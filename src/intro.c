@@ -4,6 +4,7 @@
 #include "scanline_effect.h"
 #include "task.h"
 #include "title_screen.h"
+#include "main_menu.h"
 #include "libgcnmultiboot.h"
 #include "malloc.h"
 #include "gpu_regs.h"
@@ -1069,12 +1070,16 @@ static u8 SetUpCopyrightScreen(void)
         CpuFill32(0, (void *)OAM, OAM_SIZE);
         CpuFill16(0, (void *)(PLTT + 2), PLTT_SIZE - 2);
         ResetPaletteFade();
+    #if SKIP_INTRO_TO_MAIN_MENU == FALSE
         LoadCopyrightGraphics(0, 0x3800, BG_PLTT_ID(0));
+    #endif
         ScanlineEffect_Stop();
         ResetTasks();
         ResetSpriteData();
         FreeAllSpritePalettes();
+    #if SKIP_INTRO_TO_MAIN_MENU == FALSE
         BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_WHITEALPHA);
+    #endif
         SetGpuReg(REG_OFFSET_BG0CNT, BGCNT_PRIORITY(0)
                                    | BGCNT_CHARBASE(0)
                                    | BGCNT_SCREENBASE(7)
@@ -1085,6 +1090,13 @@ static u8 SetUpCopyrightScreen(void)
         REG_DISPCNT = DISPCNT_MODE_0 | DISPCNT_OBJ_1D_MAP | DISPCNT_BG0_ON;
         SetSerialCallback(SerialCB_CopyrightScreen);
         GameCubeMultiBoot_Init(&gMultibootProgramStruct);
+    #if SKIP_INTRO_TO_MAIN_MENU == TRUE
+        // No copyright graphic/fade was set up, so skip straight to the
+        // intro-launch state. The save is still loaded when SetUpCopyrightScreen
+        // returns 0 from COPYRIGHT_START_INTRO.
+        gMain.state = COPYRIGHT_START_INTRO;
+        break;
+    #endif
     // REG_DISPCNT needs to be overwritten the second time, because otherwise the intro won't show up on VBA 1.7.2 and John GBA Lite emulators.
     // The REG_DISPCNT overwrite is NOT needed in m-GBA, No$GBA, VBA 1.8.0, My Boy and Pizza Boy GBA emulators.
     case COPYRIGHT_EMULATOR_BLEND:
@@ -1108,6 +1120,8 @@ static u8 SetUpCopyrightScreen(void)
 #if EXPANSION_INTRO == TRUE
         SetMainCallback2(CB2_ExpansionIntro);
         CreateTask(Task_HandleExpansionIntro, 0);
+#elif SKIP_INTRO_TO_MAIN_MENU == TRUE
+        SetMainCallback2(CB2_InitMainMenu);
 #else
         CreateTask(Task_Scene1_Load, 0);
         SetMainCallback2(MainCB2_Intro);
