@@ -1096,6 +1096,12 @@ static u8 SetUpCopyrightScreen(void)
         // No copyright graphic/fade was set up, so skip straight to the
         // intro-launch state. The save is still loaded when SetUpCopyrightScreen
         // returns 0 from COPYRIGHT_START_INTRO.
+        // Force the screen black instead of the copyright screen's white
+        // backdrop, so there's no white flash before the RHH intro fades in.
+        *(u16 *)PLTT = RGB_BLACK;
+        gPlttBufferFaded[0] = RGB_BLACK;
+        gPlttBufferUnfaded[0] = RGB_BLACK;
+        SetGpuReg(REG_OFFSET_DISPCNT, 0);
         gMain.state = COPYRIGHT_START_INTRO;
         break;
     #endif
