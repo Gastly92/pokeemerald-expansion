@@ -911,8 +911,8 @@ static bool8 HandleMainMenuInput(u8 taskId)
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
         gTasks[taskId].func = Task_HandleMainMenuAPressed;
     }
-#if SKIP_INTRO_TO_MAIN_MENU == FALSE
-    // With SKIP_INTRO_TO_MAIN_MENU there is no title screen to back out to, so B does nothing.
+#if SKIP_TITLE_SEQUENCE == FALSE
+    // With SKIP_TITLE_SEQUENCE there is no title screen to back out to, so B does nothing.
     else if (JOY_NEW(B_BUTTON))
     {
         PlaySE(SE_SELECT);
@@ -1148,7 +1148,7 @@ static void Task_HandleMainMenuBPressed(u8 taskId)
             RemoveScrollIndicatorArrowPair(gTasks[taskId].tScrollArrowTaskId);
         sCurrItemAndOptionMenuCheck = 0;
         FreeAllWindowBuffers();
-    #if SKIP_INTRO_TO_MAIN_MENU == TRUE
+    #if SKIP_TITLE_SEQUENCE == TRUE
         SetMainCallback2(CB2_InitMainMenu); // No title screen to back out to; stay on the main menu.
     #else
         SetMainCallback2(CB2_InitTitleScreen);
