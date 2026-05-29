@@ -1176,7 +1176,10 @@ void CB2_InitCopyrightScreenAfterBootup(void)
 {
     if (!SetUpCopyrightScreen())
     {
-    #if SKIP_INTRO_TO_MAIN_MENU == FALSE
+    // Only defer the load when there's an RHH intro to hide it behind. With no
+    // intro (EXPANSION_INTRO off) boot goes straight to the main menu, so load
+    // here as usual - otherwise the save would never load.
+    #if SKIP_INTRO_TO_MAIN_MENU == FALSE || EXPANSION_INTRO == FALSE
         LoadGameSaveAfterBootup();
     #endif
     }
