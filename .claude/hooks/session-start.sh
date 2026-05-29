@@ -22,12 +22,18 @@ if command -v arm-none-eabi-gcc >/dev/null 2>&1; then
 fi
 
 echo "Installing GBA cross-compiler toolchain..."
-sudo apt-get update -y
-sudo apt-get install -y --no-install-recommends \
-  binutils-arm-none-eabi \
-  gcc-arm-none-eabi \
-  libnewlib-arm-none-eabi \
-  libpng-dev \
-  python3
+
+PKGS="binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3"
+
+# Install directly first: these packages live in the base Ubuntu repos, whose
+# index is already present in the container. We skip `apt-get update` in the
+# common case because unrelated third-party PPAs (e.g. deadsnakes, ondrej/php)
+# can 403 on update, which would otherwise abort this hook under `set -e` and
+# waste startup time on retries. Only if the direct install fails do we fall
+# back to an update (kept non-fatal with `|| true`) and retry.
+if ! sudo apt-get install -y --no-install-recommends $PKGS; then
+  sudo apt-get update -y || true
+  sudo apt-get install -y --no-install-recommends $PKGS
+fi
 
 echo "GBA toolchain install complete."

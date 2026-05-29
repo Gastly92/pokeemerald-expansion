@@ -106,6 +106,15 @@ make -j$(nproc) release        # optimized build -> pokeemerald-release.gba
 
 - A clean `make` doubles as the linter: CI sets `UNUSED_ERROR=1` and
   `DEPRECATED_ERROR=1`, so warnings fail the build.
+- **Verify locally with CI's flags before pushing.** A plain `make` won't error
+  on unused statics/vars, but CI does. Build with them set —
+  `UNUSED_ERROR=1 DEPRECATED_ERROR=1 make -j$(nproc) -O all` — so e.g. a function
+  referenced only inside a now-disabled `#if` is caught here, not in CI.
+- **Build new config flags in both states.** Code under an inactive `#if FLAG`
+  isn't compiled in the default build, so errors there stay hidden until the flag
+  flips (or CI builds another config). Toggle each new/changed flag — and relevant
+  combinations with related flags (e.g. `SKIP_TITLE_SEQUENCE` × `EXPANSION_INTRO`)
+  — and rebuild before pushing.
 - Baseline (unmodified upstream) test result: all tests pass, exit 0. Compare
   against this after changes to catch regressions.
 
