@@ -1161,9 +1161,15 @@ void CB2_InitCopyrightScreenAfterBootup(void)
 {
     if (!SetUpCopyrightScreen())
     {
-    // Only defer the load when there's an RHH intro to hide it behind. With no
-    // intro (EXPANSION_INTRO off) boot goes straight to the main menu, so load
-    // here as usual - otherwise the save would never load.
+    // FORK/MERGE NOTE: upstream inlines the boot save-load here. We moved it to
+    // LoadGameSaveAfterBootup() in skip_title_sequence.c so SKIP_TITLE_SEQUENCE
+    // can defer it (see Task_HandleExpansionIntro). If this conflicts on an
+    // upstream sync because that block changed, apply the change in that
+    // function rather than re-inlining it here.
+    //
+    // Only defer when there's an RHH intro to hide the load behind; with no
+    // intro (EXPANSION_INTRO off) boot goes straight to the menu, so load here
+    // as usual - otherwise the save would never load.
     #if SKIP_TITLE_SEQUENCE == FALSE || EXPANSION_INTRO == FALSE
         LoadGameSaveAfterBootup();
     #endif
