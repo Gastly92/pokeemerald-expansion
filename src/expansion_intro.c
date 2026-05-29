@@ -361,9 +361,17 @@ static void ExpansionIntro_StartBlend(void)
 
 static void Task_ExpansionIntro_HandleBlend(u8 taskId)
 {
-    if (GetGpuReg(REG_OFFSET_BLDY) != 0)
+    u32 blendY = GetGpuReg(REG_OFFSET_BLDY);
+
+    if (blendY != 0)
     {
-        SetGpuReg(REG_OFFSET_BLDY, GetGpuReg(REG_OFFSET_BLDY) - 1);
+    #if SKIP_INTRO_TO_MAIN_MENU == TRUE
+        // The intro is the first thing shown on boot, so reveal the logo about
+        // twice as fast (~16 frames) to match the snappier copyright fade-in.
+        SetGpuReg(REG_OFFSET_BLDY, blendY >= 2 ? blendY - 2 : 0);
+    #else
+        SetGpuReg(REG_OFFSET_BLDY, blendY - 1);
+    #endif
     }
     else
     {
