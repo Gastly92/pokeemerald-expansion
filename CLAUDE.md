@@ -37,6 +37,27 @@ git merge upstream/master      # MERGE, not rebase — this is a long-lived shar
 - After every sync, re-verify the build and tests (see below) before merging to
   `master`.
 
+### Minimizing merge conflicts
+
+Conflicts happen line-by-line in files upstream *also* edits. The goal isn't
+"separate files" for its own sake — it's keeping our edits to upstream-owned
+files small and additive. New files never conflict; small additive edits resolve
+easily; rewrites of existing logic conflict the most.
+
+- **Prefer the config system over patching core logic.** Behaviors gated by
+  `include/config/*.h` flags (`B_*`/`I_*`/`P_*`/`OW_*`) should be changed via the
+  flag, not by editing the function — the change then lands in a file we own.
+- **Put feature code in new files** (`src/my_feature.c` + header) and register it
+  at the smallest possible hook point in an upstream file, instead of inlining a
+  whole feature into an existing function.
+- **When you must touch a shared file, keep edits additive and localized** (append
+  a switch case / table entry / new function) rather than restructuring.
+- Caveats: this is not a silver bullet — adding enum values, species, moves, etc.
+  still touches shared tables. And new files don't prevent *semantic* conflicts
+  (upstream renaming a symbol we call breaks the build without a git conflict),
+  which is why re-running `make`/`make check` after every sync is mandatory. Don't
+  over-split files just to dodge conflicts; keep it idiomatic.
+
 ## Workflow conventions
 
 - **One branch + one session per feature/PR.** Keep changes scoped; don't tangle
