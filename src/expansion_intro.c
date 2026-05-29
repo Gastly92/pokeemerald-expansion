@@ -240,9 +240,17 @@ void Task_HandleExpansionIntro(u8 taskId)
         SetVBlankCallback(VBlankCB_ExpansionIntro);
         ExpansionIntro_InitBgs();
         ExpansionIntro_LoadGraphics();
+    #if SKIP_INTRO_TO_MAIN_MENU == TRUE
+        // The intro is reached straight from the white boot screen, so fade the
+        // logo in from white rather than flashing to black first.
+        CpuFastFill16(RGB_WHITE, gPlttBufferFaded, 32);
+        ShowBg(3);
+        BeginNormalPaletteFade(1, 0, 16, 0, RGB_WHITEALPHA);
+    #else
         CpuFastFill16(RGB_BLACK, gPlttBufferFaded, 32);
         ShowBg(3);
         BeginNormalPaletteFade(1, 0, 16, 0, RGB_BLACK);
+    #endif
         ExpansionIntro_StartBlend();
         ExpansionIntro_CreateSprites();
         tState++;
