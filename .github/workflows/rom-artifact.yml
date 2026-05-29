@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install binutils
         run: |
@@ -40,7 +40,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
 
       - name: Cache build tools
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             tools/bin2c/bin2c
@@ -75,7 +75,7 @@ jobs:
           echo "ref=$(echo '${{ github.ref_name }}' | tr '/' '-')" >> "$GITHUB_OUTPUT"
 
       - name: Upload ROM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.build.outputs.rom }}-${{ steps.build.outputs.ref }}
           path: ${{ steps.build.outputs.rom }}
