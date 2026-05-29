@@ -1079,9 +1079,11 @@ static u8 SetUpCopyrightScreen(void)
         ResetTasks();
         ResetSpriteData();
         FreeAllSpritePalettes();
-    #if SKIP_INTRO_TO_MAIN_MENU == FALSE
+        // Fade in from white. Under SKIP_INTRO_TO_MAIN_MENU no copyright graphic
+        // is loaded, so this fades an (otherwise black) screen up from white -
+        // masking the GBA's white boot screen - and the RHH intro then fades in
+        // from black, the way it is designed to.
         BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_WHITEALPHA);
-    #endif
         SetGpuReg(REG_OFFSET_BG0CNT, BGCNT_PRIORITY(0)
                                    | BGCNT_CHARBASE(0)
                                    | BGCNT_SCREENBASE(7)
@@ -1094,11 +1096,10 @@ static u8 SetUpCopyrightScreen(void)
         GameCubeMultiBoot_Init(&gMultibootProgramStruct);
     #if SKIP_INTRO_TO_MAIN_MENU == TRUE
         // Skip the multiboot delay and the copyright logo, jumping straight to
-        // the intro-launch state (the save is loaded when SetUpCopyrightScreen
-        // returns 0 there). Don't fade out: hold the screen on the hardware's
-        // white boot color so the RHH intro can fade in directly from white as
-        // one continuous motion - no black gap, stall, or double fade.
-        gPlttBufferFaded[0] = RGB_WHITE;
+        // the intro-launch state. The white->black fade set up above plays out
+        // in COPYRIGHT_START_INTRO (which waits on UpdatePaletteFade), then the
+        // RHH intro is launched and the save is loaded when SetUpCopyrightScreen
+        // returns 0 from that state.
         gMain.state = COPYRIGHT_START_INTRO;
         break;
     #endif
