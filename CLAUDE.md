@@ -65,6 +65,16 @@ easily; rewrites of existing logic conflict the most.
 - Branch names use the `claude/<short-description>` prefix.
 - Open PRs against our fork's `master`. Don't push directly to `master`.
 
+### Merging
+
+- **Feature PRs: squash merge.** One clean commit per feature on `master`; drops
+  intermediate "fix review"/"trigger CI" noise.
+- **Upstream sync PRs: merge commit, never squash.** Squashing a sync collapses
+  upstream's commits into one and severs the shared-history link, which makes the
+  *next* `git merge upstream/master` conflict heavily. Preserve the merge.
+- Don't enable "Require linear history" on `master` — it would block the upstream
+  merge commits above.
+
 ## Building & testing
 
 Toolchain: the GBA cross-compiler (`arm-none-eabi-*`). In web sessions the
