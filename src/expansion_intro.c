@@ -249,7 +249,16 @@ void Task_HandleExpansionIntro(u8 taskId)
         break;
     case 1:
         if (!gPaletteFade.active)
+        {
+        #if SKIP_INTRO_TO_MAIN_MENU == TRUE
+            // The logo is now fully faded in. Load the save here so its ~1s
+            // blocking flash read freezes behind the displayed RHH logo - the
+            // way the copyright screen hides it - rather than stalling on a
+            // blank boot screen. Boot skipped this load (see intro.c).
+            LoadGameSaveAfterBootup();
+        #endif
             tState++;
+        }
         break;
     case 2:
         if (tFrameCounter == 208)

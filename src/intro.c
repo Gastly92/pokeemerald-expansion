@@ -1156,18 +1156,29 @@ static u8 SetUpCopyrightScreen(void)
     return 1;
 }
 
+// Loads the save file and finishes boot-time setup. This is the slow part of
+// boot (LoadGameSave does a blocking flash read), so SKIP_INTRO_TO_MAIN_MENU
+// defers it until the RHH logo is on screen (see Task_HandleExpansionIntro) to
+// hide the freeze, the way the copyright screen hides it behind its logo.
+void LoadGameSaveAfterBootup(void)
+{
+    SetSaveBlocksPointers(GetSaveBlocksPointersBaseOffset());
+    ResetMenuAndMonGlobals();
+    Save_ResetSaveCounters();
+    LoadGameSave(SAVE_NORMAL);
+    if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
+        Sav2_ClearSetDefault();
+    SetPokemonCryStereo(gSaveBlock2Ptr->optionsSound);
+    InitHeap(gHeap, HEAP_SIZE);
+}
+
 void CB2_InitCopyrightScreenAfterBootup(void)
 {
     if (!SetUpCopyrightScreen())
     {
-        SetSaveBlocksPointers(GetSaveBlocksPointersBaseOffset());
-        ResetMenuAndMonGlobals();
-        Save_ResetSaveCounters();
-        LoadGameSave(SAVE_NORMAL);
-        if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
-            Sav2_ClearSetDefault();
-        SetPokemonCryStereo(gSaveBlock2Ptr->optionsSound);
-        InitHeap(gHeap, HEAP_SIZE);
+    #if SKIP_INTRO_TO_MAIN_MENU == FALSE
+        LoadGameSaveAfterBootup();
+    #endif
     }
 }
 
