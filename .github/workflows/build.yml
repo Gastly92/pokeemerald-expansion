@@ -159,6 +159,16 @@ jobs:
           GAME_VERSION: EMERALD
         run: make -j$(nproc) release
 
+      # Make the built Emerald ROM downloadable from the Actions run page,
+      # but only for commits that land on master (not pull requests).
+      - name: Upload Emerald ROM
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pokeemerald-release
+          path: pokeemerald-release.gba
+          if-no-files-found: error
+
   test:
     if: github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
