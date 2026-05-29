@@ -11,7 +11,6 @@
 #include "intro.h"
 #include "intro_frlg.h"
 #include "main_menu.h"
-#include "skip_title_sequence.h"
 #include "m4a.h"
 #include "expansion_intro.h"
 #include "constants/rgb.h"

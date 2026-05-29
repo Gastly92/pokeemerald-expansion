@@ -5,7 +5,6 @@
 #include "task.h"
 #include "title_screen.h"
 #include "main_menu.h"
-#include "skip_title_sequence.h"
 #include "libgcnmultiboot.h"
 #include "malloc.h"
 #include "gpu_regs.h"
@@ -1157,15 +1156,33 @@ static u8 SetUpCopyrightScreen(void)
     return 1;
 }
 
+// Loads the save file and finishes boot-time setup. LoadGameSave does a
+// blocking flash read, so this is the slow part of boot. It is shared by the
+// normal boot path (CB2_InitCopyrightScreenAfterBootup, below) and the
+// SKIP_TITLE_SEQUENCE path, which defers it until the RHH logo is on screen
+// (see Task_HandleExpansionIntro) so the freeze hides behind the displayed
+// logo - the way the vanilla copyright screen hides it behind its own logo.
+void LoadGameSaveAfterBootup(void)
+{
+    SetSaveBlocksPointers(GetSaveBlocksPointersBaseOffset());
+    ResetMenuAndMonGlobals();
+    Save_ResetSaveCounters();
+    LoadGameSave(SAVE_NORMAL);
+    if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
+        Sav2_ClearSetDefault();
+    SetPokemonCryStereo(gSaveBlock2Ptr->optionsSound);
+    InitHeap(gHeap, HEAP_SIZE);
+}
+
 void CB2_InitCopyrightScreenAfterBootup(void)
 {
     if (!SetUpCopyrightScreen())
     {
-    // FORK/MERGE NOTE: upstream inlines the boot save-load here. We moved it to
-    // LoadGameSaveAfterBootup() in skip_title_sequence.c so SKIP_TITLE_SEQUENCE
-    // can defer it (see Task_HandleExpansionIntro). If this conflicts on an
-    // upstream sync because that block changed, apply the change in that
-    // function rather than re-inlining it here.
+    // FORK: upstream inlines the boot save-load here. We extracted it to
+    // LoadGameSaveAfterBootup() (above) so SKIP_TITLE_SEQUENCE can defer it
+    // (see Task_HandleExpansionIntro). If this conflicts on an upstream sync
+    // because that block changed, apply the change in that function rather than
+    // re-inlining it here.
     //
     // Only defer when there's an RHH intro to hide the load behind; with no
     // intro (EXPANSION_INTRO off) boot goes straight to the menu, so load here

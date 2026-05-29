@@ -58,6 +58,22 @@ easily; rewrites of existing logic conflict the most.
   which is why re-running `make`/`make check` after every sync is mandatory. Don't
   over-split files just to dodge conflicts; keep it idiomatic.
 
+### Marking intentional divergences: the `FORK:` tag
+
+When we deliberately diverge from upstream inside a file upstream also owns —
+especially a **deletion**, or a moved/replaced block git can't auto-merge — leave
+a `FORK:` comment at the divergence point so a future sync resolves it correctly
+instead of silently re-inlining or dropping our change.
+
+- **Tag:** `FORK:` — greppable, so `grep -rn "FORK:" src include` lists every
+  intentional divergence at a glance.
+- **Make it a durable resolution hint, not a description of upstream's internals**
+  (the latter goes stale). Say what we did, where the logic went, and how to
+  resolve a conflict here — e.g. "extracted to `LoadGameSaveAfterBootup()`; on
+  conflict, port upstream's change there rather than re-inlining."
+- Keep it at the exact spot that would conflict (it shows up on *our* side of the
+  conflict markers, where the person resolving will see it).
+
 ## Workflow conventions
 
 - **One branch + one session per feature/PR.** Keep changes scoped; don't tangle
