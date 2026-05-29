@@ -10,6 +10,11 @@ if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   exit 0
 fi
 
+# Ensure the upstream remote exists so `git fetch upstream` works for syncing
+# updates from rh-hideout/pokeemerald-expansion. The container is ephemeral, so
+# this is re-added every session. Idempotent: ignore the error if it exists.
+git remote add upstream https://github.com/rh-hideout/pokeemerald-expansion.git 2>/dev/null || true
+
 # Idempotent: skip the install if the cross-compiler is already present.
 if command -v arm-none-eabi-gcc >/dev/null 2>&1; then
   echo "GBA toolchain already installed; skipping."
