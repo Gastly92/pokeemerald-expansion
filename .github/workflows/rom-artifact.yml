@@ -1,0 +1,82 @@
+name: On-demand ROM build
+
+# Manually build a release ROM for any branch (e.g. a PR's head branch) and
+# upload it as a downloadable artifact. Run it from the Actions tab via the
+# "Run workflow" button, or with `gh workflow run "On-demand ROM build" --ref <branch>`.
+#
+# This is intentionally separate from the main CI (build.yml): CI still only
+# uploads a ROM on pushes to master, so routine PR pushes (including doc-only
+# changes) never produce a 16 MB artifact. You opt in to an artifact here only
+# when you actually want to test on an emulator.
+on:
+  workflow_dispatch:
+    inputs:
+      game_version:
+        description: "Which game ROM to build"
+        type: choice
+        default: EMERALD
+        options:
+          - EMERALD
+          - FIRERED
+          - LEAFGREEN
+
+env:
+  GAME_REVISION: 0
+  GAME_LANGUAGE: ENGLISH
+  COMPARE: 0
+  UNUSED_ERROR: 1
+  DEPRECATED_ERROR: 1
+
+jobs:
+  rom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install binutils
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
+
+      - name: Cache build tools
+        uses: actions/cache@v4
+        with:
+          path: |
+            tools/bin2c/bin2c
+            tools/gbafix/gbafix
+            tools/gbagfx/gbagfx
+            tools/jsonproc/jsonproc
+            tools/mapjson/mapjson
+            tools/mid2agb/mid2agb
+            tools/preproc/preproc
+            tools/ramscrgen/ramscrgen
+            tools/rsfont/rsfont
+            tools/scaninc/scaninc
+            tools/trainerproc/trainerproc
+            tools/compresSmol/compresSmol
+            tools/compresSmol/compresSmolTilemap
+            tools/wav2agb/wav2agb
+          key: tools-${{ runner.os }}-${{ hashFiles('tools/*/Makefile', 'tools/**/*.c', 'tools/**/*.cpp', 'tools/**/*.h') }}
+
+      - name: Build release ROM (${{ inputs.game_version }})
+        id: build
+        run: |
+          case "${{ inputs.game_version }}" in
+            EMERALD)   make -j$(nproc) release ;;
+            FIRERED)   BUILD=firered   make -j$(nproc) release ;;
+            LEAFGREEN) BUILD=leafgreen make -j$(nproc) release ;;
+            *) echo "Unknown game_version: ${{ inputs.game_version }}"; exit 1 ;;
+          esac
+          # The release filename tracks BUILD_NAME (see Makefile): poke<name>-release.gba
+          name="$(echo '${{ inputs.game_version }}' | tr '[:upper:]' '[:lower:]')"
+          echo "rom=poke${name}-release.gba" >> "$GITHUB_OUTPUT"
+          # Artifact names can't contain '/', so flatten the branch name (e.g. claude/foo -> claude-foo).
+          echo "ref=$(echo '${{ github.ref_name }}' | tr '/' '-')" >> "$GITHUB_OUTPUT"
+
+      - name: Upload ROM
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.rom }}-${{ steps.build.outputs.ref }}
+          path: ${{ steps.build.outputs.rom }}
+          if-no-files-found: error
