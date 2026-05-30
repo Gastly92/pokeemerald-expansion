@@ -476,6 +476,17 @@ static const struct MenuAction sMenuActions_Gender[] = {
     {gText_Girl, {NULL}}
 };
 
+// NEUTRAL_PLAYER_SELECT_TEXT: neutral wording for the new-game player-look
+// picker, used in place of the prompt/labels above. Same two-option layout, so
+// the selection logic is unchanged — only the displayed text differs.
+static const u8 sText_ChooseYourAppearance[] = _("Choose your\nappearance.");
+static const u8 sText_PlayerType1[] = _("TYPE 1");
+static const u8 sText_PlayerType2[] = _("TYPE 2");
+static const struct MenuAction sMenuActions_PlayerType[] = {
+    {sText_PlayerType1, {NULL}},
+    {sText_PlayerType2, {NULL}}
+};
+
 static const u8 *const sMalePresetNames[] = {
     COMPOUND_STRING("STU"),
     COMPOUND_STRING("MILTON"),
@@ -1350,7 +1361,7 @@ static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
     {
         // SKIP_BIRCH_SPEECH: never reveal Birch, his speech, or the empty
         // platform slide. Jump straight to the player fade-in that leads to the
-        // character (gender) and name selection. The platform gradient is still
+        // player-look and name selection. The platform gradient is still
         // at its Init state (index 8) — exactly what StartPlayerFadeIn expects.
         // With Birch gone the player is centered the whole time (see
         // sSkipBirchSpeechPlayerX), so the platform stays at BG1HOFS = 0 (the centered
@@ -1568,7 +1579,10 @@ static void Task_NewGameBirchSpeech_BoyOrGirl(u8 taskId)
         CopyWindowToVram(0, COPYWIN_GFX);
     }
     NewGameBirchSpeech_ClearWindow(0);
-    StringExpandPlaceholders(gStringVar4, gText_Birch_BoyOrGirl);
+    if (NEUTRAL_PLAYER_SELECT_TEXT)
+        StringExpandPlaceholders(gStringVar4, sText_ChooseYourAppearance);
+    else
+        StringExpandPlaceholders(gStringVar4, gText_Birch_BoyOrGirl);
     AddTextPrinterForMessage(TRUE);
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowGenderMenu;
 }
@@ -2197,10 +2211,15 @@ static void NewGameBirchSpeech_StartFadePlatformOut(u8 taskId, u8 delay)
 
 static void NewGameBirchSpeech_ShowGenderMenu(void)
 {
+    // NEUTRAL_PLAYER_SELECT_TEXT swaps the BOY/GIRL labels for neutral ones;
+    // both tables are two options in the same order, so input handling below is
+    // identical either way.
+    const struct MenuAction *menuActions = NEUTRAL_PLAYER_SELECT_TEXT ? sMenuActions_PlayerType : sMenuActions_Gender;
+
     DrawMainMenuWindowBorder(&sNewGameBirchSpeechTextWindows[1], 0xF3);
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
-    PrintMenuTable(1, ARRAY_COUNT(sMenuActions_Gender), sMenuActions_Gender);
-    InitMenuInUpperLeftCornerNormal(1, ARRAY_COUNT(sMenuActions_Gender), 0);
+    PrintMenuTable(1, 2, menuActions);
+    InitMenuInUpperLeftCornerNormal(1, 2, 0);
     PutWindowTilemap(1);
     CopyWindowToVram(1, COPYWIN_FULL);
 }

@@ -75,7 +75,8 @@
 // General settings
 #define EXPANSION_INTRO              TRUE    // If TRUE, a custom RHH intro will play after the vanilla copyright screen.
 #define SKIP_TITLE_SEQUENCE          TRUE    // If TRUE, skips the title sequence on boot (the copyright screen, the intro cinematic, and the title screen), going straight to the main menu. The RHH intro still plays if EXPANSION_INTRO is TRUE. Essential boot init (save loading, etc.) still runs.
-#define SKIP_BIRCH_SPEECH            TRUE    // If TRUE, skips Prof. Birch's new-game monologue (the Pokémon/Lotad speech and the closing "you're ready" remarks), keeping only the gender (character) and name selection before the game starts.
+#define SKIP_BIRCH_SPEECH            TRUE    // If TRUE, skips Prof. Birch's new-game monologue (the Pokémon/Lotad speech and the closing "you're ready" remarks), keeping only the character look and name selection before the game starts.
+#define NEUTRAL_PLAYER_SELECT_TEXT   TRUE    // If TRUE, the new-game player-look picker uses neutral wording ("Choose your appearance." / TYPE 1 / TYPE 2) instead of Birch's "Are you a boy? Or are you a girl?" / BOY / GIRL. Only the displayed text changes; the underlying selection is unaffected.
 #define HQ_RANDOM                    TRUE    // If TRUE, replaces the default RNG with an implementation of SFC32 RNG. May break code that relies on RNG.
 #define PHONEMES_SHARED              FALSE   // If TRUE, bard phonemes all reference the same sound (sound/direct_sound_samples/phonemes/shared.bin) to save ROM space.
 
