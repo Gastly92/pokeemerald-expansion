@@ -1343,24 +1343,26 @@ static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
     }
     else
     {
-        // SKIP_NEW_GAME_INTRO: never reveal Birch or play his monologue. Set up
-        // the dialog windows the gender/name prompts need, hide the platform
-        // palette to match the normal pre-transition state, then jump to the
-        // Birch->player transition so only the character (gender) and name
-        // selection remain. Fading out the still-invisible Birch/Lotad sprites
-        // in that chain is a visual no-op. Runtime check (not #if) keeps the
-        // speech tasks referenced for UNUSED_ERROR=1 in both flag states.
+        // SKIP_NEW_GAME_INTRO: never reveal Birch, his speech, or the empty
+        // platform slide. Jump straight to the player fade-in that leads to the
+        // character (gender) and name selection. The platform gradient is still
+        // at its Init state (index 8) — exactly what StartPlayerFadeIn expects —
+        // and BG1HOFS is preset to the post-slide position so the player's
+        // platform lands where vanilla leaves it. Load the dialog-box graphics
+        // but leave the box hidden (no DrawDialogFrame/PutWindowTilemap yet) so
+        // no empty box shows during the fade; BoyOrGirl draws it with the
+        // prompt. Runtime check (not #if) keeps the speech tasks referenced for
+        // UNUSED_ERROR=1 in both flag states.
         if (SKIP_NEW_GAME_INTRO)
         {
-            LoadPalette(&sBirchSpeechBgGradientPal[0], BG_PLTT_ID(0) + 1, PLTT_SIZEOF(8));
             InitWindows(sNewGameBirchSpeechTextWindows);
             LoadMainMenuWindowFrameTiles(0, 0xF3);
             LoadMessageBoxGfx(0, BIRCH_DLG_BASE_TILE_NUM, BG_PLTT_ID(15));
-            DrawDialogFrameWithCustomTile(0, TRUE, BIRCH_DLG_BASE_TILE_NUM);
-            PutWindowTilemap(0);
-            CopyWindowToVram(0, COPYWIN_GFX);
-            NewGameBirchSpeech_ClearWindow(0);
-            gTasks[taskId].func = Task_NewGameBirchSpeech_StartBirchLotadPlatformFade;
+            gTasks[taskId].tBG1HOFS = -60;
+            SetGpuReg(REG_OFFSET_BG1HOFS, -60);
+            gTasks[taskId].tTimer = 0;
+            gTasks[taskId].tIsDoneFadingSprites = TRUE;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_StartPlayerFadeIn;
             return;
         }
         spriteId = gTasks[taskId].tBirchSpriteId;
@@ -1541,6 +1543,16 @@ static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8 taskId)
 
 static void Task_NewGameBirchSpeech_BoyOrGirl(u8 taskId)
 {
+    // SKIP_NEW_GAME_INTRO skipped WaitForSpriteFadeInWelcome, where the dialog
+    // frame is normally drawn, so draw it here — now, with the prompt, rather
+    // than as an empty box during the player fade-in. Redrawing on re-entry
+    // (after a rejected name) is harmless.
+    if (SKIP_NEW_GAME_INTRO)
+    {
+        DrawDialogFrameWithCustomTile(0, TRUE, BIRCH_DLG_BASE_TILE_NUM);
+        PutWindowTilemap(0);
+        CopyWindowToVram(0, COPYWIN_GFX);
+    }
     NewGameBirchSpeech_ClearWindow(0);
     StringExpandPlaceholders(gStringVar4, gText_Birch_BoyOrGirl);
     AddTextPrinterForMessage(TRUE);
