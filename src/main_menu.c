@@ -1711,12 +1711,19 @@ static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8 taskId)
         if (SKIP_NEW_GAME_INTRO)
         {
             // Clear the name-confirm dialog box and its frame so the tilemap
-            // doesn't linger into CB2_NewGame (the vanilla closing path slides
-            // it away instead; skipping that left a stutter where the box was).
+            // doesn't linger into CB2_NewGame, then run the vanilla player
+            // shrink animation in place — skipping only Birch's closing speech,
+            // not the shrink. Center the player sprite (vanilla's AreYouReady
+            // does this before the shrink; on the skip path it still rests at
+            // the gender-select position) and set tIsDoneFadingSprites, which
+            // the skipped sprite fade would otherwise have provided.
+            u8 spriteId = gTasks[taskId].tPlayerSpriteId;
+
             ClearDialogWindowAndFrame(0, TRUE);
-            FadeOutBGM(4);
-            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_WHITEALPHA);
-            gTasks[taskId].func = Task_NewGameBirchSpeech_Cleanup;
+            gSprites[spriteId].x = 120;
+            gSprites[spriteId].y = 60;
+            gTasks[taskId].tIsDoneFadingSprites = TRUE;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_ShrinkPlayer;
         }
         else
         {
