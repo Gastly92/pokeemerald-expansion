@@ -1327,11 +1327,12 @@ static void Task_NewGameBirchSpeech_Init(u8 taskId)
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowBirch;
     gTasks[taskId].tPlayerSpriteId = SPRITE_NONE;
     gTasks[taskId].data[3] = 0xFF;
-    // SKIP_NEW_GAME_INTRO: the long 0xD8-frame wait exists to let Birch's
-    // silhouette sit on screen before his speech. With him skipped it is just
-    // dead time before the character picker, so collapse it to the palette
-    // fade-in length (16 frames).
-    gTasks[taskId].tTimer = SKIP_NEW_GAME_INTRO ? 16 : 0xD8;
+    // FORK: SKIP_BIRCH_SPEECH replaces upstream's `tTimer = 0xD8`. The long
+    // 0xD8-frame wait exists to let Birch's silhouette sit on screen before his
+    // speech; with him skipped it is dead time before the character picker, so
+    // collapse it to the palette fade-in length (16 frames). On conflict, keep
+    // the ternary and fold any new upstream delay value into the `: 0xD8` arm.
+    gTasks[taskId].tTimer = SKIP_BIRCH_SPEECH ? 16 : 0xD8;
     PlayBGM(MUS_ROUTE122);
     ShowBg(0);
     ShowBg(1);
@@ -1347,18 +1348,18 @@ static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
     }
     else
     {
-        // SKIP_NEW_GAME_INTRO: never reveal Birch, his speech, or the empty
+        // SKIP_BIRCH_SPEECH: never reveal Birch, his speech, or the empty
         // platform slide. Jump straight to the player fade-in that leads to the
         // character (gender) and name selection. The platform gradient is still
         // at its Init state (index 8) — exactly what StartPlayerFadeIn expects.
         // With Birch gone the player is centered the whole time (see
-        // sSkipIntroPlayerX), so the platform stays at BG1HOFS = 0 (the centered
+        // sSkipBirchSpeechPlayerX), so the platform stays at BG1HOFS = 0 (the centered
         // framing where Birch stood) rather than vanilla's -60 player offset.
         // Load the dialog-box graphics but leave the box hidden (no
         // DrawDialogFrame/PutWindowTilemap yet) so no empty box shows during the
         // fade; BoyOrGirl draws it with the prompt. Runtime check (not #if)
         // keeps the speech tasks referenced for UNUSED_ERROR=1 in both states.
-        if (SKIP_NEW_GAME_INTRO)
+        if (SKIP_BIRCH_SPEECH)
         {
             InitWindows(sNewGameBirchSpeechTextWindows);
             LoadMainMenuWindowFrameTiles(0, 0xF3);
@@ -1510,11 +1511,13 @@ static void Task_NewGameBirchSpeech_SlidePlatformAway(u8 taskId)
     }
 }
 
-// Player sprite rest X during the new-game intro. Vanilla seats the player at
-// 180 (right of center) because Birch stands to their left; SKIP_NEW_GAME_INTRO
-// removes Birch and centers the player (120) the whole time. The platform BG is
-// kept aligned to match (BG1HOFS 0 when centered vs. -60 at the vanilla offset).
-#define sSkipIntroPlayerX (SKIP_NEW_GAME_INTRO ? 120 : 180)
+// FORK: SKIP_BIRCH_SPEECH player rest X. Vanilla hardcodes 180 (right of center)
+// at each site because Birch stands to the player's left; with Birch removed we
+// center the player (120) the whole time, keeping the platform BG aligned
+// (BG1HOFS 0 when centered vs. -60 at the vanilla offset). This macro replaces
+// the literal `180` at its use sites below; on conflict, keep the macro use and
+// port any new upstream rest position into the `: 180` arm.
+#define sSkipBirchSpeechPlayerX (SKIP_BIRCH_SPEECH ? 120 : 180)
 
 static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8 taskId)
 {
@@ -1530,7 +1533,7 @@ static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8 taskId)
         {
             u8 spriteId = gTasks[taskId].tBrendanSpriteId;
 
-            gSprites[spriteId].x = sSkipIntroPlayerX;
+            gSprites[spriteId].x = sSkipBirchSpeechPlayerX;
             gSprites[spriteId].y = 60;
             gSprites[spriteId].invisible = FALSE;
             gSprites[spriteId].oam.objMode = ST_OAM_OBJ_BLEND;
@@ -1554,11 +1557,11 @@ static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8 taskId)
 
 static void Task_NewGameBirchSpeech_BoyOrGirl(u8 taskId)
 {
-    // SKIP_NEW_GAME_INTRO skipped WaitForSpriteFadeInWelcome, where the dialog
+    // SKIP_BIRCH_SPEECH skipped WaitForSpriteFadeInWelcome, where the dialog
     // frame is normally drawn, so draw it here — now, with the prompt, rather
     // than as an empty box during the player fade-in. Redrawing on re-entry
     // (after a rejected name) is harmless.
-    if (SKIP_NEW_GAME_INTRO)
+    if (SKIP_BIRCH_SPEECH)
     {
         DrawDialogFrameWithCustomTile(0, TRUE, BIRCH_DLG_BASE_TILE_NUM);
         PutWindowTilemap(0);
@@ -1639,13 +1642,13 @@ static void Task_NewGameBirchSpeech_SlideInNewGenderSprite(u8 taskId)
 {
     u8 spriteId = gTasks[taskId].tPlayerSpriteId;
 
-    if (gSprites[spriteId].x > sSkipIntroPlayerX)
+    if (gSprites[spriteId].x > sSkipBirchSpeechPlayerX)
     {
         gSprites[spriteId].x -= 4;
     }
     else
     {
-        gSprites[spriteId].x = sSkipIntroPlayerX;
+        gSprites[spriteId].x = sSkipBirchSpeechPlayerX;
         if (gTasks[taskId].tIsDoneFadingSprites)
         {
             gSprites[spriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
@@ -1712,15 +1715,15 @@ static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8 taskId)
     {
     case 0:
         PlaySE(SE_SELECT);
-        // SKIP_NEW_GAME_INTRO: once the name is confirmed, fade out and start
+        // SKIP_BIRCH_SPEECH: once the name is confirmed, fade out and start
         // the game, skipping Birch's closing "you're ready" remarks. Runtime
         // check (not #if) keeps the closing tasks referenced for UNUSED_ERROR.
-        if (SKIP_NEW_GAME_INTRO)
+        if (SKIP_BIRCH_SPEECH)
         {
             // Clear the name-confirm dialog box and its frame so the tilemap
             // doesn't linger into CB2_NewGame, then run the vanilla player
             // shrink animation in place — skipping only Birch's closing speech,
-            // not the shrink. The player is already centered (sSkipIntroPlayerX)
+            // not the shrink. The player is already centered (sSkipBirchSpeechPlayerX)
             // so no reposition is needed; just set tIsDoneFadingSprites, which
             // the skipped sprite fade would otherwise have provided.
             ClearDialogWindowAndFrame(0, TRUE);
@@ -1918,7 +1921,10 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
     ResetTasks();
     taskId = CreateTask(Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox, 0);
     gTasks[taskId].tTimer = 5;
-    gTasks[taskId].tBG1HOFS = SKIP_NEW_GAME_INTRO ? 0 : -60;
+    // FORK: SKIP_BIRCH_SPEECH centers the player on return from the naming
+    // screen, so the platform stays put (HOFS 0) instead of vanilla's -60 offset
+    // (also at the SetGpuReg below). On conflict, keep the ternaries.
+    gTasks[taskId].tBG1HOFS = SKIP_BIRCH_SPEECH ? 0 : -60;
     ScanlineEffect_Stop();
     ResetSpriteData();
     FreeAllSpritePalettes();
@@ -1934,11 +1940,11 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
         gTasks[taskId].tPlayerGender = MALE;
         spriteId = gTasks[taskId].tBrendanSpriteId;
     }
-    gSprites[spriteId].x = sSkipIntroPlayerX;
+    gSprites[spriteId].x = sSkipBirchSpeechPlayerX;
     gSprites[spriteId].y = 60;
     gSprites[spriteId].invisible = FALSE;
     gTasks[taskId].tPlayerSpriteId = spriteId;
-    SetGpuReg(REG_OFFSET_BG1HOFS, SKIP_NEW_GAME_INTRO ? 0 : -60);
+    SetGpuReg(REG_OFFSET_BG1HOFS, SKIP_BIRCH_SPEECH ? 0 : -60);
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
     SetGpuReg(REG_OFFSET_WIN0H, 0);
     SetGpuReg(REG_OFFSET_WIN0V, 0);
