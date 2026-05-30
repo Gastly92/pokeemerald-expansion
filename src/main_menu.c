@@ -476,6 +476,17 @@ static const struct MenuAction sMenuActions_Gender[] = {
     {gText_Girl, {NULL}}
 };
 
+// GENDER_NEUTRAL_TEXT: neutral wording for the new-game player-look
+// picker, used in place of the prompt/labels above. Same two-option layout, so
+// the selection logic is unchanged — only the displayed text differs.
+static const u8 sText_ChooseYourAppearance[] = _("Choose your\nappearance.");
+static const u8 sText_PlayerType1[] = _("TYPE 1");
+static const u8 sText_PlayerType2[] = _("TYPE 2");
+static const struct MenuAction sMenuActions_PlayerType[] = {
+    {sText_PlayerType1, {NULL}},
+    {sText_PlayerType2, {NULL}}
+};
+
 static const u8 *const sMalePresetNames[] = {
     COMPOUND_STRING("STU"),
     COMPOUND_STRING("MILTON"),
@@ -1327,7 +1338,12 @@ static void Task_NewGameBirchSpeech_Init(u8 taskId)
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowBirch;
     gTasks[taskId].tPlayerSpriteId = SPRITE_NONE;
     gTasks[taskId].data[3] = 0xFF;
-    gTasks[taskId].tTimer = 0xD8;
+    // FORK: SKIP_BIRCH_SPEECH replaces upstream's `tTimer = 0xD8`. The long
+    // 0xD8-frame wait exists to let Birch's silhouette sit on screen before his
+    // speech; with him skipped it is dead time before the character picker, so
+    // collapse it to the palette fade-in length (16 frames). On conflict, keep
+    // the ternary and fold any new upstream delay value into the `: 0xD8` arm.
+    gTasks[taskId].tTimer = SKIP_BIRCH_SPEECH ? 16 : 0xD8;
     PlayBGM(MUS_ROUTE122);
     ShowBg(0);
     ShowBg(1);
@@ -1343,6 +1359,29 @@ static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
     }
     else
     {
+        // SKIP_BIRCH_SPEECH: never reveal Birch, his speech, or the empty
+        // platform slide. Jump straight to the player fade-in that leads to the
+        // player-look and name selection. The platform gradient is still
+        // at its Init state (index 8) — exactly what StartPlayerFadeIn expects.
+        // With Birch gone the player is centered the whole time (see
+        // sSkipBirchSpeechPlayerX), so the platform stays at BG1HOFS = 0 (the centered
+        // framing where Birch stood) rather than vanilla's -60 player offset.
+        // Load the dialog-box graphics but leave the box hidden (no
+        // DrawDialogFrame/PutWindowTilemap yet) so no empty box shows during the
+        // fade; BoyOrGirl draws it with the prompt. Runtime check (not #if)
+        // keeps the speech tasks referenced for UNUSED_ERROR=1 in both states.
+        if (SKIP_BIRCH_SPEECH)
+        {
+            InitWindows(sNewGameBirchSpeechTextWindows);
+            LoadMainMenuWindowFrameTiles(0, 0xF3);
+            LoadMessageBoxGfx(0, BIRCH_DLG_BASE_TILE_NUM, BG_PLTT_ID(15));
+            gTasks[taskId].tBG1HOFS = 0;
+            SetGpuReg(REG_OFFSET_BG1HOFS, 0);
+            gTasks[taskId].tTimer = 0;
+            gTasks[taskId].tIsDoneFadingSprites = TRUE;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_StartPlayerFadeIn;
+            return;
+        }
         spriteId = gTasks[taskId].tBirchSpriteId;
         gSprites[spriteId].x = 136;
         gSprites[spriteId].y = 60;
@@ -1483,6 +1522,14 @@ static void Task_NewGameBirchSpeech_SlidePlatformAway(u8 taskId)
     }
 }
 
+// FORK: SKIP_BIRCH_SPEECH player rest X. Vanilla hardcodes 180 (right of center)
+// at each site because Birch stands to the player's left; with Birch removed we
+// center the player (120) the whole time, keeping the platform BG aligned
+// (BG1HOFS 0 when centered vs. -60 at the vanilla offset). This macro replaces
+// the literal `180` at its use sites below; on conflict, keep the macro use and
+// port any new upstream rest position into the `: 180` arm.
+#define sSkipBirchSpeechPlayerX (SKIP_BIRCH_SPEECH ? 120 : 180)
+
 static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8 taskId)
 {
     if (gTasks[taskId].tIsDoneFadingSprites)
@@ -1497,7 +1544,7 @@ static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8 taskId)
         {
             u8 spriteId = gTasks[taskId].tBrendanSpriteId;
 
-            gSprites[spriteId].x = 180;
+            gSprites[spriteId].x = sSkipBirchSpeechPlayerX;
             gSprites[spriteId].y = 60;
             gSprites[spriteId].invisible = FALSE;
             gSprites[spriteId].oam.objMode = ST_OAM_OBJ_BLEND;
@@ -1521,8 +1568,21 @@ static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8 taskId)
 
 static void Task_NewGameBirchSpeech_BoyOrGirl(u8 taskId)
 {
+    // SKIP_BIRCH_SPEECH skipped WaitForSpriteFadeInWelcome, where the dialog
+    // frame is normally drawn, so draw it here — now, with the prompt, rather
+    // than as an empty box during the player fade-in. Redrawing on re-entry
+    // (after a rejected name) is harmless.
+    if (SKIP_BIRCH_SPEECH)
+    {
+        DrawDialogFrameWithCustomTile(0, TRUE, BIRCH_DLG_BASE_TILE_NUM);
+        PutWindowTilemap(0);
+        CopyWindowToVram(0, COPYWIN_GFX);
+    }
     NewGameBirchSpeech_ClearWindow(0);
-    StringExpandPlaceholders(gStringVar4, gText_Birch_BoyOrGirl);
+    if (GENDER_NEUTRAL_TEXT)
+        StringExpandPlaceholders(gStringVar4, sText_ChooseYourAppearance);
+    else
+        StringExpandPlaceholders(gStringVar4, gText_Birch_BoyOrGirl);
     AddTextPrinterForMessage(TRUE);
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowGenderMenu;
 }
@@ -1596,13 +1656,13 @@ static void Task_NewGameBirchSpeech_SlideInNewGenderSprite(u8 taskId)
 {
     u8 spriteId = gTasks[taskId].tPlayerSpriteId;
 
-    if (gSprites[spriteId].x > 180)
+    if (gSprites[spriteId].x > sSkipBirchSpeechPlayerX)
     {
         gSprites[spriteId].x -= 4;
     }
     else
     {
-        gSprites[spriteId].x = 180;
+        gSprites[spriteId].x = sSkipBirchSpeechPlayerX;
         if (gTasks[taskId].tIsDoneFadingSprites)
         {
             gSprites[spriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
@@ -1669,10 +1729,28 @@ static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8 taskId)
     {
     case 0:
         PlaySE(SE_SELECT);
-        gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
-        NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
-        NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
-        gTasks[taskId].func = Task_NewGameBirchSpeech_SlidePlatformAway2;
+        // SKIP_BIRCH_SPEECH: once the name is confirmed, fade out and start
+        // the game, skipping Birch's closing "you're ready" remarks. Runtime
+        // check (not #if) keeps the closing tasks referenced for UNUSED_ERROR.
+        if (SKIP_BIRCH_SPEECH)
+        {
+            // Clear the name-confirm dialog box and its frame so the tilemap
+            // doesn't linger into CB2_NewGame, then run the vanilla player
+            // shrink animation in place — skipping only Birch's closing speech,
+            // not the shrink. The player is already centered (sSkipBirchSpeechPlayerX)
+            // so no reposition is needed; just set tIsDoneFadingSprites, which
+            // the skipped sprite fade would otherwise have provided.
+            ClearDialogWindowAndFrame(0, TRUE);
+            gTasks[taskId].tIsDoneFadingSprites = TRUE;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_ShrinkPlayer;
+        }
+        else
+        {
+            gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+            NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
+            NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_SlidePlatformAway2;
+        }
         break;
     case MENU_B_PRESSED:
     case 1:
@@ -1857,7 +1935,10 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
     ResetTasks();
     taskId = CreateTask(Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox, 0);
     gTasks[taskId].tTimer = 5;
-    gTasks[taskId].tBG1HOFS = -60;
+    // FORK: SKIP_BIRCH_SPEECH centers the player on return from the naming
+    // screen, so the platform stays put (HOFS 0) instead of vanilla's -60 offset
+    // (also at the SetGpuReg below). On conflict, keep the ternaries.
+    gTasks[taskId].tBG1HOFS = SKIP_BIRCH_SPEECH ? 0 : -60;
     ScanlineEffect_Stop();
     ResetSpriteData();
     FreeAllSpritePalettes();
@@ -1873,11 +1954,11 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
         gTasks[taskId].tPlayerGender = MALE;
         spriteId = gTasks[taskId].tBrendanSpriteId;
     }
-    gSprites[spriteId].x = 180;
+    gSprites[spriteId].x = sSkipBirchSpeechPlayerX;
     gSprites[spriteId].y = 60;
     gSprites[spriteId].invisible = FALSE;
     gTasks[taskId].tPlayerSpriteId = spriteId;
-    SetGpuReg(REG_OFFSET_BG1HOFS, -60);
+    SetGpuReg(REG_OFFSET_BG1HOFS, SKIP_BIRCH_SPEECH ? 0 : -60);
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
     SetGpuReg(REG_OFFSET_WIN0H, 0);
     SetGpuReg(REG_OFFSET_WIN0V, 0);
@@ -2130,10 +2211,15 @@ static void NewGameBirchSpeech_StartFadePlatformOut(u8 taskId, u8 delay)
 
 static void NewGameBirchSpeech_ShowGenderMenu(void)
 {
+    // GENDER_NEUTRAL_TEXT swaps the BOY/GIRL labels for neutral ones;
+    // both tables are two options in the same order, so input handling below is
+    // identical either way.
+    const struct MenuAction *menuActions = GENDER_NEUTRAL_TEXT ? sMenuActions_PlayerType : sMenuActions_Gender;
+
     DrawMainMenuWindowBorder(&sNewGameBirchSpeechTextWindows[1], 0xF3);
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
-    PrintMenuTable(1, ARRAY_COUNT(sMenuActions_Gender), sMenuActions_Gender);
-    InitMenuInUpperLeftCornerNormal(1, ARRAY_COUNT(sMenuActions_Gender), 0);
+    PrintMenuTable(1, 2, menuActions);
+    InitMenuInUpperLeftCornerNormal(1, 2, 0);
     PutWindowTilemap(1);
     CopyWindowToVram(1, COPYWIN_FULL);
 }
