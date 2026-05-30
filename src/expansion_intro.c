@@ -10,6 +10,7 @@
 #include "main.h"
 #include "intro.h"
 #include "intro_frlg.h"
+#include "main_menu.h"
 #include "m4a.h"
 #include "expansion_intro.h"
 #include "constants/rgb.h"
@@ -248,7 +249,16 @@ void Task_HandleExpansionIntro(u8 taskId)
         break;
     case 1:
         if (!gPaletteFade.active)
+        {
+        #if SKIP_TITLE_SEQUENCE == TRUE
+            // The logo is now fully faded in. Load the save here so its ~1s
+            // blocking flash read freezes behind the displayed RHH logo - the
+            // way the copyright screen hides it - rather than stalling on a
+            // blank boot screen. Boot skipped this load (see intro.c).
+            LoadGameSaveAfterBootup();
+        #endif
             tState++;
+        }
         break;
     case 2:
         if (tFrameCounter == 208)
@@ -280,11 +290,18 @@ void Task_HandleExpansionIntro(u8 taskId)
             {
                 SetMainCallback2(CB2_SetUpIntroFrlg);
             }
+        #if SKIP_TITLE_SEQUENCE == TRUE
+            else
+            {
+                SetMainCallback2(CB2_InitMainMenu);
+            }
+        #else
             else
             {
                 CreateTask(Task_Scene1_Load, 0);
                 SetMainCallback2(MainCB2_Intro);
             }
+        #endif
         }
         break;
     }
@@ -346,7 +363,13 @@ static void Task_ExpansionIntro_HandleBlend(u8 taskId)
 {
     if (GetGpuReg(REG_OFFSET_BLDY) != 0)
     {
+    #if SKIP_TITLE_SEQUENCE == TRUE
+        // The intro is the first thing shown on boot, so reveal the logo about
+        // twice as fast (~16 frames) to match the snappier copyright fade-in.
+        SetGpuReg(REG_OFFSET_BLDY, GetGpuReg(REG_OFFSET_BLDY) >= 2 ? GetGpuReg(REG_OFFSET_BLDY) - 2 : 0);
+    #else
         SetGpuReg(REG_OFFSET_BLDY, GetGpuReg(REG_OFFSET_BLDY) - 1);
+    #endif
     }
     else
     {

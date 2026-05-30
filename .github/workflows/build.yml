@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install binutils
         run: |
@@ -28,7 +28,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
 
       - name: Cache build tools
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             tools/bin2c/bin2c
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install binutils
         run: |
@@ -65,7 +65,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
 
       - name: Cache build tools
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             tools/bin2c/bin2c
@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install binutils
         run: |
@@ -100,7 +100,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
 
       - name: Cache build tools
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             tools/bin2c/bin2c
@@ -127,7 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install binutils
         run: |
@@ -135,7 +135,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
 
       - name: Cache build tools
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             tools/bin2c/bin2c
@@ -163,7 +163,7 @@ jobs:
       # but only for commits that land on master (not pull requests).
       - name: Upload Emerald ROM
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: pokeemerald-release
           path: pokeemerald-release.gba
@@ -174,7 +174,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install binutils
         run: |
@@ -182,7 +182,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
 
       - name: Cache build tools
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             tools/bin2c/bin2c
@@ -224,7 +224,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check that SUMMARY.md includes markdown doc files
         run: .github/docs_validate/inclusive_summary.py

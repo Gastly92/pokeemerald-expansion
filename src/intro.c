@@ -4,6 +4,7 @@
 #include "scanline_effect.h"
 #include "task.h"
 #include "title_screen.h"
+#include "main_menu.h"
 #include "libgcnmultiboot.h"
 #include "malloc.h"
 #include "gpu_regs.h"
@@ -1037,12 +1038,14 @@ static void MainCB2_EndIntro(void)
         SetMainCallback2(CB2_InitTitleScreen);
 }
 
+#if SKIP_TITLE_SEQUENCE == FALSE
 static void LoadCopyrightGraphics(u16 tilesetAddress, u16 tilemapAddress, u16 paletteOffset)
 {
     DecompressDataWithHeaderVram(gIntroCopyright_Gfx, (void *)(VRAM + tilesetAddress));
     DecompressDataWithHeaderVram(gIntroCopyright_Tilemap, (void *)(VRAM + tilemapAddress));
     LoadPalette(gIntroCopyright_Pal, paletteOffset, PLTT_SIZE_4BPP);
 }
+#endif
 
 static void SerialCB_CopyrightScreen(void)
 {
@@ -1069,11 +1072,17 @@ static u8 SetUpCopyrightScreen(void)
         CpuFill32(0, (void *)OAM, OAM_SIZE);
         CpuFill16(0, (void *)(PLTT + 2), PLTT_SIZE - 2);
         ResetPaletteFade();
+    #if SKIP_TITLE_SEQUENCE == FALSE
         LoadCopyrightGraphics(0, 0x3800, BG_PLTT_ID(0));
+    #endif
         ScanlineEffect_Stop();
         ResetTasks();
         ResetSpriteData();
         FreeAllSpritePalettes();
+        // Fade in from white. Under SKIP_TITLE_SEQUENCE no copyright graphic
+        // is loaded, so this fades an (otherwise black) screen up from white -
+        // masking the GBA's white boot screen - and the RHH intro then fades in
+        // from black, the way it is designed to.
         BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_WHITEALPHA);
         SetGpuReg(REG_OFFSET_BG0CNT, BGCNT_PRIORITY(0)
                                    | BGCNT_CHARBASE(0)
@@ -1085,6 +1094,15 @@ static u8 SetUpCopyrightScreen(void)
         REG_DISPCNT = DISPCNT_MODE_0 | DISPCNT_OBJ_1D_MAP | DISPCNT_BG0_ON;
         SetSerialCallback(SerialCB_CopyrightScreen);
         GameCubeMultiBoot_Init(&gMultibootProgramStruct);
+    #if SKIP_TITLE_SEQUENCE == TRUE
+        // Skip the multiboot delay and the copyright logo, jumping straight to
+        // the intro-launch state. The white->black fade set up above plays out
+        // in COPYRIGHT_START_INTRO (which waits on UpdatePaletteFade), then the
+        // RHH intro is launched and the save is loaded when SetUpCopyrightScreen
+        // returns 0 from that state.
+        gMain.state = COPYRIGHT_START_INTRO;
+        break;
+    #endif
     // REG_DISPCNT needs to be overwritten the second time, because otherwise the intro won't show up on VBA 1.7.2 and John GBA Lite emulators.
     // The REG_DISPCNT overwrite is NOT needed in m-GBA, No$GBA, VBA 1.8.0, My Boy and Pizza Boy GBA emulators.
     case COPYRIGHT_EMULATOR_BLEND:
@@ -1108,6 +1126,8 @@ static u8 SetUpCopyrightScreen(void)
 #if EXPANSION_INTRO == TRUE
         SetMainCallback2(CB2_ExpansionIntro);
         CreateTask(Task_HandleExpansionIntro, 0);
+#elif SKIP_TITLE_SEQUENCE == TRUE
+        SetMainCallback2(CB2_InitMainMenu);
 #else
         CreateTask(Task_Scene1_Load, 0);
         SetMainCallback2(MainCB2_Intro);
@@ -1136,18 +1156,40 @@ static u8 SetUpCopyrightScreen(void)
     return 1;
 }
 
+// Loads the save file and finishes boot-time setup. LoadGameSave does a
+// blocking flash read, so this is the slow part of boot. It is shared by the
+// normal boot path (CB2_InitCopyrightScreenAfterBootup, below) and the
+// SKIP_TITLE_SEQUENCE path, which defers it until the RHH logo is on screen
+// (see Task_HandleExpansionIntro) so the freeze hides behind the displayed
+// logo - the way the vanilla copyright screen hides it behind its own logo.
+void LoadGameSaveAfterBootup(void)
+{
+    SetSaveBlocksPointers(GetSaveBlocksPointersBaseOffset());
+    ResetMenuAndMonGlobals();
+    Save_ResetSaveCounters();
+    LoadGameSave(SAVE_NORMAL);
+    if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
+        Sav2_ClearSetDefault();
+    SetPokemonCryStereo(gSaveBlock2Ptr->optionsSound);
+    InitHeap(gHeap, HEAP_SIZE);
+}
+
 void CB2_InitCopyrightScreenAfterBootup(void)
 {
     if (!SetUpCopyrightScreen())
     {
-        SetSaveBlocksPointers(GetSaveBlocksPointersBaseOffset());
-        ResetMenuAndMonGlobals();
-        Save_ResetSaveCounters();
-        LoadGameSave(SAVE_NORMAL);
-        if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
-            Sav2_ClearSetDefault();
-        SetPokemonCryStereo(gSaveBlock2Ptr->optionsSound);
-        InitHeap(gHeap, HEAP_SIZE);
+    // FORK: upstream inlines the boot save-load here. We extracted it to
+    // LoadGameSaveAfterBootup() (above) so SKIP_TITLE_SEQUENCE can defer it
+    // (see Task_HandleExpansionIntro). If this conflicts on an upstream sync
+    // because that block changed, apply the change in that function rather than
+    // re-inlining it here.
+    //
+    // Only defer when there's an RHH intro to hide the load behind; with no
+    // intro (EXPANSION_INTRO off) boot goes straight to the menu, so load here
+    // as usual - otherwise the save would never load.
+    #if SKIP_TITLE_SEQUENCE == FALSE || EXPANSION_INTRO == FALSE
+        LoadGameSaveAfterBootup();
+    #endif
     }
 }
 

@@ -74,6 +74,7 @@
 
 // General settings
 #define EXPANSION_INTRO              TRUE    // If TRUE, a custom RHH intro will play after the vanilla copyright screen.
+#define SKIP_TITLE_SEQUENCE          TRUE    // If TRUE, skips the title sequence on boot (the copyright screen, the intro cinematic, and the title screen), going straight to the main menu. The RHH intro still plays if EXPANSION_INTRO is TRUE. Essential boot init (save loading, etc.) still runs.
 #define HQ_RANDOM                    TRUE    // If TRUE, replaces the default RNG with an implementation of SFC32 RNG. May break code that relies on RNG.
 #define PHONEMES_SHARED              FALSE   // If TRUE, bard phonemes all reference the same sound (sound/direct_sound_samples/phonemes/shared.bin) to save ROM space.
 

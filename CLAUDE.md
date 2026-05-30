@@ -58,6 +58,22 @@ easily; rewrites of existing logic conflict the most.
   which is why re-running `make`/`make check` after every sync is mandatory. Don't
   over-split files just to dodge conflicts; keep it idiomatic.
 
+### Marking intentional divergences: the `FORK:` tag
+
+When we deliberately diverge from upstream inside a file upstream also owns —
+especially a **deletion**, or a moved/replaced block git can't auto-merge — leave
+a `FORK:` comment at the divergence point so a future sync resolves it correctly
+instead of silently re-inlining or dropping our change.
+
+- **Tag:** `FORK:` — greppable, so `grep -rn "FORK:" src include` lists every
+  intentional divergence at a glance.
+- **Make it a durable resolution hint, not a description of upstream's internals**
+  (the latter goes stale). Say what we did, where the logic went, and how to
+  resolve a conflict here — e.g. "extracted to `LoadGameSaveAfterBootup()`; on
+  conflict, port upstream's change there rather than re-inlining."
+- Keep it at the exact spot that would conflict (it shows up on *our* side of the
+  conflict markers, where the person resolving will see it).
+
 ## Workflow conventions
 
 - **One branch + one session per feature/PR.** Keep changes scoped; don't tangle
@@ -90,6 +106,15 @@ make -j$(nproc) release        # optimized build -> pokeemerald-release.gba
 
 - A clean `make` doubles as the linter: CI sets `UNUSED_ERROR=1` and
   `DEPRECATED_ERROR=1`, so warnings fail the build.
+- **Verify locally with CI's flags before pushing.** A plain `make` won't error
+  on unused statics/vars, but CI does. Build with them set —
+  `UNUSED_ERROR=1 DEPRECATED_ERROR=1 make -j$(nproc) -O all` — so e.g. a function
+  referenced only inside a now-disabled `#if` is caught here, not in CI.
+- **Build new config flags in both states.** Code under an inactive `#if FLAG`
+  isn't compiled in the default build, so errors there stay hidden until the flag
+  flips (or CI builds another config). Toggle each new/changed flag — and relevant
+  combinations with related flags (e.g. `SKIP_TITLE_SEQUENCE` × `EXPANSION_INTRO`)
+  — and rebuild before pushing.
 - Baseline (unmodified upstream) test result: all tests pass, exit 0. Compare
   against this after changes to catch regressions.
 
