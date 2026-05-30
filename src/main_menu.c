@@ -1343,6 +1343,26 @@ static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
     }
     else
     {
+        // SKIP_NEW_GAME_INTRO: never reveal Birch or play his monologue. Set up
+        // the dialog windows the gender/name prompts need, hide the platform
+        // palette to match the normal pre-transition state, then jump to the
+        // Birch->player transition so only the character (gender) and name
+        // selection remain. Fading out the still-invisible Birch/Lotad sprites
+        // in that chain is a visual no-op. Runtime check (not #if) keeps the
+        // speech tasks referenced for UNUSED_ERROR=1 in both flag states.
+        if (SKIP_NEW_GAME_INTRO)
+        {
+            LoadPalette(&sBirchSpeechBgGradientPal[0], BG_PLTT_ID(0) + 1, PLTT_SIZEOF(8));
+            InitWindows(sNewGameBirchSpeechTextWindows);
+            LoadMainMenuWindowFrameTiles(0, 0xF3);
+            LoadMessageBoxGfx(0, BIRCH_DLG_BASE_TILE_NUM, BG_PLTT_ID(15));
+            DrawDialogFrameWithCustomTile(0, TRUE, BIRCH_DLG_BASE_TILE_NUM);
+            PutWindowTilemap(0);
+            CopyWindowToVram(0, COPYWIN_GFX);
+            NewGameBirchSpeech_ClearWindow(0);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_StartBirchLotadPlatformFade;
+            return;
+        }
         spriteId = gTasks[taskId].tBirchSpriteId;
         gSprites[spriteId].x = 136;
         gSprites[spriteId].y = 60;
@@ -1373,21 +1393,9 @@ static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId)
             PutWindowTilemap(0);
             CopyWindowToVram(0, COPYWIN_GFX);
             NewGameBirchSpeech_ClearWindow(0);
-            // SKIP_NEW_GAME_INTRO: jump straight to the Birch->player
-            // transition, skipping the Welcome/Pokémon/Lotad monologue, and
-            // land on the gender (character) and name selection. The branch is
-            // a runtime check (not #if) so every speech task below stays
-            // referenced and UNUSED_ERROR=1 builds in both flag states.
-            if (SKIP_NEW_GAME_INTRO)
-            {
-                gTasks[taskId].func = Task_NewGameBirchSpeech_StartBirchLotadPlatformFade;
-            }
-            else
-            {
-                StringExpandPlaceholders(gStringVar4, gText_Birch_Welcome);
-                AddTextPrinterForMessage(TRUE);
-                gTasks[taskId].func = Task_NewGameBirchSpeech_ThisIsAPokemon;
-            }
+            StringExpandPlaceholders(gStringVar4, gText_Birch_Welcome);
+            AddTextPrinterForMessage(TRUE);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_ThisIsAPokemon;
         }
     }
 }
