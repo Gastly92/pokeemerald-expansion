@@ -117,6 +117,12 @@ make -j$(nproc) release        # optimized build -> pokeemerald-release.gba
   — and rebuild before pushing.
 - Baseline (unmodified upstream) test result: all tests pass, exit 0. Compare
   against this after changes to catch regressions.
+- **Run one `make` target at a time — don't launch builds concurrently.** All
+  targets (`-O all`, `check`, per-flag rebuilds) share the same `build/` tree, so
+  running them in parallel makes them clobber each other's object files and
+  produces bogus failures (e.g. a spurious non-zero `check` exit). Serialize them,
+  or `rm -rf build` between configs. To wait on a background build, block on its
+  completion (a single bounded wait) rather than firing off the next `make`.
 
 ## CI
 
