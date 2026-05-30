@@ -177,6 +177,19 @@ static void SetBattleFrontierFirstArrivalState(void)
     FlagSet(FLAG_SYS_FRONTIER_PASS);
     VarSet(VAR_HAS_ENTERED_BATTLE_FRONTIER, 1);
 
+    // Hide the reception-gate Scott. He spawns at the counter (object_event
+    // flag FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT) and is normally
+    // removed at the end of the first-time scene we skip above; without the
+    // scene he just stands there blocking the gate with no script, so set his
+    // hide flag to keep him from appearing.
+    FlagSet(FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT);
+
+    // The player starts broke (the default 3000 is for the stock intro) and
+    // already has the Running Shoes (normally a gift from Mom during the intro
+    // we skip), so the Frontier is playable straight away.
+    SetMoney(&gSaveBlock1Ptr->money, 0);
+    FlagSet(FLAG_SYS_B_DASH);
+
     // Mark the skipped Littleroot intro as complete (state 7 = past every
     // map_script_2 trigger) so none of its cutscenes fire if the player ever
     // visits Littleroot, then mirror the gender-specific house setup the truck
