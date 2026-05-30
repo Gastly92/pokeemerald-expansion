@@ -1327,7 +1327,11 @@ static void Task_NewGameBirchSpeech_Init(u8 taskId)
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowBirch;
     gTasks[taskId].tPlayerSpriteId = SPRITE_NONE;
     gTasks[taskId].data[3] = 0xFF;
-    gTasks[taskId].tTimer = 0xD8;
+    // SKIP_NEW_GAME_INTRO: the long 0xD8-frame wait exists to let Birch's
+    // silhouette sit on screen before his speech. With him skipped it is just
+    // dead time before the character picker, so collapse it to the palette
+    // fade-in length (16 frames).
+    gTasks[taskId].tTimer = SKIP_NEW_GAME_INTRO ? 16 : 0xD8;
     PlayBGM(MUS_ROUTE122);
     ShowBg(0);
     ShowBg(1);
@@ -1706,6 +1710,10 @@ static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8 taskId)
         // check (not #if) keeps the closing tasks referenced for UNUSED_ERROR.
         if (SKIP_NEW_GAME_INTRO)
         {
+            // Clear the name-confirm dialog box and its frame so the tilemap
+            // doesn't linger into CB2_NewGame (the vanilla closing path slides
+            // it away instead; skipping that left a stutter where the box was).
+            ClearDialogWindowAndFrame(0, TRUE);
             FadeOutBGM(4);
             BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_WHITEALPHA);
             gTasks[taskId].func = Task_NewGameBirchSpeech_Cleanup;
