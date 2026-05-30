@@ -1887,8 +1887,16 @@ void CB2_NewGame(void)
     UnlockPlayerFieldControls();
     if (IS_FRLG)
         gFieldCallback = FieldCB_WarpExitFadeFromBlack;
+#if START_AT_BATTLE_FRONTIER
+    // FORK: New games warp straight to the Battle Frontier (see WarpToTruck in
+    // new_game.c), so skip the truck-arrival animation and just fade in. On
+    // conflict, keep this branch rather than restoring ExecuteTruckSequence.
+    else
+        gFieldCallback = FieldCB_WarpExitFadeFromBlack;
+#else
     else
         gFieldCallback = ExecuteTruckSequence;
+#endif
     gFieldCallback2 = NULL;
     DoMapLoadLoop(&gMain.state);
     SetFieldVBlankCallback();
