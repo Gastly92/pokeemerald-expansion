@@ -1373,9 +1373,21 @@ static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId)
             PutWindowTilemap(0);
             CopyWindowToVram(0, COPYWIN_GFX);
             NewGameBirchSpeech_ClearWindow(0);
-            StringExpandPlaceholders(gStringVar4, gText_Birch_Welcome);
-            AddTextPrinterForMessage(TRUE);
-            gTasks[taskId].func = Task_NewGameBirchSpeech_ThisIsAPokemon;
+            // SKIP_NEW_GAME_INTRO: jump straight to the Birch->player
+            // transition, skipping the Welcome/Pokémon/Lotad monologue, and
+            // land on the gender (character) and name selection. The branch is
+            // a runtime check (not #if) so every speech task below stays
+            // referenced and UNUSED_ERROR=1 builds in both flag states.
+            if (SKIP_NEW_GAME_INTRO)
+            {
+                gTasks[taskId].func = Task_NewGameBirchSpeech_StartBirchLotadPlatformFade;
+            }
+            else
+            {
+                StringExpandPlaceholders(gStringVar4, gText_Birch_Welcome);
+                AddTextPrinterForMessage(TRUE);
+                gTasks[taskId].func = Task_NewGameBirchSpeech_ThisIsAPokemon;
+            }
         }
     }
 }
@@ -1669,10 +1681,22 @@ static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8 taskId)
     {
     case 0:
         PlaySE(SE_SELECT);
-        gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
-        NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
-        NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
-        gTasks[taskId].func = Task_NewGameBirchSpeech_SlidePlatformAway2;
+        // SKIP_NEW_GAME_INTRO: once the name is confirmed, fade out and start
+        // the game, skipping Birch's closing "you're ready" remarks. Runtime
+        // check (not #if) keeps the closing tasks referenced for UNUSED_ERROR.
+        if (SKIP_NEW_GAME_INTRO)
+        {
+            FadeOutBGM(4);
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_WHITEALPHA);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_Cleanup;
+        }
+        else
+        {
+            gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+            NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
+            NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_SlidePlatformAway2;
+        }
         break;
     case MENU_B_PRESSED:
     case 1:
