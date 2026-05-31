@@ -137,11 +137,14 @@ BattleFrontier_BattleFactoryLobby_EventScript_AskTakeChallenge::
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 
 BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge::
-	@ FORK: B_FRONTIER_FORCE_LVL_100 is a C config flag, so it can't be read in a
-	@ script #if (the script preprocessor has no TRUE/FALSE). Bridge it through a
-	@ special instead: when set, skip the Lv50/Open prompt and force Open Level.
-	specialvar VAR_RESULT, ShouldForceFrontierLvlOpen
-	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleFactoryLobby_EventScript_ForceLvlOpen
+	@ FORK: B_FRONTIER_FORCE_LVL_100 locks battles to level 100, so skip the
+	@ Lv50/Open prompt and force Open Level. Uses an assembler .if (not a cpp
+	@ #if): .if runs after cpp, where TRUE is a real .set symbol, so config-value
+	@ flags work here. A bare #if FLAG would expand to "#if TRUE" and, since cpp
+	@ has no TRUE, evaluate to 0 and silently take the #else branch.
+.if B_FRONTIER_FORCE_LVL_100
+	frontier_set FRONTIER_DATA_LVL_MODE, FRONTIER_LVL_OPEN
+.else
 	message BattleFrontier_BattleFactoryLobby_Text_WhichLevelMode
 	waitmessage
 	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
@@ -149,12 +152,7 @@ BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge::
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 	frontier_set FRONTIER_DATA_LVL_MODE, VAR_RESULT
-	goto BattleFrontier_BattleFactoryLobby_EventScript_AskSaveBeforeChallenge
-
-BattleFrontier_BattleFactoryLobby_EventScript_ForceLvlOpen::
-	frontier_set FRONTIER_DATA_LVL_MODE, FRONTIER_LVL_OPEN
-
-BattleFrontier_BattleFactoryLobby_EventScript_AskSaveBeforeChallenge::
+.endif
 	msgbox BattleFrontier_BattleFactoryLobby_Text_OkayToSaveBeforeChallenge, MSGBOX_YESNO
 	switch VAR_RESULT
 	case NO, BattleFrontier_BattleFactoryLobby_EventScript_LoadPartyAndCancelChallenge

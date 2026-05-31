@@ -58,6 +58,37 @@ easily; rewrites of existing logic conflict the most.
   which is why re-running `make`/`make check` after every sync is mandatory. Don't
   over-split files just to dodge conflicts; keep it idiomatic.
 
+### Using config flags in scripts (`.inc`/`.s`) — use `.if`, NOT `#if`
+
+Reading a config flag (`B_*`/`I_*`/`P_*`/`OW_*`) inside a map/event script is a
+known footgun. Scripts are built by `preproc | cpp | preproc | as`, and the cpp
+pass for scripts only pulls in `constants/global.h`, **not** `gba/gba.h` — so
+`TRUE`/`FALSE` are *undefined* during cpp. A value-style flag like
+`#define B_FRONTIER_FORCE_LVL_100 TRUE` therefore breaks two ways:
+
+- **`#if B_FRONTIER_FORCE_LVL_100`** → cpp expands it to `#if TRUE` → undefined
+  identifier → `#if 0`. It **silently takes the `#else` branch** with no build
+  error. This is the trap; don't do it.
+- **`#define TRUE 1` in a header to "fix" it** → cpp then rewrites the `.set TRUE, 1`
+  line that `constants/global.inc` feeds the assembler into `.set 1, 1` → build
+  fails. Don't do this either.
+
+Do one of these instead:
+
+1. **Assembler `.if FLAG` (preferred for pure script/text branches).** `.if`
+   runs *after* cpp, in the assembler, where `TRUE`/`FALSE` exist as real `.set`
+   symbols (from `global.inc`). So `.if B_FRONTIER_FORCE_LVL_100` … `.else` …
+   `.endif` evaluates correctly and the dead branch is eliminated. Precedent:
+   `data/maps/MtChimney/scripts.inc` (`.if OW_SHOW_ITEM_DESCRIPTIONS == ...`).
+2. **A `special` that returns the flag, branched on with `goto_if_eq`.** Use this
+   only when C also needs to act on the flag (the decision genuinely lives in C),
+   not just to swap script text — it costs a runtime branch and a registered
+   special vs. compile-time elimination.
+
+Note that flags work fine as plain script *operands* (`goto_if_eq VAR_RESULT, TRUE`,
+`case FRONTIER_LVL_OPEN, ...`): those are resolved by the assembler, not cpp. Only
+cpp `#if`/`#elif` on a config value is the problem.
+
 ### Marking intentional divergences: the `FORK:` tag
 
 When we deliberately diverge from upstream inside a file upstream also owns —

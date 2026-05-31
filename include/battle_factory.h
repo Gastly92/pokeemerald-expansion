@@ -3,8 +3,6 @@
 
 void CallBattleFactoryFunction(void);
 bool8 InBattleFactory(void);
-u16 ShouldForceFrontierLvlOpen(void);
-u16 ShouldAutoRentFactoryTeam(void);
 u8 GetFactoryMonFixedIV(u8 challengeNum, bool8 isLastBattle);
 void FillFactoryBrainParty(void);
 u8 GetNumPastRentalsRank(u8 battleMode, enum FrontierLevelMode lvlMode);

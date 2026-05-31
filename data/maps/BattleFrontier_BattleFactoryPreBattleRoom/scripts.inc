@@ -36,17 +36,13 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterRoom::
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentType
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentStyle
 	@ FORK: B_FRONTIER_PARTY_SIZE_6V6 auto-rents a full team of 6, so there is no
-	@ selection to choose from. The flag is a C config, so branch via a special
-	@ rather than a script #if (which can't read TRUE/FALSE).
-	specialvar VAR_RESULT, ShouldAutoRentFactoryTeam
-	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_RentedFullTeam
-	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_HoldMonsChooseFromSelection, MSGBOX_DEFAULT
-	goto BattleFrontier_BattleFactoryPreBattleRoom_EventScript_DoRentMons
-
-BattleFrontier_BattleFactoryPreBattleRoom_EventScript_RentedFullTeam::
+	@ selection to choose from. Uses an assembler .if (not a cpp #if) so the
+	@ config-value flag is read correctly; see the note in BattleFactoryLobby.
+.if B_FRONTIER_PARTY_SIZE_6V6
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_RentedFullTeam, MSGBOX_DEFAULT
-
-BattleFrontier_BattleFactoryPreBattleRoom_EventScript_DoRentMons::
+.else
+	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_HoldMonsChooseFromSelection, MSGBOX_DEFAULT
+.endif
 	fadescreen FADE_TO_BLACK
 	factory_setswapped
 	factory_rentmons

@@ -614,19 +614,6 @@ bool8 InBattleFactory(void)
         || gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_FACTORY_BATTLE_ROOM;
 }
 
-// FORK: bridge config flags to the lobby/pre-battle scripts. Script #if can't
-// read these (the script preprocessor has no TRUE/FALSE), so the scripts call
-// these specials and branch on VAR_RESULT instead.
-u16 ShouldForceFrontierLvlOpen(void)
-{
-    return B_FRONTIER_FORCE_LVL_100;
-}
-
-u16 ShouldAutoRentFactoryTeam(void)
-{
-    return B_FRONTIER_PARTY_SIZE_6V6;
-}
-
 static void RestorePlayerPartyHeldItems(void)
 {
     u8 i;
