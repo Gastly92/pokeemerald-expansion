@@ -259,6 +259,8 @@ gSpecials::
 	def_special DoSpecialTrainerBattle, waitstate=1
 	def_special CallBattleArenaFunction
 	def_special CallBattleFactoryFunction
+	def_special ShouldForceFrontierLvlOpen
+	def_special ShouldAutoRentFactoryTeam
 	def_special CallBattlePikeFunction
 	def_special CallBattlePyramidFunction
 	def_special StopMapMusic

@@ -137,10 +137,11 @@ BattleFrontier_BattleFactoryLobby_EventScript_AskTakeChallenge::
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 
 BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge::
-#if B_FRONTIER_FORCE_LVL_100
-	@ FORK: level is locked to 100 (Open Level), so don't ask which level mode.
-	frontier_set FRONTIER_DATA_LVL_MODE, FRONTIER_LVL_OPEN
-#else
+	@ FORK: B_FRONTIER_FORCE_LVL_100 is a C config flag, so it can't be read in a
+	@ script #if (the script preprocessor has no TRUE/FALSE). Bridge it through a
+	@ special instead: when set, skip the Lv50/Open prompt and force Open Level.
+	specialvar VAR_RESULT, ShouldForceFrontierLvlOpen
+	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleFactoryLobby_EventScript_ForceLvlOpen
 	message BattleFrontier_BattleFactoryLobby_Text_WhichLevelMode
 	waitmessage
 	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
@@ -148,7 +149,12 @@ BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge::
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 	frontier_set FRONTIER_DATA_LVL_MODE, VAR_RESULT
-#endif
+	goto BattleFrontier_BattleFactoryLobby_EventScript_AskSaveBeforeChallenge
+
+BattleFrontier_BattleFactoryLobby_EventScript_ForceLvlOpen::
+	frontier_set FRONTIER_DATA_LVL_MODE, FRONTIER_LVL_OPEN
+
+BattleFrontier_BattleFactoryLobby_EventScript_AskSaveBeforeChallenge::
 	msgbox BattleFrontier_BattleFactoryLobby_Text_OkayToSaveBeforeChallenge, MSGBOX_YESNO
 	switch VAR_RESULT
 	case NO, BattleFrontier_BattleFactoryLobby_EventScript_LoadPartyAndCancelChallenge
