@@ -23,6 +23,7 @@
 #include "config/debug.h"
 #include "config/dexnav.h"
 #include "config/follower_npc.h"
+#include "config/frontier.h"
 #include "config/general.h"
 #include "config/item.h"
 #include "config/map_preview_screen.h"
@@ -84,9 +85,21 @@ enum Language
 #define FRONTIER_PARTY_SIZE         3
 #define FRONTIER_DOUBLES_PARTY_SIZE 4
 #define FRONTIER_MULTI_PARTY_SIZE   2
+// FORK: Battle Factory team size. Gated by B_FRONTIER_PARTY_SIZE_6V6 for our
+// 6v6 sandbox (scoped to the Factory so other facilities keep their vanilla
+// 3-mon coordinate tables). On conflict, keep the gate.
+#if B_FRONTIER_PARTY_SIZE_6V6
+#define FACTORY_PARTY_SIZE          PARTY_SIZE
+#else
+#define FACTORY_PARTY_SIZE          FRONTIER_PARTY_SIZE
+#endif
 #define MAX_FRONTIER_PARTY_SIZE    (max(FRONTIER_PARTY_SIZE,        \
                                     max(FRONTIER_DOUBLES_PARTY_SIZE,\
                                         FRONTIER_MULTI_PARTY_SIZE)))
+// FORK: gFrontierTempParty must also hold a full 6v6 Battle Factory team, but
+// MAX_FRONTIER_PARTY_SIZE is deliberately left at its vanilla value so the
+// saveblock tower-record party arrays don't grow.
+#define FRONTIER_TEMP_PARTY_SIZE   (max(MAX_FRONTIER_PARTY_SIZE, FACTORY_PARTY_SIZE))
 #define UNION_ROOM_PARTY_SIZE       2
 
 // capacities of various saveblock objects

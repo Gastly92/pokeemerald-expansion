@@ -17,7 +17,7 @@ struct BattleFrontierTrainer
 
 // Temporary storage for monIds of the opponent team
 // during team generation in battle factory and similar facilities.
-extern u16 gFrontierTempParty[MAX_FRONTIER_PARTY_SIZE];
+extern u16 gFrontierTempParty[FRONTIER_TEMP_PARTY_SIZE];
 
 extern const struct BattleFrontierTrainer *gFacilityTrainers;
 extern const struct TrainerMon *gFacilityTrainerMons;
