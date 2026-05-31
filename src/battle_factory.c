@@ -132,6 +132,14 @@ static void InitFactoryChallenge(void)
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
 
+#if B_FRONTIER_FORCE_LVL_100
+    // FORK: always battle at level 100. Open Level mode creates both teams at
+    // FRONTIER_MAX_LEVEL_OPEN (== MAX_LEVEL), so force it regardless of the
+    // level mode the player picked at the lobby.
+    lvlMode = FRONTIER_LVL_OPEN;
+    gSaveBlock2Ptr->frontier.lvlMode = lvlMode;
+#endif
+
     gSaveBlock2Ptr->frontier.challengeStatus = 0;
     gSaveBlock2Ptr->frontier.curChallengeBattleNum = 0;
     gSaveBlock2Ptr->frontier.challengePaused = FALSE;

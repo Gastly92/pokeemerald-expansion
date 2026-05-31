@@ -37,6 +37,22 @@ git merge upstream/master      # MERGE, not rebase — this is a long-lived shar
 - After every sync, re-verify the build and tests (see below) before merging to
   `master`.
 
+#### Our own README (`merge=ours`)
+
+`README.md` is ours, not upstream's. To keep upstream syncs from touching it,
+`.gitattributes` marks it `merge=ours`, which needs the driver defined per-clone:
+
+```bash
+git config merge.ours.driver true   # web: done by the session-start hook; run once in local clones
+```
+
+With the driver set, `git merge upstream/master` keeps our `README.md` verbatim
+and never reports a conflict on it. If the driver is *not* set, git just falls
+back to a normal merge for that file (no worse than any other conflict). To add
+another fork-owned file to this scheme, list it in `.gitattributes` with
+`merge=ours` — only for files upstream *also* edits; new fork-only files (like
+`FORK.md`, `CLAUDE.md`) never conflict and don't need it.
+
 ### Minimizing merge conflicts
 
 Conflicts happen line-by-line in files upstream *also* edits. The goal isn't
@@ -58,6 +74,37 @@ easily; rewrites of existing logic conflict the most.
   which is why re-running `make`/`make check` after every sync is mandatory. Don't
   over-split files just to dodge conflicts; keep it idiomatic.
 
+### Using config flags in scripts (`.inc`/`.s`) — use `.if`, NOT `#if`
+
+Reading a config flag (`B_*`/`I_*`/`P_*`/`OW_*`) inside a map/event script is a
+known footgun. Scripts are built by `preproc | cpp | preproc | as`, and the cpp
+pass for scripts only pulls in `constants/global.h`, **not** `gba/gba.h` — so
+`TRUE`/`FALSE` are *undefined* during cpp. A value-style flag like
+`#define B_FRONTIER_FORCE_LVL_100 TRUE` therefore breaks two ways:
+
+- **`#if B_FRONTIER_FORCE_LVL_100`** → cpp expands it to `#if TRUE` → undefined
+  identifier → `#if 0`. It **silently takes the `#else` branch** with no build
+  error. This is the trap; don't do it.
+- **`#define TRUE 1` in a header to "fix" it** → cpp then rewrites the `.set TRUE, 1`
+  line that `constants/global.inc` feeds the assembler into `.set 1, 1` → build
+  fails. Don't do this either.
+
+Do one of these instead:
+
+1. **Assembler `.if FLAG` (preferred for pure script/text branches).** `.if`
+   runs *after* cpp, in the assembler, where `TRUE`/`FALSE` exist as real `.set`
+   symbols (from `global.inc`). So `.if B_FRONTIER_FORCE_LVL_100` … `.else` …
+   `.endif` evaluates correctly and the dead branch is eliminated. Precedent:
+   `data/maps/MtChimney/scripts.inc` (`.if OW_SHOW_ITEM_DESCRIPTIONS == ...`).
+2. **A `special` that returns the flag, branched on with `goto_if_eq`.** Use this
+   only when C also needs to act on the flag (the decision genuinely lives in C),
+   not just to swap script text — it costs a runtime branch and a registered
+   special vs. compile-time elimination.
+
+Note that flags work fine as plain script *operands* (`goto_if_eq VAR_RESULT, TRUE`,
+`case FRONTIER_LVL_OPEN, ...`): those are resolved by the assembler, not cpp. Only
+cpp `#if`/`#elif` on a config value is the problem.
+
 ### Marking intentional divergences: the `FORK:` tag
 
 When we deliberately diverge from upstream inside a file upstream also owns —
@@ -73,6 +120,44 @@ instead of silently re-inlining or dropping our change.
   conflict, port upstream's change there rather than re-inlining."
 - Keep it at the exact spot that would conflict (it shows up on *our* side of the
   conflict markers, where the person resolving will see it).
+
+### Upstream-mergeable cleanups: the `UPSTREAM:` tag
+
+Sometimes we touch upstream-owned code in a way that is *purely a readability
+improvement with no behavior change* — e.g. replacing a magic `3` with the named
+`FRONTIER_PARTY_SIZE`, or naming an unexplained constant. These are good
+candidates to contribute back upstream (unlike `FORK:` divergences, which are
+intentionally ours and must never go upstream).
+
+- **Tag:** `UPSTREAM:` — the counterpart to `FORK:` (FORK: stays ours; UPSTREAM:
+  is meant to be sent back). Greppable (`grep -rn "UPSTREAM:" src include`), so
+  the set of upstream-mergeable cleanups can be collected into a PR later.
+- **Only for behavior-preserving changes** at the vanilla config (a `3 →
+  FRONTIER_PARTY_SIZE` swap is behavior-preserving when the flag is off / the
+  constant is 3). If the change alters behavior, it's a `FORK:`, not an `UPSTREAM:`.
+- Keep the note short; say what was clarified and why it's upstream-safe.
+
+## Documenting fork features
+
+We keep two human-facing docs in files we own (so they never conflict on sync):
+
+- **`README.md`** — the repo's front page, rewritten as our own (a short intro
+  describing the standalone Battle Frontier romhack, linking to `FORK.md` and
+  crediting upstream).
+  It is **not** upstream's README. See "Our own README" below for how that's
+  kept conflict-free.
+- **`FORK.md`** — the inventory of every feature this fork adds on top of
+  upstream: a table of *feature · flag(s) · location · status · notes*. It is an
+  **index**, not a spec — the flag comment in `include/config/*.h` stays the
+  source of truth for exact behavior; `FORK.md` records what the flag can't
+  (status, known limitations, where to look).
+
+**When you add or change a fork feature, update `FORK.md` in the same PR.** Add or
+edit its row — especially the *status* and *notes* columns when something is
+partial or has a known limitation (e.g. "Battle Dome layout not yet generalized
+to 6"). Keep rows one line; don't restate the flag comment. The `FORK:` code tag
+(above) and `FORK.md` are complementary: the tag marks the divergence in-code,
+the table indexes the feature for a human.
 
 ## Workflow conventions
 

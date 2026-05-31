@@ -35,11 +35,22 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterRoom::
 	setorcopyvar VAR_0x8006, VAR_RESULT
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentType
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentStyle
+	@ FORK: B_FRONTIER_PARTY_SIZE_6V6 auto-rents a full team of 6, so there is no
+	@ selection to choose from. Uses an assembler .if (not a cpp #if) so the
+	@ config-value flag is read correctly; see the note in BattleFactoryLobby.
+.if B_FRONTIER_PARTY_SIZE_6V6
+	@ Build the team synchronously via callnative — no rental screen, so no
+	@ fade-to-black/fade-in transition flash before "right this way".
+	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_RentedFullTeam, MSGBOX_DEFAULT
+	factory_setswapped
+	callnative AutoRentFullParty
+.else
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_HoldMonsChooseFromSelection, MSGBOX_DEFAULT
 	fadescreen FADE_TO_BLACK
 	factory_setswapped
 	factory_rentmons
 	waitstate
+.endif
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom::
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_RightThisWay, MSGBOX_DEFAULT
 	closemessage
@@ -457,6 +468,11 @@ BattleFrontier_BattleFactoryPreBattleRoom_Text_HoldMonsChooseFromSelection:
 	.string "safekeeping.\p"
 	.string "You may then choose from our\n"
 	.string "selection of POKéMON.$"
+
+@ FORK: shown instead of the above when a full team of 6 is auto-rented.
+BattleFrontier_BattleFactoryPreBattleRoom_Text_RentedFullTeam:
+	.string "We've prepared a full rental team of\n"
+	.string "6 POKéMON for you.$"
 
 BattleFrontier_BattleFactoryPreBattleRoom_Text_LetUsRestoreMons:
 	.string "Thank you for competing!\n"

@@ -27,3 +27,11 @@ Makefile text eol=lf
 
 *.h linguist-language=C
 *.inc linguist-language=Assembly
+
+# FORK: keep our own version of these files on `git merge upstream/master`
+# instead of merging upstream's. Requires the "ours" merge driver to be defined
+# per-clone: `git config merge.ours.driver true` (done by the session-start hook
+# in web containers; run it once manually in local clones). If the driver is not
+# defined, git falls back to a normal merge for these files — never worse than
+# today. Only list files upstream *also* owns; new fork-only files never conflict.
+README.md merge=ours

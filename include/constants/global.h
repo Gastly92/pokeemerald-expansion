@@ -23,6 +23,7 @@
 #include "config/debug.h"
 #include "config/dexnav.h"
 #include "config/follower_npc.h"
+#include "config/frontier.h"
 #include "config/general.h"
 #include "config/item.h"
 #include "config/map_preview_screen.h"
@@ -81,7 +82,15 @@ enum Language
 // party sizes
 #define PARTY_SIZE 6
 #define MULTI_PARTY_SIZE (PARTY_SIZE / 2)
+// FORK: B_FRONTIER_PARTY_SIZE_6V6 makes Frontier singles full 6-mon teams (used
+// by the 6v6 Battle Factory sandbox). This also grows MAX_FRONTIER_PARTY_SIZE to
+// 6, so the saveblock tower-record party arrays grow with it — space for that is
+// reclaimed via the FREE_* flags in config/save.h. On conflict, keep the gate.
+#if B_FRONTIER_PARTY_SIZE_6V6
+#define FRONTIER_PARTY_SIZE         6
+#else
 #define FRONTIER_PARTY_SIZE         3
+#endif
 #define FRONTIER_DOUBLES_PARTY_SIZE 4
 #define FRONTIER_MULTI_PARTY_SIZE   2
 #define MAX_FRONTIER_PARTY_SIZE    (max(FRONTIER_PARTY_SIZE,        \

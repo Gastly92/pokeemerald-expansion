@@ -15,6 +15,12 @@ fi
 # this is re-added every session. Idempotent: ignore the error if it exists.
 git remote add upstream https://github.com/rh-hideout/pokeemerald-expansion.git 2>/dev/null || true
 
+# Define the "ours" merge driver referenced by .gitattributes (e.g. README.md
+# merge=ours), so `git merge upstream/master` keeps our version of those files
+# verbatim instead of merging upstream's. This is per-clone local config, so it
+# must be re-set each ephemeral session. Idempotent.
+git config merge.ours.driver true || true
+
 # Idempotent: skip the install if the cross-compiler is already present.
 if command -v arm-none-eabi-gcc >/dev/null 2>&1; then
   echo "GBA toolchain already installed; skipping."

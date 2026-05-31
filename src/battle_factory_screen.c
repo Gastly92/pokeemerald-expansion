@@ -44,6 +44,20 @@
 
 #define SELECTABLE_MONS_COUNT 6
 
+// FORK: Ball row layout for the rental/swap screens. The vanilla 3-ball spacing
+// (48px apart, starting at x=72) doesn't fit FRONTIER_PARTY_SIZE balls when that
+// is 6, so 6v6 uses the same tighter layout the rental select screen always used
+// (35px apart, starting at x=32). Used by both the initial ball placement and
+// the slide-cycle animation when switching between player/enemy parties, so they
+// must agree.
+#if B_FRONTIER_PARTY_SIZE_6V6
+#define SWAP_BALL_X(i) ((35 * (i)) + 32)
+#define SWAP_BALL_GAP  35
+#else
+#define SWAP_BALL_X(i) ((48 * (i)) + 72)
+#define SWAP_BALL_GAP  48
+#endif
+
 #define PALNUM_FADE_TEXT 14
 #define PALNUM_TEXT      15
 
@@ -1018,6 +1032,12 @@ static const struct SwapScreenAction sSwap_PlayerScreenActions[] =
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+#if B_FRONTIER_PARTY_SIZE_6V6
+    // FORK: one SWAPACTION_MON per party slot so the cursor reaches all 6 balls.
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+#endif
     {.id = SWAPACTION_CANCEL, .func = Swap_ActionCancel},
 };
 
@@ -1026,6 +1046,12 @@ static const struct SwapScreenAction sSwap_EnemyScreenActions[] =
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+#if B_FRONTIER_PARTY_SIZE_6V6
+    // FORK: one SWAPACTION_MON per party slot so the cursor reaches all 6 balls.
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+#endif
     {.id = SWAPACTION_PKMN_FOR_SWAP, .func = Swap_ActionPkmnForSwap},
     {.id = SWAPACTION_CANCEL, .func = Swap_ActionCancel},
 };
@@ -1078,6 +1104,48 @@ static void VBlankCB_SelectScreen(void)
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
 }
+
+#if B_FRONTIER_PARTY_SIZE_6V6
+// FORK: 6v6 sandbox auto-rent. Instead of letting the player pick a subset on
+// the rental select screen, the full set of generated rentals (rentalMons[0..
+// FRONTIER_PARTY_SIZE-1], created by GenerateInitialRentalMons) becomes the
+// team directly. This mirrors what CreateFrontierFactorySelectableMons +
+// Select_CopyMonsToPlayerParty do, collapsed into one step with no UI.
+//
+// Called as a script `callnative` (see the lobby/pre-battle scripts), so it runs
+// synchronously in the overworld without opening a screen or switching the main
+// callback — no fade-to-black/fade-in transition flash.
+void AutoRentFullParty(void)
+{
+    u8 i;
+    // FORK: sandbox QoL — the auto-rented team always gets max IVs, regardless of
+    // the current win streak / challenge number.
+    u8 ivs = MAX_PER_STAT_IVS;
+    u8 level;
+    u32 otId = READ_OTID_FROM_SAVE;
+    enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
+
+    ZeroPlayerPartyMons();
+    gFacilityTrainerMons = gBattleFrontierMons;
+    // With B_FRONTIER_FORCE_LVL_100 the lobby forces lvlMode to Open, so this
+    // resolves to Lv100; the Lv50 branch only applies if that flag is off and the
+    // player actually picked Lv50.
+    if (lvlMode != FRONTIER_LVL_50)
+        level = FRONTIER_MAX_LEVEL_OPEN;
+    else
+        level = FRONTIER_MAX_LEVEL_50;
+
+    for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+    {
+        u16 monId = gSaveBlock2Ptr->frontier.rentalMons[i].monId;
+        CreateFacilityMon(&gFacilityTrainerMons[monId], level, ivs, otId, FLAG_FRONTIER_MON_FACTORY, &gParties[B_TRAINER_PLAYER][i]);
+        gSaveBlock2Ptr->frontier.rentalMons[i].ivs = ivs;
+        gSaveBlock2Ptr->frontier.rentalMons[i].personality = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_PERSONALITY);
+        gSaveBlock2Ptr->frontier.rentalMons[i].abilityNum = GetBoxMonData(&gParties[B_TRAINER_PLAYER][i].box, MON_DATA_ABILITY_NUM);
+    }
+    CalculatePlayerPartyCount();
+}
+#endif // B_FRONTIER_PARTY_SIZE_6V6
 
 void DoBattleFactorySelectScreen(void)
 {
@@ -2747,9 +2815,11 @@ static void Swap_Task_SlideCycleBalls(u8 taskId)
     switch (gTasks[taskId].tState)
     {
     case 0:
-        gTasks[taskId].tBallCycled(0) = FALSE;
-        gTasks[taskId].tBallCycled(1) = FALSE;
-        gTasks[taskId].tBallCycled(2) = FALSE;
+        // UPSTREAM: these loops iterate FRONTIER_PARTY_SIZE rather than upstream's
+        // hardcoded 3 — behavior-preserving at the vanilla size and a candidate to
+        // send upstream. See CLAUDE.md ("Upstream-mergeable cleanups: the UPSTREAM: tag").
+        for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+            gTasks[taskId].tBallCycled(i) = FALSE;
         gTasks[taskId].tState = 1;
         break;
     case 1:
@@ -2766,7 +2836,7 @@ static void Swap_Task_SlideCycleBalls(u8 taskId)
                 }
                 else if (posX > 16)
                 {
-                    gSprites[sFactorySwapScreen->ballSpriteIds[i]].x = gSprites[sFactorySwapScreen->ballSpriteIds[i + 1]].x - 48;
+                    gSprites[sFactorySwapScreen->ballSpriteIds[i]].x = gSprites[sFactorySwapScreen->ballSpriteIds[i + 1]].x - SWAP_BALL_GAP;
                 }
             }
             else
@@ -2778,13 +2848,13 @@ static void Swap_Task_SlideCycleBalls(u8 taskId)
             if (gTasks[taskId].tBallCycled(i) == TRUE)
             {
                 // New ball coming in from left, check if it has reached dest
-                if (gSprites[sFactorySwapScreen->ballSpriteIds[i]].x > (i * 48) + 72)
+                if (gSprites[sFactorySwapScreen->ballSpriteIds[i]].x > SWAP_BALL_X(i))
                 {
                     // Overshot dest, set x and finish
-                    gSprites[sFactorySwapScreen->ballSpriteIds[i]].x = (i * 48) + 72;
+                    gSprites[sFactorySwapScreen->ballSpriteIds[i]].x = SWAP_BALL_X(i);
                     finished = TRUE;
                 }
-                else if (gSprites[sFactorySwapScreen->ballSpriteIds[i]].x == (i * 48) + 72)
+                else if (gSprites[sFactorySwapScreen->ballSpriteIds[i]].x == SWAP_BALL_X(i))
                 {
                     finished = TRUE;
                 }
@@ -3399,7 +3469,7 @@ static void Swap_InitAllSprites(void)
 
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
     {
-        sFactorySwapScreen->ballSpriteIds[i] = CreateSprite(&spriteTemplate, (48 * i) + 72, 64, 1);
+        sFactorySwapScreen->ballSpriteIds[i] = CreateSprite(&spriteTemplate, SWAP_BALL_X(i), 64, 1);
         gSprites[sFactorySwapScreen->ballSpriteIds[i]].data[0] = 0;
     }
     sFactorySwapScreen->cursorSpriteId = CreateSprite(&sSpriteTemplate_Swap_Arrow, gSprites[sFactorySwapScreen->ballSpriteIds[sFactorySwapScreen->cursorPos]].x, 88, 0);
