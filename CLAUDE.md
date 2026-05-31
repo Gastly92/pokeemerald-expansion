@@ -37,6 +37,22 @@ git merge upstream/master      # MERGE, not rebase — this is a long-lived shar
 - After every sync, re-verify the build and tests (see below) before merging to
   `master`.
 
+#### Our own README (`merge=ours`)
+
+`README.md` is ours, not upstream's. To keep upstream syncs from touching it,
+`.gitattributes` marks it `merge=ours`, which needs the driver defined per-clone:
+
+```bash
+git config merge.ours.driver true   # web: done by the session-start hook; run once in local clones
+```
+
+With the driver set, `git merge upstream/master` keeps our `README.md` verbatim
+and never reports a conflict on it. If the driver is *not* set, git just falls
+back to a normal merge for that file (no worse than any other conflict). To add
+another fork-owned file to this scheme, list it in `.gitattributes` with
+`merge=ours` — only for files upstream *also* edits; new fork-only files (like
+`FORK.md`, `CLAUDE.md`) never conflict and don't need it.
+
 ### Minimizing merge conflicts
 
 Conflicts happen line-by-line in files upstream *also* edits. The goal isn't
@@ -104,6 +120,27 @@ instead of silently re-inlining or dropping our change.
   conflict, port upstream's change there rather than re-inlining."
 - Keep it at the exact spot that would conflict (it shows up on *our* side of the
   conflict markers, where the person resolving will see it).
+
+## Documenting fork features
+
+We keep two human-facing docs in files we own (so they never conflict on sync):
+
+- **`README.md`** — the repo's front page, rewritten as our own (a short
+  Battle Frontier sandbox intro that links to `FORK.md` and credits upstream).
+  It is **not** upstream's README. See "Our own README" below for how that's
+  kept conflict-free.
+- **`FORK.md`** — the inventory of every feature this fork adds on top of
+  upstream: a table of *feature · flag(s) · location · status · notes*. It is an
+  **index**, not a spec — the flag comment in `include/config/*.h` stays the
+  source of truth for exact behavior; `FORK.md` records what the flag can't
+  (status, known limitations, where to look).
+
+**When you add or change a fork feature, update `FORK.md` in the same PR.** Add or
+edit its row — especially the *status* and *notes* columns when something is
+partial or has a known limitation (e.g. "Battle Dome layout not yet generalized
+to 6"). Keep rows one line; don't restate the flag comment. The `FORK:` code tag
+(above) and `FORK.md` are complementary: the tag marks the divergence in-code,
+the table indexes the feature for a human.
 
 ## Workflow conventions
 
