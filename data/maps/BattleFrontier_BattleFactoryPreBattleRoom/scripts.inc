@@ -35,7 +35,12 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterRoom::
 	setorcopyvar VAR_0x8006, VAR_RESULT
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentType
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentStyle
+#if B_FRONTIER_PARTY_SIZE_6V6
+	@ FORK: a full team of 6 is auto-rented, so there is no selection to choose from.
+	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_RentedFullTeam, MSGBOX_DEFAULT
+#else
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_HoldMonsChooseFromSelection, MSGBOX_DEFAULT
+#endif
 	fadescreen FADE_TO_BLACK
 	factory_setswapped
 	factory_rentmons
@@ -457,6 +462,12 @@ BattleFrontier_BattleFactoryPreBattleRoom_Text_HoldMonsChooseFromSelection:
 	.string "safekeeping.\p"
 	.string "You may then choose from our\n"
 	.string "selection of POKéMON.$"
+
+@ FORK: shown instead of the above when a full team of 6 is auto-rented.
+BattleFrontier_BattleFactoryPreBattleRoom_Text_RentedFullTeam:
+	.string "We've prepared a full rental team of\n"
+	.string "6 POKéMON for you.\p"
+	.string "Give it everything you've got!$"
 
 BattleFrontier_BattleFactoryPreBattleRoom_Text_LetUsRestoreMons:
 	.string "Thank you for competing!\n"

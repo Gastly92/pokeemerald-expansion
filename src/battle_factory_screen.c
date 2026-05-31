@@ -1018,6 +1018,12 @@ static const struct SwapScreenAction sSwap_PlayerScreenActions[] =
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+#if B_FRONTIER_PARTY_SIZE_6V6
+    // FORK: one SWAPACTION_MON per party slot so the cursor reaches all 6 balls.
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+#endif
     {.id = SWAPACTION_CANCEL, .func = Swap_ActionCancel},
 };
 
@@ -1026,6 +1032,12 @@ static const struct SwapScreenAction sSwap_EnemyScreenActions[] =
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
     {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+#if B_FRONTIER_PARTY_SIZE_6V6
+    // FORK: one SWAPACTION_MON per party slot so the cursor reaches all 6 balls.
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+    {.id = SWAPACTION_MON, .func = Swap_ActionMon},
+#endif
     {.id = SWAPACTION_PKMN_FOR_SWAP, .func = Swap_ActionPkmnForSwap},
     {.id = SWAPACTION_CANCEL, .func = Swap_ActionCancel},
 };
