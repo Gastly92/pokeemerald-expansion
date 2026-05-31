@@ -1,5 +1,6 @@
 #include "config/general.h"
 #include "config/battle.h"
+#include "config/frontier.h"
 #include "config/item.h"
 #include "constants/global.h"
 #include "constants/apprentice.h"
