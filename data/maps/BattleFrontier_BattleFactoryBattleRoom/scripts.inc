@@ -96,18 +96,24 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_DefeatedOpponent::
 	factory_set FACTORY_DATA_WIN_STREAK_SWAPS  @ uses VAR_0x8006 above
 BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementWinStreak::
 	call BattleFrontier_EventScript_IncrementWinStreak
-BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementBattleNum::
-	frontier_get FRONTIER_DATA_BATTLE_NUM
-	addvar VAR_RESULT, 1
-	frontier_set FRONTIER_DATA_BATTLE_NUM, VAR_RESULT
-	switch VAR_RESULT
-	case 7, BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobbyWon
+	@ FORK: endless Factory. A challenge no longer ends after a fixed number of
+	@ wins; instead BP is awarded after every win (scaling up each set) and the
+	@ streak continues until the player loses, retires, or rests. The battle
+	@ number within a set is derived from the win streak in GenerateOpponentMons,
+	@ so it is no longer tracked here. See config/frontier.h.
+	call BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardWinPoints
+	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_ContinueChallenge
+
+BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardWinPoints::
+	frontier_givepoints
+	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
+	return
+
+BattleFrontier_BattleFactoryBattleRoom_EventScript_ContinueChallenge::
 	setvar VAR_0x8006, 1
 	warp MAP_BATTLE_FRONTIER_BATTLE_FACTORY_PRE_BATTLE_ROOM, 8, 8
 	waitstate
-BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobbyWon::
-	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, CHALLENGE_STATUS_WON
-	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobby
+	end
 
 BattleFrontier_BattleFactoryBattleRoom_EventScript_BattleNoland::
 	switch VAR_TEMP_F
@@ -175,17 +181,21 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_DoNolandBattle::
 
 BattleFrontier_BattleFactoryBattleRoom_EventScript_DefeatedNoland::
 	factory_get FACTORY_DATA_WIN_STREAK_SWAPS
-	goto_if_eq VAR_RESULT, MAX_STREAK, BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementWinStreak
+	goto_if_eq VAR_RESULT, MAX_STREAK, BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementNolandWinStreak
 	addvar VAR_RESULT, 1
 	setorcopyvar VAR_0x8006, VAR_RESULT
 	factory_set FACTORY_DATA_WIN_STREAK_SWAPS  @ uses VAR_0x8006 above
+BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementNolandWinStreak::
 	factory_get FACTORY_DATA_WIN_STREAK
-	goto_if_eq VAR_RESULT, MAX_STREAK, BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementBattleNum
+	goto_if_eq VAR_RESULT, MAX_STREAK, BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardNolandPoints
 	addvar VAR_RESULT, 1
 	factory_set FACTORY_DATA_WIN_STREAK, VAR_RESULT
-	frontier_get FRONTIER_DATA_BATTLE_NUM
-	addvar VAR_RESULT, 1
-	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobbyWon
+BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardNolandPoints::
+	@ FORK: endless Factory — beating the Factory Head awards BP equal to the
+	@ current challenge number (handled in GiveBattlePoints), then the streak
+	@ continues just like any other win rather than ending the challenge.
+	call BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardWinPoints
+	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_ContinueChallenge
 	end
 
 BattleFrontier_BattleFactoryBattleRoom_Movement_PlayerEnterRoom:

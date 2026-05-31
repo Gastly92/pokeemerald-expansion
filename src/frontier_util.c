@@ -212,7 +212,10 @@ const struct FrontierBrain gFrontierBrainInfo[NUM_FRONTIER_FACILITIES] =
                 "You're finished already?")     //Gold
         },
         .battledBit = {1 << 8, 1 << 9},
-        .streakAppearances = {21, 42, 21, 1},
+        // FORK: endless Factory moves the Factory Head to the 50th win (silver)
+        // and the 100th win (gold), rematching every 50 wins after that. On a
+        // sync conflict keep these; vanilla was {21, 42, 21, 1}.
+        .streakAppearances = {50, 100, 50, 1},
     },
     [FRONTIER_FACILITY_PIKE] =
     {
@@ -1953,6 +1956,40 @@ static void GiveBattlePoints(void)
     s32 facility = VarGet(VAR_FRONTIER_FACILITY);
     s32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
     s32 points;
+
+    // FORK: endless Battle Factory awards Battle Points after EVERY win instead
+    // of once per completed challenge. The amount scales up each set of
+    // FACTORY_STAGES_PER_CHALLENGE wins: 2 BP/win in the first set, 4 in the
+    // next, 6 in the next, and so on. Beating the Factory Head awards BP equal
+    // to the current challenge number instead. Other facilities are unchanged.
+    if (facility == FRONTIER_FACILITY_FACTORY)
+    {
+        u32 winStreak = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode];
+
+        if (TRAINER_BATTLE_PARAM.opponentA == TRAINER_FRONTIER_BRAIN)
+        {
+            points = winStreak / FACTORY_STAGES_PER_CHALLENGE; // current challenge number
+        }
+        else
+        {
+            // winStreak has already been incremented for this win, so its set
+            // index (0, 1, 2, ...) is (winStreak - 1) / FACTORY_STAGES_PER_CHALLENGE.
+            u32 setIndex = (winStreak == 0) ? 0 : (winStreak - 1) / FACTORY_STAGES_PER_CHALLENGE;
+            points = 2 * (setIndex + 1);
+        }
+
+        gSaveBlock2Ptr->frontier.battlePoints += points;
+        if (gSaveBlock2Ptr->frontier.battlePoints > MAX_BATTLE_FRONTIER_POINTS)
+            gSaveBlock2Ptr->frontier.battlePoints = MAX_BATTLE_FRONTIER_POINTS;
+        ConvertIntToDecimalStringN(gStringVar1, points, STR_CONV_MODE_LEFT_ALIGN, 4);
+
+        IncrementDailyBattlePoints(points);
+        points += gSaveBlock2Ptr->frontier.cardBattlePoints;
+        if (points > 0xFFFF)
+            points = 0xFFFF;
+        gSaveBlock2Ptr->frontier.cardBattlePoints = points;
+        return;
+    }
 
     switch (facility)
     {

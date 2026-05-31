@@ -18,4 +18,19 @@
 // creates both teams at FRONTIER_MAX_LEVEL_OPEN (== MAX_LEVEL).
 #define B_FRONTIER_FORCE_LVL_100    TRUE
 
+// Battle Factory "endless challenge". Vanilla Frontier challenges end after
+// FRONTIER_STAGES_PER_CHALLENGE (7) wins; the Factory sandbox instead lets the
+// player keep battling indefinitely. A "set" is this many wins and is now purely
+// a pacing/reward unit — the challenge never ends on its own (only on a loss, a
+// retire, or by resting). Battle Points are awarded after EVERY win and scale up
+// each set (2 BP/win in the first set, 4 in the next, 6 in the next, ...), and
+// the per-set trainer difficulty/dedup still keys off this value.
+//
+// This is a plain NUMBER (not TRUE/FALSE) on purpose so map scripts can compare
+// against it during their cpp pass without the FALSE-expansion footgun (see
+// CLAUDE.md, "Using config flags in scripts"). Set it back to
+// FRONTIER_STAGES_PER_CHALLENGE (7) to restore vanilla Factory pacing. Factory
+// only — other facilities still use FRONTIER_STAGES_PER_CHALLENGE.
+#define FACTORY_STAGES_PER_CHALLENGE   10
+
 #endif // GUARD_CONFIG_FRONTIER_H

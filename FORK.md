@@ -22,6 +22,7 @@ limitations, and where to look.
 | Debug menus always on | `DEBUG_OVERWORLD_MENU`, `DEBUG_BATTLE_MENU` | `config/debug.h` | ✅ | Overworld menu (hold R + Start), battle menu (Select). |
 | 6v6 Battle Factory | `B_FRONTIER_PARTY_SIZE_6V6` | `config/frontier.h` | ⚠️ partial | Frontier singles use full 6-mon teams; Factory auto-rents the team (rental select skipped, always max IVs). **Battle Dome is not yet generalized to 6** — its coordinate tables are stubbed so it builds, but the 6-mon layout is incorrect. |
 | Frontier battles forced to Lv100 | `B_FRONTIER_FORCE_LVL_100` | `config/frontier.h` | ✅ | Factory forces Open Level mode (both teams at `MAX_LEVEL`). See known quirks below. |
+| Endless Battle Factory challenge | `FACTORY_STAGES_PER_CHALLENGE` | `config/frontier.h` | ⚠️ partial | Factory challenges no longer end after 7 wins — the player keeps battling indefinitely. **BP awarded after every win**, scaling per set of `FACTORY_STAGES_PER_CHALLENGE` (2/win for the first set, 4 for the next, 6 for the next, …). **"Rest"** now saves + restores the party + returns to the lobby (no reboot), keeping the streak active; the attendant offers to resume. In-challenge / resume detection uses the win streak, not `curChallengeBattleNum`/`challengePaused`. **Factory Head** moved to the 50th win (silver) / 100th win (gold), awarding BP = current challenge number. **Factory only** — other facilities keep the vanilla 7-win challenge. |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
 
@@ -34,6 +35,19 @@ Legend: ✅ done · ⚠️ partial / has known limitations.
   candidate to drop for space if needed.
 - **Battle Dome at 6v6.** See the 6v6 Factory row: the Dome's fixed 3-mon
   coordinate tables aren't generalized yet, so its layout is wrong at 6 mons.
+- **Endless Factory is Factory-only for now.** The per-win BP scaling, "rest to
+  leave / resume", and Factory-Head-at-50/100 changes are scoped to the Battle
+  Factory; the other facilities still run vanilla 7-win challenges. Planned next:
+  boss battles every 10 challenges (the Factory Head is the current stand-in).
+- **Dead "won challenge" lobby path.** With the Factory now endless, the lobby's
+  `CHALLENGE_STATUS_WON` handler is no longer reached by new runs (it only ever
+  fires for a save left mid-WON by a pre-update build). Kept for that backward
+  compatibility; a later cleanup can remove it.
+- **Last-of-set difficulty spike unchanged.** The shared
+  `GetRandomScaledFrontierTrainerId` still applies its harder-trainer pool at the
+  7th battle of a set (`FRONTIER_STAGES_PER_CHALLENGE - 1`), not the 10th, since
+  that helper is shared with the Battle Tower. Difficulty otherwise scales by
+  challenge number as before.
 
 ## Conventions
 
