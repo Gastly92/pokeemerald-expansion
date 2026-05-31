@@ -2805,9 +2805,6 @@ static void Swap_Task_FadeOutSpeciesName(u8 taskId)
 
 // Slide current pokeballs offscreen to the right and new pokeballs onscreen from
 // the left during transition between player's/enemy's party screens
-// UPSTREAM: the loops here iterate FRONTIER_PARTY_SIZE rather than upstream's
-// hardcoded 3 — behavior-preserving at the vanilla size and a candidate to send
-// upstream. See CLAUDE.md ("Upstream-mergeable cleanups: the UPSTREAM: tag").
 #define tBallCycled(i) data[(i) + 1]
 static void Swap_Task_SlideCycleBalls(u8 taskId)
 {
@@ -2818,6 +2815,9 @@ static void Swap_Task_SlideCycleBalls(u8 taskId)
     switch (gTasks[taskId].tState)
     {
     case 0:
+        // UPSTREAM: these loops iterate FRONTIER_PARTY_SIZE rather than upstream's
+        // hardcoded 3 — behavior-preserving at the vanilla size and a candidate to
+        // send upstream. See CLAUDE.md ("Upstream-mergeable cleanups: the UPSTREAM: tag").
         for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
             gTasks[taskId].tBallCycled(i) = FALSE;
         gTasks[taskId].tState = 1;
