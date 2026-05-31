@@ -121,12 +121,28 @@ instead of silently re-inlining or dropping our change.
 - Keep it at the exact spot that would conflict (it shows up on *our* side of the
   conflict markers, where the person resolving will see it).
 
+### Upstream-clarity changes: the `CLARITY:` tag
+
+Sometimes we touch upstream-owned code in a way that is *purely a readability
+improvement with no behavior change* — e.g. replacing a magic `3` with the named
+`FRONTIER_PARTY_SIZE`, or naming an unexplained constant. These are good
+candidates to contribute back upstream (unlike `FORK:` divergences, which are
+intentionally ours and must never go upstream).
+
+- **Tag:** `CLARITY:` — greppable (`grep -rn "CLARITY:" src include`), so the set
+  of upstream-mergeable cleanups can be collected into an upstream PR later.
+- **Only for behavior-preserving changes** at the vanilla config (a `3 →
+  FRONTIER_PARTY_SIZE` swap is behavior-preserving when the flag is off / the
+  constant is 3). If the change alters behavior, it's a `FORK:`, not a `CLARITY:`.
+- Keep the note short; say what was clarified and why it's upstream-safe.
+
 ## Documenting fork features
 
 We keep two human-facing docs in files we own (so they never conflict on sync):
 
-- **`README.md`** — the repo's front page, rewritten as our own (a short
-  Battle Frontier sandbox intro that links to `FORK.md` and credits upstream).
+- **`README.md`** — the repo's front page, rewritten as our own (a short intro
+  describing the standalone Battle Frontier romhack, linking to `FORK.md` and
+  crediting upstream).
   It is **not** upstream's README. See "Our own README" below for how that's
   kept conflict-free.
 - **`FORK.md`** — the inventory of every feature this fork adds on top of

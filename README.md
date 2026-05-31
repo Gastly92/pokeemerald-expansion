@@ -3,13 +3,15 @@
      never pulls in upstream's README. On conflict, keep ours. Upstream's README
      is always available at `upstream/master:README.md`. -->
 
-# Battle Frontier sandbox
+# Battle Frontier romhack
 
-A personal fork of [RHH's **`pokeemerald-expansion`**](https://github.com/rh-hideout/pokeemerald-expansion),
-set up as a fast-booting **Battle Frontier sandbox** for testing Frontier
-features (notably a 6v6 Battle Factory). It is a GBA ROM hack base built on
-[pret's `pokeemerald`](https://github.com/pret/pokeemerald) decompilation — **not
-a playable game on its own.**
+A standalone single-player Pokémon romhack centered on **quality-of-life
+improvements to the Battle Frontier facilities** (starting with a 6v6,
+always-level-100 Battle Factory), with more features added over time to grow it
+into a fuller game. It's a personal fork of
+[RHH's **`pokeemerald-expansion`**](https://github.com/rh-hideout/pokeemerald-expansion),
+itself built on [pret's `pokeemerald`](https://github.com/pret/pokeemerald)
+decompilation.
 
 ## What this fork changes
 

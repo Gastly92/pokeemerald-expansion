@@ -137,11 +137,9 @@ BattleFrontier_BattleFactoryLobby_EventScript_AskTakeChallenge::
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 
 BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge::
-	@ FORK: B_FRONTIER_FORCE_LVL_100 locks battles to level 100, so skip the
-	@ Lv50/Open prompt and force Open Level. Uses an assembler .if (not a cpp
-	@ #if): .if runs after cpp, where TRUE is a real .set symbol, so config-value
-	@ flags work here. A bare #if FLAG would expand to "#if TRUE" and, since cpp
-	@ has no TRUE, evaluate to 0 and silently take the #else branch.
+	@ FORK: B_FRONTIER_FORCE_LVL_100 locks battles to Lv100, so skip the Lv50/Open
+	@ prompt and force Open Level. (Assembler .if, not cpp #if — see CLAUDE.md,
+	@ "Using config flags in scripts".)
 .if B_FRONTIER_FORCE_LVL_100
 	frontier_set FRONTIER_DATA_LVL_MODE, FRONTIER_LVL_OPEN
 .else

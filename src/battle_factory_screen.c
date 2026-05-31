@@ -1118,16 +1118,18 @@ static void VBlankCB_SelectScreen(void)
 void AutoRentFullParty(void)
 {
     u8 i;
-    u8 ivs;
+    // FORK: sandbox QoL — the auto-rented team always gets max IVs, regardless of
+    // the current win streak / challenge number.
+    u8 ivs = MAX_PER_STAT_IVS;
     u8 level;
     u32 otId = READ_OTID_FROM_SAVE;
-    u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
-    u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
-    u8 rentalRank = GetNumPastRentalsRank(battleMode, lvlMode);
 
     ZeroPlayerPartyMons();
     gFacilityTrainerMons = gBattleFrontierMons;
+    // With B_FRONTIER_FORCE_LVL_100 the lobby forces lvlMode to Open, so this
+    // resolves to Lv100; the Lv50 branch only applies if that flag is off and the
+    // player actually picked Lv50.
     if (lvlMode != FRONTIER_LVL_50)
         level = FRONTIER_MAX_LEVEL_OPEN;
     else
@@ -1136,11 +1138,6 @@ void AutoRentFullParty(void)
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
     {
         u16 monId = gSaveBlock2Ptr->frontier.rentalMons[i].monId;
-        if (i < rentalRank)
-            ivs = GetFactoryMonFixedIV(challengeNum + 1, FALSE);
-        else
-            ivs = GetFactoryMonFixedIV(challengeNum, FALSE);
-
         CreateFacilityMon(&gFacilityTrainerMons[monId], level, ivs, otId, FLAG_FRONTIER_MON_FACTORY, &gParties[B_TRAINER_PLAYER][i]);
         gSaveBlock2Ptr->frontier.rentalMons[i].ivs = ivs;
         gSaveBlock2Ptr->frontier.rentalMons[i].personality = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_PERSONALITY);
@@ -2808,6 +2805,9 @@ static void Swap_Task_FadeOutSpeciesName(u8 taskId)
 
 // Slide current pokeballs offscreen to the right and new pokeballs onscreen from
 // the left during transition between player's/enemy's party screens
+// CLARITY: the loops here iterate FRONTIER_PARTY_SIZE rather than upstream's
+// hardcoded 3 — behavior-preserving at the vanilla size and a candidate to send
+// upstream. See CLAUDE.md ("Upstream-clarity changes: the CLARITY: tag").
 #define tBallCycled(i) data[(i) + 1]
 static void Swap_Task_SlideCycleBalls(u8 taskId)
 {
