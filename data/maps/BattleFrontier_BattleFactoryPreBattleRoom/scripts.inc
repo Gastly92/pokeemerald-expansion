@@ -39,14 +39,18 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterRoom::
 	@ selection to choose from. Uses an assembler .if (not a cpp #if) so the
 	@ config-value flag is read correctly; see the note in BattleFactoryLobby.
 .if B_FRONTIER_PARTY_SIZE_6V6
+	@ Build the team synchronously via callnative — no rental screen, so no
+	@ fade-to-black/fade-in transition flash before "right this way".
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_RentedFullTeam, MSGBOX_DEFAULT
+	factory_setswapped
+	callnative AutoRentFullParty
 .else
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_HoldMonsChooseFromSelection, MSGBOX_DEFAULT
-.endif
 	fadescreen FADE_TO_BLACK
 	factory_setswapped
 	factory_rentmons
 	waitstate
+.endif
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom::
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_RightThisWay, MSGBOX_DEFAULT
 	closemessage
