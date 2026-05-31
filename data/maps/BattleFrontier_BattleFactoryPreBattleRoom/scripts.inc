@@ -472,8 +472,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_Text_HoldMonsChooseFromSelection:
 @ FORK: shown instead of the above when a full team of 6 is auto-rented.
 BattleFrontier_BattleFactoryPreBattleRoom_Text_RentedFullTeam:
 	.string "We've prepared a full rental team of\n"
-	.string "6 POKéMON for you.\p"
-	.string "Give it everything you've got!$"
+	.string "6 POKéMON for you.$"
 
 BattleFrontier_BattleFactoryPreBattleRoom_Text_LetUsRestoreMons:
 	.string "Thank you for competing!\n"

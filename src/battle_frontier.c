@@ -27,7 +27,7 @@ EWRAM_DATA const struct BattleFrontierTrainer *gFacilityTrainers = NULL;
 EWRAM_DATA const struct TrainerMon *gFacilityTrainerMons = NULL;
 
 // IWRAM common
-COMMON_DATA u16 gFrontierTempParty[FRONTIER_TEMP_PARTY_SIZE] = {0};
+COMMON_DATA u16 gFrontierTempParty[MAX_FRONTIER_PARTY_SIZE] = {0};
 
 static void HandleFacilityTrainerBattleEnd(void)
 {

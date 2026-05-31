@@ -964,7 +964,11 @@ static const u8 *const sBattleDomeOpponentStatsTexts[] =
 
 static const u8 sInfoTrainerMonX[FRONTIER_PARTY_SIZE] = {104, 136, 104};
 static const u8 sInfoTrainerMonY[FRONTIER_PARTY_SIZE] = { 38,  62,  78};
-static const u8 sSpeciesNameTextYCoords[] = {0, 4, 0};
+// FORK: Battle Dome isn't part of the 6v6 sandbox yet, but FRONTIER_PARTY_SIZE
+// now drives the party loops. Size this to FRONTIER_PARTY_SIZE so the loop stays
+// in-bounds; the extra entries are placeholder 0s (Dome layout at 6 mons is not
+// yet correct, only builds). TODO: generalize the Dome coordinate tables to 6.
+static const u8 sSpeciesNameTextYCoords[FRONTIER_PARTY_SIZE] = {0, 4, 0};
 
 // Offsets within sBattleDomeOpponentStatsTexts for stat combinations
 // SPDEF has no offset because by then all stat combinations have been reached, so it has no combination texts

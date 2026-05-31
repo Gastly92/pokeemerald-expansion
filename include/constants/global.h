@@ -82,24 +82,20 @@ enum Language
 // party sizes
 #define PARTY_SIZE 6
 #define MULTI_PARTY_SIZE (PARTY_SIZE / 2)
+// FORK: B_FRONTIER_PARTY_SIZE_6V6 makes Frontier singles full 6-mon teams (used
+// by the 6v6 Battle Factory sandbox). This also grows MAX_FRONTIER_PARTY_SIZE to
+// 6, so the saveblock tower-record party arrays grow with it — space for that is
+// reclaimed via the FREE_* flags in config/save.h. On conflict, keep the gate.
+#if B_FRONTIER_PARTY_SIZE_6V6
+#define FRONTIER_PARTY_SIZE         6
+#else
 #define FRONTIER_PARTY_SIZE         3
+#endif
 #define FRONTIER_DOUBLES_PARTY_SIZE 4
 #define FRONTIER_MULTI_PARTY_SIZE   2
-// FORK: Battle Factory team size. Gated by B_FRONTIER_PARTY_SIZE_6V6 for our
-// 6v6 sandbox (scoped to the Factory so other facilities keep their vanilla
-// 3-mon coordinate tables). On conflict, keep the gate.
-#if B_FRONTIER_PARTY_SIZE_6V6
-#define FACTORY_PARTY_SIZE          PARTY_SIZE
-#else
-#define FACTORY_PARTY_SIZE          FRONTIER_PARTY_SIZE
-#endif
 #define MAX_FRONTIER_PARTY_SIZE    (max(FRONTIER_PARTY_SIZE,        \
                                     max(FRONTIER_DOUBLES_PARTY_SIZE,\
                                         FRONTIER_MULTI_PARTY_SIZE)))
-// FORK: gFrontierTempParty must also hold a full 6v6 Battle Factory team, but
-// MAX_FRONTIER_PARTY_SIZE is deliberately left at its vanilla value so the
-// saveblock tower-record party arrays don't grow.
-#define FRONTIER_TEMP_PARTY_SIZE   (max(MAX_FRONTIER_PARTY_SIZE, FACTORY_PARTY_SIZE))
 #define UNION_ROOM_PARTY_SIZE       2
 
 // capacities of various saveblock objects

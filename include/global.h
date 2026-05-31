@@ -524,7 +524,7 @@ struct BattleFrontier
     /*0xE6A*/ u16 verdanturfTentPrize;
     /*0xE6C*/ u16 fallarborTentPrize;
     /*0xE6E*/ u16 slateportTentPrize;
-    /*0xE70*/ struct RentalMon rentalMons[FACTORY_PARTY_SIZE * 2]; // FORK: sized for 6v6 Factory rentals (player + opponent)
+    /*0xE70*/ struct RentalMon rentalMons[FRONTIER_PARTY_SIZE * 2];
     /*0xEB8*/ u16 battlePoints;
     /*0xEBA*/ u16 cardBattlePoints;
     /*0xEBC*/ u32 battlesCount;

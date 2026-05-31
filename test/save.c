@@ -4,8 +4,13 @@
 
 // If you would like to ensure save compatibility, update the values below with those for your hack. You can find these through the debug menu.
 // Please note that this simple check is not 100% foolproof, but should be able to catch most unintended shifts.
-#define T_SAVEBLOCK1_SIZE 15568
-#define T_SAVEBLOCK2_SIZE 3768 // FORK: 6v6 Factory rentalMons (+72) and FREE_BATTLE_TOWER_E_READER (-188) vs upstream 3884.
+// FORK: sizes diverge from upstream due to our sandbox config:
+// - FRONTIER_PARTY_SIZE 6 grows MAX_FRONTIER_PARTY_SIZE to 6, enlarging the
+//   SaveBlock2 tower-record party arrays (+532) and the 6v6 Factory rentalMons.
+// - Many FREE_* flags in config/save.h reclaim space (notably
+//   FREE_RECORD_MIXING_HALL_RECORDS in SaveBlock2 and the SaveBlock1 frees).
+#define T_SAVEBLOCK1_SIZE 13152
+#define T_SAVEBLOCK2_SIZE 3300
 #define T_SAVEBLOCK3_SIZE 4
 #define T_POKEMONSTORAGE_SIZE 34144
 
