@@ -251,22 +251,32 @@ static void GenerateOpponentMons(void)
     u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
     u32 winStreak = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode];
     u32 challengeNum = winStreak / FRONTIER_STAGES_PER_CHALLENGE;
+#if B_FRONTIER_ENDLESS
+    // FORK: endless Factory derives the battle-within-set position from the win
+    // streak instead of the separately-tracked curChallengeBattleNum, so the
+    // challenge can run indefinitely and survive rest/resume cleanly. We keep
+    // curChallengeBattleNum in sync for any incidental readers.
+    u32 battleNum = winStreak % FRONTIER_STAGES_PER_CHALLENGE;
+    gSaveBlock2Ptr->frontier.curChallengeBattleNum = battleNum;
+#else
+    u32 battleNum = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
+#endif
     gFacilityTrainers = gBattleFrontierTrainers;
 
     do
     {
         // Choose a random trainer, ensuring no repeats in this challenge
-        trainerId = GetRandomScaledFrontierTrainerId(challengeNum, gSaveBlock2Ptr->frontier.curChallengeBattleNum);
-        for (i = 0; i < gSaveBlock2Ptr->frontier.curChallengeBattleNum; i++)
+        trainerId = GetRandomScaledFrontierTrainerId(challengeNum, battleNum);
+        for (i = 0; i < battleNum; i++)
         {
             if (gSaveBlock2Ptr->frontier.trainerIds[i] == trainerId)
                 break;
         }
-    } while (i != gSaveBlock2Ptr->frontier.curChallengeBattleNum);
+    } while (i != battleNum);
 
     TRAINER_BATTLE_PARAM.opponentA = trainerId;
-    if (gSaveBlock2Ptr->frontier.curChallengeBattleNum < FRONTIER_STAGES_PER_CHALLENGE - 1)
-        gSaveBlock2Ptr->frontier.trainerIds[gSaveBlock2Ptr->frontier.curChallengeBattleNum] = trainerId;
+    if (battleNum < FRONTIER_STAGES_PER_CHALLENGE - 1)
+        gSaveBlock2Ptr->frontier.trainerIds[battleNum] = trainerId;
 
     i = 0;
     while (i != FRONTIER_PARTY_SIZE)

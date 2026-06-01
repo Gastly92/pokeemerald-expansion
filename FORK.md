@@ -22,6 +22,7 @@ limitations, and where to look.
 | Debug menus always on | `DEBUG_OVERWORLD_MENU`, `DEBUG_BATTLE_MENU` | `config/debug.h` | ✅ | Overworld menu (hold R + Start), battle menu (Select). |
 | 6v6 Battle Factory | `B_FRONTIER_PARTY_SIZE_6V6` | `config/frontier.h` | ⚠️ partial | Frontier singles use full 6-mon teams; Factory auto-rents the team (rental select skipped, always max IVs). **Battle Dome is not yet generalized to 6** — its coordinate tables are stubbed so it builds, but the 6-mon layout is incorrect. |
 | Frontier battles forced to Lv100 | `B_FRONTIER_FORCE_LVL_100` | `config/frontier.h` | ✅ | Factory forces Open Level mode (both teams at `MAX_LEVEL`). See known quirks below. |
+| Endless Frontier challenge | `B_FRONTIER_ENDLESS` (+ `FRONTIER_STAGES_PER_CHALLENGE`) | `config/frontier.h`, `constants/battle_frontier.h` | ⚠️ partial | A challenge no longer ends after a set number of wins — the player keeps battling indefinitely. A "set" is `FRONTIER_STAGES_PER_CHALLENGE` (bumped 7 → 10) wins. **BP awarded after every win** (by the attendant in the pre-battle room), scaling per set (2/win for the first set, 4 for the next, 6 for the next, …). **"Rest"** now saves + restores the party + returns to the lobby (no reboot), keeping the streak active; the attendant offers to resume. In-challenge / resume detection uses the win streak, not `curChallengeBattleNum`/`challengePaused`. **Frontier Brain** moved to the 50th win (silver) / 100th win (gold), awarding BP = the current win number (50 / 100). Gated by `B_FRONTIER_ENDLESS` (C `#if` + script `.if`, vanilla preserved in each `.else`). The Battle Factory is the first facility wired up; the rest follow in later passes. |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
 
@@ -34,6 +35,22 @@ Legend: ✅ done · ⚠️ partial / has known limitations.
   candidate to drop for space if needed.
 - **Battle Dome at 6v6.** See the 6v6 Factory row: the Dome's fixed 3-mon
   coordinate tables aren't generalized yet, so its layout is wrong at 6 mons.
+- **Only the Battle Factory is wired up so far.** `B_FRONTIER_ENDLESS` is a
+  Frontier-wide flag, but only the Battle Factory currently implements the
+  endless flow (per-win BP scaling, "rest to leave / resume", Brain-at-50/100);
+  the other facilities still run their vanilla once-per-challenge flow until they
+  are converted. Planned next: extend it to the Battle Tower and the rest, and
+  boss battles every 10 challenges (the Frontier Brain is the current stand-in).
+- **Bumped `FRONTIER_STAGES_PER_CHALLENGE` (7 → 10) is global.** Per review, the
+  shared constant was changed rather than adding a Factory-specific one, so the
+  other facilities now see 10-stage challenges too. Their fixed-size layout
+  tables (e.g. Battle Pyramid floor/pickup offsets, floor-name arrays) still have
+  7 entries, so those facilities are visually/functionally off until generalized
+  — accepted for now, to be fixed alongside their endless conversion.
+- **Dead "won challenge" lobby path.** With `B_FRONTIER_ENDLESS` on, the lobby's
+  `CHALLENGE_STATUS_WON` handler is no longer reached by new runs (it only ever
+  fires for a save left mid-WON by a pre-update build, or with the flag off).
+  Kept for that compatibility; a later cleanup can remove it.
 
 ## Conventions
 
