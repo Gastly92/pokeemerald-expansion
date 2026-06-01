@@ -337,6 +337,25 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
             friendship = 0;  // Frustration is more powerful the lower the Pokémon's friendship is.
     }
 
+#if B_FRONTIER_MAX_PP
+    // FORK: give facility mons max PP. SetMonMoveSlot assigns base PP, so
+    // afterwards we max the PP Up bonus on every slot (gPPUpGetMask[j] holds the
+    // 3-PP-Up mask for slot j; OR'd together that's full bonus on all four) and
+    // recompute each move's PP. Applied to every mon built here, so it covers all
+    // facilities that route through CreateFacilityMon (see B_FRONTIER_MAX_PP).
+    {
+        u8 ppBonuses = 0;
+        for (j = 0; j < MAX_MON_MOVES; j++)
+            ppBonuses |= gPPUpGetMask[j];
+        SetMonData(dst, MON_DATA_PP_BONUSES, &ppBonuses);
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            u8 pp = CalculatePPWithBonus(GetMonData(dst, MON_DATA_MOVE1 + j), ppBonuses, j);
+            SetMonData(dst, MON_DATA_PP1 + j, &pp);
+        }
+    }
+#endif
+
     SetMonData(dst, MON_DATA_FRIENDSHIP, &friendship);
     SetMonData(dst, MON_DATA_HELD_ITEM, &fmon->heldItem);
 

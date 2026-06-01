@@ -651,6 +651,13 @@ static void RestorePlayerPartyHeldItems(void)
 // is Battle Tower's instead of Battle Factory's.
 u8 GetFactoryMonFixedIV(u8 challengeNum, bool8 isLastBattle)
 {
+#if B_FRONTIER_MAX_IVS
+    // FORK: every Factory mon rolls max IVs regardless of challenge number. This
+    // is the single Battle-Factory IV source, so it covers the player's rentals,
+    // the opposing trainers, and the Frontier Brain (see B_FRONTIER_MAX_IVS). The
+    // vanilla per-challenge ramp is preserved in the #else for clean syncs.
+    return MAX_PER_STAT_IVS;
+#else
     u8 ivSet;
     bool8 useHigherIV = isLastBattle ? TRUE : FALSE;
 
@@ -667,6 +674,7 @@ u8 GetFactoryMonFixedIV(u8 challengeNum, bool8 isLastBattle)
         ivSet = challengeNum;
 
     return sFixedIVTable[ivSet][useHigherIV];
+#endif // B_FRONTIER_MAX_IVS
 }
 
 void FillFactoryBrainParty(void)
@@ -798,6 +806,13 @@ u64 GetAiScriptsInBattleFactory(void)
     }
     else
     {
+#if B_FRONTIER_HARD_AI
+        // FORK: every Factory opponent (and the Frontier Brain) always uses the
+        // strongest AI preset instead of the vanilla per-challenge scaling. Tune
+        // the exact flags via B_FRONTIER_HARD_AI_FLAGS in config/frontier.h. The
+        // vanilla scaling is preserved in the #else for clean upstream syncs.
+        return B_FRONTIER_HARD_AI_FLAGS;
+#else
         int battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
         int challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
 
@@ -809,6 +824,7 @@ u64 GetAiScriptsInBattleFactory(void)
             return AI_FLAG_CHECK_BAD_MOVE;
         else
             return AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY;
+#endif // B_FRONTIER_HARD_AI
     }
 }
 
