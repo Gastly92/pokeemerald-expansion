@@ -9,8 +9,10 @@
 //   SaveBlock2 tower-record party arrays (+532) and the 6v6 Factory rentalMons.
 // - Many FREE_* flags in config/save.h reclaim space (notably
 //   FREE_RECORD_MIXING_HALL_RECORDS in SaveBlock2 and the SaveBlock1 frees).
+// - B_FRONTIER_ENDLESS adds frontier.factoryRentedMonsBackup[2][6*2]
+//   (per-mode Factory rental snapshot, +288) to SaveBlock2.
 #define T_SAVEBLOCK1_SIZE 13152
-#define T_SAVEBLOCK2_SIZE 3300
+#define T_SAVEBLOCK2_SIZE 3588
 #define T_SAVEBLOCK3_SIZE 4
 #define T_POKEMONSTORAGE_SIZE 34144
 

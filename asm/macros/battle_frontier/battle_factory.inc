@@ -99,3 +99,18 @@
 	special CallBattleFactoryFunction
 	.endm
 
+	@ FORK: endless Factory — snapshot the rental team into the per-battle-mode
+	@ backup before "Rest" saves, so singles/doubles challenges keep separate
+	@ teams. Only valid when B_FRONTIER_ENDLESS (the backup field is gated on it).
+	.macro factory_backupteam
+	setvar VAR_0x8004, BATTLE_FACTORY_FUNC_BACKUP_TEAM
+	special CallBattleFactoryFunction
+	.endm
+
+	@ FORK: endless Factory — restore the rental team from the per-battle-mode
+	@ backup on resume, before factory_setparties rebuilds the parties.
+	.macro factory_restoreteam
+	setvar VAR_0x8004, BATTLE_FACTORY_FUNC_RESTORE_TEAM
+	special CallBattleFactoryFunction
+	.endm
+

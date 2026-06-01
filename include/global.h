@@ -537,6 +537,16 @@ struct BattleFrontier
     /*0xEFA*/ u8 unused_EFA;
     /*0xEFB*/ u8 unused_EFB;
     /*0xEFC*/ struct DomeMonData domePlayerPartyData[FRONTIER_PARTY_SIZE];
+#if B_FRONTIER_ENDLESS
+    // FORK: endless Factory rest/resume — a per-battle-mode (singles/doubles)
+    // snapshot of the shared rentalMons array. The win streaks are already
+    // tracked per [battleMode][lvlMode], but the rental team lived only in the
+    // single shared rentalMons; resting one mode's challenge and then playing the
+    // other clobbered the rested team. Saved on "Rest" (BackupFactoryRentalTeam)
+    // and restored on resume (RestoreFactoryRentalTeam) so each mode keeps its
+    // own team. Appended at the end of the struct to avoid shifting offsets.
+    struct RentalMon factoryRentedMonsBackup[2][FRONTIER_PARTY_SIZE * 2];
+#endif
 };
 
 struct ApprenticeQuestion
