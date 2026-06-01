@@ -17,6 +17,7 @@ ASSUMPTIONS
     ASSUME(GetMovePower(MOVE_FUTURE_SIGHT) > 0);
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Future Sight uses Sp. Atk stat of the original user without modifiers")
 {
     enum Item item;
@@ -46,6 +47,7 @@ SINGLE_BATTLE_TEST("Future Sight uses Sp. Atk stat of the original user without 
         EXPECT_EQ(seedFlareDmg, futureSightDmg);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Future Sight is not boosted by Life Orb is original user if not on the field")
 {

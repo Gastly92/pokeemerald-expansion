@@ -15,6 +15,7 @@ ASSUMPTIONS
     ASSUME(IsWindMove(MOVE_PETAL_BLIZZARD));
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Wind Power sets up Charge for player when hit by a wind move")
 {
     s16 dmgBefore, dmgAfter;
@@ -59,6 +60,7 @@ SINGLE_BATTLE_TEST("Wind Power sets up Charge for player when hit by a wind move
         }
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Wind Power sets up Charge for opponent when hit by a wind move")
 {
@@ -105,6 +107,7 @@ SINGLE_BATTLE_TEST("Wind Power sets up Charge for opponent when hit by a wind mo
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Wind Power sets up Charge for only one attack when hit by a wind move")
 {
     s16 dmgCharged, dmgAfter;
@@ -142,6 +145,7 @@ SINGLE_BATTLE_TEST("Wind Power sets up Charge for only one attack when hit by a 
         }
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 DOUBLE_BATTLE_TEST("Wind Power activates correctly for every battler with the ability when hit by a 2/3 target move")
 {

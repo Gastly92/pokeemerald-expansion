@@ -22,6 +22,7 @@ SINGLE_BATTLE_TEST("Protosynthesis boosts the highest stat")
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Protosynthesis boosts either Attack or Special Attack, not both")
 {
     u16 species;
@@ -53,6 +54,7 @@ SINGLE_BATTLE_TEST("Protosynthesis boosts either Attack or Special Attack, not b
             EXPECT_EQ(damage[0], damage[1]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Protosynthesis ability pop up activates only once during the duration of sunny day")
 {
@@ -301,6 +303,7 @@ SINGLE_BATTLE_TEST("Protosynthesis recalculates the boosted stat after Neutraliz
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Protosynthesis retains its boosted stat after Neutralizing Gas briefly suppresses it")
 {
     s16 damage[2];
@@ -329,6 +332,7 @@ SINGLE_BATTLE_TEST("Protosynthesis retains its boosted stat after Neutralizing G
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Protosynthesis damage calculation is correct")
 {

@@ -61,6 +61,7 @@ SINGLE_BATTLE_TEST("Levitate does not activate if attacked by an opponent with M
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Levitate does not cause single remaining target to take higher damage")
 {
     s16 damage[3];
@@ -86,6 +87,7 @@ DOUBLE_BATTLE_TEST("Levitate does not cause single remaining target to take high
         EXPECT_EQ(damage[1], damage[2]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 AI_SINGLE_BATTLE_TEST("Levitate is seen correctly by switch AI")
 {

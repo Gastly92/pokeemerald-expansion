@@ -23,6 +23,7 @@ SINGLE_BATTLE_TEST("Pickup grants an item used by another Pokémon")
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 WILD_BATTLE_TEST("Pickup grants an item used by itself in wild battles (Gen9+)")
 {
     GIVEN {
@@ -39,6 +40,7 @@ WILD_BATTLE_TEST("Pickup grants an item used by itself in wild battles (Gen9+)")
         EXPECT_EQ(player->item, ITEM_SITRUS_BERRY);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Pickup doesn't grant the user their item outside wild battles")
 {

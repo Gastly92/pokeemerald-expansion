@@ -52,41 +52,43 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_DAMAGE: turn 1 uses the base multiplier and da
 }
 
 // The ramp is intentionally uncapped: once enough turns pass the multiplier
-// climbs past 100% and the move deals more than its stock maximum roll (196 here,
-// the 100% value from the table above).
+// climbs past 100% and the move deals more than its stock maximum roll. A clean,
+// neutral, non-STAB hit with a large base (so each 1% step registers) makes this
+// visible: Glaceon (Lv100, Atk 999) Tackle vs Garchomp (Def 80) deals 387 on
+// turn 1 (92%), 421 on turn 9 (100% — the stock maximum), and 450 on turn 16
+// (107%), i.e. damage keeps climbing above what any stock roll could produce.
 SINGLE_BATTLE_TEST("DETERMINISTIC_DAMAGE: the multiplier is uncapped above 100%")
 {
-    s16 damageTurn1, damageTurn12;
+    s16 damage[16];
     GIVEN {
-        ASSUME(GetMoveCategory(MOVE_ICE_FANG) == DAMAGE_CATEGORY_PHYSICAL);
-        PLAYER(SPECIES_GLACEON) { Level(75); Attack(123); }
-        OPPONENT(SPECIES_GARCHOMP) { Defense(163); MaxHP(9999); HP(9999); Moves(MOVE_CELEBRATE); }
+        ASSUME(GetMoveType(MOVE_TACKLE) == TYPE_NORMAL); // non-STAB, neutral vs Garchomp
+        PLAYER(SPECIES_GLACEON) { Level(100); Attack(999); }
+        OPPONENT(SPECIES_GARCHOMP) { Defense(80); MaxHP(30000); HP(30000); Moves(MOVE_CELEBRATE); }
     } WHEN {
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); } // turn 1, 92%
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(player, MOVE_ICE_FANG); MOVE(opponent, MOVE_CELEBRATE); } // turn 12, 103%
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); } // turn 1, 92%
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); } // turn 9, 100%
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); } // turn 16, 107%
     } SCENE {
-        ANIMATION(ANIM_TYPE_MOVE, MOVE_ICE_FANG, player);
-        HP_BAR(opponent, captureDamage: &damageTurn1);
-        for (u32 i = 0; i < 10; i++)
-        {
-            ANIMATION(ANIM_TYPE_MOVE, MOVE_ICE_FANG, player);
-            HP_BAR(opponent);
-        }
-        ANIMATION(ANIM_TYPE_MOVE, MOVE_ICE_FANG, player);
-        HP_BAR(opponent, captureDamage: &damageTurn12);
+        for (u32 i = 0; i < 16; i++)
+            HP_BAR(opponent, captureDamage: &damage[i]);
     } THEN {
-        EXPECT_EQ(damageTurn1, 180);     // turn 1, 92%
-        EXPECT_GT(damageTurn12, 196);    // turn 12, 103% > the stock 100% maximum
+        EXPECT_EQ(damage[0], 387);          // turn 1, 92%
+        EXPECT_EQ(damage[8], 421);          // turn 9, 100% — the stock maximum roll
+        EXPECT_EQ(damage[15], 450);         // turn 16, 107%
+        EXPECT_GT(damage[15], damage[8]);   // uncapped: exceeds the stock 100% maximum
     }
 }
 

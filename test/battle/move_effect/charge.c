@@ -51,6 +51,7 @@ SINGLE_BATTLE_TEST("Charge's effect is kept until the user uses an Electric move
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Charge's effect is removed if the user fails using an Electric move (Gen 9+)")
 {
     s16 damage[2];
@@ -72,6 +73,7 @@ SINGLE_BATTLE_TEST("Charge's effect is removed if the user fails using an Electr
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Charge's effect does not stack with Electromorphosis or Wind Power")
 {
@@ -131,6 +133,7 @@ SINGLE_BATTLE_TEST("Charge's effect is removed regardless if the next move is El
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Charge will expire if user flinches while using an electric move")
 {
     s16 damage[2];
@@ -154,3 +157,4 @@ SINGLE_BATTLE_TEST("Charge will expire if user flinches while using an electric 
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE

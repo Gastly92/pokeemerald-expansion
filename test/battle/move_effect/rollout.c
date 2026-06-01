@@ -31,6 +31,7 @@ SINGLE_BATTLE_TEST("Rollout's power doubles after each hit and resest after the 
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Rollout's base power resets if the chain has been broken")
 {
     s16 damage[2];
@@ -55,6 +56,7 @@ SINGLE_BATTLE_TEST("Rollout's base power resets if the chain has been broken")
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Rollout resets if original user is forced to switch out")
 {

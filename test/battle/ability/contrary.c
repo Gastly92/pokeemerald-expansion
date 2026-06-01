@@ -33,6 +33,7 @@ SINGLE_BATTLE_TEST("Contrary raises Attack when Intimidated in a single battle",
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Contrary raises Attack when Intimidated in a double battle", s16 damageLeft, s16 damageRight)
 {
     enum Ability abilityLeft, abilityRight;
@@ -75,6 +76,7 @@ DOUBLE_BATTLE_TEST("Contrary raises Attack when Intimidated in a double battle",
         EXPECT_MUL_EQ(results[1].damageRight, Q_4_12(2.25), results[0].damageRight);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Contrary raises stats after using a move which would normally lower them: Overheat", s16 damageBefore, s16 damageAfter)
 {

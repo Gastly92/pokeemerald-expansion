@@ -40,6 +40,7 @@ SINGLE_BATTLE_TEST("Opportunist only copies foe's positive stat changes in a tur
 }
 
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Opportunist raises Attack only once when partner has Intimidate against Contrary foe in a double battle", s16 damageLeft, s16 damageRight)
 {
     enum Ability abilityLeft, abilityRight;
@@ -101,6 +102,7 @@ DOUBLE_BATTLE_TEST("Opportunist raises Attack only once when partner has Intimid
         EXPECT_MUL_EQ(results[1].damageRight, Q_4_12(2.25), results[0].damageRight);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Opportunist does not accumulate opposing mon's stat changes")
 {

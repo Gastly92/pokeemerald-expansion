@@ -1,6 +1,8 @@
 #include "global.h"
 #include "test/battle.h"
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
+
 // From https://bulbapedia.bulbagarden.net/wiki/Damage#Example
 
 SINGLE_BATTLE_TEST("Damage calculation matches Gen5+")
@@ -417,3 +419,5 @@ DOUBLE_BATTLE_TEST("Transistor Damage calculation", s16 damage)
         EXPECT_EQ(damagePlayerRight, expectedDamageTransistorPhys);
     }
 }
+
+#endif // !DETERMINISTIC_DAMAGE

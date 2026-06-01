@@ -81,6 +81,7 @@ SINGLE_BATTLE_TEST("Turn order is determined randomly if priority and Speed tie 
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Turn order is determined randomly if priority and Speed tie [doubles]", u32 permutations)
 {
     PARAMETRIZE {} // Hack to make permutations legal.
@@ -134,6 +135,7 @@ DOUBLE_BATTLE_TEST("Turn order is determined randomly if priority and Speed tie 
         EXPECT_EQ(results[i].permutations, (1 << 24) - 1);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Critical hits deal 100% (Gen 1-5) or 50% (Gen 6+) more damage", s16 damage)
 {
