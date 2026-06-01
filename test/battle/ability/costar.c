@@ -25,6 +25,8 @@ DOUBLE_BATTLE_TEST("Costar copies an ally's stat stages upon entering battle")
     }
 }
 
+// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
+#if !DETERMINISTIC_CRITICAL_HITS
 DOUBLE_BATTLE_TEST("Costar copies an ally's Dragon Cheer critical hit boost")
 {
     PASSES_RANDOMLY(1, 8, RNG_CRITICAL_HIT);
@@ -47,6 +49,7 @@ DOUBLE_BATTLE_TEST("Costar copies an ally's Dragon Cheer critical hit boost")
         MESSAGE("A critical hit!");
     }
 }
+#endif // !DETERMINISTIC_CRITICAL_HITS
 
 DOUBLE_BATTLE_TEST("Costar copies an ally's lowered stat stages")
 {
@@ -69,6 +72,8 @@ DOUBLE_BATTLE_TEST("Costar copies an ally's lowered stat stages")
     }
 }
 
+// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
+#if !DETERMINISTIC_CRITICAL_HITS
 DOUBLE_BATTLE_TEST("Costar copies an ally's Focus Energy critical hit boost")
 {
     PASSES_RANDOMLY(1, 2, RNG_CRITICAL_HIT);
@@ -93,7 +98,10 @@ DOUBLE_BATTLE_TEST("Costar copies an ally's Focus Energy critical hit boost")
         MESSAGE("A critical hit!");
     }
 }
+#endif // !DETERMINISTIC_CRITICAL_HITS
 
+// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
+#if !DETERMINISTIC_CRITICAL_HITS
 DOUBLE_BATTLE_TEST("Costar copies an ally's Dragon Cheer critical hit boost")
 {
     PASSES_RANDOMLY(1, 8, RNG_CRITICAL_HIT);
@@ -117,6 +125,7 @@ DOUBLE_BATTLE_TEST("Costar copies an ally's Dragon Cheer critical hit boost")
         MESSAGE("A critical hit!");
     }
 }
+#endif // !DETERMINISTIC_CRITICAL_HITS
 
 DOUBLE_BATTLE_TEST("Costar copies an ally's stat stages after their ability activates upon entering battle")
 {

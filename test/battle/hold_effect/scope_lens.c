@@ -1,6 +1,8 @@
 #include "global.h"
 #include "test/battle.h"
 
+// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
+#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Scope Lens increases the critical hit ratio by 1 stage")
 {
     u32 genConfig = 0, passes, trials;
@@ -21,3 +23,4 @@ SINGLE_BATTLE_TEST("Scope Lens increases the critical hit ratio by 1 stage")
         MESSAGE("A critical hit!");
     }
 }
+#endif // !DETERMINISTIC_CRITICAL_HITS

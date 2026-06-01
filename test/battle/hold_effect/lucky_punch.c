@@ -1,6 +1,8 @@
 #include "global.h"
 #include "test/battle.h"
 
+// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
+#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Lucky Punch increases critical hit ratio by 2 stages for Chansey")
 {
     u32 genConfig, passes, trials;
@@ -23,3 +25,4 @@ SINGLE_BATTLE_TEST("Lucky Punch increases critical hit ratio by 2 stages for Cha
         MESSAGE("A critical hit!");
     }
 }
+#endif // !DETERMINISTIC_CRITICAL_HITS

@@ -22,6 +22,25 @@ upstream-sync process live in **[`CLAUDE.md`](CLAUDE.md)**.
 Everything else is stock `pokeemerald-expansion`; this fork regularly merges in
 upstream updates.
 
+## Determinism: removing RNG
+
+A central goal of this fork is to **strip as much random chance out of the game
+as possible**, so that what happens in a battle follows from the player's
+choices and the state on the field rather than from luck. This is rolled out
+gradually through a family of **`DETERMINISTIC_*`** flags (in
+[`include/config/deterministic.h`](include/config/deterministic.h)), each of
+which removes one specific source of randomness. A flag set to `FALSE` is stock
+`pokeemerald-expansion` behavior; this fork enables them as features mature.
+
+The first is **`DETERMINISTIC_CRITICAL_HITS`** (**enabled** in this fork):
+critical hits no longer happen on a random roll. Crits still land when something
+*guarantees* one — moves that always crit, Laser Focus, the Merciless ability
+against a poisoned target, or enough crit-ratio stacking to reach 100% — but the
+"lucky" random crit is gone. More `DETERMINISTIC_*` flags will follow (see
+[`FORK.md`](FORK.md)). As random upsides are removed, the plan is to add
+balancing systems alongside them so play stays fair rather than just easier or
+harder.
+
 ## Base engine (upstream)
 
 This fork inherits the full `pokeemerald-expansion` feature set and toolchain.

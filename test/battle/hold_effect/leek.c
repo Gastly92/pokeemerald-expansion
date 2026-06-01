@@ -1,6 +1,8 @@
 #include "global.h"
 #include "test/battle.h"
 
+// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
+#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Leek increases critical hit ratio by 2 stages for the Farfetch'd Family")
 {
     u32 species, genConfig, passes, trials;
@@ -34,3 +36,4 @@ SINGLE_BATTLE_TEST("Leek increases critical hit ratio by 2 stages for the Farfet
         MESSAGE("A critical hit!");
     }
 }
+#endif // !DETERMINISTIC_CRITICAL_HITS

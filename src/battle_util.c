@@ -7954,12 +7954,27 @@ static bool32 IsCriticalHit(struct DamageContext *ctx)
         isCrit = FALSE;
     else if (critChance == CRITICAL_HIT_ALWAYS)
         isCrit = TRUE;
+#if DETERMINISTIC_CRITICAL_HITS
+    // FORK: critical hits never occur from the random roll. A crit only lands
+    // when it is guaranteed: via CRITICAL_HIT_ALWAYS above (always-crit moves,
+    // Laser Focus, Merciless vs. poison), or when crit-ratio stacking already
+    // reaches 1/1 odds. For any partial-chance roll we still consult
+    // RNG_CRITICAL_HIT with zero success weight, so normal play never crits
+    // while battle tests can still force one with the `criticalHit:` directive.
+    else if (GetConfig(B_CRIT_CHANCE) == GEN_1)
+        isCrit = (critChance >= 256) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
+    else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
+        isCrit = (GetCriticalHitOdds(critChance) >= 256) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
+    else
+        isCrit = (GetCriticalHitOdds(critChance) <= 1) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
+#else
     else if (GetConfig(B_CRIT_CHANCE) == GEN_1)
         isCrit = RandomChance(RNG_CRITICAL_HIT, critChance, 256);
     else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
         isCrit = RandomChance(RNG_CRITICAL_HIT, GetCriticalHitOdds(critChance), 256);
     else
         isCrit = RandomChance(RNG_CRITICAL_HIT, 1, GetCriticalHitOdds(critChance));
+#endif
 
     // Counter for IF_CRITICAL_HITS_GE evolution condition.
     if (isCrit && IsOnPlayerSide(ctx->battlerAtk)
