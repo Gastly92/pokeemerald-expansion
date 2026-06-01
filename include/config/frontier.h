@@ -33,4 +33,37 @@
 // (Battle Tower, etc.) follow in later passes.
 #define B_FRONTIER_ENDLESS  TRUE
 
+// If TRUE, Frontier mons have every move's PP maxed out (full PP Up bonus on all
+// four slots), instead of the vanilla base PP. Applied inside CreateFacilityMon
+// for any mon flagged FLAG_FRONTIER_MON_FACTORY, so it currently covers the
+// whole Battle Factory roster — the player's rentals (initial draft and 6v6
+// auto-rent), the opposing trainers, and the Frontier Brain. Other facilities
+// (Battle Tower, Battle Tent, etc.) don't set that flag and so are unaffected
+// for now; they follow in later passes.
+#define B_FRONTIER_MAX_PP   TRUE
+
+// If TRUE, Frontier mons are generated with max IVs (31) in every stat instead
+// of the vanilla per-challenge IV ramp. Gated in GetFactoryMonFixedIV (the one
+// Battle-Factory IV source), so it covers the player's rentals, the opposing
+// trainers, and the Frontier Brain alike. The 6v6 auto-rent already forces max
+// IVs unconditionally; this also brings the *opponents* up to 31. Factory-only
+// for now (the IV ramp for other facilities lives elsewhere).
+#define B_FRONTIER_MAX_IVS  TRUE
+
+// If TRUE, every Battle Factory opponent — and the Frontier Brain — always uses
+// the strongest AI preset (B_FRONTIER_HARD_AI_FLAGS below) instead of the
+// vanilla per-challenge scaling, where the first rounds run with little or no
+// AI. Gated in GetAiScriptsInBattleFactory; the Battle Tent (FRONTIER_LVL_TENT)
+// keeps its no-AI behavior. Factory-only for now.
+#define B_FRONTIER_HARD_AI  TRUE
+
+// The AI flag set used when B_FRONTIER_HARD_AI is TRUE. Defaults to the
+// expansion's strongest *standard* preset: basic AI + OMNISCIENT (knows the
+// player's moves/abilities/items) + smart switching/mon choices + PP-stall
+// prevention + smart Tera. Tweak here to taste — e.g. add AI_FLAG_PREDICTION
+// for a meaner AI, or drop AI_FLAG_OMNISCIENT so it can't see the player's team.
+// Only expanded at the use site (battle_factory.c, which includes
+// constants/battle_ai.h), so no extra include is needed here.
+#define B_FRONTIER_HARD_AI_FLAGS    AI_FLAG_SMART_TRAINER
+
 #endif // GUARD_CONFIG_FRONTIER_H
