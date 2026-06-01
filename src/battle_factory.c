@@ -257,13 +257,19 @@ static void GenerateOpponentMons(void)
     // wherever the position is needed it is rebuilt from the persistent streak,
     // and curChallengeBattleNum is kept in sync here for any incidental readers.
     u32 battleNum = winStreak % FACTORY_STAGES_PER_CHALLENGE;
+    // GetRandomScaledFrontierTrainerId applies its harder-trainer pool when the
+    // battle number equals FRONTIER_STAGES_PER_CHALLENGE - 1 (the vanilla "last
+    // battle of the challenge"). Translate the Factory's longer set position onto
+    // that so the spike still lands on the final battle of the set rather than
+    // the hard-coded 7th.
+    u32 scaledBattleNum = (battleNum == FACTORY_STAGES_PER_CHALLENGE - 1) ? FRONTIER_STAGES_PER_CHALLENGE - 1 : 0;
     gSaveBlock2Ptr->frontier.curChallengeBattleNum = battleNum;
     gFacilityTrainers = gBattleFrontierTrainers;
 
     do
     {
         // Choose a random trainer, ensuring no repeats in this challenge
-        trainerId = GetRandomScaledFrontierTrainerId(challengeNum, battleNum);
+        trainerId = GetRandomScaledFrontierTrainerId(challengeNum, scaledBattleNum);
         for (i = 0; i < battleNum; i++)
         {
             if (gSaveBlock2Ptr->frontier.trainerIds[i] == trainerId)

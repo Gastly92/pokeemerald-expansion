@@ -1961,14 +1961,15 @@ static void GiveBattlePoints(void)
     // of once per completed challenge. The amount scales up each set of
     // FACTORY_STAGES_PER_CHALLENGE wins: 2 BP/win in the first set, 4 in the
     // next, 6 in the next, and so on. Beating the Factory Head awards BP equal
-    // to the current challenge number instead. Other facilities are unchanged.
+    // to the current win number (the 50th win gives 50, the 100th gives 100).
+    // Other facilities are unchanged.
     if (facility == FRONTIER_FACILITY_FACTORY)
     {
         u32 winStreak = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode];
 
         if (TRAINER_BATTLE_PARAM.opponentA == TRAINER_FRONTIER_BRAIN)
         {
-            points = winStreak / FACTORY_STAGES_PER_CHALLENGE; // current challenge number
+            points = winStreak; // BP equal to the current win number (e.g. 50, 100)
         }
         else
         {

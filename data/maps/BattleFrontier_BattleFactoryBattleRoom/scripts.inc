@@ -97,17 +97,12 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_DefeatedOpponent::
 BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementWinStreak::
 	call BattleFrontier_EventScript_IncrementWinStreak
 	@ FORK: endless Factory. A challenge no longer ends after a fixed number of
-	@ wins; instead BP is awarded after every win (scaling up each set) and the
-	@ streak continues until the player loses, retires, or rests. The battle
-	@ number within a set is derived from the win streak in GenerateOpponentMons,
-	@ so it is no longer tracked here. See config/frontier.h.
-	call BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardWinPoints
+	@ wins; the streak continues until the player loses, retires, or rests. BP is
+	@ awarded after every win, but by the attendant back in the pre-battle room
+	@ (see ReturnToRoomFromBattle) rather than here. The battle number within a
+	@ set is derived from the win streak in GenerateOpponentMons. See
+	@ config/frontier.h.
 	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_ContinueChallenge
-
-BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardWinPoints::
-	frontier_givepoints
-	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
-	return
 
 BattleFrontier_BattleFactoryBattleRoom_EventScript_ContinueChallenge::
 	setvar VAR_0x8006, 1
@@ -191,10 +186,9 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementNolandWinStreak::
 	addvar VAR_RESULT, 1
 	factory_set FACTORY_DATA_WIN_STREAK, VAR_RESULT
 BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardNolandPoints::
-	@ FORK: endless Factory — beating the Factory Head awards BP equal to the
-	@ current challenge number (handled in GiveBattlePoints), then the streak
-	@ continues just like any other win rather than ending the challenge.
-	call BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardWinPoints
+	@ FORK: endless Factory — beating the Factory Head continues the streak just
+	@ like any other win. BP (equal to the current win number, handled in
+	@ GiveBattlePoints) is awarded by the attendant back in the pre-battle room.
 	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_ContinueChallenge
 	end
 

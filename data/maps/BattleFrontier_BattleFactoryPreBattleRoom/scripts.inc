@@ -69,6 +69,12 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReturnToRoomFromBattle::
 	playfanfare MUS_HEAL
 	waitfanfare
 	special HealPlayerParty
+	@ FORK: endless Factory — the attendant awards BP for the match you just won
+	@ here (after restoring your team) before the challenge continues. The win
+	@ streak was already incremented in the battle room, and opponentA still
+	@ identifies the Factory Head for the brain BP case. See GiveBattlePoints.
+	frontier_givepoints
+	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_AwardedBattlePoints, MSGBOX_GETPOINTS
 	frontier_getbrainstatus
 	goto_if_eq VAR_RESULT, FRONTIER_BRAIN_NOT_READY, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
 	playse SE_POKENAV_CALL
@@ -469,6 +475,12 @@ BattleFrontier_BattleFactoryPreBattleRoom_Text_RentedFullTeam:
 BattleFrontier_BattleFactoryPreBattleRoom_Text_LetUsRestoreMons:
 	.string "Thank you for competing!\n"
 	.string "Let us restore your POKéMON!$"
+
+@ FORK: endless Factory awards BP every win, which is always 2 or more, so this
+@ drops the "(s)" the shared BattleFrontier_Text_ObtainedXBattlePoints carries.
+BattleFrontier_BattleFactoryPreBattleRoom_Text_AwardedBattlePoints:
+	.string "{PLAYER} obtained {STR_VAR_1} Battle\n"
+	.string "Points.$"
 
 @ FORK: endless Factory — single generalized prompt for any match number
 @ (replaces the Factory's hard-coded "2nd".."7th match" strings). STR_VAR_1 holds
