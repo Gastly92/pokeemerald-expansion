@@ -116,6 +116,9 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementBattleNum::
 	addvar VAR_RESULT, 1
 	frontier_set FRONTIER_DATA_BATTLE_NUM, VAR_RESULT
 	switch VAR_RESULT
+	@ UPSTREAM: replaced the magic "case 7" with the named constant
+	@ (FRONTIER_STAGES_PER_CHALLENGE is available to scripts via event_scripts.s);
+	@ behavior-preserving at the vanilla value, so it's safe to send upstream.
 	case FRONTIER_STAGES_PER_CHALLENGE, BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobbyWon
 	setvar VAR_0x8006, 1
 	warp MAP_BATTLE_FRONTIER_BATTLE_FACTORY_PRE_BATTLE_ROOM, 8, 8

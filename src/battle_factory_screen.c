@@ -1783,6 +1783,8 @@ static void CreateFrontierFactorySelectableMons(u8 firstMonId)
     u32 otId = 0;
     u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
+    // UPSTREAM: replaced a magic 7 with the named FRONTIER_STAGES_PER_CHALLENGE
+    // (behavior-preserving at the vanilla value) — safe to send back upstream.
     u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
     u8 rentalRank = 0;
 

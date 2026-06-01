@@ -20,17 +20,17 @@
 
 // Frontier "endless challenge". When TRUE, a challenge no longer ends after
 // FRONTIER_STAGES_PER_CHALLENGE wins — the player keeps battling indefinitely.
-// A "set" is FRONTIER_STAGES_PER_CHALLENGE (10) wins and is now purely a
-// pacing/reward unit: Battle Points are awarded after EVERY win and scale up
-// each set (2 BP/win in the first set, 4 in the next, 6 in the next, ...),
-// "rest" lets the player step out and resume later instead of rebooting, and the
-// Frontier Brain appears at the 50th and 100th wins. When FALSE the vanilla
-// once-per-challenge flow is kept.
+// A "set" is FRONTIER_STAGES_PER_CHALLENGE wins and is now purely a pacing/reward
+// unit: Battle Points are awarded after EVERY win and scale up each set (2 BP/win
+// in the first set, 4 in the next, 6 in the next, ...), "rest" lets the player
+// step out and resume later instead of rebooting, and the Frontier Brain appears
+// at the 50th and 100th wins. When FALSE the vanilla once-per-challenge flow is
+// kept.
 //
 // Like B_FRONTIER_FORCE_LVL_100 this gates both C (#if) and map-script (.if)
 // paths; the vanilla branch is preserved in each .else so upstream syncs stay
-// clean. Only the Battle Factory honors this flag for now; the other facilities
-// (Battle Tower, etc.) will be converted in later passes.
+// clean. The Battle Factory is the first facility wired up to it; the others
+// (Battle Tower, etc.) follow in later passes.
 #define B_FRONTIER_ENDLESS  TRUE
 
 #endif // GUARD_CONFIG_FRONTIER_H

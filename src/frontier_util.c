@@ -62,13 +62,17 @@ struct FrontierBrain
     const u8 *lostTexts[2];
     const u8 *wonTexts[2];
     u16 battledBit[2];
-    // When the Frontier Brain appears, as win-streak thresholds:
-    //   [0] streak for the 1st battle (Silver Symbol)
-    //   [1] streak for the 2nd battle (Gold Symbol)
-    //   [2] interval for rematches after both symbols are won
-    //   [3] modifier added to the current streak before the comparison, so the
-    //       Brain shows up as the Nth battle (e.g. +1 => appears on the battle
-    //       that would make the streak reach [0]/[1]).
+    // The win streaks at which the Frontier Brain shows up. Using the Factory's
+    // {50, 100, 50, 1} as an example:
+    //   [0] = 50  -> 1st fight (Silver Symbol): the Brain is the 50th battle
+    //   [1] = 100 -> 2nd fight (Gold Symbol):   the Brain is the 100th battle
+    //   [2] = 50  -> after both symbols are won, the Brain comes back every
+    //                50 wins (150th, 200th, ...)
+    //   [3] = 1   -> a +1 nudge so the milestones above count the battle you are
+    //                about to fight. You walk in with 49 wins; +1 makes that 49
+    //                match the 50 in [0], so the Brain is battle #50 (not #51).
+    //                Some facilities use 0 here, which lines the fight up one
+    //                battle later instead.
     u8 streakAppearances[4];
 };
 
