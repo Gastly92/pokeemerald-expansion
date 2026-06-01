@@ -232,10 +232,10 @@ static void SetBattleFrontierFirstArrivalState(void)
 // and sets them), so Frontier runs can opt into Dynamax/Tera.
 static void GiveStartingBattleGimmickItems(void)
 {
-    AddBagItem(ITEM_MEGA_RING, 1);
-    AddBagItem(ITEM_Z_POWER_RING, 1);
     AddBagItem(ITEM_DYNAMAX_BAND, 1);
+    AddBagItem(ITEM_MEGA_RING, 1);
     AddBagItem(ITEM_TERA_ORB, 1);
+    AddBagItem(ITEM_Z_POWER_RING, 1);
 }
 #endif // START_WITH_BATTLE_GIMMICK_ITEMS
 
