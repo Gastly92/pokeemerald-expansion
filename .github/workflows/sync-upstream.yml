@@ -1,0 +1,22 @@
+name: Sync Upstream Mirror
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fast-forward:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Force sync branches from upstream
+        run: |
+          git remote add upstream https://github.com/rh-hideout/pokeemerald-expansion.git
+          git fetch upstream master upcoming
+          git checkout -B upstream-mirror/master upstream/master
+          git push origin upstream-mirror/master --force
+          git checkout -B upstream-mirror/upcoming upstream/upcoming
+          git push origin upstream-mirror/upcoming --force
