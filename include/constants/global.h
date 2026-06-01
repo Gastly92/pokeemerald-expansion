@@ -21,6 +21,7 @@
 #include "config/caps.h"
 #include "config/contest.h"
 #include "config/debug.h"
+#include "config/deterministic.h"
 #include "config/dexnav.h"
 #include "config/follower_npc.h"
 #include "config/frontier.h"

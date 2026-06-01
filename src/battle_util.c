@@ -7954,12 +7954,25 @@ static bool32 IsCriticalHit(struct DamageContext *ctx)
         isCrit = FALSE;
     else if (critChance == CRITICAL_HIT_ALWAYS)
         isCrit = TRUE;
+#if DETERMINISTIC_CRITICAL_HITS
+    // FORK: the random crit roll is removed; a hit only crits when its odds are
+    // already 1/1 (guaranteed). CRITICAL_HIT_ALWAYS sources (always-crit moves,
+    // Laser Focus, Merciless) are handled above; everything that would be a
+    // partial-chance roll deterministically does not crit.
+    else if (GetConfig(B_CRIT_CHANCE) == GEN_1)
+        isCrit = (critChance >= 256);
+    else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
+        isCrit = (GetCriticalHitOdds(critChance) >= 256);
+    else
+        isCrit = (GetCriticalHitOdds(critChance) <= 1);
+#else
     else if (GetConfig(B_CRIT_CHANCE) == GEN_1)
         isCrit = RandomChance(RNG_CRITICAL_HIT, critChance, 256);
     else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
         isCrit = RandomChance(RNG_CRITICAL_HIT, GetCriticalHitOdds(critChance), 256);
     else
         isCrit = RandomChance(RNG_CRITICAL_HIT, 1, GetCriticalHitOdds(critChance));
+#endif
 
     // Counter for IF_CRITICAL_HITS_GE evolution condition.
     if (isCrit && IsOnPlayerSide(ctx->battlerAtk)

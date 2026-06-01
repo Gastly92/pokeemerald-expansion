@@ -30,7 +30,18 @@ limitations, and where to look.
 | Frontier max IVs | `B_FRONTIER_MAX_IVS` | `config/frontier.h` | ⚠️ partial | Forces 31 IVs in every stat via `GetFactoryMonFixedIV` (the one Factory IV source), so rentals, opponents, and the Frontier Brain are all maxed instead of the vanilla per-challenge ramp. Factory-only for now; other facilities' IV ramps live elsewhere. |
 | Frontier hard AI | `B_FRONTIER_HARD_AI` (+ `B_FRONTIER_HARD_AI_FLAGS`) | `config/frontier.h` | ⚠️ partial | Every Factory opponent and the Frontier Brain use the strongest AI preset (default `AI_FLAG_SMART_TRAINER` — basic AI + OMNISCIENT + smart switching/mon choices + PP-stall prevention + smart Tera) instead of the vanilla per-challenge scaling. Gated in `GetAiScriptsInBattleFactory`; Battle Tent keeps no AI. Tune via `B_FRONTIER_HARD_AI_FLAGS`. Factory-only for now. |
 
+| Deterministic critical hits | `DETERMINISTIC_CRITICAL_HITS` | `config/deterministic.h` | ✅ | First of the `DETERMINISTIC_*` flags (a project to strip RNG from the game). Removes the random crit-chance roll in `IsCriticalHit()` (`src/battle_util.c`): crits still land only when *guaranteed* — always-crit moves, Laser Focus, Merciless vs. a poisoned target, or crit-stage stacks that already reach 1/1 odds. Crit-blocking (Battle Armor, Shell Armor, Lucky Chant) unchanged. Default `FALSE`. |
+
 Legend: ✅ done · ⚠️ partial / has known limitations.
+
+### Determinism (`DETERMINISTIC_*`)
+
+An ongoing project to remove as much RNG from the game as possible, one source
+at a time, so outcomes follow from player choices and battle state rather than
+luck. Each source gets its own opt-in flag in `config/deterministic.h` (default
+`FALSE` = stock behavior). As random upsides are removed, the plan is to
+introduce compensating systems so battles stay balanced rather than simply
+harder or easier. Flags so far: `DETERMINISTIC_CRITICAL_HITS` (see table).
 
 ## Known quirks / future work
 
