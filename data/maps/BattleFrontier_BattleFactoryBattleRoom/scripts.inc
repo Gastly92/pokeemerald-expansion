@@ -96,6 +96,7 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_DefeatedOpponent::
 	factory_set FACTORY_DATA_WIN_STREAK_SWAPS  @ uses VAR_0x8006 above
 BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementWinStreak::
 	call BattleFrontier_EventScript_IncrementWinStreak
+.if B_FRONTIER_ENDLESS
 	@ FORK: endless Factory. A challenge no longer ends after a fixed number of
 	@ wins; the streak continues until the player loses, retires, or rests. BP is
 	@ awarded after every win, but by the attendant back in the pre-battle room
@@ -109,6 +110,20 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_ContinueChallenge::
 	warp MAP_BATTLE_FRONTIER_BATTLE_FACTORY_PRE_BATTLE_ROOM, 8, 8
 	waitstate
 	end
+.else
+BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementBattleNum::
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	addvar VAR_RESULT, 1
+	frontier_set FRONTIER_DATA_BATTLE_NUM, VAR_RESULT
+	switch VAR_RESULT
+	case FRONTIER_STAGES_PER_CHALLENGE, BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobbyWon
+	setvar VAR_0x8006, 1
+	warp MAP_BATTLE_FRONTIER_BATTLE_FACTORY_PRE_BATTLE_ROOM, 8, 8
+	waitstate
+BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobbyWon::
+	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, CHALLENGE_STATUS_WON
+	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobby
+.endif
 
 BattleFrontier_BattleFactoryBattleRoom_EventScript_BattleNoland::
 	switch VAR_TEMP_F
@@ -176,6 +191,7 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_DoNolandBattle::
 
 BattleFrontier_BattleFactoryBattleRoom_EventScript_DefeatedNoland::
 	factory_get FACTORY_DATA_WIN_STREAK_SWAPS
+.if B_FRONTIER_ENDLESS
 	goto_if_eq VAR_RESULT, MAX_STREAK, BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementNolandWinStreak
 	addvar VAR_RESULT, 1
 	setorcopyvar VAR_0x8006, VAR_RESULT
@@ -191,6 +207,20 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_AwardNolandPoints::
 	@ GiveBattlePoints) is awarded by the attendant back in the pre-battle room.
 	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_ContinueChallenge
 	end
+.else
+	goto_if_eq VAR_RESULT, MAX_STREAK, BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementWinStreak
+	addvar VAR_RESULT, 1
+	setorcopyvar VAR_0x8006, VAR_RESULT
+	factory_set FACTORY_DATA_WIN_STREAK_SWAPS  @ uses VAR_0x8006 above
+	factory_get FACTORY_DATA_WIN_STREAK
+	goto_if_eq VAR_RESULT, MAX_STREAK, BattleFrontier_BattleFactoryBattleRoom_EventScript_IncrementBattleNum
+	addvar VAR_RESULT, 1
+	factory_set FACTORY_DATA_WIN_STREAK, VAR_RESULT
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	addvar VAR_RESULT, 1
+	goto BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobbyWon
+	end
+.endif
 
 BattleFrontier_BattleFactoryBattleRoom_Movement_PlayerEnterRoom:
 	walk_up

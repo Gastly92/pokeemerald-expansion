@@ -62,6 +62,13 @@ struct FrontierBrain
     const u8 *lostTexts[2];
     const u8 *wonTexts[2];
     u16 battledBit[2];
+    // When the Frontier Brain appears, as win-streak thresholds:
+    //   [0] streak for the 1st battle (Silver Symbol)
+    //   [1] streak for the 2nd battle (Gold Symbol)
+    //   [2] interval for rematches after both symbols are won
+    //   [3] modifier added to the current streak before the comparison, so the
+    //       Brain shows up as the Nth battle (e.g. +1 => appears on the battle
+    //       that would make the streak reach [0]/[1]).
     u8 streakAppearances[4];
 };
 
@@ -212,10 +219,15 @@ const struct FrontierBrain gFrontierBrainInfo[NUM_FRONTIER_FACILITIES] =
                 "You're finished already?")     //Gold
         },
         .battledBit = {1 << 8, 1 << 9},
-        // FORK: endless Factory moves the Factory Head to the 50th win (silver)
-        // and the 100th win (gold), rematching every 50 wins after that. On a
-        // sync conflict keep these; vanilla was {21, 42, 21, 1}.
+#if B_FRONTIER_ENDLESS
+        // FORK: endless Factory moves the Factory Head to the 50th win (Silver)
+        // and the 100th win (Gold), rematching every 50 wins after that. The
+        // trailing 1 is the streak modifier (see struct FrontierBrain) that makes
+        // it appear *on* the 50th/100th battle. On a sync conflict keep this.
         .streakAppearances = {50, 100, 50, 1},
+#else
+        .streakAppearances = {21, 42, 21, 1},
+#endif
     },
     [FRONTIER_FACILITY_PIKE] =
     {
@@ -1957,9 +1969,10 @@ static void GiveBattlePoints(void)
     s32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
     s32 points;
 
+#if B_FRONTIER_ENDLESS
     // FORK: endless Battle Factory awards Battle Points after EVERY win instead
     // of once per completed challenge. The amount scales up each set of
-    // FACTORY_STAGES_PER_CHALLENGE wins: 2 BP/win in the first set, 4 in the
+    // FRONTIER_STAGES_PER_CHALLENGE wins: 2 BP/win in the first set, 4 in the
     // next, 6 in the next, and so on. Beating the Factory Head awards BP equal
     // to the current win number (the 50th win gives 50, the 100th gives 100).
     // Other facilities are unchanged.
@@ -1974,8 +1987,8 @@ static void GiveBattlePoints(void)
         else
         {
             // winStreak has already been incremented for this win, so its set
-            // index (0, 1, 2, ...) is (winStreak - 1) / FACTORY_STAGES_PER_CHALLENGE.
-            u32 setIndex = (winStreak == 0) ? 0 : (winStreak - 1) / FACTORY_STAGES_PER_CHALLENGE;
+            // index (0, 1, 2, ...) is (winStreak - 1) / FRONTIER_STAGES_PER_CHALLENGE.
+            u32 setIndex = (winStreak == 0) ? 0 : (winStreak - 1) / FRONTIER_STAGES_PER_CHALLENGE;
             points = 2 * (setIndex + 1);
         }
 
@@ -1991,6 +2004,7 @@ static void GiveBattlePoints(void)
         gSaveBlock2Ptr->frontier.cardBattlePoints = points;
         return;
     }
+#endif
 
     switch (facility)
     {

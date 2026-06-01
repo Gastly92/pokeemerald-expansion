@@ -250,26 +250,23 @@ static void GenerateOpponentMons(void)
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
     u32 winStreak = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode];
-    u32 challengeNum = winStreak / FACTORY_STAGES_PER_CHALLENGE;
+    u32 challengeNum = winStreak / FRONTIER_STAGES_PER_CHALLENGE;
+#if B_FRONTIER_ENDLESS
     // FORK: endless Factory derives the battle-within-set position from the win
-    // streak instead of relying on the separately-tracked curChallengeBattleNum.
-    // This lets the challenge run indefinitely and survive rest/resume cleanly:
-    // wherever the position is needed it is rebuilt from the persistent streak,
-    // and curChallengeBattleNum is kept in sync here for any incidental readers.
-    u32 battleNum = winStreak % FACTORY_STAGES_PER_CHALLENGE;
-    // GetRandomScaledFrontierTrainerId applies its harder-trainer pool when the
-    // battle number equals FRONTIER_STAGES_PER_CHALLENGE - 1 (the vanilla "last
-    // battle of the challenge"). Translate the Factory's longer set position onto
-    // that so the spike still lands on the final battle of the set rather than
-    // the hard-coded 7th.
-    u32 scaledBattleNum = (battleNum == FACTORY_STAGES_PER_CHALLENGE - 1) ? FRONTIER_STAGES_PER_CHALLENGE - 1 : 0;
+    // streak instead of the separately-tracked curChallengeBattleNum, so the
+    // challenge can run indefinitely and survive rest/resume cleanly. We keep
+    // curChallengeBattleNum in sync for any incidental readers.
+    u32 battleNum = winStreak % FRONTIER_STAGES_PER_CHALLENGE;
     gSaveBlock2Ptr->frontier.curChallengeBattleNum = battleNum;
+#else
+    u32 battleNum = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
+#endif
     gFacilityTrainers = gBattleFrontierTrainers;
 
     do
     {
         // Choose a random trainer, ensuring no repeats in this challenge
-        trainerId = GetRandomScaledFrontierTrainerId(challengeNum, scaledBattleNum);
+        trainerId = GetRandomScaledFrontierTrainerId(challengeNum, battleNum);
         for (i = 0; i < battleNum; i++)
         {
             if (gSaveBlock2Ptr->frontier.trainerIds[i] == trainerId)
@@ -278,7 +275,7 @@ static void GenerateOpponentMons(void)
     } while (i != battleNum);
 
     TRAINER_BATTLE_PARAM.opponentA = trainerId;
-    if (battleNum < FACTORY_STAGES_PER_CHALLENGE - 1)
+    if (battleNum < FRONTIER_STAGES_PER_CHALLENGE - 1)
         gSaveBlock2Ptr->frontier.trainerIds[battleNum] = trainerId;
 
     i = 0;
@@ -425,7 +422,7 @@ static void GenerateInitialRentalMons(void)
     }
     lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
-    challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FACTORY_STAGES_PER_CHALLENGE;
+    challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
     if (VarGet(VAR_FRONTIER_BATTLE_MODE) == FRONTIER_MODE_DOUBLES)
         factoryBattleMode = FRONTIER_MODE_DOUBLES;
     else
@@ -683,7 +680,7 @@ void FillFactoryBrainParty(void)
 
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
-    u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FACTORY_STAGES_PER_CHALLENGE;
+    u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
     fixedIV = GetFactoryMonFixedIV(challengeNum + 2, FALSE);
     monLevel = SetFacilityPtrsGetLevel();
     i = 0;
@@ -802,7 +799,7 @@ u64 GetAiScriptsInBattleFactory(void)
     else
     {
         int battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
-        int challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FACTORY_STAGES_PER_CHALLENGE;
+        int challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
 
         if (TRAINER_BATTLE_PARAM.opponentA == TRAINER_FRONTIER_BRAIN)
             return AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY;
@@ -836,13 +833,13 @@ static void FillFactoryFrontierTrainerParty(u16 trainerId, u8 firstMonId)
     #ifdef BUGFIX
         enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
         u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
-        u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FACTORY_STAGES_PER_CHALLENGE;
+        u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
     #else
         enum FrontierLevelMode UNUSED lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
         u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
-        u8 challengeNum = gSaveBlock2Ptr->frontier.towerWinStreaks[battleMode][FRONTIER_LVL_50] / FACTORY_STAGES_PER_CHALLENGE;
+        u8 challengeNum = gSaveBlock2Ptr->frontier.towerWinStreaks[battleMode][FRONTIER_LVL_50] / FRONTIER_STAGES_PER_CHALLENGE;
     #endif
-        if (gSaveBlock2Ptr->frontier.curChallengeBattleNum < FACTORY_STAGES_PER_CHALLENGE - 1)
+        if (gSaveBlock2Ptr->frontier.curChallengeBattleNum < FRONTIER_STAGES_PER_CHALLENGE - 1)
             fixedIV = GetFactoryMonFixedIV(challengeNum, FALSE);
         else
             fixedIV = GetFactoryMonFixedIV(challengeNum, TRUE); // Last trainer in challenge uses higher IVs

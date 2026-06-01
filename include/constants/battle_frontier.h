@@ -57,7 +57,12 @@
 
 // This is the default number of battles (or floors, in Battle Pyramid) per challenge.
 // There are 2 facilities that differ: Battle Dome (DOME_ROUNDS_COUNT) and Battle Pike (NUM_PIKE_ROOMS).
-#define FRONTIER_STAGES_PER_CHALLENGE 7
+// FORK: bumped from the vanilla 7 to 10 for the endless Battle Factory (a "set"
+// is 10 wins; see B_FRONTIER_FACTORY_ENDLESS in config/frontier.h). This is the
+// shared constant, so the other facilities also see 10 for now — their
+// fixed-size layout tables (e.g. Battle Pyramid) aren't generalized yet and will
+// be fixed in a later pass.
+#define FRONTIER_STAGES_PER_CHALLENGE 10
 
 // These sets of facility ids would be redundant if the order was consistent
 // The order is important for this set so that all the non-link records can be continuous

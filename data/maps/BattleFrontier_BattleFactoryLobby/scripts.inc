@@ -15,9 +15,13 @@ BattleFrontier_BattleFactoryLobby_EventScript_TurnPlayerNorth::
 BattleFrontier_BattleFactoryLobby_OnFrame:
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, 0, BattleFrontier_BattleFactoryLobby_EventScript_GetChallengeStatus
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, CHALLENGE_STATUS_SAVING, BattleFrontier_BattleFactoryLobby_EventScript_QuitWithoutSaving
+.if B_FRONTIER_ENDLESS
 	@ FORK: endless Factory — a paused (rested) challenge no longer auto-resumes on
 	@ entering the lobby. The player is free to leave and do other things; resuming
 	@ is offered when they talk to the attendant (see EventScript_Attendant).
+.else
+	map_script_2 VAR_TEMP_CHALLENGE_STATUS, CHALLENGE_STATUS_PAUSED, BattleFrontier_BattleFactoryLobby_EventScript_ResumeChallenge
+.endif
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, CHALLENGE_STATUS_WON, BattleFrontier_BattleFactoryLobby_EventScript_WonChallenge
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, CHALLENGE_STATUS_LOST, BattleFrontier_BattleFactoryLobby_EventScript_LostChallenge
 	.2byte 0
@@ -97,6 +101,7 @@ BattleFrontier_BattleFactoryLobby_EventScript_EndRecordBattle::
 	releaseall
 	end
 
+.if B_FRONTIER_ENDLESS
 @ FORK: endless Factory — ask whether to continue an in-progress challenge.
 BattleFrontier_BattleFactoryLobby_EventScript_AskContinueChallenge::
 	msgbox BattleFrontier_BattleFactoryLobby_Text_AskContinueChallenge, MSGBOX_YESNO
@@ -104,6 +109,7 @@ BattleFrontier_BattleFactoryLobby_EventScript_AskContinueChallenge::
 	case YES, BattleFrontier_BattleFactoryLobby_EventScript_ResumeChallenge
 	case NO, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
+.endif
 
 BattleFrontier_BattleFactoryLobby_EventScript_ResumeChallenge::
 	lockall
@@ -132,11 +138,13 @@ BattleFrontier_BattleFactoryLobby_EventScript_DoublesAttendant::
 	end
 
 BattleFrontier_BattleFactoryLobby_EventScript_Attendant::
+.if B_FRONTIER_ENDLESS
 	@ FORK: endless Factory — if a challenge for this mode is already in progress
 	@ (detected from the active win streak rather than curChallengeBattleNum/
 	@ challengePaused), offer to continue it instead of starting a new one.
 	factory_get FACTORY_DATA_WIN_STREAK_ACTIVE
 	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleFactoryLobby_EventScript_AskContinueChallenge
+.endif
 	special SavePlayerParty
 	call_if_eq VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES, BattleFrontier_BattleFactoryLobby_EventScript_WelcomeForSingleBattle
 	call_if_eq VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_DOUBLES, BattleFrontier_BattleFactoryLobby_EventScript_WelcomeForDoubleBattle
@@ -365,12 +373,22 @@ BattleFrontier_BattleFactoryLobby_Text_ExplainSinglesChallenge:
 	.string "you must conduct a SINGLE BATTLE.\p"
 	.string "If you win, you are permitted to trade\n"
 	.string "one of your rental POKéMON.\p"
+.if B_FRONTIER_ENDLESS
 	.string "Repeat this cycle of battling and\n"
 	.string "trading for as long as you can--you\l"
 	.string "earn Battle Points after every win.\p"
 	.string "The challenge has no set length, so\n"
 	.string "you may rest at any time to take a\l"
 	.string "break and resume it later.$"
+.else
+	.string "Repeat this cycle of battling and\n"
+	.string "trading--if you win seven times in\l"
+	.string "a row, you will earn Battle Points.\p"
+	.string "If you want to interrupt your\n"
+	.string "challenge, please save the game.\p"
+	.string "If you don't save, you will be\n"
+	.string "disqualified from your challenge.$"
+.endif
 
 BattleFrontier_BattleFactoryLobby_Text_LookForwardToNextVisit:
 	.string "We look forward to your next visit.$"
@@ -467,12 +485,22 @@ BattleFrontier_BattleFactoryLobby_Text_ExplainDoublesChallenge:
 	.string "you must conduct a DOUBLE BATTLE.\p"
 	.string "If you win, you are permitted to trade\n"
 	.string "one of your rental POKéMON.\p"
+.if B_FRONTIER_ENDLESS
 	.string "Repeat this cycle of battling and\n"
 	.string "trading for as long as you can--you\l"
 	.string "earn Battle Points after every win.\p"
 	.string "The challenge has no set length, so\n"
 	.string "you may rest at any time to take a\l"
 	.string "break and resume it later.$"
+.else
+	.string "Repeat this cycle of battling and\n"
+	.string "trading--if you win seven times in\l"
+	.string "a row, you will earn Battle Points.\p"
+	.string "If you want to interrupt your\n"
+	.string "challenge, please save the game.\p"
+	.string "If you don't save before interrupting,\n"
+	.string "you will be disqualified.$"
+.endif
 
 BattleFrontier_BattleFactoryLobby_Text_CongratsForDefeatingHead:
 	.string "Congratulations for defeating\n"

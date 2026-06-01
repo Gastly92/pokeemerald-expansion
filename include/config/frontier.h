@@ -18,19 +18,19 @@
 // creates both teams at FRONTIER_MAX_LEVEL_OPEN (== MAX_LEVEL).
 #define B_FRONTIER_FORCE_LVL_100    TRUE
 
-// Battle Factory "endless challenge". Vanilla Frontier challenges end after
-// FRONTIER_STAGES_PER_CHALLENGE (7) wins; the Factory sandbox instead lets the
-// player keep battling indefinitely. A "set" is this many wins and is now purely
-// a pacing/reward unit — the challenge never ends on its own (only on a loss, a
-// retire, or by resting). Battle Points are awarded after EVERY win and scale up
-// each set (2 BP/win in the first set, 4 in the next, 6 in the next, ...), and
-// the per-set trainer difficulty/dedup still keys off this value.
+// Frontier "endless challenge". When TRUE, a challenge no longer ends after
+// FRONTIER_STAGES_PER_CHALLENGE wins — the player keeps battling indefinitely.
+// A "set" is FRONTIER_STAGES_PER_CHALLENGE (10) wins and is now purely a
+// pacing/reward unit: Battle Points are awarded after EVERY win and scale up
+// each set (2 BP/win in the first set, 4 in the next, 6 in the next, ...),
+// "rest" lets the player step out and resume later instead of rebooting, and the
+// Frontier Brain appears at the 50th and 100th wins. When FALSE the vanilla
+// once-per-challenge flow is kept.
 //
-// This is a plain NUMBER (not TRUE/FALSE) on purpose so map scripts can compare
-// against it during their cpp pass without the FALSE-expansion footgun (see
-// CLAUDE.md, "Using config flags in scripts"). Set it back to
-// FRONTIER_STAGES_PER_CHALLENGE (7) to restore vanilla Factory pacing. Factory
-// only — other facilities still use FRONTIER_STAGES_PER_CHALLENGE.
-#define FACTORY_STAGES_PER_CHALLENGE   10
+// Like B_FRONTIER_FORCE_LVL_100 this gates both C (#if) and map-script (.if)
+// paths; the vanilla branch is preserved in each .else so upstream syncs stay
+// clean. Only the Battle Factory honors this flag for now; the other facilities
+// (Battle Tower, etc.) will be converted in later passes.
+#define B_FRONTIER_ENDLESS  TRUE
 
 #endif // GUARD_CONFIG_FRONTIER_H

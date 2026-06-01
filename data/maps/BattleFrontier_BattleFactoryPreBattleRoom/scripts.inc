@@ -65,12 +65,14 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom::
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReturnToRoomFromBattle::
 	factory_setopponentmons
 	factory_resethelditems
+.if B_FRONTIER_ENDLESS
 	@ FORK: endless Factory — the attendant awards BP for the match you just won
 	@ first, then restores your team, then the challenge continues. The win streak
 	@ was already incremented in the battle room, and opponentA still identifies
 	@ the Factory Head for the brain BP case. See GiveBattlePoints.
 	frontier_givepoints
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_AwardedBattlePoints, MSGBOX_GETPOINTS
+.endif
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_LetUsRestoreMons, MSGBOX_DEFAULT
 	playfanfare MUS_HEAL
 	waitfanfare
@@ -97,6 +99,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponent::
 	frontier_getbrainstatus
 	goto_if_ne VAR_RESULT, FRONTIER_BRAIN_NOT_READY, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForHead
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent::
+.if B_FRONTIER_ENDLESS
 	@ FORK: endless Factory — the challenge runs indefinitely, so announce the
 	@ upcoming match number from the win streak instead of the 7 hard-coded
 	@ ordinal strings (which only went up to the "7th match").
@@ -105,6 +108,15 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
 	buffernumberstring STR_VAR_1, VAR_RESULT
 	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyForNextMatch
 	waitmessage
+.else
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	call_if_eq VAR_RESULT, 1, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor2ndOpponent
+	call_if_eq VAR_RESULT, 2, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor3rdOpponent
+	call_if_eq VAR_RESULT, 3, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor4thOpponent
+	call_if_eq VAR_RESULT, 4, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor5thOpponent
+	call_if_eq VAR_RESULT, 5, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor6thOpponent
+	call_if_eq VAR_RESULT, 6, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor7thOpponent
+.endif
 	call BattleFrontier_EventScript_GetCantRecordBattle
 	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponentNoRecord
 	multichoice 19, 4, MULTI_GO_ON_RECORD_REST_RETIRE, TRUE
@@ -137,7 +149,11 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_RecordBattle::
 	goto BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponent
 
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskPauseChallenge::
+.if B_FRONTIER_ENDLESS
+	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_RestFromChallenge, MSGBOX_YESNO
+.else
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_SaveAndQuitGame, MSGBOX_YESNO
+.endif
 	switch VAR_RESULT
 	case NO, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponent
 	case YES, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_PauseChallenge
@@ -175,7 +191,41 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_SwapMons::
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_YourSwapIsComplete, MSGBOX_DEFAULT
 	goto BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom
 
+@ Vanilla ordinal prompts, used by the non-endless branch above (and kept verbatim
+@ for clean upstream syncs). The 2nd/3rd strings are also shared with the
+@ Slateport Battle Tent.
+BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor2ndOpponent::
+	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor2ndOpponent
+	waitmessage
+	return
+
+BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor3rdOpponent::
+	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor3rdOpponent
+	waitmessage
+	return
+
+BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor4thOpponent::
+	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor4thOpponent
+	waitmessage
+	return
+
+BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor5thOpponent::
+	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor5thOpponent
+	waitmessage
+	return
+
+BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor6thOpponent::
+	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor6thOpponent
+	waitmessage
+	return
+
+BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor7thOpponent::
+	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor7thOpponent
+	waitmessage
+	return
+
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_PauseChallenge::
+.if B_FRONTIER_ENDLESS
 	@ FORK: endless Factory — "Rest" no longer saves-and-reboots. It saves the
 	@ challenge, restores the player's real party, and walks them back out to the
 	@ lobby so they're free to leave and do other things. The win streak stays
@@ -205,6 +255,16 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_RestLeaveToLobbyDoubles::
 	warp MAP_BATTLE_FRONTIER_BATTLE_FACTORY_LOBBY, 14, 8
 	waitstate
 	end
+.else
+	message BattleFrontier_BattleFactoryPreBattleRoom_Text_SavingDataPleaseWait
+	waitmessage
+	factory_save CHALLENGE_STATUS_PAUSED
+	playse SE_SAVE
+	waitse
+	fadescreen FADE_TO_BLACK
+	frontier_reset
+	end
+.endif
 
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ResumeChallenge::
 	special SavePlayerParty
@@ -489,8 +549,8 @@ BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyForNextMatch:
 	.string "Match No. {STR_VAR_1} is next!\n"
 	.string "Are you ready?$"
 
-@ The 2nd/3rd ordinal strings are still used by the Slateport Battle Tent
-@ (SlateportCity_BattleTentCorridor), which is fixed-length, so they remain.
+@ Vanilla ordinal strings, used by the non-endless prompt. The 2nd/3rd are also
+@ shared with the Slateport Battle Tent (SlateportCity_BattleTentCorridor).
 BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor2ndOpponent:
 	.string "The 2nd match is next!\n"
 	.string "Are you ready?$"
@@ -499,9 +559,29 @@ BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor3rdOpponent:
 	.string "The 3rd match is next!\n"
 	.string "Are you ready?$"
 
-@ FORK: "Rest" now saves and steps out to the lobby (the streak is kept so it can
-@ be resumed later) rather than saving and rebooting the game.
+BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor4thOpponent:
+	.string "The 4th match is next!\n"
+	.string "Are you ready?$"
+
+BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor5thOpponent:
+	.string "The 5th match is next!\n"
+	.string "Are you ready?$"
+
+BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor6thOpponent:
+	.string "The 6th match is next!\n"
+	.string "Are you ready?$"
+
+BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor7thOpponent:
+	.string "Finally, the 7th match is next!\n"
+	.string "Are you ready?$"
+
 BattleFrontier_BattleFactoryPreBattleRoom_Text_SaveAndQuitGame:
+	.string "Would you like to save and quit\n"
+	.string "the game?$"
+
+@ FORK: endless Factory "Rest" saves and steps out to the lobby (the streak is
+@ kept so it can be resumed later) rather than saving and rebooting the game.
+BattleFrontier_BattleFactoryPreBattleRoom_Text_RestFromChallenge:
 	.string "Would you like to save and take\n"
 	.string "a break from your challenge?$"
 
