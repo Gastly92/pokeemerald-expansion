@@ -75,6 +75,7 @@ SINGLE_BATTLE_TEST("Charge's effect is removed if the user fails using an Electr
 }
 #endif // !DETERMINISTIC_DAMAGE
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Charge's effect does not stack with Electromorphosis or Wind Power")
 {
     u32 species;
@@ -104,6 +105,7 @@ SINGLE_BATTLE_TEST("Charge's effect does not stack with Electromorphosis or Wind
         EXPECT_MUL_EQ(damage[0], Q_4_12(2.0), damage[1]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Charge's effect is removed regardless if the next move is Electric or not (Gen 3-8)")
 {

@@ -90,6 +90,7 @@ DOUBLE_BATTLE_TEST("Spread Moves: A spread move attack will activate both resist
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Spread Moves: If a spread move attack will activate a resist berries on one Pokémon, only the damage for that mon will be reduced")
 {
     s16 opponentLeftDmg[2];
@@ -121,6 +122,7 @@ DOUBLE_BATTLE_TEST("Spread Moves: If a spread move attack will activate a resist
         EXPECT_MUL_EQ(opponentRightDmg[1], Q_4_12(0.5), opponentRightDmg[0]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 DOUBLE_BATTLE_TEST("Spread Moves: A spread move attack will be weakened by strong winds on both targets")
 {

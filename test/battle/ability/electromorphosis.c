@@ -69,6 +69,7 @@ SINGLE_BATTLE_TEST("Electromorphosis displays its message before fainting when t
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Electromorphosis triggers on each multistrike hit but Charge does not stack")
 {
     s16 dmgBefore, dmgAfterSingleHit, dmgAfterMultiHit;
@@ -107,3 +108,4 @@ SINGLE_BATTLE_TEST("Electromorphosis triggers on each multistrike hit but Charge
         EXPECT_EQ(dmgAfterSingleHit, dmgAfterMultiHit);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE

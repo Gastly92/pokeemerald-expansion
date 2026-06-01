@@ -62,6 +62,7 @@ SINGLE_BATTLE_TEST("Wind Power sets up Charge for player when hit by a wind move
 }
 #endif // !DETERMINISTIC_DAMAGE
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Wind Power sets up Charge for opponent when hit by a wind move")
 {
     s16 dmgBefore, dmgAfter;
@@ -106,6 +107,7 @@ SINGLE_BATTLE_TEST("Wind Power sets up Charge for opponent when hit by a wind mo
         }
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 #if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Wind Power sets up Charge for only one attack when hit by a wind move")

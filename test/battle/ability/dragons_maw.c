@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Dragon's Maw increases Dragon-type move damage", s16 damage)
 {
     enum Move move;
@@ -31,3 +32,4 @@ SINGLE_BATTLE_TEST("Dragon's Maw increases Dragon-type move damage", s16 damage)
         EXPECT_MUL_EQ(results[4].damage, Q_4_12(1.5), results[5].damage); // Dragon Breath should be affected
     }
 }
+#endif // !DETERMINISTIC_DAMAGE

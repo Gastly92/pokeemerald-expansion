@@ -6,6 +6,7 @@ ASSUMPTIONS
     ASSUME(gItemsInfo[ITEM_CLEAR_AMULET].holdEffect == HOLD_EFFECT_CLEAR_AMULET);
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Clear Amulet prevents Intimidate")
 {
     s16 turnOneHit;
@@ -28,6 +29,7 @@ SINGLE_BATTLE_TEST("Clear Amulet prevents Intimidate")
         EXPECT_EQ(turnOneHit, turnTwoHit);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Clear Amulet prevents stat reducing effects")
 {

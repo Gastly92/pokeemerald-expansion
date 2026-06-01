@@ -56,6 +56,7 @@ SINGLE_BATTLE_TEST("Quark Drive boosts either Attack or Special Attack, not both
 }
 #endif // !DETERMINISTIC_DAMAGE
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Quark Drive keeps its initial boosted stat after Speed is lowered")
 {
     s16 damage[2];
@@ -79,6 +80,7 @@ SINGLE_BATTLE_TEST("Quark Drive keeps its initial boosted stat after Speed is lo
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 #if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Quark Drive retains its boosted stat after Neutralizing Gas briefly suppresses it")

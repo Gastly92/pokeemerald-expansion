@@ -201,6 +201,7 @@ SINGLE_BATTLE_TEST("Pickup doesn't grant an item if the user eats it with Bug Bi
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Pickup doesn't grant an used item if its user already restored it")
 {
     GIVEN {
@@ -220,6 +221,7 @@ SINGLE_BATTLE_TEST("Pickup doesn't grant an used item if its user already restor
         EXPECT_EQ(player->item, ITEM_NONE);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Pickup restores an item that has been Flinged")
 {

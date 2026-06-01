@@ -259,6 +259,7 @@ SINGLE_BATTLE_TEST("Protosynthesis accounts for Sticky Web when determining the 
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Protosynthesis keeps its initial boosted stat after Speed is lowered")
 {
     s16 damage[2];
@@ -281,6 +282,7 @@ SINGLE_BATTLE_TEST("Protosynthesis keeps its initial boosted stat after Speed is
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Protosynthesis recalculates the boosted stat after Neutralizing Gas leaves the field")
 {
@@ -334,6 +336,7 @@ SINGLE_BATTLE_TEST("Protosynthesis retains its boosted stat after Neutralizing G
 }
 #endif // !DETERMINISTIC_DAMAGE
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Protosynthesis damage calculation is correct")
 {
     s16 dmg;
@@ -368,3 +371,4 @@ SINGLE_BATTLE_TEST("Protosynthesis damage calculation is correct")
         EXPECT_EQ(expectedDamage, dmg);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE

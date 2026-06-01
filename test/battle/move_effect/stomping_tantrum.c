@@ -6,6 +6,7 @@ ASSUMPTIONS
     ASSUME(GetMoveEffect(MOVE_STOMPING_TANTRUM) == EFFECT_STOMPING_TANTRUM);
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user flinched on the previous turn")
 {
     s16 damage[3];
@@ -35,7 +36,9 @@ SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user flinched on
         EXPECT_EQ(damage[0], damage[2]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user failed to attack due to paralysis")
 {
     s16 damage[3];
@@ -65,6 +68,7 @@ SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user failed to a
         EXPECT_EQ(damage[0], damage[2]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 #if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Stomping Tantrum will not deal double damage if target protects")

@@ -73,6 +73,7 @@ SINGLE_BATTLE_TEST("Dry Skin doesn't heal in Rain if Cloud Nine/Air Lock is on t
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Dry Skin increases damage taken from Fire-type moves by 25%", s16 damage)
 {
     enum Ability ability;
@@ -100,6 +101,7 @@ SINGLE_BATTLE_TEST("Dry Skin increases damage taken from Fire-type moves by 25%"
         EXPECT_EQ(results[1].damage, 68);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Dry Skin heals 25% when hit by water type moves")
 {

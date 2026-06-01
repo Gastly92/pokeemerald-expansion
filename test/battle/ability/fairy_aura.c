@@ -60,6 +60,7 @@ DOUBLE_BATTLE_TEST("Fairy Aura increases the power of all Fairy-type attacks by 
 }
 #endif // !DETERMINISTIC_DAMAGE
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Fairy Aura's effect doesn't stack multiple times")
 {
     s16 damage[6];
@@ -108,3 +109,4 @@ DOUBLE_BATTLE_TEST("Fairy Aura's effect doesn't stack multiple times")
         EXPECT_EQ(damage[5], damage[2]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE

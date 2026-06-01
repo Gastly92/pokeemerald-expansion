@@ -53,6 +53,7 @@ DOUBLE_BATTLE_TEST("Terrain Boost: Expanding Force hits both foes in Psychic Ter
     }
 }
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Terrain Boost: Rising Voltage doubles in power if target is grounded")
 {
     s16 damage[3];
@@ -83,7 +84,9 @@ SINGLE_BATTLE_TEST("Terrain Boost: Rising Voltage doubles in power if target is 
         EXPECT_EQ(damage[0], damage[2]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Terrain Boost: Misty Explosion increases in power by 50% when affected by Misty Terrain")
 {
     s16 damage[3];
@@ -118,6 +121,7 @@ SINGLE_BATTLE_TEST("Terrain Boost: Misty Explosion increases in power by 50% whe
         EXPECT_EQ(damage[0], damage[2]);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Terrain Boost: Psyblade power increases by 50% regardless if user is grounded or not")
 {

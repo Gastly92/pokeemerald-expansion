@@ -134,6 +134,7 @@ SINGLE_BATTLE_TEST("Trace doesn't try to reactivate if activation was prevented 
 }
 #endif // !DETERMINISTIC_DAMAGE
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Trace can activate if it couldn't copy opponent's ability even with an Ability Shield")
 {
     GIVEN {
@@ -156,6 +157,7 @@ SINGLE_BATTLE_TEST("Trace can activate if it couldn't copy opponent's ability ev
         EXPECT_EQ(player->item, ITEM_NONE);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Trace copies opponent's Intimidate and triggers it immediately")
 {

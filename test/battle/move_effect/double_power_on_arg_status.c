@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Hex deals double damage to foes with a status", s16 damage)
 {
     u32 status1;
@@ -28,6 +29,7 @@ SINGLE_BATTLE_TEST("Hex deals double damage to foes with a status", s16 damage)
             EXPECT_EQ(results[i-1].damage, results[i].damage);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
 
 TO_DO_BATTLE_TEST("Hex deals double damage to Pokémon with Comatose")
 

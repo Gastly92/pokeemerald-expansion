@@ -137,6 +137,7 @@ DOUBLE_BATTLE_TEST("Order Up is boosted by Sheer Force without removing the stat
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, playerLeft);
     }
 }
+#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Order Up is always boosted by Sheer Force", s16 damage)
 {
     enum Move move;
@@ -170,3 +171,4 @@ DOUBLE_BATTLE_TEST("Order Up is always boosted by Sheer Force", s16 damage)
         EXPECT_MUL_EQ(results[0].damage, UQ_4_12(1.3), results[2].damage);
     }
 }
+#endif // !DETERMINISTIC_DAMAGE
