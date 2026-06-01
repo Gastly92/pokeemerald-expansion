@@ -7600,7 +7600,12 @@ static inline s32 DoMoveDamageCalcVars(struct DamageContext *ctx)
 
     if (ctx->randomFactor)
     {
+#if DETERMINISTIC_DAMAGE
+        // FORK: no random roll; multiply by the fixed, turn-scaling percentage.
+        dmg *= DETERMINISTIC_DAMAGE_PERCENT;
+#else
         dmg *= DMG_ROLL_PERCENT_HI - RandomUniform(RNG_DAMAGE_MODIFIER, 0, DMG_ROLL_PERCENT_HI - DMG_ROLL_PERCENT_LO);
+#endif
         dmg /= 100;
     }
     else // Apply rest of modifiers in the ai function

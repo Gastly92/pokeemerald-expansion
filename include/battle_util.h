@@ -82,6 +82,15 @@ enum ItemEffect
 #define DMG_ROLL_PERCENT_LO 85
 #define DMG_ROLL_PERCENT_HI 100
 
+// FORK: DETERMINISTIC_DAMAGE replaces the random 85%-100% damage roll with this
+// fixed, turn-scaling percentage. gBattleTurnCounter is 0 on the first turn, so
+// this is DETERMINISTIC_DAMAGE_BASE_PERCENT (92% by default) then climbs by
+// DETERMINISTIC_DAMAGE_TURN_INCREMENT per elapsed turn. Uncapped on purpose (see
+// the flag comment in config/deterministic.h). Shared by the real damage calc
+// and the AI's damage prediction so the two agree.
+#define DETERMINISTIC_DAMAGE_PERCENT \
+    (DETERMINISTIC_DAMAGE_BASE_PERCENT + DETERMINISTIC_DAMAGE_TURN_INCREMENT * gBattleTurnCounter)
+
 // Crit chance exceptions
 #define CRITICAL_HIT_BLOCKED -1
 #define CRITICAL_HIT_ALWAYS  -2
