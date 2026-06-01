@@ -237,6 +237,9 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_PauseChallenge::
 	@ isn't roaming with rental mons.
 	message BattleFrontier_BattleFactoryPreBattleRoom_Text_SavingDataPleaseWait
 	waitmessage
+	@ FORK: snapshot the rental team for this battle mode before saving, so a
+	@ rested singles team isn't clobbered by a doubles challenge (and vice versa).
+	factory_backupteam
 	factory_save 0
 	playse SE_SAVE
 	waitse
@@ -268,6 +271,12 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_RestLeaveToLobbyDoubles::
 
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ResumeChallenge::
 	special SavePlayerParty
+.if B_FRONTIER_ENDLESS
+	@ FORK: restore this battle mode's rested rental team before rebuilding the
+	@ parties, undoing any clobber from a challenge run in the other mode. (.if,
+	@ not cpp #if — the backup field/special only exist under B_FRONTIER_ENDLESS.)
+	factory_restoreteam
+.endif
 	factory_setparties 0
 	frontier_set FRONTIER_DATA_RECORD_DISABLED, TRUE
 	special CalculatePlayerPartyCount

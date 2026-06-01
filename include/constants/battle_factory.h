@@ -30,6 +30,11 @@ enum FactoryStyle {
 #define BATTLE_FACTORY_FUNC_GET_OPPONENT_MON_TYPE   14
 #define BATTLE_FACTORY_FUNC_GET_OPPONENT_STYLE      15
 #define BATTLE_FACTORY_FUNC_RESET_HELD_ITEMS        16
+// FORK: endless Factory rest/resume — back up / restore the rental team per
+// battle mode so singles and doubles challenges don't share one team. Gated by
+// B_FRONTIER_ENDLESS (see battle_factory.c).
+#define BATTLE_FACTORY_FUNC_BACKUP_TEAM             17
+#define BATTLE_FACTORY_FUNC_RESTORE_TEAM            18
 
 #define FACTORY_DATA_WIN_STREAK         1
 #define FACTORY_DATA_WIN_STREAK_ACTIVE  2

@@ -38,6 +38,10 @@ static void GenerateInitialRentalMons(void);
 static void GetOpponentMostCommonMonType(void);
 static void GetOpponentBattleStyle(void);
 static void RestorePlayerPartyHeldItems(void);
+#if B_FRONTIER_ENDLESS
+static void BackupFactoryRentalTeam(void);
+static void RestoreFactoryRentalTeam(void);
+#endif
 static u16 GetFactoryMonId(enum FrontierLevelMode lvlMode, u8 challengeNum, bool8 useBetterRange);
 static enum FactoryStyle GetMoveBattleStyle(enum Move move);
 
@@ -71,6 +75,10 @@ static void (*const sBattleFactoryFunctions[])(void) =
     [BATTLE_FACTORY_FUNC_GET_OPPONENT_MON_TYPE]  = GetOpponentMostCommonMonType,
     [BATTLE_FACTORY_FUNC_GET_OPPONENT_STYLE]     = GetOpponentBattleStyle,
     [BATTLE_FACTORY_FUNC_RESET_HELD_ITEMS]       = RestorePlayerPartyHeldItems,
+#if B_FRONTIER_ENDLESS
+    [BATTLE_FACTORY_FUNC_BACKUP_TEAM]            = BackupFactoryRentalTeam,
+    [BATTLE_FACTORY_FUNC_RESTORE_TEAM]           = RestoreFactoryRentalTeam,
+#endif
 };
 
 static const u32 sWinStreakFlags[][2] =
@@ -213,6 +221,33 @@ static void SaveFactoryChallenge(void)
     gSaveBlock2Ptr->frontier.challengePaused = TRUE;
     SaveGameFrontier();
 }
+
+#if B_FRONTIER_ENDLESS
+// FORK: endless Factory rest/resume. The rental team lives in the single shared
+// rentalMons array, but a singles and a doubles challenge can both be paused
+// ("rested") at once. Snapshot the whole array (player half + the defeated
+// team's swap candidates) into a per-battle-mode backup on "Rest", and copy it
+// back on resume, so switching modes no longer overwrites the rested team.
+// Win streaks are already tracked per [battleMode][lvlMode]; this gives the
+// rental team the same per-mode persistence.
+static void BackupFactoryRentalTeam(void)
+{
+    u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(gSaveBlock2Ptr->frontier.rentalMons); i++)
+        gSaveBlock2Ptr->frontier.factoryRentedMonsBackup[battleMode][i] = gSaveBlock2Ptr->frontier.rentalMons[i];
+}
+
+static void RestoreFactoryRentalTeam(void)
+{
+    u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(gSaveBlock2Ptr->frontier.rentalMons); i++)
+        gSaveBlock2Ptr->frontier.rentalMons[i] = gSaveBlock2Ptr->frontier.factoryRentedMonsBackup[battleMode][i];
+}
+#endif
 
 static void FactoryDummy1(void)
 {
