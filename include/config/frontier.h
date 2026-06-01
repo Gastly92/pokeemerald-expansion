@@ -33,13 +33,12 @@
 // (Battle Tower, etc.) follow in later passes.
 #define B_FRONTIER_ENDLESS  TRUE
 
-// If TRUE, Frontier mons have every move's PP maxed out (full PP Up bonus on all
-// four slots), instead of the vanilla base PP. Applied inside CreateFacilityMon
-// for any mon flagged FLAG_FRONTIER_MON_FACTORY, so it currently covers the
-// whole Battle Factory roster — the player's rentals (initial draft and 6v6
-// auto-rent), the opposing trainers, and the Frontier Brain. Other facilities
-// (Battle Tower, Battle Tent, etc.) don't set that flag and so are unaffected
-// for now; they follow in later passes.
+// If TRUE, facility mons have every move's PP maxed out (full PP Up bonus on all
+// four slots), instead of the vanilla base PP. Applied inside CreateFacilityMon,
+// the shared builder for every facility roster, so it covers all of them: the
+// Battle Factory (rentals — initial draft and 6v6 auto-rent — opponents, and the
+// Frontier Brain), the Battle Tower/Dome/Palace/Arena/Pyramid trainers, the
+// Battle Tent, and multi-battle partners.
 #define B_FRONTIER_MAX_PP   TRUE
 
 // If TRUE, Frontier mons are generated with max IVs (31) in every stat instead
