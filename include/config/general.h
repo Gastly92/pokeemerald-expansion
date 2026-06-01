@@ -81,6 +81,10 @@
 #define HQ_RANDOM                    TRUE    // If TRUE, replaces the default RNG with an implementation of SFC32 RNG. May break code that relies on RNG.
 #define PHONEMES_SHARED              FALSE   // If TRUE, bard phonemes all reference the same sound (sound/direct_sound_samples/phonemes/shared.bin) to save ROM space.
 
+// New game option defaults. These set the initial value of the corresponding option for a fresh save (SetDefaultOptions() in src/new_game.c); the player can still change them in the Options menu afterwards. Use the OPTIONS_* constants from include/constants/global.h.
+#define NEW_GAME_TEXT_SPEED          OPTIONS_TEXT_SPEED_FAST   // Default text speed for a new game. Vanilla: OPTIONS_TEXT_SPEED_MID. Options: OPTIONS_TEXT_SPEED_{SLOW,MID,FAST}.
+#define NEW_GAME_BATTLE_STYLE        OPTIONS_BATTLE_STYLE_SET  // Default battle style for a new game. Vanilla: OPTIONS_BATTLE_STYLE_SHIFT. Options: OPTIONS_BATTLE_STYLE_{SHIFT,SET}.
+
 // Measurement system constants to be used for UNITS
 #define UNITS_IMPERIAL               0       // Inches, feet, pounds
 #define UNITS_METRIC                 1       // meters, kilograms
