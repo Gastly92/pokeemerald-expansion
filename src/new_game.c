@@ -220,6 +220,25 @@ static void SetBattleFrontierFirstArrivalState(void)
 }
 #endif // START_AT_BATTLE_FRONTIER
 
+#if START_WITH_BATTLE_GIMMICK_ITEMS
+// FORK: Gives a fresh save the four battle-transformation key items. Mega
+// Evolution, Z-Moves and Ultra Burst become usable immediately, since their
+// CanActivate checks only require the item in the bag. Dynamax and Tera are
+// additionally gated on a flag (CanDynamax checks B_FLAG_DYNAMAX_BATTLE;
+// CanTerastallize checks B_FLAG_TERA_ORB_NO_COST / B_FLAG_TERA_ORB_CHARGED), both
+// left at their default 0 here, so the player holds the Dynamax Band and Tera Orb
+// but cannot use those gimmicks yet. Enabling them is intended to be a later
+// player-facing choice (a toggle that points those B_FLAG_* defines at real flags
+// and sets them), so Frontier runs can opt into Dynamax/Tera.
+static void GiveStartingBattleGimmickItems(void)
+{
+    AddBagItem(ITEM_MEGA_RING, 1);
+    AddBagItem(ITEM_Z_POWER_RING, 1);
+    AddBagItem(ITEM_DYNAMAX_BAND, 1);
+    AddBagItem(ITEM_TERA_ORB, 1);
+}
+#endif // START_WITH_BATTLE_GIMMICK_ITEMS
+
 void Sav2_ClearSetDefault(void)
 {
     ClearSav2();
@@ -296,6 +315,9 @@ void NewGameInitData(void)
         RunScriptImmediately(EventScript_ResetAllMapFlags);
 #if START_AT_BATTLE_FRONTIER
     SetBattleFrontierFirstArrivalState(); // FORK: must run after EventScript_ResetAllMapFlags so our flags survive the reset
+#endif
+#if START_WITH_BATTLE_GIMMICK_ITEMS
+    GiveStartingBattleGimmickItems(); // FORK: any point after ClearBag() above works; grouped here with the other new-game setup
 #endif
 #if IS_FRLG
         StringCopy(gSaveBlock1Ptr->rivalName, rivalName);
