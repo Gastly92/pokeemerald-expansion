@@ -48,6 +48,8 @@ SINGLE_BATTLE_TEST("Lansat Berry raises the holder's critical-hit-ratio by two s
     }
 }
 
+// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
+#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Lansat Berry raises the holder's critical-hit-ratio by 2 stages")
 {
     u32 genConfig = 0, chance;
@@ -71,3 +73,4 @@ SINGLE_BATTLE_TEST("Lansat Berry raises the holder's critical-hit-ratio by 2 sta
         MESSAGE("A critical hit!");
     }
 }
+#endif // !DETERMINISTIC_CRITICAL_HITS

@@ -1,6 +1,8 @@
 #include "global.h"
 #include "test/battle.h"
 
+// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
+#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Super Luck increases the critical hit ratio by 1 stage")
 {
     u32 j, genConfig = 0, passes = 0, trials = 0;
@@ -21,5 +23,6 @@ SINGLE_BATTLE_TEST("Super Luck increases the critical hit ratio by 1 stage")
         MESSAGE("A critical hit!");
     }
 }
+#endif // !DETERMINISTIC_CRITICAL_HITS
 
 TO_DO_BATTLE_TEST("Super Luck increases the chances of wild Pokémon holding items (Gen8+)");
