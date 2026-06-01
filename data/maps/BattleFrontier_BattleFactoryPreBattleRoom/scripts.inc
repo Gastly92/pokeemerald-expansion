@@ -65,16 +65,16 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom::
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReturnToRoomFromBattle::
 	factory_setopponentmons
 	factory_resethelditems
+	@ FORK: endless Factory — the attendant awards BP for the match you just won
+	@ first, then restores your team, then the challenge continues. The win streak
+	@ was already incremented in the battle room, and opponentA still identifies
+	@ the Factory Head for the brain BP case. See GiveBattlePoints.
+	frontier_givepoints
+	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_AwardedBattlePoints, MSGBOX_GETPOINTS
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_LetUsRestoreMons, MSGBOX_DEFAULT
 	playfanfare MUS_HEAL
 	waitfanfare
 	special HealPlayerParty
-	@ FORK: endless Factory — the attendant awards BP for the match you just won
-	@ here (after restoring your team) before the challenge continues. The win
-	@ streak was already incremented in the battle room, and opponentA still
-	@ identifies the Factory Head for the brain BP case. See GiveBattlePoints.
-	frontier_givepoints
-	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_AwardedBattlePoints, MSGBOX_GETPOINTS
 	frontier_getbrainstatus
 	goto_if_eq VAR_RESULT, FRONTIER_BRAIN_NOT_READY, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
 	playse SE_POKENAV_CALL
