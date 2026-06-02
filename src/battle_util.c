@@ -9567,6 +9567,14 @@ bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId batt
         }
         else if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
         {
+            // FORK: under determinism, the stock "double the secondary chance"
+            // boosters — Serene Grace and the Pledge Rainbow — instead make the
+            // effect certain: if the computed chance was boosted above the move's
+            // base chance, the effect bypasses the super-effective/STAB gate and
+            // always lands. (Flinch keeps its own anti-lock rule, handled above, so
+            // these boosters can't restore flinch-lock.)
+            if (percentChance > additionalEffect->chance)
+                return TRUE;
             enum Type moveType = GetBattleMoveType(move);
             bool32 superEffective = (gBattleStruct->moveResultFlags[battlerDef] & MOVE_RESULT_SUPER_EFFECTIVE) != 0;
             return DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));

@@ -3728,6 +3728,9 @@ bool32 AI_IsAdditionalEffectReliable(enum BattlerId battlerAtk, enum BattlerId b
 
     if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
     {
+        // A chance-booster (Serene Grace / Pledge Rainbow) guarantees the effect.
+        if (CalcSecondaryEffectChance(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect) > additionalEffect->chance)
+            return TRUE;
         enum Type moveType = GetBattleMoveType(move);
         bool32 superEffective = AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) >= UQ_4_12(2.0);
         return DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));

@@ -89,9 +89,14 @@
 //     only paralyzes when used by a Normal-type user.
 // Guaranteed effects (chance >= 100%) always land, unchanged. Flinch is handled
 // separately by DETERMINISTIC_FLINCH (which this flag requires), not by the
-// rule above. The AI's effect valuation is taught the same condition so it credits
-// an effect exactly when it will actually happen. See TryTriggerAdditionalEffect()
-// and DeterministicAdditionalEffectApplies() in src/battle_util.c.
+// rule above. The stock secondary-chance boosters — Serene Grace and the Pledge
+// Rainbow, which normally just double the odds — instead make the effect certain:
+// the holder bypasses the super-effective/STAB gate and always lands its non-flinch
+// effects (flinch still obeys its anti-lock rule, so these can't restore
+// flinch-lock). The AI's effect valuation is taught the same conditions so it
+// credits an effect exactly when it will actually happen. See
+// TryTriggerAdditionalEffect() and DeterministicAdditionalEffectApplies() in
+// src/battle_util.c.
 #define DETERMINISTIC_ADDITIONAL_EFFECTS TRUE
 
 #endif // GUARD_CONFIG_DETERMINISTIC_H

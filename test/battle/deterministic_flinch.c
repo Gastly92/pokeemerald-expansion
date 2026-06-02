@@ -57,6 +57,27 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_FLINCH: flinch is governed by the flinch rule,
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_FLINCH: Serene Grace does not lift the anti flinch-lock rule")
+{
+    // The secondary-chance boosters guarantee non-flinch effects, but flinch keeps
+    // its own anti-lock rule, so a Serene Grace flincher still can't flinch a target
+    // it flinched last turn.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_SERENE_GRACE); Speed(100); Moves(MOVE_IRON_HEAD); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_IRON_HEAD); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_IRON_HEAD); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        // Turn 1: flinched.
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+        // Turn 2: was flinched last turn, so Serene Grace notwithstanding it moves.
+        MESSAGE("The opposing Wobbuffet used Celebrate!");
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_FLINCH: Fake Out is exempt from the anti-lock rule and flinches every turn it can be used")
 {
     // Fake Out only works the turn its user switches in, so it can never chain

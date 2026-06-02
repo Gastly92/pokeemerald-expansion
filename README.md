@@ -32,6 +32,19 @@ gradually through a family of **`DETERMINISTIC_*`** flags (in
 which removes one specific source of randomness. A flag set to `FALSE` is stock
 `pokeemerald-expansion` behavior; this fork enables them as features mature.
 
+**Why, given this is a single-player game.** This isn't a competitive-meta
+rebalance — there's no human opponent to keep things fair for, so the usual
+multiplayer concerns (how a move like Scald shifts a metagame, etc.) don't apply
+here. The thing being protected is the *single player's* experience against the
+AI, especially in the Battle Frontier facilities, where the appeal is **building
+a long win streak through your own skill and Pokémon knowledge**. In stock play
+a great run can be ended by pure hax with no counterplay — a surprise critical
+hit, a Quick Claw turn flip into a Sheer Cold OHKO, a flinch you never get to act
+through. Determinism cuts both the lucky *and* the unlucky variance out of the
+loop, so a streak is won or lost on decisions, not dice. (The flip side — the
+player also loses their own lucky breaks — is intentional, and where the
+compensating `BUFF_*` systems come in.)
+
 The idea is that a random *upside* (a lucky crit, a lucky burn, a lucky full
 paralysis) is replaced by something that the player can read off the board and
 plan around. Flags shipped so far (all **enabled**):

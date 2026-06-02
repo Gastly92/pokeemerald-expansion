@@ -56,6 +56,23 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ADDITIONAL_EFFECTS: a move that can never be s
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_ADDITIONAL_EFFECTS: Serene Grace guarantees a normally-gated effect")
+{
+    // Fire vs Psychic is neutral (not super effective) and the user is not Fire (no
+    // STAB), so without a chance-booster the burn would NOT land. Serene Grace turns
+    // its stock chance-doubling into a guaranteed effect under the flag.
+    GIVEN {
+        ASSUME(MoveHasAdditionalEffect(MOVE_FIRE_PUNCH, MOVE_EFFECT_BURN));
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_SERENE_GRACE); Attack(1); Moves(MOVE_FIRE_PUNCH); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(600); HP(600); Defense(255); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_FIRE_PUNCH); }
+    } THEN {
+        EXPECT(opponent->status1 & STATUS1_BURN);
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_ADDITIONAL_EFFECTS: a guaranteed (100%) effect still always lands")
 {
     // Nuzzle (Electric, 100% paralysis) is neither STAB for a Psychic user nor super
