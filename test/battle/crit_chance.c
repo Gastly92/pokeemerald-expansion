@@ -6,7 +6,6 @@
 // succeeds and guaranteed (1/1) crits take no roll at all, so the probabilistic
 // assertions don't apply. The deterministic behavior is covered by
 // test/battle/deterministic_critical_hits.c instead.
-#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Critical hits without modifiers occur at different rates by generation")
 {
     u32 genConfig, passes, trials;
@@ -53,7 +52,6 @@ SINGLE_BATTLE_TEST("Crit Chance: Raising critical hit rate to 3 guarantees a cri
         MESSAGE("A critical hit!");
     }
 }
-#endif // !DETERMINISTIC_CRITICAL_HITS
 
 #define CRIT_MESSAGE "A critical hit!"
 SINGLE_BATTLE_TEST("Crit Change: Fixed damage moves don't print a crit message")

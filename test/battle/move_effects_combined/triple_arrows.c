@@ -44,8 +44,6 @@ SINGLE_BATTLE_TEST("Triple Arrows makes the foe flinch 30% of the time")
     }
 }
 
-// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
-#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Triple Arrows has an increased critical hit ratio")
 {
     u32 j, genConfig = 0, passes = 0, trials = 0;
@@ -67,7 +65,6 @@ SINGLE_BATTLE_TEST("Triple Arrows has an increased critical hit ratio")
         MESSAGE("A critical hit!");
     }
 }
-#endif // !DETERMINISTIC_CRITICAL_HITS
 
 SINGLE_BATTLE_TEST("Triple Arrows can lower Defense and cause flinch at the time")
 {

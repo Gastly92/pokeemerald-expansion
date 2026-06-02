@@ -242,6 +242,18 @@
     F(SHOULD_SWITCH_LOSES_1V1_PERCENTAGE,       switchLoses1v1Chance,       (u32, 100)) \
     F(AI_ROLL_ATTACKING,                        aiRollAttacking,            (u32, AI_ROLL_TYPE_COUNT - 1)) \
 
+// FORK: the DETERMINISTIC_* feature flags (config/deterministic.h) ride the same
+// runtime config system as the B_*/P_*/AI_* flags so battle tests can toggle them
+// per-test with WITH_CONFIG. Their production defaults come from the
+// DETERMINISTIC_* #defines (seeded into sConfigChanges); the test baseline forces
+// them off (see TestInitConfigData) so the inherited suite keeps exercising stock
+// behavior, and deterministic tests opt in explicitly. Each is a boolean, so its
+// max value is TRUE. To add a new determinism flag: add its #define in
+// config/deterministic.h and one line here.
+#define DETERMINISTIC_CONFIG_DEFINITIONS(F) \
+    F(DETERMINISTIC_CRITICAL_HITS, deterministicCriticalHits, (u32, TRUE)) \
+    F(DETERMINISTIC_DAMAGE,        deterministicDamage,       (u32, TRUE)) \
+
 #define GET_CONFIG_MAXIMUM(_typeMaxValue, ...) INVOKE_WITH_B(GET_CONFIG_MAXIMUM_, _typeMaxValue)
 #define GET_CONFIG_MAXIMUM_(_type, ...) FIRST(__VA_OPT__(FIRST(__VA_ARGS__),) MAX_BITS((sizeof(_type) * 8)))
 
@@ -252,6 +264,7 @@ enum ConfigTag
     BATTLE_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS)
     POKEMON_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS)
     AI_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS)
+    DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
     CONFIG_COUNT
 };
 

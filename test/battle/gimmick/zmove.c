@@ -114,8 +114,6 @@ SINGLE_BATTLE_TEST("(Z-MOVE) Z_EFFECT_ALL_STATS_UP raises all of a battler's sta
     }
 }
 
-// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
-#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("(Z-MOVE) Z_EFFECT_BOOST_CRITS raises a battler's critical hit ratio by 2 stages")
 {
     u32 genConfig = 0, chance;
@@ -140,7 +138,6 @@ SINGLE_BATTLE_TEST("(Z-MOVE) Z_EFFECT_BOOST_CRITS raises a battler's critical hi
         MESSAGE("A critical hit!");
     }
 }
-#endif // !DETERMINISTIC_CRITICAL_HITS
 
 DOUBLE_BATTLE_TEST("(Z-MOVE) Z_EFFECT_FOLLOW_ME redirects attacks to the user")
 {
@@ -525,8 +522,6 @@ SINGLE_BATTLE_TEST("(Z-MOVE) Light That Burns the Sky uses the battler's highest
     }
 }
 
-// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
-#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("(Z-MOVE) 10,000,000 Volt Thunderbolt has an increased critical hit ratio")
 {
     u32 genConfig, chance;
@@ -550,7 +545,6 @@ SINGLE_BATTLE_TEST("(Z-MOVE) 10,000,000 Volt Thunderbolt has an increased critic
         MESSAGE("A critical hit!");
     }
 }
-#endif // !DETERMINISTIC_CRITICAL_HITS
 
 SINGLE_BATTLE_TEST("(Z-MOVE) Stoked Sparksurfer paralyzes the target")
 {

@@ -1,8 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
-#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("criticalHitStage set to 1 increases critical hits occur at a 1/8 rate (Gen 2+) or x8 times more likely (Gen 1)")
 {
     u32 j, genConfig = 0, passes = 0, trials = 0;
@@ -24,4 +22,3 @@ SINGLE_BATTLE_TEST("criticalHitStage set to 1 increases critical hits occur at a
         MESSAGE("A critical hit!");
     }
 }
-#endif // !DETERMINISTIC_CRITICAL_HITS
