@@ -254,6 +254,17 @@
     F(DETERMINISTIC_CRITICAL_HITS, deterministicCriticalHits, (u32, TRUE)) \
     F(DETERMINISTIC_DAMAGE,        deterministicDamage,       (u32, TRUE)) \
 
+// FORK: the BUFF_* feature flags (config/buff.h) rebalance items and other game
+// functionality, riding the same runtime config system as the DETERMINISTIC_*
+// flags so battle tests can toggle them per-test with WITH_CONFIG. Their
+// production defaults come from the BUFF_* #defines (seeded into sConfigChanges);
+// the test baseline forces them off (see TestInitConfigData) so the inherited
+// suite keeps exercising stock behavior, and buff tests opt in explicitly. Each
+// is a boolean, so its max value is TRUE. To add a new buff flag: add its #define
+// in config/buff.h and one line here.
+#define BUFF_CONFIG_DEFINITIONS(F) \
+    F(BUFF_SHELL_BELL, buffShellBell, (u32, TRUE)) \
+
 #define GET_CONFIG_MAXIMUM(_typeMaxValue, ...) INVOKE_WITH_B(GET_CONFIG_MAXIMUM_, _typeMaxValue)
 #define GET_CONFIG_MAXIMUM_(_type, ...) FIRST(__VA_OPT__(FIRST(__VA_ARGS__),) MAX_BITS((sizeof(_type) * 8)))
 
@@ -265,6 +276,7 @@ enum ConfigTag
     POKEMON_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS)
     AI_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS)
     DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
+    BUFF_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
     CONFIG_COUNT
 };
 

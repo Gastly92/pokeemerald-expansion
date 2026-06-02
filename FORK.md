@@ -32,6 +32,7 @@ limitations, and where to look.
 
 | Deterministic critical hits | `DETERMINISTIC_CRITICAL_HITS` | `config/deterministic.h` | ✅ | First of the `DETERMINISTIC_*` flags (a project to strip RNG from the game). Removes the random crit-chance roll in `IsCriticalHit()` (`src/battle_util.c`): crits still land only when *guaranteed* — always-crit moves, Laser Focus, Merciless vs. a poisoned target, or crit-stage stacks that already reach 1/1 odds. Crit-blocking (Battle Armor, Shell Armor, Lucky Chant) unchanged. **Enabled (`TRUE`) in this fork.** Covered by `test/battle/deterministic_critical_hits.c` (opt-in via `WITH_CONFIG`); see the determinism test harness note below. |
 | Deterministic damage | `DETERMINISTIC_DAMAGE` (+ `DETERMINISTIC_DAMAGE_BASE_PERCENT`, `DETERMINISTIC_DAMAGE_TURN_INCREMENT`) | `config/deterministic.h` | ✅ | Replaces the random 85%–100% damage roll with a fixed multiplier that scales with the battle's turn count: `BASE_PERCENT` on turn 1, `+TURN_INCREMENT` per elapsed turn (`DETERMINISTIC_DAMAGE_PERCENT` = `BASE_PERCENT + TURN_INCREMENT * gBattleTurnCounter`). Defaults 92% / +1% → 92% turn 1, 93% turn 2, … **Intentionally uncapped** — from turn 9 on it exceeds 100%, so prolonged battles deal more than the stock maximum (set `TURN_INCREMENT` to 0 for a flat multiplier). The AI's damage prediction (`src/battle_ai_util.c` roll helpers) is fed the same figure, so its min/median/max/random rolls collapse to the deterministic value and it never mis-predicts. **Enabled (`TRUE`) in this fork.** Covered by `test/battle/deterministic_damage.c` (opt-in via `WITH_CONFIG`); see the determinism test harness note below. |
+| Shell Bell buff | `BUFF_SHELL_BELL` (+ `BUFF_SHELL_BELL_DENOMINATOR`) | `config/buff.h` | ✅ | First of the `BUFF_*` flags (a project to rebalance items/functionality). Buffs Shell Bell recovery from the stock 1/8 of damage dealt to 1/`BUFF_SHELL_BELL_DENOMINATOR` (1/4 by default) in `TryShellBell()` (`src/battle_hold_effects.c`). Registered boolean toggle (test-flippable) + plain compile-time denominator, mirroring `DETERMINISTIC_DAMAGE`'s toggle+tuning split. **Enabled (`TRUE`) in this fork.** Covered by `test/battle/buff_shell_bell.c` (opt-in via `WITH_CONFIG`); see the fork-flag test harness note below. |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
 
@@ -57,6 +58,28 @@ suite keeps running against stock behavior untouched, and only the dedicated
 determinism flag costs one `#define` + one line in
 `DETERMINISTIC_CONFIG_DEFINITIONS` + swapping its consumption site(s) to
 `GetConfig` — no scattering `#if` guards across the upstream suite.**
+
+### Balance / buffs (`BUFF_*`)
+
+An ongoing project to rebalance items and other game functionality, usually as
+compensation for other changes we make (e.g. the `DETERMINISTIC_*` project trades
+random upsides away, so some items get buffed to keep battles balanced). Each
+tweak gets its own flag in `config/buff.h` (`FALSE` = stock behavior); the fork
+enables them as they mature. Flags so far: `BUFF_SHELL_BELL` (enabled — see
+table).
+
+`BUFF_*` flags ride the **same runtime config system and test harness** as the
+`DETERMINISTIC_*` flags above (`BUFF_CONFIG_DEFINITIONS` in
+`include/constants/config_changes.h`): engine code reads each toggle via
+`GetConfig(BUFF_X)`, battle tests opt in with `WITH_CONFIG(BUFF_X, TRUE)`, and the
+per-test baseline forces every flag **off** (`TestInitConfigData`) so the
+inherited suite keeps asserting stock behavior. Where a buff has a *magnitude*
+(not just on/off), the toggle is registered but the magnitude is a plain
+compile-time constant alongside it — e.g. `BUFF_SHELL_BELL` (registered toggle) +
+`BUFF_SHELL_BELL_DENOMINATOR` (tuning), mirroring how `DETERMINISTIC_DAMAGE` pairs
+its toggle with `BASE_PERCENT`/`TURN_INCREMENT`. This keeps the boolean test
+baseline uniform (`force off` = stock) while leaving the numbers tunable in one
+fork-owned file.
 
 ## Known quirks / future work
 

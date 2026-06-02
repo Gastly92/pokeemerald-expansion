@@ -532,7 +532,13 @@ static enum ItemEffect TryShellBell(enum BattlerId battlerAtk)
      && !IsFutureSightAttackerInParty(battlerAtk, gBattlerTarget, gCurrentMove)
      && !(B_HEAL_BLOCKING >= GEN_5 && gBattleMons[battlerAtk].volatiles.healBlock))
     {
-        SetHealAmount(battlerAtk, gBattleScripting.savedDmg / GetBattlerHoldEffectParam(battlerAtk));
+        u32 healDivisor = GetBattlerHoldEffectParam(battlerAtk);
+        // FORK: BUFF_SHELL_BELL buffs recovery to 1/BUFF_SHELL_BELL_DENOMINATOR of
+        // the damage dealt (1/4 by default) instead of the stock 1/holdEffectParam
+        // (1/8). Divisor tunable via config/buff.h.
+        if (GetConfig(BUFF_SHELL_BELL))
+            healDivisor = BUFF_SHELL_BELL_DENOMINATOR;
+        SetHealAmount(battlerAtk, gBattleScripting.savedDmg / healDivisor);
         BattleScriptCall(BattleScript_ItemHealHP_Ret);
         effect = ITEM_HP_CHANGE;
     }
