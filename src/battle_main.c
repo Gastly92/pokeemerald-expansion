@@ -4707,7 +4707,10 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
         speed *= 2;
 
     // paralysis drop
-    if (gBattleMons[battler].status1 & STATUS1_PARALYSIS && ability != ABILITY_QUICK_FEET)
+    // FORK: DETERMINISTIC_PARALYSIS removes the Speed cut entirely; paralysis taxes
+    // priority and PP instead (see GetBattleMovePriority / CancelerPPDeduction).
+    if (gBattleMons[battler].status1 & STATUS1_PARALYSIS && ability != ABILITY_QUICK_FEET
+        && !GetConfig(DETERMINISTIC_PARALYSIS))
         speed /= GetConfig(B_PARALYSIS_SPEED) >= GEN_7 ? 2 : 4;
 
     if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SWAMP)
@@ -4767,6 +4770,14 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
     {
         priority += 3;
     }
+
+    // FORK: DETERMINISTIC_PARALYSIS lowers the priority of every move a paralyzed
+    // battler uses by DETERMINISTIC_PARALYSIS_PRIORITY_TAX, so it acts later in its
+    // priority bracket. Quick Feet (which already ignores the paralysis Speed drop)
+    // is exempt.
+    if (gBattleMons[battler].status1 & STATUS1_PARALYSIS && ability != ABILITY_QUICK_FEET
+        && GetConfig(DETERMINISTIC_PARALYSIS))
+        priority -= DETERMINISTIC_PARALYSIS_PRIORITY_TAX;
 
     return priority;
 }

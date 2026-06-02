@@ -4877,8 +4877,19 @@ void IncreaseParalyzeScore(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     {
         u32 atkSpeed = gAiLogicData->speedStats[battlerAtk];
         u32 defSpeed = gAiLogicData->speedStats[battlerDef];
+        bool32 paralysisGainsTurnOrder;
 
-        if ((defSpeed >= atkSpeed && defSpeed / 2 < atkSpeed) // You'll go first after paralyzing foe
+        // FORK: how paralysis flips turn order depends on the mechanic. Stock halves
+        // the foe's Speed, so it only helps when halving drops the foe below us.
+        // DETERMINISTIC_PARALYSIS leaves Speed alone and instead lowers the foe's
+        // move priority, demoting it a whole bracket — so it moves after us whenever
+        // we don't already strictly outspeed it (and only if the priority tax is on).
+        if (GetConfig(DETERMINISTIC_PARALYSIS))
+            paralysisGainsTurnOrder = (DETERMINISTIC_PARALYSIS_PRIORITY_TAX > 0) && (defSpeed >= atkSpeed);
+        else
+            paralysisGainsTurnOrder = (defSpeed >= atkSpeed && defSpeed / 2 < atkSpeed); // You'll go first after paralyzing foe
+
+        if (paralysisGainsTurnOrder
           || IsPowerBasedOnStatus(battlerAtk, EFFECT_DOUBLE_POWER_ON_ARG_STATUS, STATUS1_PARALYSIS)
           || (HasMoveWithMoveEffectExcept(battlerAtk, MOVE_EFFECT_FLINCH, EFFECT_FIRST_TURN_ONLY)) // filter out Fake Out
           || gBattleMons[battlerDef].volatiles.infatuation

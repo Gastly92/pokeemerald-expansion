@@ -43,4 +43,25 @@
 #define DETERMINISTIC_DAMAGE_BASE_PERCENT 92
 #define DETERMINISTIC_DAMAGE_TURN_INCREMENT 1
 
+// When TRUE, paralysis stops being a coin-flip and becomes a flat, predictable
+// tax. It no longer randomly costs the battler its turn (the 25% full-paralysis
+// roll in CancelerParalyzed) and no longer cuts Speed (the drop in
+// GetBattlerTotalSpeedStat). In their place every move the paralyzed battler uses
+// pays two deterministic penalties: it costs DETERMINISTIC_PARALYSIS_PP_TAX extra
+// PP (CancelerPPDeduction) and its priority is lowered by
+// DETERMINISTIC_PARALYSIS_PRIORITY_TAX (GetBattleMovePriority) — so a paralyzed
+// mon moves later in its priority bracket and burns PP faster, but never freezes
+// up and keeps its full Speed. Quick Feet, whose niche is shrugging off the
+// paralysis Speed drop, is exempt from both taxes. See
+// src/battle_move_resolution.c and src/battle_main.c.
+#define DETERMINISTIC_PARALYSIS TRUE
+
+// Tuning for DETERMINISTIC_PARALYSIS (ignored when it is FALSE). PP_TAX is how
+// many extra PP each move costs while paralyzed; PRIORITY_TAX is how many points
+// of priority each move loses. Set either to 0 to drop that one penalty (e.g.
+// PRIORITY_TAX 0 keeps only the PP tax). Mirrors DETERMINISTIC_DAMAGE's
+// toggle + compile-time tuning split.
+#define DETERMINISTIC_PARALYSIS_PP_TAX 1
+#define DETERMINISTIC_PARALYSIS_PRIORITY_TAX 1
+
 #endif // GUARD_CONFIG_DETERMINISTIC_H
