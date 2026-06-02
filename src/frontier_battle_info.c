@@ -196,33 +196,18 @@ static void BuildScreenLine(u8 *dst, u32 side)
         StringCopy(dst, COMPOUND_STRING("None"));
 }
 
-// Returns the foe's current PP for a revealed move, reading live data from the
-// active battler when that party slot is on the field, else from the party mon.
-// Returns 0xFF when the move isn't found.
-static u32 GetFoeMovePP(struct Pokemon *foeParty, u32 partyIndex, enum Move move)
+// Current PP for a foe's move slot: live data from the active battler when that
+// party slot is on the field, else the stored party PP.
+static u32 GetFoeMoveSlotPP(struct Pokemon *foeParty, u32 partyIndex, u32 slot)
 {
-    u32 i;
-
-    for (i = 0; i < gBattlersCount; i++)
+    for (u32 i = 0; i < gBattlersCount; i++)
     {
         if (!IsOnPlayerSide(i) && gBattlerPartyIndexes[i] == partyIndex
             && GetBattlerTrainer(i) == B_TRAINER_OPPONENT_A)
-        {
-            for (u32 slot = 0; slot < MAX_MON_MOVES; slot++)
-            {
-                if (gBattleMons[i].moves[slot] == move)
-                    return gBattleMons[i].pp[slot];
-            }
-        }
+            return gBattleMons[i].pp[slot];
     }
 
-    for (u32 slot = 0; slot < MAX_MON_MOVES; slot++)
-    {
-        if (GetMonData(&foeParty[partyIndex], MON_DATA_MOVE1 + slot, NULL) == move)
-            return GetMonData(&foeParty[partyIndex], MON_DATA_PP1 + slot, NULL);
-    }
-
-    return 0xFF;
+    return GetMonData(&foeParty[partyIndex], MON_DATA_PP1 + slot, NULL);
 }
 
 // ---------------------------------------------------------------------------
@@ -352,31 +337,27 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
 
     PrintLine(windowId, COMPOUND_STRING("Moves:"), 0, y);
     y += LINE_H;
+    // Only the move slots the foe has *actually used* (tracked in gBattleStruct),
+    // read straight from its real moveset. PP shows current / max-with-PP-Ups, so
+    // it stays correct under B_FRONTIER_MAX_PP.
+    u32 usedMask = gBattleStruct->infoUsedMoves[B_SIDE_OPPONENT][foeIndex];
+    u8 ppBonuses = GetMonData(&foeParty[foeIndex], MON_DATA_PP_BONUSES, NULL);
     for (u32 i = 0; i < MAX_MON_MOVES; i++)
     {
-        enum Move move = (revealed != NULL) ? revealed->moves[i] : MOVE_NONE;
+        enum Move move = GetMonData(&foeParty[foeIndex], MON_DATA_MOVE1 + i, NULL);
 
-        if (move == MOVE_NONE)
+        if (!(usedMask & (1u << i)) || move == MOVE_NONE)
         {
             PrintLine(windowId, COMPOUND_STRING("  ?"), 0, y);
         }
         else
         {
-            u32 pp = GetFoeMovePP(foeParty, foeIndex, move);
-
             p = StringCopy(line, COMPOUND_STRING("  "));
             p = StringCopy(p, GetMoveName(move));
-            if (pp != 0xFF)
-            {
-                p = StringCopy(p, COMPOUND_STRING("  "));
-                p = ConvertIntToDecimalStringN(p, pp, STR_CONV_MODE_LEFT_ALIGN, 2);
-                *p++ = CHAR_SLASH;
-                ConvertIntToDecimalStringN(p, GetMovePP(move), STR_CONV_MODE_LEFT_ALIGN, 2);
-            }
-            else
-            {
-                *p = EOS;
-            }
+            p = StringCopy(p, COMPOUND_STRING("  "));
+            p = ConvertIntToDecimalStringN(p, GetFoeMoveSlotPP(foeParty, foeIndex, i), STR_CONV_MODE_LEFT_ALIGN, 2);
+            *p++ = CHAR_SLASH;
+            ConvertIntToDecimalStringN(p, CalculatePPWithBonus(move, ppBonuses, i), STR_CONV_MODE_LEFT_ALIGN, 2);
             PrintLine(windowId, line, 0, y);
         }
         y += LINE_H;

@@ -730,6 +730,12 @@ struct BattleStruct
     u8 intimidateActivated:1;
     u8 allowPartingShot:1;
     u8 adrenalineOrbActivated:1; // prevents looping after an adrenaline stat changed
+    // FORK: per-party-slot bitmask of the move slots a battler has *actually used*,
+    // for the B_FRONTIER_BATTLE_INFO viewer. gAiPartyData's move list also includes
+    // the AI's STAB/status assumptions, so it can't serve as "what the player has
+    // seen". Set in battle_move_resolution.c; read in src/frontier_battle_info.c.
+    // Zeroed each battle (gBattleStruct is AllocZeroed).
+    u8 infoUsedMoves[NUM_BATTLE_SIDES][PARTY_SIZE];
 };
 
 struct AiBattleData
