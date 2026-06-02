@@ -445,9 +445,17 @@ static enum CancelerResult CancelerGhost(struct BattleCalcValues *cv) // GHOST i
 
 static enum CancelerResult CancelerParalyzed(struct BattleCalcValues *cv)
 {
+    // FORK: with DETERMINISTIC_PARALYSIS a paralyzed battler never loses its turn.
+    // We still consult RNG_PARALYSIS — via a guaranteed-pass RandomChance(1, 1)
+    // rather than RandomPercentage(., 100), which would short-circuit without
+    // touching the tag — so the tag stays touched and PASSES_RANDOMLY tests keep
+    // working; the !roll check is then always false and the move is never
+    // cancelled. Stock keeps the 75% move-through roll.
     if (gBattleMons[cv->battlerAtk].status1 & STATUS1_PARALYSIS
         && !(B_MAGIC_GUARD == GEN_4 && IsAbilityAndRecord(cv->battlerAtk, cv->abilities[cv->battlerAtk], ABILITY_MAGIC_GUARD))
-        && !RandomPercentage(RNG_PARALYSIS, 75))
+        && (GetConfig(DETERMINISTIC_PARALYSIS)
+                ? !RandomChance(RNG_PARALYSIS, 1, 1)
+                : !RandomPercentage(RNG_PARALYSIS, 75)))
     {
         CancelMultiTurnMoves(gBattlerAttacker);
         gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
@@ -1003,6 +1011,11 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         if (cv->battlerAtk != cv->battlerDef && GetBattlerAbility(cv->battlerDef) == ABILITY_PRESSURE)
              ppToDeduct++;
     }
+
+    // FORK: DETERMINISTIC_PARALYSIS makes every move a paralyzed battler uses cost
+    // 1 extra PP, stacking on top of any Pressure deduction above.
+    if (gBattleMons[cv->battlerAtk].status1 & STATUS1_PARALYSIS && GetConfig(DETERMINISTIC_PARALYSIS))
+        ppToDeduct++;
 
     // For item Metronome, echoed voice
     if (cv->move != gLastResultingMoves[cv->battlerAtk] || gBattleStruct->unableToUseMove)

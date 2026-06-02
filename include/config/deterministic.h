@@ -43,4 +43,14 @@
 #define DETERMINISTIC_DAMAGE_BASE_PERCENT 92
 #define DETERMINISTIC_DAMAGE_TURN_INCREMENT 1
 
+// When TRUE, paralysis stops being a coin-flip and becomes a flat, predictable
+// tax. It no longer randomly costs the battler its turn (the 25% full-paralysis
+// roll in CancelerParalyzed) and no longer cuts Speed (the drop in
+// GetBattlerTotalSpeedStat). In their place every move the paralyzed battler uses
+// pays two deterministic penalties: it costs 1 extra PP (CancelerPPDeduction) and
+// its priority is lowered by 1 (GetBattleMovePriority) — so a paralyzed mon moves
+// last within its priority bracket and burns PP faster, but never freezes up and
+// keeps its full Speed. See src/battle_move_resolution.c and src/battle_main.c.
+#define DETERMINISTIC_PARALYSIS TRUE
+
 #endif // GUARD_CONFIG_DETERMINISTIC_H
