@@ -243,6 +243,9 @@ static void Swap_RunMenuOptionFunc(u8);
 static void Swap_OptionSwap(u8);
 static void Swap_OptionSummary(u8);
 static void Swap_OptionRechoose(u8);
+#if B_FRONTIER_FACTORY_OPP_SUMMARY == TRUE
+static void Swap_OptionAccept(u8);
+#endif
 static void Swap_RunActionFunc(u8);
 static void Swap_TaskCantHaveSameMons(u8);
 static void Swap_CreateMonSprite(void);
@@ -880,6 +883,17 @@ static const TaskFunc sSwap_MenuOptionFuncs[] =
     Swap_OptionSwap,
     Swap_OptionRechoose,
 };
+
+#if B_FRONTIER_FACTORY_OPP_SUMMARY == TRUE
+// FORK: same popup menu the player gets, but for the opponent's mons. Slot 1
+// ("Swap") accepts the selected opponent mon instead of switching party screens.
+static const TaskFunc sSwap_EnemyMenuOptionFuncs[] =
+{
+    Swap_OptionSummary,
+    Swap_OptionAccept,
+    Swap_OptionRechoose,
+};
+#endif
 
 static const struct BgTemplate sSwap_BgTemplates[4] =
 {
@@ -2425,7 +2439,12 @@ static void Swap_Task_OpenSummaryScreen(u8 taskId)
         DestroyTask(taskId);
         sFactorySwapScreen->fromSummaryScreen = TRUE;
         sFactorySwapScreen->speciesNameColorBackup = gPlttBufferUnfaded[BG_PLTT_ID(PALNUM_TEXT) + 4];
+#if B_FRONTIER_FACTORY_OPP_SUMMARY == TRUE
+        // FORK: opponent mons can be inspected too; pick the party the cursor is on.
+        ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gParties[sFactorySwapScreen->inEnemyScreen ? B_TRAINER_OPPONENT_A : B_TRAINER_PLAYER], sFactorySwapScreen->cursorPos, FRONTIER_PARTY_SIZE - 1, CB2_InitSwapScreen);
+#else
         ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gParties[B_TRAINER_PLAYER], sFactorySwapScreen->cursorPos, FRONTIER_PARTY_SIZE - 1, CB2_InitSwapScreen);
+#endif
         break;
     }
 }
@@ -2592,6 +2611,10 @@ static void Swap_HandleAcceptMonResponse(u8 taskId)
     }
 }
 
+#if B_FRONTIER_FACTORY_OPP_SUMMARY != TRUE
+// FORK: when the opponent-summary QoL is on, accepting a mon goes through the
+// popup menu's Swap_OptionAccept instead (the menu already opens the mon pic), so
+// this direct-prompt path is only compiled for the vanilla flow.
 static void Swap_AskAcceptMon(u8 taskId)
 {
     if (gTasks[taskId].tState == 0)
@@ -2605,6 +2628,7 @@ static void Swap_AskAcceptMon(u8 taskId)
         gTasks[taskId].func = Swap_Task_HandleYesNo;
     }
 }
+#endif
 
 static void Swap_Task_HandleMenu(u8 taskId)
 {
@@ -4008,7 +4032,12 @@ static void Swap_InitActions(u8 id)
 
 static void Swap_RunMenuOptionFunc(u8 taskId)
 {
-    sSwap_CurrentOptionFunc = sSwap_MenuOptionFuncs[sFactorySwapScreen->menuCursorPos];
+#if B_FRONTIER_FACTORY_OPP_SUMMARY == TRUE
+    if (sFactorySwapScreen->inEnemyScreen)
+        sSwap_CurrentOptionFunc = sSwap_EnemyMenuOptionFuncs[sFactorySwapScreen->menuCursorPos];
+    else
+#endif
+        sSwap_CurrentOptionFunc = sSwap_MenuOptionFuncs[sFactorySwapScreen->menuCursorPos];
     sSwap_CurrentOptionFunc(taskId);
 }
 
@@ -4026,6 +4055,22 @@ static void Swap_OptionSummary(u8 taskId)
     gTasks[taskId].tState = STATE_SUMMARY_FADE;
     gTasks[taskId].func = Swap_Task_OpenSummaryScreen;
 }
+
+#if B_FRONTIER_FACTORY_OPP_SUMMARY == TRUE
+// FORK: "Swap" on the opponent's popup menu = accept that mon. Mirrors
+// Swap_AskAcceptMon but skips OpenMonPic (the menu already has the pic open) and
+// clears the popup menu, then runs the same yes/no "Accept this Pokémon?" flow.
+static void Swap_OptionAccept(u8 taskId)
+{
+    Swap_ErasePopupMenu(SWAP_WIN_OPTIONS);
+    Swap_PrintOnInfoWindow(gText_AcceptThisPkmn);
+    sFactorySwapScreen->monSwapped = TRUE;
+    gTasks[taskId].tState = STATE_YESNO_SHOW;
+    gTasks[taskId].tFollowUpTaskPtrHi = (u32)(Swap_HandleAcceptMonResponse) >> 16;
+    gTasks[taskId].tFollowUpTaskPtrLo = (u32)(Swap_HandleAcceptMonResponse);
+    gTasks[taskId].func = Swap_Task_HandleYesNo;
+}
+#endif
 
 static void Swap_OptionRechoose(u8 taskId)
 {
@@ -4080,9 +4125,17 @@ static void Swap_ActionMon(u8 taskId)
     }
     else
     {
+#if B_FRONTIER_FACTORY_OPP_SUMMARY == TRUE
+        // FORK: show the same popup menu as for player mons so the opponent's mon
+        // can be inspected (Summary) before "Swap" accepts it.
+        gTasks[taskId].tFollowUpTaskPtrHi = (u32)(Swap_Task_HandleMenu) >> 16;
+        gTasks[taskId].tFollowUpTaskPtrLo = (u32)(Swap_Task_HandleMenu);
+        gTasks[taskId].tFollowUpTaskState = STATE_MENU_INIT;
+#else
         gTasks[taskId].tFollowUpTaskPtrHi = (u32)(Swap_AskAcceptMon) >> 16;
         gTasks[taskId].tFollowUpTaskPtrLo = (u32)(Swap_AskAcceptMon);
         gTasks[taskId].tFollowUpTaskState = 0;
+#endif
     }
     gTasks[taskId].tState = 0;
     gTasks[taskId].func = Swap_Task_ScreenInfoTransitionOut;
@@ -4108,7 +4161,12 @@ static void Swap_ShowSummaryMonSprite(void)
     sFactorySwapScreen->monPic.bgSpriteId = CreateSprite(&sSpriteTemplate_Swap_MonPicBgAnim, 120, 64, 1);
     StartSpriteAffineAnim(&gSprites[sFactorySwapScreen->monPic.bgSpriteId], 2);
 
+#if B_FRONTIER_FACTORY_OPP_SUMMARY == TRUE
+    // FORK: returning from an opponent mon's summary draws that mon's pic.
+    mon = &gParties[sFactorySwapScreen->inEnemyScreen ? B_TRAINER_OPPONENT_A : B_TRAINER_PLAYER][sFactorySwapScreen->cursorPos];
+#else
     mon = &gParties[B_TRAINER_PLAYER][sFactorySwapScreen->cursorPos];
+#endif
     species = GetMonData(mon, MON_DATA_SPECIES);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
     isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
