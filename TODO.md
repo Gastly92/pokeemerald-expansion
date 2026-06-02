@@ -1,9 +1,5 @@
 ## Upcoming Changes
 
-### BUFF_SHELL_BELL
-
-- Increase Shell Bell healing from 1/8 of damage dealt to 1/4.
-
 ### DETERMINISTIC_ABILITIES
 
 - Stench can only attempt flinching on the first turn the battler is out.
