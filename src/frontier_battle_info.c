@@ -312,27 +312,38 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         return;
     }
 
-    // Name and level (known once the mon has appeared).
+    // Name, gender and level (known once the mon has appeared); flag if fainted.
+    u32 gender = GetMonGender(&foeParty[foeIndex]);
     p = StringCopy(line, GetSpeciesName(GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL)));
+    if (gender == MON_MALE)
+        *p++ = CHAR_MALE;
+    else if (gender == MON_FEMALE)
+        *p++ = CHAR_FEMALE;
     *p++ = CHAR_SPACE;
     *p++ = CHAR_LV;
-    ConvertIntToDecimalStringN(p, GetMonData(&foeParty[foeIndex], MON_DATA_LEVEL, NULL), STR_CONV_MODE_LEFT_ALIGN, 3);
+    p = ConvertIntToDecimalStringN(p, GetMonData(&foeParty[foeIndex], MON_DATA_LEVEL, NULL), STR_CONV_MODE_LEFT_ALIGN, 3);
+    if (GetMonData(&foeParty[foeIndex], MON_DATA_HP, NULL) == 0)
+        StringCopy(p, COMPOUND_STRING("  FNT"));
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
-    // Ability (only shown once revealed in battle).
+    // Ability — only once genuinely revealed in battle (gAiPartyData pre-knows it
+    // under AI_FLAG_OMNISCIENT, so gate on our own reveal flag instead).
+    bool32 abilitySeen = (gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
     p = StringCopy(line, COMPOUND_STRING("Ability: "));
-    if (revealed != NULL && revealed->ability != ABILITY_NONE)
+    if (abilitySeen && revealed != NULL && revealed->ability != ABILITY_NONE)
         StringCopy(p, gAbilitiesInfo[revealed->ability].name);
     else
         StringCopy(p, COMPOUND_STRING("?"));
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
-    // Held item (only shown once its effect has been revealed in battle).
+    // Held item — only once its effect has been genuinely revealed in battle.
+    enum Item heldItem = GetMonData(&foeParty[foeIndex], MON_DATA_HELD_ITEM, NULL);
+    bool32 itemSeen = (gBattleStruct->infoItemRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
     p = StringCopy(line, COMPOUND_STRING("Item: "));
-    if (revealed != NULL && revealed->heldEffect != HOLD_EFFECT_NONE)
-        StringCopy(p, GetItemName(GetMonData(&foeParty[foeIndex], MON_DATA_HELD_ITEM, NULL)));
+    if (itemSeen && heldItem != ITEM_NONE)
+        StringCopy(p, GetItemName(heldItem));
     else
         StringCopy(p, COMPOUND_STRING("?"));
     PrintLine(windowId, line, 0, y);

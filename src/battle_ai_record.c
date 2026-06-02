@@ -42,12 +42,16 @@ void RecordAbilityBattle(enum BattlerId battlerId, enum Ability abilityId)
 {
     gBattleHistory->abilities[battlerId] = abilityId;
     gAiPartyData->mons[GetBattlerSide(battlerId)][gBattlerPartyIndexes[battlerId]].ability = abilityId;
+    // FORK: mark this ability as genuinely revealed for the B_FRONTIER_BATTLE_INFO viewer.
+    gBattleStruct->infoAbilityRevealed[GetBattlerSide(battlerId)] |= 1u << gBattlerPartyIndexes[battlerId];
 }
 
 void RecordItemEffectBattle(enum BattlerId battlerId, enum HoldEffect itemEffect)
 {
     gBattleHistory->itemEffects[battlerId] = itemEffect;
     gAiPartyData->mons[GetBattlerSide(battlerId)][gBattlerPartyIndexes[battlerId]].heldEffect = itemEffect;
+    // FORK: mark this held item as genuinely revealed for the B_FRONTIER_BATTLE_INFO viewer.
+    gBattleStruct->infoItemRevealed[GetBattlerSide(battlerId)] |= 1u << gBattlerPartyIndexes[battlerId];
 }
 
 void ClearBattlerAbilityHistory(enum BattlerId battlerId)

@@ -736,6 +736,13 @@ struct BattleStruct
     // seen". Set in battle_move_resolution.c; read in src/frontier_battle_info.c.
     // Zeroed each battle (gBattleStruct is AllocZeroed).
     u8 infoUsedMoves[NUM_BATTLE_SIDES][PARTY_SIZE];
+    // FORK: per-party-slot bitmasks of which battlers have had their ability /
+    // held-item *revealed* in battle, for the B_FRONTIER_BATTLE_INFO viewer.
+    // gAiPartyData pre-fills these under AI_FLAG_OMNISCIENT, so it can't say what
+    // the player has actually seen. Set in RecordAbilityBattle /
+    // RecordItemEffectBattle; read in src/frontier_battle_info.c.
+    u8 infoAbilityRevealed[NUM_BATTLE_SIDES];
+    u8 infoItemRevealed[NUM_BATTLE_SIDES];
 };
 
 struct AiBattleData
