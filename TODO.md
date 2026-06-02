@@ -67,13 +67,6 @@
 - Instead they always deal damage equal to 50% of the target's maximum hp, minimum 1 damage.
 - Maximum PP for these moves is reduced to 1.
 
-### DETERMINISTIC_PARALYSIS
-
-- Paralysis no longer causes a battler to randomly miss their turn.
-- Paralysis no longer halves speed.
-- Paralysis increases the PP usage of all moves used by a battler by 1.
-- Paralysis decreases the priority of all moves used by a battler by 1.
-
 ### DETERMINISTIC_PROTECT
 
 - Protect always fails if used in succession rather than having a small chance of working on second uses.
