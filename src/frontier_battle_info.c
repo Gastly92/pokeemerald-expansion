@@ -40,6 +40,7 @@ bool8 gFrontierBattleInfoActive = FALSE;
 enum
 {
     INFO_PAGE_FIELD,
+    INFO_PAGE_CONDITIONS,
     INFO_PAGE_FOE,
     INFO_PAGE_COUNT,
 };
@@ -258,22 +259,40 @@ static void DrawFieldPage(u8 windowId)
 
     PrintLine(windowId, COMPOUND_STRING("Your side:"), 0, y);
     y += LINE_H;
-    BuildHazardLine(line, B_SIDE_PLAYER);
+    p = StringCopy(line, COMPOUND_STRING("Hazards: "));
+    BuildHazardLine(p, B_SIDE_PLAYER);
     PrintLine(windowId, line, 8, y);
     y += LINE_H;
-    BuildScreenLine(line, B_SIDE_PLAYER);
+    p = StringCopy(line, COMPOUND_STRING("Screens: "));
+    BuildScreenLine(p, B_SIDE_PLAYER);
     PrintLine(windowId, line, 8, y);
     y += LINE_H + 2;
 
     PrintLine(windowId, COMPOUND_STRING("Foe side:"), 0, y);
     y += LINE_H;
-    BuildHazardLine(line, B_SIDE_OPPONENT);
+    p = StringCopy(line, COMPOUND_STRING("Hazards: "));
+    BuildHazardLine(p, B_SIDE_OPPONENT);
     PrintLine(windowId, line, 8, y);
     y += LINE_H;
-    BuildScreenLine(line, B_SIDE_OPPONENT);
+    p = StringCopy(line, COMPOUND_STRING("Screens: "));
+    BuildScreenLine(p, B_SIDE_OPPONENT);
     PrintLine(windowId, line, 8, y);
 
-    PrintLine(windowId, COMPOUND_STRING("R: Foe info    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintLine(windowId, COMPOUND_STRING("R: Next page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+}
+
+// Number of mons in the foe's (opponent A's) party.
+static u32 GetFoePartyCount(struct Pokemon *foeParty)
+{
+    u32 count = 0;
+
+    for (u32 i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&foeParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE
+            && !GetMonData(&foeParty[i], MON_DATA_IS_EGG, NULL))
+            count++;
+    }
+    return count;
 }
 
 static void DrawFoePage(u8 windowId, u32 foeIndex)
@@ -281,9 +300,15 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     u8 line[64];
     u8 *p;
     u32 y = 0;
-    u32 count = gAiPartyData->count[B_SIDE_OPPONENT];
-    struct AiPartyMon *foe = &gAiPartyData->mons[B_SIDE_OPPONENT][foeIndex];
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+    u32 count = GetFoePartyCount(foeParty);
+    // What the player has actually seen of this slot: "seen" comes from the
+    // engine's sent-out flag, while the foe's *revealed* moves/ability/held item
+    // are recorded into gAiPartyData as they show up in battle. Species and level
+    // are read straight from the party once the mon has been on the field.
+    bool32 seen = gBattleStruct->partyState[B_TRAINER_OPPONENT_A][foeIndex].sentOut;
+    struct AiPartyMon *revealed = (gAiPartyData != NULL)
+        ? &gAiPartyData->mons[B_SIDE_OPPONENT][foeIndex] : NULL;
 
     p = StringCopy(line, COMPOUND_STRING("BATTLE INFO  -  FOE "));
     p = ConvertIntToDecimalStringN(p, foeIndex + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
@@ -292,25 +317,25 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     PrintLine(windowId, line, 0, y);
     y += LINE_H + 2;
 
-    if (!foe->wasSentInBattle || foe->species == SPECIES_NONE)
+    if (!seen)
     {
         PrintLine(windowId, COMPOUND_STRING("Not yet seen."), 0, y);
-        PrintLine(windowId, COMPOUND_STRING("<>: Mon  R: Field  B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+        PrintLine(windowId, COMPOUND_STRING("<>: Mon  R: Next  B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
         return;
     }
 
-    // Name and level.
-    p = StringCopy(line, GetSpeciesName(foe->species));
+    // Name and level (known once the mon has appeared).
+    p = StringCopy(line, GetSpeciesName(GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL)));
     *p++ = CHAR_SPACE;
     *p++ = CHAR_LV;
-    ConvertIntToDecimalStringN(p, foe->level, STR_CONV_MODE_LEFT_ALIGN, 3);
+    ConvertIntToDecimalStringN(p, GetMonData(&foeParty[foeIndex], MON_DATA_LEVEL, NULL), STR_CONV_MODE_LEFT_ALIGN, 3);
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
-    // Ability (only shown once revealed).
+    // Ability (only shown once revealed in battle).
     p = StringCopy(line, COMPOUND_STRING("Ability: "));
-    if (foe->ability != ABILITY_NONE)
-        StringCopy(p, gAbilitiesInfo[foe->ability].name);
+    if (revealed != NULL && revealed->ability != ABILITY_NONE)
+        StringCopy(p, gAbilitiesInfo[revealed->ability].name);
     else
         StringCopy(p, COMPOUND_STRING("?"));
     PrintLine(windowId, line, 0, y);
@@ -318,7 +343,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
 
     // Held item (only shown once its effect has been revealed in battle).
     p = StringCopy(line, COMPOUND_STRING("Item: "));
-    if (foe->heldEffect != HOLD_EFFECT_NONE)
+    if (revealed != NULL && revealed->heldEffect != HOLD_EFFECT_NONE)
         StringCopy(p, GetItemName(GetMonData(&foeParty[foeIndex], MON_DATA_HELD_ITEM, NULL)));
     else
         StringCopy(p, COMPOUND_STRING("?"));
@@ -329,7 +354,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     y += LINE_H;
     for (u32 i = 0; i < MAX_MON_MOVES; i++)
     {
-        enum Move move = foe->moves[i];
+        enum Move move = (revealed != NULL) ? revealed->moves[i] : MOVE_NONE;
 
         if (move == MOVE_NONE)
         {
@@ -357,7 +382,123 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         y += LINE_H;
     }
 
-    PrintLine(windowId, COMPOUND_STRING("<>: Mon  R: Field  B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintLine(windowId, COMPOUND_STRING("<>: Mon  R: Next  B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+}
+
+// Name of the battler's primary (status1) condition, or NULL if healthy.
+static const u8 *GetStatus1Name(u32 status1)
+{
+    if (status1 & STATUS1_SLEEP)
+        return COMPOUND_STRING("Asleep");
+    if (status1 & STATUS1_PARALYSIS)
+        return COMPOUND_STRING("Paralysis");
+    if (status1 & STATUS1_FREEZE)
+        return COMPOUND_STRING("Frozen");
+    if (status1 & STATUS1_BURN)
+        return COMPOUND_STRING("Burn");
+    if (status1 & STATUS1_TOXIC_POISON)
+        return COMPOUND_STRING("Bad Poison");
+    if (status1 & STATUS1_POISON)
+        return COMPOUND_STRING("Poison");
+    if (status1 & STATUS1_FROSTBITE)
+        return COMPOUND_STRING("Frostbite");
+    return NULL;
+}
+
+// Builds a space-separated list of the battler's primary status + notable
+// volatile conditions, or "None". Curated to the conditions a player would
+// track, not every internal volatile flag.
+static void BuildConditionLine(u8 *dst, enum BattlerId battler)
+{
+    u8 *p = dst;
+    const u8 *status = GetStatus1Name(gBattleMons[battler].status1);
+    struct Volatiles *v = &gBattleMons[battler].volatiles;
+
+    *p = EOS;
+    if (status != NULL)
+        p = AppendEntry(p, status, 1);
+    if (v->confusionTurns)
+        p = AppendEntry(p, COMPOUND_STRING("Confusion"), 1);
+    if (v->infatuation)
+        p = AppendEntry(p, COMPOUND_STRING("Infatuation"), 1);
+    if (v->leechSeed)
+        p = AppendEntry(p, COMPOUND_STRING("Leech Seed"), 1);
+    if (v->nightmare)
+        p = AppendEntry(p, COMPOUND_STRING("Nightmare"), 1);
+    if (v->cursed)
+        p = AppendEntry(p, COMPOUND_STRING("Curse"), 1);
+    if (v->perishSong)
+        p = AppendEntry(p, COMPOUND_STRING("Perish Song"), 1);
+    if (v->yawn)
+        p = AppendEntry(p, COMPOUND_STRING("Drowsy"), 1);
+    if (v->saltCure)
+        p = AppendEntry(p, COMPOUND_STRING("Salt Cure"), 1);
+    if (v->wrapped)
+        p = AppendEntry(p, COMPOUND_STRING("Trapped"), 1);
+    if (v->substitute)
+        p = AppendEntry(p, COMPOUND_STRING("Substitute"), 1);
+    if (v->tauntTimer)
+        p = AppendEntry(p, COMPOUND_STRING("Taunt"), 1);
+    if (v->encoredMove)
+        p = AppendEntry(p, COMPOUND_STRING("Encore"), 1);
+    if (v->disabledMove)
+        p = AppendEntry(p, COMPOUND_STRING("Disable"), 1);
+    if (v->torment)
+        p = AppendEntry(p, COMPOUND_STRING("Torment"), 1);
+    if (v->healBlock)
+        p = AppendEntry(p, COMPOUND_STRING("Heal Block"), 1);
+    if (v->embargo)
+        p = AppendEntry(p, COMPOUND_STRING("Embargo"), 1);
+    if (v->root)
+        p = AppendEntry(p, COMPOUND_STRING("Ingrain"), 1);
+    if (v->aquaRing)
+        p = AppendEntry(p, COMPOUND_STRING("Aqua Ring"), 1);
+    if (v->magnetRise)
+        p = AppendEntry(p, COMPOUND_STRING("Magnet Rise"), 1);
+    if (v->telekinesis)
+        p = AppendEntry(p, COMPOUND_STRING("Telekinesis"), 1);
+    if (v->smackDown)
+        p = AppendEntry(p, COMPOUND_STRING("Grounded"), 1);
+    if (v->electrified)
+        p = AppendEntry(p, COMPOUND_STRING("Electrified"), 1);
+
+    if (p == dst)
+        StringCopy(dst, COMPOUND_STRING("None"));
+}
+
+static u32 DrawConditionsForSide(u8 windowId, bool32 playerSide, u32 y)
+{
+    u8 line[160];
+    u8 *p;
+
+    for (u32 battler = 0; battler < gBattlersCount; battler++)
+    {
+        if (IsOnPlayerSide(battler) != playerSide || !IsBattlerAlive(battler))
+            continue;
+
+        p = StringCopy(line, playerSide ? COMPOUND_STRING("You: ") : COMPOUND_STRING("Foe: "));
+        StringCopy(p, gBattleMons[battler].nickname);
+        PrintLine(windowId, line, 0, y);
+        y += LINE_H;
+
+        BuildConditionLine(line, battler);
+        PrintLine(windowId, line, 8, y);
+        y += LINE_H + 2;
+    }
+    return y;
+}
+
+static void DrawConditionsPage(u8 windowId)
+{
+    u32 y = 0;
+
+    PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  CONDITIONS"), 0, y);
+    y += LINE_H + 2;
+
+    y = DrawConditionsForSide(windowId, TRUE, y);
+    DrawConditionsForSide(windowId, FALSE, y);
+
+    PrintLine(windowId, COMPOUND_STRING("R: Next page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
 }
 
 static void RedrawInfo(u8 taskId)
@@ -365,10 +506,19 @@ static void RedrawInfo(u8 taskId)
     u8 windowId = gTasks[taskId].tWindowId;
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
-    if (gTasks[taskId].tPage == INFO_PAGE_FOE)
+    switch (gTasks[taskId].tPage)
+    {
+    case INFO_PAGE_CONDITIONS:
+        DrawConditionsPage(windowId);
+        break;
+    case INFO_PAGE_FOE:
         DrawFoePage(windowId, gTasks[taskId].tFoeIndex);
-    else
+        break;
+    case INFO_PAGE_FIELD:
+    default:
         DrawFieldPage(windowId);
+        break;
+    }
     CopyWindowToVram(windowId, COPYWIN_FULL);
 }
 
@@ -388,7 +538,7 @@ static void Task_InfoFadeOut(u8 taskId)
 
 static void Task_InfoProcessInput(u8 taskId)
 {
-    u32 count = gAiPartyData->count[B_SIDE_OPPONENT];
+    u32 count = GetFoePartyCount(GetTrainerParty(B_TRAINER_OPPONENT_A));
 
     if (JOY_NEW(B_BUTTON) || JOY_NEW(A_BUTTON))
     {
@@ -399,7 +549,15 @@ static void Task_InfoProcessInput(u8 taskId)
     else if (JOY_NEW(R_BUTTON))
     {
         PlaySE(SE_SELECT);
-        gTasks[taskId].tPage ^= 1;
+        if (++gTasks[taskId].tPage >= INFO_PAGE_COUNT)
+            gTasks[taskId].tPage = 0;
+        RedrawInfo(taskId);
+    }
+    else if (JOY_NEW(L_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        if (--gTasks[taskId].tPage < 0)
+            gTasks[taskId].tPage = INFO_PAGE_COUNT - 1;
         RedrawInfo(taskId);
     }
     else if (gTasks[taskId].tPage == INFO_PAGE_FOE && count != 0
