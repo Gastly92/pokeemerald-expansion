@@ -3177,7 +3177,10 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         {
             ADJUST_SCORE(-5);
         }
+        // FORK: Dragon Cheer only raises the partner's crit *chance*, which does
+        // nothing under DETERMINISTIC_CRITICAL_HITS (only guaranteed crits land).
         else if (!partnerProtecting
+         && !GetConfig(DETERMINISTIC_CRITICAL_HITS)
          && (atkPartnerHoldEffect == HOLD_EFFECT_SCOPE_LENS
           || IS_BATTLER_OF_TYPE(battlerAtkPartner, TYPE_DRAGON)
           || GetMoveCriticalHitStage(aiData->partnerMove) > 0
@@ -4488,6 +4491,11 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
         break;
     case EFFECT_FOCUS_ENERGY:
     case EFFECT_LASER_FOCUS:
+        // FORK: under DETERMINISTIC_CRITICAL_HITS only a guaranteed crit matters.
+        // Laser Focus still guarantees the next hit crits, so it keeps its value;
+        // Focus Energy merely raises the (now dead) crit chance, so it earns nothing.
+        if (GetConfig(DETERMINISTIC_CRITICAL_HITS) && GetMoveEffect(move) == EFFECT_FOCUS_ENERGY)
+            break;
         if (aiData->abilities[battlerAtk] == ABILITY_SUPER_LUCK
          || aiData->abilities[battlerAtk] == ABILITY_SNIPER
          || aiData->holdEffects[battlerAtk] == HOLD_EFFECT_SCOPE_LENS
@@ -5970,7 +5978,9 @@ static s32 AI_Risky(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum M
     if (IsTargetingPartner(battlerAtk, battlerDef))
         return score;
 
-    if (GetMoveCriticalHitStage(move) > 0)
+    // FORK: a raised crit stage is just a higher crit *chance*, which is dead under
+    // DETERMINISTIC_CRITICAL_HITS (only guaranteed crits land), so it earns nothing.
+    if (GetMoveCriticalHitStage(move) > 0 && !GetConfig(DETERMINISTIC_CRITICAL_HITS))
         ADJUST_SCORE(DECENT_EFFECT);
 
     if (IsExplosionMove(move))
