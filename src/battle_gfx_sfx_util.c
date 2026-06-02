@@ -728,6 +728,23 @@ void BattleLoadAllHealthBoxesGfxAtOnce(void)
         LoadCompressedSpriteSheet(&sSpriteSheets_HealthBar[GetBattlerPosition(i)]);
 }
 
+// FORK: When COLOR_BLIND is on, recolor the HP bar's healthy (>50%) band from
+// green to the EXP bar's blue. The bar fill is a separate "healthbar" sprite
+// using TAG_HEALTHBAR_PAL, whose palette holds the two green shades at entries
+// 10-11 (yellow at 12-13, red at 14-15), so swapping just those two entries
+// turns the green band blue and leaves the yellow/red bands untouched. See the
+// COLOR_BLIND comment in include/config/accessibility.h.
+static void ApplyHealthbarColorBlindPalette(void)
+{
+#if COLOR_BLIND
+    static const u16 sHpBarBlue[] = { RGB(13, 27, 31), RGB(8, 25, 31) }; // light + main EXP-style blue
+    u32 palIndex = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
+
+    if (palIndex != 0xFF)
+        LoadPalette(sHpBarBlue, OBJ_PLTT_ID(palIndex) + 10, sizeof(sHpBarBlue));
+#endif
+}
+
 bool8 BattleLoadAllHealthBoxesGfx(u8 state)
 {
     bool8 retVal = FALSE;
@@ -738,6 +755,7 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
         {
             LoadSpritePalette(&sSpritePalettes_HealthBoxHealthBar[0]);
             LoadSpritePalette(&sSpritePalettes_HealthBoxHealthBar[1]);
+            ApplyHealthbarColorBlindPalette();
             CategoryIcons_LoadSpritesGfx();
         }
         else if (!IsDoubleBattle())
