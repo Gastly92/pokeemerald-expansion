@@ -854,6 +854,14 @@ static inline bool32 ShouldCalcCritDamage(struct DamageContext *ctx)
 
     if (critChanceIndex == CRITICAL_HIT_ALWAYS)
         return TRUE;
+
+    // FORK: with DETERMINISTIC_CRITICAL_HITS the random roll never crits, so the AI
+    // must not gamble on a partial-chance crit (even when Risky) — it would predict
+    // crit damage that can never happen and over-value the move / over-estimate KOs.
+    // Count a crit only when it is guaranteed, exactly like the engine's IsCriticalHit.
+    if (GetConfig(DETERMINISTIC_CRITICAL_HITS))
+        return IsGuaranteedCriticalHit(critChanceIndex);
+
     if (critChanceIndex >= RISKY_AI_CRIT_STAGE_THRESHOLD // Not guaranteed but above Risky threshold
         && (gAiThinkingStruct->aiFlags[ctx->battlerAtk] & AI_FLAG_RISKY)
         && GetConfig(B_CRIT_CHANCE) != GEN_1)
