@@ -219,7 +219,9 @@ static u32 GetFoeMoveSlotPP(struct Pokemon *foeParty, u32 partyIndex, u32 slot)
 
 static void PrintLine(u8 windowId, const u8 *str, u32 x, u32 y)
 {
-    AddTextPrinterParameterized(windowId, FONT_NORMAL, str, x, y, 0, NULL);
+    // FONT_NARROW (same height as FONT_NORMAL, narrower glyphs) fits more text
+    // per line, so dense hazard/screen/condition lists clip far less often.
+    AddTextPrinterParameterized(windowId, FONT_NARROW, str, x, y, 0, NULL);
 }
 
 static void DrawFieldPage(u8 windowId)
@@ -450,7 +452,9 @@ static void BuildConditionLine(u8 *dst, enum BattlerId battler)
 
 static u32 DrawConditionsForSide(u8 windowId, bool32 playerSide, u32 y)
 {
-    u8 line[160];
+    // Sized for the pathological worst case of every tracked status + volatile at
+    // once (~230 chars); a real mon never stacks that many, but never overflow.
+    u8 line[256];
     u8 *p;
 
     for (u32 battler = 0; battler < gBattlersCount; battler++)
