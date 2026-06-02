@@ -1013,9 +1013,13 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
     }
 
     // FORK: DETERMINISTIC_PARALYSIS makes every move a paralyzed battler uses cost
-    // 1 extra PP, stacking on top of any Pressure deduction above.
-    if (gBattleMons[cv->battlerAtk].status1 & STATUS1_PARALYSIS && GetConfig(DETERMINISTIC_PARALYSIS))
-        ppToDeduct++;
+    // DETERMINISTIC_PARALYSIS_PP_TAX extra PP, stacking on top of any Pressure
+    // deduction above. Quick Feet (which already ignores the paralysis Speed drop)
+    // is exempt.
+    if (gBattleMons[cv->battlerAtk].status1 & STATUS1_PARALYSIS
+        && cv->abilities[cv->battlerAtk] != ABILITY_QUICK_FEET
+        && GetConfig(DETERMINISTIC_PARALYSIS))
+        ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
 
     // For item Metronome, echoed voice
     if (cv->move != gLastResultingMoves[cv->battlerAtk] || gBattleStruct->unableToUseMove)

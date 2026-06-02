@@ -81,3 +81,36 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_PARALYSIS: paralysis lowers move priority by 1
         MESSAGE("Wobbuffet used Quick Attack!");
     }
 }
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_PARALYSIS: Quick Feet is exempt from the priority tax")
+{
+    // A normal paralyzed mon's priority-0 move drops to -1 and would lose to the
+    // opponent's priority-0 Growl regardless of Speed. Quick Feet is exempt, so the
+    // player's Celebrate stays at priority 0 and its (Quick-Feet-boosted) Speed
+    // beats the opponent — moving first proves the priority drop did not apply.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_PARALYSIS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_QUICK_FEET); Status1(STATUS1_PARALYSIS); Speed(100); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(70); Moves(MOVE_GROWL); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Celebrate!");
+        MESSAGE("The opposing Wobbuffet used Growl!");
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_PARALYSIS: Quick Feet is exempt from the PP tax")
+{
+    // Quick Feet shrugs off the paralysis taxes, so its move costs the normal 1 PP
+    // (35 - 1 = 34) rather than the paralyzed 2 (35 - 1 - 1 = 33).
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_PARALYSIS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_QUICK_FEET); Status1(STATUS1_PARALYSIS); Moves(MOVE_POUND); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_POUND); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], 34);
+    }
+}
