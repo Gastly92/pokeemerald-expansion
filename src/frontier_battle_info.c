@@ -41,6 +41,7 @@ enum
 {
     INFO_PAGE_FIELD,
     INFO_PAGE_CONDITIONS,
+    INFO_PAGE_STATS,
     INFO_PAGE_FOE,
     INFO_PAGE_COUNT,
 };
@@ -482,6 +483,89 @@ static void DrawConditionsPage(u8 windowId)
     PrintLine(windowId, COMPOUND_STRING("R: Next page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
 }
 
+static const u8 *GetStatAbbr(u32 stat)
+{
+    switch (stat)
+    {
+    case STAT_ATK:     return COMPOUND_STRING("Atk");
+    case STAT_DEF:     return COMPOUND_STRING("Def");
+    case STAT_SPATK:   return COMPOUND_STRING("SpA");
+    case STAT_SPDEF:   return COMPOUND_STRING("SpD");
+    case STAT_SPEED:   return COMPOUND_STRING("Spe");
+    case STAT_ACC:     return COMPOUND_STRING("Acc");
+    case STAT_EVASION: return COMPOUND_STRING("Eva");
+    default:           return COMPOUND_STRING("?");
+    }
+}
+
+// Builds "Atk+2 Spe-1 ..." for the battler's non-default stat stages, or "None".
+static void BuildStatChangeLine(u8 *dst, enum BattlerId battler)
+{
+    static const u8 sStatOrder[] = { STAT_ATK, STAT_DEF, STAT_SPATK, STAT_SPDEF, STAT_SPEED, STAT_ACC, STAT_EVASION };
+    u8 *p = dst;
+
+    *p = EOS;
+    for (u32 i = 0; i < ARRAY_COUNT(sStatOrder); i++)
+    {
+        u32 stat = sStatOrder[i];
+        s32 delta = gBattleMons[battler].statStages[stat] - DEFAULT_STAT_STAGE;
+
+        if (delta == 0)
+            continue;
+        p = StringAppend(p, GetStatAbbr(stat));
+        if (delta > 0)
+        {
+            *p++ = CHAR_PLUS;
+        }
+        else
+        {
+            *p++ = CHAR_HYPHEN;
+            delta = -delta;
+        }
+        p = ConvertIntToDecimalStringN(p, delta, STR_CONV_MODE_LEFT_ALIGN, 1);
+        *p++ = CHAR_SPACE;
+        *p = EOS;
+    }
+
+    if (p == dst)
+        StringCopy(dst, COMPOUND_STRING("None"));
+}
+
+static u32 DrawStatsForSide(u8 windowId, bool32 playerSide, u32 y)
+{
+    u8 line[64];
+    u8 *p;
+
+    for (u32 battler = 0; battler < gBattlersCount; battler++)
+    {
+        if (IsOnPlayerSide(battler) != playerSide || !IsBattlerAlive(battler))
+            continue;
+
+        p = StringCopy(line, playerSide ? COMPOUND_STRING("You: ") : COMPOUND_STRING("Foe: "));
+        StringCopy(p, gBattleMons[battler].nickname);
+        PrintLine(windowId, line, 0, y);
+        y += LINE_H;
+
+        BuildStatChangeLine(line, battler);
+        PrintLine(windowId, line, 8, y);
+        y += LINE_H;
+    }
+    return y;
+}
+
+static void DrawStatsPage(u8 windowId)
+{
+    u32 y = 0;
+
+    PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  STAT CHANGES"), 0, y);
+    y += LINE_H;
+
+    y = DrawStatsForSide(windowId, TRUE, y);
+    DrawStatsForSide(windowId, FALSE, y);
+
+    PrintLine(windowId, COMPOUND_STRING("R: Next page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+}
+
 static void RedrawInfo(u8 taskId)
 {
     u8 windowId = gTasks[taskId].tWindowId;
@@ -491,6 +575,9 @@ static void RedrawInfo(u8 taskId)
     {
     case INFO_PAGE_CONDITIONS:
         DrawConditionsPage(windowId);
+        break;
+    case INFO_PAGE_STATS:
+        DrawStatsPage(windowId);
         break;
     case INFO_PAGE_FOE:
         DrawFoePage(windowId, gTasks[taskId].tFoeIndex);
