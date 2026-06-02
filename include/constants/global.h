@@ -16,6 +16,7 @@
 #define DISABLED_ON_RELEASE TRUE
 #endif
 
+#include "config/accessibility.h"
 #include "config/ai.h"
 #include "config/battle.h"
 #include "config/caps.h"
