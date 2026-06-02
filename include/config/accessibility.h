@@ -18,6 +18,6 @@
 // entries 10-11 (yellow at 12-13, red at 14-15), so only the green band is
 // touched. No new graphics. Battle bar only for now; the party-menu/summary HP
 // bars use a different mechanism and still follow the stock colors.
-#define COLOR_BLIND FALSE
+#define COLOR_BLIND TRUE
 
 #endif // GUARD_CONFIG_ACCESSIBILITY_H
