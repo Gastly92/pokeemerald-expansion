@@ -122,7 +122,3 @@
 ### FRONTIER_NO_BANS
 
 - No species are banned from frontier challenges.
-
-### UX_BATTLE_INFO
-
-- In facilities where the bag is unavailable, it is replaced with a battle info UI. Similar, to the battle debug menu, this UI displays known info about the current battle from the player's perspective, such as hazards, enemy mon species/moves/PP, and weather/terrain.
