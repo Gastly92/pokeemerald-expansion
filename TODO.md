@@ -52,11 +52,6 @@
 - Rather than battlers randomly hurting themselves in confusion, they only hurt themselves if they use an attacking move.
 - If a battler uses a non attacking move, they snap out of their confusion immediately.
 
-### DETERMINISTIC_DAMAGE
-
-- Calculated damage is no longer multiplied by a random value 0.85 to 1.
-- Instead damage is always multipled by 0.92 plus 0.01 for every turn that has passed in the battle.
-
 ### DETERMINISTIC_FLINCH
 
 - Moves with a flinch effect only cause flinching if the target was not flinched on the previous turn.
