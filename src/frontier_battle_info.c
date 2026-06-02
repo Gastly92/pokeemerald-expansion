@@ -230,7 +230,7 @@ static void DrawFieldPage(u8 windowId)
     u32 y = 0;
 
     PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  FIELD"), 0, y);
-    y += LINE_H + 2;
+    y += LINE_H;
 
     p = StringCopy(line, COMPOUND_STRING("Weather: "));
     StringAppend(p, GetInfoWeatherName());
@@ -240,7 +240,7 @@ static void DrawFieldPage(u8 windowId)
     p = StringCopy(line, COMPOUND_STRING("Terrain: "));
     StringAppend(p, GetInfoTerrainName());
     PrintLine(windowId, line, 0, y);
-    y += LINE_H + 2;
+    y += LINE_H;
 
     PrintLine(windowId, COMPOUND_STRING("Your side:"), 0, y);
     y += LINE_H;
@@ -251,7 +251,7 @@ static void DrawFieldPage(u8 windowId)
     p = StringCopy(line, COMPOUND_STRING("Screens: "));
     BuildScreenLine(p, B_SIDE_PLAYER);
     PrintLine(windowId, line, 8, y);
-    y += LINE_H + 2;
+    y += LINE_H;
 
     PrintLine(windowId, COMPOUND_STRING("Foe side:"), 0, y);
     y += LINE_H;
@@ -300,7 +300,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     *p++ = CHAR_SLASH;
     ConvertIntToDecimalStringN(p, count, STR_CONV_MODE_LEFT_ALIGN, 1);
     PrintLine(windowId, line, 0, y);
-    y += LINE_H + 2;
+    y += LINE_H;
 
     if (!seen)
     {
@@ -333,7 +333,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     else
         StringCopy(p, COMPOUND_STRING("?"));
     PrintLine(windowId, line, 0, y);
-    y += LINE_H + 2;
+    y += LINE_H;
 
     PrintLine(windowId, COMPOUND_STRING("Moves:"), 0, y);
     y += LINE_H;
@@ -464,7 +464,7 @@ static u32 DrawConditionsForSide(u8 windowId, bool32 playerSide, u32 y)
 
         BuildConditionLine(line, battler);
         PrintLine(windowId, line, 8, y);
-        y += LINE_H + 2;
+        y += LINE_H;
     }
     return y;
 }
@@ -474,7 +474,7 @@ static void DrawConditionsPage(u8 windowId)
     u32 y = 0;
 
     PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  CONDITIONS"), 0, y);
-    y += LINE_H + 2;
+    y += LINE_H;
 
     y = DrawConditionsForSide(windowId, TRUE, y);
     DrawConditionsForSide(windowId, FALSE, y);
