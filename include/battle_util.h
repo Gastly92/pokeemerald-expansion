@@ -357,6 +357,8 @@ bool32 AreBattlersOfOppositeGender(enum BattlerId battler1, enum BattlerId battl
 bool32 AreBattlersOfSameGender(enum BattlerId battler1, enum BattlerId battler2);
 u32 CalcSecondaryEffectChance(enum BattlerId battler, enum Ability battlerAbility, const struct AdditionalEffect *additionalEffect);
 bool32 MoveEffectIsGuaranteed(enum BattlerId battler, enum Ability battlerAbility, const struct AdditionalEffect *additionalEffect);
+bool32 DeterministicAdditionalEffectApplies(enum Type moveType, bool32 isSuperEffective, bool32 isStab); // FORK: DETERMINISTIC_ADDITIONAL_EFFECTS
+bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, const struct AdditionalEffect *additionalEffect, u32 percentChance, u32 rngElement); // FORK: DETERMINISTIC_ADDITIONAL_EFFECTS / DETERMINISTIC_FLINCH
 void GetBattlerTypes(enum BattlerId battler, bool32 ignoreTera, enum Type types[static 3]);
 enum Type GetBattlerType(enum BattlerId battler, u32 typeIndex, bool32 ignoreTera);
 bool32 CanMonParticipateInSkyBattle(struct Pokemon *mon);

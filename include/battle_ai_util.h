@@ -219,6 +219,7 @@ bool32 HasSleepMoveWithLowAccuracy(enum BattlerId battlerAtk, enum BattlerId bat
 bool32 HasHealingEffect(enum BattlerId battler);
 bool32 IsTrappingMove(enum Move move);
 bool32 HasTrappingMoveEffect(enum BattlerId battler);
+bool32 AI_IsAdditionalEffectReliable(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, const struct AdditionalEffect *additionalEffect); // FORK: DETERMINISTIC_ADDITIONAL_EFFECTS / DETERMINISTIC_FLINCH
 bool32 IsFlinchGuaranteed(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move);
 bool32 HasChoiceEffect(enum BattlerId battler);
 bool32 HasThawingMove(enum BattlerId battler);

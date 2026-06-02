@@ -3863,6 +3863,10 @@ static void HandleEndTurn_ContinueBattle(void)
             gBattleCommunication[i] = 0;
         for (enum BattlerId battler = 0; battler < gBattlersCount; battler++)
         {
+            // FORK: DETERMINISTIC_FLINCH remembers who was flinched this turn (before
+            // the volatile is cleared below) so a fresh flinch next turn can be
+            // suppressed, breaking flinch-lock. Snapshot is harmless when the flag is off.
+            gBattleStruct->battlerState[battler].flinchedLastTurn = gBattleMons[battler].volatiles.flinched;
             gBattleMons[battler].volatiles.flinched = FALSE;
             if ((gBattleMons[battler].status1 & STATUS1_SLEEP) && (gBattleMons[battler].volatiles.multipleTurns))
                 CancelMultiTurnMoves(battler);

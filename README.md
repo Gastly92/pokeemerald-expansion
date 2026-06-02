@@ -32,14 +32,33 @@ gradually through a family of **`DETERMINISTIC_*`** flags (in
 which removes one specific source of randomness. A flag set to `FALSE` is stock
 `pokeemerald-expansion` behavior; this fork enables them as features mature.
 
-The first is **`DETERMINISTIC_CRITICAL_HITS`** (**enabled** in this fork):
-critical hits no longer happen on a random roll. Crits still land when something
-*guarantees* one — moves that always crit, Laser Focus, the Merciless ability
-against a poisoned target, or enough crit-ratio stacking to reach 100% — but the
-"lucky" random crit is gone. More `DETERMINISTIC_*` flags will follow (see
-[`FORK.md`](FORK.md)). As random upsides are removed, the plan is to add
-balancing systems alongside them so play stays fair rather than just easier or
-harder.
+The idea is that a random *upside* (a lucky crit, a lucky burn, a lucky full
+paralysis) is replaced by something that the player can read off the board and
+plan around. Flags shipped so far (all **enabled**):
+
+- **`DETERMINISTIC_CRITICAL_HITS`** — crits no longer come from a random roll.
+  They still land when something *guarantees* one (always-crit moves, Laser
+  Focus, Merciless vs. a poisoned target, or enough crit-ratio stacking to reach
+  100%), but the lucky random crit is gone.
+- **`DETERMINISTIC_DAMAGE`** — the random 85%–100% damage roll becomes a fixed
+  multiplier that scales with the turn count, so damage is predictable (and, in
+  long battles, can climb past the old maximum).
+- **`DETERMINISTIC_PARALYSIS`** — paralysis stops being a coin-flip (no random
+  full-paralysis miss, no Speed cut) and becomes a flat, predictable tax on PP
+  and move priority instead.
+- **`DETERMINISTIC_FLINCH`** — flinch lands every time a flinch move connects,
+  *except* against a target that already flinched last turn, which keeps it
+  reliable without enabling an inescapable flinch-lock.
+- **`DETERMINISTIC_ADDITIONAL_EFFECTS`** — a move's chance-based secondary effect
+  (burn, paralysis, a stat drop, …) is decided by the matchup rather than by a
+  roll: effects on a type that *can* be super effective land only on a super
+  effective hit, while effects on a type that never can (Normal) land only from a
+  STAB user. Guaranteed (100%) effects are unchanged.
+
+More `DETERMINISTIC_*` flags will follow (see [`FORK.md`](FORK.md)). As random
+upsides are removed, the plan is to add balancing systems alongside them — the
+**`BUFF_*`** flags — so play stays fair rather than just easier or harder. The AI
+is taught each flag's new rules so it still plays to the actual odds.
 
 ## Base engine (upstream)
 

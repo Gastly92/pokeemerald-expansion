@@ -5589,8 +5589,11 @@ static s32 AI_CalcAdditionalEffectScore(enum BattlerId battlerAtk, enum BattlerI
     {
         const struct AdditionalEffect *additionalEffect = GetMoveAdditionalEffectById(move, effectId);
 
-        // Only consider effects with a guaranteed chance to happen
-        if (!MoveEffectIsGuaranteed(battlerAtk, aiData->abilities[battlerAtk], additionalEffect))
+        // Only consider effects reliable enough to happen. FORK: under the
+        // DETERMINISTIC_ADDITIONAL_EFFECTS / DETERMINISTIC_FLINCH flags a sub-100%
+        // effect can be reliable (super effective / STAB / not flinched last turn),
+        // so the AI credits it via the shared predicate instead of MoveEffectIsGuaranteed.
+        if (!AI_IsAdditionalEffectReliable(battlerAtk, battlerDef, move, additionalEffect))
             continue;
 
         // Consider move effects that target self

@@ -9513,6 +9513,68 @@ bool32 MoveEffectIsGuaranteed(enum BattlerId battler, enum Ability battlerAbilit
     return additionalEffect->chance == 0 || CalcSecondaryEffectChance(battler, battlerAbility, additionalEffect) >= 100;
 }
 
+// FORK: DETERMINISTIC_ADDITIONAL_EFFECTS — a move type "can be super effective" if
+// the stock type chart gives it a 2x-or-better matchup against at least one type.
+// In the vanilla chart that is every type except Normal, which is never super
+// effective; the loop keeps it correct for custom charts.
+static bool32 MoveTypeCanBeSuperEffective(enum Type moveType)
+{
+    for (enum Type defType = 0; defType < NUMBER_OF_MON_TYPES; defType++)
+    {
+        if (gTypeEffectivenessTable[moveType][defType] >= UQ_4_12(2.0))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// FORK: DETERMINISTIC_ADDITIONAL_EFFECTS — given a move's (dynamic) type and the
+// pre-computed facts about this hit, decide whether its chance-based additional
+// effect lands. Types that can be super effective gate on the hit actually being
+// super effective; types that never can (Normal) gate on STAB instead. Callers
+// supply isSuperEffective/isStab so this works both at run time (from the move
+// result flags) and in the AI's prediction (from its own type calc). Flinch is
+// routed through DETERMINISTIC_FLINCH and never reaches here.
+bool32 DeterministicAdditionalEffectApplies(enum Type moveType, bool32 isSuperEffective, bool32 isStab)
+{
+    if (MoveTypeCanBeSuperEffective(moveType))
+        return isSuperEffective;
+    return isStab;
+}
+
+// FORK: DETERMINISTIC_ADDITIONAL_EFFECTS / DETERMINISTIC_FLINCH — resolves whether
+// a move's chance-based additional effect (percentChance > 0) triggers this hit.
+// With the relevant flag on, the RNG roll is replaced by a state-based rule;
+// otherwise (or for guaranteed >= 100% effects) it falls back to the stock
+// RandomPercentage roll on rngElement. percentChance is the already-computed
+// (Serene Grace / Rainbow-adjusted) chance.
+bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, const struct AdditionalEffect *additionalEffect, u32 percentChance, u32 rngElement)
+{
+    // Guaranteed effects (>= 100%) always land; the deterministic flags only
+    // replace genuinely chance-based rolls.
+    if (percentChance < 100)
+    {
+        if (additionalEffect->moveEffect == MOVE_EFFECT_FLINCH)
+        {
+            if (GetConfig(DETERMINISTIC_FLINCH))
+            {
+                // Fake Out (and any first-turn-only flincher) can never be used on
+                // consecutive turns, so it can't chain flinches and is exempt from
+                // the anti flinch-lock rule — it always flinches.
+                if (GetMoveEffect(move) == EFFECT_FIRST_TURN_ONLY)
+                    return TRUE;
+                return !gBattleStruct->battlerState[battlerDef].flinchedLastTurn;
+            }
+        }
+        else if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
+        {
+            enum Type moveType = GetBattleMoveType(move);
+            bool32 superEffective = (gBattleStruct->moveResultFlags[battlerDef] & MOVE_RESULT_SUPER_EFFECTIVE) != 0;
+            return DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));
+        }
+    }
+    return RandomPercentage(rngElement, percentChance);
+}
+
 bool32 IsGen6ExpShareEnabled(void)
 {
     if (I_EXP_SHARE_FLAG <= TEMP_FLAGS_END)

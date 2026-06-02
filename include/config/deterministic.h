@@ -64,4 +64,34 @@
 #define DETERMINISTIC_PARALYSIS_PP_TAX 1
 #define DETERMINISTIC_PARALYSIS_PRIORITY_TAX 1
 
+// When TRUE, a move's flinch additional effect stops being a random roll and
+// instead lands every time, EXCEPT when the target was already flinched on the
+// previous turn. This keeps flinch reliable (in line with the determinism goal)
+// while breaking the otherwise-inevitable flinch-lock: a fast flincher can no
+// longer chain flinch on the same target turn after turn, since each flinch
+// "uses up" the next turn's flinch. Guaranteed flinches (chance >= 100%) are
+// unaffected and always land. Fake Out (and any first-turn-only flincher) is
+// likewise exempt from the anti-lock rule — it can never be used on consecutive
+// turns, so it always flinches. Inner Focus / Shield Dust / Covert Cloak immunity
+// is unchanged. Required by DETERMINISTIC_ADDITIONAL_EFFECTS,
+// which delegates all flinch effects here rather than to its super-effective/STAB
+// rule. See TryTriggerAdditionalEffect() in src/battle_util.c.
+#define DETERMINISTIC_FLINCH TRUE
+
+// When TRUE, a move's chance-based additional effect (burn, paralysis, a stat
+// drop, etc.) stops being a random roll and instead lands on a fixed, state-based
+// condition, so a move's "secondary" is decided by the matchup rather than luck:
+//   - If the move's type CAN be super effective against something (every type but
+//     Normal in the stock chart), the effect lands only when the hit was actually
+//     super effective. So Fire Punch only burns when it hits a Fire-weak target.
+//   - If the move's type can NEVER be super effective (Normal), the effect lands
+//     only when the move is STAB (the user shares the move's type). So Body Slam
+//     only paralyzes when used by a Normal-type user.
+// Guaranteed effects (chance >= 100%) always land, unchanged. Flinch is handled
+// separately by DETERMINISTIC_FLINCH (which this flag requires), not by the
+// rule above. The AI's effect valuation is taught the same condition so it credits
+// an effect exactly when it will actually happen. See TryTriggerAdditionalEffect()
+// and DeterministicAdditionalEffectApplies() in src/battle_util.c.
+#define DETERMINISTIC_ADDITIONAL_EFFECTS TRUE
+
 #endif // GUARD_CONFIG_DETERMINISTIC_H
