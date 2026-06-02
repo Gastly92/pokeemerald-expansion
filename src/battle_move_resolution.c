@@ -644,6 +644,8 @@ static enum CancelerResult CancelerAttackstring(struct BattleCalcValues *cv)
     if (!gSpecialStatuses[gBattlerAttacker].dancerUsedMove)
     {
         gBattleMons[gBattlerAttacker].volatiles.usedMoves |= 1u << gCurrMovePos;
+        // FORK: mark this move slot as actually used for the B_FRONTIER_BATTLE_INFO viewer.
+        gBattleStruct->infoUsedMoves[GetBattlerSide(gBattlerAttacker)][gBattlerPartyIndexes[gBattlerAttacker]] |= 1u << gCurrMovePos;
         gBattleStruct->battlerState[gBattlerAttacker].lastMoveTarget = gBattlerTarget;
         gLastPrintedMoves[gBattlerAttacker] = gChosenMove;
         RecordKnownMove(gBattlerAttacker, gChosenMove);

@@ -74,4 +74,14 @@
 // mon. Gated in src/battle_factory_screen.c (Swap_* screen). Factory-only.
 #define B_FRONTIER_FACTORY_OPP_SUMMARY  TRUE
 
+// If TRUE, in Frontier facilities where the bag is disabled (Tower, Dome,
+// Palace, Arena, Factory, Pike — everything except the Pyramid, which keeps a
+// working bag), the BAG action slot is replaced by an INFO option. Selecting it
+// opens a read-only screen showing the current battle state the player can know
+// about: weather/terrain, entry hazards and side screens for both sides, and the
+// foe's *revealed-only* data (mons seen, plus the moves/PP/ability/held item that
+// have actually been shown). It reuses the B_ACTION_DEBUG controller path, so the
+// turn is not consumed. Implemented in src/frontier_battle_info.c.
+#define B_FRONTIER_BATTLE_INFO  TRUE
+
 #endif // GUARD_CONFIG_FRONTIER_H

@@ -11,6 +11,7 @@
 #include "battle_z_move.h"
 #include "battle_gimmick.h"
 #include "bg.h"
+#include "frontier_battle_info.h" // FORK: B_FRONTIER_BATTLE_INFO bag->info viewer
 #include "data.h"
 #include "item.h"
 #include "item_menu.h"
@@ -311,7 +312,18 @@ static void HandleInputChooseAction(enum BattlerId battler)
             BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_USE_MOVE, 0);
             break;
         case 1: // Top right
-            BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_USE_ITEM, 0);
+            // FORK: in Frontier facilities the bag is disabled and this slot is
+            // shown as INFO; route it to the read-only battle info viewer, reusing
+            // the B_ACTION_DEBUG controller path so the turn isn't consumed.
+            if (ShouldReplaceBagWithInfo())
+            {
+                gFrontierBattleInfoActive = TRUE;
+                BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_DEBUG, 0);
+            }
+            else
+            {
+                BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_USE_ITEM, 0);
+            }
             break;
         case 2: // Bottom left
             BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_SWITCH, 0);
@@ -2019,7 +2031,8 @@ static void PlayerHandleChooseAction(enum BattlerId battler)
 
     gBattlerControllerFuncs[battler] = HandleChooseActionAfterDma3;
     BattleTv_ClearExplosionFaintCause();
-    BattlePutTextOnWindow(gText_BattleMenu, B_WIN_ACTION_MENU);
+    // FORK: show "Info" instead of "Bag" when the bag slot is the info viewer.
+    BattlePutTextOnWindow(ShouldReplaceBagWithInfo() ? gText_BattleMenuInfo : gText_BattleMenu, B_WIN_ACTION_MENU);
 
     for (i = 0; i < 4; i++)
         ActionSelectionDestroyCursorAt(i);
@@ -2371,7 +2384,18 @@ static void Controller_WaitForDebug(enum BattlerId battler)
 static void PlayerHandleBattleDebug(enum BattlerId battler)
 {
     BeginNormalPaletteFade(-1, 0, 0, 0x10, 0);
-    SetMainCallback2(CB2_BattleDebugMenu);
+    // FORK: the INFO action (B_FRONTIER_BATTLE_INFO) reuses this controller path,
+    // distinguished by gFrontierBattleInfoActive, to open the read-only viewer
+    // instead of the debug menu.
+    if (gFrontierBattleInfoActive)
+    {
+        gFrontierBattleInfoActive = FALSE;
+        SetMainCallback2(CB2_FrontierBattleInfo);
+    }
+    else
+    {
+        SetMainCallback2(CB2_BattleDebugMenu);
+    }
     gBattlerControllerFuncs[battler] = Controller_WaitForDebug;
 }
 
