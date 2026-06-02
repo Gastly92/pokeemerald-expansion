@@ -123,18 +123,6 @@
 
 - No species are banned from frontier challenges.
 
-### HIDE_SYNCHRONIZE_POP_UPS
-
-- The Synchronize ability pop up appears even if nothing happens so hide it instead.
-
 ### UX_BATTLE_INFO
 
 - In facilities where the bag is unavailable, it is replaced with a battle info UI. Similar, to the battle debug menu, this UI displays known info about the current battle from the player's perspective, such as hazards, enemy mon species/moves/PP, and weather/terrain.
-
-### UX_COLOR_BLIND
-
-- Health bars show distinct colors at different thresholds.
-
-### UX_ICONS_LEFT
-
-- Show type icons to the left of the player's mon rather than on the right.
