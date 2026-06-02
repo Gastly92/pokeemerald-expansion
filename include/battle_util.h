@@ -251,6 +251,7 @@ u32 GetMoveSlot(u16 *moves, enum Move move);
 u32 GetBattlerWeight(enum BattlerId battler);
 s32 CalcCritChanceStage(struct DamageContext *ctx);
 s32 CalcCritChanceStageGen1(struct DamageContext *ctx);
+bool32 IsGuaranteedCriticalHit(s32 critChance); // FORK: shared "is a crit certain" predicate
 s32 CalculateMoveDamage(struct DamageContext *ctx);
 s32 CalculateMoveDamageVars(struct DamageContext *ctx);
 s32 DoFixedDamageMoveCalc(struct DamageContext *ctx);

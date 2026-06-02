@@ -7805,6 +7805,25 @@ static inline u32 GetCriticalHitOdds(u32 critChance)
     return sCriticalHitOdds[critChance];
 }
 
+// FORK: TRUE when this crit-chance value (as returned by CalcCritChanceStage /
+// CalcCritChanceStageGen1) is a *guaranteed* critical hit — one that lands even
+// under DETERMINISTIC_CRITICAL_HITS, where the random roll never succeeds. This is
+// the single source of truth for "is a crit certain here", shared by the engine's
+// IsCriticalHit and the AI's damage prediction (ShouldCalcCritDamage) so the two
+// agree on when a crit is unavoidable vs. merely possible.
+bool32 IsGuaranteedCriticalHit(s32 critChance)
+{
+    if (critChance == CRITICAL_HIT_ALWAYS)
+        return TRUE;
+    if (critChance == CRITICAL_HIT_BLOCKED)
+        return FALSE;
+    if (GetConfig(B_CRIT_CHANCE) == GEN_1)
+        return critChance >= 256;
+    if (GetConfig(B_CRIT_CHANCE) == GEN_2)
+        return GetCriticalHitOdds(critChance) >= 256;
+    return GetCriticalHitOdds(critChance) <= 1;
+}
+
 static inline u32 IsBattlerLeekAffected(enum BattlerId battler, enum HoldEffect holdEffect)
 {
     if (holdEffect == HOLD_EFFECT_LEEK)
@@ -7968,12 +7987,9 @@ static bool32 IsCriticalHit(struct DamageContext *ctx)
     // config so tests can toggle it.
     else if (GetConfig(DETERMINISTIC_CRITICAL_HITS))
     {
-        if (GetConfig(B_CRIT_CHANCE) == GEN_1)
-            isCrit = (critChance >= 256) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
-        else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
-            isCrit = (GetCriticalHitOdds(critChance) >= 256) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
-        else
-            isCrit = (GetCriticalHitOdds(critChance) <= 1) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
+        // Only a guaranteed crit lands; partial-chance rolls still consult
+        // RNG_CRITICAL_HIT with zero success weight so the tag stays touched for tests.
+        isCrit = IsGuaranteedCriticalHit(critChance) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
     }
     else
     {
