@@ -65,4 +65,13 @@
 // constants/battle_ai.h), so no extra include is needed here.
 #define B_FRONTIER_HARD_AI_FLAGS    AI_FLAG_SMART_TRAINER
 
+// If TRUE, the post-battle Battle Factory rental-swap screen lets the player
+// open a Pokémon summary for the *opponent's* mons too, not just their own.
+// Vanilla only offers Summary/Swap/Rechoose when a player mon is selected; the
+// opponent's mons jump straight to the "Accept this Pokémon?" prompt with no way
+// to inspect their moves/stats first. With this on, selecting an opponent mon
+// shows the same popup menu (Summary/Swap/Rechoose), where "Swap" accepts the
+// mon. Gated in src/battle_factory_screen.c (Swap_* screen). Factory-only.
+#define B_FRONTIER_FACTORY_OPP_SUMMARY  TRUE
+
 #endif // GUARD_CONFIG_FRONTIER_H
