@@ -2,10 +2,9 @@
 #include "test/battle.h"
 
 // FORK: coverage for the DETERMINISTIC_DAMAGE flag (config/deterministic.h).
-// These tests only make sense, and only build, when the flag is enabled. The
-// stock per-roll damage spread is covered by test/battle/damage_formula.c, whose
-// roll-dependent and cross-turn tests are guarded off under the same flag.
-#if DETERMINISTIC_DAMAGE
+// Determinism flags default off in the test baseline (see TestInitConfigData),
+// so each test opts in with WITH_CONFIG(DETERMINISTIC_DAMAGE, TRUE). The stock
+// per-roll damage spread is covered by test/battle/damage_formula.c.
 
 // The expected per-turn values below are read straight off the verified Gen5+
 // spread in test/battle/damage_formula.c ("Damage calculation matches Gen5+"):
@@ -19,6 +18,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_DAMAGE: turn 1 uses the base multiplier and da
     ASSUME(DETERMINISTIC_DAMAGE_BASE_PERCENT == 92);
     ASSUME(DETERMINISTIC_DAMAGE_TURN_INCREMENT == 1);
     GIVEN {
+        WITH_CONFIG(DETERMINISTIC_DAMAGE, TRUE);
         ASSUME(GetMoveCategory(MOVE_ICE_FANG) == DAMAGE_CATEGORY_PHYSICAL);
         PLAYER(SPECIES_GLACEON) { Level(75); Attack(123); }
         OPPONENT(SPECIES_GARCHOMP) { Defense(163); MaxHP(9999); HP(9999); Moves(MOVE_CELEBRATE); }
@@ -61,6 +61,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_DAMAGE: the multiplier is uncapped above 100%"
 {
     s16 damage[16];
     GIVEN {
+        WITH_CONFIG(DETERMINISTIC_DAMAGE, TRUE);
         ASSUME(GetMoveType(MOVE_TACKLE) == TYPE_NORMAL); // non-STAB, neutral vs Garchomp
         PLAYER(SPECIES_GLACEON) { Level(100); Attack(999); }
         OPPONENT(SPECIES_GARCHOMP) { Defense(80); MaxHP(30000); HP(30000); Moves(MOVE_CELEBRATE); }
@@ -91,5 +92,3 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_DAMAGE: the multiplier is uncapped above 100%"
         EXPECT_GT(damage[15], damage[8]);   // uncapped: exceeds the stock 100% maximum
     }
 }
-
-#endif // DETERMINISTIC_DAMAGE

@@ -151,7 +151,6 @@ SINGLE_BATTLE_TEST("Absorb does not drain any HP if the move is blocked by Disgu
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Spread Move: Heals the correct amount from all Pokemon")
 {
     s16 damage[3];
@@ -181,7 +180,6 @@ DOUBLE_BATTLE_TEST("Spread Move: Heals the correct amount from all Pokemon")
         EXPECT_MUL_EQ(damage[2], Q_4_12(-0.5), healed[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 
 SINGLE_BATTLE_TEST("Absorb does not play the draining message at full HP in Gen5+")

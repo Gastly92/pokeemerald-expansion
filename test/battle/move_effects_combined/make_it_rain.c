@@ -7,7 +7,6 @@ ASSUMPTIONS
     ASSUME_MOVE_EFFECT_STAT_CHANGE(MOVE_MAKE_IT_RAIN, self: TRUE, spAtk: -1);
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Make It Rain lowers special attack by one stage")
 {
     s16 damage[2];
@@ -35,7 +34,6 @@ SINGLE_BATTLE_TEST("Make It Rain lowers special attack by one stage")
         EXPECT_MUL_EQ(damage[0], Q_4_12(0.66), damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 DOUBLE_BATTLE_TEST("Make It Rain lowers special attack by one stage if it hits both targets")
 {

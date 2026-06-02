@@ -1,7 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Confusion adds a 50/33% chance to hit self with 40 power")
 {
     s16 damage[2];
@@ -30,7 +29,6 @@ SINGLE_BATTLE_TEST("Confusion adds a 50/33% chance to hit self with 40 power")
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Confusion self hit does not consume Gems")
 {

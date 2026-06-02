@@ -1,7 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Supreme Overlord boosts Attack by an additive 10% per fainted mon on its side upon switch in", s16 damage)
 {
     bool32 switchMon = 0;
@@ -32,9 +31,7 @@ DOUBLE_BATTLE_TEST("Supreme Overlord boosts Attack by an additive 10% per fainte
         EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.1), results[1].damage);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Supreme Overlord's boost caps at a 1.5x multipler", s16 damage)
 {
     u32 faintCount = 0;
@@ -66,7 +63,6 @@ DOUBLE_BATTLE_TEST("Supreme Overlord's boost caps at a 1.5x multipler", s16 dama
         EXPECT_EQ(results[0].damage, results[1].damage);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Supreme Overlord does not boost attack if party members are already fainted at the start of the battle", s16 damage)
 {

@@ -7,7 +7,6 @@ ASSUMPTIONS
     ASSUME(GetMoveEffect(MOVE_ROLE_PLAY) == EFFECT_ROLE_PLAY);
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Sword of Ruin reduces Defense if opposing mon's ability doesn't match")
 {
     s16 damage[2];
@@ -30,7 +29,6 @@ SINGLE_BATTLE_TEST("Sword of Ruin reduces Defense if opposing mon's ability does
         EXPECT_MUL_EQ(damage[1], Q_4_12(1.33), damage[0]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Sword of Ruin's message displays correctly after all battlers fainted - Player")
 {

@@ -40,7 +40,6 @@ SINGLE_BATTLE_TEST("Slow Start does not reduce special damage", s16 damage)
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Slow Start lasts five turns and resets after switching out", s16 damageBefore, s16 damageAfter)
 {
     bool32 switchOut;
@@ -74,7 +73,6 @@ SINGLE_BATTLE_TEST("Slow Start lasts five turns and resets after switching out",
         EXPECT_EQ(results[1].damageBefore, results[1].damageAfter);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Slow Start halves Body Press damage", s16 damage)
 {

@@ -7600,12 +7600,12 @@ static inline s32 DoMoveDamageCalcVars(struct DamageContext *ctx)
 
     if (ctx->randomFactor)
     {
-#if DETERMINISTIC_DAMAGE
-        // FORK: no random roll; multiply by the fixed, turn-scaling percentage.
-        dmg *= DETERMINISTIC_DAMAGE_PERCENT;
-#else
-        dmg *= DMG_ROLL_PERCENT_HI - RandomUniform(RNG_DAMAGE_MODIFIER, 0, DMG_ROLL_PERCENT_HI - DMG_ROLL_PERCENT_LO);
-#endif
+        // FORK: DETERMINISTIC_DAMAGE replaces the random 85-100% roll with a fixed,
+        // turn-scaling multiplier. Runtime config so battle tests can toggle it.
+        if (GetConfig(DETERMINISTIC_DAMAGE))
+            dmg *= DETERMINISTIC_DAMAGE_PERCENT;
+        else
+            dmg *= DMG_ROLL_PERCENT_HI - RandomUniform(RNG_DAMAGE_MODIFIER, 0, DMG_ROLL_PERCENT_HI - DMG_ROLL_PERCENT_LO);
         dmg /= 100;
     }
     else // Apply rest of modifiers in the ai function
@@ -7959,27 +7959,31 @@ static bool32 IsCriticalHit(struct DamageContext *ctx)
         isCrit = FALSE;
     else if (critChance == CRITICAL_HIT_ALWAYS)
         isCrit = TRUE;
-#if DETERMINISTIC_CRITICAL_HITS
-    // FORK: critical hits never occur from the random roll. A crit only lands
-    // when it is guaranteed: via CRITICAL_HIT_ALWAYS above (always-crit moves,
-    // Laser Focus, Merciless vs. poison), or when crit-ratio stacking already
-    // reaches 1/1 odds. For any partial-chance roll we still consult
-    // RNG_CRITICAL_HIT with zero success weight, so normal play never crits
-    // while battle tests can still force one with the `criticalHit:` directive.
-    else if (GetConfig(B_CRIT_CHANCE) == GEN_1)
-        isCrit = (critChance >= 256) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
-    else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
-        isCrit = (GetCriticalHitOdds(critChance) >= 256) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
+    // FORK: with DETERMINISTIC_CRITICAL_HITS a crit never occurs from the random
+    // roll. It only lands when guaranteed (handled by CRITICAL_HIT_ALWAYS above:
+    // always-crit moves, Laser Focus, Merciless vs. poison) or when crit-ratio
+    // stacking already reaches 1/1 odds. Any partial-chance roll still consults
+    // RNG_CRITICAL_HIT with zero success weight, so normal play never crits while
+    // battle tests can still force one with the `criticalHit:` directive. Runtime
+    // config so tests can toggle it.
+    else if (GetConfig(DETERMINISTIC_CRITICAL_HITS))
+    {
+        if (GetConfig(B_CRIT_CHANCE) == GEN_1)
+            isCrit = (critChance >= 256) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
+        else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
+            isCrit = (GetCriticalHitOdds(critChance) >= 256) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
+        else
+            isCrit = (GetCriticalHitOdds(critChance) <= 1) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
+    }
     else
-        isCrit = (GetCriticalHitOdds(critChance) <= 1) ? TRUE : RandomChance(RNG_CRITICAL_HIT, 0, 1);
-#else
-    else if (GetConfig(B_CRIT_CHANCE) == GEN_1)
-        isCrit = RandomChance(RNG_CRITICAL_HIT, critChance, 256);
-    else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
-        isCrit = RandomChance(RNG_CRITICAL_HIT, GetCriticalHitOdds(critChance), 256);
-    else
-        isCrit = RandomChance(RNG_CRITICAL_HIT, 1, GetCriticalHitOdds(critChance));
-#endif
+    {
+        if (GetConfig(B_CRIT_CHANCE) == GEN_1)
+            isCrit = RandomChance(RNG_CRITICAL_HIT, critChance, 256);
+        else if (GetConfig(B_CRIT_CHANCE) == GEN_2)
+            isCrit = RandomChance(RNG_CRITICAL_HIT, GetCriticalHitOdds(critChance), 256);
+        else
+            isCrit = RandomChance(RNG_CRITICAL_HIT, 1, GetCriticalHitOdds(critChance));
+    }
 
     // Counter for IF_CRITICAL_HITS_GE evolution condition.
     if (isCrit && IsOnPlayerSide(ctx->battlerAtk)

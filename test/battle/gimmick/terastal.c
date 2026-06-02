@@ -381,7 +381,6 @@ SINGLE_BATTLE_TEST("(TERA) Revelation Dance uses a Terastallized Pokemon's Tera 
 }
 
 // This tests that Tera STAB modifiers depend on the user's original types, too.
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("(TERA) Double Shock does not remove the user's Electric type while Terastallized, and changes STAB modifier depending on when it is used")
 {
     s16 damage[4];
@@ -424,7 +423,6 @@ SINGLE_BATTLE_TEST("(TERA) Double Shock does not remove the user's Electric type
         EXPECT_EQ(damage[2], damage[3]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 // Stellar Type checks
 SINGLE_BATTLE_TEST("(TERA) Stellar type does not change the user's defensive profile", s16 damage)
@@ -497,7 +495,6 @@ SINGLE_BATTLE_TEST("(TERA) Roost does not remove Flying-type ground immunity whe
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("(TERA) Terastallizing into the Stellar-type provides a one-time 2.0x boost to STAB moves")
 {
     s16 damage[3];
@@ -527,9 +524,7 @@ SINGLE_BATTLE_TEST("(TERA) Terastallizing into the Stellar-type provides a one-t
         EXPECT_EQ(damage[0], damage[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("(TERA) Terastallizing into the Stellar-type provides a one-time 1.2x boost to non-STAB moves")
 {
     s16 damage[3];
@@ -558,9 +553,7 @@ SINGLE_BATTLE_TEST("(TERA) Terastallizing into the Stellar-type provides a one-t
         EXPECT_EQ(damage[0], damage[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("(TERA) Terastallizing into the Stellar type boosts all moves up to 60 BP once per type")
 {
     s16 damage[4];
@@ -598,7 +591,6 @@ SINGLE_BATTLE_TEST("(TERA) Terastallizing into the Stellar type boosts all moves
         EXPECT_EQ(damage[1], damage[3]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("(TERA) Protean/Libero cannot change the type of a Terastallized Pokemon")
 {
@@ -646,7 +638,6 @@ SINGLE_BATTLE_TEST("(TERA) Status moves don't expend Stellar's one-time type boo
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("(TERA) Stellar type's one-time boost factors in dynamically-typed moves")
 {
     s16 damage[4];
@@ -686,9 +677,7 @@ SINGLE_BATTLE_TEST("(TERA) Stellar type's one-time boost factors in dynamically-
         EXPECT_EQ(damage[3], damage[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("(TERA) Terapagos retains the Stellar type boost at all times")
 {
     s16 damage[2];
@@ -710,7 +699,6 @@ SINGLE_BATTLE_TEST("(TERA) Terapagos retains the Stellar type boost at all times
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("(TERA) Terapagos retains its base defensive profile when Terastalizing")
 {

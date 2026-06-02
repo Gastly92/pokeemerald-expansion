@@ -17,7 +17,6 @@ ASSUMPTIONS
     ASSUME(GetMovePower(MOVE_FUTURE_SIGHT) > 0);
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Future Sight uses Sp. Atk stat of the original user without modifiers")
 {
     enum Item item;
@@ -47,9 +46,7 @@ SINGLE_BATTLE_TEST("Future Sight uses Sp. Atk stat of the original user without 
         EXPECT_EQ(seedFlareDmg, futureSightDmg);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Future Sight is not boosted by Life Orb is original user if not on the field")
 {
     s16 seedFlareDmg;
@@ -76,7 +73,6 @@ SINGLE_BATTLE_TEST("Future Sight is not boosted by Life Orb is original user if 
         EXPECT_EQ(seedFlareDmg, futureSightDmg);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 TO_DO_BATTLE_TEST("Future Sight does not receive STAB from party mon (Gen 2-4)")
 SINGLE_BATTLE_TEST("Future Sight receives STAB from party mon (Gen 5+)")
@@ -284,7 +280,6 @@ SINGLE_BATTLE_TEST("Future Sight flying type attacker in party receives no boost
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Future Sight is affected by Beads of Ruin on the original slot")
 {
     s16 damage[2];
@@ -309,4 +304,3 @@ SINGLE_BATTLE_TEST("Future Sight is affected by Beads of Ruin on the original sl
         EXPECT_MUL_EQ(damage[0], Q_4_12(1.33), damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

@@ -292,7 +292,6 @@ DOUBLE_BATTLE_TEST("Pledge moves get same attack type bonus from partner", s16 d
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Damage calculation: Combined pledge move")
 {
     s16 dmg;
@@ -331,7 +330,6 @@ DOUBLE_BATTLE_TEST("Damage calculation: Combined pledge move")
         EXPECT_EQ(expectedDamage, dmg);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 DOUBLE_BATTLE_TEST("Pledge move combo interactions with Powder are correct")
 {

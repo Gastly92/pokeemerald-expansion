@@ -6,7 +6,6 @@ ASSUMPTIONS
     ASSUME(GetMoveEffect(MOVE_STOMPING_TANTRUM) == EFFECT_STOMPING_TANTRUM);
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user flinched on the previous turn")
 {
     s16 damage[3];
@@ -36,9 +35,7 @@ SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user flinched on
         EXPECT_EQ(damage[0], damage[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user failed to attack due to paralysis")
 {
     s16 damage[3];
@@ -68,9 +65,7 @@ SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user failed to a
         EXPECT_EQ(damage[0], damage[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Stomping Tantrum will not deal double damage if target protects")
 {
     s16 damage[2];
@@ -94,9 +89,7 @@ SINGLE_BATTLE_TEST("Stomping Tantrum will not deal double damage if target prote
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user failed a Protect")
 {
     s16 damage[2];
@@ -121,7 +114,6 @@ SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user failed a Pr
         EXPECT_MUL_EQ(damage[0], Q_4_12(2.0), damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Stomping Tantrum will not deal double if it missed")
 {
@@ -166,7 +158,6 @@ SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if user was immune 
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Stomping Tantrum will not deal double damage if spread moved failed one target")
 {
     s16 damage[2];
@@ -192,7 +183,6 @@ DOUBLE_BATTLE_TEST("Stomping Tantrum will not deal double damage if spread moved
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Stomping Tantrum will deal double damage if hit into an immunity ability")
 {

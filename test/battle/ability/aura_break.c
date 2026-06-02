@@ -32,7 +32,6 @@ DOUBLE_BATTLE_TEST("Aura Break inverts Fairy Aura's effect")
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Aura Break inverts Dark Aura's effect")
 {
     s16 damage[3];
@@ -63,4 +62,3 @@ DOUBLE_BATTLE_TEST("Aura Break inverts Dark Aura's effect")
         EXPECT_MUL_EQ(damage[0], UQ_4_12(0.75), damage[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

@@ -8,12 +8,14 @@
 #define UNPACK_BATTLE_CONFIG_GEN_CHANGES(_name, _field, ...) ._field = _name,
 #define UNPACK_POKEMON_CONFIG_GEN_CHANGES(_name, _field, ...) ._field = P_##_name,
 #define UNPACK_AI_CONFIG_CHANGES(_name, _field, ...) ._field = _name,
+#define UNPACK_DETERMINISTIC_CONFIG_CHANGES(_name, _field, ...) ._field = _name, // FORK
 
 const struct ConfigChanges sConfigChanges =
 {
     BATTLE_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GEN_CHANGES)
     POKEMON_CONFIG_DEFINITIONS(UNPACK_POKEMON_CONFIG_GEN_CHANGES)
     AI_CONFIG_DEFINITIONS(UNPACK_AI_CONFIG_CHANGES)
+    DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_DETERMINISTIC_CONFIG_CHANGES) // FORK
     /* Expands to:
     .critChance     = B_CRIT_CHANCE,
     .critMultiplier = B_CRIT_MULTIPLIER,
@@ -47,6 +49,7 @@ u32 GetConfigInternal(enum ConfigTag _config)
         BATTLE_CONFIG_DEFINITIONS(UNPACK_CONFIG_GETTERS)
         POKEMON_CONFIG_DEFINITIONS(UNPACK_CONFIG_GETTERS)
         AI_CONFIG_DEFINITIONS(UNPACK_CONFIG_GETTERS)
+        DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_GETTERS) // FORK
         /* Expands to:
         case CONFIG_CRIT_CHANCE:
             return gConfigChangesTestOverride->critChance;
@@ -63,6 +66,7 @@ u32 GetConfigInternal(enum ConfigTag _config)
         BATTLE_CONFIG_DEFINITIONS(UNPACK_CONFIG_OVERRIDE_GETTERS)
         POKEMON_CONFIG_DEFINITIONS(UNPACK_CONFIG_OVERRIDE_GETTERS)
         AI_CONFIG_DEFINITIONS(UNPACK_CONFIG_OVERRIDE_GETTERS)
+        DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_OVERRIDE_GETTERS) // FORK
         /* Expands to:
         case CONFIG_CRIT_CHANCE:
             return sConfigChanges.critChance;
@@ -82,6 +86,7 @@ u32 GetClampedValue(enum ConfigTag _config, u32 newValue)
     BATTLE_CONFIG_DEFINITIONS(UNPACK_CONFIG_CLAMPER)
     POKEMON_CONFIG_DEFINITIONS(UNPACK_CONFIG_CLAMPER)
     AI_CONFIG_DEFINITIONS(UNPACK_CONFIG_CLAMPER)
+    DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_CLAMPER) // FORK
     default:
         return 0;
     }
@@ -99,6 +104,7 @@ void SetConfig(enum ConfigTag _config, u32 _value)
     BATTLE_CONFIG_DEFINITIONS(UNPACK_CONFIG_SETTERS)
     POKEMON_CONFIG_DEFINITIONS(UNPACK_CONFIG_SETTERS)
     AI_CONFIG_DEFINITIONS(UNPACK_CONFIG_SETTERS)
+    DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_SETTERS) // FORK
     /* Expands to:
     #if TESTING
     case CONFIG_CRIT_CHANCE:
@@ -116,10 +122,17 @@ void SetConfig(enum ConfigTag _config, u32 _value)
 }
 
 #if TESTING
+// FORK: force every DETERMINISTIC_* flag off in the per-test baseline. Their
+// production default is on (seeded from sConfigChanges above), but the inherited
+// test suite was written against stock behavior, so tests run with determinism
+// off unless they opt in with WITH_CONFIG(DETERMINISTIC_X, TRUE).
+#define UNPACK_DETERMINISTIC_FORCE_OFF(_name, _field, ...) gConfigChangesTestOverride->_field = FALSE;
+
 void TestInitConfigData(void)
 {
     gConfigChangesTestOverride = Alloc(sizeof(sConfigChanges));
     memcpy(gConfigChangesTestOverride, &sConfigChanges, sizeof(sConfigChanges));
+    DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_DETERMINISTIC_FORCE_OFF) // FORK
 }
 
 void TestFreeConfigData(void)

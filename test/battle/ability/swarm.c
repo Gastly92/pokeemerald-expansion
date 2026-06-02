@@ -1,7 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Swarm boosts Bug-type moves in a pinch", s16 damage)
 {
     u16 hp;
@@ -28,4 +27,3 @@ SINGLE_BATTLE_TEST("Swarm boosts Bug-type moves in a pinch", s16 damage)
         EXPECT_EQ(results[1].damage, 72);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

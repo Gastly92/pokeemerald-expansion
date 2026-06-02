@@ -592,7 +592,6 @@ AI_SINGLE_BATTLE_TEST("AI avoids contact moves against rocky helmet")
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 AI_SINGLE_BATTLE_TEST("AI uses a guaranteed KO move instead of the move with the highest expected damage")
 {
     u32 flags;
@@ -622,7 +621,6 @@ AI_SINGLE_BATTLE_TEST("AI uses a guaranteed KO move instead of the move with the
             NOT MESSAGE("Wobbuffet fainted!");
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 AI_SINGLE_BATTLE_TEST("AI stays choice locked into moves in spite of the player's ability disabling them")
 {
@@ -1017,7 +1015,6 @@ AI_DOUBLE_BATTLE_TEST("AI won't be confused by player's previous priority moves 
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 AI_SINGLE_BATTLE_TEST("AI will see 2HKOs through resist berries")
 {
     GIVEN {
@@ -1028,7 +1025,6 @@ AI_SINGLE_BATTLE_TEST("AI will see 2HKOs through resist berries")
         TURN { MOVE(player, MOVE_CELEBRATE); EXPECT_MOVE(opponent, MOVE_JUMP_KICK); }
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 AI_SINGLE_BATTLE_TEST("AI will prioritize a regular OHKO over a berry-ignoring OHKO")
 {

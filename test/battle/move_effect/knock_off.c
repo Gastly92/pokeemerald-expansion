@@ -83,7 +83,6 @@ SINGLE_BATTLE_TEST("Knock Off activates after Rocky Helmet and Weakness Policy")
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Knock Off deals additional damage to opponents holding an item in Gen 6+", s16 damage)
 {
     enum Item item = ITEM_NONE;
@@ -110,7 +109,6 @@ SINGLE_BATTLE_TEST("Knock Off deals additional damage to opponents holding an it
         EXPECT(opponent->item == ITEM_NONE);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 
 SINGLE_BATTLE_TEST("Knock Off does not remove items through Substitute")

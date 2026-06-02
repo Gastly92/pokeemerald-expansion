@@ -580,48 +580,50 @@ struct SimulatedDamage AI_CalcDamageSaveBattlers(enum Move move, enum BattlerId 
     return dmg;
 }
 
+// FORK: with DETERMINISTIC_DAMAGE there is no roll, so every roll type collapses
+// to the same fixed, turn-scaling figure and the AI's prediction matches the
+// damage actually dealt. Runtime config so tests can toggle it.
 static __attribute__((noinline)) ARM_FUNC s32 LowestRollDmg(s32 dmg)
 {
-#if DETERMINISTIC_DAMAGE
-    // FORK: damage isn't rolled, so every roll type is the same fixed figure.
-    dmg *= DETERMINISTIC_DAMAGE_PERCENT;
-#else
-    dmg *= MIN_ROLL_PERCENTAGE;
-#endif
+    if (GetConfig(DETERMINISTIC_DAMAGE))
+        dmg *= DETERMINISTIC_DAMAGE_PERCENT;
+    else
+        dmg *= MIN_ROLL_PERCENTAGE;
     dmg /= 100;
     return dmg;
 }
 
 static inline s32 HighestRollDmg(s32 dmg)
 {
-#if DETERMINISTIC_DAMAGE
-    dmg *= DETERMINISTIC_DAMAGE_PERCENT;
-#else
-    dmg *= MAX_ROLL_PERCENTAGE;
-#endif
+    if (GetConfig(DETERMINISTIC_DAMAGE))
+        dmg *= DETERMINISTIC_DAMAGE_PERCENT;
+    else
+        dmg *= MAX_ROLL_PERCENTAGE;
     dmg /= 100;
     return dmg;
 }
 
 static __attribute__((noinline)) ARM_FUNC s32 DmgRoll(s32 dmg)
 {
-#if DETERMINISTIC_DAMAGE
-    dmg *= DETERMINISTIC_DAMAGE_PERCENT;
-#else
-    dmg *= DMG_ROLL_PERCENTAGE;
-#endif
+    if (GetConfig(DETERMINISTIC_DAMAGE))
+        dmg *= DETERMINISTIC_DAMAGE_PERCENT;
+    else
+        dmg *= DMG_ROLL_PERCENTAGE;
     dmg /= 100;
     return dmg;
 }
 
 static __attribute__((noinline)) ARM_FUNC s32 RandomRollDmg(s32 dmg)
 {
-#if DETERMINISTIC_DAMAGE
-    dmg *= DETERMINISTIC_DAMAGE_PERCENT;
-#else
-    u32 randomRollPercentage = RandomUniform(RNG_AI_DMG_ROLL_RANDOM, MIN_ROLL_PERCENTAGE, MAX_ROLL_PERCENTAGE);
-    dmg *= randomRollPercentage;
-#endif
+    if (GetConfig(DETERMINISTIC_DAMAGE))
+    {
+        dmg *= DETERMINISTIC_DAMAGE_PERCENT;
+    }
+    else
+    {
+        u32 randomRollPercentage = RandomUniform(RNG_AI_DMG_ROLL_RANDOM, MIN_ROLL_PERCENTAGE, MAX_ROLL_PERCENTAGE);
+        dmg *= randomRollPercentage;
+    }
     dmg /= 100;
     return dmg;
 }

@@ -721,7 +721,6 @@ AI_DOUBLE_BATTLE_TEST("AI sees corresponding absorbing abilities on partners")
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 AI_DOUBLE_BATTLE_TEST("AI sees random rolls correctly")
 {
     PASSES_RANDOMLY(3, 15, RNG_AI_DMG_ROLL_RANDOM); // Slaking KOs with 3 rolls
@@ -738,7 +737,6 @@ AI_DOUBLE_BATTLE_TEST("AI sees random rolls correctly")
         TURN { EXPECT_MOVE(opponentLeft, MOVE_SCRATCH); }
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 AI_DOUBLE_BATTLE_TEST("AI treats an ally's redirection ability appropriately (gen 4)")
 {

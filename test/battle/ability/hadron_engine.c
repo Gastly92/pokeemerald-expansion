@@ -14,7 +14,6 @@ SINGLE_BATTLE_TEST("Hadron Engine creates Electric Terrain when entering the bat
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Hadron Engine boosts the Pokemon's Special Attack on Electric Terrain even if not grounded", s16 damage)
 {
     bool32 overrideTerrain, airBalloon;
@@ -44,4 +43,3 @@ SINGLE_BATTLE_TEST("Hadron Engine boosts the Pokemon's Special Attack on Electri
         EXPECT_MUL_EQ(results[2].damage, Q_4_12(1.3333), results[3].damage);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

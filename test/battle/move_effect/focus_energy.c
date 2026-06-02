@@ -6,8 +6,6 @@ ASSUMPTIONS
     ASSUME(GetMoveEffect(MOVE_FOCUS_ENERGY) == EFFECT_FOCUS_ENERGY);
 }
 
-// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
-#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Focus Energy increases the user's critical hit ratio by 1 stage (Gen 1-2) or 2 stages (Gen 3+)")
 {
     bool32 useFocusEnergy = 0;
@@ -41,10 +39,7 @@ SINGLE_BATTLE_TEST("Focus Energy increases the user's critical hit ratio by 1 st
         MESSAGE("A critical hit!");
     }
 }
-#endif // !DETERMINISTIC_CRITICAL_HITS
 
-// FORK: asserts a random crit *rate*; not applicable under DETERMINISTIC_CRITICAL_HITS.
-#if !DETERMINISTIC_CRITICAL_HITS
 SINGLE_BATTLE_TEST("Focus Energy multiplies crit chance by 4 with gen 1 crit chance")
 {
     bool32 useFocusEnergy = 0;
@@ -71,7 +66,6 @@ SINGLE_BATTLE_TEST("Focus Energy multiplies crit chance by 4 with gen 1 crit cha
         MESSAGE("A critical hit!");
     }
 }
-#endif // !DETERMINISTIC_CRITICAL_HITS
 
 TO_DO_BATTLE_TEST("Focus Energy fails if critical hit stage was already increased by Dragon Cheer")
 TO_DO_BATTLE_TEST("Baton Pass passes Focus Energy's effect");

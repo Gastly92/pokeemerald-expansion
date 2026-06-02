@@ -94,7 +94,6 @@ SINGLE_BATTLE_TEST("Berserk does not activate if move is boosted by Sheer Force"
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Berserk will not activate if the last multi hit move activates a restore berry")
 {
     u32 j;
@@ -117,7 +116,6 @@ SINGLE_BATTLE_TEST("Berserk will not activate if the last multi hit move activat
         EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Berserk activates before the hp can be restored on non multi hit moves")
 {

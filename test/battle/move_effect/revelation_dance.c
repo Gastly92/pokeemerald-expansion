@@ -111,7 +111,6 @@ SINGLE_BATTLE_TEST("Revelation Dance becomes Typeless if its user is Typeless")
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Revelation Dance becomes Normal type if used by a Typeless Pokemon due to Roost")
 {
     u16 speciesOpponent;
@@ -148,4 +147,3 @@ SINGLE_BATTLE_TEST("Revelation Dance becomes Normal type if used by a Typeless P
         }
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

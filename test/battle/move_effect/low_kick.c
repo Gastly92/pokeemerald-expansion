@@ -1,7 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Low Kick's damage varies based on the target's weight", s16 damage)
 {
     u32 species, weight;
@@ -28,4 +27,3 @@ SINGLE_BATTLE_TEST("Low Kick's damage varies based on the target's weight", s16 
             EXPECT_MUL_EQ(results[0].damage, Q_4_12(i + 1), results[i].damage);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

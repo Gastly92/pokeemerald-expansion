@@ -31,7 +31,6 @@ SINGLE_BATTLE_TEST("Defense Curl raises Defense by 1 stage", s16 damage)
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Defense Curl doubles the power of Rollout even if stat couldn't be changed", s16 damage)
 {
     bool32 acidArmor = FALSE;
@@ -70,7 +69,6 @@ SINGLE_BATTLE_TEST("Defense Curl doubles the power of Rollout even if stat could
         EXPECT_EQ(results[0].damage, results[1].damage);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 TO_DO_BATTLE_TEST("Defense Curl doubles the power of Rollout and Ice Ball");
 TO_DO_BATTLE_TEST("Defense Curl's effect cannot be stacked");

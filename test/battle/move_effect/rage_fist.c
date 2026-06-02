@@ -350,7 +350,6 @@ SINGLE_BATTLE_TEST("Rage Fist base power is increased by 50 if user was hit and 
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Rage Fist doesn't get increased power if Substitute is hit")
 {
     s16 timesGotHit[2];
@@ -371,7 +370,6 @@ SINGLE_BATTLE_TEST("Rage Fist doesn't get increased power if Substitute is hit")
         EXPECT_EQ(timesGotHit[0], timesGotHit[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Rage Fist counter will be updated correctly after absorb move")
 {

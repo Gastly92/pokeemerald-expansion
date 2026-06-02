@@ -547,7 +547,6 @@ SINGLE_BATTLE_TEST("Fling - thrown berry's effect activates for the target even 
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Fling deals damage based on items fling power")
 {
     s16 damage[2];
@@ -569,9 +568,7 @@ SINGLE_BATTLE_TEST("Fling deals damage based on items fling power")
         EXPECT_EQ(damage[0], damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Fling deals damage based on a TM's move power if reusable or fails if breakable")
 {
     s16 damage[2];
@@ -599,7 +596,6 @@ SINGLE_BATTLE_TEST("Fling deals damage based on a TM's move power if reusable or
             EXPECT_EQ(damage[0], damage[1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Fling fails when a Paradox mon holds a Booster Energy")
 {

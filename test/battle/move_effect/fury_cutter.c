@@ -6,7 +6,6 @@ ASSUMPTIONS
     ASSUME(GetMoveEffect(MOVE_FURY_CUTTER) == EFFECT_FURY_CUTTER);
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Fury Cutter's power doubles with each use, up to 160 power")
 {
     s16 damage[6];
@@ -37,7 +36,6 @@ SINGLE_BATTLE_TEST("Fury Cutter's power doubles with each use, up to 160 power")
         EXPECT_EQ(damage[maxTurns - 2], damage[maxTurns - 1]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
 SINGLE_BATTLE_TEST("Fury Cutter's base power resets if the chain has been broken")
 {

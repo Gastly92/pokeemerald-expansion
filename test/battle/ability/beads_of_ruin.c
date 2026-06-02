@@ -190,7 +190,6 @@ DOUBLE_BATTLE_TEST("Beads of Ruin's Sp. Def reduction is ignored by Gastro Acid"
     }
 }
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Beads of Ruin reduces Sp. Def if opposing mon's ability doesn't match (Neutralizing switches in and out)")
 {
     s16 damage[2];
@@ -218,9 +217,7 @@ SINGLE_BATTLE_TEST("Beads of Ruin reduces Sp. Def if opposing mon's ability does
         EXPECT_EQ(damage[1], damage[0]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Beads of Ruin will not reactivate after Sunsteel Strike faints Neutralizing Gas target")
 {
     s16 damage[2];
@@ -259,9 +256,7 @@ DOUBLE_BATTLE_TEST("Beads of Ruin will not reactivate after Sunsteel Strike fain
         EXPECT_EQ(damage[1], damage[0]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Beads of Ruin will not be deactivated with Ability Shield")
 {
     s16 damage[2];
@@ -291,9 +286,7 @@ DOUBLE_BATTLE_TEST("Beads of Ruin will not be deactivated with Ability Shield")
         EXPECT_EQ(damage[1], damage[0]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Beads of Ruin will still be active while suppressed after Ability Shield is removed")
 {
     s16 damage[2];
@@ -329,9 +322,7 @@ DOUBLE_BATTLE_TEST("Beads of Ruin will still be active while suppressed after Ab
         EXPECT_EQ(damage[1], damage[0]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Beads of Ruin does not apply any damage reduction on an opposing Beads of Ruin user even if it is deactivated")
 {
     s16 damage[2];
@@ -368,4 +359,3 @@ SINGLE_BATTLE_TEST("Beads of Ruin does not apply any damage reduction on an oppo
         EXPECT_EQ(damage[1], damage[0]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

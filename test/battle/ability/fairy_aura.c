@@ -1,7 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Fairy Aura increases the power of all Fairy-type attacks by 33%")
 {
     s16 damage[8];
@@ -58,9 +57,7 @@ DOUBLE_BATTLE_TEST("Fairy Aura increases the power of all Fairy-type attacks by 
         EXPECT_MUL_EQ(damage[7], UQ_4_12(1.33), damage[3]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 DOUBLE_BATTLE_TEST("Fairy Aura's effect doesn't stack multiple times")
 {
     s16 damage[6];
@@ -109,4 +106,3 @@ DOUBLE_BATTLE_TEST("Fairy Aura's effect doesn't stack multiple times")
         EXPECT_EQ(damage[5], damage[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

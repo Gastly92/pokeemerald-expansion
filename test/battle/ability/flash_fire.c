@@ -1,7 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 SINGLE_BATTLE_TEST("Flash Fire boosts fire type moves by 50% but no subsequent increase is applied")
 {
     s16 damage[3];
@@ -27,4 +26,3 @@ SINGLE_BATTLE_TEST("Flash Fire boosts fire type moves by 50% but no subsequent i
         EXPECT_EQ(damage[1], damage[2]);
     }
 }
-#endif // !DETERMINISTIC_DAMAGE

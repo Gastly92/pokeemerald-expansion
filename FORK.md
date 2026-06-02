@@ -30,8 +30,8 @@ limitations, and where to look.
 | Frontier max IVs | `B_FRONTIER_MAX_IVS` | `config/frontier.h` | ⚠️ partial | Forces 31 IVs in every stat via `GetFactoryMonFixedIV` (the one Factory IV source), so rentals, opponents, and the Frontier Brain are all maxed instead of the vanilla per-challenge ramp. Factory-only for now; other facilities' IV ramps live elsewhere. |
 | Frontier hard AI | `B_FRONTIER_HARD_AI` (+ `B_FRONTIER_HARD_AI_FLAGS`) | `config/frontier.h` | ⚠️ partial | Every Factory opponent and the Frontier Brain use the strongest AI preset (default `AI_FLAG_SMART_TRAINER` — basic AI + OMNISCIENT + smart switching/mon choices + PP-stall prevention + smart Tera) instead of the vanilla per-challenge scaling. Gated in `GetAiScriptsInBattleFactory`; Battle Tent keeps no AI. Tune via `B_FRONTIER_HARD_AI_FLAGS`. Factory-only for now. |
 
-| Deterministic critical hits | `DETERMINISTIC_CRITICAL_HITS` | `config/deterministic.h` | ✅ | First of the `DETERMINISTIC_*` flags (a project to strip RNG from the game). Removes the random crit-chance roll in `IsCriticalHit()` (`src/battle_util.c`): crits still land only when *guaranteed* — always-crit moves, Laser Focus, Merciless vs. a poisoned target, or crit-stage stacks that already reach 1/1 odds. Crit-blocking (Battle Armor, Shell Armor, Lucky Chant) unchanged. **Enabled (`TRUE`) in this fork.** New behavior is covered by `test/battle/deterministic_critical_hits.c`; upstream tests that assert a *random* crit rate are guarded with `#if !DETERMINISTIC_CRITICAL_HITS` (grep that to find them all on sync). |
-| Deterministic damage | `DETERMINISTIC_DAMAGE` (+ `DETERMINISTIC_DAMAGE_BASE_PERCENT`, `DETERMINISTIC_DAMAGE_TURN_INCREMENT`) | `config/deterministic.h` | ✅ | Replaces the random 85%–100% damage roll with a fixed multiplier that scales with the battle's turn count: `BASE_PERCENT` on turn 1, `+TURN_INCREMENT` per elapsed turn (`DETERMINISTIC_DAMAGE_PERCENT` = `BASE_PERCENT + TURN_INCREMENT * gBattleTurnCounter`). Defaults 92% / +1% → 92% turn 1, 93% turn 2, … **Intentionally uncapped** — from turn 9 on it exceeds 100%, so prolonged battles deal more than the stock maximum (set `TURN_INCREMENT` to 0 for a flat multiplier). The AI's damage prediction (`src/battle_ai_util.c` roll helpers) is fed the same figure, so its min/median/max/random rolls collapse to the deterministic value and it never mis-predicts. **Enabled (`TRUE`) in this fork.** Covered by `test/battle/deterministic_damage.c`; upstream tests that assert per-roll damage spreads or compare damage across turns are guarded with `#if !DETERMINISTIC_DAMAGE` (grep that to find them all on sync). |
+| Deterministic critical hits | `DETERMINISTIC_CRITICAL_HITS` | `config/deterministic.h` | ✅ | First of the `DETERMINISTIC_*` flags (a project to strip RNG from the game). Removes the random crit-chance roll in `IsCriticalHit()` (`src/battle_util.c`): crits still land only when *guaranteed* — always-crit moves, Laser Focus, Merciless vs. a poisoned target, or crit-stage stacks that already reach 1/1 odds. Crit-blocking (Battle Armor, Shell Armor, Lucky Chant) unchanged. **Enabled (`TRUE`) in this fork.** Covered by `test/battle/deterministic_critical_hits.c` (opt-in via `WITH_CONFIG`); see the determinism test harness note below. |
+| Deterministic damage | `DETERMINISTIC_DAMAGE` (+ `DETERMINISTIC_DAMAGE_BASE_PERCENT`, `DETERMINISTIC_DAMAGE_TURN_INCREMENT`) | `config/deterministic.h` | ✅ | Replaces the random 85%–100% damage roll with a fixed multiplier that scales with the battle's turn count: `BASE_PERCENT` on turn 1, `+TURN_INCREMENT` per elapsed turn (`DETERMINISTIC_DAMAGE_PERCENT` = `BASE_PERCENT + TURN_INCREMENT * gBattleTurnCounter`). Defaults 92% / +1% → 92% turn 1, 93% turn 2, … **Intentionally uncapped** — from turn 9 on it exceeds 100%, so prolonged battles deal more than the stock maximum (set `TURN_INCREMENT` to 0 for a flat multiplier). The AI's damage prediction (`src/battle_ai_util.c` roll helpers) is fed the same figure, so its min/median/max/random rolls collapse to the deterministic value and it never mis-predicts. **Enabled (`TRUE`) in this fork.** Covered by `test/battle/deterministic_damage.c` (opt-in via `WITH_CONFIG`); see the determinism test harness note below. |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
 
@@ -44,6 +44,19 @@ behavior); the fork enables them as they mature. As random upsides are removed,
 the plan is to introduce compensating systems so battles stay balanced rather
 than simply harder or easier. Flags so far: `DETERMINISTIC_CRITICAL_HITS` and
 `DETERMINISTIC_DAMAGE` (both enabled — see table).
+
+**Test harness.** Each `DETERMINISTIC_*` flag is registered into the existing
+runtime config system (`DETERMINISTIC_CONFIG_DEFINITIONS` in
+`include/constants/config_changes.h`), so engine code reads it via
+`GetConfig(DETERMINISTIC_X)` and battle tests toggle it per-test with
+`WITH_CONFIG(DETERMINISTIC_X, TRUE)`. The `#define`s in `config/deterministic.h`
+remain the production defaults (on in the shipped ROM); the per-test baseline
+forces every flag **off** (`TestInitConfigData`), so the entire inherited test
+suite keeps running against stock behavior untouched, and only the dedicated
+`test/battle/deterministic_*.c` files opt in. This means **adding a new
+determinism flag costs one `#define` + one line in
+`DETERMINISTIC_CONFIG_DEFINITIONS` + swapping its consumption site(s) to
+`GetConfig` — no scattering `#if` guards across the upstream suite.**
 
 ## Known quirks / future work
 

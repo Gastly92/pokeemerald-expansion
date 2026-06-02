@@ -1,7 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
 
-#if !DETERMINISTIC_DAMAGE // FORK: assumes the stock random damage roll
 
 // From https://bulbapedia.bulbagarden.net/wiki/Damage#Example
 
@@ -420,4 +419,3 @@ DOUBLE_BATTLE_TEST("Transistor Damage calculation", s16 damage)
     }
 }
 
-#endif // !DETERMINISTIC_DAMAGE
