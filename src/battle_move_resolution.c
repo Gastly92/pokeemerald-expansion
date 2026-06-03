@@ -4211,6 +4211,29 @@ static enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValue
     return result;
 }
 
+// FORK: under DETERMINISTIC_ACCURACY_EVASION a damaging move that was exactly 50%
+// accurate (Zap Cannon, Inferno, DynamicPunch, ...) now requires a recharge turn like
+// Hyper Beam — set via the same rechargeTimer/gLockedMoves state Hyper Beam uses, so
+// CancelerRecharge forces the recharge next turn. Sleep moves (Dark Void) are handled
+// as drowsiness instead, and the move must have actually connected.
+static enum MoveEndResult MoveEndDeterministicRecharge(struct BattleCalcValues *cv)
+{
+    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION)
+     && GetMoveAccuracy(cv->move) == 50
+     && !IsBattleMoveStatus(cv->move)
+     && GetMoveNonVolatileStatus(cv->move) != MOVE_EFFECT_SLEEP
+     && gBattleMons[cv->battlerAtk].volatiles.rechargeTimer == 0
+     && IsBattlerAlive(cv->battlerAtk)
+     && !(gBattleStruct->moveResultFlags[cv->battlerDef] & MOVE_RESULT_NO_EFFECT))
+    {
+        gBattleMons[cv->battlerAtk].volatiles.rechargeTimer = 2;
+        gLockedMoves[cv->battlerAtk] = cv->move;
+    }
+
+    gBattleScripting.moveendState++;
+    return MOVEEND_RESULT_CONTINUE;
+}
+
 static enum MoveEndResult MoveEndSendOutReplacements(struct BattleCalcValues *cv)
 {
     while (gBattleStruct->eventState.moveEndBattler < gBattlersCount)
@@ -4488,6 +4511,7 @@ static enum MoveEndResult (*const sMoveEndHandlers[])(struct BattleCalcValues *c
     [MOVEEND_SPRAY_LEPPA_BLUNDER] = MoveEndSprayLeppaBlunder,
     [MOVEEND_ITEM_ON_STAT_CHANGE] = MoveEndItemOnStatChange,
     [MOVEEND_DETERMINISTIC_HOLD_CONSUME] = MoveEndDeterministicHoldConsume, // FORK
+    [MOVEEND_DETERMINISTIC_RECHARGE] = MoveEndDeterministicRecharge, // FORK
     [MOVEEND_SEND_OUT_REPLACEMENTS] = MoveEndSendOutReplacements,
     [MOVEEND_CLEAR_BITS] = MoveEndClearBits,
     [MOVEEND_DANCER] = MoveEndDancer,

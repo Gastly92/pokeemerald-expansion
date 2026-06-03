@@ -16,6 +16,11 @@ ASSUMPTIONS
     ASSUME(GetMovePP(MOVE_HYDRO_PUMP) == 5);
     ASSUME(GetMoveAccuracy(MOVE_HYDRO_PUMP) == 80);
     ASSUME(GetMoveEffect(MOVE_HORN_DRILL) == EFFECT_OHKO);
+    ASSUME(GetMoveAccuracy(MOVE_HYPNOSIS) == 60);
+    ASSUME(GetMoveNonVolatileStatus(MOVE_HYPNOSIS) == MOVE_EFFECT_SLEEP);
+    ASSUME(GetMoveAccuracy(MOVE_SPORE) == 100);
+    ASSUME(GetMoveNonVolatileStatus(MOVE_SPORE) == MOVE_EFFECT_SLEEP);
+    ASSUME(GetMoveAccuracy(MOVE_ZAP_CANNON) == 50);
 }
 
 SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% move always hits, even into raised evasion")
@@ -153,3 +158,51 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: OHKO moves deal a fixed % of
         EXPECT_EQ(opponent->hp, 60); // 100 - 40% of max
     }
 }
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% sleep move causes drowsiness, not sleep")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_HYPNOSIS); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_HYPNOSIS); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet grew drowsy!");
+    } THEN {
+        EXPECT_EQ(opponent->status1 & STATUS1_SLEEP, 0); // drowsy now; Yawn puts it to sleep later
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 100% sleep move (Spore) still sleeps directly")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SPORE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet fell asleep!");
+    } THEN {
+        EXPECT(opponent->status1 & STATUS1_SLEEP);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 50% accurate move requires a recharge turn")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_ZAP_CANNON, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { HP(800); MaxHP(800); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_ZAP_CANNON); }
+        TURN { SKIP_TURN(player); } // locked into recharge
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Zap Cannon!");
+        MESSAGE("Wobbuffet must recharge!");
+        MESSAGE("Wobbuffet used Celebrate!");
+    }
+}
+

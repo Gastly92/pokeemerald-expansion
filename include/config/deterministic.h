@@ -172,9 +172,10 @@
 //     OHKO gating). See EFFECT_OHKO in DoMoveDamageCalc (src/battle_util.c).
 //   - Sleep moves that were not 100% accurate (Hypnosis, Sleep Powder, ...) now cause
 //     drowsiness like Yawn instead of sleeping outright; 100%-accurate Spore is
-//     unchanged. [stage 2]
+//     unchanged (Cmd_setnonvolatilestatus in src/battle_script_commands.c).
 //   - Moves that were exactly 50% accurate (Zap Cannon, Inferno, ...) now require a
-//     recharge turn like Hyper Beam. [stage 2]
+//     recharge turn like Hyper Beam (MOVEEND_DETERMINISTIC_RECHARGE in
+//     src/battle_move_resolution.c).
 // The AI is taught that every move always hits (Ai_SetMoveAccuracy), so it neither
 // avoids low-accuracy moves nor values evasion as a miss chance.
 #define DETERMINISTIC_ACCURACY_EVASION TRUE
