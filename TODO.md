@@ -16,19 +16,6 @@
 - Rivalry activates when battlers are of the same type.
 - Harvest always recovers used berries and also heals for 1/16 of max HP in the sun when activating.
 
-### DETERMINISTIC_ACCURACY_EVASION
-
-- Stat stage increases and decreases to accuracy and evasion no longer impact the accuracy of moves.
-- Increases to accuracy recover 1 PP per stage when using moves that target an opposing mon.
-- Decreases to accuracy increase the cost of moves that target an opposing mon by 1 PP per stage.
-- Increases to evasion increase the cost of moves that target the evasive mon by 1 PP per stage.
-- Decreases to evasion recover 1 PP per stage when using moves that target the less evasive mon.
-- Accuracy and evasion modifiers continue to cancel each other out.
-- All moves have 100% accuracy by default.
-- Sleep moves that previously did not have 100% accuracy now behave like Yawn.
-- Some moves have PP reduced or additional effects removed as they now have 100% accuracy.
-- Moves that previously had 50% accuracy now behave like Hyper Beam and require a recharge turn.
-
 ### DETERMINISTIC_ATTRACTION
 
 - Attract can effect any opposing mon rather than requiring the user to be the opposite gender of the target.
@@ -46,12 +33,6 @@
 
 - Multi hit moves always hit 3 times.
 - Holding a loaded dice allows multi hit moves to hit 6 times.
-
-### DETERMINISTIC_OHKO
-
-- OHKO moves no longer deal damage equal to the remaining health of the targeting mon.
-- Instead they always deal damage equal to 50% of the target's maximum hp, minimum 1 damage.
-- Maximum PP for these moves is reduced to 1.
 
 ### DETERMINISTIC_PROTECT
 
