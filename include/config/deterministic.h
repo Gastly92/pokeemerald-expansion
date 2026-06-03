@@ -64,4 +64,41 @@
 #define DETERMINISTIC_PARALYSIS_PP_TAX 1
 #define DETERMINISTIC_PARALYSIS_PRIORITY_TAX 1
 
+// When TRUE, a flinch additional effect can never be applied to a target that was
+// already flinched on the previous turn. This is an anti-lock CAP layered on top
+// of whatever decides the flinch in the first place — with DETERMINISTIC_ADDITIONAL_EFFECTS
+// also on (the shipped config), flinch is first gated on super effective / STAB
+// like any other effect (see that flag), and this rule then prevents a gated
+// flinch from chaining turn after turn into a stunlock: each flinch "uses up" the
+// next turn's. Guaranteed flinches (chance >= 100%) and Fake Out (and any
+// first-turn-only flincher, which can't be used on consecutive turns anyway) are
+// exempt and always flinch. Inner Focus / Shield Dust / Covert Cloak immunity is
+// unchanged. Required by DETERMINISTIC_ADDITIONAL_EFFECTS so its super-effective/
+// STAB flinches can't lock. See TryTriggerAdditionalEffect() in src/battle_util.c.
+#define DETERMINISTIC_FLINCH TRUE
+
+// When TRUE, a move's chance-based additional effect (burn, paralysis, a stat
+// drop, etc.) stops being a random roll and instead lands on a fixed, state-based
+// condition, so a move's "secondary" is decided by the matchup rather than luck:
+//   - If the move's type CAN be super effective against something (every type but
+//     Normal in the stock chart), the effect lands only when the hit was actually
+//     super effective. So Fire Punch only burns when it hits a Fire-weak target.
+//   - If the move's type can NEVER be super effective (Normal), the effect lands
+//     only when the move is STAB (the user shares the move's type). So Body Slam
+//     only paralyzes when used by a Normal-type user.
+// Flinch obeys this same super-effective/STAB gate (Iron Head / Rock Slide only
+// flinch on a super effective hit; Stomp only flinches from a Normal user), and
+// DETERMINISTIC_FLINCH (which this flag requires) then adds an anti-lock cap so a
+// gated flinch can't chain into a stunlock. Guaranteed effects (chance >= 100%)
+// always land, unchanged. The stock secondary-chance boosters — Serene Grace and
+// the Pledge Rainbow, which normally just double the odds — instead make the
+// effect certain: the holder bypasses the gate and always lands it. This includes
+// flinch, which still keeps DETERMINISTIC_FLINCH's anti-lock cap — so a boosted
+// flinch lands even on a neutral/resisted hit, but still can't be re-applied the
+// next turn, so the boosters can't restore flinch-lock. The AI's valuation is taught the
+// same conditions so it credits an effect exactly when it will actually happen.
+// See TryTriggerAdditionalEffect() and DeterministicAdditionalEffectApplies() in
+// src/battle_util.c.
+#define DETERMINISTIC_ADDITIONAL_EFFECTS TRUE
+
 #endif // GUARD_CONFIG_DETERMINISTIC_H

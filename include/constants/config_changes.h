@@ -251,9 +251,11 @@
 // max value is TRUE. To add a new determinism flag: add its #define in
 // config/deterministic.h and one line here.
 #define DETERMINISTIC_CONFIG_DEFINITIONS(F) \
-    F(DETERMINISTIC_CRITICAL_HITS, deterministicCriticalHits, (u32, TRUE)) \
-    F(DETERMINISTIC_DAMAGE,        deterministicDamage,       (u32, TRUE)) \
-    F(DETERMINISTIC_PARALYSIS,     deterministicParalysis,    (u32, TRUE)) \
+    F(DETERMINISTIC_CRITICAL_HITS,     deterministicCriticalHits,     (u32, TRUE)) \
+    F(DETERMINISTIC_DAMAGE,            deterministicDamage,           (u32, TRUE)) \
+    F(DETERMINISTIC_PARALYSIS,         deterministicParalysis,        (u32, TRUE)) \
+    F(DETERMINISTIC_FLINCH,            deterministicFlinch,           (u32, TRUE)) \
+    F(DETERMINISTIC_ADDITIONAL_EFFECTS, deterministicAdditionalEffects, (u32, TRUE)) \
 
 // FORK: the BUFF_* feature flags (config/buff.h) rebalance items and other game
 // functionality, riding the same runtime config system as the DETERMINISTIC_*

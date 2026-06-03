@@ -3538,8 +3538,11 @@ static void Cmd_setadditionaleffects(void)
             {
                 percentChance = CalcSecondaryEffectChance(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), additionalEffect);
 
-                // Activate effect if it's primary (chance == 0) or if RNGesus says so
-                if ((percentChance == 0) || RandomPercentage(RNG_SECONDARY_EFFECT + gBattleStruct->additionalEffectsCounter, percentChance))
+                // Activate effect if it's primary (chance == 0) or if it triggers.
+                // FORK: TryTriggerAdditionalEffect replaces the stock RNG roll with a
+                // deterministic, state-based decision under DETERMINISTIC_ADDITIONAL_EFFECTS
+                // / DETERMINISTIC_FLINCH, and falls back to RandomPercentage otherwise.
+                if ((percentChance == 0) || TryTriggerAdditionalEffect(gBattlerAttacker, gBattlerTarget, gCurrentMove, additionalEffect, percentChance, RNG_SECONDARY_EFFECT + gBattleStruct->additionalEffectsCounter))
                 {
                     gBattleCommunication[MULTISTRING_CHOOSER] = *((u8 *) &additionalEffect->multistring);
 

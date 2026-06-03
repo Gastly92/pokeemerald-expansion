@@ -3705,6 +3705,51 @@ bool32 ShouldTrap(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Mov
     return FALSE;
 }
 
+// FORK: DETERMINISTIC_ADDITIONAL_EFFECTS / DETERMINISTIC_FLINCH — the AI's effect
+// valuation only credits an additional effect it considers reliable. Stock that is
+// "chance >= 100%" (MoveEffectIsGuaranteed); under the deterministic flags a
+// sub-100% effect also becomes reliable when its state condition is met, so the AI
+// must treat it as guaranteed too or it would undervalue these moves. Mirrors the
+// run-time decision in TryTriggerAdditionalEffect().
+bool32 AI_IsAdditionalEffectReliable(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, const struct AdditionalEffect *additionalEffect)
+{
+    bool32 isFlinch = (additionalEffect->moveEffect == MOVE_EFFECT_FLINCH);
+    bool32 reliable;
+
+    if (MoveEffectIsGuaranteed(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect))
+    {
+        reliable = TRUE;
+    }
+    else if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
+    {
+        // A chance-booster (Serene Grace / Pledge Rainbow) guarantees the effect,
+        // flinch included; the anti-lock cap below still applies to a boosted flinch.
+        if (CalcSecondaryEffectChance(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect) > additionalEffect->chance)
+        {
+            reliable = TRUE;
+        }
+        else
+        {
+            enum Type moveType = GetBattleMoveType(move);
+            bool32 superEffective = AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) >= UQ_4_12(2.0);
+            reliable = DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));
+        }
+    }
+    else
+    {
+        reliable = FALSE;
+    }
+
+    // DETERMINISTIC_FLINCH anti-lock cap mirrors TryTriggerAdditionalEffect: a foe
+    // flinched last turn can't be flinched again (Fake Out / first-turn-only exempt).
+    if (reliable && isFlinch && GetConfig(DETERMINISTIC_FLINCH)
+     && GetMoveEffect(move) != EFFECT_FIRST_TURN_ONLY
+     && gBattleStruct->battlerState[battlerDef].flinchedLastTurn)
+        reliable = FALSE;
+
+    return reliable;
+}
+
 bool32 IsFlinchGuaranteed(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
 {
     if (!MoveHasAdditionalEffect(move, MOVE_EFFECT_FLINCH))
@@ -3719,8 +3764,9 @@ bool32 IsFlinchGuaranteed(enum BattlerId battlerAtk, enum BattlerId battlerDef, 
     for (u32 effectIndex = 0; effectIndex < additionalEffectCount; effectIndex++)
     {
         const struct AdditionalEffect *additionalEffect = GetMoveAdditionalEffectById(move, effectIndex);
-        // Only consider effects with a guaranteed chance to happen
-        if (!MoveEffectIsGuaranteed(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect))
+        // Only consider effects reliable enough to happen (FORK: includes
+        // DETERMINISTIC_FLINCH's not-flinched-last-turn case).
+        if (!AI_IsAdditionalEffectReliable(battlerAtk, battlerDef, move, additionalEffect))
             continue;
 
         if (additionalEffect->moveEffect == MOVE_EFFECT_FLINCH)
