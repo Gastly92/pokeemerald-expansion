@@ -29,12 +29,6 @@
 - Some moves have PP reduced or additional effects removed as they now have 100% accuracy.
 - Moves that previously had 50% accuracy now behave like Hyper Beam and require a recharge turn.
 
-### DETERMINISTIC_ADDITIONAL_EFFECTS
-
-- Additional effects of moves always happen conditionally rather than randomly.
-- For example, the move Fire Punch only leaves a burn if the move was super effective.
-- Moves that raise all stats have been reduced to 1 PP.
-
 ### DETERMINISTIC_ATTRACTION
 
 - Attract can effect any opposing mon rather than requiring the user to be the opposite gender of the target.
@@ -47,10 +41,6 @@
 - Confusion always lasts 2 turns.
 - Rather than battlers randomly hurting themselves in confusion, they only hurt themselves if they use an attacking move.
 - If a battler uses a non attacking move, they snap out of their confusion immediately.
-
-### DETERMINISTIC_FLINCH
-
-- Moves with a flinch effect only cause flinching if the target was not flinched on the previous turn.
 
 ### DETERMINISTIC_FOCUS_BAND
 
