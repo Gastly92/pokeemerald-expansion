@@ -201,10 +201,23 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
     if ((B_SERENE_GRACE_BOOST >= GEN_5 && ability == ABILITY_SERENE_GRACE)
      || ((gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_RAINBOW) && gCurrentMove != MOVE_SECRET_POWER))
         holdEffectParam *= 2;
-    if (ability != ABILITY_STENCH && RandomPercentage(RNG_HOLD_EFFECT_FLINCH, holdEffectParam))
+
+    // FORK: DETERMINISTIC_HOLD_EFFECTS — King's Rock / Razor Fang always flinch the
+    // target on the holder's entry turn (the early-return guards above already exclude
+    // moves that ignore the item or already flinch), regardless of the stock random
+    // roll, then the item is consumed at move end (MOVEEND_DETERMINISTIC_HOLD_CONSUME).
+    bool32 flinches;
+    if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+        flinches = (ability != ABILITY_STENCH) && IsBattlersFirstTurn(battlerAtk);
+    else
+        flinches = (ability != ABILITY_STENCH) && RandomPercentage(RNG_HOLD_EFFECT_FLINCH, holdEffectParam);
+
+    if (flinches)
     {
         SetMoveEffect(battlerAtk, battlerDef, MOVE_EFFECT_FLINCH, gBattlescriptCurrInstr, NO_FLAGS);
         effect = ITEM_EFFECT_OTHER;
+        if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+            gBattleStruct->battlerState[battlerAtk].deterministicHoldConsumePending = TRUE;
     }
 
     return effect;
@@ -1004,7 +1017,31 @@ static enum ItemEffect RandomStatRaiseBerry(enum BattlerId battler, enum Item it
         u32 savedAttacker = gBattlerAttacker;
         // MoodyCantRaiseStat requires that the battler is set to gBattlerAttacker
         gBattlerAttacker = gBattleScripting.battler = battler;
-        stat = RandomUniformExcept(RNG_RANDOM_STAT_UP, STAT_ATK, NUM_STATS - 1, MoodyCantRaiseStat);
+        // FORK: DETERMINISTIC_HOLD_EFFECTS — Starf Berry raises the holder's currently
+        // highest raiseable stat instead of a random one (the only randomness here is
+        // which stat, not whether it activates).
+        if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+        {
+            u32 bestValue = 0;
+            enum Stat bestStat = NUM_STATS;
+            for (enum Stat s = STAT_ATK; s < NUM_STATS; s++)
+            {
+                if (MoodyCantRaiseStat(s))
+                    continue;
+                u32 value = GetStatValueWithStages(battler, s);
+                if (value > bestValue)
+                {
+                    bestValue = value;
+                    bestStat = s;
+                }
+            }
+            // bestStat is always set: stat != NUM_STATS above guarantees a raiseable stat.
+            stat = bestStat;
+        }
+        else
+        {
+            stat = RandomUniformExcept(RNG_RANDOM_STAT_UP, STAT_ATK, NUM_STATS - 1, MoodyCantRaiseStat);
+        }
         gBattlerAttacker = savedAttacker;
 
         if (ability == ABILITY_RIPEN)

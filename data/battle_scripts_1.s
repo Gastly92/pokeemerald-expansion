@@ -5383,9 +5383,15 @@ BattleScript_HangedOnMsg::
 	playanimation BS_TARGET, B_ANIM_HANGED_ON
 	printstring STRINGID_PKMNHUNGONWITHX
 	waitmessage B_WAIT_TIME_LONG
-	jumpifnoholdeffect BS_TARGET, HOLD_EFFECT_FOCUS_SASH, BattleScript_HangedOnMsgRet
+	jumpifhangonitemnotconsumed BattleScript_HangedOnMsgRet
 	removeitem BS_TARGET
 BattleScript_HangedOnMsgRet:
+	return
+
+@ FORK: DETERMINISTIC_HOLD_EFFECTS — consume the attacker's crit/flinch entry item at
+@ move end (called from MOVEEND_DETERMINISTIC_HOLD_CONSUME).
+BattleScript_DeterministicHoldEffectConsume::
+	removeitem BS_ATTACKER
 	return
 
 BattleScript_BerryConfuseHeal::
@@ -5621,6 +5627,9 @@ BattleScript_QuickClawActivation::
 	waitanimation
 	printstring STRINGID_CANACTFASTERTHANKSTO
 	waitmessage B_WAIT_TIME_LONG
+	jumpifnotdeterministicholdeffects BattleScript_QuickClawActivationEnd
+	removeitem BS_ATTACKER
+BattleScript_QuickClawActivationEnd:
 	end2
 
 BattleScript_QuickDrawActivation::

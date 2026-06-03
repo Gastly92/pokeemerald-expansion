@@ -11092,6 +11092,35 @@ void BS_JumpIfCantLoseItem(void)
         gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
+// FORK: DETERMINISTIC_HOLD_EFFECTS — the shared hang-on message consumes the item
+// only for Focus Sash normally; under the flag a Focus Band that survived a lethal
+// hit on its entry turn is also consumed (it behaves like a one-shot Sash). Jump
+// (skip the removeitem) when the holder keeps its item.
+void BS_JumpIfHangOnItemNotConsumed(void)
+{
+    NATIVE_ARGS(const u8 *jumpInstr);
+    enum HoldEffect holdEffect = GetBattlerHoldEffect(gBattlerTarget);
+    bool32 consume = (holdEffect == HOLD_EFFECT_FOCUS_SASH)
+                  || (GetConfig(DETERMINISTIC_HOLD_EFFECTS) && holdEffect == HOLD_EFFECT_FOCUS_BAND);
+
+    if (consume)
+        gBattlescriptCurrInstr = cmd->nextInstr;
+    else
+        gBattlescriptCurrInstr = cmd->jumpInstr;
+}
+
+// FORK: DETERMINISTIC_HOLD_EFFECTS — skip flag-gated item consumption when the flag
+// is off, so stock Quick Claw etc. keep their item.
+void BS_JumpIfNotDeterministicHoldEffects(void)
+{
+    NATIVE_ARGS(const u8 *jumpInstr);
+
+    if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+        gBattlescriptCurrInstr = cmd->nextInstr;
+    else
+        gBattlescriptCurrInstr = cmd->jumpInstr;
+}
+
 void BS_GetBattlerSide(void)
 {
     NATIVE_ARGS(u8 battler);

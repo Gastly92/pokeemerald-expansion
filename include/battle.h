@@ -523,7 +523,8 @@ struct BattlerState
     u16 redCardSwitched:1;
     u16 isFirstTurn:2; // Starts at 2 on switch in and counts down during end turn
     u16 flinchedLastTurn:1; // FORK: DETERMINISTIC_FLINCH — was this battler flinched on the previous turn (anti flinch-lock)
-    u16 padding:10;
+    u16 deterministicHoldConsumePending:1; // FORK: DETERMINISTIC_HOLD_EFFECTS — a guaranteed crit/flinch entry item fired this move; consume at move end
+    u16 padding:9;
     // End of Word
 };
 

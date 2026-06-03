@@ -5044,7 +5044,7 @@ enum Stat GetHighestStatId(enum BattlerId battler)
     return highestId;
 }
 
-static u32 GetStatValueWithStages(enum BattlerId battler, enum Stat stat)
+u32 GetStatValueWithStages(enum BattlerId battler, enum Stat stat)
 {
     u32 statValue;
 
@@ -7978,6 +7978,21 @@ static bool32 IsCriticalHit(struct DamageContext *ctx)
         isCrit = FALSE;
     else if (critChance == CRITICAL_HIT_ALWAYS)
         isCrit = TRUE;
+    // FORK: DETERMINISTIC_HOLD_EFFECTS — a crit-boosting item (Scope Lens / Razor Claw,
+    // Lucky Punch on Chansey, Leek on Farfetch'd) makes the holder's attacks a
+    // guaranteed crit on its entry turn, then the item is consumed at move end. This
+    // restores a purpose for these items under DETERMINISTIC_CRITICAL_HITS (which
+    // otherwise strips the random crit they only nudged). Crit-blocking is honored via
+    // the CRITICAL_HIT_BLOCKED branch above. Only flag consumption on real execution
+    // (updateFlags); AI damage prediction reuses this path but must not mutate state.
+    else if (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
+          && GetHoldEffectCritChanceIncrease(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]) > 0
+          && IsBattlersFirstTurn(ctx->battlerAtk))
+    {
+        isCrit = TRUE;
+        if (ctx->updateFlags)
+            gBattleStruct->battlerState[ctx->battlerAtk].deterministicHoldConsumePending = TRUE;
+    }
     // FORK: with DETERMINISTIC_CRITICAL_HITS a crit never occurs from the random
     // roll. It only lands when guaranteed (handled by CRITICAL_HIT_ALWAYS above:
     // always-crit moves, Laser Focus, Merciless vs. poison) or when crit-ratio
@@ -8040,7 +8055,15 @@ s32 GetAdjustedDamage(struct DamageContext *ctx, s32 damage)
         gLastUsedAbility = ABILITY_STURDY;
         gBattleStruct->moveResultFlags[ctx->battlerDef] |= MOVE_RESULT_STURDIED;
     }
-    else if (ctx->holdEffects[ctx->battlerDef] == HOLD_EFFECT_FOCUS_BAND && rand < GetBattlerHoldEffectParam(ctx->battlerDef))
+    // FORK: DETERMINISTIC_HOLD_EFFECTS turns Focus Band into a Focus Sash that works
+    // from ANY HP but only on the holder's entry turn: it always survives one lethal
+    // hit at 1 HP, then is consumed (BattleScript_HangedOnMsg removes it). Because the
+    // band is consumed after the first strike, a multi-hit move still gets around it
+    // (the next strike finds no band), mirroring Focus Sash.
+    else if (ctx->holdEffects[ctx->battlerDef] == HOLD_EFFECT_FOCUS_BAND
+          && (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
+                  ? IsBattlersFirstTurn(ctx->battlerDef)
+                  : rand < GetBattlerHoldEffectParam(ctx->battlerDef)))
     {
         enduredHit = TRUE;
         RecordItemEffectBattle(ctx->battlerDef, ctx->holdEffects[ctx->battlerDef]);

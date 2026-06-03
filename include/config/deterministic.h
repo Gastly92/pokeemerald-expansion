@@ -101,4 +101,33 @@
 // src/battle_util.c.
 #define DETERMINISTIC_ADDITIONAL_EFFECTS TRUE
 
+// When TRUE, hold items whose effect is a random chance to trigger stop rolling
+// and instead become guaranteed one-shot "entry" items: the effect always
+// activates, but only on the first turn the holder is on the field (its entry
+// turn, whether it leads or switches in mid-battle — see IsBattlersFirstTurn),
+// and the item is then consumed. Covered items (by hold effect, so shared
+// effects come along):
+//   - Focus Band (HOLD_EFFECT_FOCUS_BAND): like a Focus Sash that works from ANY
+//     HP, but only on the entry turn; survives one lethal hit at 1 HP, then is
+//     consumed. As with Focus Sash, a multi-hit move gets around it (the first
+//     strike consumes the band, the next KOs). See GetAdjustedDamage().
+//   - Quick Claw (HOLD_EFFECT_QUICK_CLAW): always moves first within its priority
+//     bracket on the entry turn, regardless of move, then is consumed. See
+//     TryChangingTurnOrderEffects() in battle_main.c.
+//   - Crit items — Scope Lens / Razor Claw (HOLD_EFFECT_SCOPE_LENS), Lucky Punch
+//     (Chansey), Leek/Stick (Farfetch'd): the holder's attacks land a guaranteed
+//     critical hit on the entry turn, then the item is consumed. This composes
+//     with DETERMINISTIC_CRITICAL_HITS (which otherwise removes random crits),
+//     giving the crit-item class a deterministic purpose again. See IsCriticalHit().
+//   - Flinch items — King's Rock / Razor Fang (HOLD_EFFECT_FLINCH): if the move
+//     (and its own additional effect) has no flinch, the holder's attack flinches
+//     the target on the entry turn regardless of lastTurnFlinched, then the item
+//     is consumed. See TryKingsRock() in battle_hold_effects.c.
+// Crit and flinch items are consumed at move end via MOVEEND_DETERMINISTIC_HOLD_CONSUME.
+// Separately, this flag makes Starf Berry's random +2 stat deterministic: it
+// raises the holder's currently-highest stat instead of a random one
+// (RandomStatRaiseBerry). Evasion items (BrightPowder / Lax Incense) are left to
+// a future DETERMINISTIC_ACCURACY_EVASION flag.
+#define DETERMINISTIC_HOLD_EFFECTS TRUE
+
 #endif // GUARD_CONFIG_DETERMINISTIC_H
