@@ -7702,7 +7702,12 @@ s32 DoFixedDamageMoveCalc(struct DamageContext *ctx)
         }
         break;
     case EFFECT_OHKO:
-        dmg = gBattleMons[ctx->battlerDef].hp;
+        // FORK: DETERMINISTIC_ACCURACY_EVASION turns OHKO moves into reliable attacks
+        // that deal a fixed fraction of the target's max HP instead of a full KO.
+        if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+            dmg = gBattleMons[ctx->battlerDef].maxHP * DETERMINISTIC_OHKO_MAX_HP_PERCENT / 100;
+        else
+            dmg = gBattleMons[ctx->battlerDef].hp;
         break;
     case EFFECT_BIDE:
         dmg = gBideDmg[ctx->battlerAtk] * 2;
@@ -10544,6 +10549,66 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     return calc;
 }
 
+// FORK: net accuracy/evasion stage advantage of battlerAtk over battlerDef, after the
+// same overrides GetTotalAccuracy() applies to the hit calc, so DETERMINISTIC_ACCURACY_EVASION's
+// PP economy inherits them: positive = attacker advantage (PP recovered), negative = the
+// target is harder to hit (extra PP). Keen Eye / Unaware / Minds Eye / Illuminate (Gen 9)
+// and — repurposed from their accuracy boosts — Compound Eyes / Victory Star all make the
+// user ignore the target's evasion; Foresight / Miracle Eye / Unaware on the target and
+// MoveIgnoresDefenseEvasionStages do the same. Unaware on the target also nullifies the
+// user's accuracy boosts. Clamped to the same +-6 the hit-calc buff used.
+s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility)
+{
+    s8 accStage = gBattleMons[battlerAtk].statStages[STAT_ACC];
+    s8 evasionStage = gBattleMons[battlerDef].statStages[STAT_EVASION];
+
+    if (atkAbility == ABILITY_UNAWARE || atkAbility == ABILITY_KEEN_EYE || atkAbility == ABILITY_MINDS_EYE
+            || atkAbility == ABILITY_COMPOUND_EYES || atkAbility == ABILITY_VICTORY_STAR
+            || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE))
+        evasionStage = DEFAULT_STAT_STAGE;
+    if (MoveIgnoresDefenseEvasionStages(move))
+        evasionStage = DEFAULT_STAT_STAGE;
+    if (gBattleMons[battlerDef].volatiles.foresight || gBattleMons[battlerDef].volatiles.miracleEye)
+        evasionStage = DEFAULT_STAT_STAGE;
+    if (defAbility == ABILITY_UNAWARE)
+        accStage = DEFAULT_STAT_STAGE;
+
+    s32 delta = (accStage - DEFAULT_STAT_STAGE) - (evasionStage - DEFAULT_STAT_STAGE);
+    if (delta > MAX_STAT_STAGE - DEFAULT_STAT_STAGE)
+        delta = MAX_STAT_STAGE - DEFAULT_STAT_STAGE;
+    if (delta < MIN_STAT_STAGE - DEFAULT_STAT_STAGE)
+        delta = MIN_STAT_STAGE - DEFAULT_STAT_STAGE;
+    return delta;
+}
+
+// FORK: flat extra PP that a single target imposes on `move` under DETERMINISTIC_ACCURACY_EVASION,
+// stacking additively on top of the accuracy/evasion stage economy with no cap. BrightPowder /
+// Lax Incense, Sand Veil (in sand), Snow Cloak (in hail/snow) and Tangled Feet (while confused)
+// each add 1 PP to OFFENSIVE moves; Wonder Skin adds 1 PP to STATUS moves.
+u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect)
+{
+    u32 tax = 0;
+
+    if (IsBattleMoveStatus(move))
+    {
+        if (defAbility == ABILITY_WONDER_SKIN)
+            tax++;
+    }
+    else
+    {
+        u32 weather = GetAttackerWeather(GetBattlerHoldEffect(battlerAtk), GetBattlerAbility(battlerAtk), GetWeather());
+        if (defHoldEffect == HOLD_EFFECT_EVASION_UP)
+            tax++;
+        if (defAbility == ABILITY_SAND_VEIL && (weather & B_WEATHER_SANDSTORM))
+            tax++;
+        if (defAbility == ABILITY_SNOW_CLOAK && (weather & B_WEATHER_ICY_ANY))
+            tax++;
+        if (defAbility == ABILITY_TANGLED_FEET && gBattleMons[battlerDef].volatiles.confusionTurns)
+            tax++;
+    }
+    return tax;
+}
+
 bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv)
 {
     enum OHKOResult {
@@ -10605,9 +10670,23 @@ bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv)
 bool32 DoesMoveMissTarget(struct BattleCalcValues *cv)
 {
     if (GetMoveEffect(cv->move) == EFFECT_OHKO)
+    {
+        // FORK: under DETERMINISTIC_ACCURACY_EVASION an OHKO move is an ordinary
+        // always-hitting attack (it deals a fixed % of max HP, see DoMoveDamageCalc),
+        // so it skips the level/Sturdy/accuracy OHKO gating entirely.
+        if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+            return FALSE;
         return DoesOHKOMoveMissTarget(cv);
+    }
 
     if (CanMoveSkipAccuracyCalc(cv->battlerAtk, cv->battlerDef, cv->abilities[cv->battlerAtk], cv->abilities[cv->battlerDef], cv->move, RUN_SCRIPT))
+        return FALSE;
+
+    // FORK: DETERMINISTIC_ACCURACY_EVASION removes accuracy/evasion as a hit/miss
+    // axis; any move that reaches the accuracy roll now always hits. (Semi-
+    // invulnerability, Protect and immunities are resolved before this gate, in
+    // ResolveMoveEffects, and still make the move avoid the target.)
+    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
         return FALSE;
 
     u32 accuracy = GetTotalAccuracy(

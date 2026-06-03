@@ -1023,6 +1023,49 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         && GetConfig(DETERMINISTIC_PARALYSIS))
         ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
 
+    // FORK: DETERMINISTIC_ACCURACY_EVASION turns accuracy/evasion into a PP economy.
+    // For a move that targets opposing mon(s), the net accuracy/evasion stage advantage
+    // (GetAccEvasionStageDelta, summed over the opposing targets in doubles) recovers PP
+    // when positive and costs PP when negative; flat item/ability taxes
+    // (GetDeterministicMoveTargetPPTax, plus Hustle on the user's physical moves and a
+    // Micle Berry refund) stack additively on top. Extra cost is folded into ppToDeduct
+    // (the move still always spends >= 1 PP, and spends its last PP if it can't pay in
+    // full); recovery is applied after the deduction and clamped to max PP.
+    s32 deterministicPpRefund = 0;
+    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+    {
+        bool32 singleTargetFoe = (moveTarget == TARGET_SELECTED || moveTarget == TARGET_OPPONENT
+                               || moveTarget == TARGET_RANDOM || moveTarget == TARGET_DEPENDS
+                               || moveTarget == TARGET_SMART);
+        bool32 spreadFoe = (moveTarget == TARGET_BOTH || moveTarget == TARGET_FOES_AND_ALLY
+                         || moveTarget == TARGET_ALL_BATTLERS);
+        if (singleTargetFoe || spreadFoe)
+        {
+            enum Ability atkAbility = cv->abilities[cv->battlerAtk];
+            for (u32 t = 0; t < gBattlersCount; t++)
+            {
+                if (t == cv->battlerAtk || IsBattlerAlly(t, cv->battlerAtk) || !IsBattlerAlive(t))
+                    continue;
+                if (singleTargetFoe && t != cv->battlerDef)
+                    continue;
+                enum Ability defAbility = GetBattlerAbility(t);
+                s32 delta = GetAccEvasionStageDelta(cv->battlerAtk, t, cv->move, atkAbility, defAbility);
+                if (delta > 0)
+                    deterministicPpRefund += delta;
+                else
+                    ppToDeduct += -delta;
+                ppToDeduct += GetDeterministicMoveTargetPPTax(cv->battlerAtk, t, cv->move, defAbility, GetBattlerHoldEffect(t));
+            }
+            if (atkAbility == ABILITY_HUSTLE && IsBattleMovePhysical(cv->move))
+                ppToDeduct++;
+        }
+        if (gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry)
+        {
+            gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry = FALSE;
+            deterministicPpRefund++;
+        }
+    }
+
     // For item Metronome, echoed voice
     if (cv->move != gLastResultingMoves[cv->battlerAtk] || gBattleStruct->unableToUseMove)
         gBattleMons[cv->battlerAtk].volatiles.metronomeItemCounter = 0;
@@ -1031,6 +1074,15 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         gBattleMons[cv->battlerAtk].pp[movePosition] -= ppToDeduct;
     else
         gBattleMons[cv->battlerAtk].pp[movePosition] = 0;
+
+    // FORK: DETERMINISTIC_ACCURACY_EVASION PP recovery, applied after the deduction and
+    // clamped to the move's max PP (which is itself accuracy-scaled, see CalculatePPWithBonus).
+    if (deterministicPpRefund > 0)
+    {
+        u32 maxPP = CalculatePPWithBonus(cv->move, gBattleMons[cv->battlerAtk].ppBonuses, movePosition);
+        u32 newPP = gBattleMons[cv->battlerAtk].pp[movePosition] + deterministicPpRefund;
+        gBattleMons[cv->battlerAtk].pp[movePosition] = (newPP > maxPP) ? maxPP : newPP;
+    }
 
     gLastMoves[cv->battlerAtk] = gChosenMove;
 

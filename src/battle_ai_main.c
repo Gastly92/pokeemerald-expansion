@@ -680,6 +680,12 @@ static u32 Ai_SetMoveAccuracy(struct AiLogicData *aiData, enum BattlerId battler
     u32 accuracy;
     enum Ability abilityAtk = aiData->abilities[battlerAtk];
     enum Ability abilityDef = aiData->abilities[battlerDef];
+    // FORK: under DETERMINISTIC_ACCURACY_EVASION every move always hits, so the AI treats
+    // all moves as bypassing the accuracy roll — it then neither shies away from low-
+    // accuracy moves nor credits evasion as a miss chance. The PP cost of accuracy/evasion
+    // is separate and handled by the move-selection PP gate.
+    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+        return BYPASSES_ACCURACY_CALC;
     if (CanMoveSkipAccuracyCalc(battlerAtk, battlerDef, abilityAtk, abilityDef, move, AI_CHECK))
     {
         accuracy = BYPASSES_ACCURACY_CALC;

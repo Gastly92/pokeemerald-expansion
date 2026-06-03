@@ -3375,6 +3375,23 @@ const struct FormChange *GetSpeciesFormChanges(enum Species species)
 u8 CalculatePPWithBonus(enum Move move, u8 ppBonuses, u8 moveIndex)
 {
     u8 basePP = GetMovePP(move);
+    // FORK: DETERMINISTIC_ACCURACY_EVASION makes every move always hit, so an
+    // imperfect-accuracy move would otherwise be strictly better than before. To keep
+    // the cost of inaccuracy, its max PP is scaled down by its base accuracy (a 5 PP /
+    // 80% move becomes 4 PP), amortizing the misses it no longer suffers — the same
+    // idea as DETERMINISTIC_DAMAGE's fixed roll. Only the 50<acc<100 band is scaled;
+    // 100%/0-accuracy moves are exempt, and so are sleep moves (handled as drowsiness)
+    // and OHKO/50% moves (handled as %-damage / recharge), which carry their own change.
+    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+    {
+        u32 acc = GetMoveAccuracy(move);
+        if (acc > 50 && acc < 100 && GetMoveNonVolatileStatus(move) != MOVE_EFFECT_SLEEP)
+        {
+            basePP = (basePP * acc + 50) / 100; // scale by accuracy, rounded to nearest
+            if (basePP == 0)
+                basePP = 1;
+        }
+    }
     return basePP + ((basePP * 20 * ((gPPUpGetMask[moveIndex] & ppBonuses) >> (2 * moveIndex))) / 100);
 }
 
