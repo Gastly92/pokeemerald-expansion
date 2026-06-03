@@ -42,10 +42,6 @@
 - Rather than battlers randomly hurting themselves in confusion, they only hurt themselves if they use an attacking move.
 - If a battler uses a non attacking move, they snap out of their confusion immediately.
 
-### DETERMINISTIC_FOCUS_BAND
-
-- Focus band no longer randomly activates 20% of the time, instead it only activates the first turn the holder is in battle, regardless of their health.
-
 ### DETERMINISTIC_MULTI_HIT
 
 - Multi hit moves always hit 3 times.
@@ -60,10 +56,6 @@
 ### DETERMINISTIC_PROTECT
 
 - Protect always fails if used in succession rather than having a small chance of working on second uses.
-
-### DETERMINISTIC_QUICK_CLAW
-
-- Quick Claw activates immediately and is then consumed rather than only activating 20% of the time.
 
 ### DETERMINISTIC_RAMPAGE
 
