@@ -124,10 +124,12 @@
 //     berry is consumed and the holder's next attack is a guaranteed critical hit
 //     (reusing Laser Focus's volatile), instead of a crit-stage boost that the
 //     deterministic-crit regime can never cash in. See CriticalHitRatioUp().
-//   - Flinch items — King's Rock / Razor Fang (HOLD_EFFECT_FLINCH): if the move
-//     (and its own additional effect) has no flinch, the holder's attack flinches
-//     the target on the entry turn regardless of lastTurnFlinched, then the item
-//     is consumed. See TryKingsRock() in battle_hold_effects.c.
+//   - Flinch items — King's Rock / Razor Fang (HOLD_EFFECT_FLINCH): the holder's
+//     FIRST attack whose move doesn't already flinch flinches the target, then the
+//     item is consumed. Like Fake Out, this flinch is set via SetMoveEffect (not the
+//     additional-effect path), so it bypasses DETERMINISTIC_FLINCH's anti-lock cap
+//     and flinches even a target that flinched last turn. See TryKingsRock() in
+//     battle_hold_effects.c.
 // Crit and flinch items are consumed at move end via MOVEEND_DETERMINISTIC_HOLD_CONSUME.
 // Separately, this flag makes Starf Berry's random +2 stat deterministic: it
 // raises the holder's currently-highest stat instead of a random one

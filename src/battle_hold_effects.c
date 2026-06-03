@@ -202,13 +202,16 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
      || ((gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_RAINBOW) && gCurrentMove != MOVE_SECRET_POWER))
         holdEffectParam *= 2;
 
-    // FORK: DETERMINISTIC_HOLD_EFFECTS — King's Rock / Razor Fang always flinch the
-    // target on the holder's entry turn (the early-return guards above already exclude
-    // moves that ignore the item or already flinch), regardless of the stock random
-    // roll, then the item is consumed at move end (MOVEEND_DETERMINISTIC_HOLD_CONSUME).
+    // FORK: DETERMINISTIC_HOLD_EFFECTS — King's Rock / Razor Fang flinch the target on
+    // the holder's FIRST attack that wouldn't already flinch (the early-return guards
+    // above exclude moves that ignore the item or already flinch, and require a damaging
+    // hit), then the item is consumed at move end (MOVEEND_DETERMINISTIC_HOLD_CONSUME) so
+    // it never re-triggers. The flinch is set via SetMoveEffect, which doesn't pass
+    // through the DETERMINISTIC_FLINCH anti-lock cap (TryTriggerAdditionalEffect), so —
+    // like Fake Out — it flinches even a target that flinched last turn.
     bool32 flinches;
     if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
-        flinches = (ability != ABILITY_STENCH) && IsBattlersFirstTurn(battlerAtk);
+        flinches = (ability != ABILITY_STENCH);
     else
         flinches = (ability != ABILITY_STENCH) && RandomPercentage(RNG_HOLD_EFFECT_FLINCH, holdEffectParam);
 

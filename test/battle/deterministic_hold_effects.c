@@ -170,7 +170,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Lansat Berry makes the holder's 
 // Flinch items (King's Rock family)
 // ---------------------------------------------------------------------------
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock always flinches on the entry turn, then is consumed")
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinches the holder's first qualifying attack, then is consumed")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
@@ -189,6 +189,25 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock always flinches on t
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinch is the first attack, not the first turn")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }
+    } WHEN {
+        // A non-attacking turn 1 doesn't spend the rock; the first attack (turn 2) flinches.
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Celebrate!");   // turn 1: no attack
+        MESSAGE("Wobbuffet used Scratch!");     // turn 2: first attack...
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // ...flinches
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock does not add a flinch to a move that already flinches")
 {
     GIVEN {
@@ -201,6 +220,30 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock does not add a flinc
     } THEN {
         // The move's own flinch effect is untouched, so the band is never spent.
         EXPECT_EQ(player->item, ITEM_KINGS_ROCK);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinches a target that flinched last turn (bypasses the anti-lock cap)")
+{
+    GIVEN {
+        // DETERMINISTIC_FLINCH's anti-lock cap would normally block a flinch on a foe
+        // that flinched last turn; like Fake Out, King's Rock bypasses it.
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_FAKE_OUT, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }
+    } WHEN {
+        // Turn 1 flinches the target via Fake Out (not King's Rock, which a flinching
+        // move never spends), so it enters turn 2 having flinched last turn.
+        TURN { MOVE(player, MOVE_FAKE_OUT); }
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // turn 1, Fake Out
+        MESSAGE("Wobbuffet used Scratch!");
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // turn 2, King's Rock
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
     }
 }
 
