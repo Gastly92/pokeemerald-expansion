@@ -1210,6 +1210,13 @@ static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId b
     if (IsExplosionMove(move))
         return TRUE;
 
+    // FORK: DETERMINISTIC_ACCURACY_EVASION makes a 50%-accurate damaging move lock the
+    // user into a recharge turn (like Hyper Beam) without a MOVE_EFFECT_RECHARGE in its
+    // data; treat that as a downside so the AI prefers an equal-damage move that doesn't
+    // strand it.
+    if (MoveGainsDeterministicRecharge(move))
+        return TRUE;
+
     switch (GetMoveEffect(move))
     {
     case EFFECT_MAX_HP_50_RECOIL:

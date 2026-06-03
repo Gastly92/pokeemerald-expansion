@@ -10609,6 +10609,18 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
     return tax;
 }
 
+// FORK: TRUE when DETERMINISTIC_ACCURACY_EVASION makes `move` lock the user into a
+// Hyper Beam-style recharge turn — a damaging (non-sleep) move that was exactly 50%
+// accurate. Shared by the move-end recharge hook (MOVEEND_DETERMINISTIC_RECHARGE) and
+// the AI so they agree on which moves now recharge.
+bool32 MoveGainsDeterministicRecharge(enum Move move)
+{
+    return GetConfig(DETERMINISTIC_ACCURACY_EVASION)
+        && GetMoveAccuracy(move) == 50
+        && !IsBattleMoveStatus(move)
+        && GetMoveNonVolatileStatus(move) != MOVE_EFFECT_SLEEP;
+}
+
 bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv)
 {
     enum OHKOResult {

@@ -4221,10 +4221,7 @@ static enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValue
 // as drowsiness instead, and the move must have actually connected.
 static enum MoveEndResult MoveEndDeterministicRecharge(struct BattleCalcValues *cv)
 {
-    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION)
-     && GetMoveAccuracy(cv->move) == 50
-     && !IsBattleMoveStatus(cv->move)
-     && GetMoveNonVolatileStatus(cv->move) != MOVE_EFFECT_SLEEP
+    if (MoveGainsDeterministicRecharge(cv->move)
      && gBattleMons[cv->battlerAtk].volatiles.rechargeTimer == 0
      && IsBattlerAlive(cv->battlerAtk)
      && !(gBattleStruct->moveResultFlags[cv->battlerDef] & MOVE_RESULT_NO_EFFECT))
