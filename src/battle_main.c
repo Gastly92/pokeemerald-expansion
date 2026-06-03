@@ -4995,7 +4995,13 @@ static void SetActionsAndBattlersTurnOrder(void)
                 {
                     gActionsByTurnOrder[turnOrderId] = gChosenActionByBattler[battler];
                     gBattlerByTurnOrder[turnOrderId] = battler;
-                    quickClawRandom[battler] = RandomPercentage(RNG_QUICK_CLAW, GetBattlerHoldEffectParam(battler));
+                    // FORK: DETERMINISTIC_HOLD_EFFECTS — Quick Claw always activates on the
+                    // holder's entry turn (and is consumed in BattleScript_QuickClawActivation),
+                    // never thereafter, instead of the stock per-turn random roll.
+                    if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+                        quickClawRandom[battler] = IsBattlersFirstTurn(battler);
+                    else
+                        quickClawRandom[battler] = RandomPercentage(RNG_QUICK_CLAW, GetBattlerHoldEffectParam(battler));
                     quickDrawRandom[battler] = RandomPercentage(RNG_QUICK_DRAW, 30);
                     turnOrderId++;
                 }

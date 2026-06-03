@@ -4135,6 +4135,30 @@ static enum MoveEndResult MoveEndItemOnStatChange(struct BattleCalcValues *cv)
     return MOVEEND_RESULT_CONTINUE;
 }
 
+// FORK: DETERMINISTIC_HOLD_EFFECTS — consume the attacker's crit/flinch entry item
+// (Scope Lens / Razor Claw / Lucky Punch / Leek, King's Rock / Razor Fang) after the
+// move it fired on. IsCriticalHit()/TryKingsRock() set the pending flag; we run a
+// removeitem here once per move.
+static enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValues *cv)
+{
+    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
+
+    if (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
+     && gBattleStruct->battlerState[cv->battlerAtk].deterministicHoldConsumePending)
+    {
+        gBattleStruct->battlerState[cv->battlerAtk].deterministicHoldConsumePending = FALSE;
+        if (gBattleMons[cv->battlerAtk].item != ITEM_NONE)
+        {
+            gLastUsedItem = gBattleMons[cv->battlerAtk].item;
+            BattleScriptCall(BattleScript_DeterministicHoldEffectConsume);
+            result = MOVEEND_RESULT_RUN_SCRIPT;
+        }
+    }
+
+    gBattleScripting.moveendState++;
+    return result;
+}
+
 static enum MoveEndResult MoveEndSendOutReplacements(struct BattleCalcValues *cv)
 {
     while (gBattleStruct->eventState.moveEndBattler < gBattlersCount)
@@ -4411,6 +4435,7 @@ static enum MoveEndResult (*const sMoveEndHandlers[])(struct BattleCalcValues *c
     [MOVEEND_CONFUSION_AFTER_SKY_DROP] = MoveEndConfusionAfterSkyDrop,
     [MOVEEND_SPRAY_LEPPA_BLUNDER] = MoveEndSprayLeppaBlunder,
     [MOVEEND_ITEM_ON_STAT_CHANGE] = MoveEndItemOnStatChange,
+    [MOVEEND_DETERMINISTIC_HOLD_CONSUME] = MoveEndDeterministicHoldConsume, // FORK
     [MOVEEND_SEND_OUT_REPLACEMENTS] = MoveEndSendOutReplacements,
     [MOVEEND_CLEAR_BITS] = MoveEndClearBits,
     [MOVEEND_DANCER] = MoveEndDancer,

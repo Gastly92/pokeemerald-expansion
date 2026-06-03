@@ -335,6 +335,7 @@ bool32 IsAnyTerrainAffected(enum BattlerId battler, enum Ability ability, enum H
 bool32 IsBattlerTerrainAffected(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect, u32 fieldStatuses, u32 terrainFlag);
 enum Stat GetHighestStatId(enum BattlerId battler);
 enum Stat GetParadoxHighestStatId(enum BattlerId battler);
+u32 GetStatValueWithStages(enum BattlerId battler, enum Stat stat); // FORK: DETERMINISTIC_HOLD_EFFECTS (Starf Berry highest-stat pick)
 enum Stat GetParadoxBoostedStatId(enum BattlerId battler);
 
 bool32 CanBeSlept(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability abilityDef, enum SleepClauseBlock isBlockedBySleepClause);

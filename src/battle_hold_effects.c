@@ -201,10 +201,26 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
     if ((B_SERENE_GRACE_BOOST >= GEN_5 && ability == ABILITY_SERENE_GRACE)
      || ((gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_RAINBOW) && gCurrentMove != MOVE_SECRET_POWER))
         holdEffectParam *= 2;
-    if (ability != ABILITY_STENCH && RandomPercentage(RNG_HOLD_EFFECT_FLINCH, holdEffectParam))
+
+    // FORK: DETERMINISTIC_HOLD_EFFECTS — King's Rock / Razor Fang flinch the target on
+    // the holder's FIRST attack that wouldn't already flinch (the early-return guards
+    // above exclude moves that ignore the item or already flinch, and require a damaging
+    // hit), then the item is consumed at move end (MOVEEND_DETERMINISTIC_HOLD_CONSUME) so
+    // it never re-triggers. The flinch is set via SetMoveEffect, which doesn't pass
+    // through the DETERMINISTIC_FLINCH anti-lock cap (TryTriggerAdditionalEffect), so —
+    // like Fake Out — it flinches even a target that flinched last turn.
+    bool32 flinches;
+    if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+        flinches = (ability != ABILITY_STENCH);
+    else
+        flinches = (ability != ABILITY_STENCH) && RandomPercentage(RNG_HOLD_EFFECT_FLINCH, holdEffectParam);
+
+    if (flinches)
     {
         SetMoveEffect(battlerAtk, battlerDef, MOVE_EFFECT_FLINCH, gBattlescriptCurrInstr, NO_FLAGS);
         effect = ITEM_EFFECT_OTHER;
+        if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+            gBattleStruct->battlerState[battlerAtk].deterministicHoldConsumePending = TRUE;
     }
 
     return effect;
@@ -976,7 +992,20 @@ static enum ItemEffect CriticalHitRatioUp(enum BattlerId battler, enum Item item
      && !gBattleMons[battler].volatiles.dragonCheer
      && HasEnoughHpToEatBerry(battler, GetBattlerAbility(battler), GetItemHoldEffectParam(itemId), itemId))
     {
-        gBattleMons[battler].volatiles.focusEnergy = TRUE;
+        // FORK: DETERMINISTIC_HOLD_EFFECTS — once the (deterministic) HP threshold is
+        // reached the berry is consumed and the holder's next attack is a guaranteed
+        // critical hit, mirroring the crit-item family. A plain crit-stage boost (stock
+        // behavior) never lands under DETERMINISTIC_CRITICAL_HITS, so reuse Laser Focus's
+        // "next move always crits" volatile instead, which the AI already reads.
+        if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+        {
+            gBattleMons[battler].volatiles.laserFocus = TRUE;
+            gBattleMons[battler].volatiles.laserFocusTimer = B_LASER_FOCUS_TIMER;
+        }
+        else
+        {
+            gBattleMons[battler].volatiles.focusEnergy = TRUE;
+        }
         BattleScriptCall(BattleScript_BerryFocusEnergy);
         effect = ITEM_EFFECT_OTHER;
     }
@@ -1004,7 +1033,31 @@ static enum ItemEffect RandomStatRaiseBerry(enum BattlerId battler, enum Item it
         u32 savedAttacker = gBattlerAttacker;
         // MoodyCantRaiseStat requires that the battler is set to gBattlerAttacker
         gBattlerAttacker = gBattleScripting.battler = battler;
-        stat = RandomUniformExcept(RNG_RANDOM_STAT_UP, STAT_ATK, NUM_STATS - 1, MoodyCantRaiseStat);
+        // FORK: DETERMINISTIC_HOLD_EFFECTS — Starf Berry raises the holder's currently
+        // highest raiseable stat instead of a random one (the only randomness here is
+        // which stat, not whether it activates).
+        if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+        {
+            u32 bestValue = 0;
+            enum Stat bestStat = NUM_STATS;
+            for (enum Stat s = STAT_ATK; s < NUM_STATS; s++)
+            {
+                if (MoodyCantRaiseStat(s))
+                    continue;
+                u32 value = GetStatValueWithStages(battler, s);
+                if (value > bestValue)
+                {
+                    bestValue = value;
+                    bestStat = s;
+                }
+            }
+            // bestStat is always set: stat != NUM_STATS above guarantees a raiseable stat.
+            stat = bestStat;
+        }
+        else
+        {
+            stat = RandomUniformExcept(RNG_RANDOM_STAT_UP, STAT_ATK, NUM_STATS - 1, MoodyCantRaiseStat);
+        }
         gBattlerAttacker = savedAttacker;
 
         if (ability == ABILITY_RIPEN)
