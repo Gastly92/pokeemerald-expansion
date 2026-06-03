@@ -23,6 +23,7 @@ ASSUMPTIONS
     ASSUME(GetMoveAccuracy(MOVE_ZAP_CANNON) == 50);
     ASSUME(GetMoveAccuracy(MOVE_SWIFT) == 0);
     ASSUME(GetMovePP(MOVE_SWIFT) == 20);
+    ASSUME(gItemsInfo[ITEM_MICLE_BERRY].holdEffect == HOLD_EFFECT_MICLE_BERRY);
 }
 
 SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% move always hits, even into raised evasion")
@@ -148,7 +149,20 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a move spends its last PP ev
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: OHKO moves deal a fixed % of max HP and ignore Sturdy")
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: OHKO moves deal a fixed % of max HP")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_HORN_DRILL); }
+        OPPONENT(SPECIES_WOBBUFFET) { HP(100); MaxHP(100); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_HORN_DRILL); }
+    } THEN {
+        EXPECT_EQ(opponent->hp, 60); // 100 - 40% of max
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: OHKO moves are still blocked by Sturdy")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
@@ -157,7 +171,40 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: OHKO moves deal a fixed % of
     } WHEN {
         TURN { MOVE(player, MOVE_HORN_DRILL); }
     } THEN {
-        EXPECT_EQ(opponent->hp, 60); // 100 - 40% of max
+        EXPECT_EQ(opponent->hp, 100); // Sturdy grants full immunity
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: OHKO moves are still blocked by a higher-level target")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Level(50); Moves(MOVE_HORN_DRILL); }
+        OPPONENT(SPECIES_WOBBUFFET) { Level(100); HP(100); MaxHP(100); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_HORN_DRILL); }
+    } THEN {
+        EXPECT_EQ(opponent->hp, 100); // higher level grants immunity
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: Micle Berry's move ignores the evasion PP tax")
+{
+    u32 item;
+    u32 expectedPP;
+    PARAMETRIZE { item = ITEM_NONE;        expectedPP = 33; } // 35 - 1 (base) - 1 (foe +1 evasion)
+    PARAMETRIZE { item = ITEM_MICLE_BERRY; expectedPP = 35; } // evasion tax ignored (cost 1) + 1 PP refund -> net 0
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        // High Defense so the trigger hit can't KO; player is slower so it takes the hit
+        // (dropping it to <= 1/4 HP and activating Micle) before using Pound that same turn.
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(100); HP(26); Defense(999); Speed(20); Item(item); Moves(MOVE_POUND, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_DOUBLE_TEAM, MOVE_SCRATCH); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // foe +1 evasion
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_SCRATCH); } // Scratch drops player to <=1/4 -> Micle activates, then Pound benefits
+    } THEN {
+        EXPECT_EQ(player->pp[0], expectedPP);
     }
 }
 

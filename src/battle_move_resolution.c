@@ -1027,13 +1027,16 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
     // For a move that targets opposing mon(s), the net accuracy/evasion stage advantage
     // (GetAccEvasionStageDelta, summed over the opposing targets in doubles) recovers PP
     // when positive and costs PP when negative; flat item/ability taxes
-    // (GetDeterministicMoveTargetPPTax, plus Hustle on the user's physical moves and a
-    // Micle Berry refund) stack additively on top. Extra cost is folded into ppToDeduct
-    // (the move still always spends >= 1 PP, and spends its last PP if it can't pay in
-    // full); recovery is applied after the deduction and clamped to max PP.
+    // (GetDeterministicMoveTargetPPTax, plus Hustle on the user's physical moves) stack
+    // additively on top. A consumed Micle Berry makes this move ignore the user's accuracy
+    // drops and the foe's evasion increases (so it is never taxed by them) and refunds a
+    // flat 1 PP. Extra cost is folded into ppToDeduct (the move still always spends >= 1
+    // PP, and spends its last PP if it can't pay in full); recovery is applied after the
+    // deduction and clamped to max PP.
     s32 deterministicPpRefund = 0;
     if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
     {
+        bool32 micleActive = gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry;
         bool32 singleTargetFoe = (moveTarget == TARGET_SELECTED || moveTarget == TARGET_OPPONENT
                                || moveTarget == TARGET_RANDOM || moveTarget == TARGET_DEPENDS
                                || moveTarget == TARGET_SMART);
@@ -1052,7 +1055,7 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
                 if (singleTargetFoe && t != cv->battlerDef)
                     continue;
                 enum Ability defAbility = GetBattlerAbility(t);
-                s32 delta = GetAccEvasionStageDelta(cv->battlerAtk, t, cv->move, atkAbility, defAbility);
+                s32 delta = GetAccEvasionStageDelta(cv->battlerAtk, t, cv->move, atkAbility, defAbility, micleActive);
                 if (delta > 0)
                     deterministicPpRefund += delta;
                 else
@@ -1062,7 +1065,7 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
             if (atkAbility == ABILITY_HUSTLE && IsBattleMovePhysical(cv->move))
                 ppToDeduct++;
         }
-        if (gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry)
+        if (micleActive)
         {
             gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry = FALSE;
             deterministicPpRefund++;

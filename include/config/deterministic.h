@@ -165,11 +165,15 @@
 //     spent. Flat, additive (uncapped) extra costs stack on top: BrightPowder/Lax
 //     Incense, Sand Veil (sand) and Snow Cloak (hail/snow), Tangled Feet (confused)
 //     each add 1 PP to OFFENSIVE moves targeting the holder; Wonder Skin adds 1 PP to
-//     STATUS moves; Hustle adds 1 PP to the user's physical moves; Micle Berry instead
-//     refunds 1 PP on the user's next move.
-//   - OHKO moves (Fissure etc.) become ordinary always-hitting attacks that deal
-//     DETERMINISTIC_OHKO_MAX_HP_PERCENT of the target's max HP (no more level/Sturdy
-//     OHKO gating). See EFFECT_OHKO in DoMoveDamageCalc (src/battle_util.c).
+//     STATUS moves; Hustle adds 1 PP to the user's physical moves. Micle Berry (the old
+//     accuracy berry) instead makes its next move ignore the user's accuracy drops and
+//     the foe's evasion increases — so it is never taxed by them, though it still recovers
+//     PP from boosts/evasion drops — and refunds a flat 1 PP.
+//   - OHKO moves (Fissure etc.) become always-hitting attacks that deal
+//     DETERMINISTIC_OHKO_MAX_HP_PERCENT of the target's max HP instead of a full KO, but
+//     keep the OHKO immunities: Sturdy, Dynamax, a higher-level target and type immunity
+//     all still block them entirely. See DoesOHKOMoveMissTarget and EFFECT_OHKO in
+//     DoMoveDamageCalc (src/battle_util.c).
 //   - Sleep moves that were not 100% accurate (Hypnosis, Sleep Powder, ...) now cause
 //     drowsiness like Yawn instead of sleeping outright; 100%-accurate Spore is
 //     unchanged (Cmd_setnonvolatilestatus in src/battle_script_commands.c).

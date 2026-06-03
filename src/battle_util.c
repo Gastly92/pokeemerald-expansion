@@ -10556,8 +10556,11 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
 // and — repurposed from their accuracy boosts — Compound Eyes / Victory Star all make the
 // user ignore the target's evasion; Foresight / Miracle Eye / Unaware on the target and
 // MoveIgnoresDefenseEvasionStages do the same. Unaware on the target also nullifies the
-// user's accuracy boosts. Clamped to the same +-6 the hit-calc buff used.
-s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility)
+// user's accuracy boosts. When ignorePenalties is set (Micle Berry), the user's accuracy
+// drops and the target's evasion increases are ignored, so the move can still recover PP
+// from boosts/evasion drops but is never taxed by them. Clamped to the same +-6 the
+// hit-calc buff used.
+s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, bool32 ignorePenalties)
 {
     s8 accStage = gBattleMons[battlerAtk].statStages[STAT_ACC];
     s8 evasionStage = gBattleMons[battlerDef].statStages[STAT_EVASION];
@@ -10572,6 +10575,14 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
         evasionStage = DEFAULT_STAT_STAGE;
     if (defAbility == ABILITY_UNAWARE)
         accStage = DEFAULT_STAT_STAGE;
+
+    if (ignorePenalties)
+    {
+        if (accStage < DEFAULT_STAT_STAGE)
+            accStage = DEFAULT_STAT_STAGE;     // ignore the user's accuracy drops
+        if (evasionStage > DEFAULT_STAT_STAGE)
+            evasionStage = DEFAULT_STAT_STAGE; // ignore the target's evasion increases
+    }
 
     s32 delta = (accStage - DEFAULT_STAT_STAGE) - (evasionStage - DEFAULT_STAT_STAGE);
     if (delta > MAX_STAT_STAGE - DEFAULT_STAT_STAGE)
@@ -10648,6 +10659,13 @@ bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv)
         return TRUE;
     }
 
+    // FORK: under DETERMINISTIC_ACCURACY_EVASION an OHKO move that clears the immunity
+    // gates above (Dynamax / higher level / Sturdy, plus type immunity handled earlier)
+    // always lands as an ordinary attack dealing a fixed % of max HP (see DoMoveDamageCalc).
+    // It is deliberately not flagged as a one-hit KO, since it no longer KOs.
+    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+        return FALSE;
+
     enum OHKOResult lands = NO_HIT;
 
     if (gBattleMons[cv->battlerAtk].volatiles.battlerWithSureHit == cv->battlerDef + 1
@@ -10682,14 +10700,7 @@ bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv)
 bool32 DoesMoveMissTarget(struct BattleCalcValues *cv)
 {
     if (GetMoveEffect(cv->move) == EFFECT_OHKO)
-    {
-        // FORK: under DETERMINISTIC_ACCURACY_EVASION an OHKO move is an ordinary
-        // always-hitting attack (it deals a fixed % of max HP, see DoMoveDamageCalc),
-        // so it skips the level/Sturdy/accuracy OHKO gating entirely.
-        if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
-            return FALSE;
         return DoesOHKOMoveMissTarget(cv);
-    }
 
     if (CanMoveSkipAccuracyCalc(cv->battlerAtk, cv->battlerDef, cv->abilities[cv->battlerAtk], cv->abilities[cv->battlerDef], cv->move, RUN_SCRIPT))
         return FALSE;
