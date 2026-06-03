@@ -989,7 +989,20 @@ static enum ItemEffect CriticalHitRatioUp(enum BattlerId battler, enum Item item
      && !gBattleMons[battler].volatiles.dragonCheer
      && HasEnoughHpToEatBerry(battler, GetBattlerAbility(battler), GetItemHoldEffectParam(itemId), itemId))
     {
-        gBattleMons[battler].volatiles.focusEnergy = TRUE;
+        // FORK: DETERMINISTIC_HOLD_EFFECTS — once the (deterministic) HP threshold is
+        // reached the berry is consumed and the holder's next attack is a guaranteed
+        // critical hit, mirroring the crit-item family. A plain crit-stage boost (stock
+        // behavior) never lands under DETERMINISTIC_CRITICAL_HITS, so reuse Laser Focus's
+        // "next move always crits" volatile instead, which the AI already reads.
+        if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
+        {
+            gBattleMons[battler].volatiles.laserFocus = TRUE;
+            gBattleMons[battler].volatiles.laserFocusTimer = B_LASER_FOCUS_TIMER;
+        }
+        else
+        {
+            gBattleMons[battler].volatiles.focusEnergy = TRUE;
+        }
         BattleScriptCall(BattleScript_BerryFocusEnergy);
         effect = ITEM_EFFECT_OTHER;
     }

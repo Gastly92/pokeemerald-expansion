@@ -115,10 +115,15 @@
 //     bracket on the entry turn, regardless of move, then is consumed. See
 //     TryChangingTurnOrderEffects() in battle_main.c.
 //   - Crit items — Scope Lens / Razor Claw (HOLD_EFFECT_SCOPE_LENS), Lucky Punch
-//     (Chansey), Leek/Stick (Farfetch'd): the holder's attacks land a guaranteed
-//     critical hit on the entry turn, then the item is consumed. This composes
-//     with DETERMINISTIC_CRITICAL_HITS (which otherwise removes random crits),
-//     giving the crit-item class a deterministic purpose again. See IsCriticalHit().
+//     (Chansey), Leek/Stick (Farfetch'd): the holder's FIRST landed attack is a
+//     guaranteed critical hit, then the item is consumed (so it applies to the first
+//     attack, not a whole turn). This composes with DETERMINISTIC_CRITICAL_HITS (which
+//     otherwise removes random crits), giving the crit-item class a deterministic
+//     purpose again. See IsCriticalHit().
+//   - Lansat Berry (HOLD_EFFECT_CRITICAL_UP): once its HP threshold is reached the
+//     berry is consumed and the holder's next attack is a guaranteed critical hit
+//     (reusing Laser Focus's volatile), instead of a crit-stage boost that the
+//     deterministic-crit regime can never cash in. See CriticalHitRatioUp().
 //   - Flinch items — King's Rock / Razor Fang (HOLD_EFFECT_FLINCH): if the move
 //     (and its own additional effect) has no flinch, the holder's attack flinches
 //     the target on the entry turn regardless of lastTurnFlinched, then the item

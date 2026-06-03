@@ -103,25 +103,30 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Quick Claw always moves first on
 // Crit-boosting items (Scope Lens family)
 // ---------------------------------------------------------------------------
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Scope Lens guarantees a critical hit on the entry turn, then is consumed")
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Scope Lens guarantees a critical hit on the holder's first attack, then is consumed")
 {
     GIVEN {
         // Compose with DETERMINISTIC_CRITICAL_HITS (the shipped default): the random
-        // crit is gone, so the only crit comes from the entry-turn Scope Lens.
+        // crit is gone, so the only crit comes from the Scope Lens.
         WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
         WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
         PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_SCOPE_LENS); }
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
+        // It is the first *attack* that crits, not the first turn: a status move on
+        // turn 1 doesn't spend the lens, so the turn-2 attack is the one that crits.
+        TURN { MOVE(player, MOVE_CELEBRATE); }
         TURN { MOVE(player, MOVE_SCRATCH); }
     } SCENE {
-        MESSAGE("A critical hit!");
+        MESSAGE("Wobbuffet used Celebrate!"); // turn 1: status move, lens unspent
+        MESSAGE("Wobbuffet used Scratch!");   // turn 2: first attack...
+        MESSAGE("A critical hit!");           // ...crits
     } THEN {
         EXPECT_EQ(player->item, ITEM_NONE);
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a crit-boosting item no longer crits after its entry turn")
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a crit-boosting item only crits on the first attack")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
@@ -132,8 +137,30 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a crit-boosting item no longer c
         TURN { MOVE(player, MOVE_SCRATCH); }
         TURN { MOVE(player, MOVE_SCRATCH); }
     } SCENE {
-        MESSAGE("A critical hit!"); // entry turn
+        MESSAGE("A critical hit!"); // first attack
         NONE_OF { MESSAGE("A critical hit!"); } // item consumed, crits are gone
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Lansat Berry makes the holder's next attack a guaranteed critical hit")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(gItemsInfo[ITEM_LANSAT_BERRY].holdEffect == HOLD_EFFECT_CRITICAL_UP);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_LANSAT_BERRY); HP(101); MaxHP(400); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        // Turn 1 drops the holder past the HP threshold, eating the berry; the next
+        // attack (turn 2) is then a guaranteed crit.
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_SCRATCH); }
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Celebrate!"); // turn 1: holder didn't attack
+        MESSAGE("Wobbuffet used Scratch!");   // turn 2: next attack...
+        MESSAGE("A critical hit!");           // ...is the berry-granted crit
     } THEN {
         EXPECT_EQ(player->item, ITEM_NONE);
     }

@@ -7979,15 +7979,15 @@ static bool32 IsCriticalHit(struct DamageContext *ctx)
     else if (critChance == CRITICAL_HIT_ALWAYS)
         isCrit = TRUE;
     // FORK: DETERMINISTIC_HOLD_EFFECTS — a crit-boosting item (Scope Lens / Razor Claw,
-    // Lucky Punch on Chansey, Leek on Farfetch'd) makes the holder's attacks a
-    // guaranteed crit on its entry turn, then the item is consumed at move end. This
-    // restores a purpose for these items under DETERMINISTIC_CRITICAL_HITS (which
-    // otherwise strips the random crit they only nudged). Crit-blocking is honored via
-    // the CRITICAL_HIT_BLOCKED branch above. Only flag consumption on real execution
-    // (updateFlags); AI damage prediction reuses this path but must not mutate state.
+    // Lucky Punch on Chansey, Leek on Farfetch'd) makes the holder's FIRST landed attack
+    // a guaranteed crit, then the item is consumed at move end (so it applies to the
+    // first attack, not the whole turn). This restores a purpose for these items under
+    // DETERMINISTIC_CRITICAL_HITS (which otherwise strips the random crit they only
+    // nudged). Crit-blocking is honored via the CRITICAL_HIT_BLOCKED branch above. Only
+    // flag consumption on real execution (updateFlags); AI damage prediction reuses this
+    // path but must not mutate state.
     else if (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
-          && GetHoldEffectCritChanceIncrease(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]) > 0
-          && IsBattlersFirstTurn(ctx->battlerAtk))
+          && GetHoldEffectCritChanceIncrease(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]) > 0)
     {
         isCrit = TRUE;
         if (ctx->updateFlags)
