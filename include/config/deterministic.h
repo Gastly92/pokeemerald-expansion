@@ -133,8 +133,59 @@
 // Crit and flinch items are consumed at move end via MOVEEND_DETERMINISTIC_HOLD_CONSUME.
 // Separately, this flag makes Starf Berry's random +2 stat deterministic: it
 // raises the holder's currently-highest stat instead of a random one
-// (RandomStatRaiseBerry). Evasion items (BrightPowder / Lax Incense) are left to
-// a future DETERMINISTIC_ACCURACY_EVASION flag.
+// (RandomStatRaiseBerry). Evasion items (BrightPowder / Lax Incense) are handled
+// by DETERMINISTIC_ACCURACY_EVASION below.
 #define DETERMINISTIC_HOLD_EFFECTS TRUE
+
+// When TRUE, accuracy and evasion stop being a hit/miss coin flip and become a PP
+// economy instead. Stat-stage accuracy/evasion no longer change whether a move
+// lands — every move that reaches the accuracy roll always hits (semi-invulnerable
+// targets, Protect, type/ability immunities etc. are resolved earlier and still
+// avoid the move). What the accuracy/evasion axis does now:
+//   - Max PP scaling: a move whose base accuracy is in the 50<acc<100 band has its
+//     maximum PP scaled down by that accuracy (a 5 PP / 80% move becomes 4 PP),
+//     amortizing the misses it no longer suffers — the same idea as
+//     DETERMINISTIC_DAMAGE's fixed roll. 100%/0-accuracy moves and the specially
+//     handled classes below are exempt. The 50<acc<100 band intentionally carries
+//     no further penalty yet (a knob for that can be added later). See
+//     CalculatePPWithBonus() in src/pokemon.c.
+//   - Per-use PP economy (CancelerPPDeduction in src/battle_move_resolution.c) for a
+//     move that targets an opposing mon, derived from the SAME net accuracy/evasion
+//     stage the hit calc used (so Keen Eye, Unaware, Foresight/Miracle Eye, Minds
+//     Eye, Compound Eyes and Victory Star — which all ignore the target's evasion —
+//     carry over for free, satisfying "abilities that affected accuracy still do"):
+//       * raising the user's accuracy recovers 1 PP per net stage;
+//       * lowering it costs 1 PP per net stage;
+//       * raising the target's evasion costs 1 PP per net stage;
+//       * lowering it recovers 1 PP per net stage.
+//     Accuracy and evasion still cancel (it is one signed net stage). In doubles the
+//     opposing targets' stages are summed, so a +1/-1 split costs a normal 1 PP.
+//     A move always consumes at least 1 PP; recovery is applied after and clamped to
+//     max PP, and if only 1 PP is left when a move would cost more, the last PP is
+//     spent. Flat, additive (uncapped) extra costs stack on top: BrightPowder/Lax
+//     Incense, Sand Veil (sand) and Snow Cloak (hail/snow), Tangled Feet (confused)
+//     each add 1 PP to OFFENSIVE moves targeting the holder; Wonder Skin adds 1 PP to
+//     STATUS moves; Hustle adds 1 PP to the user's physical moves. Micle Berry (the old
+//     accuracy berry) instead makes its next move ignore the user's accuracy drops and
+//     the foe's evasion increases — so it is never taxed by them, though it still recovers
+//     PP from boosts/evasion drops — and refunds a flat 1 PP.
+//   - OHKO moves (Fissure etc.) become always-hitting attacks that deal
+//     DETERMINISTIC_OHKO_MAX_HP_PERCENT of the target's max HP instead of a full KO, but
+//     keep the OHKO immunities: Sturdy, Dynamax, a higher-level target and type immunity
+//     all still block them entirely. See DoesOHKOMoveMissTarget and EFFECT_OHKO in
+//     DoMoveDamageCalc (src/battle_util.c).
+//   - Sleep moves that were not 100% accurate (Hypnosis, Sleep Powder, ...) now cause
+//     drowsiness like Yawn instead of sleeping outright; 100%-accurate Spore is
+//     unchanged (Cmd_setnonvolatilestatus in src/battle_script_commands.c).
+//   - Moves that were exactly 50% accurate (Zap Cannon, Inferno, ...) now require a
+//     recharge turn like Hyper Beam (MOVEEND_DETERMINISTIC_RECHARGE in
+//     src/battle_move_resolution.c).
+// The AI is taught that every move always hits (Ai_SetMoveAccuracy), so it neither
+// avoids low-accuracy moves nor values evasion as a miss chance.
+#define DETERMINISTIC_ACCURACY_EVASION TRUE
+
+// Tuning for DETERMINISTIC_ACCURACY_EVASION (ignored when it is FALSE): the
+// percentage of the target's max HP that a (formerly one-hit-KO) OHKO move deals.
+#define DETERMINISTIC_OHKO_MAX_HP_PERCENT 40
 
 #endif // GUARD_CONFIG_DETERMINISTIC_H

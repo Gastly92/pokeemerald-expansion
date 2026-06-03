@@ -10645,8 +10645,28 @@ static void Cmd_setnonvolatilestatus(void)
             SetNonVolatileStatus(gBattleScripting.battler, gEffectBattler, gBattleScripting.moveEffect, cmd->nextInstr, TRIGGER_ON_ABILITY);
         break;
     case TRIGGER_ON_MOVE:
-        SetNonVolatileStatus(gBattlerAttacker, gBattlerTarget, GetMoveNonVolatileStatus(gCurrentMove), cmd->nextInstr, TRIGGER_ON_MOVE);
+    {
+        enum MoveEffect nonVolatileStatus = GetMoveNonVolatileStatus(gCurrentMove);
+        u32 moveAcc = GetMoveAccuracy(gCurrentMove);
+        // FORK: under DETERMINISTIC_ACCURACY_EVASION, a sleep move that wasn't 100%
+        // accurate causes drowsiness (Yawn) instead of sleeping outright. The move's
+        // earlier trynonvolatilestatus already cleared sleep immunities, so the target
+        // is sleepable here; Spore (100% acc) and 0-acc cases fall through to real sleep.
+        if (GetConfig(DETERMINISTIC_ACCURACY_EVASION)
+            && nonVolatileStatus == MOVE_EFFECT_SLEEP
+            && moveAcc > 0 && moveAcc < 100)
+        {
+            gEffectBattler = gBattlerTarget;
+            gBattleMons[gBattlerTarget].volatiles.yawn = 2;
+            BattleScriptPush(cmd->nextInstr);
+            gBattlescriptCurrInstr = BattleScript_DeterministicSleepBecomesDrowsy;
+        }
+        else
+        {
+            SetNonVolatileStatus(gBattlerAttacker, gBattlerTarget, nonVolatileStatus, cmd->nextInstr, TRIGGER_ON_MOVE);
+        }
         break;
+    }
     case TRIGGER_ON_PROTECT:
         SetNonVolatileStatus(gBattlerTarget, gBattlerAttacker, gBattleScripting.moveEffect, cmd->nextInstr, TRIGGER_ON_PROTECT);
         break;

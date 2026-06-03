@@ -1461,6 +1461,19 @@ static u32 GetBattlerMonData(enum BattlerId battler, struct Pokemon *party, u32 
             battleMon.pp[size] = GetMonData(&party[monId], MON_DATA_PP1 + size);
         }
         battleMon.ppBonuses = GetMonData(&party[monId], MON_DATA_PP_BONUSES);
+        // FORK: DETERMINISTIC_ACCURACY_EVASION scales a move's max PP by its accuracy
+        // (CalculatePPWithBonus). If the stored PP was written under a different config
+        // (the flag toggled after capture, or the per-test baseline), clamp the battle PP
+        // to the live max so current PP never exceeds the scaled maximum.
+        if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+        {
+            for (size = 0; size < MAX_MON_MOVES; size++)
+            {
+                u32 maxPP = CalculatePPWithBonus(battleMon.moves[size], battleMon.ppBonuses, size);
+                if (battleMon.pp[size] > maxPP)
+                    battleMon.pp[size] = maxPP;
+            }
+        }
         battleMon.friendship = GetMonData(&party[monId], MON_DATA_FRIENDSHIP);
         battleMon.experience = GetMonData(&party[monId], MON_DATA_EXP);
         battleMon.hpIV = GetMonData(&party[monId], MON_DATA_HP_IV);

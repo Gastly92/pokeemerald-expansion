@@ -2624,6 +2624,13 @@ BattleScript_MoveEffectYawnFoe::
 	restoretarget
 	return
 
+@ FORK: DETERMINISTIC_ACCURACY_EVASION — a sub-100% sleep move makes the target
+@ drowsy (Yawn) instead of sleeping; the volatile is set in Cmd_setnonvolatilestatus.
+BattleScript_DeterministicSleepBecomesDrowsy::
+	printstring STRINGID_PKMNWASMADEDROWSY
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_PrintAbilityMadeIneffective::
 	pause B_WAIT_TIME_SHORT
 	call BattleScript_AbilityPopUp

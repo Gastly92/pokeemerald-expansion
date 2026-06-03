@@ -1023,6 +1023,55 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         && GetConfig(DETERMINISTIC_PARALYSIS))
         ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
 
+    // FORK: DETERMINISTIC_ACCURACY_EVASION turns accuracy/evasion into a PP economy.
+    // For a move that targets opposing mon(s), the net accuracy/evasion stage advantage
+    // (GetAccEvasionStageDelta, summed over the opposing targets in doubles) recovers PP
+    // when positive and costs PP when negative; flat item/ability taxes
+    // (GetDeterministicMoveTargetPPTax, plus Hustle on the user's physical moves) stack
+    // additively on top. A consumed Micle Berry makes this move ignore the user's accuracy
+    // drops and the foe's evasion increases (so it is never taxed by them) and refunds a
+    // flat 1 PP. Extra cost is folded into ppToDeduct (the move still always spends >= 1
+    // PP, and spends its last PP if it can't pay in full); recovery is applied after the
+    // deduction and clamped to max PP.
+    s32 deterministicPpRefund = 0;
+    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+    {
+        bool32 micleActive = gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry;
+        bool32 singleTargetFoe = (moveTarget == TARGET_SELECTED || moveTarget == TARGET_OPPONENT
+                               || moveTarget == TARGET_RANDOM || moveTarget == TARGET_DEPENDS
+                               || moveTarget == TARGET_SMART);
+        bool32 spreadFoe = (moveTarget == TARGET_BOTH || moveTarget == TARGET_FOES_AND_ALLY
+                         || moveTarget == TARGET_ALL_BATTLERS);
+        // 0-accuracy moves (Swift, Aerial Ace, ...) ignore accuracy/evasion entirely, so
+        // they pay no stage/item evasion taxes — just a flat 1 PP (the Micle refund below
+        // still applies, since it is "regardless of any modifiers").
+        if ((singleTargetFoe || spreadFoe) && GetMoveAccuracy(cv->move) != 0)
+        {
+            enum Ability atkAbility = cv->abilities[cv->battlerAtk];
+            for (u32 t = 0; t < gBattlersCount; t++)
+            {
+                if (t == cv->battlerAtk || IsBattlerAlly(t, cv->battlerAtk) || !IsBattlerAlive(t))
+                    continue;
+                if (singleTargetFoe && t != cv->battlerDef)
+                    continue;
+                enum Ability defAbility = GetBattlerAbility(t);
+                s32 delta = GetAccEvasionStageDelta(cv->battlerAtk, t, cv->move, atkAbility, defAbility, micleActive);
+                if (delta > 0)
+                    deterministicPpRefund += delta;
+                else
+                    ppToDeduct += -delta;
+                ppToDeduct += GetDeterministicMoveTargetPPTax(cv->battlerAtk, t, cv->move, defAbility, GetBattlerHoldEffect(t));
+            }
+            if (atkAbility == ABILITY_HUSTLE && IsBattleMovePhysical(cv->move))
+                ppToDeduct++;
+        }
+        if (micleActive)
+        {
+            gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry = FALSE;
+            deterministicPpRefund++;
+        }
+    }
+
     // For item Metronome, echoed voice
     if (cv->move != gLastResultingMoves[cv->battlerAtk] || gBattleStruct->unableToUseMove)
         gBattleMons[cv->battlerAtk].volatiles.metronomeItemCounter = 0;
@@ -1031,6 +1080,15 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         gBattleMons[cv->battlerAtk].pp[movePosition] -= ppToDeduct;
     else
         gBattleMons[cv->battlerAtk].pp[movePosition] = 0;
+
+    // FORK: DETERMINISTIC_ACCURACY_EVASION PP recovery, applied after the deduction and
+    // clamped to the move's max PP (which is itself accuracy-scaled, see CalculatePPWithBonus).
+    if (deterministicPpRefund > 0)
+    {
+        u32 maxPP = CalculatePPWithBonus(cv->move, gBattleMons[cv->battlerAtk].ppBonuses, movePosition);
+        u32 newPP = gBattleMons[cv->battlerAtk].pp[movePosition] + deterministicPpRefund;
+        gBattleMons[cv->battlerAtk].pp[movePosition] = (newPP > maxPP) ? maxPP : newPP;
+    }
 
     gLastMoves[cv->battlerAtk] = gChosenMove;
 
@@ -4159,6 +4217,26 @@ static enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValue
     return result;
 }
 
+// FORK: under DETERMINISTIC_ACCURACY_EVASION a damaging move that was exactly 50%
+// accurate (Zap Cannon, Inferno, DynamicPunch, ...) now requires a recharge turn like
+// Hyper Beam — set via the same rechargeTimer/gLockedMoves state Hyper Beam uses, so
+// CancelerRecharge forces the recharge next turn. Sleep moves (Dark Void) are handled
+// as drowsiness instead, and the move must have actually connected.
+static enum MoveEndResult MoveEndDeterministicRecharge(struct BattleCalcValues *cv)
+{
+    if (MoveGainsDeterministicRecharge(cv->move)
+     && gBattleMons[cv->battlerAtk].volatiles.rechargeTimer == 0
+     && IsBattlerAlive(cv->battlerAtk)
+     && !(gBattleStruct->moveResultFlags[cv->battlerDef] & MOVE_RESULT_NO_EFFECT))
+    {
+        gBattleMons[cv->battlerAtk].volatiles.rechargeTimer = 2;
+        gLockedMoves[cv->battlerAtk] = cv->move;
+    }
+
+    gBattleScripting.moveendState++;
+    return MOVEEND_RESULT_CONTINUE;
+}
+
 static enum MoveEndResult MoveEndSendOutReplacements(struct BattleCalcValues *cv)
 {
     while (gBattleStruct->eventState.moveEndBattler < gBattlersCount)
@@ -4436,6 +4514,7 @@ static enum MoveEndResult (*const sMoveEndHandlers[])(struct BattleCalcValues *c
     [MOVEEND_SPRAY_LEPPA_BLUNDER] = MoveEndSprayLeppaBlunder,
     [MOVEEND_ITEM_ON_STAT_CHANGE] = MoveEndItemOnStatChange,
     [MOVEEND_DETERMINISTIC_HOLD_CONSUME] = MoveEndDeterministicHoldConsume, // FORK
+    [MOVEEND_DETERMINISTIC_RECHARGE] = MoveEndDeterministicRecharge, // FORK
     [MOVEEND_SEND_OUT_REPLACEMENTS] = MoveEndSendOutReplacements,
     [MOVEEND_CLEAR_BITS] = MoveEndClearBits,
     [MOVEEND_DANCER] = MoveEndDancer,

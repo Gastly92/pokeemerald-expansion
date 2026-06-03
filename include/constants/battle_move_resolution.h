@@ -141,6 +141,7 @@ enum MoveEndState
     MOVEEND_SPRAY_LEPPA_BLUNDER, // Throat Spray, Leppa Berry, Blunder Policy
     MOVEEND_ITEM_ON_STAT_CHANGE,
     MOVEEND_DETERMINISTIC_HOLD_CONSUME, // FORK: DETERMINISTIC_HOLD_EFFECTS — consume a crit/flinch entry item that fired this move
+    MOVEEND_DETERMINISTIC_RECHARGE, // FORK: DETERMINISTIC_ACCURACY_EVASION — a formerly-50%-accurate damaging move requires a recharge turn
     MOVEEND_SEND_OUT_REPLACEMENTS, // For all non-forced switching effects
     MOVEEND_CLEAR_BITS,
     MOVEEND_DANCER,
