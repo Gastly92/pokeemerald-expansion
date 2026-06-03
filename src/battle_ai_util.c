@@ -3713,29 +3713,41 @@ bool32 ShouldTrap(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Mov
 // run-time decision in TryTriggerAdditionalEffect().
 bool32 AI_IsAdditionalEffectReliable(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, const struct AdditionalEffect *additionalEffect)
 {
+    bool32 isFlinch = (additionalEffect->moveEffect == MOVE_EFFECT_FLINCH);
+    bool32 reliable;
+
     if (MoveEffectIsGuaranteed(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect))
-        return TRUE;
-
-    if (additionalEffect->moveEffect == MOVE_EFFECT_FLINCH)
     {
-        if (!GetConfig(DETERMINISTIC_FLINCH))
-            return FALSE;
-        // Fake Out (first-turn-only) is exempt from the anti flinch-lock rule.
-        if (GetMoveEffect(move) == EFFECT_FIRST_TURN_ONLY)
-            return TRUE;
-        return !gBattleStruct->battlerState[battlerDef].flinchedLastTurn;
+        reliable = TRUE;
+    }
+    else if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
+    {
+        // A chance-booster (Serene Grace / Pledge Rainbow) guarantees a non-flinch
+        // effect; flinch is never bypassed and always uses the gate below.
+        if (!isFlinch && CalcSecondaryEffectChance(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect) > additionalEffect->chance)
+        {
+            reliable = TRUE;
+        }
+        else
+        {
+            enum Type moveType = GetBattleMoveType(move);
+            bool32 superEffective = AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) >= UQ_4_12(2.0);
+            reliable = DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));
+        }
+    }
+    else
+    {
+        reliable = FALSE;
     }
 
-    if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
-    {
-        // A chance-booster (Serene Grace / Pledge Rainbow) guarantees the effect.
-        if (CalcSecondaryEffectChance(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect) > additionalEffect->chance)
-            return TRUE;
-        enum Type moveType = GetBattleMoveType(move);
-        bool32 superEffective = AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) >= UQ_4_12(2.0);
-        return DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));
-    }
-    return FALSE;
+    // DETERMINISTIC_FLINCH anti-lock cap mirrors TryTriggerAdditionalEffect: a foe
+    // flinched last turn can't be flinched again (Fake Out / first-turn-only exempt).
+    if (reliable && isFlinch && GetConfig(DETERMINISTIC_FLINCH)
+     && GetMoveEffect(move) != EFFECT_FIRST_TURN_ONLY
+     && gBattleStruct->battlerState[battlerDef].flinchedLastTurn)
+        reliable = FALSE;
+
+    return reliable;
 }
 
 bool32 IsFlinchGuaranteed(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)

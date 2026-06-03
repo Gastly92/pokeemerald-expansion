@@ -59,14 +59,17 @@ plan around. Flags shipped so far (all **enabled**):
 - **`DETERMINISTIC_PARALYSIS`** — paralysis stops being a coin-flip (no random
   full-paralysis miss, no Speed cut) and becomes a flat, predictable tax on PP
   and move priority instead.
-- **`DETERMINISTIC_FLINCH`** — flinch lands every time a flinch move connects,
-  *except* against a target that already flinched last turn, which keeps it
-  reliable without enabling an inescapable flinch-lock.
 - **`DETERMINISTIC_ADDITIONAL_EFFECTS`** — a move's chance-based secondary effect
-  (burn, paralysis, a stat drop, …) is decided by the matchup rather than by a
-  roll: effects on a type that *can* be super effective land only on a super
-  effective hit, while effects on a type that never can (Normal) land only from a
-  STAB user. Guaranteed (100%) effects are unchanged.
+  (burn, paralysis, a flinch, a stat drop, …) is decided by the matchup rather
+  than by a roll: effects on a type that *can* be super effective land only on a
+  super effective hit (Fire Punch burns only a Fire-weak target, Iron Head flinches
+  only a Steel-weak target), while effects on a type that never can (Normal) land
+  only from a STAB user (Body Slam paralyzes / Stomp flinches only from a Normal
+  user). Guaranteed (100%) effects are unchanged.
+- **`DETERMINISTIC_FLINCH`** — layered on top of the rule above: a flinch that
+  passes the super-effective/STAB gate still can't be re-applied to a target that
+  flinched *last* turn, so flinch stays meaningful without letting a fast flincher
+  chain it into an inescapable lock.
 
 More `DETERMINISTIC_*` flags will follow (see [`FORK.md`](FORK.md)). As random
 upsides are removed, the plan is to add balancing systems alongside them — the

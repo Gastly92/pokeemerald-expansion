@@ -9547,38 +9547,56 @@ bool32 DeterministicAdditionalEffectApplies(enum Type moveType, bool32 isSuperEf
 // otherwise (or for guaranteed >= 100% effects) it falls back to the stock
 // RandomPercentage roll on rngElement. percentChance is the already-computed
 // (Serene Grace / Rainbow-adjusted) chance.
+//
+// The two flags COMPOSE for flinch: DETERMINISTIC_ADDITIONAL_EFFECTS decides the
+// base trigger via the super-effective/STAB gate (flinch is gated exactly like any
+// other effect — Iron Head only flinches on a super effective hit, Stomp only from
+// a Normal user), and DETERMINISTIC_FLINCH then adds the anti-lock cap on top (a
+// foe flinched last turn can't be flinched again), so a gated flinch still can't
+// stunlock.
 bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, const struct AdditionalEffect *additionalEffect, u32 percentChance, u32 rngElement)
 {
     // Guaranteed effects (>= 100%) always land; the deterministic flags only
     // replace genuinely chance-based rolls.
     if (percentChance < 100)
     {
-        if (additionalEffect->moveEffect == MOVE_EFFECT_FLINCH)
+        bool32 isFlinch = (additionalEffect->moveEffect == MOVE_EFFECT_FLINCH);
+        bool32 triggers;
+
+        // Base trigger: the deterministic super-effective/STAB gate under
+        // DETERMINISTIC_ADDITIONAL_EFFECTS, else the stock random roll.
+        if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
         {
-            if (GetConfig(DETERMINISTIC_FLINCH))
+            // The stock "double the secondary chance" boosters — Serene Grace and the
+            // Pledge Rainbow — instead make a NON-flinch effect certain: if the
+            // computed chance was boosted above the move's base chance, it bypasses
+            // the gate and always lands. Flinch is never bypassed; it always uses the
+            // gate (and keeps its anti-lock cap below), so boosters can't stunlock.
+            if (!isFlinch && percentChance > additionalEffect->chance)
             {
-                // Fake Out (and any first-turn-only flincher) can never be used on
-                // consecutive turns, so it can't chain flinches and is exempt from
-                // the anti flinch-lock rule — it always flinches.
-                if (GetMoveEffect(move) == EFFECT_FIRST_TURN_ONLY)
-                    return TRUE;
-                return !gBattleStruct->battlerState[battlerDef].flinchedLastTurn;
+                triggers = TRUE;
+            }
+            else
+            {
+                enum Type moveType = GetBattleMoveType(move);
+                bool32 superEffective = (gBattleStruct->moveResultFlags[battlerDef] & MOVE_RESULT_SUPER_EFFECTIVE) != 0;
+                triggers = DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));
             }
         }
-        else if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
+        else
         {
-            // FORK: under determinism, the stock "double the secondary chance"
-            // boosters — Serene Grace and the Pledge Rainbow — instead make the
-            // effect certain: if the computed chance was boosted above the move's
-            // base chance, the effect bypasses the super-effective/STAB gate and
-            // always lands. (Flinch keeps its own anti-lock rule, handled above, so
-            // these boosters can't restore flinch-lock.)
-            if (percentChance > additionalEffect->chance)
-                return TRUE;
-            enum Type moveType = GetBattleMoveType(move);
-            bool32 superEffective = (gBattleStruct->moveResultFlags[battlerDef] & MOVE_RESULT_SUPER_EFFECTIVE) != 0;
-            return DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));
+            triggers = RandomPercentage(rngElement, percentChance);
         }
+
+        // DETERMINISTIC_FLINCH anti-lock cap: a foe flinched last turn can't be
+        // flinched again. Fake Out (and any first-turn-only flincher) can't be used
+        // on consecutive turns, so it can't chain and is exempt.
+        if (triggers && isFlinch && GetConfig(DETERMINISTIC_FLINCH)
+         && GetMoveEffect(move) != EFFECT_FIRST_TURN_ONLY
+         && gBattleStruct->battlerState[battlerDef].flinchedLastTurn)
+            triggers = FALSE;
+
+        return triggers;
     }
     return RandomPercentage(rngElement, percentChance);
 }
