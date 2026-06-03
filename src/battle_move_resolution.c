@@ -1039,7 +1039,10 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
                                || moveTarget == TARGET_SMART);
         bool32 spreadFoe = (moveTarget == TARGET_BOTH || moveTarget == TARGET_FOES_AND_ALLY
                          || moveTarget == TARGET_ALL_BATTLERS);
-        if (singleTargetFoe || spreadFoe)
+        // 0-accuracy moves (Swift, Aerial Ace, ...) ignore accuracy/evasion entirely, so
+        // they pay no stage/item evasion taxes — just a flat 1 PP (the Micle refund below
+        // still applies, since it is "regardless of any modifiers").
+        if ((singleTargetFoe || spreadFoe) && GetMoveAccuracy(cv->move) != 0)
         {
             enum Ability atkAbility = cv->abilities[cv->battlerAtk];
             for (u32 t = 0; t < gBattlersCount; t++)

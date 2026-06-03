@@ -21,6 +21,8 @@ ASSUMPTIONS
     ASSUME(GetMoveAccuracy(MOVE_SPORE) == 100);
     ASSUME(GetMoveNonVolatileStatus(MOVE_SPORE) == MOVE_EFFECT_SLEEP);
     ASSUME(GetMoveAccuracy(MOVE_ZAP_CANNON) == 50);
+    ASSUME(GetMoveAccuracy(MOVE_SWIFT) == 0);
+    ASSUME(GetMovePP(MOVE_SWIFT) == 20);
 }
 
 SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% move always hits, even into raised evasion")
@@ -156,6 +158,20 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: OHKO moves deal a fixed % of
         TURN { MOVE(player, MOVE_HORN_DRILL); }
     } THEN {
         EXPECT_EQ(opponent->hp, 60); // 100 - 40% of max
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 0-accuracy move ignores the evasion PP tax")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_SWIFT, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // opponent +1 evasion
+        TURN { MOVE(player, MOVE_SWIFT); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], 19); // flat 1 PP; the +1 evasion imposes no tax
     }
 }
 
