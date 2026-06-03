@@ -91,10 +91,11 @@
 // DETERMINISTIC_FLINCH (which this flag requires) then adds an anti-lock cap so a
 // gated flinch can't chain into a stunlock. Guaranteed effects (chance >= 100%)
 // always land, unchanged. The stock secondary-chance boosters — Serene Grace and
-// the Pledge Rainbow, which normally just double the odds — instead make a
-// NON-flinch effect certain: the holder bypasses the gate and always lands it.
-// Flinch is never bypassed (it always uses the gate, plus the anti-lock cap), so
-// the boosters can't restore flinch-lock. The AI's effect valuation is taught the
+// the Pledge Rainbow, which normally just double the odds — instead make the
+// effect certain: the holder bypasses the gate and always lands it. This includes
+// flinch, which still keeps DETERMINISTIC_FLINCH's anti-lock cap — so a boosted
+// flinch lands even on a neutral/resisted hit, but still can't be re-applied the
+// next turn, so the boosters can't restore flinch-lock. The AI's valuation is taught the
 // same conditions so it credits an effect exactly when it will actually happen.
 // See TryTriggerAdditionalEffect() and DeterministicAdditionalEffectApplies() in
 // src/battle_util.c.

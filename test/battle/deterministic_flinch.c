@@ -77,10 +77,11 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_FLINCH: a gated flinch still cannot lock a foe
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_FLINCH: Serene Grace does not bypass the flinch super-effective gate")
+SINGLE_BATTLE_TEST("DETERMINISTIC_FLINCH: Serene Grace guarantees a flinch even on a non-gated hit, but still cannot lock")
 {
-    // Serene Grace guarantees NON-flinch secondaries, but flinch is never bypassed:
-    // a neutral Iron Head from a Serene Grace user still does not flinch.
+    // Serene Grace guarantees ALL secondaries, flinch included, so a neutral Iron Head
+    // flinches despite failing the super-effective/STAB gate. The anti-lock cap still
+    // applies, so the foe can't be flinched again the very next turn.
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
         WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
@@ -88,7 +89,11 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_FLINCH: Serene Grace does not bypass the flinc
         OPPONENT(SPECIES_WOBBUFFET) { Speed(50); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
     } WHEN {
         TURN { MOVE(player, MOVE_IRON_HEAD); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_IRON_HEAD); MOVE(opponent, MOVE_CELEBRATE); }
     } SCENE {
+        // Turn 1: Serene Grace guarantees the flinch despite the neutral hit.
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+        // Turn 2: flinched last turn -> anti-lock cap, it gets to move.
         MESSAGE("The opposing Wobbuffet used Celebrate!");
     }
 }

@@ -3722,9 +3722,9 @@ bool32 AI_IsAdditionalEffectReliable(enum BattlerId battlerAtk, enum BattlerId b
     }
     else if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
     {
-        // A chance-booster (Serene Grace / Pledge Rainbow) guarantees a non-flinch
-        // effect; flinch is never bypassed and always uses the gate below.
-        if (!isFlinch && CalcSecondaryEffectChance(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect) > additionalEffect->chance)
+        // A chance-booster (Serene Grace / Pledge Rainbow) guarantees the effect,
+        // flinch included; the anti-lock cap below still applies to a boosted flinch.
+        if (CalcSecondaryEffectChance(battlerAtk, gAiLogicData->abilities[battlerAtk], additionalEffect) > additionalEffect->chance)
         {
             reliable = TRUE;
         }

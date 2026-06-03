@@ -9568,11 +9568,12 @@ bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId batt
         if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS))
         {
             // The stock "double the secondary chance" boosters — Serene Grace and the
-            // Pledge Rainbow — instead make a NON-flinch effect certain: if the
-            // computed chance was boosted above the move's base chance, it bypasses
-            // the gate and always lands. Flinch is never bypassed; it always uses the
-            // gate (and keeps its anti-lock cap below), so boosters can't stunlock.
-            if (!isFlinch && percentChance > additionalEffect->chance)
+            // Pledge Rainbow — instead make the effect certain: if the computed chance
+            // was boosted above the move's base chance, it bypasses the
+            // super-effective/STAB gate and always lands. This includes flinch, which
+            // still keeps its anti-lock cap below — so a boosted flinch lands even on a
+            // neutral/resisted hit, but still can't be re-applied next turn (no lock).
+            if (percentChance > additionalEffect->chance)
             {
                 triggers = TRUE;
             }
