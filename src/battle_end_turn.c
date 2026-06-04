@@ -931,7 +931,10 @@ static bool32 HandleEndTurnYawn(enum BattlerId battler)
             }
             else
             {
-                if (B_SLEEP_TURNS >= GEN_5)
+                // FORK: DETERMINISTIC_STATUS fixes sleep at DETERMINISTIC_SLEEP_TURNS turns.
+                if (GetConfig(DETERMINISTIC_STATUS))
+                    gBattleMons[battler].status1 |= DETERMINISTIC_SLEEP_TURNS;
+                else if (B_SLEEP_TURNS >= GEN_5)
                     gBattleMons[battler].status1 |= (RandomUniform(RNG_SLEEP_TURNS, 2, 4));
                 else if (B_SLEEP_TURNS >= GEN_3)
                     gBattleMons[battler].status1 |= (RandomUniform(RNG_SLEEP_TURNS, 2, 5));

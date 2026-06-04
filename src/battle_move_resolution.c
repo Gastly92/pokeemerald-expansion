@@ -389,6 +389,42 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
 {
     if (gBattleMons[cv->battlerAtk].volatiles.confusionTurns)
     {
+        // FORK: under DETERMINISTIC_STATUS, confusion is a one-time tax decided by the
+        // chosen move. An attacking move makes the battler hit itself once and then
+        // confusion clears; a status move shakes it off for free with no self-hit.
+        // (Infinite confusion never clears, but still obeys the same per-action rule.)
+        if (GetConfig(DETERMINISTIC_STATUS))
+        {
+            bool32 attacking = GetMoveCategory(cv->move) != DAMAGE_CATEGORY_STATUS;
+            bool32 clears = !gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion;
+            if (clears)
+                gBattleMons[cv->battlerAtk].volatiles.confusionTurns = 0;
+            if (attacking)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
+                gBattlerTarget = gBattlerAttacker;
+                struct DamageContext dmgCtx = {0};
+                dmgCtx.battlerAtk = dmgCtx.battlerDef = cv->battlerAtk;
+                dmgCtx.move = dmgCtx.chosenMove = MOVE_NONE;
+                dmgCtx.moveType = TYPE_MYSTERY;
+                dmgCtx.isCrit = FALSE;
+                dmgCtx.randomFactor = FALSE;
+                dmgCtx.updateFlags = TRUE;
+                dmgCtx.isSelfInflicted = TRUE;
+                dmgCtx.fixedBasePower = 40;
+                dmgCtx.abilities[gBattlerAttacker] = cv->abilities[gBattlerAttacker];
+                dmgCtx.holdEffects[gBattlerAttacker] = cv->holdEffects[gBattlerAttacker];
+                gBattleStruct->passiveHpUpdate[cv->battlerAtk] = CalculateMoveDamage(&dmgCtx);
+                gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
+                return CANCELER_RESULT_FAILURE;
+            }
+            if (clears)
+            {
+                BattleScriptCall(BattleScript_MoveUsedIsConfusedNoMore);
+                return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
+            }
+            return CANCELER_RESULT_SUCCESS;
+        }
         if (!gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion)
             gBattleMons[cv->battlerAtk].volatiles.confusionTurns--;
         if (gBattleMons[cv->battlerAtk].volatiles.confusionTurns)
@@ -469,6 +505,23 @@ static enum CancelerResult CancelerInfatuation(struct BattleCalcValues *cv)
     if (gBattleMons[cv->battlerAtk].volatiles.infatuation)
     {
         gBattleScripting.battler = gBattleMons[cv->battlerAtk].volatiles.infatuation - 1;
+        // FORK: under DETERMINISTIC_STATUS infatuation never randomly cancels the
+        // turn. The battler always acts (its moves vs. the loved target deal reduced
+        // damage, applied in the damage calc) and the infatuation is cured after
+        // DETERMINISTIC_INFATUATION_TURNS of its actions.
+        if (GetConfig(DETERMINISTIC_STATUS))
+        {
+            if (gBattleMons[cv->battlerAtk].volatiles.infatuationTimer == 0)
+            {
+                gBattleMons[cv->battlerAtk].volatiles.infatuation = 0;
+                gBattleScripting.battler = cv->battlerAtk;
+                BattleScriptCall(BattleScript_DeterministicInfatuationEnds);
+                return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
+            }
+            gBattleMons[cv->battlerAtk].volatiles.infatuationTimer--;
+            BattleScriptCall(BattleScript_MoveUsedIsInLove);
+            return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
+        }
         if (!RandomPercentage(RNG_INFATUATION, 50))
         {
             BattleScriptCall(BattleScript_MoveUsedIsInLove);
@@ -1387,6 +1440,15 @@ static enum CancelerResult CancelerMoveFailure(struct BattleCalcValues *cv)
         break;
     case EFFECT_PRESENT:
     {
+        // FORK: DETERMINISTIC_MOVE_RESULTS — Present always damages a foe and always
+        // heals an ally (basePower 0 routes to the heal script), keyed off the target's side.
+        if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            bool32 ally = gBattlerTarget != gBattlerAttacker
+                       && GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker);
+            gBattleStruct->presentBasePower = ally ? 0 : DETERMINISTIC_PRESENT_POWER;
+            break;
+        }
         u32 rand = RandomUniform(RNG_PRESENT, 0, 0xFF);
         if (rand < 102)
             gBattleStruct->presentBasePower = 40;
@@ -1934,7 +1996,23 @@ static enum CancelerResult CancelerMoveSpecificMessage(struct BattleCalcValues *
         BattleScriptCall(BattleScript_MagnitudeMessage);
         return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
     case EFFECT_FICKLE_BEAM:
-        gBattleStruct->fickleBeamBoosted = RandomPercentage(RNG_FICKLE_BEAM, 30);
+        // FORK: DETERMINISTIC_MOVE_RESULTS — Fickle Beam only doubles on a super-effective hit.
+        if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            struct DamageContext effCtx = {0};
+            effCtx.battlerAtk = cv->battlerAtk;
+            effCtx.battlerDef = gBattlerTarget;
+            effCtx.move = cv->move;
+            effCtx.moveType = GetBattleMoveType(cv->move);
+            effCtx.updateFlags = FALSE;
+            effCtx.abilities[cv->battlerAtk] = cv->abilities[cv->battlerAtk];
+            effCtx.abilities[gBattlerTarget] = GetBattlerAbility(gBattlerTarget);
+            effCtx.holdEffects[cv->battlerAtk] = cv->holdEffects[cv->battlerAtk];
+            effCtx.holdEffects[gBattlerTarget] = GetBattlerHoldEffect(gBattlerTarget);
+            gBattleStruct->fickleBeamBoosted = CalcTypeEffectivenessMultiplier(&effCtx) >= UQ_4_12(2.0);
+        }
+        else
+            gBattleStruct->fickleBeamBoosted = RandomPercentage(RNG_FICKLE_BEAM, 30);
         if (gBattleStruct->fickleBeamBoosted)
         {
             BattleScriptCall(BattleScript_FickleBeamMessage);
@@ -2378,7 +2456,15 @@ static void SetPossibleNewSmartTarget(u32 move)
 
 static void SetRandomMultiHitCounter()
 {
-    if (GetBattlerHoldEffect(gBattlerAttacker) == HOLD_EFFECT_LOADED_DICE)
+    // FORK: under DETERMINISTIC_MOVE_RESULTS a 2-5 hit move always hits a fixed
+    // number of times; Loaded Dice (like Skill Link) guarantees the maximum.
+    if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+    {
+        gMultiHitCounter = (GetBattlerHoldEffect(gBattlerAttacker) == HOLD_EFFECT_LOADED_DICE)
+                         ? DETERMINISTIC_MULTI_HIT_MAX_COUNT
+                         : DETERMINISTIC_MULTI_HIT_COUNT;
+    }
+    else if (GetBattlerHoldEffect(gBattlerAttacker) == HOLD_EFFECT_LOADED_DICE)
         gMultiHitCounter = RandomUniform(RNG_LOADED_DICE, 4, 5);
     else if (GetConfig(B_MULTI_HIT_CHANCE) >= GEN_5)
         gMultiHitCounter = RandomWeighted(RNG_HITS, 0, 0, 7, 7, 3, 3); // 35%: 2 hits, 35%: 3 hits, 15% 4 hits, 15% 5 hits.
@@ -2400,7 +2486,8 @@ static enum CancelerResult CancelerMultihitMoves(struct BattleCalcValues *cv)
 
         if (ability == ABILITY_SKILL_LINK)
         {
-            gMultiHitCounter = 5;
+            // FORK: DETERMINISTIC_MOVE_RESULTS raises the guaranteed-max hit count.
+            gMultiHitCounter = GetConfig(DETERMINISTIC_MOVE_RESULTS) ? DETERMINISTIC_MULTI_HIT_MAX_COUNT : 5;
         }
         else if (cv->moveEffect == EFFECT_SPECIES_POWER_OVERRIDE
               && gBattleMons[cv->battlerAtk].species == GetMoveSpeciesPowerOverride_Species(cv->move))
@@ -5309,6 +5396,28 @@ static bool32 TryActivatePowderStatus(enum Move move)
 
 static void CalculateMagnitudeDamage(void)
 {
+    // FORK: DETERMINISTIC_MOVE_RESULTS chooses Magnitude's power by the
+    // attacker:target weight ratio (like Heavy Slam) instead of a random tier,
+    // keeping Magnitude's own 10-150 power range.
+    if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+    {
+        u32 targetWeight = GetBattlerWeight(gBattlerTarget);
+        if (targetWeight == 0)
+            targetWeight = 1;
+        u32 ratio = (GetBattlerWeight(gBattlerAttacker) * 10) / targetWeight; // tenths
+        u32 power, magnitudeValue;
+        if      (ratio >= 50) { power = 150; magnitudeValue = 10; }
+        else if (ratio >= 40) { power = 110; magnitudeValue = 9; }
+        else if (ratio >= 30) { power = 90;  magnitudeValue = 8; }
+        else if (ratio >= 20) { power = 70;  magnitudeValue = 7; }
+        else if (ratio >= 15) { power = 50;  magnitudeValue = 6; }
+        else if (ratio >= 10) { power = 30;  magnitudeValue = 5; }
+        else                  { power = 10;  magnitudeValue = 4; }
+        gBattleStruct->magnitudeBasePower = power;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 2, magnitudeValue)
+        return;
+    }
+
     u32 magnitude = RandomUniform(RNG_MAGNITUDE, 0, 99);
 
     if (magnitude < 5)

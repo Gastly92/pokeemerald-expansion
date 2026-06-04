@@ -259,6 +259,8 @@
     F(DETERMINISTIC_HOLD_EFFECTS,      deterministicHoldEffects,      (u32, TRUE)) \
     F(DETERMINISTIC_ACCURACY_EVASION,  deterministicAccuracyEvasion,  (u32, TRUE)) \
     F(DETERMINISTIC_ABILITIES,         deterministicAbilities,        (u32, TRUE)) \
+    F(DETERMINISTIC_STATUS,            deterministicStatus,           (u32, TRUE)) \
+    F(DETERMINISTIC_MOVE_RESULTS,      deterministicMoveResults,      (u32, TRUE)) \
 
 // FORK: the BUFF_* feature flags (config/buff.h) rebalance items and other game
 // functionality, riding the same runtime config system as the DETERMINISTIC_*
