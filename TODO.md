@@ -2,7 +2,7 @@
 
 ### DETERMINISTIC_ABILITIES
 
-- Stench can only attempt flinching on the first turn the battler is out. Takes effect before king's rock like items get consumed.
+- Stench can only attempt flinching on the first turn the battler is out.
 - Static always attempts to set paralysis on contact.
 - Poison Point and Poison Touch always attempt to set poison on contact.
 - Cute charm always attempts to activate on contact, regardless of gender.
@@ -15,11 +15,6 @@
 - Quick Draw only activates the first turn the user is out.
 - Rivalry activates when battlers are of the same type.
 - Harvest always recovers used berries and also heals for 1/16 of max HP in the sun when activating.
-- Moody compares raw stat values: raise the lowest +2, lower the highest -1, ties raise/lower all. Always ignores acc/evasion.
-- Pickup recovers the first valid item: self, then partner, then opposing foe, then across foe.
-- Trace copies the directly-opposing foe's ability in doubles (fallback to the other foe).
-- Forewarn tie-breaks by move slot order (1-4) instead of randomly.
-- Overworld ability RNG (encounter/pickup bias) deferred until the Battle Pyramid survival rework.
 
 ### DETERMINISTIC_ATTRACTION
 

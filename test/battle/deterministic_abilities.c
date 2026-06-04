@@ -280,3 +280,40 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: a Stench holder's King's Rock is no
         EXPECT_EQ(player->item, ITEM_KINGS_ROCK); // King's Rock is left untouched (Stench pre-empts it)
     }
 }
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Quick Draw always moves first on the entry turn, never after")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_SLOWBRO_GALAR) { Ability(ABILITY_QUICK_DRAW); Speed(1); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_SCRATCH); }
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        // Turn 1 (entry turn): Quick Draw activates and the slower holder moves first.
+        ABILITY_POPUP(player, ABILITY_QUICK_DRAW);
+        MESSAGE("Slowbro used Scratch!");
+        MESSAGE("The opposing Wobbuffet used Celebrate!");
+        // Turn 2: not the entry turn, so Quick Draw stays silent and the holder is slow.
+        MESSAGE("The opposing Wobbuffet used Celebrate!");
+        MESSAGE("Slowbro used Scratch!");
+    }
+}
+
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: AI knows Quick Draw lets it move first on its entry turn")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        ASSUME(GetMoveEffect(MOVE_DESTINY_BOND) == EFFECT_DESTINY_BOND);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        // The AI is far slower by raw speed, but Quick Draw guarantees it moves first
+        // on its entry turn. Since the foe can then KO it, the AI should value Destiny
+        // Bond (which is only scored up when the AI predicts going first), proving it
+        // models the Quick Draw turn-order override.
+        PLAYER(SPECIES_WOBBUFFET) { Speed(200); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_SLOWBRO_GALAR) { Ability(ABILITY_QUICK_DRAW); Speed(1); HP(1); MaxHP(200); Moves(MOVE_DESTINY_BOND, MOVE_SCRATCH); }
+    } WHEN {
+        TURN { SCORE_GT(opponent, MOVE_DESTINY_BOND, MOVE_SCRATCH); }
+    }
+}

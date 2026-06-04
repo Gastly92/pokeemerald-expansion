@@ -1504,6 +1504,20 @@ s32 AI_WhoStrikesFirst(enum BattlerId battlerAI, enum BattlerId battler, enum Mo
     else if (abilityAI != ABILITY_STALL && abilityPlayer == ABILITY_STALL)
         return AI_IS_FASTER;
 
+    // FORK: under DETERMINISTIC_ABILITIES, Quick Draw guarantees its holder moves first
+    // within its priority bracket on the holder's entry turn. Model that override (it
+    // beats the raw speed check below, and like the engine ignores Trick Room) so the
+    // AI's turn-order prediction matches what will actually happen.
+    if (GetConfig(DETERMINISTIC_ABILITIES))
+    {
+        bool32 aiQuickDraw = abilityAI == ABILITY_QUICK_DRAW && IsBattlersFirstTurn(battlerAI);
+        bool32 playerQuickDraw = abilityPlayer == ABILITY_QUICK_DRAW && IsBattlersFirstTurn(battler);
+        if (aiQuickDraw && !playerQuickDraw)
+            return AI_IS_FASTER;
+        if (playerQuickDraw && !aiQuickDraw)
+            return AI_IS_SLOWER;
+    }
+
     if (speedBattlerAI > speedBattler)
     {
         if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
