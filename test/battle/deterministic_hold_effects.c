@@ -250,6 +250,26 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinches a target th
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock is not consumed when the faster foe already acted (no flinch lands)")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        ASSUME(gItemsInfo[ITEM_KINGS_ROCK].holdEffect == HOLD_EFFECT_FLINCH);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(1); Item(ITEM_KINGS_ROCK); } // slower: foe acts before the rock hits
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        // The foe has already acted, so the flinch can't land — and the item must survive.
+        NONE_OF {
+            MESSAGE("The King's Rock was used up…");
+            MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+        }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_KINGS_ROCK);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Starf Berry
 // ---------------------------------------------------------------------------
