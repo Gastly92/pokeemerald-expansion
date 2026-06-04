@@ -30,6 +30,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_BELDUM,    { ABILITY_LEVITATE } },
     { SPECIES_METANG,    { ABILITY_LEVITATE } },
     { SPECIES_METAGROSS, { ABILITY_LEVITATE } },
+
+    // The Aggron line is a hulking steel dinosaur: it gains an innate Intimidate
+    // (an *active*, on-switch-in ability) on top of its native Sturdy/Rock Head/
+    // Heavy Metal, demonstrating that innates fire their entry effects, not just
+    // passive trait checks.
+    { SPECIES_ARON,    { ABILITY_INTIMIDATE } },
+    { SPECIES_LAIRON,  { ABILITY_INTIMIDATE } },
+    { SPECIES_AGGRON,  { ABILITY_INTIMIDATE } },
 };
 
 bool32 SpeciesHasInnate(u16 species, enum Ability ability)

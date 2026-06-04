@@ -13,9 +13,11 @@
 ASSUMPTIONS
 {
     ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
-    // The seed datum these tests rely on. If the table changes, update the tests.
+    // The seed data these tests rely on. If the table changes, update the tests.
     ASSUME(SpeciesHasInnate(SPECIES_METAGROSS, ABILITY_LEVITATE));
     ASSUME(gSpeciesInfo[SPECIES_METAGROSS].abilities[0] == ABILITY_CLEAR_BODY);
+    ASSUME(SpeciesHasInnate(SPECIES_AGGRON, ABILITY_INTIMIDATE));
+    ASSUME(gSpeciesInfo[SPECIES_AGGRON].abilities[0] != ABILITY_INTIMIDATE);
 }
 
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Levitate grants Ground immunity")
@@ -90,5 +92,34 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies only the primary abil
         // never an innate.
         ABILITY_POPUP(player, ABILITY_TRACE);
         MESSAGE("It traced the opposing Metagross's Clear Body!");
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate (Intimidate) fires its switch-in effect")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_AGGRON); // native Sturdy, innate Intimidate
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN {}
+    } SCENE {
+        // Innate Intimidate activates on entry, with the pop-up showing Intimidate.
+        ABILITY_POPUP(player, ABILITY_INTIMIDATE);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, opponent);
+        MESSAGE("The opposing Wobbuffet's Attack fell!");
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate does not fire when the feature is off")
+{
+    GIVEN {
+        // Feature off in the test baseline → Aggron's native ability only.
+        PLAYER(SPECIES_AGGRON);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN {}
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_INTIMIDATE); }
     }
 }
