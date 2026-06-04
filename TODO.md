@@ -24,7 +24,7 @@
 
 ## Bugs/Issues
 
-- After a mon hurts themselves in confusion, the volatile should persist and they should snap out of confusion when they make their next move. That way that can't get locked into confusion by a faster foe. AI needs to understand this behavior.
+- After a mon hurts themselves in confusion, the volatile should persist and they should snap out of confusion when they make their next move. That way that can't get locked into confusion by a faster foe. AI needs to understand this behavior. Another idea, when a mon is confused, the next time they attack, they hurt themselves before dealing damage. Then stay confused until they snap out next turn to avoid confusion lock. and perhaps this effect only lasts 2 turns.
 - King's rock gets used up against a quick claw user even though no flinch occurs. It should only get used if it causes a flinch.
 - Moves can pull up a display to show accuracy info by hitting L, this can be replaced with projected PP cost?
 - Battle factory help text still hard codes "three" in some places.
