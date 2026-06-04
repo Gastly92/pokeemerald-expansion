@@ -123,3 +123,26 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate does not fire whe
         NONE_OF { ABILITY_POPUP(player, ABILITY_INTIMIDATE); }
     }
 }
+
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI treats an innate Levitate as Ground immunity")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        // The AI's damage prediction runs through the shared type calc, where the
+        // innate immunity is applied off the battler's real species — so it sees the
+        // immunity with no AI-specific plumbing. With the feature off, Earthquake is
+        // 2x super effective on Steel/Psychic Metagross and the AI prefers it.
+        ASSUME(GetMoveType(MOVE_EARTHQUAKE) == TYPE_GROUND);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY);
+        PLAYER(SPECIES_METAGROSS); // innate Levitate when the feature is on
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_EARTHQUAKE, MOVE_SURF); }
+    } WHEN {
+        if (enabled)
+            TURN { EXPECT_MOVE(opponent, MOVE_SURF); }       // Earthquake would do nothing
+        else
+            TURN { EXPECT_MOVE(opponent, MOVE_EARTHQUAKE); } // 2x super effective on Steel
+    }
+}
