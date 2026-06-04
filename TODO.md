@@ -57,6 +57,13 @@
 
 - Some species have innate abilities that are always active in addition to their single chosen ability.
 - For example, Flygon always has the innate ability levitate.
+- Implemented (trait layer): `FEATURE_INNATE_ABILITIES` flag, fork-owned species->innate
+  table (`src/innate_abilities.c`), and the `BattlerHasAbility()` predicate wired
+  into the field/side queries, the grounding spine, trapping, and the discrete
+  `GetBattlerAbility(...)==` trait checks. See `FORK.md` for the full status.
+- Remaining follow-up: drive **active** on-switch-in innates (Intimidate, weather,
+  etc.) by iterating innates in the ability-activation dispatch (not just the trait
+  predicate), and convert the cached-local `if (ability == X)` checks.
 
 ### FEATURE_NEW_TYPES
 
