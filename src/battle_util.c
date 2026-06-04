@@ -4284,6 +4284,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL))
             {
                 gBattleMons[gBattlerAttacker].volatiles.infatuation = INFATUATED_WITH(gBattlerTarget);
+                if (GetConfig(DETERMINISTIC_STATUS)) // FORK: fixed-duration infatuation
+                    gBattleMons[gBattlerAttacker].volatiles.infatuationTimer = DETERMINISTIC_INFATUATION_TURNS;
                 BattleScriptCall(BattleScript_CuteCharmActivates);
                 effect++;
             }
@@ -7726,6 +7728,15 @@ static inline uq4_12_t GetOtherModifiers(struct DamageContext *ctx)
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderItemsModifier(ctx));
         DAMAGE_MULTIPLY_MODIFIER(GetAttackerItemsModifier(ctx->battlerAtk, ctx->typeEffectivenessModifier, ctx->holdEffects[ctx->battlerAtk]));
     }
+
+    // FORK: under DETERMINISTIC_STATUS, infatuation no longer randomly cancels the turn;
+    // instead the infatuated battler's moves against the mon it loves deal
+    // DETERMINISTIC_INFATUATION_DMG_PERCENT% damage. Applied as a final modifier (so it is
+    // a clean fraction of damage) on the shared calc path, so the AI predicts it too.
+    if (GetConfig(DETERMINISTIC_STATUS)
+        && gBattleMons[ctx->battlerAtk].volatiles.infatuation == INFATUATED_WITH(ctx->battlerDef))
+        DAMAGE_MULTIPLY_MODIFIER(PercentToUQ4_12(DETERMINISTIC_INFATUATION_DMG_PERCENT));
+
     return finalModifier;
 }
 
@@ -9996,7 +10007,10 @@ void SetShellSideArmCategory(void)
 
             special = ((((2 * gBattleMons[battlerAtk].level / 5 + 2) * power * attackerSpAtkStat) / targetSpDefStat) / 50);
 
-            if ((physical > special) || (physical == special && RandomPercentage(RNG_SHELL_SIDE_ARM, 50)))
+            // FORK: DETERMINISTIC_MOVE_RESULTS resolves a projected-damage tie to
+            // physical instead of a coin flip.
+            if ((physical > special)
+                || (physical == special && (GetConfig(DETERMINISTIC_MOVE_RESULTS) || RandomPercentage(RNG_SHELL_SIDE_ARM, 50))))
                 gBattleStruct->shellSideArmCategory[battlerAtk][battlerDef] = DAMAGE_CATEGORY_PHYSICAL;
             else
                 gBattleStruct->shellSideArmCategory[battlerAtk][battlerDef] = DAMAGE_CATEGORY_SPECIAL;
@@ -11165,6 +11179,14 @@ bool32 IsUsableWhileAsleepEffect(enum BattleMoveEffects effect)
 
 void SetWrapTurns(enum BattlerId battler, enum HoldEffect holdEffect)
 {
+    // FORK: DETERMINISTIC_MOVE_RESULTS fixes binding duration (Grip Claw traps longer).
+    if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+    {
+        gBattleMons[battler].volatiles.wrapTurns = (holdEffect == HOLD_EFFECT_GRIP_CLAW)
+                                                 ? DETERMINISTIC_WRAP_GRIP_CLAW_TURNS
+                                                 : DETERMINISTIC_WRAP_TURNS;
+        return;
+    }
     u32 normalWrapTurns = B_WRAP_TURNS - 2; // 5 turns
     if (holdEffect == HOLD_EFFECT_GRIP_CLAW)
         gBattleMons[battler].volatiles.wrapTurns = GetConfig(B_BINDING_TURNS) >= GEN_5 ? B_WRAP_TURNS : normalWrapTurns;
@@ -11307,6 +11329,11 @@ bool32 CanUseMoveConsecutively(enum BattlerId battler)
 
     if (failChances == 1)
         return TRUE;
+
+    // FORK: DETERMINISTIC_MOVE_RESULTS — a Protect-family move used on consecutive
+    // turns always fails instead of keeping a shrinking success chance.
+    if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        return FALSE;
 
     return RandomUniform(RNG_PROTECT_FAIL, 1, failChances) == 1;
 }

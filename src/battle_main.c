@@ -4900,11 +4900,56 @@ static const u8 sBattlerOrders[24][4] =
     { 3, 2, 1, 0 },
 };
 
+// FORK: DETERMINISTIC_MOVE_RESULTS breaks a speed tie by a fixed ladder instead of the
+// random permutation: higher raw base Speed, then lighter weight, then higher
+// remaining-HP%. Returns 1 if battlerAtk wins the tie, -1 if battlerDef wins, or 0 if
+// every rung is also tied (caller falls back to the random order). Under Trick Room the
+// whole ladder is inverted, mirroring the speed axis. Shared with the AI's turn-order
+// prediction (AI_WhoStrikesFirst) so the two never disagree.
+s32 DeterministicSpeedTieWins(enum BattlerId battlerAtk, enum BattlerId battlerDef)
+{
+    s32 result = 0;
+    u32 baseAtk = gSpeciesInfo[gBattleMons[battlerAtk].species].baseSpeed;
+    u32 baseDef = gSpeciesInfo[gBattleMons[battlerDef].species].baseSpeed;
+    if (baseAtk != baseDef)
+    {
+        result = (baseAtk > baseDef) ? 1 : -1;
+    }
+    else
+    {
+        u32 weightAtk = GetBattlerWeight(battlerAtk);
+        u32 weightDef = GetBattlerWeight(battlerDef);
+        if (weightAtk != weightDef)
+        {
+            result = (weightAtk < weightDef) ? 1 : -1; // the lighter battler strikes first
+        }
+        else
+        {
+            // higher remaining-HP% strikes first (cross-multiply to avoid fractions)
+            u32 lhs = gBattleMons[battlerAtk].hp * gBattleMons[battlerDef].maxHP;
+            u32 rhs = gBattleMons[battlerDef].hp * gBattleMons[battlerAtk].maxHP;
+            if (lhs != rhs)
+                result = (lhs > rhs) ? 1 : -1;
+        }
+    }
+
+    if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+        result = -result;
+    return result;
+}
+
 s32 GetWhichBattlerFaster(struct BattleCalcValues *calcValues, bool32 ignoreChosenMoves)
 {
     s32 strikesFirst = GetWhichBattlerFasterOrTies(calcValues, ignoreChosenMoves);
     if (strikesFirst == 0)
     {
+        // FORK: resolve the tie deterministically before falling back to the random order.
+        if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            strikesFirst = DeterministicSpeedTieWins(calcValues->battlerAtk, calcValues->battlerDef);
+            if (strikesFirst != 0)
+                return strikesFirst;
+        }
         s32 order1 = sBattlerOrders[gBattleStruct->speedTieBreaks][calcValues->battlerAtk];
         s32 order2 = sBattlerOrders[gBattleStruct->speedTieBreaks][calcValues->battlerDef];
         if (order1 < order2)

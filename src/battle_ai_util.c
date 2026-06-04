@@ -794,6 +794,18 @@ static inline void CalcDynamicMoveDamage(struct DamageContext *ctx, u16 *medianD
             maximum *= GetMoveSpeciesPowerOverride_NumOfHits(ctx->move);
             random *= GetMoveSpeciesPowerOverride_NumOfHits(ctx->move);
         }
+        else if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            // FORK: the hit count is fixed (Skill Link / Loaded Dice guarantee the max).
+            u32 hits = (ctx->abilities[ctx->battlerAtk] == ABILITY_SKILL_LINK
+                     || ctx->holdEffects[ctx->battlerAtk] == HOLD_EFFECT_LOADED_DICE)
+                     ? DETERMINISTIC_MULTI_HIT_MAX_COUNT
+                     : DETERMINISTIC_MULTI_HIT_COUNT;
+            median *= hits;
+            minimum *= hits;
+            maximum *= hits;
+            random *= hits;
+        }
         else if (ctx->abilities[ctx->battlerAtk] == ABILITY_SKILL_LINK)
         {
             median *= 5;
@@ -1557,6 +1569,18 @@ s32 AI_WhoStrikesFirst(enum BattlerId battlerAI, enum BattlerId battler, enum Mo
     }
     else if (speedBattlerAI == speedBattler)
     {
+        // FORK: under DETERMINISTIC_MOVE_RESULTS the engine breaks a speed tie with a
+        // fixed ladder; mirror it here so the AI's turn-order prediction matches. If
+        // the ladder is also fully tied it falls back to the engine's random order,
+        // which the AI can't see, so keep assuming it moves first (as in stock).
+        if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            s32 tie = DeterministicSpeedTieWins(battlerAI, battler);
+            if (tie > 0)
+                return AI_IS_FASTER;
+            if (tie < 0)
+                return AI_IS_SLOWER;
+        }
         return AI_IS_FASTER;
     }
     else

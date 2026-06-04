@@ -237,4 +237,84 @@
 // These will be revisited with the Battle Pyramid survival rework.
 #define DETERMINISTIC_ABILITIES TRUE
 
+// When TRUE, the non-volatile/volatile status conditions whose effect is a random
+// roll become legible, state-based outcomes:
+//   - Infatuation: the opposite-gender requirement is dropped (matching
+//     DETERMINISTIC_ABILITIES' Cute Charm), it lasts a fixed
+//     DETERMINISTIC_INFATUATION_TURNS turns (decremented each time the infatuated
+//     battler acts, then cured with a message), and instead of the 50% "won't
+//     attack" coin flip the infatuated battler always acts but its moves AGAINST
+//     the loved target deal DETERMINISTIC_INFATUATION_DMG_PERCENT% damage. See
+//     CancelerInfatuation in src/battle_move_resolution.c and the Attract/Cute
+//     Charm application sites.
+//   - Sleep always lasts DETERMINISTIC_SLEEP_TURNS turns (default 2, like Rest)
+//     instead of the random 2-4/2-5/2-8 spread. See the MOVE_EFFECT_SLEEP and
+//     end-of-turn Yawn/Effect-Spore sites.
+//   - Confusion stops being a 2-5 turn chain of self-hit rolls. The confused
+//     battler's next ATTACKING move makes it hit itself once (the usual 40-BP
+//     typeless self-hit) and then confusion clears; a STATUS move shakes it off
+//     for free (no self-hit). So confusion is a one-time tempo/damage tax that a
+//     utility turn can play around. See CancelerConfused.
+// The AI is taught each rule so it values attract/sleep/confusion by what will
+// actually happen.
+#define DETERMINISTIC_STATUS TRUE
+
+// Tuning for DETERMINISTIC_STATUS (ignored when it is FALSE). INFATUATION_TURNS is
+// how many of the infatuated battler's actions the infatuation lasts;
+// INFATUATION_DMG_PERCENT is the damage its moves deal to the loved target while
+// infatuated; SLEEP_TURNS is the fixed sleep duration.
+#define DETERMINISTIC_INFATUATION_TURNS 2
+#define DETERMINISTIC_INFATUATION_DMG_PERCENT 50
+#define DETERMINISTIC_SLEEP_TURNS 2
+
+// When TRUE, the random rolls baked into move outcomes become fixed or
+// state-based, so a move's result is read off the board rather than diced:
+//   - Multi-hit moves that roll 2-5 hits always hit DETERMINISTIC_MULTI_HIT_COUNT
+//     times (default 3); Skill Link and Loaded Dice instead guarantee
+//     DETERMINISTIC_MULTI_HIT_MAX_COUNT (default 6). Fixed-count moves (Triple
+//     Kick, Population Bomb, Beat Up, Dragon Darts) are unaffected. See
+//     SetRandomMultiHitCounter in src/battle_move_resolution.c.
+//   - Protect-family moves used on consecutive turns always fail instead of
+//     keeping a shrinking success chance. See CanUseMoveConsecutively in
+//     src/battle_util.c.
+//   - Rampage moves (Thrash/Outrage/Petal Dance) always last
+//     DETERMINISTIC_RAMPAGE_TURNS turns (default 2). See MOVE_EFFECT_THRASH.
+//   - Speed ties are broken by a fixed ladder instead of a coin flip: higher raw
+//     base Speed, then lighter weight, then higher remaining-HP%, then (only if
+//     still tied) the random permutation. Inverted under Trick Room. The AI's
+//     turn-order prediction uses the same ladder. See GetWhichBattlerFaster /
+//     DeterministicSpeedTieWins in src/battle_main.c and AI_WhoStrikesFirst.
+//   - Binding moves (Wrap/Fire Spin/…) always last DETERMINISTIC_WRAP_TURNS turns
+//     (default 4); a Grip Claw holder traps for DETERMINISTIC_WRAP_GRIP_CLAW_TURNS
+//     (default 7). See SetWrapTurns.
+//   - Tri Attack picks its status by the target's offenses: burn if its Attack is
+//     higher, frostbite if its Sp. Atk is higher, paralysis on a tie. See the
+//     MOVE_EFFECT_TRI_ATTACK site.
+//   - Dire Claw picks by the target's stats: paralysis if its Speed beats either
+//     defense, sleep on a three-way Speed/Def/SpD tie, else poison. See the
+//     MOVE_EFFECT_DIRE_CLAW site.
+//   - Magnitude's power is chosen by the attacker:target weight ratio (like Heavy
+//     Slam) instead of a random tier. See CalculateMagnitudeDamage.
+//   - Present always damages a foe (DETERMINISTIC_PRESENT_POWER base power) and
+//     always heals an ally (1/DETERMINISTIC_PRESENT_HEAL_DENOMINATOR max HP),
+//     keyed off the target's side. See the EFFECT_PRESENT site.
+//   - Fickle Beam only doubles its power on a super-effective hit. See the
+//     EFFECT_FICKLE_BEAM site.
+//   - Shell Side Arm's physical/special pick is deterministic on a projected-damage
+//     tie (defaults to physical) rather than a coin flip. See SetShellSideArmCategory.
+//   - Roar/Whirlwind/Dragon Tail/Red Card drag out the next living party member in
+//     slot order (wrapping) instead of a random one, so party order matters. See
+//     the RNG_FORCE_RANDOM_SWITCH site.
+// The AI is taught each rule so it values these moves by their real outcome.
+#define DETERMINISTIC_MOVE_RESULTS TRUE
+
+// Tuning for DETERMINISTIC_MOVE_RESULTS (ignored when it is FALSE).
+#define DETERMINISTIC_MULTI_HIT_COUNT 3
+#define DETERMINISTIC_MULTI_HIT_MAX_COUNT 6
+#define DETERMINISTIC_RAMPAGE_TURNS 2
+#define DETERMINISTIC_WRAP_TURNS 4
+#define DETERMINISTIC_WRAP_GRIP_CLAW_TURNS 7
+#define DETERMINISTIC_PRESENT_POWER 80
+#define DETERMINISTIC_PRESENT_HEAL_DENOMINATOR 4
+
 #endif // GUARD_CONFIG_DETERMINISTIC_H

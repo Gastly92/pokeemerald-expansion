@@ -2194,7 +2194,10 @@ static void SetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId effec
     switch (effect)
     {
     case MOVE_EFFECT_SLEEP:
-        if (B_SLEEP_TURNS >= GEN_5)
+        // FORK: DETERMINISTIC_STATUS fixes sleep at DETERMINISTIC_SLEEP_TURNS turns.
+        if (GetConfig(DETERMINISTIC_STATUS))
+            gBattleMons[effectBattler].status1 |= STATUS1_SLEEP_TURN(DETERMINISTIC_SLEEP_TURNS);
+        else if (B_SLEEP_TURNS >= GEN_5)
             gBattleMons[effectBattler].status1 |= STATUS1_SLEEP_TURN(RandomUniform(RNG_SLEEP_TURNS, 2, 4));
         else if (B_SLEEP_TURNS >= GEN_3)
             gBattleMons[effectBattler].status1 |= STATUS1_SLEEP_TURN(RandomUniform(RNG_SLEEP_TURNS, 2, 5));
@@ -2474,7 +2477,23 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
             MOVE_EFFECT_FREEZE_OR_FROSTBITE,
             MOVE_EFFECT_PARALYSIS
         };
-        u32 chosenMoveEffect = RandomUniform(RNG_TRI_ATTACK, 0, ARRAY_COUNT(sTriAttackEffects) - 1);
+        u32 chosenMoveEffect;
+        // FORK: DETERMINISTIC_MOVE_RESULTS picks the status that hurts the target's
+        // stronger offense — burn if its Attack is higher, frostbite if its Sp. Atk
+        // is higher, paralysis on a tie.
+        if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            u32 targetAtk = gBattleMons[effectBattler].attack;
+            u32 targetSpAtk = gBattleMons[effectBattler].spAttack;
+            if (targetAtk > targetSpAtk)
+                chosenMoveEffect = 0; // burn
+            else if (targetSpAtk > targetAtk)
+                chosenMoveEffect = 1; // frostbite
+            else
+                chosenMoveEffect = 2; // paralysis
+        }
+        else
+            chosenMoveEffect = RandomUniform(RNG_TRI_ATTACK, 0, ARRAY_COUNT(sTriAttackEffects) - 1);
         if (sTriAttackEffects[chosenMoveEffect] == MOVE_EFFECT_BURN)
             gBattleStruct->triAttackBurn = TRUE;
 
@@ -2572,7 +2591,10 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
         {
             gBattleMons[effectBattler].volatiles.multipleTurns = TRUE;
             gLockedMoves[effectBattler] = gCurrentMove;
-            gBattleMons[effectBattler].volatiles.rampageTurns = RandomUniform(RNG_RAMPAGE_TURNS, 2, B_RAMPAGE_TURNS);
+            // FORK: DETERMINISTIC_MOVE_RESULTS fixes rampage at DETERMINISTIC_RAMPAGE_TURNS turns.
+            gBattleMons[effectBattler].volatiles.rampageTurns = GetConfig(DETERMINISTIC_MOVE_RESULTS)
+                ? DETERMINISTIC_RAMPAGE_TURNS
+                : RandomUniform(RNG_RAMPAGE_TURNS, 2, B_RAMPAGE_TURNS);
         }
         break;
     case MOVE_EFFECT_CLEAR_SMOG:
@@ -2722,7 +2744,24 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
         if (!gBattleMons[effectBattler].status1)
         {
             static const u8 sDireClawEffects[] = { MOVE_EFFECT_POISON, MOVE_EFFECT_PARALYSIS, MOVE_EFFECT_SLEEP };
-            SetMoveEffect(battlerAtk, effectBattler, RandomElement(RNG_DIRE_CLAW, sDireClawEffects), battleScript, effectFlags);
+            u32 direClawEffect;
+            // FORK: DETERMINISTIC_MOVE_RESULTS — paralyze if the target's Speed beats
+            // either defense, sleep on a three-way Speed/Def/SpD tie, else poison.
+            if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+            {
+                u32 targetSpe = gBattleMons[effectBattler].speed;
+                u32 targetDef = gBattleMons[effectBattler].defense;
+                u32 targetSpDef = gBattleMons[effectBattler].spDefense;
+                if (targetSpe > targetDef || targetSpe > targetSpDef)
+                    direClawEffect = MOVE_EFFECT_PARALYSIS;
+                else if (targetSpe == targetDef && targetSpe == targetSpDef)
+                    direClawEffect = MOVE_EFFECT_SLEEP;
+                else
+                    direClawEffect = MOVE_EFFECT_POISON;
+            }
+            else
+                direClawEffect = RandomElement(RNG_DIRE_CLAW, sDireClawEffects);
+            SetMoveEffect(battlerAtk, effectBattler, direClawEffect, battleScript, effectFlags);
         }
         break;
     case MOVE_EFFECT_STEALTH_ROCK:
@@ -7458,7 +7497,24 @@ static void Cmd_forcerandomswitch(void)
             gBattleStruct->battlerPartyIndexes[gBattlerTarget] = gBattlerPartyIndexes[gBattlerTarget];
             gBattlescriptCurrInstr = BattleScript_RoarSuccessSwitch;
             gProtectStructs[gBattlerTarget].forcedSwitch = TRUE;
-            gBattleStruct->monToSwitchIntoId[gBattlerTarget] = validMons[RandomUniform(RNG_FORCE_RANDOM_SWITCH, 0, validMonsCount - 1)];
+            // FORK: DETERMINISTIC_MOVE_RESULTS drags out the next living party member in
+            // slot order (wrapping) instead of a random one, so party order matters.
+            if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+            {
+                u32 currentSlot = gBattlerPartyIndexes[gBattlerTarget];
+                u32 chosenIndex = 0; // wrap to the lowest valid slot by default
+                for (u32 k = 0; k < validMonsCount; k++)
+                {
+                    if (validMons[k] > currentSlot)
+                    {
+                        chosenIndex = k;
+                        break;
+                    }
+                }
+                gBattleStruct->monToSwitchIntoId[gBattlerTarget] = validMons[chosenIndex];
+            }
+            else
+                gBattleStruct->monToSwitchIntoId[gBattlerTarget] = validMons[RandomUniform(RNG_FORCE_RANDOM_SWITCH, 0, validMonsCount - 1)];
             if (!IsMultiBattle())
                 SwitchPartyOrder(gBattlerTarget);
 
@@ -7670,14 +7726,18 @@ static void Cmd_tryinfatuating(void)
     }
     else
     {
+        // FORK: under DETERMINISTIC_STATUS, Attract drops the opposite-gender
+        // requirement and the infatuation lasts a fixed number of the target's turns.
         if (gBattleMons[gBattlerTarget].volatiles.infatuation
-            || !AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget))
+            || (!GetConfig(DETERMINISTIC_STATUS) && !AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget)))
         {
             gBattlescriptCurrInstr = cmd->failInstr;
         }
         else
         {
             gBattleMons[gBattlerTarget].volatiles.infatuation = INFATUATED_WITH(gBattlerAttacker);
+            if (GetConfig(DETERMINISTIC_STATUS))
+                gBattleMons[gBattlerTarget].volatiles.infatuationTimer = DETERMINISTIC_INFATUATION_TURNS;
             gBattlescriptCurrInstr = cmd->nextInstr;
         }
     }
@@ -8504,7 +8564,7 @@ static void Cmd_presentdamagecalculation(void)
     else
     {
         gBattleStruct->moveResultFlags[gBattlerTarget] &= ~(MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
-        SetHealAmount(gBattlerTarget, GetNonDynamaxMaxHP(gBattlerTarget) / 4);
+        SetHealAmount(gBattlerTarget, GetNonDynamaxMaxHP(gBattlerTarget) / (GetConfig(DETERMINISTIC_MOVE_RESULTS) ? DETERMINISTIC_PRESENT_HEAL_DENOMINATOR : 4));
         gBattlescriptCurrInstr = BattleScript_PresentHealTarget;
     }
 }
@@ -12309,9 +12369,12 @@ void BS_TrySetInfatuation(void)
     if (!gBattleMons[gBattlerTarget].volatiles.infatuation
         && gBattleMons[gBattlerTarget].ability != ABILITY_OBLIVIOUS
         && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
-        && AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget))
+        // FORK: DETERMINISTIC_STATUS drops the opposite-gender requirement.
+        && (GetConfig(DETERMINISTIC_STATUS) || AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget)))
     {
         gBattleMons[gBattlerTarget].volatiles.infatuation = INFATUATED_WITH(gBattlerAttacker);
+        if (GetConfig(DETERMINISTIC_STATUS))
+            gBattleMons[gBattlerTarget].volatiles.infatuationTimer = DETERMINISTIC_INFATUATION_TURNS;
         gBattleCommunication[MULTIUSE_STATE] = 2;
         gEffectBattler = gBattlerTarget;
         gBattlescriptCurrInstr = cmd->nextInstr;

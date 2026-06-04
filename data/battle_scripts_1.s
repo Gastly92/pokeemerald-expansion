@@ -4310,6 +4310,13 @@ BattleScript_MoveUsedIsInLoveCantAttack::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
+@ FORK: DETERMINISTIC_STATUS — infatuation reaches its fixed duration and is cured;
+@ the move then proceeds. gBattleScripting.battler is the (now former) infatuated mon.
+BattleScript_DeterministicInfatuationEnds::
+	printstring STRINGID_PKMNGOTOVERITSINFATUATION
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_NightmareTurnDmg::
 	printstring STRINGID_PKMNLOCKEDINNIGHTMARE
 	waitmessage B_WAIT_TIME_LONG
