@@ -1,9 +1,9 @@
-#ifndef GUARD_CONFIG_INNATE_H
-#define GUARD_CONFIG_INNATE_H
+#ifndef GUARD_CONFIG_FEATURE_H
+#define GUARD_CONFIG_FEATURE_H
 
 // FORK: fork-owned config file. The FEATURE_* flags here gate standalone
-// gameplay features this fork layers on top of upstream. FALSE = stock
-// pokeemerald-expansion behavior.
+// gameplay features this fork layers on top of upstream (innate abilities, new
+// types, etc.). FALSE = stock pokeemerald-expansion behavior.
 //
 // These #defines are the *production* defaults. The flags are also registered
 // into the runtime config system (FEATURE_CONFIG_DEFINITIONS in
@@ -28,4 +28,4 @@
 // BattlerHasAbility()/IsInnateActive() (src/battle_util.c).
 #define FEATURE_INNATE_ABILITIES TRUE
 
-#endif // GUARD_CONFIG_INNATE_H
+#endif // GUARD_CONFIG_FEATURE_H

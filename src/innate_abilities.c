@@ -12,7 +12,7 @@
 //
 // This is a deliberately small seed list; expand it as the fork's roster grows.
 // Innates are additive passives, never the battler's copyable/swappable identity
-// (see config/innate.h and BattlerHasAbility() for the exact semantics).
+// (see config/feature.h and BattlerHasAbility() for the exact semantics).
 struct SpeciesInnates
 {
     u16 species;

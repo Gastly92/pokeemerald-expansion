@@ -1,7 +1,7 @@
 #ifndef GUARD_INNATE_ABILITIES_H
 #define GUARD_INNATE_ABILITIES_H
 
-// FORK: innate abilities (FEATURE_INNATE_ABILITIES, config/innate.h).
+// FORK: innate abilities (FEATURE_INNATE_ABILITIES, config/feature.h).
 //
 // Some species carry one or more *innate* abilities that are always active in
 // addition to their single chosen ability. The species->innate mapping lives in

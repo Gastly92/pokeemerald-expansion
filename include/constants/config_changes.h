@@ -273,7 +273,7 @@
 #define BUFF_CONFIG_DEFINITIONS(F) \
     F(BUFF_SHELL_BELL, buffShellBell, (u32, TRUE)) \
 
-// FORK: the FEATURE_* flags (config/innate.h, ...) gate standalone gameplay
+// FORK: the FEATURE_* flags (config/feature.h) gate standalone gameplay
 // features this fork adds, riding the same runtime config system as the
 // DETERMINISTIC_*/BUFF_* flags so battle tests can toggle them per-test with
 // WITH_CONFIG. Production defaults come from the FEATURE_* #defines (seeded into
