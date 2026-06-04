@@ -25,6 +25,7 @@
 ## Bugs/Issues
 
 - After a mon hurts themselves in confusion, the volatile should persist and they should snap out of confusion when they make their next move. That way that can't get locked into confusion by a faster foe. AI needs to understand this behavior.
+- King's rock gets used up against a quick claw user even though no flinch occurs. It should only get used if it causes a flinch.
 - Moves can pull up a display to show accuracy info by hitting L, this can be replaced with projected PP cost?
 - Battle factory help text still hard codes "three" in some places.
 - Battle factory opponent preview should reveal upcoming team info.
