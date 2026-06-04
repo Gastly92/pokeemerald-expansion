@@ -262,3 +262,21 @@ AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: AI avoids contact into a guarant
         TURN { SCORE_LT(opponent, MOVE_CUT, MOVE_ROCK_THROW); }
     }
 }
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: a Stench holder's King's Rock is not consumed when it attacks on the first turn")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        ASSUME(gItemsInfo[ITEM_KINGS_ROCK].holdEffect == HOLD_EFFECT_FLINCH);
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        PLAYER(SPECIES_GRIMER) { Ability(ABILITY_STENCH); Item(ITEM_KINGS_ROCK); Speed(50); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(10); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // Stench's flinch, not King's Rock
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_KINGS_ROCK); // King's Rock is left untouched (Stench pre-empts it)
+    }
+}
