@@ -269,3 +269,19 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 50% accurate move requires
     }
 }
 
+
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: AI won't use a sub-100% sleep move on an already-drowsy foe")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(GetMoveAccuracy(MOVE_HYPNOSIS) > 0 && GetMoveAccuracy(MOVE_HYPNOSIS) < 100);
+        ASSUME(GetMoveNonVolatileStatus(MOVE_HYPNOSIS) == MOVE_EFFECT_SLEEP);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
+        PLAYER(SPECIES_WOBBUFFET) { HP(600); MaxHP(600); }
+        OPPONENT(SPECIES_HYPNO) { Moves(MOVE_HYPNOSIS, MOVE_PSYCHIC); }
+    } WHEN {
+        TURN { EXPECT_MOVE(opponent, MOVE_HYPNOSIS); } // sub-100% sleep -> makes the foe drowsy
+        // Foe is now drowsy, so Hypnosis would be wasted; the AI should attack instead.
+        TURN { SCORE_LT(opponent, MOVE_HYPNOSIS, MOVE_PSYCHIC); }
+    }
+}

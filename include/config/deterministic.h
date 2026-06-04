@@ -188,4 +188,50 @@
 // percentage of the target's max HP that a (formerly one-hit-KO) OHKO move deals.
 #define DETERMINISTIC_OHKO_MAX_HP_PERCENT 40
 
+// When TRUE, abilities whose effect is a random chance (or a random choice) stop
+// rolling and become guaranteed/state-based, so an ability pays off on the matchup
+// and board state rather than luck. Covered abilities (all in src/battle_util.c
+// unless noted):
+//   - Contact status/effect abilities always *attempt* their effect (the usual
+//     immunity/substitute/contact checks still gate it): Static (paralysis),
+//     Poison Point and Poison Touch (poison), Flame Body (burn), Effect Spore
+//     (always drowsiness/Yawn instead of the 3-way poison/paralysis/sleep pick),
+//     Cute Charm (infatuation — and the opposite-gender requirement is dropped, so
+//     it attempts regardless of gender), Toxic Chain (bad poison; the roll in
+//     SetToxicChainPriority in src/battle_script_commands.c), Cursed Body (disable
+//     the used move).
+//   - Stench only attempts its flinch on the holder's first turn on the field
+//     (IsBattlersFirstTurn), but then always does. It resolves at
+//     MOVEEND_ABILITIES_ATTACKER, before attacker hold items, so it lands before a
+//     King's Rock-style flinch item is consumed.
+//   - End-of-turn: Shed Skin always cures status, Healer always cures the ally's
+//     status, Harvest always recovers a used berry (not just in sun / on the 50%
+//     roll) and, when it activates in the sun, also heals 1/16 max HP
+//     (BattleScript_HarvestActivatesSunHeal).
+//   - Quick Draw only activates on the user's first turn on the field
+//     (IsBattlersFirstTurn), but then always moves it first in its bracket — the
+//     attacker-ability mirror of DETERMINISTIC_HOLD_EFFECTS' Quick Claw. See
+//     src/battle_main.c.
+//   - Moody compares the *raw* current values of the five battle stats (Atk/Def/
+//     SpA/SpD/Spe — accuracy/evasion are ALWAYS excluded under this flag, ignoring
+//     B_MOODY_ACC_EVASION), raises the lowest-valued stat by +2 and lowers the
+//     highest-valued by -1; on a tie every tied stat on that side is raised/lowered.
+//     Raw values differ from turn 1 (base stats + nature), so there is no degenerate
+//     all-equal case.
+//   - Pickup recovers the first valid used item in a fixed preference order rather
+//     than a random battler's: self, then partner, then the directly-opposing foe,
+//     then the across foe (each gated by CantPickupItem).
+//   - Trace, in doubles, copies the directly-opposing battler's ability (same flank,
+//     opposite side) when traceable, otherwise the other foe's, instead of choosing
+//     randomly between two valid foes.
+//   - Forewarn breaks ties between equal-power moves by battler/move-slot order
+//     (lowest slot, first opponent) instead of randomly (ForewarnChooseMove).
+//   - Rivalry keys off shared type instead of gender: +25% damage when attacker and
+//     target share a type, -25% when they share none (GetBattlerAbility damage mod).
+// Out of scope (deferred): overworld ability RNG — post-battle Pickup item finds,
+// Cute Charm/Synchronize encounter bias, Static/Magnet Pull/etc. encounter-type
+// bias, Compound Eyes held-item odds, Hustle/Pressure/Vital Spirit encounter level.
+// These will be revisited with the Battle Pyramid survival rework.
+#define DETERMINISTIC_ABILITIES TRUE
+
 #endif // GUARD_CONFIG_DETERMINISTIC_H

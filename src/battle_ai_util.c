@@ -1192,6 +1192,42 @@ static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId ba
     return FALSE;
 }
 
+// FORK: DETERMINISTIC_ABILITIES — TRUE when making contact with battlerDef would
+// guarantee a status on battlerAtk via the defender's always-on contact ability
+// (Static/Flame Body/Poison Point/Effect Spore/Cute Charm) and the attacker can
+// actually receive it. Used to treat such a contact move as a downside.
+static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
+{
+    enum Ability abilityAtk, abilityDef;
+
+    if (!GetConfig(DETERMINISTIC_ABILITIES))
+        return FALSE;
+
+    abilityAtk = gAiLogicData->abilities[battlerAtk];
+    abilityDef = gAiLogicData->abilities[battlerDef];
+
+    if (!AI_MoveMakesContact(battlerAtk, battlerDef, abilityAtk, gAiLogicData->holdEffects[battlerAtk], move))
+        return FALSE;
+
+    switch (abilityDef)
+    {
+    case ABILITY_STATIC:
+        return CanBeParalyzed(battlerDef, battlerAtk, abilityAtk);
+    case ABILITY_FLAME_BODY:
+        return CanBeBurned(battlerDef, battlerAtk, abilityAtk);
+    case ABILITY_POISON_POINT:
+        return CanBePoisoned(battlerDef, battlerAtk, abilityDef, abilityAtk);
+    case ABILITY_EFFECT_SPORE:
+        return CanBeSlept(battlerDef, battlerAtk, abilityAtk, NOT_BLOCKED_BY_SLEEP_CLAUSE);
+    case ABILITY_CUTE_CHARM:
+        return !gBattleMons[battlerAtk].volatiles.infatuation
+            && abilityAtk != ABILITY_OBLIVIOUS
+            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL);
+    default:
+        return FALSE;
+    }
+}
+
 static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
 {
     enum Ability abilityAtk = gAiLogicData->abilities[battlerAtk];
@@ -1206,6 +1242,13 @@ static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId b
             return TRUE;
         }
     }
+
+    // FORK: under DETERMINISTIC_ABILITIES a contact move into a defender whose ability
+    // always inflicts a status on contact is a guaranteed downside (if the attacker
+    // can actually receive it), so the AI treats it as a minus and prefers a
+    // non-contact alternative of equal value.
+    if (AI_DeterministicContactAbilityPunishes(battlerAtk, battlerDef, move))
+        return TRUE;
 
     if (IsExplosionMove(move))
         return TRUE;
@@ -3489,6 +3532,10 @@ bool32 AI_CanPutToSleep(enum BattlerId battlerAtk, enum BattlerId battlerDef, en
     if (!CanBeSlept(battlerAtk, battlerDef, defAbility, BLOCKED_BY_SLEEP_CLAUSE)
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
       || PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))   // shouldn't try to sleep mon that partner is trying to make sleep
+        return FALSE;
+    // FORK: under DETERMINISTIC_ACCURACY_EVASION a sub-100% sleep move only makes the
+    // target drowsy (Yawn); don't waste it on a foe that is already drowsy.
+    if (MoveSleepBecomesDrowsy(move) && gBattleMons[battlerDef].volatiles.yawn)
         return FALSE;
     return TRUE;
 }

@@ -5002,7 +5002,13 @@ static void SetActionsAndBattlersTurnOrder(void)
                         quickClawRandom[battler] = IsBattlersFirstTurn(battler);
                     else
                         quickClawRandom[battler] = RandomPercentage(RNG_QUICK_CLAW, GetBattlerHoldEffectParam(battler));
-                    quickDrawRandom[battler] = RandomPercentage(RNG_QUICK_DRAW, 30);
+                    // FORK: DETERMINISTIC_ABILITIES — Quick Draw always activates, but
+                    // only on the user's entry turn (mirrors Quick Claw above), instead
+                    // of the stock 30% per-turn roll.
+                    if (GetConfig(DETERMINISTIC_ABILITIES))
+                        quickDrawRandom[battler] = IsBattlersFirstTurn(battler);
+                    else
+                        quickDrawRandom[battler] = RandomPercentage(RNG_QUICK_DRAW, 30);
                     turnOrderId++;
                 }
             }

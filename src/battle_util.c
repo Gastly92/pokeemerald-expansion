@@ -1706,6 +1706,20 @@ bool32 MoodyCantRaiseStat(u32 stat)
     return CompareStat(gBattlerAttacker, stat, MAX_STAT_STAGE, CMP_EQUAL, GetBattlerAbility(gBattlerAttacker));
 }
 
+// FORK: raw current value of one of the five battle stats, used by deterministic
+// Moody (DETERMINISTIC_ABILITIES) to pick which stat to raise/lower by value.
+static u32 GetMoodyStatValue(enum BattlerId battler, enum Stat stat)
+{
+    switch (stat)
+    {
+    case STAT_ATK:   return gBattleMons[battler].attack;
+    case STAT_DEF:   return gBattleMons[battler].defense;
+    case STAT_SPEED: return gBattleMons[battler].speed;
+    case STAT_SPATK: return gBattleMons[battler].spAttack;
+    default:         return gBattleMons[battler].spDefense; // STAT_SPDEF
+    }
+}
+
 // gBattlerAttacker is the battler that's trying to lower their stats and due to limitations of RandomUniformExcept, cannot be an argument
 bool32 MoodyCantLowerStat(u32 stat)
 {
@@ -2100,7 +2114,10 @@ static void ForewarnChooseMove(enum BattlerId battler)
         }
     }
 
-    if (tieCount > 1)
+    // FORK: under DETERMINISTIC_ABILITIES, don't randomly tie-break equal-power
+    // moves — keep bestId at the first one (lowest slot, first opponent), which the
+    // scan above already selected.
+    if (tieCount > 1 && !GetConfig(DETERMINISTIC_ABILITIES))
     {
         u32 tieIndex = RandomUniform(RNG_FOREWARN, 0, tieCount - 1);
         for (i = 0, bestId = 0; i < count; i++)
@@ -2978,7 +2995,15 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 {
                     if (!gAbilitiesInfo[gBattleMons[target1].ability].cantBeTraced && gBattleMons[target1].hp != 0
                         && !gAbilitiesInfo[gBattleMons[target2].ability].cantBeTraced && gBattleMons[target2].hp != 0)
-                        chosenTarget = GetBattlerAtPosition((RandomPercentage(RNG_TRACE, 50) * 2) | side), effect++;
+                    {
+                        // FORK: under DETERMINISTIC_ABILITIES, copy the directly-opposing
+                        // battler (same flank, opposite side) instead of a random foe.
+                        if (GetConfig(DETERMINISTIC_ABILITIES))
+                            chosenTarget = (GetBattlerPosition(battler) & BIT_FLANK) ? target2 : target1;
+                        else
+                            chosenTarget = GetBattlerAtPosition((RandomPercentage(RNG_TRACE, 50) * 2) | side);
+                        effect++;
+                    }
                     else if (!gAbilitiesInfo[gBattleMons[target1].ability].cantBeTraced && gBattleMons[target1].hp != 0)
                         chosenTarget = target1, effect++;
                     else if (!gAbilitiesInfo[gBattleMons[target2].ability].cantBeTraced && gBattleMons[target2].hp != 0)
@@ -3525,22 +3550,59 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 if (gBattleMons[battler].item == ITEM_NONE
                  && PickupHasValidTarget(battler))
                 {
-                    gBattlerTarget = RandomUniformExcept(RNG_PICKUP, 0, gBattlersCount - 1, CantPickupItem);
+                    if (GetConfig(DETERMINISTIC_ABILITIES))
+                    {
+                        // FORK: recover the first valid used item in a fixed preference
+                        // order instead of a random valid battler: self, partner, the
+                        // directly-opposing foe, then the across foe.
+                        enum BattlerId order[4] = {
+                            battler,
+                            BATTLE_PARTNER(battler),
+                            BATTLE_OPPOSITE(battler),
+                            BATTLE_PARTNER(BATTLE_OPPOSITE(battler)),
+                        };
+                        for (u32 idx = 0; idx < ARRAY_COUNT(order); idx++)
+                        {
+                            if (order[idx] < gBattlersCount && !CantPickupItem(order[idx]))
+                            {
+                                gBattlerTarget = order[idx];
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        gBattlerTarget = RandomUniformExcept(RNG_PICKUP, 0, gBattlersCount - 1, CantPickupItem);
+                    }
                     gLastUsedItem = GetBattlerPartyState(gBattlerTarget)->usedHeldItem;
                     BattleScriptCall(BattleScript_PickupActivates);
                     effect++;
                 }
                 break;
             case ABILITY_HARVEST:
-                if ((IsBattlerWeatherAffected(GetBattlerHoldEffect(battler), GetWeather(), B_WEATHER_SUN) || RandomPercentage(RNG_HARVEST, 50))
+            {
+                bool32 inSun = IsBattlerWeatherAffected(GetBattlerHoldEffect(battler), GetWeather(), B_WEATHER_SUN);
+                // FORK: under DETERMINISTIC_ABILITIES, Harvest always recovers a used
+                // berry (not just in sun / on the 50% roll); when it activates in the
+                // sun it additionally heals 1/16 of max HP.
+                if ((GetConfig(DETERMINISTIC_ABILITIES) || inSun || RandomPercentage(RNG_HARVEST, 50))
                  && gBattleMons[battler].item == ITEM_NONE
                  && GetItemPocket(GetBattlerPartyState(battler)->usedHeldItem) == POCKET_BERRIES)
                 {
                     gLastUsedItem = GetBattlerPartyState(battler)->usedHeldItem;
-                    BattleScriptCall(BattleScript_HarvestActivates);
+                    if (GetConfig(DETERMINISTIC_ABILITIES) && inSun && !IsBattlerAtMaxHp(battler) && !gBattleMons[battler].volatiles.healBlock)
+                    {
+                        SetHealAmount(battler, GetNonDynamaxMaxHP(battler) / 16);
+                        BattleScriptCall(BattleScript_HarvestActivatesSunHeal);
+                    }
+                    else
+                    {
+                        BattleScriptCall(BattleScript_HarvestActivates);
+                    }
                     effect++;
                 }
                 break;
+            }
             case ABILITY_ICE_BODY:
                 if (IsBattlerWeatherAffected(GetBattlerHoldEffect(battler), GetWeather(), B_WEATHER_ICY_ANY)
                  && !IsBattlerAtMaxHp(battler)
@@ -3577,7 +3639,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 break;
             case ABILITY_SHED_SKIN:
                 if ((gBattleMons[battler].status1 & STATUS1_ANY)
-                 && (GetConfig(B_ABILITY_TRIGGER_CHANCE) == GEN_4 ? RandomPercentage(RNG_SHED_SKIN, 30) : RandomChance(RNG_SHED_SKIN, 1, 3)))
+                 && (GetConfig(DETERMINISTIC_ABILITIES) // FORK: Shed Skin always cures status
+                  || (GetConfig(B_ABILITY_TRIGGER_CHANCE) == GEN_4 ? RandomPercentage(RNG_SHED_SKIN, 30) : RandomChance(RNG_SHED_SKIN, 1, 3))))
                 {
                 ABILITY_HEAL_MON_STATUS:
                     if (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON))
@@ -3615,6 +3678,63 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 }
                 break;
             case ABILITY_MOODY:
+                if (GetConfig(DETERMINISTIC_ABILITIES))
+                {
+                    // FORK: deterministic Moody. Compare the *raw* current values of the
+                    // five battle stats (accuracy/evasion always excluded), raise the
+                    // lowest-valued raisable stat(s) by +2 and lower the highest-valued
+                    // lowerable stat(s) by -1; ties affect every tied stat. Raw values
+                    // differ from turn 1, so there is no degenerate all-equal case.
+                    enum Stat stat;
+                    u32 statValue, raiseMask = 0, lowerMask = 0;
+                    u32 lowestValue = UINT32_MAX, highestValue = 0;
+
+                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
+                    {
+                        statValue = GetMoodyStatValue(battler, stat);
+                        if (CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility) && statValue < lowestValue)
+                            lowestValue = statValue;
+                    }
+                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
+                    {
+                        statValue = GetMoodyStatValue(battler, stat);
+                        if (CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility) && statValue == lowestValue)
+                            raiseMask |= 1u << stat;
+                    }
+                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
+                    {
+                        if (raiseMask & (1u << stat)) // Can't lower a stat we're raising.
+                            continue;
+                        statValue = GetMoodyStatValue(battler, stat);
+                        if (CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN, gLastUsedAbility) && statValue > highestValue)
+                            highestValue = statValue;
+                    }
+                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
+                    {
+                        if (raiseMask & (1u << stat))
+                            continue;
+                        statValue = GetMoodyStatValue(battler, stat);
+                        if (CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN, gLastUsedAbility) && statValue == highestValue)
+                            lowerMask |= 1u << stat;
+                    }
+
+                    // Queue raises before lowers, matching stock Moody's order.
+                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
+                    {
+                        if (raiseMask & (1u << stat))
+                            SetStatChange(battler, stat, 2);
+                    }
+                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
+                    {
+                        if (lowerMask & (1u << stat))
+                            SetStatChange(battler, stat, -1);
+                    }
+
+                    gEffectBattler = gBattlerAbility = battler;
+                    BattleScriptCall(BattleScript_AbilityStatChange);
+                    effect++;
+                }
+                else
                 {
                     enum Stat stat = STAT_ATK;
                     u32 validToRaise = 0, validToLower = 0;
@@ -3673,7 +3793,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 gBattleScripting.battler = BATTLE_PARTNER(battler);
                 if (IsBattlerAlive(gBattleScripting.battler)
                  && gBattleMons[gBattleScripting.battler].status1 & STATUS1_ANY
-                 && RandomPercentage(RNG_HEALER, 30))
+                 && (GetConfig(DETERMINISTIC_ABILITIES) || RandomPercentage(RNG_HEALER, 30))) // FORK: Healer always cures ally
                 {
                     BattleScriptCall(BattleScript_HealerActivates);
                     effect++;
@@ -3849,7 +3969,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && IsBattlerAlive(gBattlerAttacker)
              && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL)
              && gChosenMove != MOVE_STRUGGLE
-             && RandomPercentage(RNG_CURSED_BODY, 30))
+             && (GetConfig(DETERMINISTIC_ABILITIES) || RandomPercentage(RNG_CURSED_BODY, 30))) // FORK: Cursed Body always disables
             {
                 gBattleMons[gBattlerAttacker].volatiles.disabledMove = gChosenMove;
                 gBattleMons[gBattlerAttacker].volatiles.disableTimer = B_DISABLE_TIMER;
@@ -4035,6 +4155,25 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             {
                 u32 poison, paralysis, sleep;
 
+                // FORK: under DETERMINISTIC_ABILITIES, Effect Spore drops both the
+                // trigger roll and the 3-way status pick and always attempts to make
+                // the attacker drowsy (Yawn), reusing the deterministic sleep->drowsy
+                // mechanism.
+                if (GetConfig(DETERMINISTIC_ABILITIES))
+                {
+                    if (gBattleMons[gBattlerAttacker].volatiles.yawn == 0
+                     && CanBeSlept(gBattlerTarget, gBattlerAttacker, abilityAtk, NOT_BLOCKED_BY_SLEEP_CLAUSE))
+                    {
+                        gEffectBattler = gBattlerAttacker;
+                        gBattleScripting.battler = gBattlerTarget;
+                        gBattleMons[gBattlerAttacker].volatiles.yawn = 2;
+                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                        BattleScriptCall(BattleScript_EffectSporeDrowsy);
+                        effect++;
+                    }
+                    break;
+                }
+
                 if (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_5)
                 {
                     poison = 9;
@@ -4068,7 +4207,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         }
             break;
         case ABILITY_POISON_POINT:
-            if (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_POISON_POINT, 30) : RandomChance(RNG_POISON_POINT, 1, 3))
+            if (GetConfig(DETERMINISTIC_ABILITIES) // FORK: Poison Point always attempts poison
+             || (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_POISON_POINT, 30) : RandomChance(RNG_POISON_POINT, 1, 3)))
             {
             POISON_POINT:
             {
@@ -4090,7 +4230,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             }
             break;
         case ABILITY_STATIC:
-            if (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_STATIC, 30) : RandomChance(RNG_STATIC, 1, 3))
+            if (GetConfig(DETERMINISTIC_ABILITIES) // FORK: Static always attempts paralysis
+             || (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_STATIC, 30) : RandomChance(RNG_STATIC, 1, 3)))
             {
             STATIC:
             {
@@ -4117,7 +4258,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && !CanBattlerAvoidContactEffects(gBattlerAttacker, gBattlerTarget, GetBattlerAbility(gBattlerAttacker), GetBattlerHoldEffect(gBattlerAttacker), move)
              && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
              && CanBeBurned(gBattlerTarget, gBattlerAttacker, GetBattlerAbility(gBattlerAttacker))
-             && (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_FLAME_BODY, 30) : RandomChance(RNG_FLAME_BODY, 1, 3)))
+             && (GetConfig(DETERMINISTIC_ABILITIES) // FORK: Flame Body always attempts burn
+              || (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_FLAME_BODY, 30) : RandomChance(RNG_FLAME_BODY, 1, 3))))
             {
                 gEffectBattler = gBattlerAttacker;
                 gBattleScripting.battler = gBattlerTarget;
@@ -4132,9 +4274,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && !gBattleStruct->unableToUseMove
              && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
              && IsBattlerAlive(gBattlerTarget)
-             && (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_CUTE_CHARM, 30) : RandomChance(RNG_CUTE_CHARM, 1, 3))
+             // FORK: Cute Charm always attempts infatuation, regardless of gender.
+             && (GetConfig(DETERMINISTIC_ABILITIES)
+              || (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_CUTE_CHARM, 30) : RandomChance(RNG_CUTE_CHARM, 1, 3)))
              && !(gBattleMons[gBattlerAttacker].volatiles.infatuation)
-             && AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget)
+             && (GetConfig(DETERMINISTIC_ABILITIES) || AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget))
              && !IsAbilityAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_OBLIVIOUS)
              && !CanBattlerAvoidContactEffects(gBattlerAttacker, gBattlerTarget, GetBattlerAbility(gBattlerAttacker), GetBattlerHoldEffect(gBattlerAttacker), move)
              && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL))
@@ -4294,7 +4438,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && CanBePoisoned(gBattlerAttacker, gBattlerTarget, gLastUsedAbility, GetBattlerAbility(gBattlerTarget))
              && IsMoveMakingContact(gBattlerAttacker, gBattlerTarget, GetBattlerAbility(gBattlerAttacker), GetBattlerHoldEffect(gBattlerAttacker), move)
              && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES) // Need to actually hit the target
-             && RandomPercentage(RNG_POISON_TOUCH, 30))
+             && (GetConfig(DETERMINISTIC_ABILITIES) || RandomPercentage(RNG_POISON_TOUCH, 30))) // FORK: Poison Touch always attempts poison
             {
                 gEffectBattler = gBattlerTarget;
                 gBattleScripting.battler = gBattlerAttacker;
@@ -4320,9 +4464,13 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             }
             break;
         case ABILITY_STENCH:
+            // FORK: under DETERMINISTIC_ABILITIES, Stench always attempts its flinch,
+            // but only on the holder's first turn out (mirrors a King's Rock-style
+            // entry flinch). It resolves at MOVEEND_ABILITIES_ATTACKER, before attacker
+            // hold items, so it lands before a flinch item is consumed.
             if (IsBattlerAlive(gBattlerTarget)
              && !gBattleStruct->unableToUseMove
-             && RandomChance(RNG_STENCH, 1, 10)
+             && (GetConfig(DETERMINISTIC_ABILITIES) ? IsBattlersFirstTurn(gBattlerAttacker) : RandomChance(RNG_STENCH, 1, 10))
              && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
              && !MoveHasAdditionalEffect(gCurrentMove, MOVE_EFFECT_FLINCH))
             {
@@ -6491,7 +6639,17 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
         break;
     case ABILITY_RIVALRY:
-        if (AreBattlersOfSameGender(battlerAtk, battlerDef))
+        // FORK: under DETERMINISTIC_ABILITIES, Rivalry keys off shared type instead
+        // of gender: +25% when attacker and target share a type, -25% when they
+        // share none.
+        if (GetConfig(DETERMINISTIC_ABILITIES))
+        {
+            if (DoBattlersShareType(battlerAtk, battlerDef))
+                modifier = uq4_12_multiply(modifier, UQ_4_12(1.25));
+            else
+                modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+        }
+        else if (AreBattlersOfSameGender(battlerAtk, battlerDef))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.25));
         else if (AreBattlersOfOppositeGender(battlerAtk, battlerDef))
             modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
@@ -10630,6 +10788,17 @@ bool32 MoveGainsDeterministicRecharge(enum Move move)
         && GetMoveAccuracy(move) == 50
         && !IsBattleMoveStatus(move)
         && GetMoveNonVolatileStatus(move) != MOVE_EFFECT_SLEEP;
+}
+
+// FORK: under DETERMINISTIC_ACCURACY_EVASION a sleep move that wasn't 100% accurate
+// causes drowsiness (Yawn) instead of sleeping outright (see Cmd_setnonvolatilestatus).
+// Shared so the AI agrees with the engine on which sleep moves become drowse moves.
+bool32 MoveSleepBecomesDrowsy(enum Move move)
+{
+    u32 moveAcc = GetMoveAccuracy(move);
+    return GetConfig(DETERMINISTIC_ACCURACY_EVASION)
+        && GetMoveNonVolatileStatus(move) == MOVE_EFFECT_SLEEP
+        && moveAcc > 0 && moveAcc < 100;
 }
 
 bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv)
