@@ -1,21 +1,5 @@
 ## Upcoming Changes
 
-### DETERMINISTIC_ABILITIES
-
-- Stench can only attempt flinching on the first turn the battler is out.
-- Static always attempts to set paralysis on contact.
-- Poison Point and Poison Touch always attempt to set poison on contact.
-- Cute charm always attempts to activate on contact, regardless of gender.
-- Flame body always attempts to set burn on contact.
-- Effect Spore always attempts to set drowsy on contact.
-- Shed Skin always cures status conditions at the end of the turn.
-- Cursed Body always attempts to disable the used move.
-- Healer always heals the always status condition at the end of the turn.
-- Toxic Chain always attempts to set badly poisoned status.
-- Quick Draw only activates the first turn the user is out.
-- Rivalry activates when battlers are of the same type.
-- Harvest always recovers used berries and also heals for 1/16 of max HP in the sun when activating.
-
 ### DETERMINISTIC_ATTRACTION
 
 - Attract can effect any opposing mon rather than requiring the user to be the opposite gender of the target.
@@ -88,8 +72,6 @@
 
 ## Bugs/Issues
 
-- After DETERMINISTIC_ACCURACY_EVASION, AI attempts to use sleep moves on foes that are already drowsy
-- DETERMINISTIC_HOLD_ITEMS, scope lens and kings rock family of items need battle text/events to i ndicate they are being used and consumed.
 - Moves can pull up a display to show accuracy info, this can be replaced with PP cost (projected?)
 - Battle factory help text still hard codes "three" in some places.
 - Battle factory opponent preview should reveal upcoming team info.
