@@ -85,3 +85,14 @@
 ### FRONTIER_NO_BANS
 
 - No species are banned from frontier challenges.
+
+## Bugs/Issues
+
+- After DETERMINISTIC_ACCURACY_EVASION, AI attempts to use sleep moves on foes that are already drowsy
+- DETERMINISTIC_HOLD_ITEMS, scope lens and kings rock family of items need battle text/events to i ndicate they are being used and consumed.
+- Moves can pull up a display to show accuracy info, this can be replaced with PP cost (projected?)
+- Battle factory help text still hard codes "three" in some places.
+- Battle factory opponent preview should reveal upcoming team info.
+- Battle info view should show current turn (damage multiplier)
+- Battle info should support L to navigate left
+
