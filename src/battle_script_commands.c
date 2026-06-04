@@ -3516,7 +3516,7 @@ static void SetToxicChainPriority(void)
      && IsBattlerAlive(gBattlerTarget)
      && CanBePoisoned(gBattlerAttacker, gBattlerTarget, abilityAtk, GetBattlerAbility(gBattlerTarget))
      && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
-     && RandomWeighted(RNG_TOXIC_CHAIN, 7, 3))
+     && (GetConfig(DETERMINISTIC_ABILITIES) || RandomWeighted(RNG_TOXIC_CHAIN, 7, 3))) // FORK: Toxic Chain always poisons
         gBattleStruct->toxicChainPriority = TRUE;
 }
 
@@ -10647,14 +10647,11 @@ static void Cmd_setnonvolatilestatus(void)
     case TRIGGER_ON_MOVE:
     {
         enum MoveEffect nonVolatileStatus = GetMoveNonVolatileStatus(gCurrentMove);
-        u32 moveAcc = GetMoveAccuracy(gCurrentMove);
         // FORK: under DETERMINISTIC_ACCURACY_EVASION, a sleep move that wasn't 100%
         // accurate causes drowsiness (Yawn) instead of sleeping outright. The move's
         // earlier trynonvolatilestatus already cleared sleep immunities, so the target
         // is sleepable here; Spore (100% acc) and 0-acc cases fall through to real sleep.
-        if (GetConfig(DETERMINISTIC_ACCURACY_EVASION)
-            && nonVolatileStatus == MOVE_EFFECT_SLEEP
-            && moveAcc > 0 && moveAcc < 100)
+        if (MoveSleepBecomesDrowsy(gCurrentMove))
         {
             gEffectBattler = gBattlerTarget;
             gBattleMons[gBattlerTarget].volatiles.yawn = 2;

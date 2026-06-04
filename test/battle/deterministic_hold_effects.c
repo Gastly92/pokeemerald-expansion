@@ -138,6 +138,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a crit-boosting item only crits 
         TURN { MOVE(player, MOVE_SCRATCH); }
     } SCENE {
         MESSAGE("A critical hit!"); // first attack
+        MESSAGE("The Scope Lens was used up…"); // consumption is announced
         NONE_OF { MESSAGE("A critical hit!"); } // item consumed, crits are gone
     } THEN {
         EXPECT_EQ(player->item, ITEM_NONE);
@@ -181,6 +182,8 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinches the holder'
         // Item consumed: no flinch the next turn, the target acts.
         TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
     } SCENE {
+        // Consumed at the holder's move-end, before the flinched target's action.
+        MESSAGE("The King's Rock was used up…"); // consumption is announced
         MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
         MESSAGE("The opposing Wobbuffet used Celebrate!");
         NONE_OF { MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); }

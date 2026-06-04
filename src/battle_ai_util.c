@@ -1059,6 +1059,32 @@ bool32 AI_IsDamagedByRecoil(enum BattlerId battler)
 }
 
 // Decide whether move having an additional effect for .
+// FORK: DETERMINISTIC_ABILITIES — TRUE when the attacker's own always-on ability
+// guarantees a beneficial poison on this damaging move: Poison Touch on a contact
+// hit, or Toxic Chain on any damaging hit. Reuses AI_CanPoison so it respects the
+// same immunity/effectiveness/substitute checks as a move's own poison effect.
+static bool32 AI_DeterministicAbilityGuaranteesStatus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
+{
+    enum Ability abilityAtk, abilityDef;
+
+    if (!GetConfig(DETERMINISTIC_ABILITIES) || IsBattleMoveStatus(move))
+        return FALSE;
+
+    abilityAtk = gAiLogicData->abilities[battlerAtk];
+    abilityDef = gAiLogicData->abilities[battlerDef];
+
+    if (abilityAtk == ABILITY_POISON_TOUCH
+     && AI_MoveMakesContact(battlerAtk, battlerDef, abilityAtk, gAiLogicData->holdEffects[battlerAtk], move)
+     && AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, gAiLogicData->partnerMove))
+        return TRUE;
+
+    if (abilityAtk == ABILITY_TOXIC_CHAIN
+     && AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, gAiLogicData->partnerMove))
+        return TRUE;
+
+    return FALSE;
+}
+
 static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
 {
     enum Ability abilityDef = gAiLogicData->abilities[battlerDef];
@@ -1071,6 +1097,10 @@ static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId ba
     {
         return FALSE;
     }
+
+    // FORK: a contact move's guaranteed Poison Touch / Toxic Chain poison is a plus.
+    if (AI_DeterministicAbilityGuaranteesStatus(battlerAtk, battlerDef, move))
+        return TRUE;
 
     switch (GetMoveEffect(move))
     {
@@ -1192,6 +1222,42 @@ static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId ba
     return FALSE;
 }
 
+// FORK: DETERMINISTIC_ABILITIES — TRUE when making contact with battlerDef would
+// guarantee a status on battlerAtk via the defender's always-on contact ability
+// (Static/Flame Body/Poison Point/Effect Spore/Cute Charm) and the attacker can
+// actually receive it. Used to treat such a contact move as a downside.
+static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
+{
+    enum Ability abilityAtk, abilityDef;
+
+    if (!GetConfig(DETERMINISTIC_ABILITIES))
+        return FALSE;
+
+    abilityAtk = gAiLogicData->abilities[battlerAtk];
+    abilityDef = gAiLogicData->abilities[battlerDef];
+
+    if (!AI_MoveMakesContact(battlerAtk, battlerDef, abilityAtk, gAiLogicData->holdEffects[battlerAtk], move))
+        return FALSE;
+
+    switch (abilityDef)
+    {
+    case ABILITY_STATIC:
+        return CanBeParalyzed(battlerDef, battlerAtk, abilityAtk);
+    case ABILITY_FLAME_BODY:
+        return CanBeBurned(battlerDef, battlerAtk, abilityAtk);
+    case ABILITY_POISON_POINT:
+        return CanBePoisoned(battlerDef, battlerAtk, abilityDef, abilityAtk);
+    case ABILITY_EFFECT_SPORE:
+        return CanBeSlept(battlerDef, battlerAtk, abilityAtk, NOT_BLOCKED_BY_SLEEP_CLAUSE);
+    case ABILITY_CUTE_CHARM:
+        return !gBattleMons[battlerAtk].volatiles.infatuation
+            && abilityAtk != ABILITY_OBLIVIOUS
+            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL);
+    default:
+        return FALSE;
+    }
+}
+
 static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
 {
     enum Ability abilityAtk = gAiLogicData->abilities[battlerAtk];
@@ -1206,6 +1272,13 @@ static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId b
             return TRUE;
         }
     }
+
+    // FORK: under DETERMINISTIC_ABILITIES a contact move into a defender whose ability
+    // always inflicts a status on contact is a guaranteed downside (if the attacker
+    // can actually receive it), so the AI treats it as a minus and prefers a
+    // non-contact alternative of equal value.
+    if (AI_DeterministicContactAbilityPunishes(battlerAtk, battlerDef, move))
+        return TRUE;
 
     if (IsExplosionMove(move))
         return TRUE;
@@ -1460,6 +1533,20 @@ s32 AI_WhoStrikesFirst(enum BattlerId battlerAI, enum BattlerId battler, enum Mo
         return AI_IS_SLOWER;
     else if (abilityAI != ABILITY_STALL && abilityPlayer == ABILITY_STALL)
         return AI_IS_FASTER;
+
+    // FORK: under DETERMINISTIC_ABILITIES, Quick Draw guarantees its holder moves first
+    // within its priority bracket on the holder's entry turn. Model that override (it
+    // beats the raw speed check below, and like the engine ignores Trick Room) so the
+    // AI's turn-order prediction matches what will actually happen.
+    if (GetConfig(DETERMINISTIC_ABILITIES))
+    {
+        bool32 aiQuickDraw = abilityAI == ABILITY_QUICK_DRAW && IsBattlersFirstTurn(battlerAI);
+        bool32 playerQuickDraw = abilityPlayer == ABILITY_QUICK_DRAW && IsBattlersFirstTurn(battler);
+        if (aiQuickDraw && !playerQuickDraw)
+            return AI_IS_FASTER;
+        if (playerQuickDraw && !aiQuickDraw)
+            return AI_IS_SLOWER;
+    }
 
     if (speedBattlerAI > speedBattler)
     {
@@ -3489,6 +3576,10 @@ bool32 AI_CanPutToSleep(enum BattlerId battlerAtk, enum BattlerId battlerDef, en
     if (!CanBeSlept(battlerAtk, battlerDef, defAbility, BLOCKED_BY_SLEEP_CLAUSE)
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
       || PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))   // shouldn't try to sleep mon that partner is trying to make sleep
+        return FALSE;
+    // FORK: under DETERMINISTIC_ACCURACY_EVASION a sub-100% sleep move only makes the
+    // target drowsy (Yawn); don't waste it on a foe that is already drowsy.
+    if (MoveSleepBecomesDrowsy(move) && gBattleMons[battlerDef].volatiles.yawn)
         return FALSE;
     return TRUE;
 }

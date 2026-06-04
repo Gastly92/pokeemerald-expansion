@@ -400,6 +400,7 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
 s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, bool32 ignorePenalties); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
 u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
 bool32 MoveGainsDeterministicRecharge(enum Move move); // FORK: DETERMINISTIC_ACCURACY_EVASION 50%->recharge
+bool32 MoveSleepBecomesDrowsy(enum Move move); // FORK: DETERMINISTIC_ACCURACY_EVASION sub-100% sleep->drowsy
 bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv);
 bool32 DoesMoveMissTarget(struct BattleCalcValues *cv);
 bool32 IsSemiInvulnerable(enum BattlerId battler, enum SemiInvulnerableExclusion excludeCommander);

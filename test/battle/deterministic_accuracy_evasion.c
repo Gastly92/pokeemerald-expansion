@@ -46,7 +46,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: max PP is scaled down by bas
     u32 flag;
     u32 expectedPP;
     PARAMETRIZE { flag = FALSE; expectedPP = 5; } // stock
-    PARAMETRIZE { flag = TRUE;  expectedPP = 4; } // round(5 * 0.80)
+    PARAMETRIZE { flag = TRUE;  expectedPP = 4; } // floor(5 * 0.80)
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, flag);
         PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, MOVE_HYDRO_PUMP); }
@@ -55,6 +55,21 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: max PP is scaled down by bas
         TURN { MOVE(player, MOVE_CELEBRATE); }
     } THEN {
         EXPECT_EQ(player->pp[1], expectedPP); // Hydro Pump unused, so pp == its (scaled) max
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: max PP scaling rounds down")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(GetMovePP(MOVE_MEGAHORN) == 10);
+        ASSUME(GetMoveAccuracy(MOVE_MEGAHORN) == 85);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, MOVE_MEGAHORN); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[1], 8); // floor(10 * 0.85) = 8, not 9 (round-to-nearest)
     }
 }
 
@@ -269,3 +284,19 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 50% accurate move requires
     }
 }
 
+
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: AI won't use a sub-100% sleep move on an already-drowsy foe")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(GetMoveAccuracy(MOVE_HYPNOSIS) > 0 && GetMoveAccuracy(MOVE_HYPNOSIS) < 100);
+        ASSUME(GetMoveNonVolatileStatus(MOVE_HYPNOSIS) == MOVE_EFFECT_SLEEP);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
+        PLAYER(SPECIES_WOBBUFFET) { HP(600); MaxHP(600); }
+        OPPONENT(SPECIES_HYPNO) { Moves(MOVE_HYPNOSIS, MOVE_PSYCHIC); }
+    } WHEN {
+        TURN { EXPECT_MOVE(opponent, MOVE_HYPNOSIS); } // sub-100% sleep -> makes the foe drowsy
+        // Foe is now drowsy, so Hypnosis would be wasted; the AI should attack instead.
+        TURN { SCORE_LT(opponent, MOVE_HYPNOSIS, MOVE_PSYCHIC); }
+    }
+}

@@ -2631,6 +2631,15 @@ BattleScript_DeterministicSleepBecomesDrowsy::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: DETERMINISTIC_ABILITIES — Effect Spore always makes the attacker drowsy
+@ (Yawn) on contact; the volatile is set in AbilityBattleEffects.
+BattleScript_EffectSporeDrowsy::
+	waitstate
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_EFFECTSPOREDROWSY
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_PrintAbilityMadeIneffective::
 	pause B_WAIT_TIME_SHORT
 	call BattleScript_AbilityPopUp
@@ -4597,6 +4606,23 @@ BattleScript_HarvestActivates::
 BattleScript_HarvestActivatesEnd:
 	return
 
+@ FORK: DETERMINISTIC_ABILITIES — Harvest recovers the berry and, when it activates
+@ in the sun, also heals 1/16 max HP (heal amount preset via SetHealAmount).
+BattleScript_HarvestActivatesSunHeal::
+	pause 5
+	tryrecycleitem BattleScript_HarvestActivatesSunHealEnd
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_HARVESTBERRY
+	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_ATTACKER, B_ANIM_SIMPLE_HEAL
+	healthbarupdate BS_ATTACKER, PASSIVE_HP_UPDATE
+	datahpupdate BS_ATTACKER, PASSIVE_HP_UPDATE
+	printstring STRINGID_HARVESTHPGAIN
+	waitmessage B_WAIT_TIME_LONG
+	tryactivateitem BS_ATTACKER, ACTIVATION_ON_HARVEST
+BattleScript_HarvestActivatesSunHealEnd:
+	return
+
 BattleScript_SolarPowerActivates::
 	call BattleScript_AbilityPopUp
 	healthbarupdate BS_ATTACKER, PASSIVE_HP_UPDATE
@@ -5398,6 +5424,8 @@ BattleScript_HangedOnMsgRet:
 @ FORK: DETERMINISTIC_HOLD_EFFECTS — consume the attacker's crit/flinch entry item at
 @ move end (called from MOVEEND_DETERMINISTIC_HOLD_CONSUME).
 BattleScript_DeterministicHoldEffectConsume::
+	printstring STRINGID_ITEMWASUSEDUP
+	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
 	return
 
