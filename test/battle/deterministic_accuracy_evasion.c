@@ -46,7 +46,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: max PP is scaled down by bas
     u32 flag;
     u32 expectedPP;
     PARAMETRIZE { flag = FALSE; expectedPP = 5; } // stock
-    PARAMETRIZE { flag = TRUE;  expectedPP = 4; } // round(5 * 0.80)
+    PARAMETRIZE { flag = TRUE;  expectedPP = 4; } // floor(5 * 0.80)
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, flag);
         PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, MOVE_HYDRO_PUMP); }
@@ -55,6 +55,21 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: max PP is scaled down by bas
         TURN { MOVE(player, MOVE_CELEBRATE); }
     } THEN {
         EXPECT_EQ(player->pp[1], expectedPP); // Hydro Pump unused, so pp == its (scaled) max
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: max PP scaling rounds down")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(GetMovePP(MOVE_MEGAHORN) == 10);
+        ASSUME(GetMoveAccuracy(MOVE_MEGAHORN) == 85);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, MOVE_MEGAHORN); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[1], 8); // floor(10 * 0.85) = 8, not 9 (round-to-nearest)
     }
 }
 

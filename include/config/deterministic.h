@@ -130,7 +130,9 @@
 //     additional-effect path), so it bypasses DETERMINISTIC_FLINCH's anti-lock cap
 //     and flinches even a target that flinched last turn. See TryKingsRock() in
 //     battle_hold_effects.c.
-// Crit and flinch items are consumed at move end via MOVEEND_DETERMINISTIC_HOLD_CONSUME.
+// Crit and flinch items are consumed at move end via MOVEEND_DETERMINISTIC_HOLD_CONSUME,
+// which announces the consumption ("The <item> was used up...") so the otherwise-silent
+// crit/flinch is credited to the item.
 // Separately, this flag makes Starf Berry's random +2 stat deterministic: it
 // raises the holder's currently-highest stat instead of a random one
 // (RandomStatRaiseBerry). Evasion items (BrightPowder / Lax Incense) are handled
@@ -143,8 +145,9 @@
 // targets, Protect, type/ability immunities etc. are resolved earlier and still
 // avoid the move). What the accuracy/evasion axis does now:
 //   - Max PP scaling: a move whose base accuracy is in the 50<acc<100 band has its
-//     maximum PP scaled down by that accuracy (a 5 PP / 80% move becomes 4 PP),
-//     amortizing the misses it no longer suffers — the same idea as
+//     maximum PP scaled down by that accuracy, rounded down (a 5 PP / 80% move
+//     becomes 4 PP; a 10 PP / 85% move becomes 8), so the holder pays for the misses
+//     it no longer suffers — the same idea as
 //     DETERMINISTIC_DAMAGE's fixed roll. 100%/0-accuracy moves and the specially
 //     handled classes below are exempt. The 50<acc<100 band intentionally carries
 //     no further penalty yet (a knob for that can be added later). See

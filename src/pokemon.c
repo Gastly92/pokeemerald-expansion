@@ -3387,7 +3387,7 @@ u8 CalculatePPWithBonus(enum Move move, u8 ppBonuses, u8 moveIndex)
         u32 acc = GetMoveAccuracy(move);
         if (acc > 50 && acc < 100 && GetMoveNonVolatileStatus(move) != MOVE_EFFECT_SLEEP)
         {
-            basePP = (basePP * acc + 50) / 100; // scale by accuracy, rounded to nearest
+            basePP = (basePP * acc) / 100; // scale by accuracy, rounded down (extra penalty for the misses it no longer suffers)
             if (basePP == 0)
                 basePP = 1;
         }

@@ -5424,6 +5424,8 @@ BattleScript_HangedOnMsgRet:
 @ FORK: DETERMINISTIC_HOLD_EFFECTS — consume the attacker's crit/flinch entry item at
 @ move end (called from MOVEEND_DETERMINISTIC_HOLD_CONSUME).
 BattleScript_DeterministicHoldEffectConsume::
+	printstring STRINGID_ITEMWASUSEDUP
+	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
 	return
 
