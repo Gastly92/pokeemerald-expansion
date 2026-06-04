@@ -317,3 +317,22 @@ AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: AI knows Quick Draw lets it move
         TURN { SCORE_GT(opponent, MOVE_DESTINY_BOND, MOVE_SCRATCH); }
     }
 }
+
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: AI prefers a contact move so Poison Touch guarantees poison")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE); // remove accuracy from move scoring
+        ASSUME(MoveMakesContact(MOVE_CUT));
+        ASSUME(!MoveMakesContact(MOVE_ROCK_THROW));
+        ASSUME(GetMovePower(MOVE_CUT) == GetMovePower(MOVE_ROCK_THROW));
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        // Pikachu is pure Electric (poisonable, neutral to Normal & Rock), so Cut and
+        // Rock Throw deal equal damage; the only difference is Cut's guaranteed poison.
+        // Illuminate keeps it from punishing contact, isolating the Poison Touch plus.
+        PLAYER(SPECIES_PIKACHU) { Ability(ABILITY_ILLUMINATE); HP(300); MaxHP(300); }
+        OPPONENT(SPECIES_GRIMER) { Ability(ABILITY_POISON_TOUCH); Moves(MOVE_CUT, MOVE_ROCK_THROW); }
+    } WHEN {
+        TURN { SCORE_GT(opponent, MOVE_CUT, MOVE_ROCK_THROW); }
+    }
+}

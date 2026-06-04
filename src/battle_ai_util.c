@@ -1059,6 +1059,32 @@ bool32 AI_IsDamagedByRecoil(enum BattlerId battler)
 }
 
 // Decide whether move having an additional effect for .
+// FORK: DETERMINISTIC_ABILITIES — TRUE when the attacker's own always-on ability
+// guarantees a beneficial poison on this damaging move: Poison Touch on a contact
+// hit, or Toxic Chain on any damaging hit. Reuses AI_CanPoison so it respects the
+// same immunity/effectiveness/substitute checks as a move's own poison effect.
+static bool32 AI_DeterministicAbilityGuaranteesStatus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
+{
+    enum Ability abilityAtk, abilityDef;
+
+    if (!GetConfig(DETERMINISTIC_ABILITIES) || IsBattleMoveStatus(move))
+        return FALSE;
+
+    abilityAtk = gAiLogicData->abilities[battlerAtk];
+    abilityDef = gAiLogicData->abilities[battlerDef];
+
+    if (abilityAtk == ABILITY_POISON_TOUCH
+     && AI_MoveMakesContact(battlerAtk, battlerDef, abilityAtk, gAiLogicData->holdEffects[battlerAtk], move)
+     && AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, gAiLogicData->partnerMove))
+        return TRUE;
+
+    if (abilityAtk == ABILITY_TOXIC_CHAIN
+     && AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, gAiLogicData->partnerMove))
+        return TRUE;
+
+    return FALSE;
+}
+
 static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
 {
     enum Ability abilityDef = gAiLogicData->abilities[battlerDef];
@@ -1071,6 +1097,10 @@ static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId ba
     {
         return FALSE;
     }
+
+    // FORK: a contact move's guaranteed Poison Touch / Toxic Chain poison is a plus.
+    if (AI_DeterministicAbilityGuaranteesStatus(battlerAtk, battlerDef, move))
+        return TRUE;
 
     switch (GetMoveEffect(move))
     {
