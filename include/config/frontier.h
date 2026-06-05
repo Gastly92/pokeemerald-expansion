@@ -86,10 +86,11 @@
 // fork-owned file (src/factory_competitive_mons.c) so upstream syncs never touch
 // it; only the Battle Factory's code paths swap rosters (Tower/Dome keep the
 // vanilla gBattleFrontierMons for now). Gated in src/battle_factory.c and
-// src/battle_factory_screen.c. NOTE: the roster is still being built out
-// generation by generation, so this stays FALSE until it is large enough to draft
-// from safely.
-#define B_FRONTIER_COMPETITIVE_MONS FALSE
+// src/battle_factory_screen.c. The roster carries several distinct builds per
+// species (so the opponent's exact set can't be read off the species) and tags
+// each set FACTORY_SINGLES/DOUBLES/BOTH so format-inappropriate sets never appear.
+// Generation I is built out; later generations follow.
+#define B_FRONTIER_COMPETITIVE_MONS TRUE
 
 // If TRUE, in Frontier facilities where the bag is disabled (Tower, Dome,
 // Palace, Arena, Factory, Pike — everything except the Pyramid, which keeps a
