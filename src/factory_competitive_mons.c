@@ -140,6 +140,83 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
+    {
+        .species = SPECIES_DRAGONITE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .moves = {MOVE_DRAGON_DANCE, MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_ROOST},
+        .ability = ABILITY_MULTISCALE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GYARADOS,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_GYARADOSITE, // Mega Gyarados (Mold Breaker)
+        .moves = {MOVE_DRAGON_DANCE, MOVE_WATERFALL, MOVE_CRUNCH, MOVE_EARTHQUAKE},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_AERODACTYL,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_AERODACTYLITE, // Mega Aerodactyl (Tough Claws)
+        .moves = {MOVE_ROCK_SLIDE, MOVE_DUAL_WINGBEAT, MOVE_EARTHQUAKE, MOVE_AQUA_TAIL},
+        .ability = ABILITY_ROCK_HEAD,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_SLOWBRO,
+        .tags = FACTORY_SINGLES, // slow defensive Calm Mind wall; poor doubles fit
+        .heldItem = ITEM_SLOWBRONITE, // Mega Slowbro (Shell Armor)
+        .moves = {MOVE_SCALD, MOVE_PSYSHOCK, MOVE_CALM_MIND, MOVE_SLACK_OFF},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CLOYSTER,
+        .tags = FACTORY_SINGLES, // Shell Smash sweeper (debatable — could be BOTH)
+        .heldItem = ITEM_WHITE_HERB, // restores the Shell Smash defense drops
+        .moves = {MOVE_SHELL_SMASH, MOVE_ICICLE_SPEAR, MOVE_ROCK_BLAST, MOVE_HYDRO_PUMP},
+        .ability = ABILITY_SKILL_LINK, // guarantees max multi-hit under DETERMINISTIC_MOVE_RESULTS
+        .nature = NATURE_NAUGHTY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 4, 0),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CHANSEY,
+        .tags = FACTORY_SINGLES, // stall wall
+        .heldItem = ITEM_EVIOLITE,
+        .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_TOXIC, MOVE_HEAL_BELL},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ZAPDOS,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .moves = {MOVE_THUNDERBOLT, MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_ROOST},
+        .ability = ABILITY_STATIC,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(4, 0, 0, 252, 252, 0),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
 };
 
 const u16 gFactoryCompetitiveMonsCount = ARRAY_COUNT(gFactoryCompetitiveMons);

@@ -559,6 +559,20 @@ static void GenerateInitialRentalMons(void)
         if (j != firstMonId + i)
             continue;
 
+    #if B_FRONTIER_COMPETITIVE_MONS
+        // The vanilla currSpecies logic above intentionally lets ONE same-species
+        // pair through; with several builds per species in the competitive roster
+        // that would hand the player two copies of the same mon, so forbid any
+        // duplicate species outright (matching the opponent/Brain dedup).
+        for (j = firstMonId; j < firstMonId + i; j++)
+        {
+            if (species[j] == gFacilityTrainerMons[monId].species)
+                break;
+        }
+        if (j != firstMonId + i)
+            continue;
+    #endif
+
         // Cannot have two same held items.
         for (j = firstMonId; j < firstMonId + i; j++)
         {
