@@ -44,6 +44,8 @@
 #include "text.h"
 #include "tv.h"
 #include "window.h"
+#include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
+#include "innate_abilities.h" // FORK: GetSpeciesInnate() for the innate display
 #include "constants/battle_move_effects.h"
 #include "constants/items.h"
 #include "constants/moves.h"
@@ -3546,6 +3548,28 @@ static void PrintMonOTID(void)
 static void PrintMonAbilityName(void)
 {
     enum Ability ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
+    // FORK: FEATURE_INNATE_ABILITIES — show the species' innate abilities on the
+    // chosen-ability line as "Chosen / Innate[ / Innate]", so the player can see
+    // them outside battle. The data lookup (GetSpeciesInnate) needs no battle
+    // state; the chosen ability's own description stays below it unchanged. No
+    // effect when the feature is off.
+    if (GetConfig(FEATURE_INNATE_ABILITIES))
+    {
+        static const u8 sText_InnateSeparator[] = _(" / ");
+        u8 *str = StringCopy(gStringVar1, gAbilitiesInfo[ability].name);
+
+        for (u32 i = 0; i < MAX_INNATE_ABILITIES; i++)
+        {
+            enum Ability innate = GetSpeciesInnate(sMonSummaryScreen->summary.species, i);
+
+            if (innate == ABILITY_NONE || innate == ability)
+                continue;
+            str = StringAppend(str, sText_InnateSeparator);
+            str = StringAppend(str, gAbilitiesInfo[innate].name);
+        }
+        PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gStringVar1, 0, 1, 0, 1);
+        return;
+    }
     PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].name, 0, 1, 0, 1);
 }
 
