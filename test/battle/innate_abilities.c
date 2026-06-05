@@ -63,6 +63,40 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Lev
     }
 }
 
+// Comprehensive-table coverage: every species that natively carries Levitate is also
+// listed as an innate (forward-looking — a later flag re-homes their primary). Today
+// that's redundant, but it becomes observable the moment the primary is overwritten:
+// the innate must keep the mon airborne. Worry Seed strips Gastly's primary Levitate
+// (-> Insomnia); the feature-off leg's HP_BAR doubles as proof the primary really was
+// removed (otherwise it would still be immune), so the feature-on leg's immunity can
+// only come from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Levitate persists after the primary Levitate is overwritten")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
+        ASSUME(SpeciesHasInnate(SPECIES_GASTLY, ABILITY_LEVITATE));
+        ASSUME(gSpeciesInfo[SPECIES_GASTLY].abilities[0] == ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_GASTLY); // primary Levitate AND (now) innate Levitate
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_WORRY_SEED, MOVE_MUD_SLAP); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WORRY_SEED); } // primary Levitate -> Insomnia (pops the old Levitate)
+        TURN { MOVE(opponent, MOVE_MUD_SLAP); }
+    } SCENE {
+        // Worry Seed pops the *old* ability (Levitate) as it overwrites, so we can't key
+        // on the pop-up; the turn-2 outcome is the discriminator. Both legs run the same
+        // Worry Seed, so the feature-off HP_BAR proves the primary Levitate really was
+        // removed — making the feature-on immunity attributable only to the innate.
+        if (enabled)
+            MESSAGE("It doesn't affect Gastly…"); // innate Levitate still blocks the Ground hit
+        else
+            HP_BAR(player); // grounded: Insomnia replaced Levitate and there's no innate
+    }
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Levitate")
 {
     GIVEN {
