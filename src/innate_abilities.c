@@ -5,66 +5,69 @@
 
 // FORK: fork-owned species->innate table (FEATURE_INNATE_ABILITIES). Kept here
 // instead of in gSpeciesInfo so upstream syncs never touch it and the upstream
-// species data stays untouched. Each row lists a species and up to
-// MAX_INNATE_ABILITIES innate abilities that are always active on top of that
-// species' normal chosen ability; unused slots are ABILITY_NONE. To give a
-// species an innate, add or extend its row here — no other file needs editing.
+// species data stays untouched. Each row maps a species to an ABILITY_NONE-
+// terminated list of innate abilities that are always active on top of that
+// species' normal chosen ability. The list is variable-length (no fixed cap): add
+// or remove entries freely, just keep the terminating ABILITY_NONE.
 //
-// This is a deliberately small seed list; expand it as the fork's roster grows.
-// Innates are additive passives, never the battler's copyable/swappable identity
-// (see config/feature.h and BattlerHasAbility() for the exact semantics).
+// ALLOWLIST — only abilities whose innate behavior has been deliberately wired in
+// may appear here (see innate_abilities.h "SCOPE"). The fork grows this set one
+// ability at a time. Supported innate abilities:
+//   - ABILITY_LEVITATE — passive Ground-immunity / ungrounding, handled in
+//     src/battle_util.c (IsBattlerUngroundedByAbilityItemOrEffect and the
+//     type-effectiveness calc credit an innate Levitate exactly like the real one).
+// Do NOT give a species an innate that is not on this list: nothing would honor it
+// (no effect site activates it), so it would silently do nothing.
+
 struct SpeciesInnates
 {
     u16 species;
-    enum Ability innates[MAX_INNATE_ABILITIES];
+    const enum Ability *innates; // ABILITY_NONE-terminated
 };
+
+// The Beldum line hovers via magnetic force, so it gains an innate Levitate on top
+// of its native ability (Clear Body / Light Metal). Flygon and Vibrava already
+// carry Levitate as their real ability, so an innate there would be a no-op; the
+// Beldum line lacks native Levitate, so the innate is actually observable (and is
+// what test/battle/innate_abilities.c exercises).
+static const enum Ability sBeldumLineInnates[] = { ABILITY_LEVITATE, ABILITY_NONE };
 
 static const struct SpeciesInnates sSpeciesInnates[] =
 {
-    // The Beldum line hovers via magnetic force, so it gains an innate Levitate on
-    // top of its native ability (Clear Body / Light Metal). This realizes the
-    // concept the TODO illustrates with "Flygon's innate Levitate" — Flygon and
-    // Vibrava already carry Levitate as their real ability, so an innate there
-    // would be a no-op; the Beldum line lacks native Levitate, so the innate is
-    // actually observable (and is what test/battle/innate_abilities.c exercises).
-    //
-    // The line also gets an innate Speed Boost (slot 1) as the *passive + active*
-    // demo: that same magnetic propulsion accelerates it each turn. Levitate is a
-    // passive trait innate; Speed Boost is an active end-turn innate, so this one
-    // row exercises both a multi-slot species and the end-turn innate trigger.
-    { SPECIES_BELDUM,    { ABILITY_LEVITATE, ABILITY_SPEED_BOOST } },
-    { SPECIES_METANG,    { ABILITY_LEVITATE, ABILITY_SPEED_BOOST } },
-    { SPECIES_METAGROSS, { ABILITY_LEVITATE, ABILITY_SPEED_BOOST } },
-
-    // The Aggron line is a hulking steel dinosaur: it gains an innate Intimidate
-    // (an *active*, on-switch-in ability) on top of its native Sturdy/Rock Head/
-    // Heavy Metal, demonstrating that innates fire their entry effects, not just
-    // passive trait checks. Its craggy iron armor also grants an innate Rough Skin
-    // (slot 1), a *move-end / on-contact* innate — so the line demonstrates the
-    // contact-ability trigger (attacker is hurt when it makes contact).
-    { SPECIES_ARON,    { ABILITY_INTIMIDATE, ABILITY_ROUGH_SKIN } },
-    { SPECIES_LAIRON,  { ABILITY_INTIMIDATE, ABILITY_ROUGH_SKIN } },
-    { SPECIES_AGGRON,  { ABILITY_INTIMIDATE, ABILITY_ROUGH_SKIN } },
+    { SPECIES_BELDUM,    sBeldumLineInnates },
+    { SPECIES_METANG,    sBeldumLineInnates },
+    { SPECIES_METAGROSS, sBeldumLineInnates },
 };
+
+static const enum Ability *GetSpeciesInnateList(u16 species)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sSpeciesInnates); i++)
+    {
+        if (sSpeciesInnates[i].species == species)
+            return sSpeciesInnates[i].innates;
+    }
+
+    return NULL;
+}
 
 bool32 SpeciesHasInnate(u16 species, enum Ability ability)
 {
-    u32 i, slot;
+    const enum Ability *list;
+    u32 i;
 
     if (ability == ABILITY_NONE)
         return FALSE;
 
-    for (i = 0; i < ARRAY_COUNT(sSpeciesInnates); i++)
-    {
-        if (sSpeciesInnates[i].species != species)
-            continue;
+    list = GetSpeciesInnateList(species);
+    if (list == NULL)
+        return FALSE;
 
-        for (slot = 0; slot < MAX_INNATE_ABILITIES; slot++)
-        {
-            if (sSpeciesInnates[i].innates[slot] == ability)
-                return TRUE;
-        }
-        return FALSE; // species matched; it simply doesn't have this innate
+    for (i = 0; list[i] != ABILITY_NONE; i++)
+    {
+        if (list[i] == ability)
+            return TRUE;
     }
 
     return FALSE;
@@ -72,15 +75,16 @@ bool32 SpeciesHasInnate(u16 species, enum Ability ability)
 
 enum Ability GetSpeciesInnate(u16 species, u32 index)
 {
+    const enum Ability *list = GetSpeciesInnateList(species);
     u32 i;
 
-    if (index >= MAX_INNATE_ABILITIES)
+    if (list == NULL)
         return ABILITY_NONE;
 
-    for (i = 0; i < ARRAY_COUNT(sSpeciesInnates); i++)
+    for (i = 0; list[i] != ABILITY_NONE; i++)
     {
-        if (sSpeciesInnates[i].species == species)
-            return sSpeciesInnates[i].innates[index];
+        if (i == index)
+            return list[i];
     }
 
     return ABILITY_NONE;

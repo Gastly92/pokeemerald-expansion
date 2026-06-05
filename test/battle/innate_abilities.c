@@ -2,24 +2,21 @@
 #include "test/battle.h"
 #include "innate_abilities.h"
 
-// FORK: coverage for FEATURE_INNATE_ABILITIES (config/innate.h). Feature flags
+// FORK: coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
 // default off in the test baseline (see TestInitConfigData), so each test that
 // wants innates opts in with WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE). The
-// seed table (src/innate_abilities.c) gives the Beldum line an innate Levitate on
-// top of its native Clear Body, so a Ground move is the natural probe: Metagross
-// is Steel/Psychic (Ground is super effective), so the difference between "immune
-// via innate Levitate" and "takes a super effective hit" is unambiguous.
+// supported innate set is currently just LEVITATE (see src/innate_abilities.c).
+// The seed table gives the Beldum line an innate Levitate on top of its native
+// Clear Body, so a Ground move is the natural probe: Metagross is Steel/Psychic
+// (Ground is super effective), so the difference between "immune via innate
+// Levitate" and "takes a super effective hit" is unambiguous.
 
 ASSUMPTIONS
 {
     ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
     // The seed data these tests rely on. If the table changes, update the tests.
     ASSUME(SpeciesHasInnate(SPECIES_METAGROSS, ABILITY_LEVITATE));
-    ASSUME(SpeciesHasInnate(SPECIES_METAGROSS, ABILITY_SPEED_BOOST)); // active end-turn innate (slot 1)
     ASSUME(gSpeciesInfo[SPECIES_METAGROSS].abilities[0] == ABILITY_CLEAR_BODY);
-    ASSUME(SpeciesHasInnate(SPECIES_AGGRON, ABILITY_INTIMIDATE));
-    ASSUME(SpeciesHasInnate(SPECIES_AGGRON, ABILITY_ROUGH_SKIN)); // active on-contact innate (slot 1)
-    ASSUME(gSpeciesInfo[SPECIES_AGGRON].abilities[0] != ABILITY_INTIMIDATE);
 }
 
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Levitate grants Ground immunity")
@@ -94,93 +91,6 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies only the primary abil
         // never an innate.
         ABILITY_POPUP(player, ABILITY_TRACE);
         MESSAGE("It traced the opposing Metagross's Clear Body!");
-    }
-}
-
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate (Intimidate) fires its switch-in effect")
-{
-    GIVEN {
-        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_AGGRON); // native Sturdy, innate Intimidate
-        OPPONENT(SPECIES_WOBBUFFET);
-    } WHEN {
-        TURN {}
-    } SCENE {
-        // Innate Intimidate activates on entry, with the pop-up showing Intimidate.
-        ABILITY_POPUP(player, ABILITY_INTIMIDATE);
-        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, opponent);
-        MESSAGE("The opposing Wobbuffet's Attack fell!");
-    }
-}
-
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate (Speed Boost) fires its end-turn effect")
-{
-    GIVEN {
-        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_METAGROSS); // native Clear Body, innate Levitate + Speed Boost
-        OPPONENT(SPECIES_WOBBUFFET);
-    } WHEN {
-        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
-    } SCENE {
-        // The end-turn innate fires with the pop-up forced to Speed Boost (not the
-        // primary Clear Body), raising Metagross's Speed at the end of the turn.
-        ABILITY_POPUP(player, ABILITY_SPEED_BOOST);
-        MESSAGE("Metagross's Speed rose!");
-    }
-}
-
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an end-turn innate does not fire when the feature is off")
-{
-    GIVEN {
-        // Feature off in the test baseline → Metagross's native ability only.
-        PLAYER(SPECIES_METAGROSS);
-        OPPONENT(SPECIES_WOBBUFFET);
-    } WHEN {
-        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
-    } SCENE {
-        NONE_OF { ABILITY_POPUP(player, ABILITY_SPEED_BOOST); }
-    }
-}
-
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate does not fire when the feature is off")
-{
-    GIVEN {
-        // Feature off in the test baseline → Aggron's native ability only.
-        PLAYER(SPECIES_AGGRON);
-        OPPONENT(SPECIES_WOBBUFFET);
-    } WHEN {
-        TURN {}
-    } SCENE {
-        NONE_OF { ABILITY_POPUP(player, ABILITY_INTIMIDATE); }
-    }
-}
-
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate (Rough Skin) fires on contact")
-{
-    GIVEN {
-        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_WOBBUFFET);
-        OPPONENT(SPECIES_AGGRON); // native Sturdy; innate Intimidate (switch-in) + Rough Skin (contact)
-    } WHEN {
-        TURN { MOVE(player, MOVE_SCRATCH); }
-    } SCENE {
-        // The move-end / contact innate fires with the pop-up forced to Rough Skin
-        // (not the primary ability), hurting the attacker that made contact.
-        ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN);
-        MESSAGE("Wobbuffet was hurt!");
-    }
-}
-
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a contact innate does not fire when the feature is off")
-{
-    GIVEN {
-        // Feature off in the test baseline → Aggron's native ability only.
-        PLAYER(SPECIES_WOBBUFFET);
-        OPPONENT(SPECIES_AGGRON);
-    } WHEN {
-        TURN { MOVE(player, MOVE_SCRATCH); }
-    } SCENE {
-        NONE_OF { ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN); }
     }
 }
 

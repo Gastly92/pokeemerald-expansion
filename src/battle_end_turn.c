@@ -8,7 +8,6 @@
 #include "battle_stat_change.h"
 #include "battle_gimmick.h"
 #include "battle_scripts.h"
-#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — MAX_INNATE_ABILITIES
 #include "constants/battle.h"
 #include "constants/battle_string_ids.h"
 #include "constants/abilities.h"
@@ -1327,19 +1326,6 @@ static bool32 HandleEndTurnThirdEventBlock(enum BattlerId battler)
         gBattleStruct->eventState.endTurnBlock++;
         break;
     }
-    case THIRD_EVENT_BLOCK_ABILITIES_INNATE:
-        // FORK: FEATURE_INNATE_ABILITIES — fire each active innate's end-turn effect
-        // (Speed Boost, Moody, Harvest, ...) just like the primary ability above.
-        // Each re-entry advances endTurnInnateIndex past one slot, so multiple
-        // innates queue their scripts in turn; the block only advances once every
-        // slot has been tried. No-op when the feature is off.
-        effect = TryActivateInnateEffects(ABILITYEFFECT_ENDTURN, battler, &gBattleStruct->endTurnInnateIndex, TRUE);
-        if (gBattleStruct->endTurnInnateIndex >= MAX_INNATE_ABILITIES)
-        {
-            gBattleStruct->endTurnInnateIndex = 0;
-            gBattleStruct->eventState.endTurnBlock++;
-        }
-        break;
     case THIRD_EVENT_BLOCK_ITEMS:
     {
         // TODO: simplify

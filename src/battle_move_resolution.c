@@ -4,7 +4,6 @@
 #include "battle_hold_effects.h"
 #include "battle_ai_record.h"
 #include "battle_util.h"
-#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — MAX_INNATE_ABILITIES
 #include "battle_move_resolution.h"
 #include "battle_script_commands.h"
 #include "battle_stat_change.h"
@@ -2879,25 +2878,6 @@ static enum MoveEndResult MoveEndAbilities(struct BattleCalcValues *cv)
     return result;
 }
 
-// FORK: FEATURE_INNATE_ABILITIES — fire the defender's active innate contact/on-hit
-// effects (Static, Flame Body, Poison Point, Rough Skin, ...) right after its primary
-// ability, one innate per re-entry via moveEndInnateIndex; the state only advances
-// once every slot has been tried. No-op when the feature is off.
-static enum MoveEndResult MoveEndAbilitiesInnate(struct BattleCalcValues *cv)
-{
-    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
-
-    if (TryActivateInnateEffects(ABILITYEFFECT_MOVE_END, cv->battlerDef, &gBattleStruct->moveEndInnateIndex, TRUE))
-        result = MOVEEND_RESULT_RUN_SCRIPT;
-
-    if (gBattleStruct->moveEndInnateIndex >= MAX_INNATE_ABILITIES)
-    {
-        gBattleStruct->moveEndInnateIndex = 0;
-        gBattleScripting.moveendState++;
-    }
-    return result;
-}
-
 static enum MoveEndResult MoveEndFormChangeOnHit(struct BattleCalcValues *cv)
 {
     enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
@@ -2917,23 +2897,6 @@ static enum MoveEndResult MoveEndAbilitiesAttacker(struct BattleCalcValues *cv)
         result = MOVEEND_RESULT_RUN_SCRIPT;
 
     gBattleScripting.moveendState++;
-    return result;
-}
-
-// FORK: FEATURE_INNATE_ABILITIES — attacker counterpart of MoveEndAbilitiesInnate
-// (Poison Touch, Stench, ...), mirroring its single-innate-per-re-entry pattern.
-static enum MoveEndResult MoveEndAbilitiesAttackerInnate(struct BattleCalcValues *cv)
-{
-    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
-
-    if (TryActivateInnateEffects(ABILITYEFFECT_MOVE_END_ATTACKER, cv->battlerAtk, &gBattleStruct->moveEndInnateIndex, TRUE))
-        result = MOVEEND_RESULT_RUN_SCRIPT;
-
-    if (gBattleStruct->moveEndInnateIndex >= MAX_INNATE_ABILITIES)
-    {
-        gBattleStruct->moveEndInnateIndex = 0;
-        gBattleScripting.moveendState++;
-    }
     return result;
 }
 
@@ -4613,10 +4576,8 @@ static enum MoveEndResult (*const sMoveEndHandlers[])(struct BattleCalcValues *c
     [MOVEEND_ABSORB] = MoveEndAbsorb,
     [MOVEEND_RAGE] = MoveEndRage,
     [MOVEEND_ABILITIES] = MoveEndAbilities,
-    [MOVEEND_ABILITIES_INNATE] = MoveEndAbilitiesInnate, // FORK: FEATURE_INNATE_ABILITIES
     [MOVEEND_FORM_CHANGE_ON_HIT] = MoveEndFormChangeOnHit,
     [MOVEEND_ABILITIES_ATTACKER] = MoveEndAbilitiesAttacker,
-    [MOVEEND_ABILITIES_ATTACKER_INNATE] = MoveEndAbilitiesAttackerInnate, // FORK: FEATURE_INNATE_ABILITIES
     [MOVEEND_QUEUE_DANCER] = MoveEndQueueDancer,
     [MOVEEND_STATUS_IMMUNITY_ABILITIES] = MoveEndStatusImmunityAbilities,
     [MOVEEND_ATTACKER_INVISIBLE] = MoveEndAttackerInvisible,

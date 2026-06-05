@@ -100,10 +100,8 @@ enum MoveEndState
     MOVEEND_ABSORB,
     MOVEEND_RAGE,
     MOVEEND_ABILITIES,
-    MOVEEND_ABILITIES_INNATE, // FORK: FEATURE_INNATE_ABILITIES — defender contact innates (Static, Flame Body, Rough Skin, ...)
     MOVEEND_FORM_CHANGE_ON_HIT, // Disguise / Gulp Missile
     MOVEEND_ABILITIES_ATTACKER,
-    MOVEEND_ABILITIES_ATTACKER_INNATE, // FORK: FEATURE_INNATE_ABILITIES — attacker contact innates (Poison Touch, Stench, ...)
     MOVEEND_QUEUE_DANCER,
     MOVEEND_STATUS_IMMUNITY_ABILITIES, // TODO: Do berries come before????
     MOVEEND_ATTACKER_INVISIBLE,

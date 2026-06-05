@@ -7,7 +7,6 @@
 #include "battle_switch_in.h"
 #include "battle_controllers.h"
 #include "config_changes.h"
-#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "constants/battle.h"
 #include "constants/moves.h"
 
@@ -38,7 +37,6 @@ bool32 DoSwitchInEvents(void)
         gBattleStruct->battlersSorted = TRUE;
         gBattleStruct->switchInBattlerCounter = 0;
         gBattleStruct->eventState.battlerSwitchIn = 0;
-        gBattleStruct->switchInInnateIndex = 0; // FORK: FEATURE_INNATE_ABILITIES
         gBattleStruct->eventState.switchIn++;
         // fallthrough
     case SWITCH_IN_EVENTS_TERA_SHIFT:
@@ -80,7 +78,6 @@ bool32 DoSwitchInEvents(void)
             {
                 gBattleStruct->switchInBattlerCounter++;
                 gBattleStruct->eventState.battlerSwitchIn = 0;
-                gBattleStruct->switchInInnateIndex = 0; // FORK: FEATURE_INNATE_ABILITIES
                 continue;
             }
 
@@ -93,7 +90,6 @@ bool32 DoSwitchInEvents(void)
 
             gBattleStruct->switchInBattlerCounter++;
             gBattleStruct->eventState.battlerSwitchIn = 0;
-            gBattleStruct->switchInInnateIndex = 0; // FORK: FEATURE_INNATE_ABILITIES
         }
         gBattleStruct->switchInBattlerCounter = 0;
         gBattleStruct->eventState.switchIn++;
@@ -210,16 +206,6 @@ static bool32 CanBattlerBeHealed(enum BattlerId battler)
     return FALSE;
 }
 
-// FORK: FEATURE_INNATE_ABILITIES — run the next active innate's switch-in effect.
-// Delegates to the shared TryActivateInnateEffects driver (the index resumes across
-// re-entries; the primary ability, already activated by
-// FIRST_EVENT_BLOCK_GENERAL_ABILITIES, and inactive innates are skipped).
-static bool32 TryActivateSwitchInInnates(enum BattlerId battler)
-{
-    return TryActivateInnateEffects(ABILITYEFFECT_ON_SWITCHIN, battler, &gBattleStruct->switchInInnateIndex,
-                                    gBattleStruct->battlerState[battler].switchIn);
-}
-
 static bool32 FirstEventBlockEvents(struct BattleCalcValues *calcValues)
 {
     bool32 effect = FALSE;
@@ -292,19 +278,6 @@ static bool32 FirstEventBlockEvents(struct BattleCalcValues *calcValues)
          || TryClearIllusion(battler, calcValues->abilities[battler]))
             effect = TRUE;
         gBattleStruct->eventState.battlerSwitchIn++;
-        break;
-    case FIRST_EVENT_BLOCK_INNATE_ABILITIES:
-        // FORK: FEATURE_INNATE_ABILITIES — fire each active innate's switch-in effect
-        // (Drought, Intimidate, Download, ...) just like the primary ability above.
-        // Each re-entry advances switchInInnateIndex past one innate slot, so multiple
-        // innates queue their scripts in turn; the block only advances once every slot
-        // has been tried. No-op when the feature is off (BattlerHasAbility is FALSE).
-        effect = TryActivateSwitchInInnates(battler);
-        if (gBattleStruct->switchInInnateIndex >= MAX_INNATE_ABILITIES)
-        {
-            gBattleStruct->switchInInnateIndex = 0;
-            gBattleStruct->eventState.battlerSwitchIn++;
-        }
         break;
     case FIRST_EVENT_BLOCK_IMMUNITY_ABILITIES:
         if (AbilityBattleEffects(ABILITYEFFECT_IMMUNITY, battler, calcValues->abilities[battler], MOVE_NONE, TRUE))

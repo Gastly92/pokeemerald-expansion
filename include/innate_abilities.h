@@ -9,22 +9,30 @@
 // never conflicts on upstream sync and leaves the upstream species data
 // untouched.
 //
+// SCOPE — innates are supported one ability at a time, via an explicit allowlist.
+// Making an *arbitrary* ability work as an innate would require routing every
+// "does this battler have ability X?" check through BattlerHasAbility() across
+// hundreds of upstream-owned sites — a large, perpetually merge-conflict-prone
+// sweep. Instead this fork wires up the innate behavior of one ability at a time
+// and only allows species to declare innates from that supported set. Today the
+// set is just LEVITATE (a passive grounding / Ground-immunity trait handled
+// entirely inside src/battle_util.c). To add another ability: wire its specific
+// effect, extend the allowlist comment in src/innate_abilities.c, and add a test.
+// The step-by-step extension playbook lives in INNATE_ABILITIES.md (repo root).
+//
 // This header exposes only the raw data lookups (no battle/suppression logic).
 // The battle-facing predicate that decides whether an innate is *currently
 // active* on a battler — honoring Gastro Acid, Neutralizing Gas, Mold Breaker,
 // Ability Shield, etc., exactly like a real ability — is BattlerHasAbility() /
 // IsInnateActive() in battle_util.h / src/battle_util.c.
 
-// Maximum number of innate abilities a single species may declare.
-#define MAX_INNATE_ABILITIES 3
-
 // TRUE if `species` declares `ability` as an innate. Pure data lookup: does not
 // consider battle state or ability suppression. ABILITY_NONE never matches.
 bool32 SpeciesHasInnate(u16 species, enum Ability ability);
 
-// Returns the innate ability in slot `index` (0..MAX_INNATE_ABILITIES-1) for
-// `species`, or ABILITY_NONE if the slot is empty / out of range. Lets callers
-// iterate a species' innates (summary screen, tests, etc.).
+// Returns the innate ability at 0-based `index` for `species`, or ABILITY_NONE if
+// the slot is past the end / the species has no innates. Lets callers iterate a
+// species' innates without needing to know how many it has.
 enum Ability GetSpeciesInnate(u16 species, u32 index);
 
 #endif // GUARD_INNATE_ABILITIES_H
