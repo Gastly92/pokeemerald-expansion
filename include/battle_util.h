@@ -403,6 +403,7 @@ bool32 CanMoveSkipAccuracyCalc(enum BattlerId battlerAtk, enum BattlerId battler
 u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, enum HoldEffect atkHoldEffect, enum HoldEffect defHoldEffect);
 s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, bool32 ignorePenalties); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
 u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
+s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move); // FORK: DETERMINISTIC_ACCURACY_EVASION move-info PP cost
 bool32 MoveGainsDeterministicRecharge(enum Move move); // FORK: DETERMINISTIC_ACCURACY_EVASION 50%->recharge
 bool32 MoveSleepBecomesDrowsy(enum Move move); // FORK: DETERMINISTIC_ACCURACY_EVASION sub-100% sleep->drowsy
 bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv);

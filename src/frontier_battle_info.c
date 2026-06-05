@@ -226,6 +226,20 @@ static void PrintLine(u8 windowId, const u8 *str, u32 x, u32 y)
     AddTextPrinterParameterized(windowId, FONT_NARROW, str, x, y, 0, NULL);
 }
 
+// FORK: DETERMINISTIC_DAMAGE replaces the random damage roll with a fixed,
+// turn-scaling percentage (DETERMINISTIC_DAMAGE_PERCENT). Surface the current
+// turn and that multiplier so the player can read the exact roll they'll get.
+static void DrawDeterministicDamageLine(u8 windowId, u8 *line, u32 y)
+{
+    u8 *p = StringCopy(line, COMPOUND_STRING("Turn "));
+    // gBattleTurnCounter is 0 on the first turn; show it 1-based.
+    p = ConvertIntToDecimalStringN(p, gBattleTurnCounter + 1, STR_CONV_MODE_LEFT_ALIGN, 3);
+    p = StringCopy(p, COMPOUND_STRING("  Damage "));
+    p = ConvertIntToDecimalStringN(p, DETERMINISTIC_DAMAGE_PERCENT, STR_CONV_MODE_LEFT_ALIGN, 3);
+    StringCopy(p, COMPOUND_STRING("%"));
+    PrintLine(windowId, line, 0, y);
+}
+
 static void DrawFieldPage(u8 windowId)
 {
     // Large enough to hold a side with every screen/hazard active at once (the
@@ -237,6 +251,13 @@ static void DrawFieldPage(u8 windowId)
     PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  FIELD"), 0, y);
     y += LINE_H;
 
+    // FORK: the per-turn deterministic damage multiplier (only when that mode is on).
+    if (GetConfig(DETERMINISTIC_DAMAGE))
+    {
+        DrawDeterministicDamageLine(windowId, line, y);
+        y += LINE_H;
+    }
+
     p = StringCopy(line, COMPOUND_STRING("Weather: "));
     StringAppend(p, GetInfoWeatherName());
     PrintLine(windowId, line, 0, y);
@@ -247,28 +268,27 @@ static void DrawFieldPage(u8 windowId)
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
-    PrintLine(windowId, COMPOUND_STRING("Your side:"), 0, y);
-    y += LINE_H;
-    p = StringCopy(line, COMPOUND_STRING("Hazards: "));
+    // FORK: the side hazard/screen rows are prefixed "You"/"Foe" inline (rather than
+    // sitting under standalone "Your side:"/"Foe side:" headers) to free the vertical
+    // room the turn/damage line above needs in this fixed-height window.
+    p = StringCopy(line, COMPOUND_STRING("You Hazards: "));
     BuildHazardLine(p, B_SIDE_PLAYER);
-    PrintLine(windowId, line, 8, y);
+    PrintLine(windowId, line, 0, y);
     y += LINE_H;
-    p = StringCopy(line, COMPOUND_STRING("Screens: "));
+    p = StringCopy(line, COMPOUND_STRING("You Screens: "));
     BuildScreenLine(p, B_SIDE_PLAYER);
-    PrintLine(windowId, line, 8, y);
+    PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
-    PrintLine(windowId, COMPOUND_STRING("Foe side:"), 0, y);
-    y += LINE_H;
-    p = StringCopy(line, COMPOUND_STRING("Hazards: "));
+    p = StringCopy(line, COMPOUND_STRING("Foe Hazards: "));
     BuildHazardLine(p, B_SIDE_OPPONENT);
-    PrintLine(windowId, line, 8, y);
+    PrintLine(windowId, line, 0, y);
     y += LINE_H;
-    p = StringCopy(line, COMPOUND_STRING("Screens: "));
+    p = StringCopy(line, COMPOUND_STRING("Foe Screens: "));
     BuildScreenLine(p, B_SIDE_OPPONENT);
-    PrintLine(windowId, line, 8, y);
+    PrintLine(windowId, line, 0, y);
 
-    PrintLine(windowId, COMPOUND_STRING("R: Next page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
 }
 
 // Number of mons in the foe's (opponent A's) party.
@@ -310,7 +330,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     if (!seen)
     {
         PrintLine(windowId, COMPOUND_STRING("Not yet seen."), 0, y);
-        PrintLine(windowId, COMPOUND_STRING("<>: Mon  R: Next  B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+        PrintLine(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
         return;
     }
 
@@ -528,7 +548,7 @@ static void DrawConditionsPage(u8 windowId)
     y = DrawConditionsForSide(windowId, TRUE, y);
     DrawConditionsForSide(windowId, FALSE, y);
 
-    PrintLine(windowId, COMPOUND_STRING("R: Next page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
 }
 
 static const u8 *GetStatAbbr(u32 stat)
@@ -611,7 +631,7 @@ static void DrawStatsPage(u8 windowId)
     y = DrawStatsForSide(windowId, TRUE, y);
     DrawStatsForSide(windowId, FALSE, y);
 
-    PrintLine(windowId, COMPOUND_STRING("R: Next page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
 }
 
 static void RedrawInfo(u8 taskId)
