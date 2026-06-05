@@ -35,6 +35,25 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Levitate grants Ground immu
     }
 }
 
+// Flavor-floater coverage: a species with no native Levitate that floats by design
+// (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
+// Electric/Steel so Ground is super effective) gains Ground immunity from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor floater (Magnemite) gets innate Levitate")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAGNEMITE, ABILITY_LEVITATE));
+        ASSUME(gSpeciesInfo[SPECIES_MAGNEMITE].abilities[0] != ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MAGNEMITE);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_MUD_SLAP); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_LEVITATE);
+        MESSAGE("It doesn't affect Magnemite…");
+    }
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Levitate (stock behavior)")
 {
     GIVEN {

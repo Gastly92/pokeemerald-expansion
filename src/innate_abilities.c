@@ -44,6 +44,14 @@ struct SpeciesInnates
 // floats, so it's listed here as an *observable* innate (like the Beldum line). Gengar's
 // MEGA form is deliberately omitted — Mega Gengar sinks into the ground (Shadow Tag), so
 // it should stay grounded.
+//
+// The "Flavor floaters" section below is the same idea applied broadly: species that
+// have no native Levitate but hover/levitate by design (Magnemite's magnetism, ghostly
+// spirits, floating sword/teacup/candle Pokémon, the lake/cosmic legendaries, etc.).
+// These are innate-only and *observable*. Forms are judged individually — e.g.
+// Gimmighoul-Roaming floats but its Chest form stays grounded, and Mewtwo-Mega-X is a
+// grounded bruiser while Mega-Y floats. Flying-types are excluded throughout: they fly
+// by wing, not levitation.
 static const enum Ability sInnateLevitate[] = { ABILITY_LEVITATE, ABILITY_NONE };
 
 static const struct SpeciesInnates sSpeciesInnates[] =
@@ -140,6 +148,158 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 7
     { SPECIES_VIKAVOLT,          sInnateLevitate },
     { SPECIES_VIKAVOLT_TOTEM,    sInnateLevitate },
+
+    // ───────────────────────────────────────────────────────────────────────────
+    // Flavor floaters: no native Levitate, hover/levitate by design (innate-only,
+    // observable). Base form constants (e.g. SPECIES_CASTFORM) are listed alongside
+    // their form constants so the lookup matches whichever value is queried.
+    // ───────────────────────────────────────────────────────────────────────────
+
+    // Gen 1
+    { SPECIES_MAGNEMITE,                sInnateLevitate },
+    { SPECIES_MAGNETON,                 sInnateLevitate },
+    { SPECIES_MAGNEZONE,                sInnateLevitate },
+    { SPECIES_MEW,                      sInnateLevitate },
+    { SPECIES_MEWTWO,                   sInnateLevitate },
+    { SPECIES_MEWTWO_MEGA_Y,            sInnateLevitate }, // Mega-X is a grounded bruiser, omitted
+    { SPECIES_PORYGON,                  sInnateLevitate },
+    { SPECIES_PORYGON2,                 sInnateLevitate },
+    { SPECIES_PORYGON_Z,                sInnateLevitate },
+
+    // Gen 2
+    { SPECIES_CELEBI,                   sInnateLevitate },
+
+    // Gen 3
+    { SPECIES_BANETTE,                  sInnateLevitate },
+    { SPECIES_BANETTE_MEGA,             sInnateLevitate },
+    { SPECIES_CASTFORM,                 sInnateLevitate },
+    { SPECIES_CASTFORM_NORMAL,          sInnateLevitate },
+    { SPECIES_CASTFORM_RAINY,           sInnateLevitate },
+    { SPECIES_CASTFORM_SNOWY,           sInnateLevitate },
+    { SPECIES_CASTFORM_SUNNY,           sInnateLevitate },
+    { SPECIES_DEOXYS,                   sInnateLevitate },
+    { SPECIES_DEOXYS_ATTACK,            sInnateLevitate },
+    { SPECIES_DEOXYS_DEFENSE,           sInnateLevitate },
+    { SPECIES_DEOXYS_NORMAL,            sInnateLevitate },
+    { SPECIES_DEOXYS_SPEED,             sInnateLevitate },
+    { SPECIES_DUSCLOPS,                 sInnateLevitate },
+    { SPECIES_FROSLASS,                 sInnateLevitate },
+    { SPECIES_FROSLASS_MEGA,            sInnateLevitate },
+    { SPECIES_GLALIE,                   sInnateLevitate },
+    { SPECIES_GLALIE_MEGA,              sInnateLevitate },
+    { SPECIES_JIRACHI,                  sInnateLevitate },
+    { SPECIES_SHEDINJA,                 sInnateLevitate },
+    { SPECIES_SHUPPET,                  sInnateLevitate },
+
+    // Gen 4
+    { SPECIES_DARKRAI,                  sInnateLevitate },
+    { SPECIES_DARKRAI_MEGA,             sInnateLevitate },
+    { SPECIES_GIRATINA_ALTERED,         sInnateLevitate }, // Origin form is already covered above
+    { SPECIES_SPIRITOMB,                sInnateLevitate },
+
+    // Gen 5
+    { SPECIES_BEHEEYEM,                 sInnateLevitate },
+    { SPECIES_CHANDELURE,               sInnateLevitate },
+    { SPECIES_CHANDELURE_MEGA,          sInnateLevitate },
+    { SPECIES_COFAGRIGUS,               sInnateLevitate },
+    { SPECIES_COTTONEE,                 sInnateLevitate },
+    { SPECIES_DUOSION,                  sInnateLevitate },
+    { SPECIES_ELGYEM,                   sInnateLevitate },
+    { SPECIES_FRILLISH,                 sInnateLevitate },
+    { SPECIES_JELLICENT,                sInnateLevitate },
+    { SPECIES_KLANG,                    sInnateLevitate },
+    { SPECIES_KLINK,                    sInnateLevitate },
+    { SPECIES_KLINKLANG,                sInnateLevitate },
+    { SPECIES_LAMPENT,                  sInnateLevitate },
+    { SPECIES_LITWICK,                  sInnateLevitate },
+    { SPECIES_MUNNA,                    sInnateLevitate },
+    { SPECIES_MUSHARNA,                 sInnateLevitate },
+    { SPECIES_REUNICLUS,                sInnateLevitate },
+    { SPECIES_RUNERIGUS,                sInnateLevitate },
+    { SPECIES_SOLOSIS,                  sInnateLevitate },
+    { SPECIES_VANILLISH,                sInnateLevitate },
+    { SPECIES_VANILLITE,                sInnateLevitate },
+    { SPECIES_VANILLUXE,                sInnateLevitate },
+    { SPECIES_VICTINI,                  sInnateLevitate },
+    { SPECIES_WHIMSICOTT,               sInnateLevitate },
+    { SPECIES_YAMASK,                   sInnateLevitate },
+    { SPECIES_YAMASK_GALAR,             sInnateLevitate },
+
+    // Gen 6
+    { SPECIES_AEGISLASH,                sInnateLevitate },
+    { SPECIES_AEGISLASH_BLADE,          sInnateLevitate },
+    { SPECIES_AEGISLASH_SHIELD,         sInnateLevitate },
+    { SPECIES_CARBINK,                  sInnateLevitate },
+    { SPECIES_DIANCIE,                  sInnateLevitate },
+    { SPECIES_DIANCIE_MEGA,             sInnateLevitate },
+    { SPECIES_DOUBLADE,                 sInnateLevitate },
+    { SPECIES_GOURGEIST,                sInnateLevitate },
+    { SPECIES_GOURGEIST_AVERAGE,        sInnateLevitate },
+    { SPECIES_GOURGEIST_LARGE,          sInnateLevitate },
+    { SPECIES_GOURGEIST_SMALL,          sInnateLevitate },
+    { SPECIES_GOURGEIST_SUPER,          sInnateLevitate },
+    { SPECIES_HONEDGE,                  sInnateLevitate },
+    { SPECIES_HOOPA,                    sInnateLevitate },
+    { SPECIES_HOOPA_CONFINED,           sInnateLevitate },
+    { SPECIES_HOOPA_UNBOUND,            sInnateLevitate },
+    { SPECIES_INKAY,                    sInnateLevitate }, // Inkay floats; Malamar stands, so omitted
+    { SPECIES_KLEFKI,                   sInnateLevitate },
+    { SPECIES_PUMPKABOO,                sInnateLevitate },
+    { SPECIES_PUMPKABOO_AVERAGE,        sInnateLevitate },
+    { SPECIES_PUMPKABOO_LARGE,          sInnateLevitate },
+    { SPECIES_PUMPKABOO_SMALL,          sInnateLevitate },
+    { SPECIES_PUMPKABOO_SUPER,          sInnateLevitate },
+
+    // Gen 7
+    { SPECIES_BLACEPHALON,              sInnateLevitate },
+    { SPECIES_COMFEY,                   sInnateLevitate },
+    { SPECIES_COSMOEM,                  sInnateLevitate },
+    { SPECIES_COSMOG,                   sInnateLevitate },
+    { SPECIES_DHELMISE,                 sInnateLevitate },
+    { SPECIES_KARTANA,                  sInnateLevitate },
+    { SPECIES_LUNALA,                   sInnateLevitate },
+    { SPECIES_MAGEARNA,                 sInnateLevitate },
+    { SPECIES_MAGEARNA_MEGA,            sInnateLevitate },
+    { SPECIES_MAGEARNA_ORIGINAL,        sInnateLevitate },
+    { SPECIES_MAGEARNA_ORIGINAL_MEGA,   sInnateLevitate },
+    { SPECIES_NECROZMA,                 sInnateLevitate },
+    { SPECIES_NECROZMA_DAWN_WINGS,      sInnateLevitate },
+    { SPECIES_NECROZMA_DUSK_MANE,       sInnateLevitate },
+    { SPECIES_NECROZMA_ULTRA,           sInnateLevitate },
+    { SPECIES_NIHILEGO,                 sInnateLevitate },
+    { SPECIES_POIPOLE,                  sInnateLevitate },
+    { SPECIES_TAPU_BULU,                sInnateLevitate },
+    { SPECIES_TAPU_FINI,                sInnateLevitate },
+    { SPECIES_TAPU_KOKO,                sInnateLevitate },
+    { SPECIES_TAPU_LELE,                sInnateLevitate },
+    { SPECIES_XURKITREE,                sInnateLevitate },
+
+    // Gen 8
+    { SPECIES_DRAGAPULT,                sInnateLevitate },
+    { SPECIES_DRAKLOAK,                 sInnateLevitate },
+    { SPECIES_DREEPY,                   sInnateLevitate },
+    { SPECIES_POLTEAGEIST,              sInnateLevitate },
+    { SPECIES_POLTEAGEIST_ANTIQUE,      sInnateLevitate },
+    { SPECIES_POLTEAGEIST_PHONY,        sInnateLevitate },
+    { SPECIES_REGIELEKI,                sInnateLevitate },
+    { SPECIES_SINISTEA,                 sInnateLevitate },
+    { SPECIES_SINISTEA_ANTIQUE,         sInnateLevitate },
+    { SPECIES_SINISTEA_PHONY,           sInnateLevitate },
+
+    // Gen 9
+    { SPECIES_FLUTTER_MANE,             sInnateLevitate },
+    { SPECIES_GHOLDENGO,                sInnateLevitate },
+    { SPECIES_GIMMIGHOUL_ROAMING,       sInnateLevitate }, // Chest form sits on the ground, omitted
+    { SPECIES_IRON_MOTH,                sInnateLevitate },
+    { SPECIES_MIRAIDON,                 sInnateLevitate },
+    { SPECIES_PECHARUNT,                sInnateLevitate },
+    { SPECIES_POLTCHAGEIST,             sInnateLevitate },
+    { SPECIES_POLTCHAGEIST_ARTISAN,     sInnateLevitate },
+    { SPECIES_POLTCHAGEIST_COUNTERFEIT, sInnateLevitate },
+    { SPECIES_SANDY_SHOCKS,             sInnateLevitate },
+    { SPECIES_SINISTCHA,                sInnateLevitate },
+    { SPECIES_SINISTCHA_MASTERPIECE,    sInnateLevitate },
+    { SPECIES_SINISTCHA_UNREMARKABLE,   sInnateLevitate },
 };
 
 static const enum Ability *GetSpeciesInnateList(u16 species)
