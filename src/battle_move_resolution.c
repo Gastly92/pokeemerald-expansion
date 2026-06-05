@@ -390,15 +390,29 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
     if (gBattleMons[cv->battlerAtk].volatiles.confusionTurns)
     {
         // FORK: under DETERMINISTIC_STATUS, confusion is an anti-lock one-time tax. The
-        // battler takes a single RNG-free self-hit but STILL carries out its chosen move
-        // (the move is never denied), so a faster foe can't chain confusion to lock it
-        // out of acting; the confusion then clears. Infinite confusion never clears, so
-        // it self-hits on each action (but still never denies the move).
+        // battler takes a single RNG-free self-hit on its first confused action but STILL
+        // carries out its chosen move (the move is never denied), so a faster foe can't
+        // chain confusion to lock it out of acting. The volatile then LINGERS until the
+        // battler's next action, at which point it snaps out — meaning the foe can't
+        // re-confuse in the interim (a confused target can't be confused again, and
+        // AI_CanBeConfused declines one), so the self-hit costs at most once per spell of
+        // confusion. Infinite confusion never snaps out (it self-hits each action).
         if (GetConfig(DETERMINISTIC_STATUS))
         {
-            // NB: don't repoint gBattlerTarget at the attacker for the self-hit — the
-            // chosen move continues afterwards and must keep its real target. The
-            // self-damage script operates entirely on BS_ATTACKER instead.
+            bool32 infinite = gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion;
+            // confusionTurns == 1 is a sentinel meaning "the one-time self-hit already
+            // happened; snap out now." Fresh confusion is always applied with >= 2 turns
+            // (RandomUniform min 2), so this never collides with a real freshly-set value.
+            if (!infinite && gBattleMons[cv->battlerAtk].volatiles.confusionTurns == 1)
+            {
+                gBattleMons[cv->battlerAtk].volatiles.confusionTurns = 0;
+                BattleScriptCall(BattleScript_MoveUsedIsConfusedNoMore);
+                return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
+            }
+
+            // First confused action: take the one-time self-hit. NB: don't repoint
+            // gBattlerTarget at the attacker — the chosen move continues afterwards and
+            // must keep its real target; the self-damage script operates on BS_ATTACKER.
             gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
             struct DamageContext dmgCtx = {0};
             dmgCtx.battlerAtk = dmgCtx.battlerDef = cv->battlerAtk;
@@ -412,8 +426,6 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
             dmgCtx.abilities[gBattlerAttacker] = cv->abilities[gBattlerAttacker];
             dmgCtx.holdEffects[gBattlerAttacker] = cv->holdEffects[gBattlerAttacker];
             gBattleStruct->passiveHpUpdate[cv->battlerAtk] = CalculateMoveDamage(&dmgCtx);
-            if (!gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion)
-                gBattleMons[cv->battlerAtk].volatiles.confusionTurns = 0;
             // If the self-hit would KO, fall back to the original behavior: the confusion
             // script ends the move and the battler faints (it isn't acting anyway, so
             // there's no lock to break).
@@ -422,7 +434,10 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
                 return CANCELER_RESULT_FAILURE;
             }
-            // Otherwise: self-hit, then let the chosen move still run this turn.
+            // Otherwise: self-hit, arm the snap-out sentinel (so confusion lingers exactly
+            // one more action), then let the chosen move still run this turn.
+            if (!infinite)
+                gBattleMons[cv->battlerAtk].volatiles.confusionTurns = 1;
             BattleScriptCall(BattleScript_DeterministicConfusionSelfDmg);
             return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
         }
