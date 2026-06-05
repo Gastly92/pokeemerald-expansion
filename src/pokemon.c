@@ -31,6 +31,7 @@
 #include "main.h"
 #include "move_relearner.h"
 #include "naming_screen.h"
+#include "new_types.h" // FORK: FEATURE_NEW_TYPES — species type overrides
 #include "overworld.h"
 #include "party_menu.h"
 #include "pokedex.h"
@@ -2452,8 +2453,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
                 }
                 else if (substruct0->teraType == TYPE_NONE) // Tera Type hasn't been modified so we can just use the personality
                 {
-                    const enum Type *types = gSpeciesInfo[substruct0->species].types;
-                    retVal = (boxMon->personality & 0x1) == 0 ? types[0] : types[1];
+                    // FORK: GetSpeciesType applies the FEATURE_NEW_TYPES override
+                    u8 slot = (boxMon->personality & 0x1) == 0 ? 0 : 1;
+                    retVal = GetSpeciesType(substruct0->species, slot);
                 }
                 else
                 {
@@ -3256,6 +3258,9 @@ u32 GetSpeciesWeight(enum Species species)
 
 enum Type GetSpeciesType(enum Species species, u8 slot)
 {
+    enum Type overrideType; // FORK: FEATURE_NEW_TYPES — fork type override is the single chokepoint
+    if (GetConfig(FEATURE_NEW_TYPES) && GetSpeciesTypeOverride(species, slot, &overrideType))
+        return overrideType;
     return gSpeciesInfo[SanitizeSpeciesId(species)].types[slot];
 }
 
@@ -6829,8 +6834,10 @@ bool32 IsSpeciesForeignRegionalForm(enum Species species, u32 currentRegion)
 
 enum Type GetTeraTypeFromPersonality(struct Pokemon *mon)
 {
-    const u8 *types = gSpeciesInfo[GetMonData(mon, MON_DATA_SPECIES)].types;
-    return (GetMonData(mon, MON_DATA_PERSONALITY) & 0x1) == 0 ? types[0] : types[1];
+    // FORK: GetSpeciesType applies the FEATURE_NEW_TYPES override
+    u32 species = GetMonData(mon, MON_DATA_SPECIES);
+    u8 slot = (GetMonData(mon, MON_DATA_PERSONALITY) & 0x1) == 0 ? 0 : 1;
+    return GetSpeciesType(species, slot);
 }
 
 struct Pokemon *GetSavedPlayerPartyMon(u32 index)
@@ -6850,8 +6857,9 @@ void SavePlayerPartyMon(u32 index, struct Pokemon *mon)
 
 bool32 IsSpeciesOfType(enum Species species, enum Type type)
 {
-    if (gSpeciesInfo[species].types[0] == type
-     || gSpeciesInfo[species].types[1] == type)
+    // FORK: GetSpeciesType applies the FEATURE_NEW_TYPES override
+    if (GetSpeciesType(species, 0) == type
+     || GetSpeciesType(species, 1) == type)
         return TRUE;
     return FALSE;
 }
