@@ -7,8 +7,11 @@
 #include "overworld.h"
 #include "frontier_util.h"
 #include "battle_tower.h"
+#include "item.h"
 #include "random.h"
+#include "factory_competitive_mons.h"
 #include "constants/battle_ai.h"
+#include "constants/hold_effects.h"
 #include "constants/battle_factory.h"
 #include "constants/battle_frontier.h"
 #include "constants/battle_frontier_mons.h"
@@ -133,6 +136,51 @@ void CallBattleFactoryFunction(void)
 {
     sBattleFactoryFunctions[gSpecialVar_0x8004]();
 }
+
+// FORK: with B_FRONTIER_COMPETITIVE_MONS the Battle Factory draws from the fork's
+// competitive roster instead of the vanilla gBattleFrontierMons. Only the Factory
+// swaps rosters; the other facilities keep gBattleFrontierMons. When the flag is
+// off these are thin wrappers over the vanilla list, so callers stay uniform.
+const struct TrainerMon *GetFactoryMonsTable(void)
+{
+#if B_FRONTIER_COMPETITIVE_MONS
+    return gFactoryCompetitiveMons;
+#else
+    return gBattleFrontierMons;
+#endif
+}
+
+u16 GetFactoryMonsCount(void)
+{
+#if B_FRONTIER_COMPETITIVE_MONS
+    return gFactoryCompetitiveMonsCount;
+#else
+    return NUM_FRONTIER_MONS;
+#endif
+}
+
+#if B_FRONTIER_COMPETITIVE_MONS
+// FORK: competitive draft rule — a generated team may hold at most one Mega Stone
+// and at most one Z-Crystal (only one Mega Evolution / Z-Move is usable per
+// battle). The existing same-item dup check doesn't catch two *different* mega
+// stones or two *different* Z-crystals, so this guards that gap. Returns TRUE if
+// adding newItem would give the team a second mon with the same gimmick class.
+static bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem)
+{
+    enum HoldEffect newEffect = GetItemHoldEffect(newItem);
+    u32 i;
+
+    if (newEffect != HOLD_EFFECT_MEGA_STONE && newEffect != HOLD_EFFECT_Z_CRYSTAL)
+        return FALSE;
+
+    for (i = 0; i < count; i++)
+    {
+        if (heldItems[i] != ITEM_NONE && GetItemHoldEffect(heldItems[i]) == newEffect)
+            return TRUE;
+    }
+    return FALSE;
+}
+#endif
 
 static void InitFactoryChallenge(void)
 {
@@ -353,6 +401,12 @@ static void GenerateOpponentMons(void)
         if (k != firstMonId + i)
             continue;
 
+    #if B_FRONTIER_COMPETITIVE_MONS
+        // At most one Mega Stone and one Z-Crystal per team (see helper).
+        if (TeamHasGimmickItemConflict(&heldItems[firstMonId], i, gFacilityTrainerMons[monId].heldItem))
+            continue;
+    #endif
+
         // Successful selection
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gFacilityTrainerMons[monId].heldItem;
@@ -371,7 +425,7 @@ static void SetRentalsToOpponentParty(void)
     u8 i;
 
     if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_TENT)
-        gFacilityTrainerMons = gBattleFrontierMons;
+        gFacilityTrainerMons = GetFactoryMonsTable();
     else
         gFacilityTrainerMons = gSlateportBattleTentMons;
 
@@ -399,7 +453,7 @@ static void SetPlayerAndOpponentParties(void)
     }
     else
     {
-        gFacilityTrainerMons = gBattleFrontierMons;
+        gFacilityTrainerMons = GetFactoryMonsTable();
         if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_50)
             monLevel = FRONTIER_MAX_LEVEL_OPEN;
         else
@@ -463,7 +517,7 @@ static void GenerateInitialRentalMons(void)
     else
         factoryBattleMode = FRONTIER_MODE_SINGLES;
 
-    gFacilityTrainerMons = gBattleFrontierMons;
+    gFacilityTrainerMons = GetFactoryMonsTable();
     if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_50)
     {
         factoryLvlMode = FRONTIER_LVL_OPEN;
@@ -518,6 +572,12 @@ static void GenerateInitialRentalMons(void)
         if (j != firstMonId + i)
             continue;
 
+    #if B_FRONTIER_COMPETITIVE_MONS
+        // At most one Mega Stone and one Z-Crystal per rented team (see helper).
+        if (TeamHasGimmickItemConflict(&heldItems[firstMonId], i, gFacilityTrainerMons[monId].heldItem))
+            continue;
+    #endif
+
         gSaveBlock2Ptr->frontier.rentalMons[i].monId = monId;
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gFacilityTrainerMons[monId].heldItem;
@@ -536,7 +596,7 @@ static void GetOpponentMostCommonMonType(void)
     u8 typeCounts[NUMBER_OF_MON_TYPES];
     u8 mostCommonTypes[2];
 
-    gFacilityTrainerMons = gBattleFrontierMons;
+    gFacilityTrainerMons = GetFactoryMonsTable();
 
     // Count the number of times each type occurs in the opponent's party.
     for (i = TYPE_NORMAL; i < NUMBER_OF_MON_TYPES; i++)
@@ -586,7 +646,7 @@ static void GetOpponentBattleStyle(void)
     u8 stylePoints[FACTORY_NUM_STYLES];
 
     count = 0;
-    gFacilityTrainerMons = gBattleFrontierMons;
+    gFacilityTrainerMons = GetFactoryMonsTable();
     for (i = 0; i < FACTORY_NUM_STYLES; i++)
         stylePoints[i] = 0;
 
@@ -664,7 +724,7 @@ static void RestorePlayerPartyHeldItems(void)
     u8 i;
 
     if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_TENT)
-        gFacilityTrainerMons = gBattleFrontierMons;
+        gFacilityTrainerMons = GetFactoryMonsTable();
     else
         gFacilityTrainerMons = gSlateportBattleTentMons;
 
@@ -716,7 +776,7 @@ void FillFactoryBrainParty(void)
 {
     int i, j, k;
     enum Species species[FRONTIER_PARTY_SIZE];
-    enum Item heldItems[FRONTIER_PARTY_SIZE];
+    u16 heldItems[FRONTIER_PARTY_SIZE]; // u16 (not enum Item) to share the competitive draft helpers
     int monLevel;
     u8 fixedIV;
     u32 otId;
@@ -762,6 +822,12 @@ void FillFactoryBrainParty(void)
         if (k != i)
             continue;
 
+    #if B_FRONTIER_COMPETITIVE_MONS
+        // At most one Mega Stone and one Z-Crystal on the Brain's team (see helper).
+        if (TeamHasGimmickItemConflict(heldItems, i, gFacilityTrainerMons[monId].heldItem))
+            continue;
+    #endif
+
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gFacilityTrainerMons[monId].heldItem;
         CreateFacilityMon(&gFacilityTrainerMons[monId],
@@ -773,6 +839,27 @@ void FillFactoryBrainParty(void)
 
 static u16 GetFactoryMonId(enum FrontierLevelMode lvlMode, u8 challengeNum, bool8 useBetterRange)
 {
+#if B_FRONTIER_COMPETITIVE_MONS
+    // FORK: the competitive roster has no weak->strong tier ordering, so every mon
+    // is equally drawable from the start; the vanilla per-challenge range ramp
+    // (sInitialRentalMonRanges, the lvlMode/challengeNum/useBetterRange inputs) is
+    // bypassed in favor of a uniform pull across the whole list. We also reject any
+    // set not suited to the current battle format (singles vs doubles), so a
+    // singles-only set never appears in a doubles challenge and vice versa.
+    {
+        const struct TrainerMon *mons = GetFactoryMonsTable();
+        u16 count = GetFactoryMonsCount();
+        u32 formatTag = (VarGet(VAR_FRONTIER_BATTLE_MODE) == FRONTIER_MODE_DOUBLES)
+                      ? FACTORY_DOUBLES : FACTORY_SINGLES;
+        u16 id;
+
+        (void)lvlMode, (void)challengeNum, (void)useBetterRange;
+        do
+            id = Random() % count;
+        while (!(mons[id].tags & formatTag));
+        return id;
+    }
+#else
     u16 numMons, monId;
     u16 adder; // Used to skip past early mons for open level
 
@@ -808,6 +895,7 @@ static u16 GetFactoryMonId(enum FrontierLevelMode lvlMode, u8 challengeNum, bool
     }
 
     return monId;
+#endif // B_FRONTIER_COMPETITIVE_MONS
 }
 
 u8 GetNumPastRentalsRank(u8 battleMode, enum FrontierLevelMode lvlMode)

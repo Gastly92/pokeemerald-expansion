@@ -74,6 +74,23 @@
 // mon. Gated in src/battle_factory_screen.c (Swap_* screen). Factory-only.
 #define B_FRONTIER_FACTORY_OPP_SUMMARY  TRUE
 
+// If TRUE, the Battle Factory draws its rental/opponent/Brain Pokémon from a
+// fork-defined roster of modern competitive sets (spanning all nine generations
+// and tuned around this fork's DETERMINISTIC_* changes) instead of the vanilla
+// gBattleFrontierMons list. Selection is uniform across the whole roster (every
+// mon is equally drawable from the start; the vanilla per-challenge tier ramp in
+// sInitialRentalMonRanges is bypassed). A generated team may hold at most one
+// Mega Stone and at most one Z-Crystal, since only one Mega Evolution / Z-Move is
+// usable per battle (the player can still end up with extras by swapping after a
+// win — that's fine, the per-battle limit still applies). The roster lives in a
+// fork-owned file (src/factory_competitive_mons.c) so upstream syncs never touch
+// it; only the Battle Factory's code paths swap rosters (Tower/Dome keep the
+// vanilla gBattleFrontierMons for now). Gated in src/battle_factory.c and
+// src/battle_factory_screen.c. NOTE: the roster is still being built out
+// generation by generation, so this stays FALSE until it is large enough to draft
+// from safely.
+#define B_FRONTIER_COMPETITIVE_MONS FALSE
+
 // If TRUE, in Frontier facilities where the bag is disabled (Tower, Dome,
 // Palace, Arena, Factory, Pike — everything except the Pyramid, which keeps a
 // working bag), the BAG action slot is replaced by an INFO option. Selecting it
