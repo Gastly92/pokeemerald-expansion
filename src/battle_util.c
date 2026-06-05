@@ -567,7 +567,7 @@ bool32 TryRunFromBattle(enum BattlerId battler)
     {
         effect = TRUE;
     }
-    else if (BattlerHasAbility(battler, ABILITY_RUN_AWAY)) // FORK: innate-aware trait check
+    else if (GetBattlerAbility(battler) == ABILITY_RUN_AWAY)
     {
         if (CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE)
         {
@@ -676,7 +676,7 @@ void HandleAction_Run(void)
         else
         {
             if (GetBattlerHoldEffect(gBattlerAttacker) != HOLD_EFFECT_CAN_ALWAYS_RUN
-             && !BattlerHasAbility(gBattlerAttacker, ABILITY_RUN_AWAY) // FORK: innate-aware trait check
+             && GetBattlerAbility(gBattlerAttacker) != ABILITY_RUN_AWAY
              && !CanBattlerEscape(gBattlerAttacker))
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ATTACKER_CANT_ESCAPE;
@@ -1525,7 +1525,7 @@ u32 TrySetCantSelectMoveBattleScript(enum BattlerId battler)
             limitations++;
         }
     }
-    if (DYNAMAX_BYPASS_CHECK && BattlerHasAbility(battler, ABILITY_GORILLA_TACTICS) && *choicedMove != MOVE_NONE // FORK: innate-aware trait check
+    if (DYNAMAX_BYPASS_CHECK && (GetBattlerAbility(battler) == ABILITY_GORILLA_TACTICS) && *choicedMove != MOVE_NONE
               && *choicedMove != MOVE_UNAVAILABLE && *choicedMove != move)
     {
         gCurrentMove = *choicedMove;
@@ -1635,7 +1635,7 @@ u32 CheckMoveLimitations(enum BattlerId battler, u8 unusableMoves, u16 check)
         else if (check & MOVE_LIMITATION_STUFF_CHEEKS && moveEffect == EFFECT_STUFF_CHEEKS && GetItemPocket(gBattleMons[battler].item) != POCKET_BERRIES)
             unusableMoves |= 1u << i;
         // Gorilla Tactics
-        else if (check & MOVE_LIMITATION_CHOICE_ITEM && BattlerHasAbility(battler, ABILITY_GORILLA_TACTICS) && *choicedMove != MOVE_NONE && *choicedMove != MOVE_UNAVAILABLE && *choicedMove != move) // FORK: innate-aware
+        else if (check & MOVE_LIMITATION_CHOICE_ITEM && GetBattlerAbility(battler) == ABILITY_GORILLA_TACTICS && *choicedMove != MOVE_NONE && *choicedMove != MOVE_UNAVAILABLE && *choicedMove != move)
             unusableMoves |= 1u << i;
         // Can't Use Twice flag
         else if (check & MOVE_LIMITATION_CANT_USE_TWICE && MoveCantBeUsedTwice(move) && move == gLastResultingMoves[battler])
@@ -5099,9 +5099,9 @@ bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability)
 
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability)
 {
-    if (IsBattlerAlive(battler) && BattlerHasAbility(battler, ability)) // FORK: innate-aware trait query
+    if (IsBattlerAlive(battler) && GetBattlerAbility(battler) == ability)
         return battler + 1;
-    else if (IsBattlerAlive(BATTLE_PARTNER(battler)) && BattlerHasAbility(BATTLE_PARTNER(battler), ability)) // FORK: innate-aware
+    else if (IsBattlerAlive(BATTLE_PARTNER(battler)) && GetBattlerAbility(BATTLE_PARTNER(battler)) == ability)
         return BATTLE_PARTNER(battler) + 1;
     else
         return 0;
@@ -5116,7 +5116,7 @@ u32 IsAbilityOnField(enum Ability ability)
 {
     for (enum BattlerId i = 0; i < gBattlersCount; i++)
     {
-        if (IsBattlerAlive(i) && BattlerHasAbility(i, ability)) // FORK: innate-aware trait query
+        if (IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
             return i + 1;
     }
 
@@ -5127,7 +5127,7 @@ u32 IsAbilityOnFieldExcept(enum BattlerId battler, enum Ability ability)
 {
     for (enum BattlerId i = 0; i < gBattlersCount; i++)
     {
-        if (i != battler && IsBattlerAlive(i) && BattlerHasAbility(i, ability)) // FORK: innate-aware trait query
+        if (i != battler && IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
             return i + 1;
     }
 
@@ -5145,14 +5145,15 @@ u32 IsAbilityPreventingEscape(enum BattlerId battler)
         if (battler == battlerDef || IsBattlerAlly(battler, battlerDef))
             continue;
 
-        // FORK: innate-aware trapping checks (trapper & Shadow Tag escapee).
-        if (BattlerHasAbility(battlerDef, ABILITY_SHADOW_TAG) && (B_SHADOW_TAG_ESCAPE <= GEN_3 || !BattlerHasAbility(battler, ABILITY_SHADOW_TAG)))
+        enum Ability ability = GetBattlerAbility(battlerDef);
+
+        if (ability == ABILITY_SHADOW_TAG && (B_SHADOW_TAG_ESCAPE <= GEN_3 || GetBattlerAbility(battler) != ABILITY_SHADOW_TAG))
             return battlerDef + 1;
 
-        if (BattlerHasAbility(battlerDef, ABILITY_ARENA_TRAP) && isBattlerGrounded)
+        if (ability == ABILITY_ARENA_TRAP && isBattlerGrounded)
             return battlerDef + 1;
 
-        if (BattlerHasAbility(battlerDef, ABILITY_MAGNET_PULL) && IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
+        if (ability == ABILITY_MAGNET_PULL && IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
             return battlerDef + 1;
     }
 
