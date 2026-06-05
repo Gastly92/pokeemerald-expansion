@@ -38,9 +38,12 @@ struct SpeciesInnates
 // the live source of their Levitate. Keeping the list comprehensive now means that
 // migration only has to touch gSpeciesInfo, not this file.
 //
-// NOTE: under the default config every Levitate species carries it in slot 0 (no mon
-// has Levitate *only* in slot 1 / hidden), and Gengar is intentionally absent because
-// at P_UPDATED_ABILITIES == GEN_LATEST it resolves to Cursed Body, not Levitate.
+// NOTE: under the default config every natural-Levitate species carries it in slot 0
+// (no mon has Levitate *only* in slot 1 / hidden). The Gengar line is a special case:
+// at P_UPDATED_ABILITIES == GEN_LATEST its primary is Cursed Body, not Levitate, but it
+// floats, so it's listed here as an *observable* innate (like the Beldum line). Gengar's
+// MEGA form is deliberately omitted — Mega Gengar sinks into the ground (Shadow Tag), so
+// it should stay grounded.
 static const enum Ability sInnateLevitate[] = { ABILITY_LEVITATE, ABILITY_NONE };
 
 static const struct SpeciesInnates sSpeciesInnates[] =
@@ -53,6 +56,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 1
     { SPECIES_GASTLY,            sInnateLevitate },
     { SPECIES_HAUNTER,           sInnateLevitate },
+    { SPECIES_GENGAR,            sInnateLevitate }, // floats; primary is Cursed Body at GEN_LATEST, so observable
+    { SPECIES_GENGAR_GMAX,       sInnateLevitate }, // a Gigantamaxed Gengar still floats (NOT Gengar-Mega, which is grounded)
     { SPECIES_KOFFING,           sInnateLevitate },
     { SPECIES_WEEZING,           sInnateLevitate },
     { SPECIES_WEEZING_GALAR,     sInnateLevitate },
