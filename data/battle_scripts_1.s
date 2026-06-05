@@ -5688,6 +5688,8 @@ BattleScript_QuickClawActivation::
 	printstring STRINGID_CANACTFASTERTHANKSTO
 	waitmessage B_WAIT_TIME_LONG
 	jumpifnotdeterministicholdeffects BattleScript_QuickClawActivationEnd
+	printstring STRINGID_ITEMWASUSEDUP
+	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
 BattleScript_QuickClawActivationEnd:
 	end2

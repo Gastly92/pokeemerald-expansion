@@ -90,6 +90,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Quick Claw always moves first on
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
     } SCENE {
         MESSAGE("Wobbuffet can act faster than normal, thanks to its Quick Claw!");
+        MESSAGE("The Quick Claw was used up…"); // consumption is announced
         MESSAGE("Wobbuffet used Celebrate!");
         MESSAGE("The opposing Wobbuffet used Celebrate!");
         MESSAGE("The opposing Wobbuffet used Celebrate!");
@@ -211,18 +212,47 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinch is the first 
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock does not add a flinch to a move that already flinches")
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock is not spent when the move's own flinch lands")
 {
     GIVEN {
+        // With DETERMINISTIC_ADDITIONAL_EFFECTS a flinch move's own flinch is gated on a
+        // super-effective hit. Iron Head is super effective here, so it flinches on its
+        // own and the rock has nothing to add — and stays unspent.
         WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
-        ASSUME(MoveHasAdditionalEffect(MOVE_HEADBUTT, MOVE_EFFECT_FLINCH));
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_IRON_HEAD, MOVE_EFFECT_FLINCH));
         PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
-        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }
+        OPPONENT(SPECIES_ARTICUNO) { Speed(1); } // Ice/Flying: Steel is super effective
     } WHEN {
-        TURN { MOVE(player, MOVE_HEADBUTT); }
+        TURN { MOVE(player, MOVE_IRON_HEAD); }
+    } SCENE {
+        MESSAGE("The opposing Articuno flinched and couldn't move!"); // the move's own flinch
+        NONE_OF { MESSAGE("The King's Rock was used up…"); }
     } THEN {
-        // The move's own flinch effect is untouched, so the band is never spent.
+        // The move's own flinch landed, so the rock is never spent.
         EXPECT_EQ(player->item, ITEM_KINGS_ROCK);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock supplies the flinch when the move's own flinch is gated out")
+{
+    GIVEN {
+        // Iron Head is not super effective here, so DETERMINISTIC_ADDITIONAL_EFFECTS gates
+        // out its own flinch. King's Rock must still guarantee a flinch (rather than
+        // wrongly bowing out just because the move *can* flinch), then is consumed.
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_IRON_HEAD, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); } // Psychic: Steel is neutral, flinch gated out
+    } WHEN {
+        TURN { MOVE(player, MOVE_IRON_HEAD); }
+    } SCENE {
+        // Consumed at the holder's move-end, before the flinched target's action.
+        MESSAGE("The King's Rock was used up…");
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
     }
 }
 
@@ -267,6 +297,219 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock is not consumed when
         }
     } THEN {
         EXPECT_EQ(player->item, ITEM_KINGS_ROCK);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// King's Rock × DETERMINISTIC_FLINCH × DETERMINISTIC_ADDITIONAL_EFFECTS — the full
+// production stack (all four flags on, as they ship). Verifies the multi-turn /
+// doubles interactions a flinch-move holder runs into.
+// ---------------------------------------------------------------------------
+
+// Scenario 1: holder is faster and the flinch move is super effective every turn.
+//   T1 — the move's own flinch lands (SE gate passes, no prior flinch); the rock has
+//        nothing to add, so it is NOT consumed.
+//   T2 — the move's own flinch is suppressed by the anti-lock cap (target flinched last
+//        turn), so the rock fills in (it bypasses the cap like Fake Out) and IS consumed.
+//   T3 — the target flinched last turn (via the rock), and the rock is now gone, so the
+//        move's own flinch is again capped: NO flinch, the target acts.
+//   T4 — the target did not flinch last turn, so the move's own flinch lands again.
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock fills the anti-lock gap for one turn, then the move flinch-locks every other turn")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE); // Rock Slide always lands
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        OPPONENT(SPECIES_REGICE) { Speed(1); } // pure Ice: 2x weak to Rock, very bulky
+    } WHEN {
+        TURN { MOVE(player, MOVE_ROCK_SLIDE); } // T1: foe flinched (by the move)
+        TURN { MOVE(player, MOVE_ROCK_SLIDE); } // T2: foe flinched (by King's Rock)
+        TURN { MOVE(player, MOVE_ROCK_SLIDE); MOVE(opponent, MOVE_CELEBRATE); } // T3: foe acts
+        TURN { MOVE(player, MOVE_ROCK_SLIDE); } // T4: foe flinched (by the move)
+    } SCENE {
+        // T1: the move flinches; the rock is untouched (no "used up" yet).
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The opposing Regice flinched and couldn't move!");
+        // T2: the rock fills the anti-lock gap and is spent right here.
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The King's Rock was used up…");
+        MESSAGE("The opposing Regice flinched and couldn't move!");
+        // T3: capped, no rock left — the foe acts (proof it was not flinched).
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The opposing Regice used Celebrate!");
+        // T4: the move flinches again.
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The opposing Regice flinched and couldn't move!");
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
+// Scenario 2: holder is faster and the flinch move is NOT super effective — its own
+// flinch is gated out, so King's Rock supplies the flinch and is consumed.
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: faster holder, non-super-effective flinch move — King's Rock supplies the flinch and is consumed")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); } // Psychic: neutral to Rock
+    } WHEN {
+        TURN { MOVE(player, MOVE_ROCK_SLIDE); }
+    } SCENE {
+        MESSAGE("The King's Rock was used up…");
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
+// Scenario 3: holder is slower — the foe has already acted by the time the move hits, so
+// no flinch can land (neither the move's nor the rock's), and the rock is not consumed,
+// even though the move is super effective.
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: slower holder never flinches and never spends King's Rock")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(1); Item(ITEM_KINGS_ROCK); } // slower
+        OPPONENT(SPECIES_REGICE) { Speed(100); } // pure Ice: super effective, but acts first
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_ROCK_SLIDE); }
+    } SCENE {
+        NONE_OF {
+            MESSAGE("The King's Rock was used up…");
+            MESSAGE("The opposing Regice flinched and couldn't move!");
+        }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_KINGS_ROCK);
+    }
+}
+
+// Scenario 4a (doubles): the holder's spread flinch move is NOT super effective on
+// either foe, so both foes' own flinches are gated out. King's Rock is evaluated once
+// per target (MOVEEND_ITEM_EFFECTS_ATTACKER_1 runs before MOVEEND_NEXT_TARGET), so it
+// supplies a flinch to BOTH foes, then is consumed ONCE (MOVEEND_DETERMINISTIC_HOLD_CONSUME
+// runs after the target loop).
+DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: in doubles a spread flinch move whose flinch is gated out lets King's Rock flinch both foes, consumed once")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        PLAYER(SPECIES_ZIGZAGOON) { Speed(99); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }  // Psychic: neutral to Rock
+        OPPONENT(SPECIES_ALAKAZAM) { Speed(2); }   // Psychic: neutral to Rock; acts first of the foes
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_ROCK_SLIDE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The King's Rock was used up…"); // consumed exactly once (after both targets)
+        // Flinch messages print when each foe tries to act, i.e. in foe speed order.
+        MESSAGE("The opposing Alakazam flinched and couldn't move!");
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+    } THEN {
+        EXPECT_EQ(playerLeft->item, ITEM_NONE);
+    }
+}
+
+// Scenario 4b (doubles): the spread flinch move IS super effective on both foes, so each
+// foe's own flinch lands and King's Rock has nothing to add — it stays unspent.
+DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: in doubles a super-effective spread flinch move flinches both foes itself and never spends King's Rock")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        PLAYER(SPECIES_ZIGZAGOON) { Speed(99); }
+        OPPONENT(SPECIES_REGICE) { Speed(1); }   // pure Ice: super effective
+        OPPONENT(SPECIES_ARTICUNO) { Speed(2); } // Ice/Flying: super effective; acts first of the foes
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_ROCK_SLIDE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Rock Slide!");
+        NONE_OF { MESSAGE("The King's Rock was used up…"); } // the move flinches both itself; rock unspent
+        // Flinch messages print when each foe tries to act, i.e. in foe speed order.
+        MESSAGE("The opposing Articuno flinched and couldn't move!");
+        MESSAGE("The opposing Regice flinched and couldn't move!");
+    } THEN {
+        EXPECT_EQ(playerLeft->item, ITEM_KINGS_ROCK);
+    }
+}
+
+// Scenario 4c (doubles): one foe is FASTER than the holder and one is SLOWER. A flinch
+// (whether from the move or from King's Rock) needs the target to not have acted yet, so
+// the faster foe — which already took its turn before Rock Slide hits — is never flinched;
+// only the slower foe is. King's Rock is still spent (the slower foe triggered it). Shown
+// with a neutral hit so the rock, not the move, is the flincher.
+DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: in doubles a foe faster than the holder is never flinched, only the slower foe")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Item(ITEM_KINGS_ROCK); }
+        PLAYER(SPECIES_ZIGZAGOON) { Speed(49); }
+        OPPONENT(SPECIES_ALAKAZAM) { Speed(100); } // Psychic, neutral to Rock; FASTER than the holder
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }  // Psychic, neutral to Rock; SLOWER than the holder
+    } WHEN {
+        // The fast foe acts before Rock Slide; the slow foe is flinched and never acts.
+        TURN { MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(playerLeft, MOVE_ROCK_SLIDE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Alakazam used Celebrate!"); // fast foe already acted...
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The King's Rock was used up…");          // spent on the slow foe
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // only the slow foe flinches
+        NONE_OF { MESSAGE("The opposing Alakazam flinched and couldn't move!"); } // the fast foe never does
+    } THEN {
+        EXPECT_EQ(playerLeft->item, ITEM_NONE);
+    }
+}
+
+// Scenario 4d (doubles): the holder is faster than both foes, and the spread move is
+// super effective on one foe but neutral on the other. The SE foe is flinched by the
+// move's own (gated) flinch; the neutral foe's own flinch is gated out, so King's Rock
+// fills in for it. Both foes flinch, and the rock is consumed once — even though it only
+// actually acted on one of the two foes.
+DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: in doubles a mixed SE/neutral spread move flinches both foes (move + rock) and spends King's Rock once")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        PLAYER(SPECIES_ZIGZAGOON) { Speed(99); }
+        OPPONENT(SPECIES_REGICE) { Speed(2); }    // pure Ice: super effective; flinched by the move
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); } // Psychic, neutral to Rock; flinched by King's Rock
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_ROCK_SLIDE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The King's Rock was used up…"); // spent once, on the neutral foe
+        // Flinch messages print in foe speed order.
+        MESSAGE("The opposing Regice flinched and couldn't move!");    // SE foe, by the move
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // neutral foe, by the rock
+    } THEN {
+        EXPECT_EQ(playerLeft->item, ITEM_NONE);
     }
 }
 
