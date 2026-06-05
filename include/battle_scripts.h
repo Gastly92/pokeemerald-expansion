@@ -134,6 +134,7 @@ extern const u8 BattleScript_ThrashConfuses[];
 extern const u8 BattleScript_ConfusionAfterRampage[];
 extern const u8 BattleScript_MoveUsedIsConfused[];
 extern const u8 BattleScript_MoveUsedIsConfusedNoMore[];
+extern const u8 BattleScript_DeterministicConfusionSelfDmg[]; // FORK: DETERMINISTIC_STATUS
 extern const u8 BattleScript_PrintPayDayMoneyString[];
 extern const u8 BattleScript_WrapTurnDmg[];
 extern const u8 BattleScript_WrapEnds[];

@@ -389,41 +389,42 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
 {
     if (gBattleMons[cv->battlerAtk].volatiles.confusionTurns)
     {
-        // FORK: under DETERMINISTIC_STATUS, confusion is a one-time tax decided by the
-        // chosen move. An attacking move makes the battler hit itself once and then
-        // confusion clears; a status move shakes it off for free with no self-hit.
-        // (Infinite confusion never clears, but still obeys the same per-action rule.)
+        // FORK: under DETERMINISTIC_STATUS, confusion is an anti-lock one-time tax. The
+        // battler takes a single RNG-free self-hit but STILL carries out its chosen move
+        // (the move is never denied), so a faster foe can't chain confusion to lock it
+        // out of acting; the confusion then clears. Infinite confusion never clears, so
+        // it self-hits on each action (but still never denies the move).
         if (GetConfig(DETERMINISTIC_STATUS))
         {
-            bool32 attacking = GetMoveCategory(cv->move) != DAMAGE_CATEGORY_STATUS;
-            bool32 clears = !gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion;
-            if (clears)
+            // NB: don't repoint gBattlerTarget at the attacker for the self-hit — the
+            // chosen move continues afterwards and must keep its real target. The
+            // self-damage script operates entirely on BS_ATTACKER instead.
+            gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
+            struct DamageContext dmgCtx = {0};
+            dmgCtx.battlerAtk = dmgCtx.battlerDef = cv->battlerAtk;
+            dmgCtx.move = dmgCtx.chosenMove = MOVE_NONE;
+            dmgCtx.moveType = TYPE_MYSTERY;
+            dmgCtx.isCrit = FALSE;
+            dmgCtx.randomFactor = FALSE;
+            dmgCtx.updateFlags = TRUE;
+            dmgCtx.isSelfInflicted = TRUE;
+            dmgCtx.fixedBasePower = 40;
+            dmgCtx.abilities[gBattlerAttacker] = cv->abilities[gBattlerAttacker];
+            dmgCtx.holdEffects[gBattlerAttacker] = cv->holdEffects[gBattlerAttacker];
+            gBattleStruct->passiveHpUpdate[cv->battlerAtk] = CalculateMoveDamage(&dmgCtx);
+            if (!gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion)
                 gBattleMons[cv->battlerAtk].volatiles.confusionTurns = 0;
-            if (attacking)
+            // If the self-hit would KO, fall back to the original behavior: the confusion
+            // script ends the move and the battler faints (it isn't acting anyway, so
+            // there's no lock to break).
+            if (gBattleStruct->passiveHpUpdate[cv->battlerAtk] >= gBattleMons[cv->battlerAtk].hp)
             {
-                gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
-                gBattlerTarget = gBattlerAttacker;
-                struct DamageContext dmgCtx = {0};
-                dmgCtx.battlerAtk = dmgCtx.battlerDef = cv->battlerAtk;
-                dmgCtx.move = dmgCtx.chosenMove = MOVE_NONE;
-                dmgCtx.moveType = TYPE_MYSTERY;
-                dmgCtx.isCrit = FALSE;
-                dmgCtx.randomFactor = FALSE;
-                dmgCtx.updateFlags = TRUE;
-                dmgCtx.isSelfInflicted = TRUE;
-                dmgCtx.fixedBasePower = 40;
-                dmgCtx.abilities[gBattlerAttacker] = cv->abilities[gBattlerAttacker];
-                dmgCtx.holdEffects[gBattlerAttacker] = cv->holdEffects[gBattlerAttacker];
-                gBattleStruct->passiveHpUpdate[cv->battlerAtk] = CalculateMoveDamage(&dmgCtx);
                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
                 return CANCELER_RESULT_FAILURE;
             }
-            if (clears)
-            {
-                BattleScriptCall(BattleScript_MoveUsedIsConfusedNoMore);
-                return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
-            }
-            return CANCELER_RESULT_SUCCESS;
+            // Otherwise: self-hit, then let the chosen move still run this turn.
+            BattleScriptCall(BattleScript_DeterministicConfusionSelfDmg);
+            return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
         }
         if (!gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion)
             gBattleMons[cv->battlerAtk].volatiles.confusionTurns--;
