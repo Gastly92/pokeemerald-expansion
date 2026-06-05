@@ -483,6 +483,36 @@ DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: in doubles a foe faster than the
     }
 }
 
+// Scenario 4d (doubles): the holder is faster than both foes, and the spread move is
+// super effective on one foe but neutral on the other. The SE foe is flinched by the
+// move's own (gated) flinch; the neutral foe's own flinch is gated out, so King's Rock
+// fills in for it. Both foes flinch, and the rock is consumed once — even though it only
+// actually acted on one of the two foes.
+DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: in doubles a mixed SE/neutral spread move flinches both foes (move + rock) and spends King's Rock once")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        PLAYER(SPECIES_ZIGZAGOON) { Speed(99); }
+        OPPONENT(SPECIES_REGICE) { Speed(2); }    // pure Ice: super effective; flinched by the move
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); } // Psychic, neutral to Rock; flinched by King's Rock
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_ROCK_SLIDE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The King's Rock was used up…"); // spent once, on the neutral foe
+        // Flinch messages print in foe speed order.
+        MESSAGE("The opposing Regice flinched and couldn't move!");    // SE foe, by the move
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // neutral foe, by the rock
+    } THEN {
+        EXPECT_EQ(playerLeft->item, ITEM_NONE);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Starf Berry
 // ---------------------------------------------------------------------------
