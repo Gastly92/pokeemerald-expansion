@@ -625,9 +625,18 @@ BattleFrontier_BattleFactoryLobby_Text_ExplainSwapNumberRules:
 BattleFrontier_BattleFactoryLobby_Text_ExplainSwapNotesRules:
 	.string "There are two key points to be aware\n"
 	.string "of when swapping POKéMON.\p"
+@ FORK: B_FRONTIER_FACTORY_OPP_SUMMARY lets the player open a summary for the
+@ opponent's mons on the swap screen, so the vanilla "can't check the stats"
+@ note is reversed to "may check".
+.if B_FRONTIER_FACTORY_OPP_SUMMARY
+	.string "First, when swapping, you may check\n"
+	.string "the stats of the POKéMON you are\l"
+	.string "about to receive.\p"
+.else
 	.string "First, when swapping, you can't check\n"
 	.string "the stats of the POKéMON you are\l"
 	.string "about to receive.\p"
+.endif
 	.string "Second, the POKéMON on your team\n"
 	.string "are lined up in sequence, depending on\l"
 	.string "the order in which you rented them.\p"
