@@ -1498,26 +1498,6 @@ static void FactoryPrintPrevOrCurrentStreak(u8 battleMode, enum FrontierLevelMod
         FactoryPrintStreak(gText_Prev, winStreak, rents, x1, x2, x3, y);
 }
 
-#if B_FRONTIER_FORCE_LVL_100
-// FORK: the freed Lv 50 space (see ShowFactoryResultsWindow) shows how many full sets
-// the player has cleared, now and at their best. A set is FRONTIER_STAGES_PER_CHALLENGE
-// wins — the endless Factory's pacing/reward unit (see B_FRONTIER_ENDLESS).
-static void FactoryPrintSetsCleared(u8 battleMode, u8 y)
-{
-    u16 curSets = FactoryGetWinStreak(battleMode, FRONTIER_LVL_OPEN) / FRONTIER_STAGES_PER_CHALLENGE;
-    u16 bestStreak = gSaveBlock2Ptr->frontier.factoryRecordWinStreaks[battleMode][FRONTIER_LVL_OPEN];
-
-    if (bestStreak > MAX_STREAK)
-        bestStreak = MAX_STREAK;
-
-    AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, COMPOUND_STRING("Sets cleared"), 8, y, TEXT_SKIP_DRAW, NULL);
-    ConvertIntToDecimalStringN(gStringVar1, curSets, STR_CONV_MODE_RIGHT_ALIGN, 4);
-    ConvertIntToDecimalStringN(gStringVar2, bestStreak / FRONTIER_STAGES_PER_CHALLENGE, STR_CONV_MODE_RIGHT_ALIGN, 4);
-    StringExpandPlaceholders(gStringVar4, COMPOUND_STRING("Now {STR_VAR_1}   Best {STR_VAR_2}"));
-    AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gStringVar4, 64, y, TEXT_SKIP_DRAW, NULL);
-}
-#endif
-
 static void ShowFactoryResultsWindow(u8 battleMode)
 {
     gRecordsWindowId = AddWindow(&sFrontierResultsWindowTemplate);
@@ -1532,13 +1512,11 @@ static void ShowFactoryResultsWindow(u8 battleMode)
 #if B_FRONTIER_FORCE_LVL_100
     // FORK: B_FRONTIER_FORCE_LVL_100 forces every challenge into Open Level, so the
     // vanilla Lv 50 block is permanently empty. Drop it and show only the Open Level
-    // streak in the top half; the freed bottom half shows the cleared-set count.
+    // streak.
     AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_OpenLv, 8, 33, TEXT_SKIP_DRAW, NULL);
     AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_RentalSwap, 152, 33, TEXT_SKIP_DRAW, NULL);
     FactoryPrintPrevOrCurrentStreak(battleMode, FRONTIER_LVL_OPEN, 8, 64, 158, 49);
     FactoryPrintRecordStreak(battleMode, FRONTIER_LVL_OPEN, 8, 64, 158, 65);
-    PrintHyphens(10);
-    FactoryPrintSetsCleared(battleMode, 97);
 #else
     AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_Lv502, 8, 33, TEXT_SKIP_DRAW, NULL);
     AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_RentalSwap, 152, 33, TEXT_SKIP_DRAW, NULL);
