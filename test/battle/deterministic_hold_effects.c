@@ -452,6 +452,37 @@ DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: in doubles a super-effective spr
     }
 }
 
+// Scenario 4c (doubles): one foe is FASTER than the holder and one is SLOWER. A flinch
+// (whether from the move or from King's Rock) needs the target to not have acted yet, so
+// the faster foe — which already took its turn before Rock Slide hits — is never flinched;
+// only the slower foe is. King's Rock is still spent (the slower foe triggered it). Shown
+// with a neutral hit so the rock, not the move, is the flincher.
+DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: in doubles a foe faster than the holder is never flinched, only the slower foe")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_FLINCH, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_ROCK_SLIDE, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Item(ITEM_KINGS_ROCK); }
+        PLAYER(SPECIES_ZIGZAGOON) { Speed(49); }
+        OPPONENT(SPECIES_ALAKAZAM) { Speed(100); } // Psychic, neutral to Rock; FASTER than the holder
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }  // Psychic, neutral to Rock; SLOWER than the holder
+    } WHEN {
+        // The fast foe acts before Rock Slide; the slow foe is flinched and never acts.
+        TURN { MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(playerLeft, MOVE_ROCK_SLIDE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Alakazam used Celebrate!"); // fast foe already acted...
+        MESSAGE("Wobbuffet used Rock Slide!");
+        MESSAGE("The King's Rock was used up…");          // spent on the slow foe
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // only the slow foe flinches
+        NONE_OF { MESSAGE("The opposing Alakazam flinched and couldn't move!"); } // the fast foe never does
+    } THEN {
+        EXPECT_EQ(playerLeft->item, ITEM_NONE);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Starf Berry
 // ---------------------------------------------------------------------------
