@@ -9,6 +9,8 @@
 #include "battle_controllers.h"
 #include "battle_util.h"
 #include "bg.h"
+#include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
+#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "frontier_battle_info.h"
 #include "gpu_regs.h"
 #include "item.h"
@@ -337,6 +339,32 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         StringCopy(p, COMPOUND_STRING("?"));
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
+
+    // FORK: FEATURE_INNATE_ABILITIES — list the foe's innate abilities (always-active
+    // passives on top of the chosen ability above). Gated on the same in-battle reveal
+    // flag as the chosen ability, so the viewer keeps showing only what has been seen
+    // in action and doesn't even leak that the mon has innates until then.
+    if (GetConfig(FEATURE_INNATE_ABILITIES) && abilitySeen)
+    {
+        enum Species foeSpecies = GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL);
+        bool32 anyInnate = FALSE;
+        p = StringCopy(line, COMPOUND_STRING("Innate: "));
+        for (u32 slot = 0; ; slot++)
+        {
+            enum Ability innate = GetSpeciesInnate(foeSpecies, slot);
+            if (innate == ABILITY_NONE)
+                break;
+            if (anyInnate)
+                p = StringCopy(p, COMPOUND_STRING(", "));
+            p = StringCopy(p, gAbilitiesInfo[innate].name);
+            anyInnate = TRUE;
+        }
+        if (anyInnate)
+        {
+            PrintLine(windowId, line, 0, y);
+            y += LINE_H;
+        }
+    }
 
     // Held item — only once its effect has been genuinely revealed in battle.
     enum Item heldItem = GetMonData(&foeParty[foeIndex], MON_DATA_HELD_ITEM, NULL);

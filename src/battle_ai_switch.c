@@ -5,6 +5,7 @@
 #include "battle_ai_switch.h"
 #include "battle_ai_util.h"
 #include "battle_util.h"
+#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — innate-aware switch evaluation
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_main.h"
@@ -634,7 +635,10 @@ static bool32 FindMonThatAbsorbsOpponentsMove(struct SwitchAiContext *switchCont
     // Check current mon for all absorbing abilities
     for (u32 absorbingAbilityIndex = 0; absorbingAbilityIndex < numAbsorbingAbilities; absorbingAbilityIndex++)
     {
-        if (gAiLogicData->abilities[switchContext->battler] == absorbingTypeAbilities[absorbingAbilityIndex])
+        enum Ability absorbingAbility = absorbingTypeAbilities[absorbingAbilityIndex];
+        // FORK: innate-aware — the active mon's innate Levitate (allowlist) absorbs Ground too.
+        if (gAiLogicData->abilities[switchContext->battler] == absorbingAbility
+         || (absorbingAbility == ABILITY_LEVITATE && BattlerHasAbility(switchContext->battler, ABILITY_LEVITATE)))
             return FALSE;
     }
 
@@ -648,8 +652,14 @@ static bool32 FindMonThatAbsorbsOpponentsMove(struct SwitchAiContext *switchCont
 
         for (u32 absorbingAbilityIndex = 0; absorbingAbilityIndex < numAbsorbingAbilities; absorbingAbilityIndex++)
         {
+            enum Ability absorbingAbility = absorbingTypeAbilities[absorbingAbilityIndex];
+            // FORK: innate-aware — a benched mon's innate Levitate (allowlist) absorbs Ground
+            // too. Off the field there's no battler index, so key off the species data.
+            bool32 monHasAbsorbingAbility = (absorbingAbility == partyMonAbility)
+                || (absorbingAbility == ABILITY_LEVITATE
+                 && SpeciesHasInnate(GetMonData(&switchContext->party[monIndex], MON_DATA_SPECIES), ABILITY_LEVITATE));
             // Found a mon
-            if (absorbingTypeAbilities[absorbingAbilityIndex] == partyMonAbility && RandomPercentage(RNG_AI_SWITCH_ABSORBING, GetSwitchChance(SHOULD_SWITCH_ABSORBS_MOVE)))
+            if (monHasAbsorbingAbility && RandomPercentage(RNG_AI_SWITCH_ABSORBING, GetSwitchChance(SHOULD_SWITCH_ABSORBS_MOVE)))
                 return SetSwitchinAndSwitch(switchContext->battler, monIndex);
         }
     }

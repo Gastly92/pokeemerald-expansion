@@ -3324,7 +3324,17 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         // partner ability checks
         if (!partnerProtecting && moveTarget != TARGET_BOTH && !DoesBattlerIgnoreAbilityChecks(battlerAtk, aiData->abilities[battlerAtk], move))
         {
-            switch (atkPartnerAbility)
+            // FORK: innate-aware (allowlist) — treat the partner's innate Levitate like the
+            // real ability for this Ground-move partner-immunity scoring. Levitate is the only
+            // supported innate and its sole partner-relevant effect is Ground immunity, so
+            // promoting the value is safe unless the primary already grants Ground immunity
+            // (Levitate / Earth Eater), which we leave untouched.
+            enum Ability scoringPartnerAbility = atkPartnerAbility;
+            if (moveType == TYPE_GROUND
+             && scoringPartnerAbility != ABILITY_LEVITATE && scoringPartnerAbility != ABILITY_EARTH_EATER
+             && BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_LEVITATE))
+                scoringPartnerAbility = ABILITY_LEVITATE;
+            switch (scoringPartnerAbility)
             {
             case ABILITY_ANGER_POINT:
                 if (MoveAlwaysCrits(move)

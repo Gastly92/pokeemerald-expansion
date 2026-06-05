@@ -78,13 +78,31 @@ How much is needed depends on the ability class:
   either swap the comparison or add a `BattlerHasAbility` check alongside.)
 
 - **Passive immunity / calc modifier** (like **Levitate**). The effect lives in a
-  damage/grounding calc, so add an `IsInnateActive(battler, ABILITY_X)` (or
-  `SpeciesHasInnate` for species-level prediction with no battle state) clause
-  next to the existing `ability == ABILITY_X` test. Levitate is the worked
-  example: see `IsBattlerUngroundedByAbilityItemOrEffect` and
-  `CalcTypeEffectivenessMultiplierInternal`/`CalcPartyMonTypeEffectivenessMultiplier`
-  in `src/battle_util.c`. Force the pop-up to the innate with
-  `gBattleScripting.abilityPopupOverwrite = ABILITY_X;` when it visibly triggers.
+  damage/grounding calc, so add an `IsInnateActive(battler, ABILITY_X)` (for an
+  on-field battler) or `SpeciesHasInnate(species, ABILITY_X)` (off-field /
+  species-level prediction, no battle state) clause next to the existing
+  `ability == ABILITY_X` test. **Levitate is the fully-wired worked example** —
+  use it as the checklist for what "full parity" touches:
+  - core effect + markers + pop-up: `IsBattlerUngroundedByAbilityItemOrEffect`,
+    `CalcTypeEffectivenessMultiplierInternal`,
+    `CalcPartyMonTypeEffectivenessMultiplier` (`src/battle_util.c`). The type calc
+    already sets `gLastUsedAbility`, calls `RecordAbilityBattle`, and forces
+    `gBattleScripting.abilityPopupOverwrite` to the innate when it blocks.
+  - AI: on-field damage/grounding is automatic (the AI runs the same calc keyed
+    off the real battler), but off-field/partner sites need explicit help —
+    `GetPartyMonAbilityForSwitchCalc`'s callers in `src/battle_ai_switch.c`
+    (benched-mon absorb check), the partner-immunity switch in
+    `src/battle_ai_main.c` (doubles spread-move scoring). Do **not** make the
+    single-valued `gAiLogicData->abilities[]` / `AI_DecideKnownAbilityForTurn`
+    return the innate — that array is the mon's chosen *identity*; query the
+    innate alongside it instead.
+  - facility/eligibility: Sky Battle (`CanMonParticipateInSkyBattle`,
+    `src/battle_util.c`) and Battle Dome move rating (`GetEffectivenessPoints`,
+    `src/battle_dome.c`).
+  - displays: the summary screen Info page (`PrintMonAbilityName`,
+    `src/pokemon_summary_screen.c`) and the Frontier battle-info viewer
+    (`src/frontier_battle_info.c`) already iterate the whole innate list, so they
+    show any allowlisted ability with no per-ability work.
 
 - **Active / on-event ability** (fires a script on switch-in, end-of-turn, or
   on-contact — e.g. Intimidate, Speed Boost, Static, Rough Skin). These need the

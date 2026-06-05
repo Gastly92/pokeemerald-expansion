@@ -9965,7 +9965,8 @@ bool32 CanMonParticipateInSkyBattle(struct Pokemon *mon)
     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
     u32 monAbilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM);
 
-    bool32 hasLevitateAbility = GetSpeciesAbility(species, monAbilityNum) == ABILITY_LEVITATE;
+    bool32 hasLevitateAbility = GetSpeciesAbility(species, monAbilityNum) == ABILITY_LEVITATE
+                             || SpeciesHasInnate(species, ABILITY_LEVITATE); // FORK: innate-aware Levitate (allowlist)
     bool32 isFlyingType = GetSpeciesType(species, 0) == TYPE_FLYING || GetSpeciesType(species, 1) == TYPE_FLYING;
     bool32 monIsValidAndNotEgg = GetMonData(mon, MON_DATA_SANITY_HAS_SPECIES) && !GetMonData(mon, MON_DATA_IS_EGG);
 
