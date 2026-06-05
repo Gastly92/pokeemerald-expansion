@@ -39,10 +39,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // The Aggron line is a hulking steel dinosaur: it gains an innate Intimidate
     // (an *active*, on-switch-in ability) on top of its native Sturdy/Rock Head/
     // Heavy Metal, demonstrating that innates fire their entry effects, not just
-    // passive trait checks.
-    { SPECIES_ARON,    { ABILITY_INTIMIDATE } },
-    { SPECIES_LAIRON,  { ABILITY_INTIMIDATE } },
-    { SPECIES_AGGRON,  { ABILITY_INTIMIDATE } },
+    // passive trait checks. Its craggy iron armor also grants an innate Rough Skin
+    // (slot 1), a *move-end / on-contact* innate — so the line demonstrates the
+    // contact-ability trigger (attacker is hurt when it makes contact).
+    { SPECIES_ARON,    { ABILITY_INTIMIDATE, ABILITY_ROUGH_SKIN } },
+    { SPECIES_LAIRON,  { ABILITY_INTIMIDATE, ABILITY_ROUGH_SKIN } },
+    { SPECIES_AGGRON,  { ABILITY_INTIMIDATE, ABILITY_ROUGH_SKIN } },
 };
 
 bool32 SpeciesHasInnate(u16 species, enum Ability ability)

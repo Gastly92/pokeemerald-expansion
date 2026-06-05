@@ -18,6 +18,7 @@ ASSUMPTIONS
     ASSUME(SpeciesHasInnate(SPECIES_METAGROSS, ABILITY_SPEED_BOOST)); // active end-turn innate (slot 1)
     ASSUME(gSpeciesInfo[SPECIES_METAGROSS].abilities[0] == ABILITY_CLEAR_BODY);
     ASSUME(SpeciesHasInnate(SPECIES_AGGRON, ABILITY_INTIMIDATE));
+    ASSUME(SpeciesHasInnate(SPECIES_AGGRON, ABILITY_ROUGH_SKIN)); // active on-contact innate (slot 1)
     ASSUME(gSpeciesInfo[SPECIES_AGGRON].abilities[0] != ABILITY_INTIMIDATE);
 }
 
@@ -151,6 +152,35 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate does not fire whe
         TURN {}
     } SCENE {
         NONE_OF { ABILITY_POPUP(player, ABILITY_INTIMIDATE); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate (Rough Skin) fires on contact")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_AGGRON); // native Sturdy; innate Intimidate (switch-in) + Rough Skin (contact)
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        // The move-end / contact innate fires with the pop-up forced to Rough Skin
+        // (not the primary ability), hurting the attacker that made contact.
+        ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN);
+        MESSAGE("Wobbuffet was hurt!");
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a contact innate does not fire when the feature is off")
+{
+    GIVEN {
+        // Feature off in the test baseline → Aggron's native ability only.
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_AGGRON);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN); }
     }
 }
 
