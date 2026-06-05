@@ -283,6 +283,7 @@
 // flag: add its #define in the relevant config/*.h and one line here.
 #define FEATURE_CONFIG_DEFINITIONS(F) \
     F(FEATURE_INNATE_ABILITIES, featureInnateAbilities, (u32, TRUE)) \
+    F(FEATURE_NEW_TYPES,        featureNewTypes,        (u32, TRUE)) \
 
 #define GET_CONFIG_MAXIMUM(_typeMaxValue, ...) INVOKE_WITH_B(GET_CONFIG_MAXIMUM_, _typeMaxValue)
 #define GET_CONFIG_MAXIMUM_(_type, ...) FIRST(__VA_OPT__(FIRST(__VA_ARGS__),) MAX_BITS((sizeof(_type) * 8)))

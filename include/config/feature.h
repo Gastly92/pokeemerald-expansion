@@ -28,4 +28,16 @@
 // BattlerHasAbility()/IsInnateActive() (src/battle_util.c).
 #define FEATURE_INNATE_ABILITIES TRUE
 
+// When TRUE, some species' types are overwritten with a fork-defined typing,
+// replacing the stock gSpeciesInfo types for those species everywhere the
+// canonical accessor GetSpeciesType() is consulted (battle type matchups/STAB,
+// the type icons, the Pokédex, the summary screen, IsSpeciesOfType, etc.). The
+// species->types override table lives in a fork-owned file (src/new_types.c)
+// rather than in gSpeciesInfo, so it never conflicts on upstream sync and leaves
+// the upstream species data untouched. The first entry re-types Galarian Ponyta
+// and Galarian Rapidash from Psychic(/Fairy) to Fire/Fairy. The override is
+// applied inside GetSpeciesType() (src/pokemon.c); see NEW_TYPES.md (repo root)
+// for how to add a species.
+#define FEATURE_NEW_TYPES TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
