@@ -90,6 +90,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Quick Claw always moves first on
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
     } SCENE {
         MESSAGE("Wobbuffet can act faster than normal, thanks to its Quick Claw!");
+        MESSAGE("The Quick Claw was used up…"); // consumption is announced
         MESSAGE("Wobbuffet used Celebrate!");
         MESSAGE("The opposing Wobbuffet used Celebrate!");
         MESSAGE("The opposing Wobbuffet used Celebrate!");
@@ -211,18 +212,47 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinch is the first 
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock does not add a flinch to a move that already flinches")
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock is not spent when the move's own flinch lands")
 {
     GIVEN {
+        // With DETERMINISTIC_ADDITIONAL_EFFECTS a flinch move's own flinch is gated on a
+        // super-effective hit. Iron Head is super effective here, so it flinches on its
+        // own and the rock has nothing to add — and stays unspent.
         WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
-        ASSUME(MoveHasAdditionalEffect(MOVE_HEADBUTT, MOVE_EFFECT_FLINCH));
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_IRON_HEAD, MOVE_EFFECT_FLINCH));
         PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
-        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }
+        OPPONENT(SPECIES_ARTICUNO) { Speed(1); } // Ice/Flying: Steel is super effective
     } WHEN {
-        TURN { MOVE(player, MOVE_HEADBUTT); }
+        TURN { MOVE(player, MOVE_IRON_HEAD); }
+    } SCENE {
+        MESSAGE("The opposing Articuno flinched and couldn't move!"); // the move's own flinch
+        NONE_OF { MESSAGE("The King's Rock was used up…"); }
     } THEN {
-        // The move's own flinch effect is untouched, so the band is never spent.
+        // The move's own flinch landed, so the rock is never spent.
         EXPECT_EQ(player->item, ITEM_KINGS_ROCK);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock supplies the flinch when the move's own flinch is gated out")
+{
+    GIVEN {
+        // Iron Head is not super effective here, so DETERMINISTIC_ADDITIONAL_EFFECTS gates
+        // out its own flinch. King's Rock must still guarantee a flinch (rather than
+        // wrongly bowing out just because the move *can* flinch), then is consumed.
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        ASSUME(MoveHasAdditionalEffect(MOVE_IRON_HEAD, MOVE_EFFECT_FLINCH));
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); } // Psychic: Steel is neutral, flinch gated out
+    } WHEN {
+        TURN { MOVE(player, MOVE_IRON_HEAD); }
+    } SCENE {
+        // Consumed at the holder's move-end, before the flinched target's action.
+        MESSAGE("The King's Rock was used up…");
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
     }
 }
 

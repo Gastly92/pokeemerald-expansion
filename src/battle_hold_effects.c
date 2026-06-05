@@ -193,8 +193,21 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
 
     if (!IsBattlerAlive(battlerDef)
      || !IsBattlerTurnDamaged(battlerDef, EXCLUDING_SUBSTITUTES)
-     || MoveIgnoresKingsRock(gCurrentMove)
-     || MoveHasAdditionalEffect(gCurrentMove, MOVE_EFFECT_FLINCH))
+     || MoveIgnoresKingsRock(gCurrentMove))
+        return effect;
+
+    // FORK: DETERMINISTIC_HOLD_EFFECTS — King's Rock fills in a flinch the move itself
+    // didn't deliver. Stock behavior never stacks the rock on a move that already has its
+    // own flinch chance, so we keep that exclusion when the flag is off. But under the
+    // DETERMINISTIC_ADDITIONAL_EFFECTS super-effective/STAB gate, a flinch move (Rock
+    // Slide, Iron Head, ...) only flinches on a qualifying hit; on a neutral hit its
+    // flinch is gated out, so the rock should still guarantee one. Bailing whenever the
+    // move merely *has* a flinch effect leaves no flinch at all. Instead let the
+    // flinchWouldLand check below decide via !volatiles.flinched: if the move already
+    // flinched the target this hit the rock is a no-op (and stays unspent); otherwise it
+    // provides the guaranteed flinch and is consumed.
+    if (!GetConfig(DETERMINISTIC_HOLD_EFFECTS)
+     && MoveHasAdditionalEffect(gCurrentMove, MOVE_EFFECT_FLINCH))
         return effect;
 
     enum Ability ability = GetBattlerAbility(battlerAtk);
@@ -206,11 +219,12 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
 
     // FORK: DETERMINISTIC_HOLD_EFFECTS — King's Rock / Razor Fang flinch the target on
     // the holder's FIRST attack that wouldn't already flinch (the early-return guards
-    // above exclude moves that ignore the item or already flinch, and require a damaging
-    // hit), then the item is consumed at move end (MOVEEND_DETERMINISTIC_HOLD_CONSUME) so
-    // it never re-triggers. The flinch is set via SetMoveEffect, which doesn't pass
-    // through the DETERMINISTIC_FLINCH anti-lock cap (TryTriggerAdditionalEffect), so —
-    // like Fake Out — it flinches even a target that flinched last turn.
+    // above exclude moves that ignore the item and require a damaging hit; a move that
+    // delivered its own flinch is filtered by the !volatiles.flinched check below), then
+    // the item is consumed at move end (MOVEEND_DETERMINISTIC_HOLD_CONSUME) so it never
+    // re-triggers. The flinch is set via SetMoveEffect, which doesn't pass through the
+    // DETERMINISTIC_FLINCH anti-lock cap (TryTriggerAdditionalEffect), so — like Fake
+    // Out — it flinches even a target that flinched last turn.
     bool32 flinches;
     if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
     {
