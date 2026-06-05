@@ -228,6 +228,7 @@ enum Ability GetBattlerAbility(enum BattlerId battler);
 // predicate: TRUE for the primary (chosen) ability or an active innate. Use this
 // for trait checks; keep GetBattlerAbility() for identity/copy/swap/display.
 bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability);
+bool32 TryActivateInnateEffects(enum AbilityEffect caseID, enum BattlerId battler, u8 *innateIndex, bool32 shouldAbilityTrigger); // FORK: FEATURE_INNATE_ABILITIES
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnOpposingSide(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnField(enum Ability ability);

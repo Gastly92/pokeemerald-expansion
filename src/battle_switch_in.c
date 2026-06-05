@@ -211,31 +211,13 @@ static bool32 CanBattlerBeHealed(enum BattlerId battler)
 }
 
 // FORK: FEATURE_INNATE_ABILITIES — run the next active innate's switch-in effect.
-// Scans the battler's innate slots from gBattleStruct->switchInInnateIndex, skipping
-// the primary ability (already activated by FIRST_EVENT_BLOCK_GENERAL_ABILITIES) and
-// any innate not currently active (BattlerHasAbility honors the feature flag and the
-// usual suppression). Advances the index past the slot it consumed so successive
-// re-entries activate successive innates. The pop-up is forced to the innate via
-// abilityPopupOverwrite (the activation scripts otherwise show the primary ability).
+// Delegates to the shared TryActivateInnateEffects driver (the index resumes across
+// re-entries; the primary ability, already activated by
+// FIRST_EVENT_BLOCK_GENERAL_ABILITIES, and inactive innates are skipped).
 static bool32 TryActivateSwitchInInnates(enum BattlerId battler)
 {
-    enum Ability primary = GetBattlerAbility(battler);
-
-    while (gBattleStruct->switchInInnateIndex < MAX_INNATE_ABILITIES)
-    {
-        enum Ability innate = GetSpeciesInnate(gBattleMons[battler].species, gBattleStruct->switchInInnateIndex);
-        gBattleStruct->switchInInnateIndex++;
-
-        if (innate == ABILITY_NONE || innate == primary || !BattlerHasAbility(battler, innate))
-            continue;
-
-        gBattleScripting.abilityPopupOverwrite = innate;
-        if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler, innate, MOVE_NONE, gBattleStruct->battlerState[battler].switchIn))
-            return TRUE;
-        gBattleScripting.abilityPopupOverwrite = ABILITY_NONE; // effect didn't fire; don't leak the overwrite
-    }
-
-    return FALSE;
+    return TryActivateInnateEffects(ABILITYEFFECT_ON_SWITCHIN, battler, &gBattleStruct->switchInInnateIndex,
+                                    gBattleStruct->battlerState[battler].switchIn);
 }
 
 static bool32 FirstEventBlockEvents(struct BattleCalcValues *calcValues)

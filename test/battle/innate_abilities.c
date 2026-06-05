@@ -15,6 +15,7 @@ ASSUMPTIONS
     ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
     // The seed data these tests rely on. If the table changes, update the tests.
     ASSUME(SpeciesHasInnate(SPECIES_METAGROSS, ABILITY_LEVITATE));
+    ASSUME(SpeciesHasInnate(SPECIES_METAGROSS, ABILITY_SPEED_BOOST)); // active end-turn innate (slot 1)
     ASSUME(gSpeciesInfo[SPECIES_METAGROSS].abilities[0] == ABILITY_CLEAR_BODY);
     ASSUME(SpeciesHasInnate(SPECIES_AGGRON, ABILITY_INTIMIDATE));
     ASSUME(gSpeciesInfo[SPECIES_AGGRON].abilities[0] != ABILITY_INTIMIDATE);
@@ -108,6 +109,35 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate (Intimidate) fire
         ABILITY_POPUP(player, ABILITY_INTIMIDATE);
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, opponent);
         MESSAGE("The opposing Wobbuffet's Attack fell!");
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an active innate (Speed Boost) fires its end-turn effect")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_METAGROSS); // native Clear Body, innate Levitate + Speed Boost
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        // The end-turn innate fires with the pop-up forced to Speed Boost (not the
+        // primary Clear Body), raising Metagross's Speed at the end of the turn.
+        ABILITY_POPUP(player, ABILITY_SPEED_BOOST);
+        MESSAGE("Metagross's Speed rose!");
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an end-turn innate does not fire when the feature is off")
+{
+    GIVEN {
+        // Feature off in the test baseline → Metagross's native ability only.
+        PLAYER(SPECIES_METAGROSS);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_SPEED_BOOST); }
     }
 }
 

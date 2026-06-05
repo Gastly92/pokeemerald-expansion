@@ -5097,6 +5097,37 @@ bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability)
     return IsInnateActive(battler, ability);
 }
 
+// FORK: FEATURE_INNATE_ABILITIES — shared driver that fires a battler's *active*
+// innate ability effects for a given trigger (caseID), one innate per call. It
+// mirrors the primary ability's re-entrant flow: AbilityBattleEffects queues a
+// battle script and returns TRUE, so the caller re-enters and we resume at the
+// next slot. *innateIndex tracks progress across re-entries; the caller resets it
+// to 0 and advances its own state machine once the index reaches
+// MAX_INNATE_ABILITIES. Skips the primary ability (already handled by the normal
+// ability block at this trigger) and any inactive innate, and forces the ability
+// pop-up to the innate (the activation scripts otherwise show the primary). A
+// no-op returning FALSE when the feature is off, since BattlerHasAbility is.
+bool32 TryActivateInnateEffects(enum AbilityEffect caseID, enum BattlerId battler, u8 *innateIndex, bool32 shouldAbilityTrigger)
+{
+    enum Ability primary = GetBattlerAbility(battler);
+
+    while (*innateIndex < MAX_INNATE_ABILITIES)
+    {
+        enum Ability innate = GetSpeciesInnate(gBattleMons[battler].species, *innateIndex);
+        (*innateIndex)++;
+
+        if (innate == ABILITY_NONE || innate == primary || !BattlerHasAbility(battler, innate))
+            continue;
+
+        gBattleScripting.abilityPopupOverwrite = innate;
+        if (AbilityBattleEffects(caseID, battler, innate, MOVE_NONE, shouldAbilityTrigger))
+            return TRUE;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_NONE; // effect didn't fire; don't leak the overwrite
+    }
+
+    return FALSE;
+}
+
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability)
 {
     if (IsBattlerAlive(battler) && BattlerHasAbility(battler, ability)) // FORK: innate-aware trait query

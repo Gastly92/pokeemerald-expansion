@@ -627,6 +627,7 @@ struct BattleStruct
     u16 choicedMove[MAX_BATTLERS_COUNT];
     u8 switchInBattlerCounter;
     u8 switchInInnateIndex; // FORK: FEATURE_INNATE_ABILITIES — which innate slot the switch-in activation loop is on
+    u8 endTurnInnateIndex; // FORK: FEATURE_INNATE_ABILITIES — which innate slot the end-turn activation loop is on
     u16 lastTakenMoveFrom[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT]; // a 2-D array [target][attacker]
     union {
         struct LinkBattlerHeader linkBattlerHeader;

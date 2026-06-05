@@ -27,9 +27,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Vibrava already carry Levitate as their real ability, so an innate there
     // would be a no-op; the Beldum line lacks native Levitate, so the innate is
     // actually observable (and is what test/battle/innate_abilities.c exercises).
-    { SPECIES_BELDUM,    { ABILITY_LEVITATE } },
-    { SPECIES_METANG,    { ABILITY_LEVITATE } },
-    { SPECIES_METAGROSS, { ABILITY_LEVITATE } },
+    //
+    // The line also gets an innate Speed Boost (slot 1) as the *passive + active*
+    // demo: that same magnetic propulsion accelerates it each turn. Levitate is a
+    // passive trait innate; Speed Boost is an active end-turn innate, so this one
+    // row exercises both a multi-slot species and the end-turn innate trigger.
+    { SPECIES_BELDUM,    { ABILITY_LEVITATE, ABILITY_SPEED_BOOST } },
+    { SPECIES_METANG,    { ABILITY_LEVITATE, ABILITY_SPEED_BOOST } },
+    { SPECIES_METAGROSS, { ABILITY_LEVITATE, ABILITY_SPEED_BOOST } },
 
     // The Aggron line is a hulking steel dinosaur: it gains an innate Intimidate
     // (an *active*, on-switch-in ability) on top of its native Sturdy/Rock Head/
