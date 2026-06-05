@@ -10863,6 +10863,88 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
     return tax;
 }
 
+// FORK: projected net PP the attacker's move will cost *this turn*, for the in-battle
+// move-info display under DETERMINISTIC_ACCURACY_EVASION (where the move always hits, so
+// accuracy is meaningless and the PP economy is what matters). Mirrors the deduction in
+// CancelerPPDeduction (src/battle_move_resolution.c): base 1 PP, Pressure, the paralysis
+// PP tax, the accuracy/evasion stage economy and the flat item/ability taxes, minus the
+// PP recovered from a net accuracy advantage / Micle Berry. Targets aren't chosen yet at
+// move-select time, so single-target moves project against the first live foe. The signed
+// result can be negative when the move would net-recover PP. Keep in sync with CancelerPPDeduction.
+s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
+{
+    s32 ppToDeduct = 1;
+    s32 refund = 0;
+    enum MoveTarget moveTarget = GetBattlerMoveTargetType(battlerAtk, move);
+    enum Ability atkAbility = GetBattlerAbility(battlerAtk);
+
+    // Representative single target: the first living opponent.
+    enum BattlerId primaryDef = battlerAtk;
+    for (u32 t = 0; t < gBattlersCount; t++)
+    {
+        if (!IsBattlerAlly(t, battlerAtk) && IsBattlerAlive(t))
+        {
+            primaryDef = t;
+            break;
+        }
+    }
+
+    // Pressure (matches CancelerPPDeduction).
+    if (IsSpreadMove(moveTarget) || moveTarget == TARGET_ALL_BATTLERS
+        || moveTarget == TARGET_FIELD || MoveForcesPressure(move))
+    {
+        for (u32 i = 0; i < gBattlersCount; i++)
+        {
+            if (!IsBattlerAlly(i, battlerAtk))
+                ppToDeduct += (GetBattlerAbility(i) == ABILITY_PRESSURE);
+        }
+    }
+    else if (moveTarget != TARGET_OPPONENTS_FIELD)
+    {
+        if (primaryDef != battlerAtk && GetBattlerAbility(primaryDef) == ABILITY_PRESSURE)
+            ppToDeduct++;
+    }
+
+    if (gBattleMons[battlerAtk].status1 & STATUS1_PARALYSIS
+        && atkAbility != ABILITY_QUICK_FEET
+        && GetConfig(DETERMINISTIC_PARALYSIS))
+        ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
+
+    if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+    {
+        bool32 micleActive = gBattleStruct->battlerState[battlerAtk].usedMicleBerry;
+        bool32 singleTargetFoe = (moveTarget == TARGET_SELECTED || moveTarget == TARGET_OPPONENT
+                               || moveTarget == TARGET_RANDOM || moveTarget == TARGET_DEPENDS
+                               || moveTarget == TARGET_SMART);
+        bool32 spreadFoe = (moveTarget == TARGET_BOTH || moveTarget == TARGET_FOES_AND_ALLY
+                         || moveTarget == TARGET_ALL_BATTLERS);
+
+        if ((singleTargetFoe || spreadFoe) && GetMoveAccuracy(move) != 0)
+        {
+            for (u32 t = 0; t < gBattlersCount; t++)
+            {
+                if (t == battlerAtk || IsBattlerAlly(t, battlerAtk) || !IsBattlerAlive(t))
+                    continue;
+                if (singleTargetFoe && t != primaryDef)
+                    continue;
+                enum Ability defAbility = GetBattlerAbility(t);
+                s32 delta = GetAccEvasionStageDelta(battlerAtk, t, move, atkAbility, defAbility, micleActive);
+                if (delta > 0)
+                    refund += delta;
+                else
+                    ppToDeduct += -delta;
+                ppToDeduct += GetDeterministicMoveTargetPPTax(battlerAtk, t, move, defAbility, GetBattlerHoldEffect(t));
+            }
+            if (atkAbility == ABILITY_HUSTLE && IsBattleMovePhysical(move))
+                ppToDeduct++;
+        }
+        if (micleActive)
+            refund++;
+    }
+
+    return ppToDeduct - refund;
+}
+
 // FORK: TRUE when DETERMINISTIC_ACCURACY_EVASION makes `move` lock the user into a
 // Hyper Beam-style recharge turn — a damaging (non-sleep) move that was exactly 50%
 // accurate. Shared by the move-end recharge hook (MOVEEND_DETERMINISTIC_RECHARGE) and

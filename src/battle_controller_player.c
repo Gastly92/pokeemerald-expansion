@@ -11,6 +11,7 @@
 #include "battle_z_move.h"
 #include "battle_gimmick.h"
 #include "bg.h"
+#include "config_changes.h" // FORK: GetConfig(DETERMINISTIC_ACCURACY_EVASION) for move-info PP cost
 #include "frontier_battle_info.h" // FORK: B_FRONTIER_BATTLE_INFO bag->info viewer
 #include "data.h"
 #include "item.h"
@@ -1776,6 +1777,7 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[battler][4]);
     enum Move move = moveInfo->moves[gMoveSelectionCursor[battler]];
+    enum Move selectedMove = move; // the real move, before any Max-move substitution below
     u16 pwr = GetMovePower(move);
     u16 acc = GetMoveAccuracy(move);
     enum DamageCategory cat = GetBattleMoveCategory(move);
@@ -1787,10 +1789,16 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
         acc = 0;
     }
 
-    u8 pwr_num[3], acc_num[3];
+    // FORK: under DETERMINISTIC_ACCURACY_EVASION every move always hits, so the accuracy
+    // field is meaningless. Show the move's projected net PP cost this turn instead — the
+    // taxes/refunds from evasion, accuracy stages, paralysis, BrightPowder, etc.
+    bool32 showPpCost = GetConfig(DETERMINISTIC_ACCURACY_EVASION);
+
+    u8 pwr_num[3], acc_num[8];
     u8 cat_desc[7] = _("CAT: ");
     u8 pwr_desc[7] = _("PWR: ");
     u8 acc_desc[7] = _("ACC: ");
+    u8 pp_desc[7] = _("PP: ");
     u8 cat_start[] = _("{CLEAR_TO 0x03}");
     u8 pwr_start[] = _("{CLEAR_TO 0x38}");
     u8 acc_start[] = _("{CLEAR_TO 0x6C}");
@@ -1800,7 +1808,18 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
         StringCopy(pwr_num, gText_BattleSwitchWhich5);
     else
         ConvertIntToDecimalStringN(pwr_num, pwr, STR_CONV_MODE_LEFT_ALIGN, 3);
-    if (acc < 2)
+    if (showPpCost)
+    {
+        s32 ppCost = GetProjectedMovePPCost(battler, selectedMove);
+        u8 *q = acc_num;
+        if (ppCost < 0)
+        {
+            *q++ = CHAR_HYPHEN;
+            ppCost = -ppCost;
+        }
+        ConvertIntToDecimalStringN(q, ppCost, STR_CONV_MODE_LEFT_ALIGN, 3);
+    }
+    else if (acc < 2)
         StringCopy(acc_num, gText_BattleSwitchWhich5);
     else
         ConvertIntToDecimalStringN(acc_num, acc, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -1810,7 +1829,7 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
     StringAppend(gDisplayedStringBattle, pwr_desc);
     StringAppend(gDisplayedStringBattle, pwr_num);
     StringAppend(gDisplayedStringBattle, acc_start);
-    StringAppend(gDisplayedStringBattle, acc_desc);
+    StringAppend(gDisplayedStringBattle, showPpCost ? pp_desc : acc_desc);
     StringAppend(gDisplayedStringBattle, acc_num);
     StringAppend(gDisplayedStringBattle, gText_NewLine);
     StringAppend(gDisplayedStringBattle, GetMoveDescription(move));

@@ -29,12 +29,19 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterRoom::
 	goto_if_eq VAR_0x8006, 2, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ResumeChallenge
 	factory_generaterentalmons
 	factory_generateopponentmons
+	@ FORK: B_FRONTIER_ENDLESS drops the staff's cryptic type/style hints about the
+	@ upcoming opponent ("favors Fire", "slow and steady"); they aren't helpful, so
+	@ the attendant sends you straight in. Assembler .if (not cpp #if); see the note
+	@ in BattleFactoryLobby. The opponent team is still generated above.
+.if B_FRONTIER_ENDLESS
+.else
 	factory_getopponentmontype
 	setorcopyvar VAR_0x8005, VAR_RESULT
 	factory_getopponentstyle
 	setorcopyvar VAR_0x8006, VAR_RESULT
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentType
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentStyle
+.endif
 	@ FORK: B_FRONTIER_PARTY_SIZE_6V6 auto-rents a full team of 6, so there is no
 	@ selection to choose from. Uses an assembler .if (not a cpp #if) so the
 	@ config-value flag is read correctly; see the note in BattleFactoryLobby.
@@ -170,12 +177,16 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskRetireChallenge::
 
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskSwapMon::
 	factory_generateopponentmons
+	@ FORK: B_FRONTIER_ENDLESS drops the cryptic opponent hints here too (see EnterRoom).
+.if B_FRONTIER_ENDLESS
+.else
 	factory_getopponentmontype
 	setorcopyvar VAR_0x8005, VAR_RESULT
 	factory_getopponentstyle
 	setorcopyvar VAR_0x8006, VAR_RESULT
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentType
 	call BattleFrontier_BattleFactoryPreBattleRoom_EventScript_CommentOnOpponentStyle
+.endif
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_LikeToSwapMon, MSGBOX_YESNO
 	switch VAR_RESULT
 	case NO, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom

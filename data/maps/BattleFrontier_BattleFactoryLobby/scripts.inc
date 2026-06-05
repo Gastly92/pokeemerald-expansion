@@ -367,8 +367,15 @@ BattleFrontier_BattleFactoryLobby_Text_ExplainSinglesChallenge:
 	.string "The Battle Swap Single Tournament\n"
 	.string "is a SINGLE BATTLE competition using\l"
 	.string "only rental POKéMON.\p"
+@ FORK: B_FRONTIER_PARTY_SIZE_6V6 loans a full team of six, not three. Assembler
+@ .if (not cpp #if); see the note at the top of this file's level-mode branch.
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "First, you will be loaned a full team\n"
+	.string "of six POKéMON for this event.\p"
+.else
 	.string "First, you will be loaned three\n"
 	.string "POKéMON specifically for this event.\p"
+.endif
 	.string "Using the supplied rental POKéMON,\n"
 	.string "you must conduct a SINGLE BATTLE.\p"
 	.string "If you win, you are permitted to trade\n"
@@ -479,8 +486,15 @@ BattleFrontier_BattleFactoryLobby_Text_ExplainDoublesChallenge:
 	.string "The Battle Swap Double Tournament\n"
 	.string "is a DOUBLE BATTLE competition using\l"
 	.string "only rental POKéMON.\p"
+@ FORK: B_FRONTIER_PARTY_SIZE_6V6 loans a full team of six, not three. Assembler
+@ .if (not cpp #if); see the note at the top of this file's level-mode branch.
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "First, you will be loaned a full team\n"
+	.string "of six POKéMON for this event.\p"
+.else
 	.string "First, you will be loaned three\n"
 	.string "POKéMON specifically for this event.\p"
+.endif
 	.string "Using the supplied rental POKéMON,\n"
 	.string "you must conduct a DOUBLE BATTLE.\p"
 	.string "If you win, you are permitted to trade\n"
@@ -548,10 +562,19 @@ BattleFrontier_BattleFactoryLobby_Text_NeedToCheckOpponentsMons:
 	.string "they're any good.$"
 
 BattleFrontier_BattleFactoryLobby_Text_CantFigureOutStaffHints:
+@ FORK: B_FRONTIER_ENDLESS drops the staff's opponent hints, so this man no longer
+@ grumbles about deciphering them.
+.if B_FRONTIER_ENDLESS
+	.string "The staff used to drop hints about\n"
+	.string "your next opponent, but no more.\p"
+	.string "Now I just have to size up the foe's\n"
+	.string "POKéMON myself during the battle!$"
+.else
 	.string "You know how the staff here give you\n"
 	.string "a few hints about your next opponent?\p"
 	.string "Well, I'm a full-grown man, but I have\n"
 	.string "trouble figuring out their hints.$"
+.endif
 
 @ Unused
 BattleFrontier_BattleFactoryLobby_Text_RentalMonsAreVaried:
@@ -569,8 +592,13 @@ BattleFrontier_BattleFactoryLobby_Text_ReadWhichHeading:
 	.string "Which heading do you want to read?$"
 
 BattleFrontier_BattleFactoryLobby_Text_ExplainBasicRules:
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "In a Battle Swap event, you may use\n"
+	.string "a full team of six POKéMON.\p"
+.else
 	.string "In a Battle Swap event, you may use\n"
 	.string "only three POKéMON.\p"
+.endif
 	.string "Whether you are renting or swapping,\n"
 	.string "your team may not have two or more\l"
 	.string "of the same POKéMON.$"
@@ -584,9 +612,15 @@ BattleFrontier_BattleFactoryLobby_Text_ExplainSwapPartnerRules:
 BattleFrontier_BattleFactoryLobby_Text_ExplainSwapNumberRules:
 	.string "After every battle you win, you may\n"
 	.string "swap for one of your defeated\l"
+@ FORK: B_FRONTIER_ENDLESS has no fixed final TRAINER, so drop the vanilla note
+@ about being unable to swap with the seventh (last) opponent.
+.if B_FRONTIER_ENDLESS
+	.string "opponent's POKéMON.$"
+.else
 	.string "opponent's POKéMON.\p"
 	.string "You will not be able to swap POKéMON\n"
 	.string "with the seventh TRAINER in the event.$"
+.endif
 
 BattleFrontier_BattleFactoryLobby_Text_ExplainSwapNotesRules:
 	.string "There are two key points to be aware\n"
