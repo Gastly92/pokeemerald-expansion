@@ -4277,6 +4277,24 @@ BattleScript_MoveUsedPowder::
 	tryfaintmon BS_ATTACKER
 	goto BattleScript_MoveEnd
 
+@ FORK: DETERMINISTIC_STATUS — apply the one-time confusion self-hit, then RETURN so
+@ the chosen move still executes this turn (the C side guarantees the hit is non-fatal,
+@ so no faint handling is needed here, and the battler can't be locked out of acting).
+BattleScript_DeterministicConfusionSelfDmg::
+	printstring STRINGID_PKMNISCONFUSED
+	waitmessage B_WAIT_TIME_LONG
+	volatileanimation BS_ATTACKER, VOLATILE_CONFUSION
+	printstring STRINGID_ITHURTCONFUSION
+	waitmessage B_WAIT_TIME_LONG
+	effectivenesssound
+	hitanimation BS_ATTACKER
+	waitstate
+	tryselfconfusiondmgformchange
+	healthbarupdate BS_ATTACKER, PASSIVE_HP_UPDATE
+	datahpupdate BS_ATTACKER, PASSIVE_HP_UPDATE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_MoveUsedIsConfusedNoMore::
 	printstring STRINGID_PKMNHEALEDCONFUSION
 	waitmessage B_WAIT_TIME_LONG

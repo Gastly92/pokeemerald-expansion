@@ -6,6 +6,7 @@
 #include "battle_pyramid.h"
 #include "battle_util.h"
 #include "battle_controllers.h"
+#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -566,7 +567,7 @@ bool32 TryRunFromBattle(enum BattlerId battler)
     {
         effect = TRUE;
     }
-    else if (GetBattlerAbility(battler) == ABILITY_RUN_AWAY)
+    else if (BattlerHasAbility(battler, ABILITY_RUN_AWAY)) // FORK: innate-aware trait check
     {
         if (CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE)
         {
@@ -675,7 +676,7 @@ void HandleAction_Run(void)
         else
         {
             if (GetBattlerHoldEffect(gBattlerAttacker) != HOLD_EFFECT_CAN_ALWAYS_RUN
-             && GetBattlerAbility(gBattlerAttacker) != ABILITY_RUN_AWAY
+             && !BattlerHasAbility(gBattlerAttacker, ABILITY_RUN_AWAY) // FORK: innate-aware trait check
              && !CanBattlerEscape(gBattlerAttacker))
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ATTACKER_CANT_ESCAPE;
@@ -1524,7 +1525,7 @@ u32 TrySetCantSelectMoveBattleScript(enum BattlerId battler)
             limitations++;
         }
     }
-    if (DYNAMAX_BYPASS_CHECK && (GetBattlerAbility(battler) == ABILITY_GORILLA_TACTICS) && *choicedMove != MOVE_NONE
+    if (DYNAMAX_BYPASS_CHECK && BattlerHasAbility(battler, ABILITY_GORILLA_TACTICS) && *choicedMove != MOVE_NONE // FORK: innate-aware trait check
               && *choicedMove != MOVE_UNAVAILABLE && *choicedMove != move)
     {
         gCurrentMove = *choicedMove;
@@ -1634,7 +1635,7 @@ u32 CheckMoveLimitations(enum BattlerId battler, u8 unusableMoves, u16 check)
         else if (check & MOVE_LIMITATION_STUFF_CHEEKS && moveEffect == EFFECT_STUFF_CHEEKS && GetItemPocket(gBattleMons[battler].item) != POCKET_BERRIES)
             unusableMoves |= 1u << i;
         // Gorilla Tactics
-        else if (check & MOVE_LIMITATION_CHOICE_ITEM && GetBattlerAbility(battler) == ABILITY_GORILLA_TACTICS && *choicedMove != MOVE_NONE && *choicedMove != MOVE_UNAVAILABLE && *choicedMove != move)
+        else if (check & MOVE_LIMITATION_CHOICE_ITEM && BattlerHasAbility(battler, ABILITY_GORILLA_TACTICS) && *choicedMove != MOVE_NONE && *choicedMove != MOVE_UNAVAILABLE && *choicedMove != move) // FORK: innate-aware
             unusableMoves |= 1u << i;
         // Can't Use Twice flag
         else if (check & MOVE_LIMITATION_CANT_USE_TWICE && MoveCantBeUsedTwice(move) && move == gLastResultingMoves[battler])
@@ -5033,11 +5034,74 @@ enum Ability GetBattlerAbilityInternal(enum BattlerId battler, bool32 ignoreMold
     return gBattleMons[battler].ability;
 }
 
+// FORK: innate abilities (FEATURE_INNATE_ABILITIES). Mirrors CanBreakThroughAbility
+// for an arbitrary innate ability value: Mold Breaker & co. pierce an innate only
+// if that innate is itself breakable, exactly as they would the same ability in a
+// real slot. Keep in sync with CanBreakThroughAbility above.
+static bool32 CanBreakThroughInnate(enum BattlerId battlerDef, enum Ability ability, bool32 hasAbilityShield)
+{
+    if (hasAbilityShield || gBattlerAttacker == battlerDef)
+        return FALSE;
+    return gBattleStruct->moldBreakerActive && gAbilitiesInfo[ability].breakable;
+}
+
+// FORK: innate abilities (FEATURE_INNATE_ABILITIES). TRUE if `battler`'s species
+// declares `ability` as an innate AND that innate is currently active. Applies the
+// same suppression gates as GetBattlerAbilityInternal (not-on-field, Gastro Acid,
+// Neutralizing Gas, Mold Breaker on breakable abilities, Ability Shield) so an
+// innate is never stronger than the same ability in a real slot. Mirrors the
+// default GetBattlerAbility() path (Mold Breaker respected, Ability Shield
+// honored); the Comatose-while-transformed micro-edge there does not apply to
+// innates (which key off the battler's species). Returns FALSE entirely when the
+// feature flag is off, so the BattlerHasAbility() sweep is a no-op in stock play.
+static bool32 IsInnateActive(enum BattlerId battler, enum Ability ability)
+{
+    bool32 hasAbilityShield;
+
+    if (!GetConfig(FEATURE_INNATE_ABILITIES))
+        return FALSE;
+
+    if (gBattleStruct->battlerState[battler].notOnField)
+        return FALSE;
+
+    if (!SpeciesHasInnate(gBattleMons[battler].species, ability))
+        return FALSE;
+
+    hasAbilityShield = GetBattlerHoldEffectIgnoreAbility(battler) == HOLD_EFFECT_ABILITY_SHIELD;
+
+    if (gAbilitiesInfo[ability].cantBeSuppressed)
+        return !CanBreakThroughInnate(battler, ability, hasAbilityShield);
+
+    if (gBattleMons[battler].volatiles.gastroAcid)
+        return FALSE;
+
+    if (!hasAbilityShield
+     && IsNeutralizingGasOnField()
+     && ability != ABILITY_NEUTRALIZING_GAS)
+        return FALSE;
+
+    return !CanBreakThroughInnate(battler, ability, hasAbilityShield);
+}
+
+// FORK: innate abilities (FEATURE_INNATE_ABILITIES). The central "does this
+// battler have ability X?" trait predicate. TRUE if X is the battler's primary
+// (chosen) ability — resolved by GetBattlerAbility(), so all the usual
+// suppression applies — OR an active innate. Identity-style queries (Trace, Skill
+// Swap, Role Play, ability pop-up, RecordAbilityBattle, ...) must keep using
+// GetBattlerAbility() directly: innates are additive passives, never copyable or
+// swappable, so the primary slot stays deterministic.
+bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability)
+{
+    if (GetBattlerAbility(battler) == ability)
+        return TRUE;
+    return IsInnateActive(battler, ability);
+}
+
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability)
 {
-    if (IsBattlerAlive(battler) && GetBattlerAbility(battler) == ability)
+    if (IsBattlerAlive(battler) && BattlerHasAbility(battler, ability)) // FORK: innate-aware trait query
         return battler + 1;
-    else if (IsBattlerAlive(BATTLE_PARTNER(battler)) && GetBattlerAbility(BATTLE_PARTNER(battler)) == ability)
+    else if (IsBattlerAlive(BATTLE_PARTNER(battler)) && BattlerHasAbility(BATTLE_PARTNER(battler), ability)) // FORK: innate-aware
         return BATTLE_PARTNER(battler) + 1;
     else
         return 0;
@@ -5052,7 +5116,7 @@ u32 IsAbilityOnField(enum Ability ability)
 {
     for (enum BattlerId i = 0; i < gBattlersCount; i++)
     {
-        if (IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
+        if (IsBattlerAlive(i) && BattlerHasAbility(i, ability)) // FORK: innate-aware trait query
             return i + 1;
     }
 
@@ -5063,7 +5127,7 @@ u32 IsAbilityOnFieldExcept(enum BattlerId battler, enum Ability ability)
 {
     for (enum BattlerId i = 0; i < gBattlersCount; i++)
     {
-        if (i != battler && IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
+        if (i != battler && IsBattlerAlive(i) && BattlerHasAbility(i, ability)) // FORK: innate-aware trait query
             return i + 1;
     }
 
@@ -5081,15 +5145,14 @@ u32 IsAbilityPreventingEscape(enum BattlerId battler)
         if (battler == battlerDef || IsBattlerAlly(battler, battlerDef))
             continue;
 
-        enum Ability ability = GetBattlerAbility(battlerDef);
-
-        if (ability == ABILITY_SHADOW_TAG && (B_SHADOW_TAG_ESCAPE <= GEN_3 || GetBattlerAbility(battler) != ABILITY_SHADOW_TAG))
+        // FORK: innate-aware trapping checks (trapper & Shadow Tag escapee).
+        if (BattlerHasAbility(battlerDef, ABILITY_SHADOW_TAG) && (B_SHADOW_TAG_ESCAPE <= GEN_3 || !BattlerHasAbility(battler, ABILITY_SHADOW_TAG)))
             return battlerDef + 1;
 
-        if (ability == ABILITY_ARENA_TRAP && isBattlerGrounded)
+        if (BattlerHasAbility(battlerDef, ABILITY_ARENA_TRAP) && isBattlerGrounded)
             return battlerDef + 1;
 
-        if (ability == ABILITY_MAGNET_PULL && IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
+        if (BattlerHasAbility(battlerDef, ABILITY_MAGNET_PULL) && IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
             return battlerDef + 1;
     }
 
@@ -6025,6 +6088,8 @@ static bool32 IsBattlerUngroundedByAbilityItemOrEffect(enum BattlerId battler, e
     if (holdEffect == HOLD_EFFECT_AIR_BALLOON)
         return TRUE;
     if (ability == ABILITY_LEVITATE)
+        return TRUE;
+    if (IsInnateActive(battler, ABILITY_LEVITATE)) // FORK: innate Levitate ungrounds exactly like the real ability
         return TRUE;
     return FALSE;
 }
@@ -8417,10 +8482,14 @@ static inline uq4_12_t CalcTypeEffectivenessMultiplierInternal(struct DamageCont
         && !(ctx->holdEffects[ctx->battlerDef] == HOLD_EFFECT_RING_TARGET && IS_BATTLER_OF_TYPE(ctx->battlerDef, TYPE_FLYING) && !IsBattlerUngroundedByAbilityItemOrEffect(ctx->battlerDef, ctx->abilities[ctx->battlerDef], ctx->holdEffects[ctx->battlerDef])))
     {
         modifier = UQ_4_12(0.0);
-        if (ctx->updateFlags && ctx->abilities[ctx->battlerDef] == ABILITY_LEVITATE)
+        if (ctx->updateFlags && (ctx->abilities[ctx->battlerDef] == ABILITY_LEVITATE || IsInnateActive(ctx->battlerDef, ABILITY_LEVITATE))) // FORK: credit innate Levitate too
         {
             gBattleStruct->moveResultFlags[ctx->battlerDef] |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
             gLastUsedAbility = ABILITY_LEVITATE;
+            // FORK: when an innate Levitate (not the primary slot) blocks the move, force the
+            // pop-up to show Levitate. CreateAbilityPopUp() otherwise reads the primary ability
+            // (gBattleMons[battler].ability); BattleScript_AbilityPopUp clears the overwrite after.
+            gBattleScripting.abilityPopupOverwrite = ABILITY_LEVITATE;
             ctx->abilityBlocked = TRUE;
             RecordAbilityBattle(ctx->battlerDef, ABILITY_LEVITATE);
         }
@@ -8509,7 +8578,7 @@ uq4_12_t CalcPartyMonTypeEffectivenessMultiplier(enum Move move, enum Species sp
         if (GetSpeciesType(speciesDef, 1) != GetSpeciesType(speciesDef, 0))
             MulByTypeEffectiveness(&ctx, &modifier, GetSpeciesType(speciesDef, 1));
 
-        if (ctx.moveType == TYPE_GROUND && abilityDef == ABILITY_LEVITATE && !(gFieldStatuses & STATUS_FIELD_GRAVITY))
+        if (ctx.moveType == TYPE_GROUND && (abilityDef == ABILITY_LEVITATE || SpeciesHasInnate(speciesDef, ABILITY_LEVITATE)) && !(gFieldStatuses & STATUS_FIELD_GRAVITY)) // FORK: innate-aware (species-level prediction, no battle state)
             modifier = UQ_4_12(0.0);
         if (abilityDef == ABILITY_WONDER_GUARD && modifier <= UQ_4_12(1.0) && GetMovePower(move) != 0)
             modifier = UQ_4_12(0.0);

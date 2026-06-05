@@ -78,34 +78,61 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_STATUS: sleep always lasts a fixed number of t
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_STATUS: an attacking move makes a confused battler hit itself once, then clears")
+SINGLE_BATTLE_TEST("DETERMINISTIC_STATUS: a confused battler self-hits once but still uses its move, then snaps out next turn")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_STATUS, TRUE);
         PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_TACKLE); }
         OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_CONFUSE_RAY, MOVE_CELEBRATE); }
     } WHEN {
-        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_TACKLE); } // confused: hits itself, move cancelled
-        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_TACKLE); }   // confusion cleared: Tackle lands
+        // The fix: the confused battler takes its one-time self-hit but its chosen move
+        // STILL executes (old behavior denied the move, which a faster foe could chain
+        // into a lock). The confusion lingers and snaps out on the next action.
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_TACKLE); } // self-hit + Tackle
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_TACKLE); }   // snaps out + Tackle
     } SCENE {
         MESSAGE("Wobbuffet became confused!");
-        MESSAGE("It hurt itself in its confusion!");
+        MESSAGE("It hurt itself in its confusion!");         // turn 1: the one-time self-hit...
+        MESSAGE("Wobbuffet used Tackle!");                   // ...but the move STILL executes (no lock)
+        HP_BAR(opponent);
+        MESSAGE("Wobbuffet snapped out of its confusion!");  // turn 2: snaps out, no second self-hit
         MESSAGE("Wobbuffet used Tackle!");
         HP_BAR(opponent);
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_STATUS: a status move shakes off confusion for free")
+SINGLE_BATTLE_TEST("DETERMINISTIC_STATUS: a faster foe re-confusing can't stop the battler acting or force a second self-hit")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_STATUS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_CONFUSE_RAY); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_TACKLE); } // confused: self-hit + Tackle
+        // The foe re-uses Confuse Ray, but the volatile still lingers, so it can't refresh
+        // the confusion: the battler snaps out and Tackles instead of self-hitting again.
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        MESSAGE("It hurt itself in its confusion!");        // turn 1 self-hit
+        MESSAGE("Wobbuffet used Tackle!");
+        HP_BAR(opponent);
+        MESSAGE("Wobbuffet snapped out of its confusion!"); // turn 2: lingered then snapped out (not refreshed)
+        MESSAGE("Wobbuffet used Tackle!");
+        HP_BAR(opponent);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_STATUS: the confusion self-hit applies regardless of move category")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_STATUS, TRUE);
         PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_CELEBRATE); }
         OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_CONFUSE_RAY); }
     } WHEN {
-        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_CELEBRATE); } // self-hit, then Celebrate still runs
     } SCENE {
         MESSAGE("Wobbuffet became confused!");
-        MESSAGE("Wobbuffet snapped out of its confusion!");
+        MESSAGE("It hurt itself in its confusion!"); // status move no longer a free shake-off
         MESSAGE("Wobbuffet used Celebrate!");
     }
 }

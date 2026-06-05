@@ -5,6 +5,8 @@
 #include "battle_controllers.h"
 #include "battle_util.h"
 #include "battle_hold_effects.h"
+#include "battle_gimmick.h"
+#include "battle_script_commands.h"
 #include "battle_stat_change.h"
 #include "battle_scripts.h"
 #include "item.h"
@@ -211,7 +213,19 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
     // like Fake Out — it flinches even a target that flinched last turn.
     bool32 flinches;
     if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
-        flinches = (ability != ABILITY_STENCH);
+    {
+        // FORK: only flinch — and therefore only consume the item — when the flinch will
+        // actually land this turn. The guaranteed deterministic flinch is otherwise
+        // wasted (and the item wrongly used up) against a faster foe that has already
+        // acted, a target already flinched by another source this turn (move effect /
+        // Stench), Inner Focus, or a Dynamaxed target. These mirror the conditions under
+        // which MOVE_EFFECT_FLINCH actually sets the flinched volatile (Cmd_*).
+        bool32 flinchWouldLand = !HasBattlerActedThisTurn(battlerDef)
+                              && !gBattleMons[battlerDef].volatiles.flinched
+                              && GetBattlerAbility(battlerDef) != ABILITY_INNER_FOCUS
+                              && GetActiveGimmick(battlerDef) != GIMMICK_DYNAMAX;
+        flinches = (ability != ABILITY_STENCH) && flinchWouldLand;
+    }
     else
         flinches = (ability != ABILITY_STENCH) && RandomPercentage(RNG_HOLD_EFFECT_FLINCH, holdEffectParam);
 

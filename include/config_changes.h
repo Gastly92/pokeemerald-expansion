@@ -7,6 +7,7 @@
 #include "config/ai.h"
 #include "config/deterministic.h" // FORK: DETERMINISTIC_* flags ride this system
 #include "config/buff.h" // FORK: BUFF_* flags ride this system
+#include "config/feature.h" // FORK: FEATURE_* flags ride this system
 
 #define UNPACK_CONFIG_STRUCT(_name, _field, _typeMaxValue, ...) INVOKE_WITH_(UNPACK_CONFIG_STRUCT_, _field, UNPACK_B(_typeMaxValue));
 #define UNPACK_CONFIG_STRUCT_(_field, _type, ...) _type FIRST(__VA_OPT__(_field:BIT_SIZE(FIRST(__VA_ARGS__)),) _field)
@@ -18,6 +19,7 @@ struct ConfigChanges
     AI_CONFIG_DEFINITIONS(UNPACK_CONFIG_STRUCT)
     DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_STRUCT) // FORK
     BUFF_CONFIG_DEFINITIONS(UNPACK_CONFIG_STRUCT) // FORK
+    FEATURE_CONFIG_DEFINITIONS(UNPACK_CONFIG_STRUCT) // FORK
     // Expands to:
     // u32 critChance:4;
     // u32 critMultiplier:4;

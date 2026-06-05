@@ -5123,7 +5123,13 @@ void IncreaseConfusionScore(enum BattlerId battlerAtk, enum BattlerId battlerDef
       && gAiLogicData->holdEffects[battlerDef] != HOLD_EFFECT_CURE_CONFUSION
       && gAiLogicData->holdEffects[battlerDef] != HOLD_EFFECT_CURE_STATUS)
     {
-        if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS
+        // FORK: under DETERMINISTIC_STATUS confusion no longer denies the foe its
+        // action — it takes one guaranteed self-hit and then snaps out — so it is worth
+        // far less than the vanilla random action-disruption. Value it as light chip
+        // rather than a disabling status.
+        if (GetConfig(DETERMINISTIC_STATUS))
+            ADJUST_SCORE_PTR(WEAK_EFFECT);
+        else if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS
           || gBattleMons[battlerDef].volatiles.infatuation
           || (gAiLogicData->abilities[battlerAtk] == ABILITY_SERENE_GRACE && HasMoveWithMoveEffectExcept(battlerAtk, MOVE_EFFECT_FLINCH, EFFECT_FIRST_TURN_ONLY)))
             ADJUST_SCORE_PTR(GOOD_EFFECT);

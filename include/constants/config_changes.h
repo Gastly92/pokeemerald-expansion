@@ -273,6 +273,17 @@
 #define BUFF_CONFIG_DEFINITIONS(F) \
     F(BUFF_SHELL_BELL, buffShellBell, (u32, TRUE)) \
 
+// FORK: the FEATURE_* flags (config/feature.h) gate standalone gameplay
+// features this fork adds, riding the same runtime config system as the
+// DETERMINISTIC_*/BUFF_* flags so battle tests can toggle them per-test with
+// WITH_CONFIG. Production defaults come from the FEATURE_* #defines (seeded into
+// sConfigChanges); the test baseline forces them off (see TestInitConfigData) so
+// the inherited suite keeps exercising stock behavior, and feature tests opt in
+// explicitly. Each is a boolean, so its max value is TRUE. To add a new feature
+// flag: add its #define in the relevant config/*.h and one line here.
+#define FEATURE_CONFIG_DEFINITIONS(F) \
+    F(FEATURE_INNATE_ABILITIES, featureInnateAbilities, (u32, TRUE)) \
+
 #define GET_CONFIG_MAXIMUM(_typeMaxValue, ...) INVOKE_WITH_B(GET_CONFIG_MAXIMUM_, _typeMaxValue)
 #define GET_CONFIG_MAXIMUM_(_type, ...) FIRST(__VA_OPT__(FIRST(__VA_ARGS__),) MAX_BITS((sizeof(_type) * 8)))
 
@@ -285,6 +296,7 @@ enum ConfigTag
     AI_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS)
     DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
     BUFF_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
+    FEATURE_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
     CONFIG_COUNT
 };
 

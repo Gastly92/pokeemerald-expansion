@@ -389,41 +389,57 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
 {
     if (gBattleMons[cv->battlerAtk].volatiles.confusionTurns)
     {
-        // FORK: under DETERMINISTIC_STATUS, confusion is a one-time tax decided by the
-        // chosen move. An attacking move makes the battler hit itself once and then
-        // confusion clears; a status move shakes it off for free with no self-hit.
-        // (Infinite confusion never clears, but still obeys the same per-action rule.)
+        // FORK: under DETERMINISTIC_STATUS, confusion is an anti-lock one-time tax. The
+        // battler takes a single RNG-free self-hit on its first confused action but STILL
+        // carries out its chosen move (the move is never denied), so a faster foe can't
+        // chain confusion to lock it out of acting. The volatile then LINGERS until the
+        // battler's next action, at which point it snaps out — meaning the foe can't
+        // re-confuse in the interim (a confused target can't be confused again, and
+        // AI_CanBeConfused declines one), so the self-hit costs at most once per spell of
+        // confusion. Infinite confusion never snaps out (it self-hits each action).
         if (GetConfig(DETERMINISTIC_STATUS))
         {
-            bool32 attacking = GetMoveCategory(cv->move) != DAMAGE_CATEGORY_STATUS;
-            bool32 clears = !gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion;
-            if (clears)
+            bool32 infinite = gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion;
+            // confusionTurns == 1 is a sentinel meaning "the one-time self-hit already
+            // happened; snap out now." Fresh confusion is always applied with >= 2 turns
+            // (RandomUniform min 2), so this never collides with a real freshly-set value.
+            if (!infinite && gBattleMons[cv->battlerAtk].volatiles.confusionTurns == 1)
+            {
                 gBattleMons[cv->battlerAtk].volatiles.confusionTurns = 0;
-            if (attacking)
-            {
-                gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
-                gBattlerTarget = gBattlerAttacker;
-                struct DamageContext dmgCtx = {0};
-                dmgCtx.battlerAtk = dmgCtx.battlerDef = cv->battlerAtk;
-                dmgCtx.move = dmgCtx.chosenMove = MOVE_NONE;
-                dmgCtx.moveType = TYPE_MYSTERY;
-                dmgCtx.isCrit = FALSE;
-                dmgCtx.randomFactor = FALSE;
-                dmgCtx.updateFlags = TRUE;
-                dmgCtx.isSelfInflicted = TRUE;
-                dmgCtx.fixedBasePower = 40;
-                dmgCtx.abilities[gBattlerAttacker] = cv->abilities[gBattlerAttacker];
-                dmgCtx.holdEffects[gBattlerAttacker] = cv->holdEffects[gBattlerAttacker];
-                gBattleStruct->passiveHpUpdate[cv->battlerAtk] = CalculateMoveDamage(&dmgCtx);
-                gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
-                return CANCELER_RESULT_FAILURE;
-            }
-            if (clears)
-            {
                 BattleScriptCall(BattleScript_MoveUsedIsConfusedNoMore);
                 return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
             }
-            return CANCELER_RESULT_SUCCESS;
+
+            // First confused action: take the one-time self-hit. NB: don't repoint
+            // gBattlerTarget at the attacker — the chosen move continues afterwards and
+            // must keep its real target; the self-damage script operates on BS_ATTACKER.
+            gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
+            struct DamageContext dmgCtx = {0};
+            dmgCtx.battlerAtk = dmgCtx.battlerDef = cv->battlerAtk;
+            dmgCtx.move = dmgCtx.chosenMove = MOVE_NONE;
+            dmgCtx.moveType = TYPE_MYSTERY;
+            dmgCtx.isCrit = FALSE;
+            dmgCtx.randomFactor = FALSE;
+            dmgCtx.updateFlags = TRUE;
+            dmgCtx.isSelfInflicted = TRUE;
+            dmgCtx.fixedBasePower = 40;
+            dmgCtx.abilities[gBattlerAttacker] = cv->abilities[gBattlerAttacker];
+            dmgCtx.holdEffects[gBattlerAttacker] = cv->holdEffects[gBattlerAttacker];
+            gBattleStruct->passiveHpUpdate[cv->battlerAtk] = CalculateMoveDamage(&dmgCtx);
+            // If the self-hit would KO, fall back to the original behavior: the confusion
+            // script ends the move and the battler faints (it isn't acting anyway, so
+            // there's no lock to break).
+            if (gBattleStruct->passiveHpUpdate[cv->battlerAtk] >= gBattleMons[cv->battlerAtk].hp)
+            {
+                gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
+                return CANCELER_RESULT_FAILURE;
+            }
+            // Otherwise: self-hit, arm the snap-out sentinel (so confusion lingers exactly
+            // one more action), then let the chosen move still run this turn.
+            if (!infinite)
+                gBattleMons[cv->battlerAtk].volatiles.confusionTurns = 1;
+            BattleScriptCall(BattleScript_DeterministicConfusionSelfDmg);
+            return CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
         }
         if (!gBattleMons[cv->battlerAtk].volatiles.infiniteConfusion)
             gBattleMons[cv->battlerAtk].volatiles.confusionTurns--;

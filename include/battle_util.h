@@ -224,6 +224,10 @@ enum Ability GetBattlerAbilityIgnoreMoldBreaker(enum BattlerId battler);
 enum Ability GetBattlerAbilityNoAbilityShield(enum BattlerId battler);
 enum Ability GetBattlerAbilityInternal(enum BattlerId battler, bool32 ignoreMoldBreaker, bool32 noAbilityShield);
 enum Ability GetBattlerAbility(enum BattlerId battler);
+// FORK: FEATURE_INNATE_ABILITIES. "Does this battler have ability X?" trait
+// predicate: TRUE for the primary (chosen) ability or an active innate. Use this
+// for trait checks; keep GetBattlerAbility() for identity/copy/swap/display.
+bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnOpposingSide(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnField(enum Ability ability);
