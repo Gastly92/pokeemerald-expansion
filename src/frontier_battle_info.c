@@ -354,6 +354,11 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
             enum Ability innate = GetSpeciesInnate(foeSpecies, slot);
             if (innate == ABILITY_NONE)
                 break;
+            // Skip an innate that just duplicates the revealed chosen ability above
+            // (e.g. a species that still carries Levitate as its primary), so the line
+            // stays meaningful rather than echoing "Levitate" twice.
+            if (revealed != NULL && innate == revealed->ability)
+                continue;
             if (anyInnate)
                 p = StringCopy(p, COMPOUND_STRING(", "));
             p = StringCopy(p, gAbilitiesInfo[innate].name);
