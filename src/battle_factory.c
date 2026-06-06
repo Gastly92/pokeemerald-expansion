@@ -10,6 +10,7 @@
 #include "item.h"
 #include "random.h"
 #include "frontier_extended_mons.h"
+#include "species_tiers.h"
 #include "constants/battle_ai.h"
 #include "constants/hold_effects.h"
 #include "constants/battle_factory.h"
@@ -180,6 +181,43 @@ static bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 ne
     }
     return FALSE;
 }
+
+// FORK: competitive draft rule — per-team tier quota, using the fork's species
+// tier map (GetSpeciesTier / species_tiers.h). Mirrors the gimmick-item guard.
+// Each party slot has a "slot tier":
+//   - TIER_NORMAL slot: ordinary draft pick — legendaries and mythicals are
+//     banned, and at most ONE pseudo (pseudo-legendary / Ultra Beast / Paradox /
+//     Treasure of Ruin) is allowed on the whole team.
+//   - any other slot tier: a *forced* slot that must be filled by a mon of
+//     exactly that tier (used to seed a set-milestone opponent with a legendary,
+//     or the Frontier Brain with a legendary + a mythical).
+// Returns TRUE if a candidate of `candTier` may NOT fill a `slotTier` slot given
+// how many pseudos the team already holds — i.e. the candidate is rejected.
+static bool32 TierRejectsCandidate(enum SpeciesTier slotTier, enum SpeciesTier candTier, u32 pseudoCount)
+{
+    if (slotTier != TIER_NORMAL)
+        return candTier != slotTier;
+
+    if (candTier == TIER_LEGENDARY || candTier == TIER_MYTHICAL)
+        return TRUE;
+    if (candTier == TIER_PSEUDO && pseudoCount >= 1)
+        return TRUE;
+    return FALSE;
+}
+
+// FORK: reserve one random, not-yet-reserved party slot in slotTiers[] (sized
+// FRONTIER_PARTY_SIZE, pre-filled with TIER_NORMAL) for a forced tier, so the
+// guaranteed legendary/mythical lands at a random position. Calling it twice with
+// different tiers yields two distinct slots.
+static void ReserveForcedTierSlot(enum SpeciesTier *slotTiers, enum SpeciesTier tier)
+{
+    u32 slot;
+
+    do
+        slot = Random() % FRONTIER_PARTY_SIZE;
+    while (slotTiers[slot] != TIER_NORMAL);
+    slotTiers[slot] = tier;
+}
 #endif
 
 static void InitFactoryChallenge(void)
@@ -330,6 +368,10 @@ static void GenerateOpponentMons(void)
     u16 heldItems[FRONTIER_PARTY_SIZE];
     int firstMonId = 0;
     u16 trainerId = 0;
+#if B_FRONTIER_EXTENDED_MONS
+    enum SpeciesTier slotTiers[FRONTIER_PARTY_SIZE] = {TIER_NORMAL}; // per-slot draft rule
+    u32 pseudoCount = 0;
+#endif
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
     u32 winStreak = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode];
@@ -368,6 +410,16 @@ static void GenerateOpponentMons(void)
     TRAINER_BATTLE_PARAM.opponentA = trainerId;
     if (battleNum < FRONTIER_STAGES_PER_CHALLENGE - 1)
         gSaveBlock2Ptr->frontier.trainerIds[battleNum] = trainerId;
+
+#if B_FRONTIER_EXTENDED_MONS
+    // FORK: every FRONTIER_STAGES_PER_CHALLENGE-th battle (the last of each set)
+    // the opponent is seeded with one guaranteed legendary at a random slot; the
+    // other slots draft under the normal no-legendary/no-mythical/<=1-pseudo rule.
+    // (On a Frontier Brain battle the Brain builds its own party in
+    // FillFactoryBrainParty, so this seeded team is discarded there.)
+    if (battleNum == FRONTIER_STAGES_PER_CHALLENGE - 1)
+        ReserveForcedTierSlot(slotTiers, TIER_LEGENDARY);
+#endif
 
     i = 0;
     while (i != FRONTIER_PARTY_SIZE)
@@ -418,12 +470,21 @@ static void GenerateOpponentMons(void)
         // At most one Mega Stone and one Z-Crystal per team (see helper).
         if (TeamHasGimmickItemConflict(&heldItems[firstMonId], i, gFacilityTrainerMons[monId].heldItem))
             continue;
+
+        // Tier quota: normal slots ban legendaries/mythicals and cap pseudos at
+        // one; a slot reserved above must be filled by its forced tier.
+        if (TierRejectsCandidate(slotTiers[i], GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
+            continue;
     #endif
 
         // Successful selection
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gFacilityTrainerMons[monId].heldItem;
         gFrontierTempParty[i] = monId;
+    #if B_FRONTIER_EXTENDED_MONS
+        if (GetSpeciesTier(gFacilityTrainerMons[monId].species) == TIER_PSEUDO)
+            pseudoCount++;
+    #endif
         i++;
     }
 }
@@ -514,6 +575,9 @@ static void GenerateInitialRentalMons(void)
     enum Species species[PARTY_SIZE];
     u16 monIds[PARTY_SIZE];
     u16 heldItems[PARTY_SIZE];
+#if B_FRONTIER_EXTENDED_MONS
+    u32 pseudoCount = 0; // FORK: tier quota — at most one pseudo on the team
+#endif
 
     gFacilityTrainers = gBattleFrontierTrainers;
     for (i = 0; i < PARTY_SIZE; i++)
@@ -603,12 +667,21 @@ static void GenerateInitialRentalMons(void)
         // At most one Mega Stone and one Z-Crystal per rented team (see helper).
         if (TeamHasGimmickItemConflict(&heldItems[firstMonId], i, gFacilityTrainerMons[monId].heldItem))
             continue;
+
+        // Tier quota: the player's initial team carries no legendaries or
+        // mythicals and at most one pseudo (every slot is a normal slot here).
+        if (TierRejectsCandidate(TIER_NORMAL, GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
+            continue;
     #endif
 
         gSaveBlock2Ptr->frontier.rentalMons[i].monId = monId;
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gFacilityTrainerMons[monId].heldItem;
         monIds[i] = monId;
+    #if B_FRONTIER_EXTENDED_MONS
+        if (GetSpeciesTier(gFacilityTrainerMons[monId].species) == TIER_PSEUDO)
+            pseudoCount++;
+    #endif
         i++;
     }
 }
@@ -807,6 +880,10 @@ void FillFactoryBrainParty(void)
     int monLevel;
     u8 fixedIV;
     u32 otId;
+#if B_FRONTIER_EXTENDED_MONS
+    enum SpeciesTier slotTiers[FRONTIER_PARTY_SIZE] = {TIER_NORMAL}; // per-slot draft rule
+    u32 pseudoCount = 0;
+#endif
 
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
@@ -817,6 +894,13 @@ void FillFactoryBrainParty(void)
     // gBattleFrontierMons (it's shared by every facility); re-point it at the
     // competitive roster so the Brain's competitive monIds resolve correctly.
     gFacilityTrainerMons = GetFactoryMonsTable();
+#if B_FRONTIER_EXTENDED_MONS
+    // FORK: the Frontier Brain fields one guaranteed mythical and one guaranteed
+    // legendary at two random slots; the remaining slots draft under the normal
+    // no-legendary/no-mythical/<=1-pseudo rule.
+    ReserveForcedTierSlot(slotTiers, TIER_MYTHICAL);
+    ReserveForcedTierSlot(slotTiers, TIER_LEGENDARY);
+#endif
     i = 0;
     otId = READ_OTID_FROM_SAVE;
 
@@ -861,10 +945,19 @@ void FillFactoryBrainParty(void)
         // At most one Mega Stone and one Z-Crystal on the Brain's team (see helper).
         if (TeamHasGimmickItemConflict(heldItems, i, gFacilityTrainerMons[monId].heldItem))
             continue;
+
+        // Tier quota: the two reserved slots demand a mythical / legendary; the
+        // rest ban legendaries/mythicals and cap pseudos at one.
+        if (TierRejectsCandidate(slotTiers[i], GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
+            continue;
     #endif
 
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gFacilityTrainerMons[monId].heldItem;
+    #if B_FRONTIER_EXTENDED_MONS
+        if (GetSpeciesTier(gFacilityTrainerMons[monId].species) == TIER_PSEUDO)
+            pseudoCount++;
+    #endif
         CreateFacilityMon(&gFacilityTrainerMons[monId],
                 monLevel, fixedIV, otId, FLAG_FRONTIER_MON_FACTORY,
                 &gParties[B_TRAINER_OPPONENT_A][i]);
