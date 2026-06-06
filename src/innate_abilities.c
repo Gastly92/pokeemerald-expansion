@@ -296,7 +296,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_POLTCHAGEIST,             sInnateLevitate },
     { SPECIES_POLTCHAGEIST_ARTISAN,     sInnateLevitate },
     { SPECIES_POLTCHAGEIST_COUNTERFEIT, sInnateLevitate },
-    { SPECIES_SANDY_SHOCKS,             sInnateLevitate },
     { SPECIES_SINISTCHA,                sInnateLevitate },
     { SPECIES_SINISTCHA_MASTERPIECE,    sInnateLevitate },
     { SPECIES_SINISTCHA_UNREMARKABLE,   sInnateLevitate },
