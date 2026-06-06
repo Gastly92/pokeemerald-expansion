@@ -1,5 +1,5 @@
 #include "global.h"
-#include "factory_competitive_mons.h"
+#include "frontier_extended_mons.h"
 #include "constants/abilities.h"
 #include "constants/battle.h"
 #include "constants/items.h"
@@ -7,7 +7,7 @@
 #include "constants/pokemon.h"
 #include "constants/species.h"
 
-// FORK: fork-owned Battle Factory roster overhaul (B_FRONTIER_COMPETITIVE_MONS).
+// FORK: fork-owned Battle Factory roster overhaul (B_FRONTIER_EXTENDED_MONS).
 // A from-scratch roster of modern competitive sets that replaces the vanilla
 // gBattleFrontierMons on the Battle Factory's code paths. Kept in this new file
 // (not gBattleFrontierMons) so upstream syncs never touch it and the vanilla
@@ -26,10 +26,10 @@
 //  - .teraType TYPE_NORMAL (0) reads as "unset" in CreateFacilityMon, so a Tera
 //          Normal set would not apply — fine, Tera is disabled in this fork for now
 //          (B_FLAG_TERA_ORB_* = 0), so teraType is recorded as future-proofing only.
-//  - .tags  is REQUIRED here: FACTORY_SINGLES / FACTORY_DOUBLES / FACTORY_BOTH
+//  - .tags  is REQUIRED here: FORMAT_SINGLES / FORMAT_DOUBLES / FORMAT_BOTH
 //          marks which battle format(s) the set is suited for, so a singles-only
 //          set never shows up in a doubles challenge (and vice versa). A set that
-//          works in either mode is FACTORY_BOTH. (See factory_competitive_mons.h.)
+//          works in either mode is FORMAT_BOTH. (See frontier_extended_mons.h.)
 //
 // Design intent — these sets are tuned for THIS fork, not the live competitive
 // metagame. Account for the DETERMINISTIC_* changes (see FORK.md):
@@ -54,7 +54,7 @@
 //
 // STATUS: Generations I-IX are all built out (~2-4 builds per reasonable species,
 // mega & non-mega, with a deliberate mix of offensive and defensive/support sets).
-// B_FRONTIER_COMPETITIVE_MONS is TRUE — the list is large enough to draft a 6-mon
+// B_FRONTIER_EXTENDED_MONS is TRUE — the list is large enough to draft a 6-mon
 // team (plus distinct opponents) in both singles and doubles from any subset.
 // ORDER: entries are sorted by National Pokédex number (see the Generation
 // banners, which delimit the dex ranges). All builds for one species are kept
@@ -68,7 +68,7 @@
 // rented team in an existing save (appending past the end is the only save-safe
 // edit) — acceptable while iterating, but be aware when editing a shipped save.
 
-const struct TrainerMon gFactoryCompetitiveMons[] =
+const struct TrainerMon gFrontierExtendedMons[] =
 {
 
     // ============================================================
@@ -78,7 +78,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Venusaur ----
     {
         .species = SPECIES_VENUSAUR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_VENUSAURITE, // Mega Venusaur (Thick Fat) — bulky pivot
         .moves = {MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_LEECH_SEED, MOVE_SYNTHESIS},
         .ability = ABILITY_OVERGROW,
@@ -89,7 +89,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VENUSAUR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper (no mega)
         .moves = {MOVE_GROWTH, MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_EARTH_POWER},
         .ability = ABILITY_CHLOROPHYLL,
@@ -100,7 +100,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VENUSAUR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // defensive status spreader
         .moves = {MOVE_SLUDGE_BOMB, MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_LEECH_SEED},
         .ability = ABILITY_OVERGROW,
@@ -111,7 +111,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VENUSAUR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GRASSIUM_Z, // Bloom Doom nuke
         .moves = {MOVE_GROWTH, MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_WEATHER_BALL},
         .ability = ABILITY_OVERGROW,
@@ -124,7 +124,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Charizard ----
     {
         .species = SPECIES_CHARIZARD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHARIZARDITE_Y, // Mega Charizard Y (Drought)
         .moves = {MOVE_FIRE_BLAST, MOVE_SOLAR_BEAM, MOVE_AIR_SLASH, MOVE_ROOST},
         .ability = ABILITY_BLAZE,
@@ -135,7 +135,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHARIZARD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHARIZARDITE_X, // Mega Charizard X (Tough Claws, Fire/Dragon)
         .moves = {MOVE_DRAGON_DANCE, MOVE_FLARE_BLITZ, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE},
         .ability = ABILITY_BLAZE,
@@ -146,7 +146,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHARIZARD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // no-mega special breaker
         .moves = {MOVE_FIRE_BLAST, MOVE_AIR_SLASH, MOVE_FOCUS_BLAST, MOVE_OVERHEAT},
         .ability = ABILITY_SOLAR_POWER,
@@ -157,7 +157,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHARIZARD,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sub-Roost stallbreaker
         .moves = {MOVE_SUBSTITUTE, MOVE_ROOST, MOVE_FIRE_BLAST, MOVE_DRAGON_PULSE},
         .ability = ABILITY_BLAZE,
@@ -170,7 +170,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Blastoise ----
     {
         .species = SPECIES_BLASTOISE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLASTOISINITE, // Mega Blastoise (Mega Launcher)
         .moves = {MOVE_HYDRO_PUMP, MOVE_AURA_SPHERE, MOVE_DARK_PULSE, MOVE_ICE_BEAM},
         .ability = ABILITY_TORRENT,
@@ -181,7 +181,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BLASTOISE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky spinner
         .moves = {MOVE_SCALD, MOVE_RAPID_SPIN, MOVE_ICE_BEAM, MOVE_REST},
         .ability = ABILITY_TORRENT,
@@ -192,7 +192,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BLASTOISE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FLIP_TURN, MOVE_EARTHQUAKE},
         .ability = ABILITY_TORRENT,
@@ -205,7 +205,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Butterfree ----
     {
         .species = SPECIES_BUTTERFREE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Quiver Dance sweeper, sash = one-shot entry guard
         .moves = {MOVE_QUIVER_DANCE, MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_SLEEP_POWDER},
         .ability = ABILITY_COMPOUND_EYES,
@@ -216,7 +216,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BUTTERFREE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // doubles spread + support
         .moves = {MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_SLEEP_POWDER, MOVE_TAILWIND},
         .ability = ABILITY_TINTED_LENS,
@@ -229,7 +229,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Beedrill ----
     {
         .species = SPECIES_BEEDRILL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BEEDRILLITE, // Mega Beedrill (Adaptability)
         .moves = {MOVE_X_SCISSOR, MOVE_POISON_JAB, MOVE_DRILL_RUN, MOVE_KNOCK_OFF},
         .ability = ABILITY_SWARM,
@@ -240,7 +240,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BEEDRILL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast pivot lead
         .moves = {MOVE_POISON_JAB, MOVE_KNOCK_OFF, MOVE_U_TURN, MOVE_SWORDS_DANCE},
         .ability = ABILITY_SWARM,
@@ -253,7 +253,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pidgeot ----
     {
         .species = SPECIES_PIDGEOT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_PIDGEOTITE, // Mega Pidgeot (No Guard)
         .moves = {MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_U_TURN, MOVE_ROOST},
         .ability = ABILITY_KEEN_EYE,
@@ -264,7 +264,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PIDGEOT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // no-mega hurricane spam
         .moves = {MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_U_TURN, MOVE_HYPER_VOICE},
         .ability = ABILITY_TINTED_LENS,
@@ -277,7 +277,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pikachu ----
     {
         .species = SPECIES_PIKACHU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_BALL, // doubles the attack stats
         .moves = {MOVE_VOLT_TACKLE, MOVE_PLAY_ROUGH, MOVE_KNOCK_OFF, MOVE_FAKE_OUT},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -288,7 +288,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PIKACHU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_PIKANIUM_Z, // Catastropika
         .moves = {MOVE_VOLT_TACKLE, MOVE_PLAY_ROUGH, MOVE_IRON_TAIL, MOVE_NASTY_PLOT},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -301,7 +301,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Raichu ----
     {
         .species = SPECIES_RAICHU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves = {MOVE_THUNDERBOLT, MOVE_FOCUS_BLAST, MOVE_SURF, MOVE_NASTY_PLOT},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -312,7 +312,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RAICHU,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // fast Fake Out support
         .moves = {MOVE_THUNDERBOLT, MOVE_FAKE_OUT, MOVE_VOLT_SWITCH, MOVE_GRASS_KNOT},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -325,7 +325,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sandslash ----
     {
         .species = SPECIES_SANDSLASH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS,
         .moves = {MOVE_EARTHQUAKE, MOVE_KNOCK_OFF, MOVE_RAPID_SPIN, MOVE_SWORDS_DANCE},
         .ability = ABILITY_SAND_RUSH,
@@ -336,7 +336,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SANDSLASH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_GROUNDIUM_Z, // SD + Tectonic Rage
         .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_KNOCK_OFF},
         .ability = ABILITY_SAND_RUSH,
@@ -349,7 +349,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Nidoqueen ----
     {
         .species = SPECIES_NIDOQUEEN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sheer Force nuke
         .moves = {MOVE_EARTH_POWER, MOVE_SLUDGE_WAVE, MOVE_ICE_BEAM, MOVE_FLAMETHROWER},
         .ability = ABILITY_SHEER_FORCE,
@@ -360,7 +360,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NIDOQUEEN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky hazards
         .moves = {MOVE_STEALTH_ROCK, MOVE_TOXIC_SPIKES, MOVE_EARTH_POWER, MOVE_ICE_BEAM},
         .ability = ABILITY_SHEER_FORCE,
@@ -373,7 +373,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Nidoking ----
     {
         .species = SPECIES_NIDOKING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sheer Force nuke
         .moves = {MOVE_EARTH_POWER, MOVE_SLUDGE_WAVE, MOVE_ICE_BEAM, MOVE_THUNDERBOLT},
         .ability = ABILITY_SHEER_FORCE,
@@ -384,7 +384,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NIDOKING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
         .moves = {MOVE_EARTH_POWER, MOVE_SLUDGE_WAVE, MOVE_ICE_BEAM, MOVE_FLAMETHROWER},
         .ability = ABILITY_SHEER_FORCE,
@@ -397,7 +397,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Clefable ----
     {
         .species = SPECIES_CLEFABLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Magic Guard CM wall
         .moves = {MOVE_MOONBLAST, MOVE_CALM_MIND, MOVE_SOFT_BOILED, MOVE_FLAMETHROWER},
         .ability = ABILITY_MAGIC_GUARD,
@@ -408,7 +408,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CLEFABLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Unaware / offensive
         .moves = {MOVE_MOONBLAST, MOVE_NASTY_PLOT, MOVE_FLAMETHROWER, MOVE_THUNDERBOLT},
         .ability = ABILITY_MAGIC_GUARD,
@@ -419,7 +419,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CLEFABLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_STICKY_BARB, // Unaware staller (toggle-friendly)
         .moves = {MOVE_MOONBLAST, MOVE_SOFT_BOILED, MOVE_TOXIC, MOVE_THUNDER_WAVE},
         .ability = ABILITY_UNAWARE,
@@ -432,7 +432,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ninetales ----
     {
         .species = SPECIES_NINETALES,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAT_ROCK, // Drought setter
         .moves = {MOVE_FIRE_BLAST, MOVE_SOLAR_BEAM, MOVE_NASTY_PLOT, MOVE_WILL_O_WISP},
         .ability = ABILITY_DROUGHT,
@@ -443,7 +443,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NINETALES,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FIRIUM_Z, // sun-boosted Inferno Overdrive
         .moves = {MOVE_NASTY_PLOT, MOVE_FIRE_BLAST, MOVE_SOLAR_BEAM, MOVE_SCORCHING_SANDS},
         .ability = ABILITY_DROUGHT,
@@ -456,7 +456,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Venomoth ----
     {
         .species = SPECIES_VENOMOTH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Quiver Dance + Sleep Powder sweeper
         .moves = {MOVE_QUIVER_DANCE, MOVE_BUG_BUZZ, MOVE_SLUDGE_BOMB, MOVE_SLEEP_POWDER},
         .ability = ABILITY_TINTED_LENS,
@@ -467,7 +467,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VENOMOTH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE,
         .moves = {MOVE_BUG_BUZZ, MOVE_SLUDGE_BOMB, MOVE_QUIVER_DANCE, MOVE_ROOST},
         .ability = ABILITY_TINTED_LENS,
@@ -480,7 +480,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dugtrio ----
     {
         .species = SPECIES_DUGTRIO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Arena Trap revenge / trapper
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_SUCKER_PUNCH, MOVE_SWORDS_DANCE},
         .ability = ABILITY_ARENA_TRAP,
@@ -491,7 +491,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DUGTRIO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sand Force band
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_SUCKER_PUNCH, MOVE_AERIAL_ACE},
         .ability = ABILITY_SAND_FORCE,
@@ -504,7 +504,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Golduck ----
     {
         .species = SPECIES_GOLDUCK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_CALM_MIND, MOVE_FOCUS_BLAST},
         .ability = ABILITY_SWIFT_SWIM,
@@ -515,7 +515,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOLDUCK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS,
         .moves = {MOVE_SCALD, MOVE_CALM_MIND, MOVE_RECOVER, MOVE_ICE_BEAM},
         .ability = ABILITY_CLOUD_NINE,
@@ -528,7 +528,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Arcanine ----
     {
         .species = SPECIES_ARCANINE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky pivot
         .moves = {MOVE_FLARE_BLITZ, MOVE_EXTREME_SPEED, MOVE_MORNING_SUN, MOVE_WILL_O_WISP},
         .ability = ABILITY_INTIMIDATE,
@@ -539,7 +539,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCANINE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band wallbreaker
         .moves = {MOVE_FLARE_BLITZ, MOVE_EXTREME_SPEED, MOVE_WILD_CHARGE, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_FLASH_FIRE,
@@ -550,7 +550,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCANINE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // doubles Intimidate support
         .moves = {MOVE_FLARE_BLITZ, MOVE_EXTREME_SPEED, MOVE_SNARL, MOVE_PROTECT},
         .ability = ABILITY_INTIMIDATE,
@@ -563,7 +563,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Arcanine-Hisui ----
     {
         .species = SPECIES_ARCANINE_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Rock Head Head Smash breaker
         .moves = {MOVE_HEAD_SMASH, MOVE_FLARE_BLITZ, MOVE_EXTREME_SPEED, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_ROCK_HEAD,
@@ -574,7 +574,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCANINE_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Intimidate bulky pivot
         .moves = {MOVE_FLARE_BLITZ, MOVE_ROCK_SLIDE, MOVE_EXTREME_SPEED, MOVE_MORNING_SUN},
         .ability = ABILITY_INTIMIDATE,
@@ -587,7 +587,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Poliwrath ----
     {
         .species = SPECIES_POLIWRATH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Bulk Up
         .moves = {MOVE_BULK_UP, MOVE_LIQUIDATION, MOVE_DRAIN_PUNCH, MOVE_REST},
         .ability = ABILITY_WATER_ABSORB,
@@ -598,7 +598,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_POLIWRATH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim attacker
         .moves = {MOVE_LIQUIDATION, MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH, MOVE_DARKEST_LARIAT},
         .ability = ABILITY_SWIFT_SWIM,
@@ -611,7 +611,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Alakazam ----
     {
         .species = SPECIES_ALAKAZAM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Magic Guard nuke
         .moves = {MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_SHADOW_BALL, MOVE_NASTY_PLOT},
         .ability = ABILITY_MAGIC_GUARD,
@@ -622,7 +622,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ALAKAZAM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ALAKAZITE, // Mega Alakazam (Trace)
         .moves = {MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_SHADOW_BALL, MOVE_ENERGY_BALL},
         .ability = ABILITY_MAGIC_GUARD,
@@ -633,7 +633,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ALAKAZAM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast lead, sash = one-shot guard
         .moves = {MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_SHADOW_BALL, MOVE_ENCORE},
         .ability = ABILITY_MAGIC_GUARD,
@@ -646,7 +646,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Machamp ----
     {
         .species = SPECIES_MACHAMP,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // No Guard band breaker
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_ICE_PUNCH, MOVE_STONE_EDGE},
         .ability = ABILITY_NO_GUARD,
@@ -657,7 +657,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MACHAMP,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Guts staller-breaker
         .moves = {MOVE_FACADE, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_BULLET_PUNCH},
         .ability = ABILITY_GUTS,
@@ -668,7 +668,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MACHAMP,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // doubles bulk
         .moves = {MOVE_CLOSE_COMBAT, MOVE_ROCK_SLIDE, MOVE_KNOCK_OFF, MOVE_ICE_PUNCH},
         .ability = ABILITY_NO_GUARD,
@@ -681,7 +681,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Victreebel ----
     {
         .species = SPECIES_VICTREEBEL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
         .moves = {MOVE_SOLAR_BLADE, MOVE_KNOCK_OFF, MOVE_SUCKER_PUNCH, MOVE_SWORDS_DANCE},
         .ability = ABILITY_CHLOROPHYLL,
@@ -692,7 +692,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VICTREEBEL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH,
         .moves = {MOVE_SLEEP_POWDER, MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_WEATHER_BALL},
         .ability = ABILITY_CHLOROPHYLL,
@@ -705,7 +705,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tentacruel ----
     {
         .species = SPECIES_TENTACRUEL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky spinner / hazards
         .moves = {MOVE_SCALD, MOVE_RAPID_SPIN, MOVE_TOXIC_SPIKES, MOVE_HAZE},
         .ability = ABILITY_LIQUID_OOZE,
@@ -716,7 +716,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TENTACRUEL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Rain Dish / offensive
         .moves = {MOVE_HYDRO_PUMP, MOVE_SLUDGE_WAVE, MOVE_ICE_BEAM, MOVE_FLIP_TURN},
         .ability = ABILITY_RAIN_DISH,
@@ -729,7 +729,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Golem ----
     {
         .species = SPECIES_GOLEM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sturdy band breaker
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_EXPLOSION, MOVE_SUPERPOWER},
         .ability = ABILITY_STURDY,
@@ -740,7 +740,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOLEM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CUSTAP_BERRY, // Sturdy + Custap lead w/ rocks
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_EXPLOSION},
         .ability = ABILITY_STURDY,
@@ -753,7 +753,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Rapidash ----
     {
         .species = SPECIES_RAPIDASH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves = {MOVE_FLARE_BLITZ, MOVE_HIGH_HORSEPOWER, MOVE_WILD_CHARGE, MOVE_MORNING_SUN},
         .ability = ABILITY_FLAME_BODY,
@@ -764,7 +764,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RAPIDASH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND,
         .moves = {MOVE_FLARE_BLITZ, MOVE_HIGH_HORSEPOWER, MOVE_WILD_CHARGE, MOVE_MEGAHORN},
         .ability = ABILITY_FLASH_FIRE,
@@ -777,7 +777,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Slowbro ----
     {
         .species = SPECIES_SLOWBRO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SLOWBRONITE, // Mega Slowbro (Shell Armor) CM wall
         .moves = {MOVE_SCALD, MOVE_PSYSHOCK, MOVE_CALM_MIND, MOVE_SLACK_OFF},
         .ability = ABILITY_REGENERATOR,
@@ -788,7 +788,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SLOWBRO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator pivot wall
         .moves = {MOVE_SCALD, MOVE_FUTURE_SIGHT, MOVE_SLACK_OFF, MOVE_THUNDER_WAVE},
         .ability = ABILITY_REGENERATOR,
@@ -799,7 +799,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SLOWBRO,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker (0 Spe IV)
         .moves = {MOVE_TRICK_ROOM, MOVE_PSYCHIC, MOVE_SCALD, MOVE_SLACK_OFF},
         .ability = ABILITY_REGENERATOR,
@@ -813,7 +813,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dodrio ----
     {
         .species = SPECIES_DODRIO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // fast band
         .moves = {MOVE_BRAVE_BIRD, MOVE_DOUBLE_EDGE, MOVE_KNOCK_OFF, MOVE_QUICK_ATTACK},
         .ability = ABILITY_EARLY_BIRD,
@@ -824,7 +824,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DODRIO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLYINIUM_Z, // SD + Supersonic Skystrike
         .moves = {MOVE_SWORDS_DANCE, MOVE_BRAVE_BIRD, MOVE_DOUBLE_EDGE, MOVE_KNOCK_OFF},
         .ability = ABILITY_EARLY_BIRD,
@@ -837,7 +837,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Muk ----
     {
         .species = SPECIES_MUK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky special tank
         .moves = {MOVE_GUNK_SHOT, MOVE_KNOCK_OFF, MOVE_DRAIN_PUNCH, MOVE_TOXIC},
         .ability = ABILITY_POISON_TOUCH,
@@ -848,7 +848,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MUK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST,
         .moves = {MOVE_GUNK_SHOT, MOVE_KNOCK_OFF, MOVE_DRAIN_PUNCH, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_POISON_TOUCH,
@@ -861,7 +861,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cloyster ----
     {
         .species = SPECIES_CLOYSTER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper, Skill Link max multi-hit
         .moves = {MOVE_SHELL_SMASH, MOVE_ICICLE_SPEAR, MOVE_ROCK_BLAST, MOVE_HYDRO_PUMP},
         .ability = ABILITY_SKILL_LINK,
@@ -872,7 +872,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CLOYSTER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH, // guaranteed Shell Smash via one-shot entry guard
         .moves = {MOVE_SHELL_SMASH, MOVE_ICICLE_SPEAR, MOVE_ROCK_BLAST, MOVE_ICE_SHARD},
         .ability = ABILITY_SKILL_LINK,
@@ -883,7 +883,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CLOYSTER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive spiker
         .moves = {MOVE_SPIKES, MOVE_ICICLE_SPEAR, MOVE_RAPID_SPIN, MOVE_ICE_SHARD},
         .ability = ABILITY_SKILL_LINK,
@@ -896,7 +896,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gengar ----
     {
         .species = SPECIES_GENGAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GENGARITE, // Mega Gengar (Shadow Tag) trapper
         .moves = {MOVE_SHADOW_BALL, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST, MOVE_NASTY_PLOT},
         .ability = ABILITY_CURSED_BODY,
@@ -907,7 +907,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GENGAR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast lead w/ Destiny Bond
         .moves = {MOVE_SHADOW_BALL, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST, MOVE_DESTINY_BOND},
         .ability = ABILITY_CURSED_BODY,
@@ -918,7 +918,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GENGAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
         .moves = {MOVE_SHADOW_BALL, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST, MOVE_TRICK},
         .ability = ABILITY_CURSED_BODY,
@@ -929,7 +929,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GENGAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GHOSTIUM_Z, // Never-Ending Nightmare nuke
         .moves = {MOVE_NASTY_PLOT, MOVE_SHADOW_BALL, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST},
         .ability = ABILITY_CURSED_BODY,
@@ -942,7 +942,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hypno ----
     {
         .species = SPECIES_HYPNO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // CM wall
         .moves = {MOVE_PSYCHIC, MOVE_CALM_MIND, MOVE_FOUL_PLAY, MOVE_WISH},
         .ability = ABILITY_INSOMNIA,
@@ -953,7 +953,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HYPNO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves = {MOVE_NASTY_PLOT, MOVE_PSYCHIC, MOVE_SHADOW_BALL, MOVE_FOCUS_BLAST},
         .ability = ABILITY_INSOMNIA,
@@ -966,7 +966,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Exeggutor ----
     {
         .species = SPECIES_EXEGGUTOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun nuke
         .moves = {MOVE_LEAF_STORM, MOVE_PSYCHIC, MOVE_SLEEP_POWDER, MOVE_GIGA_DRAIN},
         .ability = ABILITY_CHLOROPHYLL,
@@ -977,7 +977,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_EXEGGUTOR,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker
         .moves = {MOVE_TRICK_ROOM, MOVE_LEAF_STORM, MOVE_PSYCHIC, MOVE_SLUDGE_BOMB},
         .ability = ABILITY_HARVEST,
@@ -991,7 +991,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Marowak ----
     {
         .species = SPECIES_MAROWAK,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_THICK_CLUB, // doubles up Attack; Trick Room sweeper
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_KNOCK_OFF, MOVE_BONEMERANG},
         .ability = ABILITY_ROCK_HEAD,
@@ -1003,7 +1003,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MAROWAK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_THICK_CLUB, // SD physical sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_FIRE_PUNCH},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -1016,7 +1016,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hitmonlee ----
     {
         .species = SPECIES_HITMONLEE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Reckless / Unburden sweeper
         .moves = {MOVE_HIGH_JUMP_KICK, MOVE_KNOCK_OFF, MOVE_MACH_PUNCH, MOVE_STONE_EDGE},
         .ability = ABILITY_RECKLESS,
@@ -1027,7 +1027,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HITMONLEE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FIGHTINIUM_Z, // All-Out Pummeling nuke
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_STONE_EDGE, MOVE_BLAZE_KICK},
         .ability = ABILITY_RECKLESS,
@@ -1040,7 +1040,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hitmonchan ----
     {
         .species = SPECIES_HITMONCHAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Iron Fist bulky attacker
         .moves = {MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH, MOVE_THUNDER_PUNCH, MOVE_MACH_PUNCH},
         .ability = ABILITY_IRON_FIST,
@@ -1051,7 +1051,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HITMONCHAN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH, MOVE_MACH_PUNCH},
         .ability = ABILITY_IRON_FIST,
@@ -1064,7 +1064,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Weezing ----
     {
         .species = SPECIES_WEEZING,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Levitate phys wall
         .moves = {MOVE_SLUDGE_BOMB, MOVE_WILL_O_WISP, MOVE_PAIN_SPLIT, MOVE_TOXIC_SPIKES},
         .ability = ABILITY_LEVITATE,
@@ -1075,7 +1075,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_WEEZING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves = {MOVE_SLUDGE_BOMB, MOVE_FIRE_BLAST, MOVE_THUNDERBOLT, MOVE_WILL_O_WISP},
         .ability = ABILITY_LEVITATE,
@@ -1088,7 +1088,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Chansey ----
     {
         .species = SPECIES_CHANSEY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EVIOLITE, // special wall
         .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_TOXIC, MOVE_HEAL_BELL},
         .ability = ABILITY_NATURAL_CURE,
@@ -1099,7 +1099,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHANSEY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LUCKY_PUNCH, // Chansey-only crit item; guaranteed first crit
         .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_STEALTH_ROCK, MOVE_THUNDER_WAVE},
         .ability = ABILITY_NATURAL_CURE,
@@ -1112,7 +1112,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kangaskhan ----
     {
         .species = SPECIES_KANGASKHAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_KANGASKHANITE, // Mega Kangaskhan (Parental Bond)
         .moves = {MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE, MOVE_SUCKER_PUNCH, MOVE_POWER_UP_PUNCH},
         .ability = ABILITY_SCRAPPY,
@@ -1123,7 +1123,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KANGASKHAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // no-mega Scrappy attacker
         .moves = {MOVE_FAKE_OUT, MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SCRAPPY,
@@ -1136,7 +1136,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Starmie ----
     {
         .species = SPECIES_STARMIE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast special pivot
         .moves = {MOVE_HYDRO_PUMP, MOVE_PSYSHOCK, MOVE_ICE_BEAM, MOVE_THUNDERBOLT},
         .ability = ABILITY_ANALYTIC,
@@ -1147,7 +1147,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_STARMIE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure spinner
         .moves = {MOVE_SCALD, MOVE_RAPID_SPIN, MOVE_RECOVER, MOVE_ICE_BEAM},
         .ability = ABILITY_NATURAL_CURE,
@@ -1158,7 +1158,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_STARMIE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_PSYCHIC, MOVE_ICE_BEAM, MOVE_THUNDERBOLT},
         .ability = ABILITY_ANALYTIC,
@@ -1171,7 +1171,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Jynx ----
     {
         .species = SPECIES_JYNX,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Lovely Kiss lead
         .moves = {MOVE_LOVELY_KISS, MOVE_ICE_BEAM, MOVE_PSYCHIC, MOVE_NASTY_PLOT},
         .ability = ABILITY_DRY_SKIN,
@@ -1182,7 +1182,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_JYNX,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ICIUM_Z, // Subzero Slammer
         .moves = {MOVE_NASTY_PLOT, MOVE_ICE_BEAM, MOVE_PSYCHIC, MOVE_FOCUS_BLAST},
         .ability = ABILITY_DRY_SKIN,
@@ -1195,7 +1195,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pinsir ----
     {
         .species = SPECIES_PINSIR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_PINSIRITE, // Mega Pinsir (Aerilate)
         .moves = {MOVE_SWORDS_DANCE, MOVE_RETURN, MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE},
         .ability = ABILITY_HYPER_CUTTER,
@@ -1206,7 +1206,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PINSIR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // Moxie revenge (no mega)
         .moves = {MOVE_X_SCISSOR, MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE, MOVE_STONE_EDGE},
         .ability = ABILITY_MOXIE,
@@ -1219,7 +1219,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tauros ----
     {
         .species = SPECIES_TAUROS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force band
         .moves = {MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE, MOVE_ZEN_HEADBUTT, MOVE_IRON_HEAD},
         .ability = ABILITY_SHEER_FORCE,
@@ -1230,7 +1230,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TAUROS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Intimidate lure
         .moves = {MOVE_BODY_SLAM, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_THROAT_CHOP},
         .ability = ABILITY_INTIMIDATE,
@@ -1243,7 +1243,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gyarados ----
     {
         .species = SPECIES_GYARADOS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GYARADOSITE, // Mega Gyarados (Mold Breaker)
         .moves = {MOVE_DRAGON_DANCE, MOVE_WATERFALL, MOVE_CRUNCH, MOVE_EARTHQUAKE},
         .ability = ABILITY_INTIMIDATE,
@@ -1254,7 +1254,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GYARADOS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // no-mega DD sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_WATERFALL, MOVE_POWER_WHIP, MOVE_EARTHQUAKE},
         .ability = ABILITY_INTIMIDATE,
@@ -1265,7 +1265,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GYARADOS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLYINIUM_Z, // DD + Supersonic Skystrike
         .moves = {MOVE_DRAGON_DANCE, MOVE_BOUNCE, MOVE_WATERFALL, MOVE_EARTHQUAKE},
         .ability = ABILITY_MOXIE,
@@ -1278,7 +1278,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lapras ----
     {
         .species = SPECIES_LAPRAS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Water Absorb tank
         .moves = {MOVE_FREEZE_DRY, MOVE_SURF, MOVE_THUNDERBOLT, MOVE_ICE_SHARD},
         .ability = ABILITY_WATER_ABSORB,
@@ -1289,7 +1289,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LAPRAS,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ICIUM_Z, // Snow Warning + Aurora Veil setter
         .moves = {MOVE_AURORA_VEIL, MOVE_FREEZE_DRY, MOVE_SURF, MOVE_PROTECT},
         .ability = ABILITY_SNOW_WARNING,
@@ -1302,7 +1302,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Vaporeon ----
     {
         .species = SPECIES_VAPOREON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Wish pivot wall
         .moves = {MOVE_SCALD, MOVE_WISH, MOVE_PROTECT, MOVE_FLIP_TURN},
         .ability = ABILITY_WATER_ABSORB,
@@ -1313,7 +1313,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VAPOREON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST,
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FLIP_TURN, MOVE_SHADOW_BALL},
         .ability = ABILITY_WATER_ABSORB,
@@ -1326,7 +1326,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Jolteon ----
     {
         .species = SPECIES_JOLTEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ELECTRIUM_Z, // Gigavolt Havoc
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_SHADOW_BALL, MOVE_HYPER_VOICE},
         .ability = ABILITY_VOLT_ABSORB,
@@ -1337,7 +1337,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_JOLTEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // fast breaker
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_SHADOW_BALL, MOVE_ALLURING_VOICE},
         .ability = ABILITY_VOLT_ABSORB,
@@ -1350,7 +1350,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Flareon ----
     {
         .species = SPECIES_FLAREON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Flash Fire / Guts band
         .moves = {MOVE_FLARE_BLITZ, MOVE_DOUBLE_EDGE, MOVE_SUPERPOWER, MOVE_QUICK_ATTACK},
         .ability = ABILITY_FLASH_FIRE,
@@ -1361,7 +1361,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLAREON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Guts breaker
         .moves = {MOVE_FACADE, MOVE_FLARE_BLITZ, MOVE_SUPERPOWER, MOVE_QUICK_ATTACK},
         .ability = ABILITY_GUTS,
@@ -1374,7 +1374,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Aerodactyl ----
     {
         .species = SPECIES_AERODACTYL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_AERODACTYLITE, // Mega Aerodactyl (Tough Claws)
         .moves = {MOVE_ROCK_SLIDE, MOVE_DUAL_WINGBEAT, MOVE_EARTHQUAKE, MOVE_AQUA_TAIL},
         .ability = ABILITY_ROCK_HEAD,
@@ -1385,7 +1385,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AERODACTYL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // suicide lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_TAUNT, MOVE_ROCK_SLIDE, MOVE_EARTHQUAKE},
         .ability = ABILITY_UNNERVE,
@@ -1398,7 +1398,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Snorlax ----
     {
         .species = SPECIES_SNORLAX,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Curse setup
         .moves = {MOVE_BODY_SLAM, MOVE_CURSE, MOVE_EARTHQUAKE, MOVE_REST},
         .ability = ABILITY_THICK_FAT,
@@ -1409,7 +1409,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SNORLAX,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
         .moves = {MOVE_BODY_SLAM, MOVE_HIGH_HORSEPOWER, MOVE_CRUNCH, MOVE_SELF_DESTRUCT},
         .ability = ABILITY_THICK_FAT,
@@ -1420,7 +1420,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SNORLAX,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SNORLIUM_Z, // Pulverizing Pancake (Gluttony recovery elsewhere)
         .moves = {MOVE_BELLY_DRUM, MOVE_BODY_SLAM, MOVE_EARTHQUAKE, MOVE_CRUNCH},
         .ability = ABILITY_GLUTTONY,
@@ -1433,7 +1433,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Articuno ----
     {
         .species = SPECIES_ARTICUNO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky special wall
         .moves = {MOVE_FREEZE_DRY, MOVE_HURRICANE, MOVE_ROOST, MOVE_HAZE},
         .ability = ABILITY_PRESSURE,
@@ -1444,7 +1444,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARTICUNO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves = {MOVE_BLIZZARD, MOVE_HURRICANE, MOVE_FREEZE_DRY, MOVE_ROOST},
         .ability = ABILITY_SNOW_CLOAK,
@@ -1457,7 +1457,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zapdos ----
     {
         .species = SPECIES_ZAPDOS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // pivot
         .moves = {MOVE_THUNDERBOLT, MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_ROOST},
         .ability = ABILITY_STATIC,
@@ -1468,7 +1468,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZAPDOS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive sub-roost
         .moves = {MOVE_THUNDERBOLT, MOVE_HURRICANE, MOVE_SUBSTITUTE, MOVE_ROOST},
         .ability = ABILITY_STATIC,
@@ -1481,7 +1481,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Moltres ----
     {
         .species = SPECIES_MOLTRES,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky pivot
         .moves = {MOVE_FIRE_BLAST, MOVE_HURRICANE, MOVE_ROOST, MOVE_WILL_O_WISP},
         .ability = ABILITY_FLAME_BODY,
@@ -1492,7 +1492,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MOLTRES,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // breaker
         .moves = {MOVE_FIRE_BLAST, MOVE_HURRICANE, MOVE_SCORCHING_SANDS, MOVE_U_TURN},
         .ability = ABILITY_FLAME_BODY,
@@ -1505,7 +1505,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dragonite ----
     {
         .species = SPECIES_DRAGONITE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Multiscale DD sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_ROOST},
         .ability = ABILITY_MULTISCALE,
@@ -1516,7 +1516,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRAGONITE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Extreme Speed band
         .moves = {MOVE_EXTREME_SPEED, MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_FIRE_PUNCH},
         .ability = ABILITY_MULTISCALE,
@@ -1527,7 +1527,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRAGONITE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLYINIUM_Z, // DD + Supersonic Skystrike
         .moves = {MOVE_DRAGON_DANCE, MOVE_FLY, MOVE_EARTHQUAKE, MOVE_OUTRAGE},
         .ability = ABILITY_MULTISCALE,
@@ -1540,7 +1540,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mewtwo ----
     {
         .species = SPECIES_MEWTWO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MEWTWONITE_Y, // Mega Mewtwo Y (Insomnia) special nuke
         .moves = {MOVE_PSYSTRIKE, MOVE_AURA_SPHERE, MOVE_ICE_BEAM, MOVE_NASTY_PLOT},
         .ability = ABILITY_PRESSURE,
@@ -1551,7 +1551,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEWTWO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MEWTWONITE_X, // Mega Mewtwo X (Steadfast) physical
         .moves = {MOVE_BULK_UP, MOVE_PSYCHIC_FANGS, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH},
         .ability = ABILITY_PRESSURE,
@@ -1562,7 +1562,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEWTWO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // no-mega all-out attacker
         .moves = {MOVE_PSYSTRIKE, MOVE_AURA_SPHERE, MOVE_FIRE_BLAST, MOVE_ICE_BEAM},
         .ability = ABILITY_UNNERVE,
@@ -1575,7 +1575,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mew ----
     {
         .species = SPECIES_MEW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed nasty plot
         .moves = {MOVE_NASTY_PLOT, MOVE_PSYCHIC, MOVE_AURA_SPHERE, MOVE_FIRE_BLAST},
         .ability = ABILITY_SYNCHRONIZE,
@@ -1586,7 +1586,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEW,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // utility lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_TAUNT, MOVE_ROOST},
         .ability = ABILITY_SYNCHRONIZE,
@@ -1597,7 +1597,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // physical pivot
         .moves = {MOVE_CLOSE_COMBAT, MOVE_U_TURN, MOVE_EARTHQUAKE, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_SYNCHRONIZE,
@@ -1614,7 +1614,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Meganium ----
     {
         .species = SPECIES_MEGANIUM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky defensive pivot / cleric
         .moves = {MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_AROMATHERAPY, MOVE_BODY_PRESS},
         .ability = ABILITY_OVERGROW,
@@ -1625,7 +1625,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEGANIUM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MIRACLE_SEED, // dragon dance physical attacker
         .moves = {MOVE_DRAGON_DANCE, MOVE_HORN_LEECH, MOVE_PLAY_ROUGH, MOVE_EARTHQUAKE},
         .ability = ABILITY_OVERGROW,
@@ -1636,7 +1636,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEGANIUM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // defensive spreader with hazards
         .moves = {MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_TOXIC, MOVE_SYNTHESIS},
         .ability = ABILITY_OVERGROW,
@@ -1649,7 +1649,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Typhlosion ----
     {
         .species = SPECIES_TYPHLOSION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_EARTH_POWER, MOVE_SOLAR_BEAM},
         .ability = ABILITY_BLAZE,
@@ -1660,7 +1660,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TYPHLOSION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // nasty plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_SHADOW_BALL},
         .ability = ABILITY_BLAZE,
@@ -1671,7 +1671,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TYPHLOSION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAT_ROCK, // sun setter for the team
         .moves = {MOVE_SUNNY_DAY, MOVE_FIRE_BLAST, MOVE_SOLAR_BEAM, MOVE_EARTH_POWER},
         .ability = ABILITY_BLAZE,
@@ -1684,7 +1684,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Typhlosion-Hisui ----
     {
         .species = SPECIES_TYPHLOSION_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Frisk Ghost/Fire breaker
         .moves = {MOVE_SHADOW_BALL, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_INFERNAL_PARADE},
         .ability = ABILITY_FRISK,
@@ -1695,7 +1695,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TYPHLOSION_HISUI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot Hex sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_HEX, MOVE_FIRE_BLAST, MOVE_WILL_O_WISP},
         .ability = ABILITY_FRISK,
@@ -1708,7 +1708,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Feraligatr ----
     {
         .species = SPECIES_FERALIGATR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // dragon dance physical sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_LIQUIDATION, MOVE_ICE_PUNCH, MOVE_CRUNCH},
         .ability = ABILITY_TORRENT,
@@ -1719,7 +1719,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FERALIGATR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band wallbreaker with priority
         .moves = {MOVE_LIQUIDATION, MOVE_AQUA_JET, MOVE_ICE_PUNCH, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_TORRENT,
@@ -1730,7 +1730,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FERALIGATR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky belly-drum sweeper
         .moves = {MOVE_BELLY_DRUM, MOVE_LIQUIDATION, MOVE_AQUA_JET, MOVE_ICE_PUNCH},
         .ability = ABILITY_TORRENT,
@@ -1743,7 +1743,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Crobat ----
     {
         .species = SPECIES_CROBAT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast physical attacker / pivot
         .moves = {MOVE_BRAVE_BIRD, MOVE_GUNK_SHOT, MOVE_CLOSE_COMBAT, MOVE_U_TURN},
         .ability = ABILITY_INNER_FOCUS,
@@ -1754,7 +1754,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CROBAT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // defensive defogger / status
         .moves = {MOVE_BRAVE_BIRD, MOVE_DEFOG, MOVE_ROOST, MOVE_TAUNT},
         .ability = ABILITY_INFILTRATOR,
@@ -1765,7 +1765,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CROBAT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band pivot wallbreaker
         .moves = {MOVE_BRAVE_BIRD, MOVE_GUNK_SHOT, MOVE_U_TURN, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_INNER_FOCUS,
@@ -1778,7 +1778,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ampharos ----
     {
         .species = SPECIES_AMPHAROS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_AMPHAROSITE, // Mega Ampharos (Mold Breaker, Electric/Dragon)
         .moves = {MOVE_THUNDERBOLT, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST, MOVE_VOLT_SWITCH},
         .ability = ABILITY_STATIC,
@@ -1789,7 +1789,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AMPHAROS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker (no mega)
         .moves = {MOVE_THUNDERBOLT, MOVE_FOCUS_BLAST, MOVE_DRAGON_PULSE, MOVE_VOLT_SWITCH},
         .ability = ABILITY_STATIC,
@@ -1800,7 +1800,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AMPHAROS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special tank
         .moves = {MOVE_THUNDERBOLT, MOVE_DRAGON_PULSE, MOVE_POWER_WHIP, MOVE_VOLT_SWITCH},
         .ability = ABILITY_STATIC,
@@ -1813,7 +1813,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Bellossom ----
     {
         .species = SPECIES_BELLOSSOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // chlorophyll sun sweeper
         .moves = {MOVE_QUIVER_DANCE, MOVE_GIGA_DRAIN, MOVE_MOONBLAST, MOVE_WEATHER_BALL},
         .ability = ABILITY_CHLOROPHYLL,
@@ -1824,7 +1824,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BELLOSSOM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive quiver dance + sleep
         .moves = {MOVE_QUIVER_DANCE, MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_MOONLIGHT},
         .ability = ABILITY_CHLOROPHYLL,
@@ -1837,7 +1837,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Azumarill ----
     {
         .species = SPECIES_AZUMARILL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Huge Power band breaker w/ priority
         .moves = {MOVE_LIQUIDATION, MOVE_PLAY_ROUGH, MOVE_AQUA_JET, MOVE_ICE_PUNCH},
         .ability = ABILITY_HUGE_POWER,
@@ -1848,7 +1848,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AZUMARILL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // belly drum + aqua jet sweeper
         .moves = {MOVE_BELLY_DRUM, MOVE_AQUA_JET, MOVE_PLAY_ROUGH, MOVE_LIQUIDATION},
         .ability = ABILITY_HUGE_POWER,
@@ -1859,7 +1859,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AZUMARILL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
         .moves = {MOVE_PLAY_ROUGH, MOVE_AQUA_JET, MOVE_KNOCK_OFF, MOVE_LIQUIDATION},
         .ability = ABILITY_HUGE_POWER,
@@ -1872,7 +1872,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sudowoodo ----
     {
         .species = SPECIES_SUDOWOODO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Rock Head reckless band attacker
         .moves = {MOVE_HEAD_SMASH, MOVE_EARTHQUAKE, MOVE_WOOD_HAMMER, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_ROCK_HEAD,
@@ -1883,7 +1883,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SUDOWOODO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // sturdy physical wall w/ rocks
         .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_BODY_PRESS},
         .ability = ABILITY_STURDY,
@@ -1896,7 +1896,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Politoed ----
     {
         .species = SPECIES_POLITOED,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_DAMP_ROCK, // Drizzle rain setter
         .moves = {MOVE_RAIN_DANCE, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_ENCORE},
         .ability = ABILITY_DRIZZLE,
@@ -1907,7 +1907,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_POLITOED,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky water with utility
         .moves = {MOVE_SCALD, MOVE_ICE_BEAM, MOVE_ENCORE, MOVE_PROTECT},
         .ability = ABILITY_WATER_ABSORB,
@@ -1918,7 +1918,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_POLITOED,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // rain-boosted special breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FOCUS_BLAST, MOVE_FLIP_TURN},
         .ability = ABILITY_DRIZZLE,
@@ -1931,7 +1931,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Jumpluff ----
     {
         .species = SPECIES_JUMPLUFF,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // fast sleep + leech seed staller
         .moves = {MOVE_SLEEP_POWDER, MOVE_LEECH_SEED, MOVE_SUBSTITUTE, MOVE_GIGA_DRAIN},
         .ability = ABILITY_INFILTRATOR,
@@ -1942,7 +1942,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_JUMPLUFF,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // chlorophyll offensive utility
         .moves = {MOVE_GIGA_DRAIN, MOVE_ACROBATICS, MOVE_SLEEP_POWDER, MOVE_STRENGTH_SAP},
         .ability = ABILITY_CHLOROPHYLL,
@@ -1955,7 +1955,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sunflora ----
     {
         .species = SPECIES_SUNFLORA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Chlorophyll sun nuke
         .moves = {MOVE_LEAF_STORM, MOVE_EARTH_POWER, MOVE_WEATHER_BALL, MOVE_SLUDGE_BOMB},
         .ability = ABILITY_CHLOROPHYLL,
@@ -1966,7 +1966,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SUNFLORA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // growth sun sweeper
         .moves = {MOVE_GROWTH, MOVE_GIGA_DRAIN, MOVE_WEATHER_BALL, MOVE_EARTH_POWER},
         .ability = ABILITY_CHLOROPHYLL,
@@ -1979,7 +1979,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Quagsire ----
     {
         .species = SPECIES_QUAGSIRE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware physical wall
         .moves = {MOVE_EARTHQUAKE, MOVE_SCALD, MOVE_RECOVER, MOVE_TOXIC},
         .ability = ABILITY_UNAWARE,
@@ -1990,7 +1990,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_QUAGSIRE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed bulk water absorber
         .moves = {MOVE_EARTHQUAKE, MOVE_LIQUIDATION, MOVE_ICE_PUNCH, MOVE_KNOCK_OFF},
         .ability = ABILITY_WATER_ABSORB,
@@ -2003,7 +2003,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Espeon ----
     {
         .species = SPECIES_ESPEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Magic Bounce special sweeper
         .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_SHADOW_BALL, MOVE_CALM_MIND},
         .ability = ABILITY_MAGIC_BOUNCE,
@@ -2014,7 +2014,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ESPEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // hazard-bouncing special breaker
         .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_SHADOW_BALL, MOVE_TRICK},
         .ability = ABILITY_MAGIC_BOUNCE,
@@ -2027,7 +2027,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Umbreon ----
     {
         .species = SPECIES_UMBREON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // wish-passing special wall
         .moves = {MOVE_FOUL_PLAY, MOVE_WISH, MOVE_PROTECT, MOVE_TOXIC},
         .ability = ABILITY_SYNCHRONIZE,
@@ -2038,7 +2038,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_UMBREON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // physically defensive cleric
         .moves = {MOVE_FOUL_PLAY, MOVE_HEAL_BELL, MOVE_WISH, MOVE_PROTECT},
         .ability = ABILITY_SYNCHRONIZE,
@@ -2051,7 +2051,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Slowking ----
     {
         .species = SPECIES_SLOWKING,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator special wall / pivot
         .moves = {MOVE_SCALD, MOVE_FUTURE_SIGHT, MOVE_SLACK_OFF, MOVE_THUNDER_WAVE},
         .ability = ABILITY_REGENERATOR,
@@ -2062,7 +2062,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SLOWKING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special attacker
         .moves = {MOVE_HYDRO_PUMP, MOVE_PSYSHOCK, MOVE_ICE_BEAM, MOVE_FIRE_BLAST},
         .ability = ABILITY_REGENERATOR,
@@ -2073,7 +2073,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SLOWKING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_TWISTED_SPOON, // calm mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_SCALD, MOVE_SLACK_OFF},
         .ability = ABILITY_REGENERATOR,
@@ -2086,7 +2086,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Girafarig ----
     {
         .species = SPECIES_GIRAFARIG,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_PSYSHOCK, MOVE_HYPER_VOICE, MOVE_THUNDERBOLT},
         .ability = ABILITY_SAP_SIPPER,
@@ -2097,7 +2097,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GIRAFARIG,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // calm mind + dual screens pivot
         .moves = {MOVE_CALM_MIND, MOVE_STORED_POWER, MOVE_SHADOW_BALL, MOVE_THUNDERBOLT},
         .ability = ABILITY_SAP_SIPPER,
@@ -2110,7 +2110,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Forretress ----
     {
         .species = SPECIES_FORRETRESS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // hazard setter / spinner
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_RAPID_SPIN, MOVE_GYRO_BALL},
         .ability = ABILITY_STURDY,
@@ -2122,7 +2122,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FORRETRESS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // physical wall with Volt Switch pivot
         .moves = {MOVE_GYRO_BALL, MOVE_VOLT_SWITCH, MOVE_RAPID_SPIN, MOVE_BODY_PRESS},
         .ability = ABILITY_STURDY,
@@ -2136,7 +2136,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Steelix ----
     {
         .species = SPECIES_STEELIX,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_STEELIXITE, // Mega Steelix (Sand Force) physical wall
         .moves = {MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM, MOVE_STEALTH_ROCK, MOVE_BODY_PRESS},
         .ability = ABILITY_STURDY,
@@ -2147,7 +2147,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_STEELIX,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy hazard tank (no mega)
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM, MOVE_TOXIC},
         .ability = ABILITY_STURDY,
@@ -2158,7 +2158,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_STEELIX,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band trapper-style breaker
         .moves = {MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM, MOVE_STONE_EDGE, MOVE_ICE_PUNCH},
         .ability = ABILITY_SHEER_FORCE,
@@ -2171,7 +2171,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Granbull ----
     {
         .species = SPECIES_GRANBULL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Intimidate band breaker
         .moves = {MOVE_PLAY_ROUGH, MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
         .ability = ABILITY_INTIMIDATE,
@@ -2182,7 +2182,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GRANBULL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot with status
         .moves = {MOVE_PLAY_ROUGH, MOVE_KNOCK_OFF, MOVE_THUNDER_WAVE, MOVE_HEAL_BELL},
         .ability = ABILITY_INTIMIDATE,
@@ -2195,7 +2195,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Qwilfish ----
     {
         .species = SPECIES_QWILFISH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Intimidate hazard setter
         .moves = {MOVE_SPIKES, MOVE_TOXIC_SPIKES, MOVE_LIQUIDATION, MOVE_HAZE},
         .ability = ABILITY_INTIMIDATE,
@@ -2206,7 +2206,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_QWILFISH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // swift swim rain attacker
         .moves = {MOVE_LIQUIDATION, MOVE_GUNK_SHOT, MOVE_ICE_PUNCH, MOVE_AQUA_JET},
         .ability = ABILITY_SWIFT_SWIM,
@@ -2219,7 +2219,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Scizor ----
     {
         .species = SPECIES_SCIZOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SCIZORITE, // Mega Scizor (Technician) swords dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_BULLET_PUNCH, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF},
         .ability = ABILITY_TECHNICIAN,
@@ -2230,7 +2230,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SCIZOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Technician band breaker w/ priority
         .moves = {MOVE_BULLET_PUNCH, MOVE_U_TURN, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF},
         .ability = ABILITY_TECHNICIAN,
@@ -2241,7 +2241,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SCIZOR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive defogger / pivot
         .moves = {MOVE_BULLET_PUNCH, MOVE_DEFOG, MOVE_ROOST, MOVE_U_TURN},
         .ability = ABILITY_TECHNICIAN,
@@ -2254,7 +2254,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Heracross ----
     {
         .species = SPECIES_HERACROSS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HERACRONITE, // Mega Heracross (Skill Link) multi-hit breaker
         .moves = {MOVE_PIN_MISSILE, MOVE_ROCK_BLAST, MOVE_BULLET_SEED, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_GUTS,
@@ -2265,7 +2265,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HERACROSS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Guts band breaker (no mega)
         .moves = {MOVE_CLOSE_COMBAT, MOVE_MEGAHORN, MOVE_KNOCK_OFF, MOVE_ROCK_SLIDE},
         .ability = ABILITY_GUTS,
@@ -2276,7 +2276,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HERACROSS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Guts self-status breaker
         .moves = {MOVE_FACADE, MOVE_CLOSE_COMBAT, MOVE_MEGAHORN, MOVE_KNOCK_OFF},
         .ability = ABILITY_GUTS,
@@ -2289,7 +2289,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ursaring ----
     {
         .species = SPECIES_URSARING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts Facade wallbreaker
         .moves = {MOVE_FACADE, MOVE_CLOSE_COMBAT, MOVE_CRUNCH, MOVE_EARTHQUAKE},
         .ability = ABILITY_GUTS,
@@ -2300,7 +2300,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_URSARING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker with coverage
         .moves = {MOVE_DOUBLE_EDGE, MOVE_CLOSE_COMBAT, MOVE_CRUNCH, MOVE_EARTHQUAKE},
         .ability = ABILITY_GUTS,
@@ -2313,7 +2313,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Octillery ----
     {
         .species = SPECIES_OCTILLERY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Sniper / special breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FIRE_BLAST, MOVE_ENERGY_BALL},
         .ability = ABILITY_MOLD_BREAKER,
@@ -2324,7 +2324,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_OCTILLERY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // swift swim rain attacker
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_GUNK_SHOT, MOVE_ENERGY_BALL},
         .ability = ABILITY_SWIFT_SWIM,
@@ -2337,7 +2337,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mantine ----
     {
         .species = SPECIES_MANTINE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky defogger / special wall
         .moves = {MOVE_SCALD, MOVE_DEFOG, MOVE_ROOST, MOVE_TOXIC},
         .ability = ABILITY_WATER_ABSORB,
@@ -2348,7 +2348,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MANTINE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_HURRICANE, MOVE_FLIP_TURN},
         .ability = ABILITY_WATER_ABSORB,
@@ -2361,7 +2361,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Skarmory ----
     {
         .species = SPECIES_SKARMORY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // hazard setter physical wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_ROOST, MOVE_BODY_PRESS},
         .ability = ABILITY_STURDY,
@@ -2372,7 +2372,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SKARMORY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // defogger pivot
         .moves = {MOVE_BRAVE_BIRD, MOVE_DEFOG, MOVE_ROOST, MOVE_WHIRLWIND},
         .ability = ABILITY_STURDY,
@@ -2385,7 +2385,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Houndoom ----
     {
         .species = SPECIES_HOUNDOOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HOUNDOOMINITE, // Mega Houndoom (Solar Power) nasty plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_FIRE_BLAST, MOVE_DARK_PULSE, MOVE_SLUDGE_BOMB},
         .ability = ABILITY_FLASH_FIRE,
@@ -2396,7 +2396,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HOUNDOOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Flash Fire special breaker (no mega)
         .moves = {MOVE_FIRE_BLAST, MOVE_DARK_PULSE, MOVE_SLUDGE_BOMB, MOVE_FOCUS_BLAST},
         .ability = ABILITY_FLASH_FIRE,
@@ -2407,7 +2407,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HOUNDOOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
         .moves = {MOVE_FIRE_BLAST, MOVE_DARK_PULSE, MOVE_SLUDGE_BOMB, MOVE_OVERHEAT},
         .ability = ABILITY_FLASH_FIRE,
@@ -2420,7 +2420,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kingdra ----
     {
         .species = SPECIES_KINGDRA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
         .moves = {MOVE_HYDRO_PUMP, MOVE_DRACO_METEOR, MOVE_ICE_BEAM, MOVE_FLIP_TURN},
         .ability = ABILITY_SWIFT_SWIM,
@@ -2431,7 +2431,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KINGDRA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // dragon dance physical sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_WATERFALL, MOVE_OUTRAGE, MOVE_ICE_PUNCH},
         .ability = ABILITY_SNIPER,
@@ -2442,7 +2442,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KINGDRA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // specs special breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_DRACO_METEOR, MOVE_ICE_BEAM, MOVE_FLIP_TURN},
         .ability = ABILITY_SNIPER,
@@ -2455,7 +2455,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Donphan ----
     {
         .species = SPECIES_DONPHAN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy hazard setter / spinner
         .moves = {MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK, MOVE_RAPID_SPIN, MOVE_ICE_SHARD},
         .ability = ABILITY_STURDY,
@@ -2466,7 +2466,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DONPHAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker with priority
         .moves = {MOVE_EARTHQUAKE, MOVE_ICE_SHARD, MOVE_KNOCK_OFF, MOVE_STONE_EDGE},
         .ability = ABILITY_SAND_VEIL,
@@ -2477,7 +2477,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DONPHAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed bulk pivot
         .moves = {MOVE_EARTHQUAKE, MOVE_ICE_SHARD, MOVE_HEAVY_SLAM, MOVE_KNOCK_OFF},
         .ability = ABILITY_STURDY,
@@ -2490,7 +2490,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Porygon2 ---- (Eviolite NFE niche: Porygon-Z is a glass cannon, Porygon2 the bulky tank)
     {
         .species = SPECIES_PORYGON2,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EVIOLITE, // Trace bulky tank / recovery (Porygon2 NFE niche)
         .moves = {MOVE_TRI_ATTACK, MOVE_ICE_BEAM, MOVE_RECOVER, MOVE_THUNDER_WAVE},
         .ability = ABILITY_TRACE,
@@ -2501,7 +2501,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PORYGON2,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_EVIOLITE, // Download offensive Eviolite pivot
         .moves = {MOVE_TRI_ATTACK, MOVE_ICE_BEAM, MOVE_THUNDERBOLT, MOVE_RECOVER},
         .ability = ABILITY_DOWNLOAD,
@@ -2514,7 +2514,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Stantler ----
     {
         .species = SPECIES_STANTLER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Intimidate mixed attacker
         .moves = {MOVE_DOUBLE_EDGE, MOVE_PSYCHIC, MOVE_EARTHQUAKE, MOVE_JUMP_KICK},
         .ability = ABILITY_INTIMIDATE,
@@ -2525,7 +2525,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_STANTLER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
         .moves = {MOVE_DOUBLE_EDGE, MOVE_MEGAHORN, MOVE_EARTHQUAKE, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_SAP_SIPPER,
@@ -2538,7 +2538,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Smeargle ----
     {
         .species = SPECIES_SMEARGLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // suicide lead, hazards + sleep (sash = one-shot guard)
         .moves = {MOVE_SPORE, MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_WHIRLWIND},
         .ability = ABILITY_OWN_TEMPO,
@@ -2549,7 +2549,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SMEARGLE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // doubles support lead (Spore + Fake Out)
         .moves = {MOVE_SPORE, MOVE_FAKE_OUT, MOVE_FOLLOW_ME, MOVE_KINGS_SHIELD},
         .ability = ABILITY_MOODY,
@@ -2562,7 +2562,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hitmontop ----
     {
         .species = SPECIES_HITMONTOP,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Intimidate doubles support attacker
         .moves = {MOVE_FAKE_OUT, MOVE_CLOSE_COMBAT, MOVE_TRIPLE_AXEL, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_INTIMIDATE,
@@ -2573,7 +2573,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HITMONTOP,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Technician spinner / pivot
         .moves = {MOVE_RAPID_SPIN, MOVE_CLOSE_COMBAT, MOVE_MACH_PUNCH, MOVE_TRIPLE_AXEL},
         .ability = ABILITY_TECHNICIAN,
@@ -2586,7 +2586,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Miltank ----
     {
         .species = SPECIES_MILTANK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky physical wall / cleric
         .moves = {MOVE_BODY_SLAM, MOVE_MILK_DRINK, MOVE_HEAL_BELL, MOVE_STEALTH_ROCK},
         .ability = ABILITY_THICK_FAT,
@@ -2597,7 +2597,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MILTANK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Scrappy band breaker
         .moves = {MOVE_DOUBLE_EDGE, MOVE_BODY_PRESS, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
         .ability = ABILITY_SCRAPPY,
@@ -2610,7 +2610,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Blissey ----
     {
         .species = SPECIES_BLISSEY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // special wall / cleric
         .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_HEAL_BELL, MOVE_TOXIC},
         .ability = ABILITY_NATURAL_CURE,
@@ -2621,7 +2621,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BLISSEY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // stallbreaker support with hazards
         .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_STEALTH_ROCK, MOVE_THUNDER_WAVE},
         .ability = ABILITY_NATURAL_CURE,
@@ -2634,7 +2634,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Raikou ----
     {
         .species = SPECIES_RAIKOU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // calm mind special sweeper
         .moves = {MOVE_CALM_MIND, MOVE_THUNDERBOLT, MOVE_AURA_SPHERE, MOVE_SHADOW_BALL},
         .ability = ABILITY_PRESSURE,
@@ -2645,7 +2645,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RAIKOU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // specs special breaker / pivot
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_AURA_SPHERE, MOVE_SHADOW_BALL},
         .ability = ABILITY_PRESSURE,
@@ -2656,7 +2656,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RAIKOU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_AURA_SPHERE, MOVE_WEATHER_BALL},
         .ability = ABILITY_PRESSURE,
@@ -2669,7 +2669,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Entei ----
     {
         .species = SPECIES_ENTEI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sacred Fire band breaker w/ priority
         .moves = {MOVE_SACRED_FIRE, MOVE_EXTREME_SPEED, MOVE_STONE_EDGE, MOVE_FLARE_BLITZ},
         .ability = ABILITY_INNER_FOCUS,
@@ -2680,7 +2680,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ENTEI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
         .moves = {MOVE_SACRED_FIRE, MOVE_EXTREME_SPEED, MOVE_STONE_EDGE, MOVE_BULLDOZE},
         .ability = ABILITY_INNER_FOCUS,
@@ -2691,7 +2691,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ENTEI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot
         .moves = {MOVE_SACRED_FIRE, MOVE_EXTREME_SPEED, MOVE_STONE_EDGE, MOVE_MORNING_SUN},
         .ability = ABILITY_INNER_FOCUS,
@@ -2704,7 +2704,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Suicune ----
     {
         .species = SPECIES_SUICUNE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // calm mind bulky sweeper
         .moves = {MOVE_CALM_MIND, MOVE_SCALD, MOVE_ICE_BEAM, MOVE_REST},
         .ability = ABILITY_PRESSURE,
@@ -2715,7 +2715,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SUICUNE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // offensive calm mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_TERA_BLAST},
         .ability = ABILITY_PRESSURE,
@@ -2726,7 +2726,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SUICUNE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // bulky defogger / wall
         .moves = {MOVE_SCALD, MOVE_DEFOG, MOVE_REST, MOVE_SLEEP_TALK},
         .ability = ABILITY_PRESSURE,
@@ -2739,7 +2739,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tyranitar ----
     {
         .species = SPECIES_TYRANITAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_TYRANITARITE, // Mega Tyranitar (Sand Stream) dragon dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
         .ability = ABILITY_SAND_STREAM,
@@ -2750,7 +2750,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TYRANITAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sand Stream band breaker
         .moves = {MOVE_STONE_EDGE, MOVE_CRUNCH, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
         .ability = ABILITY_SAND_STREAM,
@@ -2761,7 +2761,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TYRANITAR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // sand tank with hazards
         .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_THUNDER_WAVE},
         .ability = ABILITY_SAND_STREAM,
@@ -2772,7 +2772,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TYRANITAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank in sand
         .moves = {MOVE_STONE_EDGE, MOVE_CRUNCH, MOVE_FIRE_BLAST, MOVE_EARTHQUAKE},
         .ability = ABILITY_SAND_STREAM,
@@ -2785,7 +2785,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lugia ----
     {
         .species = SPECIES_LUGIA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Multiscale physical wall / defogger
         .moves = {MOVE_AEROBLAST, MOVE_ROOST, MOVE_DEFOG, MOVE_TOXIC},
         .ability = ABILITY_MULTISCALE,
@@ -2796,7 +2796,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LUGIA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
         .moves = {MOVE_CALM_MIND, MOVE_AEROBLAST, MOVE_PSYCHIC, MOVE_ROOST},
         .ability = ABILITY_MULTISCALE,
@@ -2809,7 +2809,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ho-Oh ----
     {
         .species = SPECIES_HO_OH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sacred Fire band breaker
         .moves = {MOVE_SACRED_FIRE, MOVE_BRAVE_BIRD, MOVE_EARTHQUAKE, MOVE_EXTREME_SPEED},
         .ability = ABILITY_REGENERATOR,
@@ -2820,7 +2820,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HO_OH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot / cleric
         .moves = {MOVE_SACRED_FIRE, MOVE_BRAVE_BIRD, MOVE_RECOVER, MOVE_WHIRLWIND},
         .ability = ABILITY_REGENERATOR,
@@ -2837,7 +2837,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sceptile ----
     {
         .species = SPECIES_SCEPTILE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SCEPTILITE, // Mega Sceptile (Lightning Rod, Grass/Dragon) — fast special breaker
         .moves = {MOVE_LEAF_STORM, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST, MOVE_GIGA_DRAIN},
         .ability = ABILITY_OVERGROW,
@@ -2848,7 +2848,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SCEPTILE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical Swords Dance sweeper (no mega)
         .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW},
         .ability = ABILITY_OVERGROW,
@@ -2859,7 +2859,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SCEPTILE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // sun special revenge killer
         .moves = {MOVE_LEAF_STORM, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST, MOVE_GIGA_DRAIN},
         .ability = ABILITY_CHLOROPHYLL,
@@ -2872,7 +2872,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Blaziken ----
     {
         .species = SPECIES_BLAZIKEN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLAZIKENITE, // Mega Blaziken (Speed Boost) — snowballing sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_FLARE_BLITZ, MOVE_HIGH_JUMP_KICK, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_SPEED_BOOST,
@@ -2883,7 +2883,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BLAZIKEN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Speed Boost mixed wallbreaker (no mega)
         .moves = {MOVE_FLARE_BLITZ, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_STONE_EDGE},
         .ability = ABILITY_SPEED_BOOST,
@@ -2894,7 +2894,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BLAZIKEN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // immediate banded breaker
         .moves = {MOVE_FLARE_BLITZ, MOVE_HIGH_JUMP_KICK, MOVE_KNOCK_OFF, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_BLAZE,
@@ -2907,7 +2907,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Swampert ----
     {
         .species = SPECIES_SWAMPERT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SWAMPERTITE, // Mega Swampert (Swift Swim) — rain sweeper
         .moves = {MOVE_WATERFALL, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH, MOVE_SUPERPOWER},
         .ability = ABILITY_TORRENT,
@@ -2918,7 +2918,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SWAMPERT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky hazard setter
         .moves = {MOVE_STEALTH_ROCK, MOVE_SCALD, MOVE_EARTHQUAKE, MOVE_ICE_BEAM},
         .ability = ABILITY_TORRENT,
@@ -2929,7 +2929,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SWAMPERT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed-tank pivot
         .moves = {MOVE_FLIP_TURN, MOVE_EARTHQUAKE, MOVE_ICE_BEAM, MOVE_POWER_GEM},
         .ability = ABILITY_TORRENT,
@@ -2942,7 +2942,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mightyena ----
     {
         .species = SPECIES_MIGHTYENA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Quick Feet status-fueled attacker
         .moves = {MOVE_FACADE, MOVE_CRUNCH, MOVE_PLAY_ROUGH, MOVE_FIRE_FANG},
         .ability = ABILITY_QUICK_FEET,
@@ -2953,7 +2953,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MIGHTYENA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Intimidate hit-and-run band
         .moves = {MOVE_CRUNCH, MOVE_PLAY_ROUGH, MOVE_SUCKER_PUNCH, MOVE_FIRE_FANG},
         .ability = ABILITY_INTIMIDATE,
@@ -2966,7 +2966,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Linoone ----
     {
         .species = SPECIES_LINOONE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Belly Drum + Extreme Speed sweeper
         .moves = {MOVE_BELLY_DRUM, MOVE_EXTREME_SPEED, MOVE_SEED_BOMB, MOVE_KNOCK_OFF},
         .ability = ABILITY_GUTS,
@@ -2977,7 +2977,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LINOONE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts priority breaker
         .moves = {MOVE_FACADE, MOVE_EXTREME_SPEED, MOVE_KNOCK_OFF, MOVE_SEED_BOMB},
         .ability = ABILITY_GUTS,
@@ -2990,7 +2990,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ludicolo ----
     {
         .species = SPECIES_LUDICOLO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
         .moves = {MOVE_HYDRO_PUMP, MOVE_GIGA_DRAIN, MOVE_ICE_BEAM, MOVE_FOCUS_BLAST},
         .ability = ABILITY_SWIFT_SWIM,
@@ -3001,7 +3001,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LUDICOLO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Rain Dish bulky pivot
         .moves = {MOVE_SCALD, MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_RAIN_DANCE},
         .ability = ABILITY_RAIN_DISH,
@@ -3012,7 +3012,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LUDICOLO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WATERIUM_Z, // Hydro Vortex nuke under rain
         .moves = {MOVE_HYDRO_PUMP, MOVE_ENERGY_BALL, MOVE_ICE_BEAM, MOVE_RAIN_DANCE},
         .ability = ABILITY_SWIFT_SWIM,
@@ -3025,7 +3025,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Shiftry ----
     {
         .species = SPECIES_SHIFTRY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
         .moves = {MOVE_LEAF_STORM, MOVE_KNOCK_OFF, MOVE_SUCKER_PUNCH, MOVE_HEAT_WAVE},
         .ability = ABILITY_CHLOROPHYLL,
@@ -3036,7 +3036,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SHIFTRY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Sticky Web lead, sash = one-shot entry guard
         .moves = {MOVE_STICKY_WEB, MOVE_LEAF_BLADE, MOVE_KNOCK_OFF, MOVE_DEFOG},
         .ability = ABILITY_CHLOROPHYLL,
@@ -3047,7 +3047,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SHIFTRY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Swords-less band breaker
         .moves = {MOVE_KNOCK_OFF, MOVE_LEAF_BLADE, MOVE_SUCKER_PUNCH, MOVE_X_SCISSOR},
         .ability = ABILITY_CHLOROPHYLL,
@@ -3060,7 +3060,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Swellow ----
     {
         .species = SPECIES_SWELLOW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_TOXIC_ORB, // Guts Facade sweeper
         .moves = {MOVE_FACADE, MOVE_BRAVE_BIRD, MOVE_U_TURN, MOVE_QUICK_ATTACK},
         .ability = ABILITY_GUTS,
@@ -3071,7 +3071,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SWELLOW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Scrappy-less band hit-and-run
         .moves = {MOVE_BRAVE_BIRD, MOVE_FACADE, MOVE_U_TURN, MOVE_STEEL_WING},
         .ability = ABILITY_GUTS,
@@ -3084,7 +3084,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pelipper ----
     {
         .species = SPECIES_PELIPPER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_DAMP_ROCK, // Drizzle rain setter
         .moves = {MOVE_HURRICANE, MOVE_HYDRO_PUMP, MOVE_U_TURN, MOVE_ROOST},
         .ability = ABILITY_DRIZZLE,
@@ -3095,7 +3095,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PELIPPER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Defog pivot
         .moves = {MOVE_SCALD, MOVE_HURRICANE, MOVE_DEFOG, MOVE_ROOST},
         .ability = ABILITY_DRIZZLE,
@@ -3108,7 +3108,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gardevoir ----
     {
         .species = SPECIES_GARDEVOIR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GARDEVOIRITE, // Mega Gardevoir (Pixilate) — Hyper Voice nuke
         .moves = {MOVE_HYPER_VOICE, MOVE_PSYSHOCK, MOVE_MOONBLAST, MOVE_FOCUS_BLAST},
         .ability = ABILITY_TRACE,
@@ -3119,7 +3119,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GARDEVOIR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Trace revenge killer (no mega)
         .moves = {MOVE_MOONBLAST, MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_TRICK},
         .ability = ABILITY_TRACE,
@@ -3130,7 +3130,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GARDEVOIR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind setup sweeper
         .moves = {MOVE_CALM_MIND, MOVE_MOONBLAST, MOVE_PSYSHOCK, MOVE_FOCUS_BLAST},
         .ability = ABILITY_SYNCHRONIZE,
@@ -3143,7 +3143,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Masquerain ----
     {
         .species = SPECIES_MASQUERAIN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Quiver Dance sweeper, sash = one-shot entry guard
         .moves = {MOVE_QUIVER_DANCE, MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_HYDRO_PUMP},
         .ability = ABILITY_INTIMIDATE,
@@ -3156,7 +3156,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Breloom ----
     {
         .species = SPECIES_BRELOOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Technician-less Spore + priority breaker
         .moves = {MOVE_SPORE, MOVE_BULLET_SEED, MOVE_MACH_PUNCH, MOVE_ROCK_TOMB},
         .ability = ABILITY_TECHNICIAN,
@@ -3167,7 +3167,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BRELOOM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_TOXIC_ORB, // Poison Heal Sub-Punch staller
         .moves = {MOVE_SPORE, MOVE_SUBSTITUTE, MOVE_FOCUS_PUNCH, MOVE_SEED_BOMB},
         .ability = ABILITY_POISON_HEAL,
@@ -3178,7 +3178,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BRELOOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH, // Spore lead, sash = one-shot entry guard
         .moves = {MOVE_SPORE, MOVE_BULLET_SEED, MOVE_MACH_PUNCH, MOVE_SWORDS_DANCE},
         .ability = ABILITY_TECHNICIAN,
@@ -3191,7 +3191,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Slaking ----
     {
         .species = SPECIES_SLAKING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Truant banded wallbreaker
         .moves = {MOVE_RETURN, MOVE_EARTHQUAKE, MOVE_GIGA_IMPACT, MOVE_NIGHT_SLASH},
         .ability = ABILITY_TRUANT,
@@ -3202,7 +3202,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SLAKING,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // coverage breaker
         .moves = {MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE, MOVE_GUNK_SHOT, MOVE_ICE_PUNCH},
         .ability = ABILITY_TRUANT,
@@ -3215,7 +3215,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ninjask ----
     {
         .species = SPECIES_NINJASK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Speed Boost fast sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_X_SCISSOR, MOVE_AERIAL_ACE, MOVE_DIG},
         .ability = ABILITY_SPEED_BOOST,
@@ -3226,7 +3226,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NINJASK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // baton-pass-style speed control lead
         .moves = {MOVE_SWORDS_DANCE, MOVE_SUBSTITUTE, MOVE_X_SCISSOR, MOVE_PROTECT},
         .ability = ABILITY_SPEED_BOOST,
@@ -3239,7 +3239,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Shedinja ----
     {
         .species = SPECIES_SHEDINJA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Wonder Guard sweeper (boots dodge hazards)
         .moves = {MOVE_SWORDS_DANCE, MOVE_X_SCISSOR, MOVE_SHADOW_SNEAK, MOVE_WILL_O_WISP},
         .ability = ABILITY_WONDER_GUARD,
@@ -3252,7 +3252,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Exploud ----
     {
         .species = SPECIES_EXPLOUD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Boomburst spam breaker
         .moves = {MOVE_BOOMBURST, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_ICE_BEAM},
         .ability = ABILITY_SCRAPPY,
@@ -3263,7 +3263,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_EXPLOUD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed sound attacker
         .moves = {MOVE_BOOMBURST, MOVE_OVERHEAT, MOVE_SURF, MOVE_FOCUS_BLAST},
         .ability = ABILITY_SCRAPPY,
@@ -3276,7 +3276,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hariyama ----
     {
         .species = SPECIES_HARIYAMA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts status-fueled bruiser
         .moves = {MOVE_FACADE, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_FAKE_OUT},
         .ability = ABILITY_GUTS,
@@ -3287,7 +3287,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HARIYAMA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Thick Fat special tank
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_HEAVY_SLAM, MOVE_BULLET_PUNCH},
         .ability = ABILITY_THICK_FAT,
@@ -3300,7 +3300,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sableye ----
     {
         .species = SPECIES_SABLEYE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SABLENITE, // Mega Sableye (Magic Bounce) — defensive pivot
         .moves = {MOVE_CALM_MIND, MOVE_DARK_PULSE, MOVE_RECOVER, MOVE_WILL_O_WISP},
         .ability = ABILITY_PRANKSTER,
@@ -3311,7 +3311,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SABLEYE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Prankster utility staller (no mega)
         .moves = {MOVE_WILL_O_WISP, MOVE_RECOVER, MOVE_KNOCK_OFF, MOVE_TAUNT},
         .ability = ABILITY_PRANKSTER,
@@ -3324,7 +3324,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mawile ----
     {
         .species = SPECIES_MAWILE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MAWILITE, // Mega Mawile (Huge Power) — Swords Dance wallbreaker
         .moves = {MOVE_SWORDS_DANCE, MOVE_PLAY_ROUGH, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_INTIMIDATE,
@@ -3335,7 +3335,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MAWILE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Intimidate utility setter (no mega)
         .moves = {MOVE_STEALTH_ROCK, MOVE_PLAY_ROUGH, MOVE_IRON_HEAD, MOVE_THUNDER_WAVE},
         .ability = ABILITY_INTIMIDATE,
@@ -3348,7 +3348,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Aggron ----
     {
         .species = SPECIES_AGGRON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_AGGRONITE, // Mega Aggron (Filter, pure Steel) — physical wall
         .moves = {MOVE_HEAVY_SLAM, MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK, MOVE_ROAR},
         .ability = ABILITY_STURDY,
@@ -3359,7 +3359,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AGGRON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Rock Head band breaker (no mega)
         .moves = {MOVE_HEAD_SMASH, MOVE_HEAVY_SLAM, MOVE_EARTHQUAKE, MOVE_AVALANCHE},
         .ability = ABILITY_ROCK_HEAD,
@@ -3370,7 +3370,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AGGRON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Sturdy bait setup tank (no mega)
         .moves = {MOVE_AUTOTOMIZE, MOVE_HEAVY_SLAM, MOVE_EARTHQUAKE, MOVE_STONE_EDGE},
         .ability = ABILITY_STURDY,
@@ -3383,7 +3383,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Medicham ----
     {
         .species = SPECIES_MEDICHAM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MEDICHAMITE, // Mega Medicham (Pure Power) — fast breaker
         .moves = {MOVE_HIGH_JUMP_KICK, MOVE_ZEN_HEADBUTT, MOVE_ICE_PUNCH, MOVE_FAKE_OUT},
         .ability = ABILITY_PURE_POWER,
@@ -3394,7 +3394,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEDICHAM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // Pure Power revenge killer (no mega)
         .moves = {MOVE_HIGH_JUMP_KICK, MOVE_ZEN_HEADBUTT, MOVE_ICE_PUNCH, MOVE_TRICK},
         .ability = ABILITY_PURE_POWER,
@@ -3407,7 +3407,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Manectric ----
     {
         .species = SPECIES_MANECTRIC,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MANECTITE, // Mega Manectric (Intimidate) — fast special pivot
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_FLAMETHROWER, MOVE_ENERGY_BALL},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -3418,7 +3418,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MANECTRIC,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Lightning Rod special breaker (no mega)
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_OVERHEAT, MOVE_THUNDER},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -3431,7 +3431,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Plusle ---- (doubles support)
     {
         .species = SPECIES_PLUSLE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Plus partner special attacker
         .moves = {MOVE_THUNDERBOLT, MOVE_DAZZLING_GLEAM, MOVE_HELPING_HAND, MOVE_NASTY_PLOT},
         .ability = ABILITY_PLUS,
@@ -3444,7 +3444,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Minun ---- (doubles support)
     {
         .species = SPECIES_MINUN,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Minus support pivot
         .moves = {MOVE_THUNDERBOLT, MOVE_DAZZLING_GLEAM, MOVE_HELPING_HAND, MOVE_NASTY_PLOT},
         .ability = ABILITY_MINUS,
@@ -3457,7 +3457,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Volbeat ---- (doubles support)
     {
         .species = SPECIES_VOLBEAT,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_DAMP_ROCK, // Prankster Tailwind/Rain support
         .moves = {MOVE_TAILWIND, MOVE_RAIN_DANCE, MOVE_THUNDER_WAVE, MOVE_U_TURN},
         .ability = ABILITY_PRANKSTER,
@@ -3470,7 +3470,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Illumise ---- (doubles support)
     {
         .species = SPECIES_ILLUMISE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster utility setter
         .moves = {MOVE_TAILWIND, MOVE_ENCORE, MOVE_HELPING_HAND, MOVE_BUG_BUZZ},
         .ability = ABILITY_PRANKSTER,
@@ -3483,7 +3483,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Swalot ----
     {
         .species = SPECIES_SWALOT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Sticky Hold status tank
         .moves = {MOVE_SLUDGE_BOMB, MOVE_TOXIC, MOVE_PAIN_SPLIT, MOVE_ENCORE},
         .ability = ABILITY_LIQUID_OOZE,
@@ -3496,7 +3496,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sharpedo ----
     {
         .species = SPECIES_SHARPEDO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SHARPEDONITE, // Mega Sharpedo (Strong Jaw) — Speed Boost sweeper
         .moves = {MOVE_PROTECT, MOVE_CRUNCH, MOVE_WATERFALL, MOVE_PSYCHIC_FANGS},
         .ability = ABILITY_SPEED_BOOST,
@@ -3507,7 +3507,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SHARPEDO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Speed Boost wallbreaker (no mega)
         .moves = {MOVE_CRUNCH, MOVE_WATERFALL, MOVE_CLOSE_COMBAT, MOVE_ICE_FANG},
         .ability = ABILITY_SPEED_BOOST,
@@ -3518,7 +3518,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SHARPEDO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // rough-skin revenge killer
         .moves = {MOVE_CRUNCH, MOVE_WATERFALL, MOVE_CLOSE_COMBAT, MOVE_DESTINY_BOND},
         .ability = ABILITY_ROUGH_SKIN,
@@ -3531,7 +3531,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Wailord ----
     {
         .species = SPECIES_WAILORD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Water Spout cannon
         .moves = {MOVE_WATER_SPOUT, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_HYPER_VOICE},
         .ability = ABILITY_WATER_VEIL,
@@ -3544,7 +3544,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Camerupt ----
     {
         .species = SPECIES_CAMERUPT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CAMERUPTITE, // Mega Camerupt (Sheer Force) — Trick Room breaker
         .moves = {MOVE_ERUPTION, MOVE_EARTH_POWER, MOVE_FIRE_BLAST, MOVE_ANCIENT_POWER},
         .ability = ABILITY_SOLID_ROCK,
@@ -3556,7 +3556,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CAMERUPT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Solid Rock special wall (no mega)
         .moves = {MOVE_LAVA_PLUME, MOVE_EARTH_POWER, MOVE_STEALTH_ROCK, MOVE_TOXIC},
         .ability = ABILITY_SOLID_ROCK,
@@ -3569,7 +3569,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Torkoal ----
     {
         .species = SPECIES_TORKOAL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAT_ROCK, // Drought sun setter
         .moves = {MOVE_ERUPTION, MOVE_LAVA_PLUME, MOVE_SOLAR_BEAM, MOVE_EARTH_POWER},
         .ability = ABILITY_DROUGHT,
@@ -3581,7 +3581,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TORKOAL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // White Smoke defensive setter
         .moves = {MOVE_LAVA_PLUME, MOVE_STEALTH_ROCK, MOVE_RAPID_SPIN, MOVE_YAWN},
         .ability = ABILITY_WHITE_SMOKE,
@@ -3594,7 +3594,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Grumpig ----
     {
         .species = SPECIES_GRUMPIG,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat Calm Mind tank
         .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_REST},
         .ability = ABILITY_THICK_FAT,
@@ -3607,7 +3607,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Flygon ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_FLYGON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Levitate banded pivot
         .moves = {MOVE_EARTHQUAKE, MOVE_OUTRAGE, MOVE_U_TURN, MOVE_STONE_EDGE},
         .ability = ABILITY_LEVITATE,
@@ -3618,7 +3618,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLYGON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // fast revenge killer
         .moves = {MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW, MOVE_U_TURN, MOVE_FIRE_PUNCH},
         .ability = ABILITY_LEVITATE,
@@ -3629,7 +3629,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLYGON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SOFT_SAND, // Dragon Dance setup sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW, MOVE_FIRE_PUNCH},
         .ability = ABILITY_LEVITATE,
@@ -3640,7 +3640,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLYGON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // defensive Defog pivot (innate/native Levitate)
         .moves = {MOVE_DEFOG, MOVE_EARTHQUAKE, MOVE_U_TURN, MOVE_TOXIC},
         .ability = ABILITY_LEVITATE,
@@ -3653,7 +3653,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cacturne ----
     {
         .species = SPECIES_CACTURNE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance priority breaker
         .moves = {MOVE_SWORDS_DANCE, MOVE_SEED_BOMB, MOVE_SUCKER_PUNCH, MOVE_DRAIN_PUNCH},
         .ability = ABILITY_WATER_ABSORB,
@@ -3664,7 +3664,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CACTURNE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Spikes + Destiny Bond lead, sash = one-shot guard
         .moves = {MOVE_SPIKES, MOVE_SEED_BOMB, MOVE_SUCKER_PUNCH, MOVE_DESTINY_BOND},
         .ability = ABILITY_WATER_ABSORB,
@@ -3677,7 +3677,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Altaria ---- (Swablu line)
     {
         .species = SPECIES_ALTARIA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ALTARIANITE, // Mega Altaria (Pixilate, Dragon/Fairy) — Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_RETURN, MOVE_EARTHQUAKE, MOVE_ROOST},
         .ability = ABILITY_NATURAL_CURE,
@@ -3688,7 +3688,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ALTARIA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure defensive pivot (no mega)
         .moves = {MOVE_DRAGON_PULSE, MOVE_ROOST, MOVE_DEFOG, MOVE_HEAL_BELL},
         .ability = ABILITY_NATURAL_CURE,
@@ -3701,7 +3701,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zangoose ----
     {
         .species = SPECIES_ZANGOOSE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_TOXIC_ORB, // Toxic Boost Facade breaker
         .moves = {MOVE_FACADE, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_QUICK_ATTACK},
         .ability = ABILITY_TOXIC_BOOST,
@@ -3712,7 +3712,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZANGOOSE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_DOUBLE_EDGE, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF},
         .ability = ABILITY_TOXIC_BOOST,
@@ -3725,7 +3725,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Seviper ----
     {
         .species = SPECIES_SEVIPER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // mixed special breaker
         .moves = {MOVE_SLUDGE_WAVE, MOVE_FLAMETHROWER, MOVE_GIGA_DRAIN, MOVE_DARK_PULSE},
         .ability = ABILITY_INFILTRATOR,
@@ -3738,7 +3738,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lunatone ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_LUNATONE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Levitate Cosmic Power / Trick Room attacker
         .moves = {MOVE_PSYCHIC, MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_ICE_BEAM},
         .ability = ABILITY_LEVITATE,
@@ -3749,7 +3749,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LUNATONE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Trick Room setter / Cosmic Power tank
         .moves = {MOVE_TRICK_ROOM, MOVE_COSMIC_POWER, MOVE_STORED_POWER, MOVE_MOONLIGHT},
         .ability = ABILITY_LEVITATE,
@@ -3763,7 +3763,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Solrock ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_SOLROCK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Levitate physical setup attacker
         .moves = {MOVE_ROCK_POLISH, MOVE_STONE_EDGE, MOVE_ZEN_HEADBUTT, MOVE_EARTHQUAKE},
         .ability = ABILITY_LEVITATE,
@@ -3774,7 +3774,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SOLROCK,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // doubles support / Trick Room
         .moves = {MOVE_TRICK_ROOM, MOVE_STEALTH_ROCK, MOVE_HELPING_HAND, MOVE_EXPLOSION},
         .ability = ABILITY_LEVITATE,
@@ -3788,7 +3788,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Whiscash ----
     {
         .species = SPECIES_WHISCASH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Dragon Dance bulky sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_WATERFALL, MOVE_EARTHQUAKE, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_OBLIVIOUS,
@@ -3801,7 +3801,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Crawdaunt ----
     {
         .species = SPECIES_CRAWDAUNT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Adaptability wallbreaker
         .moves = {MOVE_SWORDS_DANCE, MOVE_KNOCK_OFF, MOVE_LIQUIDATION, MOVE_AQUA_JET},
         .ability = ABILITY_ADAPTABILITY,
@@ -3812,7 +3812,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CRAWDAUNT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Adaptability band breaker
         .moves = {MOVE_KNOCK_OFF, MOVE_LIQUIDATION, MOVE_AQUA_JET, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_ADAPTABILITY,
@@ -3825,7 +3825,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Claydol ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_CLAYDOL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Levitate hazard setter / spinner
         .moves = {MOVE_STEALTH_ROCK, MOVE_RAPID_SPIN, MOVE_EARTH_POWER, MOVE_ICE_BEAM},
         .ability = ABILITY_LEVITATE,
@@ -3838,7 +3838,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cradily ----
     {
         .species = SPECIES_CRADILY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Storm Drain Curse setup tank
         .moves = {MOVE_CURSE, MOVE_SEED_BOMB, MOVE_STONE_EDGE, MOVE_RECOVER},
         .ability = ABILITY_STORM_DRAIN,
@@ -3851,7 +3851,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Armaldo ----
     {
         .species = SPECIES_ARMALDO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance physical attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_STONE_EDGE, MOVE_X_SCISSOR, MOVE_AQUA_TAIL},
         .ability = ABILITY_BATTLE_ARMOR,
@@ -3862,7 +3862,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARMALDO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive Rapid Spin + Stealth Rock
         .moves = {MOVE_STEALTH_ROCK, MOVE_RAPID_SPIN, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE},
         .ability = ABILITY_BATTLE_ARMOR,
@@ -3875,7 +3875,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Milotic ----
     {
         .species = SPECIES_MILOTIC,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Marvel Scale defensive pivot
         .moves = {MOVE_SCALD, MOVE_RECOVER, MOVE_ICE_BEAM, MOVE_HAZE},
         .ability = ABILITY_MARVEL_SCALE,
@@ -3886,7 +3886,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MILOTIC,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Marvel Scale flame-orb tank
         .moves = {MOVE_SCALD, MOVE_RECOVER, MOVE_ICE_BEAM, MOVE_FLIP_TURN},
         .ability = ABILITY_MARVEL_SCALE,
@@ -3899,7 +3899,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Castform ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_CASTFORM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Forecast Weather Ball attacker
         .moves = {MOVE_WEATHER_BALL, MOVE_THUNDERBOLT, MOVE_ICE_BEAM, MOVE_SUNNY_DAY},
         .ability = ABILITY_FORECAST,
@@ -3912,7 +3912,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kecleon ----
     {
         .species = SPECIES_KECLEON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Color Change special tank
         .moves = {MOVE_KNOCK_OFF, MOVE_SUCKER_PUNCH, MOVE_DRAIN_PUNCH, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_PROTEAN,
@@ -3925,7 +3925,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Banette ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_BANETTE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BANETTITE, // Mega Banette (Prankster) — fast disruptor
         .moves = {MOVE_SHADOW_CLAW, MOVE_KNOCK_OFF, MOVE_WILL_O_WISP, MOVE_DESTINY_BOND},
         .ability = ABILITY_FRISK,
@@ -3936,7 +3936,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BANETTE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Destiny Bond trapper (no mega)
         .moves = {MOVE_SHADOW_CLAW, MOVE_SUCKER_PUNCH, MOVE_DESTINY_BOND, MOVE_TAUNT},
         .ability = ABILITY_INSOMNIA,
@@ -3949,7 +3949,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dusclops ---- (Eviolite NFE wall — INNATE LEVITATE; Dusknoir intentionally omitted)
     {
         .species = SPECIES_DUSCLOPS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EVIOLITE, // Eviolite physical/special wall
         .moves = {MOVE_WILL_O_WISP, MOVE_NIGHT_SHADE, MOVE_PAIN_SPLIT, MOVE_HEX},
         .ability = ABILITY_PRESSURE,
@@ -3962,7 +3962,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tropius ----
     {
         .species = SPECIES_TROPIUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Harvest Sitrus staller
         .moves = {MOVE_LEECH_SEED, MOVE_SUBSTITUTE, MOVE_AIR_SLASH, MOVE_GIGA_DRAIN},
         .ability = ABILITY_HARVEST,
@@ -3975,7 +3975,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Chimecho ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_CHIMECHO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Levitate Calm Mind tank
         .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_RECOVER},
         .ability = ABILITY_LEVITATE,
@@ -3988,7 +3988,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Absol ----
     {
         .species = SPECIES_ABSOL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ABSOLITE, // Mega Absol (Magic Bounce) — Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_KNOCK_OFF, MOVE_PLAY_ROUGH, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SUPER_LUCK,
@@ -3999,7 +3999,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ABSOL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Super Luck band breaker (no mega)
         .moves = {MOVE_KNOCK_OFF, MOVE_SUCKER_PUNCH, MOVE_PLAY_ROUGH, MOVE_PSYCHO_CUT},
         .ability = ABILITY_SUPER_LUCK,
@@ -4010,7 +4010,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ABSOL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SCOPE_LENS, // Super Luck guaranteed-crit attacker
         .moves = {MOVE_NIGHT_SLASH, MOVE_PSYCHO_CUT, MOVE_SUCKER_PUNCH, MOVE_SWORDS_DANCE},
         .ability = ABILITY_SUPER_LUCK,
@@ -4023,7 +4023,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Glalie ---- (Gen III mega OK — INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_GLALIE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GLALITITE, // Mega Glalie (Refrigerate) — Return/Explosion nuke
         .moves = {MOVE_RETURN, MOVE_ICICLE_CRASH, MOVE_EARTHQUAKE, MOVE_FREEZE_DRY},
         .ability = ABILITY_INNER_FOCUS,
@@ -4034,7 +4034,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GLALIE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Spikes + Explosion lead (no mega)
         .moves = {MOVE_SPIKES, MOVE_ICE_BEAM, MOVE_FREEZE_DRY, MOVE_EXPLOSION},
         .ability = ABILITY_INNER_FOCUS,
@@ -4047,7 +4047,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Walrein ----
     {
         .species = SPECIES_WALREIN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat defensive staller
         .moves = {MOVE_SURF, MOVE_ICE_BEAM, MOVE_TOXIC, MOVE_PROTECT},
         .ability = ABILITY_THICK_FAT,
@@ -4058,7 +4058,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_WALREIN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Thick Fat special tank
         .moves = {MOVE_SURF, MOVE_ICE_BEAM, MOVE_FREEZE_DRY, MOVE_BODY_SLAM},
         .ability = ABILITY_THICK_FAT,
@@ -4071,7 +4071,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Huntail ---- (Clamperl line)
     {
         .species = SPECIES_HUNTAIL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash physical sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_WATERFALL, MOVE_CRUNCH, MOVE_ICE_FANG},
         .ability = ABILITY_WATER_VEIL,
@@ -4084,7 +4084,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gorebyss ---- (Clamperl line)
     {
         .species = SPECIES_GOREBYSS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash special sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_PSYCHIC},
         .ability = ABILITY_SWIFT_SWIM,
@@ -4097,7 +4097,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Relicanth ----
     {
         .species = SPECIES_RELICANTH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Rock Head Rock Polish setup tank
         .moves = {MOVE_ROCK_POLISH, MOVE_HEAD_SMASH, MOVE_WATERFALL, MOVE_EARTHQUAKE},
         .ability = ABILITY_ROCK_HEAD,
@@ -4108,7 +4108,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RELICANTH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy defensive rocker + Yawn
         .moves = {MOVE_STEALTH_ROCK, MOVE_YAWN, MOVE_WATERFALL, MOVE_TOXIC},
         .ability = ABILITY_STURDY,
@@ -4121,7 +4121,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Salamence ---- (Bagon line)
     {
         .species = SPECIES_SALAMENCE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SALAMENCITE, // Mega Salamence (Aerilate) — Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE, MOVE_ROOST},
         .ability = ABILITY_INTIMIDATE,
@@ -4132,7 +4132,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SALAMENCE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Intimidate revenge killer (no mega)
         .moves = {MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW, MOVE_FIRE_BLAST},
         .ability = ABILITY_INTIMIDATE,
@@ -4143,7 +4143,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SALAMENCE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Draco breaker (no mega)
         .moves = {MOVE_DRACO_METEOR, MOVE_FIRE_BLAST, MOVE_EARTHQUAKE, MOVE_ROOST},
         .ability = ABILITY_INTIMIDATE,
@@ -4156,7 +4156,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Metagross ---- (Beldum line — INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_METAGROSS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_METAGROSSITE, // Mega Metagross (Tough Claws) — fast physical breaker
         .moves = {MOVE_METEOR_MASH, MOVE_ZEN_HEADBUTT, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
         .ability = ABILITY_CLEAR_BODY,
@@ -4167,7 +4167,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_METAGROSS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Clear Body band breaker (no mega)
         .moves = {MOVE_METEOR_MASH, MOVE_BULLET_PUNCH, MOVE_EARTHQUAKE, MOVE_EXPLOSION},
         .ability = ABILITY_CLEAR_BODY,
@@ -4178,7 +4178,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_METAGROSS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Agility setup / utility tank
         .moves = {MOVE_AGILITY, MOVE_METEOR_MASH, MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK},
         .ability = ABILITY_CLEAR_BODY,
@@ -4191,7 +4191,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Regirock ----
     {
         .species = SPECIES_REGIROCK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Clear Body Curse setup wall
         .moves = {MOVE_CURSE, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_REST},
         .ability = ABILITY_CLEAR_BODY,
@@ -4202,7 +4202,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_REGIROCK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Sturdy bait setup tank
         .moves = {MOVE_ROCK_POLISH, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_HAMMER_ARM},
         .ability = ABILITY_STURDY,
@@ -4215,7 +4215,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Regice ----
     {
         .species = SPECIES_REGICE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Clear Body special wall
         .moves = {MOVE_ICE_BEAM, MOVE_THUNDERBOLT, MOVE_THUNDER_WAVE, MOVE_REST},
         .ability = ABILITY_CLEAR_BODY,
@@ -4226,7 +4226,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_REGICE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
         .moves = {MOVE_ICE_BEAM, MOVE_THUNDERBOLT, MOVE_FOCUS_BLAST, MOVE_FLASH_CANNON},
         .ability = ABILITY_CLEAR_BODY,
@@ -4239,7 +4239,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Registeel ----
     {
         .species = SPECIES_REGISTEEL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Clear Body Curse setup wall
         .moves = {MOVE_CURSE, MOVE_IRON_HEAD, MOVE_BODY_PRESS, MOVE_REST},
         .ability = ABILITY_CLEAR_BODY,
@@ -4250,7 +4250,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_REGISTEEL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // defensive setter / pivot
         .moves = {MOVE_STEALTH_ROCK, MOVE_IRON_HEAD, MOVE_THUNDER_WAVE, MOVE_BODY_PRESS},
         .ability = ABILITY_CLEAR_BODY,
@@ -4263,7 +4263,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Latias ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_LATIAS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LATIASITE, // Mega Latias — bulky Calm Mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_DRAGON_PULSE, MOVE_ROOST},
         .ability = ABILITY_LEVITATE,
@@ -4274,7 +4274,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LATIAS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive Levitate pivot (no mega)
         .moves = {MOVE_DRAGON_PULSE, MOVE_ROOST, MOVE_DEFOG, MOVE_HEALING_WISH},
         .ability = ABILITY_LEVITATE,
@@ -4287,7 +4287,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Latios ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_LATIOS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LATIOSITE, // Mega Latios — fast special sweeper
         .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_DRACO_METEOR, MOVE_ROOST},
         .ability = ABILITY_LEVITATE,
@@ -4298,7 +4298,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LATIOS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Levitate special breaker (no mega)
         .moves = {MOVE_DRACO_METEOR, MOVE_PSYCHIC, MOVE_AURA_SPHERE, MOVE_TRICK},
         .ability = ABILITY_LEVITATE,
@@ -4311,7 +4311,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kyogre ----
     {
         .species = SPECIES_KYOGRE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLUE_ORB, // Primal Kyogre (Primordial Sea) — rain nuke
         .moves = {MOVE_WATER_SPOUT, MOVE_ORIGIN_PULSE, MOVE_ICE_BEAM, MOVE_THUNDER},
         .ability = ABILITY_DRIZZLE,
@@ -4322,7 +4322,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KYOGRE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Drizzle revenge killer (no primal)
         .moves = {MOVE_WATER_SPOUT, MOVE_ORIGIN_PULSE, MOVE_ICE_BEAM, MOVE_THUNDER},
         .ability = ABILITY_DRIZZLE,
@@ -4333,7 +4333,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KYOGRE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind + Rest (rain, no primal)
         .moves = {MOVE_CALM_MIND, MOVE_ORIGIN_PULSE, MOVE_ICE_BEAM, MOVE_REST},
         .ability = ABILITY_DRIZZLE,
@@ -4346,7 +4346,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Groudon ----
     {
         .species = SPECIES_GROUDON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_RED_ORB, // Primal Groudon (Desolate Land) — sun breaker
         .moves = {MOVE_PRECIPICE_BLADES, MOVE_FIRE_PUNCH, MOVE_STONE_EDGE, MOVE_SWORDS_DANCE},
         .ability = ABILITY_DROUGHT,
@@ -4357,7 +4357,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GROUDON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Drought bulky setter (no primal)
         .moves = {MOVE_STEALTH_ROCK, MOVE_PRECIPICE_BLADES, MOVE_LAVA_PLUME, MOVE_ROAR},
         .ability = ABILITY_DROUGHT,
@@ -4370,7 +4370,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Rayquaza ---- (Mega via Dragon Ascent + no item)
     {
         .species = SPECIES_RAYQUAZA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_NONE, // Mega Rayquaza (Delta Stream, via Dragon Ascent) — Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_DRAGON_ASCENT, MOVE_EARTHQUAKE, MOVE_EXTREME_SPEED},
         .ability = ABILITY_AIR_LOCK,
@@ -4381,7 +4381,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RAYQUAZA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Draco breaker (no Dragon Ascent / no mega)
         .moves = {MOVE_DRACO_METEOR, MOVE_FIRE_BLAST, MOVE_EARTHQUAKE, MOVE_EXTREME_SPEED},
         .ability = ABILITY_AIR_LOCK,
@@ -4394,7 +4394,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Jirachi ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_JIRACHI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Serene Grace flinch revenge killer
         .moves = {MOVE_IRON_HEAD, MOVE_ZEN_HEADBUTT, MOVE_ICE_PUNCH, MOVE_U_TURN},
         .ability = ABILITY_SERENE_GRACE,
@@ -4405,7 +4405,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_JIRACHI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Serene Grace Wish support / Iron Head flinch
         .moves = {MOVE_WISH, MOVE_IRON_HEAD, MOVE_STEALTH_ROCK, MOVE_THUNDER_WAVE},
         .ability = ABILITY_SERENE_GRACE,
@@ -4416,7 +4416,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_JIRACHI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind special setup sweeper
         .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT},
         .ability = ABILITY_SERENE_GRACE,
@@ -4429,7 +4429,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Deoxys-Attack ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_DEOXYS_ATTACK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // glass-cannon mixed attacker
         .moves = {MOVE_PSYCHO_BOOST, MOVE_ICE_BEAM, MOVE_SUPERPOWER, MOVE_KNOCK_OFF},
         .ability = ABILITY_PRESSURE,
@@ -4440,7 +4440,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DEOXYS_ATTACK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // sash glass cannon, one-shot entry guard
         .moves = {MOVE_PSYCHO_BOOST, MOVE_THUNDERBOLT, MOVE_ICE_BEAM, MOVE_SUPERPOWER},
         .ability = ABILITY_PRESSURE,
@@ -4453,7 +4453,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Deoxys-Speed ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_DEOXYS_SPEED,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // hyper-offense hazard lead, one-shot entry guard
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_TAUNT, MOVE_PSYCHO_BOOST},
         .ability = ABILITY_PRESSURE,
@@ -4464,7 +4464,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DEOXYS_SPEED,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast Nasty Plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_PSYCHO_BOOST, MOVE_ICE_BEAM, MOVE_FOCUS_BLAST},
         .ability = ABILITY_PRESSURE,
@@ -4477,7 +4477,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Deoxys-Defense ---- (INNATE LEVITATE — no Air Balloon)
     {
         .species = SPECIES_DEOXYS_DEFENSE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky hazard / status wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_TOXIC, MOVE_RECOVER},
         .ability = ABILITY_PRESSURE,
@@ -4494,7 +4494,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Torterra ----
     {
         .species = SPECIES_TORTERRA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky Rock Polish / Shell Smash setup
         .moves = {MOVE_ROCK_POLISH, MOVE_WOOD_HAMMER, MOVE_EARTHQUAKE, MOVE_STONE_EDGE},
         .ability = ABILITY_OVERGROW,
@@ -4505,7 +4505,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TORTERRA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // bulky hazards + Synthesis
         .moves = {MOVE_STEALTH_ROCK, MOVE_WOOD_HAMMER, MOVE_EARTHQUAKE, MOVE_SYNTHESIS},
         .ability = ABILITY_SHELL_ARMOR,
@@ -4518,7 +4518,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Infernape ----
     {
         .species = SPECIES_INFERNAPE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed wallbreaker
         .moves = {MOVE_FLARE_BLITZ, MOVE_CLOSE_COMBAT, MOVE_GUNK_SHOT, MOVE_GRASS_KNOT},
         .ability = ABILITY_IRON_FIST,
@@ -4529,7 +4529,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_INFERNAPE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast suicide lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_FAKE_OUT, MOVE_CLOSE_COMBAT, MOVE_FIRE_BLAST},
         .ability = ABILITY_BLAZE,
@@ -4540,7 +4540,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_INFERNAPE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
         .moves = {MOVE_OVERHEAT, MOVE_CLOSE_COMBAT, MOVE_U_TURN, MOVE_GRASS_KNOT},
         .ability = ABILITY_BLAZE,
@@ -4553,7 +4553,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Empoleon ----
     {
         .species = SPECIES_EMPOLEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky special pivot
         .moves = {MOVE_SCALD, MOVE_FLASH_CANNON, MOVE_ROOST, MOVE_DEFOG},
         .ability = ABILITY_TORRENT,
@@ -4564,7 +4564,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_EMPOLEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Torrent special breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_FLASH_CANNON, MOVE_ICE_BEAM, MOVE_GRASS_KNOT},
         .ability = ABILITY_COMPETITIVE,
@@ -4577,7 +4577,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Staraptor ----
     {
         .species = SPECIES_STARAPTOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Reckless band
         .moves = {MOVE_BRAVE_BIRD, MOVE_DOUBLE_EDGE, MOVE_CLOSE_COMBAT, MOVE_U_TURN},
         .ability = ABILITY_RECKLESS,
@@ -4588,7 +4588,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_STARAPTOR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLYINIUM_Z, // Supersonic Skystrike nuke
         .moves = {MOVE_BRAVE_BIRD, MOVE_CLOSE_COMBAT, MOVE_QUICK_ATTACK, MOVE_DOUBLE_EDGE},
         .ability = ABILITY_RECKLESS,
@@ -4601,7 +4601,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Luxray ----
     {
         .species = SPECIES_LUXRAY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Intimidate physical attacker
         .moves = {MOVE_WILD_CHARGE, MOVE_CRUNCH, MOVE_SUPERPOWER, MOVE_ICE_FANG},
         .ability = ABILITY_INTIMIDATE,
@@ -4612,7 +4612,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LUXRAY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Guts band
         .moves = {MOVE_WILD_CHARGE, MOVE_CRUNCH, MOVE_SUPERPOWER, MOVE_VOLT_SWITCH},
         .ability = ABILITY_GUTS,
@@ -4625,7 +4625,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Roserade ----
     {
         .species = SPECIES_ROSERADE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // special attacker
         .moves = {MOVE_LEAF_STORM, MOVE_SLUDGE_BOMB, MOVE_SLEEP_POWDER, MOVE_FLAMETHROWER},
         .ability = ABILITY_NATURAL_CURE,
@@ -4636,7 +4636,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ROSERADE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Technician status spreader
         .moves = {MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_SPIKES, MOVE_TOXIC_SPIKES},
         .ability = ABILITY_TECHNICIAN,
@@ -4649,7 +4649,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Rampardos ----
     {
         .species = SPECIES_RAMPARDOS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Mold Breaker glass cannon
         .moves = {MOVE_HEAD_SMASH, MOVE_EARTHQUAKE, MOVE_CLOSE_COMBAT, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_MOLD_BREAKER,
@@ -4660,7 +4660,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RAMPARDOS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCK_GEM, // Rock Head nuke (no recoil Head Smash)
         .moves = {MOVE_SWORDS_DANCE, MOVE_HEAD_SMASH, MOVE_EARTHQUAKE, MOVE_FIRE_PUNCH},
         .ability = ABILITY_ROCK_HEAD,
@@ -4673,7 +4673,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Bastiodon ----
     {
         .species = SPECIES_BASTIODON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // physically defensive wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_IRON_HEAD, MOVE_ROAR, MOVE_TOXIC},
         .ability = ABILITY_SOUNDPROOF,
@@ -4686,7 +4686,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Vespiquen ----
     {
         .species = SPECIES_VESPIQUEN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Pressure stall / defensive pivot
         .moves = {MOVE_ROOST, MOVE_DEFOG, MOVE_TOXIC, MOVE_AIR_SLASH},
         .ability = ABILITY_PRESSURE,
@@ -4699,7 +4699,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Floatzel ----
     {
         .species = SPECIES_FLOATZEL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim / fast attacker
         .moves = {MOVE_LIQUIDATION, MOVE_ICE_PUNCH, MOVE_AQUA_JET, MOVE_LOW_KICK},
         .ability = ABILITY_SWIFT_SWIM,
@@ -4710,7 +4710,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLOATZEL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // Water Veil band breaker
         .moves = {MOVE_WAVE_CRASH, MOVE_ICE_PUNCH, MOVE_AQUA_JET, MOVE_FLIP_TURN},
         .ability = ABILITY_WATER_VEIL,
@@ -4723,7 +4723,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gastrodon ----
     {
         .species = SPECIES_GASTRODON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Storm Drain special tank
         .moves = {MOVE_EARTH_POWER, MOVE_SCALD, MOVE_ICE_BEAM, MOVE_RECOVER},
         .ability = ABILITY_STORM_DRAIN,
@@ -4734,7 +4734,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GASTRODON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Sticky Hold special tank
         .moves = {MOVE_EARTH_POWER, MOVE_SCALD, MOVE_ICE_BEAM, MOVE_CLEAR_SMOG},
         .ability = ABILITY_STICKY_HOLD,
@@ -4747,7 +4747,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ambipom ----
     {
         .species = SPECIES_AMBIPOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // Technician Fake Out pivot
         .moves = {MOVE_FAKE_OUT, MOVE_DOUBLE_HIT, MOVE_KNOCK_OFF, MOVE_U_TURN},
         .ability = ABILITY_TECHNICIAN,
@@ -4758,7 +4758,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AMBIPOM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
         .moves = {MOVE_DOUBLE_HIT, MOVE_KNOCK_OFF, MOVE_LOW_KICK, MOVE_TRIPLE_AXEL},
         .ability = ABILITY_TECHNICIAN,
@@ -4771,7 +4771,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Drifblim ----
     {
         .species = SPECIES_DRIFBLIM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Unburden sweeper
         .moves = {MOVE_CALM_MIND, MOVE_SHADOW_BALL, MOVE_AIR_SLASH, MOVE_STRENGTH_SAP},
         .ability = ABILITY_UNBURDEN,
@@ -4782,7 +4782,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRIFBLIM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Flare Boost special attacker
         .moves = {MOVE_SHADOW_BALL, MOVE_AIR_SLASH, MOVE_HEX, MOVE_WILL_O_WISP},
         .ability = ABILITY_FLARE_BOOST,
@@ -4795,7 +4795,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lopunny ----
     {
         .species = SPECIES_LOPUNNY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LOPUNNITE, // Mega Lopunny (Scrappy)
         .moves = {MOVE_FAKE_OUT, MOVE_HIGH_JUMP_KICK, MOVE_RETURN, MOVE_ICE_PUNCH},
         .ability = ABILITY_LIMBER,
@@ -4806,7 +4806,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LOPUNNY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_TOXIC_ORB, // Klutz Switcheroo / status spreader
         .moves = {MOVE_FAKE_OUT, MOVE_SWITCHEROO, MOVE_RETURN, MOVE_HIGH_JUMP_KICK},
         .ability = ABILITY_KLUTZ,
@@ -4819,7 +4819,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mismagius (Gen IV evolution of Misdreavus; innate Levitate) ----
     {
         .species = SPECIES_MISMAGIUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot special sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_SHADOW_BALL, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE},
         .ability = ABILITY_LEVITATE,
@@ -4830,7 +4830,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MISMAGIUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_COLBUR_BERRY, // utility / Taunt + Will-O-Wisp
         .moves = {MOVE_SHADOW_BALL, MOVE_WILL_O_WISP, MOVE_TAUNT, MOVE_PAIN_SPLIT},
         .ability = ABILITY_LEVITATE,
@@ -4843,7 +4843,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Honchkrow (Gen IV evolution of Murkrow) ----
     {
         .species = SPECIES_HONCHKROW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Moxie sweeper
         .moves = {MOVE_SUCKER_PUNCH, MOVE_BRAVE_BIRD, MOVE_HEAT_WAVE, MOVE_SUPERPOWER},
         .ability = ABILITY_MOXIE,
@@ -4854,7 +4854,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HONCHKROW,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // Super Luck band (guaranteed crits on crit moves)
         .moves = {MOVE_BRAVE_BIRD, MOVE_SUCKER_PUNCH, MOVE_NIGHT_SLASH, MOVE_PSYCHO_CUT},
         .ability = ABILITY_SUPER_LUCK,
@@ -4867,7 +4867,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Skuntank ----
     {
         .species = SPECIES_SKUNTANK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Aftermath pivot
         .moves = {MOVE_GUNK_SHOT, MOVE_CRUNCH, MOVE_FIRE_BLAST, MOVE_PURSUIT},
         .ability = ABILITY_AFTERMATH,
@@ -4880,7 +4880,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Bronzong (innate Levitate) ----
     {
         .species = SPECIES_BRONZONG,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // dual-screen / Trick Room setter
         .moves = {MOVE_TRICK_ROOM, MOVE_STEALTH_ROCK, MOVE_GYRO_BALL, MOVE_BODY_PRESS},
         .ability = ABILITY_LEVITATE,
@@ -4892,7 +4892,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BRONZONG,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIGHT_CLAY, // Heatproof screens wall
         .moves = {MOVE_LIGHT_SCREEN, MOVE_REFLECT, MOVE_PSYCHIC, MOVE_TOXIC},
         .ability = ABILITY_HEATPROOF,
@@ -4905,7 +4905,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Spiritomb (innate Levitate) ----
     {
         .species = SPECIES_SPIRITOMB,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Infiltrator Calm Mind wall
         .moves = {MOVE_CALM_MIND, MOVE_DARK_PULSE, MOVE_SHADOW_BALL, MOVE_REST},
         .ability = ABILITY_INFILTRATOR,
@@ -4916,7 +4916,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SPIRITOMB,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Pressure / Pursuit trapper
         .moves = {MOVE_SUCKER_PUNCH, MOVE_FOUL_PLAY, MOVE_WILL_O_WISP, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_PRESSURE,
@@ -4929,7 +4929,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Garchomp ----
     {
         .species = SPECIES_GARCHOMP,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GARCHOMPITE, // Mega Garchomp (Sand Force)
         .moves = {MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW, MOVE_FIRE_BLAST, MOVE_STONE_EDGE},
         .ability = ABILITY_ROUGH_SKIN,
@@ -4940,7 +4940,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GARCHOMP,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_OUTRAGE, MOVE_FIRE_FANG},
         .ability = ABILITY_ROUGH_SKIN,
@@ -4951,7 +4951,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GARCHOMP,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Rough Skin hazards lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_DRAGON_TAIL, MOVE_SPIKES},
         .ability = ABILITY_ROUGH_SKIN,
@@ -4964,7 +4964,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lucario ----
     {
         .species = SPECIES_LUCARIO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LUCARIONITE, // Mega Lucario (Adaptability)
         .moves = {MOVE_SWORDS_DANCE, MOVE_METEOR_MASH, MOVE_CLOSE_COMBAT, MOVE_BULLET_PUNCH},
         .ability = ABILITY_JUSTIFIED,
@@ -4975,7 +4975,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LUCARIO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot special
         .moves = {MOVE_NASTY_PLOT, MOVE_AURA_SPHERE, MOVE_FLASH_CANNON, MOVE_VACUUM_WAVE},
         .ability = ABILITY_INNER_FOCUS,
@@ -4986,7 +4986,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LUCARIO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FIGHTINIUM_Z, // SD + All-Out Pummeling
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_BULLET_PUNCH, MOVE_EXTREME_SPEED},
         .ability = ABILITY_STEADFAST,
@@ -4999,7 +4999,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hippowdon ----
     {
         .species = SPECIES_HIPPOWDON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Sand Stream physical wall
         .moves = {MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK, MOVE_SLACK_OFF, MOVE_WHIRLWIND},
         .ability = ABILITY_SAND_STREAM,
@@ -5010,7 +5010,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HIPPOWDON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SMOOTH_ROCK, // sand setter + Slack Off
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_SLACK_OFF, MOVE_ICE_FANG},
         .ability = ABILITY_SAND_STREAM,
@@ -5023,7 +5023,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Drapion ----
     {
         .species = SPECIES_DRAPION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Sniper / Knock Off pivot
         .moves = {MOVE_KNOCK_OFF, MOVE_POISON_JAB, MOVE_EARTHQUAKE, MOVE_TAUNT},
         .ability = ABILITY_BATTLE_ARMOR,
@@ -5034,7 +5034,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRAPION,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_KNOCK_OFF, MOVE_POISON_JAB, MOVE_AQUA_TAIL},
         .ability = ABILITY_SNIPER,
@@ -5047,7 +5047,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Toxicroak ----
     {
         .species = SPECIES_TOXICROAK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dry Skin rain sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_GUNK_SHOT, MOVE_DRAIN_PUNCH, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_DRY_SKIN,
@@ -5058,7 +5058,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOXICROAK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Poison Touch bulk
         .moves = {MOVE_GUNK_SHOT, MOVE_DRAIN_PUNCH, MOVE_SUCKER_PUNCH, MOVE_KNOCK_OFF},
         .ability = ABILITY_POISON_TOUCH,
@@ -5071,7 +5071,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Carnivine (innate Levitate) ----
     {
         .species = SPECIES_CARNIVINE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance grass attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_POWER_WHIP, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE},
         .ability = ABILITY_LEVITATE,
@@ -5084,7 +5084,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Abomasnow ----
     {
         .species = SPECIES_ABOMASNOW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ABOMASITE, // Mega Abomasnow (Snow Warning)
         .moves = {MOVE_BLIZZARD, MOVE_GIGA_DRAIN, MOVE_EARTHQUAKE, MOVE_ICE_SHARD},
         .ability = ABILITY_SNOW_WARNING,
@@ -5095,7 +5095,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ABOMASNOW,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ICIUM_Z, // Aurora Veil + Blizzard support
         .moves = {MOVE_AURORA_VEIL, MOVE_BLIZZARD, MOVE_GIGA_DRAIN, MOVE_PROTECT},
         .ability = ABILITY_SNOW_WARNING,
@@ -5108,7 +5108,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Weavile (Gen IV evolution of Sneasel) ----
     {
         .species = SPECIES_WEAVILE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast physical attacker
         .moves = {MOVE_TRIPLE_AXEL, MOVE_KNOCK_OFF, MOVE_ICE_SHARD, MOVE_LOW_KICK},
         .ability = ABILITY_PRESSURE,
@@ -5119,7 +5119,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_WEAVILE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Swords Dance + Pickpocket
         .moves = {MOVE_SWORDS_DANCE, MOVE_ICICLE_CRASH, MOVE_KNOCK_OFF, MOVE_ICE_SHARD},
         .ability = ABILITY_PICKPOCKET,
@@ -5132,7 +5132,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Magnezone (Gen IV evolution of Magneton; innate Levitate = Ground-immune) ----
     {
         .species = SPECIES_MAGNEZONE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Magnet Pull trapper
         .moves = {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_TRI_ATTACK},
         .ability = ABILITY_MAGNET_PULL,
@@ -5145,7 +5145,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         // Innate Levitate already dodges Ground, so no Air Balloon needed — run a
         // bulky Analytic special tank instead.
         .species = SPECIES_MAGNEZONE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Analytic special tank
         .moves = {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_ANALYTIC,
@@ -5158,7 +5158,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lickilicky ----
     {
         .species = SPECIES_LICKILICKY,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Own Tempo Trick Room support
         .moves = {MOVE_TRICK_ROOM, MOVE_BODY_SLAM, MOVE_EXPLOSION, MOVE_KNOCK_OFF},
         .ability = ABILITY_OWN_TEMPO,
@@ -5170,7 +5170,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LICKILICKY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Wish + Protect cleric wall
         .moves = {MOVE_WISH, MOVE_PROTECT, MOVE_BODY_SLAM, MOVE_KNOCK_OFF},
         .ability = ABILITY_CLOUD_NINE,
@@ -5183,7 +5183,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Rhyperior (Gen IV evolution of Rhydon) ----
     {
         .species = SPECIES_RHYPERIOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky Lightning Rod rocker
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_STEALTH_ROCK, MOVE_ICE_PUNCH},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -5194,7 +5194,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RHYPERIOR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Solid Rock + WP sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_MEGAHORN},
         .ability = ABILITY_SOLID_ROCK,
@@ -5207,7 +5207,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tangrowth (Gen IV evolution of Tangela) ----
     {
         .species = SPECIES_TANGROWTH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator wall
         .moves = {MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_LEECH_SEED, MOVE_KNOCK_OFF},
         .ability = ABILITY_REGENERATOR,
@@ -5218,7 +5218,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TANGROWTH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Regenerator physical tank
         .moves = {MOVE_POWER_WHIP, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE},
         .ability = ABILITY_REGENERATOR,
@@ -5231,7 +5231,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Electivire (Gen IV evolution of Electabuzz) ----
     {
         .species = SPECIES_ELECTIVIRE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Motor Drive mixed sweeper
         .moves = {MOVE_WILD_CHARGE, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE, MOVE_CROSS_CHOP},
         .ability = ABILITY_MOTOR_DRIVE,
@@ -5242,7 +5242,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ELECTIVIRE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // bulky Vital Spirit pivot
         .moves = {MOVE_WILD_CHARGE, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE, MOVE_VOLT_SWITCH},
         .ability = ABILITY_VITAL_SPIRIT,
@@ -5255,7 +5255,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Magmortar (Gen IV evolution of Magmar) ----
     {
         .species = SPECIES_MAGMORTAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Flash Fire special breaker
         .moves = {MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT, MOVE_OVERHEAT},
         .ability = ABILITY_FLASH_FIRE,
@@ -5266,7 +5266,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MAGMORTAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Vital Spirit revenge killer
         .moves = {MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT, MOVE_PSYCHIC},
         .ability = ABILITY_VITAL_SPIRIT,
@@ -5279,7 +5279,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Togekiss ----
     {
         .species = SPECIES_TOGEKISS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Serene Grace flinch / Nasty Plot
         .moves = {MOVE_NASTY_PLOT, MOVE_AIR_SLASH, MOVE_DAZZLING_GLEAM, MOVE_ROOST},
         .ability = ABILITY_SERENE_GRACE,
@@ -5290,7 +5290,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOGEKISS,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // doubles support (Follow Me + Tailwind)
         .moves = {MOVE_FOLLOW_ME, MOVE_TAILWIND, MOVE_DAZZLING_GLEAM, MOVE_AIR_SLASH},
         .ability = ABILITY_SUPER_LUCK,
@@ -5303,7 +5303,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Yanmega (Gen IV evolution of Yanma) ----
     {
         .species = SPECIES_YANMEGA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Tinted Lens breaker
         .moves = {MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_GIGA_DRAIN, MOVE_PROTECT},
         .ability = ABILITY_TINTED_LENS,
@@ -5314,7 +5314,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_YANMEGA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Speed Boost sweeper
         .moves = {MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_ANCIENT_POWER, MOVE_GIGA_DRAIN},
         .ability = ABILITY_SPEED_BOOST,
@@ -5327,7 +5327,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Leafeon ----
     {
         .species = SPECIES_LEAFEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll / Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_KNOCK_OFF, MOVE_X_SCISSOR},
         .ability = ABILITY_CHLOROPHYLL,
@@ -5340,7 +5340,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Glaceon ----
     {
         .species = SPECIES_GLACEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_BLIZZARD, MOVE_FREEZE_DRY, MOVE_WATER_PULSE, MOVE_SHADOW_BALL},
         .ability = ABILITY_SNOW_CLOAK,
@@ -5353,7 +5353,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gliscor (Gen IV evolution of Gligar) ----
     {
         .species = SPECIES_GLISCOR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_TOXIC_ORB, // Poison Heal stall
         .moves = {MOVE_EARTHQUAKE, MOVE_PROTECT, MOVE_TOXIC, MOVE_ROOST},
         .ability = ABILITY_POISON_HEAL,
@@ -5364,7 +5364,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GLISCOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_TOXIC_ORB, // Poison Heal Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_KNOCK_OFF, MOVE_ROOST},
         .ability = ABILITY_POISON_HEAL,
@@ -5377,7 +5377,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mamoswine (Gen IV evolution of Piloswine) ----
     {
         .species = SPECIES_MAMOSWINE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Thick Fat physical attacker
         .moves = {MOVE_EARTHQUAKE, MOVE_ICICLE_CRASH, MOVE_ICE_SHARD, MOVE_KNOCK_OFF},
         .ability = ABILITY_THICK_FAT,
@@ -5388,7 +5388,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MAMOSWINE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
         .moves = {MOVE_EARTHQUAKE, MOVE_ICICLE_CRASH, MOVE_ICE_SHARD, MOVE_SUPERPOWER},
         .ability = ABILITY_THICK_FAT,
@@ -5399,7 +5399,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MAMOSWINE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat tank rocker
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_ICE_SHARD, MOVE_KNOCK_OFF},
         .ability = ABILITY_THICK_FAT,
@@ -5412,7 +5412,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Porygon-Z (innate Levitate) ----
     {
         .species = SPECIES_PORYGON_Z,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Adaptability Nasty Plot nuke
         .moves = {MOVE_NASTY_PLOT, MOVE_TRI_ATTACK, MOVE_DARK_PULSE, MOVE_THUNDERBOLT},
         .ability = ABILITY_ADAPTABILITY,
@@ -5423,7 +5423,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PORYGON_Z,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Download breaker
         .moves = {MOVE_TRI_ATTACK, MOVE_ICE_BEAM, MOVE_THUNDERBOLT, MOVE_TRICK},
         .ability = ABILITY_DOWNLOAD,
@@ -5436,7 +5436,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gallade (Gen IV evolution of Kirlia) ----
     {
         .species = SPECIES_GALLADE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GALLADITE, // Mega Gallade (Inner Focus)
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_PSYCHO_CUT, MOVE_KNOCK_OFF},
         .ability = ABILITY_JUSTIFIED,
@@ -5447,7 +5447,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GALLADE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Sharpness slicer
         .moves = {MOVE_SWORDS_DANCE, MOVE_SACRED_SWORD, MOVE_PSYCHO_CUT, MOVE_LEAF_BLADE},
         .ability = ABILITY_SHARPNESS,
@@ -5460,7 +5460,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Probopass ----
     {
         .species = SPECIES_PROBOPASS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Magnet Pull steel trapper / hazards
         .moves = {MOVE_STEALTH_ROCK, MOVE_POWER_GEM, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH},
         .ability = ABILITY_MAGNET_PULL,
@@ -5473,7 +5473,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dusknoir (Gen IV evolution of Dusclops) ----
     {
         .species = SPECIES_DUSKNOIR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky utility / Pain Split
         .moves = {MOVE_POLTERGEIST, MOVE_WILL_O_WISP, MOVE_PAIN_SPLIT, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_PRESSURE,
@@ -5484,7 +5484,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DUSKNOIR,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker
         .moves = {MOVE_TRICK_ROOM, MOVE_POLTERGEIST, MOVE_EARTHQUAKE, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_FRISK,
@@ -5498,7 +5498,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Froslass (innate Levitate) ----
     {
         .species = SPECIES_FROSLASS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast spikes / Destiny Bond lead
         .moves = {MOVE_SPIKES, MOVE_ICE_BEAM, MOVE_SHADOW_BALL, MOVE_DESTINY_BOND},
         .ability = ABILITY_CURSED_BODY,
@@ -5509,7 +5509,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FROSLASS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Snow Cloak offensive
         .moves = {MOVE_ICE_BEAM, MOVE_SHADOW_BALL, MOVE_THUNDERBOLT, MOVE_TAUNT},
         .ability = ABILITY_SNOW_CLOAK,
@@ -5522,7 +5522,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Rotom-Heat (innate Levitate) ----
     {
         .species = SPECIES_ROTOM_HEAT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // fire/electric breaker
         .moves = {MOVE_OVERHEAT, MOVE_VOLT_SWITCH, MOVE_THUNDERBOLT, MOVE_TRICK},
         .ability = ABILITY_LEVITATE,
@@ -5533,7 +5533,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ROTOM_HEAT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot
         .moves = {MOVE_OVERHEAT, MOVE_VOLT_SWITCH, MOVE_WILL_O_WISP, MOVE_NASTY_PLOT},
         .ability = ABILITY_LEVITATE,
@@ -5546,7 +5546,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Rotom-Wash (innate Levitate) ----
     {
         .species = SPECIES_ROTOM_WASH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky water/electric pivot
         .moves = {MOVE_HYDRO_PUMP, MOVE_VOLT_SWITCH, MOVE_WILL_O_WISP, MOVE_PAIN_SPLIT},
         .ability = ABILITY_LEVITATE,
@@ -5557,7 +5557,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ROTOM_WASH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge pivot
         .moves = {MOVE_HYDRO_PUMP, MOVE_VOLT_SWITCH, MOVE_THUNDERBOLT, MOVE_TRICK},
         .ability = ABILITY_LEVITATE,
@@ -5570,7 +5570,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Rotom-Mow (innate Levitate) ----
     {
         .species = SPECIES_ROTOM_MOW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // grass/electric attacker
         .moves = {MOVE_LEAF_STORM, MOVE_VOLT_SWITCH, MOVE_THUNDERBOLT, MOVE_WILL_O_WISP},
         .ability = ABILITY_LEVITATE,
@@ -5583,7 +5583,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Uxie (innate Levitate) ----
     {
         .species = SPECIES_UXIE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // dual-screen / hazards wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_PSYCHIC, MOVE_YAWN, MOVE_U_TURN},
         .ability = ABILITY_LEVITATE,
@@ -5596,7 +5596,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mesprit (innate Levitate) ----
     {
         .species = SPECIES_MESPRIT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed pivot
         .moves = {MOVE_PSYCHIC, MOVE_ICE_BEAM, MOVE_U_TURN, MOVE_STEALTH_ROCK},
         .ability = ABILITY_LEVITATE,
@@ -5609,7 +5609,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Azelf (innate Levitate) ----
     {
         .species = SPECIES_AZELF,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast suicide lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_TAUNT, MOVE_PSYCHIC, MOVE_EXPLOSION},
         .ability = ABILITY_LEVITATE,
@@ -5620,7 +5620,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AZELF,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_PSYCHIC, MOVE_FIRE_BLAST, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_LEVITATE,
@@ -5633,7 +5633,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dialga ----
     {
         .species = SPECIES_DIALGA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky special legend
         .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT, MOVE_STEALTH_ROCK},
         .ability = ABILITY_PRESSURE,
@@ -5644,7 +5644,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DIALGA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Roar of Time breaker
         .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_FIRE_BLAST, MOVE_ROAR_OF_TIME},
         .ability = ABILITY_TELEPATHY,
@@ -5657,7 +5657,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Palkia ----
     {
         .species = SPECIES_PALKIA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast special legend
         .moves = {MOVE_SPACIAL_REND, MOVE_HYDRO_PUMP, MOVE_FIRE_BLAST, MOVE_THUNDERBOLT},
         .ability = ABILITY_PRESSURE,
@@ -5668,7 +5668,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PALKIA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge legend
         .moves = {MOVE_SPACIAL_REND, MOVE_HYDRO_PUMP, MOVE_DRACO_METEOR, MOVE_FIRE_BLAST},
         .ability = ABILITY_TELEPATHY,
@@ -5681,7 +5681,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Heatran ----
     {
         .species = SPECIES_HEATRAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Flash Fire pivot / hazards
         .moves = {MOVE_MAGMA_STORM, MOVE_EARTH_POWER, MOVE_STEALTH_ROCK, MOVE_TAUNT},
         .ability = ABILITY_FLASH_FIRE,
@@ -5692,7 +5692,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HEATRAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_MAGMA_STORM, MOVE_EARTH_POWER, MOVE_FLASH_CANNON, MOVE_DRAGON_PULSE},
         .ability = ABILITY_FLASH_FIRE,
@@ -5705,7 +5705,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Regigigas ----
     {
         .species = SPECIES_REGIGIGAS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Slow Start sit-out with Substitute
         .moves = {MOVE_SUBSTITUTE, MOVE_BODY_SLAM, MOVE_KNOCK_OFF, MOVE_DRAIN_PUNCH},
         .ability = ABILITY_SLOW_START,
@@ -5718,7 +5718,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Giratina (Altered, innate Levitate) ----
     {
         .species = SPECIES_GIRATINA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Will-O / Defog wall
         .moves = {MOVE_DRAGON_TAIL, MOVE_WILL_O_WISP, MOVE_REST, MOVE_DEFOG},
         .ability = ABILITY_PRESSURE,
@@ -5731,7 +5731,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Giratina-Origin (innate Levitate) ----
     {
         .species = SPECIES_GIRATINA_ORIGIN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GRISEOUS_ORB, // Origin forme nuke
         .moves = {MOVE_SHADOW_FORCE, MOVE_DRACO_METEOR, MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW},
         .ability = ABILITY_LEVITATE,
@@ -5744,7 +5744,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cresselia (innate Levitate) ----
     {
         .species = SPECIES_CRESSELIA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky sweeper
         .moves = {MOVE_CALM_MIND, MOVE_MOONBLAST, MOVE_PSYSHOCK, MOVE_MOONLIGHT},
         .ability = ABILITY_LEVITATE,
@@ -5755,7 +5755,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CRESSELIA,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // doubles support
         .moves = {MOVE_TRICK_ROOM, MOVE_HELPING_HAND, MOVE_ICY_WIND, MOVE_MOONBLAST},
         .ability = ABILITY_LEVITATE,
@@ -5768,7 +5768,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Darkrai (innate Levitate) ----
     {
         .species = SPECIES_DARKRAI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot / Dark Void sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_DARK_PULSE, MOVE_SLUDGE_BOMB, MOVE_ICE_BEAM},
         .ability = ABILITY_BAD_DREAMS,
@@ -5781,7 +5781,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Shaymin (Land) ----
     {
         .species = SPECIES_SHAYMIN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure Seed Flare / Synthesis
         .moves = {MOVE_SEED_FLARE, MOVE_EARTH_POWER, MOVE_AIR_SLASH, MOVE_SYNTHESIS},
         .ability = ABILITY_NATURAL_CURE,
@@ -5794,7 +5794,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Shaymin-Sky ----
     {
         .species = SPECIES_SHAYMIN_SKY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Serene Grace Air Slash flincher
         .moves = {MOVE_SEED_FLARE, MOVE_AIR_SLASH, MOVE_EARTH_POWER, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_SERENE_GRACE,
@@ -5807,7 +5807,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Arceus ----
     {
         .species = SPECIES_ARCEUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Extreme Speed Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_EXTREME_SPEED, MOVE_EARTHQUAKE, MOVE_SHADOW_CLAW},
         .ability = ABILITY_MULTITYPE,
@@ -5818,7 +5818,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCEUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind special sweeper
         .moves = {MOVE_CALM_MIND, MOVE_JUDGMENT, MOVE_ICE_BEAM, MOVE_RECOVER},
         .ability = ABILITY_MULTITYPE,
@@ -5835,7 +5835,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Serperior ----
     {
         .species = SPECIES_SERPERIOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Contrary Leaf Storm sweeper
         .moves = {MOVE_LEAF_STORM, MOVE_DRAGON_PULSE, MOVE_GIGA_DRAIN, MOVE_SUBSTITUTE},
         .ability = ABILITY_CONTRARY,
@@ -5846,7 +5846,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SERPERIOR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Sub + Glare pivot
         .moves = {MOVE_LEAF_STORM, MOVE_GLARE, MOVE_LEECH_SEED, MOVE_SUBSTITUTE},
         .ability = ABILITY_CONTRARY,
@@ -5859,7 +5859,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Emboar ----
     {
         .species = SPECIES_EMBOAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Reckless wallbreaker
         .moves = {MOVE_FLARE_BLITZ, MOVE_CLOSE_COMBAT, MOVE_WILD_CHARGE, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_RECKLESS,
@@ -5870,7 +5870,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_EMBOAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed attacker
         .moves = {MOVE_FLARE_BLITZ, MOVE_CLOSE_COMBAT, MOVE_HEAT_WAVE, MOVE_GRASS_KNOT},
         .ability = ABILITY_BLAZE,
@@ -5883,7 +5883,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Samurott ----
     {
         .species = SPECIES_SAMUROTT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Swords Dance attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_LIQUIDATION, MOVE_SACRED_SWORD, MOVE_AQUA_JET},
         .ability = ABILITY_TORRENT,
@@ -5894,7 +5894,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SAMUROTT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FLIP_TURN, MOVE_GRASS_KNOT},
         .ability = ABILITY_TORRENT,
@@ -5907,7 +5907,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Samurott-Hisui ----
     {
         .species = SPECIES_SAMUROTT_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH, // Sharpness Ceaseless Edge lead
         .moves = {MOVE_CEASELESS_EDGE, MOVE_AQUA_JET, MOVE_SUCKER_PUNCH, MOVE_KNOCK_OFF},
         .ability = ABILITY_SHARPNESS,
@@ -5918,7 +5918,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SAMUROTT_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sharpness Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_CEASELESS_EDGE, MOVE_LIQUIDATION, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SHARPNESS,
@@ -5931,7 +5931,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Stoutland ----
     {
         .species = SPECIES_STOUTLAND,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sand Rush band
         .moves = {MOVE_RETURN, MOVE_SUPERPOWER, MOVE_CRUNCH, MOVE_WILD_CHARGE},
         .ability = ABILITY_SAND_RUSH,
@@ -5942,7 +5942,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_STOUTLAND,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Intimidate physical wall
         .moves = {MOVE_BODY_SLAM, MOVE_TOXIC, MOVE_ROAR, MOVE_REST},
         .ability = ABILITY_INTIMIDATE,
@@ -5955,7 +5955,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Musharna (innate Levitate per roster rule) ----
     {
         .species = SPECIES_MUSHARNA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
         .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_MOONLIGHT, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_SYNCHRONIZE,
@@ -5966,7 +5966,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MUSHARNA,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Telepathy Trick Room setter
         .moves = {MOVE_TRICK_ROOM, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_HELPING_HAND},
         .ability = ABILITY_TELEPATHY,
@@ -5980,7 +5980,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Excadrill ----
     {
         .species = SPECIES_EXCADRILL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sand Rush sweeper
         .moves = {MOVE_EARTHQUAKE, MOVE_IRON_HEAD, MOVE_ROCK_SLIDE, MOVE_RAPID_SPIN},
         .ability = ABILITY_SAND_RUSH,
@@ -5991,7 +5991,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_EXCADRILL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Mold Breaker hazard lead + spinner
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_IRON_HEAD, MOVE_RAPID_SPIN},
         .ability = ABILITY_MOLD_BREAKER,
@@ -6002,7 +6002,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_EXCADRILL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
         .moves = {MOVE_EARTHQUAKE, MOVE_IRON_HEAD, MOVE_ROCK_SLIDE, MOVE_HIGH_HORSEPOWER},
         .ability = ABILITY_MOLD_BREAKER,
@@ -6015,7 +6015,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Audino ----
     {
         .species = SPECIES_AUDINO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator cleric wall
         .moves = {MOVE_WISH, MOVE_PROTECT, MOVE_TOXIC, MOVE_HEAL_BELL},
         .ability = ABILITY_REGENERATOR,
@@ -6028,7 +6028,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Conkeldurr ----
     {
         .species = SPECIES_CONKELDURR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts bulk-up tank
         .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_MACH_PUNCH, MOVE_KNOCK_OFF},
         .ability = ABILITY_GUTS,
@@ -6039,7 +6039,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CONKELDURR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Sheer Force mixed tank
         .moves = {MOVE_DRAIN_PUNCH, MOVE_MACH_PUNCH, MOVE_POISON_JAB, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_SHEER_FORCE,
@@ -6052,7 +6052,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Seismitoad ----
     {
         .species = SPECIES_SEISMITOAD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
         .moves = {MOVE_HYDRO_PUMP, MOVE_EARTH_POWER, MOVE_SLUDGE_WAVE, MOVE_ICE_BEAM},
         .ability = ABILITY_SWIFT_SWIM,
@@ -6063,7 +6063,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SEISMITOAD,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky pivot
         .moves = {MOVE_STEALTH_ROCK, MOVE_SCALD, MOVE_EARTH_POWER, MOVE_TOXIC},
         .ability = ABILITY_WATER_ABSORB,
@@ -6076,7 +6076,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Throh ----
     {
         .species = SPECIES_THROH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Guts Bulk Up tank
         .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_KNOCK_OFF, MOVE_REST},
         .ability = ABILITY_GUTS,
@@ -6089,7 +6089,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sawk ----
     {
         .species = SPECIES_SAWK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Mold Breaker revenge killer
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_STONE_EDGE, MOVE_EARTHQUAKE},
         .ability = ABILITY_MOLD_BREAKER,
@@ -6100,7 +6100,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SAWK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sturdy breaker band
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_ICE_PUNCH, MOVE_POISON_JAB},
         .ability = ABILITY_STURDY,
@@ -6113,7 +6113,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Leavanny ----
     {
         .species = SPECIES_LEAVANNY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_X_SCISSOR, MOVE_KNOCK_OFF},
         .ability = ABILITY_SWARM,
@@ -6124,7 +6124,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LEAVANNY,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // Sticky Web lead
         .moves = {MOVE_STICKY_WEB, MOVE_LEAF_BLADE, MOVE_KNOCK_OFF, MOVE_X_SCISSOR},
         .ability = ABILITY_OVERCOAT,
@@ -6137,7 +6137,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Scolipede ----
     {
         .species = SPECIES_SCOLIPEDE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Speed Boost sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_MEGAHORN, MOVE_POISON_JAB, MOVE_EARTHQUAKE},
         .ability = ABILITY_SPEED_BOOST,
@@ -6148,7 +6148,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SCOLIPEDE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Speed Boost screens / Tailwind support
         .moves = {MOVE_TAILWIND, MOVE_PROTECT, MOVE_POISON_JAB, MOVE_MEGAHORN},
         .ability = ABILITY_SPEED_BOOST,
@@ -6161,7 +6161,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Whimsicott (innate Levitate not applicable; Prankster pivot) ----
     {
         .species = SPECIES_WHIMSICOTT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Prankster utility pivot
         .moves = {MOVE_MOONBLAST, MOVE_LEECH_SEED, MOVE_ENCORE, MOVE_U_TURN},
         .ability = ABILITY_PRANKSTER,
@@ -6172,7 +6172,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_WHIMSICOTT,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // Prankster Tailwind + redirect support
         .moves = {MOVE_TAILWIND, MOVE_HELPING_HAND, MOVE_MOONBLAST, MOVE_ENCORE},
         .ability = ABILITY_PRANKSTER,
@@ -6185,7 +6185,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lilligant ----
     {
         .species = SPECIES_LILLIGANT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Quiver Dance sweeper
         .moves = {MOVE_QUIVER_DANCE, MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_OWN_TEMPO,
@@ -6196,7 +6196,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LILLIGANT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Chlorophyll sun sweeper
         .moves = {MOVE_QUIVER_DANCE, MOVE_GIGA_DRAIN, MOVE_HURRICANE, MOVE_SUBSTITUTE},
         .ability = ABILITY_CHLOROPHYLL,
@@ -6209,7 +6209,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lilligant-Hisui ----
     {
         .species = SPECIES_LILLIGANT_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll Victory Dance sweeper
         .moves = {MOVE_VICTORY_DANCE, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_TRIPLE_AXEL},
         .ability = ABILITY_CHLOROPHYLL,
@@ -6220,7 +6220,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LILLIGANT_HISUI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // sash setup sweeper
         .moves = {MOVE_VICTORY_DANCE, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_ICE_SPINNER},
         .ability = ABILITY_CHLOROPHYLL,
@@ -6233,7 +6233,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Krookodile ----
     {
         .species = SPECIES_KROOKODILE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Moxie band
         .moves = {MOVE_EARTHQUAKE, MOVE_KNOCK_OFF, MOVE_STONE_EDGE, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_MOXIE,
@@ -6244,7 +6244,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KROOKODILE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Intimidate bulky hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE, MOVE_TAUNT},
         .ability = ABILITY_INTIMIDATE,
@@ -6257,7 +6257,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Darmanitan ----
     {
         .species = SPECIES_DARMANITAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Sheer Force revenge killer
         .moves = {MOVE_FLARE_BLITZ, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_U_TURN},
         .ability = ABILITY_SHEER_FORCE,
@@ -6268,7 +6268,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DARMANITAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force band wallbreaker
         .moves = {MOVE_FLARE_BLITZ, MOVE_EARTHQUAKE, MOVE_SUPERPOWER, MOVE_U_TURN},
         .ability = ABILITY_SHEER_FORCE,
@@ -6281,7 +6281,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Maractus ----
     {
         .species = SPECIES_MARACTUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
         .moves = {MOVE_GROWTH, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER, MOVE_LEECH_SEED},
         .ability = ABILITY_CHLOROPHYLL,
@@ -6294,7 +6294,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Crustle ----
     {
         .species = SPECIES_CRUSTLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Sturdy Shell Smash + hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_SHELL_SMASH, MOVE_X_SCISSOR, MOVE_STONE_EDGE},
         .ability = ABILITY_STURDY,
@@ -6305,7 +6305,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CRUSTLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_STONE_EDGE, MOVE_X_SCISSOR, MOVE_EARTHQUAKE},
         .ability = ABILITY_WEAK_ARMOR,
@@ -6318,7 +6318,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Scrafty ----
     {
         .species = SPECIES_SCRAFTY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up Moxie sweeper
         .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_KNOCK_OFF, MOVE_ICE_PUNCH},
         .ability = ABILITY_MOXIE,
@@ -6329,7 +6329,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SCRAFTY,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Intimidate Fake Out support tank
         .moves = {MOVE_FAKE_OUT, MOVE_KNOCK_OFF, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH},
         .ability = ABILITY_INTIMIDATE,
@@ -6342,7 +6342,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sigilyph ----
     {
         .species = SPECIES_SIGILYPH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Magic Guard Cosmic Power stallbreaker
         .moves = {MOVE_COSMIC_POWER, MOVE_STORED_POWER, MOVE_ROOST, MOVE_PSYCHO_SHIFT},
         .ability = ABILITY_MAGIC_GUARD,
@@ -6353,7 +6353,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SIGILYPH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // special attacker
         .moves = {MOVE_AIR_SLASH, MOVE_PSYCHIC, MOVE_HEAT_WAVE, MOVE_ROOST},
         .ability = ABILITY_TINTED_LENS,
@@ -6366,7 +6366,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cofagrigus (innate Levitate) ----
     {
         .species = SPECIES_COFAGRIGUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Mummy bulky special wall
         .moves = {MOVE_SHADOW_BALL, MOVE_WILL_O_WISP, MOVE_TOXIC_SPIKES, MOVE_PAIN_SPLIT},
         .ability = ABILITY_MUMMY,
@@ -6377,7 +6377,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_COFAGRIGUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Nasty Plot Trick Room attacker
         .moves = {MOVE_TRICK_ROOM, MOVE_NASTY_PLOT, MOVE_SHADOW_BALL, MOVE_PSYCHIC},
         .ability = ABILITY_MUMMY,
@@ -6391,7 +6391,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Carracosta ----
     {
         .species = SPECIES_CARRACOSTA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Solid Rock Shell Smash sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_AQUA_JET},
         .ability = ABILITY_SOLID_ROCK,
@@ -6402,7 +6402,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CARRACOSTA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Sturdy Shell Smash lead
         .moves = {MOVE_SHELL_SMASH, MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_EARTHQUAKE},
         .ability = ABILITY_STURDY,
@@ -6415,7 +6415,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Archeops ----
     {
         .species = SPECIES_ARCHEOPS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // glass cannon (Defeatist drawback)
         .moves = {MOVE_ACROBATICS, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_U_TURN},
         .ability = ABILITY_DEFEATIST,
@@ -6426,7 +6426,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCHEOPS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_ACROBATICS, MOVE_TAUNT},
         .ability = ABILITY_DEFEATIST,
@@ -6439,7 +6439,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Garbodor ----
     {
         .species = SPECIES_GARBODOR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Aftermath hazard setter
         .moves = {MOVE_TOXIC_SPIKES, MOVE_SPIKES, MOVE_GUNK_SHOT, MOVE_PAIN_SPLIT},
         .ability = ABILITY_AFTERMATH,
@@ -6450,7 +6450,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GARBODOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Weak Armor attacker
         .moves = {MOVE_GUNK_SHOT, MOVE_SEED_BOMB, MOVE_DRAIN_PUNCH, MOVE_EXPLOSION},
         .ability = ABILITY_WEAK_ARMOR,
@@ -6463,7 +6463,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zoroark ----
     {
         .species = SPECIES_ZOROARK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Illusion mixed attacker
         .moves = {MOVE_NASTY_PLOT, MOVE_DARK_PULSE, MOVE_FLAMETHROWER, MOVE_FOCUS_BLAST},
         .ability = ABILITY_ILLUSION,
@@ -6474,7 +6474,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZOROARK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Illusion special breaker
         .moves = {MOVE_DARK_PULSE, MOVE_FLAMETHROWER, MOVE_FOCUS_BLAST, MOVE_U_TURN},
         .ability = ABILITY_ILLUSION,
@@ -6487,7 +6487,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zoroark-Hisui ----
     {
         .species = SPECIES_ZOROARK_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Illusion Normal/Ghost breaker
         .moves = {MOVE_SHADOW_BALL, MOVE_HYPER_VOICE, MOVE_FLAMETHROWER, MOVE_U_TURN},
         .ability = ABILITY_ILLUSION,
@@ -6498,7 +6498,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZOROARK_HISUI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_SHADOW_BALL, MOVE_HYPER_VOICE, MOVE_FOCUS_BLAST},
         .ability = ABILITY_ILLUSION,
@@ -6511,7 +6511,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cinccino ----
     {
         .species = SPECIES_CINCCINO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Skill Link multi-hit sweeper
         .moves = {MOVE_TAIL_SLAP, MOVE_BULLET_SEED, MOVE_ROCK_BLAST, MOVE_KNOCK_OFF},
         .ability = ABILITY_SKILL_LINK,
@@ -6522,7 +6522,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CINCCINO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Skill Link band
         .moves = {MOVE_TAIL_SLAP, MOVE_BULLET_SEED, MOVE_ROCK_BLAST, MOVE_U_TURN},
         .ability = ABILITY_SKILL_LINK,
@@ -6535,7 +6535,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gothitelle ----
     {
         .species = SPECIES_GOTHITELLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shadow Tag Calm Mind trapper
         .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_SHADOW_BALL, MOVE_REST},
         .ability = ABILITY_SHADOW_TAG,
@@ -6548,7 +6548,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Reuniclus (innate Levitate per roster rule) ----
     {
         .species = SPECIES_REUNICLUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Magic Guard Calm Mind tank
         .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_FOCUS_BLAST, MOVE_RECOVER},
         .ability = ABILITY_MAGIC_GUARD,
@@ -6559,7 +6559,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_REUNICLUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Trick Room attacker
         .moves = {MOVE_TRICK_ROOM, MOVE_PSYCHIC, MOVE_SHADOW_BALL, MOVE_FOCUS_BLAST},
         .ability = ABILITY_MAGIC_GUARD,
@@ -6573,7 +6573,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Swanna ----
     {
         .species = SPECIES_SWANNA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // hydration / offensive pivot
         .moves = {MOVE_HURRICANE, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_ROOST},
         .ability = ABILITY_HYDRATION,
@@ -6586,7 +6586,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Vanilluxe (innate Levitate per roster rule) ----
     {
         .species = SPECIES_VANILLUXE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Snow Warning special attacker
         .moves = {MOVE_AUTOTOMIZE, MOVE_BLIZZARD, MOVE_FREEZE_DRY, MOVE_FLASH_CANNON},
         .ability = ABILITY_SNOW_WARNING,
@@ -6599,7 +6599,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sawsbuck ----
     {
         .species = SPECIES_SAWSBUCK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_HORN_LEECH, MOVE_DOUBLE_EDGE, MOVE_JUMP_KICK},
         .ability = ABILITY_CHLOROPHYLL,
@@ -6610,7 +6610,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SAWSBUCK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sap Sipper band
         .moves = {MOVE_HORN_LEECH, MOVE_DOUBLE_EDGE, MOVE_MEGAHORN, MOVE_JUMP_KICK},
         .ability = ABILITY_SAP_SIPPER,
@@ -6623,7 +6623,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Escavalier ----
     {
         .species = SPECIES_ESCAVALIER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Swarm band breaker
         .moves = {MOVE_MEGAHORN, MOVE_IRON_HEAD, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_SWARM,
@@ -6634,7 +6634,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ESCAVALIER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Overcoat bulky tank
         .moves = {MOVE_MEGAHORN, MOVE_IRON_HEAD, MOVE_DRAIN_PUNCH, MOVE_SWORDS_DANCE},
         .ability = ABILITY_OVERCOAT,
@@ -6647,7 +6647,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Amoonguss ----
     {
         .species = SPECIES_AMOONGUSS,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET, // Regenerator Rage Powder redirect
         .moves = {MOVE_RAGE_POWDER, MOVE_SPORE, MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB},
         .ability = ABILITY_REGENERATOR,
@@ -6658,7 +6658,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AMOONGUSS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Regenerator status wall
         .moves = {MOVE_SPORE, MOVE_GIGA_DRAIN, MOVE_CLEAR_SMOG, MOVE_TOXIC},
         .ability = ABILITY_REGENERATOR,
@@ -6671,7 +6671,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Jellicent (innate Levitate per roster rule) ----
     {
         .species = SPECIES_JELLICENT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky spinblocker
         .moves = {MOVE_SCALD, MOVE_WILL_O_WISP, MOVE_RECOVER, MOVE_TOXIC},
         .ability = ABILITY_WATER_ABSORB,
@@ -6682,7 +6682,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_JELLICENT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Cursed Body special wall
         .moves = {MOVE_SHADOW_BALL, MOVE_SCALD, MOVE_RECOVER, MOVE_TAUNT},
         .ability = ABILITY_CURSED_BODY,
@@ -6695,7 +6695,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Alomomola ----
     {
         .species = SPECIES_ALOMOMOLA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator Wish wall
         .moves = {MOVE_WISH, MOVE_PROTECT, MOVE_SCALD, MOVE_TOXIC},
         .ability = ABILITY_REGENERATOR,
@@ -6708,7 +6708,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Galvantula ----
     {
         .species = SPECIES_GALVANTULA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Compound Eyes Sticky Web lead
         .moves = {MOVE_STICKY_WEB, MOVE_THUNDER, MOVE_BUG_BUZZ, MOVE_VOLT_SWITCH},
         .ability = ABILITY_COMPOUND_EYES,
@@ -6719,7 +6719,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GALVANTULA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // special attacker
         .moves = {MOVE_THUNDER, MOVE_BUG_BUZZ, MOVE_ENERGY_BALL, MOVE_VOLT_SWITCH},
         .ability = ABILITY_COMPOUND_EYES,
@@ -6732,7 +6732,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ferroseed (NFE Eviolite niche) ----
     {
         .species = SPECIES_FERROSEED,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EVIOLITE, // Iron Barbs hazard wall (Eviolite niche)
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_LEECH_SEED, MOVE_GYRO_BALL},
         .ability = ABILITY_IRON_BARBS,
@@ -6746,7 +6746,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ferrothorn ----
     {
         .species = SPECIES_FERROTHORN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Iron Barbs hazard wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_LEECH_SEED, MOVE_POWER_WHIP},
         .ability = ABILITY_IRON_BARBS,
@@ -6758,7 +6758,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FERROTHORN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Iron Barbs + Helmet contact punisher
         .moves = {MOVE_GYRO_BALL, MOVE_POWER_WHIP, MOVE_KNOCK_OFF, MOVE_LEECH_SEED},
         .ability = ABILITY_IRON_BARBS,
@@ -6772,7 +6772,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Klinklang (innate Levitate per roster rule) ----
     {
         .species = SPECIES_KLINKLANG,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Clear Body Shift Gear sweeper
         .moves = {MOVE_SHIFT_GEAR, MOVE_GEAR_GRIND, MOVE_SUBSTITUTE, MOVE_WILD_CHARGE},
         .ability = ABILITY_CLEAR_BODY,
@@ -6785,7 +6785,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Eelektross (native Levitate) ----
     {
         .species = SPECIES_EELEKTROSS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Levitate mixed tank
         .moves = {MOVE_THUNDERBOLT, MOVE_FLAMETHROWER, MOVE_GIGA_DRAIN, MOVE_FLIP_TURN},
         .ability = ABILITY_LEVITATE,
@@ -6796,7 +6796,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_EELEKTROSS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Coil physical attacker
         .moves = {MOVE_COIL, MOVE_WILD_CHARGE, MOVE_DRAIN_PUNCH, MOVE_KNOCK_OFF},
         .ability = ABILITY_LEVITATE,
@@ -6809,7 +6809,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Beheeyem (innate Levitate per roster rule) ----
     {
         .species = SPECIES_BEHEEYEM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Trick Room attacker
         .moves = {MOVE_TRICK_ROOM, MOVE_PSYCHIC, MOVE_SHADOW_BALL, MOVE_THUNDERBOLT},
         .ability = ABILITY_ANALYTIC,
@@ -6823,7 +6823,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Chandelure (innate Levitate per roster rule) ----
     {
         .species = SPECIES_CHANDELURE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Infiltrator revenge killer
         .moves = {MOVE_FIRE_BLAST, MOVE_SHADOW_BALL, MOVE_ENERGY_BALL, MOVE_TRICK},
         .ability = ABILITY_INFILTRATOR,
@@ -6834,7 +6834,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHANDELURE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Flash Fire Calm Mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_FIRE_BLAST, MOVE_SHADOW_BALL, MOVE_SUBSTITUTE},
         .ability = ABILITY_FLASH_FIRE,
@@ -6845,7 +6845,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHANDELURE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Trick Room wallbreaker
         .moves = {MOVE_TRICK_ROOM, MOVE_HEAT_WAVE, MOVE_SHADOW_BALL, MOVE_ENERGY_BALL},
         .ability = ABILITY_FLASH_FIRE,
@@ -6859,7 +6859,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Haxorus ----
     {
         .species = SPECIES_HAXORUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mold Breaker Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_POISON_JAB},
         .ability = ABILITY_MOLD_BREAKER,
@@ -6870,7 +6870,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HAXORUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Mold Breaker band breaker
         .moves = {MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_CLOSE_COMBAT, MOVE_FIRST_IMPRESSION},
         .ability = ABILITY_MOLD_BREAKER,
@@ -6883,7 +6883,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Beartic ----
     {
         .species = SPECIES_BEARTIC,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_ICICLE_CRASH, MOVE_LIQUIDATION, MOVE_AQUA_JET},
         .ability = ABILITY_SWIFT_SWIM,
@@ -6896,7 +6896,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cryogonal (innate Levitate per roster rule) ----
     {
         .species = SPECIES_CRYOGONAL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Levitate special wall + Rapid Spin
         .moves = {MOVE_FREEZE_DRY, MOVE_RAPID_SPIN, MOVE_RECOVER, MOVE_TOXIC},
         .ability = ABILITY_LEVITATE,
@@ -6909,7 +6909,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mienshao ----
     {
         .species = SPECIES_MIENSHAO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Regenerator revenge killer / pivot
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_U_TURN, MOVE_STONE_EDGE},
         .ability = ABILITY_REGENERATOR,
@@ -6920,7 +6920,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MIENSHAO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Reckless wallbreaker
         .moves = {MOVE_HIGH_JUMP_KICK, MOVE_KNOCK_OFF, MOVE_POISON_JAB, MOVE_U_TURN},
         .ability = ABILITY_RECKLESS,
@@ -6933,7 +6933,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Druddigon ----
     {
         .species = SPECIES_DRUDDIGON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Rough Skin bulky pivot
         .moves = {MOVE_STEALTH_ROCK, MOVE_DRAGON_CLAW, MOVE_GLARE, MOVE_FIRE_PUNCH},
         .ability = ABILITY_ROUGH_SKIN,
@@ -6944,7 +6944,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRUDDIGON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force band
         .moves = {MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_FIRE_PUNCH, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SHEER_FORCE,
@@ -6957,7 +6957,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Golurk ----
     {
         .species = SPECIES_GOLURK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // No Guard band breaker
         .moves = {MOVE_EARTHQUAKE, MOVE_POLTERGEIST, MOVE_DYNAMIC_PUNCH, MOVE_ICE_PUNCH},
         .ability = ABILITY_NO_GUARD,
@@ -6968,7 +6968,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOLURK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Iron Fist bulky hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_POLTERGEIST, MOVE_TOXIC},
         .ability = ABILITY_IRON_FIST,
@@ -6981,7 +6981,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Bisharp ----
     {
         .species = SPECIES_BISHARP,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Defiant Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_KNOCK_OFF, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_DEFIANT,
@@ -6992,7 +6992,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BISHARP,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Defiant band breaker
         .moves = {MOVE_KNOCK_OFF, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_DEFIANT,
@@ -7005,7 +7005,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Bouffalant ----
     {
         .species = SPECIES_BOUFFALANT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Reckless head-charge band
         .moves = {MOVE_HEAD_CHARGE, MOVE_EARTHQUAKE, MOVE_SUPERPOWER, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_RECKLESS,
@@ -7018,7 +7018,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Braviary ----
     {
         .species = SPECIES_BRAVIARY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Defiant band
         .moves = {MOVE_BRAVE_BIRD, MOVE_CLOSE_COMBAT, MOVE_U_TURN, MOVE_ROCK_SLIDE},
         .ability = ABILITY_DEFIANT,
@@ -7029,7 +7029,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BRAVIARY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Sheer Force Bulk Up sweeper
         .moves = {MOVE_BULK_UP, MOVE_BRAVE_BIRD, MOVE_CLOSE_COMBAT, MOVE_ROOST},
         .ability = ABILITY_SHEER_FORCE,
@@ -7042,7 +7042,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Braviary-Hisui ----
     {
         .species = SPECIES_BRAVIARY_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Tinted Lens special attacker
         .moves = {MOVE_HURRICANE, MOVE_PSYCHIC, MOVE_HEAT_WAVE, MOVE_U_TURN},
         .ability = ABILITY_TINTED_LENS,
@@ -7053,7 +7053,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BRAVIARY_HISUI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_HURRICANE, MOVE_PSYCHIC, MOVE_SUBSTITUTE},
         .ability = ABILITY_TINTED_LENS,
@@ -7066,7 +7066,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mandibuzz ----
     {
         .species = SPECIES_MANDIBUZZ,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Overcoat defensive Defog pivot
         .moves = {MOVE_FOUL_PLAY, MOVE_ROOST, MOVE_DEFOG, MOVE_TOXIC},
         .ability = ABILITY_OVERCOAT,
@@ -7077,7 +7077,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MANDIBUZZ,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Weak Armor physical wall
         .moves = {MOVE_FOUL_PLAY, MOVE_ROOST, MOVE_KNOCK_OFF, MOVE_TAUNT},
         .ability = ABILITY_OVERCOAT,
@@ -7090,7 +7090,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Heatmor ----
     {
         .species = SPECIES_HEATMOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // White Smoke mixed attacker
         .moves = {MOVE_FIRE_BLAST, MOVE_GIGA_DRAIN, MOVE_SUCKER_PUNCH, MOVE_FOCUS_BLAST},
         .ability = ABILITY_FLASH_FIRE,
@@ -7103,7 +7103,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Durant ----
     {
         .species = SPECIES_DURANT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Hustle band breaker
         .moves = {MOVE_IRON_HEAD, MOVE_X_SCISSOR, MOVE_STONE_EDGE, MOVE_SUPERPOWER},
         .ability = ABILITY_HUSTLE,
@@ -7114,7 +7114,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DURANT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swarm Hone Claws sweeper
         .moves = {MOVE_HONE_CLAWS, MOVE_IRON_HEAD, MOVE_X_SCISSOR, MOVE_ROCK_SLIDE},
         .ability = ABILITY_SWARM,
@@ -7127,7 +7127,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hydreigon (native Levitate) ----
     {
         .species = SPECIES_HYDREIGON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Levitate revenge killer
         .moves = {MOVE_DARK_PULSE, MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_U_TURN},
         .ability = ABILITY_LEVITATE,
@@ -7138,7 +7138,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HYDREIGON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_DARK_PULSE, MOVE_FIRE_BLAST, MOVE_FLASH_CANNON},
         .ability = ABILITY_LEVITATE,
@@ -7149,7 +7149,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HYDREIGON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Defog pivot
         .moves = {MOVE_DRACO_METEOR, MOVE_DARK_PULSE, MOVE_DEFOG, MOVE_ROOST},
         .ability = ABILITY_LEVITATE,
@@ -7162,7 +7162,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Volcarona ----
     {
         .species = SPECIES_VOLCARONA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Quiver Dance sweeper
         .moves = {MOVE_QUIVER_DANCE, MOVE_FLAMETHROWER, MOVE_BUG_BUZZ, MOVE_GIGA_DRAIN},
         .ability = ABILITY_FLAME_BODY,
@@ -7173,7 +7173,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VOLCARONA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Quiver Dance + Roost
         .moves = {MOVE_QUIVER_DANCE, MOVE_FIRE_BLAST, MOVE_GIGA_DRAIN, MOVE_ROOST},
         .ability = ABILITY_FLAME_BODY,
@@ -7186,7 +7186,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cobalion ----
     {
         .species = SPECIES_COBALION,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Justified Swords Dance setup
         .moves = {MOVE_SWORDS_DANCE, MOVE_IRON_HEAD, MOVE_CLOSE_COMBAT, MOVE_STEALTH_ROCK},
         .ability = ABILITY_JUSTIFIED,
@@ -7197,7 +7197,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_COBALION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer / pivot
         .moves = {MOVE_CLOSE_COMBAT, MOVE_IRON_HEAD, MOVE_STONE_EDGE, MOVE_VOLT_SWITCH},
         .ability = ABILITY_JUSTIFIED,
@@ -7210,7 +7210,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Terrakion ----
     {
         .species = SPECIES_TERRAKION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Justified band breaker
         .moves = {MOVE_CLOSE_COMBAT, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_QUICK_ATTACK},
         .ability = ABILITY_JUSTIFIED,
@@ -7221,7 +7221,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TERRAKION,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Swords Dance / hazard lead
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_STONE_EDGE, MOVE_STEALTH_ROCK},
         .ability = ABILITY_JUSTIFIED,
@@ -7234,7 +7234,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Virizion ----
     {
         .species = SPECIES_VIRIZION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_STONE_EDGE},
         .ability = ABILITY_JUSTIFIED,
@@ -7245,7 +7245,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VIRIZION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Calm Mind special tank
         .moves = {MOVE_GIGA_DRAIN, MOVE_FOCUS_BLAST, MOVE_AIR_SLASH, MOVE_VACUUM_WAVE},
         .ability = ABILITY_JUSTIFIED,
@@ -7258,7 +7258,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tornadus ----
     {
         .species = SPECIES_TORNADUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Prankster offensive pivot
         .moves = {MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_FOCUS_BLAST, MOVE_U_TURN},
         .ability = ABILITY_PRANKSTER,
@@ -7269,7 +7269,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TORNADUS,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // Prankster Tailwind support
         .moves = {MOVE_TAILWIND, MOVE_HURRICANE, MOVE_TAUNT, MOVE_RAIN_DANCE},
         .ability = ABILITY_PRANKSTER,
@@ -7282,7 +7282,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tornadus-Therian ----
     {
         .species = SPECIES_TORNADUS_THERIAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Regenerator special pivot
         .moves = {MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_KNOCK_OFF, MOVE_U_TURN},
         .ability = ABILITY_REGENERATOR,
@@ -7295,7 +7295,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Thundurus ----
     {
         .species = SPECIES_THUNDURUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Prankster mixed attacker
         .moves = {MOVE_THUNDERBOLT, MOVE_FOCUS_BLAST, MOVE_KNOCK_OFF, MOVE_NASTY_PLOT},
         .ability = ABILITY_PRANKSTER,
@@ -7306,7 +7306,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_THUNDURUS,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // Prankster Thunder Wave support
         .moves = {MOVE_THUNDER_WAVE, MOVE_THUNDERBOLT, MOVE_TAUNT, MOVE_VOLT_SWITCH},
         .ability = ABILITY_PRANKSTER,
@@ -7319,7 +7319,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Thundurus-Therian ----
     {
         .species = SPECIES_THUNDURUS_THERIAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Volt Absorb revenge killer
         .moves = {MOVE_THUNDERBOLT, MOVE_FOCUS_BLAST, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH},
         .ability = ABILITY_VOLT_ABSORB,
@@ -7332,7 +7332,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Reshiram ----
     {
         .species = SPECIES_RESHIRAM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Turboblaze special breaker
         .moves = {MOVE_BLUE_FLARE, MOVE_DRACO_METEOR, MOVE_FLAMETHROWER, MOVE_EARTH_POWER},
         .ability = ABILITY_TURBOBLAZE,
@@ -7343,7 +7343,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RESHIRAM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Roost attacker
         .moves = {MOVE_BLUE_FLARE, MOVE_DRAGON_PULSE, MOVE_ROOST, MOVE_WILL_O_WISP},
         .ability = ABILITY_TURBOBLAZE,
@@ -7356,7 +7356,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zekrom ----
     {
         .species = SPECIES_ZEKROM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Teravolt Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_BOLT_STRIKE, MOVE_OUTRAGE, MOVE_EARTHQUAKE},
         .ability = ABILITY_TERAVOLT,
@@ -7367,7 +7367,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZEKROM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Teravolt band breaker
         .moves = {MOVE_BOLT_STRIKE, MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_VOLT_SWITCH},
         .ability = ABILITY_TERAVOLT,
@@ -7380,7 +7380,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Landorus ----
     {
         .species = SPECIES_LANDORUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sheer Force special nuke
         .moves = {MOVE_EARTH_POWER, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST, MOVE_PSYCHIC},
         .ability = ABILITY_SHEER_FORCE,
@@ -7393,7 +7393,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Landorus-Therian ----
     {
         .species = SPECIES_LANDORUS_THERIAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Intimidate revenge killer
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_U_TURN, MOVE_KNOCK_OFF},
         .ability = ABILITY_INTIMIDATE,
@@ -7404,7 +7404,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LANDORUS_THERIAN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Intimidate bulky hazard pivot
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_U_TURN, MOVE_TOXIC},
         .ability = ABILITY_INTIMIDATE,
@@ -7417,7 +7417,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kyurem ----
     {
         .species = SPECIES_KYUREM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Pressure special breaker
         .moves = {MOVE_ICE_BEAM, MOVE_DRACO_METEOR, MOVE_FREEZE_DRY, MOVE_EARTH_POWER},
         .ability = ABILITY_PRESSURE,
@@ -7428,7 +7428,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KYUREM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sub-Roost stallbreaker
         .moves = {MOVE_SUBSTITUTE, MOVE_ROOST, MOVE_ICE_BEAM, MOVE_EARTH_POWER},
         .ability = ABILITY_PRESSURE,
@@ -7441,7 +7441,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kyurem-Black ----
     {
         .species = SPECIES_KYUREM_BLACK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Teravolt physical breaker
         .moves = {MOVE_ICICLE_CRASH, MOVE_FUSION_BOLT, MOVE_OUTRAGE, MOVE_EARTHQUAKE},
         .ability = ABILITY_TERAVOLT,
@@ -7452,7 +7452,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KYUREM_BLACK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_ICICLE_CRASH, MOVE_FUSION_BOLT, MOVE_EARTHQUAKE},
         .ability = ABILITY_TERAVOLT,
@@ -7465,7 +7465,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kyurem-White ----
     {
         .species = SPECIES_KYUREM_WHITE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Turboblaze special nuke
         .moves = {MOVE_ICE_BEAM, MOVE_FUSION_FLARE, MOVE_DRACO_METEOR, MOVE_EARTH_POWER},
         .ability = ABILITY_TURBOBLAZE,
@@ -7478,7 +7478,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Keldeo ----
     {
         .species = SPECIES_KELDEO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Justified special breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_SECRET_SWORD, MOVE_SCALD, MOVE_ICY_WIND},
         .ability = ABILITY_JUSTIFIED,
@@ -7489,7 +7489,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KELDEO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
         .moves = {MOVE_HYDRO_PUMP, MOVE_SECRET_SWORD, MOVE_HYDRO_PUMP, MOVE_ICY_WIND},
         .ability = ABILITY_JUSTIFIED,
@@ -7502,7 +7502,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Meloetta ----
     {
         .species = SPECIES_MELOETTA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Serene Grace Calm Mind attacker
         .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_HYPER_VOICE, MOVE_FOCUS_BLAST},
         .ability = ABILITY_SERENE_GRACE,
@@ -7513,7 +7513,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MELOETTA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special pivot
         .moves = {MOVE_HYPER_VOICE, MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_SHADOW_BALL},
         .ability = ABILITY_SERENE_GRACE,
@@ -7526,7 +7526,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Genesect ----
     {
         .species = SPECIES_GENESECT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Download revenge killer / pivot
         .moves = {MOVE_U_TURN, MOVE_ICE_BEAM, MOVE_FLAMETHROWER, MOVE_THUNDERBOLT},
         .ability = ABILITY_DOWNLOAD,
@@ -7537,7 +7537,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GENESECT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Download Techno Blast attacker
         .moves = {MOVE_TECHNO_BLAST, MOVE_FLASH_CANNON, MOVE_ICE_BEAM, MOVE_THUNDERBOLT},
         .ability = ABILITY_DOWNLOAD,
@@ -7554,7 +7554,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Chesnaught ----
     {
         .species = SPECIES_CHESNAUGHT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Spikes / pivot wall
         .moves = {MOVE_SPIKES, MOVE_SPIKY_SHIELD, MOVE_LEECH_SEED, MOVE_BODY_PRESS},
         .ability = ABILITY_BULLETPROOF,
@@ -7565,7 +7565,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHESNAUGHT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed bulky attacker
         .moves = {MOVE_WOOD_HAMMER, MOVE_CLOSE_COMBAT, MOVE_STONE_EDGE, MOVE_GUNK_SHOT},
         .ability = ABILITY_BULLETPROOF,
@@ -7576,7 +7576,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHESNAUGHT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance breaker
         .moves = {MOVE_SWORDS_DANCE, MOVE_WOOD_HAMMER, MOVE_CLOSE_COMBAT, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_OVERGROW,
@@ -7589,7 +7589,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Delphox ----
     {
         .species = SPECIES_DELPHOX,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_FIRE_BLAST, MOVE_PSYSHOCK, MOVE_DAZZLING_GLEAM, MOVE_GRASS_KNOT},
         .ability = ABILITY_BLAZE,
@@ -7600,7 +7600,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DELPHOX,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_FIRE_BLAST, MOVE_PSYCHIC, MOVE_MYSTICAL_FIRE},
         .ability = ABILITY_MAGICIAN,
@@ -7611,7 +7611,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DELPHOX,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sub stallbreaker
         .moves = {MOVE_SUBSTITUTE, MOVE_CALM_MIND, MOVE_FIRE_BLAST, MOVE_PSYSHOCK},
         .ability = ABILITY_BLAZE,
@@ -7624,7 +7624,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Greninja ----
     {
         .species = SPECIES_GRENINJA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Protean wallbreaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_DARK_PULSE, MOVE_ICE_BEAM, MOVE_GUNK_SHOT},
         .ability = ABILITY_PROTEAN,
@@ -7635,7 +7635,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GRENINJA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // suicide hazard lead
         .moves = {MOVE_SPIKES, MOVE_TOXIC_SPIKES, MOVE_HYDRO_PUMP, MOVE_DARK_PULSE},
         .ability = ABILITY_PROTEAN,
@@ -7646,7 +7646,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GRENINJA_BATTLE_BOND,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Battle Bond revenge killer
         .moves = {MOVE_HYDRO_PUMP, MOVE_DARK_PULSE, MOVE_ICE_BEAM, MOVE_U_TURN},
         .ability = ABILITY_BATTLE_BOND,
@@ -7659,7 +7659,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Diggersby ----
     {
         .species = SPECIES_DIGGERSBY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Huge Power band
         .moves = {MOVE_EARTHQUAKE, MOVE_RETURN, MOVE_QUICK_ATTACK, MOVE_WILD_CHARGE},
         .ability = ABILITY_HUGE_POWER,
@@ -7670,7 +7670,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DIGGERSBY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_RETURN, MOVE_QUICK_ATTACK},
         .ability = ABILITY_HUGE_POWER,
@@ -7683,7 +7683,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Talonflame ----
     {
         .species = SPECIES_TALONFLAME,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Gale Wings priority sweeper
         .moves = {MOVE_BRAVE_BIRD, MOVE_FLARE_BLITZ, MOVE_SWORDS_DANCE, MOVE_U_TURN},
         .ability = ABILITY_GALE_WINGS,
@@ -7694,7 +7694,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TALONFLAME,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Roost / hazard control
         .moves = {MOVE_BRAVE_BIRD, MOVE_ROOST, MOVE_DEFOG, MOVE_WILL_O_WISP},
         .ability = ABILITY_FLAME_BODY,
@@ -7705,7 +7705,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TALONFLAME,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SHARP_BEAK, // Tailwind setter + priority
         .moves = {MOVE_TAILWIND, MOVE_BRAVE_BIRD, MOVE_FLARE_BLITZ, MOVE_WILL_O_WISP},
         .ability = ABILITY_GALE_WINGS,
@@ -7718,7 +7718,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pyroar ----
     {
         .species = SPECIES_PYROAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_FIRE_BLAST, MOVE_HYPER_VOICE, MOVE_DARK_PULSE, MOVE_SOLAR_BEAM},
         .ability = ABILITY_UNNERVE,
@@ -7729,7 +7729,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PYROAR,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_THROAT_SPRAY, // Hyper Voice spread attacker
         .moves = {MOVE_HYPER_VOICE, MOVE_HEAT_WAVE, MOVE_SNARL, MOVE_PROTECT},
         .ability = ABILITY_UNNERVE,
@@ -7742,7 +7742,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Florges ----
     {
         .species = SPECIES_FLORGES,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind cleric wall
         .moves = {MOVE_CALM_MIND, MOVE_MOONBLAST, MOVE_SYNTHESIS, MOVE_AROMATHERAPY},
         .ability = ABILITY_FLOWER_VEIL,
@@ -7753,7 +7753,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLORGES,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Pixilate breaker
         .moves = {MOVE_HYPER_VOICE, MOVE_MOONBLAST, MOVE_PSYCHIC, MOVE_ENERGY_BALL},
         .ability = ABILITY_SYMBIOSIS,
@@ -7766,7 +7766,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gogoat ----
     {
         .species = SPECIES_GOGOAT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up Sap Sipper tank
         .moves = {MOVE_BULK_UP, MOVE_HORN_LEECH, MOVE_EARTHQUAKE, MOVE_MILK_DRINK},
         .ability = ABILITY_SAP_SIPPER,
@@ -7777,7 +7777,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOGOAT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical attacker
         .moves = {MOVE_HORN_LEECH, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_BULK_UP},
         .ability = ABILITY_GRASS_PELT,
@@ -7790,7 +7790,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pangoro ----
     {
         .species = SPECIES_PANGORO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Iron Fist / Scrappy band
         .moves = {MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT, MOVE_GUNK_SHOT, MOVE_ICE_PUNCH},
         .ability = ABILITY_IRON_FIST,
@@ -7801,7 +7801,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PANGORO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance breaker
         .moves = {MOVE_SWORDS_DANCE, MOVE_KNOCK_OFF, MOVE_DRAIN_PUNCH, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SCRAPPY,
@@ -7814,7 +7814,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Meowstic (Male) ----
     {
         .species = SPECIES_MEOWSTIC,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster screens/support
         .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_FAKE_OUT, MOVE_THUNDER_WAVE},
         .ability = ABILITY_PRANKSTER,
@@ -7825,7 +7825,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEOWSTIC,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster disruption support
         .moves = {MOVE_FOLLOW_ME, MOVE_THUNDER_WAVE, MOVE_HELPING_HAND, MOVE_PSYCHIC},
         .ability = ABILITY_PRANKSTER,
@@ -7838,7 +7838,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Meowstic (Female) ----
     {
         .species = SPECIES_MEOWSTIC_F,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Competitive special attacker
         .moves = {MOVE_NASTY_PLOT, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_ENERGY_BALL},
         .ability = ABILITY_COMPETITIVE,
@@ -7849,7 +7849,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEOWSTIC_F,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Competitive breaker
         .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_SHADOW_BALL, MOVE_ENERGY_BALL},
         .ability = ABILITY_COMPETITIVE,
@@ -7862,7 +7862,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Aegislash (innate Stance Change; no Air Balloon) ----
     {
         .species = SPECIES_AEGISLASH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // King's Shield stance tank
         .moves = {MOVE_KINGS_SHIELD, MOVE_IRON_HEAD, MOVE_SHADOW_SNEAK, MOVE_SHADOW_CLAW},
         .ability = ABILITY_STANCE_CHANGE,
@@ -7873,7 +7873,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AEGISLASH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Weakness Policy sweeper
         .moves = {MOVE_KINGS_SHIELD, MOVE_SHADOW_BALL, MOVE_FLASH_CANNON, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_STANCE_CHANGE,
@@ -7884,7 +7884,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AEGISLASH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance / Spectral Thief
         .moves = {MOVE_SWORDS_DANCE, MOVE_SPECTRAL_THIEF, MOVE_IRON_HEAD, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_STANCE_CHANGE,
@@ -7897,7 +7897,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Aromatisse ----
     {
         .species = SPECIES_AROMATISSE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Aroma Veil Trick Room cleric
         .moves = {MOVE_TRICK_ROOM, MOVE_MOONBLAST, MOVE_AROMATHERAPY, MOVE_WISH},
         .ability = ABILITY_AROMA_VEIL,
@@ -7911,7 +7911,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Slurpuff ----
     {
         .species = SPECIES_SLURPUFF,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // Unburden Belly Drum sweeper
         .moves = {MOVE_BELLY_DRUM, MOVE_PLAY_ROUGH, MOVE_DRAIN_PUNCH, MOVE_FACADE},
         .ability = ABILITY_UNBURDEN,
@@ -7922,7 +7922,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SLURPUFF,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind special wall
         .moves = {MOVE_CALM_MIND, MOVE_DAZZLING_GLEAM, MOVE_FLAMETHROWER, MOVE_DRAINING_KISS},
         .ability = ABILITY_SWEET_VEIL,
@@ -7935,7 +7935,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Malamar ----
     {
         .species = SPECIES_MALAMAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Contrary Superpower sweeper
         .moves = {MOVE_SUPERPOWER, MOVE_KNOCK_OFF, MOVE_PSYCHO_CUT, MOVE_REST},
         .ability = ABILITY_CONTRARY,
@@ -7946,7 +7946,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MALAMAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Superpower + priority
         .moves = {MOVE_SUPERPOWER, MOVE_KNOCK_OFF, MOVE_SUCKER_PUNCH, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_CONTRARY,
@@ -7959,7 +7959,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Barbaracle ----
     {
         .species = SPECIES_BARBARACLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_CROSS_CHOP},
         .ability = ABILITY_TOUGH_CLAWS,
@@ -7970,7 +7970,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BARBARACLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // physical Tough Claws attacker
         .moves = {MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_SHADOW_CLAW},
         .ability = ABILITY_TOUGH_CLAWS,
@@ -7983,7 +7983,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dragalge ----
     {
         .species = SPECIES_DRAGALGE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Adaptability special tank
         .moves = {MOVE_DRACO_METEOR, MOVE_SLUDGE_WAVE, MOVE_FLIP_TURN, MOVE_FOCUS_BLAST},
         .ability = ABILITY_ADAPTABILITY,
@@ -7994,7 +7994,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRAGALGE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky Toxic Spikes pivot
         .moves = {MOVE_TOXIC_SPIKES, MOVE_SLUDGE_BOMB, MOVE_DRAGON_PULSE, MOVE_TOXIC},
         .ability = ABILITY_POISON_POINT,
@@ -8007,7 +8007,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Clawitzer ----
     {
         .species = SPECIES_CLAWITZER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Mega Launcher breaker
         .moves = {MOVE_DARK_PULSE, MOVE_WATER_PULSE, MOVE_AURA_SPHERE, MOVE_DRAGON_PULSE},
         .ability = ABILITY_MEGA_LAUNCHER,
@@ -8018,7 +8018,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CLAWITZER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special pivot
         .moves = {MOVE_HYDRO_PUMP, MOVE_DARK_PULSE, MOVE_ICE_BEAM, MOVE_AURA_SPHERE},
         .ability = ABILITY_MEGA_LAUNCHER,
@@ -8031,7 +8031,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Heliolisk ----
     {
         .species = SPECIES_HELIOLISK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dry Skin fast special attacker
         .moves = {MOVE_THUNDERBOLT, MOVE_HYPER_VOICE, MOVE_VOLT_SWITCH, MOVE_SURF},
         .ability = ABILITY_DRY_SKIN,
@@ -8042,7 +8042,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HELIOLISK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_HYPER_VOICE, MOVE_FOCUS_BLAST},
         .ability = ABILITY_DRY_SKIN,
@@ -8055,7 +8055,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tyrantrum ----
     {
         .species = SPECIES_TYRANTRUM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Strong Jaw band breaker
         .moves = {MOVE_HEAD_SMASH, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE, MOVE_CRUNCH},
         .ability = ABILITY_ROCK_HEAD,
@@ -8066,7 +8066,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TYRANTRUM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_OUTRAGE, MOVE_HEAD_SMASH, MOVE_EARTHQUAKE},
         .ability = ABILITY_ROCK_HEAD,
@@ -8077,7 +8077,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TYRANTRUM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // Strong Jaw revenge killer
         .moves = {MOVE_PSYCHIC_FANGS, MOVE_CRUNCH, MOVE_DRAGON_CLAW, MOVE_FIRE_FANG},
         .ability = ABILITY_STRONG_JAW,
@@ -8090,7 +8090,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Aurorus ----
     {
         .species = SPECIES_AURORUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Refrigerate bulky attacker / Aurora Veil
         .moves = {MOVE_HYPER_VOICE, MOVE_FREEZE_DRY, MOVE_THUNDERBOLT, MOVE_EARTH_POWER},
         .ability = ABILITY_REFRIGERATE,
@@ -8101,7 +8101,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AURORUS,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Snow Warning Aurora Veil setter
         .moves = {MOVE_AURORA_VEIL, MOVE_FREEZE_DRY, MOVE_HYPER_VOICE, MOVE_THUNDER_WAVE},
         .ability = ABILITY_SNOW_WARNING,
@@ -8114,7 +8114,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sylveon ----
     {
         .species = SPECIES_SYLVEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Pixilate Hyper Voice breaker
         .moves = {MOVE_HYPER_VOICE, MOVE_PSYSHOCK, MOVE_MYSTICAL_FIRE, MOVE_QUICK_ATTACK},
         .ability = ABILITY_PIXILATE,
@@ -8125,7 +8125,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SYLVEON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind cleric wall
         .moves = {MOVE_CALM_MIND, MOVE_HYPER_VOICE, MOVE_WISH, MOVE_PROTECT},
         .ability = ABILITY_PIXILATE,
@@ -8136,7 +8136,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SYLVEON,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_THROAT_SPRAY, // Hyper Voice spread support
         .moves = {MOVE_HYPER_VOICE, MOVE_MYSTICAL_FIRE, MOVE_HELPING_HAND, MOVE_PROTECT},
         .ability = ABILITY_PIXILATE,
@@ -8149,7 +8149,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hawlucha ----
     {
         .species = SPECIES_HAWLUCHA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GRASSY_SEED, // Unburden Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_ACROBATICS, MOVE_CLOSE_COMBAT, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_UNBURDEN,
@@ -8160,7 +8160,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HAWLUCHA,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Mold Breaker physical attacker
         .moves = {MOVE_ACROBATICS, MOVE_CLOSE_COMBAT, MOVE_STONE_EDGE, MOVE_PROTECT},
         .ability = ABILITY_MOLD_BREAKER,
@@ -8173,7 +8173,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dedenne ----
     {
         .species = SPECIES_DEDENNE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Cheek Pouch / screens support
         .moves = {MOVE_NUZZLE, MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_CHEEK_POUCH,
@@ -8186,7 +8186,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Carbink (innate; no Air Balloon) ----
     {
         .species = SPECIES_CARBINK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy dual-screens / hazards wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_LIGHT_SCREEN, MOVE_REFLECT, MOVE_BODY_PRESS},
         .ability = ABILITY_STURDY,
@@ -8197,7 +8197,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CARBINK,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Trick Room screens setter
         .moves = {MOVE_TRICK_ROOM, MOVE_LIGHT_SCREEN, MOVE_REFLECT, MOVE_MOONBLAST},
         .ability = ABILITY_CLEAR_BODY,
@@ -8211,7 +8211,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Goodra ----
     {
         .species = SPECIES_GOODRA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Sap Sipper special tank
         .moves = {MOVE_DRACO_METEOR, MOVE_FIRE_BLAST, MOVE_THUNDERBOLT, MOVE_FLIP_TURN},
         .ability = ABILITY_SAP_SIPPER,
@@ -8222,7 +8222,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOODRA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Gooey bulky pivot
         .moves = {MOVE_DRAGON_PULSE, MOVE_SCALD, MOVE_TOXIC, MOVE_REST},
         .ability = ABILITY_GOOEY,
@@ -8233,7 +8233,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOODRA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Hydration breaker
         .moves = {MOVE_DRACO_METEOR, MOVE_SLUDGE_WAVE, MOVE_FIRE_BLAST, MOVE_THUNDERBOLT},
         .ability = ABILITY_HYDRATION,
@@ -8246,7 +8246,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Goodra-Hisui ----
     {
         .species = SPECIES_GOODRA_HISUI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Sap Sipper special tank
         .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_FIRE_BLAST, MOVE_EARTH_POWER},
         .ability = ABILITY_SAP_SIPPER,
@@ -8257,7 +8257,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOODRA_HISUI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shell Armor bulky setup
         .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_DRACO_METEOR, MOVE_RECOVER},
         .ability = ABILITY_SHELL_ARMOR,
@@ -8270,7 +8270,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Klefki (innate Levitate; no Air Balloon) ----
     {
         .species = SPECIES_KLEFKI,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster screens + Spikes
         .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_THUNDER_WAVE, MOVE_SPIKES},
         .ability = ABILITY_PRANKSTER,
@@ -8281,7 +8281,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KLEFKI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Prankster annoyer wall
         .moves = {MOVE_SPIKES, MOVE_THUNDER_WAVE, MOVE_FOUL_PLAY, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_PRANKSTER,
@@ -8294,7 +8294,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Trevenant ----
     {
         .species = SPECIES_TREVENANT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Harvest Sitrus stall
         .moves = {MOVE_HORN_LEECH, MOVE_POLTERGEIST, MOVE_WILL_O_WISP, MOVE_LEECH_SEED},
         .ability = ABILITY_HARVEST,
@@ -8305,7 +8305,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TREVENANT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Natural Cure trick-room-friendly breaker
         .moves = {MOVE_POLTERGEIST, MOVE_WOOD_HAMMER, MOVE_EARTHQUAKE, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_NATURAL_CURE,
@@ -8319,7 +8319,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gourgeist-Super (innate; no Air Balloon) ----
     {
         .species = SPECIES_GOURGEIST_SUPER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // physically defensive WoW wall
         .moves = {MOVE_WILL_O_WISP, MOVE_POLTERGEIST, MOVE_LEECH_SEED, MOVE_SYNTHESIS},
         .ability = ABILITY_FRISK,
@@ -8330,7 +8330,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOURGEIST_SUPER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Trick Room band breaker
         .moves = {MOVE_POLTERGEIST, MOVE_SEED_BOMB, MOVE_TRICK, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_INSOMNIA,
@@ -8344,7 +8344,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Avalugg ----
     {
         .species = SPECIES_AVALUGG,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy physical wall / Rapid Spin
         .moves = {MOVE_RECOVER, MOVE_AVALANCHE, MOVE_BODY_PRESS, MOVE_RAPID_SPIN},
         .ability = ABILITY_STURDY,
@@ -8355,7 +8355,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AVALUGG,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Ice Body chip wall
         .moves = {MOVE_AVALANCHE, MOVE_BODY_PRESS, MOVE_RECOVER, MOVE_EARTHQUAKE},
         .ability = ABILITY_ICE_BODY,
@@ -8369,7 +8369,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Avalugg-Hisui ----
     {
         .species = SPECIES_AVALUGG_HISUI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Strong Jaw bulky setup
         .moves = {MOVE_RECOVER, MOVE_ICICLE_CRASH, MOVE_BODY_PRESS, MOVE_RAPID_SPIN},
         .ability = ABILITY_STRONG_JAW,
@@ -8380,7 +8380,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_AVALUGG_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Strong Jaw band attacker
         .moves = {MOVE_ICE_FANG, MOVE_CRUNCH, MOVE_STONE_EDGE, MOVE_BODY_PRESS},
         .ability = ABILITY_STRONG_JAW,
@@ -8393,7 +8393,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Noivern ----
     {
         .species = SPECIES_NOIVERN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Infiltrator special breaker
         .moves = {MOVE_DRACO_METEOR, MOVE_HURRICANE, MOVE_FLAMETHROWER, MOVE_U_TURN},
         .ability = ABILITY_INFILTRATOR,
@@ -8404,7 +8404,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NOIVERN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Defog pivot
         .moves = {MOVE_HURRICANE, MOVE_ROOST, MOVE_DEFOG, MOVE_U_TURN},
         .ability = ABILITY_INFILTRATOR,
@@ -8415,7 +8415,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NOIVERN,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Tailwind setter
         .moves = {MOVE_TAILWIND, MOVE_HURRICANE, MOVE_DRACO_METEOR, MOVE_HEAT_WAVE},
         .ability = ABILITY_FRISK,
@@ -8428,7 +8428,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Xerneas ----
     {
         .species = SPECIES_XERNEAS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_POWER_HERB, // Geomancy sweeper
         .moves = {MOVE_GEOMANCY, MOVE_MOONBLAST, MOVE_THUNDERBOLT, MOVE_FOCUS_BLAST},
         .ability = ABILITY_FAIRY_AURA,
@@ -8439,7 +8439,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_XERNEAS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical Swords Dance variant
         .moves = {MOVE_SWORDS_DANCE, MOVE_PLAY_ROUGH, MOVE_CLOSE_COMBAT, MOVE_HORN_LEECH},
         .ability = ABILITY_FAIRY_AURA,
@@ -8452,7 +8452,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Yveltal ----
     {
         .species = SPECIES_YVELTAL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dark Aura mixed attacker
         .moves = {MOVE_DARK_PULSE, MOVE_HURRICANE, MOVE_FOCUS_BLAST, MOVE_U_TURN},
         .ability = ABILITY_DARK_AURA,
@@ -8463,7 +8463,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_YVELTAL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Roost pivot
         .moves = {MOVE_FOUL_PLAY, MOVE_HURRICANE, MOVE_ROOST, MOVE_TOXIC},
         .ability = ABILITY_DARK_AURA,
@@ -8476,7 +8476,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zygarde ----
     {
         .species = SPECIES_ZYGARDE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Dragon Dance bulky sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_THOUSAND_ARROWS, MOVE_OUTRAGE, MOVE_COIL},
         .ability = ABILITY_AURA_BREAK,
@@ -8487,7 +8487,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZYGARDE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Coil bulky setup wall
         .moves = {MOVE_COIL, MOVE_THOUSAND_ARROWS, MOVE_DRAGON_TAIL, MOVE_GLARE},
         .ability = ABILITY_POWER_CONSTRUCT,
@@ -8500,7 +8500,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Diancie (innate Levitate-class; no Air Balloon) ----
     {
         .species = SPECIES_DIANCIE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_DIANCITE, // Mega Diancie (Magic Bounce) glass cannon
         .moves = {MOVE_DIAMOND_STORM, MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_PROTECT},
         .ability = ABILITY_CLEAR_BODY,
@@ -8511,7 +8511,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DIANCIE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Clear Body hazards / dual-screens wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_DIAMOND_STORM, MOVE_MOONBLAST, MOVE_REFLECT},
         .ability = ABILITY_CLEAR_BODY,
@@ -8524,7 +8524,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hoopa (Confined; innate Levitate-class; no Air Balloon) ----
     {
         .species = SPECIES_HOOPA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Magician special breaker
         .moves = {MOVE_PSYCHIC, MOVE_SHADOW_BALL, MOVE_FOCUS_BLAST, MOVE_NASTY_PLOT},
         .ability = ABILITY_MAGICIAN,
@@ -8537,7 +8537,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hoopa-Unbound (innate Levitate-class; no Air Balloon) ----
     {
         .species = SPECIES_HOOPA_UNBOUND,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Magician wallbreaker
         .moves = {MOVE_HYPERSPACE_FURY, MOVE_PSYCHIC, MOVE_GUNK_SHOT, MOVE_FIRE_PUNCH},
         .ability = ABILITY_MAGICIAN,
@@ -8548,7 +8548,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HOOPA_UNBOUND,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special tank breaker
         .moves = {MOVE_PSYCHIC, MOVE_DARK_PULSE, MOVE_FOCUS_BLAST, MOVE_GUNK_SHOT},
         .ability = ABILITY_MAGICIAN,
@@ -8562,7 +8562,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Volcanion ----
     {
         .species = SPECIES_VOLCANION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Water Absorb special breaker
         .moves = {MOVE_STEAM_ERUPTION, MOVE_FLAMETHROWER, MOVE_SLUDGE_WAVE, MOVE_EARTH_POWER},
         .ability = ABILITY_WATER_ABSORB,
@@ -8573,7 +8573,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VOLCANION,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Substitute pivot
         .moves = {MOVE_SUBSTITUTE, MOVE_STEAM_ERUPTION, MOVE_FLAMETHROWER, MOVE_TOXIC},
         .ability = ABILITY_WATER_ABSORB,
@@ -8584,7 +8584,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VOLCANION,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // spread special tank
         .moves = {MOVE_HEAT_WAVE, MOVE_STEAM_ERUPTION, MOVE_EARTH_POWER, MOVE_SLUDGE_WAVE},
         .ability = ABILITY_WATER_ABSORB,
@@ -8601,7 +8601,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Decidueye ----
     {
         .species = SPECIES_DECIDUEYE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_DECIDIUM_Z, // Sinister Arrow Raid nuke
         .moves = {MOVE_SWORDS_DANCE, MOVE_SPIRIT_SHACKLE, MOVE_LEAF_BLADE, MOVE_BRAVE_BIRD},
         .ability = ABILITY_OVERGROW,
@@ -8612,7 +8612,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DECIDUEYE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Long Reach trap-shooter
         .moves = {MOVE_SPIRIT_SHACKLE, MOVE_LEAF_BLADE, MOVE_DEFOG, MOVE_ROOST},
         .ability = ABILITY_LONG_REACH,
@@ -8623,7 +8623,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DECIDUEYE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed attacker
         .moves = {MOVE_LEAF_BLADE, MOVE_SPIRIT_SHACKLE, MOVE_SUCKER_PUNCH, MOVE_U_TURN},
         .ability = ABILITY_OVERGROW,
@@ -8636,7 +8636,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Decidueye-Hisui ----
     {
         .species = SPECIES_DECIDUEYE_HISUI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Scrappy Triple Arrows attacker
         .moves = {MOVE_TRIPLE_ARROWS, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SCRAPPY,
@@ -8647,7 +8647,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DECIDUEYE_HISUI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Swords Dance bulky setup
         .moves = {MOVE_SWORDS_DANCE, MOVE_TRIPLE_ARROWS, MOVE_LEAF_BLADE, MOVE_ROOST},
         .ability = ABILITY_OVERGROW,
@@ -8660,7 +8660,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Incineroar ----
     {
         .species = SPECIES_INCINEROAR,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Intimidate pivot, Fake Out support
         .moves = {MOVE_FAKE_OUT, MOVE_FLARE_BLITZ, MOVE_DARKEST_LARIAT, MOVE_PARTING_SHOT},
         .ability = ABILITY_INTIMIDATE,
@@ -8671,7 +8671,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_INCINEROAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_INCINIUM_Z, // Malicious Moonsault nuke
         .moves = {MOVE_SWORDS_DANCE, MOVE_FLARE_BLITZ, MOVE_DARKEST_LARIAT, MOVE_EARTHQUAKE},
         .ability = ABILITY_BLAZE,
@@ -8682,7 +8682,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_INCINEROAR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Intimidate pivot
         .moves = {MOVE_KNOCK_OFF, MOVE_FLARE_BLITZ, MOVE_WILL_O_WISP, MOVE_U_TURN},
         .ability = ABILITY_INTIMIDATE,
@@ -8695,7 +8695,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Primarina ----
     {
         .species = SPECIES_PRIMARINA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Liquid Voice special breaker
         .moves = {MOVE_SPARKLING_ARIA, MOVE_MOONBLAST, MOVE_PSYCHIC, MOVE_FLIP_TURN},
         .ability = ABILITY_LIQUID_VOICE,
@@ -8706,7 +8706,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PRIMARINA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky setup
         .moves = {MOVE_CALM_MIND, MOVE_SPARKLING_ARIA, MOVE_MOONBLAST, MOVE_REST},
         .ability = ABILITY_TORRENT,
@@ -8717,7 +8717,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PRIMARINA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_PRIMARIUM_Z, // Oceanic Operetta nuke
         .moves = {MOVE_HYDRO_PUMP, MOVE_MOONBLAST, MOVE_ENERGY_BALL, MOVE_PSYCHIC},
         .ability = ABILITY_TORRENT,
@@ -8730,7 +8730,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Toucannon ----
     {
         .species = SPECIES_TOUCANNON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Skill Link Bullet Seed band
         .moves = {MOVE_BEAK_BLAST, MOVE_BULLET_SEED, MOVE_ROCK_BLAST, MOVE_BRAVE_BIRD},
         .ability = ABILITY_SKILL_LINK,
@@ -8741,7 +8741,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOUCANNON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LOADED_DICE, // guaranteed multi-hit
         .moves = {MOVE_BULLET_SEED, MOVE_ROCK_BLAST, MOVE_BRAVE_BIRD, MOVE_BEAK_BLAST},
         .ability = ABILITY_SKILL_LINK,
@@ -8754,7 +8754,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Vikavolt ----
     {
         .species = SPECIES_VIKAVOLT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_BUG_BUZZ, MOVE_THUNDERBOLT, MOVE_ENERGY_BALL, MOVE_VOLT_SWITCH},
         .ability = ABILITY_LEVITATE,
@@ -8765,7 +8765,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_VIKAVOLT,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room special attacker
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .moves = {MOVE_BUG_BUZZ, MOVE_THUNDERBOLT, MOVE_ENERGY_BALL, MOVE_AIR_SLASH},
@@ -8779,7 +8779,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Crabominable ----
     {
         .species = SPECIES_CRABOMINABLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Iron Fist punch band
         .moves = {MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE, MOVE_ICE_HAMMER},
         .ability = ABILITY_IRON_FIST,
@@ -8790,7 +8790,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CRABOMINABLE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room bruiser
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .moves = {MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE, MOVE_THUNDER_PUNCH},
@@ -8804,7 +8804,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Oricorio (Baile) ----
     {
         .species = SPECIES_ORICORIO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dancer Fire/Flying special attacker
         .moves = {MOVE_REVELATION_DANCE, MOVE_HURRICANE, MOVE_ROOST, MOVE_CALM_MIND},
         .ability = ABILITY_DANCER,
@@ -8815,7 +8815,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ORICORIO_PAU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Psychic/Flying pivot
         .moves = {MOVE_REVELATION_DANCE, MOVE_HURRICANE, MOVE_ROOST, MOVE_U_TURN},
         .ability = ABILITY_DANCER,
@@ -8828,7 +8828,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ribombee ----
     {
         .species = SPECIES_RIBOMBEE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast Sticky Web lead
         .moves = {MOVE_STICKY_WEB, MOVE_MOONBLAST, MOVE_BUG_BUZZ, MOVE_STUN_SPORE},
         .ability = ABILITY_SWEET_VEIL,
@@ -8839,7 +8839,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RIBOMBEE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Quiver Dance sweeper
         .moves = {MOVE_QUIVER_DANCE, MOVE_MOONBLAST, MOVE_BUG_BUZZ, MOVE_POLLEN_PUFF},
         .ability = ABILITY_SHIELD_DUST,
@@ -8852,7 +8852,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lycanroc (Midday) ----
     {
         .species = SPECIES_LYCANROC,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sand Rush attacker
         .moves = {MOVE_STONE_EDGE, MOVE_ACCELEROCK, MOVE_CLOSE_COMBAT, MOVE_PSYCHIC_FANGS},
         .ability = ABILITY_SAND_RUSH,
@@ -8863,7 +8863,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LYCANROC_DUSK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LYCANIUM_Z, // Splintered Stormshards nuke, Tough Claws
         .moves = {MOVE_SWORDS_DANCE, MOVE_STONE_EDGE, MOVE_ACCELEROCK, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_TOUGH_CLAWS,
@@ -8874,7 +8874,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LYCANROC_MIDNIGHT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // No Guard band
         .moves = {MOVE_STONE_EDGE, MOVE_CLOSE_COMBAT, MOVE_ACCELEROCK, MOVE_EARTHQUAKE},
         .ability = ABILITY_NO_GUARD,
@@ -8887,7 +8887,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Wishiwashi (School) ----
     {
         .species = SPECIES_WISHIWASHI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Schooling special tank
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FLIP_TURN, MOVE_EARTH_POWER},
         .ability = ABILITY_SCHOOLING,
@@ -8898,7 +8898,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_WISHIWASHI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot
         .moves = {MOVE_SCALD, MOVE_ICE_BEAM, MOVE_TOXIC, MOVE_PROTECT},
         .ability = ABILITY_SCHOOLING,
@@ -8911,7 +8911,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Toxapex ----
     {
         .species = SPECIES_TOXAPEX,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Regenerator wall
         .moves = {MOVE_SCALD, MOVE_TOXIC, MOVE_RECOVER, MOVE_HAZE},
         .ability = ABILITY_REGENERATOR,
@@ -8922,7 +8922,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOXAPEX,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // physically defensive Banded Bunker stall
         .moves = {MOVE_BANEFUL_BUNKER, MOVE_TOXIC_SPIKES, MOVE_RECOVER, MOVE_SCALD},
         .ability = ABILITY_REGENERATOR,
@@ -8933,7 +8933,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOXAPEX,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Merciless redirect support
         .moves = {MOVE_SCALD, MOVE_BANEFUL_BUNKER, MOVE_TOXIC, MOVE_HAZE},
         .ability = ABILITY_MERCILESS,
@@ -8946,7 +8946,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mudsdale ----
     {
         .species = SPECIES_MUDSDALE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Stamina physical wall
         .moves = {MOVE_HIGH_HORSEPOWER, MOVE_BODY_PRESS, MOVE_STEALTH_ROCK, MOVE_ROAR},
         .ability = ABILITY_STAMINA,
@@ -8957,7 +8957,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MUDSDALE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Stamina hazard tank
         .moves = {MOVE_HIGH_HORSEPOWER, MOVE_HEAVY_SLAM, MOVE_STEALTH_ROCK, MOVE_TOXIC},
         .ability = ABILITY_STAMINA,
@@ -8970,7 +8970,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Araquanid ----
     {
         .species = SPECIES_ARAQUANID,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Bubble bulky attacker
         .moves = {MOVE_LIQUIDATION, MOVE_LEECH_LIFE, MOVE_MIRROR_COAT, MOVE_TOXIC},
         .ability = ABILITY_WATER_BUBBLE,
@@ -8981,7 +8981,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARAQUANID,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room Water Bubble nuke
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .moves = {MOVE_LIQUIDATION, MOVE_LEECH_LIFE, MOVE_ICE_PUNCH, MOVE_BUG_BITE},
@@ -8995,7 +8995,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lurantis ----
     {
         .species = SPECIES_LURANTIS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Contrary Leaf Storm attacker
         .moves = {MOVE_LEAF_STORM, MOVE_SUPERPOWER, MOVE_HIDDEN_POWER, MOVE_SYNTHESIS},
         .ability = ABILITY_CONTRARY,
@@ -9006,7 +9006,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LURANTIS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky support
         .moves = {MOVE_LEAF_BLADE, MOVE_LEECH_SEED, MOVE_SYNTHESIS, MOVE_TOXIC},
         .ability = ABILITY_LEAF_GUARD,
@@ -9019,7 +9019,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Salazzle ----
     {
         .species = SPECIES_SALAZZLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Corrosion toxic staller
         .moves = {MOVE_TOXIC, MOVE_FIRE_BLAST, MOVE_PROTECT, MOVE_SUBSTITUTE},
         .ability = ABILITY_CORROSION,
@@ -9030,7 +9030,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SALAZZLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_FIRE_BLAST, MOVE_SLUDGE_WAVE, MOVE_DRAGON_PULSE},
         .ability = ABILITY_CORROSION,
@@ -9043,7 +9043,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Bewear ----
     {
         .species = SPECIES_BEWEAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Fluffy / Force band
         .moves = {MOVE_DOUBLE_EDGE, MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
         .ability = ABILITY_FLUFFY,
@@ -9054,7 +9054,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BEWEAR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Fluffy bulky setup
         .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE},
         .ability = ABILITY_FLUFFY,
@@ -9067,7 +9067,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tsareena ----
     {
         .species = SPECIES_TSAREENA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Queenly Majesty attacker
         .moves = {MOVE_POWER_WHIP, MOVE_HIGH_JUMP_KICK, MOVE_PLAY_ROUGH, MOVE_U_TURN},
         .ability = ABILITY_QUEENLY_MAJESTY,
@@ -9078,7 +9078,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TSAREENA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky priority-block pivot
         .moves = {MOVE_POWER_WHIP, MOVE_RAPID_SPIN, MOVE_SYNTHESIS, MOVE_KNOCK_OFF},
         .ability = ABILITY_QUEENLY_MAJESTY,
@@ -9091,7 +9091,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Comfey ---- (innate Levitate)
     {
         .species = SPECIES_COMFEY,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Triage priority healer
         .moves = {MOVE_FLORAL_HEALING, MOVE_DRAINING_KISS, MOVE_GIGA_DRAIN, MOVE_CALM_MIND},
         .ability = ABILITY_TRIAGE,
@@ -9102,7 +9102,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_COMFEY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Triage Calm Mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_DRAINING_KISS, MOVE_GIGA_DRAIN, MOVE_PSYCHIC},
         .ability = ABILITY_TRIAGE,
@@ -9115,7 +9115,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Oranguru ----
     {
         .species = SPECIES_ORANGURU,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Trick Room setter / Instruct support
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .moves = {MOVE_TRICK_ROOM, MOVE_INSTRUCT, MOVE_PSYCHIC, MOVE_FOUL_PLAY},
@@ -9127,7 +9127,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ORANGURU,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
         .moves = {MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT, MOVE_NASTY_PLOT},
         .ability = ABILITY_TELEPATHY,
@@ -9140,7 +9140,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Passimian ----
     {
         .species = SPECIES_PASSIMIAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Defiant revenge killer
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_U_TURN, MOVE_GUNK_SHOT},
         .ability = ABILITY_DEFIANT,
@@ -9151,7 +9151,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PASSIMIAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // physical breaker
         .moves = {MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_KNOCK_OFF},
         .ability = ABILITY_DEFIANT,
@@ -9164,7 +9164,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Golisopod ----
     {
         .species = SPECIES_GOLISOPOD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Emergency Exit First Impression band
         .moves = {MOVE_FIRST_IMPRESSION, MOVE_LIQUIDATION, MOVE_CLOSE_COMBAT, MOVE_AQUA_JET},
         .ability = ABILITY_EMERGENCY_EXIT,
@@ -9175,7 +9175,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOLISOPOD,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot
         .moves = {MOVE_FIRST_IMPRESSION, MOVE_LIQUIDATION, MOVE_SPIKES, MOVE_LEECH_LIFE},
         .ability = ABILITY_EMERGENCY_EXIT,
@@ -9188,7 +9188,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Palossand ----
     {
         .species = SPECIES_PALOSSAND,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Compaction defensive trapper
         .moves = {MOVE_SHADOW_BALL, MOVE_EARTH_POWER, MOVE_TOXIC, MOVE_SHORE_UP},
         .ability = ABILITY_WATER_COMPACTION,
@@ -9199,7 +9199,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PALOSSAND,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GHOSTIUM_Z, // Never-Ending Nightmare setup
         .moves = {MOVE_SHADOW_BALL, MOVE_EARTH_POWER, MOVE_GIGA_DRAIN, MOVE_SHORE_UP},
         .ability = ABILITY_WATER_COMPACTION,
@@ -9212,7 +9212,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pyukumuku ----
     {
         .species = SPECIES_PYUKUMUKU,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware Counter/Toxic staller
         .moves = {MOVE_COUNTER, MOVE_TOXIC, MOVE_RECOVER, MOVE_SOAK},
         .ability = ABILITY_UNAWARE,
@@ -9225,7 +9225,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Silvally ----
     {
         .species = SPECIES_SILVALLY_DRAGON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_DRAGON_MEMORY, // RKS System Dragon pivot
         .moves = {MOVE_MULTI_ATTACK, MOVE_FLAMETHROWER, MOVE_U_TURN, MOVE_SWORDS_DANCE},
         .ability = ABILITY_RKS_SYSTEM,
@@ -9236,7 +9236,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SILVALLY_FAIRY,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FAIRY_MEMORY, // defensive pivot
         .moves = {MOVE_MULTI_ATTACK, MOVE_PARTING_SHOT, MOVE_DEFOG, MOVE_THUNDER_WAVE},
         .ability = ABILITY_RKS_SYSTEM,
@@ -9247,7 +9247,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SILVALLY_STEEL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_STEEL_MEMORY, // Steel attacker
         .moves = {MOVE_MULTI_ATTACK, MOVE_FLAMETHROWER, MOVE_ICE_BEAM, MOVE_U_TURN},
         .ability = ABILITY_RKS_SYSTEM,
@@ -9260,7 +9260,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Minior (Core) ----
     {
         .species = SPECIES_MINIOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH, // Shields Down Shell Smash sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_ACROBATICS, MOVE_POWER_GEM, MOVE_EARTHQUAKE},
         .ability = ABILITY_SHIELDS_DOWN,
@@ -9271,7 +9271,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MINIOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash, White Herb restores drops
         .moves = {MOVE_SHELL_SMASH, MOVE_POWER_GEM, MOVE_DAZZLING_GLEAM, MOVE_ACROBATICS},
         .ability = ABILITY_SHIELDS_DOWN,
@@ -9284,7 +9284,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Komala ----
     {
         .species = SPECIES_KOMALA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Comatose status-immune attacker
         .moves = {MOVE_RETURN, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE, MOVE_SUPERPOWER},
         .ability = ABILITY_COMATOSE,
@@ -9297,7 +9297,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Turtonator ----
     {
         .species = SPECIES_TURTONATOR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shell Trap defensive attacker
         .moves = {MOVE_SHELL_TRAP, MOVE_FLAMETHROWER, MOVE_DRAGON_PULSE, MOVE_BODY_PRESS},
         .ability = ABILITY_SHELL_ARMOR,
@@ -9308,7 +9308,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TURTONATOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Fire/Dragon special attacker
         .moves = {MOVE_FIRE_BLAST, MOVE_DRACO_METEOR, MOVE_EARTH_POWER, MOVE_FLASH_CANNON},
         .ability = ABILITY_SHELL_ARMOR,
@@ -9321,7 +9321,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Togedemaru ----
     {
         .species = SPECIES_TOGEDEMARU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Iron Barbs / Lightning Rod attacker
         .moves = {MOVE_ZING_ZAP, MOVE_IRON_HEAD, MOVE_U_TURN, MOVE_NUZZLE},
         .ability = ABILITY_IRON_BARBS,
@@ -9332,7 +9332,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOGEDEMARU,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // Lightning Rod redirect support
         .moves = {MOVE_FAKE_OUT, MOVE_ZING_ZAP, MOVE_SPIKY_SHIELD, MOVE_ENCORE},
         .ability = ABILITY_LIGHTNING_ROD,
@@ -9345,7 +9345,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Mimikyu ----
     {
         .species = SPECIES_MIMIKYU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MIMIKIUM_Z, // Let's Snuggle Forever nuke, Disguise
         .moves = {MOVE_SWORDS_DANCE, MOVE_PLAY_ROUGH, MOVE_SHADOW_CLAW, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_DISGUISE,
@@ -9356,7 +9356,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MIMIKYU,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Disguise sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_PLAY_ROUGH, MOVE_SHADOW_SNEAK, MOVE_DRAIN_PUNCH},
         .ability = ABILITY_DISGUISE,
@@ -9367,7 +9367,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MIMIKYU,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LUM_BERRY, // Disguise disruptor
         .moves = {MOVE_PLAY_ROUGH, MOVE_SHADOW_SNEAK, MOVE_WILL_O_WISP, MOVE_TAUNT},
         .ability = ABILITY_DISGUISE,
@@ -9380,7 +9380,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Bruxish ----
     {
         .species = SPECIES_BRUXISH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Strong Jaw attacker
         .moves = {MOVE_PSYCHIC_FANGS, MOVE_LIQUIDATION, MOVE_CRUNCH, MOVE_ICE_FANG},
         .ability = ABILITY_STRONG_JAW,
@@ -9391,7 +9391,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BRUXISH,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_CHOICE_SCARF, // Wonder Skin / disruption pivot
         .moves = {MOVE_PSYCHIC_FANGS, MOVE_LIQUIDATION, MOVE_FLIP_TURN, MOVE_ICE_FANG},
         .ability = ABILITY_STRONG_JAW,
@@ -9404,7 +9404,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Drampa ----
     {
         .species = SPECIES_DRAMPA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Berserk special breaker
         .moves = {MOVE_DRACO_METEOR, MOVE_HYPER_VOICE, MOVE_FLAMETHROWER, MOVE_GIGA_DRAIN},
         .ability = ABILITY_BERSERK,
@@ -9415,7 +9415,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRAMPA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Berserk Roost staller
         .moves = {MOVE_HYPER_VOICE, MOVE_FLAMETHROWER, MOVE_ROOST, MOVE_GLARE},
         .ability = ABILITY_BERSERK,
@@ -9428,7 +9428,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dhelmise ----
     {
         .species = SPECIES_DHELMISE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Steelworker Anchor Shot band
         .moves = {MOVE_ANCHOR_SHOT, MOVE_POWER_WHIP, MOVE_EARTHQUAKE, MOVE_SHADOW_CLAW},
         .ability = ABILITY_STEELWORKER,
@@ -9439,7 +9439,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DHELMISE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room trapper
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .moves = {MOVE_ANCHOR_SHOT, MOVE_POWER_WHIP, MOVE_SHADOW_CLAW, MOVE_EARTHQUAKE},
@@ -9453,7 +9453,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kommo-o ----
     {
         .species = SPECIES_KOMMO_O,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_KOMMONIUM_Z, // Clangorous Soulblaze setup
         .moves = {MOVE_CLANGING_SCALES, MOVE_CLOSE_COMBAT, MOVE_FLAMETHROWER, MOVE_FLASH_CANNON},
         .ability = ABILITY_SOUNDPROOF,
@@ -9464,7 +9464,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KOMMO_O,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up / Body Press setup
         .moves = {MOVE_BULK_UP, MOVE_BODY_PRESS, MOVE_DRAIN_PUNCH, MOVE_IRON_DEFENSE},
         .ability = ABILITY_BULLETPROOF,
@@ -9475,7 +9475,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KOMMO_O,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LOADED_DICE, // Dragon Dance physical sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_SCALE_SHOT, MOVE_CLOSE_COMBAT, MOVE_POISON_JAB},
         .ability = ABILITY_OVERCOAT,
@@ -9488,7 +9488,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tapu Koko ---- (innate Levitate)
     {
         .species = SPECIES_TAPU_KOKO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_TAPUNIUM_Z, // Guardian of Alola / Electric Surge
         .moves = {MOVE_THUNDERBOLT, MOVE_DAZZLING_GLEAM, MOVE_VOLT_SWITCH, MOVE_NATURES_MADNESS},
         .ability = ABILITY_ELECTRIC_SURGE,
@@ -9499,7 +9499,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TAPU_KOKO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Electric Surge breaker
         .moves = {MOVE_THUNDERBOLT, MOVE_DAZZLING_GLEAM, MOVE_VOLT_SWITCH, MOVE_GRASS_KNOT},
         .ability = ABILITY_ELECTRIC_SURGE,
@@ -9510,7 +9510,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TAPU_KOKO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Electric Terrain sweeper
         .moves = {MOVE_THUNDERBOLT, MOVE_DAZZLING_GLEAM, MOVE_U_TURN, MOVE_CALM_MIND},
         .ability = ABILITY_ELECTRIC_SURGE,
@@ -9523,7 +9523,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tapu Lele ---- (innate Levitate)
     {
         .species = SPECIES_TAPU_LELE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Psychic Surge breaker
         .moves = {MOVE_PSYCHIC, MOVE_MOONBLAST, MOVE_PSYSHOCK, MOVE_FOCUS_BLAST},
         .ability = ABILITY_PSYCHIC_SURGE,
@@ -9534,7 +9534,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TAPU_LELE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_PSYCHIC_SEED, // Calm Mind sweeper, terrain-boosted SpD
         .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_MOONBLAST, MOVE_THUNDERBOLT},
         .ability = ABILITY_PSYCHIC_SURGE,
@@ -9545,7 +9545,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TAPU_LELE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_PSYCHIUM_Z, // Shattered Psyche nuke
         .moves = {MOVE_PSYCHIC, MOVE_MOONBLAST, MOVE_PSYSHOCK, MOVE_THUNDERBOLT},
         .ability = ABILITY_PSYCHIC_SURGE,
@@ -9558,7 +9558,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tapu Bulu ---- (innate Levitate)
     {
         .species = SPECIES_TAPU_BULU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Grassy Surge band
         .moves = {MOVE_WOOD_HAMMER, MOVE_HORN_LEECH, MOVE_PLAY_ROUGH, MOVE_SUPERPOWER},
         .ability = ABILITY_GRASSY_SURGE,
@@ -9569,7 +9569,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TAPU_BULU,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_GRASSY_SEED, // Swords Dance bulky setup
         .moves = {MOVE_SWORDS_DANCE, MOVE_HORN_LEECH, MOVE_PLAY_ROUGH, MOVE_SYNTHESIS},
         .ability = ABILITY_GRASSY_SURGE,
@@ -9582,7 +9582,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tapu Fini ---- (innate Levitate)
     {
         .species = SPECIES_TAPU_FINI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Misty Surge Calm Mind wall
         .moves = {MOVE_CALM_MIND, MOVE_SURF, MOVE_MOONBLAST, MOVE_TAUNT},
         .ability = ABILITY_MISTY_SURGE,
@@ -9593,7 +9593,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TAPU_FINI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_MOONBLAST, MOVE_ICE_BEAM, MOVE_SURF},
         .ability = ABILITY_MISTY_SURGE,
@@ -9604,7 +9604,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TAPU_FINI,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MISTY_SEED, // bulky support, terrain-boosted SpD
         .moves = {MOVE_MUDDY_WATER, MOVE_MOONBLAST, MOVE_HAZE, MOVE_PROTECT},
         .ability = ABILITY_MISTY_SURGE,
@@ -9617,7 +9617,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Solgaleo ----
     {
         .species = SPECIES_SOLGALEO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Full Metal Body physical attacker
         .moves = {MOVE_SUNSTEEL_STRIKE, MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE, MOVE_FLARE_BLITZ},
         .ability = ABILITY_FULL_METAL_BODY,
@@ -9628,7 +9628,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SOLGALEO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky setup pivot
         .moves = {MOVE_SUNSTEEL_STRIKE, MOVE_MORNING_SUN, MOVE_CALM_MIND, MOVE_FLAMETHROWER},
         .ability = ABILITY_FULL_METAL_BODY,
@@ -9641,7 +9641,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Lunala ----
     {
         .species = SPECIES_LUNALA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LUNALIUM_Z, // Menacing Moonraze Maelstrom nuke
         .moves = {MOVE_MOONGEIST_BEAM, MOVE_SHADOW_BALL, MOVE_MOONBLAST, MOVE_CALM_MIND},
         .ability = ABILITY_SHADOW_SHIELD,
@@ -9652,7 +9652,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_LUNALA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shadow Shield Calm Mind tank
         .moves = {MOVE_CALM_MIND, MOVE_MOONGEIST_BEAM, MOVE_PSYSHOCK, MOVE_MOONLIGHT},
         .ability = ABILITY_SHADOW_SHIELD,
@@ -9665,7 +9665,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Nihilego ---- (innate Levitate)
     {
         .species = SPECIES_NIHILEGO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Beast Boost special breaker
         .moves = {MOVE_SLUDGE_WAVE, MOVE_POWER_GEM, MOVE_THUNDERBOLT, MOVE_GRASS_KNOT},
         .ability = ABILITY_BEAST_BOOST,
@@ -9676,7 +9676,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NIHILEGO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // special wall / status spreader
         .moves = {MOVE_SLUDGE_WAVE, MOVE_POWER_GEM, MOVE_TOXIC_SPIKES, MOVE_STEALTH_ROCK},
         .ability = ABILITY_BEAST_BOOST,
@@ -9689,7 +9689,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Buzzwole ----
     {
         .species = SPECIES_BUZZWOLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Beast Boost physical breaker
         .moves = {MOVE_CLOSE_COMBAT, MOVE_LEECH_LIFE, MOVE_ICE_PUNCH, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_BEAST_BOOST,
@@ -9700,7 +9700,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BUZZWOLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up bulky setup
         .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_LEECH_LIFE, MOVE_ICE_PUNCH},
         .ability = ABILITY_BEAST_BOOST,
@@ -9713,7 +9713,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pheromosa ----
     {
         .species = SPECIES_PHEROMOSA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Beast Boost glass cannon
         .moves = {MOVE_CLOSE_COMBAT, MOVE_TRIPLE_AXEL, MOVE_BUG_BUZZ, MOVE_U_TURN},
         .ability = ABILITY_BEAST_BOOST,
@@ -9724,7 +9724,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PHEROMOSA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH, // fast lead
         .moves = {MOVE_CLOSE_COMBAT, MOVE_ICE_BEAM, MOVE_THUNDERBOLT, MOVE_RAPID_SPIN},
         .ability = ABILITY_BEAST_BOOST,
@@ -9737,7 +9737,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Xurkitree ---- (innate Levitate)
     {
         .species = SPECIES_XURKITREE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ELECTRIUM_Z, // Gigavolt Havoc nuke
         .moves = {MOVE_TAIL_GLOW, MOVE_THUNDERBOLT, MOVE_ENERGY_BALL, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_BEAST_BOOST,
@@ -9748,7 +9748,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_XURKITREE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Beast Boost revenge killer
         .moves = {MOVE_THUNDERBOLT, MOVE_ENERGY_BALL, MOVE_DAZZLING_GLEAM, MOVE_VOLT_SWITCH},
         .ability = ABILITY_BEAST_BOOST,
@@ -9761,7 +9761,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Celesteela ----
     {
         .species = SPECIES_CELESTEELA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Beast Boost defensive wall
         .moves = {MOVE_LEECH_SEED, MOVE_PROTECT, MOVE_FLAMETHROWER, MOVE_HEAVY_SLAM},
         .ability = ABILITY_BEAST_BOOST,
@@ -9772,7 +9772,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CELESTEELA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Autotomize sweeper
         .moves = {MOVE_AUTOTOMIZE, MOVE_HEAVY_SLAM, MOVE_FLAMETHROWER, MOVE_AIR_SLASH},
         .ability = ABILITY_BEAST_BOOST,
@@ -9785,7 +9785,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kartana ---- (innate Levitate)
     {
         .species = SPECIES_KARTANA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Beast Boost physical breaker
         .moves = {MOVE_LEAF_BLADE, MOVE_SACRED_SWORD, MOVE_KNOCK_OFF, MOVE_SMART_STRIKE},
         .ability = ABILITY_BEAST_BOOST,
@@ -9796,7 +9796,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KARTANA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_GRASSIUM_Z, // Bloom Doom Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_SACRED_SWORD, MOVE_SMART_STRIKE},
         .ability = ABILITY_BEAST_BOOST,
@@ -9809,7 +9809,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Guzzlord ----
     {
         .species = SPECIES_GUZZLORD,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // massive HP mixed tank
         .moves = {MOVE_KNOCK_OFF, MOVE_DRAGON_TAIL, MOVE_HEAVY_SLAM, MOVE_REST},
         .ability = ABILITY_BEAST_BOOST,
@@ -9820,7 +9820,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GUZZLORD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank attacker
         .moves = {MOVE_DRACO_METEOR, MOVE_DARK_PULSE, MOVE_FLAMETHROWER, MOVE_SLUDGE_BOMB},
         .ability = ABILITY_BEAST_BOOST,
@@ -9833,7 +9833,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Necrozma ---- (innate Levitate)
     {
         .species = SPECIES_NECROZMA_DUSK_MANE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance physical sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_SUNSTEEL_STRIKE, MOVE_EARTHQUAKE, MOVE_PHOTON_GEYSER},
         .ability = ABILITY_PRISM_ARMOR,
@@ -9844,7 +9844,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NECROZMA_DAWN_WINGS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind special sweeper
         .moves = {MOVE_CALM_MIND, MOVE_MOONGEIST_BEAM, MOVE_PHOTON_GEYSER, MOVE_AURA_SPHERE},
         .ability = ABILITY_PRISM_ARMOR,
@@ -9855,7 +9855,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NECROZMA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_PSYCHIUM_Z, // Calm Mind Shattered Psyche
         .moves = {MOVE_CALM_MIND, MOVE_PHOTON_GEYSER, MOVE_HEAT_WAVE, MOVE_MOONLIGHT},
         .ability = ABILITY_PRISM_ARMOR,
@@ -9868,7 +9868,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Magearna ---- (innate Levitate)
     {
         .species = SPECIES_MAGEARNA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Soul-Heart Calm Mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_FLEUR_CANNON, MOVE_FLASH_CANNON, MOVE_AURA_SPHERE},
         .ability = ABILITY_SOUL_HEART,
@@ -9879,7 +9879,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MAGEARNA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
         .moves = {MOVE_FLEUR_CANNON, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_AURA_SPHERE},
         .ability = ABILITY_SOUL_HEART,
@@ -9890,7 +9890,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MAGEARNA,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FAIRIUM_Z, // Twinkle Tackle / Trick Room nuke
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .moves = {MOVE_TRICK_ROOM, MOVE_FLEUR_CANNON, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT},
@@ -9904,7 +9904,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Marshadow ----
     {
         .species = SPECIES_MARSHADOW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MARSHADIUM_Z, // Soul-Stealing 7-Star Strike nuke
         .moves = {MOVE_SPECTRAL_THIEF, MOVE_CLOSE_COMBAT, MOVE_SHADOW_SNEAK, MOVE_BULK_UP},
         .ability = ABILITY_TECHNICIAN,
@@ -9915,7 +9915,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MARSHADOW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Technician priority sweeper
         .moves = {MOVE_BULK_UP, MOVE_SPECTRAL_THIEF, MOVE_MACH_PUNCH, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_TECHNICIAN,
@@ -9928,7 +9928,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Naganadel ---- (innate Levitate)
     {
         .species = SPECIES_NAGANADEL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Beast Boost Nasty Plot sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_SLUDGE_WAVE, MOVE_FIRE_BLAST, MOVE_DRACO_METEOR},
         .ability = ABILITY_BEAST_BOOST,
@@ -9939,7 +9939,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_NAGANADEL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
         .moves = {MOVE_SLUDGE_WAVE, MOVE_DRACO_METEOR, MOVE_FIRE_BLAST, MOVE_U_TURN},
         .ability = ABILITY_BEAST_BOOST,
@@ -9952,7 +9952,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Stakataka ----
     {
         .species = SPECIES_STAKATAKA,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Trick Room Beast Boost wallbreaker
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .moves = {MOVE_GYRO_BALL, MOVE_ROCK_SLIDE, MOVE_EARTHQUAKE, MOVE_TRICK_ROOM},
@@ -9964,7 +9964,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_STAKATAKA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // physical wall / hazard setter
         .moves = {MOVE_STEALTH_ROCK, MOVE_GYRO_BALL, MOVE_BODY_PRESS, MOVE_TRICK_ROOM},
         .ability = ABILITY_BEAST_BOOST,
@@ -9977,7 +9977,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Blacephalon ---- (innate Levitate)
     {
         .species = SPECIES_BLACEPHALON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Beast Boost revenge killer
         .moves = {MOVE_SHADOW_BALL, MOVE_FIRE_BLAST, MOVE_PSYCHIC, MOVE_TRICK},
         .ability = ABILITY_BEAST_BOOST,
@@ -9988,7 +9988,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BLACEPHALON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FIRIUM_Z, // Inferno Overdrive nuke
         .moves = {MOVE_CALM_MIND, MOVE_FIRE_BLAST, MOVE_SHADOW_BALL, MOVE_FOCUS_BLAST},
         .ability = ABILITY_BEAST_BOOST,
@@ -10001,7 +10001,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zeraora ----
     {
         .species = SPECIES_ZERAORA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Volt Absorb fast physical attacker
         .moves = {MOVE_PLASMA_FISTS, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_PLAY_ROUGH},
         .ability = ABILITY_VOLT_ABSORB,
@@ -10012,7 +10012,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZERAORA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ELECTRIUM_Z, // Gigavolt Havoc + Bulk Up
         .moves = {MOVE_BULK_UP, MOVE_PLASMA_FISTS, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF},
         .ability = ABILITY_VOLT_ABSORB,
@@ -10029,7 +10029,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Rillaboom ----
     {
         .species = SPECIES_RILLABOOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Grassy Surge band breaker
         .moves = {MOVE_GRASSY_GLIDE, MOVE_WOOD_HAMMER, MOVE_KNOCK_OFF, MOVE_U_TURN},
         .ability = ABILITY_GRASSY_SURGE,
@@ -10040,7 +10040,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RILLABOOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance terrain sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_GRASSY_GLIDE, MOVE_HIGH_HORSEPOWER, MOVE_DRAIN_PUNCH},
         .ability = ABILITY_GRASSY_SURGE,
@@ -10051,7 +10051,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RILLABOOM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Grassy Terrain pivot
         .moves = {MOVE_GRASSY_GLIDE, MOVE_KNOCK_OFF, MOVE_SYNTHESIS, MOVE_U_TURN},
         .ability = ABILITY_GRASSY_SURGE,
@@ -10064,7 +10064,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cinderace ----
     {
         .species = SPECIES_CINDERACE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Libero offensive pivot
         .moves = {MOVE_PYRO_BALL, MOVE_HIGH_HORSEPOWER, MOVE_U_TURN, MOVE_GUNK_SHOT},
         .ability = ABILITY_LIBERO,
@@ -10075,7 +10075,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CINDERACE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Libero band breaker
         .moves = {MOVE_PYRO_BALL, MOVE_HIGH_HORSEPOWER, MOVE_ZEN_HEADBUTT, MOVE_U_TURN},
         .ability = ABILITY_LIBERO,
@@ -10086,7 +10086,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CINDERACE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Court Change utility sweeper
         .moves = {MOVE_PYRO_BALL, MOVE_COURT_CHANGE, MOVE_HIGH_HORSEPOWER, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_LIBERO,
@@ -10099,7 +10099,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Inteleon ----
     {
         .species = SPECIES_INTELEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Sniper special breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_DARK_PULSE, MOVE_U_TURN},
         .ability = ABILITY_TORRENT,
@@ -10110,7 +10110,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_INTELEON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SCOPE_LENS, // Sniper guaranteed-crit Snipe Shot
         .moves = {MOVE_SNIPE_SHOT, MOVE_ICE_BEAM, MOVE_DARK_PULSE, MOVE_AIR_SLASH},
         .ability = ABILITY_SNIPER,
@@ -10121,7 +10121,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_INTELEON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_U_TURN, MOVE_DARK_PULSE},
         .ability = ABILITY_TORRENT,
@@ -10134,7 +10134,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Corviknight ----
     {
         .species = SPECIES_CORVIKNIGHT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Pressure Defog wall
         .moves = {MOVE_BODY_PRESS, MOVE_ROOST, MOVE_DEFOG, MOVE_IRON_DEFENSE},
         .ability = ABILITY_PRESSURE,
@@ -10145,7 +10145,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CORVIKNIGHT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Mirror Armor physical wall
         .moves = {MOVE_BRAVE_BIRD, MOVE_BODY_PRESS, MOVE_ROOST, MOVE_U_TURN},
         .ability = ABILITY_MIRROR_ARMOR,
@@ -10156,7 +10156,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CORVIKNIGHT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot
         .moves = {MOVE_BRAVE_BIRD, MOVE_BULK_UP, MOVE_ROOST, MOVE_U_TURN},
         .ability = ABILITY_PRESSURE,
@@ -10169,7 +10169,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Coalossal ----
     {
         .species = SPECIES_COALOSSAL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Steam Engine bulky hazards
         .moves = {MOVE_STEALTH_ROCK, MOVE_RAPID_SPIN, MOVE_FLAMETHROWER, MOVE_STONE_EDGE},
         .ability = ABILITY_FLASH_FIRE,
@@ -10180,7 +10180,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_COALOSSAL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Steam Engine sweeper
         .moves = {MOVE_FLAMETHROWER, MOVE_STONE_EDGE, MOVE_EARTH_POWER, MOVE_HEAT_CRASH},
         .ability = ABILITY_STEAM_ENGINE,
@@ -10193,7 +10193,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Flapple ----
     {
         .species = SPECIES_FLAPPLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Hustle physical attacker
         .moves = {MOVE_GRAV_APPLE, MOVE_DRAGON_RUSH, MOVE_U_TURN, MOVE_OUTRAGE},
         .ability = ABILITY_HUSTLE,
@@ -10204,7 +10204,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLAPPLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_APPLE_ACID, MOVE_DRACO_METEOR, MOVE_FIRE_BLAST, MOVE_U_TURN},
         .ability = ABILITY_HUSTLE,
@@ -10217,7 +10217,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Appletun ----
     {
         .species = SPECIES_APPLETUN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat bulky special wall
         .moves = {MOVE_APPLE_ACID, MOVE_DRAGON_PULSE, MOVE_RECOVER, MOVE_LEECH_SEED},
         .ability = ABILITY_THICK_FAT,
@@ -10228,7 +10228,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_APPLETUN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
         .moves = {MOVE_APPLE_ACID, MOVE_DRACO_METEOR, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
         .ability = ABILITY_THICK_FAT,
@@ -10241,7 +10241,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sandaconda ----
     {
         .species = SPECIES_SANDACONDA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sand Spit Coil wall
         .moves = {MOVE_COIL, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_GLARE},
         .ability = ABILITY_SHED_SKIN,
@@ -10252,7 +10252,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SANDACONDA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // bulky hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_GLARE, MOVE_RAPID_SPIN},
         .ability = ABILITY_SAND_SPIT,
@@ -10265,7 +10265,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Barraskewda ----
     {
         .species = SPECIES_BARRASKEWDA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Swift Swim band breaker
         .moves = {MOVE_LIQUIDATION, MOVE_CLOSE_COMBAT, MOVE_PSYCHIC_FANGS, MOVE_FLIP_TURN},
         .ability = ABILITY_SWIFT_SWIM,
@@ -10276,7 +10276,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BARRASKEWDA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // fast revenge killer
         .moves = {MOVE_LIQUIDATION, MOVE_CLOSE_COMBAT, MOVE_AQUA_JET, MOVE_FLIP_TURN},
         .ability = ABILITY_PROPELLER_TAIL,
@@ -10289,7 +10289,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Toxtricity ----
     {
         .species = SPECIES_TOXTRICITY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY, // Punk Rock Boomburst nuke (Amped)
         .moves = {MOVE_BOOMBURST, MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH},
         .ability = ABILITY_PUNK_ROCK,
@@ -10300,7 +10300,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOXTRICITY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Punk Rock special breaker
         .moves = {MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH, MOVE_FOCUS_BLAST},
         .ability = ABILITY_PUNK_ROCK,
@@ -10311,7 +10311,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOXTRICITY_LOW_KEY,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Low Key revenge killer
         .moves = {MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH, MOVE_BOOMBURST},
         .ability = ABILITY_PUNK_ROCK,
@@ -10324,7 +10324,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Centiskorch ----
     {
         .species = SPECIES_CENTISKORCH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Flash Fire bulky attacker
         .moves = {MOVE_FIERY_DANCE, MOVE_OVERHEAT, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
         .ability = ABILITY_FLASH_FIRE,
@@ -10335,7 +10335,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CENTISKORCH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY, // Fiery Dance / Coil setup
         .moves = {MOVE_COIL, MOVE_FLARE_BLITZ, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
         .ability = ABILITY_WHITE_SMOKE,
@@ -10348,7 +10348,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Polteageist ---- (innate Levitate)
     {
         .species = SPECIES_POLTEAGEIST,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shell Smash Stored Power sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_STORED_POWER, MOVE_SHADOW_BALL, MOVE_GIGA_DRAIN},
         .ability = ABILITY_CURSED_BODY,
@@ -10359,7 +10359,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_POLTEAGEIST,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH, // Shell Smash sash sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_SHADOW_BALL, MOVE_GIGA_DRAIN, MOVE_STORED_POWER},
         .ability = ABILITY_WEAK_ARMOR,
@@ -10372,7 +10372,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hatterene ---- (innate Magic Bounce)
     {
         .species = SPECIES_HATTERENE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Magic Bounce Calm Mind wall
         .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_DAZZLING_GLEAM, MOVE_DRAIN_PUNCH},
         .ability = ABILITY_MAGIC_BOUNCE,
@@ -10383,7 +10383,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HATTERENE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Psychic Terrain breaker
         .moves = {MOVE_EXPANDING_FORCE, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE, MOVE_PROTECT},
         .ability = ABILITY_MAGIC_BOUNCE,
@@ -10394,7 +10394,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HATTERENE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
         .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE, MOVE_POWER_WHIP},
         .ability = ABILITY_MAGIC_BOUNCE,
@@ -10407,7 +10407,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Grimmsnarl ----
     {
         .species = SPECIES_GRIMMSNARL,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster dual screens lead
         .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_SPIRIT_BREAK, MOVE_THUNDER_WAVE},
         .ability = ABILITY_PRANKSTER,
@@ -10418,7 +10418,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GRIMMSNARL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Bulk Up physical sweeper
         .moves = {MOVE_BULK_UP, MOVE_SPIRIT_BREAK, MOVE_SUCKER_PUNCH, MOVE_DRAIN_PUNCH},
         .ability = ABILITY_PRANKSTER,
@@ -10429,7 +10429,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GRIMMSNARL,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster support / Taunt-proof
         .moves = {MOVE_SPIRIT_BREAK, MOVE_THUNDER_WAVE, MOVE_TAUNT, MOVE_PARTING_SHOT},
         .ability = ABILITY_PRANKSTER,
@@ -10442,7 +10442,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Obstagoon ----
     {
         .species = SPECIES_OBSTAGOON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts Facade breaker
         .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT, MOVE_OBSTRUCT},
         .ability = ABILITY_GUTS,
@@ -10453,7 +10453,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_OBSTAGOON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up Guts wall-breaker
         .moves = {MOVE_BULK_UP, MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_OBSTRUCT},
         .ability = ABILITY_GUTS,
@@ -10466,7 +10466,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Perrserker ----
     {
         .species = SPECIES_PERRSERKER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Steely Spirit band breaker
         .moves = {MOVE_IRON_HEAD, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_U_TURN},
         .ability = ABILITY_STEELY_SPIRIT,
@@ -10477,7 +10477,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PERRSERKER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Swords Dance
         .moves = {MOVE_SWORDS_DANCE, MOVE_IRON_HEAD, MOVE_CLOSE_COMBAT, MOVE_STEALTH_ROCK},
         .ability = ABILITY_TOUGH_CLAWS,
@@ -10490,7 +10490,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cursola ---- (innate Perish Body)
     {
         .species = SPECIES_CURSOLA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Perish Body bulky special attacker
         .moves = {MOVE_CALM_MIND, MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_STRENGTH_SAP},
         .ability = ABILITY_PERISH_BODY,
@@ -10501,7 +10501,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CURSOLA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // glass cannon
         .moves = {MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_EARTH_POWER, MOVE_GIGA_DRAIN},
         .ability = ABILITY_WEAK_ARMOR,
@@ -10514,7 +10514,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sirfetch'd ----
     {
         .species = SPECIES_SIRFETCHD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEEK, // guaranteed-crit Leaf Blade Scrappy fighter
         .moves = {MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_KNOCK_OFF, MOVE_FIRST_IMPRESSION},
         .ability = ABILITY_SCRAPPY,
@@ -10525,7 +10525,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SIRFETCHD,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_BRAVE_BIRD},
         .ability = ABILITY_SCRAPPY,
@@ -10538,7 +10538,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Runerigus ---- (innate Levitate)
     {
         .species = SPECIES_RUNERIGUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Wandering Spirit bulky hazards
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_BODY_PRESS, MOVE_WILL_O_WISP},
         .ability = ABILITY_WANDERING_SPIRIT,
@@ -10549,7 +10549,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RUNERIGUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Iron Defense Body Press wall
         .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_EARTHQUAKE, MOVE_POLTERGEIST},
         .ability = ABILITY_WANDERING_SPIRIT,
@@ -10562,7 +10562,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Falinks ----
     {
         .species = SPECIES_FALINKS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // No Retreat setup sweeper
         .moves = {MOVE_NO_RETREAT, MOVE_CLOSE_COMBAT, MOVE_IRON_HEAD, MOVE_ROCK_SLIDE},
         .ability = ABILITY_DEFIANT,
@@ -10573,7 +10573,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FALINKS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WHITE_HERB, // No Retreat sweeper with herb reset
         .moves = {MOVE_NO_RETREAT, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_THROAT_CHOP},
         .ability = ABILITY_DEFIANT,
@@ -10586,7 +10586,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Frosmoth ----
     {
         .species = SPECIES_FROSMOTH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Quiver Dance sweeper
         .moves = {MOVE_QUIVER_DANCE, MOVE_ICE_BEAM, MOVE_BUG_BUZZ, MOVE_GIGA_DRAIN},
         .ability = ABILITY_ICE_SCALES,
@@ -10597,7 +10597,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FROSMOTH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Ice Scales special wall
         .moves = {MOVE_QUIVER_DANCE, MOVE_ICE_BEAM, MOVE_HURRICANE, MOVE_SUBSTITUTE},
         .ability = ABILITY_ICE_SCALES,
@@ -10610,7 +10610,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Eiscue ----
     {
         .species = SPECIES_EISCUE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Ice Face Belly Drum sweeper
         .moves = {MOVE_BELLY_DRUM, MOVE_LIQUIDATION, MOVE_ICICLE_CRASH, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_ICE_FACE,
@@ -10621,7 +10621,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_EISCUE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Ice Face band attacker
         .moves = {MOVE_ICICLE_CRASH, MOVE_LIQUIDATION, MOVE_HEAD_SMASH, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_ICE_FACE,
@@ -10634,7 +10634,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Indeedee ----
     {
         .species = SPECIES_INDEEDEE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Psychic Surge attacker
         .moves = {MOVE_EXPANDING_FORCE, MOVE_DAZZLING_GLEAM, MOVE_PSYCHIC_TERRAIN, MOVE_PROTECT},
         .ability = ABILITY_PSYCHIC_SURGE,
@@ -10645,7 +10645,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_INDEEDEE_F,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Healer redirect support (Indeedee-F)
         .moves = {MOVE_FOLLOW_ME, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_HEAL_PULSE},
         .ability = ABILITY_PSYCHIC_SURGE,
@@ -10658,7 +10658,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Morpeko ----
     {
         .species = SPECIES_MORPEKO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Hunger Switch Aura Wheel attacker
         .moves = {MOVE_AURA_WHEEL, MOVE_KNOCK_OFF, MOVE_PSYCHIC_FANGS, MOVE_PROTECT},
         .ability = ABILITY_HUNGER_SWITCH,
@@ -10671,7 +10671,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Copperajah ----
     {
         .species = SPECIES_COPPERAJAH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force Heavy Slam breaker
         .moves = {MOVE_HEAVY_SLAM, MOVE_HIGH_HORSEPOWER, MOVE_PLAY_ROUGH, MOVE_ROCK_SLIDE},
         .ability = ABILITY_SHEER_FORCE,
@@ -10682,7 +10682,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_COPPERAJAH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky hazard setter
         .moves = {MOVE_STEALTH_ROCK, MOVE_HEAVY_SLAM, MOVE_HIGH_HORSEPOWER, MOVE_WHIRLWIND},
         .ability = ABILITY_HEAVY_METAL,
@@ -10695,7 +10695,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dracozolt ----
     {
         .species = SPECIES_DRACOZOLT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Hustle Bolt Beak nuke
         .moves = {MOVE_BOLT_BEAK, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE, MOVE_FIRE_PUNCH},
         .ability = ABILITY_HUSTLE,
@@ -10706,7 +10706,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRACOZOLT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sand Rush sweeper
         .moves = {MOVE_BOLT_BEAK, MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE},
         .ability = ABILITY_SAND_RUSH,
@@ -10719,7 +10719,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Arctozolt ----
     {
         .species = SPECIES_ARCTOZOLT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Slush Rush Bolt Beak nuke
         .moves = {MOVE_BOLT_BEAK, MOVE_ICICLE_CRASH, MOVE_LOW_KICK, MOVE_BLIZZARD},
         .ability = ABILITY_SLUSH_RUSH,
@@ -10730,7 +10730,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCTOZOLT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Static special breaker
         .moves = {MOVE_BOLT_BEAK, MOVE_FREEZE_DRY, MOVE_THUNDERBOLT, MOVE_FLASH_CANNON},
         .ability = ABILITY_STATIC,
@@ -10743,7 +10743,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dracovish ----
     {
         .species = SPECIES_DRACOVISH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Strong Jaw Fishious Rend nuke
         .moves = {MOVE_FISHIOUS_REND, MOVE_CRUNCH, MOVE_PSYCHIC_FANGS, MOVE_ICE_FANG},
         .ability = ABILITY_STRONG_JAW,
@@ -10754,7 +10754,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRACOVISH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sand Rush band breaker
         .moves = {MOVE_FISHIOUS_REND, MOVE_CRUNCH, MOVE_EARTHQUAKE, MOVE_ICE_FANG},
         .ability = ABILITY_SAND_RUSH,
@@ -10767,7 +10767,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Arctovish ----
     {
         .species = SPECIES_ARCTOVISH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // Slush Rush Fishious Rend
         .moves = {MOVE_FISHIOUS_REND, MOVE_ICICLE_CRASH, MOVE_PSYCHIC_FANGS, MOVE_CRUNCH},
         .ability = ABILITY_SLUSH_RUSH,
@@ -10778,7 +10778,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCTOVISH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky pivot
         .moves = {MOVE_FREEZE_DRY, MOVE_FLIP_TURN, MOVE_BODY_PRESS, MOVE_RECOVER},
         .ability = ABILITY_WATER_ABSORB,
@@ -10791,7 +10791,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Duraludon ----
     {
         .species = SPECIES_DURALUDON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Light Metal special breaker
         .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT, MOVE_BODY_PRESS},
         .ability = ABILITY_LIGHT_METAL,
@@ -10802,7 +10802,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DURALUDON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Stealth Rock bulky setup
         .moves = {MOVE_STEALTH_ROCK, MOVE_FLASH_CANNON, MOVE_DRACO_METEOR, MOVE_BODY_PRESS},
         .ability = ABILITY_STALWART,
@@ -10815,7 +10815,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dragapult ---- (innate Levitate)
     {
         .species = SPECIES_DRAGAPULT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Draco/Shadow Ball breaker
         .moves = {MOVE_DRACO_METEOR, MOVE_SHADOW_BALL, MOVE_FLAMETHROWER, MOVE_U_TURN},
         .ability = ABILITY_INFILTRATOR,
@@ -10826,7 +10826,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRAGAPULT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Dragon Darts band breaker
         .moves = {MOVE_DRAGON_DARTS, MOVE_PHANTOM_FORCE, MOVE_U_TURN, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_CLEAR_BODY,
@@ -10837,7 +10837,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DRAGAPULT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Dragon Dance physical sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_DRAGON_DARTS, MOVE_PHANTOM_FORCE, MOVE_FIRE_BLAST},
         .ability = ABILITY_INFILTRATOR,
@@ -10850,7 +10850,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zacian (Crowned) ----
     {
         .species = SPECIES_ZACIAN_CROWNED,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_RUSTED_SWORD, // Intrepid Sword Behemoth Blade
         .moves = {MOVE_BEHEMOTH_BLADE, MOVE_PLAY_ROUGH, MOVE_CLOSE_COMBAT, MOVE_SWORDS_DANCE},
         .ability = ABILITY_INTREPID_SWORD,
@@ -10861,7 +10861,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZACIAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // base Zacian band breaker
         .moves = {MOVE_PLAY_ROUGH, MOVE_CLOSE_COMBAT, MOVE_CRUNCH, MOVE_WILD_CHARGE},
         .ability = ABILITY_INTREPID_SWORD,
@@ -10874,7 +10874,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Zamazenta (Crowned) ----
     {
         .species = SPECIES_ZAMAZENTA_CROWNED,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_RUSTED_SHIELD, // Dauntless Shield Body Press wall
         .moves = {MOVE_BEHEMOTH_BASH, MOVE_BODY_PRESS, MOVE_IRON_DEFENSE, MOVE_CRUNCH},
         .ability = ABILITY_DAUNTLESS_SHIELD,
@@ -10885,7 +10885,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ZAMAZENTA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // base Zamazenta bulky setup
         .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_CLOSE_COMBAT, MOVE_CRUNCH},
         .ability = ABILITY_DAUNTLESS_SHIELD,
@@ -10898,7 +10898,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Eternatus ----
     {
         .species = SPECIES_ETERNATUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Pressure special breaker
         .moves = {MOVE_DYNAMAX_CANNON, MOVE_SLUDGE_WAVE, MOVE_FLAMETHROWER, MOVE_DRACO_METEOR},
         .ability = ABILITY_PRESSURE,
@@ -10909,7 +10909,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ETERNATUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky Toxic Spikes / Cosmic Power
         .moves = {MOVE_DYNAMAX_CANNON, MOVE_FLAMETHROWER, MOVE_TOXIC_SPIKES, MOVE_RECOVER},
         .ability = ABILITY_PRESSURE,
@@ -10922,7 +10922,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Urshifu (Single Strike) ----
     {
         .species = SPECIES_URSHIFU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Unseen Fist Wicked Blow breaker
         .moves = {MOVE_WICKED_BLOW, MOVE_CLOSE_COMBAT, MOVE_U_TURN, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_UNSEEN_FIST,
@@ -10933,7 +10933,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_URSHIFU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_WICKED_BLOW, MOVE_CLOSE_COMBAT, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_UNSEEN_FIST,
@@ -10946,7 +10946,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Urshifu (Rapid Strike) ----
     {
         .species = SPECIES_URSHIFU_RAPID_STRIKE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Surging Strikes always-crit breaker
         .moves = {MOVE_SURGING_STRIKES, MOVE_CLOSE_COMBAT, MOVE_AQUA_JET, MOVE_U_TURN},
         .ability = ABILITY_UNSEEN_FIST,
@@ -10957,7 +10957,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_URSHIFU_RAPID_STRIKE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_SURGING_STRIKES, MOVE_CLOSE_COMBAT, MOVE_AQUA_JET},
         .ability = ABILITY_UNSEEN_FIST,
@@ -10970,7 +10970,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Regieleki ---- (innate Transistor / Levitate-tier speed)
     {
         .species = SPECIES_REGIELEKI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Transistor electric nuke
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_RISING_VOLTAGE, MOVE_TERA_BLAST},
         .ability = ABILITY_TRANSISTOR,
@@ -10981,7 +10981,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_REGIELEKI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIGHT_CLAY, // screens lead
         .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_THUNDERBOLT, MOVE_EXPLOSION},
         .ability = ABILITY_TRANSISTOR,
@@ -10994,7 +10994,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Regidrago ----
     {
         .species = SPECIES_REGIDRAGO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Dragon's Maw Dragon Energy breaker
         .moves = {MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE, MOVE_OUTRAGE, MOVE_FIRE_FANG},
         .ability = ABILITY_DRAGONS_MAW,
@@ -11005,7 +11005,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_REGIDRAGO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special Dragon Energy breaker
         .moves = {MOVE_DRACO_METEOR, MOVE_DRAGON_PULSE, MOVE_THUNDERBOLT, MOVE_EARTH_POWER},
         .ability = ABILITY_DRAGONS_MAW,
@@ -11018,7 +11018,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Glastrier ----
     {
         .species = SPECIES_GLASTRIER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Chilling Neigh band breaker
         .moves = {MOVE_ICICLE_CRASH, MOVE_HIGH_HORSEPOWER, MOVE_CLOSE_COMBAT, MOVE_HEAVY_SLAM},
         .ability = ABILITY_CHILLING_NEIGH,
@@ -11029,7 +11029,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GLASTRIER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Swords Dance
         .moves = {MOVE_SWORDS_DANCE, MOVE_ICICLE_CRASH, MOVE_HIGH_HORSEPOWER, MOVE_BODY_PRESS},
         .ability = ABILITY_CHILLING_NEIGH,
@@ -11042,7 +11042,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Spectrier ---- (innate Levitate-tier)
     {
         .species = SPECIES_SPECTRIER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Grim Neigh special breaker
         .moves = {MOVE_SHADOW_BALL, MOVE_DARK_PULSE, MOVE_MYSTICAL_FIRE, MOVE_DRAINING_KISS},
         .ability = ABILITY_GRIM_NEIGH,
@@ -11053,7 +11053,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SPECTRIER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot snowball sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_SHADOW_BALL, MOVE_MYSTICAL_FIRE, MOVE_SUBSTITUTE},
         .ability = ABILITY_GRIM_NEIGH,
@@ -11066,7 +11066,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Calyrex (Ice Rider) ----
     {
         .species = SPECIES_CALYREX_ICE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // As One Glacial Lance breaker
         .moves = {MOVE_GLACIAL_LANCE, MOVE_HIGH_HORSEPOWER, MOVE_TRICK_ROOM, MOVE_LEECH_SEED},
         .ability = ABILITY_AS_ONE_ICE_RIDER,
@@ -11078,7 +11078,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CALYREX_ICE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Chilling Neigh band breaker
         .moves = {MOVE_GLACIAL_LANCE, MOVE_HIGH_HORSEPOWER, MOVE_CLOSE_COMBAT, MOVE_SEED_BOMB},
         .ability = ABILITY_AS_ONE_ICE_RIDER,
@@ -11091,7 +11091,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Calyrex (Shadow Rider) ----
     {
         .species = SPECIES_CALYREX_SHADOW,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Grim Neigh Astral Barrage nuke
         .moves = {MOVE_ASTRAL_BARRAGE, MOVE_PSYSHOCK, MOVE_GIGA_DRAIN, MOVE_DRACO_METEOR},
         .ability = ABILITY_AS_ONE_SHADOW_RIDER,
@@ -11102,7 +11102,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CALYREX_SHADOW,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Nasty Plot Substitute sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_ASTRAL_BARRAGE, MOVE_GIGA_DRAIN, MOVE_SUBSTITUTE},
         .ability = ABILITY_AS_ONE_SHADOW_RIDER,
@@ -11115,7 +11115,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Wyrdeer ----
     {
         .species = SPECIES_WYRDEER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sap Sipper band attacker
         .moves = {MOVE_PSYCHIC_FANGS, MOVE_MEGAHORN, MOVE_BODY_SLAM, MOVE_THROAT_CHOP},
         .ability = ABILITY_SAP_SIPPER,
@@ -11126,7 +11126,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_WYRDEER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Intimidate special tank
         .moves = {MOVE_PSYCHIC, MOVE_HYPER_VOICE, MOVE_SHADOW_BALL, MOVE_EARTH_POWER},
         .ability = ABILITY_INTIMIDATE,
@@ -11139,7 +11139,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kleavor ----
     {
         .species = SPECIES_KLEAVOR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sharpness Stone Axe breaker
         .moves = {MOVE_STONE_AXE, MOVE_X_SCISSOR, MOVE_CLOSE_COMBAT, MOVE_U_TURN},
         .ability = ABILITY_SHARPNESS,
@@ -11150,7 +11150,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KLEAVOR,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Stone Axe hazard lead
         .moves = {MOVE_STONE_AXE, MOVE_X_SCISSOR, MOVE_CLOSE_COMBAT, MOVE_DEFOG},
         .ability = ABILITY_SHARPNESS,
@@ -11163,7 +11163,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ursaluna ----
     {
         .species = SPECIES_URSALUNA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts Facade wallbreaker
         .moves = {MOVE_FACADE, MOVE_HEADLONG_RUSH, MOVE_CRUNCH, MOVE_FIRE_PUNCH},
         .ability = ABILITY_GUTS,
@@ -11175,7 +11175,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_URSALUNA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Swords Dance Bulk Up bruiser
         .moves = {MOVE_SWORDS_DANCE, MOVE_HEADLONG_RUSH, MOVE_CRUNCH, MOVE_PROTECT},
         .ability = ABILITY_GUTS,
@@ -11188,7 +11188,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Basculegion ----
     {
         .species = SPECIES_BASCULEGION,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Adaptability Wave Crash breaker
         .moves = {MOVE_WAVE_CRASH, MOVE_PHANTOM_FORCE, MOVE_AQUA_JET, MOVE_FLIP_TURN},
         .ability = ABILITY_ADAPTABILITY,
@@ -11199,7 +11199,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BASCULEGION_F,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special Basculegion-F breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_FLIP_TURN},
         .ability = ABILITY_ADAPTABILITY,
@@ -11212,7 +11212,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sneasler ----
     {
         .species = SPECIES_SNEASLER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_TOXIC_ORB, // Poison Touch Dire Claw attacker
         .moves = {MOVE_DIRE_CLAW, MOVE_CLOSE_COMBAT, MOVE_FAKE_OUT, MOVE_THROAT_CHOP},
         .ability = ABILITY_POISON_TOUCH,
@@ -11223,7 +11223,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SNEASLER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance Unburden-style sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_DIRE_CLAW, MOVE_ACROBATICS},
         .ability = ABILITY_UNBURDEN,
@@ -11236,7 +11236,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Overqwil ----
     {
         .species = SPECIES_OVERQWIL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Intimidate Toxic Spikes pivot
         .moves = {MOVE_BARB_BARRAGE, MOVE_KNOCK_OFF, MOVE_TOXIC_SPIKES, MOVE_DESTINY_BOND},
         .ability = ABILITY_INTIMIDATE,
@@ -11247,7 +11247,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_OVERQWIL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_BARB_BARRAGE, MOVE_KNOCK_OFF, MOVE_AQUA_JET},
         .ability = ABILITY_POISON_POINT,
@@ -11260,7 +11260,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Enamorus ----
     {
         .species = SPECIES_ENAMORUS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Cute Charm special attacker (Incarnate)
         .moves = {MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_SLUDGE_BOMB, MOVE_MYSTICAL_FIRE},
         .ability = ABILITY_CUTE_CHARM,
@@ -11271,7 +11271,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ENAMORUS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind setup
         .moves = {MOVE_CALM_MIND, MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_SUBSTITUTE},
         .ability = ABILITY_CONTRARY,
@@ -11282,7 +11282,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ENAMORUS_THERIAN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Overcoat Therian physical breaker
         .moves = {MOVE_PLAY_ROUGH, MOVE_EARTHQUAKE, MOVE_SPRINGTIDE_STORM, MOVE_U_TURN},
         .ability = ABILITY_OVERCOAT,
@@ -11299,7 +11299,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Meowscarada ----
     {
         .species = SPECIES_MEOWSCARADA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Protean physical attacker
         .moves = {MOVE_FLOWER_TRICK, MOVE_KNOCK_OFF, MOVE_U_TURN, MOVE_PLAY_ROUGH},
         .ability = ABILITY_PROTEAN,
@@ -11310,7 +11310,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEOWSCARADA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // hit-and-run wallbreaker
         .moves = {MOVE_FLOWER_TRICK, MOVE_KNOCK_OFF, MOVE_U_TURN, MOVE_TRIPLE_AXEL},
         .ability = ABILITY_PROTEAN,
@@ -11321,7 +11321,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MEOWSCARADA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast lead / spike support
         .moves = {MOVE_SPIKES, MOVE_FLOWER_TRICK, MOVE_KNOCK_OFF, MOVE_TAUNT},
         .ability = ABILITY_OVERGROW,
@@ -11334,7 +11334,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Skeledirge ----
     {
         .species = SPECIES_SKELEDIRGE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Torch Song bulky setup pivot
         .moves = {MOVE_TORCH_SONG, MOVE_SHADOW_BALL, MOVE_SLACK_OFF, MOVE_WILL_O_WISP},
         .ability = ABILITY_UNAWARE,
@@ -11345,7 +11345,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SKELEDIRGE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware special wall
         .moves = {MOVE_TORCH_SONG, MOVE_HEX, MOVE_SLACK_OFF, MOVE_WILL_O_WISP},
         .ability = ABILITY_UNAWARE,
@@ -11356,7 +11356,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SKELEDIRGE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY, // Torch Song snowball sweeper
         .moves = {MOVE_TORCH_SONG, MOVE_SHADOW_BALL, MOVE_EARTH_POWER, MOVE_SLACK_OFF},
         .ability = ABILITY_BLAZE,
@@ -11369,7 +11369,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Quaquaval ----
     {
         .species = SPECIES_QUAQUAVAL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Aqua Step setup sweeper
         .moves = {MOVE_AQUA_STEP, MOVE_CLOSE_COMBAT, MOVE_ICE_SPINNER, MOVE_AQUA_JET},
         .ability = ABILITY_MOXIE,
@@ -11380,7 +11380,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_QUAQUAVAL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Moxie band breaker
         .moves = {MOVE_AQUA_STEP, MOVE_CLOSE_COMBAT, MOVE_TRIPLE_AXEL, MOVE_U_TURN},
         .ability = ABILITY_MOXIE,
@@ -11393,7 +11393,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Maushold ----
     {
         .species = SPECIES_MAUSHOLD,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WIDE_LENS, // Technician Population Bomb sweeper
         .moves = {MOVE_POPULATION_BOMB, MOVE_BULLET_SEED, MOVE_TIDY_UP, MOVE_ENCORE},
         .ability = ABILITY_TECHNICIAN,
@@ -11404,7 +11404,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MAUSHOLD,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // Friend Guard support lead
         .moves = {MOVE_FOLLOW_ME, MOVE_BEAT_UP, MOVE_HELPING_HAND, MOVE_PROTECT},
         .ability = ABILITY_FRIEND_GUARD,
@@ -11417,7 +11417,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Garganacl ----
     {
         .species = SPECIES_GARGANACL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Purifying Salt physical wall
         .moves = {MOVE_SALT_CURE, MOVE_RECOVER, MOVE_STEALTH_ROCK, MOVE_BODY_PRESS},
         .ability = ABILITY_PURIFYING_SALT,
@@ -11428,7 +11428,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GARGANACL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Iron Defense + Body Press sweeper
         .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_SALT_CURE, MOVE_RECOVER},
         .ability = ABILITY_PURIFYING_SALT,
@@ -11439,7 +11439,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GARGANACL,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET, // doubles Salt Cure chip + Wide Guard
         .moves = {MOVE_SALT_CURE, MOVE_WIDE_GUARD, MOVE_RECOVER, MOVE_EARTHQUAKE},
         .ability = ABILITY_PURIFYING_SALT,
@@ -11452,7 +11452,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Armarouge ----
     {
         .species = SPECIES_ARMAROUGE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Armor Cannon special sweeper
         .moves = {MOVE_ARMOR_CANNON, MOVE_PSYSHOCK, MOVE_AURA_SPHERE, MOVE_CALM_MIND},
         .ability = ABILITY_FLASH_FIRE,
@@ -11463,7 +11463,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARMAROUGE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Expanding Force Trick Room attacker
         .moves = {MOVE_EXPANDING_FORCE, MOVE_ARMOR_CANNON, MOVE_TRICK_ROOM, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_FLASH_FIRE,
@@ -11477,7 +11477,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ceruledge ----
     {
         .species = SPECIES_CERULEDGE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Bitter Blade Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_BITTER_BLADE, MOVE_SHADOW_SNEAK, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_WEAK_ARMOR,
@@ -11488,7 +11488,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CERULEDGE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Bulk Up bulky setup
         .moves = {MOVE_BULK_UP, MOVE_BITTER_BLADE, MOVE_SHADOW_SNEAK, MOVE_WILL_O_WISP},
         .ability = ABILITY_FLASH_FIRE,
@@ -11501,7 +11501,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Brambleghast ----
     {
         .species = SPECIES_BRAMBLEGHAST,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Wind Rider spin / hazard control
         .moves = {MOVE_POWER_WHIP, MOVE_SHADOW_BALL, MOVE_RAPID_SPIN, MOVE_LEECH_SEED},
         .ability = ABILITY_WIND_RIDER,
@@ -11512,7 +11512,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BRAMBLEGHAST,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // physical breaker
         .moves = {MOVE_POWER_WHIP, MOVE_POLTERGEIST, MOVE_RAPID_SPIN, MOVE_INFERNAL_PARADE},
         .ability = ABILITY_WIND_RIDER,
@@ -11525,7 +11525,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Toedscruel ----
     {
         .species = SPECIES_TOEDSCRUEL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Mycelium Might hazard control
         .moves = {MOVE_SPORE, MOVE_RAPID_SPIN, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
         .ability = ABILITY_MYCELIUM_MIGHT,
@@ -11536,7 +11536,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TOEDSCRUEL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast special attacker
         .moves = {MOVE_ENERGY_BALL, MOVE_EARTH_POWER, MOVE_SLUDGE_BOMB, MOVE_RAPID_SPIN},
         .ability = ABILITY_MYCELIUM_MIGHT,
@@ -11549,7 +11549,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Scovillain ----
     {
         .species = SPECIES_SCOVILLAIN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll mixed sun attacker
         .moves = {MOVE_GROWTH, MOVE_FLAMETHROWER, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
         .ability = ABILITY_CHLOROPHYLL,
@@ -11562,7 +11562,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Espathra ----
     {
         .species = SPECIES_ESPATHRA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Opportunist Calm Mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_STORED_POWER, MOVE_DAZZLING_GLEAM, MOVE_ROOST},
         .ability = ABILITY_OPPORTUNIST,
@@ -11573,7 +11573,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ESPATHRA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // fast special breaker
         .moves = {MOVE_PSYSHOCK, MOVE_DAZZLING_GLEAM, MOVE_SHADOW_BALL, MOVE_TERA_BLAST},
         .ability = ABILITY_SPEED_BOOST,
@@ -11586,7 +11586,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Tinkaton ----
     {
         .species = SPECIES_TINKATON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_AIR_BALLOON, // Gigaton Hammer + hazards utility
         .moves = {MOVE_GIGATON_HAMMER, MOVE_PLAY_ROUGH, MOVE_STEALTH_ROCK, MOVE_THUNDER_WAVE},
         .ability = ABILITY_MOLD_BREAKER,
@@ -11597,7 +11597,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TINKATON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Gigaton Hammer band breaker
         .moves = {MOVE_GIGATON_HAMMER, MOVE_PLAY_ROUGH, MOVE_KNOCK_OFF, MOVE_ICE_HAMMER},
         .ability = ABILITY_MOLD_BREAKER,
@@ -11610,7 +11610,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Bombirdier ----
     {
         .species = SPECIES_BOMBIRDIER,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Big Pecks hazard / utility pivot
         .moves = {MOVE_STEALTH_ROCK, MOVE_KNOCK_OFF, MOVE_BRAVE_BIRD, MOVE_ROOST},
         .ability = ABILITY_BIG_PECKS,
@@ -11623,7 +11623,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Palafin (Hero) ----
     {
         .species = SPECIES_PALAFIN_HERO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Zero to Hero band breaker
         .moves = {MOVE_JET_PUNCH, MOVE_WAVE_CRASH, MOVE_CLOSE_COMBAT, MOVE_FLIP_TURN},
         .ability = ABILITY_ZERO_TO_HERO,
@@ -11634,7 +11634,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PALAFIN_HERO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Bulk Up Hero sweeper
         .moves = {MOVE_BULK_UP, MOVE_JET_PUNCH, MOVE_WAVE_CRASH, MOVE_DRAIN_PUNCH},
         .ability = ABILITY_ZERO_TO_HERO,
@@ -11647,7 +11647,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Revavroom ----
     {
         .species = SPECIES_REVAVROOM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Filter Shift Gear sweeper
         .moves = {MOVE_SHIFT_GEAR, MOVE_GUNK_SHOT, MOVE_IRON_HEAD, MOVE_HIGH_HORSEPOWER},
         .ability = ABILITY_FILTER,
@@ -11658,7 +11658,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_REVAVROOM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // bulky pivot / hazard support
         .moves = {MOVE_GUNK_SHOT, MOVE_SPIKES, MOVE_PARTING_SHOT, MOVE_HIGH_HORSEPOWER},
         .ability = ABILITY_FILTER,
@@ -11671,7 +11671,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Cyclizar ----
     {
         .species = SPECIES_CYCLIZAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Regenerator Shed Tail pivot
         .moves = {MOVE_SHED_TAIL, MOVE_DRAGON_PULSE, MOVE_OVERHEAT, MOVE_RAPID_SPIN},
         .ability = ABILITY_REGENERATOR,
@@ -11682,7 +11682,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CYCLIZAR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // fast U-turn pivot
         .moves = {MOVE_DRAGON_CLAW, MOVE_KNOCK_OFF, MOVE_U_TURN, MOVE_RAPID_SPIN},
         .ability = ABILITY_REGENERATOR,
@@ -11695,7 +11695,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Orthworm ----
     {
         .species = SPECIES_ORTHWORM,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Earth Eater Iron Defense + Body Press wall
         .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_SHED_TAIL, MOVE_STEALTH_ROCK},
         .ability = ABILITY_EARTH_EATER,
@@ -11706,7 +11706,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ORTHWORM,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Shed Tail pivot
         .moves = {MOVE_SHED_TAIL, MOVE_IRON_HEAD, MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK},
         .ability = ABILITY_EARTH_EATER,
@@ -11719,7 +11719,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Glimmora ----
     {
         .species = SPECIES_GLIMMORA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Toxic Debris hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_POWER_GEM, MOVE_MORTAL_SPIN},
         .ability = ABILITY_TOXIC_DEBRIS,
@@ -11730,7 +11730,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GLIMMORA,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // special attacker
         .moves = {MOVE_POWER_GEM, MOVE_SLUDGE_WAVE, MOVE_EARTH_POWER, MOVE_ENERGY_BALL},
         .ability = ABILITY_TOXIC_DEBRIS,
@@ -11743,7 +11743,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Houndstone ----
     {
         .species = SPECIES_HOUNDSTONE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sand Rush Last Respects sweeper
         .moves = {MOVE_LAST_RESPECTS, MOVE_BODY_PRESS, MOVE_PLAY_ROUGH, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_SAND_RUSH,
@@ -11756,7 +11756,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dondozo ----
     {
         .species = SPECIES_DONDOZO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware Curse physical wall
         .moves = {MOVE_CURSE, MOVE_WAVE_CRASH, MOVE_REST, MOVE_SLEEP_TALK},
         .ability = ABILITY_UNAWARE,
@@ -11767,7 +11767,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DONDOZO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Order Up / bulky pivot
         .moves = {MOVE_WAVE_CRASH, MOVE_BODY_PRESS, MOVE_EARTHQUAKE, MOVE_REST},
         .ability = ABILITY_UNAWARE,
@@ -11780,7 +11780,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Annihilape ----
     {
         .species = SPECIES_ANNIHILAPE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up + Rage Fist snowball
         .moves = {MOVE_BULK_UP, MOVE_RAGE_FIST, MOVE_DRAIN_PUNCH, MOVE_TAUNT},
         .ability = ABILITY_VITAL_SPIRIT,
@@ -11791,7 +11791,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ANNIHILAPE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Defiant revenge killer
         .moves = {MOVE_RAGE_FIST, MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH, MOVE_U_TURN},
         .ability = ABILITY_DEFIANT,
@@ -11804,7 +11804,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Clodsire ----
     {
         .species = SPECIES_CLODSIRE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware special wall / status spreader
         .moves = {MOVE_TOXIC, MOVE_RECOVER, MOVE_EARTHQUAKE, MOVE_TOXIC_SPIKES},
         .ability = ABILITY_UNAWARE,
@@ -11815,7 +11815,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CLODSIRE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Water Absorb stall pivot
         .moves = {MOVE_RECOVER, MOVE_EARTHQUAKE, MOVE_TOXIC, MOVE_STEALTH_ROCK},
         .ability = ABILITY_WATER_ABSORB,
@@ -11828,7 +11828,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Farigiraf ----
     {
         .species = SPECIES_FARIGIRAF,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Armor Tail Calm Mind wall
         .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC_NOISE, MOVE_HYPER_VOICE, MOVE_REST},
         .ability = ABILITY_ARMOR_TAIL,
@@ -11839,7 +11839,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FARIGIRAF,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room support tank
         .moves = {MOVE_TRICK_ROOM, MOVE_HYPER_VOICE, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_ARMOR_TAIL,
@@ -11853,7 +11853,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Dudunsparce ----
     {
         .species = SPECIES_DUDUNSPARCE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Serene Grace Coil + flinch / status
         .moves = {MOVE_COIL, MOVE_BODY_SLAM, MOVE_ROOST, MOVE_EARTHQUAKE},
         .ability = ABILITY_SERENE_GRACE,
@@ -11864,7 +11864,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_DUDUNSPARCE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind + Boomburst special
         .moves = {MOVE_CALM_MIND, MOVE_BOOMBURST, MOVE_EARTH_POWER, MOVE_ROOST},
         .ability = ABILITY_SERENE_GRACE,
@@ -11877,7 +11877,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Kingambit ----
     {
         .species = SPECIES_KINGAMBIT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Supreme Overlord Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SUPREME_OVERLORD,
@@ -11888,7 +11888,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KINGAMBIT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Defiant pivot punisher
         .moves = {MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH, MOVE_LOW_KICK},
         .ability = ABILITY_DEFIANT,
@@ -11899,7 +11899,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KINGAMBIT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special tank
         .moves = {MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH, MOVE_LOW_KICK},
         .ability = ABILITY_SUPREME_OVERLORD,
@@ -11912,7 +11912,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Great Tusk ----
     {
         .species = SPECIES_GREAT_TUSK,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis hazard control sweeper
         .moves = {MOVE_HEADLONG_RUSH, MOVE_CLOSE_COMBAT, MOVE_RAPID_SPIN, MOVE_ICE_SPINNER},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -11923,7 +11923,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GREAT_TUSK,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Bulk Up physical wall / spinner
         .moves = {MOVE_BULK_UP, MOVE_HEADLONG_RUSH, MOVE_BODY_PRESS, MOVE_RAPID_SPIN},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -11936,7 +11936,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Scream Tail ----
     {
         .species = SPECIES_SCREAM_TAIL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Protosynthesis utility wall
         .moves = {MOVE_WISH, MOVE_PROTECT, MOVE_DAZZLING_GLEAM, MOVE_ENCORE},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -11947,7 +11947,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SCREAM_TAIL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // fast support pivot
         .moves = {MOVE_PLAY_ROUGH, MOVE_PSYCHIC_FANGS, MOVE_THUNDER_WAVE, MOVE_WISH},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -11960,7 +11960,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Brute Bonnet ----
     {
         .species = SPECIES_BRUTE_BONNET,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis bulky breaker
         .moves = {MOVE_SUCKER_PUNCH, MOVE_SEED_BOMB, MOVE_SPORE, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -11973,7 +11973,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Flutter Mane ----
     {
         .species = SPECIES_FLUTTER_MANE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special sweeper (innate Levitate)
         .moves = {MOVE_MOONBLAST, MOVE_SHADOW_BALL, MOVE_MYSTICAL_FIRE, MOVE_CALM_MIND},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -11984,7 +11984,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLUTTER_MANE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // special nuke (innate Levitate)
         .moves = {MOVE_MOONBLAST, MOVE_SHADOW_BALL, MOVE_POWER_GEM, MOVE_THUNDERBOLT},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -11995,7 +11995,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FLUTTER_MANE,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // fast Perish Trap / utility (innate Levitate)
         .moves = {MOVE_MOONBLAST, MOVE_SHADOW_BALL, MOVE_DAZZLING_GLEAM, MOVE_PROTECT},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12008,7 +12008,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Slither Wing ----
     {
         .species = SPECIES_SLITHER_WING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis bulky attacker
         .moves = {MOVE_CLOSE_COMBAT, MOVE_FIRST_IMPRESSION, MOVE_U_TURN, MOVE_FLARE_BLITZ},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12021,7 +12021,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sandy Shocks ----
     {
         .species = SPECIES_SANDY_SHOCKS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special attacker (innate Levitate)
         .moves = {MOVE_THUNDERBOLT, MOVE_EARTH_POWER, MOVE_VOLT_SWITCH, MOVE_FLASH_CANNON},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12032,7 +12032,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SANDY_SHOCKS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard lead (innate Levitate)
         .moves = {MOVE_STEALTH_ROCK, MOVE_THUNDERBOLT, MOVE_EARTH_POWER, MOVE_VOLT_SWITCH},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12045,7 +12045,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Treads ----
     {
         .species = SPECIES_IRON_TREADS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive hazard control sweeper
         .moves = {MOVE_EARTHQUAKE, MOVE_IRON_HEAD, MOVE_RAPID_SPIN, MOVE_ICE_SPINNER},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12056,7 +12056,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_IRON_TREADS,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_RAPID_SPIN, MOVE_KNOCK_OFF},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12069,7 +12069,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Bundle ----
     {
         .species = SPECIES_IRON_BUNDLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive fast special attacker
         .moves = {MOVE_HYDRO_PUMP, MOVE_FREEZE_DRY, MOVE_FLIP_TURN, MOVE_ICE_BEAM},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12080,7 +12080,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_IRON_BUNDLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // hydro specs nuke
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FLIP_TURN, MOVE_FREEZE_DRY},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12093,7 +12093,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Hands ----
     {
         .species = SPECIES_IRON_HANDS,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Quark Drive bulky attacker
         .moves = {MOVE_DRAIN_PUNCH, MOVE_THUNDER_PUNCH, MOVE_FAKE_OUT, MOVE_WILD_CHARGE},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12104,7 +12104,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_IRON_HANDS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Belly Drum + Drain Punch sweeper
         .moves = {MOVE_BELLY_DRUM, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12117,7 +12117,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Jugulis ----
     {
         .species = SPECIES_IRON_JUGULIS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive fast special attacker
         .moves = {MOVE_DARK_PULSE, MOVE_HURRICANE, MOVE_EARTH_POWER, MOVE_FLAMETHROWER},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12130,7 +12130,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Moth ----
     {
         .species = SPECIES_IRON_MOTH,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive special sweeper (innate Levitate)
         .moves = {MOVE_FIERY_DANCE, MOVE_SLUDGE_WAVE, MOVE_ENERGY_BALL, MOVE_TERA_BLAST},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12141,7 +12141,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_IRON_MOTH,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Toxic Spikes / special pivot (innate Levitate)
         .moves = {MOVE_FLAMETHROWER, MOVE_SLUDGE_WAVE, MOVE_TOXIC_SPIKES, MOVE_MORNING_SUN},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12154,7 +12154,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Thorns ----
     {
         .species = SPECIES_IRON_THORNS,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12167,7 +12167,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Baxcalibur ----
     {
         .species = SPECIES_BAXCALIBUR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LOADED_DICE, // Dragon Dance + Icicle Spear sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_ICICLE_SPEAR, MOVE_GLAIVE_RUSH, MOVE_EARTHQUAKE},
         .ability = ABILITY_THERMAL_EXCHANGE,
@@ -12178,7 +12178,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_BAXCALIBUR,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Dragon Dance breaker
         .moves = {MOVE_DRAGON_DANCE, MOVE_ICICLE_CRASH, MOVE_GLAIVE_RUSH, MOVE_ICE_SHARD},
         .ability = ABILITY_THERMAL_EXCHANGE,
@@ -12191,7 +12191,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gholdengo ----
     {
         .species = SPECIES_GHOLDENGO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Nasty Plot + Make It Rain sweeper (innate Levitate)
         .moves = {MOVE_NASTY_PLOT, MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_RECOVER},
         .ability = ABILITY_GOOD_AS_GOLD,
@@ -12202,7 +12202,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GHOLDENGO,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Good as Gold status blocker / pivot (innate Levitate)
         .moves = {MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_RECOVER, MOVE_THUNDER_WAVE},
         .ability = ABILITY_GOOD_AS_GOLD,
@@ -12213,7 +12213,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GHOLDENGO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special nuke (innate Levitate)
         .moves = {MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_FOCUS_BLAST, MOVE_TRICK},
         .ability = ABILITY_GOOD_AS_GOLD,
@@ -12226,7 +12226,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Wo-Chien ----
     {
         .species = SPECIES_WO_CHIEN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Tablets of Ruin defensive status spreader
         .moves = {MOVE_LEECH_SEED, MOVE_GIGA_DRAIN, MOVE_KNOCK_OFF, MOVE_PROTECT},
         .ability = ABILITY_TABLETS_OF_RUIN,
@@ -12237,7 +12237,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_WO_CHIEN,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Tablets stall wall
         .moves = {MOVE_LEECH_SEED, MOVE_GIGA_DRAIN, MOVE_FOUL_PLAY, MOVE_STUN_SPORE},
         .ability = ABILITY_TABLETS_OF_RUIN,
@@ -12250,7 +12250,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Chien-Pao ----
     {
         .species = SPECIES_CHIEN_PAO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sword of Ruin Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_ICICLE_CRASH, MOVE_SUCKER_PUNCH, MOVE_SACRED_SWORD},
         .ability = ABILITY_SWORD_OF_RUIN,
@@ -12261,7 +12261,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHIEN_PAO,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sword of Ruin band breaker
         .moves = {MOVE_ICE_SPINNER, MOVE_CRUNCH, MOVE_SACRED_SWORD, MOVE_ICE_SHARD},
         .ability = ABILITY_SWORD_OF_RUIN,
@@ -12274,7 +12274,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ting-Lu ----
     {
         .species = SPECIES_TING_LU,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Vessel of Ruin physical wall / hazards
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_EARTHQUAKE, MOVE_WHIRLWIND},
         .ability = ABILITY_VESSEL_OF_RUIN,
@@ -12285,7 +12285,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TING_LU,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Ruination staller
         .moves = {MOVE_RUINATION, MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK, MOVE_REST},
         .ability = ABILITY_VESSEL_OF_RUIN,
@@ -12298,7 +12298,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Chi-Yu ----
     {
         .species = SPECIES_CHI_YU,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Beads of Ruin special sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_OVERHEAT, MOVE_DARK_PULSE, MOVE_FLAMETHROWER},
         .ability = ABILITY_BEADS_OF_RUIN,
@@ -12309,7 +12309,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CHI_YU,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // Beads of Ruin nuke
         .moves = {MOVE_FIRE_BLAST, MOVE_DARK_PULSE, MOVE_PSYCHIC, MOVE_FLAMETHROWER},
         .ability = ABILITY_BEADS_OF_RUIN,
@@ -12322,7 +12322,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Roaring Moon ----
     {
         .species = SPECIES_ROARING_MOON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_KNOCK_OFF, MOVE_OUTRAGE, MOVE_ROOST},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12333,7 +12333,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ROARING_MOON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Dragon's Maw band breaker
         .moves = {MOVE_OUTRAGE, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE, MOVE_U_TURN},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12346,7 +12346,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Valiant ----
     {
         .species = SPECIES_IRON_VALIANT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive mixed Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_SPIRIT_BREAK},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12357,7 +12357,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_IRON_VALIANT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
         .moves = {MOVE_MOONBLAST, MOVE_AURA_SPHERE, MOVE_PSYSHOCK, MOVE_THUNDERBOLT},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12370,7 +12370,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Koraidon ----
     {
         .species = SPECIES_KORAIDON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Orichalcum Pulse sun sweeper
         .moves = {MOVE_COLLISION_COURSE, MOVE_FLARE_BLITZ, MOVE_DRAGON_CLAW, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_ORICHALCUM_PULSE,
@@ -12381,7 +12381,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_KORAIDON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
         .moves = {MOVE_COLLISION_COURSE, MOVE_OUTRAGE, MOVE_FLARE_BLITZ, MOVE_U_TURN},
         .ability = ABILITY_ORICHALCUM_PULSE,
@@ -12394,7 +12394,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Miraidon ----
     {
         .species = SPECIES_MIRAIDON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Hadron Engine special nuke (innate Levitate)
         .moves = {MOVE_ELECTRO_DRIFT, MOVE_DRACO_METEOR, MOVE_VOLT_SWITCH, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_HADRON_ENGINE,
@@ -12405,7 +12405,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MIRAIDON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind sweeper (innate Levitate)
         .moves = {MOVE_CALM_MIND, MOVE_ELECTRO_DRIFT, MOVE_DRACO_METEOR, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_HADRON_ENGINE,
@@ -12418,7 +12418,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Walking Wake ----
     {
         .species = SPECIES_WALKING_WAKE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special attacker
         .moves = {MOVE_HYDRO_STEAM, MOVE_DRACO_METEOR, MOVE_FLAMETHROWER, MOVE_FLIP_TURN},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12429,7 +12429,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_WALKING_WAKE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // Draco specs nuke
         .moves = {MOVE_DRACO_METEOR, MOVE_HYDRO_PUMP, MOVE_FLAMETHROWER, MOVE_FLIP_TURN},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12442,7 +12442,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Leaves ----
     {
         .species = SPECIES_IRON_LEAVES,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_PSYBLADE, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12455,7 +12455,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Sinistcha ----
     {
         .species = SPECIES_SINISTCHA,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind Matcha Gotcha wall (innate Levitate)
         .moves = {MOVE_CALM_MIND, MOVE_MATCHA_GOTCHA, MOVE_SHADOW_BALL, MOVE_STRENGTH_SAP},
         .ability = ABILITY_HEATPROOF,
@@ -12466,7 +12466,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_SINISTCHA,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Hospitality support tank (innate Levitate)
         .moves = {MOVE_MATCHA_GOTCHA, MOVE_SHADOW_BALL, MOVE_GIGA_DRAIN, MOVE_TRICK_ROOM},
         .ability = ABILITY_HOSPITALITY,
@@ -12480,7 +12480,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Okidogi ----
     {
         .species = SPECIES_OKIDOGI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Toxic Chain Bulk Up sweeper
         .moves = {MOVE_BULK_UP, MOVE_GUNK_SHOT, MOVE_CLOSE_COMBAT, MOVE_CRUNCH},
         .ability = ABILITY_TOXIC_CHAIN,
@@ -12491,7 +12491,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_OKIDOGI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Guard Dog Bulk Up wall breaker
         .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_POISON_JAB, MOVE_PSYCHIC_FANGS},
         .ability = ABILITY_GUARD_DOG,
@@ -12504,7 +12504,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Munkidori ----
     {
         .species = SPECIES_MUNKIDORI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Toxic Chain special attacker
         .moves = {MOVE_NASTY_PLOT, MOVE_SLUDGE_WAVE, MOVE_PSYCHIC, MOVE_DARK_PULSE},
         .ability = ABILITY_TOXIC_CHAIN,
@@ -12515,7 +12515,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_MUNKIDORI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator special pivot
         .moves = {MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_U_TURN, MOVE_FUTURE_SIGHT},
         .ability = ABILITY_REGENERATOR,
@@ -12528,7 +12528,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Fezandipiti ----
     {
         .species = SPECIES_FEZANDIPITI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Toxic Chain utility pivot
         .moves = {MOVE_ROOST, MOVE_TOXIC, MOVE_FOUL_PLAY, MOVE_U_TURN},
         .ability = ABILITY_TOXIC_CHAIN,
@@ -12539,7 +12539,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_FEZANDIPITI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind special pivot
         .moves = {MOVE_CALM_MIND, MOVE_MOONBLAST, MOVE_SLUDGE_BOMB, MOVE_ROOST},
         .ability = ABILITY_TECHNICIAN,
@@ -12552,7 +12552,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ogerpon (Teal) ----
     {
         .species = SPECIES_OGERPON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Defiant Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
         .ability = ABILITY_DEFIANT,
@@ -12565,7 +12565,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ogerpon (Wellspring) ----
     {
         .species = SPECIES_OGERPON_WELLSPRING,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_WELLSPRING_MASK, // Water Absorb Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_PLAY_ROUGH},
         .ability = ABILITY_WATER_ABSORB,
@@ -12578,7 +12578,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ogerpon (Hearthflame) ----
     {
         .species = SPECIES_OGERPON_HEARTHFLAME,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEARTHFLAME_MASK, // Mold Breaker Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_HORN_LEECH},
         .ability = ABILITY_MOLD_BREAKER,
@@ -12591,7 +12591,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Ogerpon (Cornerstone) ----
     {
         .species = SPECIES_OGERPON_CORNERSTONE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_CORNERSTONE_MASK, // Sturdy Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_STONE_EDGE},
         .ability = ABILITY_STURDY,
@@ -12604,7 +12604,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Archaludon ----
     {
         .species = SPECIES_ARCHALUDON,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Electro Shot special tank
         .moves = {MOVE_ELECTRO_SHOT, MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_BODY_PRESS},
         .ability = ABILITY_STAMINA,
@@ -12615,7 +12615,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCHALUDON,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Stamina Body Press wall
         .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_DRAGON_TAIL, MOVE_STEALTH_ROCK},
         .ability = ABILITY_STAMINA,
@@ -12626,7 +12626,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_ARCHALUDON,
-        .tags = FACTORY_DOUBLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // rain Electro Shot nuke
         .moves = {MOVE_ELECTRO_SHOT, MOVE_FLASH_CANNON, MOVE_DRACO_METEOR, MOVE_PROTECT},
         .ability = ABILITY_STAMINA,
@@ -12639,7 +12639,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Hydrapple ----
     {
         .species = SPECIES_HYDRAPPLE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator bulky special tank
         .moves = {MOVE_FICKLE_BEAM, MOVE_GIGA_DRAIN, MOVE_NASTY_PLOT, MOVE_RECOVER},
         .ability = ABILITY_REGENERATOR,
@@ -12650,7 +12650,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_HYDRAPPLE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
         .moves = {MOVE_FICKLE_BEAM, MOVE_DRACO_METEOR, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
         .ability = ABILITY_REGENERATOR,
@@ -12663,7 +12663,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Gouging Fire ----
     {
         .species = SPECIES_GOUGING_FIRE,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_HEAT_CRASH, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12674,7 +12674,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_GOUGING_FIRE,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Morning Sun setup
         .moves = {MOVE_DRAGON_DANCE, MOVE_FLARE_BLITZ, MOVE_DRAGON_CLAW, MOVE_MORNING_SUN},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12687,7 +12687,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Raging Bolt ----
     {
         .species = SPECIES_RAGING_BOLT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Calm Mind special sweeper
         .moves = {MOVE_CALM_MIND, MOVE_THUNDERCLAP, MOVE_DRACO_METEOR, MOVE_THUNDERBOLT},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12698,7 +12698,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_RAGING_BOLT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
         .moves = {MOVE_CALM_MIND, MOVE_THUNDERBOLT, MOVE_DRAGON_PULSE, MOVE_THUNDERCLAP},
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -12711,7 +12711,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Boulder ----
     {
         .species = SPECIES_IRON_BOULDER,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Mighty Cleave sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_MIGHTY_CLEAVE, MOVE_EARTHQUAKE, MOVE_ZEN_HEADBUTT},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12724,7 +12724,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Iron Crown ----
     {
         .species = SPECIES_IRON_CROWN,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Calm Mind special sweeper
         .moves = {MOVE_CALM_MIND, MOVE_TACHYON_CUTTER, MOVE_PSYCHIC_NOISE, MOVE_FOCUS_BLAST},
         .ability = ABILITY_QUARK_DRIVE,
@@ -12737,7 +12737,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Terapagos ----
     {
         .species = SPECIES_TERAPAGOS_TERASTAL,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Tera Shell Calm Mind tank
         .moves = {MOVE_CALM_MIND, MOVE_TERA_STARSTORM, MOVE_EARTH_POWER, MOVE_RECOVER},
         .ability = ABILITY_TERA_SHELL,
@@ -12748,7 +12748,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_TERAPAGOS_TERASTAL,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
         .moves = {MOVE_TERA_STARSTORM, MOVE_EARTH_POWER, MOVE_DARK_PULSE, MOVE_FLAMETHROWER},
         .ability = ABILITY_TERA_SHELL,
@@ -12761,7 +12761,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Pecharunt ----
     {
         .species = SPECIES_PECHARUNT,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Poison Puppeteer Nasty Plot tank (innate Levitate)
         .moves = {MOVE_NASTY_PLOT, MOVE_HEX, MOVE_SLUDGE_BOMB, MOVE_RECOVER},
         .ability = ABILITY_POISON_PUPPETEER,
@@ -12772,7 +12772,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_PECHARUNT,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE, // Malignant Chain status tank (innate Levitate)
         .moves = {MOVE_MALIGNANT_CHAIN, MOVE_HEX, MOVE_PARTING_SHOT, MOVE_RECOVER},
         .ability = ABILITY_POISON_PUPPETEER,
@@ -12785,7 +12785,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ---- Celebi ---- (innate Levitate — Ground immune, never give an Air Balloon)
     {
         .species = SPECIES_CELEBI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_EARTH_POWER},
         .ability = ABILITY_NATURAL_CURE,
@@ -12796,7 +12796,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CELEBI,
-        .tags = FACTORY_SINGLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
         .moves = {MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_RECOVER, MOVE_U_TURN},
         .ability = ABILITY_NATURAL_CURE,
@@ -12807,7 +12807,7 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     },
     {
         .species = SPECIES_CELEBI,
-        .tags = FACTORY_BOTH,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
         .moves = {MOVE_CALM_MIND, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_RECOVER},
         .ability = ABILITY_NATURAL_CURE,
@@ -12819,4 +12819,4 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
 
 };
 
-const u16 gFactoryCompetitiveMonsCount = ARRAY_COUNT(gFactoryCompetitiveMons);
+const u16 gFrontierExtendedMonsCount = ARRAY_COUNT(gFrontierExtendedMons);
