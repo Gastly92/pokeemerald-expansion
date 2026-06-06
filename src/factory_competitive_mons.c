@@ -56,12 +56,21 @@
 // mega & non-mega, with a deliberate mix of offensive and defensive/support sets).
 // B_FRONTIER_COMPETITIVE_MONS is TRUE — the list is large enough to draft a 6-mon
 // team (plus distinct opponents) in both singles and doubles from any subset.
-// Builds are appended generation by generation; saved rentals reference entries by
-// array INDEX, so only append at the end of a generation block — never reorder or
-// delete mid-list (that invalidates an in-progress rented team in an existing save).
+// ORDER: entries are sorted by National Pokédex number (see the Generation
+// banners, which delimit the dex ranges). All builds for one species are kept
+// contiguous, and alternate formes (megas share the base entry; Rotom/Therian/
+// Hisuian/Paradox/etc. are their own entries) sort with their base species' dex
+// number. Cross-gen evolutions therefore live at their own dex slot — e.g.
+// Magnezone/Electivire/Magmortar/Rhyperior/Tangrowth sit in the Generation IV
+// range (#462/466/467/464/465), NOT next to their Gen I pre-evolutions. Insert a
+// new species at its correct dex position. NOTE: saved rentals reference entries
+// by array INDEX, so any mid-list insertion/removal invalidates an in-progress
+// rented team in an existing save (appending past the end is the only save-safe
+// edit) — acceptable while iterating, but be aware when editing a shipped save.
 
 const struct TrainerMon gFactoryCompetitiveMons[] =
 {
+
     // ============================================================
     //                       Generation I
     // ============================================================
@@ -551,6 +560,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Arcanine-Hisui ----
+    {
+        .species = SPECIES_ARCANINE_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Rock Head Head Smash breaker
+        .moves = {MOVE_HEAD_SMASH, MOVE_FLARE_BLITZ, MOVE_EXTREME_SPEED, MOVE_CLOSE_COMBAT},
+        .ability = ABILITY_ROCK_HEAD,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ARCANINE_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Intimidate bulky pivot
+        .moves = {MOVE_FLARE_BLITZ, MOVE_ROCK_SLIDE, MOVE_EXTREME_SPEED, MOVE_MORNING_SUN},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
     // ---- Poliwrath ----
     {
         .species = SPECIES_POLIWRATH,
@@ -777,32 +810,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Magnezone (Gen IV evolution of Magneton; innate Levitate = Ground-immune) ----
-    {
-        .species = SPECIES_MAGNEZONE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Magnet Pull trapper
-        .moves = {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_TRI_ATTACK},
-        .ability = ABILITY_MAGNET_PULL,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-    {
-        // Innate Levitate already dodges Ground, so no Air Balloon needed — run a
-        // bulky Analytic special tank instead.
-        .species = SPECIES_MAGNEZONE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Analytic special tank
-        .moves = {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_DAZZLING_GLEAM},
-        .ability = ABILITY_ANALYTIC,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
     // ---- Dodrio ----
     {
         .species = SPECIES_DODRIO,
@@ -956,6 +963,31 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Exeggutor ----
+    {
+        .species = SPECIES_EXEGGUTOR,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun nuke
+        .moves = {MOVE_LEAF_STORM, MOVE_PSYCHIC, MOVE_SLEEP_POWDER, MOVE_GIGA_DRAIN},
+        .ability = ABILITY_CHLOROPHYLL,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_EXEGGUTOR,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker
+        .moves = {MOVE_TRICK_ROOM, MOVE_LEAF_STORM, MOVE_PSYCHIC, MOVE_SLUDGE_BOMB},
+        .ability = ABILITY_HARVEST,
+        .nature = NATURE_QUIET,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
     // ---- Marowak ----
     {
         .species = SPECIES_MAROWAK,
@@ -1053,30 +1085,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Rhyperior (Gen IV evolution of Rhydon) ----
-    {
-        .species = SPECIES_RHYPERIOR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky Lightning Rod rocker
-        .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_STEALTH_ROCK, MOVE_ICE_PUNCH},
-        .ability = ABILITY_LIGHTNING_ROD,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
-        .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_RHYPERIOR,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Solid Rock + WP sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_MEGAHORN},
-        .ability = ABILITY_SOLID_ROCK,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
-        .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
-    },
-
     // ---- Chansey ----
     {
         .species = SPECIES_CHANSEY,
@@ -1101,30 +1109,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Tangrowth (Gen IV evolution of Tangela) ----
-    {
-        .species = SPECIES_TANGROWTH,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator wall
-        .moves = {MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_LEECH_SEED, MOVE_KNOCK_OFF},
-        .ability = ABILITY_REGENERATOR,
-        .nature = NATURE_BOLD,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_TANGROWTH,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Regenerator physical tank
-        .moves = {MOVE_POWER_WHIP, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE},
-        .ability = ABILITY_REGENERATOR,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-
     // ---- Kangaskhan ----
     {
         .species = SPECIES_KANGASKHAN,
@@ -1146,31 +1130,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Exeggutor ----
-    {
-        .species = SPECIES_EXEGGUTOR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun nuke
-        .moves = {MOVE_LEAF_STORM, MOVE_PSYCHIC, MOVE_SLEEP_POWDER, MOVE_GIGA_DRAIN},
-        .ability = ABILITY_CHLOROPHYLL,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_EXEGGUTOR,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker
-        .moves = {MOVE_TRICK_ROOM, MOVE_LEAF_STORM, MOVE_PSYCHIC, MOVE_SLUDGE_BOMB},
-        .ability = ABILITY_HARVEST,
-        .nature = NATURE_QUIET,
-        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
-        .teraType = TYPE_GRASS,
         .ball = BALL_POKE,
     },
 
@@ -1230,54 +1189,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Electivire (Gen IV evolution of Electabuzz) ----
-    {
-        .species = SPECIES_ELECTIVIRE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Motor Drive mixed sweeper
-        .moves = {MOVE_WILD_CHARGE, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE, MOVE_CROSS_CHOP},
-        .ability = ABILITY_MOTOR_DRIVE,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ELECTIVIRE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // bulky Vital Spirit pivot
-        .moves = {MOVE_WILD_CHARGE, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE, MOVE_VOLT_SWITCH},
-        .ability = ABILITY_VITAL_SPIRIT,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(112, 252, 0, 144, 0, 0),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Magmortar (Gen IV evolution of Magmar) ----
-    {
-        .species = SPECIES_MAGMORTAR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Flash Fire special breaker
-        .moves = {MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT, MOVE_OVERHEAT},
-        .ability = ABILITY_FLASH_FIRE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_MAGMORTAR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Vital Spirit revenge killer
-        .moves = {MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT, MOVE_PSYCHIC},
-        .ability = ABILITY_VITAL_SPIRIT,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FIRE,
         .ball = BALL_POKE,
     },
 
@@ -1767,6 +1678,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Typhlosion-Hisui ----
+    {
+        .species = SPECIES_TYPHLOSION_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Frisk Ghost/Fire breaker
+        .moves = {MOVE_SHADOW_BALL, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_INFERNAL_PARADE},
+        .ability = ABILITY_FRISK,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TYPHLOSION_HISUI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot Hex sweeper
+        .moves = {MOVE_NASTY_PLOT, MOVE_HEX, MOVE_FIRE_BLAST, MOVE_WILL_O_WISP},
+        .ability = ABILITY_FRISK,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GHOST,
         .ball = BALL_POKE,
     },
 
@@ -2696,52 +2631,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Tyranitar ----
-    {
-        .species = SPECIES_TYRANITAR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_TYRANITARITE, // Mega Tyranitar (Sand Stream) dragon dance sweeper
-        .moves = {MOVE_DRAGON_DANCE, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
-        .ability = ABILITY_SAND_STREAM,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_TYRANITAR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sand Stream band breaker
-        .moves = {MOVE_STONE_EDGE, MOVE_CRUNCH, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
-        .ability = ABILITY_SAND_STREAM,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_TYRANITAR,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // sand tank with hazards
-        .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_SAND_STREAM,
-        .nature = NATURE_CAREFUL,
-        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_TYRANITAR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank in sand
-        .moves = {MOVE_STONE_EDGE, MOVE_CRUNCH, MOVE_FIRE_BLAST, MOVE_EARTHQUAKE},
-        .ability = ABILITY_SAND_STREAM,
-        .nature = NATURE_SASSY,
-        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
-        .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
-    },
-
     // ---- Raikou ----
     {
         .species = SPECIES_RAIKOU,
@@ -2847,6 +2736,52 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Tyranitar ----
+    {
+        .species = SPECIES_TYRANITAR,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_TYRANITARITE, // Mega Tyranitar (Sand Stream) dragon dance sweeper
+        .moves = {MOVE_DRAGON_DANCE, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TYRANITAR,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Sand Stream band breaker
+        .moves = {MOVE_STONE_EDGE, MOVE_CRUNCH, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TYRANITAR,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // sand tank with hazards
+        .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_THUNDER_WAVE},
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE_CAREFUL,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TYRANITAR,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // special tank in sand
+        .moves = {MOVE_STONE_EDGE, MOVE_CRUNCH, MOVE_FIRE_BLAST, MOVE_EARTHQUAKE},
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE_SASSY,
+        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+
     // ---- Lugia ----
     {
         .species = SPECIES_LUGIA,
@@ -2892,41 +2827,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_CAREFUL,
         .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Celebi ---- (innate Levitate — Ground immune, never give an Air Balloon)
-    {
-        .species = SPECIES_CELEBI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
-        .moves = {MOVE_NASTY_PLOT, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_EARTH_POWER},
-        .ability = ABILITY_NATURAL_CURE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_CELEBI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
-        .moves = {MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_RECOVER, MOVE_U_TURN},
-        .ability = ABILITY_NATURAL_CURE,
-        .nature = NATURE_BOLD,
-        .ev = TRAINER_PARTY_EVS(252, 0, 240, 0, 0, 16),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_CELEBI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
-        .moves = {MOVE_CALM_MIND, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_RECOVER},
-        .ability = ABILITY_NATURAL_CURE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 60, 196, 0),
-        .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
 
@@ -4590,10 +4490,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
     // ============================================================
     //                       Generation IV
     // ============================================================
-    // NOTE: Magnezone, Electivire, Magmortar, Rhyperior and Tangrowth are the
-    // Gen IV evolutions of Gen I mons and live in the Generation I section above
-    // (in place of their pre-evolutions), so they are intentionally not repeated
-    // here.
 
     // ---- Torterra ----
     {
@@ -5233,6 +5129,32 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Magnezone (Gen IV evolution of Magneton; innate Levitate = Ground-immune) ----
+    {
+        .species = SPECIES_MAGNEZONE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Magnet Pull trapper
+        .moves = {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_TRI_ATTACK},
+        .ability = ABILITY_MAGNET_PULL,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        // Innate Levitate already dodges Ground, so no Air Balloon needed — run a
+        // bulky Analytic special tank instead.
+        .species = SPECIES_MAGNEZONE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // Analytic special tank
+        .moves = {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_DAZZLING_GLEAM},
+        .ability = ABILITY_ANALYTIC,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Lickilicky ----
     {
         .species = SPECIES_LICKILICKY,
@@ -5255,6 +5177,102 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 4, 252, 0, 0, 0),
         .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Rhyperior (Gen IV evolution of Rhydon) ----
+    {
+        .species = SPECIES_RHYPERIOR,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // bulky Lightning Rod rocker
+        .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_STEALTH_ROCK, MOVE_ICE_PUNCH},
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_RHYPERIOR,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_WEAKNESS_POLICY, // Solid Rock + WP sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_MEGAHORN},
+        .ability = ABILITY_SOLID_ROCK,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Tangrowth (Gen IV evolution of Tangela) ----
+    {
+        .species = SPECIES_TANGROWTH,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Regenerator wall
+        .moves = {MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_LEECH_SEED, MOVE_KNOCK_OFF},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TANGROWTH,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // Regenerator physical tank
+        .moves = {MOVE_POWER_WHIP, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Electivire (Gen IV evolution of Electabuzz) ----
+    {
+        .species = SPECIES_ELECTIVIRE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Motor Drive mixed sweeper
+        .moves = {MOVE_WILD_CHARGE, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE, MOVE_CROSS_CHOP},
+        .ability = ABILITY_MOTOR_DRIVE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ELECTIVIRE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // bulky Vital Spirit pivot
+        .moves = {MOVE_WILD_CHARGE, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE, MOVE_VOLT_SWITCH},
+        .ability = ABILITY_VITAL_SPIRIT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(112, 252, 0, 144, 0, 0),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Magmortar (Gen IV evolution of Magmar) ----
+    {
+        .species = SPECIES_MAGMORTAR,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Flash Fire special breaker
+        .moves = {MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT, MOVE_OVERHEAT},
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MAGMORTAR,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF, // Vital Spirit revenge killer
+        .moves = {MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT, MOVE_PSYCHIC},
+        .ability = ABILITY_VITAL_SPIRIT,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FIRE,
         .ball = BALL_POKE,
     },
 
@@ -5886,6 +5904,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Samurott-Hisui ----
+    {
+        .species = SPECIES_SAMUROTT_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_FOCUS_SASH, // Sharpness Ceaseless Edge lead
+        .moves = {MOVE_CEASELESS_EDGE, MOVE_AQUA_JET, MOVE_SUCKER_PUNCH, MOVE_KNOCK_OFF},
+        .ability = ABILITY_SHARPNESS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_SAMUROTT_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Sharpness Swords Dance sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_CEASELESS_EDGE, MOVE_LIQUIDATION, MOVE_SUCKER_PUNCH},
+        .ability = ABILITY_SHARPNESS,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
     // ---- Stoutland ----
     {
         .species = SPECIES_STOUTLAND,
@@ -5907,6 +5949,31 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Musharna (innate Levitate per roster rule) ----
+    {
+        .species = SPECIES_MUSHARNA,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
+        .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_MOONLIGHT, MOVE_DAZZLING_GLEAM},
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MUSHARNA,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB, // Telepathy Trick Room setter
+        .moves = {MOVE_TRICK_ROOM, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_HELPING_HAND},
+        .ability = ABILITY_TELEPATHY,
+        .nature = NATURE_QUIET,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .teraType = TYPE_PSYCHIC,
         .ball = BALL_POKE,
     },
 
@@ -6006,6 +6073,19 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Throh ----
+    {
+        .species = SPECIES_THROH,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Guts Bulk Up tank
+        .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_KNOCK_OFF, MOVE_REST},
+        .ability = ABILITY_GUTS,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 4, 252, 0, 0, 0),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+
     // ---- Sawk ----
     {
         .species = SPECIES_SAWK,
@@ -6026,19 +6106,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ability = ABILITY_STURDY,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Throh ----
-    {
-        .species = SPECIES_THROH,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Guts Bulk Up tank
-        .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_KNOCK_OFF, MOVE_REST},
-        .ability = ABILITY_GUTS,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 4, 252, 0, 0, 0),
         .teraType = TYPE_FIGHTING,
         .ball = BALL_POKE,
     },
@@ -6135,6 +6202,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ability = ABILITY_CHLOROPHYLL,
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Lilligant-Hisui ----
+    {
+        .species = SPECIES_LILLIGANT_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Chlorophyll Victory Dance sweeper
+        .moves = {MOVE_VICTORY_DANCE, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_TRIPLE_AXEL},
+        .ability = ABILITY_CHLOROPHYLL,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_LILLIGANT_HISUI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_FOCUS_SASH, // sash setup sweeper
+        .moves = {MOVE_VICTORY_DANCE, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_ICE_SPINNER},
+        .ability = ABILITY_CHLOROPHYLL,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GRASS,
         .ball = BALL_POKE,
     },
@@ -6393,6 +6484,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Zoroark-Hisui ----
+    {
+        .species = SPECIES_ZOROARK_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Illusion Normal/Ghost breaker
+        .moves = {MOVE_SHADOW_BALL, MOVE_HYPER_VOICE, MOVE_FLAMETHROWER, MOVE_U_TURN},
+        .ability = ABILITY_ILLUSION,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ZOROARK_HISUI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
+        .moves = {MOVE_NASTY_PLOT, MOVE_SHADOW_BALL, MOVE_HYPER_VOICE, MOVE_FOCUS_BLAST},
+        .ability = ABILITY_ILLUSION,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+
     // ---- Cinccino ----
     {
         .species = SPECIES_CINCCINO,
@@ -6450,31 +6565,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ability = ABILITY_MAGIC_GUARD,
         .nature = NATURE_QUIET,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
-        .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Musharna (innate Levitate per roster rule) ----
-    {
-        .species = SPECIES_MUSHARNA,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
-        .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_MOONLIGHT, MOVE_DAZZLING_GLEAM},
-        .ability = ABILITY_SYNCHRONIZE,
-        .nature = NATURE_BOLD,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
-        .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_MUSHARNA,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_MENTAL_HERB, // Telepathy Trick Room setter
-        .moves = {MOVE_TRICK_ROOM, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_HELPING_HAND},
-        .ability = ABILITY_TELEPATHY,
-        .nature = NATURE_QUIET,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_PSYCHIC,
         .ball = BALL_POKE,
@@ -6949,6 +7039,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Braviary-Hisui ----
+    {
+        .species = SPECIES_BRAVIARY_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Tinted Lens special attacker
+        .moves = {MOVE_HURRICANE, MOVE_PSYCHIC, MOVE_HEAT_WAVE, MOVE_U_TURN},
+        .ability = ABILITY_TINTED_LENS,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_BRAVIARY_HISUI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LIFE_ORB, // Calm Mind sweeper
+        .moves = {MOVE_CALM_MIND, MOVE_HURRICANE, MOVE_PSYCHIC, MOVE_SUBSTITUTE},
+        .ability = ABILITY_TINTED_LENS,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+
     // ---- Mandibuzz ----
     {
         .species = SPECIES_MANDIBUZZ,
@@ -6973,6 +7087,19 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Heatmor ----
+    {
+        .species = SPECIES_HEATMOR,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // White Smoke mixed attacker
+        .moves = {MOVE_FIRE_BLAST, MOVE_GIGA_DRAIN, MOVE_SUCKER_PUNCH, MOVE_FOCUS_BLAST},
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE_RASH,
+        .ev = TRAINER_PARTY_EVS(0, 4, 0, 252, 252, 0),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
     // ---- Durant ----
     {
         .species = SPECIES_DURANT,
@@ -6994,19 +7121,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Heatmor ----
-    {
-        .species = SPECIES_HEATMOR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // White Smoke mixed attacker
-        .moves = {MOVE_FIRE_BLAST, MOVE_GIGA_DRAIN, MOVE_SUCKER_PUNCH, MOVE_FOCUS_BLAST},
-        .ability = ABILITY_FLASH_FIRE,
-        .nature = NATURE_RASH,
-        .ev = TRAINER_PARTY_EVS(0, 4, 0, 252, 252, 0),
-        .teraType = TYPE_FIRE,
         .ball = BALL_POKE,
     },
 
@@ -7215,43 +7329,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Landorus ----
-    {
-        .species = SPECIES_LANDORUS,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sheer Force special nuke
-        .moves = {MOVE_EARTH_POWER, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST, MOVE_PSYCHIC},
-        .ability = ABILITY_SHEER_FORCE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Landorus-Therian ----
-    {
-        .species = SPECIES_LANDORUS_THERIAN,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Intimidate revenge killer
-        .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_U_TURN, MOVE_KNOCK_OFF},
-        .ability = ABILITY_INTIMIDATE,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_LANDORUS_THERIAN,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Intimidate bulky hazard pivot
-        .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_U_TURN, MOVE_TOXIC},
-        .ability = ABILITY_INTIMIDATE,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 216, 0, 0, 40),
-        .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
-    },
-
     // ---- Reshiram ----
     {
         .species = SPECIES_RESHIRAM,
@@ -7297,6 +7374,43 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Landorus ----
+    {
+        .species = SPECIES_LANDORUS,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Sheer Force special nuke
+        .moves = {MOVE_EARTH_POWER, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST, MOVE_PSYCHIC},
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Landorus-Therian ----
+    {
+        .species = SPECIES_LANDORUS_THERIAN,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF, // Intimidate revenge killer
+        .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_U_TURN, MOVE_KNOCK_OFF},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_LANDORUS_THERIAN,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET, // Intimidate bulky hazard pivot
+        .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_U_TURN, MOVE_TOXIC},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 216, 0, 0, 40),
+        .teraType = TYPE_GROUND,
         .ball = BALL_POKE,
     },
 
@@ -8129,6 +8243,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Goodra-Hisui ----
+    {
+        .species = SPECIES_GOODRA_HISUI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_ASSAULT_VEST, // Sap Sipper special tank
+        .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_FIRE_BLAST, MOVE_EARTH_POWER},
+        .ability = ABILITY_SAP_SIPPER,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GOODRA_HISUI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Shell Armor bulky setup
+        .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_DRACO_METEOR, MOVE_RECOVER},
+        .ability = ABILITY_SHELL_ARMOR,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Klefki (innate Levitate; no Air Balloon) ----
     {
         .species = SPECIES_KLEFKI,
@@ -8226,6 +8364,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .teraType = TYPE_ICE,
         .ball = BALL_POKE,
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+    },
+
+    // ---- Avalugg-Hisui ----
+    {
+        .species = SPECIES_AVALUGG_HISUI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Strong Jaw bulky setup
+        .moves = {MOVE_RECOVER, MOVE_ICICLE_CRASH, MOVE_BODY_PRESS, MOVE_RAPID_SPIN},
+        .ability = ABILITY_STRONG_JAW,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_AVALUGG_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Strong Jaw band attacker
+        .moves = {MOVE_ICE_FANG, MOVE_CRUNCH, MOVE_STONE_EDGE, MOVE_BODY_PRESS},
+        .ability = ABILITY_STRONG_JAW,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
     },
 
     // ---- Noivern ----
@@ -8468,6 +8630,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Decidueye-Hisui ----
+    {
+        .species = SPECIES_DECIDUEYE_HISUI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Scrappy Triple Arrows attacker
+        .moves = {MOVE_TRIPLE_ARROWS, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_SUCKER_PUNCH},
+        .ability = ABILITY_SCRAPPY,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DECIDUEYE_HISUI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Swords Dance bulky setup
+        .moves = {MOVE_SWORDS_DANCE, MOVE_TRIPLE_ARROWS, MOVE_LEAF_BLADE, MOVE_ROOST},
+        .ability = ABILITY_OVERGROW,
+        .nature = NATURE_CAREFUL,
+        .ev = TRAINER_PARTY_EVS(248, 16, 0, 0, 0, 244),
+        .teraType = TYPE_GRASS,
         .ball = BALL_POKE,
     },
 
@@ -9980,194 +10166,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Grimmsnarl ----
-    {
-        .species = SPECIES_GRIMMSNARL,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Prankster dual screens lead
-        .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_SPIRIT_BREAK, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_PRANKSTER,
-        .nature = NATURE_CAREFUL,
-        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GRIMMSNARL,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Bulk Up physical sweeper
-        .moves = {MOVE_BULK_UP, MOVE_SPIRIT_BREAK, MOVE_SUCKER_PUNCH, MOVE_DRAIN_PUNCH},
-        .ability = ABILITY_PRANKSTER,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GRIMMSNARL,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_MENTAL_HERB, // Prankster support / Taunt-proof
-        .moves = {MOVE_SPIRIT_BREAK, MOVE_THUNDER_WAVE, MOVE_TAUNT, MOVE_PARTING_SHOT},
-        .ability = ABILITY_PRANKSTER,
-        .nature = NATURE_CAREFUL,
-        .ev = TRAINER_PARTY_EVS(252, 0, 100, 0, 0, 156),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Hatterene ---- (innate Magic Bounce)
-    {
-        .species = SPECIES_HATTERENE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Magic Bounce Calm Mind wall
-        .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_DAZZLING_GLEAM, MOVE_DRAIN_PUNCH},
-        .ability = ABILITY_MAGIC_BOUNCE,
-        .nature = NATURE_BOLD,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
-        .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_HATTERENE,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // Psychic Terrain breaker
-        .moves = {MOVE_EXPANDING_FORCE, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE, MOVE_PROTECT},
-        .ability = ABILITY_MAGIC_BOUNCE,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
-        .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_HATTERENE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
-        .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE, MOVE_POWER_WHIP},
-        .ability = ABILITY_MAGIC_BOUNCE,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Toxtricity ----
-    {
-        .species = SPECIES_TOXTRICITY,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_THROAT_SPRAY, // Punk Rock Boomburst nuke (Amped)
-        .moves = {MOVE_BOOMBURST, MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH},
-        .ability = ABILITY_PUNK_ROCK,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_TOXTRICITY,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Punk Rock special breaker
-        .moves = {MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH, MOVE_FOCUS_BLAST},
-        .ability = ABILITY_PUNK_ROCK,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_TOXTRICITY_LOW_KEY,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Low Key revenge killer
-        .moves = {MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH, MOVE_BOOMBURST},
-        .ability = ABILITY_PUNK_ROCK,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Dragapult ---- (innate Levitate)
-    {
-        .species = SPECIES_DRAGAPULT,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Draco/Shadow Ball breaker
-        .moves = {MOVE_DRACO_METEOR, MOVE_SHADOW_BALL, MOVE_FLAMETHROWER, MOVE_U_TURN},
-        .ability = ABILITY_INFILTRATOR,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_DRAGAPULT,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Dragon Darts band breaker
-        .moves = {MOVE_DRAGON_DARTS, MOVE_PHANTOM_FORCE, MOVE_U_TURN, MOVE_SUCKER_PUNCH},
-        .ability = ABILITY_CLEAR_BODY,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_DRAGAPULT,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Dragon Dance physical sweeper
-        .moves = {MOVE_DRAGON_DANCE, MOVE_DRAGON_DARTS, MOVE_PHANTOM_FORCE, MOVE_FIRE_BLAST},
-        .ability = ABILITY_INFILTRATOR,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Duraludon ----
-    {
-        .species = SPECIES_DURALUDON,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Light Metal special breaker
-        .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT, MOVE_BODY_PRESS},
-        .ability = ABILITY_LIGHT_METAL,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_DURALUDON,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Stealth Rock bulky setup
-        .moves = {MOVE_STEALTH_ROCK, MOVE_FLASH_CANNON, MOVE_DRACO_METEOR, MOVE_BODY_PRESS},
-        .ability = ABILITY_STALWART,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Copperajah ----
-    {
-        .species = SPECIES_COPPERAJAH,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sheer Force Heavy Slam breaker
-        .moves = {MOVE_HEAVY_SLAM, MOVE_HIGH_HORSEPOWER, MOVE_PLAY_ROUGH, MOVE_ROCK_SLIDE},
-        .ability = ABILITY_SHEER_FORCE,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_COPPERAJAH,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky hazard setter
-        .moves = {MOVE_STEALTH_ROCK, MOVE_HEAVY_SLAM, MOVE_HIGH_HORSEPOWER, MOVE_WHIRLWIND},
-        .ability = ABILITY_HEAVY_METAL,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
     // ---- Coalossal ----
     {
         .species = SPECIES_COALOSSAL,
@@ -10189,6 +10187,54 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_QUIET,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
         .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Flapple ----
+    {
+        .species = SPECIES_FLAPPLE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Hustle physical attacker
+        .moves = {MOVE_GRAV_APPLE, MOVE_DRAGON_RUSH, MOVE_U_TURN, MOVE_OUTRAGE},
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_FLAPPLE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .moves = {MOVE_APPLE_ACID, MOVE_DRACO_METEOR, MOVE_FIRE_BLAST, MOVE_U_TURN},
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE_NAIVE,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Appletun ----
+    {
+        .species = SPECIES_APPLETUN,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Thick Fat bulky special wall
+        .moves = {MOVE_APPLE_ACID, MOVE_DRAGON_PULSE, MOVE_RECOVER, MOVE_LEECH_SEED},
+        .ability = ABILITY_THICK_FAT,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(248, 0, 8, 0, 0, 252),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_APPLETUN,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .moves = {MOVE_APPLE_ACID, MOVE_DRACO_METEOR, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
+        .ability = ABILITY_THICK_FAT,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_GRASS,
         .ball = BALL_POKE,
     },
 
@@ -10240,6 +10286,65 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Toxtricity ----
+    {
+        .species = SPECIES_TOXTRICITY,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_THROAT_SPRAY, // Punk Rock Boomburst nuke (Amped)
+        .moves = {MOVE_BOOMBURST, MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH},
+        .ability = ABILITY_PUNK_ROCK,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TOXTRICITY,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Punk Rock special breaker
+        .moves = {MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH, MOVE_FOCUS_BLAST},
+        .ability = ABILITY_PUNK_ROCK,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TOXTRICITY_LOW_KEY,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF, // Low Key revenge killer
+        .moves = {MOVE_OVERDRIVE, MOVE_SLUDGE_WAVE, MOVE_VOLT_SWITCH, MOVE_BOOMBURST},
+        .ability = ABILITY_PUNK_ROCK,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Centiskorch ----
+    {
+        .species = SPECIES_CENTISKORCH,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Flash Fire bulky attacker
+        .moves = {MOVE_FIERY_DANCE, MOVE_OVERHEAT, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CENTISKORCH,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_THROAT_SPRAY, // Fiery Dance / Coil setup
+        .moves = {MOVE_COIL, MOVE_FLARE_BLITZ, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
+        .ability = ABILITY_WHITE_SMOKE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
     // ---- Polteageist ---- (innate Levitate)
     {
         .species = SPECIES_POLTEAGEIST,
@@ -10264,27 +10369,73 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Cursola ---- (innate Perish Body)
+    // ---- Hatterene ---- (innate Magic Bounce)
     {
-        .species = SPECIES_CURSOLA,
+        .species = SPECIES_HATTERENE,
         .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Perish Body bulky special attacker
-        .moves = {MOVE_CALM_MIND, MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_STRENGTH_SAP},
-        .ability = ABILITY_PERISH_BODY,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_GHOST,
+        .heldItem = ITEM_LEFTOVERS, // Magic Bounce Calm Mind wall
+        .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_DAZZLING_GLEAM, MOVE_DRAIN_PUNCH},
+        .ability = ABILITY_MAGIC_BOUNCE,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_PSYCHIC,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_CURSOLA,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // glass cannon
-        .moves = {MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_EARTH_POWER, MOVE_GIGA_DRAIN},
-        .ability = ABILITY_WEAK_ARMOR,
+        .species = SPECIES_HATTERENE,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_LIFE_ORB, // Psychic Terrain breaker
+        .moves = {MOVE_EXPANDING_FORCE, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE, MOVE_PROTECT},
+        .ability = ABILITY_MAGIC_BOUNCE,
         .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GHOST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_HATTERENE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE, MOVE_POWER_WHIP},
+        .ability = ABILITY_MAGIC_BOUNCE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Grimmsnarl ----
+    {
+        .species = SPECIES_GRIMMSNARL,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY, // Prankster dual screens lead
+        .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_SPIRIT_BREAK, MOVE_THUNDER_WAVE},
+        .ability = ABILITY_PRANKSTER,
+        .nature = NATURE_CAREFUL,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GRIMMSNARL,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Bulk Up physical sweeper
+        .moves = {MOVE_BULK_UP, MOVE_SPIRIT_BREAK, MOVE_SUCKER_PUNCH, MOVE_DRAIN_PUNCH},
+        .ability = ABILITY_PRANKSTER,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GRIMMSNARL,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB, // Prankster support / Taunt-proof
+        .moves = {MOVE_SPIRIT_BREAK, MOVE_THUNDER_WAVE, MOVE_TAUNT, MOVE_PARTING_SHOT},
+        .ability = ABILITY_PRANKSTER,
+        .nature = NATURE_CAREFUL,
+        .ev = TRAINER_PARTY_EVS(252, 0, 100, 0, 0, 156),
+        .teraType = TYPE_DARK,
         .ball = BALL_POKE,
     },
 
@@ -10336,6 +10487,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Cursola ---- (innate Perish Body)
+    {
+        .species = SPECIES_CURSOLA,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Perish Body bulky special attacker
+        .moves = {MOVE_CALM_MIND, MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_STRENGTH_SAP},
+        .ability = ABILITY_PERISH_BODY,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CURSOLA,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // glass cannon
+        .moves = {MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_EARTH_POWER, MOVE_GIGA_DRAIN},
+        .ability = ABILITY_WEAK_ARMOR,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+
     // ---- Sirfetch'd ----
     {
         .species = SPECIES_SIRFETCHD,
@@ -10357,6 +10532,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
         .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Runerigus ---- (innate Levitate)
+    {
+        .species = SPECIES_RUNERIGUS,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET, // Wandering Spirit bulky hazards
+        .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_BODY_PRESS, MOVE_WILL_O_WISP},
+        .ability = ABILITY_WANDERING_SPIRIT,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_RUNERIGUS,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Iron Defense Body Press wall
+        .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_EARTHQUAKE, MOVE_POLTERGEIST},
+        .ability = ABILITY_WANDERING_SPIRIT,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_GHOST,
         .ball = BALL_POKE,
     },
 
@@ -10408,195 +10607,27 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Centiskorch ----
+    // ---- Eiscue ----
     {
-        .species = SPECIES_CENTISKORCH,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Flash Fire bulky attacker
-        .moves = {MOVE_FIERY_DANCE, MOVE_OVERHEAT, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
-        .ability = ABILITY_FLASH_FIRE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_CENTISKORCH,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_THROAT_SPRAY, // Fiery Dance / Coil setup
-        .moves = {MOVE_COIL, MOVE_FLARE_BLITZ, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
-        .ability = ABILITY_WHITE_SMOKE,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Appletun ----
-    {
-        .species = SPECIES_APPLETUN,
+        .species = SPECIES_EISCUE,
         .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Thick Fat bulky special wall
-        .moves = {MOVE_APPLE_ACID, MOVE_DRAGON_PULSE, MOVE_RECOVER, MOVE_LEECH_SEED},
-        .ability = ABILITY_THICK_FAT,
-        .nature = NATURE_CALM,
-        .ev = TRAINER_PARTY_EVS(248, 0, 8, 0, 0, 252),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_APPLETUN,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
-        .moves = {MOVE_APPLE_ACID, MOVE_DRACO_METEOR, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
-        .ability = ABILITY_THICK_FAT,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Flapple ----
-    {
-        .species = SPECIES_FLAPPLE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Hustle physical attacker
-        .moves = {MOVE_GRAV_APPLE, MOVE_DRAGON_RUSH, MOVE_U_TURN, MOVE_OUTRAGE},
-        .ability = ABILITY_HUSTLE,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_FLAPPLE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
-        .moves = {MOVE_APPLE_ACID, MOVE_DRACO_METEOR, MOVE_FIRE_BLAST, MOVE_U_TURN},
-        .ability = ABILITY_HUSTLE,
-        .nature = NATURE_NAIVE,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Dracovish ----
-    {
-        .species = SPECIES_DRACOVISH,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Strong Jaw Fishious Rend nuke
-        .moves = {MOVE_FISHIOUS_REND, MOVE_CRUNCH, MOVE_PSYCHIC_FANGS, MOVE_ICE_FANG},
-        .ability = ABILITY_STRONG_JAW,
+        .heldItem = ITEM_LEFTOVERS, // Ice Face Belly Drum sweeper
+        .moves = {MOVE_BELLY_DRUM, MOVE_LIQUIDATION, MOVE_ICICLE_CRASH, MOVE_ZEN_HEADBUTT},
+        .ability = ABILITY_ICE_FACE,
         .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_WATER,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_ICE,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_DRACOVISH,
+        .species = SPECIES_EISCUE,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sand Rush band breaker
-        .moves = {MOVE_FISHIOUS_REND, MOVE_CRUNCH, MOVE_EARTHQUAKE, MOVE_ICE_FANG},
-        .ability = ABILITY_SAND_RUSH,
+        .heldItem = ITEM_CHOICE_BAND, // Ice Face band attacker
+        .moves = {MOVE_ICICLE_CRASH, MOVE_LIQUIDATION, MOVE_HEAD_SMASH, MOVE_ZEN_HEADBUTT},
+        .ability = ABILITY_ICE_FACE,
         .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Dracozolt ----
-    {
-        .species = SPECIES_DRACOZOLT,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Hustle Bolt Beak nuke
-        .moves = {MOVE_BOLT_BEAK, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE, MOVE_FIRE_PUNCH},
-        .ability = ABILITY_HUSTLE,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_DRACOZOLT,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sand Rush sweeper
-        .moves = {MOVE_BOLT_BEAK, MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE},
-        .ability = ABILITY_SAND_RUSH,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Arctovish ----
-    {
-        .species = SPECIES_ARCTOVISH,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND, // Slush Rush Fishious Rend
-        .moves = {MOVE_FISHIOUS_REND, MOVE_ICICLE_CRASH, MOVE_PSYCHIC_FANGS, MOVE_CRUNCH},
-        .ability = ABILITY_SLUSH_RUSH,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ARCTOVISH,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky pivot
-        .moves = {MOVE_FREEZE_DRY, MOVE_FLIP_TURN, MOVE_BODY_PRESS, MOVE_RECOVER},
-        .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE_RELAXED,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Arctozolt ----
-    {
-        .species = SPECIES_ARCTOZOLT,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Slush Rush Bolt Beak nuke
-        .moves = {MOVE_BOLT_BEAK, MOVE_ICICLE_CRASH, MOVE_LOW_KICK, MOVE_BLIZZARD},
-        .ability = ABILITY_SLUSH_RUSH,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ARCTOZOLT,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Static special breaker
-        .moves = {MOVE_BOLT_BEAK, MOVE_FREEZE_DRY, MOVE_THUNDERBOLT, MOVE_FLASH_CANNON},
-        .ability = ABILITY_STATIC,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Runerigus ---- (innate Levitate)
-    {
-        .species = SPECIES_RUNERIGUS,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Wandering Spirit bulky hazards
-        .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_BODY_PRESS, MOVE_WILL_O_WISP},
-        .ability = ABILITY_WANDERING_SPIRIT,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
-        .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_RUNERIGUS,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Iron Defense Body Press wall
-        .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_EARTHQUAKE, MOVE_POLTERGEIST},
-        .ability = ABILITY_WANDERING_SPIRIT,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
-        .teraType = TYPE_GHOST,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_ICE,
         .ball = BALL_POKE,
     },
 
@@ -10624,30 +10655,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Eiscue ----
-    {
-        .species = SPECIES_EISCUE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Ice Face Belly Drum sweeper
-        .moves = {MOVE_BELLY_DRUM, MOVE_LIQUIDATION, MOVE_ICICLE_CRASH, MOVE_ZEN_HEADBUTT},
-        .ability = ABILITY_ICE_FACE,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
-        .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_EISCUE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Ice Face band attacker
-        .moves = {MOVE_ICICLE_CRASH, MOVE_LIQUIDATION, MOVE_HEAD_SMASH, MOVE_ZEN_HEADBUTT},
-        .ability = ABILITY_ICE_FACE,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
-        .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
-    },
-
     // ---- Morpeko ----
     {
         .species = SPECIES_MORPEKO,
@@ -10661,27 +10668,182 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Eternatus ----
+    // ---- Copperajah ----
     {
-        .species = SPECIES_ETERNATUS,
+        .species = SPECIES_COPPERAJAH,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Pressure special breaker
-        .moves = {MOVE_DYNAMAX_CANNON, MOVE_SLUDGE_WAVE, MOVE_FLAMETHROWER, MOVE_DRACO_METEOR},
-        .ability = ABILITY_PRESSURE,
+        .heldItem = ITEM_CHOICE_BAND, // Sheer Force Heavy Slam breaker
+        .moves = {MOVE_HEAVY_SLAM, MOVE_HIGH_HORSEPOWER, MOVE_PLAY_ROUGH, MOVE_ROCK_SLIDE},
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_COPPERAJAH,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky hazard setter
+        .moves = {MOVE_STEALTH_ROCK, MOVE_HEAVY_SLAM, MOVE_HIGH_HORSEPOWER, MOVE_WHIRLWIND},
+        .ability = ABILITY_HEAVY_METAL,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Dracozolt ----
+    {
+        .species = SPECIES_DRACOZOLT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Hustle Bolt Beak nuke
+        .moves = {MOVE_BOLT_BEAK, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE, MOVE_FIRE_PUNCH},
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DRACOZOLT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Sand Rush sweeper
+        .moves = {MOVE_BOLT_BEAK, MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE},
+        .ability = ABILITY_SAND_RUSH,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Arctozolt ----
+    {
+        .species = SPECIES_ARCTOZOLT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Slush Rush Bolt Beak nuke
+        .moves = {MOVE_BOLT_BEAK, MOVE_ICICLE_CRASH, MOVE_LOW_KICK, MOVE_BLIZZARD},
+        .ability = ABILITY_SLUSH_RUSH,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ARCTOZOLT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Static special breaker
+        .moves = {MOVE_BOLT_BEAK, MOVE_FREEZE_DRY, MOVE_THUNDERBOLT, MOVE_FLASH_CANNON},
+        .ability = ABILITY_STATIC,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Dracovish ----
+    {
+        .species = SPECIES_DRACOVISH,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF, // Strong Jaw Fishious Rend nuke
+        .moves = {MOVE_FISHIOUS_REND, MOVE_CRUNCH, MOVE_PSYCHIC_FANGS, MOVE_ICE_FANG},
+        .ability = ABILITY_STRONG_JAW,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DRACOVISH,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Sand Rush band breaker
+        .moves = {MOVE_FISHIOUS_REND, MOVE_CRUNCH, MOVE_EARTHQUAKE, MOVE_ICE_FANG},
+        .ability = ABILITY_SAND_RUSH,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Arctovish ----
+    {
+        .species = SPECIES_ARCTOVISH,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_CHOICE_BAND, // Slush Rush Fishious Rend
+        .moves = {MOVE_FISHIOUS_REND, MOVE_ICICLE_CRASH, MOVE_PSYCHIC_FANGS, MOVE_CRUNCH},
+        .ability = ABILITY_SLUSH_RUSH,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ARCTOVISH,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky pivot
+        .moves = {MOVE_FREEZE_DRY, MOVE_FLIP_TURN, MOVE_BODY_PRESS, MOVE_RECOVER},
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE_RELAXED,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Duraludon ----
+    {
+        .species = SPECIES_DURALUDON,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Light Metal special breaker
+        .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT, MOVE_BODY_PRESS},
+        .ability = ABILITY_LIGHT_METAL,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DURALUDON,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Stealth Rock bulky setup
+        .moves = {MOVE_STEALTH_ROCK, MOVE_FLASH_CANNON, MOVE_DRACO_METEOR, MOVE_BODY_PRESS},
+        .ability = ABILITY_STALWART,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Dragapult ---- (innate Levitate)
+    {
+        .species = SPECIES_DRAGAPULT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Draco/Shadow Ball breaker
+        .moves = {MOVE_DRACO_METEOR, MOVE_SHADOW_BALL, MOVE_FLAMETHROWER, MOVE_U_TURN},
+        .ability = ABILITY_INFILTRATOR,
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_DRAGON,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_ETERNATUS,
+        .species = SPECIES_DRAGAPULT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Dragon Darts band breaker
+        .moves = {MOVE_DRAGON_DARTS, MOVE_PHANTOM_FORCE, MOVE_U_TURN, MOVE_SUCKER_PUNCH},
+        .ability = ABILITY_CLEAR_BODY,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DRAGAPULT,
         .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // bulky Toxic Spikes / Cosmic Power
-        .moves = {MOVE_DYNAMAX_CANNON, MOVE_FLAMETHROWER, MOVE_TOXIC_SPIKES, MOVE_RECOVER},
-        .ability = ABILITY_PRESSURE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 100, 156, 0),
-        .teraType = TYPE_POISON,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Dragon Dance physical sweeper
+        .moves = {MOVE_DRAGON_DANCE, MOVE_DRAGON_DARTS, MOVE_PHANTOM_FORCE, MOVE_FIRE_BLAST},
+        .ability = ABILITY_INFILTRATOR,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_DRAGON,
         .ball = BALL_POKE,
     },
 
@@ -10730,6 +10892,30 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 252, 0, 0),
         .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Eternatus ----
+    {
+        .species = SPECIES_ETERNATUS,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // Pressure special breaker
+        .moves = {MOVE_DYNAMAX_CANNON, MOVE_SLUDGE_WAVE, MOVE_FLAMETHROWER, MOVE_DRACO_METEOR},
+        .ability = ABILITY_PRESSURE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ETERNATUS,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_BLACK_SLUDGE, // bulky Toxic Spikes / Cosmic Power
+        .moves = {MOVE_DYNAMAX_CANNON, MOVE_FLAMETHROWER, MOVE_TOXIC_SPIKES, MOVE_RECOVER},
+        .ability = ABILITY_PRESSURE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 100, 156, 0),
+        .teraType = TYPE_POISON,
         .ball = BALL_POKE,
     },
 
@@ -10926,278 +11112,27 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Enamorus ----
+    // ---- Wyrdeer ----
     {
-        .species = SPECIES_ENAMORUS,
+        .species = SPECIES_WYRDEER,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Cute Charm special attacker (Incarnate)
-        .moves = {MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_SLUDGE_BOMB, MOVE_MYSTICAL_FIRE},
-        .ability = ABILITY_CUTE_CHARM,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ENAMORUS,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind setup
-        .moves = {MOVE_CALM_MIND, MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_SUBSTITUTE},
-        .ability = ABILITY_CONTRARY,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ENAMORUS_THERIAN,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Overcoat Therian physical breaker
-        .moves = {MOVE_PLAY_ROUGH, MOVE_EARTHQUAKE, MOVE_SPRINGTIDE_STORM, MOVE_U_TURN},
-        .ability = ABILITY_OVERCOAT,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Typhlosion-Hisui ----
-    {
-        .species = SPECIES_TYPHLOSION_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Frisk Ghost/Fire breaker
-        .moves = {MOVE_SHADOW_BALL, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_INFERNAL_PARADE},
-        .ability = ABILITY_FRISK,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_TYPHLOSION_HISUI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot Hex sweeper
-        .moves = {MOVE_NASTY_PLOT, MOVE_HEX, MOVE_FIRE_BLAST, MOVE_WILL_O_WISP},
-        .ability = ABILITY_FRISK,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Samurott-Hisui ----
-    {
-        .species = SPECIES_SAMUROTT_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // Sharpness Ceaseless Edge lead
-        .moves = {MOVE_CEASELESS_EDGE, MOVE_AQUA_JET, MOVE_SUCKER_PUNCH, MOVE_KNOCK_OFF},
-        .ability = ABILITY_SHARPNESS,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_SAMUROTT_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sharpness Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_CEASELESS_EDGE, MOVE_LIQUIDATION, MOVE_SUCKER_PUNCH},
-        .ability = ABILITY_SHARPNESS,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Decidueye-Hisui ----
-    {
-        .species = SPECIES_DECIDUEYE_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Scrappy Triple Arrows attacker
-        .moves = {MOVE_TRIPLE_ARROWS, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_SUCKER_PUNCH},
-        .ability = ABILITY_SCRAPPY,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_DECIDUEYE_HISUI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Swords Dance bulky setup
-        .moves = {MOVE_SWORDS_DANCE, MOVE_TRIPLE_ARROWS, MOVE_LEAF_BLADE, MOVE_ROOST},
-        .ability = ABILITY_OVERGROW,
-        .nature = NATURE_CAREFUL,
-        .ev = TRAINER_PARTY_EVS(248, 16, 0, 0, 0, 244),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Zoroark-Hisui ----
-    {
-        .species = SPECIES_ZOROARK_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Illusion Normal/Ghost breaker
-        .moves = {MOVE_SHADOW_BALL, MOVE_HYPER_VOICE, MOVE_FLAMETHROWER, MOVE_U_TURN},
-        .ability = ABILITY_ILLUSION,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ZOROARK_HISUI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
-        .moves = {MOVE_NASTY_PLOT, MOVE_SHADOW_BALL, MOVE_HYPER_VOICE, MOVE_FOCUS_BLAST},
-        .ability = ABILITY_ILLUSION,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Arcanine-Hisui ----
-    {
-        .species = SPECIES_ARCANINE_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Rock Head Head Smash breaker
-        .moves = {MOVE_HEAD_SMASH, MOVE_FLARE_BLITZ, MOVE_EXTREME_SPEED, MOVE_CLOSE_COMBAT},
-        .ability = ABILITY_ROCK_HEAD,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ARCANINE_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Intimidate bulky pivot
-        .moves = {MOVE_FLARE_BLITZ, MOVE_ROCK_SLIDE, MOVE_EXTREME_SPEED, MOVE_MORNING_SUN},
-        .ability = ABILITY_INTIMIDATE,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Goodra-Hisui ----
-    {
-        .species = SPECIES_GOODRA_HISUI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Sap Sipper special tank
-        .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_FIRE_BLAST, MOVE_EARTH_POWER},
+        .heldItem = ITEM_CHOICE_BAND, // Sap Sipper band attacker
+        .moves = {MOVE_PSYCHIC_FANGS, MOVE_MEGAHORN, MOVE_BODY_SLAM, MOVE_THROAT_CHOP},
         .ability = ABILITY_SAP_SIPPER,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_WYRDEER,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_ASSAULT_VEST, // Intimidate special tank
+        .moves = {MOVE_PSYCHIC, MOVE_HYPER_VOICE, MOVE_SHADOW_BALL, MOVE_EARTH_POWER},
+        .ability = ABILITY_INTIMIDATE,
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GOODRA_HISUI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Shell Armor bulky setup
-        .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_DRACO_METEOR, MOVE_RECOVER},
-        .ability = ABILITY_SHELL_ARMOR,
-        .nature = NATURE_CALM,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Avalugg-Hisui ----
-    {
-        .species = SPECIES_AVALUGG_HISUI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Strong Jaw bulky setup
-        .moves = {MOVE_RECOVER, MOVE_ICICLE_CRASH, MOVE_BODY_PRESS, MOVE_RAPID_SPIN},
-        .ability = ABILITY_STRONG_JAW,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
-        .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_AVALUGG_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Strong Jaw band attacker
-        .moves = {MOVE_ICE_FANG, MOVE_CRUNCH, MOVE_STONE_EDGE, MOVE_BODY_PRESS},
-        .ability = ABILITY_STRONG_JAW,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
-        .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Braviary-Hisui ----
-    {
-        .species = SPECIES_BRAVIARY_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Tinted Lens special attacker
-        .moves = {MOVE_HURRICANE, MOVE_PSYCHIC, MOVE_HEAT_WAVE, MOVE_U_TURN},
-        .ability = ABILITY_TINTED_LENS,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_BRAVIARY_HISUI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Calm Mind sweeper
-        .moves = {MOVE_CALM_MIND, MOVE_HURRICANE, MOVE_PSYCHIC, MOVE_SUBSTITUTE},
-        .ability = ABILITY_TINTED_LENS,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Lilligant-Hisui ----
-    {
-        .species = SPECIES_LILLIGANT_HISUI,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll Victory Dance sweeper
-        .moves = {MOVE_VICTORY_DANCE, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_TRIPLE_AXEL},
-        .ability = ABILITY_CHLOROPHYLL,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_LILLIGANT_HISUI,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // sash setup sweeper
-        .moves = {MOVE_VICTORY_DANCE, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_ICE_SPINNER},
-        .ability = ABILITY_CHLOROPHYLL,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Basculegion ----
-    {
-        .species = SPECIES_BASCULEGION,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Adaptability Wave Crash breaker
-        .moves = {MOVE_WAVE_CRASH, MOVE_PHANTOM_FORCE, MOVE_AQUA_JET, MOVE_FLIP_TURN},
-        .ability = ABILITY_ADAPTABILITY,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_BASCULEGION_F,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special Basculegion-F breaker
-        .moves = {MOVE_HYDRO_PUMP, MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_FLIP_TURN},
-        .ability = ABILITY_ADAPTABILITY,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
 
@@ -11250,27 +11185,51 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Wyrdeer ----
+    // ---- Basculegion ----
     {
-        .species = SPECIES_WYRDEER,
+        .species = SPECIES_BASCULEGION,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sap Sipper band attacker
-        .moves = {MOVE_PSYCHIC_FANGS, MOVE_MEGAHORN, MOVE_BODY_SLAM, MOVE_THROAT_CHOP},
-        .ability = ABILITY_SAP_SIPPER,
+        .heldItem = ITEM_CHOICE_BAND, // Adaptability Wave Crash breaker
+        .moves = {MOVE_WAVE_CRASH, MOVE_PHANTOM_FORCE, MOVE_AQUA_JET, MOVE_FLIP_TURN},
+        .ability = ABILITY_ADAPTABILITY,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_WYRDEER,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Intimidate special tank
-        .moves = {MOVE_PSYCHIC, MOVE_HYPER_VOICE, MOVE_SHADOW_BALL, MOVE_EARTH_POWER},
-        .ability = ABILITY_INTIMIDATE,
+        .species = SPECIES_BASCULEGION_F,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // special Basculegion-F breaker
+        .moves = {MOVE_HYDRO_PUMP, MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_FLIP_TURN},
+        .ability = ABILITY_ADAPTABILITY,
         .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_PSYCHIC,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Sneasler ----
+    {
+        .species = SPECIES_SNEASLER,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_TOXIC_ORB, // Poison Touch Dire Claw attacker
+        .moves = {MOVE_DIRE_CLAW, MOVE_CLOSE_COMBAT, MOVE_FAKE_OUT, MOVE_THROAT_CHOP},
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_SNEASLER,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LIFE_ORB, // Swords Dance Unburden-style sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_DIRE_CLAW, MOVE_ACROBATICS},
+        .ability = ABILITY_UNBURDEN,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
         .ball = BALL_POKE,
     },
 
@@ -11298,27 +11257,38 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Sneasler ----
+    // ---- Enamorus ----
     {
-        .species = SPECIES_SNEASLER,
+        .species = SPECIES_ENAMORUS,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_TOXIC_ORB, // Poison Touch Dire Claw attacker
-        .moves = {MOVE_DIRE_CLAW, MOVE_CLOSE_COMBAT, MOVE_FAKE_OUT, MOVE_THROAT_CHOP},
-        .ability = ABILITY_POISON_TOUCH,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIGHTING,
+        .heldItem = ITEM_LIFE_ORB, // Cute Charm special attacker (Incarnate)
+        .moves = {MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_SLUDGE_BOMB, MOVE_MYSTICAL_FIRE},
+        .ability = ABILITY_CUTE_CHARM,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_SNEASLER,
+        .species = SPECIES_ENAMORUS,
         .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance Unburden-style sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_DIRE_CLAW, MOVE_ACROBATICS},
-        .ability = ABILITY_UNBURDEN,
-        .nature = NATURE_JOLLY,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind setup
+        .moves = {MOVE_CALM_MIND, MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_SUBSTITUTE},
+        .ability = ABILITY_CONTRARY,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ENAMORUS_THERIAN,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Overcoat Therian physical breaker
+        .moves = {MOVE_PLAY_ROUGH, MOVE_EARTHQUAKE, MOVE_SPRINGTIDE_STORM, MOVE_U_TURN},
+        .ability = ABILITY_OVERCOAT,
+        .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIGHTING,
+        .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
 
@@ -11420,27 +11390,27 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Clodsire ----
+    // ---- Maushold ----
     {
-        .species = SPECIES_CLODSIRE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware special wall / status spreader
-        .moves = {MOVE_TOXIC, MOVE_RECOVER, MOVE_EARTHQUAKE, MOVE_TOXIC_SPIKES},
-        .ability = ABILITY_UNAWARE,
-        .nature = NATURE_CAREFUL,
-        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
-        .teraType = TYPE_STEEL,
+        .species = SPECIES_MAUSHOLD,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_WIDE_LENS, // Technician Population Bomb sweeper
+        .moves = {MOVE_POPULATION_BOMB, MOVE_BULLET_SEED, MOVE_TIDY_UP, MOVE_ENCORE},
+        .ability = ABILITY_TECHNICIAN,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_NORMAL,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_CLODSIRE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Water Absorb stall pivot
-        .moves = {MOVE_RECOVER, MOVE_EARTHQUAKE, MOVE_TOXIC, MOVE_STEALTH_ROCK},
-        .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
-        .teraType = TYPE_FAIRY,
+        .species = SPECIES_MAUSHOLD,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH, // Friend Guard support lead
+        .moves = {MOVE_FOLLOW_ME, MOVE_BEAT_UP, MOVE_HELPING_HAND, MOVE_PROTECT},
+        .ability = ABILITY_FRIEND_GUARD,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
+        .teraType = TYPE_GHOST,
         .ball = BALL_POKE,
     },
 
@@ -11528,341 +11498,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Espathra ----
-    {
-        .species = SPECIES_ESPATHRA,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Opportunist Calm Mind sweeper
-        .moves = {MOVE_CALM_MIND, MOVE_STORED_POWER, MOVE_DAZZLING_GLEAM, MOVE_ROOST},
-        .ability = ABILITY_OPPORTUNIST,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ESPATHRA,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // fast special breaker
-        .moves = {MOVE_PSYSHOCK, MOVE_DAZZLING_GLEAM, MOVE_SHADOW_BALL, MOVE_TERA_BLAST},
-        .ability = ABILITY_SPEED_BOOST,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Tinkaton ----
-    {
-        .species = SPECIES_TINKATON,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_AIR_BALLOON, // Gigaton Hammer + hazards utility
-        .moves = {MOVE_GIGATON_HAMMER, MOVE_PLAY_ROUGH, MOVE_STEALTH_ROCK, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_MOLD_BREAKER,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
-        .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_TINKATON,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Gigaton Hammer band breaker
-        .moves = {MOVE_GIGATON_HAMMER, MOVE_PLAY_ROUGH, MOVE_KNOCK_OFF, MOVE_ICE_HAMMER},
-        .ability = ABILITY_MOLD_BREAKER,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Kingambit ----
-    {
-        .species = SPECIES_KINGAMBIT,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Supreme Overlord Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH},
-        .ability = ABILITY_SUPREME_OVERLORD,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(112, 252, 0, 0, 0, 144),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_KINGAMBIT,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Defiant pivot punisher
-        .moves = {MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH, MOVE_LOW_KICK},
-        .ability = ABILITY_DEFIANT,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(112, 252, 0, 0, 0, 144),
-        .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_KINGAMBIT,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // bulky special tank
-        .moves = {MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH, MOVE_LOW_KICK},
-        .ability = ABILITY_SUPREME_OVERLORD,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Annihilape ----
-    {
-        .species = SPECIES_ANNIHILAPE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up + Rage Fist snowball
-        .moves = {MOVE_BULK_UP, MOVE_RAGE_FIST, MOVE_DRAIN_PUNCH, MOVE_TAUNT},
-        .ability = ABILITY_VITAL_SPIRIT,
-        .nature = NATURE_CAREFUL,
-        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ANNIHILAPE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Defiant revenge killer
-        .moves = {MOVE_RAGE_FIST, MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH, MOVE_U_TURN},
-        .ability = ABILITY_DEFIANT,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Baxcalibur ----
-    {
-        .species = SPECIES_BAXCALIBUR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LOADED_DICE, // Dragon Dance + Icicle Spear sweeper
-        .moves = {MOVE_DRAGON_DANCE, MOVE_ICICLE_SPEAR, MOVE_GLAIVE_RUSH, MOVE_EARTHQUAKE},
-        .ability = ABILITY_THERMAL_EXCHANGE,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_BAXCALIBUR,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed Dragon Dance breaker
-        .moves = {MOVE_DRAGON_DANCE, MOVE_ICICLE_CRASH, MOVE_GLAIVE_RUSH, MOVE_ICE_SHARD},
-        .ability = ABILITY_THERMAL_EXCHANGE,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Gholdengo ----
-    {
-        .species = SPECIES_GHOLDENGO,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Nasty Plot + Make It Rain sweeper (innate Levitate)
-        .moves = {MOVE_NASTY_PLOT, MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_RECOVER},
-        .ability = ABILITY_GOOD_AS_GOLD,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GHOLDENGO,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Good as Gold status blocker / pivot (innate Levitate)
-        .moves = {MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_RECOVER, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_GOOD_AS_GOLD,
-        .nature = NATURE_BOLD,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GHOLDENGO,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special nuke (innate Levitate)
-        .moves = {MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_FOCUS_BLAST, MOVE_TRICK},
-        .ability = ABILITY_GOOD_AS_GOLD,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Palafin (Hero) ----
-    {
-        .species = SPECIES_PALAFIN_HERO,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Zero to Hero band breaker
-        .moves = {MOVE_JET_PUNCH, MOVE_WAVE_CRASH, MOVE_CLOSE_COMBAT, MOVE_FLIP_TURN},
-        .ability = ABILITY_ZERO_TO_HERO,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_PALAFIN_HERO,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Bulk Up Hero sweeper
-        .moves = {MOVE_BULK_UP, MOVE_JET_PUNCH, MOVE_WAVE_CRASH, MOVE_DRAIN_PUNCH},
-        .ability = ABILITY_ZERO_TO_HERO,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Dondozo ----
-    {
-        .species = SPECIES_DONDOZO,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware Curse physical wall
-        .moves = {MOVE_CURSE, MOVE_WAVE_CRASH, MOVE_REST, MOVE_SLEEP_TALK},
-        .ability = ABILITY_UNAWARE,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 4, 252, 0, 0, 0),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_DONDOZO,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Order Up / bulky pivot
-        .moves = {MOVE_WAVE_CRASH, MOVE_BODY_PRESS, MOVE_EARTHQUAKE, MOVE_REST},
-        .ability = ABILITY_UNAWARE,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Dudunsparce ----
-    {
-        .species = SPECIES_DUDUNSPARCE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Serene Grace Coil + flinch / status
-        .moves = {MOVE_COIL, MOVE_BODY_SLAM, MOVE_ROOST, MOVE_EARTHQUAKE},
-        .ability = ABILITY_SERENE_GRACE,
-        .nature = NATURE_CAREFUL,
-        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
-        .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_DUDUNSPARCE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind + Boomburst special
-        .moves = {MOVE_CALM_MIND, MOVE_BOOMBURST, MOVE_EARTH_POWER, MOVE_ROOST},
-        .ability = ABILITY_SERENE_GRACE,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Farigiraf ----
-    {
-        .species = SPECIES_FARIGIRAF,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Armor Tail Calm Mind wall
-        .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC_NOISE, MOVE_HYPER_VOICE, MOVE_REST},
-        .ability = ABILITY_ARMOR_TAIL,
-        .nature = NATURE_CALM,
-        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_FARIGIRAF,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Trick Room support tank
-        .moves = {MOVE_TRICK_ROOM, MOVE_HYPER_VOICE, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM},
-        .ability = ABILITY_ARMOR_TAIL,
-        .nature = NATURE_SASSY,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Maushold ----
-    {
-        .species = SPECIES_MAUSHOLD,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_WIDE_LENS, // Technician Population Bomb sweeper
-        .moves = {MOVE_POPULATION_BOMB, MOVE_BULLET_SEED, MOVE_TIDY_UP, MOVE_ENCORE},
-        .ability = ABILITY_TECHNICIAN,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_MAUSHOLD,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // Friend Guard support lead
-        .moves = {MOVE_FOLLOW_ME, MOVE_BEAT_UP, MOVE_HELPING_HAND, MOVE_PROTECT},
-        .ability = ABILITY_FRIEND_GUARD,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
-        .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Glimmora ----
-    {
-        .species = SPECIES_GLIMMORA,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Toxic Debris hazard lead
-        .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_POWER_GEM, MOVE_MORTAL_SPIN},
-        .ability = ABILITY_TOXIC_DEBRIS,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GLIMMORA,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // special attacker
-        .moves = {MOVE_POWER_GEM, MOVE_SLUDGE_WAVE, MOVE_EARTH_POWER, MOVE_ENERGY_BALL},
-        .ability = ABILITY_TOXIC_DEBRIS,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Revavroom ----
-    {
-        .species = SPECIES_REVAVROOM,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Filter Shift Gear sweeper
-        .moves = {MOVE_SHIFT_GEAR, MOVE_GUNK_SHOT, MOVE_IRON_HEAD, MOVE_HIGH_HORSEPOWER},
-        .ability = ABILITY_FILTER,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_REVAVROOM,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // bulky pivot / hazard support
-        .moves = {MOVE_GUNK_SHOT, MOVE_SPIKES, MOVE_PARTING_SHOT, MOVE_HIGH_HORSEPOWER},
-        .ability = ABILITY_FILTER,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
     // ---- Brambleghast ----
     {
         .species = SPECIES_BRAMBLEGHAST,
@@ -11911,16 +11546,125 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Houndstone ----
+    // ---- Scovillain ----
     {
-        .species = SPECIES_HOUNDSTONE,
+        .species = SPECIES_SCOVILLAIN,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sand Rush Last Respects sweeper
-        .moves = {MOVE_LAST_RESPECTS, MOVE_BODY_PRESS, MOVE_PLAY_ROUGH, MOVE_SHADOW_SNEAK},
-        .ability = ABILITY_SAND_RUSH,
+        .heldItem = ITEM_LIFE_ORB, // Chlorophyll mixed sun attacker
+        .moves = {MOVE_GROWTH, MOVE_FLAMETHROWER, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
+        .ability = ABILITY_CHLOROPHYLL,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Espathra ----
+    {
+        .species = SPECIES_ESPATHRA,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Opportunist Calm Mind sweeper
+        .moves = {MOVE_CALM_MIND, MOVE_STORED_POWER, MOVE_DAZZLING_GLEAM, MOVE_ROOST},
+        .ability = ABILITY_OPPORTUNIST,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ESPATHRA,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS, // fast special breaker
+        .moves = {MOVE_PSYSHOCK, MOVE_DAZZLING_GLEAM, MOVE_SHADOW_BALL, MOVE_TERA_BLAST},
+        .ability = ABILITY_SPEED_BOOST,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Tinkaton ----
+    {
+        .species = SPECIES_TINKATON,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_AIR_BALLOON, // Gigaton Hammer + hazards utility
+        .moves = {MOVE_GIGATON_HAMMER, MOVE_PLAY_ROUGH, MOVE_STEALTH_ROCK, MOVE_THUNDER_WAVE},
+        .ability = ABILITY_MOLD_BREAKER,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TINKATON,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Gigaton Hammer band breaker
+        .moves = {MOVE_GIGATON_HAMMER, MOVE_PLAY_ROUGH, MOVE_KNOCK_OFF, MOVE_ICE_HAMMER},
+        .ability = ABILITY_MOLD_BREAKER,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_GHOST,
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Bombirdier ----
+    {
+        .species = SPECIES_BOMBIRDIER,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Big Pecks hazard / utility pivot
+        .moves = {MOVE_STEALTH_ROCK, MOVE_KNOCK_OFF, MOVE_BRAVE_BIRD, MOVE_ROOST},
+        .ability = ABILITY_BIG_PECKS,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Palafin (Hero) ----
+    {
+        .species = SPECIES_PALAFIN_HERO,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Zero to Hero band breaker
+        .moves = {MOVE_JET_PUNCH, MOVE_WAVE_CRASH, MOVE_CLOSE_COMBAT, MOVE_FLIP_TURN},
+        .ability = ABILITY_ZERO_TO_HERO,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_PALAFIN_HERO,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Bulk Up Hero sweeper
+        .moves = {MOVE_BULK_UP, MOVE_JET_PUNCH, MOVE_WAVE_CRASH, MOVE_DRAIN_PUNCH},
+        .ability = ABILITY_ZERO_TO_HERO,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Revavroom ----
+    {
+        .species = SPECIES_REVAVROOM,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Filter Shift Gear sweeper
+        .moves = {MOVE_SHIFT_GEAR, MOVE_GUNK_SHOT, MOVE_IRON_HEAD, MOVE_HIGH_HORSEPOWER},
+        .ability = ABILITY_FILTER,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_REVAVROOM,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET, // bulky pivot / hazard support
+        .moves = {MOVE_GUNK_SHOT, MOVE_SPIKES, MOVE_PARTING_SHOT, MOVE_HIGH_HORSEPOWER},
+        .ability = ABILITY_FILTER,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
     },
 
@@ -11972,119 +11716,198 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Bombirdier ----
+    // ---- Glimmora ----
     {
-        .species = SPECIES_BOMBIRDIER,
+        .species = SPECIES_GLIMMORA,
         .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Big Pecks hazard / utility pivot
-        .moves = {MOVE_STEALTH_ROCK, MOVE_KNOCK_OFF, MOVE_BRAVE_BIRD, MOVE_ROOST},
-        .ability = ABILITY_BIG_PECKS,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
-        .teraType = TYPE_STEEL,
+        .heldItem = ITEM_FOCUS_SASH, // Toxic Debris hazard lead
+        .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_POWER_GEM, MOVE_MORTAL_SPIN},
+        .ability = ABILITY_TOXIC_DEBRIS,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GLIMMORA,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // special attacker
+        .moves = {MOVE_POWER_GEM, MOVE_SLUDGE_WAVE, MOVE_EARTH_POWER, MOVE_ENERGY_BALL},
+        .ability = ABILITY_TOXIC_DEBRIS,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ROCK,
         .ball = BALL_POKE,
     },
 
-    // ---- Scovillain ----
+    // ---- Houndstone ----
     {
-        .species = SPECIES_SCOVILLAIN,
+        .species = SPECIES_HOUNDSTONE,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll mixed sun attacker
-        .moves = {MOVE_GROWTH, MOVE_FLAMETHROWER, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
-        .ability = ABILITY_CHLOROPHYLL,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sand Rush Last Respects sweeper
+        .moves = {MOVE_LAST_RESPECTS, MOVE_BODY_PRESS, MOVE_PLAY_ROUGH, MOVE_SHADOW_SNEAK},
+        .ability = ABILITY_SAND_RUSH,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Dondozo ----
+    {
+        .species = SPECIES_DONDOZO,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Unaware Curse physical wall
+        .moves = {MOVE_CURSE, MOVE_WAVE_CRASH, MOVE_REST, MOVE_SLEEP_TALK},
+        .ability = ABILITY_UNAWARE,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 4, 252, 0, 0, 0),
+        .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DONDOZO,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Order Up / bulky pivot
+        .moves = {MOVE_WAVE_CRASH, MOVE_BODY_PRESS, MOVE_EARTHQUAKE, MOVE_REST},
+        .ability = ABILITY_UNAWARE,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Annihilape ----
+    {
+        .species = SPECIES_ANNIHILAPE,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Bulk Up + Rage Fist snowball
+        .moves = {MOVE_BULK_UP, MOVE_RAGE_FIST, MOVE_DRAIN_PUNCH, MOVE_TAUNT},
+        .ability = ABILITY_VITAL_SPIRIT,
+        .nature = NATURE_CAREFUL,
+        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ANNIHILAPE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF, // Defiant revenge killer
+        .moves = {MOVE_RAGE_FIST, MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH, MOVE_U_TURN},
+        .ability = ABILITY_DEFIANT,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Clodsire ----
+    {
+        .species = SPECIES_CLODSIRE,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Unaware special wall / status spreader
+        .moves = {MOVE_TOXIC, MOVE_RECOVER, MOVE_EARTHQUAKE, MOVE_TOXIC_SPIKES},
+        .ability = ABILITY_UNAWARE,
+        .nature = NATURE_CAREFUL,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CLODSIRE,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_BLACK_SLUDGE, // Water Absorb stall pivot
+        .moves = {MOVE_RECOVER, MOVE_EARTHQUAKE, MOVE_TOXIC, MOVE_STEALTH_ROCK},
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Farigiraf ----
+    {
+        .species = SPECIES_FARIGIRAF,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Armor Tail Calm Mind wall
+        .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC_NOISE, MOVE_HYPER_VOICE, MOVE_REST},
+        .ability = ABILITY_ARMOR_TAIL,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_FARIGIRAF,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_ASSAULT_VEST, // Trick Room support tank
+        .moves = {MOVE_TRICK_ROOM, MOVE_HYPER_VOICE, MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM},
+        .ability = ABILITY_ARMOR_TAIL,
+        .nature = NATURE_SASSY,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
+        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_FIRE,
         .ball = BALL_POKE,
     },
 
-    // ---- Hydrapple ----
+    // ---- Dudunsparce ----
     {
-        .species = SPECIES_HYDRAPPLE,
+        .species = SPECIES_DUDUNSPARCE,
         .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator bulky special tank
-        .moves = {MOVE_FICKLE_BEAM, MOVE_GIGA_DRAIN, MOVE_NASTY_PLOT, MOVE_RECOVER},
-        .ability = ABILITY_REGENERATOR,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_HYDRAPPLE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
-        .moves = {MOVE_FICKLE_BEAM, MOVE_DRACO_METEOR, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
-        .ability = ABILITY_REGENERATOR,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Sinistcha ----
-    {
-        .species = SPECIES_SINISTCHA,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind Matcha Gotcha wall (innate Levitate)
-        .moves = {MOVE_CALM_MIND, MOVE_MATCHA_GOTCHA, MOVE_SHADOW_BALL, MOVE_STRENGTH_SAP},
-        .ability = ABILITY_HEATPROOF,
-        .nature = NATURE_BOLD,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_SINISTCHA,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Hospitality support tank (innate Levitate)
-        .moves = {MOVE_MATCHA_GOTCHA, MOVE_SHADOW_BALL, MOVE_GIGA_DRAIN, MOVE_TRICK_ROOM},
-        .ability = ABILITY_HOSPITALITY,
-        .nature = NATURE_QUIET,
-        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Archaludon ----
-    {
-        .species = SPECIES_ARCHALUDON,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Electro Shot special tank
-        .moves = {MOVE_ELECTRO_SHOT, MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_BODY_PRESS},
-        .ability = ABILITY_STAMINA,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ARCHALUDON,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Stamina Body Press wall
-        .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_DRAGON_TAIL, MOVE_STEALTH_ROCK},
-        .ability = ABILITY_STAMINA,
-        .nature = NATURE_IMPISH,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .heldItem = ITEM_LEFTOVERS, // Serene Grace Coil + flinch / status
+        .moves = {MOVE_COIL, MOVE_BODY_SLAM, MOVE_ROOST, MOVE_EARTHQUAKE},
+        .ability = ABILITY_SERENE_GRACE,
+        .nature = NATURE_CAREFUL,
+        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
         .teraType = TYPE_GHOST,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_ARCHALUDON,
-        .tags = FACTORY_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // rain Electro Shot nuke
-        .moves = {MOVE_ELECTRO_SHOT, MOVE_FLASH_CANNON, MOVE_DRACO_METEOR, MOVE_PROTECT},
-        .ability = ABILITY_STAMINA,
+        .species = SPECIES_DUDUNSPARCE,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Calm Mind + Boomburst special
+        .moves = {MOVE_CALM_MIND, MOVE_BOOMBURST, MOVE_EARTH_POWER, MOVE_ROOST},
+        .ability = ABILITY_SERENE_GRACE,
         .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
         .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //              Generation IX — Paradox Pokemon
-    // ============================================================
+    // ---- Kingambit ----
+    {
+        .species = SPECIES_KINGAMBIT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Supreme Overlord Swords Dance sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH},
+        .ability = ABILITY_SUPREME_OVERLORD,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(112, 252, 0, 0, 0, 144),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_KINGAMBIT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_BLACK_GLASSES, // Defiant pivot punisher
+        .moves = {MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH, MOVE_LOW_KICK},
+        .ability = ABILITY_DEFIANT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(112, 252, 0, 0, 0, 144),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_KINGAMBIT,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_ASSAULT_VEST, // bulky special tank
+        .moves = {MOVE_KOWTOW_CLEAVE, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH, MOVE_LOW_KICK},
+        .ability = ABILITY_SUPREME_OVERLORD,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
 
     // ---- Great Tusk ----
     {
@@ -12219,30 +12042,6 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Roaring Moon ----
-    {
-        .species = SPECIES_ROARING_MOON,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
-        .moves = {MOVE_DRAGON_DANCE, MOVE_KNOCK_OFF, MOVE_OUTRAGE, MOVE_ROOST},
-        .ability = ABILITY_PROTOSYNTHESIS,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_ROARING_MOON,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Dragon's Maw band breaker
-        .moves = {MOVE_OUTRAGE, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE, MOVE_U_TURN},
-        .ability = ABILITY_PROTOSYNTHESIS,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-
     // ---- Iron Treads ----
     {
         .species = SPECIES_IRON_TREADS,
@@ -12365,144 +12164,64 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Iron Valiant ----
+    // ---- Baxcalibur ----
     {
-        .species = SPECIES_IRON_VALIANT,
+        .species = SPECIES_BAXCALIBUR,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive mixed Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_SPIRIT_BREAK},
-        .ability = ABILITY_QUARK_DRIVE,
+        .heldItem = ITEM_LOADED_DICE, // Dragon Dance + Icicle Spear sweeper
+        .moves = {MOVE_DRAGON_DANCE, MOVE_ICICLE_SPEAR, MOVE_GLAIVE_RUSH, MOVE_EARTHQUAKE},
+        .ability = ABILITY_THERMAL_EXCHANGE,
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_IRON_VALIANT,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
-        .moves = {MOVE_MOONBLAST, MOVE_AURA_SPHERE, MOVE_PSYSHOCK, MOVE_THUNDERBOLT},
-        .ability = ABILITY_QUARK_DRIVE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Walking Wake ----
-    {
-        .species = SPECIES_WALKING_WAKE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special attacker
-        .moves = {MOVE_HYDRO_STEAM, MOVE_DRACO_METEOR, MOVE_FLAMETHROWER, MOVE_FLIP_TURN},
-        .ability = ABILITY_PROTOSYNTHESIS,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_WALKING_WAKE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS, // Draco specs nuke
-        .moves = {MOVE_DRACO_METEOR, MOVE_HYDRO_PUMP, MOVE_FLAMETHROWER, MOVE_FLIP_TURN},
-        .ability = ABILITY_PROTOSYNTHESIS,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_DRAGON,
         .ball = BALL_POKE,
     },
-
-    // ---- Iron Leaves ----
     {
-        .species = SPECIES_IRON_LEAVES,
+        .species = SPECIES_BAXCALIBUR,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_PSYBLADE, MOVE_CLOSE_COMBAT},
-        .ability = ABILITY_QUARK_DRIVE,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Gouging Fire ----
-    {
-        .species = SPECIES_GOUGING_FIRE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
-        .moves = {MOVE_DRAGON_DANCE, MOVE_HEAT_CRASH, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE},
-        .ability = ABILITY_PROTOSYNTHESIS,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GOUGING_FIRE,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Morning Sun setup
-        .moves = {MOVE_DRAGON_DANCE, MOVE_FLARE_BLITZ, MOVE_DRAGON_CLAW, MOVE_MORNING_SUN},
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .heldItem = ITEM_LIFE_ORB, // mixed Dragon Dance breaker
+        .moves = {MOVE_DRAGON_DANCE, MOVE_ICICLE_CRASH, MOVE_GLAIVE_RUSH, MOVE_ICE_SHARD},
+        .ability = ABILITY_THERMAL_EXCHANGE,
         .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(252, 4, 0, 252, 0, 0),
-        .teraType = TYPE_DRAGON,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ICE,
         .ball = BALL_POKE,
     },
 
-    // ---- Raging Bolt ----
+    // ---- Gholdengo ----
     {
-        .species = SPECIES_RAGING_BOLT,
+        .species = SPECIES_GHOLDENGO,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Calm Mind special sweeper
-        .moves = {MOVE_CALM_MIND, MOVE_THUNDERCLAP, MOVE_DRACO_METEOR, MOVE_THUNDERBOLT},
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .heldItem = ITEM_LEFTOVERS, // Nasty Plot + Make It Rain sweeper (innate Levitate)
+        .moves = {MOVE_NASTY_PLOT, MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_RECOVER},
+        .ability = ABILITY_GOOD_AS_GOLD,
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_ELECTRIC,
+        .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_RAGING_BOLT,
+        .species = SPECIES_GHOLDENGO,
         .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
-        .moves = {MOVE_CALM_MIND, MOVE_THUNDERBOLT, MOVE_DRAGON_PULSE, MOVE_THUNDERCLAP},
-        .ability = ABILITY_PROTOSYNTHESIS,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Good as Gold status blocker / pivot (innate Levitate)
+        .moves = {MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_RECOVER, MOVE_THUNDER_WAVE},
+        .ability = ABILITY_GOOD_AS_GOLD,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
         .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
-
-    // ---- Iron Boulder ----
     {
-        .species = SPECIES_IRON_BOULDER,
+        .species = SPECIES_GHOLDENGO,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Mighty Cleave sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_MIGHTY_CLEAVE, MOVE_EARTHQUAKE, MOVE_ZEN_HEADBUTT},
-        .ability = ABILITY_QUARK_DRIVE,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Iron Crown ----
-    {
-        .species = SPECIES_IRON_CROWN,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Calm Mind special sweeper
-        .moves = {MOVE_CALM_MIND, MOVE_TACHYON_CUTTER, MOVE_PSYCHIC_NOISE, MOVE_FOCUS_BLAST},
-        .ability = ABILITY_QUARK_DRIVE,
+        .heldItem = ITEM_CHOICE_SPECS, // special nuke (innate Levitate)
+        .moves = {MOVE_MAKE_IT_RAIN, MOVE_SHADOW_BALL, MOVE_FOCUS_BLAST, MOVE_TRICK},
+        .ability = ABILITY_GOOD_AS_GOLD,
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
     },
-
-    // ============================================================
-    //              Generation IX — Treasures of Ruin
-    // ============================================================
 
     // ---- Wo-Chien ----
     {
@@ -12600,9 +12319,53 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //              Generation IX — Legendaries & Mythicals
-    // ============================================================
+    // ---- Roaring Moon ----
+    {
+        .species = SPECIES_ROARING_MOON,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
+        .moves = {MOVE_DRAGON_DANCE, MOVE_KNOCK_OFF, MOVE_OUTRAGE, MOVE_ROOST},
+        .ability = ABILITY_PROTOSYNTHESIS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ROARING_MOON,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // Dragon's Maw band breaker
+        .moves = {MOVE_OUTRAGE, MOVE_KNOCK_OFF, MOVE_EARTHQUAKE, MOVE_U_TURN},
+        .ability = ABILITY_PROTOSYNTHESIS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Iron Valiant ----
+    {
+        .species = SPECIES_IRON_VALIANT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive mixed Swords Dance sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_SPIRIT_BREAK},
+        .ability = ABILITY_QUARK_DRIVE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_IRON_VALIANT,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .moves = {MOVE_MOONBLAST, MOVE_AURA_SPHERE, MOVE_PSYSHOCK, MOVE_THUNDERBOLT},
+        .ability = ABILITY_QUARK_DRIVE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
 
     // ---- Koraidon ----
     {
@@ -12652,79 +12415,65 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Terapagos ----
+    // ---- Walking Wake ----
     {
-        .species = SPECIES_TERAPAGOS_TERASTAL,
-        .tags = FACTORY_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Tera Shell Calm Mind tank
-        .moves = {MOVE_CALM_MIND, MOVE_TERA_STARSTORM, MOVE_EARTH_POWER, MOVE_RECOVER},
-        .ability = ABILITY_TERA_SHELL,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
-        .teraType = TYPE_NORMAL,
+        .species = SPECIES_WALKING_WAKE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special attacker
+        .moves = {MOVE_HYDRO_STEAM, MOVE_DRACO_METEOR, MOVE_FLAMETHROWER, MOVE_FLIP_TURN},
+        .ability = ABILITY_PROTOSYNTHESIS,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_TERAPAGOS_TERASTAL,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
-        .moves = {MOVE_TERA_STARSTORM, MOVE_EARTH_POWER, MOVE_DARK_PULSE, MOVE_FLAMETHROWER},
-        .ability = ABILITY_TERA_SHELL,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_STELLAR,
+        .species = SPECIES_WALKING_WAKE,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_CHOICE_SPECS, // Draco specs nuke
+        .moves = {MOVE_DRACO_METEOR, MOVE_HYDRO_PUMP, MOVE_FLAMETHROWER, MOVE_FLIP_TURN},
+        .ability = ABILITY_PROTOSYNTHESIS,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_DRAGON,
         .ball = BALL_POKE,
     },
 
-    // ---- Ogerpon (Teal) ----
+    // ---- Iron Leaves ----
     {
-        .species = SPECIES_OGERPON,
+        .species = SPECIES_IRON_LEAVES,
         .tags = FACTORY_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Defiant Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
-        .ability = ABILITY_DEFIANT,
+        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Swords Dance sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_PSYBLADE, MOVE_CLOSE_COMBAT},
+        .ability = ABILITY_QUARK_DRIVE,
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GRASS,
         .ball = BALL_POKE,
     },
 
-    // ---- Ogerpon (Wellspring) ----
+    // ---- Sinistcha ----
     {
-        .species = SPECIES_OGERPON_WELLSPRING,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_WELLSPRING_MASK, // Water Absorb Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_PLAY_ROUGH},
-        .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .species = SPECIES_SINISTCHA,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Calm Mind Matcha Gotcha wall (innate Levitate)
+        .moves = {MOVE_CALM_MIND, MOVE_MATCHA_GOTCHA, MOVE_SHADOW_BALL, MOVE_STRENGTH_SAP},
+        .ability = ABILITY_HEATPROOF,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
         .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
-
-    // ---- Ogerpon (Hearthflame) ----
     {
-        .species = SPECIES_OGERPON_HEARTHFLAME,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_HEARTHFLAME_MASK, // Mold Breaker Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_HORN_LEECH},
-        .ability = ABILITY_MOLD_BREAKER,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Ogerpon (Cornerstone) ----
-    {
-        .species = SPECIES_OGERPON_CORNERSTONE,
-        .tags = FACTORY_BOTH,
-        .heldItem = ITEM_CORNERSTONE_MASK, // Sturdy Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_STONE_EDGE},
-        .ability = ABILITY_STURDY,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ROCK,
+        .species = SPECIES_SINISTCHA,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_ASSAULT_VEST, // Hospitality support tank (innate Levitate)
+        .moves = {MOVE_MATCHA_GOTCHA, MOVE_SHADOW_BALL, MOVE_GIGA_DRAIN, MOVE_TRICK_ROOM},
+        .ability = ABILITY_HOSPITALITY,
+        .nature = NATURE_QUIET,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
 
@@ -12800,6 +12549,215 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Ogerpon (Teal) ----
+    {
+        .species = SPECIES_OGERPON,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Defiant Swords Dance sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_KNOCK_OFF},
+        .ability = ABILITY_DEFIANT,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Ogerpon (Wellspring) ----
+    {
+        .species = SPECIES_OGERPON_WELLSPRING,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_WELLSPRING_MASK, // Water Absorb Swords Dance sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_PLAY_ROUGH},
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Ogerpon (Hearthflame) ----
+    {
+        .species = SPECIES_OGERPON_HEARTHFLAME,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_HEARTHFLAME_MASK, // Mold Breaker Swords Dance sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_HORN_LEECH},
+        .ability = ABILITY_MOLD_BREAKER,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Ogerpon (Cornerstone) ----
+    {
+        .species = SPECIES_OGERPON_CORNERSTONE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_CORNERSTONE_MASK, // Sturdy Swords Dance sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_STONE_EDGE},
+        .ability = ABILITY_STURDY,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Archaludon ----
+    {
+        .species = SPECIES_ARCHALUDON,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // Electro Shot special tank
+        .moves = {MOVE_ELECTRO_SHOT, MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_BODY_PRESS},
+        .ability = ABILITY_STAMINA,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ARCHALUDON,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Stamina Body Press wall
+        .moves = {MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_DRAGON_TAIL, MOVE_STEALTH_ROCK},
+        .ability = ABILITY_STAMINA,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ARCHALUDON,
+        .tags = FACTORY_DOUBLES,
+        .heldItem = ITEM_LIFE_ORB, // rain Electro Shot nuke
+        .moves = {MOVE_ELECTRO_SHOT, MOVE_FLASH_CANNON, MOVE_DRACO_METEOR, MOVE_PROTECT},
+        .ability = ABILITY_STAMINA,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Hydrapple ----
+    {
+        .species = SPECIES_HYDRAPPLE,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Regenerator bulky special tank
+        .moves = {MOVE_FICKLE_BEAM, MOVE_GIGA_DRAIN, MOVE_NASTY_PLOT, MOVE_RECOVER},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_HYDRAPPLE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
+        .moves = {MOVE_FICKLE_BEAM, MOVE_DRACO_METEOR, MOVE_GIGA_DRAIN, MOVE_EARTH_POWER},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Gouging Fire ----
+    {
+        .species = SPECIES_GOUGING_FIRE,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
+        .moves = {MOVE_DRAGON_DANCE, MOVE_HEAT_CRASH, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE},
+        .ability = ABILITY_PROTOSYNTHESIS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GOUGING_FIRE,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Morning Sun setup
+        .moves = {MOVE_DRAGON_DANCE, MOVE_FLARE_BLITZ, MOVE_DRAGON_CLAW, MOVE_MORNING_SUN},
+        .ability = ABILITY_PROTOSYNTHESIS,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 4, 0, 252, 0, 0),
+        .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Raging Bolt ----
+    {
+        .species = SPECIES_RAGING_BOLT,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Calm Mind special sweeper
+        .moves = {MOVE_CALM_MIND, MOVE_THUNDERCLAP, MOVE_DRACO_METEOR, MOVE_THUNDERBOLT},
+        .ability = ABILITY_PROTOSYNTHESIS,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_RAGING_BOLT,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
+        .moves = {MOVE_CALM_MIND, MOVE_THUNDERBOLT, MOVE_DRAGON_PULSE, MOVE_THUNDERCLAP},
+        .ability = ABILITY_PROTOSYNTHESIS,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Iron Boulder ----
+    {
+        .species = SPECIES_IRON_BOULDER,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Mighty Cleave sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_MIGHTY_CLEAVE, MOVE_EARTHQUAKE, MOVE_ZEN_HEADBUTT},
+        .ability = ABILITY_QUARK_DRIVE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Iron Crown ----
+    {
+        .species = SPECIES_IRON_CROWN,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Calm Mind special sweeper
+        .moves = {MOVE_CALM_MIND, MOVE_TACHYON_CUTTER, MOVE_PSYCHIC_NOISE, MOVE_FOCUS_BLAST},
+        .ability = ABILITY_QUARK_DRIVE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Terapagos ----
+    {
+        .species = SPECIES_TERAPAGOS_TERASTAL,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Tera Shell Calm Mind tank
+        .moves = {MOVE_CALM_MIND, MOVE_TERA_STARSTORM, MOVE_EARTH_POWER, MOVE_RECOVER},
+        .ability = ABILITY_TERA_SHELL,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TERAPAGOS_TERASTAL,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .moves = {MOVE_TERA_STARSTORM, MOVE_EARTH_POWER, MOVE_DARK_PULSE, MOVE_FLAMETHROWER},
+        .ability = ABILITY_TERA_SHELL,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_STELLAR,
+        .ball = BALL_POKE,
+    },
+
     // ---- Pecharunt ----
     {
         .species = SPECIES_PECHARUNT,
@@ -12820,6 +12778,41 @@ const struct TrainerMon gFactoryCompetitiveMons[] =
         .ability = ABILITY_POISON_PUPPETEER,
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Celebi ---- (innate Levitate — Ground immune, never give an Air Balloon)
+    {
+        .species = SPECIES_CELEBI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
+        .moves = {MOVE_NASTY_PLOT, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_EARTH_POWER},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CELEBI,
+        .tags = FACTORY_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
+        .moves = {MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_RECOVER, MOVE_U_TURN},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 240, 0, 0, 16),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CELEBI,
+        .tags = FACTORY_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
+        .moves = {MOVE_CALM_MIND, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_RECOVER},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 60, 196, 0),
         .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
