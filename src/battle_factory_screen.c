@@ -1140,7 +1140,7 @@ void AutoRentFullParty(void)
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
 
     ZeroPlayerPartyMons();
-    gFacilityTrainerMons = GetFactoryMonsTable(); // FORK: competitive roster under B_FRONTIER_COMPETITIVE_MONS
+    gFacilityTrainerMons = GetFactoryMonsTable(); // FORK: competitive roster under B_FRONTIER_EXTENDED_MONS
     // With B_FRONTIER_FORCE_LVL_100 the lobby forces lvlMode to Open, so this
     // resolves to Lv100; the Lv50 branch only applies if that flag is off and the
     // player actually picked Lv50.
@@ -1802,7 +1802,7 @@ static void CreateFrontierFactorySelectableMons(u8 firstMonId)
     u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
     u8 rentalRank = 0;
 
-    gFacilityTrainerMons = GetFactoryMonsTable(); // FORK: competitive roster under B_FRONTIER_COMPETITIVE_MONS
+    gFacilityTrainerMons = GetFactoryMonsTable(); // FORK: competitive roster under B_FRONTIER_EXTENDED_MONS
     if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_50)
         level = FRONTIER_MAX_LEVEL_OPEN;
     else

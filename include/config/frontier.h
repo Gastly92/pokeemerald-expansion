@@ -83,14 +83,14 @@
 // Mega Stone and at most one Z-Crystal, since only one Mega Evolution / Z-Move is
 // usable per battle (the player can still end up with extras by swapping after a
 // win — that's fine, the per-battle limit still applies). The roster lives in a
-// fork-owned file (src/factory_competitive_mons.c) so upstream syncs never touch
+// fork-owned file (src/frontier_extended_mons.c) so upstream syncs never touch
 // it; only the Battle Factory's code paths swap rosters (Tower/Dome keep the
 // vanilla gBattleFrontierMons for now). Gated in src/battle_factory.c and
 // src/battle_factory_screen.c. The roster carries several distinct builds per
 // species (so the opponent's exact set can't be read off the species) and tags
-// each set FACTORY_SINGLES/DOUBLES/BOTH so format-inappropriate sets never appear.
-// Generations I through IV are built out; later generations follow.
-#define B_FRONTIER_COMPETITIVE_MONS TRUE
+// each set FORMAT_SINGLES/DOUBLES/BOTH so format-inappropriate sets never appear.
+// Generations I through IX are all built out.
+#define B_FRONTIER_EXTENDED_MONS TRUE
 
 // If TRUE, in Frontier facilities where the bag is disabled (Tower, Dome,
 // Palace, Arena, Factory, Pike — everything except the Pyramid, which keeps a

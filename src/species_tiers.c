@@ -1,0 +1,173 @@
+#include "global.h"
+#include "species_tiers.h"
+#include "pokemon.h"
+#include "constants/pokedex.h"
+#include "constants/species.h"
+
+// FORK: species -> tier classification (see include/species_tiers.h for the full
+// rationale and the fork's tier definitions). Keyed by National Pokedex number so
+// every forme of a species inherits the base species' tier automatically.
+//
+// Derived from the upstream species flags (isRestrictedLegendary / isSubLegendary
+// / isMythical / isUltraBeast / isParadox) with this fork's groupings layered on
+// top: restricted legendaries + official mythicals -> TIER_MYTHICAL; sub-legends
+// -> TIER_LEGENDARY; Ultra Beasts + Paradox + the Treasures of Ruin + the classic
+// 600-BST pseudo-legendaries -> TIER_PSEUDO. Edit a row to reclassify a species.
+
+struct SpeciesTierEntry
+{
+    u16 natDex;     // enum NationalDexOrder (NATIONAL_DEX_*)
+    u8 tier;        // enum SpeciesTier
+};
+
+static const struct SpeciesTierEntry sSpeciesTiers[] =
+{
+    // ---- Mythical — restricted box/cover legends + official event mythicals ----
+    { NATIONAL_DEX_MEWTWO, TIER_MYTHICAL }, // Mewtwo
+    { NATIONAL_DEX_MEW, TIER_MYTHICAL }, // Mew
+    { NATIONAL_DEX_LUGIA, TIER_MYTHICAL }, // Lugia
+    { NATIONAL_DEX_HO_OH, TIER_MYTHICAL }, // Ho Oh
+    { NATIONAL_DEX_KYOGRE, TIER_MYTHICAL }, // Kyogre
+    { NATIONAL_DEX_GROUDON, TIER_MYTHICAL }, // Groudon
+    { NATIONAL_DEX_RAYQUAZA, TIER_MYTHICAL }, // Rayquaza
+    { NATIONAL_DEX_JIRACHI, TIER_MYTHICAL }, // Jirachi
+    { NATIONAL_DEX_DEOXYS, TIER_MYTHICAL }, // Deoxys
+    { NATIONAL_DEX_DIALGA, TIER_MYTHICAL }, // Dialga
+    { NATIONAL_DEX_PALKIA, TIER_MYTHICAL }, // Palkia
+    { NATIONAL_DEX_GIRATINA, TIER_MYTHICAL }, // Giratina
+    { NATIONAL_DEX_DARKRAI, TIER_MYTHICAL }, // Darkrai
+    { NATIONAL_DEX_SHAYMIN, TIER_MYTHICAL }, // Shaymin
+    { NATIONAL_DEX_ARCEUS, TIER_MYTHICAL }, // Arceus
+    { NATIONAL_DEX_RESHIRAM, TIER_MYTHICAL }, // Reshiram
+    { NATIONAL_DEX_ZEKROM, TIER_MYTHICAL }, // Zekrom
+    { NATIONAL_DEX_KYUREM, TIER_MYTHICAL }, // Kyurem
+    { NATIONAL_DEX_KELDEO, TIER_MYTHICAL }, // Keldeo
+    { NATIONAL_DEX_MELOETTA, TIER_MYTHICAL }, // Meloetta
+    { NATIONAL_DEX_GENESECT, TIER_MYTHICAL }, // Genesect
+    { NATIONAL_DEX_XERNEAS, TIER_MYTHICAL }, // Xerneas
+    { NATIONAL_DEX_YVELTAL, TIER_MYTHICAL }, // Yveltal
+    { NATIONAL_DEX_ZYGARDE, TIER_MYTHICAL }, // Zygarde
+    { NATIONAL_DEX_DIANCIE, TIER_MYTHICAL }, // Diancie
+    { NATIONAL_DEX_HOOPA, TIER_MYTHICAL }, // Hoopa
+    { NATIONAL_DEX_VOLCANION, TIER_MYTHICAL }, // Volcanion
+    { NATIONAL_DEX_SOLGALEO, TIER_MYTHICAL }, // Solgaleo
+    { NATIONAL_DEX_LUNALA, TIER_MYTHICAL }, // Lunala
+    { NATIONAL_DEX_NECROZMA, TIER_MYTHICAL }, // Necrozma
+    { NATIONAL_DEX_MAGEARNA, TIER_MYTHICAL }, // Magearna
+    { NATIONAL_DEX_MARSHADOW, TIER_MYTHICAL }, // Marshadow
+    { NATIONAL_DEX_ZERAORA, TIER_MYTHICAL }, // Zeraora
+    { NATIONAL_DEX_ZACIAN, TIER_MYTHICAL }, // Zacian
+    { NATIONAL_DEX_ZAMAZENTA, TIER_MYTHICAL }, // Zamazenta
+    { NATIONAL_DEX_ETERNATUS, TIER_MYTHICAL }, // Eternatus
+    { NATIONAL_DEX_CALYREX, TIER_MYTHICAL }, // Calyrex
+    { NATIONAL_DEX_KORAIDON, TIER_MYTHICAL }, // Koraidon
+    { NATIONAL_DEX_MIRAIDON, TIER_MYTHICAL }, // Miraidon
+    { NATIONAL_DEX_TERAPAGOS, TIER_MYTHICAL }, // Terapagos
+    { NATIONAL_DEX_PECHARUNT, TIER_MYTHICAL }, // Pecharunt
+    { NATIONAL_DEX_CELEBI, TIER_MYTHICAL }, // Celebi
+
+    // ---- Legendary — sub-legendaries (birds, trios, genies, Tapus, Regis, etc.) ----
+    { NATIONAL_DEX_ARTICUNO, TIER_LEGENDARY }, // Articuno
+    { NATIONAL_DEX_ZAPDOS, TIER_LEGENDARY }, // Zapdos
+    { NATIONAL_DEX_MOLTRES, TIER_LEGENDARY }, // Moltres
+    { NATIONAL_DEX_RAIKOU, TIER_LEGENDARY }, // Raikou
+    { NATIONAL_DEX_ENTEI, TIER_LEGENDARY }, // Entei
+    { NATIONAL_DEX_SUICUNE, TIER_LEGENDARY }, // Suicune
+    { NATIONAL_DEX_REGIROCK, TIER_LEGENDARY }, // Regirock
+    { NATIONAL_DEX_REGICE, TIER_LEGENDARY }, // Regice
+    { NATIONAL_DEX_REGISTEEL, TIER_LEGENDARY }, // Registeel
+    { NATIONAL_DEX_LATIAS, TIER_LEGENDARY }, // Latias
+    { NATIONAL_DEX_LATIOS, TIER_LEGENDARY }, // Latios
+    { NATIONAL_DEX_UXIE, TIER_LEGENDARY }, // Uxie
+    { NATIONAL_DEX_MESPRIT, TIER_LEGENDARY }, // Mesprit
+    { NATIONAL_DEX_AZELF, TIER_LEGENDARY }, // Azelf
+    { NATIONAL_DEX_HEATRAN, TIER_LEGENDARY }, // Heatran
+    { NATIONAL_DEX_REGIGIGAS, TIER_LEGENDARY }, // Regigigas
+    { NATIONAL_DEX_CRESSELIA, TIER_LEGENDARY }, // Cresselia
+    { NATIONAL_DEX_COBALION, TIER_LEGENDARY }, // Cobalion
+    { NATIONAL_DEX_TERRAKION, TIER_LEGENDARY }, // Terrakion
+    { NATIONAL_DEX_VIRIZION, TIER_LEGENDARY }, // Virizion
+    { NATIONAL_DEX_TORNADUS, TIER_LEGENDARY }, // Tornadus
+    { NATIONAL_DEX_THUNDURUS, TIER_LEGENDARY }, // Thundurus
+    { NATIONAL_DEX_LANDORUS, TIER_LEGENDARY }, // Landorus
+    { NATIONAL_DEX_TAPU_KOKO, TIER_LEGENDARY }, // Tapu Koko
+    { NATIONAL_DEX_TAPU_LELE, TIER_LEGENDARY }, // Tapu Lele
+    { NATIONAL_DEX_TAPU_BULU, TIER_LEGENDARY }, // Tapu Bulu
+    { NATIONAL_DEX_TAPU_FINI, TIER_LEGENDARY }, // Tapu Fini
+    { NATIONAL_DEX_URSHIFU, TIER_LEGENDARY }, // Urshifu
+    { NATIONAL_DEX_REGIELEKI, TIER_LEGENDARY }, // Regieleki
+    { NATIONAL_DEX_REGIDRAGO, TIER_LEGENDARY }, // Regidrago
+    { NATIONAL_DEX_GLASTRIER, TIER_LEGENDARY }, // Glastrier
+    { NATIONAL_DEX_SPECTRIER, TIER_LEGENDARY }, // Spectrier
+    { NATIONAL_DEX_ENAMORUS, TIER_LEGENDARY }, // Enamorus
+    { NATIONAL_DEX_OKIDOGI, TIER_LEGENDARY }, // Okidogi
+    { NATIONAL_DEX_MUNKIDORI, TIER_LEGENDARY }, // Munkidori
+    { NATIONAL_DEX_FEZANDIPITI, TIER_LEGENDARY }, // Fezandipiti
+    { NATIONAL_DEX_OGERPON, TIER_LEGENDARY }, // Ogerpon
+
+    // ---- Pseudo — 600-BST pseudo-legends, Ultra Beasts, Paradox, Treasures of Ruin ----
+    { NATIONAL_DEX_DRAGONITE, TIER_PSEUDO }, // Dragonite
+    { NATIONAL_DEX_TYRANITAR, TIER_PSEUDO }, // Tyranitar
+    { NATIONAL_DEX_SALAMENCE, TIER_PSEUDO }, // Salamence
+    { NATIONAL_DEX_METAGROSS, TIER_PSEUDO }, // Metagross
+    { NATIONAL_DEX_GARCHOMP, TIER_PSEUDO }, // Garchomp
+    { NATIONAL_DEX_HYDREIGON, TIER_PSEUDO }, // Hydreigon
+    { NATIONAL_DEX_GOODRA, TIER_PSEUDO }, // Goodra
+    { NATIONAL_DEX_KOMMO_O, TIER_PSEUDO }, // Kommo O
+    { NATIONAL_DEX_NIHILEGO, TIER_PSEUDO }, // Nihilego
+    { NATIONAL_DEX_BUZZWOLE, TIER_PSEUDO }, // Buzzwole
+    { NATIONAL_DEX_PHEROMOSA, TIER_PSEUDO }, // Pheromosa
+    { NATIONAL_DEX_XURKITREE, TIER_PSEUDO }, // Xurkitree
+    { NATIONAL_DEX_CELESTEELA, TIER_PSEUDO }, // Celesteela
+    { NATIONAL_DEX_KARTANA, TIER_PSEUDO }, // Kartana
+    { NATIONAL_DEX_GUZZLORD, TIER_PSEUDO }, // Guzzlord
+    { NATIONAL_DEX_NAGANADEL, TIER_PSEUDO }, // Naganadel
+    { NATIONAL_DEX_STAKATAKA, TIER_PSEUDO }, // Stakataka
+    { NATIONAL_DEX_BLACEPHALON, TIER_PSEUDO }, // Blacephalon
+    { NATIONAL_DEX_DRAGAPULT, TIER_PSEUDO }, // Dragapult
+    { NATIONAL_DEX_GREAT_TUSK, TIER_PSEUDO }, // Great Tusk
+    { NATIONAL_DEX_SCREAM_TAIL, TIER_PSEUDO }, // Scream Tail
+    { NATIONAL_DEX_BRUTE_BONNET, TIER_PSEUDO }, // Brute Bonnet
+    { NATIONAL_DEX_FLUTTER_MANE, TIER_PSEUDO }, // Flutter Mane
+    { NATIONAL_DEX_SLITHER_WING, TIER_PSEUDO }, // Slither Wing
+    { NATIONAL_DEX_SANDY_SHOCKS, TIER_PSEUDO }, // Sandy Shocks
+    { NATIONAL_DEX_IRON_TREADS, TIER_PSEUDO }, // Iron Treads
+    { NATIONAL_DEX_IRON_BUNDLE, TIER_PSEUDO }, // Iron Bundle
+    { NATIONAL_DEX_IRON_HANDS, TIER_PSEUDO }, // Iron Hands
+    { NATIONAL_DEX_IRON_JUGULIS, TIER_PSEUDO }, // Iron Jugulis
+    { NATIONAL_DEX_IRON_MOTH, TIER_PSEUDO }, // Iron Moth
+    { NATIONAL_DEX_IRON_THORNS, TIER_PSEUDO }, // Iron Thorns
+    { NATIONAL_DEX_BAXCALIBUR, TIER_PSEUDO }, // Baxcalibur
+    { NATIONAL_DEX_WO_CHIEN, TIER_PSEUDO }, // Wo Chien
+    { NATIONAL_DEX_CHIEN_PAO, TIER_PSEUDO }, // Chien Pao
+    { NATIONAL_DEX_TING_LU, TIER_PSEUDO }, // Ting Lu
+    { NATIONAL_DEX_CHI_YU, TIER_PSEUDO }, // Chi Yu
+    { NATIONAL_DEX_ROARING_MOON, TIER_PSEUDO }, // Roaring Moon
+    { NATIONAL_DEX_IRON_VALIANT, TIER_PSEUDO }, // Iron Valiant
+    { NATIONAL_DEX_WALKING_WAKE, TIER_PSEUDO }, // Walking Wake
+    { NATIONAL_DEX_IRON_LEAVES, TIER_PSEUDO }, // Iron Leaves
+    { NATIONAL_DEX_ARCHALUDON, TIER_PSEUDO }, // Archaludon
+    { NATIONAL_DEX_GOUGING_FIRE, TIER_PSEUDO }, // Gouging Fire
+    { NATIONAL_DEX_RAGING_BOLT, TIER_PSEUDO }, // Raging Bolt
+    { NATIONAL_DEX_IRON_BOULDER, TIER_PSEUDO }, // Iron Boulder
+    { NATIONAL_DEX_IRON_CROWN, TIER_PSEUDO }, // Iron Crown
+};
+
+enum SpeciesTier GetSpeciesTier(u16 species)
+{
+    enum NationalDexOrder natDex = SpeciesToNationalPokedexNum(species);
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sSpeciesTiers); i++)
+    {
+        if (sSpeciesTiers[i].natDex == natDex)
+            return sSpeciesTiers[i].tier;
+    }
+
+    return TIER_NORMAL;
+}
+
+bool32 SpeciesIsTier(u16 species, enum SpeciesTier tier)
+{
+    return GetSpeciesTier(species) == tier;
+}
