@@ -345,6 +345,14 @@ static void GenerateOpponentMons(void)
     u32 battleNum = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
 #endif
     gFacilityTrainers = gBattleFrontierTrainers;
+    // FORK: pin the roster used for the species/item dedup below (and that the
+    // stored monIds index into). Vanilla left gFacilityTrainerMons at whatever a
+    // prior call set; under B_FRONTIER_COMPETITIVE_MONS it must be the competitive
+    // list so the dedup compares the right species. Tent keeps its own roster.
+    if (lvlMode != FRONTIER_LVL_TENT)
+        gFacilityTrainerMons = GetFactoryMonsTable();
+    else
+        gFacilityTrainerMons = gSlateportBattleTentMons;
 
     do
     {
@@ -800,6 +808,10 @@ void FillFactoryBrainParty(void)
     u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
     fixedIV = GetFactoryMonFixedIV(challengeNum + 2, FALSE);
     monLevel = SetFacilityPtrsGetLevel();
+    // FORK: SetFacilityPtrsGetLevel resets gFacilityTrainerMons to the vanilla
+    // gBattleFrontierMons (it's shared by every facility); re-point it at the
+    // competitive roster so the Brain's competitive monIds resolve correctly.
+    gFacilityTrainerMons = GetFactoryMonsTable();
     i = 0;
     otId = READ_OTID_FROM_SAVE;
 
@@ -1016,6 +1028,11 @@ static void FillFactoryFrontierTrainerParty(u16 trainerId, u8 firstMonId)
     }
 
     level = SetFacilityPtrsGetLevel();
+    // FORK: SetFacilityPtrsGetLevel resets gFacilityTrainerMons to the vanilla
+    // gBattleFrontierMons (it's shared by every facility); re-point it at the
+    // competitive roster so the opponent's competitive monIds resolve correctly
+    // (this is the non-tent path — FillFactoryTentTrainerParty handles the tent).
+    gFacilityTrainerMons = GetFactoryMonsTable();
     otID = READ_OTID_FROM_SAVE;
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
     {
