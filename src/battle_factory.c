@@ -387,9 +387,14 @@ static void GenerateOpponentMons(void)
         if (j != (int)ARRAY_COUNT(gSaveBlock2Ptr->frontier.rentalMons))
             continue;
 
-        // "High tier" Pokémon are only allowed on open level mode
+        // "High tier" Pokémon are only allowed on open level mode.
+        // FORK: the competitive roster has no weak->strong tier ordering, so a high
+        // array index doesn't mean "stronger" — this gate (and its 849-entry ceiling)
+        // doesn't apply. Skipped under B_FRONTIER_COMPETITIVE_MONS.
+    #if !B_FRONTIER_COMPETITIVE_MONS
         if (lvlMode == FRONTIER_LVL_50 && monId > FRONTIER_MONS_HIGH_TIER)
             continue;
+    #endif
 
         // Ensure this species hasn't already been chosen for the opponent
         for (k = firstMonId; k < firstMonId + i; k++)
@@ -821,8 +826,12 @@ void FillFactoryBrainParty(void)
 
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN)
             continue;
+    #if !B_FRONTIER_COMPETITIVE_MONS
+        // FORK: see GenerateOpponentMons — the competitive roster has no tier ramp,
+        // so the high-tier gate (and its 849-entry ceiling) is skipped under the flag.
         if (monLevel == FRONTIER_MAX_LEVEL_50 && monId > FRONTIER_MONS_HIGH_TIER)
             continue;
+    #endif
 
         for (j = 0; j < (int)ARRAY_COUNT(gSaveBlock2Ptr->frontier.rentalMons); j++)
         {

@@ -89,7 +89,7 @@
 // src/battle_factory_screen.c. The roster carries several distinct builds per
 // species (so the opponent's exact set can't be read off the species) and tags
 // each set FACTORY_SINGLES/DOUBLES/BOTH so format-inappropriate sets never appear.
-// Generation I is built out; later generations follow.
+// Generations I through IV are built out; later generations follow.
 #define B_FRONTIER_COMPETITIVE_MONS TRUE
 
 // If TRUE, in Frontier facilities where the bag is disabled (Tower, Dome,
