@@ -51,17 +51,8 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { NATIONAL_DEX_MIRAIDON, TIER_MYTHICAL }, // 1008
 
     // ---- Legendary — 1 per factory boss battle ----
-    { NATIONAL_DEX_ARTICUNO, TIER_LEGENDARY }, // Articuno
-    { NATIONAL_DEX_ZAPDOS, TIER_LEGENDARY }, // Zapdos
-    { NATIONAL_DEX_MOLTRES, TIER_LEGENDARY }, // Moltres
     { NATIONAL_DEX_MEW, TIER_LEGENDARY }, // Mew
-    { NATIONAL_DEX_RAIKOU, TIER_LEGENDARY }, // Raikou
-    { NATIONAL_DEX_ENTEI, TIER_LEGENDARY }, // Entei
-    { NATIONAL_DEX_SUICUNE, TIER_LEGENDARY }, // Suicune
     { NATIONAL_DEX_CELEBI, TIER_LEGENDARY }, // Celebi
-    { NATIONAL_DEX_REGIROCK, TIER_LEGENDARY }, // Regirock
-    { NATIONAL_DEX_REGICE, TIER_LEGENDARY }, // Regice
-    { NATIONAL_DEX_REGISTEEL, TIER_LEGENDARY }, // Registeel
     { NATIONAL_DEX_LATIAS, TIER_LEGENDARY }, // Latias
     { NATIONAL_DEX_LATIOS, TIER_LEGENDARY }, // Latios
     { NATIONAL_DEX_JIRACHI, TIER_LEGENDARY }, // Jirachi
@@ -112,17 +103,10 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { NATIONAL_DEX_METAGROSS, TIER_PSEUDO }, // Metagross
     { NATIONAL_DEX_GARCHOMP, TIER_PSEUDO }, // Garchomp
     { NATIONAL_DEX_HYDREIGON, TIER_PSEUDO }, // Hydreigon
-    { NATIONAL_DEX_GOODRA, TIER_PSEUDO }, // Goodra
     { NATIONAL_DEX_KOMMO_O, TIER_PSEUDO }, // Kommo O
-    { NATIONAL_DEX_NIHILEGO, TIER_PSEUDO }, // Nihilego
-    { NATIONAL_DEX_BUZZWOLE, TIER_PSEUDO }, // Buzzwole
     { NATIONAL_DEX_PHEROMOSA, TIER_PSEUDO }, // Pheromosa
-    { NATIONAL_DEX_XURKITREE, TIER_PSEUDO }, // Xurkitree
-    { NATIONAL_DEX_CELESTEELA, TIER_PSEUDO }, // Celesteela
     { NATIONAL_DEX_KARTANA, TIER_PSEUDO }, // Kartana
-    { NATIONAL_DEX_GUZZLORD, TIER_PSEUDO }, // Guzzlord
     { NATIONAL_DEX_NAGANADEL, TIER_PSEUDO }, // Naganadel
-    { NATIONAL_DEX_STAKATAKA, TIER_PSEUDO }, // Stakataka
     { NATIONAL_DEX_BLACEPHALON, TIER_PSEUDO }, // Blacephalon
     { NATIONAL_DEX_DRAGAPULT, TIER_PSEUDO }, // Dragapult
     { NATIONAL_DEX_GREAT_TUSK, TIER_PSEUDO }, // Great Tusk
