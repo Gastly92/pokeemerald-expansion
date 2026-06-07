@@ -195,7 +195,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_DARKRAI,                  sInnateLevitate },
     { SPECIES_DARKRAI_MEGA,             sInnateLevitate },
     { SPECIES_GIRATINA_ALTERED,         sInnateLevitate }, // Origin form is already covered above
-    { SPECIES_SPIRITOMB,                sInnateLevitate },
 
     // Gen 5
     { SPECIES_BEHEEYEM,                 sInnateLevitate },
