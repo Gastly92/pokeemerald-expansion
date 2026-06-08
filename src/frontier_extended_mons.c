@@ -274,30 +274,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Pikachu ----
-    {
-        .species = SPECIES_PIKACHU,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIGHT_BALL, // doubles the attack stats
-        .moves = {MOVE_VOLT_TACKLE, MOVE_PLAY_ROUGH, MOVE_KNOCK_OFF, MOVE_FAKE_OUT},
-        .ability = ABILITY_LIGHTNING_ROD,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_PIKACHU,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PIKANIUM_Z, // Catastropika
-        .moves = {MOVE_VOLT_TACKLE, MOVE_PLAY_ROUGH, MOVE_IRON_TAIL, MOVE_NASTY_PLOT},
-        .ability = ABILITY_LIGHTNING_ROD,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
-    },
-
     // ---- Raichu ----
     {
         .species = SPECIES_RAICHU,
