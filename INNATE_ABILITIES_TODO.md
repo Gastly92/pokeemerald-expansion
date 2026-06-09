@@ -1,6 +1,8 @@
 ## Innate Ability TODO
 
-* [ ] [!INFO] STENCH = 1
+> [!INFO]
+> test
+* [ ] STENCH = 1
 * [ ] DRIZZLE = 2
 * [ ] SPEED_BOOST = 3
 * [ ] BATTLE_ARMOR = 4
