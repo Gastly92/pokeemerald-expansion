@@ -95,7 +95,6 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { NATIONAL_DEX_GOUGING_FIRE, TIER_PSEUDO }, // 1020
     { NATIONAL_DEX_RAGING_BOLT, TIER_PSEUDO }, // 1021
     { NATIONAL_DEX_TERAPAGOS, TIER_PSEUDO }, // 1024
-    { NATIONAL_DEX_PECHARUNT, TIER_PSEUDO }, // 1025
 };
 
 enum SpeciesTier GetSpeciesTier(u16 species)
