@@ -293,9 +293,9 @@
 * [ ] CUD_CHEW = 291
 * [ ] SHARPNESS = 292
 > * [x] ~~SUPREME_OVERLORD = 293~~
-* [ ] COSTAR = 294
-* [ ] TOXIC_DEBRIS = 295
-* [ ] ARMOR_TAIL = 296
+> * [x] ~~COSTAR = 294~~
+> * [x] ~~TOXIC_DEBRIS = 295~~
+> * [x] ~~ARMOR_TAIL = 296~~
 > * [x] ~~EARTH_EATER = 297~~
 > * [x] ~~MYCELIUM_MIGHT = 298~~
 > * [x] ~~HOSPITALITY = 299~~
