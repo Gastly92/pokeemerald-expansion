@@ -2059,30 +2059,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Girafarig ----
-    {
-        .species = SPECIES_GIRAFARIG,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
-        .moves = {MOVE_NASTY_PLOT, MOVE_PSYSHOCK, MOVE_HYPER_VOICE, MOVE_THUNDERBOLT},
-        .ability = ABILITY_SAP_SIPPER,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GIRAFARIG,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // calm mind + dual screens pivot
-        .moves = {MOVE_CALM_MIND, MOVE_STORED_POWER, MOVE_SHADOW_BALL, MOVE_THUNDERBOLT},
-        .ability = ABILITY_SAP_SIPPER,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
-    },
-
     // ---- Forretress ----
     {
         .species = SPECIES_FORRETRESS,
@@ -2483,30 +2459,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_DOWNLOAD,
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
-        .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Stantler ----
-    {
-        .species = SPECIES_STANTLER,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Intimidate mixed attacker
-        .moves = {MOVE_DOUBLE_EDGE, MOVE_PSYCHIC, MOVE_EARTHQUAKE, MOVE_JUMP_KICK},
-        .ability = ABILITY_INTIMIDATE,
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_STANTLER,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band breaker
-        .moves = {MOVE_DOUBLE_EDGE, MOVE_MEGAHORN, MOVE_EARTHQUAKE, MOVE_ZEN_HEADBUTT},
-        .ability = ABILITY_SAP_SIPPER,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_NORMAL,
         .ball = BALL_POKE,
     },
@@ -6937,30 +6889,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(252, 4, 0, 252, 0, 0),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Bisharp ----
-    {
-        .species = SPECIES_BISHARP,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Defiant Swords Dance sweeper
-        .moves = {MOVE_SWORDS_DANCE, MOVE_KNOCK_OFF, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH},
-        .ability = ABILITY_DEFIANT,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_BISHARP,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Defiant band breaker
-        .moves = {MOVE_KNOCK_OFF, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH, MOVE_CLOSE_COMBAT},
-        .ability = ABILITY_DEFIANT,
-        .nature = NATURE_ADAMANT,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_DARK,
         .ball = BALL_POKE,
     },
 
