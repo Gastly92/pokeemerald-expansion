@@ -1,5 +1,11 @@
 ## Innate Ability TODO
 
+* [ ] UNIMPLEMENTED/UNDECIDED
+> * [x] IMPLEMENTED = index
+> * [x] ~~REJECTED = index~~
+
+___
+
 * [ ] STENCH = 1
 * [ ] DRIZZLE = 2
 * [ ] SPEED_BOOST = 3
@@ -184,13 +190,13 @@
 * [ ] PIXILATE = 182
 * [ ] GOOEY = 183
 * [ ] AERILATE = 184
-* [ ] PARENTAL_BOND = 185
-* [ ] DARK_AURA = 186
-* [ ] FAIRY_AURA = 187
-* [ ] AURA_BREAK = 188
-* [ ] PRIMORDIAL_SEA = 189
-* [ ] DESOLATE_LAND = 190
-* [ ] DELTA_STREAM = 191
+> * [x] ~~PARENTAL_BOND = 185~~
+> * [x] ~~DARK_AURA = 186~~
+> * [x] ~~FAIRY_AURA = 187~~
+> * [x] ~~AURA_BREAK = 188~~
+> * [x] ~~PRIMORDIAL_SEA = 189~~
+> * [x] ~~DESOLATE_LAND = 190~~
+> * [x] ~~DELTA_STREAM = 191~~
 * [ ] STAMINA = 192
 * [ ] WIMP_OUT = 193
 * [ ] EMERGENCY_EXIT = 194
