@@ -1,5 +1,11 @@
 ## Innate Ability TODO
 
+* [ ] UNIMPLEMENTED/UNDECIDED
+> * [x] IMPLEMENTED = index
+> * [x] ~~REJECTED = index~~
+
+___
+
 * [ ] STENCH = 1
 * [ ] DRIZZLE = 2
 * [ ] SPEED_BOOST = 3
