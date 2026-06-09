@@ -7,12 +7,6 @@
 // FORK: species -> tier classification (see include/species_tiers.h for the full
 // rationale and the fork's tier definitions). Keyed by National Pokedex number so
 // every forme of a species inherits the base species' tier automatically.
-//
-// Derived from the upstream species flags (isRestrictedLegendary / isSubLegendary
-// / isMythical / isUltraBeast / isParadox) with this fork's groupings layered on
-// top: restricted legendaries + official mythicals -> TIER_MYTHICAL; sub-legends
-// -> TIER_LEGENDARY; Ultra Beasts + Paradox + the Treasures of Ruin + the classic
-// 600-BST pseudo-legendaries -> TIER_PSEUDO. Edit a row to reclassify a species.
 
 struct SpeciesTierEntry
 {
@@ -22,7 +16,7 @@ struct SpeciesTierEntry
 
 static const struct SpeciesTierEntry sSpeciesTiers[] =
 {
-    // ---- Mythical — 1 per frontier brain battle ----
+    // ---- Mythical — Exactly 1 per frontier brain battle ----
     { NATIONAL_DEX_MEWTWO, TIER_MYTHICAL }, // 150
     { NATIONAL_DEX_LUGIA, TIER_MYTHICAL }, // 249
     { NATIONAL_DEX_HO_OH, TIER_MYTHICAL }, // 250
@@ -50,7 +44,7 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { NATIONAL_DEX_KORAIDON, TIER_MYTHICAL }, // 1007
     { NATIONAL_DEX_MIRAIDON, TIER_MYTHICAL }, // 1008
 
-    // ---- Legendary — 1 per frontier boss battle ----
+    // ---- Legendary — Exactly 1 per frontier boss battle ----
     { NATIONAL_DEX_LATIAS, TIER_LEGENDARY }, // 380
     { NATIONAL_DEX_LATIOS, TIER_LEGENDARY }, // 381
     { NATIONAL_DEX_JIRACHI, TIER_LEGENDARY }, // 385
@@ -75,6 +69,7 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { NATIONAL_DEX_SALAMENCE, TIER_PSEUDO }, // 373
     { NATIONAL_DEX_GARCHOMP, TIER_PSEUDO }, // 445
     { NATIONAL_DEX_HEATRAN, TIER_PSEUDO }, // 485
+    { NATIONAL_DEX_KOMMO_O, TIER_PSEUDO }, // 784
     { NATIONAL_DEX_PHEROMOSA, TIER_PSEUDO }, // 795
     { NATIONAL_DEX_KARTANA, TIER_PSEUDO }, // 798
     { NATIONAL_DEX_NAGANADEL, TIER_PSEUDO }, // 804
