@@ -1,7 +1,5 @@
 ## Innate Ability TODO
 
-> [!TIP]
-> test
 * [ ] STENCH = 1
 * [ ] DRIZZLE = 2
 * [ ] SPEED_BOOST = 3
@@ -27,7 +25,7 @@
 * [ ] SHADOW_TAG = 23
 * [ ] ROUGH_SKIN = 24
 * [ ] WONDER_GUARD = 25
-* [x] LEVITATE = 26
+> * [x] LEVITATE = 26
 * [ ] EFFECT_SPORE = 27
 * [ ] SYNCHRONIZE = 28
 * [ ] CLEAR_BODY = 29
