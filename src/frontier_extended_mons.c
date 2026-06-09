@@ -6705,20 +6705,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Ferroseed (NFE Eviolite niche) ----
-    {
-        .species = SPECIES_FERROSEED,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_EVIOLITE, // Iron Barbs hazard wall (Eviolite niche)
-        .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_LEECH_SEED, MOVE_GYRO_BALL},
-        .ability = ABILITY_IRON_BARBS,
-        .nature = NATURE_RELAXED,
-        .ev = TRAINER_PARTY_EVS(252, 0, 88, 0, 0, 168),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
     // ---- Ferrothorn ----
     {
         .species = SPECIES_FERROTHORN,
