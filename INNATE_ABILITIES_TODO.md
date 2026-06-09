@@ -220,11 +220,11 @@
 * [ ] FLUFFY = 218
 * [ ] DAZZLING = 219
 * [ ] SOUL_HEART = 220
-* [ ] TANGLING_HAIR = 221
+> * [x] ~~TANGLING_HAIR = 221~~
 * [ ] RECEIVER = 222
 * [ ] POWER_OF_ALCHEMY = 223
-* [ ] BEAST_BOOST = 224
-* [ ] RKS_SYSTEM = 225
+> * [x] ~~BEAST_BOOST = 224~~
+> * [x] ~~RKS_SYSTEM = 225~~
 * [ ] ELECTRIC_SURGE = 226
 * [ ] PSYCHIC_SURGE = 227
 * [ ] MISTY_SURGE = 228
