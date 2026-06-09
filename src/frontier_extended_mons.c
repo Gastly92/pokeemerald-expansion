@@ -993,9 +993,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HITMONLEE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Reckless / Unburden sweeper
+        .heldItem = ITEM_QUICK_CLAW, // Reckless / Unburden sweeper
         .moves = {MOVE_HIGH_JUMP_KICK, MOVE_KNOCK_OFF, MOVE_MACH_PUNCH, MOVE_STONE_EDGE},
-        .ability = ABILITY_RECKLESS,
+        .ability = ABILITY_UNBURDEN,
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_FIGHTING,
@@ -4735,7 +4735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRIFBLIM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Unburden sweeper
+        .heldItem = ITEM_QUICK_CLAW, // Unburden sweeper
         .moves = {MOVE_CALM_MIND, MOVE_SHADOW_BALL, MOVE_AIR_SLASH, MOVE_STRENGTH_SAP},
         .ability = ABILITY_UNBURDEN,
         .nature = NATURE_TIMID,
@@ -5313,7 +5313,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Gliscor (Gen IV evolution of Gligar) ----
+    // ---- Gliscor ----
     {
         .species = SPECIES_GLISCOR,
         .tags = FORMAT_SINGLES,
@@ -8075,7 +8075,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HAWLUCHA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GRASSY_SEED, // Unburden Swords Dance sweeper
+        .heldItem = ITEM_QUICK_CLAW, // Unburden Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_ACROBATICS, MOVE_CLOSE_COMBAT, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_UNBURDEN,
         .nature = NATURE_JOLLY,
@@ -11138,7 +11138,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SNEASLER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TOXIC_ORB, // Poison Touch Dire Claw attacker
+        .heldItem = ITEM_LIFE_ORB, // Poison Touch Dire Claw attacker
         .moves = {MOVE_DIRE_CLAW, MOVE_CLOSE_COMBAT, MOVE_FAKE_OUT, MOVE_THROAT_CHOP},
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE_JOLLY,
@@ -11149,7 +11149,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SNEASLER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance Unburden-style sweeper
+        .heldItem = ITEM_SCOPE_LENS, // Swords Dance Unburden-style sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_DIRE_CLAW, MOVE_ACROBATICS},
         .ability = ABILITY_UNBURDEN,
         .nature = NATURE_JOLLY,
