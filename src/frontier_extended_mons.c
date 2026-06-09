@@ -396,7 +396,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_STICKY_BARB, // Unaware staller (toggle-friendly)
+        .heldItem = ITEM_LEFTOVERS, // Unaware staller (toggle-friendly)
         .moves = {MOVE_MOONBLAST, MOVE_SOFT_BOILED, MOVE_TOXIC, MOVE_THUNDER_WAVE},
         .ability = ABILITY_UNAWARE,
         .nature = NATURE_CALM,
@@ -2758,6 +2758,41 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Celebi ---- (innate Levitate — Ground immune, never give an Air Balloon)
+    {
+        .species = SPECIES_CELEBI,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
+        .moves = {MOVE_NASTY_PLOT, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_EARTH_POWER},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CELEBI,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
+        .moves = {MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_RECOVER, MOVE_U_TURN},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 240, 0, 0, 16),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CELEBI,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
+        .moves = {MOVE_CALM_MIND, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_RECOVER},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 60, 196, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+
     // ============================================================
     //                       Generation III
     // ============================================================
@@ -4952,7 +4987,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAPION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Sniper / Knock Off pivot
+        .heldItem = ITEM_BLACK_SLUDGE, // Sniper / Knock Off pivot
         .moves = {MOVE_KNOCK_OFF, MOVE_POISON_JAB, MOVE_EARTHQUAKE, MOVE_TAUNT},
         .ability = ABILITY_BATTLE_ARMOR,
         .nature = NATURE_JOLLY,
@@ -6077,7 +6112,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Speed Boost screens / Tailwind support
+        .heldItem = ITEM_BLACK_SLUDGE, // Tailwind support
         .moves = {MOVE_TAILWIND, MOVE_PROTECT, MOVE_POISON_JAB, MOVE_MEGAHORN},
         .ability = ABILITY_SPEED_BOOST,
         .nature = NATURE_JOLLY,
@@ -8824,7 +8859,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXAPEX,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS, // Merciless redirect support
+        .heldItem = ITEM_BLACK_SLUDGE, // Merciless redirect support
         .moves = {MOVE_SCALD, MOVE_BANEFUL_BUNKER, MOVE_TOXIC, MOVE_HAZE},
         .ability = ABILITY_MERCILESS,
         .nature = NATURE_CALM,
@@ -11695,7 +11730,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLODSIRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware special wall / status spreader
+        .heldItem = ITEM_BLACK_SLUDGE, // Unaware special wall / status spreader
         .moves = {MOVE_TOXIC, MOVE_RECOVER, MOVE_EARTHQUAKE, MOVE_TOXIC_SPIKES},
         .ability = ABILITY_UNAWARE,
         .nature = NATURE_CAREFUL,
@@ -12382,7 +12417,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OKIDOGI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Guard Dog Bulk Up wall breaker
+        .heldItem = ITEM_BLACK_SLUDGE, // Guard Dog Bulk Up wall breaker
         .moves = {MOVE_BULK_UP, MOVE_DRAIN_PUNCH, MOVE_POISON_JAB, MOVE_PSYCHIC_FANGS},
         .ability = ABILITY_GUARD_DOG,
         .nature = NATURE_ADAMANT,
@@ -12406,7 +12441,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUNKIDORI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator special pivot
+        .heldItem = ITEM_BLACK_SLUDGE, // Regenerator special pivot
         .moves = {MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_U_TURN, MOVE_FUTURE_SIGHT},
         .ability = ABILITY_REGENERATOR,
         .nature = NATURE_TIMID,
@@ -12419,7 +12454,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FEZANDIPITI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Toxic Chain utility pivot
+        .heldItem = ITEM_BLACK_SLUDGE, // Toxic Chain utility pivot
         .moves = {MOVE_ROOST, MOVE_TOXIC, MOVE_FOUL_PLAY, MOVE_U_TURN},
         .ability = ABILITY_TOXIC_CHAIN,
         .nature = NATURE_CAREFUL,
@@ -12668,41 +12703,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_POISON_PUPPETEER,
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
-        .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Celebi ---- (innate Levitate — Ground immune, never give an Air Balloon)
-    {
-        .species = SPECIES_CELEBI,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
-        .moves = {MOVE_NASTY_PLOT, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_EARTH_POWER},
-        .ability = ABILITY_NATURAL_CURE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_CELEBI,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
-        .moves = {MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_RECOVER, MOVE_U_TURN},
-        .ability = ABILITY_NATURAL_CURE,
-        .nature = NATURE_BOLD,
-        .ev = TRAINER_PARTY_EVS(252, 0, 240, 0, 0, 16),
-        .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_CELEBI,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
-        .moves = {MOVE_CALM_MIND, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_RECOVER},
-        .ability = ABILITY_NATURAL_CURE,
-        .nature = NATURE_TIMID,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 60, 196, 0),
         .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
