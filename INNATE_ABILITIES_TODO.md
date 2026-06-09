@@ -1,6 +1,6 @@
 ## Innate Ability TODO
 
-> [!INFO]
+> [!TIP]
 > test
 * [ ] STENCH = 1
 * [ ] DRIZZLE = 2
