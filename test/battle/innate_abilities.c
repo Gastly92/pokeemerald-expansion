@@ -115,7 +115,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies only the primary abil
         // Trace resolves deterministically to the single primary ability slot,
         // never an innate.
         ABILITY_POPUP(player, ABILITY_TRACE);
-        MESSAGE("It traced the opposing Magnezones's Magnet Pull!");
+        MESSAGE("It traced the opposing Magnezone's Magnet Pull!");
     }
 }
 
