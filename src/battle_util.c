@@ -5048,8 +5048,10 @@ static bool32 CanBreakThroughInnate(enum BattlerId battlerDef, enum Ability abil
 // FORK: innate abilities (FEATURE_INNATE_ABILITIES). TRUE if `battler`'s species
 // declares `ability` as an innate AND that innate is currently active. Applies the
 // same suppression gates as GetBattlerAbilityInternal (not-on-field, Gastro Acid,
-// Neutralizing Gas, Mold Breaker on breakable abilities, Ability Shield) so an
-// innate is never stronger than the same ability in a real slot. Mirrors the
+// Neutralizing Gas, Mold Breaker on breakable abilities, Ability Shield) so an innate is
+// suppressed exactly like the same ability in a real slot. (Suppression parity only: the innate
+// LEVITATE *effect* is a deliberate pure-boon divergence — see IsBattlerGroundedForBenefit — so
+// an active innate Levitate is intentionally a bit stronger than a real one.) Mirrors the
 // default GetBattlerAbility() path (Mold Breaker respected, Ability Shield
 // honored); the Comatose-while-transformed micro-edge there does not apply to
 // innates (which key off the battler's species). Returns FALSE entirely when the
@@ -5095,6 +5097,21 @@ bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability)
     if (GetBattlerAbility(battler) == ability)
         return TRUE;
     return IsInnateActive(battler, ability);
+}
+
+// FORK: TRUE if the battler should receive the *beneficial* ground interactions — field terrain
+// and Toxic Spikes absorption. That's any grounded battler, plus one that floats only by an
+// active innate Levitate (FEATURE_INNATE_ABILITIES). Unlike a real Levitate, the fork makes an
+// innate Levitate a pure boon: the battler still floats above Ground moves and entry-hazard
+// damage (that immunity flows from IsBattlerGrounded, untouched here), yet it still soaks the
+// terrain it/an ally sets and a Poison-type can still clear Toxic Spikes. A *real* Levitate is
+// deliberately NOT included, so it stays terrain-exempt exactly as in canon — only the innate
+// diverges. With the feature off, IsInnateActive() is FALSE, so this collapses to IsBattlerGrounded.
+bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect)
+{
+    if (IsInnateActive(battler, ABILITY_LEVITATE))
+        return TRUE;
+    return IsBattlerGrounded(battler, ability, holdEffect);
 }
 
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability)
@@ -5212,7 +5229,8 @@ bool32 IsBattlerTerrainAffected(enum BattlerId battler, enum Ability ability, en
     if (IsSemiInvulnerable(battler, CHECK_ALL))
         return FALSE;
 
-    return IsBattlerGrounded(battler, ability, holdEffect);
+    // FORK: an innate Levitate still reaps terrain (IsBattlerGroundedForBenefit) — pure boon.
+    return IsBattlerGroundedForBenefit(battler, ability, holdEffect);
 }
 
 enum Stat GetHighestStatId(enum BattlerId battler)

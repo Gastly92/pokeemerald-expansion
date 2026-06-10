@@ -15,9 +15,12 @@
 // hundreds of upstream-owned sites — a large, perpetually merge-conflict-prone
 // sweep. Instead this fork wires up the innate behavior of one ability at a time
 // and only allows species to declare innates from that supported set. Today the
-// set is just LEVITATE (a passive grounding / Ground-immunity trait handled
-// entirely inside src/battle_util.c). To add another ability: wire its specific
-// effect, extend the allowlist comment in src/innate_abilities.c, and add a test.
+// set is just LEVITATE, handled entirely inside src/battle_util.c. NOTE: an innate Levitate is
+// intentionally a *pure boon* and NOT a 1:1 copy of a real Levitate — it grants Ground / entry-
+// hazard immunity like the real thing, but the fork also keeps the mon grounded for the
+// beneficial ground interactions (field terrain, Toxic Spikes absorption) via
+// IsBattlerGroundedForBenefit(). See the ALLOWLIST note in src/innate_abilities.c. To add another
+// ability: wire its specific effect, extend the allowlist comment in src/innate_abilities.c, and add a test.
 // The step-by-step extension playbook lives in INNATE_ABILITIES.md (repo root).
 //
 // This header exposes only the raw data lookups (no battle/suppression logic).

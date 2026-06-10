@@ -31,8 +31,9 @@ it"* breaks into two parts:
   TRUE if `ability` is the battler's chosen ability **or** an active innate.
 - **Suppression parity** via `IsInnateActive()`: an innate honors Gastro Acid,
   Neutralizing Gas, Mold Breaker (on breakable abilities), Ability Shield, and
-  not-on-field exactly like the same ability in a real slot — so an innate is
-  never strictly better than holding that ability normally.
+  not-on-field exactly like the same ability in a real slot. (Suppression parity
+  only — an innate's *effect* may diverge by design: see the Levitate pure-boon
+  note below, where an innate Levitate is intentionally a bit stronger than a real one.)
 - **Identity stays deterministic**: innates are *never* copied/swapped/displayed
   as identity. Trace, Skill Swap, Role Play, the ability pop-up, and
   `RecordAbilityBattle` all keep reading only the primary slot
@@ -88,6 +89,15 @@ How much is needed depends on the ability class:
     `CalcPartyMonTypeEffectivenessMultiplier` (`src/battle_util.c`). The type calc
     already sets `gLastUsedAbility`, calls `RecordAbilityBattle`, and forces
     `gBattleScripting.abilityPopupOverwrite` to the innate when it blocks.
+  - **pure-boon divergence (Levitate-specific):** unlike a real Levitate, an innate
+    Levitate keeps the mon grounded for the *beneficial* ground interactions —
+    field terrain and Toxic Spikes absorption — while still floating over Ground
+    moves and entry hazards. That's funnelled through `IsBattlerGroundedForBenefit()`
+    (`src/battle_util.c` — grounded, or floating only by an innate Levitate), used at
+    the terrain chokepoint (`IsBattlerTerrainAffected`), the Grassy-Terrain heal
+    (`battle_end_turn.c`), and the Toxic-Spikes switch-in absorb (`battle_switch_in.c`).
+    A real Levitate is excluded there, so it stays terrain-exempt/canon — only the
+    innate is the boon.
   - AI: on-field damage/grounding is automatic (the AI runs the same calc keyed
     off the real battler), but off-field/partner sites need explicit help —
     `GetPartyMonAbilityForSwitchCalc`'s callers in `src/battle_ai_switch.c`
