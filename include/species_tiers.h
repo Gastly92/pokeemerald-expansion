@@ -24,13 +24,17 @@
 //                      Ruin.
 //   - TIER_NORMAL    : everything else (the default; not stored in the table).
 //
-// The table is keyed by National Pokedex number, so every form of a species
-// (Therian formes, Necrozma/Calyrex/Ogerpon formes, regional forms, ...) shares
-// the base species' tier automatically — no need to list each forme.
+// The table is keyed by EXACT species id, so each forme is classified on its own
+// merits rather than inheriting a single tier from its base species' Pokedex
+// number. This lets a powerful forme outrank its base — Shaymin-Sky is
+// TIER_LEGENDARY while ordinary Shaymin is TIER_NORMAL (simply absent from the
+// table) — and a weak base sit below its formes — base Calyrex is TIER_NORMAL
+// while its Ice/Shadow riders are TIER_MYTHICAL. List every forme you want
+// classified; anything not listed is TIER_NORMAL.
 //
-// SCOPE: the table currently covers the species used by the extended frontier
-// roster (src/frontier_extended_mons.c). Species not listed return TIER_NORMAL.
-// Add a row to extend coverage.
+// SCOPE: the table currently covers the species/formes used by the extended
+// frontier roster (src/frontier_extended_mons.c). Species not listed return
+// TIER_NORMAL. Add a row to extend coverage.
 
 enum SpeciesTier
 {

@@ -1,102 +1,125 @@
 #include "global.h"
 #include "species_tiers.h"
-#include "pokemon.h"
-#include "constants/pokedex.h"
 #include "constants/species.h"
 
 // FORK: species -> tier classification (see include/species_tiers.h for the full
-// rationale and the fork's tier definitions). Keyed by National Pokedex number so
-// every forme of a species inherits the base species' tier automatically.
+// rationale and the fork's tier definitions). Keyed by EXACT species id so each
+// forme is classified on its own merits: a powerful forme can sit above its base
+// (Shaymin-Sky is TIER_LEGENDARY while ordinary Shaymin is TIER_NORMAL and is
+// simply absent from the table) and a weak base can sit below its formes (base
+// Calyrex is TIER_NORMAL / absent while its Ice/Shadow riders are TIER_MYTHICAL).
+// Anything not listed is TIER_NORMAL. Add a row to classify another species/forme.
 
 struct SpeciesTierEntry
 {
-    u16 natDex;     // enum NationalDexOrder (NATIONAL_DEX_*)
+    u16 species;    // exact SPECIES_* id (forme-specific)
     u8 tier;        // enum SpeciesTier
 };
 
 static const struct SpeciesTierEntry sSpeciesTiers[] =
 {
-    // ---- Mythical — Exactly 1 per frontier brain battle ----
-    { NATIONAL_DEX_MEWTWO, TIER_MYTHICAL }, // 150
-    { NATIONAL_DEX_LUGIA, TIER_MYTHICAL }, // 249
-    { NATIONAL_DEX_HO_OH, TIER_MYTHICAL }, // 250
-    { NATIONAL_DEX_KYOGRE, TIER_MYTHICAL }, // 382
-    { NATIONAL_DEX_GROUDON, TIER_MYTHICAL }, // 383
-    { NATIONAL_DEX_RAYQUAZA, TIER_MYTHICAL }, // 384
-    { NATIONAL_DEX_DEOXYS, TIER_MYTHICAL }, // 386
-    { NATIONAL_DEX_DIALGA, TIER_MYTHICAL }, // 483
-    { NATIONAL_DEX_PALKIA, TIER_MYTHICAL }, // 484
-    { NATIONAL_DEX_GIRATINA, TIER_MYTHICAL }, // 487
-    { NATIONAL_DEX_DARKRAI, TIER_MYTHICAL }, // 491
-    { NATIONAL_DEX_ARCEUS, TIER_MYTHICAL }, // 493
-    { NATIONAL_DEX_RESHIRAM, TIER_MYTHICAL }, // 643
-    { NATIONAL_DEX_ZEKROM, TIER_MYTHICAL }, // 644
-    { NATIONAL_DEX_XERNEAS, TIER_MYTHICAL }, // 716
-    { NATIONAL_DEX_YVELTAL, TIER_MYTHICAL }, // 717
-    { NATIONAL_DEX_ZYGARDE, TIER_MYTHICAL }, // 718
-    { NATIONAL_DEX_SOLGALEO, TIER_MYTHICAL }, // 791
-    { NATIONAL_DEX_LUNALA, TIER_MYTHICAL }, // 792
-    { NATIONAL_DEX_NECROZMA, TIER_MYTHICAL }, // 800
-    { NATIONAL_DEX_ZACIAN, TIER_MYTHICAL }, // 888
-    { NATIONAL_DEX_ZAMAZENTA, TIER_MYTHICAL }, // 889
-    { NATIONAL_DEX_ETERNATUS, TIER_MYTHICAL }, // 890
-    { NATIONAL_DEX_CALYREX, TIER_MYTHICAL }, // 898
-    { NATIONAL_DEX_KORAIDON, TIER_MYTHICAL }, // 1007
-    { NATIONAL_DEX_MIRAIDON, TIER_MYTHICAL }, // 1008
+    // ---- Mythical — the strongest restricted legends + event mythicals ----
+    { SPECIES_MEWTWO,              TIER_MYTHICAL },
+    { SPECIES_LUGIA,               TIER_MYTHICAL },
+    { SPECIES_HO_OH,               TIER_MYTHICAL },
+    { SPECIES_KYOGRE,              TIER_MYTHICAL },
+    { SPECIES_GROUDON,             TIER_MYTHICAL },
+    { SPECIES_RAYQUAZA,            TIER_MYTHICAL },
+    { SPECIES_DEOXYS_ATTACK,       TIER_MYTHICAL },
+    { SPECIES_DEOXYS_DEFENSE,      TIER_MYTHICAL },
+    { SPECIES_DEOXYS_SPEED,        TIER_MYTHICAL },
+    { SPECIES_DIALGA,              TIER_MYTHICAL },
+    { SPECIES_DIALGA_ORIGIN,       TIER_MYTHICAL },
+    { SPECIES_PALKIA,              TIER_MYTHICAL },
+    { SPECIES_PALKIA_ORIGIN,       TIER_MYTHICAL },
+    { SPECIES_GIRATINA,            TIER_MYTHICAL },
+    { SPECIES_GIRATINA_ORIGIN,     TIER_MYTHICAL },
+    { SPECIES_DARKRAI,             TIER_MYTHICAL },
+    { SPECIES_ARCEUS,              TIER_MYTHICAL },
+    { SPECIES_RESHIRAM,            TIER_MYTHICAL },
+    { SPECIES_ZEKROM,              TIER_MYTHICAL },
+    { SPECIES_XERNEAS,             TIER_MYTHICAL },
+    { SPECIES_YVELTAL,             TIER_MYTHICAL },
+    { SPECIES_ZYGARDE,             TIER_MYTHICAL },
+    { SPECIES_SOLGALEO,            TIER_MYTHICAL },
+    { SPECIES_LUNALA,              TIER_MYTHICAL },
+    { SPECIES_NECROZMA,            TIER_MYTHICAL },
+    { SPECIES_NECROZMA_DAWN_WINGS, TIER_MYTHICAL },
+    { SPECIES_NECROZMA_DUSK_MANE,  TIER_MYTHICAL },
+    { SPECIES_ZACIAN,              TIER_MYTHICAL },
+    { SPECIES_ZACIAN_CROWNED,      TIER_MYTHICAL },
+    { SPECIES_ZAMAZENTA,           TIER_MYTHICAL },
+    { SPECIES_ZAMAZENTA_CROWNED,   TIER_MYTHICAL },
+    { SPECIES_ETERNATUS,           TIER_MYTHICAL },
+    { SPECIES_CALYREX_ICE,         TIER_MYTHICAL }, // rider forme (base Calyrex is TIER_NORMAL)
+    { SPECIES_CALYREX_SHADOW,      TIER_MYTHICAL }, // rider forme (base Calyrex is TIER_NORMAL)
+    { SPECIES_KORAIDON,            TIER_MYTHICAL },
+    { SPECIES_MIRAIDON,            TIER_MYTHICAL },
 
-    // ---- Legendary — Exactly 1 per frontier boss battle ----
-    { NATIONAL_DEX_LATIAS, TIER_LEGENDARY }, // 380
-    { NATIONAL_DEX_LATIOS, TIER_LEGENDARY }, // 381
-    { NATIONAL_DEX_JIRACHI, TIER_LEGENDARY }, // 385
-    { NATIONAL_DEX_TORNADUS, TIER_LEGENDARY }, // 641
-    { NATIONAL_DEX_THUNDURUS, TIER_LEGENDARY }, // 642
-    { NATIONAL_DEX_LANDORUS, TIER_LEGENDARY }, // 645
-    { NATIONAL_DEX_KYUREM, TIER_LEGENDARY }, // 646
-    { NATIONAL_DEX_KELDEO, TIER_LEGENDARY }, // 647
-    { NATIONAL_DEX_MELOETTA, TIER_LEGENDARY }, // 648
-    { NATIONAL_DEX_GENESECT, TIER_LEGENDARY }, // 649
-    { NATIONAL_DEX_DIANCIE, TIER_LEGENDARY }, // 719
-    { NATIONAL_DEX_HOOPA, TIER_LEGENDARY }, // 720
-    { NATIONAL_DEX_MAGEARNA, TIER_LEGENDARY }, // 801
-    { NATIONAL_DEX_MARSHADOW, TIER_LEGENDARY }, // 802
-    { NATIONAL_DEX_URSHIFU, TIER_LEGENDARY }, // 892
-    { NATIONAL_DEX_GLASTRIER, TIER_LEGENDARY }, // 896
-    { NATIONAL_DEX_SPECTRIER, TIER_LEGENDARY }, // 897
-    { NATIONAL_DEX_WALKING_WAKE, TIER_LEGENDARY }, // 1009
-    { NATIONAL_DEX_OGERPON, TIER_LEGENDARY }, // 1017
+    // ---- Legendary — sub-legendaries (birds/beasts/genies/Tapus/Urshifu/Ogerpon/…) ----
+    { SPECIES_LATIAS,               TIER_LEGENDARY },
+    { SPECIES_LATIOS,               TIER_LEGENDARY },
+    { SPECIES_JIRACHI,              TIER_LEGENDARY },
+    { SPECIES_SHAYMIN_SKY,          TIER_LEGENDARY }, // boosted Serene Grace forme (base Shaymin is TIER_NORMAL)
+    { SPECIES_TORNADUS,             TIER_LEGENDARY },
+    { SPECIES_TORNADUS_THERIAN,     TIER_LEGENDARY },
+    { SPECIES_THUNDURUS,            TIER_LEGENDARY },
+    { SPECIES_THUNDURUS_THERIAN,    TIER_LEGENDARY },
+    { SPECIES_LANDORUS,             TIER_LEGENDARY },
+    { SPECIES_LANDORUS_THERIAN,     TIER_LEGENDARY },
+    { SPECIES_KYUREM,               TIER_LEGENDARY },
+    { SPECIES_KYUREM_BLACK,         TIER_LEGENDARY },
+    { SPECIES_KYUREM_WHITE,         TIER_LEGENDARY },
+    { SPECIES_KELDEO,               TIER_LEGENDARY },
+    { SPECIES_MELOETTA,             TIER_LEGENDARY },
+    { SPECIES_GENESECT,             TIER_LEGENDARY },
+    { SPECIES_DIANCIE,              TIER_LEGENDARY },
+    { SPECIES_HOOPA,                TIER_LEGENDARY },
+    { SPECIES_HOOPA_UNBOUND,        TIER_LEGENDARY },
+    { SPECIES_MAGEARNA,             TIER_LEGENDARY },
+    { SPECIES_MARSHADOW,            TIER_LEGENDARY },
+    { SPECIES_URSHIFU,              TIER_LEGENDARY },
+    { SPECIES_URSHIFU_RAPID_STRIKE, TIER_LEGENDARY },
+    { SPECIES_GLASTRIER,            TIER_LEGENDARY },
+    { SPECIES_SPECTRIER,            TIER_LEGENDARY },
+    { SPECIES_WALKING_WAKE,         TIER_LEGENDARY },
+    { SPECIES_OGERPON,              TIER_LEGENDARY },
+    { SPECIES_OGERPON_CORNERSTONE,  TIER_LEGENDARY },
+    { SPECIES_OGERPON_HEARTHFLAME,  TIER_LEGENDARY },
+    { SPECIES_OGERPON_TEAL,         TIER_LEGENDARY },
+    { SPECIES_OGERPON_WELLSPRING,   TIER_LEGENDARY },
 
-    // ---- Pseudo — At most 1 per factory rental team ----
-    { NATIONAL_DEX_SALAMENCE, TIER_PSEUDO }, // 373
-    { NATIONAL_DEX_GARCHOMP, TIER_PSEUDO }, // 445
-    { NATIONAL_DEX_HEATRAN, TIER_PSEUDO }, // 485
-    { NATIONAL_DEX_KOMMO_O, TIER_PSEUDO }, // 784
-    { NATIONAL_DEX_PHEROMOSA, TIER_PSEUDO }, // 795
-    { NATIONAL_DEX_KARTANA, TIER_PSEUDO }, // 798
-    { NATIONAL_DEX_NAGANADEL, TIER_PSEUDO }, // 804
-    { NATIONAL_DEX_ZERAORA, TIER_PSEUDO }, // 807
-    { NATIONAL_DEX_BLACEPHALON, TIER_PSEUDO }, // 806
-    { NATIONAL_DEX_DRAGAPULT, TIER_PSEUDO }, // 887
-    { NATIONAL_DEX_GREAT_TUSK, TIER_PSEUDO }, // 984
-    { NATIONAL_DEX_IRON_BUNDLE, TIER_PSEUDO }, // 991
-    { NATIONAL_DEX_IRON_JUGULIS, TIER_PSEUDO }, // 993
-    { NATIONAL_DEX_BAXCALIBUR, TIER_PSEUDO }, // 998
-    { NATIONAL_DEX_CHIEN_PAO, TIER_PSEUDO }, // 1002
-    { NATIONAL_DEX_CHI_YU, TIER_PSEUDO }, // 1004
-    { NATIONAL_DEX_ROARING_MOON, TIER_PSEUDO }, // 1005
-    { NATIONAL_DEX_IRON_VALIANT, TIER_PSEUDO }, // 1006
-    { NATIONAL_DEX_GOUGING_FIRE, TIER_PSEUDO }, // 1020
-    { NATIONAL_DEX_RAGING_BOLT, TIER_PSEUDO }, // 1021
-    { NATIONAL_DEX_TERAPAGOS, TIER_PSEUDO }, // 1024
+    // ---- Pseudo — 600-BST pseudos, Ultra Beasts, Paradox, Treasures of Ruin ----
+    { SPECIES_SALAMENCE,          TIER_PSEUDO },
+    { SPECIES_GARCHOMP,           TIER_PSEUDO },
+    { SPECIES_HEATRAN,            TIER_PSEUDO },
+    { SPECIES_KOMMO_O,            TIER_PSEUDO },
+    { SPECIES_PHEROMOSA,          TIER_PSEUDO },
+    { SPECIES_KARTANA,            TIER_PSEUDO },
+    { SPECIES_NAGANADEL,          TIER_PSEUDO },
+    { SPECIES_BLACEPHALON,        TIER_PSEUDO },
+    { SPECIES_ZERAORA,            TIER_PSEUDO },
+    { SPECIES_DRAGAPULT,          TIER_PSEUDO },
+    { SPECIES_GREAT_TUSK,         TIER_PSEUDO },
+    { SPECIES_IRON_BUNDLE,        TIER_PSEUDO },
+    { SPECIES_IRON_JUGULIS,       TIER_PSEUDO },
+    { SPECIES_BAXCALIBUR,         TIER_PSEUDO },
+    { SPECIES_CHIEN_PAO,          TIER_PSEUDO },
+    { SPECIES_CHI_YU,             TIER_PSEUDO },
+    { SPECIES_ROARING_MOON,       TIER_PSEUDO },
+    { SPECIES_IRON_VALIANT,       TIER_PSEUDO },
+    { SPECIES_GOUGING_FIRE,       TIER_PSEUDO },
+    { SPECIES_RAGING_BOLT,        TIER_PSEUDO },
+    { SPECIES_TERAPAGOS_TERASTAL, TIER_PSEUDO },
 };
 
 enum SpeciesTier GetSpeciesTier(u16 species)
 {
-    enum NationalDexOrder natDex = SpeciesToNationalPokedexNum(species);
     u32 i;
 
     for (i = 0; i < ARRAY_COUNT(sSpeciesTiers); i++)
     {
-        if (sSpeciesTiers[i].natDex == natDex)
+        if (sSpeciesTiers[i].species == species)
             return sSpeciesTiers[i].tier;
     }
 
