@@ -1073,17 +1073,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
-    {
-        .species = SPECIES_CHANSEY,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LUCKY_PUNCH, // Chansey-only crit item; guaranteed first crit
-        .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_STEALTH_ROCK, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_NATURAL_CURE,
-        .nature = NATURE_BOLD,
-        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
-        .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
-    },
 
     // ---- Kangaskhan ----
     {
@@ -8112,7 +8101,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CARBINK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Sturdy dual-screens / hazards wall
+        .heldItem = ITEM_LIGHT_CLAY, // Sturdy dual-screens / hazards wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_LIGHT_SCREEN, MOVE_REFLECT, MOVE_BODY_PRESS},
         .ability = ABILITY_STURDY,
         .nature = NATURE_BOLD,
