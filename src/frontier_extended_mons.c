@@ -274,6 +274,102 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Alolan Raticate ----
+    {
+        .species = SPECIES_RATICATE_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SILK_SCARF, // Hustle wallbreaker
+        .moves = {MOVE_DOUBLE_EDGE, MOVE_CRUNCH, MOVE_SUCKER_PUNCH, MOVE_SUPER_FANG},
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_RATICATE_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // bulky pivot, Thick Fat eats fire/ice
+        .moves = {MOVE_KNOCK_OFF, MOVE_BODY_SLAM, MOVE_U_TURN, MOVE_SUPER_FANG},
+        .ability = ABILITY_THICK_FAT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 80, 0, 176, 0, 0),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Raticate ----
+    {
+        .species = SPECIES_RATICATE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Guts attacker
+        .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_SUCKER_PUNCH, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_GUTS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_RATICATE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SILK_SCARF, // Hustle hits
+        .moves = {MOVE_BODY_SLAM, MOVE_DRILL_RUN, MOVE_KNOCK_OFF, MOVE_AQUA_JET},
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Fearow ----
+    {
+        .species = SPECIES_FEAROW,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SCOPE_LENS, // Sniper crits
+        .moves = {MOVE_DRILL_PECK, MOVE_DRILL_RUN, MOVE_KNOCK_OFF, MOVE_AGILITY},
+        .ability = ABILITY_SNIPER,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_FEAROW,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SHARP_BEAK, // Sharp Beak sweeper
+        .moves = {MOVE_BRAVE_BIRD, MOVE_DRILL_RUN, MOVE_U_TURN, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_KEEN_EYE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Arbok ----
+    {
+        .species = SPECIES_ARBOK,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BLACK_GLASSES, // Intimidate pivot
+        .moves = {MOVE_GUNK_SHOT, MOVE_EARTHQUAKE, MOVE_KNOCK_OFF, MOVE_GLARE},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ARBOK,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_POISON_BARB, // STAB poison
+        .moves = {MOVE_POISON_JAB, MOVE_SUCKER_PUNCH, MOVE_EARTHQUAKE, MOVE_AQUA_JET},
+        .ability = ABILITY_SHED_SKIN,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+
     // ---- Raichu ----
     {
         .species = SPECIES_RAICHU,
@@ -298,6 +394,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Alolan Raichu ----
+    {
+        .species = SPECIES_RAICHU_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_TWISTED_SPOON, // Surge Surfer sweeper
+        .moves = {MOVE_THUNDERBOLT, MOVE_PSYCHIC, MOVE_NASTY_PLOT, MOVE_FOCUS_BLAST},
+        .ability = ABILITY_SURGE_SURFER,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_RAICHU_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MAGNET, // fast pivot variant
+        .moves = {MOVE_VOLT_SWITCH, MOVE_PSYSHOCK, MOVE_DAZZLING_GLEAM, MOVE_FOCUS_BLAST},
+        .ability = ABILITY_SURGE_SURFER,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+
     // ---- Sandslash ----
     {
         .species = SPECIES_SANDSLASH,
@@ -319,6 +439,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Alolan Sandslash ----
+    {
+        .species = SPECIES_SANDSLASH_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_NEVER_MELT_ICE, // Slush Rush physical sweeper
+        .moves = {MOVE_ICICLE_CRASH, MOVE_IRON_HEAD, MOVE_EARTHQUAKE, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_SLUSH_RUSH,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_SANDSLASH_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // bulky spinner/hazard control
+        .moves = {MOVE_TRIPLE_AXEL, MOVE_IRON_HEAD, MOVE_RAPID_SPIN, MOVE_KNOCK_OFF},
+        .ability = ABILITY_SLUSH_RUSH,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(248, 0, 8, 252, 0, 0),
+        .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
     },
 
@@ -429,6 +573,102 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Alolan Ninetales ----
+    {
+        .species = SPECIES_NINETALES_ALOLA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY, // Snow Warning + Aurora Veil support
+        .moves = {MOVE_AURORA_VEIL, MOVE_MOONBLAST, MOVE_FREEZE_DRY, MOVE_ICY_WIND},
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_NINETALES_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_NEVER_MELT_ICE, // offensive Snow Warning special attacker
+        .moves = {MOVE_BLIZZARD, MOVE_MOONBLAST, MOVE_FREEZE_DRY, MOVE_NASTY_PLOT},
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Wigglytuff ----
+    {
+        .species = SPECIES_WIGGLYTUFF,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Bulky fairy
+        .moves = {MOVE_HYPER_VOICE, MOVE_DAZZLING_GLEAM, MOVE_ICE_BEAM, MOVE_CALM_MIND},
+        .ability = ABILITY_COMPETITIVE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_WIGGLYTUFF,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Doubles support
+        .moves = {MOVE_DAZZLING_GLEAM, MOVE_HELPING_HAND, MOVE_THUNDER_WAVE, MOVE_PROTECT},
+        .ability = ABILITY_FRISK,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Vileplume ----
+    {
+        .species = SPECIES_VILEPLUME,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BLACK_GLASSES, // boosts Sludge Bomb chip
+        .moves = {MOVE_SLUDGE_BOMB, MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_MOONBLAST},
+        .ability = ABILITY_EFFECT_SPORE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_VILEPLUME,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-proof Chlorophyll
+        .moves = {MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_MOONBLAST, MOVE_SLEEP_POWDER},
+        .ability = ABILITY_CHLOROPHYLL,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Parasect ----
+    {
+        .species = SPECIES_PARASECT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Spore disabler
+        .moves = {MOVE_SPORE, MOVE_SEED_BOMB, MOVE_X_SCISSOR, MOVE_KNOCK_OFF},
+        .ability = ABILITY_EFFECT_SPORE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_PARASECT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FIGY_BERRY, // Dry Skin sweeper
+        .moves = {MOVE_SPORE, MOVE_GIGA_DRAIN, MOVE_LEECH_LIFE, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_DRY_SKIN,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 4, 0, 0, 0),
+        .teraType = TYPE_BUG,
+        .ball = BALL_POKE,
+    },
+
     // ---- Venomoth ----
     {
         .species = SPECIES_VENOMOTH,
@@ -474,6 +714,78 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Alolan Dugtrio ----
+    {
+        .species = SPECIES_DUGTRIO_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FOCUS_SASH, // Sand Force trapper/revenge killer
+        .moves = {MOVE_EARTHQUAKE, MOVE_IRON_HEAD, MOVE_STONE_EDGE, MOVE_SUCKER_PUNCH},
+        .ability = ABILITY_SAND_FORCE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DUGTRIO_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SOFT_SAND, // Tangling Hair contact-punisher
+        .moves = {MOVE_EARTHQUAKE, MOVE_IRON_HEAD, MOVE_SWORDS_DANCE, MOVE_STONE_EDGE},
+        .ability = ABILITY_TANGLING_HAIR,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Alolan Persian ----
+    {
+        .species = SPECIES_PERSIAN_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BLACK_GLASSES, // Technician fast attacker
+        .moves = {MOVE_KNOCK_OFF, MOVE_FAKE_OUT, MOVE_PLAY_ROUGH, MOVE_U_TURN},
+        .ability = ABILITY_TECHNICIAN,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_PERSIAN_ALOLA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET, // Fur Coat physical wall + support
+        .moves = {MOVE_FOUL_PLAY, MOVE_FAKE_OUT, MOVE_PARTING_SHOT, MOVE_TAUNT},
+        .ability = ABILITY_FUR_COAT,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(248, 0, 8, 252, 0, 0),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Persian ----
+    {
+        .species = SPECIES_PERSIAN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SILK_SCARF, // Technician Fake Out
+        .moves = {MOVE_FAKE_OUT, MOVE_NASTY_PLOT, MOVE_HYPER_VOICE, MOVE_DARK_PULSE},
+        .ability = ABILITY_TECHNICIAN,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_PERSIAN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Fast support
+        .moves = {MOVE_KNOCK_OFF, MOVE_FAKE_OUT, MOVE_U_TURN, MOVE_THUNDER_WAVE},
+        .ability = ABILITY_LIMBER,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_NORMAL,
         .ball = BALL_POKE,
     },
 
@@ -726,6 +1038,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Alolan Golem ----
+    {
+        .species = SPECIES_GOLEM_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // Galvanize Explosion/STAB attacker
+        .moves = {MOVE_DOUBLE_EDGE, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_EXPLOSION},
+        .ability = ABILITY_GALVANIZE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GOLEM_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HARD_STONE, // Sturdy bulky tank
+        .moves = {MOVE_STONE_EDGE, MOVE_THUNDER_PUNCH, MOVE_EARTHQUAKE, MOVE_CURSE},
+        .ability = ABILITY_STURDY,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 4, 0, 0, 0),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+
     // ---- Rapidash ----
     {
         .species = SPECIES_RAPIDASH,
@@ -747,6 +1083,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Galarian Rapidash ----
+    {
+        .species = SPECIES_RAPIDASH_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_TWISTED_SPOON, // Psychic boost
+        .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE, MOVE_CALM_MIND},
+        .ability = ABILITY_PASTEL_VEIL,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_RAPIDASH_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // physical sweeper
+        .moves = {MOVE_PLAY_ROUGH, MOVE_HIGH_HORSEPOWER, MOVE_PSYCHIC, MOVE_AGILITY},
+        .ability = ABILITY_ANTICIPATION,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
 
@@ -786,6 +1146,43 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Galarian Slowbro ----
+    {
+        .species = SPECIES_SLOWBRO_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // mixed tank
+        .moves = {MOVE_SHELL_SIDE_ARM, MOVE_PSYCHIC, MOVE_ICE_BEAM, MOVE_FLAMETHROWER},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_SLOWBRO_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BLACK_SLUDGE, // bulky pivot
+        .moves = {MOVE_SHELL_SIDE_ARM, MOVE_SLUDGE_BOMB, MOVE_CALM_MIND, MOVE_SLACK_OFF},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Farfetch'd ----
+    {
+        .species = SPECIES_FARFETCHD,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEEK, // Guaranteed crit
+        .moves = {MOVE_SWORDS_DANCE, MOVE_BRAVE_BIRD, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT},
+        .ability = ABILITY_DEFIANT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+
     // ---- Dodrio ----
     {
         .species = SPECIES_DODRIO,
@@ -810,6 +1207,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Dewgong ----
+    {
+        .species = SPECIES_DEWGONG,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Thick Fat tank
+        .moves = {MOVE_ICE_BEAM, MOVE_SURF, MOVE_ICY_WIND, MOVE_PROTECT},
+        .ability = ABILITY_THICK_FAT,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DEWGONG,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_NEVER_MELT_ICE, // Freeze-Dry tech
+        .moves = {MOVE_FREEZE_DRY, MOVE_SURF, MOVE_AURORA_VEIL, MOVE_PROTECT},
+        .ability = ABILITY_ICE_BODY,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+
     // ---- Muk ----
     {
         .species = SPECIES_MUK,
@@ -831,6 +1252,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
         .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Alolan Muk ----
+    {
+        .species = SPECIES_MUK_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // Power of Alchemy special wall
+        .moves = {MOVE_GUNK_SHOT, MOVE_KNOCK_OFF, MOVE_ICE_PUNCH, MOVE_FIRE_PUNCH},
+        .ability = ABILITY_POWER_OF_ALCHEMY,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MUK_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Poison Touch bulky attacker
+        .moves = {MOVE_POISON_JAB, MOVE_CRUNCH, MOVE_CURSE, MOVE_FIRE_PUNCH},
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 4, 0, 0, 0),
+        .teraType = TYPE_POISON,
         .ball = BALL_POKE,
     },
 
@@ -939,6 +1384,78 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Kingler ----
+    {
+        .species = SPECIES_KINGLER,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MYSTIC_WATER, // Sheer Force pincer
+        .moves = {MOVE_LIQUIDATION, MOVE_CRABHAMMER, MOVE_KNOCK_OFF, MOVE_AGILITY},
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_KINGLER,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SCOPE_LENS, // Guaranteed crit claw
+        .moves = {MOVE_CRABHAMMER, MOVE_X_SCISSOR, MOVE_KNOCK_OFF, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_HYPER_CUTTER,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Electrode-Hisui ----
+    {
+        .species = SPECIES_ELECTRODE_HISUI,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MAGNET, // boosts STAB Electric
+        .moves = {MOVE_THUNDERBOLT, MOVE_LEAF_STORM, MOVE_VOLT_SWITCH, MOVE_TAUNT},
+        .ability = ABILITY_STATIC,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ELECTRODE_HISUI,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // fast Thunder Wave support
+        .moves = {MOVE_THUNDERBOLT, MOVE_ENERGY_BALL, MOVE_THUNDER_WAVE, MOVE_TAUNT},
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Electrode ----
+    {
+        .species = SPECIES_ELECTRODE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MAGNET, // Blazing speed
+        .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_THUNDER_WAVE, MOVE_TAUNT},
+        .ability = ABILITY_STATIC,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ELECTRODE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY, // Screens setter
+        .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_THUNDERBOLT, MOVE_TAUNT},
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
     // ---- Exeggutor ----
     {
         .species = SPECIES_EXEGGUTOR,
@@ -960,6 +1477,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_QUIET,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Alolan Exeggutor ----
+    {
+        .species = SPECIES_EXEGGUTOR_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_WEAKNESS_POLICY, // Trick Room sweeper (0 Speed IVs)
+        .moves = {MOVE_DRACO_METEOR, MOVE_LEAF_STORM, MOVE_DRAGON_HAMMER, MOVE_WOOD_HAMMER},
+        .ability = ABILITY_HARVEST,
+        .nature = NATURE_QUIET,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_EXEGGUTOR_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // Harvest bulky mixed attacker
+        .moves = {MOVE_DRAGON_HAMMER, MOVE_WOOD_HAMMER, MOVE_EARTHQUAKE, MOVE_FLAMETHROWER},
+        .ability = ABILITY_HARVEST,
+        .nature = NATURE_BRAVE,
+        .ev = TRAINER_PARTY_EVS(252, 128, 0, 0, 128, 0),
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_GRASS,
         .ball = BALL_POKE,
     },
@@ -986,6 +1529,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
         .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Alolan Marowak ----
+    {
+        .species = SPECIES_MAROWAK_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_THICK_CLUB, // iconic Thick Club + Rock Head Flare Blitz
+        .moves = {MOVE_FLARE_BLITZ, MOVE_SHADOW_BONE, MOVE_BONEMERANG, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_ROCK_HEAD,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(248, 252, 8, 0, 0, 0),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MAROWAK_ALOLA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_THICK_CLUB, // Lightning Rod redirection bruiser
+        .moves = {MOVE_SHADOW_BONE, MOVE_FLARE_BLITZ, MOVE_BONEMERANG, MOVE_WILL_O_WISP},
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(248, 252, 8, 0, 0, 0),
+        .teraType = TYPE_GHOST,
         .ball = BALL_POKE,
     },
 
@@ -1061,6 +1628,41 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Galarian Weezing ----
+    {
+        .species = SPECIES_WEEZING_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BLACK_SLUDGE, // defensive wall
+        .moves = {MOVE_STRANGE_STEAM, MOVE_SLUDGE_BOMB, MOVE_WILL_O_WISP, MOVE_PAIN_SPLIT},
+        .ability = ABILITY_LEVITATE,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_WEEZING_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ROCKY_HELMET, // hazard control & Neutralizing Gas
+        .moves = {MOVE_SLUDGE_BOMB, MOVE_DEFOG, MOVE_TOXIC_SPIKES, MOVE_PAIN_SPLIT},
+        .ability = ABILITY_NEUTRALIZING_GAS,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_WEEZING_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Misty Surge support
+        .moves = {MOVE_STRANGE_STEAM, MOVE_SLUDGE_BOMB, MOVE_WILL_O_WISP, MOVE_DEFOG},
+        .ability = ABILITY_MISTY_SURGE,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+
     // ---- Chansey ----
     {
         .species = SPECIES_CHANSEY,
@@ -1098,6 +1700,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Seaking ----
+    {
+        .species = SPECIES_SEAKING,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MYSTIC_WATER, // Lightning Rod draw
+        .moves = {MOVE_WATERFALL, MOVE_MEGAHORN, MOVE_DRILL_RUN, MOVE_KNOCK_OFF},
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_SEAKING,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LUM_BERRY, // Swift Swim sweep
+        .moves = {MOVE_LIQUIDATION, MOVE_MEGAHORN, MOVE_AGILITY, MOVE_ICE_BEAM},
+        .ability = ABILITY_SWIFT_SWIM,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
     // ---- Starmie ----
     {
         .species = SPECIES_STARMIE,
@@ -1130,6 +1756,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Mr. Mime ----
+    {
+        .species = SPECIES_MR_MIME,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY, // Screens support
+        .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_DAZZLING_GLEAM, MOVE_FOLLOW_ME},
+        .ability = ABILITY_FILTER,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MR_MIME,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_TWISTED_SPOON, // Technician special
+        .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_ICY_WIND, MOVE_CALM_MIND},
+        .ability = ABILITY_TECHNICIAN,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_PSYCHIC,
         .ball = BALL_POKE,
     },
 
@@ -1205,6 +1855,56 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Tauros-Paldea-Combat ----
+    {
+        .species = SPECIES_TAUROS_PALDEA_COMBAT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET, // chip + Intimidate pivot
+        .moves = {MOVE_RAGING_BULL, MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE, MOVE_STONE_EDGE},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_TAUROS_PALDEA_COMBAT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Bulk Up sweeper
+        .moves = {MOVE_BULK_UP, MOVE_RAGING_BULL, MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE},
+        .ability = ABILITY_CUD_CHEW,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Tauros-Paldea-Blaze ----
+    {
+        .species = SPECIES_TAUROS_PALDEA_BLAZE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-immune attacker
+        .moves = {MOVE_RAGING_BULL, MOVE_CLOSE_COMBAT, MOVE_FLARE_BLITZ, MOVE_STONE_EDGE},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Tauros-Paldea-Aqua ----
+    {
+        .species = SPECIES_TAUROS_PALDEA_AQUA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MYSTIC_WATER, // boosts Raging Bull (Water)
+        .moves = {MOVE_RAGING_BULL, MOVE_CLOSE_COMBAT, MOVE_WAVE_CRASH, MOVE_AQUA_JET},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
     // ---- Gyarados ----
     {
         .species = SPECIES_GYARADOS,
@@ -1261,6 +1961,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
         .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Ditto ----
+    {
+        .species = SPECIES_DITTO,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SCARF, // outspeed copied foe
+        .moves = {MOVE_TRANSFORM, MOVE_TRANSFORM, MOVE_TRANSFORM, MOVE_TRANSFORM},
+        .ability = ABILITY_IMPOSTER,
+        .nature = NATURE_HARDY,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 252, 0, 0),
+        .teraType = TYPE_NORMAL,
         .ball = BALL_POKE,
     },
 
@@ -1333,6 +2046,54 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Omastar ----
+    {
+        .species = SPECIES_OMASTAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_WEAKNESS_POLICY, // Shell Smash sweeper
+        .moves = {MOVE_SHELL_SMASH, MOVE_HYDRO_PUMP, MOVE_POWER_GEM, MOVE_ICE_BEAM},
+        .ability = ABILITY_WEAK_ARMOR,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_OMASTAR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HARD_STONE, // Rain abuser
+        .moves = {MOVE_HYDRO_PUMP, MOVE_POWER_GEM, MOVE_EARTH_POWER, MOVE_ICE_BEAM},
+        .ability = ABILITY_SWIFT_SWIM,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Kabutops ----
+    {
+        .species = SPECIES_KABUTOPS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LUM_BERRY, // Battle Armor blade
+        .moves = {MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_KNOCK_OFF, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_BATTLE_ARMOR,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_KABUTOPS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_WEAKNESS_POLICY, // Weak Armor sweep
+        .moves = {MOVE_AQUA_JET, MOVE_STONE_EDGE, MOVE_X_SCISSOR, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_WEAK_ARMOR,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
 
@@ -1419,6 +2180,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Galarian Articuno ----
+    {
+        .species = SPECIES_ARTICUNO_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind setup
+        .moves = {MOVE_FREEZING_GLARE, MOVE_HURRICANE, MOVE_CALM_MIND, MOVE_ROOST},
+        .ability = ABILITY_COMPETITIVE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ARTICUNO_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_TWISTED_SPOON, // immediate special attacker
+        .moves = {MOVE_FREEZING_GLARE, MOVE_PSYCHIC, MOVE_HURRICANE, MOVE_RECOVER},
+        .ability = ABILITY_COMPETITIVE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+
     // ---- Zapdos ----
     {
         .species = SPECIES_ZAPDOS,
@@ -1443,6 +2228,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Galarian Zapdos ----
+    {
+        .species = SPECIES_ZAPDOS_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // physical breaker
+        .moves = {MOVE_THUNDEROUS_KICK, MOVE_CLOSE_COMBAT, MOVE_BRAVE_BIRD, MOVE_U_TURN},
+        .ability = ABILITY_DEFIANT,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ZAPDOS_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Bulk Up sweeper
+        .moves = {MOVE_THUNDEROUS_KICK, MOVE_BRAVE_BIRD, MOVE_BULK_UP, MOVE_CLOSE_COMBAT},
+        .ability = ABILITY_DEFIANT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+
     // ---- Moltres ----
     {
         .species = SPECIES_MOLTRES,
@@ -1464,6 +2273,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Galarian Moltres ----
+    {
+        .species = SPECIES_MOLTRES_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot sweeper
+        .moves = {MOVE_FIERY_WRATH, MOVE_HURRICANE, MOVE_NASTY_PLOT, MOVE_AGILITY},
+        .ability = ABILITY_BERSERK,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MOLTRES_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_WEAKNESS_POLICY, // Berserk + WP snowball
+        .moves = {MOVE_FIERY_WRATH, MOVE_AIR_SLASH, MOVE_NASTY_PLOT, MOVE_HURRICANE},
+        .ability = ABILITY_BERSERK,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
+        .teraType = TYPE_FLYING,
         .ball = BALL_POKE,
     },
 
@@ -1705,6 +2538,80 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Furret ----
+    {
+        .species = SPECIES_FURRET,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SHELL_BELL, // scrappy U-turn pivot
+        .moves = {MOVE_DOUBLE_EDGE, MOVE_KNOCK_OFF, MOVE_U_TURN, MOVE_SUPER_FANG},
+        .ability = ABILITY_KEEN_EYE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Noctowl ----
+    {
+        .species = SPECIES_NOCTOWL,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Tinted Lens special
+        .moves = {MOVE_AIR_SLASH, MOVE_HYPER_VOICE, MOVE_PSYCHIC, MOVE_ROOST},
+        .ability = ABILITY_TINTED_LENS,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_NOCTOWL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Insomnia staller
+        .moves = {MOVE_HURRICANE, MOVE_PSYCHIC, MOVE_ROOST, MOVE_TOXIC},
+        .ability = ABILITY_INSOMNIA,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Ledian ----
+    {
+        .species = SPECIES_LEDIAN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_EXPERT_BELT, // Iron Fist mixed
+        .moves = {MOVE_AIR_SLASH, MOVE_BUG_BUZZ, MOVE_AURA_SPHERE, MOVE_ROOST},
+        .ability = ABILITY_IRON_FIST,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Ariados ----
+    {
+        .species = SPECIES_ARIADOS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Web setter
+        .moves = {MOVE_STICKY_WEB, MOVE_TOXIC_SPIKES, MOVE_POISON_JAB, MOVE_SUCKER_PUNCH},
+        .ability = ABILITY_INSOMNIA,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ARIADOS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SCOPE_LENS, // Sniper jabs
+        .moves = {MOVE_MEGAHORN, MOVE_POISON_JAB, MOVE_SUCKER_PUNCH, MOVE_LEECH_LIFE},
+        .ability = ABILITY_SNIPER,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_BUG,
+        .ball = BALL_POKE,
+    },
+
     // ---- Crobat ----
     {
         .species = SPECIES_CROBAT,
@@ -1737,6 +2644,54 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Lanturn ----
+    {
+        .species = SPECIES_LANTURN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // bulky Volt Absorb pivot
+        .moves = {MOVE_VOLT_SWITCH, MOVE_SCALD, MOVE_ICE_BEAM, MOVE_THUNDER_WAVE},
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_LANTURN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .moves = {MOVE_THUNDERBOLT, MOVE_SCALD, MOVE_ICE_BEAM, MOVE_VOLT_SWITCH},
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 132, 124),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Xatu ----
+    {
+        .species = SPECIES_XATU,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Magic Bounce support
+        .moves = {MOVE_ROOST, MOVE_THUNDER_WAVE, MOVE_PSYCHIC, MOVE_U_TURN},
+        .ability = ABILITY_MAGIC_BOUNCE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_XATU,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_TWISTED_SPOON, // Tailwind setter
+        .moves = {MOVE_TAILWIND, MOVE_PSYCHIC, MOVE_AIR_SLASH, MOVE_U_TURN},
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FLYING,
         .ball = BALL_POKE,
     },
 
@@ -2048,6 +3003,43 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Galarian Slowking ----
+    {
+        .species = SPECIES_SLOWKING_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // bulky special pivot
+        .moves = {MOVE_FUTURE_SIGHT, MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_SLACK_OFF},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_SLOWKING_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BLACK_SLUDGE, // Nasty Plot wallbreaker
+        .moves = {MOVE_NASTY_PLOT, MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_CHILLY_RECEPTION},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Wobbuffet ----
+    {
+        .species = SPECIES_WOBBUFFET,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Shadow Tag trapper
+        .moves = {MOVE_COUNTER, MOVE_MIRROR_COAT, MOVE_ENCORE, MOVE_DESTINY_BOND},
+        .ability = ABILITY_SHADOW_TAG,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 128, 0, 0, 128),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Forretress ----
     {
         .species = SPECIES_FORRETRESS,
@@ -2192,6 +3184,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Shuckle ----
+    {
+        .species = SPECIES_SHUCKLE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MENTAL_HERB, // anti-Taunt support
+        .moves = {MOVE_STICKY_WEB, MOVE_ENCORE, MOVE_KNOCK_OFF, MOVE_TOXIC},
+        .ability = ABILITY_STURDY,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 128, 0, 0, 128),
+        .teraType = TYPE_BUG,
+        .ball = BALL_POKE,
+    },
+
     // ---- Heracross ----
     {
         .species = SPECIES_HERACROSS,
@@ -2251,6 +3256,54 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Magcargo ----
+    {
+        .species = SPECIES_MAGCARGO,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_WEAKNESS_POLICY, // Shell Smash + WP payoff
+        .moves = {MOVE_SHELL_SMASH, MOVE_FIRE_BLAST, MOVE_EARTH_POWER, MOVE_STONE_EDGE},
+        .ability = ABILITY_WEAK_ARMOR,
+        .nature = NATURE_MILD,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MAGCARGO,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ROCKY_HELMET, // hazard setter
+        .moves = {MOVE_STEALTH_ROCK, MOVE_FIRE_BLAST, MOVE_EARTH_POWER, MOVE_RECOVER},
+        .ability = ABILITY_FLAME_BODY,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 132, 0, 124, 0),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Corsola ----
+    {
+        .species = SPECIES_CORSOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Regenerator wall
+        .moves = {MOVE_RECOVER, MOVE_SCALD, MOVE_POWER_GEM, MOVE_STEALTH_ROCK},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CORSOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET, // Natural Cure pivot
+        .moves = {MOVE_RECOVER, MOVE_SCALD, MOVE_POWER_GEM, MOVE_TOXIC},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+
     // ---- Octillery ----
     {
         .species = SPECIES_OCTILLERY,
@@ -2272,6 +3325,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Delibird ----
+    {
+        .species = SPECIES_DELIBIRD,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FOCUS_SASH, // Pure flavor
+        .moves = {MOVE_ICE_SPINNER, MOVE_ICICLE_SPEAR, MOVE_DRILL_PECK, MOVE_RAPID_SPIN},
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ICE,
         .ball = BALL_POKE,
     },
 
@@ -2786,6 +3852,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
     //                       Generation III
     // ============================================================
 
+    // ---- Genesect ----
+    {
+        .species = SPECIES_GENESECT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF, // Download revenge killer / pivot
+        .moves = {MOVE_U_TURN, MOVE_ICE_BEAM, MOVE_FLAMETHROWER, MOVE_THUNDERBOLT},
+        .ability = ABILITY_DOWNLOAD,
+        .nature = NATURE_NAIVE,
+        .ev = TRAINER_PARTY_EVS(0, 4, 0, 252, 252, 0),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GENESECT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Download Techno Blast attacker
+        .moves = {MOVE_TECHNO_BLAST, MOVE_FLASH_CANNON, MOVE_ICE_BEAM, MOVE_THUNDERBOLT},
+        .ability = ABILITY_DOWNLOAD,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Sceptile ----
     {
         .species = SPECIES_SCEPTILE,
@@ -2936,6 +4026,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Beautifly ----
+    {
+        .species = SPECIES_BEAUTIFLY,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // Quiver Dance flavor sweeper
+        .moves = {MOVE_QUIVER_DANCE, MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_ROOST},
+        .ability = ABILITY_SWARM,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_BUG,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Dustox ----
+    {
+        .species = SPECIES_DUSTOX,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ROCKY_HELMET, // bulky flavor wall
+        .moves = {MOVE_BUG_BUZZ, MOVE_SLUDGE_BOMB, MOVE_ROOST, MOVE_TOXIC},
+        .ability = ABILITY_SHIELD_DUST,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
+        .teraType = TYPE_POISON,
         .ball = BALL_POKE,
     },
 
@@ -3249,6 +4365,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Delcatty ----
+    {
+        .species = SPECIES_DELCATTY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SILK_SCARF, // Normalized everything
+        .moves = {MOVE_HYPER_VOICE, MOVE_FAKE_OUT, MOVE_THUNDERBOLT, MOVE_ICE_BEAM},
+        .ability = ABILITY_NORMALIZE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Sableye ----
     {
         .species = SPECIES_SABLEYE,
@@ -3553,6 +4682,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 4, 252),
         .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Spinda ----
+    {
+        .species = SPECIES_SPINDA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Contrary Superpower flavor
+        .moves = {MOVE_SUPERPOWER, MOVE_BODY_SLAM, MOVE_FACADE, MOVE_ENCORE},
+        .ability = ABILITY_CONTRARY,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_NORMAL,
         .ball = BALL_POKE,
     },
 
@@ -4070,6 +5212,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Luvdisc ----
+    {
+        .species = SPECIES_LUVDISC,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // pure flavor pivot
+        .moves = {MOVE_SURF, MOVE_ICE_BEAM, MOVE_SWEET_KISS, MOVE_SOAK},
+        .ability = ABILITY_SWIFT_SWIM,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_LOVE,
+    },
+
     // ---- Salamence ---- (Bagon line)
     {
         .species = SPECIES_SALAMENCE,
@@ -4550,6 +5705,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Bibarel ----
+    {
+        .species = SPECIES_BIBAREL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Unaware wall
+        .moves = {MOVE_WATERFALL, MOVE_BODY_SLAM, MOVE_YAWN, MOVE_ROOST},
+        .ability = ABILITY_UNAWARE,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
+    },
+
+    // ---- Kricketune ----
+    {
+        .species = SPECIES_KRICKETUNE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_WIDE_LENS, // Technician Fury Cutter ramp
+        .moves = {MOVE_FURY_CUTTER, MOVE_BUG_BITE, MOVE_POUNCE, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_TECHNICIAN,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_BUG,
+        .ball = BALL_NET,
+    },
+
     // ---- Luxray ----
     {
         .species = SPECIES_LUXRAY,
@@ -4645,6 +5826,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_CAREFUL,
         .ev = TRAINER_PARTY_EVS(248, 0, 8, 0, 0, 252),
         .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Pachirisu ----
+    {
+        .species = SPECIES_PACHIRISU,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Follow Me redirection support
+        .moves = {MOVE_FOLLOW_ME, MOVE_NUZZLE, MOVE_SUPER_FANG, MOVE_VOLT_SWITCH},
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 128, 0, 0, 128),
+        .teraType = TYPE_ELECTRIC,
         .ball = BALL_POKE,
     },
 
@@ -4816,6 +6010,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Purugly ----
+    {
+        .species = SPECIES_PURUGLY,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SILK_SCARF, // Fake Out + Facade attacker
+        .moves = {MOVE_FAKE_OUT, MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_PLAY_ROUGH},
+        .ability = ABILITY_THICK_FAT,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Skuntank ----
     {
         .species = SPECIES_SKUNTANK,
@@ -4851,6 +6058,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_SASSY,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
         .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Chatot ----
+    {
+        .species = SPECIES_CHATOT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_THROAT_SPRAY, // Boomburst spam
+        .moves = {MOVE_BOOMBURST, MOVE_HEAT_WAVE, MOVE_HURRICANE, MOVE_U_TURN},
+        .ability = ABILITY_BIG_PECKS,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_NORMAL,
         .ball = BALL_POKE,
     },
 
@@ -5031,6 +6251,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GRASS,
         .ball = BALL_POKE,
+    },
+
+    // ---- Lumineon ----
+    {
+        .species = SPECIES_LUMINEON,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Defog/U-turn utility
+        .moves = {MOVE_SCALD, MOVE_ICE_BEAM, MOVE_U_TURN, MOVE_DEFOG},
+        .ability = ABILITY_STORM_DRAIN,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
     },
 
     // ---- Abomasnow ----
@@ -5532,6 +6765,45 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Rotom ----
+    {
+        .species = SPECIES_ROTOM,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Levitate, no Air Balloon
+        .moves = {MOVE_THUNDERBOLT, MOVE_SHADOW_BALL, MOVE_VOLT_SWITCH, MOVE_WILL_O_WISP},
+        .ability = ABILITY_LEVITATE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Rotom-Frost ----
+    {
+        .species = SPECIES_ROTOM_FROST,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Levitate, no Air Balloon
+        .moves = {MOVE_THUNDERBOLT, MOVE_BLIZZARD, MOVE_VOLT_SWITCH, MOVE_NASTY_PLOT},
+        .ability = ABILITY_LEVITATE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Rotom-Fan ----
+    {
+        .species = SPECIES_ROTOM_FAN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Levitate, no Air Balloon
+        .moves = {MOVE_THUNDERBOLT, MOVE_AIR_SLASH, MOVE_VOLT_SWITCH, MOVE_WILL_O_WISP},
+        .ability = ABILITY_LEVITATE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+
     // ---- Uxie (innate Levitate) ----
     {
         .species = SPECIES_UXIE,
@@ -5606,6 +6878,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Dialga-Origin ----
+    {
+        .species = SPECIES_DIALGA_ORIGIN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ADAMANT_CRYSTAL, // forme-locked item
+        .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT, MOVE_EARTH_POWER},
+        .ability = ABILITY_PRESSURE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Palkia ----
     {
         .species = SPECIES_PALKIA,
@@ -5627,6 +6912,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_DRAGON,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Palkia-Origin ----
+    {
+        .species = SPECIES_PALKIA_ORIGIN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LUSTROUS_GLOBE, // forme-locked item
+        .moves = {MOVE_SPACIAL_REND, MOVE_HYDRO_PUMP, MOVE_DRACO_METEOR, MOVE_THUNDERBOLT},
+        .ability = ABILITY_PRESSURE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
+        .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
 
@@ -5717,6 +7015,43 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Phione ----
+    {
+        .species = SPECIES_PHIONE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Calm Mind staller
+        .moves = {MOVE_CALM_MIND, MOVE_SURF, MOVE_ICE_BEAM, MOVE_REST},
+        .ability = ABILITY_HYDRATION,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Manaphy ----
+    {
+        .species = SPECIES_MANAPHY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Tail Glow sweeper
+        .moves = {MOVE_TAIL_GLOW, MOVE_SURF, MOVE_ICE_BEAM, MOVE_ENERGY_BALL},
+        .ability = ABILITY_HYDRATION,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(4, 0, 0, 252, 252, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MANAPHY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MYSTIC_WATER, // hard-hitting setup
+        .moves = {MOVE_TAIL_GLOW, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_SURF},
+        .ability = ABILITY_HYDRATION,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(4, 0, 0, 252, 252, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
     // ---- Darkrai (innate Levitate) ----
     {
         .species = SPECIES_DARKRAI,
@@ -5783,6 +7118,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // ============================================================
     //                       Generation V
     // ============================================================
+
+    // ---- Victini ----
+    {
+        .species = SPECIES_VICTINI,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHARCOAL, // V-create physical wallbreaker
+        .moves = {MOVE_V_CREATE, MOVE_BOLT_STRIKE, MOVE_ZEN_HEADBUTT, MOVE_U_TURN},
+        .ability = ABILITY_VICTORY_STAR,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_VICTINI,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EXPERT_BELT, // special mixed coverage
+        .moves = {MOVE_BLUE_FLARE, MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT},
+        .ability = ABILITY_VICTORY_STAR,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
 
     // ---- Serperior ----
     {
@@ -5880,6 +7239,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Watchog ----
+    {
+        .species = SPECIES_WATCHOG,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EXPERT_BELT, // Analytic coverage
+        .moves = {MOVE_HYPER_VOICE, MOVE_THUNDERBOLT, MOVE_FOCUS_BLAST, MOVE_SHADOW_BALL},
+        .ability = ABILITY_ANALYTIC,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Stoutland ----
     {
         .species = SPECIES_STOUTLAND,
@@ -5904,6 +7276,58 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Liepard ----
+    {
+        .species = SPECIES_LIEPARD,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // prankster support
+        .moves = {MOVE_THUNDER_WAVE, MOVE_ENCORE, MOVE_FOUL_PLAY, MOVE_KNOCK_OFF},
+        .ability = ABILITY_PRANKSTER,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 252, 0, 0),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Simisage ----
+    {
+        .species = SPECIES_SIMISAGE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Nasty Plot mixed
+        .moves = {MOVE_NASTY_PLOT, MOVE_ENERGY_BALL, MOVE_FOCUS_BLAST, MOVE_KNOCK_OFF},
+        .ability = ABILITY_OVERGROW,
+        .nature = NATURE_NAIVE,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Simisear ----
+    {
+        .species = SPECIES_SIMISEAR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHARCOAL, // Nasty Plot fire
+        .moves = {MOVE_NASTY_PLOT, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_GRASS_KNOT},
+        .ability = ABILITY_BLAZE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Simipour ----
+    {
+        .species = SPECIES_SIMIPOUR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MYSTIC_WATER, // Nasty Plot water
+        .moves = {MOVE_NASTY_PLOT, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FOCUS_BLAST},
+        .ability = ABILITY_TORRENT,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+
     // ---- Musharna (innate Levitate per roster rule) ----
     {
         .species = SPECIES_MUSHARNA,
@@ -5925,6 +7349,69 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_QUIET,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Unfezant ----
+    {
+        .species = SPECIES_UNFEZANT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SCOPE_LENS, // Super Luck guaranteed crits
+        .moves = {MOVE_AIR_SLASH, MOVE_RETURN, MOVE_U_TURN, MOVE_ROOST},
+        .ability = ABILITY_SUPER_LUCK,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Zebstrika ----
+    {
+        .species = SPECIES_ZEBSTRIKA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_EXPERT_BELT, // fast Motor Drive attacker
+        .moves = {MOVE_WILD_CHARGE, MOVE_HEAT_WAVE, MOVE_VOLT_SWITCH, MOVE_OVERHEAT},
+        .ability = ABILITY_MOTOR_DRIVE,
+        .nature = NATURE_HASTY,
+        .ev = TRAINER_PARTY_EVS(0, 4, 0, 252, 252, 0),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Gigalith ----
+    {
+        .species = SPECIES_GIGALITH,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ROCKY_HELMET, // sand setter
+        .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM},
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 4, 0, 0, 0),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GIGALITH,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HARD_STONE, // Sand Force hitter
+        .moves = {MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM, MOVE_ROCK_SLIDE},
+        .ability = ABILITY_SAND_FORCE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Swoobat ----
+    {
+        .species = SPECIES_SWOOBAT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Simple Calm Mind + Stored Power
+        .moves = {MOVE_CALM_MIND, MOVE_STORED_POWER, MOVE_AIR_SLASH, MOVE_ROOST},
+        .ability = ABILITY_SIMPLE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
         .teraType = TYPE_PSYCHIC,
         .ball = BALL_POKE,
     },
@@ -6224,6 +7711,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force band wallbreaker
         .moves = {MOVE_FLARE_BLITZ, MOVE_EARTHQUAKE, MOVE_SUPERPOWER, MOVE_U_TURN},
         .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Galarian Darmanitan ----
+    {
+        .species = SPECIES_DARMANITAN_GALAR_STANDARD,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF, // Gorilla Tactics revenge killer
+        .moves = {MOVE_ICICLE_CRASH, MOVE_FLARE_BLITZ, MOVE_EARTHQUAKE, MOVE_U_TURN},
+        .ability = ABILITY_GORILLA_TACTICS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DARMANITAN_GALAR_STANDARD,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_BAND, // wallbreaker
+        .moves = {MOVE_ICICLE_CRASH, MOVE_FLARE_BLITZ, MOVE_EARTHQUAKE, MOVE_U_TURN},
+        .ability = ABILITY_GORILLA_TACTICS,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_FIRE,
@@ -6572,6 +8083,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Emolga ----
+    {
+        .species = SPECIES_EMOLGA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH, // doubles support glider
+        .moves = {MOVE_NUZZLE, MOVE_VOLT_SWITCH, MOVE_AIR_SLASH, MOVE_TAILWIND},
+        .ability = ABILITY_MOTOR_DRIVE,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 4, 252, 252, 0),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
     // ---- Escavalier ----
     {
         .species = SPECIES_ESCAVALIER,
@@ -6841,6 +8365,67 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
         .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Accelgor ----
+    {
+        .species = SPECIES_ACCELGOR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FOCUS_SASH, // fast lead, survives one hit
+        .moves = {MOVE_BUG_BUZZ, MOVE_FOCUS_BLAST, MOVE_ENERGY_BALL, MOVE_SPIKES},
+        .ability = ABILITY_UNBURDEN,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_BUG,
+        .ball = BALL_NET,
+    },
+    {
+        .species = SPECIES_ACCELGOR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // disruptive Yawn/Encore lead
+        .moves = {MOVE_YAWN, MOVE_ENCORE, MOVE_BUG_BUZZ, MOVE_FOCUS_BLAST},
+        .ability = ABILITY_STICKY_HOLD,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(4, 0, 0, 252, 252, 0),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_NET,
+    },
+
+    // ---- Galarian Stunfisk ----
+    {
+        .species = SPECIES_STUNFISK_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // defensive trapper
+        .moves = {MOVE_SNAP_TRAP, MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK, MOVE_PAIN_SPLIT},
+        .ability = ABILITY_MIMICRY,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_STUNFISK_GALAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ROCKY_HELMET, // bulky utility
+        .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_YAWN, MOVE_FOUL_PLAY},
+        .ability = ABILITY_MIMICRY,
+        .nature = NATURE_RELAXED,
+        .ev = TRAINER_PARTY_EVS(252, 4, 252, 0, 0, 0),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Stunfisk ----
+    {
+        .species = SPECIES_STUNFISK,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // bulky Ground/Electric pivot
+        .moves = {MOVE_STEALTH_ROCK, MOVE_DISCHARGE, MOVE_EARTH_POWER, MOVE_PAIN_SPLIT},
+        .ability = ABILITY_STATIC,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_ELECTRIC,
         .ball = BALL_POKE,
     },
 
@@ -7434,30 +9019,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Genesect ----
-    {
-        .species = SPECIES_GENESECT,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Download revenge killer / pivot
-        .moves = {MOVE_U_TURN, MOVE_ICE_BEAM, MOVE_FLAMETHROWER, MOVE_THUNDERBOLT},
-        .ability = ABILITY_DOWNLOAD,
-        .nature = NATURE_NAIVE,
-        .ev = TRAINER_PARTY_EVS(0, 4, 0, 252, 252, 0),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GENESECT,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Download Techno Blast attacker
-        .moves = {MOVE_TECHNO_BLAST, MOVE_FLASH_CANNON, MOVE_ICE_BEAM, MOVE_THUNDERBOLT},
-        .ability = ABILITY_DOWNLOAD,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
     },
 
@@ -8665,6 +10226,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Gumshoos ----
+    {
+        .species = SPECIES_GUMSHOOS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // Stakeout switch punisher
+        .moves = {MOVE_BODY_SLAM, MOVE_CRUNCH, MOVE_EARTHQUAKE, MOVE_U_TURN},
+        .ability = ABILITY_STAKEOUT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
     // ---- Vikavolt ----
     {
         .species = SPECIES_VIKAVOLT,
@@ -8927,6 +10501,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Shiinotic ----
+    {
+        .species = SPECIES_SHIINOTIC,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Spore + Strength Sap support
+        .moves = {MOVE_SPORE, MOVE_STRENGTH_SAP, MOVE_MOONBLAST, MOVE_GIGA_DRAIN},
+        .ability = ABILITY_EFFECT_SPORE,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
 
@@ -9936,6 +11523,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Melmetal ----
+    {
+        .species = SPECIES_MELMETAL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky Iron Fist breaker
+        .moves = {MOVE_DOUBLE_IRON_BASH, MOVE_THUNDER_PUNCH, MOVE_ICE_PUNCH, MOVE_EARTHQUAKE},
+        .ability = ABILITY_IRON_FIST,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MELMETAL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ASSAULT_VEST, // special bulk tank
+        .moves = {MOVE_DOUBLE_IRON_BASH, MOVE_THUNDER_PUNCH, MOVE_SUPERPOWER, MOVE_EARTHQUAKE},
+        .ability = ABILITY_IRON_FIST,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
     // ============================================================
     //                       Generation VIII
     // ============================================================
@@ -10045,6 +11656,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Greedent ----
+    {
+        .species = SPECIES_GREEDENT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // Cheek Pouch heal loop
+        .moves = {MOVE_BODY_SLAM, MOVE_EARTHQUAKE, MOVE_SWORDS_DANCE, MOVE_BULLET_SEED},
+        .ability = ABILITY_CHEEK_POUCH,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 4, 0, 0, 0),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
     // ---- Corviknight ----
     {
         .species = SPECIES_CORVIKNIGHT,
@@ -10077,6 +11701,106 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_CAREFUL,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
         .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Orbeetle ----
+    {
+        .species = SPECIES_ORBEETLE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY, // dual screens support
+        .moves = {MOVE_LIGHT_SCREEN, MOVE_REFLECT, MOVE_PSYCHIC, MOVE_STICKY_WEB},
+        .ability = ABILITY_TELEPATHY,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 128, 0, 0, 128),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_NET,
+    },
+    {
+        .species = SPECIES_ORBEETLE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind
+        .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_BUG_BUZZ, MOVE_ROOST},
+        .ability = ABILITY_FRISK,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_BUG,
+        .ball = BALL_NET,
+    },
+
+    // ---- Thievul ----
+    {
+        .species = SPECIES_THIEVUL,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BLACK_GLASSES, // Nasty Plot special sweeper
+        .moves = {MOVE_NASTY_PLOT, MOVE_DARK_PULSE, MOVE_PARTING_SHOT, MOVE_FOUL_PLAY},
+        .ability = ABILITY_STAKEOUT,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(4, 0, 0, 252, 252, 0),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Eldegoss ----
+    {
+        .species = SPECIES_ELDEGOSS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // Regenerator support pivot
+        .moves = {MOVE_LEECH_SEED, MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_SYNTHESIS},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 128, 0, 0, 128),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Dubwool ----
+    {
+        .species = SPECIES_DUBWOOL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Cotton Guard Body Press wall
+        .moves = {MOVE_COTTON_GUARD, MOVE_BODY_PRESS, MOVE_BODY_SLAM, MOVE_ROOST},
+        .ability = ABILITY_FLUFFY,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Drednaw ----
+    {
+        .species = SPECIES_DREDNAW,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LUM_BERRY, // status insurance for setup
+        .moves = {MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_STRONG_JAW,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DREDNAW,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HARD_STONE, // jaw-boosted Crunch bite set
+        .moves = {MOVE_CRUNCH, MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_SHELL_ARMOR,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_DIVE,
+    },
+
+    // ---- Boltund ----
+    {
+        .species = SPECIES_BOLTUND,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MAGNET, // Strong Jaw Bolt Beak
+        .moves = {MOVE_BOLT_BEAK, MOVE_CRUNCH, MOVE_PLAY_ROUGH, MOVE_FIRE_FANG},
+        .ability = ABILITY_STRONG_JAW,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ELECTRIC,
         .ball = BALL_POKE,
     },
 
@@ -10176,6 +11900,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Cramorant ----
+    {
+        .species = SPECIES_CRAMORANT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Gulp Missile spam
+        .moves = {MOVE_SURF, MOVE_HURRICANE, MOVE_ROOST, MOVE_DEFOG},
+        .ability = ABILITY_GULP_MISSILE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
+    },
+
     // ---- Barraskewda ----
     {
         .species = SPECIES_BARRASKEWDA,
@@ -10256,6 +11993,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Grapploct ----
+    {
+        .species = SPECIES_GRAPPLOCT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Technician punches + Bulk Up
+        .moves = {MOVE_OCTOLOCK, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH, MOVE_BULK_UP},
+        .ability = ABILITY_TECHNICIAN,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 4, 0, 0, 0),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_DIVE,
+    },
+    {
+        .species = SPECIES_GRAPPLOCT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // priority Mach Punch attacker
+        .moves = {MOVE_MACH_PUNCH, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH, MOVE_KNOCK_OFF},
+        .ability = ABILITY_LIMBER,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(160, 252, 0, 0, 0, 96),
+        .teraType = TYPE_ICE,
         .ball = BALL_POKE,
     },
 
@@ -10449,6 +12210,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Mr. Rime ----
+    {
+        .species = SPECIES_MR_RIME,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIGHT_CLAY, // Aurora Veil support
+        .moves = {MOVE_AURORA_VEIL, MOVE_ICE_BEAM, MOVE_PSYCHIC, MOVE_NASTY_PLOT},
+        .ability = ABILITY_SCREEN_CLEANER,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MR_RIME,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LEFTOVERS, // bulky Nasty Plot
+        .moves = {MOVE_NASTY_PLOT, MOVE_FREEZE_DRY, MOVE_FOCUS_BLAST, MOVE_SLACK_OFF},
+        .ability = ABILITY_ICE_BODY,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+
     // ---- Runerigus ---- (innate Levitate)
     {
         .species = SPECIES_RUNERIGUS,
@@ -10497,6 +12282,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Pincurchin ----
+    {
+        .species = SPECIES_PINCURCHIN,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LEFTOVERS, // terrain setter
+        .moves = {MOVE_RISING_VOLTAGE, MOVE_DISCHARGE, MOVE_RECOVER, MOVE_SPIKES},
+        .ability = ABILITY_ELECTRIC_SURGE,
+        .nature = NATURE_QUIET,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_DIVE,
+    },
+
     // ---- Frosmoth ----
     {
         .species = SPECIES_FROSMOTH,
@@ -10518,6 +12317,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 100, 156, 0),
         .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Stonjourner ----
+    {
+        .species = SPECIES_STONJOURNER,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Power Spot ally booster
+        .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM},
+        .ability = ABILITY_POWER_SPOT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_ROCK,
         .ball = BALL_POKE,
     },
 
@@ -10881,6 +12693,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Zarude ----
+    {
+        .species = SPECIES_ZARUDE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Swords Dance + recovery
+        .moves = {MOVE_SWORDS_DANCE, MOVE_POWER_WHIP, MOVE_DARKEST_LARIAT, MOVE_JUNGLE_HEALING},
+        .ability = ABILITY_LEAF_GUARD,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_ZARUDE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BLACK_GLASSES, // Dark-boosted pivot
+        .moves = {MOVE_POWER_WHIP, MOVE_DARKEST_LARIAT, MOVE_KNOCK_OFF, MOVE_U_TURN},
+        .ability = ABILITY_LEAF_GUARD,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+
     // ---- Regieleki ---- (innate Transistor / Levitate-tier speed)
     {
         .species = SPECIES_REGIELEKI,
@@ -11026,6 +12862,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Calyrex ----
+    {
+        .species = SPECIES_CALYREX,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky setup
+        .moves = {MOVE_CALM_MIND, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_LEECH_SEED},
+        .ability = ABILITY_UNNERVE,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CALYREX,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // Trick Room utility
+        .moves = {MOVE_TRICK_ROOM, MOVE_PSYCHIC, MOVE_POLLEN_PUFF, MOVE_LEECH_SEED},
+        .ability = ABILITY_UNNERVE,
+        .nature = NATURE_QUIET,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_POKE,
+    },
+
     // ---- Wyrdeer ----
     {
         .species = SPECIES_WYRDEER,
@@ -11095,6 +12956,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_GUTS,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_GROUND,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Ursaluna-Bloodmoon ----
+    {
+        .species = SPECIES_URSALUNA_BLOODMOON,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // special tank
+        .moves = {MOVE_BLOOD_MOON, MOVE_EARTH_POWER, MOVE_HYPER_VOICE, MOVE_CALM_MIND},
+        .ability = ABILITY_MINDS_EYE,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
         .teraType = TYPE_GROUND,
         .ball = BALL_POKE,
     },
@@ -11304,6 +13178,67 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Spidops ----
+    {
+        .species = SPECIES_SPIDOPS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET, // hazard setter
+        .moves = {MOVE_STICKY_WEB, MOVE_SPIKES, MOVE_KNOCK_OFF, MOVE_CIRCLE_THROW},
+        .ability = ABILITY_INSOMNIA,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_BUG,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Lokix ----
+    {
+        .species = SPECIES_LOKIX,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FOCUS_SASH, // priority bug
+        .moves = {MOVE_FIRST_IMPRESSION, MOVE_SUCKER_PUNCH, MOVE_LEECH_LIFE, MOVE_THROAT_CHOP},
+        .ability = ABILITY_TINTED_LENS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_BUG,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_LOKIX,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SILK_SCARF, // SD wallbreaker
+        .moves = {MOVE_SWORDS_DANCE, MOVE_FIRST_IMPRESSION, MOVE_SUCKER_PUNCH, MOVE_THROAT_CHOP},
+        .ability = ABILITY_TINTED_LENS,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Pawmot ----
+    {
+        .species = SPECIES_PAWMOT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // pivot/punch
+        .moves = {MOVE_DOUBLE_SHOCK, MOVE_CLOSE_COMBAT, MOVE_MACH_PUNCH, MOVE_NUZZLE},
+        .ability = ABILITY_IRON_FIST,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_PAWMOT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_EXPERT_BELT, // coverage pivot
+        .moves = {MOVE_VOLT_SWITCH, MOVE_CLOSE_COMBAT, MOVE_NUZZLE, MOVE_MACH_PUNCH},
+        .ability = ABILITY_NATURAL_CURE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+
     // ---- Maushold ----
     {
         .species = SPECIES_MAUSHOLD,
@@ -11325,6 +13260,45 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
         .teraType = TYPE_GHOST,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Dachsbun ----
+    {
+        .species = SPECIES_DACHSBUN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // baked bread wall
+        .moves = {MOVE_PLAY_ROUGH, MOVE_BODY_PRESS, MOVE_WISH, MOVE_PROTECT},
+        .ability = ABILITY_WELL_BAKED_BODY,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Arboliva ----
+    {
+        .species = SPECIES_ARBOLIVA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky grass
+        .moves = {MOVE_ENERGY_BALL, MOVE_EARTH_POWER, MOVE_STRENGTH_SAP, MOVE_LEECH_SEED},
+        .ability = ABILITY_SEED_SOWER,
+        .nature = NATURE_CALM,
+        .ev = TRAINER_PARTY_EVS(252, 0, 100, 0, 0, 156),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_NEST,
+    },
+
+    // ---- Squawkabilly Green ----
+    {
+        .species = SPECIES_SQUAWKABILLY_GREEN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FLAME_ORB, // guts attacker
+        .moves = {MOVE_FACADE, MOVE_BRAVE_BIRD, MOVE_U_TURN, MOVE_DOUBLE_EDGE},
+        .ability = ABILITY_GUTS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_NORMAL,
         .ball = BALL_POKE,
     },
 
@@ -11412,6 +13386,80 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Bellibolt ----
+    {
+        .species = SPECIES_BELLIBOLT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS, // bulky frog
+        .moves = {MOVE_VOLT_SWITCH, MOVE_MUDDY_WATER, MOVE_SLACK_OFF, MOVE_TOXIC},
+        .ability = ABILITY_ELECTROMORPHOSIS,
+        .nature = NATURE_BOLD,
+        .ev = TRAINER_PARTY_EVS(252, 0, 200, 0, 0, 56),
+        .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
+    },
+    {
+        .species = SPECIES_BELLIBOLT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ASSAULT_VEST, // special wall
+        .moves = {MOVE_PARABOLIC_CHARGE, MOVE_DISCHARGE, MOVE_MUDDY_WATER, MOVE_VOLT_SWITCH},
+        .ability = ABILITY_STATIC,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_DIVE,
+    },
+
+    // ---- Kilowattrel ----
+    {
+        .species = SPECIES_KILOWATTREL,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // fast special
+        .moves = {MOVE_THUNDERBOLT, MOVE_HURRICANE, MOVE_VOLT_SWITCH, MOVE_AIR_SLASH},
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Mabosstiff ----
+    {
+        .species = SPECIES_MABOSSTIFF,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY, // guard dog mauler
+        .moves = {MOVE_CRUNCH, MOVE_PLAY_ROUGH, MOVE_PSYCHIC_FANGS, MOVE_FIRE_FANG},
+        .ability = ABILITY_GUARD_DOG,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_DARK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_MABOSSTIFF,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET, // intimidate punish
+        .moves = {MOVE_COMEUPPANCE, MOVE_CRUNCH, MOVE_PLAY_ROUGH, MOVE_WILD_CHARGE},
+        .ability = ABILITY_INTIMIDATE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_FAIRY,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Grafaiai ----
+    {
+        .species = SPECIES_GRAFAIAI,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ROCKY_HELMET, // prankster status
+        .moves = {MOVE_TOXIC, MOVE_ENCORE, MOVE_GUNK_SHOT, MOVE_KNOCK_OFF},
+        .ability = ABILITY_PRANKSTER,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
+        .teraType = TYPE_POISON,
+        .ball = BALL_POKE,
+    },
+
     // ---- Brambleghast ----
     {
         .species = SPECIES_BRAMBLEGHAST,
@@ -11460,6 +13508,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Klawf ----
+    {
+        .species = SPECIES_KLAWF,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET, // rock setter
+        .moves = {MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_KNOCK_OFF, MOVE_STEALTH_ROCK},
+        .ability = ABILITY_REGENERATOR,
+        .nature = NATURE_IMPISH,
+        .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_KLAWF,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_WEAKNESS_POLICY, // anger shell sweep
+        .moves = {MOVE_SWORDS_DANCE, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_CRABHAMMER},
+        .ability = ABILITY_ANGER_SHELL,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+
     // ---- Scovillain ----
     {
         .species = SPECIES_SCOVILLAIN,
@@ -11470,6 +13542,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Rabsca ----
+    {
+        .species = SPECIES_RABSCA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MENTAL_HERB, // trick room setter
+        .moves = {MOVE_TRICK_ROOM, MOVE_PSYCHIC, MOVE_BUG_BUZZ, MOVE_EARTH_POWER},
+        .ability = ABILITY_TELEPATHY,
+        .nature = NATURE_QUIET,
+        .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .teraType = TYPE_PSYCHIC,
         .ball = BALL_POKE,
     },
 
@@ -11519,6 +13605,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
+    },
+
+    // ---- Wugtrio ----
+    {
+        .species = SPECIES_WUGTRIO,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MYSTIC_WATER, // priority eel
+        .moves = {MOVE_WAVE_CRASH, MOVE_LIQUIDATION, MOVE_AQUA_JET, MOVE_SUCKER_PUNCH},
+        .ability = ABILITY_SAND_VEIL,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
     },
 
     // ---- Bombirdier ----
@@ -11667,6 +13766,78 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Flamigo ----
+    {
+        .species = SPECIES_FLAMIGO,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // scrappy bird
+        .moves = {MOVE_BRAVE_BIRD, MOVE_CLOSE_COMBAT, MOVE_THROAT_CHOP, MOVE_U_TURN},
+        .ability = ABILITY_SCRAPPY,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIGHTING,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_FLAMIGO,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // SD sweeper
+        .moves = {MOVE_SWORDS_DANCE, MOVE_BRAVE_BIRD, MOVE_CLOSE_COMBAT, MOVE_THROAT_CHOP},
+        .ability = ABILITY_SCRAPPY,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_FLYING,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Cetitan ----
+    {
+        .species = SPECIES_CETITAN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_NEVER_MELT_ICE, // belly drum whale
+        .moves = {MOVE_BELLY_DRUM, MOVE_ICICLE_CRASH, MOVE_LIQUIDATION, MOVE_ICE_SHARD},
+        .ability = ABILITY_THICK_FAT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
+        .teraType = TYPE_ICE,
+        .ball = BALL_DIVE,
+    },
+    {
+        .species = SPECIES_CETITAN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST, // sheer force tank
+        .moves = {MOVE_ICICLE_CRASH, MOVE_LIQUIDATION, MOVE_EARTHQUAKE, MOVE_ICE_SHARD},
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
+        .teraType = TYPE_ICE,
+        .ball = BALL_DIVE,
+    },
+
+    // ---- Veluza ----
+    {
+        .species = SPECIES_VELUZA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MYSTIC_WATER, // sharpness slicer
+        .moves = {MOVE_AQUA_CUTTER, MOVE_PSYCHO_CUT, MOVE_NIGHT_SLASH, MOVE_AQUA_JET},
+        .ability = ABILITY_SHARPNESS,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
+    },
+    {
+        .species = SPECIES_VELUZA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY, // fillet away sweep
+        .moves = {MOVE_FILLET_AWAY, MOVE_AQUA_CUTTER, MOVE_PSYCHO_CUT, MOVE_AQUA_JET},
+        .ability = ABILITY_SHARPNESS,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(4, 252, 0, 252, 0, 0),
+        .teraType = TYPE_PSYCHIC,
+        .ball = BALL_DIVE,
+    },
+
     // ---- Dondozo ----
     {
         .species = SPECIES_DONDOZO,
@@ -11688,6 +13859,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Tatsugiri ----
+    {
+        .species = SPECIES_TATSUGIRI,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_THROAT_SPRAY, // SpA boost off spread move
+        .moves = {MOVE_NASTY_PLOT, MOVE_DRACO_METEOR, MOVE_MUDDY_WATER, MOVE_ICY_WIND},
+        .ability = ABILITY_STORM_DRAIN,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
+        .teraType = TYPE_DRAGON,
         .ball = BALL_POKE,
     },
 
@@ -12515,6 +14699,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
+    // ---- Ogerpon-Teal ----
+    {
+        .species = SPECIES_OGERPON_TEAL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-immune Defiant pivot
+        .moves = {MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_KNOCK_OFF, MOVE_SWORDS_DANCE},
+        .ability = ABILITY_DEFIANT,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_GRASS,
+        .ball = BALL_POKE,
+    },
+
     // ---- Archaludon ----
     {
         .species = SPECIES_ARCHALUDON,
@@ -12695,7 +14892,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
-
 };
 
 const u16 gFrontierExtendedMonsCount = ARRAY_COUNT(gFrontierExtendedMons);

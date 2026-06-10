@@ -6,12 +6,34 @@
 
 // FORK: species -> tier classification (see include/species_tiers.h for the full
 // rationale and the fork's tier definitions). Keyed by National Pokedex number so
-// every forme of a species inherits the base species' tier automatically.
+// every forme of a species inherits the base species' tier automatically, with a
+// per-forme override table (sFormeTierOverrides[]) for formes whose power diverges
+// from their base (e.g. Shaymin-Sky, base Calyrex).
 
 struct SpeciesTierEntry
 {
     u16 natDex;     // enum NationalDexOrder (NATIONAL_DEX_*)
     u8 tier;        // enum SpeciesTier
+};
+
+// FORK: per-forme tier overrides, keyed by EXACT species id (SPECIES_*), checked
+// before the dex-keyed table below. The dex-keyed map gives every forme of a
+// species the base's tier, which is wrong when a forme's power differs sharply
+// from its base: e.g. ordinary Shaymin is a middling TIER_NORMAL mon, but
+// Shaymin-Sky's boosted Serene Grace (this fork) makes it restricted-tier; and
+// base Calyrex (BST 500) is a weak standalone while its Ice/Shadow riders are
+// top-tier restricteds. List the exact forme here to override its inherited tier;
+// everything not listed still falls through to the National-Dex table.
+struct SpeciesFormeTierEntry
+{
+    u16 species;    // exact SPECIES_* forme id
+    u8 tier;        // enum SpeciesTier
+};
+
+static const struct SpeciesFormeTierEntry sFormeTierOverrides[] =
+{
+    { SPECIES_SHAYMIN_SKY, TIER_LEGENDARY },   // boosted Serene Grace forme; base Shaymin stays TIER_NORMAL
+    { SPECIES_CALYREX, TIER_NORMAL },          // weak base forme; Calyrex-Ice/Shadow keep TIER_MYTHICAL via the dex table
 };
 
 static const struct SpeciesTierEntry sSpeciesTiers[] =
@@ -91,9 +113,17 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
 
 enum SpeciesTier GetSpeciesTier(u16 species)
 {
-    enum NationalDexOrder natDex = SpeciesToNationalPokedexNum(species);
+    enum NationalDexOrder natDex;
     u32 i;
 
+    // Exact-forme overrides win over the dex-keyed inheritance below.
+    for (i = 0; i < ARRAY_COUNT(sFormeTierOverrides); i++)
+    {
+        if (sFormeTierOverrides[i].species == species)
+            return sFormeTierOverrides[i].tier;
+    }
+
+    natDex = SpeciesToNationalPokedexNum(species);
     for (i = 0; i < ARRAY_COUNT(sSpeciesTiers); i++)
     {
         if (sSpeciesTiers[i].natDex == natDex)

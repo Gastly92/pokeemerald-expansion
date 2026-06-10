@@ -28,6 +28,13 @@
 // (Therian formes, Necrozma/Calyrex/Ogerpon formes, regional forms, ...) shares
 // the base species' tier automatically — no need to list each forme.
 //
+// When a specific forme's power diverges from its base, a per-forme override
+// table (sFormeTierOverrides[], keyed by exact SPECIES_* id) takes precedence over
+// the dex-keyed inheritance: e.g. Shaymin-Sky is TIER_LEGENDARY while ordinary
+// Shaymin stays TIER_NORMAL, and base Calyrex is TIER_NORMAL while its Ice/Shadow
+// riders keep TIER_MYTHICAL. Add a row there to override one forme without
+// disturbing the rest of the species' formes.
+//
 // SCOPE: the table currently covers the species used by the extended frontier
 // roster (src/frontier_extended_mons.c). Species not listed return TIER_NORMAL.
 // Add a row to extend coverage.
