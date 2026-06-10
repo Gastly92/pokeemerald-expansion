@@ -235,10 +235,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_NECROZMA_ULTRA,           sInnateLevitate },
     { SPECIES_NIHILEGO,                 sInnateLevitate },
     { SPECIES_POIPOLE,                  sInnateLevitate },
-    { SPECIES_TAPU_BULU,                sInnateLevitate },
-    { SPECIES_TAPU_FINI,                sInnateLevitate },
-    { SPECIES_TAPU_KOKO,                sInnateLevitate },
-    { SPECIES_TAPU_LELE,                sInnateLevitate },
+    // The Tapus (Electric/Psychic/Grassy/Misty Surge) summon their terrain on entry; innate
+    // Levitate would unground them and forfeit that terrain's benefits (boosts, status
+    // protection, healing — all grounding-gated). Omitted so they stay grounded, which also
+    // matches canon (the Tapus have no Levitate and are Ground-vulnerable in the official games).
     { SPECIES_XURKITREE,                sInnateLevitate },
 
     // Gen 8
@@ -258,7 +258,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GHOLDENGO,                sInnateLevitate },
     { SPECIES_GIMMIGHOUL_ROAMING,       sInnateLevitate }, // Chest form sits on the ground, omitted
     { SPECIES_IRON_MOTH,                sInnateLevitate },
-    { SPECIES_MIRAIDON,                 sInnateLevitate },
+    // Miraidon's Hadron Engine summons Electric Terrain on entry; innate Levitate would
+    // unground it and forfeit the terrain's stacking Electric-move boost and sleep immunity
+    // (its signature Sp. Atk boost survives, but the terrain payoff does not). Omitted to stay
+    // grounded, matching canon (Miraidon has no Levitate and is Ground-vulnerable in-game).
     { SPECIES_PECHARUNT,                sInnateLevitate },
     { SPECIES_POLTCHAGEIST,             sInnateLevitate },
     { SPECIES_POLTCHAGEIST_ARTISAN,     sInnateLevitate },

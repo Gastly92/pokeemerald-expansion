@@ -119,6 +119,54 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies only the primary abil
     }
 }
 
+// Terrain summoners are deliberately excluded from the innate-Levitate table: floating would
+// forfeit the terrain they set on entry (every terrain benefit is grounding-gated), so they
+// stay grounded — which also matches canon, where none of them have Levitate. Guard against a
+// well-meaning re-add: with the feature on, a Tapu must still take a Ground hit, and it must
+// reap its own terrain (Tapu Bulu heals from the Grassy Terrain it summons, only if grounded).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: terrain summoners (Tapus, Miraidon) are not given innate Levitate")
+{
+    GIVEN {
+        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_KOKO, ABILITY_LEVITATE));
+        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_LELE, ABILITY_LEVITATE));
+        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_BULU, ABILITY_LEVITATE));
+        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_FINI, ABILITY_LEVITATE));
+        ASSUME(!SpeciesHasInnate(SPECIES_MIRAIDON, ABILITY_LEVITATE));
+        ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TAPU_KOKO); // Electric Surge, no innate Levitate -> grounded
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_MUD_SLAP); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_LEVITATE); }
+        HP_BAR(player); // grounded: no innate Levitate, the Ground hit connects
+    }
+}
+
+// The positive half: a terrain summoner now benefits from its own terrain. Tapu Bulu's Grassy
+// Surge sets Grassy Terrain on entry; a grounded mon heals 1/16 max HP at end of turn from it.
+// With innate Levitate it would float and heal nothing, so end-of-turn healing proves it's
+// grounded for terrain purposes.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a terrain summoner (Tapu Bulu) reaps its own Grassy Terrain")
+{
+    GIVEN {
+        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_BULU, ABILITY_LEVITATE));
+        ASSUME(gSpeciesInfo[SPECIES_TAPU_BULU].abilities[0] == ABILITY_GRASSY_SURGE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TAPU_BULU) { MaxHP(100); HP(1); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_GRASSY_SURGE);          // Grassy Surge sets the terrain on switch-in
+        MESSAGE("Grass grew to cover the battlefield!");
+        s32 maxHPPlayer = GetMonData(&PLAYER_PARTY[0], MON_DATA_MAX_HP);
+        MESSAGE("Tapu Bulu is healed by the grassy terrain!"); // grounded -> heals from its own terrain
+        HP_BAR(player, damage: -maxHPPlayer / 16);
+    }
+}
+
 AI_DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI will spread-Earthquake when its ally's innate Levitate makes it immune")
 {
     bool32 enabled;
