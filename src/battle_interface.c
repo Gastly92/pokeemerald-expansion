@@ -1994,7 +1994,9 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
             MoveBattleBar(battler, healthboxSpriteId, HEALTH_BAR, 0);
         }
 
-        if (!isDoubles && (elementId == HEALTHBOX_EXP_BAR || elementId == HEALTHBOX_ALL))
+        // FORK: B_CLEAN_HEALTHBOX drops the singles EXP bar (the clean box graphic
+        // has no EXP bar frame, so don't draw the bar fill over it either).
+        if (B_CLEAN_HEALTHBOX != TRUE && !isDoubles && (elementId == HEALTHBOX_EXP_BAR || elementId == HEALTHBOX_ALL))
         {
             enum Species species;
             u32 exp, currLevelExp;
