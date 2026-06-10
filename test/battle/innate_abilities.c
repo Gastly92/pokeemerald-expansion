@@ -132,6 +132,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: terrain summoners (Tapus, Miraidon
         ASSUME(!SpeciesHasInnate(SPECIES_TAPU_BULU, ABILITY_LEVITATE));
         ASSUME(!SpeciesHasInnate(SPECIES_TAPU_FINI, ABILITY_LEVITATE));
         ASSUME(!SpeciesHasInnate(SPECIES_MIRAIDON, ABILITY_LEVITATE));
+        ASSUME(!SpeciesHasInnate(SPECIES_WEEZING_GALAR, ABILITY_LEVITATE)); // Misty Surge (HA) summoner; see table comment
         ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         PLAYER(SPECIES_TAPU_KOKO); // Electric Surge, no innate Levitate -> grounded

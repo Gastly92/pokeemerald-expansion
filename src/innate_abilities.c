@@ -36,7 +36,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GENGAR_GMAX,       sInnateLevitate }, // a Gigantamaxed Gengar still floats (NOT Gengar-Mega, which is grounded)
     { SPECIES_KOFFING,           sInnateLevitate },
     { SPECIES_WEEZING,           sInnateLevitate },
-    { SPECIES_WEEZING_GALAR,     sInnateLevitate },
+    // Weezing-Galar is omitted even though Koffing/Weezing carry native Levitate: its other
+    // ability slots make an innate Levitate either pointless or harmful. Its Misty Surge (HA)
+    // build is a terrain summoner the innate would unground (the Tapu problem); its Neutralizing
+    // Gas build suppresses the innate anyway (IsInnateActive); and its default Levitate build
+    // already floats by its real ability. So the innate never helps any build of it.
 
     // Gen 2
     { SPECIES_MISDREAVUS,        sInnateLevitate },
