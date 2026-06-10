@@ -22,9 +22,13 @@
 // ability in gBattleMons[battler].ability), but they DO satisfy "does this
 // battler have ability X?" trait checks via BattlerHasAbility(). Innates honor
 // the same suppression rules as a real ability of the same name (Gastro Acid,
-// Neutralizing Gas, Mold Breaker on breakable abilities, Ability Shield), so an
-// innate is never strictly better than holding that ability in a real slot. The
-// species->innate table lives in src/innate_abilities.c; the predicate lives in
+// Neutralizing Gas, Mold Breaker on breakable abilities, Ability Shield). An
+// innate's *effect* may diverge from the real ability by design: an innate
+// Levitate is a deliberate pure boon — still immune to Ground moves and entry
+// hazards, but unlike a real Levitate it stays "grounded" for the beneficial
+// ground interactions (field terrain, Toxic Spikes absorption) via
+// IsBattlerGroundedForBenefit(). The species->innate table lives in
+// src/innate_abilities.c; the predicate lives in
 // BattlerHasAbility()/IsInnateActive() (src/battle_util.c).
 #define FEATURE_INNATE_ABILITIES TRUE
 

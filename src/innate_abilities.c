@@ -13,9 +13,15 @@
 // ALLOWLIST — only abilities whose innate behavior has been deliberately wired in
 // may appear here (see innate_abilities.h "SCOPE"). The fork grows this set one
 // ability at a time. Supported innate abilities:
-//   - ABILITY_LEVITATE — passive Ground-immunity / ungrounding, handled in
-//     src/battle_util.c (IsBattlerUngroundedByAbilityItemOrEffect and the
-//     type-effectiveness calc credit an innate Levitate exactly like the real one).
+//   - ABILITY_LEVITATE — Ground-immunity / ungrounding, handled in src/battle_util.c
+//     (IsBattlerUngroundedByAbilityItemOrEffect and the type-effectiveness calc credit an
+//     innate Levitate exactly like the real one). DELIBERATE DIVERGENCE: an innate Levitate is
+//     a *pure boon*, NOT identical to a real Levitate. It still floats above Ground moves and
+//     entry-hazard damage, but the fork also treats it as grounded for the *beneficial* ground
+//     interactions — field terrain and Toxic Spikes absorption (via IsBattlerGroundedForBenefit,
+//     src/battle_util.c). So an innate-Levitate mon reaps the terrain it/an ally sets and a
+//     Poison-type still clears Toxic Spikes — things a real Levitate forgoes. This is why
+//     terrain summoners (the Tapus, Miraidon) and Poison floaters happily carry the innate.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -36,11 +42,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GENGAR_GMAX,       sInnateLevitate }, // a Gigantamaxed Gengar still floats (NOT Gengar-Mega, which is grounded)
     { SPECIES_KOFFING,           sInnateLevitate },
     { SPECIES_WEEZING,           sInnateLevitate },
-    // Weezing-Galar is omitted even though Koffing/Weezing carry native Levitate: its other
-    // ability slots make an innate Levitate either pointless or harmful. Its Misty Surge (HA)
-    // build is a terrain summoner the innate would unground (the Tapu problem); its Neutralizing
-    // Gas build suppresses the innate anyway (IsInnateActive); and its default Levitate build
-    // already floats by its real ability. So the innate never helps any build of it.
+    { SPECIES_WEEZING_GALAR,     sInnateLevitate }, // Misty Surge (HA) build floats AND reaps its terrain; Poison-type builds clear Toxic Spikes
 
     // Gen 2
     { SPECIES_MISDREAVUS,        sInnateLevitate },
@@ -239,10 +241,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_NECROZMA_ULTRA,           sInnateLevitate },
     { SPECIES_NIHILEGO,                 sInnateLevitate },
     { SPECIES_POIPOLE,                  sInnateLevitate },
-    // The Tapus (Electric/Psychic/Grassy/Misty Surge) summon their terrain on entry; innate
-    // Levitate would unground them and forfeit that terrain's benefits (boosts, status
-    // protection, healing — all grounding-gated). Omitted so they stay grounded, which also
-    // matches canon (the Tapus have no Levitate and are Ground-vulnerable in the official games).
+    { SPECIES_TAPU_BULU,                sInnateLevitate }, // Grassy Surge: floats AND reaps its own terrain (innate Levitate is a pure boon)
+    { SPECIES_TAPU_FINI,                sInnateLevitate }, // Misty Surge
+    { SPECIES_TAPU_KOKO,                sInnateLevitate }, // Electric Surge
+    { SPECIES_TAPU_LELE,                sInnateLevitate }, // Psychic Surge
     { SPECIES_XURKITREE,                sInnateLevitate },
 
     // Gen 8
@@ -262,10 +264,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GHOLDENGO,                sInnateLevitate },
     { SPECIES_GIMMIGHOUL_ROAMING,       sInnateLevitate }, // Chest form sits on the ground, omitted
     { SPECIES_IRON_MOTH,                sInnateLevitate },
-    // Miraidon's Hadron Engine summons Electric Terrain on entry; innate Levitate would
-    // unground it and forfeit the terrain's stacking Electric-move boost and sleep immunity
-    // (its signature Sp. Atk boost survives, but the terrain payoff does not). Omitted to stay
-    // grounded, matching canon (Miraidon has no Levitate and is Ground-vulnerable in-game).
+    { SPECIES_MIRAIDON,                 sInnateLevitate }, // Hadron Engine: floats AND reaps its own Electric Terrain
     { SPECIES_PECHARUNT,                sInnateLevitate },
     { SPECIES_POLTCHAGEIST,             sInnateLevitate },
     { SPECIES_POLTCHAGEIST_ARTISAN,     sInnateLevitate },

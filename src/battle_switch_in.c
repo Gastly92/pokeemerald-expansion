@@ -335,11 +335,14 @@ static bool32 TryHazardsOnSwitchIn(enum BattlerId battler, enum Ability ability,
         }
         break;
     case HAZARDS_TOXIC_SPIKES:
-        if (!IsBattlerGrounded(battler, ability, holdEffect))
-        {
-            effect = FALSE;
-        }
-        else if (IS_BATTLER_OF_TYPE(battler, TYPE_POISON)) // Absorb the toxic spikes.
+        // FORK: a Poison-type absorbs (clears) Toxic Spikes when grounded — or when it floats
+        // only by an innate Levitate (IsBattlerGroundedForBenefit), which the fork treats as a
+        // pure boon: it still floats above every other hazard, but a Poison innate-floater still
+        // sweeps these up. A real Levitate stays exempt (canonical). The ordering matters: this
+        // absorb check runs before the "ungrounded -> no interaction" gate so the innate floater
+        // reaches it, while a *non*-Poison innate floater still falls through to that gate (no
+        // poison, no clear).
+        if (IS_BATTLER_OF_TYPE(battler, TYPE_POISON) && IsBattlerGroundedForBenefit(battler, ability, holdEffect)) // Absorb the toxic spikes.
         {
             gSideTimers[side].toxicSpikesAmount = 0;
             RemoveHazardFromField(side, HAZARDS_TOXIC_SPIKES);
@@ -347,6 +350,10 @@ static bool32 TryHazardsOnSwitchIn(enum BattlerId battler, enum Ability ability,
             BattleScriptCall(BattleScript_ToxicSpikesAbsorbed);
             clearedToxicSpikes = TRUE;
             effect = TRUE;
+        }
+        else if (!IsBattlerGrounded(battler, ability, holdEffect))
+        {
+            effect = FALSE;
         }
         else if (IsBattlerAffectedByHazards(battler, holdEffect, TRUE)
               && CanBePoisoned(battler, battler, ABILITY_NONE, ability))

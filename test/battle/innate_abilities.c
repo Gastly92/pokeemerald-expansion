@@ -119,52 +119,88 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies only the primary abil
     }
 }
 
-// Terrain summoners are deliberately excluded from the innate-Levitate table: floating would
-// forfeit the terrain they set on entry (every terrain benefit is grounding-gated), so they
-// stay grounded — which also matches canon, where none of them have Levitate. Guard against a
-// well-meaning re-add: with the feature on, a Tapu must still take a Ground hit, and it must
-// reap its own terrain (Tapu Bulu heals from the Grassy Terrain it summons, only if grounded).
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: terrain summoners (Tapus, Miraidon) are not given innate Levitate")
+// FORK divergence: an innate Levitate is a *pure boon*, NOT a 1:1 real Levitate. It still floats
+// above Ground moves and entry hazards, but the fork keeps the mon grounded for the *beneficial*
+// ground interactions (field terrain, Toxic Spikes absorption) via IsBattlerGroundedForBenefit.
+// Tapu Bulu shows both halves at once: its Grassy Surge sets Grassy Terrain on entry, its innate
+// Levitate blocks the Ground move, and it still heals 1/16 HP from that terrain at end of turn —
+// healing that only happens because IsBattlerGroundedForBenefit counts the innate floater as
+// grounded (IsBattlerGrounded alone returns FALSE here, so a broken boon would skip the heal).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Levitate is a pure boon — Tapu Bulu floats yet reaps its own Grassy Terrain")
 {
     GIVEN {
-        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_KOKO, ABILITY_LEVITATE));
-        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_LELE, ABILITY_LEVITATE));
-        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_BULU, ABILITY_LEVITATE));
-        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_FINI, ABILITY_LEVITATE));
-        ASSUME(!SpeciesHasInnate(SPECIES_MIRAIDON, ABILITY_LEVITATE));
-        ASSUME(!SpeciesHasInnate(SPECIES_WEEZING_GALAR, ABILITY_LEVITATE)); // Misty Surge (HA) summoner; see table comment
+        ASSUME(SpeciesHasInnate(SPECIES_TAPU_BULU, ABILITY_LEVITATE));
+        ASSUME(gSpeciesInfo[SPECIES_TAPU_BULU].abilities[0] == ABILITY_GRASSY_SURGE);
         ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_TAPU_KOKO); // Electric Surge, no innate Levitate -> grounded
-        OPPONENT(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_TAPU_BULU) { MaxHP(100); HP(1); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_MUD_SLAP); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_MUD_SLAP); }
     } SCENE {
-        NONE_OF { ABILITY_POPUP(player, ABILITY_LEVITATE); }
-        HP_BAR(player); // grounded: no innate Levitate, the Ground hit connects
+        ABILITY_POPUP(player, ABILITY_GRASSY_SURGE);           // sets its own terrain on entry
+        MESSAGE("Grass grew to cover the battlefield!");
+        ABILITY_POPUP(player, ABILITY_LEVITATE);               // still floats above the Ground move...
+        MESSAGE("It doesn't affect Tapu Bulu…");
+        s32 maxHPPlayer = GetMonData(&PLAYER_PARTY[0], MON_DATA_MAX_HP);
+        MESSAGE("Tapu Bulu is healed by the grassy terrain!"); // ...yet reaps the terrain (the boon)
+        HP_BAR(player, damage: -maxHPPlayer / 16);
     }
 }
 
-// The positive half: a terrain summoner now benefits from its own terrain. Tapu Bulu's Grassy
-// Surge sets Grassy Terrain on entry; a grounded mon heals 1/16 max HP at end of turn from it.
-// With innate Levitate it would float and heal nothing, so end-of-turn healing proves it's
-// grounded for terrain purposes.
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a terrain summoner (Tapu Bulu) reaps its own Grassy Terrain")
+// Toxic Spikes: a Poison-type with an *innate* Levitate clears them (boon), whereas a *real*
+// Levitate stays exempt (canonical). Weezing's primary ability is real Levitate AND it carries an
+// innate Levitate, so toggling the feature isolates the divergence: feature on -> the innate is
+// active -> it absorbs; feature off -> only the real Levitate remains -> it floats over the spikes
+// without clearing them. (On the opponent side so the message reads "the opposing team".)
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Levitate Poison-type clears Toxic Spikes (real Levitate does not)")
 {
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
     GIVEN {
-        ASSUME(!SpeciesHasInnate(SPECIES_TAPU_BULU, ABILITY_LEVITATE));
-        ASSUME(gSpeciesInfo[SPECIES_TAPU_BULU].abilities[0] == ABILITY_GRASSY_SURGE);
-        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_TAPU_BULU) { MaxHP(100); HP(1); }
-        OPPONENT(SPECIES_WOBBUFFET);
+        ASSUME(GetSpeciesType(SPECIES_WEEZING, 0) == TYPE_POISON);
+        ASSUME(SpeciesHasInnate(SPECIES_WEEZING, ABILITY_LEVITATE));
+        ASSUME(gSpeciesInfo[SPECIES_WEEZING].abilities[0] == ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TOXIC_SPIKES, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WEEZING) { Moves(MOVE_CELEBRATE); }
     } WHEN {
-        TURN {}
+        TURN { MOVE(player, MOVE_TOXIC_SPIKES); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); SWITCH(opponent, 1); }
     } SCENE {
-        ABILITY_POPUP(player, ABILITY_GRASSY_SURGE);          // Grassy Surge sets the terrain on switch-in
-        MESSAGE("Grass grew to cover the battlefield!");
-        s32 maxHPPlayer = GetMonData(&PLAYER_PARTY[0], MON_DATA_MAX_HP);
-        MESSAGE("Tapu Bulu is healed by the grassy terrain!"); // grounded -> heals from its own terrain
-        HP_BAR(player, damage: -maxHPPlayer / 16);
+        if (enabled)
+            MESSAGE("The poison spikes disappeared from the ground around the opposing team!"); // innate boon absorbs
+        else
+            NONE_OF { MESSAGE("The poison spikes disappeared from the ground around the opposing team!"); } // real Levitate floats over them
+    }
+}
+
+// The boon must not ground a *non*-Poison innate floater for the harmful half: it still dodges
+// Toxic Spikes poison entirely. Mew (Psychic, flavor floater, primary Synchronize) is poisoned by
+// Toxic Spikes only when grounded — feature off -> grounded -> poisoned; feature on -> innate
+// Levitate floats it -> not poisoned (and, not being Poison-type, it does not clear them either).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a non-Poison innate floater still dodges Toxic Spikes poison")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MEW, ABILITY_LEVITATE));
+        ASSUME(gSpeciesInfo[SPECIES_MEW].abilities[0] != ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TOXIC_SPIKES, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_MEW) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TOXIC_SPIKES); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); SWITCH(opponent, 1); }
+    } SCENE {
+        if (enabled)
+            NONE_OF { STATUS_ICON(opponent, poison: TRUE); } // floats via innate -> not poisoned
+        else
+            STATUS_ICON(opponent, poison: TRUE);             // grounded -> poisoned
     }
 }
 
