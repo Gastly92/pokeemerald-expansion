@@ -3852,30 +3852,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
     //                       Generation III
     // ============================================================
 
-    // ---- Genesect ----
-    {
-        .species = SPECIES_GENESECT,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Download revenge killer / pivot
-        .moves = {MOVE_U_TURN, MOVE_ICE_BEAM, MOVE_FLAMETHROWER, MOVE_THUNDERBOLT},
-        .ability = ABILITY_DOWNLOAD,
-        .nature = NATURE_NAIVE,
-        .ev = TRAINER_PARTY_EVS(0, 4, 0, 252, 252, 0),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_GENESECT,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Download Techno Blast attacker
-        .moves = {MOVE_TECHNO_BLAST, MOVE_FLASH_CANNON, MOVE_ICE_BEAM, MOVE_THUNDERBOLT},
-        .ability = ABILITY_DOWNLOAD,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
-    },
-
     // ---- Sceptile ----
     {
         .species = SPECIES_SCEPTILE,
@@ -9019,6 +8995,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
         .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
+
+    // ---- Genesect ----
+    {
+        .species = SPECIES_GENESECT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF, // Download revenge killer / pivot
+        .moves = {MOVE_U_TURN, MOVE_ICE_BEAM, MOVE_FLAMETHROWER, MOVE_THUNDERBOLT},
+        .ability = ABILITY_DOWNLOAD,
+        .nature = NATURE_NAIVE,
+        .ev = TRAINER_PARTY_EVS(0, 4, 0, 252, 252, 0),
+        .teraType = TYPE_STEEL,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_GENESECT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIFE_ORB, // Download Techno Blast attacker
+        .moves = {MOVE_TECHNO_BLAST, MOVE_FLASH_CANNON, MOVE_ICE_BEAM, MOVE_THUNDERBOLT},
+        .ability = ABILITY_DOWNLOAD,
+        .nature = NATURE_MODEST,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
     },
 
