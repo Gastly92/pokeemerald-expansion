@@ -17,7 +17,7 @@ struct SpeciesTierEntry
 static const struct SpeciesTierEntry sSpeciesTiers[] =
 {
     // ---- Mythical — Exactly 1 per frontier brain battle ----
-    { NATIONAL_DEX_MEWTWO, TIER_MYTHICAL }, // 150
+    { NATIONAL_DEX_MEWFWO, TIER_MYTHICAL }, // 150
     { NATIONAL_DEX_LUGIA, TIER_MYTHICAL }, // 249
     { NATIONAL_DEX_HO_OH, TIER_MYTHICAL }, // 250
     { NATIONAL_DEX_KYOGRE, TIER_MYTHICAL }, // 382
