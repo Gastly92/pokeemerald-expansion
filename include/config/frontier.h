@@ -11,7 +11,18 @@
 // select screen is skipped). NOTE: other facilities (e.g. Battle Dome) have
 // fixed 3-mon coordinate tables that aren't yet generalized to 6 — they're
 // stubbed to build but not visually correct at 6v6.
-#define B_FRONTIER_PARTY_SIZE_6V6   TRUE
+//
+// IMPORTANT: this is defined as 1/0, NOT TRUE/FALSE, on purpose. Unlike the other
+// B_FRONTIER_* flags this one feeds a numeric constant (FRONTIER_PARTY_SIZE /
+// FRONTIER_DOUBLES_PARTY_SIZE) computed with `#if` in constants/global.h that
+// MAP SCRIPTS read as a value (e.g. `setvar VAR_0x8005, FRONTIER_PARTY_SIZE` in
+// the Battle Tower lobby). The script cpp pass does not define TRUE, so `#if
+// B_FRONTIER_PARTY_SIZE_6V6` would expand to `#if TRUE` → undefined → `#if 0` and
+// scripts would silently see the vanilla 3/4 while C saw 6 (the party picker then
+// only lets you choose 3). Using a literal 1 makes `#if` evaluate the same in the
+// C and script cpp passes; `.if B_FRONTIER_PARTY_SIZE_6V6` still works too (it
+// becomes `.if 1`). See CLAUDE.md, "Using config flags in scripts".
+#define B_FRONTIER_PARTY_SIZE_6V6   1
 
 // If TRUE, Frontier battles are locked to level 100. For the Battle Factory
 // this is done by forcing the challenge into Open Level mode, which already

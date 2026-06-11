@@ -192,12 +192,19 @@ BattleFrontier_BattleTowerLobby_EventScript_AskEnterSinglesChallenge::
 
 BattleFrontier_BattleTowerLobby_EventScript_TryEnterSinglesChallenge::
 	setvar VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES
+.if B_FRONTIER_FORCE_LVL_100
+	@ FORK: B_FRONTIER_FORCE_LVL_100 locks battles to Lv100, so skip the Lv50/Open
+	@ prompt and force Open Level (the attendant just moves forward). Assembler .if,
+	@ not cpp #if — see CLAUDE.md, "Using config flags in scripts".
+	setvar VAR_RESULT, FRONTIER_LVL_OPEN
+.else
 	message BattleFrontier_BattleTowerLobby_Text_WhichLevelMode
 	waitmessage
 	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
 	switch VAR_RESULT
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
+.endif
 	frontier_checkineligible
 	goto_if_eq VAR_0x8004, TRUE, BattleFrontier_BattleTowerLobby_EventScript_NotEnoughValidMons
 	frontier_set FRONTIER_DATA_LVL_MODE, VAR_RESULT
@@ -255,12 +262,17 @@ BattleFrontier_BattleTowerLobby_EventScript_AskEnterDoublesChallenge::
 
 BattleFrontier_BattleTowerLobby_EventScript_TryEnterDoublesChallenge::
 	setvar VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_DOUBLES
+.if B_FRONTIER_FORCE_LVL_100
+	@ FORK: forced Lv100 — skip the Lv50/Open prompt and force Open Level.
+	setvar VAR_RESULT, FRONTIER_LVL_OPEN
+.else
 	message BattleFrontier_BattleTowerLobby_Text_WhichLevelMode
 	waitmessage
 	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
 	switch VAR_RESULT
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
+.endif
 	frontier_checkineligible
 	goto_if_eq VAR_0x8004, TRUE, BattleFrontier_BattleTowerLobby_EventScript_NotEnoughValidMons
 	frontier_set FRONTIER_DATA_LVL_MODE, VAR_RESULT
