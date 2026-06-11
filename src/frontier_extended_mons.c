@@ -54,21 +54,19 @@
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
 // that carries an innate Levitate or Regenerator always has it in battle, so its
-// .ability slot here is NOT spent on that ability — it carries a *complementary*
-// chosen ability instead (the mon then runs both). E.g. a Slowbro set lists
-// .ability = ABILITY_OWN_TEMPO yet still pivots on its innate Regenerator; a Rotom
-// set lists ABILITY_LIGHTNING_ROD yet still floats on its innate Levitate. Role
-// comments that mention "Regenerator"/"Levitate" describe the set's innate-backed
-// playstyle, not the .ability field.
+// .ability slot here is free to carry a *complementary* chosen ability — the mon
+// then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
+// pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
+// still floats on its innate Levitate.
 //
-// FORK: KNOWN BAD ENTRY — the Munkidori FORMAT_SINGLES set lists
-// .ability = ABILITY_REGENERATOR, but Regenerator is NOT one of its legal
-// abilities ({TOXIC_CHAIN, -, FRISK}) and it is not an innate-Regenerator species.
-// CreateFacilityMon (src/battle_frontier.c) finds no match and silently falls back
-// to ability slot 0, so this "Regenerator pivot" actually battles as Toxic Chain.
-// Left as-is for now; to be cleaned up alongside a planned config flag that allows
-// a frontier set to force an off-list primary ability (then either make it a real
-// override or retune the build to a legal Toxic Chain/Frisk set).
+// IMPORTANT: every .ability here must resolve to a real ability slot for the
+// species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
+// silently falls back to slot 0). For an "ability-locked" innate species whose
+// only real ability is the one now granted innately (Rotom, Hydreigon, the lake
+// trio, ...), the complementary ability is made selectable by a fork-owned
+// override table (src/species_ability_overrides.c) rather than by editing upstream
+// species data. The roster test (test/frontier_extended_roster.c) enforces that
+// every .ability is legal through that hook, so a typo can't silently downgrade.
 //
 // STATUS: Generations I-IX are all built out (~2-4 builds per reasonable species,
 // mega & non-mega, with a deliberate mix of offensive and defensive/support sets).
@@ -283,9 +281,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PIDGEOT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // no-mega hurricane spam
+        .heldItem = ITEM_CHOICE_SPECS, // Keen Eye Choice Specs (Tinted Lens needs the Mega)
         .moves = {MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_U_TURN, MOVE_HYPER_VOICE},
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_KEEN_EYE,
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_FLYING,
@@ -1973,9 +1971,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LAPRAS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ICIUM_Z, // Snow Warning + Aurora Veil setter
+        .heldItem = ITEM_ICIUM_Z, // Water Absorb Aurora Veil setter (relies on ally hail)
         .moves = {MOVE_AURORA_VEIL, MOVE_FREEZE_DRY, MOVE_SURF, MOVE_PROTECT},
-        .ability = ABILITY_SNOW_WARNING,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 4, 252, 0),
         .teraType = TYPE_WATER,
@@ -3328,7 +3326,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Sniper / special breaker
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_FIRE_BLAST, MOVE_ENERGY_BALL},
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_SNIPER,
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_WATER,
@@ -3337,9 +3335,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OCTILLERY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // swift swim rain attacker
+        .heldItem = ITEM_LIFE_ORB, // Sniper Life Orb attacker
         .moves = {MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_GUNK_SHOT, MOVE_ENERGY_BALL},
-        .ability = ABILITY_SWIFT_SWIM,
+        .ability = ABILITY_SNIPER,
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_WATER,
@@ -3896,9 +3894,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // sun special revenge killer
+        .heldItem = ITEM_CHOICE_SPECS, // Overgrow special revenge killer
         .moves = {MOVE_LEAF_STORM, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST, MOVE_GIGA_DRAIN},
-        .ability = ABILITY_CHLOROPHYLL,
+        .ability = ABILITY_OVERGROW,
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_GRASS,
@@ -4003,9 +4001,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LINOONE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Belly Drum + Extreme Speed sweeper
+        .heldItem = ITEM_SITRUS_BERRY, // Gluttony Belly Drum + Extreme Speed sweeper
         .moves = {MOVE_BELLY_DRUM, MOVE_EXTREME_SPEED, MOVE_SEED_BOMB, MOVE_KNOCK_OFF},
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_GLUTTONY,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_NORMAL,
@@ -4014,9 +4012,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LINOONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Guts priority breaker
+        .heldItem = ITEM_FLAME_ORB, // Quick Feet Flame Orb priority breaker
         .moves = {MOVE_FACADE, MOVE_EXTREME_SPEED, MOVE_KNOCK_OFF, MOVE_SEED_BOMB},
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_QUICK_FEET,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_NORMAL,
@@ -5788,9 +5786,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAMPARDOS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCK_GEM, // Rock Head nuke (no recoil Head Smash)
+        .heldItem = ITEM_ROCK_GEM, // Sheer Force Swords Dance nuke
         .moves = {MOVE_SWORDS_DANCE, MOVE_HEAD_SMASH, MOVE_EARTHQUAKE, MOVE_FIRE_PUNCH},
-        .ability = ABILITY_ROCK_HEAD,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_ROCK,
@@ -6435,9 +6433,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGMORTAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Flash Fire special breaker
+        .heldItem = ITEM_CHOICE_SPECS, // Vital Spirit special breaker
         .moves = {MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_THUNDERBOLT, MOVE_OVERHEAT},
-        .ability = ABILITY_FLASH_FIRE,
+        .ability = ABILITY_VITAL_SPIRIT,
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_FIRE,
@@ -9981,9 +9979,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZYGARDE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Coil bulky setup wall
+        .heldItem = ITEM_LEFTOVERS, // Coil bulky setup wall (innate Regenerator)
         .moves = {MOVE_COIL, MOVE_THOUSAND_ARROWS, MOVE_DRAGON_TAIL, MOVE_GLARE},
-        .ability = ABILITY_POWER_CONSTRUCT,
+        .ability = ABILITY_AURA_BREAK,
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_DRAGON,
@@ -14632,9 +14630,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUNKIDORI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Regenerator special pivot
+        .heldItem = ITEM_BLACK_SLUDGE, // Toxic Chain defensive pivot
         .moves = {MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_U_TURN, MOVE_FUTURE_SIGHT},
-        .ability = ABILITY_REGENERATOR,
+        .ability = ABILITY_TOXIC_CHAIN,
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
         .teraType = TYPE_STEEL,
