@@ -9457,6 +9457,25 @@ static void Cmd_switchoutabilities(void)
         break;
     }
 
+    // FORK: innate Regenerator (FEATURE_INNATE_ABILITIES). The switch above heals a
+    // *chosen* Regenerator; this fires the same silent 1/3-HP switch-out heal for a
+    // mon carrying Regenerator as an innate. Guarded on GetBattlerAbility() so a
+    // chosen Regenerator (already healed above) never double-heals; BattlerHasAbility()
+    // applies the same suppression (Gastro Acid / Neutralizing Gas / not-on-field) as
+    // the real ability — the battler is still on-field here (notOnField is set below).
+    // Writes the party mon directly (exactly what the controller does for REQUEST_HP_BATTLE)
+    // instead of a second BtlController_EmitSetMonData, so it can't clobber the single-slot
+    // emit a chosen ability (e.g. Corsola's Natural Cure) may have already queued this turn.
+    if (GetBattlerAbility(battler) != ABILITY_REGENERATOR
+     && BattlerHasAbility(battler, ABILITY_REGENERATOR))
+    {
+        u32 regenerate = GetNonDynamaxMaxHP(battler) / 3;
+        regenerate += gBattleMons[battler].hp;
+        if (regenerate > gBattleMons[battler].maxHP)
+            regenerate = gBattleMons[battler].maxHP;
+        SetMonData(GetBattlerMon(battler), MON_DATA_HP, &regenerate);
+    }
+
     gBattleStruct->battlerState[battler].notOnField = TRUE;
 
     gBattlescriptCurrInstr = cmd->nextInstr;

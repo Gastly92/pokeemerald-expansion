@@ -149,7 +149,7 @@ ___
 > * [x] ~~MOODY = 141~~
 > * [x] ~~OVERCOAT = 142~~
 > * [x] ~~POISON_TOUCH = 143~~
-* [ ] REGENERATOR = 144
+> * [x] REGENERATOR = 144
 > * [x] ~~BIG_PECKS = 145~~
 > * [x] ~~SAND_RUSH = 146~~
 > * [x] ~~WONDER_SKIN = 147~~

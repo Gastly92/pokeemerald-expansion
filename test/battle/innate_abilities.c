@@ -5,7 +5,8 @@
 // FORK: coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
 // default off in the test baseline (see TestInitConfigData), so each test that
 // wants innates opts in with WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE). The
-// supported innate set is currently just LEVITATE (see src/innate_abilities.c).
+// supported innate set is LEVITATE (a passive Ground immunity) and REGENERATOR
+// (a silent 1/3-HP switch-out heal); see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -251,5 +252,94 @@ AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI treats an innate Levitate as
             TURN { EXPECT_MOVE(opponent, MOVE_SURF); }       // Earthquake would do nothing
         else
             TURN { EXPECT_MOVE(opponent, MOVE_EARTHQUAKE); } // 4x super effective on Steel/Electric
+    }
+}
+
+// ─── Innate Regenerator ──────────────────────────────────────────────────────
+// A silent 1/3-max-HP heal on switch-out, wired additively at the single switch-out
+// site (Cmd_switchoutabilities, src/battle_script_commands.c). Staryu is a flavor
+// regenerator: it has no native Regenerator (Illuminate/Natural Cure/Analytic), so the
+// heal is attributable solely to the innate, and toggling the feature isolates it.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Regenerator heals 1/3 max HP on switch-out")
+{
+    u32 currHP;
+    PARAMETRIZE { currHP = 1; }
+    PARAMETRIZE { currHP = 3; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_STARYU, ABILITY_REGENERATOR));
+        ASSUME(gSpeciesInfo[SPECIES_STARYU].abilities[0] != ABILITY_REGENERATOR);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_STARYU) { HP(currHP); }
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+        TURN { SWITCH(player, 0); }
+    } SCENE {
+        SWITCH_OUT_MESSAGE("Staryu");
+        SEND_IN_MESSAGE("Wobbuffet");
+        SWITCH_OUT_MESSAGE("Wobbuffet");
+        SEND_IN_MESSAGE("Staryu");
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP / 3 + currHP);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Regenerator heal (stock behavior)")
+{
+    GIVEN {
+        // Feature off by default in the baseline; Staryu carries no native Regenerator.
+        ASSUME(gSpeciesInfo[SPECIES_STARYU].abilities[0] != ABILITY_REGENERATOR);
+        PLAYER(SPECIES_STARYU) { HP(1); }
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+        TURN { SWITCH(player, 0); }
+    } SCENE {
+        SWITCH_OUT_MESSAGE("Staryu");
+        SEND_IN_MESSAGE("Wobbuffet");
+        SWITCH_OUT_MESSAGE("Wobbuffet");
+        SEND_IN_MESSAGE("Staryu");
+    } THEN {
+        EXPECT_EQ(player->hp, 1); // switched out and back with no heal
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Regenerator's switch-out heal")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_STARYU) { HP(1); Moves(MOVE_CELEBRATE); }
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // innate suppressed before it can switch
+        TURN { SWITCH(player, 1); }
+        TURN { SWITCH(player, 0); }
+    } THEN {
+        EXPECT_EQ(player->hp, 1); // suppressed -> no heal on switch-out
+    }
+}
+
+// A canon Regenerator user (Corsola: Hustle/Natural Cure/Regenerator) whose *chosen*
+// ability is Natural Cure ALSO carries Regenerator as an innate. Both must fire on
+// switch-out: Natural Cure clears status AND the innate heals. This guards the wiring's
+// direct party-HP write, which exists precisely so the heal doesn't clobber the single
+// switch-out controller emit that Natural Cure already queued.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: chosen Natural Cure and innate Regenerator both fire on switch-out")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CORSOLA, ABILITY_REGENERATOR));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CORSOLA) { Ability(ABILITY_NATURAL_CURE); HP(1); Status1(STATUS1_POISON); }
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); } // switches first (start of turn), before any poison tick
+        TURN { SWITCH(player, 0); }
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP / 3 + 1); // innate Regenerator healed
+        EXPECT_EQ(player->status1, STATUS1_NONE);     // chosen Natural Cure cleared the poison
     }
 }
