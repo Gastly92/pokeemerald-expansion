@@ -18,7 +18,7 @@ struct SpeciesTierEntry
 
 static const struct SpeciesTierEntry sSpeciesTiers[] =
 {
-    // ---- Mythical — the strongest restricted legends + event mythicals ----
+    // ---- Mythical — exactly 1 per frontier brain battle ----
     { SPECIES_MEWTWO,              TIER_MYTHICAL },
     { SPECIES_LUGIA,               TIER_MYTHICAL },
     { SPECIES_HO_OH,               TIER_MYTHICAL },
@@ -51,16 +51,16 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_ZAMAZENTA,           TIER_MYTHICAL },
     { SPECIES_ZAMAZENTA_CROWNED,   TIER_MYTHICAL },
     { SPECIES_ETERNATUS,           TIER_MYTHICAL },
-    { SPECIES_CALYREX_ICE,         TIER_MYTHICAL }, // rider forme (base Calyrex is TIER_NORMAL)
-    { SPECIES_CALYREX_SHADOW,      TIER_MYTHICAL }, // rider forme (base Calyrex is TIER_NORMAL)
+    { SPECIES_CALYREX_ICE,         TIER_MYTHICAL },
+    { SPECIES_CALYREX_SHADOW,      TIER_MYTHICAL },
     { SPECIES_KORAIDON,            TIER_MYTHICAL },
     { SPECIES_MIRAIDON,            TIER_MYTHICAL },
 
-    // ---- Legendary — sub-legendaries (birds/beasts/genies/Tapus/Urshifu/Ogerpon/…) ----
+    // ---- Legendary — exactly 1 per frontier boss battle ----
     { SPECIES_LATIAS,               TIER_LEGENDARY },
     { SPECIES_LATIOS,               TIER_LEGENDARY },
     { SPECIES_JIRACHI,              TIER_LEGENDARY },
-    { SPECIES_SHAYMIN_SKY,          TIER_LEGENDARY }, // boosted Serene Grace forme (base Shaymin is TIER_NORMAL)
+    { SPECIES_SHAYMIN_SKY,          TIER_LEGENDARY },
     { SPECIES_TORNADUS,             TIER_LEGENDARY },
     { SPECIES_TORNADUS_THERIAN,     TIER_LEGENDARY },
     { SPECIES_THUNDURUS,            TIER_LEGENDARY },
@@ -89,7 +89,7 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_OGERPON_TEAL,         TIER_LEGENDARY },
     { SPECIES_OGERPON_WELLSPRING,   TIER_LEGENDARY },
 
-    // ---- Pseudo — 600-BST pseudos, Ultra Beasts, Paradox, Treasures of Ruin ----
+    // ---- Pseudo — At most 1 per frontier draft team ----
     { SPECIES_SALAMENCE,          TIER_PSEUDO },
     { SPECIES_GARCHOMP,           TIER_PSEUDO },
     { SPECIES_HEATRAN,            TIER_PSEUDO },
