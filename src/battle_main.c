@@ -1987,7 +1987,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
 
             if (B_TRAINER_CLASS_POKE_BALLS >= GEN_7 && ball == -1)
             {
-                ball = gTrainerClasses[trainer->trainerClass].ball ?: ITEM_POKE_BALL;
+                ball = gTrainerClasses[trainer->trainerClass].ball ?: BALL_POKE;
                 SetMonData(&party[i], MON_DATA_POKEBALL, &ball);
             }
         }
@@ -5633,8 +5633,7 @@ static void HandleEndTurn_FinishBattle(void)
     }
     else
     {
-        if (gBattleControllerExecFlags == 0)
-            gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
+        RunBattleScriptCommands();
     }
 }
 
@@ -5781,8 +5780,7 @@ void RunBattleScriptCommands_PopCallbacksStack(void)
     }
     else
     {
-        if (gBattleControllerExecFlags == 0)
-            gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
+        RunBattleScriptCommands();
     }
 }
 

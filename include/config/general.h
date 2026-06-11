@@ -74,17 +74,7 @@
 
 // General settings
 #define EXPANSION_INTRO              TRUE    // If TRUE, a custom RHH intro will play after the vanilla copyright screen.
-#define SKIP_TITLE_SEQUENCE          TRUE    // If TRUE, skips the title sequence on boot (the copyright screen, the intro cinematic, and the title screen), going straight to the main menu. The RHH intro still plays if EXPANSION_INTRO is TRUE. Essential boot init (save loading, etc.) still runs.
-#define SKIP_BIRCH_SPEECH            TRUE    // If TRUE, skips Prof. Birch's new-game monologue (the Pokémon/Lotad speech and the closing "you're ready" remarks), keeping only the character look and name selection before the game starts.
-#define GENDER_NEUTRAL_TEXT          TRUE    // If TRUE, gendered new-game wording is replaced with neutral text. Currently applies to the player-look picker ("Choose your appearance." / TYPE 1 / TYPE 2 instead of "Are you a boy? Or are you a girl?" / BOY / GIRL); can be reused for other gendered strings later. Only displayed text changes; the underlying selection is unaffected.
-#define START_AT_BATTLE_FRONTIER     TRUE    // If TRUE, a new game skips the moving-truck arrival animation and Littleroot intro, warping the player straight to the Battle Frontier ferry dock with the flags/vars set as if they had just arrived there for the first time. Has no effect on FRLG. See SetBattleFrontierFirstArrivalState() in src/new_game.c.
-#define START_WITH_BATTLE_GIMMICK_ITEMS TRUE  // If TRUE, a new game gives the player the four battle-transformation key items (Mega Ring, Z-Power Ring, Dynamax Band, Tera Orb) in the bag. Mega Evolution, Z-Moves and Ultra Burst work immediately (item is all they need); Dynamax and Tera stay disabled until their B_FLAG_DYNAMAX_BATTLE / B_FLAG_TERA_ORB_* flags (config/battle.h) are enabled, left for a later player-facing toggle. See GiveStartingBattleGimmickItems() in src/new_game.c.
-#define HQ_RANDOM                    TRUE    // If TRUE, replaces the default RNG with an implementation of SFC32 RNG. May break code that relies on RNG.
 #define PHONEMES_SHARED              FALSE   // If TRUE, bard phonemes all reference the same sound (sound/direct_sound_samples/phonemes/shared.bin) to save ROM space.
-
-// New game option defaults. These set the initial value of the corresponding option for a fresh save (SetDefaultOptions() in src/new_game.c); the player can still change them in the Options menu afterwards. Use the OPTIONS_* constants from include/constants/global.h.
-#define NEW_GAME_TEXT_SPEED          OPTIONS_TEXT_SPEED_FAST   // Default text speed for a new game. Vanilla: OPTIONS_TEXT_SPEED_MID. Options: OPTIONS_TEXT_SPEED_{SLOW,MID,FAST}.
-#define NEW_GAME_BATTLE_STYLE        OPTIONS_BATTLE_STYLE_SET  // Default battle style for a new game. Vanilla: OPTIONS_BATTLE_STYLE_SHIFT. Options: OPTIONS_BATTLE_STYLE_{SHIFT,SET}.
 
 // Measurement system constants to be used for UNITS
 #define UNITS_IMPERIAL               0       // Inches, feet, pounds

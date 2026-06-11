@@ -4,6 +4,7 @@
 #include <string.h>
 #include <limits.h>
 #include "config/general.h" // we need to define config before gba headers as print stuff needs the functions nulled before defines.
+#include "config/fork.h" // FORK: fork-owned boot/new-game compile-time flags, kept out of upstream's general.h to avoid sync conflicts.
 #include "gba/gba.h"
 #include "assertf.h"
 #include "gametypes.h"

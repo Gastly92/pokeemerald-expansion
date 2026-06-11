@@ -571,9 +571,9 @@ static enum ItemEffect TryShellBell(enum BattlerId battlerAtk)
 
     if (gBattleScripting.savedDmg > 0
      && !gBattleStruct->unableToUseMove
+     && GetMoveEffect(gCurrentMove) != EFFECT_FUTURE_SIGHT
      && !gBattleStruct->battlerState[battlerAtk].redCardSwitched
      && !IsBattlerAtMaxHp(battlerAtk)
-     && !IsFutureSightAttackerInParty(battlerAtk, gBattlerTarget, gCurrentMove)
      && !(B_HEAL_BLOCKING >= GEN_5 && gBattleMons[battlerAtk].volatiles.healBlock))
     {
         u32 healDivisor = GetBattlerHoldEffectParam(battlerAtk);
@@ -597,8 +597,7 @@ static enum ItemEffect TryLifeOrb(enum BattlerId battlerAtk)
     if (!gBattleStruct->unableToUseMove
      && !gBattleStruct->battlerState[battlerAtk].redCardSwitched
      && (IsAnyTargetTurnDamaged(battlerAtk, INCLUDING_SUBSTITUTES) || gBattleScripting.savedDmg > 0)
-     && !IsAbilityAndRecord(battlerAtk, GetBattlerAbility(battlerAtk), ABILITY_MAGIC_GUARD)
-     && !IsFutureSightAttackerInParty(battlerAtk, gBattlerTarget, gCurrentMove))
+     && !IsAbilityAndRecord(battlerAtk, GetBattlerAbility(battlerAtk), ABILITY_MAGIC_GUARD))
     {
         SetPassiveDamageAmount(battlerAtk, GetNonDynamaxMaxHP(battlerAtk) / 10);
         BattleScriptCall(BattleScript_ItemHurtRet);
