@@ -59,8 +59,16 @@
 // .ability = ABILITY_OWN_TEMPO yet still pivots on its innate Regenerator; a Rotom
 // set lists ABILITY_LIGHTNING_ROD yet still floats on its innate Levitate. Role
 // comments that mention "Regenerator"/"Levitate" describe the set's innate-backed
-// playstyle, not the .ability field. (Munkidori is the lone exception: it is not an
-// innate-Regenerator species, so its set keeps .ability = ABILITY_REGENERATOR.)
+// playstyle, not the .ability field.
+//
+// FORK: KNOWN BAD ENTRY — the Munkidori FORMAT_SINGLES set lists
+// .ability = ABILITY_REGENERATOR, but Regenerator is NOT one of its legal
+// abilities ({TOXIC_CHAIN, -, FRISK}) and it is not an innate-Regenerator species.
+// CreateFacilityMon (src/battle_frontier.c) finds no match and silently falls back
+// to ability slot 0, so this "Regenerator pivot" actually battles as Toxic Chain.
+// Left as-is for now; to be cleaned up alongside a planned config flag that allows
+// a frontier set to force an off-list primary ability (then either make it a real
+// override or retune the build to a legal Toxic Chain/Frisk set).
 //
 // STATUS: Generations I-IX are all built out (~2-4 builds per reasonable species,
 // mega & non-mega, with a deliberate mix of offensive and defensive/support sets).
