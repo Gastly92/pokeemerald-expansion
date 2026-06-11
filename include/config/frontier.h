@@ -102,4 +102,14 @@
 // turn is not consumed. Implemented in src/frontier_battle_info.c.
 #define B_FRONTIER_BATTLE_INFO  TRUE
 
+// If TRUE, the per-species "banned in the Battle Frontier" flag
+// (gSpeciesInfo[species].isFrontierBanned, set on legendaries/mythicals/etc.) is
+// ignored, so EVERY species is legal in the Battle Frontier facilities (Battle
+// Tower, Factory, etc.). Reads of the banned flag are funnelled through
+// IsSpeciesFrontierBanned() (include/frontier_legality.h), which returns FALSE
+// under this flag; the party-menu eligibility check, the AppendIfValid /
+// CheckPartyIneligibility logic, and the "caught banned species" list viewer all
+// go through it. When FALSE the vanilla per-species ban is honored.
+#define B_FRONTIER_ALL_SPECIES_LEGAL    TRUE
+
 #endif // GUARD_CONFIG_FRONTIER_H
