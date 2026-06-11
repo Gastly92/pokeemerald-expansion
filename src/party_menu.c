@@ -3900,6 +3900,23 @@ static void CursorCb_SendMon(u8 taskId)
     }
 }
 
+// FORK: box-description ids for the Frontier party picker's selection order
+// (FIRST..SIXTH). The ordinals are not contiguous with PARTYBOX_DESC_FIRST —
+// FIFTH/SIXTH were appended past the other description ids so the existing ones
+// kept their values — so the 5th/6th pick must map through this table instead of
+// the vanilla "i + PARTYBOX_DESC_FIRST", which silently printed "ABLE"/"NOT ABLE"
+// for entries 5 and 6. Always six entries; only the first GetMaxBattleEntries()
+// are read.
+static const u8 sFrontierPartyOrderDescIds[] =
+{
+    PARTYBOX_DESC_FIRST,
+    PARTYBOX_DESC_SECOND,
+    PARTYBOX_DESC_THIRD,
+    PARTYBOX_DESC_FOURTH,
+    PARTYBOX_DESC_FIFTH,
+    PARTYBOX_DESC_SIXTH,
+};
+
 static void CursorCb_Enter(u8 taskId)
 {
     u8 maxBattlers;
@@ -3914,7 +3931,7 @@ static void CursorCb_Enter(u8 taskId)
         {
             PlaySE(SE_SELECT);
             gSelectedOrderFromParty[i] = gPartyMenu.slotId + 1;
-            DisplayPartyPokemonDescriptionText(i + PARTYBOX_DESC_FIRST, &sPartyMenuBoxes[gPartyMenu.slotId], 1);
+            DisplayPartyPokemonDescriptionText(sFrontierPartyOrderDescIds[i], &sPartyMenuBoxes[gPartyMenu.slotId], 1);
             if (i == (maxBattlers - 1))
                 MoveCursorToConfirm();
             DisplayPartyMenuStdMessage(PARTY_MSG_CHOOSE_MON);
@@ -3959,7 +3976,7 @@ static void CursorCb_NoEntry(u8 taskId)
     for (i = 0; i < (maxBattlers - 1); i++)
     {
         if (gSelectedOrderFromParty[i] != 0)
-            DisplayPartyPokemonDescriptionText(i + PARTYBOX_DESC_FIRST, &sPartyMenuBoxes[gSelectedOrderFromParty[i] - 1], 1);
+            DisplayPartyPokemonDescriptionText(sFrontierPartyOrderDescIds[i], &sPartyMenuBoxes[gSelectedOrderFromParty[i] - 1], 1);
     }
     DisplayPartyMenuStdMessage(PARTY_MSG_CHOOSE_MON);
     gTasks[taskId].func = Task_HandleChooseMonInput;

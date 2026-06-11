@@ -51,8 +51,16 @@ BattleFrontier_BattleTower_EventScript_WarpToLobbyLost::
 BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedOpponent::
 	call BattleFrontier_EventScript_IncrementWinStreak
 	tower_setbattlewon
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless Tower — award Battle Points for this win (scaling up each set)
+	@ and never end the challenge after a fixed number of wins; cycle opponents
+	@ indefinitely. The Salon Maiden still appears at the 50th/100th win.
+	frontier_givepoints
+	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
+.else
 	switch VAR_RESULT
 	case 7, BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
+.endif
 	applymovement LOCALID_TOWER_BATTLE_OPPONENT, BattleFrontier_BattleTowerBattleRoom_Movement_OpponentExit
 	waitmovement 0
 	removeobject LOCALID_TOWER_BATTLE_OPPONENT
@@ -70,8 +78,18 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_AskReadyForOpponent::
 	frontier_getbrainstatus
 	copyvar VAR_TEMP_F, VAR_RESULT
 	goto_if_ne VAR_RESULT, FRONTIER_BRAIN_NOT_READY, BattleFrontier_BattleTowerBattleRoom_EventScript_MaidenUpNext
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless Tower — announce the upcoming opponent by win number instead of
+	@ the fixed 2nd/3rd/.../7th lines (a set is now just a pacing unit).
+	tower_get TOWER_DATA_WIN_STREAK
+	addvar VAR_RESULT, 1
+	buffernumberstring STR_VAR_1, VAR_RESULT
+	message BattleFrontier_BattleTowerBattleRoom_Text_ReadyForOpponent
+	waitmessage
+.else
 	frontier_get FRONTIER_DATA_BATTLE_NUM
 	call BattleFrontier_BattleTowerBattleRoom_EventScript_ReadyForOpponent
+.endif
 	call BattleFrontier_EventScript_GetCantRecordBattle
 	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleTowerBattleRoom_EventScript_AskReadyForOpponentNoRecord
 	multichoice 19, 4, MULTI_GO_ON_RECORD_REST_RETIRE, TRUE
@@ -135,6 +153,21 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon::
 	goto BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobby
 
 BattleFrontier_BattleTowerBattleRoom_EventScript_PauseChallenge::
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless Tower — "Rest" saves the challenge and returns to the lobby
+	@ WITHOUT rebooting, keeping the player's real party. The win streak stays
+	@ active (winStreakActiveFlags), so the lobby attendant lets the player resume
+	@ — choosing a fresh team — later. The streak is tracked per battle mode, so a
+	@ rested singles run and a rested doubles run continue independently.
+	message BattleFrontier_BattleTowerBattleRoom_Text_SavingPleaseWait
+	waitmessage
+	special LoadPlayerParty
+	tower_save 0
+	playse SE_SAVE
+	waitse
+	callnative UpdateFollowingPokemon
+	goto BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobby
+.else
 	message BattleFrontier_BattleTowerBattleRoom_Text_SavingPleaseWait
 	waitmessage
 	tower_save CHALLENGE_STATUS_PAUSED
@@ -143,6 +176,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_PauseChallenge::
 	fadescreen FADE_TO_BLACK
 	frontier_reset
 	end
+.endif
 
 BattleFrontier_BattleTowerBattleRoom_EventScript_ReadyForOpponent::
 	copyvar VAR_TEMP_F, VAR_RESULT
@@ -257,7 +291,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_BattleAnabelSilver::
 BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedAnabelSilver::
 	call BattleFrontier_EventScript_IncrementWinStreak
 	frontier_getsymbols
-	goto_if_ne VAR_RESULT, 0, BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
+	goto_if_ne VAR_RESULT, 0, BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelVictoryDone
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_AnabelTalentShallBeRecognized, MSGBOX_DEFAULT
 	playfanfare MUS_OBTAIN_SYMBOL
 	message BattleFrontier_BattleTowerBattleRoom_Text_ReceivedAbilitySymbol
@@ -265,7 +299,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedAnabelSilver::
 	waitfanfare
 	frontier_givesymbol
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_UntilNextTime, MSGBOX_DEFAULT
-	goto BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
+	goto BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelVictoryDone
 
 BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelGoldIntro::
 	frontier_get FRONTIER_DATA_HEARD_BRAIN_SPEECH
@@ -281,7 +315,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_BattleAnabelGold::
 BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedAnabelGold::
 	call BattleFrontier_EventScript_IncrementWinStreak
 	frontier_getsymbols
-	goto_if_eq VAR_RESULT, 2, BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
+	goto_if_eq VAR_RESULT, 2, BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelVictoryDone
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_AnabelCongratsYourPassPlease, MSGBOX_DEFAULT
 	playfanfare MUS_OBTAIN_SYMBOL
 	message BattleFrontier_BattleTowerBattleRoom_Text_AbilitySymbolTookGoldenShine
@@ -289,7 +323,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedAnabelGold::
 	waitfanfare
 	frontier_givesymbol
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_WishICouldBattleYouAgain, MSGBOX_DEFAULT
-	goto BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
+	goto BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelVictoryDone
 
 BattleFrontier_BattleTowerBattleRoom_EventScript_DoTowerBattle::
 	closemessage
@@ -311,6 +345,31 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_EndTowerBattle::
 BattleFrontier_EventScript_SetBrainObjectGfx::
 	frontier_setbrainobj
 	return
+
+@ FORK: after the Salon Maiden is beaten, the endless Tower awards Battle Points
+@ for the win and resumes the streak (she leaves, party heals, opponents continue)
+@ instead of ending the challenge; the vanilla flow still warps to the lobby "won".
+BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelVictoryDone::
+.if B_FRONTIER_ENDLESS
+	tower_setbattlewon
+	frontier_givepoints
+	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
+	closemessage
+	applymovement LOCALID_TOWER_BATTLE_OPPONENT, BattleFrontier_BattleTowerBattleRoom_Movement_OpponentExit
+	waitmovement 0
+	removeobject LOCALID_TOWER_BATTLE_OPPONENT
+	applymovement LOCALID_TOWER_BATTLE_ATTENDANT_1, BattleFrontier_BattleTowerBattleRoom_Movement_AttendantApproachPlayer
+	waitmovement 0
+	applymovement LOCALID_PLAYER, BattleFrontier_BattleTowerBattleRoom_Movement_PlayerFaceAttendant
+	waitmovement 0
+	msgbox BattleFrontier_BattleTowerBattleRoom_Text_RestoreMonsToFullHealth, MSGBOX_DEFAULT
+	playfanfare MUS_HEAL
+	waitfanfare
+	special HealPlayerParty
+	goto BattleFrontier_BattleTowerBattleRoom_EventScript_AskReadyForOpponent
+.else
+	goto BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
+.endif
 
 BattleFrontier_BattleTowerBattleRoom_Movement_PlayerEnter:
 	walk_up
@@ -435,7 +494,8 @@ BattleFrontier_BattleTowerBattleRoom_Text_RestoreMonsToFullHealth:
 	.string "We will restore your POKéMON to\n"
 	.string "full health.$"
 
-@ Unused
+@ Unused in the vanilla flow; FORK: used by the endless Tower to announce the
+@ next opponent by win number (see EventScript_AskReadyForOpponent).
 BattleFrontier_BattleTowerBattleRoom_Text_ReadyForOpponent:
 	.string "You will be facing opponent no. {STR_VAR_1}.\n"
 	.string "Are you ready?$"

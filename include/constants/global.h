@@ -90,10 +90,15 @@ enum Language
 // reclaimed via the FREE_* flags in config/save.h. On conflict, keep the gate.
 #if B_FRONTIER_PARTY_SIZE_6V6
 #define FRONTIER_PARTY_SIZE         6
+// Doubles also brings a full team of six (two active, four in reserve) instead
+// of the vanilla four, so the 6v6 sandbox is consistent across singles/doubles.
+// This stays <= FRONTIER_PARTY_SIZE so MAX_FRONTIER_PARTY_SIZE (and the saveblock
+// party arrays sized by it) don't grow. On conflict, keep the gate.
+#define FRONTIER_DOUBLES_PARTY_SIZE 6
 #else
 #define FRONTIER_PARTY_SIZE         3
-#endif
 #define FRONTIER_DOUBLES_PARTY_SIZE 4
+#endif
 #define FRONTIER_MULTI_PARTY_SIZE   2
 #define MAX_FRONTIER_PARTY_SIZE    (max(FRONTIER_PARTY_SIZE,        \
                                     max(FRONTIER_DOUBLES_PARTY_SIZE,\

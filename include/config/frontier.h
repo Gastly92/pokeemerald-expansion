@@ -102,6 +102,15 @@
 // turn is not consumed. Implemented in src/frontier_battle_info.c.
 #define B_FRONTIER_BATTLE_INFO  TRUE
 
+// If TRUE, the Battle Tower's Multi and Link Multi battle modes are disabled:
+// talking to those two attendants shows a brief "not available" message instead
+// of starting a challenge, and the Singles/Doubles modes are the only ones that
+// get the 6v6 / endless treatment. These modes need a partner or a second player
+// and don't fit the endless single-player loop. The Multi/Link code and scripts
+// are left intact (gated by .if in the Tower lobby script), so flipping this back
+// to FALSE restores them. Tower-only.
+#define B_FRONTIER_TOWER_DISABLE_MULTI_LINK TRUE
+
 // If TRUE, the per-species "banned in the Battle Frontier" flag
 // (gSpeciesInfo[species].isFrontierBanned, set on legendaries/mythicals/etc.) is
 // ignored, so EVERY species is legal in the Battle Frontier facilities (Battle

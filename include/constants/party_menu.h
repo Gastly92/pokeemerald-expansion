@@ -81,6 +81,12 @@
 #define PARTYBOX_DESC_LEARNED     10
 #define PARTYBOX_DESC_HAVE        11
 #define PARTYBOX_DESC_DONT_HAVE   12
+// FORK: B_FRONTIER_PARTY_SIZE_6V6 lets the Frontier party picker select up to 6
+// mons. Vanilla only defined the FIRST..FOURTH ordinals, so a 5th/6th pick
+// printed the wrong table entry ("ABLE"/"NOT ABLE"). These extend the ordinals
+// to six; appended at the end so the existing indices are unchanged.
+#define PARTYBOX_DESC_FIFTH       13
+#define PARTYBOX_DESC_SIXTH       14
 
 #define SELECTWINDOW_ACTIONS     0
 #define SELECTWINDOW_ITEM        1

@@ -775,6 +775,9 @@ static const u8 *const sDescriptionStringTable[] =
     [PARTYBOX_DESC_LEARNED]    = gText_Learned,
     [PARTYBOX_DESC_HAVE]       = gText_Have,
     [PARTYBOX_DESC_DONT_HAVE]  = gText_DontHave,
+    // FORK: 6v6 Frontier party picker ordinals (see PARTYBOX_DESC_FIFTH/SIXTH).
+    [PARTYBOX_DESC_FIFTH]      = gText_Fifth_PM,
+    [PARTYBOX_DESC_SIXTH]      = gText_Sixth_PM,
 };
 
 static const u16 sUnusedData[] =

@@ -161,6 +161,27 @@ u16 GetFactoryMonsCount(void)
 }
 
 #if B_FRONTIER_EXTENDED_MONS
+// FORK: draw one random roster index whose set is valid for the current battle
+// format (singles/doubles). Uniform across the whole list (the roster has no
+// weak->strong tier ordering). Shared so facilities other than the Factory — the
+// Battle Tower fields its opponents from this roster — can pull from the
+// competitive list; callers handle their own species/held-item dedup.
+u16 GetRandomFrontierExtendedMonId(void)
+{
+    const struct TrainerMon *mons = GetFactoryMonsTable();
+    u16 count = GetFactoryMonsCount();
+    u32 formatTag = (VarGet(VAR_FRONTIER_BATTLE_MODE) == FRONTIER_MODE_DOUBLES)
+                  ? FORMAT_DOUBLES : FORMAT_SINGLES;
+    u16 id;
+
+    do
+        id = Random() % count;
+    while (!(mons[id].tags & formatTag));
+    return id;
+}
+#endif
+
+#if B_FRONTIER_EXTENDED_MONS
 // FORK: competitive draft rule — a generated team may hold at most one Mega Stone
 // and at most one Z-Crystal (only one Mega Evolution / Z-Move is usable per
 // battle). The existing same-item dup check doesn't catch two *different* mega
@@ -974,19 +995,8 @@ static u16 GetFactoryMonId(enum FrontierLevelMode lvlMode, u8 challengeNum, bool
     // bypassed in favor of a uniform pull across the whole list. We also reject any
     // set not suited to the current battle format (singles vs doubles), so a
     // singles-only set never appears in a doubles challenge and vice versa.
-    {
-        const struct TrainerMon *mons = GetFactoryMonsTable();
-        u16 count = GetFactoryMonsCount();
-        u32 formatTag = (VarGet(VAR_FRONTIER_BATTLE_MODE) == FRONTIER_MODE_DOUBLES)
-                      ? FORMAT_DOUBLES : FORMAT_SINGLES;
-        u16 id;
-
-        (void)lvlMode, (void)challengeNum, (void)useBetterRange;
-        do
-            id = Random() % count;
-        while (!(mons[id].tags & formatTag));
-        return id;
-    }
+    (void)lvlMode, (void)challengeNum, (void)useBetterRange;
+    return GetRandomFrontierExtendedMonId();
 #else
     u16 numMons, monId;
     u16 adder; // Used to skip past early mons for open level

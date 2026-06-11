@@ -780,6 +780,18 @@ static void SetTowerBattleWon(void)
         gSaveBlock2Ptr->frontier.towerNumWins++;
 
     gSaveBlock2Ptr->frontier.curChallengeBattleNum++;
+#if B_FRONTIER_ENDLESS
+    // FORK: endless Tower never ends a challenge after a fixed number of wins, so
+    // keep curChallengeBattleNum as the within-set position (0..STAGES-1) derived
+    // from the per-mode win streak rather than letting it grow unbounded. The win
+    // streak was already incremented for this win (frontier_incrementstreak).
+    {
+        enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
+        u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
+        u32 winStreak = gSaveBlock2Ptr->frontier.towerWinStreaks[battleMode][lvlMode];
+        gSaveBlock2Ptr->frontier.curChallengeBattleNum = winStreak % FRONTIER_STAGES_PER_CHALLENGE;
+    }
+#endif
     SaveCurrentWinStreak();
     gSpecialVar_Result = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
 }
@@ -865,6 +877,18 @@ static void SetNextTowerOpponent(void)
         u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
         u16 winStreak = GetCurrentFacilityWinStreak();
         u32 challengeNum = winStreak / FRONTIER_STAGES_PER_CHALLENGE;
+#if B_FRONTIER_ENDLESS
+        // FORK: endless Tower derives the within-set battle position from the
+        // per-mode win streak rather than the shared curChallengeBattleNum. This
+        // lets the challenge run indefinitely AND keeps singles/doubles fully
+        // independent: each mode's own streak scales its opponents even when the
+        // other mode's challenge is paused (rested) at the same time. (The shared
+        // trainerIds dedup list can briefly hold the other mode's trainers after a
+        // mode switch, which at worst repeats one opponent class within a set.)
+        u32 battleNum = winStreak % FRONTIER_STAGES_PER_CHALLENGE;
+#else
+        u32 battleNum = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
+#endif
         SetFacilityPtrsGetLevel();
 
         if (battleMode == FRONTIER_MODE_MULTIS || battleMode == FRONTIER_MODE_LINK_MULTIS)
@@ -878,29 +902,29 @@ static void SetNextTowerOpponent(void)
         else if (ChooseSpecialBattleTowerTrainer())
         {
             SetBattleFacilityTrainerGfxId(TRAINER_BATTLE_PARAM.opponentA, 0);
-            gSaveBlock2Ptr->frontier.trainerIds[gSaveBlock2Ptr->frontier.curChallengeBattleNum] = TRAINER_BATTLE_PARAM.opponentA;
+            gSaveBlock2Ptr->frontier.trainerIds[battleNum] = TRAINER_BATTLE_PARAM.opponentA;
         }
         else
         {
             s32 i;
             while (1)
             {
-                id = GetRandomScaledFrontierTrainerId(challengeNum, gSaveBlock2Ptr->frontier.curChallengeBattleNum);
+                id = GetRandomScaledFrontierTrainerId(challengeNum, battleNum);
 
                 // Ensure trainer wasn't previously fought in this challenge.
-                for (i = 0; i < gSaveBlock2Ptr->frontier.curChallengeBattleNum; i++)
+                for (i = 0; i < (s32)battleNum; i++)
                 {
                     if (gSaveBlock2Ptr->frontier.trainerIds[i] == id)
                         break;
                 }
-                if (i == gSaveBlock2Ptr->frontier.curChallengeBattleNum)
+                if (i == (s32)battleNum)
                     break;
             }
 
             TRAINER_BATTLE_PARAM.opponentA = id;
             SetBattleFacilityTrainerGfxId(TRAINER_BATTLE_PARAM.opponentA, 0);
-            if (gSaveBlock2Ptr->frontier.curChallengeBattleNum + 1 < FRONTIER_STAGES_PER_CHALLENGE)
-                gSaveBlock2Ptr->frontier.trainerIds[gSaveBlock2Ptr->frontier.curChallengeBattleNum] = TRAINER_BATTLE_PARAM.opponentA;
+            if (battleNum + 1 < FRONTIER_STAGES_PER_CHALLENGE)
+                gSaveBlock2Ptr->frontier.trainerIds[battleNum] = TRAINER_BATTLE_PARAM.opponentA;
         }
     }
 }

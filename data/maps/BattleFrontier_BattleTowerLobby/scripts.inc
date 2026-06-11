@@ -36,7 +36,15 @@ BattleFrontier_BattleTowerLobby_EventScript_PlayerFaceNorth::
 BattleFrontier_BattleTowerLobby_OnFrame:
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, 0, BattleFrontier_BattleTowerLobby_EventScript_GetChallengeStatus
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, CHALLENGE_STATUS_SAVING, BattleFrontier_BattleTowerLobby_EventScript_QuitWithoutSaving
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless Tower — a rested challenge no longer auto-resumes on entering
+	@ the lobby. The player is free to leave; resuming happens when they talk to the
+	@ Singles/Doubles attendant again (the active win streak makes tower_init keep
+	@ the streak, and they choose a fresh team). Singles and doubles resume
+	@ independently because each mode keeps its own win streak + active flag.
+.else
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, CHALLENGE_STATUS_PAUSED, BattleFrontier_BattleTowerLobby_EventScript_ResumeChallenge
+.endif
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, CHALLENGE_STATUS_WON, BattleFrontier_BattleTowerLobby_EventScript_WonChallenge
 	map_script_2 VAR_TEMP_CHALLENGE_STATUS, CHALLENGE_STATUS_LOST, BattleFrontier_BattleTowerLobby_EventScript_LostChallenge
 	.2byte 0
@@ -295,6 +303,14 @@ BattleFrontier_BattleTowerLobby_EventScript_ExplainDoublesChallenge::
 BattleFrontier_BattleTowerLobby_EventScript_MultisAttendant::
 	lock
 	faceplayer
+.if B_FRONTIER_TOWER_DISABLE_MULTI_LINK
+	@ FORK: Multi battles are disabled in this fork (need an NPC/second player and
+	@ don't fit the endless single-player loop). The flow below is kept intact for
+	@ if the mode is ever re-enabled. See B_FRONTIER_TOWER_DISABLE_MULTI_LINK.
+	msgbox BattleFrontier_BattleTowerLobby_Text_ModeNotAvailable, MSGBOX_DEFAULT
+	release
+	end
+.endif
 	setvar VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_TOWER
 	clearflag FLAG_CHOSEN_MULTI_BATTLE_NPC_PARTNER
 	special SavePlayerParty
@@ -359,6 +375,13 @@ BattleFrontier_BattleTowerLobby_EventScript_ExplainMultisChallenge::
 BattleFrontier_BattleTowerLobby_EventScript_LinkMultisAttendant::
 	lock
 	faceplayer
+.if B_FRONTIER_TOWER_DISABLE_MULTI_LINK
+	@ FORK: Link Multi battles are disabled in this fork (need a second player).
+	@ The flow below is kept intact. See B_FRONTIER_TOWER_DISABLE_MULTI_LINK.
+	msgbox BattleFrontier_BattleTowerLobby_Text_ModeNotAvailable, MSGBOX_DEFAULT
+	release
+	end
+.endif
 	setvar VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_TOWER
 	special SavePlayerParty
 	msgbox BattleFrontier_BattleTowerLobby_Text_WelcomeLinkMultiBattle, MSGBOX_DEFAULT
@@ -1184,8 +1207,13 @@ BattleFrontier_BattleTowerLobby_Text_ExplainSinglesChallenge:
 	.string "you will be disqualified.$"
 
 BattleFrontier_BattleTowerLobby_Text_SelectThreeMons:
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "Now please select the six POKéMON\n"
+	.string "that are to be entered.$"
+.else
 	.string "Now please select the three POKéMON\n"
 	.string "that are to be entered.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_WelcomeDoubleBattle:
 	.string "Where the talents of TRAINERS\n"
@@ -1214,8 +1242,20 @@ BattleFrontier_BattleTowerLobby_Text_ExplainDoublesChallenge:
 	.string "you will be disqualified.$"
 
 BattleFrontier_BattleTowerLobby_Text_PleaseSelectFourMons:
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "Now please select the six POKéMON\n"
+	.string "that are to be entered.$"
+.else
 	.string "Now please select the four POKéMON\n"
 	.string "that are to be entered.$"
+.endif
+
+@ FORK: shown when the disabled Multi/Link attendants are spoken to.
+BattleFrontier_BattleTowerLobby_Text_ModeNotAvailable:
+	.string "I'm sorry, but this battle format\n"
+	.string "isn't available right now.\p"
+	.string "Please try the Single or Double\n"
+	.string "Battle Rooms instead!$"
 
 BattleFrontier_BattleTowerLobby_Text_WelcomeMultiBattle:
 	.string "Where the talents of TRAINERS\n"
