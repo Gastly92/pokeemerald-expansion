@@ -197,12 +197,13 @@ static void CompleteOnBattlerSpritePosX_0(enum BattlerId battler)
         BtlController_Complete(battler);
 }
 
-static u16 GetPrevBall(u16 ballId)
+static enum Item GetPrevBall(enum Item ballId)
 {
     s32 i;
-    s32 index = ItemIdToBallId(ballId);
-    u32 newBall = 0;
-     for (i = 0; i < POKEBALL_COUNT; i++)
+    enum PokeBall index = ItemIdToBallId(ballId);
+    enum Item newBall = ITEM_NONE;
+
+    for (i = 0; i < POKEBALL_COUNT; i++)
     {
         index--;
         if (index == -1)
@@ -214,11 +215,12 @@ static u16 GetPrevBall(u16 ballId)
     return ballId;
 }
 
-static u32 GetNextBall(u32 ballId)
+static enum Item GetNextBall(enum Item ballId)
 {
     s32 i;
     s32 index = ItemIdToBallId(ballId);
-    u32 newBall = 0;
+    enum Item newBall = ITEM_NONE;
+
     for (i = 0; i < POKEBALL_COUNT; i++)
     {
         index++;
@@ -1798,10 +1800,10 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
     u8 cat_desc[7] = _("CAT: ");
     u8 pwr_desc[7] = _("PWR: ");
     u8 acc_desc[7] = _("ACC: ");
-    u8 pp_desc[7] = _("PP: ");
-    u8 cat_start[] = _("{CLEAR_TO 0x03}");
-    u8 pwr_start[] = _("{CLEAR_TO 0x38}");
-    u8 acc_start[] = _("{CLEAR_TO 0x6C}");
+    u8 pp_desc[7] = _("PP: "); // FORK: net-PP-cost label, shown in place of ACC under DETERMINISTIC_ACCURACY_EVASION
+    u8 cat_start[] = _("{CLEAR_TO 3}");
+    u8 pwr_start[] = _("{CLEAR_TO 56}");
+    u8 acc_start[] = _("{CLEAR_TO 108}");
     LoadMessageBoxAndBorderGfx();
     DrawStdWindowFrame(B_WIN_MOVE_DESCRIPTION, FALSE);
     if (pwr < 2)
