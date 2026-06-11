@@ -125,12 +125,12 @@ fork-owned file.
 
 - **Forced Lv100 leaves dual record tracking (`B_FRONTIER_FORCE_LVL_100`).** With
   only Open Level in use, the always-empty "Lv 50" block is dropped from facility
-  record displays. The **Battle Factory** results board now does this (Open Level
-  streak only), gated on `B_FRONTIER_FORCE_LVL_100` in `ShowFactoryResultsWindow`
-  (`src/frontier_util.c`). The other facilities' record
-  windows still show both blocks — same treatment to follow. The save block also
-  still persists Lv50 records that can no longer change — candidate to drop for
-  space if needed.
+  record displays. The **Battle Factory** and **Battle Tower** results windows now
+  do this (Open Level streak only), gated on `B_FRONTIER_FORCE_LVL_100` in
+  `ShowFactoryResultsWindow` / `ShowTowerResultsWindow` (`src/frontier_util.c`).
+  The remaining facilities' record windows still show both blocks — same treatment
+  to follow. The save block also still persists Lv50 records that can no longer
+  change — candidate to drop for space if needed.
 - **Battle Dome at 6v6.** See the 6v6 Factory row: the Dome's fixed 3-mon
   coordinate tables aren't generalized yet, so its layout is wrong at 6 mons.
 - **The Battle Factory and Battle Tower are wired up so far.** `B_FRONTIER_ENDLESS`

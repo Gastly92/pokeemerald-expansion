@@ -1088,11 +1088,20 @@ BattleFrontier_BattleTowerLobby_Text_WinsInRowRecorded:
 	.string "an embarrassing way!$"
 
 BattleFrontier_BattleTowerLobby_Text_CanLeaveUntilLossOrSevenWins:
+.if B_FRONTIER_ENDLESS
+	.string "Battle as long as you can keep\n"
+	.string "winning—there's no set finish line.\p"
+	.string "You can rest between battles to step\n"
+	.string "out, then come back to pick up your\l"
+	.string "streak right where you left off.\p"
+	.string "One loss, though, and the streak ends!$"
+.else
 	.string "Once you've entered the BATTLE TOWER,\n"
 	.string "you can't leave until you either lose\l"
 	.string "or you beat seven TRAINERS in a row.\p"
 	.string "You'd best be certain that you're up\n"
 	.string "to the challenge.$"
+.endif
 
 @ Unused
 BattleFrontier_BattleTowerLobby_Text_DoubleBattleRoomConstruction:
@@ -1534,6 +1543,15 @@ BattleFrontier_BattleTowerLobby_Text_ReadWhichHeading:
 	.string "Which heading do you want to read?$"
 
 BattleFrontier_BattleTowerLobby_Text_ExplainTowerRules:
+.if B_FRONTIER_TOWER_DISABLE_MULTI_LINK
+	.string "The BATTLE TOWER is a facility where\n"
+	.string "two types of battles are waged--\l"
+	.string "SINGLE BATTLE and DOUBLE BATTLE.\p"
+	.string "For each of these types, there are\n"
+	.string "separate BATTLE ROOMS.\p"
+	.string "Please speak with a guide offering\n"
+	.string "the type of battle you wish to enter.$"
+.else
 	.string "The BATTLE TOWER is a facility where\n"
 	.string "four types of battles are waged--\l"
 	.string "SINGLE BATTLE, DOUBLE BATTLE, MULTI\l"
@@ -1542,8 +1560,14 @@ BattleFrontier_BattleTowerLobby_Text_ExplainTowerRules:
 	.string "separate BATTLE ROOMS.\p"
 	.string "Please speak with a guide offering\n"
 	.string "the type of battle you wish to enter.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_ExplainMonRules:
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "Both the SINGLE BATTLE and DOUBLE\n"
+	.string "BATTLE modes are fought with a full\l"
+	.string "team of six POKéMON.$"
+.else
 	.string "Depending on the BATTLE ROOM you are\n"
 	.string "entering, you will be required to take\l"
 	.string "a certain number of POKéMON.\p"
@@ -1551,6 +1575,7 @@ BattleFrontier_BattleTowerLobby_Text_ExplainMonRules:
 	.string "three POKéMON.\p"
 	.string "The DOUBLE BATTLE mode requires four,\n"
 	.string "and the MULTI modes both require two.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_ExplainSalonRules:
 	.string "The BATTLE SALON is where you must\n"

@@ -1169,6 +1169,14 @@ static void ShowTowerResultsWindow(u8 battleMode)
         StringExpandPlaceholders(gStringVar4, gText_LinkMultiBattleRoomResults);
 
     PrintAligned(gStringVar4, 2);
+#if B_FRONTIER_FORCE_LVL_100
+    // FORK: B_FRONTIER_FORCE_LVL_100 forces every challenge into Open Level, so the
+    // vanilla Lv 50 block is permanently empty. Drop it and show only the Open Level
+    // streak (mirrors ShowFactoryResultsWindow).
+    AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_OpenLv, 16, 49, TEXT_SKIP_DRAW, NULL);
+    TowerPrintPrevOrCurrentStreak(battleMode, FRONTIER_LVL_OPEN, 72, 132, 49);
+    TowerPrintRecordStreak(battleMode, FRONTIER_LVL_OPEN, 72, 132, 65);
+#else
     AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_Lv502, 16, 49, TEXT_SKIP_DRAW, NULL);
     AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_OpenLv, 16, 97, TEXT_SKIP_DRAW, NULL);
     PrintHyphens(10);
@@ -1176,6 +1184,7 @@ static void ShowTowerResultsWindow(u8 battleMode)
     TowerPrintRecordStreak(battleMode, FRONTIER_LVL_50, 72, 132, 65);
     TowerPrintPrevOrCurrentStreak(battleMode, FRONTIER_LVL_OPEN, 72, 132, 97);
     TowerPrintRecordStreak(battleMode, FRONTIER_LVL_OPEN, 72, 132, 113);
+#endif
     PutWindowTilemap(gRecordsWindowId);
     CopyWindowToVram(gRecordsWindowId, COPYWIN_FULL);
 }
