@@ -6,9 +6,12 @@
 # Battle Frontier romhack
 
 A standalone single-player Pokémon romhack centered on **quality-of-life
-improvements to the Battle Frontier facilities** (starting with a 6v6,
-always-level-100 Battle Factory), with more features added over time to grow it
-into a fuller game. It's a personal fork of
+improvements to the Battle Frontier facilities** — 6v6 always-level-100 teams, an
+endless challenge, a modern competitive roster, a stronger AI, and a from-scratch
+push to strip luck out of battles — with more features added over time to grow it
+into a fuller game. The frontier features are designed to span **all seven
+facilities**; they're rolled out one facility at a time, and the **Battle Factory
+is the first brought to a complete v1**. It's a personal fork of
 [RHH's **`pokeemerald-expansion`**](https://github.com/rh-hideout/pokeemerald-expansion),
 itself built on [pret's `pokeemerald`](https://github.com/pret/pokeemerald)
 decompilation.
@@ -21,6 +24,27 @@ upstream-sync process live in **[`CLAUDE.md`](CLAUDE.md)**.
 
 Everything else is stock `pokeemerald-expansion`; this fork regularly merges in
 upstream updates.
+
+## Frontier facilities
+
+The goal is to bring every Battle Frontier facility up to the same standard, so
+the frontier features are written to be **facility-agnostic wherever possible**.
+Many already apply across the board — the determinism engine, max PP,
+"all species legal", and the in-battle info viewer run in the shared facility code
+paths and so cover (almost) every facility at once. The remaining per-facility
+work is wiring up the parts that
+still carry facility-specific layout or flow (rosters, the endless challenge flow,
+the 6v6 layouts, the swap/info screens).
+
+Facilities are converted one at a time. Progress (**1 / 7**):
+
+- ✅ **Battle Factory** — complete (v1): 6v6, always-Lv100, endless challenge,
+  extended modern roster, hard AI, opponent-summary swaps, in-battle info viewer.
+- 🔜 **Battle Tower** — next.
+- ⬜ Battle Dome · Battle Palace · Battle Arena · Battle Pyramid · Battle Pike.
+
+See **[`FORK.md`](FORK.md)** for the per-feature status, including which features
+are still Factory-only and which already cover all facilities.
 
 ## Determinism: removing RNG
 
