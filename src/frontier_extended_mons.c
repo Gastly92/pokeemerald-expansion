@@ -13649,9 +13649,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Palafin (Hero) ----
+    // ---- Palafin (Zero to Hero) ----
+    // Enter in Zero form; Zero to Hero transforms it to Hero after its first switch-out
+    // (the form table has no FORM_CHANGE_BEGIN_BATTLE, so naming the Hero form here would
+    //  wrongly start it transformed).
     {
-        .species = SPECIES_PALAFIN_HERO,
+        .species = SPECIES_PALAFIN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Zero to Hero band breaker
         .moves = {MOVE_JET_PUNCH, MOVE_WAVE_CRASH, MOVE_CLOSE_COMBAT, MOVE_FLIP_TURN},
@@ -13662,7 +13665,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
     {
-        .species = SPECIES_PALAFIN_HERO,
+        .species = SPECIES_PALAFIN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Bulk Up Hero sweeper
         .moves = {MOVE_BULK_UP, MOVE_JET_PUNCH, MOVE_WAVE_CRASH, MOVE_DRAIN_PUNCH},
