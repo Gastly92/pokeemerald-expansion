@@ -288,6 +288,8 @@ static void PrintMoveNameAndPP(u8);
 static void PrintContestMoves(void);
 static void Task_PrintContestMoves(u8);
 static void PrintContestMoveDescription(u8);
+static bool32 InnateContestModeActive(void); // FORK: Contest Moves page lists innate abilities
+static void PrintInnateAbilitiesPage(void); // FORK
 static void PrintMoveDetails(enum Move move);
 static void PrintNewMoveDetailsOrCancelText(void);
 static void AddAndFillMoveNamesWindow(void);
@@ -1592,7 +1594,10 @@ static void SetDefaultTilemaps(void)
     }
     else
     {
-        DrawContestMoveHearts(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]);
+        // FORK: the Contest Moves page lists innate abilities (no contests in this
+        // hack), so it shows no appeal/jam hearts — suppress them in that mode.
+        if (!InnateContestModeActive())
+            DrawContestMoveHearts(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]);
         TilemapFiveMovesDisplay(sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0], 3, FALSE);
         TilemapFiveMovesDisplay(sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0], 1, FALSE);
         SetBgTilemapBuffer(1, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0]);
@@ -1803,8 +1808,13 @@ static void Task_HandleInput(u8 taskId)
                 }
                 else if (IS_MOVE_PAGE(sMonSummaryScreen->currPageIndex))
                 {
-                    PlaySE(SE_SELECT);
-                    SwitchToMoveSelection(taskId);
+                    // FORK: the Contest Moves page lists innate abilities, not selectable
+                    // moves, so A does nothing there (move reordering stays on Battle Moves).
+                    if (!(sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES && InnateContestModeActive()))
+                    {
+                        PlaySE(SE_SELECT);
+                        SwitchToMoveSelection(taskId);
+                    }
                 }
             }
             if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
@@ -1829,8 +1839,10 @@ static void Task_HandleInput(u8 taskId)
             PlaySE(SE_SELECT);
             CloseSummaryScreen(taskId);
         }
-        else if (ShouldShowMoveRelearner() && IS_MOVE_PAGE(sMonSummaryScreen->currPageIndex))
+        else if (ShouldShowMoveRelearner() && IS_MOVE_PAGE(sMonSummaryScreen->currPageIndex)
+              && !(sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES && InnateContestModeActive()))
         {
+            // FORK: the innate-ability page isn't a relearner entry point (use Battle Moves).
             HandleMoveRelearnerInput(taskId);
         }
     }
@@ -3292,7 +3304,16 @@ static void PrintPageNamesAndStats(void)
     PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_INFO_TITLE, gText_PkmnInfo, 2, 1, 0, 1);
     PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_TITLE, gText_PkmnSkills, 2, 1, 0, 1);
     PrintTextOnWindow(PSS_LABEL_WINDOW_BATTLE_MOVES_TITLE, gText_BattleMoves, 2, 1, 0, 1);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_CONTEST_MOVES_TITLE, gText_ContestMoves, 2, 1, 0, 1);
+    // FORK: title the repurposed Contest Moves page "Innates" when it lists innate abilities.
+    if (InnateContestModeActive())
+    {
+        static const u8 sText_InnatesTitle[] = _("Innates");
+        PrintTextOnWindow(PSS_LABEL_WINDOW_CONTEST_MOVES_TITLE, sText_InnatesTitle, 2, 1, 0, 1);
+    }
+    else
+    {
+        PrintTextOnWindow(PSS_LABEL_WINDOW_CONTEST_MOVES_TITLE, gText_ContestMoves, 2, 1, 0, 1);
+    }
 
     ShowUtilityPrompt(SUMMARY_MODE_NORMAL);
 
@@ -3369,7 +3390,9 @@ static void PutPageWindowTilemaps(u8 page)
         }
         else
         {
-            if (ShouldShowMoveRelearner())
+            // FORK: no move-relearner prompt on the innate-ability listing (the relearner
+            // stays available on the Battle Moves page).
+            if (ShouldShowMoveRelearner() && !InnateContestModeActive())
                 PutWindowTilemap(PSS_LABEL_WINDOW_PROMPT_RELEARN);
         }
         break;
@@ -3548,30 +3571,11 @@ static void PrintMonOTID(void)
 static void PrintMonAbilityName(void)
 {
     enum Ability ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
-    // FORK: FEATURE_INNATE_ABILITIES — show the species' innate abilities on the
-    // chosen-ability line as "Chosen / Innate[ / Innate]", so the player can see
-    // them outside battle. The data lookup (GetSpeciesInnate) needs no battle
-    // state; the chosen ability's own description stays below it unchanged. No
-    // effect when the feature is off.
-    if (GetConfig(FEATURE_INNATE_ABILITIES))
-    {
-        static const u8 sText_InnateSeparator[] = _(" / ");
-        u8 *str = StringCopy(gStringVar1, gAbilitiesInfo[ability].name);
-
-        for (u32 i = 0; ; i++)
-        {
-            enum Ability innate = GetSpeciesInnate(sMonSummaryScreen->summary.species, i);
-
-            if (innate == ABILITY_NONE)
-                break;
-            if (innate == ability)
-                continue;
-            str = StringAppend(str, sText_InnateSeparator);
-            str = StringAppend(str, gAbilitiesInfo[innate].name);
-        }
-        PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gStringVar1, 0, 1, 0, 1);
-        return;
-    }
+    // FORK: FEATURE_INNATE_ABILITIES — the species' innate abilities are NOT shown
+    // here on the Info page anymore (that crowded the chosen-ability line). They are
+    // listed on the Contest Moves page instead (this romhack has no contests), via
+    // PrintInnateAbilitiesPage(). The Info page shows only the chosen ability, as in
+    // stock.
     PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].name, 0, 1, 0, 1);
 }
 
@@ -4152,8 +4156,57 @@ static void PrintMovePowerAndAccuracy(enum Move moveIndex)
     }
 }
 
+// FORK: FEATURE_INNATE_ABILITIES — this romhack has no contests, so the Contest
+// Moves page is repurposed to list the species' always-active innate abilities.
+// TRUE while that repurposing is in effect: the feature is on AND we are in a plain
+// viewing mode (not the contest-move-interactive modes — move selection / contest
+// move relearner — which keep stock contest behavior so reordering/relearning still
+// work). The mode is fixed for a summary-screen session, so this is page-independent
+// and stable; callers add the page check where they need it.
+static bool32 InnateContestModeActive(void)
+{
+    return GetConfig(FEATURE_INNATE_ABILITIES)
+        && sMonSummaryScreen->mode != SUMMARY_MODE_SELECT_MOVE
+        && sMonSummaryScreen->mode != SUMMARY_MODE_RELEARNER_CONTEST
+        && sMonSummaryScreen->mode != SUMMARY_MODE_RELEARNER_BATTLE;
+}
+
+// FORK: renders the species' innate abilities where the contest move slots normally
+// go (names in the move-name slots, the first innate's description below). PP, hearts
+// and category icons are suppressed elsewhere for this page. In practice a species has
+// one innate; if it ever has more, all names list but only the first's description shows.
+static void PrintInnateAbilitiesPage(void)
+{
+    static const u8 sText_NoInnateAbilities[] = _("No innate abilities.");
+    u8 nameWindowId = AddWindowFromTemplateList(sPageMovesTemplate, PSS_DATA_WINDOW_MOVE_NAMES);
+    u8 descWindowId = AddWindowFromTemplateList(sPageMovesTemplate, PSS_DATA_WINDOW_MOVE_DESCRIPTION);
+    u32 species = sMonSummaryScreen->summary.species;
+    enum Ability firstInnate = GetSpeciesInnate(species, 0);
+
+    for (u32 i = 0; i < MAX_MON_MOVES; i++)
+    {
+        enum Ability innate = GetSpeciesInnate(species, i);
+
+        if (innate == ABILITY_NONE)
+            PrintTextOnWindow(nameWindowId, gText_OneDash, 0, i * 16 + 1, 0, 1);
+        else
+            PrintTextOnWindowToFit(nameWindowId, gAbilitiesInfo[innate].name, 0, i * 16 + 1, 0, 1);
+    }
+
+    if (firstInnate == ABILITY_NONE)
+        PrintTextOnWindow(descWindowId, sText_NoInnateAbilities, 6, 1, 0, 0);
+    else
+        PrintTextOnWindow(descWindowId, gAbilitiesInfo[firstInnate].description, 6, 1, 0, 0);
+}
+
 static void PrintContestMoves(void)
 {
+    if (InnateContestModeActive())
+    {
+        PrintInnateAbilitiesPage();
+        return;
+    }
+
     PrintMoveNameAndPP(0);
     PrintMoveNameAndPP(1);
     PrintMoveNameAndPP(2);
@@ -4169,6 +4222,15 @@ static void PrintContestMoves(void)
 static void Task_PrintContestMoves(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
+
+    // FORK: innate-ability list replaces the contest moves on this page (see
+    // InnateContestModeActive). Small enough to print in one step, then end.
+    if (InnateContestModeActive())
+    {
+        PrintInnateAbilitiesPage();
+        DestroyTask(taskId);
+        return;
+    }
 
     switch (data[0])
     {
@@ -4465,7 +4527,8 @@ static void SetContestMoveTypeIcons(void)
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
-        if (summary->moves[i] != MOVE_NONE)
+        // FORK: no contest-category icons when this page lists innate abilities.
+        if (!InnateContestModeActive() && summary->moves[i] != MOVE_NONE)
             SetTypeSpritePosAndPal(NUMBER_OF_MON_TYPES + GetMoveContestCategory(summary->moves[i]), 85, 32 + (i * 16), i + SPRITE_ARR_ID_TYPE);
         else
             SetSpriteInvisibility(i + SPRITE_ARR_ID_TYPE, TRUE);

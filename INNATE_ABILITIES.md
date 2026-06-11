@@ -13,7 +13,8 @@ Making an *arbitrary* ability work as an innate would mean routing every
 hundreds of upstream-owned sites — a large, perpetually merge-conflict-prone
 sweep. We don't do that. Instead we **wire up one ability's behavior at a time**
 and only let species declare innates from that supported set. Today the set is
-just **`LEVITATE`**.
+**`LEVITATE`** (a passive Ground immunity) and **`REGENERATOR`** (a silent
+1/3-HP switch-out heal).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -114,10 +115,23 @@ How much is needed depends on the ability class:
     (`src/frontier_battle_info.c`) already iterate the whole innate list, so they
     show any allowlisted ability with no per-ability work.
 
-- **Active / on-event ability** (fires a script on switch-in, end-of-turn, or
-  on-contact — e.g. Intimidate, Speed Boost, Static, Rough Skin). These need the
-  re-entrant **`TryActivateInnateEffects(caseID, battler, *index, trigger)`**
-  driver and a trigger hook. That driver + the switch-in / end-turn / move-end
+- **Silent on-event effect** (fires at a single event site with no script /
+  pop-up / animation — e.g. **Regenerator**, the worked example). No driver
+  needed: find the upstream event site (for Regenerator, the switch-out handler
+  `Cmd_switchoutabilities` in `src/battle_script_commands.c`) and add an
+  `BattlerHasAbility(battler, ABILITY_X)` clause that applies the effect
+  additively next to the chosen-ability path, guarded so the two don't
+  double-apply. Watch the engine's constraints at that site — Regenerator writes
+  the party mon's HP **directly** (`SetMonData(GetBattlerMon(b), MON_DATA_HP, …)`,
+  exactly what the controller's `REQUEST_HP_BATTLE` does) rather than a second
+  `BtlController_EmitSetMonData`, because the local switch-out command's single
+  `bufferA` slot would otherwise clobber an emit a chosen ability already queued.
+
+- **Active / on-event ability with a script** (fires a battle script on
+  switch-in, end-of-turn, or on-contact — e.g. Intimidate, Speed Boost, Static,
+  Rough Skin). These need the re-entrant
+  **`TryActivateInnateEffects(caseID, battler, *index, trigger)`** driver and a
+  trigger hook. That driver + the switch-in / end-turn / move-end
   hooks were written and then removed when we scoped back to Levitate; restore
   them from git history as the reference implementation when the first active
   ability joins the allowlist:

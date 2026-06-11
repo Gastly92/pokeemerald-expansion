@@ -22,6 +22,15 @@
 //     src/battle_util.c). So an innate-Levitate mon reaps the terrain it/an ally sets and a
 //     Poison-type still clears Toxic Spikes — things a real Levitate forgoes. This is why
 //     terrain summoners (the Tapus, Miraidon) and Poison floaters happily carry the innate.
+//   - ABILITY_REGENERATOR — heals 1/3 max HP on switch-out, handled at the single switch-out
+//     site in src/battle_script_commands.c (Cmd_switchoutabilities), additively alongside the
+//     real Regenerator so a mon carrying it as an innate heals exactly like the real ability.
+//     The heal is silent (no script/pop-up), so no driver is needed. Suppression parity holds:
+//     the innate is gated by IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field),
+//     same as the real ability's GetBattlerAbility() path. This populates the canon Regenerator
+//     users so they keep their signature pivot heal regardless of which ability slot the build
+//     picks, plus a few flavor regenerators (Staryu/Starmie's regrowing core, the axolotl Wooper
+//     line, Zygarde's reassembling cells).
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -32,6 +41,7 @@ struct SpeciesInnates
 };
 
 static const enum Ability sInnateLevitate[] = { ABILITY_LEVITATE, ABILITY_NONE };
+static const enum Ability sInnateRegenerator[] = { ABILITY_REGENERATOR, ABILITY_NONE };
 
 static const struct SpeciesInnates sSpeciesInnates[] =
 {
@@ -272,6 +282,71 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_SINISTCHA,                sInnateLevitate },
     { SPECIES_SINISTCHA_MASTERPIECE,    sInnateLevitate },
     { SPECIES_SINISTCHA_UNREMARKABLE,   sInnateLevitate },
+
+    // ───────────────────────────────────────────────────────────────────────────
+    // Innate Regenerator (heals 1/3 max HP on switch-out). Two groups:
+    //   1) Canon Regenerator users — the species that carry Regenerator in their
+    //      ability data (often as the Hidden Ability). Giving it as an innate lets
+    //      them keep the signature pivot heal no matter which slot the build picks.
+    //      Mega/regional forms of those lines are listed so the innate survives the
+    //      transformation mid-battle (the species constant changes on Mega Evolve).
+    //   2) Flavor regenerators — species strongly associated with regeneration that
+    //      lack the real ability: Staryu/Starmie (regrows from its core), the axolotl
+    //      Wooper lines (limb regrowth), and Zygarde (cells reassemble).
+    // ───────────────────────────────────────────────────────────────────────────
+
+    // Gen 1
+    { SPECIES_SLOWPOKE,                 sInnateRegenerator },
+    { SPECIES_SLOWBRO,                  sInnateRegenerator },
+    { SPECIES_SLOWBRO_MEGA,             sInnateRegenerator }, // canon Mega is Shell Armor; innate persists through the Mega
+    { SPECIES_SLOWKING,                 sInnateRegenerator },
+    { SPECIES_SLOWPOKE_GALAR,           sInnateRegenerator },
+    { SPECIES_SLOWBRO_GALAR,            sInnateRegenerator },
+    { SPECIES_SLOWKING_GALAR,           sInnateRegenerator },
+    { SPECIES_TANGELA,                  sInnateRegenerator },
+    { SPECIES_TANGROWTH,                sInnateRegenerator },
+    { SPECIES_STARYU,                   sInnateRegenerator }, // flavor: regenerates as long as its core survives
+    { SPECIES_STARMIE,                  sInnateRegenerator }, // flavor
+
+    // Gen 2
+    { SPECIES_CORSOLA,                  sInnateRegenerator },
+    { SPECIES_HO_OH,                    sInnateRegenerator },
+    { SPECIES_WOOPER,                   sInnateRegenerator }, // flavor: axolotl limb regrowth
+    { SPECIES_QUAGSIRE,                 sInnateRegenerator }, // flavor
+
+    // Gen 5
+    { SPECIES_AUDINO,                   sInnateRegenerator },
+    { SPECIES_AUDINO_MEGA,              sInnateRegenerator }, // canon Mega is Healer; innate persists through the Mega
+    { SPECIES_SOLOSIS,                  sInnateRegenerator },
+    { SPECIES_DUOSION,                  sInnateRegenerator },
+    { SPECIES_REUNICLUS,                sInnateRegenerator },
+    { SPECIES_FOONGUS,                  sInnateRegenerator },
+    { SPECIES_AMOONGUSS,                sInnateRegenerator },
+    { SPECIES_ALOMOMOLA,                sInnateRegenerator },
+    { SPECIES_MIENFOO,                  sInnateRegenerator },
+    { SPECIES_MIENSHAO,                 sInnateRegenerator },
+    { SPECIES_TORNADUS_THERIAN,         sInnateRegenerator }, // only the Therian forme has Regenerator
+
+    // Gen 6
+    { SPECIES_ZYGARDE,                  sInnateRegenerator }, // flavor: a colony of cells that reassemble
+    { SPECIES_ZYGARDE_10,               sInnateRegenerator }, // flavor
+    { SPECIES_ZYGARDE_50,               sInnateRegenerator }, // flavor
+    { SPECIES_ZYGARDE_COMPLETE,         sInnateRegenerator }, // flavor
+
+    // Gen 7
+    { SPECIES_MAREANIE,                 sInnateRegenerator },
+    { SPECIES_TOXAPEX,                  sInnateRegenerator },
+
+    // Gen 8
+    { SPECIES_GOSSIFLEUR,               sInnateRegenerator },
+    { SPECIES_ELDEGOSS,                 sInnateRegenerator },
+    { SPECIES_HYDRAPPLE,                sInnateRegenerator },
+
+    // Gen 9
+    { SPECIES_KLAWF,                    sInnateRegenerator },
+    { SPECIES_CYCLIZAR,                 sInnateRegenerator },
+    { SPECIES_WOOPER_PALDEA,            sInnateRegenerator }, // flavor: Paldean axolotl
+    { SPECIES_CLODSIRE,                 sInnateRegenerator }, // flavor
 };
 
 static const enum Ability *GetSpeciesInnateList(u16 species)

@@ -15,7 +15,9 @@
 // hundreds of upstream-owned sites — a large, perpetually merge-conflict-prone
 // sweep. Instead this fork wires up the innate behavior of one ability at a time
 // and only allows species to declare innates from that supported set. Today the
-// set is just LEVITATE, handled entirely inside src/battle_util.c. NOTE: an innate Levitate is
+// set is LEVITATE (a passive Ground immunity, handled inside src/battle_util.c) and
+// REGENERATOR (a silent 1/3-HP heal fired at the single switch-out site in
+// src/battle_script_commands.c). NOTE: an innate Levitate is
 // intentionally a *pure boon* and NOT a 1:1 copy of a real Levitate — it grants Ground / entry-
 // hazard immunity like the real thing, but the fork also keeps the mon grounded for the
 // beneficial ground interactions (field terrain, Toxic Spikes absorption) via
