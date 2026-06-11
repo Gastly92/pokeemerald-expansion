@@ -306,10 +306,6 @@ ___
 > * [x] ~~MYCELIUM_MIGHT = 298~~
 > * [x] ~~HOSPITALITY = 299~~
 > * [x] ~~MINDS_EYE = 300~~
-> * [x] ~~EMBODY_ASPECT_TEAL_MASK = 301~~
-> * [x] ~~EMBODY_ASPECT_HEARTHFLAME_MASK = 302~~
-> * [x] ~~EMBODY_ASPECT_WELLSPRING_MASK = 303~~
-> * [x] ~~EMBODY_ASPECT_CORNERSTONE_MASK = 304~~
 > * [x] ~~TOXIC_CHAIN = 305~~
 > * [x] ~~SUPERSWEET_SYRUP = 306~~
 > * [x] ~~TERA_SHIFT = 307~~
@@ -318,9 +314,5 @@ ___
 > * [x] ~~POISON_PUPPETEER = 310~~
 > * [x] ~~PIERCING_DRILL = 311~~
 > * [x] ~~DRAGONIZE = 312~~
-> * [x] ~~313 = 313~~
-> * [x] ~~314 = 314~~
 > * [x] ~~MEGA_SOL = 315~~
-> * [x] ~~316 = 316~~
-> * [x] ~~317 = 317~~
 > * [x] ~~SPICY_SPRAY = 318~~
