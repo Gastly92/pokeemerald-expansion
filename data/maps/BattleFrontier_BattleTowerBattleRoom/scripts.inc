@@ -52,11 +52,9 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedOpponent::
 	call BattleFrontier_EventScript_IncrementWinStreak
 	tower_setbattlewon
 .if B_FRONTIER_ENDLESS
-	@ FORK: endless Tower — award Battle Points for this win (scaling up each set)
-	@ and never end the challenge after a fixed number of wins; cycle opponents
-	@ indefinitely. The Salon Maiden still appears at the 50th/100th win.
-	frontier_givepoints
-	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
+	@ FORK: endless Tower — never end the challenge after a fixed number of wins;
+	@ cycle opponents indefinitely. Battle Points are awarded below, once the
+	@ attendant has walked over (the Salon Maiden still appears at the 50th/100th).
 .else
 	switch VAR_RESULT
 	case 7, BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
@@ -70,6 +68,12 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedOpponent::
 	waitmovement 0
 	applymovement LOCALID_PLAYER, BattleFrontier_BattleTowerBattleRoom_Movement_PlayerFaceAttendant
 	waitmovement 0
+.if B_FRONTIER_ENDLESS
+	@ FORK: the attendant has walked over — now award the Battle Points for this
+	@ win (scaling up each set), then restore the party, like the Battle Factory.
+	frontier_givepoints
+	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
+.endif
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_RestoreMonsToFullHealth, MSGBOX_DEFAULT
 	playfanfare MUS_HEAL
 	waitfanfare
@@ -352,8 +356,6 @@ BattleFrontier_EventScript_SetBrainObjectGfx::
 BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelVictoryDone::
 .if B_FRONTIER_ENDLESS
 	tower_setbattlewon
-	frontier_givepoints
-	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
 	closemessage
 	applymovement LOCALID_TOWER_BATTLE_OPPONENT, BattleFrontier_BattleTowerBattleRoom_Movement_OpponentExit
 	waitmovement 0
@@ -362,6 +364,9 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelVictoryDone::
 	waitmovement 0
 	applymovement LOCALID_PLAYER, BattleFrontier_BattleTowerBattleRoom_Movement_PlayerFaceAttendant
 	waitmovement 0
+	@ the attendant has walked over — now award the Battle Points for the win
+	frontier_givepoints
+	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_RestoreMonsToFullHealth, MSGBOX_DEFAULT
 	playfanfare MUS_HEAL
 	waitfanfare

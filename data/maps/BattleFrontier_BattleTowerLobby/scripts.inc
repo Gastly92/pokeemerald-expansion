@@ -208,6 +208,12 @@ BattleFrontier_BattleTowerLobby_EventScript_TryEnterSinglesChallenge::
 	frontier_checkineligible
 	goto_if_eq VAR_0x8004, TRUE, BattleFrontier_BattleTowerLobby_EventScript_NotEnoughValidMons
 	frontier_set FRONTIER_DATA_LVL_MODE, VAR_RESULT
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless — if a win streak for this mode is still active (the player
+	@ rested and came back), acknowledge it continues before they pick a new team.
+	tower_get TOWER_DATA_WIN_STREAK_ACTIVE
+	call_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleTowerLobby_EventScript_AnnounceContinuingStreak
+.endif
 	msgbox BattleFrontier_BattleTowerLobby_Text_SelectThreeMons, MSGBOX_DEFAULT
 	fadescreen FADE_TO_BLACK
 	callnative RemoveFollowingPokemon
@@ -276,6 +282,11 @@ BattleFrontier_BattleTowerLobby_EventScript_TryEnterDoublesChallenge::
 	frontier_checkineligible
 	goto_if_eq VAR_0x8004, TRUE, BattleFrontier_BattleTowerLobby_EventScript_NotEnoughValidMons
 	frontier_set FRONTIER_DATA_LVL_MODE, VAR_RESULT
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless — acknowledge a still-active win streak before re-picking.
+	tower_get TOWER_DATA_WIN_STREAK_ACTIVE
+	call_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleTowerLobby_EventScript_AnnounceContinuingStreak
+.endif
 	msgbox BattleFrontier_BattleTowerLobby_Text_PleaseSelectFourMons, MSGBOX_DEFAULT
 	fadescreen FADE_TO_BLACK
 	callnative RemoveFollowingPokemon
@@ -798,6 +809,18 @@ BattleFrontier_EventScript_GetLvlMode::
 	frontier_get FRONTIER_DATA_LVL_MODE
 	return
 
+.if B_FRONTIER_ENDLESS
+@ FORK: endless — the per-mode win streak survives "rest" (it's stored per
+@ [battleMode][lvlMode] and tower_init keeps it while the mode's streak is still
+@ active), so a player who rested can step into the *other* mode and back without
+@ losing either streak. Acknowledge the continuing streak before they re-pick.
+BattleFrontier_BattleTowerLobby_EventScript_AnnounceContinuingStreak::
+	tower_get TOWER_DATA_WIN_STREAK
+	buffernumberstring STR_VAR_1, VAR_RESULT
+	msgbox BattleFrontier_BattleTowerLobby_Text_StreakContinues, MSGBOX_DEFAULT
+	return
+.endif
+
 BattleFrontier_BattleTowerLobby_EventScript_TryCableLink::
 	setvar VAR_0x8004, USING_BATTLE_TOWER
 	message gText_PleaseWaitForLink
@@ -1139,6 +1162,15 @@ BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLvOpen:
 	.string "EGGS{STR_VAR_1}.$"
 
 BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLv50Singles:
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "Excuse me!\p"
+	.string "You don't have six eligible POKéMON.\p"
+	.string "You must have six different POKéMON\n"
+	.string "of Level 50 or less to enter.\p"
+	.string "They also must be holding different\n"
+	.string "kinds of items.\p"
+	.string "EGGS{STR_VAR_1}.$"
+.else
 	.string "Excuse me!\p"
 	.string "You don't have three eligible POKéMON.\p"
 	.string "You must have three different POKéMON\n"
@@ -1146,8 +1178,18 @@ BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLv50Singles:
 	.string "They also must be holding different\n"
 	.string "kinds of items.\p"
 	.string "EGGS{STR_VAR_1}.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLvOpenSingles:
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "Excuse me!\p"
+	.string "You don't have six eligible POKéMON.\p"
+	.string "You must have six different POKéMON\n"
+	.string "to enter.\p"
+	.string "They also must be holding different\n"
+	.string "kinds of items.\p"
+	.string "EGGS{STR_VAR_1}.$"
+.else
 	.string "Excuse me!\p"
 	.string "You don't have three eligible POKéMON.\p"
 	.string "You must have three different POKéMON\n"
@@ -1155,8 +1197,18 @@ BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLvOpenSingles:
 	.string "They also must be holding different\n"
 	.string "kinds of items.\p"
 	.string "EGGS{STR_VAR_1}.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLv50Doubles:
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "Excuse me!\p"
+	.string "You don't have six eligible POKéMON.\p"
+	.string "You must have six different POKéMON\n"
+	.string "of Level 50 or less to enter.\p"
+	.string "They also must be holding different\n"
+	.string "kinds of items.\p"
+	.string "EGGS{STR_VAR_1}.$"
+.else
 	.string "Excuse me!\p"
 	.string "You don't have four eligible POKéMON.\p"
 	.string "You must have four different POKéMON\n"
@@ -1164,8 +1216,18 @@ BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLv50Doubles:
 	.string "They also must be holding different\n"
 	.string "kinds of items.\p"
 	.string "EGGS{STR_VAR_1}.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLvOpenDoubles:
+.if B_FRONTIER_PARTY_SIZE_6V6
+	.string "Excuse me!\p"
+	.string "You don't have six eligible POKéMON.\p"
+	.string "You must have six different POKéMON\n"
+	.string "to enter.\p"
+	.string "They also must be holding different\n"
+	.string "kinds of items.\p"
+	.string "EGGS{STR_VAR_1}.$"
+.else
 	.string "Excuse me!\p"
 	.string "You don't have four eligible POKéMON.\p"
 	.string "You must have four different POKéMON\n"
@@ -1173,6 +1235,7 @@ BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLvOpenDoubles:
 	.string "They also must be holding different\n"
 	.string "kinds of items.\p"
 	.string "EGGS{STR_VAR_1}.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_NotEnoughValidMonsLv50Multis:
 	.string "Excuse me!\p"
@@ -1204,6 +1267,32 @@ BattleFrontier_BattleTowerLobby_Text_TakeSinglesChallenge:
 	.string "BATTLE ROOM challenge?$"
 
 BattleFrontier_BattleTowerLobby_Text_ExplainSinglesChallenge:
+.if B_FRONTIER_ENDLESS
+	.string "The BATTLE TOWER's SINGLE BATTLE\n"
+	.string "ROOMS are for SINGLE BATTLES with\l"
+	.string "a full team of six POKéMON.\p"
+	.string "Battle TRAINERS one after another for\n"
+	.string "as long as you can keep winning.\p"
+	.string "You'll earn Battle Points with every\n"
+	.string "victory, and they add up faster the\l"
+	.string "longer your streak.\p"
+	.string "You may rest between battles to step\n"
+	.string "out, then come back to continue.$"
+.elseif B_FRONTIER_PARTY_SIZE_6V6
+	.string "The BATTLE TOWER's SINGLE BATTLE\n"
+	.string "ROOMS are facilities for conducting\l"
+	.string "SINGLE BATTLES with six POKéMON.\p"
+	.string "There are many SINGLE BATTLE ROOMS\n"
+	.string "in the BATTLE TOWER for team battles.\p"
+	.string "In each of the SINGLE BATTLE ROOMS,\n"
+	.string "seven TRAINERS await your challenge.\p"
+	.string "If you manage to defeat all seven,\n"
+	.string "you will earn Battle Points.\p"
+	.string "If you want to interrupt your\n"
+	.string "challenge, please save the game.\p"
+	.string "If you don't save before interrupting,\n"
+	.string "you will be disqualified.$"
+.else
 	.string "The BATTLE TOWER's SINGLE BATTLE\n"
 	.string "ROOMS are facilities for conducting\l"
 	.string "SINGLE BATTLES with three POKéMON.\p"
@@ -1217,6 +1306,7 @@ BattleFrontier_BattleTowerLobby_Text_ExplainSinglesChallenge:
 	.string "challenge, please save the game.\p"
 	.string "If you don't save before interrupting,\n"
 	.string "you will be disqualified.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_SelectThreeMons:
 .if B_FRONTIER_PARTY_SIZE_6V6
@@ -1239,6 +1329,32 @@ BattleFrontier_BattleTowerLobby_Text_TakeDoublesChallenge:
 	.string "BATTLE ROOM challenge?$"
 
 BattleFrontier_BattleTowerLobby_Text_ExplainDoublesChallenge:
+.if B_FRONTIER_ENDLESS
+	.string "The BATTLE TOWER's DOUBLE BATTLE\n"
+	.string "ROOMS are for DOUBLE BATTLES with\l"
+	.string "a full team of six POKéMON.\p"
+	.string "Battle TRAINERS one after another for\n"
+	.string "as long as you can keep winning.\p"
+	.string "You'll earn Battle Points with every\n"
+	.string "victory, and they add up faster the\l"
+	.string "longer your streak.\p"
+	.string "You may rest between battles to step\n"
+	.string "out, then come back to continue.$"
+.elseif B_FRONTIER_PARTY_SIZE_6V6
+	.string "The BATTLE TOWER's DOUBLE BATTLE\n"
+	.string "ROOMS are facilities for conducting\l"
+	.string "DOUBLE BATTLES with six POKéMON.\p"
+	.string "There are many DOUBLE BATTLE ROOMS\n"
+	.string "in the BATTLE TOWER for team battles.\p"
+	.string "In each of the DOUBLE BATTLE ROOMS,\n"
+	.string "seven TRAINERS await your challenge.\p"
+	.string "If you manage to defeat all seven,\n"
+	.string "you will earn Battle Points.\p"
+	.string "If you want to interrupt your\n"
+	.string "challenge, please save the game.\p"
+	.string "If you don't save before interrupting,\n"
+	.string "you will be disqualified.$"
+.else
 	.string "The BATTLE TOWER's DOUBLE BATTLE\n"
 	.string "ROOMS are facilities for conducting\l"
 	.string "DOUBLE BATTLES with four POKéMON.\p"
@@ -1252,6 +1368,7 @@ BattleFrontier_BattleTowerLobby_Text_ExplainDoublesChallenge:
 	.string "challenge, please save the game.\p"
 	.string "If you don't save before interrupting,\n"
 	.string "you will be disqualified.$"
+.endif
 
 BattleFrontier_BattleTowerLobby_Text_PleaseSelectFourMons:
 .if B_FRONTIER_PARTY_SIZE_6V6
@@ -1261,6 +1378,14 @@ BattleFrontier_BattleTowerLobby_Text_PleaseSelectFourMons:
 	.string "Now please select the four POKéMON\n"
 	.string "that are to be entered.$"
 .endif
+
+@ FORK: endless — shown when resuming a still-active win streak.
+BattleFrontier_BattleTowerLobby_Text_StreakContinues:
+	.string "Welcome back!\p"
+	.string "Your win streak of {STR_VAR_1} is still\n"
+	.string "going strong.\p"
+	.string "Choose your team and we'll pick up\n"
+	.string "right where you left off!$"
 
 @ FORK: shown when the disabled Multi/Link attendants are spoken to.
 BattleFrontier_BattleTowerLobby_Text_ModeNotAvailable:
