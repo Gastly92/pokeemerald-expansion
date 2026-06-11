@@ -364,9 +364,14 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
     {
         const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[fmon->species];
         u32 maxAbilities = ARRAY_COUNT(speciesInfo->abilities);
+        // FORK: match through GetSpeciesAbility (not speciesInfo->abilities[]
+        // directly) so fork ability overrides (src/species_ability_overrides.c) are
+        // visible here; otherwise an overridden ability could not be selected and
+        // would fall back to slot 0. Identical to the array read where no override
+        // exists. Keep this on the accessor on upstream sync.
         for (ability = 0; ability < maxAbilities; ++ability)
         {
-            if (speciesInfo->abilities[ability] == fmon->ability)
+            if (GetSpeciesAbility(fmon->species, ability) == fmon->ability)
                 break;
         }
         if (ability >= maxAbilities)

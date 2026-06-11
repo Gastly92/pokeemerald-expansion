@@ -40,6 +40,7 @@
 #include "pokemon_animation.h"
 #include "pokemon_icon.h"
 #include "pokemon_summary_screen.h"
+#include "species_ability_overrides.h" // FORK: ability-override hook in GetSpeciesAbility
 #include "pokemon_storage_system.h"
 #include "pokerus.h"
 #include "random.h"
@@ -3266,6 +3267,15 @@ enum Type GetSpeciesType(enum Species species, u8 slot)
 
 enum Ability GetSpeciesAbility(enum Species species, u8 slot)
 {
+    // FORK: consult the fork-owned ability-override table first (FEATURE: species
+    // ability overrides, src/species_ability_overrides.c). This is the single
+    // accessor every ability read funnels through, so an override behaves like a
+    // real ability everywhere (battle, summary, AI, the Battle Factory picker).
+    // Vanilla behavior is unchanged where no override exists. Keep this hook ahead
+    // of the array read on upstream sync — it is load-bearing for the feature.
+    enum Ability overrideAbility = GetSpeciesAbilityOverride(species, slot);
+    if (overrideAbility != ABILITY_NONE)
+        return overrideAbility;
     return gSpeciesInfo[SanitizeSpeciesId(species)].abilities[slot];
 }
 
