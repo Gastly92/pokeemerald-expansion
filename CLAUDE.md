@@ -26,12 +26,31 @@ Verified working from web sessions: `git fetch upstream` succeeds (both ref
 listing and object download). To sync:
 
 ```bash
+# 0. Web containers clone the fork SHALLOWLY. A shallow clone has no common
+#    ancestor with upstream, so `git merge upstream/master` sees two unrelated
+#    histories (no merge base) and refuses / would conflict on everything. This
+#    also makes GitHub's "N commits behind" look absurd (e.g. 8000+ instead of
+#    the real ~70). Deepen to full history FIRST. No-op on a complete clone.
+git rev-parse --is-shallow-repository   # "true" => run the next line
+git fetch --unshallow origin            # one-time per ephemeral clone; downloads full history
+                                        # (lighter alt: git fetch --unshallow --filter=blob:none origin)
+
+# 1. Then sync.
 git fetch upstream
 git merge upstream/master      # MERGE, not rebase — this is a long-lived shared fork
 ```
 
+- **Unshallow before merging.** If `git merge-base HEAD upstream/master` prints
+  nothing, you're still shallow (or the histories truly diverged) — fix it with
+  the unshallow above before doing anything else. This is the single most common
+  reason an upstream sync "looks impossible."
 - Use **merge**, never rebase: rebasing rewrites history and force-pushes over a
   branch that other sessions/clones may share.
+- **Never rewrite the upstream commits** the merge brings in (no `rebase --exec`,
+  no amending their author/email even if a hook flags them "Unverified"). Those
+  are upstream's real commits; rewriting them severs the shared-history link and
+  makes the *next* sync conflict on everything. Only your own merge commit is
+  yours to amend.
 - On conflicts, favor our intentional feature divergences; keep upstream's
   changes everywhere else.
 - After every sync, re-verify the build and tests (see below) before merging to
@@ -63,6 +82,18 @@ easily; rewrites of existing logic conflict the most.
 - **Prefer the config system over patching core logic.** Behaviors gated by
   `include/config/*.h` flags (`B_*`/`I_*`/`P_*`/`OW_*`) should be changed via the
   flag, not by editing the function — the change then lands in a file we own.
+- **Define our *own* config flags in fork-owned headers, never inline in an
+  upstream config header.** Upstream actively edits `config/general.h`,
+  `config/battle.h`, etc., so a fork flag wedged into one of those blocks
+  conflicts whenever upstream touches a nearby line (this is exactly what bit the
+  new-game flags). The fork keeps its flags in headers we own:
+  `config/deterministic.h` and `config/feature.h` (runtime-registered via
+  `*_CONFIG_DEFINITIONS` for per-test `WITH_CONFIG` toggling) and `config/fork.h`
+  (plain compile-time `#if` flags), each pulled in with a one-line additive
+  `#include` (`config/fork.h` from `global.h`, right after `general.h`). The
+  *usages* still hook into upstream files where the behavior lives, but the
+  *definitions* never conflict. To add a flag, drop a `#define` in the right fork
+  header — don't add it to an upstream one.
 - **Put feature code in new files** (`src/my_feature.c` + header) and register it
   at the smallest possible hook point in an upstream file, instead of inlining a
   whole feature into an existing function.
