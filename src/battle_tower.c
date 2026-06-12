@@ -878,13 +878,17 @@ static void SetNextTowerOpponent(void)
         u16 winStreak = GetCurrentFacilityWinStreak();
         u32 challengeNum = winStreak / FRONTIER_STAGES_PER_CHALLENGE;
 #if B_FRONTIER_ENDLESS
-        // FORK: endless Tower derives the within-set battle position from the
-        // per-mode win streak rather than the shared curChallengeBattleNum. This
-        // lets the challenge run indefinitely AND keeps singles/doubles fully
-        // independent: each mode's own streak scales its opponents even when the
-        // other mode's challenge is paused (rested) at the same time. (The shared
-        // trainerIds dedup list can briefly hold the other mode's trainers after a
-        // mode switch, which at worst repeats one opponent class within a set.)
+        // FORK: endless Tower derives the within-set battle position (and the
+        // trainer-id draw) from the per-mode win streak rather than the shared
+        // curChallengeBattleNum. This lets the challenge run indefinitely AND keeps
+        // singles/doubles fully independent: each mode's own streak drives its own
+        // opponent generation even when the other mode's challenge is paused
+        // (rested) at the same time. This is purely the independence mechanism, not
+        // a difficulty ramp -- the opponents' actual mons are drawn uniformly from
+        // the competitive roster (FillTrainerParty), with no scaling by streak.
+        // (The shared trainerIds dedup list can briefly hold the other mode's
+        // trainers after a mode switch, which at worst repeats one opponent class
+        // within a set.)
         u32 battleNum = winStreak % FRONTIER_STAGES_PER_CHALLENGE;
 #else
         u32 battleNum = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
