@@ -126,7 +126,13 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_RecordBattle::
 	goto BattleFrontier_BattleTowerBattleRoom_EventScript_AskReadyForOpponent
 
 BattleFrontier_BattleTowerBattleRoom_EventScript_AskPauseChallenge::
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless Tower — "Rest" steps out and resumes later (it doesn't quit the
+	@ game), so ask about resting rather than the vanilla "save and quit" prompt.
+	msgbox BattleFrontier_BattleTowerBattleRoom_Text_RestFromChallenge, MSGBOX_YESNO
+.else
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_SaveAndQuitGame, MSGBOX_YESNO
+.endif
 	switch VAR_RESULT
 	case NO, BattleFrontier_BattleTowerBattleRoom_EventScript_AskReadyForOpponent
 	case YES, BattleFrontier_BattleTowerBattleRoom_EventScript_PauseChallenge
@@ -540,6 +546,11 @@ BattleFrontier_BattleTowerLobby_Text_BattleRecordedOnPass:
 BattleFrontier_BattleTowerBattleRoom_Text_SaveAndQuitGame:
 	.string "Would you like to save and\n"
 	.string "quit the game?$"
+
+@ FORK: endless Tower rest prompt (you step out and resume later, not quit).
+BattleFrontier_BattleTowerBattleRoom_Text_RestFromChallenge:
+	.string "Would you like to save and take\n"
+	.string "a break from your challenge?$"
 
 BattleFrontier_BattleTowerBattleRoom_Text_SavingPleaseWait:
 	.string "Saving your battle data.\n"

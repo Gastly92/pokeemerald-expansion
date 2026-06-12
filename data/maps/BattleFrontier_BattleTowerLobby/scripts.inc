@@ -179,6 +179,16 @@ BattleFrontier_BattleTowerLobby_EventScript_SinglesAttendant::
 	faceplayer
 	setvar VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_TOWER
 	special SavePlayerParty
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless Tower — if a singles streak is already active (the player rested
+	@ and came back), skip the intro welcome and the "take the challenge?" prompt and
+	@ jump straight to choosing a fresh team to continue (the resume dialog is shown
+	@ in TryEnter). Relies on the stored lvlMode, which B_FRONTIER_FORCE_LVL_100 keeps
+	@ at Open Level.
+	setvar VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES
+	tower_get TOWER_DATA_WIN_STREAK_ACTIVE
+	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleTowerLobby_EventScript_TryEnterSinglesChallenge
+.endif
 	msgbox BattleFrontier_BattleTowerLobby_Text_WelcomSingleBattle, MSGBOX_DEFAULT
 BattleFrontier_BattleTowerLobby_EventScript_AskEnterSinglesChallenge::
 	message BattleFrontier_BattleTowerLobby_Text_TakeSinglesChallenge
@@ -255,6 +265,13 @@ BattleFrontier_BattleTowerLobby_EventScript_DoublesAttendant::
 	faceplayer
 	setvar VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_TOWER
 	special SavePlayerParty
+.if B_FRONTIER_ENDLESS
+	@ FORK: endless Tower — skip the intro and jump to choosing a fresh team when a
+	@ doubles streak is already active (see the singles attendant for details).
+	setvar VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_DOUBLES
+	tower_get TOWER_DATA_WIN_STREAK_ACTIVE
+	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleTowerLobby_EventScript_TryEnterDoublesChallenge
+.endif
 	msgbox BattleFrontier_BattleTowerLobby_Text_WelcomeDoubleBattle, MSGBOX_DEFAULT
 BattleFrontier_BattleTowerLobby_EventScript_AskEnterDoublesChallenge::
 	message BattleFrontier_BattleTowerLobby_Text_TakeDoublesChallenge
