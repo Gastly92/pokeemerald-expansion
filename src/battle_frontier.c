@@ -11,7 +11,9 @@
 #include "battle_transition.h"
 #include "event_data.h"
 #include "frontier_extended_mons.h" // FORK: GetRandomFrontierExtendedMonId
+#include "frontier_draft.h"         // FORK: TeamHasGimmickItemConflict
 #include "frontier_util.h"
+#include "item.h"                   // FORK: GetItemHoldEffect (exactly-1-mega rule)
 #include "overworld.h"
 #include "script.h"
 #include "string_util.h"
@@ -20,6 +22,7 @@
 #include "constants/abilities.h"
 #include "constants/battle_frontier.h"
 #include "constants/battle_frontier_mons.h"
+#include "constants/hold_effects.h" // FORK: HOLD_EFFECT_MEGA_STONE
 
 static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCount);
 
@@ -261,10 +264,17 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
     // only the mon source (and the always-max IVs the sets are tuned for) change.
     // Other facilities (Dome/Palace/Arena/Pyramid) keep their vanilla monSet.
     bool32 useExtendedRoster = (VarGet(VAR_FRONTIER_FACILITY) == FRONTIER_FACILITY_TOWER);
+    // FORK: exactly one Tower opponent slot holds a Mega Stone (the player gets to
+    // hand-pick their team, so opponents always bring a Mega). Reserve a random
+    // slot for the mega holder; heldItems[] tracks the team so the shared
+    // gimmick-conflict rule also caps Z-Crystals at one.
+    u32 megaSlot = 0;
+    u16 heldItems[MAX_FRONTIER_PARTY_SIZE] = {ITEM_NONE};
     if (useExtendedRoster)
     {
         gFacilityTrainerMons = GetFactoryMonsTable();
         fixedIV = MAX_PER_STAT_IVS;
+        megaSlot = Random() % monCount;
     }
     else
 #endif
@@ -283,6 +293,18 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
         // "high tier" gate doesn't apply when drawing from it.
         if (!useExtendedRoster && (level == FRONTIER_MAX_LEVEL_50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER)
             continue;
+
+        // FORK: exactly one Mega Stone — the reserved slot must take a Mega holder,
+        // every other slot must not; plus the shared at-most-one-of-each gimmick
+        // rule (caps Z-Crystals at one).
+        if (useExtendedRoster)
+        {
+            bool32 candIsMega = (GetItemHoldEffect(gFacilityTrainerMons[monId].heldItem) == HOLD_EFFECT_MEGA_STONE);
+            if (candIsMega != (i == (s32)megaSlot))
+                continue;
+            if (TeamHasGimmickItemConflict(heldItems, i, gFacilityTrainerMons[monId].heldItem))
+                continue;
+        }
     #else
         u16 monId = monSet[Random() % bfMonCount];
 
@@ -322,6 +344,9 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
             continue;
 
         chosenMonIndices[i] = monId;
+    #if B_FRONTIER_EXTENDED_MONS
+        heldItems[i] = gFacilityTrainerMons[monId].heldItem; // FORK: track for the gimmick-item rule
+    #endif
 
         // Place the chosen Pokémon into the trainer's party.
         CreateFacilityMon(&gFacilityTrainerMons[monId], level, fixedIV, otID, 0, &gParties[trainer][i]);
