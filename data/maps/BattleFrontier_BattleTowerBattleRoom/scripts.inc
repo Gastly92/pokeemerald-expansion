@@ -72,7 +72,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedOpponent::
 	@ FORK: the attendant has walked over — now award the Battle Points for this
 	@ win (scaling up each set), then restore the party, like the Battle Factory.
 	frontier_givepoints
-	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
+	msgbox BattleFrontier_BattleTowerBattleRoom_Text_AwardedBattlePoints, MSGBOX_GETPOINTS
 .endif
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_RestoreMonsToFullHealth, MSGBOX_DEFAULT
 	playfanfare MUS_HEAL
@@ -372,7 +372,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_AnabelVictoryDone::
 	waitmovement 0
 	@ the attendant has walked over — now award the Battle Points for the win
 	frontier_givepoints
-	msgbox BattleFrontier_Text_ObtainedXBattlePoints, MSGBOX_GETPOINTS
+	msgbox BattleFrontier_BattleTowerBattleRoom_Text_AwardedBattlePoints, MSGBOX_GETPOINTS
 	msgbox BattleFrontier_BattleTowerBattleRoom_Text_RestoreMonsToFullHealth, MSGBOX_DEFAULT
 	playfanfare MUS_HEAL
 	waitfanfare
@@ -551,6 +551,13 @@ BattleFrontier_BattleTowerBattleRoom_Text_SaveAndQuitGame:
 BattleFrontier_BattleTowerBattleRoom_Text_RestFromChallenge:
 	.string "Would you like to save and take\n"
 	.string "a break from your challenge?$"
+
+@ FORK: endless Tower per-win BP award. The endless award is always 2+ BP, so
+@ unlike the shared "Battle Point(s)" text this drops the singular parenthesis
+@ (matching the Battle Factory's AwardedBattlePoints).
+BattleFrontier_BattleTowerBattleRoom_Text_AwardedBattlePoints:
+	.string "{PLAYER} obtained {STR_VAR_1} Battle\n"
+	.string "Points.$"
 
 BattleFrontier_BattleTowerBattleRoom_Text_SavingPleaseWait:
 	.string "Saving your battle data.\n"
