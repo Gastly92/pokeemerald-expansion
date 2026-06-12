@@ -1158,6 +1158,20 @@ void AutoRentFullParty(void)
         gSaveBlock2Ptr->frontier.rentalMons[i].abilityNum = GetBoxMonData(&gParties[B_TRAINER_PLAYER][i].box, MON_DATA_ABILITY_NUM);
     }
     CalculatePlayerPartyCount();
+#if B_FRONTIER_ENDLESS
+    // FORK: snapshot the freshly rented team into the per-mode backup immediately,
+    // so a challenge that is active but hasn't been "rested" yet still has a valid
+    // team to restore on resume. Without this, resuming such a challenge restores
+    // an all-zero backup -- every monId 0, i.e. a full team of roster index 0
+    // (Venusaur). "Rest" later overwrites this with the current (possibly swapped)
+    // team. Indexed by battle mode, matching BackupFactoryRentalTeam.
+    {
+        u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
+        u32 j;
+        for (j = 0; j < ARRAY_COUNT(gSaveBlock2Ptr->frontier.rentalMons); j++)
+            gSaveBlock2Ptr->frontier.factoryRentedMonsBackup[battleMode][j] = gSaveBlock2Ptr->frontier.rentalMons[j];
+    }
+#endif
 }
 #endif // B_FRONTIER_PARTY_SIZE_6V6
 
