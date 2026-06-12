@@ -10,6 +10,7 @@
 #include "battle_tower.h"
 #include "battle_transition.h"
 #include "event_data.h"
+#include "frontier_extended_mons.h" // FORK: GetRandomFrontierExtendedMonId
 #include "frontier_util.h"
 #include "overworld.h"
 #include "script.h"

@@ -24,4 +24,8 @@
 extern const struct TrainerMon gFrontierExtendedMons[];
 extern const u16 gFrontierExtendedMonsCount;
 
+// FORK: uniform, format-aware draw from the competitive roster, shared by any
+// facility (Battle Factory, Battle Tower) whose opponents pull from it.
+u16 GetRandomFrontierExtendedMonId(void);
+
 #endif // GUARD_FRONTIER_EXTENDED_MONS_H

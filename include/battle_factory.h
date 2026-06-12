@@ -16,10 +16,5 @@ void FillFactoryTrainerParty(void);
 // every Factory code path (battle_factory.c / battle_factory_screen.c).
 const struct TrainerMon *GetFactoryMonsTable(void);
 u16 GetFactoryMonsCount(void);
-#if B_FRONTIER_EXTENDED_MONS
-// FORK: uniform, format-aware draw from the competitive roster, shared with the
-// Battle Tower so its opponents pull from gFrontierExtendedMons too.
-u16 GetRandomFrontierExtendedMonId(void);
-#endif
 
 #endif // GUARD_BATTLE_FACTORY_H

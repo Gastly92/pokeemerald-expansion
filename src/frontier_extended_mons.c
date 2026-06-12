@@ -1,7 +1,10 @@
 #include "global.h"
 #include "frontier_extended_mons.h"
+#include "event_data.h"
+#include "random.h"
 #include "constants/abilities.h"
 #include "constants/battle.h"
+#include "constants/battle_frontier.h"
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/pokemon.h"
@@ -14911,3 +14914,21 @@ const struct TrainerMon gFrontierExtendedMons[] =
 };
 
 const u16 gFrontierExtendedMonsCount = ARRAY_COUNT(gFrontierExtendedMons);
+
+// FORK: draw one random roster index whose set is valid for the current battle
+// format (singles/doubles). Uniform across the whole list (the roster has no
+// weak->strong tier ordering), so there is no difficulty scaling by streak.
+// Lives here, with the roster data, rather than in the upstream battle_factory.c,
+// and is shared so any facility (Battle Factory, Battle Tower) can field opponents
+// from the competitive list; callers handle their own species/held-item dedup.
+u16 GetRandomFrontierExtendedMonId(void)
+{
+    u32 formatTag = (VarGet(VAR_FRONTIER_BATTLE_MODE) == FRONTIER_MODE_DOUBLES)
+                  ? FORMAT_DOUBLES : FORMAT_SINGLES;
+    u16 id;
+
+    do
+        id = Random() % gFrontierExtendedMonsCount;
+    while (!(gFrontierExtendedMons[id].tags & formatTag));
+    return id;
+}
