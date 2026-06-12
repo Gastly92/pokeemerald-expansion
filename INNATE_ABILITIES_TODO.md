@@ -230,7 +230,6 @@
 > * [x] ~~COTTON_DOWN = 238~~
 > * [x] ~~PROPELLER_TAIL = 239~~
 > * [x] ~~MIRROR_ARMOR = 240~~
-> * [x] ~~GULP_MISSILE = 241~~
 > * [x] ~~STALWART = 242~~
 > * [x] ~~STEAM_ENGINE = 243~~
 > * [x] ~~PUNK_ROCK = 244~~
@@ -263,16 +262,8 @@
 > * [x] ~~ROCKY_PAYLOAD = 276~~
 > * [x] ~~WIND_POWER = 277~~
 > * [x] ~~COMMANDER = 279~~
-> * [x] ~~ELECTROMORPHOSIS = 280~~
 > * [x] ~~PROTOSYNTHESIS = 281~~
 > * [x] ~~QUARK_DRIVE = 282~~
-> * [x] ~~GOOD_AS_GOLD = 283~~
-> * [x] ~~VESSEL_OF_RUIN = 284~~
-> * [x] ~~SWORD_OF_RUIN = 285~~
-> * [x] ~~TABLETS_OF_RUIN = 286~~
-> * [x] ~~BEADS_OF_RUIN = 287~~
-> * [x] ~~ORICHALCUM_PULSE = 288~~
-> * [x] ~~HADRON_ENGINE = 289~~
 > * [x] ~~OPPORTUNIST = 290~~
 > * [x] ~~CUD_CHEW = 291~~
 > * [x] ~~SHARPNESS = 292~~
@@ -285,7 +276,6 @@
 > * [x] ~~MINDS_EYE = 300~~
 > * [x] ~~TOXIC_CHAIN = 305~~
 > * [x] ~~SUPERSWEET_SYRUP = 306~~
-> * [x] ~~POISON_PUPPETEER = 310~~
 > * [x] ~~PIERCING_DRILL = 311~~
 > * [x] ~~DRAGONIZE = 312~~
 > * [x] ~~MEGA_SOL = 315~~
