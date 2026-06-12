@@ -1090,7 +1090,7 @@ BattleFrontier_BattleTowerLobby_Text_WinsInRowRecorded:
 BattleFrontier_BattleTowerLobby_Text_CanLeaveUntilLossOrSevenWins:
 .if B_FRONTIER_ENDLESS
 	.string "Battle as long as you can keep\n"
-	.string "winning—there's no set finish line.\p"
+	.string "winning. There's no set finish line!\p"
 	.string "You can rest between battles to step\n"
 	.string "out, then come back to pick up your\l"
 	.string "streak right where you left off.\p"
