@@ -147,7 +147,6 @@
 > * [x] ~~WONDER_SKIN = 147~~
 > * [x] ~~ANALYTIC = 148~~
 > * [x] ~~ILLUSION = 149~~
-> * [x] ~~IMPOSTER = 150~~
 > * [x] ~~INFILTRATOR = 151~~
 > * [x] ~~MUMMY = 152~~
 > * [x] ~~MOXIE = 153~~
@@ -182,7 +181,6 @@
 > * [x] ~~PIXILATE = 182~~
 > * [x] ~~GOOEY = 183~~
 > * [x] ~~AERILATE = 184~~
-> * [x] ~~PARENTAL_BOND = 185~~
 > * [x] ~~DARK_AURA = 186~~
 > * [x] ~~FAIRY_AURA = 187~~
 > * [x] ~~AURA_BREAK = 188~~
@@ -203,8 +201,6 @@
 > * [x] ~~LONG_REACH = 203~~
 > * [x] ~~LIQUID_VOICE = 204~~
 > * [x] ~~TRIAGE = 205~~
-> * [x] ~~GALVANIZE = 206~~
-> * [x] ~~SURGE_SURFER = 207~~
 > * [x] ~~SCHOOLING = 208~~
 > * [x] ~~DISGUISE = 209~~
 > * [x] ~~BATTLE_BOND = 210~~
@@ -218,9 +214,7 @@
 > * [x] ~~FLUFFY = 218~~
 > * [x] ~~DAZZLING = 219~~
 > * [x] ~~SOUL_HEART = 220~~
-> * [x] ~~TANGLING_HAIR = 221~~
 > * [x] ~~RECEIVER = 222~~
-> * [x] ~~POWER_OF_ALCHEMY = 223~~
 * [ ] ELECTRIC_SURGE = 226
 * [ ] PSYCHIC_SURGE = 227
 * [ ] MISTY_SURGE = 228
@@ -254,7 +248,6 @@
 > * [x] ~~NEUTRALIZING_GAS = 256~~
 > * [x] ~~PASTEL_VEIL = 257~~
 > * [x] ~~HUNGER_SWITCH = 258~~
-> * [x] ~~QUICK_DRAW = 259~~
 > * [x] ~~UNSEEN_FIST = 260~~
 > * [x] ~~CURIOUS_MEDICINE = 261~~
 > * [x] ~~TRANSISTOR = 262~~
