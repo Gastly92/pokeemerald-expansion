@@ -1,11 +1,5 @@
 ## Innate Ability TODO
 
-* [ ] UNIMPLEMENTED/UNDECIDED
-> * [x] IMPLEMENTED = index
-> * [x] ~~REJECTED = index~~
-
-___
-
 > * [x] ~~STENCH = 1~~
 > * [x] ~~DRIZZLE = 2~~
 > * [x] ~~SPEED_BOOST = 3~~
@@ -31,7 +25,6 @@ ___
 * [ ] SHADOW_TAG = 23
 * [ ] ROUGH_SKIN = 24
 > * [x] ~~WONDER_GUARD = 25~~
-> * [x] LEVITATE = 26
 > * [x] ~~EFFECT_SPORE = 27~~
 > * [x] ~~SYNCHRONIZE = 28~~
 * [ ] CLEAR_BODY = 29
@@ -149,7 +142,6 @@ ___
 > * [x] ~~MOODY = 141~~
 > * [x] ~~OVERCOAT = 142~~
 > * [x] ~~POISON_TOUCH = 143~~
-> * [x] REGENERATOR = 144
 > * [x] ~~BIG_PECKS = 145~~
 > * [x] ~~SAND_RUSH = 146~~
 > * [x] ~~WONDER_SKIN = 147~~
@@ -308,9 +300,6 @@ ___
 > * [x] ~~MINDS_EYE = 300~~
 > * [x] ~~TOXIC_CHAIN = 305~~
 > * [x] ~~SUPERSWEET_SYRUP = 306~~
-> * [x] ~~TERA_SHIFT = 307~~
-> * [x] ~~TERA_SHELL = 308~~
-> * [x] ~~TERAFORM_ZERO = 309~~
 > * [x] ~~POISON_PUPPETEER = 310~~
 > * [x] ~~PIERCING_DRILL = 311~~
 > * [x] ~~DRAGONIZE = 312~~
