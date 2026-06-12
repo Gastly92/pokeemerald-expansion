@@ -221,8 +221,6 @@
 > * [x] ~~TANGLING_HAIR = 221~~
 > * [x] ~~RECEIVER = 222~~
 > * [x] ~~POWER_OF_ALCHEMY = 223~~
-> * [x] ~~BEAST_BOOST = 224~~
-> * [x] ~~RKS_SYSTEM = 225~~
 * [ ] ELECTRIC_SURGE = 226
 * [ ] PSYCHIC_SURGE = 227
 * [ ] MISTY_SURGE = 228
@@ -261,10 +259,6 @@
 > * [x] ~~CURIOUS_MEDICINE = 261~~
 > * [x] ~~TRANSISTOR = 262~~
 > * [x] ~~DRAGONS_MAW = 263~~
-> * [x] ~~CHILLING_NEIGH = 264~~
-> * [x] ~~GRIM_NEIGH = 265~~
-> * [x] ~~AS_ONE_ICE_RIDER = 266~~
-> * [x] ~~AS_ONE_SHADOW_RIDER = 267~~
 > * [x] ~~LINGERING_AROMA = 268~~
 > * [x] ~~SEED_SOWER = 269~~
 > * [x] ~~THERMAL_EXCHANGE = 270~~
@@ -275,7 +269,6 @@
 > * [x] ~~GUARD_DOG = 275~~
 > * [x] ~~ROCKY_PAYLOAD = 276~~
 > * [x] ~~WIND_POWER = 277~~
-> * [x] ~~ZERO_TO_HERO = 278~~
 > * [x] ~~COMMANDER = 279~~
 > * [x] ~~ELECTROMORPHOSIS = 280~~
 > * [x] ~~PROTOSYNTHESIS = 281~~
@@ -290,7 +283,6 @@
 > * [x] ~~OPPORTUNIST = 290~~
 > * [x] ~~CUD_CHEW = 291~~
 > * [x] ~~SHARPNESS = 292~~
-> * [x] ~~SUPREME_OVERLORD = 293~~
 > * [x] ~~COSTAR = 294~~
 > * [x] ~~TOXIC_DEBRIS = 295~~
 > * [x] ~~ARMOR_TAIL = 296~~
