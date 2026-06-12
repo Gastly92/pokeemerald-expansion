@@ -141,6 +141,11 @@ fork-owned file.
   still run their vanilla once-per-challenge flow until they are converted.
   Planned next: extend it to the rest, Tower opponent tier-gating + hard AI, and
   boss battles every 10 challenges (the Frontier Brain is the current stand-in).
+  **Converting a facility follows a repeatable pattern** — the step-by-step
+  checklist, shared infrastructure to reuse, the rental-vs-own-party split, and
+  the footguns we hit (the `1`/`0` flag gotcha, charmap chars, `make release`,
+  empty rental backups) are written up in
+  [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md). Read it before doing Palace/Arena/etc.
 - **Bumped `FRONTIER_STAGES_PER_CHALLENGE` (7 → 10) is global.** Per review, the
   shared constant was changed rather than adding a Factory-specific one, so the
   other facilities now see 10-stage challenges too. Their fixed-size layout
