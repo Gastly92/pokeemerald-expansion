@@ -1409,9 +1409,7 @@ BattleFrontier_BattleTowerLobby_Text_PleaseSelectFourMons:
 BattleFrontier_BattleTowerLobby_Text_StreakContinues:
 	.string "Welcome back!\p"
 	.string "Your win streak of {STR_VAR_1} is still\n"
-	.string "going strong.\p"
-	.string "Choose your team and we'll pick up\n"
-	.string "right where you left off!$"
+	.string "going strong.$"
 
 @ FORK: shown when the disabled Multi/Link attendants are spoken to.
 BattleFrontier_BattleTowerLobby_Text_ModeNotAvailable:
