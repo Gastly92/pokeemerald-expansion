@@ -27,7 +27,6 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_GROUDON,             TIER_MYTHICAL }, // 383
     { SPECIES_RAYQUAZA,            TIER_MYTHICAL }, // 384
     { SPECIES_DEOXYS_ATTACK,       TIER_MYTHICAL }, // 386
-    { SPECIES_DEOXYS_DEFENSE,      TIER_MYTHICAL }, // 386
     { SPECIES_DEOXYS_SPEED,        TIER_MYTHICAL }, // 386
     { SPECIES_DIALGA,              TIER_MYTHICAL }, // 483
     { SPECIES_DIALGA_ORIGIN,       TIER_MYTHICAL }, // 483
