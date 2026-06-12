@@ -11,7 +11,18 @@
 // select screen is skipped). NOTE: other facilities (e.g. Battle Dome) have
 // fixed 3-mon coordinate tables that aren't yet generalized to 6 — they're
 // stubbed to build but not visually correct at 6v6.
-#define B_FRONTIER_PARTY_SIZE_6V6   TRUE
+//
+// IMPORTANT: this is defined as 1/0, NOT TRUE/FALSE, on purpose. Unlike the other
+// B_FRONTIER_* flags this one feeds a numeric constant (FRONTIER_PARTY_SIZE /
+// FRONTIER_DOUBLES_PARTY_SIZE) computed with `#if` in constants/global.h that
+// MAP SCRIPTS read as a value (e.g. `setvar VAR_0x8005, FRONTIER_PARTY_SIZE` in
+// the Battle Tower lobby). The script cpp pass does not define TRUE, so `#if
+// B_FRONTIER_PARTY_SIZE_6V6` would expand to `#if TRUE` → undefined → `#if 0` and
+// scripts would silently see the vanilla 3/4 while C saw 6 (the party picker then
+// only lets you choose 3). Using a literal 1 makes `#if` evaluate the same in the
+// C and script cpp passes; `.if B_FRONTIER_PARTY_SIZE_6V6` still works too (it
+// becomes `.if 1`). See CLAUDE.md, "Using config flags in scripts".
+#define B_FRONTIER_PARTY_SIZE_6V6   1
 
 // If TRUE, Frontier battles are locked to level 100. For the Battle Factory
 // this is done by forcing the challenge into Open Level mode, which already
@@ -101,6 +112,15 @@
 // have actually been shown). It reuses the B_ACTION_DEBUG controller path, so the
 // turn is not consumed. Implemented in src/frontier_battle_info.c.
 #define B_FRONTIER_BATTLE_INFO  TRUE
+
+// If TRUE, the Battle Tower's Multi and Link Multi battle modes are disabled:
+// talking to those two attendants shows a brief "not available" message instead
+// of starting a challenge, and the Singles/Doubles modes are the only ones that
+// get the 6v6 / endless treatment. These modes need a partner or a second player
+// and don't fit the endless single-player loop. The Multi/Link code and scripts
+// are left intact (gated by .if in the Tower lobby script), so flipping this back
+// to FALSE restores them. Tower-only.
+#define B_FRONTIER_TOWER_DISABLE_MULTI_LINK TRUE
 
 // If TRUE, the per-species "banned in the Battle Frontier" flag
 // (gSpeciesInfo[species].isFrontierBanned, set on legendaries/mythicals/etc.) is

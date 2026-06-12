@@ -10,6 +10,7 @@
 #include "battle_tower.h"
 #include "battle_transition.h"
 #include "event_data.h"
+#include "frontier_extended_mons.h" // FORK: GetRandomFrontierExtendedMonId
 #include "frontier_util.h"
 #include "overworld.h"
 #include "script.h"
@@ -205,7 +206,7 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
     u16 chosenMonIndices[MAX_FRONTIER_PARTY_SIZE];
     u8 level = SetFacilityPtrsGetLevel();
     u8 fixedIV = 0;
-    u8 bfMonCount;
+    u8 bfMonCount = 0;
     const u16 *monSet = NULL;
     u32 otID = 0;
 
@@ -250,21 +251,46 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
     }
 
     // Regular battle frontier trainer.
-    // Attempt to fill the trainer's party with random Pokémon until 3 have been
-    // successfully chosen. The trainer's party may not have duplicate Pokémon species
-    // or duplicate held items.
-    for (bfMonCount = 0; monSet[bfMonCount] != 0xFFFF; bfMonCount++)
-        ;
+    // Attempt to fill the trainer's party with random Pokémon until monCount have
+    // been successfully chosen. The trainer's party may not have duplicate Pokémon
+    // species or duplicate held items.
+#if B_FRONTIER_EXTENDED_MONS
+    // FORK: the Battle Tower fields its opponents from the shared competitive
+    // roster (frontier_extended_mons.c) instead of each fixed trainer's themed
+    // monSet, matching the Factory. The species/held-item dedup below still runs;
+    // only the mon source (and the always-max IVs the sets are tuned for) change.
+    // Other facilities (Dome/Palace/Arena/Pyramid) keep their vanilla monSet.
+    bool32 useExtendedRoster = (VarGet(VAR_FRONTIER_FACILITY) == FRONTIER_FACILITY_TOWER);
+    if (useExtendedRoster)
+    {
+        gFacilityTrainerMons = GetFactoryMonsTable();
+        fixedIV = MAX_PER_STAT_IVS;
+    }
+    else
+#endif
+    {
+        for (bfMonCount = 0; monSet[bfMonCount] != 0xFFFF; bfMonCount++)
+            ;
+    }
     i = 0;
     otID = Random32();
     while (i != monCount)
     {
+    #if B_FRONTIER_EXTENDED_MONS
+        u16 monId = useExtendedRoster ? GetRandomFrontierExtendedMonId() : monSet[Random() % bfMonCount];
+
+        // The competitive roster has no weak->strong tier ordering, so the Lv50
+        // "high tier" gate doesn't apply when drawing from it.
+        if (!useExtendedRoster && (level == FRONTIER_MAX_LEVEL_50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER)
+            continue;
+    #else
         u16 monId = monSet[Random() % bfMonCount];
 
         // "High tier" Pokémon are only allowed on open level mode
         // 20 is not a possible value for level here
         if ((level == FRONTIER_MAX_LEVEL_50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER)
             continue;
+    #endif
 
         // Ensure this Pokémon species isn't a duplicate.
         for (j = 0; j < i; j++)

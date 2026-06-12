@@ -178,6 +178,14 @@ static void SetBattleFrontierFirstArrivalState(void)
     FlagSet(FLAG_SYS_FRONTIER_PASS);
     VarSet(VAR_HAS_ENTERED_BATTLE_FRONTIER, 1);
 
+    // FORK: a new game in this hack gives the player no starter, so the stock
+    // FLAG_SYS_POKEMON_GET (set when receiving the first mon from Birch's bag) is
+    // never set and the overworld START menu hides the POKéMON option
+    // (BuildNormalStartMenu, src/start_menu.c). The Battle Tower needs the player
+    // to bring their own team, so unlock the party screen up front — the player
+    // adds mons via the debug menu — instead of gating it on a starter we removed.
+    FlagSet(FLAG_SYS_POKEMON_GET);
+
     // Hide the reception-gate Scott. He spawns at the counter (object_event
     // flag FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT) and is normally
     // removed at the end of the first-time scene we skip above; without the

@@ -136,6 +136,20 @@ Note that flags work fine as plain script *operands* (`goto_if_eq VAR_RESULT, TR
 `case FRONTIER_LVL_OPEN, ...`): those are resolved by the assembler, not cpp. Only
 cpp `#if`/`#elif` on a config value is the problem.
 
+**Special case — a flag that feeds a numeric constant scripts read as a value.**
+If a `TRUE`/`FALSE` flag gates a `#define` of a *number* (e.g.
+`#if B_FRONTIER_PARTY_SIZE_6V6` → `FRONTIER_PARTY_SIZE` 6 vs 3 in
+`constants/global.h`) and a **map script reads that constant as an operand**
+(`setvar VAR_0x8005, FRONTIER_PARTY_SIZE`), the `#if` itself runs in the script
+cpp pass where `TRUE` is undefined → `#if 0` → scripts silently get the *false*
+value (3) while C gets the true one (6). You can't `.if` your way out (it's a
+value, not a branch), and you can't `#define TRUE` (breaks the assembler). The fix
+is to **define that one flag as a literal `1`/`0`, not `TRUE`/`FALSE`**, so `#if`
+evaluates identically in the C and script cpp passes (`.if FLAG` still works, it
+becomes `.if 1`). This bit the 6v6 party picker — `B_FRONTIER_PARTY_SIZE_6V6` is
+intentionally `1`, with a comment saying why. Flags that only ever appear in `.if`
+or as operands can stay `TRUE`/`FALSE`.
+
 ### Marking intentional divergences: the `FORK:` tag
 
 When we deliberately diverge from upstream inside a file upstream also owns —

@@ -132,7 +132,13 @@ const struct FrontierBrain gFrontierBrainInfo[NUM_FRONTIER_FACILITIES] =
             COMPOUND_STRING("I'm terribly sorry…")       //Gold
         },
         .battledBit = {1 << 0, 1 << 1},
+#if B_FRONTIER_ENDLESS
+        // FORK: endless Tower — the Salon Maiden appears on the 50th win (silver)
+        // and 100th (gold), then every 50 wins, matching the endless Factory.
+        .streakAppearances = {50, 100, 50, 1},
+#else
         .streakAppearances = {35, 70, 35, 1},
+#endif
     },
     [FRONTIER_FACILITY_DOME] =
     {
@@ -1163,6 +1169,14 @@ static void ShowTowerResultsWindow(u8 battleMode)
         StringExpandPlaceholders(gStringVar4, gText_LinkMultiBattleRoomResults);
 
     PrintAligned(gStringVar4, 2);
+#if B_FRONTIER_FORCE_LVL_100
+    // FORK: B_FRONTIER_FORCE_LVL_100 forces every challenge into Open Level, so the
+    // vanilla Lv 50 block is permanently empty. Drop it and show only the Open Level
+    // streak (mirrors ShowFactoryResultsWindow).
+    AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_OpenLv, 16, 49, TEXT_SKIP_DRAW, NULL);
+    TowerPrintPrevOrCurrentStreak(battleMode, FRONTIER_LVL_OPEN, 72, 132, 49);
+    TowerPrintRecordStreak(battleMode, FRONTIER_LVL_OPEN, 72, 132, 65);
+#else
     AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_Lv502, 16, 49, TEXT_SKIP_DRAW, NULL);
     AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gText_OpenLv, 16, 97, TEXT_SKIP_DRAW, NULL);
     PrintHyphens(10);
@@ -1170,6 +1184,7 @@ static void ShowTowerResultsWindow(u8 battleMode)
     TowerPrintRecordStreak(battleMode, FRONTIER_LVL_50, 72, 132, 65);
     TowerPrintPrevOrCurrentStreak(battleMode, FRONTIER_LVL_OPEN, 72, 132, 97);
     TowerPrintRecordStreak(battleMode, FRONTIER_LVL_OPEN, 72, 132, 113);
+#endif
     PutWindowTilemap(gRecordsWindowId);
     CopyWindowToVram(gRecordsWindowId, COPYWIN_FULL);
 }
@@ -1985,15 +2000,17 @@ static void GiveBattlePoints(void)
     s32 points;
 
 #if B_FRONTIER_ENDLESS
-    // FORK: endless Battle Factory awards Battle Points after EVERY win instead
-    // of once per completed challenge. The amount scales up each set of
-    // FRONTIER_STAGES_PER_CHALLENGE wins: 2 BP/win in the first set, 4 in the
-    // next, 6 in the next, and so on. Beating the Factory Head awards BP equal
-    // to the current win number (the 50th win gives 50, the 100th gives 100).
-    // Other facilities are unchanged.
-    if (facility == FRONTIER_FACILITY_FACTORY)
+    // FORK: the endless Battle Factory and Battle Tower award Battle Points after
+    // EVERY win instead of once per completed challenge. The amount scales up each
+    // set of FRONTIER_STAGES_PER_CHALLENGE wins: 2 BP/win in the first set, 4 in
+    // the next, 6 in the next, and so on. Beating the Frontier Brain awards BP
+    // equal to the current win number (the 50th win gives 50, the 100th gives
+    // 100). Other facilities are unchanged.
+    if (facility == FRONTIER_FACILITY_FACTORY || facility == FRONTIER_FACILITY_TOWER)
     {
-        u32 winStreak = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode];
+        u32 winStreak = (facility == FRONTIER_FACILITY_TOWER)
+            ? gSaveBlock2Ptr->frontier.towerWinStreaks[battleMode][lvlMode]
+            : gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode];
 
         if (TRAINER_BATTLE_PARAM.opponentA == TRAINER_FRONTIER_BRAIN)
         {
