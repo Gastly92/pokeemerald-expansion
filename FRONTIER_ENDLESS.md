@@ -194,14 +194,11 @@ The biggest per-facility fork is **where the team comes from on resume**:
 
 ## Known gaps shared by every conversion so far
 
-- **General opponents: no tier-gating.** Ordinary (non-boss) Tower opponents are a
-  uniform roster draw — legendaries can appear. The Factory tier-gates (no
-  legendaries on ordinary opponents, a guaranteed legendary on the last-of-set) via
-  the species tier map (`frontier_draft.c`'s `TierRejectsCandidate` /
-  `ReserveForcedTierSlot` are extracted and ready to reuse); the Tower doesn't apply
-  it yet. (The Tower instead uses **fixed gym-leader boss teams** on the set-end
-  marks, each carrying one legendary, rather than a drafted legendary.)
-- **Hard AI** (`B_FRONTIER_HARD_AI`) is Factory-only.
+- **Hard AI** (`B_FRONTIER_HARD_AI`) is Factory-only. (Tower general opponents are
+  tier-gated like the Factory — no legendaries/mythicals, ≤1 pseudo, via
+  `frontier_draft.c`'s `TierRejectsCandidate`; the Tower uses **fixed gym-leader
+  boss teams** on the set-end marks, each carrying one legendary, rather than a
+  drafted one.)
 - **Boss polish** (Tower): bosses are pure-random (no immediate-repeat avoidance),
   and use the default frontier battle music.
 

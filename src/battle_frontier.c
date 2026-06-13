@@ -279,6 +279,7 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
     // gimmick-conflict rule also caps Z-Crystals at one.
     u32 megaSlot = 0;
     u16 heldItems[MAX_FRONTIER_PARTY_SIZE] = {ITEM_NONE};
+    u32 pseudoCount = 0; // FORK: tier quota — at most one pseudo on a Tower team
     if (useExtendedRoster)
     {
         gFacilityTrainerMons = GetFactoryMonsTable();
@@ -312,6 +313,11 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
             if (candIsMega != (i == (s32)megaSlot))
                 continue;
             if (TeamHasGimmickItemConflict(heldItems, i, gFacilityTrainerMons[monId].heldItem))
+                continue;
+            // No legendaries or mythicals on ordinary Tower opponents, and at most
+            // one pseudo on the team (every slot is a normal slot). Bosses/Brain
+            // return earlier, so their fixed legendaries are unaffected.
+            if (TierRejectsCandidate(TIER_NORMAL, GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
                 continue;
         }
     #else
@@ -355,6 +361,8 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
         chosenMonIndices[i] = monId;
     #if B_FRONTIER_EXTENDED_MONS
         heldItems[i] = gFacilityTrainerMons[monId].heldItem; // FORK: track for the gimmick-item rule
+        if (useExtendedRoster && GetSpeciesTier(gFacilityTrainerMons[monId].species) == TIER_PSEUDO)
+            pseudoCount++;
     #endif
 
         // Place the chosen Pokémon into the trainer's party.
