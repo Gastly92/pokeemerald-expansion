@@ -3003,6 +3003,13 @@ void SetBattleFacilityTrainerGfxId(u16 trainerId, u8 tempVarId)
     else if (IsTowerBossTrainerId(trainerId))
     {
         // FORK: gym-leader boss — show its real overworld sprite directly.
+        // KNOWN ISSUE (glide): the gym-leader overworld sheets are only 3
+        // frames (one pose per facing, no step cycle), unlike the Salon
+        // Maiden's full 9-frame walk sheet, so when the boss approaches the
+        // battle spot it slides ("glides") instead of animating a walk. This
+        // is a sprite-art limitation (would need ~6 new authored frames per
+        // leader, ×8), not a logic bug — left as-is for now. See the Tower
+        // boss row in FORK.md (Known limitations) for the options.
         u8 gfxId = GetTowerBossObjEventGfx(trainerId);
         switch (tempVarId)
         {
