@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle_tower.h"
+#include "battle_tower_trainers.h" // FORK: gym-leader bosses
 #include "apprentice.h"
 #include "event_data.h"
 #include "battle_setup.h"
@@ -895,6 +896,20 @@ static void SetNextTowerOpponent(void)
 #endif
         SetFacilityPtrsGetLevel();
 
+#if B_FRONTIER_ENDLESS
+        // FORK: every set's last battle (the 10th, 20th, ... win) is a gym-leader
+        // boss with a fixed competitive team, chosen at random. The 50th/100th win
+        // is the Salon Maiden instead (the script routes those to the Brain before
+        // tower_setopponent runs), so this only fires on the non-Brain decade marks.
+        if (battleNum == FRONTIER_STAGES_PER_CHALLENGE - 1
+            && (battleMode == FRONTIER_MODE_SINGLES || battleMode == FRONTIER_MODE_DOUBLES))
+        {
+            TRAINER_BATTLE_PARAM.opponentA = ChooseTowerBossTrainerId();
+            SetBattleFacilityTrainerGfxId(TRAINER_BATTLE_PARAM.opponentA, 0);
+            return;
+        }
+#endif
+
         if (battleMode == FRONTIER_MODE_MULTIS || battleMode == FRONTIER_MODE_LINK_MULTIS)
         {
             id = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
@@ -1052,6 +1067,10 @@ static void GetOpponentIntroSpeech(void)
     if (trainerId < FRONTIER_TRAINERS_COUNT)
 #endif //FREE_BATTLE_TOWER_E_READER
         FrontierSpeechToString(gFacilityTrainers[trainerId].speechBefore);
+#if B_FRONTIER_ENDLESS
+    else if (IsTowerBossTrainerId(trainerId))
+        BufferTowerBossBattleText(FRONTIER_BEFORE_TEXT, trainerId); // FORK: gym-leader boss intro
+#endif
     else if (trainerId < TRAINER_RECORD_MIXING_APPRENTICE)
         FrontierSpeechToString(gSaveBlock2Ptr->frontier.towerRecords[trainerId - TRAINER_RECORD_MIXING_FRIEND].greeting);
     else

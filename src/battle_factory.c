@@ -11,6 +11,7 @@
 #include "random.h"
 #include "frontier_extended_mons.h"
 #include "species_tiers.h"
+#include "frontier_draft.h" // FORK: shared competitive-draft rules
 #include "constants/battle_ai.h"
 #include "constants/hold_effects.h"
 #include "constants/battle_factory.h"
@@ -161,63 +162,9 @@ u16 GetFactoryMonsCount(void)
 }
 
 #if B_FRONTIER_EXTENDED_MONS
-// FORK: competitive draft rule — a generated team may hold at most one Mega Stone
-// and at most one Z-Crystal (only one Mega Evolution / Z-Move is usable per
-// battle). The existing same-item dup check doesn't catch two *different* mega
-// stones or two *different* Z-crystals, so this guards that gap. Returns TRUE if
-// adding newItem would give the team a second mon with the same gimmick class.
-static bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem)
-{
-    enum HoldEffect newEffect = GetItemHoldEffect(newItem);
-    u32 i;
-
-    if (newEffect != HOLD_EFFECT_MEGA_STONE && newEffect != HOLD_EFFECT_Z_CRYSTAL)
-        return FALSE;
-
-    for (i = 0; i < count; i++)
-    {
-        if (heldItems[i] != ITEM_NONE && GetItemHoldEffect(heldItems[i]) == newEffect)
-            return TRUE;
-    }
-    return FALSE;
-}
-
-// FORK: competitive draft rule — per-team tier quota, using the fork's species
-// tier map (GetSpeciesTier / species_tiers.h). Mirrors the gimmick-item guard.
-// Each party slot has a "slot tier":
-//   - TIER_NORMAL slot: ordinary draft pick — legendaries and mythicals are
-//     banned, and at most ONE pseudo (pseudo-legendary / Ultra Beast / Paradox /
-//     Treasure of Ruin) is allowed on the whole team.
-//   - any other slot tier: a *forced* slot that must be filled by a mon of
-//     exactly that tier (used to seed a set-milestone opponent with a legendary,
-//     or the Frontier Brain with a legendary + a mythical).
-// Returns TRUE if a candidate of `candTier` may NOT fill a `slotTier` slot given
-// how many pseudos the team already holds — i.e. the candidate is rejected.
-static bool32 TierRejectsCandidate(enum SpeciesTier slotTier, enum SpeciesTier candTier, u32 pseudoCount)
-{
-    if (slotTier != TIER_NORMAL)
-        return candTier != slotTier;
-
-    if (candTier == TIER_LEGENDARY || candTier == TIER_MYTHICAL)
-        return TRUE;
-    if (candTier == TIER_PSEUDO && pseudoCount >= 1)
-        return TRUE;
-    return FALSE;
-}
-
-// FORK: reserve one random, not-yet-reserved party slot in slotTiers[] (sized
-// FRONTIER_PARTY_SIZE, pre-filled with TIER_NORMAL) for a forced tier, so the
-// guaranteed legendary/mythical lands at a random position. Calling it twice with
-// different tiers yields two distinct slots.
-static void ReserveForcedTierSlot(enum SpeciesTier *slotTiers, enum SpeciesTier tier)
-{
-    u32 slot;
-
-    do
-        slot = Random() % FRONTIER_PARTY_SIZE;
-    while (slotTiers[slot] != TIER_NORMAL);
-    slotTiers[slot] = tier;
-}
+// FORK: the competitive-draft rules (TeamHasGimmickItemConflict /
+// TierRejectsCandidate / ReserveForcedTierSlot) used below live in the fork-owned
+// src/frontier_draft.c (shared with the Battle Tower); see frontier_draft.h.
 #endif
 
 static void InitFactoryChallenge(void)

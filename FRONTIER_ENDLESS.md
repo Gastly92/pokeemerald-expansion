@@ -17,7 +17,7 @@ checklist.
 | Facility | 6v6 | Endless | Forced Lv100 | Roster opponents | Notes |
 |---|---|---|---|---|---|
 | Factory | ✅ | ✅ | ✅ | ✅ | First conversion; rents a team (see "rental vs own-party"). |
-| Tower | ✅ | ✅ | ✅ | ✅ | Second; own-party. Brain team still vanilla; no opponent tier-gating yet. |
+| Tower | ✅ | ✅ | ✅ | ✅ | Second; own-party. Static competitive Brain teams (silver/gold) + random gym-leader bosses every 10 wins (`battle_tower_trainers.c`); general opponents have no tier-gating yet. |
 | Palace | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Own-party, AI-driven mons, singles+doubles. |
 | Arena | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Own-party, judged 3-turn bouts, **singles only** (`arenaWinStreaks[lvlMode]`, no battleMode index). |
 | Dome | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Tournament bracket — fixed 3-mon coordinate tables not generalized to 6 (see FORK.md). |
@@ -51,9 +51,19 @@ These already exist and are facility-agnostic; a conversion *extends* them:
   to include the new facility, reading **that facility's** win-streak array
   (`<fac>WinStreaks[battleMode][lvlMode]`, or `[lvlMode]` for Arena/Pike/Pyramid).
   Scaling is 2 BP/win in set 1, 4 in set 2, …; Brain win = the win number.
-- **Roster draw** — `GetRandomFrontierExtendedMonId()` (`src/battle_factory.c`,
-  declared in `include/battle_factory.h`): one uniform, format-aware pull from the
-  competitive roster. **Uniform = no difficulty scaling by streak.**
+- **Roster draw** — `GetRandomFrontierExtendedMonId()` (`src/frontier_extended_mons.c`,
+  declared in `include/frontier_extended_mons.h`): one uniform, format-aware pull
+  from the competitive roster. **Uniform = no difficulty scaling by streak.**
+- **Draft rules** — `TeamHasGimmickItemConflict` / `TierRejectsCandidate` /
+  `ReserveForcedTierSlot` (fork-owned `src/frontier_draft.c`, declared in
+  `include/frontier_draft.h`): the at-most-one-Mega/Z guard, the per-slot tier
+  quota, and the random forced-tier-slot reservation. Shared by the Factory and
+  the Tower; reuse them, don't re-implement.
+- **Static special teams** — the Tower's Salon Maiden and gym-leader bosses live
+  in the fork-owned `src/battle_tower_trainers.c` (authored `struct TrainerMon`
+  arrays built via `CreateFacilityMon`). A facility that wants hand-authored boss
+  teams instead of (or beside) a draft can follow the same id-range + hook pattern
+  (see the boss notes there and the hook list in the Tower's `FORK.md` row).
 - **Opponent party builder** — `FillTrainerParty()` (`src/battle_frontier.c`)
   already has a `useExtendedRoster = (VarGet(VAR_FRONTIER_FACILITY) == FRONTIER_FACILITY_TOWER)`
   branch. Facilities that build opponents through `FillTrainerParty`
@@ -173,18 +183,24 @@ The biggest per-facility fork is **where the team comes from on resume**:
 7. **Resting exactly on a Brain-threshold win (49/99) can skip that Brain.** The
    first post-resume battle bypasses the mid-loop Brain check. Known minor
    limitation; documented per facility.
+8. **A mutable `static`/global in a fork-added `.c` breaks linking.** pokeemerald's
+   ld script wildcards `.text`/`.rodata` (so all-const fork files like
+   `frontier_extended_mons.c` / `frontier_draft.c` / `battle_tower_trainers.c` link
+   fine) but lists `.data`/`.bss` object files **explicitly** — a new file's `.data`
+   section is discarded ("defined in discarded section `.data`"). Keep fork files
+   `const`-only, or you must add the object to the upstream ld script (which the
+   fork avoids). This is why the Tower bosses are picked with no mutable
+   "last boss" state.
 
 ## Known gaps shared by every conversion so far
 
-- **No opponent difficulty scaling.** Opponents are a uniform roster draw. The
-  Factory additionally tier-gates (no legendaries on ordinary opponents, a
-  guaranteed legendary on the last-of-set, Brain = legendary + mythical) via the
-  species tier map; the Tower does **not** yet. Porting that gating is its own task.
-- **Brain team.** The Tower Brain still fields the vanilla hardcoded team
-  (`CreateFrontierBrainPokemon`), not a roster draft. The Factory Brain
-  (`FillFactoryBrainParty`) does draft from the roster — generalize it when wiring a
-  Brain to the roster.
-- **Hard AI** (`B_FRONTIER_HARD_AI`) is Factory-only.
+- **Hard AI** (`B_FRONTIER_HARD_AI`) is Factory-only. (Tower general opponents are
+  tier-gated like the Factory — no legendaries/mythicals, ≤1 pseudo, via
+  `frontier_draft.c`'s `TierRejectsCandidate`; the Tower uses **fixed gym-leader
+  boss teams** on the set-end marks, each carrying one legendary, rather than a
+  drafted one.)
+- **Boss polish** (Tower): bosses are pure-random (no immediate-repeat avoidance),
+  and use the default frontier battle music.
 
 When you finish a facility, update the Status table above, add/refresh its
 `FORK.md` row, and tick the shared gaps if you closed any.
