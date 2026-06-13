@@ -110,6 +110,7 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_IRON_VALIANT,       TIER_PSEUDO }, // 1006
     { SPECIES_GOUGING_FIRE,       TIER_PSEUDO }, // 1020
     { SPECIES_RAGING_BOLT,        TIER_PSEUDO }, // 1021
+    { SPECIES_IRON_BOULDER,       TIER_PSEUDO }, // 1022
     { SPECIES_TERAPAGOS_TERASTAL, TIER_PSEUDO }, // 1024
 };
 
