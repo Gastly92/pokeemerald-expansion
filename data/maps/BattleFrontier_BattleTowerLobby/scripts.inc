@@ -647,6 +647,14 @@ BattleFrontier_BattleTowerLobby_EventScript_NotEnoughValidMonsLvOpenDoubles::
 
 BattleFrontier_BattleTowerLobby_EventScript_CancelChallengeSaveFailed::
 	frontier_set FRONTIER_DATA_CHALLENGE_STATUS  @ No status provided, so it relies on VAR_0x8006 being 0 already
+	@ FORK: every SaveBefore*Challenge entry marks the win streak ACTIVE *before* the
+	@ save (so a power-off mid-challenge can resume). If the save is declined/fails the
+	@ challenge never starts, so tear that state back down here as QuitWithoutSaving
+	@ does — the endless-Tower attendant detects a resumable challenge from
+	@ WIN_STREAK_ACTIVE, and a stale TRUE makes the next visit "resume" a phantom
+	@ challenge with an un-selected team.
+	tower_set TOWER_DATA_WIN_STREAK, 0
+	tower_set TOWER_DATA_WIN_STREAK_ACTIVE, FALSE
 	goto BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
 	end
 
