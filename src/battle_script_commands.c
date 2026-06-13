@@ -6274,6 +6274,11 @@ static void Cmd_removeitem(void)
         GetBattlerPartyState(battler)->usedHeldItem = itemId; // Remember if switched out
 
     gBattleMons[battler].item = ITEM_NONE;
+    // FORK: B_FRONTIER_BATTLE_INFO — an item destroyed/removed in view of the player
+    // (Fling, Corrosive Gas, Incinerate, …) is revealed; mark it so the viewer shows
+    // the empty slot as "None" rather than "?". (Knock Off records its own removal in
+    // battle_move_resolution.c; stolen items via StealTargetItem.)
+    gBattleStruct->infoItemRevealed[GetBattlerSide(battler)] |= 1u << gBattlerPartyIndexes[battler];
     gBattleStruct->battlerState[battler].canPickupItem = TRUE;
     gBattleStruct->adrenalineOrbActivated = FALSE;
     CheckSetUnburden(battler);

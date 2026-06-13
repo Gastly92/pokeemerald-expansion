@@ -1321,6 +1321,12 @@ enum ItemEffect ItemBattleEffects(enum BattlerId itemBattler, enum BattlerId bat
         gBattleScripting.battler = gPotentialItemEffectBattler = itemBattler;
         if (gItemsInfo[item].pocket == POCKET_BERRIES)
             GetBattlerPartyState(itemBattler)->ateBerry = TRUE;
+        // FORK: B_FRONTIER_BATTLE_INFO — a hold effect that visibly activated (Life Orb
+        // recoil, Leftovers/berry heal, Black Sludge, a status orb, a stat-boost berry,
+        // …) reveals the item to the player, so mark it seen for the viewer. Silent
+        // effects (e.g. Amulet Coin) return ITEM_NO_EFFECT and never reach here. A later
+        // consumed/removed item then reads as "None" rather than "?".
+        gBattleStruct->infoItemRevealed[GetBattlerSide(itemBattler)] |= 1u << gBattlerPartyIndexes[itemBattler];
     }
 
     return effect;
