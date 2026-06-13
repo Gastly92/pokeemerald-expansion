@@ -26,6 +26,11 @@
 // one legendary-tier mon. See FORK.md / battle_tower_trainers.h.
 //
 // EVs use TRAINER_PARTY_EVS(hp, atk, def, speed, spatk, spdef) — speed is 4th.
+//
+// Teams are authored at the full 6v6 size. The arrays are a fixed 6 (not
+// FRONTIER_PARTY_SIZE, which is 3 when B_FRONTIER_PARTY_SIZE_6V6 is off) so the
+// initializers always fit; the builders only create the first FRONTIER_PARTY_SIZE.
+#define TOWER_SPECIAL_TEAM_SIZE 6
 
 // ===========================================================================
 // Frontier Brain (Anabel) — static teams, Silver (50th win) and Gold (100th).
@@ -34,7 +39,7 @@
 // competitive; the Gold team is the tougher rematch.
 // ===========================================================================
 
-static const struct TrainerMon sTowerBrainTeam[2][FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sTowerBrainTeam[2][TOWER_SPECIAL_TEAM_SIZE] =
 {
     // Silver Symbol (50th win).
     {
@@ -128,7 +133,7 @@ void FillTowerBrainParty(u32 symbol)
 // ===========================================================================
 
 // --- Roxanne (Rock) — legendary: Regirock ---
-static const struct TrainerMon sBossRoxanne[FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sBossRoxanne[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
         .species = SPECIES_TYRANITAR, .heldItem = ITEM_TYRANITARITE, .ability = ABILITY_SAND_STREAM,
@@ -163,7 +168,7 @@ static const struct TrainerMon sBossRoxanne[FRONTIER_PARTY_SIZE] =
 };
 
 // --- Brawly (Fighting) — legendary: Terrakion ---
-static const struct TrainerMon sBossBrawly[FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sBossBrawly[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
         .species = SPECIES_MEDICHAM, .heldItem = ITEM_MEDICHAMITE, .ability = ABILITY_PURE_POWER,
@@ -198,7 +203,7 @@ static const struct TrainerMon sBossBrawly[FRONTIER_PARTY_SIZE] =
 };
 
 // --- Wattson (Electric) — legendary: Raikou ---
-static const struct TrainerMon sBossWattson[FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sBossWattson[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
         .species = SPECIES_MANECTRIC, .heldItem = ITEM_MANECTITE, .ability = ABILITY_LIGHTNING_ROD,
@@ -233,7 +238,7 @@ static const struct TrainerMon sBossWattson[FRONTIER_PARTY_SIZE] =
 };
 
 // --- Flannery (Fire) — legendary: Heatran ---
-static const struct TrainerMon sBossFlannery[FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sBossFlannery[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
         .species = SPECIES_CHARIZARD, .heldItem = ITEM_CHARIZARDITE_Y, .ability = ABILITY_BLAZE,
@@ -268,7 +273,7 @@ static const struct TrainerMon sBossFlannery[FRONTIER_PARTY_SIZE] =
 };
 
 // --- Norman (Normal) — legendary: Regigigas ---
-static const struct TrainerMon sBossNorman[FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sBossNorman[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
         .species = SPECIES_LOPUNNY, .heldItem = ITEM_LOPUNNITE, .ability = ABILITY_LIMBER,
@@ -303,7 +308,7 @@ static const struct TrainerMon sBossNorman[FRONTIER_PARTY_SIZE] =
 };
 
 // --- Winona (Flying) — legendary: Tornadus ---
-static const struct TrainerMon sBossWinona[FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sBossWinona[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
         .species = SPECIES_PIDGEOT, .heldItem = ITEM_PIDGEOTITE, .ability = ABILITY_KEEN_EYE,
@@ -338,7 +343,7 @@ static const struct TrainerMon sBossWinona[FRONTIER_PARTY_SIZE] =
 };
 
 // --- Tate & Liza (Psychic) — legendary: Latios ---
-static const struct TrainerMon sBossTateLiza[FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sBossTateLiza[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
         .species = SPECIES_GARDEVOIR, .heldItem = ITEM_GARDEVOIRITE, .ability = ABILITY_TRACE,
@@ -373,7 +378,7 @@ static const struct TrainerMon sBossTateLiza[FRONTIER_PARTY_SIZE] =
 };
 
 // --- Juan (Water) — legendary: Suicune ---
-static const struct TrainerMon sBossJuan[FRONTIER_PARTY_SIZE] =
+static const struct TrainerMon sBossJuan[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
         .species = SPECIES_SWAMPERT, .heldItem = ITEM_SWAMPERTITE, .ability = ABILITY_TORRENT,
