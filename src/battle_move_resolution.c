@@ -3653,6 +3653,11 @@ static enum MoveEndResult MoveEndMoveBlock(struct BattleCalcValues *cv)
 
             gLastUsedItem = gBattleMons[cv->battlerDef].item;
             gBattleMons[cv->battlerDef].item = ITEM_NONE;
+            // FORK: B_FRONTIER_BATTLE_INFO — the player just watched Knock Off remove
+            // this item (it's named in the message), so mark it revealed; the viewer
+            // then shows the now-empty slot as "None" rather than "?". Mirrors the
+            // record StealTargetItem already does for stolen items.
+            gBattleStruct->infoItemRevealed[side] |= 1u << gBattlerPartyIndexes[cv->battlerDef];
             if (gBattleMons[cv->battlerDef].ability != ABILITY_GORILLA_TACTICS)
                 gBattleStruct->choicedMove[cv->battlerDef] = MOVE_NONE;
             CheckSetUnburden(cv->battlerDef);
