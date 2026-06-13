@@ -221,6 +221,15 @@ BattleFrontier_BattleFactoryLobby_EventScript_ExplainChallenge::
 
 BattleFrontier_BattleFactoryLobby_EventScript_CancelChallengeSaveFailed::
 	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, 0
+	@ FORK: SaveBeforeChallenge runs factory_init and marks the win streak ACTIVE
+	@ *before* the save (so a power-off mid-challenge can resume). If the save is
+	@ declined/fails the challenge never starts, so tear that state back down here
+	@ as QuitWithoutSaving does — the endless-Factory attendant detects a resumable
+	@ challenge from WIN_STREAK_ACTIVE, and a stale TRUE makes the next visit "resume"
+	@ a phantom challenge into match 1 with an un-selected rental team.
+	factory_set FACTORY_DATA_WIN_STREAK_SWAPS, 0
+	factory_set FACTORY_DATA_WIN_STREAK, 0
+	factory_set FACTORY_DATA_WIN_STREAK_ACTIVE, FALSE
 	goto BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 
 BattleFrontier_BattleFactoryLobby_EventScript_LoadPartyAndCancelChallenge::
