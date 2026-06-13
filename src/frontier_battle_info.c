@@ -307,6 +307,32 @@ static u32 GetFoePartyCount(struct Pokemon *foeParty)
     return count;
 }
 
+// FORK: The mon whose *identity* the viewer should display for a foe party slot.
+// A foe with an active Illusion (Zoroark/Zorua) is disguised as another party
+// member, so revealing its real species before the Illusion breaks would leak it.
+// While that slot's on-field battler is ILLUSION_ON, return the disguise mon the
+// player actually sees (this mirrors the health box, which also reads
+// GetIllusionMonPtr for species/nickname/gender/level). Once the Illusion is
+// broken (ILLUSION_OFF) this falls back to the real party slot, so the true
+// species reveals exactly when the player learns it. Identity reads (species,
+// gender, level) use this; HP/FNT and reveal-gated data (moves, ability, item)
+// stay keyed to the real slot, matching what the health box and reveal flags show.
+static struct Pokemon *GetFoeDisplayMon(struct Pokemon *foeParty, u32 foeIndex)
+{
+    for (u32 i = 0; i < gBattlersCount; i++)
+    {
+        if (!IsOnPlayerSide(i) && GetBattlerTrainer(i) == B_TRAINER_OPPONENT_A
+            && gBattlerPartyIndexes[i] == foeIndex
+            && gBattleStruct->illusion[i].state == ILLUSION_ON)
+        {
+            struct Pokemon *disguise = GetIllusionMonPtr(i);
+            if (disguise != NULL)
+                return disguise;
+        }
+    }
+    return &foeParty[foeIndex];
+}
+
 static void DrawFoePage(u8 windowId, u32 foeIndex)
 {
     u8 line[64];
@@ -337,15 +363,19 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     }
 
     // Name, gender and level (known once the mon has appeared); flag if fainted.
-    u32 gender = GetMonGender(&foeParty[foeIndex]);
-    p = StringCopy(line, GetSpeciesName(GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL)));
+    // Identity reads go through the display mon so an active Illusion shows the
+    // disguise, not the real species; HP/FNT stays on the real slot (its health
+    // box shows the real HP, and a fainting mon's Illusion has already broken).
+    struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
+    u32 gender = GetMonGender(displayMon);
+    p = StringCopy(line, GetSpeciesName(GetMonData(displayMon, MON_DATA_SPECIES, NULL)));
     if (gender == MON_MALE)
         *p++ = CHAR_MALE;
     else if (gender == MON_FEMALE)
         *p++ = CHAR_FEMALE;
     *p++ = CHAR_SPACE;
     *p++ = CHAR_LV;
-    p = ConvertIntToDecimalStringN(p, GetMonData(&foeParty[foeIndex], MON_DATA_LEVEL, NULL), STR_CONV_MODE_LEFT_ALIGN, 3);
+    p = ConvertIntToDecimalStringN(p, GetMonData(displayMon, MON_DATA_LEVEL, NULL), STR_CONV_MODE_LEFT_ALIGN, 3);
     if (GetMonData(&foeParty[foeIndex], MON_DATA_HP, NULL) == 0)
         StringCopy(p, COMPOUND_STRING("  FNT"));
     PrintLine(windowId, line, 0, y);
@@ -695,12 +725,16 @@ static void DrawSpeedPage(u8 windowId)
         }
         else
         {
-            u32 level = GetMonData(&foeParty[i], MON_DATA_LEVEL, NULL);
-            u32 baseSpeed = GetSpeciesBaseSpeed(species);
+            // Use the display mon so an active Illusion reports the disguise's
+            // Speed tier (what the player believes they face), not the real mon's.
+            struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, i);
+            enum Species displaySpecies = GetMonData(displayMon, MON_DATA_SPECIES, NULL);
+            u32 level = GetMonData(displayMon, MON_DATA_LEVEL, NULL);
+            u32 baseSpeed = GetSpeciesBaseSpeed(displaySpecies);
             u32 lo = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
             u32 hi = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
 
-            p = StringCopy(p, GetSpeciesName(species));
+            p = StringCopy(p, GetSpeciesName(displaySpecies));
             *p++ = CHAR_SPACE;
             p = ConvertIntToDecimalStringN(p, lo, STR_CONV_MODE_LEFT_ALIGN, 3);
             *p++ = CHAR_HYPHEN;
