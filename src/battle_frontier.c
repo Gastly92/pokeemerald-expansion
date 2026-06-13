@@ -12,6 +12,7 @@
 #include "event_data.h"
 #include "frontier_extended_mons.h" // FORK: GetRandomFrontierExtendedMonId
 #include "frontier_draft.h"         // FORK: TeamHasGimmickItemConflict
+#include "battle_tower_trainers.h"  // FORK: gym-leader boss parties
 #include "frontier_util.h"
 #include "item.h"                   // FORK: GetItemHoldEffect (exactly-1-mega rule)
 #include "overworld.h"
@@ -232,6 +233,14 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
         CreateFrontierBrainPokemon();
         return;
     }
+#if B_FRONTIER_ENDLESS
+    else if (IsTowerBossTrainerId(trainerId))
+    {
+        // FORK: gym-leader boss — build its fixed competitive team.
+        FillTowerBossParty(trainerId, monCount);
+        return;
+    }
+#endif
     else if (trainerId < TRAINER_RECORD_MIXING_APPRENTICE)
     {
         // Record mixed player.

@@ -8,6 +8,7 @@
 #include "battle_frontier.h"
 #include "battle_special.h"
 #include "battle_tower.h"
+#include "battle_tower_trainers.h" // FORK: tower brain/boss static teams
 #include "field_specials.h"
 #include "frontier_legality.h"
 #include "battle.h"
@@ -1825,6 +1826,15 @@ u8 GetFrontierBrainStatus(void)
 
 void CopyFrontierTrainerText(u8 whichText, u16 trainerId)
 {
+#if B_FRONTIER_ENDLESS
+    // FORK: gym-leader boss — fixed pre-/post-battle lines (the frontier easy-chat
+    // speech tables have no entry for boss ids).
+    if (IsTowerBossTrainerId(trainerId))
+    {
+        BufferTowerBossBattleText(whichText, trainerId);
+        return;
+    }
+#endif
     switch (whichText)
     {
     case FRONTIER_BEFORE_TEXT:
@@ -2693,6 +2703,17 @@ void CreateFrontierBrainPokemon(void)
     s32 facility = VarGet(VAR_FRONTIER_FACILITY);
     s32 symbol = GetFronterBrainSymbol();
 
+#if B_FRONTIER_ENDLESS
+    // FORK: the endless Battle Tower's Salon Maiden fields a fork-owned static
+    // competitive team (Silver = 50th win, Gold = 100th), not the vanilla brain
+    // data. See src/battle_tower_trainers.c.
+    if (facility == FRONTIER_FACILITY_TOWER)
+    {
+        FillTowerBrainParty(symbol);
+        return;
+    }
+#endif
+
     if (facility == FRONTIER_FACILITY_DOME)
         selectedMonBits = GetDomeTrainerSelectedMons(TrainerIdToDomeTournamentId(TRAINER_FRONTIER_BRAIN));
     else
@@ -2975,6 +2996,20 @@ void SetBattleFacilityTrainerGfxId(u16 trainerId, u8 tempVarId)
         SetFrontierBrainObjEventGfx_2();
         return;
     }
+#if B_FRONTIER_ENDLESS
+    else if (IsTowerBossTrainerId(trainerId))
+    {
+        // FORK: gym-leader boss — show its real overworld sprite directly.
+        u8 gfxId = GetTowerBossObjEventGfx(trainerId);
+        switch (tempVarId)
+        {
+        case 1:  VarSet(VAR_OBJ_GFX_ID_1, gfxId); return;
+        case 15: VarSet(VAR_OBJ_GFX_ID_E, gfxId); return;
+        case 0:
+        default: VarSet(VAR_OBJ_GFX_ID_0, gfxId); return;
+        }
+    }
+#endif
     else if (trainerId < FRONTIER_TRAINERS_COUNT)
     {
         facilityClass = gFacilityTrainers[trainerId].facilityClass;
@@ -3124,6 +3159,12 @@ u8 GetFrontierTrainerFrontSpriteId(u16 trainerId)
     {
         return GetFrontierBrainTrainerPicIndex();
     }
+#if B_FRONTIER_ENDLESS
+    else if (IsTowerBossTrainerId(trainerId))
+    {
+        return GetTowerBossTrainerPic(trainerId); // FORK: gym-leader boss battle pic
+    }
+#endif
     else if (trainerId < FRONTIER_TRAINERS_COUNT)
     {
         return gFacilityClassToPicIndex[gFacilityTrainers[trainerId].facilityClass];
@@ -3162,6 +3203,12 @@ enum TrainerClassID GetFrontierOpponentClass(u16 trainerId)
     {
         return GetFrontierBrainTrainerClass();
     }
+#if B_FRONTIER_ENDLESS
+    else if (IsTowerBossTrainerId(trainerId))
+    {
+        return GetTowerBossTrainerClass(trainerId); // FORK: gym-leader boss class
+    }
+#endif
     else if (trainerId > TRAINER_PARTNER(PARTNER_NONE))
     {
         trainerClass = gBattlePartners[difficulty][trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerClass;
@@ -3249,6 +3296,13 @@ void GetFrontierTrainerName(u8 *dst, u16 trainerId)
         CopyFrontierBrainTrainerName(dst);
         return;
     }
+#if B_FRONTIER_ENDLESS
+    else if (IsTowerBossTrainerId(trainerId))
+    {
+        GetTowerBossTrainerName(dst, trainerId); // FORK: gym-leader boss name
+        return;
+    }
+#endif
     else if (trainerId > TRAINER_PARTNER(PARTNER_NONE))
     {
         for (i = 0; gBattlePartners[difficulty][trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerName[i] != EOS; i++)
