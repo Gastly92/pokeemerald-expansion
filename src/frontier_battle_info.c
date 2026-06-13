@@ -423,14 +423,21 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         }
     }
 
-    // Held item — only once its effect has been genuinely revealed in battle.
+    // Held item — only once its situation has been genuinely revealed in battle.
+    // The reveal bit is set both when an item's effect activates *and* when the
+    // item is removed in view of the player (Knock Off/Thief/Trick all route
+    // through StealTargetItem -> RecordItemEffectBattle, and a consumed berry
+    // records its effect as it triggers). So once revealed, an empty held-item
+    // slot means the player saw it leave -> show "None", not "?".
     enum Item heldItem = GetMonData(&foeParty[foeIndex], MON_DATA_HELD_ITEM, NULL);
     bool32 itemSeen = (gBattleStruct->infoItemRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
     p = StringCopy(line, COMPOUND_STRING("Item: "));
-    if (itemSeen && heldItem != ITEM_NONE)
+    if (!itemSeen)
+        StringCopy(p, COMPOUND_STRING("?"));
+    else if (heldItem != ITEM_NONE)
         StringCopy(p, GetItemName(heldItem));
     else
-        StringCopy(p, COMPOUND_STRING("?"));
+        StringCopy(p, COMPOUND_STRING("None"));
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
