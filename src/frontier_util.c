@@ -2022,9 +2022,12 @@ static void GiveBattlePoints(void)
             ? gSaveBlock2Ptr->frontier.towerWinStreaks[battleMode][lvlMode]
             : gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode];
 
-        if (TRAINER_BATTLE_PARAM.opponentA == TRAINER_FRONTIER_BRAIN)
+        if (TRAINER_BATTLE_PARAM.opponentA == TRAINER_FRONTIER_BRAIN
+            || IsTowerBossTrainerId(TRAINER_BATTLE_PARAM.opponentA))
         {
-            points = winStreak; // BP equal to the current win number (e.g. 50, 100)
+            // BP equal to the current win number (Brain at 50/100; a gym-leader
+            // boss on each 10th win, like the Brain).
+            points = winStreak;
         }
         else
         {
