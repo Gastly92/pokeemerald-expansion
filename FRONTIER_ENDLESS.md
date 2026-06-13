@@ -64,6 +64,11 @@ These already exist and are facility-agnostic; a conversion *extends* them:
   arrays built via `CreateFacilityMon`). A facility that wants hand-authored boss
   teams instead of (or beside) a draft can follow the same id-range + hook pattern
   (see the boss notes there and the hook list in the Tower's `FORK.md` row).
+  *Known issue (glide):* gym-leader bosses **glide** to the battle spot instead of
+  walking — their overworld sheets are 3-frame (one pose per facing, no step
+  cycle), unlike the Salon Maiden's 9-frame walk sheet. Cosmetic, sprite-art
+  limitation (~6 new authored frames per leader, ×8); see the boss gfx hook in
+  `src/frontier_util.c` (`SetBattleFacilityTrainerGfxId`).
 - **Opponent party builder** — `FillTrainerParty()` (`src/battle_frontier.c`)
   already has a `useExtendedRoster = (VarGet(VAR_FRONTIER_FACILITY) == FRONTIER_FACILITY_TOWER)`
   branch. Facilities that build opponents through `FillTrainerParty`
