@@ -31,6 +31,7 @@
 #include "text_window.h"
 #include "window.h"
 #include "constants/battle.h"
+#include "constants/pokemon.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
@@ -44,6 +45,7 @@ enum
     INFO_PAGE_FIELD,
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
+    INFO_PAGE_SPEED,
     INFO_PAGE_FOE,
     INFO_PAGE_COUNT,
 };
@@ -634,6 +636,83 @@ static void DrawStatsPage(u8 windowId)
     PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
 }
 
+// FORK: Speed tier report. From base stats + level alone, a foe's *possible*
+// Speed stat spans a known range — the player needn't know the exact EV/IV
+// investment or nature to bound it. Lowest = 0 IVs, 0 EVs, a hindering nature
+// (x0.9); highest = 31 IVs, 252 EVs, a boosting nature (x1.1). The formula
+// mirrors CalculateMonStats() in src/pokemon.c. This is the *raw* stat range:
+// it deliberately ignores in-battle modifiers not derivable from base stats
+// (Choice Scarf, paralysis, Tailwind, stat stages, Speed-changing abilities).
+// The player's own active mons' actual Speed is shown alongside for comparison.
+static u32 CalcSpeedBound(u32 baseSpeed, u32 level, u32 iv, u32 ev, u32 natureNum)
+{
+    u32 n = (((2 * baseSpeed + iv + ev / 4) * level) / 100) + 5;
+    // natureNum is 90 (hindering), 100 (neutral) or 110 (boosting); see
+    // ModifyStatByNature(), which applies the factor as `stat * num / 100`.
+    return n * natureNum / 100;
+}
+
+static void DrawSpeedPage(u8 windowId)
+{
+    u8 line[64];
+    u8 *p;
+    u32 y = 0;
+    struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+
+    PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"), 0, y);
+    y += LINE_H;
+
+    // The player's active mons: their actual (already-known) Speed stat, so the
+    // foe ranges below can be read against a concrete reference point.
+    for (u32 battler = 0; battler < gBattlersCount; battler++)
+    {
+        if (!IsOnPlayerSide(battler) || !IsBattlerAlive(battler))
+            continue;
+
+        p = StringCopy(line, COMPOUND_STRING("You: "));
+        p = StringCopy(p, gBattleMons[battler].nickname);
+        p = StringCopy(p, COMPOUND_STRING("  Spe "));
+        ConvertIntToDecimalStringN(p, gBattleMons[battler].speed, STR_CONV_MODE_LEFT_ALIGN, 3);
+        PrintLine(windowId, line, 0, y);
+        y += LINE_H;
+    }
+
+    // Each foe party slot's possible Speed range, but only the species/level of a
+    // slot the player has actually seen sent out (same reveal gate as the Foe
+    // page). Unseen slots show "?" so the report never leaks an unrevealed mon.
+    for (u32 i = 0; i < PARTY_SIZE; i++)
+    {
+        enum Species species = GetMonData(&foeParty[i], MON_DATA_SPECIES, NULL);
+        if (species == SPECIES_NONE || GetMonData(&foeParty[i], MON_DATA_IS_EGG, NULL))
+            continue;
+
+        p = StringCopy(line, COMPOUND_STRING("Foe "));
+        p = ConvertIntToDecimalStringN(p, i + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
+        p = StringCopy(p, COMPOUND_STRING(": "));
+        if (!gBattleStruct->partyState[B_TRAINER_OPPONENT_A][i].sentOut)
+        {
+            StringCopy(p, COMPOUND_STRING("?"));
+        }
+        else
+        {
+            u32 level = GetMonData(&foeParty[i], MON_DATA_LEVEL, NULL);
+            u32 baseSpeed = GetSpeciesBaseSpeed(species);
+            u32 lo = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
+            u32 hi = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
+
+            p = StringCopy(p, GetSpeciesName(species));
+            *p++ = CHAR_SPACE;
+            p = ConvertIntToDecimalStringN(p, lo, STR_CONV_MODE_LEFT_ALIGN, 3);
+            *p++ = CHAR_HYPHEN;
+            ConvertIntToDecimalStringN(p, hi, STR_CONV_MODE_LEFT_ALIGN, 3);
+        }
+        PrintLine(windowId, line, 0, y);
+        y += LINE_H;
+    }
+
+    PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+}
+
 static void RedrawInfo(u8 taskId)
 {
     u8 windowId = gTasks[taskId].tWindowId;
@@ -646,6 +725,9 @@ static void RedrawInfo(u8 taskId)
         break;
     case INFO_PAGE_STATS:
         DrawStatsPage(windowId);
+        break;
+    case INFO_PAGE_SPEED:
+        DrawSpeedPage(windowId);
         break;
     case INFO_PAGE_FOE:
         DrawFoePage(windowId, gTasks[taskId].tFoeIndex);
