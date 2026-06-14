@@ -31,6 +31,7 @@
 #include "text_window.h"
 #include "window.h"
 #include "constants/battle.h"
+#include "constants/characters.h" // FORK: TEXT_COLOR_* for the styled title/footer text
 #include "constants/pokemon.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
@@ -44,8 +45,20 @@ bool8 gFrontierBattleInfoActive = FALSE;
 // battle screen so a stray open can never strand the player.
 static MainCallback sInfoExitCallback = NULL;
 
-#define INFO_WIN_WIDTH   28
+// FORK: styling. The viewer used to be a flat full-screen white window of plain
+// text. We now dress it up purely by reusing existing assets/helpers (no new art):
+//   - a window frame (the player's chosen options frame) around the window,
+//   - the standard menu palette so text can use the conventional TEXT_COLOR_* set,
+//   - a transparent window over a soft backdrop colour, and
+//   - coloured page titles / footer for a clear visual hierarchy.
+// The window is one tile narrower than the screen so its 9 frame tiles fit in the
+// same char block (28 wide would leave no room) and the border has a column to sit
+// in. The frame shares the window's BG, whose tilemap buffer AddWindow() allocates.
+#define INFO_WIN_WIDTH   27
 #define INFO_WIN_HEIGHT  18
+
+#define FRAME_PAL_NUM    14                              // BG palette slot for the frame (window uses 15)
+#define FRAME_BASE_TILE  (1 + INFO_WIN_WIDTH * INFO_WIN_HEIGHT)  // first free tile after the window's
 
 enum
 {
@@ -86,7 +99,10 @@ static const struct WindowTemplate sInfoWindowTemplate =
     .baseBlock = 0x1,
 };
 
-static const u16 sBgColor[] = {RGB_WHITE};
+// FORK: soft cool-grey backdrop shown through the (now transparent) window, so the
+// screen reads as a framed panel rather than a flat white sheet. Kept light to keep
+// the dark body text legible.
+static const u16 sBgColor[] = {RGB(23, 25, 30)};
 
 // ---------------------------------------------------------------------------
 // State readers (read-only; mirror what the player is allowed to know).
@@ -228,12 +244,35 @@ static u32 GetFoeMoveSlotPP(struct Pokemon *foeParty, u32 partyIndex, u32 slot)
 
 #define LINE_H  14
 
+// FONT_NARROW (same height as FONT_NORMAL, narrower glyphs) fits more text per
+// line, so dense hazard/screen/condition lists clip far less often. The window is
+// transparent over the backdrop, so text is drawn with a transparent background
+// (else each glyph cell would paint an opaque box over the backdrop). Colours are
+// indices into gStandardMenuPalette, loaded into the window's palette slot.
+static void PrintLineEx(u8 windowId, const u8 *str, u32 x, u32 y, u8 fg, u8 shadow)
+{
+    u8 color[3] = { TEXT_COLOR_TRANSPARENT, fg, shadow };
+
+    AddTextPrinterParameterized4(windowId, FONT_NARROW, x, y, 0, 0, color, 0, str);
+}
+
 static void PrintLine(u8 windowId, const u8 *str, u32 x, u32 y)
 {
-    // FONT_NARROW (same height as FONT_NORMAL, narrower glyphs) fits more text
-    // per line, so dense hazard/screen/condition lists clip far less often.
-    AddTextPrinterParameterized(windowId, FONT_NARROW, str, x, y, 0, NULL);
+    PrintLineEx(windowId, str, x, y, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY);
 }
+
+// Page heading (top row), in red to anchor the page.
+static void PrintTitle(u8 windowId, const u8 *str)
+{
+    PrintLineEx(windowId, str, 0, 0, TEXT_COLOR_RED, TEXT_COLOR_LIGHT_RED);
+}
+
+// Navigation hint pinned to the bottom row, in blue to read as chrome, not data.
+static void PrintFooter(u8 windowId, const u8 *str)
+{
+    PrintLineEx(windowId, str, 0, (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
+}
+
 
 // FORK: DETERMINISTIC_DAMAGE replaces the random damage roll with a fixed,
 // turn-scaling percentage (DETERMINISTIC_DAMAGE_PERCENT). Surface the current
@@ -257,7 +296,7 @@ static void DrawFieldPage(u8 windowId)
     u8 *p;
     u32 y = 0;
 
-    PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  FIELD"), 0, y);
+    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  FIELD"));
     y += LINE_H;
 
     // FORK: the per-turn deterministic damage multiplier (only when that mode is on).
@@ -297,7 +336,7 @@ static void DrawFieldPage(u8 windowId)
     BuildScreenLine(p, B_SIDE_OPPONENT);
     PrintLine(windowId, line, 0, y);
 
-    PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintFooter(windowId, COMPOUND_STRING("L/R: Page    B: Close"));
 }
 
 // Number of mons in the foe's (opponent A's) party.
@@ -359,13 +398,13 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     p = ConvertIntToDecimalStringN(p, foeIndex + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
     *p++ = CHAR_SLASH;
     ConvertIntToDecimalStringN(p, count, STR_CONV_MODE_LEFT_ALIGN, 1);
-    PrintLine(windowId, line, 0, y);
+    PrintTitle(windowId, line);
     y += LINE_H;
 
     if (!seen)
     {
         PrintLine(windowId, COMPOUND_STRING("Not yet seen."), 0, y);
-        PrintLine(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+        PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
         return;
     }
 
@@ -481,7 +520,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         y += LINE_H;
     }
 
-    PrintLine(windowId, COMPOUND_STRING("<>: Mon  R: Next  B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintFooter(windowId, COMPOUND_STRING("<>: Mon  R: Next  B: Close"));
 }
 
 // Name of the battler's primary (status1) condition, or NULL if healthy.
@@ -593,13 +632,13 @@ static void DrawConditionsPage(u8 windowId)
 {
     u32 y = 0;
 
-    PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  CONDITIONS"), 0, y);
+    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  CONDITIONS"));
     y += LINE_H;
 
     y = DrawConditionsForSide(windowId, TRUE, y);
     DrawConditionsForSide(windowId, FALSE, y);
 
-    PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintFooter(windowId, COMPOUND_STRING("L/R: Page    B: Close"));
 }
 
 static const u8 *GetStatAbbr(u32 stat)
@@ -676,13 +715,13 @@ static void DrawStatsPage(u8 windowId)
 {
     u32 y = 0;
 
-    PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  STAT CHANGES"), 0, y);
+    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  STAT CHANGES"));
     y += LINE_H;
 
     y = DrawStatsForSide(windowId, TRUE, y);
     DrawStatsForSide(windowId, FALSE, y);
 
-    PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintFooter(windowId, COMPOUND_STRING("L/R: Page    B: Close"));
 }
 
 // FORK: Speed tier report. From base stats + level alone, a foe's *possible*
@@ -708,7 +747,7 @@ static void DrawSpeedPage(u8 windowId)
     u32 y = 0;
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
 
-    PrintLine(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"), 0, y);
+    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"));
     y += LINE_H;
 
     // The player's active mons: their actual (already-known) Speed stat, so the
@@ -763,14 +802,15 @@ static void DrawSpeedPage(u8 windowId)
         y += LINE_H;
     }
 
-    PrintLine(windowId, COMPOUND_STRING("L/R: Page    B: Close"), 0, (INFO_WIN_HEIGHT * 8) - 14);
+    PrintFooter(windowId, COMPOUND_STRING("L/R: Page    B: Close"));
 }
 
 static void RedrawInfo(u8 taskId)
 {
     u8 windowId = gTasks[taskId].tWindowId;
 
-    FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
+    // Transparent fill so the backdrop colour shows through behind the text.
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
     switch (gTasks[taskId].tPage)
     {
     case INFO_PAGE_CONDITIONS:
@@ -910,16 +950,28 @@ void CB2_FrontierBattleInfo(void)
         gMain.state++;
         break;
     case 3:
+    {
+        const struct TilesPal *frame = GetWindowFrameTilesPal(gSaveBlock2Ptr->optionsWindowFrameType);
+
         LoadPalette(sBgColor, BG_PLTT_ID(0), sizeof(sBgColor));
-        LoadPalette(GetOverworldTextboxPalettePtr(), BG_PLTT_ID(15), PLTT_SIZEOF(8));
+        // gStandardMenuPalette carries the conventional TEXT_COLOR_* colours, so
+        // PrintTitle/PrintFooter can colour text without a bespoke palette.
+        LoadPalette(gStandardMenuPalette, BG_PLTT_ID(15), PLTT_SIZE_4BPP);
+        // The player's chosen window frame (from Options), reused as our border.
+        LoadBgTiles(0, frame->tiles, 0x120, FRAME_BASE_TILE);
+        LoadPalette(frame->pal, BG_PLTT_ID(FRAME_PAL_NUM), PLTT_SIZE_4BPP);
         gMain.state++;
         break;
+    }
     case 4:
         taskId = CreateTask(Task_InfoFadeIn, 0);
         gTasks[taskId].tWindowId = AddWindow(&sInfoWindowTemplate);
         gTasks[taskId].tPage = INFO_PAGE_FIELD;
         gTasks[taskId].tFoeIndex = 0;
         PutWindowTilemap(gTasks[taskId].tWindowId);
+        // Border around the window, drawn into the window BG's tilemap buffer; the
+        // CopyWindowToVram() inside RedrawInfo() commits both border and text.
+        DrawTextBorderOuter(gTasks[taskId].tWindowId, FRAME_BASE_TILE, FRAME_PAL_NUM);
         RedrawInfo(taskId);
         gMain.state++;
         break;
