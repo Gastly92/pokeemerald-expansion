@@ -14,8 +14,9 @@ hundreds of upstream-owned sites — a large, perpetually merge-conflict-prone
 sweep. We don't do that. Instead we **wire up one ability's behavior at a time**
 and only let species declare innates from that supported set. Today the set is
 **`LEVITATE`** (a passive Ground immunity), **`REGENERATOR`** (a silent
-1/3-HP switch-out heal), and **`UNAWARE`** (a passive calc modifier that ignores
-the foe's stat-stage changes).
+1/3-HP switch-out heal), **`UNAWARE`** (a passive calc modifier that ignores
+the foe's stat-stage changes), and **`STURDY`** (a full-HP endure + OHKO-move
+immunity).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -28,8 +29,8 @@ it"* breaks into two parts:
 
 An innate is bonus value layered on top of a mon's chosen ability, so it should
 **only ever help its holder — never carry the real ability's downside.** When the
-real ability is a clean upside (Regenerator, Levitate's Ground immunity), the innate
-copies it 1:1. But when the real ability has a *cost* — a case where it would hurt
+real ability is a clean upside (Regenerator, Levitate's Ground immunity, **Sturdy** — it
+never hurts its holder), the innate copies it 1:1. But when the real ability has a *cost* — a case where it would hurt
 the holder — the innate keeps the upside and drops the cost. This is a deliberate,
 suppression-independent divergence (`IsInnateActive()` still suppresses it exactly
 like the real ability; only the *effect* diverges). Two worked examples:
@@ -183,6 +184,19 @@ How much is needed depends on the ability class:
   battler's species through `IsInnateActive`; off-field AI heuristics
   (`AI_IsAbilityOnSide` sites) are left as a known minor-quality gap, deliberately not
   wired — keeping the footprint small.
+
+  **Sturdy is the *clean-upside* worked example for this class** — a multi-site passive
+  immunity whose real ability has *no* downside, so the innate is a plain **1:1 copy** (no
+  pure-boon divergence). It took an `IsInnateActive(b, ABILITY_STURDY)` clause beside the two
+  cached `ABILITY_STURDY` reads in `src/battle_util.c`: the full-HP **endure** in
+  `GetAdjustedDamage` (gated `B_STURDY >= GEN_5`) and the **OHKO-move immunity** in the OHKO
+  accuracy gate. The "endured"/Sturdy pop-up & message need **no script** — they flow from the
+  existing `MOVE_RESULT_STURDIED` / `MOVE_RESULT_ONE_HIT_KO_STURDY` flags. The one extra step a
+  pop-up'd innate needs: because `CreateAbilityPopUp` reads the *primary* slot, set
+  `gBattleScripting.abilityPopupOverwrite = ABILITY_STURDY` so the pop-up shows Sturdy and not the
+  chosen ability — but **only when the chosen ability differs** (`cachedAbility != ABILITY_STURDY`),
+  so the real-ability path stays byte-for-byte untouched. Same precedent as Levitate's
+  `abilityPopupOverwrite`. Off-field AI survival heuristics are left unwired (the Unaware scope call).
 
 - **Silent on-event effect** (fires at a single event site with no script /
   pop-up / animation — e.g. **Regenerator**, the worked example). No driver

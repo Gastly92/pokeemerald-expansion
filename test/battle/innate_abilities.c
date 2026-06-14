@@ -5,8 +5,9 @@
 // FORK: coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
 // default off in the test baseline (see TestInitConfigData), so each test that
 // wants innates opts in with WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE). The
-// supported innate set is LEVITATE (a passive Ground immunity) and REGENERATOR
-// (a silent 1/3-HP switch-out heal); see src/innate_abilities.c.
+// supported innate set is LEVITATE (a passive Ground immunity), REGENERATOR
+// (a silent 1/3-HP switch-out heal), UNAWARE (a passive calc modifier) and STURDY
+// (full-HP endure + OHKO-move immunity); see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -551,5 +552,122 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware keeps the target's 
             EXPECT_GT(damage[1], damage[0]); // boon: the target's -1 Sp. Def is respected -> more damage
         else
             EXPECT_EQ(damage[1], damage[0]); // real Unaware ignores the target's Sp. Def drop
+    }
+}
+
+// ─── Innate Sturdy ───────────────────────────────────────────────────────────
+// A pure boon with no downside, so a 1:1 copy of the real ability: the holder endures a
+// lethal hit at full HP (B_STURDY >= GEN_5) and is immune to OHKO moves. Wired at the two
+// effect sites in src/battle_util.c; the "endured"/Sturdy pop-up & message flow from the
+// existing MOVE_RESULT_STURDIED / MOVE_RESULT_ONE_HIT_KO_STURDY flags. Cloyster is a flavor
+// pick (primary Shell Armor, no native Sturdy), so the endure is attributable solely to the
+// innate; toggling the feature isolates it. Seismic Toss deals fixed damage equal to the
+// user's level (100), so a MaxHP-100 Cloyster at full HP takes exactly a lethal hit.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sturdy endures a lethal hit at full HP")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLOYSTER, ABILITY_STURDY));
+        ASSUME(gSpeciesInfo[SPECIES_CLOYSTER].abilities[0] != ABILITY_STURDY);
+        ASSUME(B_STURDY >= GEN_5);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CLOYSTER) { MaxHP(100); HP(100); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SEISMIC_TOSS); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SEISMIC_TOSS, opponent);
+        if (enabled) {
+            HP_BAR(player, hp: 1);                 // endured at 1 HP via the innate
+            ABILITY_POPUP(player, ABILITY_STURDY); // pop-up shows Sturdy, not the chosen Shell Armor
+            MESSAGE("Cloyster endured the hit!");
+        } else {
+            HP_BAR(player, hp: 0);                 // no innate -> the lethal hit KOs
+        }
+    }
+}
+
+// OHKO-move immunity is not gen-gated and the Sturdy check precedes the hit roll, so a single
+// feature-on leg is a clean, RNG-free proof: a flavor Cloyster (no native Sturdy) is immune to
+// Fissure only via the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sturdy is immune to OHKO moves")
+{
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_FISSURE) == EFFECT_OHKO);
+        ASSUME(SpeciesHasInnate(SPECIES_CLOYSTER, ABILITY_STURDY));
+        ASSUME(gSpeciesInfo[SPECIES_CLOYSTER].abilities[0] != ABILITY_STURDY);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLOYSTER);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FISSURE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_STURDY);
+        MESSAGE("It doesn't affect Cloyster…");
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP);
+    }
+}
+
+// Suppression parity: Sturdy is breakable, so an attacker's Mold Breaker pierces an innate
+// Sturdy exactly as it would the real ability — the full-HP endure no longer triggers.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Sturdy")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_STURDY].breakable);
+        ASSUME(B_STURDY >= GEN_5);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLOYSTER) { MaxHP(100); HP(100); } // innate Sturdy
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SEISMIC_TOSS); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SEISMIC_TOSS, opponent);
+        HP_BAR(player, hp: 0); // Mold Breaker ignores the innate -> no endure -> KO
+        NONE_OF { ABILITY_POPUP(player, ABILITY_STURDY); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Sturdy")
+{
+    GIVEN {
+        ASSUME(B_STURDY >= GEN_5);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLOYSTER) { MaxHP(100); HP(100); Moves(MOVE_CELEBRATE); } // innate Sturdy
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_SEISMIC_TOSS); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses the innate
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_SEISMIC_TOSS); }
+    } SCENE {
+        MESSAGE("Cloyster's Ability was suppressed!"); // player side: no "opposing" prefix
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SEISMIC_TOSS, opponent);
+        HP_BAR(player, hp: 0); // suppressed -> no endure -> KO
+    } THEN {
+        EXPECT_EQ(player->hp, 0);
+    }
+}
+
+// A canon Sturdy user (Skarmory: Keen Eye/Sturdy/Weak Armor) whose *chosen* ability is Keen Eye
+// still carries Sturdy as an innate, so it keeps the full-HP endure no matter which slot the
+// build picks.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Sturdy user keeps it via innate when the chosen ability differs")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SKARMORY, ABILITY_STURDY));
+        ASSUME(B_STURDY >= GEN_5);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SKARMORY) { Ability(ABILITY_KEEN_EYE); MaxHP(100); HP(100); } // chosen ability is NOT Sturdy
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SEISMIC_TOSS); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SEISMIC_TOSS, opponent);
+        HP_BAR(player, hp: 1);
+        ABILITY_POPUP(player, ABILITY_STURDY); // shows Sturdy despite chosen Keen Eye
+        MESSAGE("Skarmory endured the hit!");
+    } THEN {
+        EXPECT_EQ(player->hp, 1);
     }
 }

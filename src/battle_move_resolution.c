@@ -2413,6 +2413,10 @@ static enum CancelerResult CancelerAccuracyCheck(struct BattleCalcValues *cv)
             {
                 gLastUsedAbility = ABILITY_STURDY;
                 gBattlerAbility = cv->battlerDef;
+                // FORK: an innate Sturdy's chosen ability differs, so force the pop-up to show Sturdy
+                // (CreateAbilityPopUp reads the primary slot otherwise). No-op for a real Sturdy.
+                if (GetBattlerAbility(cv->battlerDef) != ABILITY_STURDY)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_STURDY;
                 BattleScriptCall(BattleScript_SturdyPreventsOHKO);
             }
             else if (gBattleStruct->moveResultFlags[cv->battlerDef] & MOVE_RESULT_ONE_HIT_KO_NO_AFFECT)
