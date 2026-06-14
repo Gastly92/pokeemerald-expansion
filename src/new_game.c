@@ -159,39 +159,41 @@ static void WarpToTruck(void)
 }
 
 #if START_AT_BATTLE_FRONTIER
-// FORK: Puts a new save into the state expected right after a first arrival at
-// the Battle Frontier. Because we never play the truck/Littleroot intro, we both
-// (a) set the Battle Frontier flags the reception-gate scene would normally grant
-// and (b) mark the Littleroot intro complete and pick a sane heal/respawn point
-// so whiteouts and intro map scripts behave.
+// FORK: Puts a new save into the state expected for a first arrival at the
+// Battle Frontier. Because we never play the truck/Littleroot intro, we
+// (a) set the prerequisite flags so the player spawns at the ferry landing and
+// the reception-gate first-time scene can play as the game's intro, and (b) mark
+// the Littleroot intro complete and pick a sane heal/respawn point so whiteouts
+// and intro map scripts behave.
 static void SetBattleFrontierFirstArrivalState(void)
 {
     if (IS_FRLG)
         return;
 
     // Battle Frontier "first arrival" flags. FLAG_MET_SCOTT_ON_SS_TIDAL is the
-    // prerequisite that unlocks the ferry; the rest are what the reception-gate
-    // first-time scene (greeter welcome + Scott + Frontier Pass) would set, so
-    // the player can use the facilities immediately without replaying it.
+    // prerequisite that unlocks the ferry; FLAG_LANDMARK_BATTLE_FRONTIER shows the
+    // landmark on the spawn map before the player reaches the gate.
+    //
+    // FORK: unlike the rest of the skipped intro, we deliberately let the
+    // reception-gate first-time scene PLAY — it is the game's intro (greeter
+    // welcome + Frontier Pass + Scott pointing the player at the Battle Factory).
+    // The player spawns at the ferry landing and must walk north through the
+    // Reception Gate to reach any facility, so the scene (gated on
+    // VAR_HAS_ENTERED_BATTLE_FRONTIER == 0) fires naturally and is unmissable.
+    // Therefore do NOT pre-set FLAG_SYS_FRONTIER_PASS, VAR_HAS_ENTERED_BATTLE_
+    // FRONTIER, or FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT here: the scene
+    // issues the pass and hides Scott itself (data/maps/BattleFrontier_Reception-
+    // Gate/scripts.inc). Pre-setting any of them would skip or break the intro.
     FlagSet(FLAG_MET_SCOTT_ON_SS_TIDAL);
     FlagSet(FLAG_LANDMARK_BATTLE_FRONTIER);
-    FlagSet(FLAG_SYS_FRONTIER_PASS);
-    VarSet(VAR_HAS_ENTERED_BATTLE_FRONTIER, 1);
 
     // FORK: a new game in this hack gives the player no starter, so the stock
     // FLAG_SYS_POKEMON_GET (set when receiving the first mon from Birch's bag) is
     // never set and the overworld START menu hides the POKéMON option
-    // (BuildNormalStartMenu, src/start_menu.c). The Battle Tower needs the player
-    // to bring their own team, so unlock the party screen up front — the player
-    // adds mons via the debug menu — instead of gating it on a starter we removed.
-    FlagSet(FLAG_SYS_POKEMON_GET);
-
-    // Hide the reception-gate Scott. He spawns at the counter (object_event
-    // flag FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT) and is normally
-    // removed at the end of the first-time scene we skip above; without the
-    // scene he just stands there blocking the gate with no script, so set his
-    // hide flag to keep him from appearing.
-    FlagSet(FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT);
+    // (BuildNormalStartMenu, src/start_menu.c). We intentionally leave it unset:
+    // the player owns no POKéMON until they obtain their first one (the future BP
+    // exchange's give-mon script sets the flag; the debug "give mon" menu also
+    // does), so the empty party menu stays hidden until it has something in it.
 
     // The player starts broke (the default 3000 is for the stock intro) and
     // already has the Running Shoes (normally a gift from Mom during the intro
