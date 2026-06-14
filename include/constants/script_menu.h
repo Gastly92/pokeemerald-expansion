@@ -169,6 +169,15 @@ enum
     MULTI_HOF_VICTORIES_QUIT,
     MULTI_EGGS_VICTORIES_QUIT,
     MULTI_HOF_EGGS_VICTORIES_QUIT,
+    // FORK: reduced Reception Gate guide menus that drop options the fork's
+    // frontier config disables. MULTI_FRONTIER_RULES_LV100 hides the level-mode
+    // entries (TWO STYLES / LV. 50 / OPEN LEVEL) when B_FRONTIER_FORCE_LVL_100
+    // locks battles to Lv100; MULTI_FRONTIER_PASS_INFO_NO_RECORD hides RECORD
+    // when B_FRONTIER_DISABLE_RECORD_BATTLE turns off battle recording. The
+    // Reception Gate script (BattleFrontier_ReceptionGate) picks the list with
+    // .if on those flags. Added at the end so the enum stays additive on sync.
+    MULTI_FRONTIER_RULES_LV100,
+    MULTI_FRONTIER_PASS_INFO_NO_RECORD,
 };
 
 #define MULTI_NONE 255

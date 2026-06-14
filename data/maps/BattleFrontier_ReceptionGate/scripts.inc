@@ -216,6 +216,19 @@ BattleFrontier_ReceptionGate_EventScript_RulesGuide::
 BattleFrontier_ReceptionGate_EventScript_ChooseRuleToLearnAbout::
 	message BattleFrontier_ReceptionGate_Text_LearnAboutWhat
 	waitmessage
+	@ FORK: B_FRONTIER_FORCE_LVL_100 locks battles to Lv100, so there's no
+	@ Lv50/Open choice to explain -- hide the level-mode entries (TWO STYLES,
+	@ LV. 50, OPEN LEVEL) by using the reduced rules list. (Assembler .if, not
+	@ cpp #if -- see CLAUDE.md, "Using config flags in scripts".)
+.if B_FRONTIER_FORCE_LVL_100
+	multichoice 15, 0, MULTI_FRONTIER_RULES_LV100, FALSE
+	switch VAR_RESULT
+	case 0, BattleFrontier_ReceptionGate_EventScript_MonEntry
+	case 1, BattleFrontier_ReceptionGate_EventScript_HoldItems
+	case 2, BattleFrontier_ReceptionGate_EventScript_ExitRulesGuide
+	case MULTI_B_PRESSED, BattleFrontier_ReceptionGate_EventScript_ExitRulesGuide
+	end
+.else
 	multichoice 15, 0, MULTI_FRONTIER_RULES, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_ReceptionGate_EventScript_LevelMode
@@ -226,6 +239,7 @@ BattleFrontier_ReceptionGate_EventScript_ChooseRuleToLearnAbout::
 	case 5, BattleFrontier_ReceptionGate_EventScript_ExitRulesGuide
 	case MULTI_B_PRESSED, BattleFrontier_ReceptionGate_EventScript_ExitRulesGuide
 	end
+.endif
 
 BattleFrontier_ReceptionGate_EventScript_LevelMode::
 	msgbox BattleFrontier_ReceptionGate_Text_LevelModeInfo, MSGBOX_DEFAULT
@@ -267,6 +281,18 @@ BattleFrontier_ReceptionGate_EventScript_FrontierPassGuide::
 BattleFrontier_ReceptionGate_EventScript_ChooseFrontierPassInfoToLearnAbout::
 	message BattleFrontier_ReceptionGate_Text_LearnAboutWhich1
 	waitmessage
+	@ FORK: B_FRONTIER_DISABLE_RECORD_BATTLE turns off battle recording, so hide
+	@ the RECORD entry by using the reduced Frontier Pass list. (Assembler .if,
+	@ not cpp #if -- see CLAUDE.md, "Using config flags in scripts".)
+.if B_FRONTIER_DISABLE_RECORD_BATTLE
+	multichoice 16, 4, MULTI_FRONTIER_PASS_INFO_NO_RECORD, FALSE
+	switch VAR_RESULT
+	case 0, BattleFrontier_ReceptionGate_EventScript_Symbols
+	case 1, BattleFrontier_ReceptionGate_EventScript_BattlePoints
+	case 2, BattleFrontier_ReceptionGate_EventScript_ExitFrontierPassGuide
+	case MULTI_B_PRESSED, BattleFrontier_ReceptionGate_EventScript_ExitFrontierPassGuide
+	end
+.else
 	multichoice 16, 4, MULTI_FRONTIER_PASS_INFO, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_ReceptionGate_EventScript_Symbols
@@ -275,6 +301,7 @@ BattleFrontier_ReceptionGate_EventScript_ChooseFrontierPassInfoToLearnAbout::
 	case 3, BattleFrontier_ReceptionGate_EventScript_ExitFrontierPassGuide
 	case MULTI_B_PRESSED, BattleFrontier_ReceptionGate_EventScript_ExitFrontierPassGuide
 	end
+.endif
 
 BattleFrontier_ReceptionGate_EventScript_Symbols::
 	msgbox BattleFrontier_ReceptionGate_Text_SymbolsInfo, MSGBOX_DEFAULT
