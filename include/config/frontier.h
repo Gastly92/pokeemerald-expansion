@@ -133,4 +133,19 @@
 // go through it. When FALSE the vanilla per-species ban is honored.
 #define B_FRONTIER_ALL_SPECIES_LEGAL    TRUE
 
+// If TRUE, the Battle Frontier never offers to record a battle onto the Frontier
+// Pass. Recorded-battle "playback" isn't a video: it re-simulates the battle from
+// a saved RNG seed + the players' per-turn inputs, so it only looks right if the
+// engine reproduces the original run byte-for-byte. The expansion's battle engine
+// is far too stateful for that to hold reliably (this is a long-standing upstream
+// fragility, not something this fork introduced — the recording engine files are
+// stock upstream), so the replay desyncs into a glitched battle. Rather than ship
+// a broken feature, we force FRONTIER_DATA_RECORD_DISABLED on: every facility
+// attendant's "Record" menu option falls through to its existing no-record menu
+// (the scripts already branch on this), and the Frontier Pass "Record" area has
+// nothing to play. The recording/playback code is left untouched (so an upstream
+// fix can revive it by flipping this back to FALSE). Gated in GetFrontierData()
+// (FRONTIER_DATA_RECORD_DISABLED) in src/frontier_util.c.
+#define B_FRONTIER_DISABLE_RECORD_BATTLE    TRUE
+
 #endif // GUARD_CONFIG_FRONTIER_H

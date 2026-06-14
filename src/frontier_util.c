@@ -954,7 +954,14 @@ static void GetFrontierData(void)
         gBattleOutcome = 0;
         break;
     case FRONTIER_DATA_RECORD_DISABLED:
+    #if B_FRONTIER_DISABLE_RECORD_BATTLE
+        // FORK: recorded-battle playback re-simulates from a seed + inputs and
+        // desyncs on the expansion's stateful engine, so the "Record" prompt is
+        // always off. See B_FRONTIER_DISABLE_RECORD_BATTLE in config/frontier.h.
+        gSpecialVar_Result = TRUE;
+    #else
         gSpecialVar_Result = gSaveBlock2Ptr->frontier.disableRecordBattle;
+    #endif
         break;
     case FRONTIER_DATA_HEARD_BRAIN_SPEECH:
         gSpecialVar_Result = gSaveBlock2Ptr->frontier.battledBrainFlags & gFrontierBrainInfo[facility].battledBit[hasSymbol];
