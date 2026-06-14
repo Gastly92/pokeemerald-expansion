@@ -647,10 +647,28 @@ static const struct MenuAction MultichoiceList_FrontierRules[] =
     {gText_Exit},
 };
 
+// FORK: reduced rules guide for B_FRONTIER_FORCE_LVL_100 (battles locked to
+// Lv100), dropping the level-mode entries since there is no Lv50/Open choice.
+static const struct MenuAction MultichoiceList_FrontierRulesLv100[] =
+{
+    {COMPOUND_STRING("{PKMN} TYPE & NO.")},
+    {COMPOUND_STRING("HOLD ITEMS")},
+    {gText_Exit},
+};
+
 static const struct MenuAction MultichoiceList_FrontierPassInfo[] =
 {
     {COMPOUND_STRING("SYMBOLS")},
     {COMPOUND_STRING("RECORD")},
+    {COMPOUND_STRING("BATTLE PTS")},
+    {gText_Exit},
+};
+
+// FORK: reduced Frontier Pass guide for B_FRONTIER_DISABLE_RECORD_BATTLE,
+// dropping the RECORD entry since battle recording is turned off.
+static const struct MenuAction MultichoiceList_FrontierPassInfoNoRecord[] =
+{
+    {COMPOUND_STRING("SYMBOLS")},
     {COMPOUND_STRING("BATTLE PTS")},
     {gText_Exit},
 };
@@ -1294,6 +1312,9 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_HOF_VICTORIES_QUIT]                         = MULTICHOICE(sMultichoiceList_HOF_Victories_Quit),
     [MULTI_EGGS_VICTORIES_QUIT]                        = MULTICHOICE(sMultichoiceList_Eggs_Victories_Quit),
     [MULTI_HOF_EGGS_VICTORIES_QUIT]                    = MULTICHOICE(sMultichoiceList_HOF_Eggs_Victories_Quit),
+    // FORK: reduced Reception Gate guide menus (see constants/script_menu.h).
+    [MULTI_FRONTIER_RULES_LV100]                       = MULTICHOICE(MultichoiceList_FrontierRulesLv100),
+    [MULTI_FRONTIER_PASS_INFO_NO_RECORD]               = MULTICHOICE(MultichoiceList_FrontierPassInfoNoRecord),
 };
 
 const u8 *const gStdStrings[] =
