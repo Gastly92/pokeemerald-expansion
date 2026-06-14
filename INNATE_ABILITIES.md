@@ -24,6 +24,30 @@ it"* breaks into two parts:
 2. **Effect wiring** — how much is automatic depends on the *kind* of ability
    (see the recipe). This is the part the allowlist gates.
 
+## The design principle: an innate is a *pure boon*
+
+An innate is bonus value layered on top of a mon's chosen ability, so it should
+**only ever help its holder — never carry the real ability's downside.** When the
+real ability is a clean upside (Regenerator, Levitate's Ground immunity), the innate
+copies it 1:1. But when the real ability has a *cost* — a case where it would hurt
+the holder — the innate keeps the upside and drops the cost. This is a deliberate,
+suppression-independent divergence (`IsInnateActive()` still suppresses it exactly
+like the real ability; only the *effect* diverges). Two worked examples:
+
+- **Levitate** carries a hidden cost: a real Levitate forgoes the *beneficial* ground
+  interactions (it can't soak field terrain or clear Toxic Spikes as a Poison-type).
+  The innate keeps the Ground/​hazard immunity but stays grounded for those benefits
+  (`IsBattlerGroundedForBenefit()`), so it's strictly a boon.
+- **Unaware** carries a cost in the *drop* direction: a real Unaware blanks the foe's
+  stat stage both ways, so it also ignores a foe's *drop* (e.g. an attacker that
+  lowered its own Attack) and takes more damage / deals less for it. The innate ignores
+  only the foe's *boosts* and keeps the foe's *drops* — always the favorable half
+  (`InnateUnawareBoonStage()`).
+
+**When you wire a new ability, ask "does the real ability ever hurt its user?"** If
+yes, wire the innate to skip that branch (and note the divergence in the allowlist
+comment + `FORK.md`). If no, a 1:1 copy is already pure-boon.
+
 ## What the generic tooling already gives you (no per-ability work)
 
 - **The species → innate table** (`src/innate_abilities.c`): a variable-length,
@@ -34,8 +58,8 @@ it"* breaks into two parts:
 - **Suppression parity** via `IsInnateActive()`: an innate honors Gastro Acid,
   Neutralizing Gas, Mold Breaker (on breakable abilities), Ability Shield, and
   not-on-field exactly like the same ability in a real slot. (Suppression parity
-  only — an innate's *effect* may diverge by design: see the Levitate pure-boon
-  note below, where an innate Levitate is intentionally a bit stronger than a real one.)
+  only — an innate's *effect* may diverge by design: see "an innate is a pure boon"
+  above, where Levitate and Unaware are both intentionally a bit stronger than the real ability.)
 - **Identity stays deterministic**: innates are *never* copied/swapped/displayed
   as identity. Trace, Skill Swap, Role Play, the ability pop-up, and
   `RecordAbilityBattle` all keep reading only the primary slot
@@ -138,21 +162,27 @@ How much is needed depends on the ability class:
     (`src/frontier_battle_info.c`) already iterate the whole innate list, so they
     show any allowlisted ability with no per-ability work.
 
-  **Unaware is the *minimal* calc-modifier worked example** — a pure stat-stage
-  ignore with *no* pure-boon divergence, no pop-up, and no AI plumbing beyond what
-  the shared calc gives for free. It only needed an `IsInnateActive(battler,
-  ABILITY_UNAWARE)` clause beside the four existing `ability == ABILITY_UNAWARE`
-  comparisons in `src/battle_util.c`: the offensive and defensive stat-stage reads
-  in the damage calc, plus the evasion/accuracy reads in `GetTotalAccuracy` and
+  **Unaware is the *minimal* calc-modifier worked example** — no pop-up, and no AI
+  plumbing beyond what the shared calc gives for free. It needed only a small clause
+  beside the four existing `ability == ABILITY_UNAWARE` comparisons in
+  `src/battle_util.c`: the offensive and defensive stat-stage reads in the damage
+  calc, plus the evasion/accuracy reads in `GetTotalAccuracy` and
   `GetAccEvasionStageDelta`. Each reads a cached `ctx->abilities[...]` / parameter,
-  so the `IsInnateActive()` clause sits *alongside* the cached comparison (the
-  cached-local idiom from the easy case). Suppression parity is automatic: Unaware
-  is `breakable`, so an attacker's Mold Breaker drops both the chosen-ability path
-  (`GetBattlerAbility` already returns `NONE`) and the innate
-  (`IsInnateActive` → `CanBreakThroughInnate`). On-field AI damage prediction is
-  correct for free because it reads the real battler's species through
-  `IsInnateActive`; off-field AI heuristics (`AI_IsAbilityOnSide` sites) are left
-  as a known minor-quality gap, deliberately not wired — keeping the footprint small.
+  so the innate clause sits *alongside* the cached comparison (the cached-local idiom
+  from the easy case). **But it is *not* a 1:1 copy — it's the pure-boon worked
+  example for a calc modifier** (see "an innate is a pure boon" above): rather than
+  blanking the foe's stat stage like the real ability (`stage = DEFAULT_STAT_STAGE`),
+  the innate routes the stage through `InnateUnawareBoonStage()`, which caps it at
+  default only when it's a *boost* and leaves a *drop* in place — so each site becomes
+  `if (real Unaware) stage = DEFAULT; else stage = InnateUnawareBoonStage(b, stage);`.
+  Because every Unaware site favors the *lower* stage for its holder, the same helper
+  works at all four. Suppression parity is still automatic: Unaware is `breakable`, so
+  an attacker's Mold Breaker drops both the chosen-ability path (`GetBattlerAbility`
+  already returns `NONE`) and the innate (`IsInnateActive` → `CanBreakThroughInnate`).
+  On-field AI damage prediction is correct for free because it reads the real
+  battler's species through `IsInnateActive`; off-field AI heuristics
+  (`AI_IsAbilityOnSide` sites) are left as a known minor-quality gap, deliberately not
+  wired — keeping the footprint small.
 
 - **Silent on-event effect** (fires at a single event site with no script /
   pop-up / animation — e.g. **Regenerator**, the worked example). No driver

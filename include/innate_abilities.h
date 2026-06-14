@@ -19,12 +19,14 @@
 // REGENERATOR (a silent 1/3-HP heal fired at the single switch-out site in
 // src/battle_script_commands.c), and UNAWARE (a passive calc modifier that ignores
 // the foe's stat-stage changes, handled at the damage/accuracy calc sites in
-// src/battle_util.c). NOTE: an innate Levitate is
-// intentionally a *pure boon* and NOT a 1:1 copy of a real Levitate — it grants Ground / entry-
-// hazard immunity like the real thing, but the fork also keeps the mon grounded for the
-// beneficial ground interactions (field terrain, Toxic Spikes absorption) via
-// IsBattlerGroundedForBenefit(). See the ALLOWLIST note in src/innate_abilities.c. To add another
-// ability: wire its specific effect, extend the allowlist comment in src/innate_abilities.c, and add a test.
+// src/battle_util.c). NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
+// ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
+// immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground
+// interactions (field terrain, Toxic Spikes absorption) via IsBattlerGroundedForBenefit(); an innate
+// Unaware ignores the foe's stat *boosts* but keeps the foe's stat *drops* (the favorable half) via
+// InnateUnawareBoonStage(), where a real Unaware would ignore the drop too and take more damage for it.
+// See the ALLOWLIST note in src/innate_abilities.c. To add another ability: wire its specific effect
+// (boon-only where the real ability has a downside), extend the allowlist comment in src/innate_abilities.c, and add a test.
 // The step-by-step extension playbook lives in INNATE_ABILITIES.md (repo root).
 //
 // This header exposes only the raw data lookups (no battle/suppression logic).

@@ -34,14 +34,18 @@
 //   - ABILITY_UNAWARE — ignores the foe's stat-stage changes in the damage and accuracy calcs,
 //     handled in src/battle_util.c (the four calc sites that read ABILITY_UNAWARE — offensive and
 //     defensive stat stages in the damage calc, plus evasion/accuracy in GetTotalAccuracy and
-//     GetAccEvasionStageDelta — each gained an IsInnateActive(battler, ABILITY_UNAWARE) clause
-//     next to the chosen-ability test). A pure calc-modifier passive like Levitate: no script /
-//     pop-up / driver. Suppression parity holds via IsInnateActive() — Unaware is breakable, so an
-//     attacker's Mold Breaker ignores an innate Unaware on the defender exactly as it would the
-//     real ability. This populates the canon Unaware users so they keep the stat-ignore no matter
-//     which slot the build picks, plus flavor picks too dull/dazed/asleep to notice the foe's
-//     buffs (Numel's "doesn't notice being hit", the dazed Psyduck line, the ever-sleeping Komala,
-//     the unbothered Snorlax line).
+//     GetAccEvasionStageDelta — route the innate through InnateUnawareBoonStage() next to the
+//     chosen-ability test). A pure calc-modifier passive like Levitate: no script / pop-up / driver.
+//     Suppression parity holds via IsInnateActive() — Unaware is breakable, so an attacker's Mold
+//     Breaker ignores an innate Unaware on the defender exactly as it would the real ability.
+//     DELIBERATE DIVERGENCE: an innate Unaware is a *pure boon*, NOT identical to a real Unaware. A
+//     real Unaware blanks the foe's stat stage in both directions (so it ignores a foe's *drop* too,
+//     and takes more damage / deals less for it); the innate ignores only the foe's *boosts* and
+//     keeps the foe's *drops* (always the favorable half — see InnateUnawareBoonStage, battle_util.c).
+//     This populates the canon Unaware users so they keep the stat-ignore no matter which slot the
+//     build picks, plus flavor picks too dull/dazed/asleep to notice the foe's buffs (Numel's
+//     "doesn't notice being hit", the dazed Psyduck line, the ever-sleeping Komala, the unbothered
+//     Snorlax line).
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 

@@ -486,3 +486,70 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Unaware user keeps it via 
         EXPECT_EQ(damage[1], damage[0]); // innate Unaware ignores the +2 Atk despite chosen Magic Guard
     }
 }
+
+// FORK divergence: an innate Unaware is a *pure boon*, NOT a 1:1 real Unaware. A real
+// Unaware blanks the foe's stat stage both ways — so it ignores a foe's *drop* too and
+// takes more damage for it — whereas the innate ignores only the foe's *boosts* and keeps
+// its drops (via InnateUnawareBoonStage). Defensive half: with the attacker's Attack
+// lowered, an innate-only Unaware respects the drop (less damage), while a real Unaware
+// ignores it (full damage). Clefable can run either: chosen Magic Guard -> Unaware is
+// innate-only; chosen Unaware -> the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware keeps the attacker's Attack drop (pure boon); real Unaware ignores it")
+{
+    s16 damage[2];
+    enum Ability chosen;
+    PARAMETRIZE { chosen = ABILITY_MAGIC_GUARD; } // Unaware innate-only -> boon (respects the drop)
+    PARAMETRIZE { chosen = ABILITY_UNAWARE; }     // real Unaware -> ignores the drop (canon)
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_UNAWARE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(chosen); Moves(MOVE_GROWL, MOVE_CELEBRATE); } // outspeeds Wobbuffet
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TACKLE); } // neutral Atk
+        TURN { MOVE(player, MOVE_GROWL);     MOVE(opponent, MOVE_TACKLE); } // Growl resolves first: -1 Atk, then Tackle
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[0]);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_GROWL, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[1]);
+    } THEN {
+        if (chosen == ABILITY_MAGIC_GUARD)
+            EXPECT_LT(damage[1], damage[0]); // boon: the -1 Atk drop is respected -> less damage
+        else
+            EXPECT_EQ(damage[1], damage[0]); // real Unaware ignores the drop -> same damage
+    }
+}
+
+// Offensive half of the same divergence: against a target that lowered its own Sp. Def,
+// an innate-only Unaware keeps the drop (more damage), while a real Unaware ignores it.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware keeps the target's Defense drop (pure boon); real Unaware ignores it")
+{
+    s16 damage[2];
+    enum Ability chosen;
+    PARAMETRIZE { chosen = ABILITY_MAGIC_GUARD; } // Unaware innate-only -> boon (respects the drop)
+    PARAMETRIZE { chosen = ABILITY_UNAWARE; }     // real Unaware -> ignores the drop (canon)
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_UNAWARE));
+        ASSUME(GetMoveCategory(MOVE_SWIFT) == DAMAGE_CATEGORY_SPECIAL); // reads the target's Sp. Def
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(chosen); Moves(MOVE_SWIFT, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SHELL_SMASH, MOVE_CELEBRATE); } // self -1 Sp. Def
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWIFT);    MOVE(opponent, MOVE_CELEBRATE); }     // neutral Sp. Def
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_SHELL_SMASH); } // target Sp. Def -1
+        TURN { MOVE(player, MOVE_SWIFT);    MOVE(opponent, MOVE_CELEBRATE); }     // target Sp. Def -1
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWIFT, player);
+        HP_BAR(opponent, captureDamage: &damage[0]);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SHELL_SMASH, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWIFT, player);
+        HP_BAR(opponent, captureDamage: &damage[1]);
+    } THEN {
+        if (chosen == ABILITY_MAGIC_GUARD)
+            EXPECT_GT(damage[1], damage[0]); // boon: the target's -1 Sp. Def is respected -> more damage
+        else
+            EXPECT_EQ(damage[1], damage[0]); // real Unaware ignores the target's Sp. Def drop
+    }
+}
