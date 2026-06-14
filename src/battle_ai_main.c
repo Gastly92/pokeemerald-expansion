@@ -6,6 +6,7 @@
 #include "battle_ai_util.h"
 #include "battle_ai_items.h"
 #include "battle_ai_switch.h"
+#include "battle_ai_species_overrides.h" // FORK: species-aware AI overrides
 #include "battle_ai_main.h"
 #include "battle_ai_record.h"
 #include "battle_stat_change.h"
@@ -110,7 +111,7 @@ static s32 (*const sBattleAiFuncTable[])(enum BattlerId, enum BattlerId, enum Mo
     [31] = NULL,                     // Unused
     [32] = NULL,                     // Unused
     [33] = NULL,                     // Unused
-    [34] = NULL,                     // Unused
+    [34] = AI_GetSpeciesOverrideMoveScore, // FORK: AI_FLAG_SMART_SPECIES_LOGIC
     [35] = NULL,                     // Unused
     [36] = NULL,                     // Unused
     [37] = NULL,                     // Unused
@@ -437,6 +438,14 @@ void ReconsiderGimmick(enum BattlerId battlerAtk, enum BattlerId battlerDef, enu
         SetAIUsingGimmick(battlerAtk, NO_GIMMICK);
 
     if (gBattleStruct->gimmick.usableGimmick[battlerAtk] == GIMMICK_TERA && GetMoveEffect(move) == EFFECT_PROTECT)
+        SetAIUsingGimmick(battlerAtk, NO_GIMMICK);
+
+    // FORK: bank a Speed Boost before Mega Evolving (e.g. Sharpedo). If the chosen
+    // move is Protect for that purpose, hold the Mega for next turn.
+    if (gBattleStruct->gimmick.usableGimmick[battlerAtk] == GIMMICK_MEGA
+     && (gAiThinkingStruct->aiFlags[battlerAtk] & AI_FLAG_SMART_SPECIES_LOGIC)
+     && GetMoveEffect(move) == EFFECT_PROTECT
+     && AI_ShouldBankSpeedBoostBeforeMega(battlerAtk))
         SetAIUsingGimmick(battlerAtk, NO_GIMMICK);
 }
 

@@ -4,6 +4,7 @@
 #include "battle_ai_main.h"
 #include "battle_ai_switch.h"
 #include "battle_ai_util.h"
+#include "battle_ai_species_overrides.h" // FORK: species-aware AI overrides
 #include "battle_util.h"
 #include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — innate-aware switch evaluation
 #include "battle_anim.h"
@@ -1424,6 +1425,13 @@ bool32 ShouldSwitch(enum BattlerId battler)
     // NOTE: needs to always end with `return SetSwitchinAndSwitch` or `return FALSE`
     if (gDynamicAiSwitchFunc != NULL && gDynamicAiSwitchFunc(&switchContext)) // Create custom AI functions for specific battles via "setdynamicswitchaifunc" cmd
         return TRUE;
+
+    // FORK: species-aware veto of voluntary switches (e.g. keep transformed
+    // Palafin-Hero in). Runs before the built-in switch checks so it can override
+    // them; returning FALSE here means "stay in and attack".
+    if ((gAiThinkingStruct->aiFlags[switchContext.battler] & AI_FLAG_SMART_SPECIES_LOGIC)
+     && AI_ShouldKeepTransformedFormIn(&switchContext))
+        return FALSE;
 
     // NOTE: The sequence of the below functions matter! Do not change unless you have carefully considered the outcome.
     // Since the order is sequential, and some of these functions prompt switch to specific party members.
