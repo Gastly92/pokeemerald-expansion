@@ -13,8 +13,9 @@ Making an *arbitrary* ability work as an innate would mean routing every
 hundreds of upstream-owned sites — a large, perpetually merge-conflict-prone
 sweep. We don't do that. Instead we **wire up one ability's behavior at a time**
 and only let species declare innates from that supported set. Today the set is
-**`LEVITATE`** (a passive Ground immunity) and **`REGENERATOR`** (a silent
-1/3-HP switch-out heal).
+**`LEVITATE`** (a passive Ground immunity), **`REGENERATOR`** (a silent
+1/3-HP switch-out heal), and **`UNAWARE`** (a passive calc modifier that ignores
+the foe's stat-stage changes).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -114,6 +115,22 @@ How much is needed depends on the ability class:
     `src/pokemon_summary_screen.c`) and the Frontier battle-info viewer
     (`src/frontier_battle_info.c`) already iterate the whole innate list, so they
     show any allowlisted ability with no per-ability work.
+
+  **Unaware is the *minimal* calc-modifier worked example** — a pure stat-stage
+  ignore with *no* pure-boon divergence, no pop-up, and no AI plumbing beyond what
+  the shared calc gives for free. It only needed an `IsInnateActive(battler,
+  ABILITY_UNAWARE)` clause beside the four existing `ability == ABILITY_UNAWARE`
+  comparisons in `src/battle_util.c`: the offensive and defensive stat-stage reads
+  in the damage calc, plus the evasion/accuracy reads in `GetTotalAccuracy` and
+  `GetAccEvasionStageDelta`. Each reads a cached `ctx->abilities[...]` / parameter,
+  so the `IsInnateActive()` clause sits *alongside* the cached comparison (the
+  cached-local idiom from the easy case). Suppression parity is automatic: Unaware
+  is `breakable`, so an attacker's Mold Breaker drops both the chosen-ability path
+  (`GetBattlerAbility` already returns `NONE`) and the innate
+  (`IsInnateActive` → `CanBreakThroughInnate`). On-field AI damage prediction is
+  correct for free because it reads the real battler's species through
+  `IsInnateActive`; off-field AI heuristics (`AI_IsAbilityOnSide` sites) are left
+  as a known minor-quality gap, deliberately not wired — keeping the footprint small.
 
 - **Silent on-event effect** (fires at a single event site with no script /
   pop-up / animation — e.g. **Regenerator**, the worked example). No driver

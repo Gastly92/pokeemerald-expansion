@@ -110,7 +110,7 @@
 | :white_large_square: | Aftermath | Attackers that knock out the Pokémon with a contact move take damage equal to 1/4 of their max HP. |
 | :white_large_square: | Anticipation | When the Pokémon enters a battle, it senses whether the opponents know any one-hit KO moves or moves that are super effective against it. |
 | :white_large_square: | Forewarn | When it enters a battle, the Pokémon can tell one of the moves an opposing Pokémon has. |
-| :white_large_square: | Unaware | The Pokémon ignores the target's stat changes when attacking, and ignores the attacker's stat changes when being attacked. It cannot ignore changes to the Speed stat, however. |
+| :white_check_mark: | Unaware | The Pokémon ignores the target's stat changes when attacking, and ignores the attacker's stat changes when being attacked. It cannot ignore changes to the Speed stat, however. |
 | :white_large_square: | Tinted Lens | The Pokémon can use "not very effective" moves to deal regular damage. |
 | :white_large_square: | Filter | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :white_large_square: | Slow Start | For five turns, the Pokémon's Attack and Speed stats are halved. |

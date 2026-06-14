@@ -7035,7 +7035,8 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
     if (ctx->isCrit && atkStage < DEFAULT_STAT_STAGE)
         atkStage = DEFAULT_STAT_STAGE;
     // Pokémon with unaware ignore attack stat changes while taking damage
-    if (ctx->abilities[ctx->battlerDef] == ABILITY_UNAWARE)
+    if (ctx->abilities[ctx->battlerDef] == ABILITY_UNAWARE
+     || IsInnateActive(ctx->battlerDef, ABILITY_UNAWARE)) // FORK: innate-aware
         atkStage = DEFAULT_STAT_STAGE;
 
     atkStat *= gStatStageRatios[atkStage][0];
@@ -7322,7 +7323,8 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
     if (ctx->isCrit && defStage > DEFAULT_STAT_STAGE)
         defStage = DEFAULT_STAT_STAGE;
     // Pokémon with unaware ignore defense stat changes while dealing damage
-    if (ctx->abilities[ctx->battlerAtk] == ABILITY_UNAWARE)
+    if (ctx->abilities[ctx->battlerAtk] == ABILITY_UNAWARE
+     || IsInnateActive(ctx->battlerAtk, ABILITY_UNAWARE)) // FORK: innate-aware
         defStage = DEFAULT_STAT_STAGE;
     // certain moves also ignore stat changes
     if (MoveIgnoresDefenseEvasionStages(move))
@@ -10673,11 +10675,12 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     accStage = gBattleMons[battlerAtk].statStages[STAT_ACC];
     evasionStage = gBattleMons[battlerDef].statStages[STAT_EVASION];
     if (atkAbility == ABILITY_UNAWARE || atkAbility == ABILITY_KEEN_EYE || atkAbility == ABILITY_MINDS_EYE
-            || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE))
+            || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE)
+            || IsInnateActive(battlerAtk, ABILITY_UNAWARE)) // FORK: innate-aware
         evasionStage = DEFAULT_STAT_STAGE;
     if (MoveIgnoresDefenseEvasionStages(move))
         evasionStage = DEFAULT_STAT_STAGE;
-    if (defAbility == ABILITY_UNAWARE)
+    if (defAbility == ABILITY_UNAWARE || IsInnateActive(battlerDef, ABILITY_UNAWARE)) // FORK: innate-aware
         accStage = DEFAULT_STAT_STAGE;
 
     if (gBattleMons[battlerDef].volatiles.foresight || gBattleMons[battlerDef].volatiles.miracleEye)
@@ -10817,13 +10820,14 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
 
     if (atkAbility == ABILITY_UNAWARE || atkAbility == ABILITY_KEEN_EYE || atkAbility == ABILITY_MINDS_EYE
             || atkAbility == ABILITY_COMPOUND_EYES || atkAbility == ABILITY_VICTORY_STAR
-            || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE))
+            || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE)
+            || IsInnateActive(battlerAtk, ABILITY_UNAWARE)) // FORK: innate-aware
         evasionStage = DEFAULT_STAT_STAGE;
     if (MoveIgnoresDefenseEvasionStages(move))
         evasionStage = DEFAULT_STAT_STAGE;
     if (gBattleMons[battlerDef].volatiles.foresight || gBattleMons[battlerDef].volatiles.miracleEye)
         evasionStage = DEFAULT_STAT_STAGE;
-    if (defAbility == ABILITY_UNAWARE)
+    if (defAbility == ABILITY_UNAWARE || IsInnateActive(battlerDef, ABILITY_UNAWARE)) // FORK: innate-aware
         accStage = DEFAULT_STAT_STAGE;
 
     if (ignorePenalties)

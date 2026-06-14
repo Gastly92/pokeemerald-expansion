@@ -343,3 +343,146 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: chosen Natural Cure and innate Reg
         EXPECT_EQ(player->status1, STATUS1_NONE);     // chosen Natural Cure cleared the poison
     }
 }
+
+// ─── Innate Unaware ──────────────────────────────────────────────────────────
+// A pure calc-modifier passive: the holder ignores the foe's stat-stage changes in
+// the damage and accuracy calcs (src/battle_util.c). No script / pop-up / driver.
+// Snorlax is a flavor pick (primary Immunity/Thick Fat/Gluttony, no native Unaware),
+// so the stat-ignore is attributable solely to the innate; toggling the feature
+// isolates it. Defensive half: the attacker's Attack boosts are ignored while the
+// innate Unaware holder takes damage.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware ignores the attacker's Attack boosts when taking damage")
+{
+    s16 damage[2];
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_UNAWARE));
+        ASSUME(gSpeciesInfo[SPECIES_SNORLAX].abilities[0] != ABILITY_UNAWARE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SNORLAX);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE, MOVE_SWORDS_DANCE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }        // unboosted
+        TURN { MOVE(opponent, MOVE_SWORDS_DANCE); }  // +2 Atk
+        TURN { MOVE(opponent, MOVE_TACKLE); }        // boosted
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[0]);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWORDS_DANCE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[1]);
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(damage[1], damage[0]); // innate Unaware ignores the +2 Atk
+        else
+            EXPECT_GT(damage[1], damage[0]); // stock: the boost applies
+    }
+}
+
+// Offensive half: the innate Unaware holder ignores the target's Defense boosts while
+// dealing damage.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware ignores the target's Defense boosts when dealing damage")
+{
+    s16 damage[2];
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_UNAWARE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SNORLAX) { Moves(MOVE_TACKLE, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_IRON_DEFENSE, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }       // target Def +0
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_IRON_DEFENSE); } // target Def +2
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }       // target Def +2
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player);
+        HP_BAR(opponent, captureDamage: &damage[0]);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_IRON_DEFENSE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player);
+        HP_BAR(opponent, captureDamage: &damage[1]);
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(damage[1], damage[0]); // innate Unaware ignores the +2 Def
+        else
+            EXPECT_LT(damage[1], damage[0]); // stock: the boost reduces the hit
+    }
+}
+
+// Suppression parity: Unaware is breakable, so an attacker's Mold Breaker ignores an
+// innate Unaware on the defender exactly as it would the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Unaware")
+{
+    s16 damage[2];
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_UNAWARE].breakable);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SNORLAX); // innate Unaware
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_TACKLE, MOVE_SWORDS_DANCE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+        TURN { MOVE(opponent, MOVE_SWORDS_DANCE); }
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[0]);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWORDS_DANCE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[1]);
+    } THEN {
+        EXPECT_GT(damage[1], damage[0]); // Mold Breaker ignores the innate -> the boost applies
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Unaware")
+{
+    s16 damage[2];
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SNORLAX); // innate Unaware
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE, MOVE_SWORDS_DANCE, MOVE_GASTRO_ACID); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses the innate
+        TURN { MOVE(opponent, MOVE_SWORDS_DANCE); }
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[0]);
+        MESSAGE("Snorlax's Ability was suppressed!"); // player side: no "opposing" prefix
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWORDS_DANCE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[1]);
+    } THEN {
+        EXPECT_GT(damage[1], damage[0]); // suppressed -> the +2 Atk now applies
+    }
+}
+
+// A canon Unaware user (Clefable: Cute Charm/Magic Guard/Unaware) whose *chosen* ability
+// is something else still carries Unaware as an innate, so it keeps the stat-ignore no
+// matter which slot the build picks.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Unaware user keeps it via innate when the chosen ability differs")
+{
+    s16 damage[2];
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_UNAWARE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_GUARD); } // chosen ability is NOT Unaware
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE, MOVE_SWORDS_DANCE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+        TURN { MOVE(opponent, MOVE_SWORDS_DANCE); }
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[0]);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWORDS_DANCE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player, captureDamage: &damage[1]);
+    } THEN {
+        EXPECT_EQ(damage[1], damage[0]); // innate Unaware ignores the +2 Atk despite chosen Magic Guard
+    }
+}

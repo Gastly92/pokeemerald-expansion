@@ -56,11 +56,14 @@
 // opponent's exact set can't be read off the species alone.
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
-// that carries an innate Levitate or Regenerator always has it in battle, so its
-// .ability slot here is free to carry a *complementary* chosen ability — the mon
-// then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
+// that carries an innate Levitate, Regenerator, or Unaware always has it in battle,
+// so its .ability slot here is free to carry a *complementary* chosen ability — the
+// mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
-// still floats on its innate Levitate.
+// still floats on its innate Levitate; an Unaware staller like Clefable lists
+// ABILITY_MAGIC_GUARD yet still ignores the foe's boosts via its innate Unaware.
+// Role comments that mention "Unaware"/"Levitate"/"Regenerator" describe the set's
+// innate-backed playstyle, not the .ability field.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -561,7 +564,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware staller (toggle-friendly)
         .moves = {MOVE_MOONBLAST, MOVE_SOFT_BOILED, MOVE_TOXIC, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_MAGIC_GUARD, // Unaware now innate; chosen Magic Guard shrugs off hazard/status chip
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
         .teraType = TYPE_STEEL,
@@ -2921,7 +2924,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware physical wall
         .moves = {MOVE_EARTHQUAKE, MOVE_CHILLING_WATER, MOVE_RECOVER, MOVE_TOXIC},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_WATER_ABSORB, // Unaware now innate; chosen Water Absorb adds a Water immunity + heal
         .nature = NATURE_RELAXED,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_POISON,
@@ -5706,7 +5709,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware wall
         .moves = {MOVE_WATERFALL, MOVE_BODY_SLAM, MOVE_YAWN, MOVE_ROOST},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_MOODY, // Unaware now innate; chosen Moody slowly snowballs the bulky wall
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_WATER,
@@ -10735,7 +10738,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware Counter/Toxic staller
         .moves = {MOVE_COUNTER, MOVE_TOXIC, MOVE_RECOVER, MOVE_SOAK},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_INNARDS_OUT, // Unaware now innate; chosen Innards Out punishes the KO on this Counter staller
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
         .teraType = TYPE_WATER,
@@ -13144,7 +13147,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Torch Song bulky setup pivot
         .moves = {MOVE_TORCH_SONG, MOVE_SHADOW_BALL, MOVE_SLACK_OFF, MOVE_WILL_O_WISP},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_BLAZE, // Unaware now innate; chosen Blaze backs the Torch Song setup at low HP
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
         .teraType = TYPE_FAIRY,
@@ -13155,7 +13158,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware special wall
         .moves = {MOVE_TORCH_SONG, MOVE_HEX, MOVE_SLACK_OFF, MOVE_WILL_O_WISP},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_BLAZE, // Unaware now innate; chosen Blaze is the only other legal slot
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
         .teraType = TYPE_WATER,
@@ -13866,7 +13869,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware Curse physical wall
         .moves = {MOVE_CURSE, MOVE_WAVE_CRASH, MOVE_REST, MOVE_SLEEP_TALK},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_WATER_VEIL, // Unaware now innate; chosen Water Veil keeps this Curse wall burn-proof
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 4, 252, 0, 0, 0),
         .teraType = TYPE_DRAGON,
@@ -13877,7 +13880,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Order Up / bulky pivot
         .moves = {MOVE_WAVE_CRASH, MOVE_BODY_PRESS, MOVE_EARTHQUAKE, MOVE_REST},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_OBLIVIOUS, // Unaware now innate; chosen Oblivious keeps the pivot Taunt/Intimidate-proof
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_GRASS,
@@ -13927,7 +13930,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Unaware special wall / status spreader
         .moves = {MOVE_TOXIC, MOVE_RECOVER, MOVE_EARTHQUAKE, MOVE_TOXIC_SPIKES},
-        .ability = ABILITY_UNAWARE,
+        .ability = ABILITY_WATER_ABSORB, // Unaware now innate; chosen Water Absorb adds a Water immunity to the special wall
         .nature = NATURE_CAREFUL,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
         .teraType = TYPE_STEEL,
