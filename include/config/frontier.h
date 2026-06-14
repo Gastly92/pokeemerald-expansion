@@ -73,8 +73,9 @@
 // prevention + smart Tera. Tweak here to taste — e.g. add AI_FLAG_PREDICTION
 // for a meaner AI, or drop AI_FLAG_OMNISCIENT so it can't see the player's team.
 // Only expanded at the use site (battle_factory.c, which includes
-// constants/battle_ai.h), so no extra include is needed here.
-#define B_FRONTIER_HARD_AI_FLAGS    AI_FLAG_SMART_TRAINER
+// constants/battle_ai.h and battle_ai_species_overrides.h), so no extra include
+// is needed here.
+#define B_FRONTIER_HARD_AI_FLAGS    (AI_FLAG_SMART_TRAINER | AI_FLAG_SMART_SPECIES_LOGIC)
 
 // If TRUE, the post-battle Battle Factory rental-swap screen lets the player
 // open a Pokémon summary for the *opponent's* mons too, not just their own.

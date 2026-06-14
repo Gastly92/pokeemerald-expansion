@@ -13,6 +13,7 @@
 #include "species_tiers.h"
 #include "frontier_draft.h" // FORK: shared competitive-draft rules
 #include "constants/battle_ai.h"
+#include "battle_ai_species_overrides.h" // FORK: AI_FLAG_SMART_SPECIES_LOGIC for B_FRONTIER_HARD_AI_FLAGS
 #include "constants/hold_effects.h"
 #include "constants/battle_factory.h"
 #include "constants/battle_frontier.h"
