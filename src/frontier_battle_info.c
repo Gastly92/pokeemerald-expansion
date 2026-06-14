@@ -390,45 +390,50 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
 
     // Ability — only once genuinely revealed in battle (gAiPartyData pre-knows it
     // under AI_FLAG_OMNISCIENT, so gate on our own reveal flag instead).
+    //
+    // FORK: FEATURE_INNATE_ABILITIES — the foe's innate abilities (always-active
+    // passives) share this single line instead of a separate "Innate:" row. The
+    // dedicated row pushed every line below it down by LINE_H, sliding the bottom
+    // Moves slot under the navigation bar; folding the innates into a parenthetical
+    // here (mirroring the space-separated hazard list on the Field page) keeps the
+    // page within its fixed height. The chosen ability is listed plainly; innates
+    // follow in "(+Name, ...)" with a leading '+' to mark them as additional
+    // passives. Innates are gated on the same in-battle reveal flag as the chosen
+    // ability, so the viewer still shows only what has been seen in action and
+    // doesn't leak that the mon has innates until then.
     bool32 abilitySeen = (gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
     p = StringCopy(line, COMPOUND_STRING("Ability: "));
     if (abilitySeen && revealed != NULL && revealed->ability != ABILITY_NONE)
-        StringCopy(p, gAbilitiesInfo[revealed->ability].name);
-    else
-        StringCopy(p, COMPOUND_STRING("?"));
-    PrintLine(windowId, line, 0, y);
-    y += LINE_H;
-
-    // FORK: FEATURE_INNATE_ABILITIES — list the foe's innate abilities (always-active
-    // passives on top of the chosen ability above). Gated on the same in-battle reveal
-    // flag as the chosen ability, so the viewer keeps showing only what has been seen
-    // in action and doesn't even leak that the mon has innates until then.
-    if (GetConfig(FEATURE_INNATE_ABILITIES) && abilitySeen)
     {
-        enum Species foeSpecies = GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL);
-        bool32 anyInnate = FALSE;
-        p = StringCopy(line, COMPOUND_STRING("Innate: "));
-        for (u32 slot = 0; ; slot++)
+        p = StringCopy(p, gAbilitiesInfo[revealed->ability].name);
+        if (GetConfig(FEATURE_INNATE_ABILITIES))
         {
-            enum Ability innate = GetSpeciesInnate(foeSpecies, slot);
-            if (innate == ABILITY_NONE)
-                break;
-            // Skip an innate that just duplicates the revealed chosen ability above
-            // (e.g. a species that still carries Levitate as its primary), so the line
-            // stays meaningful rather than echoing "Levitate" twice.
-            if (revealed != NULL && innate == revealed->ability)
-                continue;
+            enum Species foeSpecies = GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL);
+            bool32 anyInnate = FALSE;
+            for (u32 slot = 0; ; slot++)
+            {
+                enum Ability innate = GetSpeciesInnate(foeSpecies, slot);
+                if (innate == ABILITY_NONE)
+                    break;
+                // Skip an innate that just duplicates the revealed chosen ability
+                // (e.g. a species that still carries Levitate as its primary), so the
+                // line doesn't echo the same name twice.
+                if (innate == revealed->ability)
+                    continue;
+                p = StringCopy(p, anyInnate ? COMPOUND_STRING(", ") : COMPOUND_STRING(" (+"));
+                p = StringCopy(p, gAbilitiesInfo[innate].name);
+                anyInnate = TRUE;
+            }
             if (anyInnate)
-                p = StringCopy(p, COMPOUND_STRING(", "));
-            p = StringCopy(p, gAbilitiesInfo[innate].name);
-            anyInnate = TRUE;
-        }
-        if (anyInnate)
-        {
-            PrintLine(windowId, line, 0, y);
-            y += LINE_H;
+                p = StringCopy(p, COMPOUND_STRING(")"));
         }
     }
+    else
+    {
+        StringCopy(p, COMPOUND_STRING("?"));
+    }
+    PrintLine(windowId, line, 0, y);
+    y += LINE_H;
 
     // Held item — only once its situation has been genuinely revealed in battle.
     // The reveal bit is set both when an item's effect activates *and* when the
