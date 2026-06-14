@@ -59,6 +59,9 @@ BattleFrontier_ReceptionGate_EventScript_ScottScene::
 	applymovement LOCALID_FRONTIER_RECEPTION_SCOTT, BattleFrontier_ReceptionGate_Movement_ScottExit
 	waitmovement 0
 	removeobject LOCALID_FRONTIER_RECEPTION_SCOTT
+	@ FORK: our new game starts with this hide flag clear so Scott appears for the
+	@ restored intro; set it now so he doesn't respawn standing at the gate after.
+	setflag FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT
 	releaseall
 	end
 
@@ -331,12 +334,14 @@ BattleFrontier_ReceptionGate_Text_OhMrScottGoodDay:
 BattleFrontier_ReceptionGate_Text_ScottGreatToSeeYouHere:
 	.string "SCOTT: It's great to see you here,\n"
 	.string "it really is!\p"
-	.string "I hope you'll take your time and\n"
-	.string "explore everywhere.\p"
-	.string "Naturally, I hope you'll also experience\n"
-	.string "the pure essence of battling.\p"
-	.string "I also have my quarters here, so feel\n"
-	.string "free to visit if you have time.$"
+	.string "But, hoho--you've come with no\n"
+	.string "POKéMON of your own!\p"
+	.string "Then start at the BATTLE FACTORY.\n"
+	.string "Rent a team there and rack up\l"
+	.string "BATTLE POINTS by winning.\p"
+	.string "Trade those POINTS for POKéMON of\n"
+	.string "your very own, and the whole\l"
+	.string "FRONTIER opens up to you!$"
 
 BattleFrontier_ReceptionGate_Text_YourGuideToFacilities:
 	.string "I'm your guide to the various facilities\n"
