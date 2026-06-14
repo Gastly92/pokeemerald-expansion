@@ -5125,7 +5125,7 @@ bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability,
 // ignore only for the favorable half — it caps a stage at default when it's a *boost*,
 // but leaves a *drop* in place. So an innate-Unaware mon ignores the foe's boosts yet
 // still reaps the foe's self-inflicted drops; a real Unaware forgoes the latter. Returns
-// the boon-adjusted stage. (See INNATE_ABILITIES.md "innates are pure boons".)
+// the boon-adjusted stage. (See fork-docs/INNATE_ABILITIES.md "innates are pure boons".)
 static inline s32 InnateUnawareBoonStage(enum BattlerId battler, s32 stage)
 {
     if (stage > DEFAULT_STAT_STAGE && IsInnateActive(battler, ABILITY_UNAWARE))

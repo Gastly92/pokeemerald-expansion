@@ -35,7 +35,7 @@
 //          works in either mode is FORMAT_BOTH. (See frontier_extended_mons.h.)
 //
 // Design intent — these sets are tuned for THIS fork, not the live competitive
-// metagame. Account for the DETERMINISTIC_* changes (see FORK.md):
+// metagame. Account for the DETERMINISTIC_* changes (see fork-docs/FORK.md):
 //  - Accuracy never misses (low-accuracy moves instead cost extra PP), so
 //    Hydro Pump / Focus Blast / Fire Blast / Hurricane are "reliable" — pick power.
 //  - Crits only land when guaranteed; crit items (Scope Lens / Razor Claw / Lucky

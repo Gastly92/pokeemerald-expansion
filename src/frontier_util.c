@@ -3016,7 +3016,7 @@ void SetBattleFacilityTrainerGfxId(u16 trainerId, u8 tempVarId)
         // battle spot it slides ("glides") instead of animating a walk. This
         // is a sprite-art limitation (would need ~6 new authored frames per
         // leader, ×8), not a logic bug — left as-is for now. See the Tower
-        // boss row in FORK.md (Known limitations) for the options.
+        // boss row in fork-docs/FORK.md (Known limitations) for the options.
         u8 gfxId = GetTowerBossObjEventGfx(trainerId);
         switch (tempVarId)
         {

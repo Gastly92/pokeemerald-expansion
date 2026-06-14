@@ -4,7 +4,7 @@ This is a fork of [RHH's `pokeemerald-expansion`](https://github.com/rh-hideout/
 It tracks upstream and layers a set of custom features on top to build a
 **standalone single-player romhack** centered on quality-of-life improvements to
 the Battle Frontier facilities, growing into a fuller game over time. See
-[`CLAUDE.md`](CLAUDE.md) for the conventions and the upstream-sync process.
+[`CLAUDE.md`](../CLAUDE.md) for the conventions and the upstream-sync process.
 
 This file is an **index**, not a spec: each feature is gated by a config flag
 whose comment in `include/config/*.h` is the source of truth for its exact
