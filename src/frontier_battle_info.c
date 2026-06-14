@@ -37,6 +37,13 @@
 
 bool8 gFrontierBattleInfoActive = FALSE;
 
+// FORK: where to return when the viewer is closed. The in-battle action menu sets
+// this to ReshowBattleScreenAfterMenu (back to the battle); the in-battle "choose
+// a Pokémon" party menu sets it to a callback that re-opens that party menu. Set
+// via OpenFrontierBattleInfo() before CB2_FrontierBattleInfo runs; defaults to the
+// battle screen so a stray open can never strand the player.
+static MainCallback sInfoExitCallback = NULL;
+
 #define INFO_WIN_WIDTH   28
 #define INFO_WIN_HEIGHT  18
 
@@ -791,7 +798,7 @@ static void Task_InfoFadeOut(u8 taskId)
     {
         DestroyTask(taskId);
         FreeAllWindowBuffers();
-        SetMainCallback2(ReshowBattleScreenAfterMenu);
+        SetMainCallback2(sInfoExitCallback != NULL ? sInfoExitCallback : ReshowBattleScreenAfterMenu);
     }
 }
 
@@ -856,6 +863,15 @@ static void VBlankCB(void)
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
+}
+
+// FORK: open the read-only viewer, returning to returnCallback when the player
+// closes it. Lets the same viewer be reached from the battle action menu (return
+// to the battle screen) and the in-battle party menu (return to the party menu).
+void OpenFrontierBattleInfo(MainCallback returnCallback)
+{
+    sInfoExitCallback = returnCallback;
+    SetMainCallback2(CB2_FrontierBattleInfo);
 }
 
 void CB2_FrontierBattleInfo(void)

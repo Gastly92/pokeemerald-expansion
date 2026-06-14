@@ -2411,7 +2411,7 @@ static void PlayerHandleBattleDebug(enum BattlerId battler)
     if (gFrontierBattleInfoActive)
     {
         gFrontierBattleInfoActive = FALSE;
-        SetMainCallback2(CB2_FrontierBattleInfo);
+        OpenFrontierBattleInfo(ReshowBattleScreenAfterMenu);
     }
     else
     {
