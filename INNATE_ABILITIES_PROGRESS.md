@@ -302,16 +302,16 @@
 | :white_large_square: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
 | :white_large_square: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |
 | :white_large_square: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
-| :white_large_square: | Embody Aspect | The Pokémon's heart fills with memories, causing the Teal Mask to shine and the Pokémon's Speed stat to be boosted. |
-| :white_large_square: | Embody Aspect | The Pokémon's heart fills with memories, causing the Hearthflame Mask to shine and the Pokémon's Attack stat to be boosted. |
-| :white_large_square: | Embody Aspect | The Pokémon's heart fills with memories, causing the Wellspring Mask to shine and the Pokémon's Sp. Def stat to be boosted. |
-| :white_large_square: | Embody Aspect | The Pokémon's heart fills with memories, causing the Cornerstone Mask to shine and the Pokémon's Defense stat to be boosted. |
+| :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Teal Mask to shine and the Pokémon's Speed stat to be boosted. |
+| :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Hearthflame Mask to shine and the Pokémon's Attack stat to be boosted. |
+| :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Wellspring Mask to shine and the Pokémon's Sp. Def stat to be boosted. |
+| :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Cornerstone Mask to shine and the Pokémon's Defense stat to be boosted. |
 | :white_large_square: | Toxic Chain | The power of the Pokémon's toxic chain may badly poison any target the Pokémon hits with a move. |
 | :white_large_square: | Supersweet Syrup | When the Pokémon enters a battle, opponents' evasiveness is lowered by 1 stage. This Ability is triggered only once per battle. |
-| :white_large_square: | Tera Shift | When the Pokémon enters a battle, it absorbs the energy around itself and transforms into its Terastal Form. |
-| :white_large_square: | Tera Shell | The Pokémon's shell contains the powers of each type. All damage-dealing moves that hit the Pokémon when its HP is full will not be very effective. |
-| :white_large_square: | Teraform Zero | When Terapagos changes into its Stellar Form, it uses its hidden powers to eliminate all effects of weather and terrain, reducing them to zero. |
-| :white_large_square: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
+| :x: | Tera Shift | When the Pokémon enters a battle, it absorbs the energy around itself and transforms into its Terastal Form. |
+| :x: | Tera Shell | The Pokémon's shell contains the powers of each type. All damage-dealing moves that hit the Pokémon when its HP is full will not be very effective. |
+| :x: | Teraform Zero | When Terapagos changes into its Stellar Form, it uses its hidden powers to eliminate all effects of weather and terrain, reducing them to zero. |
+| :x: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
 | :white_large_square: | Piercing Drill | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :white_large_square: | Dragonize | The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%. |
 | :white_large_square: | Mega Sol | Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight. |
