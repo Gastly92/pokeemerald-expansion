@@ -62,7 +62,8 @@ at a time, so outcomes follow from player choices and battle state rather than
 luck. Each source gets its own flag in `config/deterministic.h` (`FALSE` = stock
 behavior); the fork enables them as they mature. As random upsides are removed,
 the plan is to introduce compensating systems so battles stay balanced rather
-than simply harder or easier.
+than simply harder or easier. See **[`DETERMINISM.md`](DETERMINISM.md)** for the
+full rationale and per-flag breakdown.
 
 **Design intent — this is a single-player game.** These changes are *not* a
 competitive-meta rebalance; there's no human opponent, so multiplayer concerns
