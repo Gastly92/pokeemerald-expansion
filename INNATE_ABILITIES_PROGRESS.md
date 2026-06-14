@@ -60,7 +60,7 @@
 | :white_large_square: | Cute Charm | When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if the attacker and the Pokémon are of opposite genders. |
 | :white_large_square: | Plus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :white_large_square: | Minus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
-| :white_large_square: | Forecast | The Pokémon transforms with the weather to change its type to Water, Fire, or Ice. |
+| :x: | Forecast | The Pokémon transforms with the weather to change its type to Water, Fire, or Ice. |
 | :white_large_square: | Sticky Hold | The Pokémon's held item cannot be stolen or removed by other Pokémon. |
 | :white_large_square: | Shed Skin | The Pokémon has a 30% chance of curing its own status conditions at the end of every turn. |
 | :white_large_square: | Guts | When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon's physical moves. |
@@ -122,7 +122,7 @@
 | :white_large_square: | Honey Gather | The Pokémon may gather Honey after a battle. |
 | :white_large_square: | Frisk | When the Pokémon enters a battle, it identifies opponents' held items. |
 | :white_large_square: | Reckless | Boosts the power of the Pokémon's moves by 20% if they have recoil or crash damage. |
-| :white_large_square: | Multitype | Changes the Pokémon's type to match the plate it holds. |
+| :x: | Multitype | Changes the Pokémon's type to match the plate it holds. |
 | :white_large_square: | Flower Gift | Boosts the Attack and Sp. Def stats of the Pokémon and its allies in harsh sunlight. |
 | :white_large_square: | Bad Dreams | Damages opposing Pokémon that are asleep. |
 | :white_large_square: | Pickpocket | When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item. |
@@ -162,7 +162,7 @@
 | :white_large_square: | Prankster | Increases the priority of the Pokémon's status moves by 1 stage. |
 | :white_large_square: | Sand Force | Boosts the power of the Pokémon's Rock-, Ground-, and Steel-type moves by 30% in a sandstorm. |
 | :white_large_square: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
-| :white_large_square: | Zen Mode | Changes the Pokémon's shape when its HP drops to half or less. |
+| :x: | Zen Mode | Changes the Pokémon's shape when its HP drops to half or less. |
 | :white_large_square: | Victory Star | Boosts the accuracy of the Pokémon and its allies. |
 | :white_large_square: | Turboblaze | The Pokémon's moves are unimpeded by the Ability of the target. |
 | :white_large_square: | Teravolt | The Pokémon's moves are unimpeded by the Ability of the target. |
@@ -177,7 +177,7 @@
 | :white_large_square: | Strong Jaw | Boosts the power of the Pokémon's biting moves by 50%. |
 | :white_large_square: | Refrigerate | The Pokémon's Normal-type moves become Ice-type moves and their power is boosted by 20%. |
 | :white_large_square: | Sweet Veil | The Pokémon and its allies cannot become drowsy or be put to sleep. |
-| :white_large_square: | Stance Change | The Pokémon changes into its Blade Forme when it attacks and changes into its Shield Forme when it uses the move King's Shield. |
+| :x: | Stance Change | The Pokémon changes into its Blade Forme when it attacks and changes into its Shield Forme when it uses the move King's Shield. |
 | :white_large_square: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
 | :white_large_square: | Mega Launcher | Boosts the power of the Pokémon's pulse moves by 50%. |
 | :white_large_square: | Grass Pelt | Boosts the Pokémon's Defense stat on Grassy Terrain. |
@@ -198,7 +198,7 @@
 | :white_large_square: | Emergency Exit | The Pokémon, sensing danger, switches out when its HP drops to half or less. |
 | :white_large_square: | Water Compaction | Boosts the Defense stat sharply when the Pokémon is hit by a Water-type move. |
 | :white_large_square: | Merciless | The Pokémon's attacks become critical hits if the target is poisoned or badly poisoned. |
-| :white_large_square: | Shields Down | When its HP drops to half or less, the Pokémon's shell breaks and it becomes aggressive. |
+| :x: | Shields Down | When its HP drops to half or less, the Pokémon's shell breaks and it becomes aggressive. |
 | :white_large_square: | Stakeout | Doubles the damage dealt to a target that has just switched into battle. |
 | :white_large_square: | Water Bubble | Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned. |
 | :white_large_square: | Steelworker | Powers up Steel-type moves. |
@@ -209,10 +209,10 @@
 | :white_large_square: | Triage | Gives priority to the Pokémon's healing moves. |
 | :white_large_square: | Galvanize | Normal-type moves become Electric-type moves. The power of those moves is boosted a little. |
 | :white_large_square: | Surge Surfer | Doubles the Pokémon's Speed stat on Electric Terrain. |
-| :white_large_square: | Schooling | When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low. |
-| :white_large_square: | Disguise | When the Pokémon is in its Disguised Form and would take damage from a move, it loses 1/8 of its max HP instead of taking the damage, then changes into its Busted Form. |
-| :white_large_square: | Battle Bond | When the Pokémon knocks out a target, its bond with its Trainer is strengthened, and its Attack, Sp. Atk, and Speed stats are boosted. |
-| :white_large_square: | Power Construct | Cells gather to aid the Pokémon when its HP drops to half or less, causing it to change into its Complete Forme. |
+| :x: | Schooling | When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low. |
+| :x: | Disguise | When the Pokémon is in its Disguised Form and would take damage from a move, it loses 1/8 of its max HP instead of taking the damage, then changes into its Busted Form. |
+| :x: | Battle Bond | When the Pokémon knocks out a target, its bond with its Trainer is strengthened, and its Attack, Sp. Atk, and Speed stats are boosted. |
+| :x: | Power Construct | Cells gather to aid the Pokémon when its HP drops to half or less, causing it to change into its Complete Forme. |
 | :white_large_square: | Corrosion | The Pokémon can poison or badly poison targets even if they're Steel or Poison types. |
 | :white_large_square: | Comatose | The Pokémon is always drowsing and will never wake up. It can attack while in its sleeping state. |
 | :white_large_square: | Queenly Majesty | Opponents are unable to use priority moves against the Pokémon or its allies. |
@@ -226,7 +226,7 @@
 | :white_large_square: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
 | :white_large_square: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |
 | :white_large_square: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
-| :white_large_square: | RKS System | Changes the Pokémon's type to match the memory disc it holds. |
+| :x: | RKS System | Changes the Pokémon's type to match the memory disc it holds. |
 | :white_large_square: | Electric Surge | Turns the ground into Electric Terrain when the Pokémon enters a battle. |
 | :white_large_square: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |
 | :white_large_square: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
@@ -242,14 +242,14 @@
 | :white_large_square: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |
 | :white_large_square: | Propeller Tail | Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves. |
 | :white_large_square: | Mirror Armor | Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them. |
-| :white_large_square: | Gulp Missile | When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack. |
+| :x: | Gulp Missile | When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack. |
 | :white_large_square: | Stalwart | The Pokémon ignores the effects of Abilities and moves that draw in moves. |
 | :white_large_square: | Steam Engine | Boosts the Speed stat drastically when the Pokémon is hit by a Fire- or Water-type move. |
 | :white_large_square: | Punk Rock | Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves. |
 | :white_large_square: | Sand Spit | Summons a sandstorm for 5 turns when the Pokémon takes damage from moves. |
 | :white_large_square: | Ice Scales | The Pokémon is protected by ice scales, which halve the damage taken from special moves. |
 | :white_large_square: | Ripen | Doubles the effects of Berries eaten by the Pokémon. |
-| :white_large_square: | Ice Face | The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it snows. |
+| :x: | Ice Face | The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it snows. |
 | :white_large_square: | Power Spot | Just being next to the Pokémon powers up moves. |
 | :white_large_square: | Mimicry | The Pokémon's type changes depending on the terrain. |
 | :white_large_square: | Screen Cleaner | When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses. |
@@ -259,7 +259,7 @@
 | :white_large_square: | Gorilla Tactics | Boosts the Pokémon's Attack stat, but only allows the use of the first selected move. |
 | :white_large_square: | Neutralizing Gas | While the Pokémon is in the battle, the effects of all other Pokémon's Abilities will be nullified or will not be triggered. |
 | :white_large_square: | Pastel Veil | Prevents the Pokémon and its allies from being poisoned. |
-| :white_large_square: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
+| :x: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
 | :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
 | :white_large_square: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :white_large_square: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
@@ -267,8 +267,8 @@
 | :white_large_square: | Dragon's Maw | Powers up Dragon-type moves. |
 | :white_large_square: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
 | :white_large_square: | Grim Neigh | When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat. |
-| :white_large_square: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability. |
-| :white_large_square: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability. |
+| :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability. |
+| :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability. |
 | :white_large_square: | Lingering Aroma | Contact with the Pokémon changes the attacker's Ability to Lingering Aroma. |
 | :white_large_square: | Seed Sower | Turns the ground into Grassy Terrain when the Pokémon is hit by an attack. |
 | :white_large_square: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
@@ -279,8 +279,8 @@
 | :white_large_square: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
 | :white_large_square: | Rocky Payload | Powers up Rock-type moves. |
 | :white_large_square: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
-| :white_large_square: | Zero to Hero | The Pokémon changes into its Hero Form when it switches out of battle. |
-| :white_large_square: | Commander | When the Pokémon enters a battle, it goes inside the mouth of an ally Dondozo if one is on the field. The Pokémon then issues commands from there. |
+| :x: | Zero to Hero | The Pokémon changes into its Hero Form when it switches out of battle. |
+| :x: | Commander | When the Pokémon enters a battle, it goes inside the mouth of an ally Dondozo if one is on the field. The Pokémon then issues commands from there. |
 | :white_large_square: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
 | :white_large_square: | Protosynthesis | Boosts the Pokémon's most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy. |
 | :white_large_square: | Quark Drive | Boosts the Pokémon's most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy. |
@@ -311,7 +311,7 @@
 | :x: | Tera Shift | When the Pokémon enters a battle, it absorbs the energy around itself and transforms into its Terastal Form. |
 | :x: | Tera Shell | The Pokémon's shell contains the powers of each type. All damage-dealing moves that hit the Pokémon when its HP is full will not be very effective. |
 | :x: | Teraform Zero | When Terapagos changes into its Stellar Form, it uses its hidden powers to eliminate all effects of weather and terrain, reducing them to zero. |
-| :x: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
+| :white_large_square: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
 | :white_large_square: | Piercing Drill | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :white_large_square: | Dragonize | The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%. |
 | :white_large_square: | Mega Sol | Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight. |
