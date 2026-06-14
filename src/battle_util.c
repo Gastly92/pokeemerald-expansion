@@ -5117,6 +5117,22 @@ bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability,
     return IsBattlerGrounded(battler, ability, holdEffect);
 }
 
+// FORK: innate Unaware is a *pure boon* (FEATURE_INNATE_ABILITIES), NOT a 1:1 real
+// Unaware. A real Unaware blanks the foe's stat stage in *both* directions, which can
+// hurt: ignoring a foe's Attack/Defense/evasion/accuracy *drop* makes the holder take
+// more damage / deal less / be easier to hit than it otherwise would. At every Unaware
+// site the holder benefits from the *lower* stage, so an innate Unaware mimics the
+// ignore only for the favorable half — it caps a stage at default when it's a *boost*,
+// but leaves a *drop* in place. So an innate-Unaware mon ignores the foe's boosts yet
+// still reaps the foe's self-inflicted drops; a real Unaware forgoes the latter. Returns
+// the boon-adjusted stage. (See INNATE_ABILITIES.md "innates are pure boons".)
+static inline s32 InnateUnawareBoonStage(enum BattlerId battler, s32 stage)
+{
+    if (stage > DEFAULT_STAT_STAGE && IsInnateActive(battler, ABILITY_UNAWARE))
+        return DEFAULT_STAT_STAGE;
+    return stage;
+}
+
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability)
 {
     if (IsBattlerAlive(battler) && GetBattlerAbility(battler) == ability)
@@ -7037,6 +7053,8 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
     // Pokémon with unaware ignore attack stat changes while taking damage
     if (ctx->abilities[ctx->battlerDef] == ABILITY_UNAWARE)
         atkStage = DEFAULT_STAT_STAGE;
+    else // FORK: an innate Unaware ignores the attacker's boosts but keeps its drops (pure boon)
+        atkStage = InnateUnawareBoonStage(ctx->battlerDef, atkStage);
 
     atkStat *= gStatStageRatios[atkStage][0];
     atkStat /= gStatStageRatios[atkStage][1];
@@ -7324,6 +7342,8 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
     // Pokémon with unaware ignore defense stat changes while dealing damage
     if (ctx->abilities[ctx->battlerAtk] == ABILITY_UNAWARE)
         defStage = DEFAULT_STAT_STAGE;
+    else // FORK: an innate Unaware ignores the target's Defense boosts but keeps its drops (pure boon)
+        defStage = InnateUnawareBoonStage(ctx->battlerAtk, defStage);
     // certain moves also ignore stat changes
     if (MoveIgnoresDefenseEvasionStages(move))
         defStage = DEFAULT_STAT_STAGE;
@@ -10675,10 +10695,14 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     if (atkAbility == ABILITY_UNAWARE || atkAbility == ABILITY_KEEN_EYE || atkAbility == ABILITY_MINDS_EYE
             || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE))
         evasionStage = DEFAULT_STAT_STAGE;
+    else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
+        evasionStage = InnateUnawareBoonStage(battlerAtk, evasionStage);
     if (MoveIgnoresDefenseEvasionStages(move))
         evasionStage = DEFAULT_STAT_STAGE;
     if (defAbility == ABILITY_UNAWARE)
         accStage = DEFAULT_STAT_STAGE;
+    else // FORK: an innate Unaware ignores the attacker's accuracy boosts but keeps its drops (pure boon)
+        accStage = InnateUnawareBoonStage(battlerDef, accStage);
 
     if (gBattleMons[battlerDef].volatiles.foresight || gBattleMons[battlerDef].volatiles.miracleEye)
         buff = accStage;
@@ -10819,12 +10843,16 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
             || atkAbility == ABILITY_COMPOUND_EYES || atkAbility == ABILITY_VICTORY_STAR
             || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE))
         evasionStage = DEFAULT_STAT_STAGE;
+    else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
+        evasionStage = InnateUnawareBoonStage(battlerAtk, evasionStage);
     if (MoveIgnoresDefenseEvasionStages(move))
         evasionStage = DEFAULT_STAT_STAGE;
     if (gBattleMons[battlerDef].volatiles.foresight || gBattleMons[battlerDef].volatiles.miracleEye)
         evasionStage = DEFAULT_STAT_STAGE;
     if (defAbility == ABILITY_UNAWARE)
         accStage = DEFAULT_STAT_STAGE;
+    else // FORK: an innate Unaware ignores the attacker's accuracy boosts but keeps its drops (pure boon)
+        accStage = InnateUnawareBoonStage(battlerDef, accStage);
 
     if (ignorePenalties)
     {

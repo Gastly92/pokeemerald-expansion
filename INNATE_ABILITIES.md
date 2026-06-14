@@ -13,8 +13,9 @@ Making an *arbitrary* ability work as an innate would mean routing every
 hundreds of upstream-owned sites — a large, perpetually merge-conflict-prone
 sweep. We don't do that. Instead we **wire up one ability's behavior at a time**
 and only let species declare innates from that supported set. Today the set is
-**`LEVITATE`** (a passive Ground immunity) and **`REGENERATOR`** (a silent
-1/3-HP switch-out heal).
+**`LEVITATE`** (a passive Ground immunity), **`REGENERATOR`** (a silent
+1/3-HP switch-out heal), and **`UNAWARE`** (a passive calc modifier that ignores
+the foe's stat-stage changes).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -22,6 +23,30 @@ it"* breaks into two parts:
 1. **Data** — always generic, no engine work. Add the species → list mapping.
 2. **Effect wiring** — how much is automatic depends on the *kind* of ability
    (see the recipe). This is the part the allowlist gates.
+
+## The design principle: an innate is a *pure boon*
+
+An innate is bonus value layered on top of a mon's chosen ability, so it should
+**only ever help its holder — never carry the real ability's downside.** When the
+real ability is a clean upside (Regenerator, Levitate's Ground immunity), the innate
+copies it 1:1. But when the real ability has a *cost* — a case where it would hurt
+the holder — the innate keeps the upside and drops the cost. This is a deliberate,
+suppression-independent divergence (`IsInnateActive()` still suppresses it exactly
+like the real ability; only the *effect* diverges). Two worked examples:
+
+- **Levitate** carries a hidden cost: a real Levitate forgoes the *beneficial* ground
+  interactions (it can't soak field terrain or clear Toxic Spikes as a Poison-type).
+  The innate keeps the Ground/​hazard immunity but stays grounded for those benefits
+  (`IsBattlerGroundedForBenefit()`), so it's strictly a boon.
+- **Unaware** carries a cost in the *drop* direction: a real Unaware blanks the foe's
+  stat stage both ways, so it also ignores a foe's *drop* (e.g. an attacker that
+  lowered its own Attack) and takes more damage / deals less for it. The innate ignores
+  only the foe's *boosts* and keeps the foe's *drops* — always the favorable half
+  (`InnateUnawareBoonStage()`).
+
+**When you wire a new ability, ask "does the real ability ever hurt its user?"** If
+yes, wire the innate to skip that branch (and note the divergence in the allowlist
+comment + `FORK.md`). If no, a 1:1 copy is already pure-boon.
 
 ## What the generic tooling already gives you (no per-ability work)
 
@@ -33,8 +58,8 @@ it"* breaks into two parts:
 - **Suppression parity** via `IsInnateActive()`: an innate honors Gastro Acid,
   Neutralizing Gas, Mold Breaker (on breakable abilities), Ability Shield, and
   not-on-field exactly like the same ability in a real slot. (Suppression parity
-  only — an innate's *effect* may diverge by design: see the Levitate pure-boon
-  note below, where an innate Levitate is intentionally a bit stronger than a real one.)
+  only — an innate's *effect* may diverge by design: see "an innate is a pure boon"
+  above, where Levitate and Unaware are both intentionally a bit stronger than the real ability.)
 - **Identity stays deterministic**: innates are *never* copied/swapped/displayed
   as identity. Trace, Skill Swap, Role Play, the ability pop-up, and
   `RecordAbilityBattle` all keep reading only the primary slot
@@ -61,6 +86,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 
 A species may list several innates: `{ ABILITY_X, ABILITY_Y, ABILITY_NONE }`.
 
+**One row per species — merge, don't duplicate.** `GetSpeciesInnateList()` returns
+the *first* matching row, so a species can appear only once. If a species you're
+adding is **already in the table** under a different innate (e.g. Quagsire already
+carries an innate Regenerator), do **not** add a second row — it would be dead. Give
+it a combined list and update the *existing* row in place:
+
+```c
+static const enum Ability sInnateRegeneratorUnaware[] = { ABILITY_REGENERATOR, ABILITY_UNAWARE, ABILITY_NONE };
+// ... in the table, change the existing Quagsire row's list pointer to the combined one:
+{ SPECIES_QUAGSIRE, sInnateRegeneratorUnaware }, // was sInnateRegenerator
+```
+
+Order within a list doesn't matter (membership lookups + display iterate the whole
+list). Reuse one combined list across every line that needs the same pair.
+
 ### Step 2 — put the ability on the allowlist
 
 Add `ABILITY_X` to the **allowlist comment** in `src/innate_abilities.c` (and the
@@ -68,6 +108,13 @@ SCOPE note in `include/innate_abilities.h` if the supported set's character
 changes). This is the human record of what's actually wired; keep it honest.
 
 ### Step 3 — wire the effect (the only per-ability work)
+
+**First, find *every* site.** `grep -n ABILITY_X src/` and wire each effect site —
+an ability often reads in several scattered places, not one. "Single site" below is
+the *easy class*, not a promise of one hit: Unaware took **four** (`battle_util.c`
+damage calc ×2 + `GetTotalAccuracy` + `GetAccEvasionStageDelta`). Skip the pure
+identity/AI-bookkeeping reads (`RecordAbilityBattle`, `gAiLogicData->abilities[]`,
+ability pop-up) — only the *effect* sites get the innate clause.
 
 How much is needed depends on the ability class:
 
@@ -115,6 +162,28 @@ How much is needed depends on the ability class:
     (`src/frontier_battle_info.c`) already iterate the whole innate list, so they
     show any allowlisted ability with no per-ability work.
 
+  **Unaware is the *minimal* calc-modifier worked example** — no pop-up, and no AI
+  plumbing beyond what the shared calc gives for free. It needed only a small clause
+  beside the four existing `ability == ABILITY_UNAWARE` comparisons in
+  `src/battle_util.c`: the offensive and defensive stat-stage reads in the damage
+  calc, plus the evasion/accuracy reads in `GetTotalAccuracy` and
+  `GetAccEvasionStageDelta`. Each reads a cached `ctx->abilities[...]` / parameter,
+  so the innate clause sits *alongside* the cached comparison (the cached-local idiom
+  from the easy case). **But it is *not* a 1:1 copy — it's the pure-boon worked
+  example for a calc modifier** (see "an innate is a pure boon" above): rather than
+  blanking the foe's stat stage like the real ability (`stage = DEFAULT_STAT_STAGE`),
+  the innate routes the stage through `InnateUnawareBoonStage()`, which caps it at
+  default only when it's a *boost* and leaves a *drop* in place — so each site becomes
+  `if (real Unaware) stage = DEFAULT; else stage = InnateUnawareBoonStage(b, stage);`.
+  Because every Unaware site favors the *lower* stage for its holder, the same helper
+  works at all four. Suppression parity is still automatic: Unaware is `breakable`, so
+  an attacker's Mold Breaker drops both the chosen-ability path (`GetBattlerAbility`
+  already returns `NONE`) and the innate (`IsInnateActive` → `CanBreakThroughInnate`).
+  On-field AI damage prediction is correct for free because it reads the real
+  battler's species through `IsInnateActive`; off-field AI heuristics
+  (`AI_IsAbilityOnSide` sites) are left as a known minor-quality gap, deliberately not
+  wired — keeping the footprint small.
+
 - **Silent on-event effect** (fires at a single event site with no script /
   pop-up / animation — e.g. **Regenerator**, the worked example). No driver
   needed: find the upstream event site (for Regenerator, the switch-out handler
@@ -145,6 +214,32 @@ How much is needed depends on the ability class:
     `MOVEEND_ABILITIES_ATTACKER_INNATE`): commit `e93911db`
     (`battle_move_resolution.c`)
 
+### Step 3.5 — free the frontier roster slots (if any set hardcoded the ability)
+
+The extended frontier roster (`src/frontier_extended_mons.c`) is drafted under
+`B_FRONTIER_EXTENDED_MONS`, and many sets were built **before** an ability became
+an innate, so they spent their single `.ability` slot on it. Once the species
+carries the ability *innately*, that slot is redundant — the mon always has the
+ability regardless. Free it to a **complementary** chosen ability so the set runs
+both. This happened for Levitate (commit `d5da59a3` freed Slowbro→`OWN_TEMPO`,
+Rotom→`LIGHTNING_ROD`, …) and again for Unaware (Clefable→`MAGIC_GUARD`,
+Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …).
+
+1. `grep -n ABILITY_X src/frontier_extended_mons.c` for every set that hardcoded it.
+2. For each, confirm the **species now carries the innate** (only those rows are
+   freed — a set on a species *without* the innate must keep its real ability).
+3. Replace `.ability = ABILITY_X` with a complementary ability and a short
+   `// X now innate; chosen Y does Z` comment. The role comment on the `.heldItem`
+   line (e.g. "Unaware wall") stays — it now describes the innate-backed playstyle.
+4. **The replacement must be a real ability slot for that species** (`CreateFacilityMon`
+   silently falls back to slot 0 otherwise). Pick from the species' own
+   `gSpeciesInfo[...].abilities[]`, or — for an "ability-locked" species whose only
+   real ability is the one now innate — add a row to the fork-owned override table
+   `src/species_ability_overrides.c` (see its callers / the `FORK:` note in
+   `src/battle_frontier.c`). `test/frontier_extended_roster.c` fails CI if any
+   `.ability` doesn't resolve to a real slot, so a bad pick can't slip through.
+5. Update the roster header's INNATE ABILITIES note to mention the new ability.
+
 ### Step 4 — test it
 
 Add a case to `test/battle/innate_abilities.c`. Opt into the feature with
@@ -158,14 +253,20 @@ Trace/identity still behave like the real ability. Run:
 make -j$(nproc) check TESTS="FEATURE_INNATE_ABILITIES"
 ```
 
-### Step 5 — update the index
+### Step 5 — update the indexes
 
-Edit the **Innate abilities** row in `FORK.md`: add the ability to the supported
-set and note any new wiring or limitation.
+Two human-facing records, both fork-owned:
+
+- **`FORK.md`** — edit the **Innate abilities** row: add the ability to the
+  supported-set parenthetical in the *status* column, to the "Today the allowlist
+  is …" sentence, and to the "Known limitations" list; note any new wiring.
+- **`INNATE_ABILITIES_PROGRESS.md`** — flip the ability's row from
+  `:white_large_square:` to `:white_check_mark:`.
 
 ## Why "mostly automatic" depends on the ability
 
-Steps 1, 2, 4, 5 are mechanical for every ability. Step 3 is the variable:
+Steps 1, 2, 4, 5 are mechanical for every ability; Step 3.5 only applies if a
+frontier set hardcoded the ability. Step 3 is the variable:
 single-site passive traits are a one-line swap; calc-modifier passives are a
 small clause; active abilities reuse the driver but need their trigger hook
 restored. Keeping the allowlist small and explicit is what bounds the

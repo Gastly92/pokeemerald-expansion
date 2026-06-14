@@ -31,6 +31,21 @@
 //     users so they keep their signature pivot heal regardless of which ability slot the build
 //     picks, plus a few flavor regenerators (Staryu/Starmie's regrowing core, the axolotl Wooper
 //     line, Zygarde's reassembling cells).
+//   - ABILITY_UNAWARE — ignores the foe's stat-stage changes in the damage and accuracy calcs,
+//     handled in src/battle_util.c (the four calc sites that read ABILITY_UNAWARE — offensive and
+//     defensive stat stages in the damage calc, plus evasion/accuracy in GetTotalAccuracy and
+//     GetAccEvasionStageDelta — route the innate through InnateUnawareBoonStage() next to the
+//     chosen-ability test). A pure calc-modifier passive like Levitate: no script / pop-up / driver.
+//     Suppression parity holds via IsInnateActive() — Unaware is breakable, so an attacker's Mold
+//     Breaker ignores an innate Unaware on the defender exactly as it would the real ability.
+//     DELIBERATE DIVERGENCE: an innate Unaware is a *pure boon*, NOT identical to a real Unaware. A
+//     real Unaware blanks the foe's stat stage in both directions (so it ignores a foe's *drop* too,
+//     and takes more damage / deals less for it); the innate ignores only the foe's *boosts* and
+//     keeps the foe's *drops* (always the favorable half — see InnateUnawareBoonStage, battle_util.c).
+//     This populates the canon Unaware users so they keep the stat-ignore no matter which slot the
+//     build picks, plus flavor picks too dull/dazed/asleep to notice the foe's buffs (Numel's
+//     "doesn't notice being hit", the dazed Psyduck line, the ever-sleeping Komala, the unbothered
+//     Snorlax line).
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -42,6 +57,9 @@ struct SpeciesInnates
 
 static const enum Ability sInnateLevitate[] = { ABILITY_LEVITATE, ABILITY_NONE };
 static const enum Ability sInnateRegenerator[] = { ABILITY_REGENERATOR, ABILITY_NONE };
+static const enum Ability sInnateUnaware[] = { ABILITY_UNAWARE, ABILITY_NONE };
+// Species that carry both innates (canon/flavor Regenerator + canon/flavor Unaware).
+static const enum Ability sInnateRegeneratorUnaware[] = { ABILITY_REGENERATOR, ABILITY_UNAWARE, ABILITY_NONE };
 
 static const struct SpeciesInnates sSpeciesInnates[] =
 {
@@ -311,8 +329,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 2
     { SPECIES_CORSOLA,                  sInnateRegenerator },
     { SPECIES_HO_OH,                    sInnateRegenerator },
-    { SPECIES_WOOPER,                   sInnateRegenerator }, // flavor: axolotl limb regrowth
-    { SPECIES_QUAGSIRE,                 sInnateRegenerator }, // flavor
+    { SPECIES_WOOPER,                   sInnateRegeneratorUnaware }, // flavor Regen (axolotl limb regrowth) + canon Unaware (HA)
+    { SPECIES_QUAGSIRE,                 sInnateRegeneratorUnaware }, // flavor Regen + canon Unaware (HA)
 
     // Gen 5
     { SPECIES_AUDINO,                   sInnateRegenerator },
@@ -345,8 +363,66 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 9
     { SPECIES_KLAWF,                    sInnateRegenerator },
     { SPECIES_CYCLIZAR,                 sInnateRegenerator },
-    { SPECIES_WOOPER_PALDEA,            sInnateRegenerator }, // flavor: Paldean axolotl
-    { SPECIES_CLODSIRE,                 sInnateRegenerator }, // flavor
+    { SPECIES_WOOPER_PALDEA,            sInnateRegeneratorUnaware }, // flavor Regen (Paldean axolotl) + canon Unaware (HA)
+    { SPECIES_CLODSIRE,                 sInnateRegeneratorUnaware }, // flavor Regen + canon Unaware (HA)
+
+    // ───────────────────────────────────────────────────────────────────────────
+    // Innate Unaware (ignores the foe's stat-stage changes in the damage & accuracy
+    // calcs). Two groups:
+    //   1) Canon Unaware users — species that carry Unaware in their ability data
+    //      (often as the Hidden Ability). Giving it as an innate lets them keep the
+    //      signature stat-ignore no matter which slot the build picks. Mega forms are
+    //      listed so the innate survives the transformation mid-battle. (The Wooper,
+    //      Quagsire, Paldean Wooper and Clodsire lines are also canon Unaware users,
+    //      but they already carry innate Regenerator above, so they take the combined
+    //      sInnateRegeneratorUnaware list there instead of being repeated here.
+    //      Cosmog is omitted: Unaware is already its sole ability, so an innate copy
+    //      would be redundant.)
+    //   2) Flavor picks — species too dull, dazed or asleep to register the foe's
+    //      buffs, lacking the real ability: Numel/Camerupt ("so dull-witted it doesn't
+    //      notice being hit"), the perpetually headache-dazed Psyduck line, the
+    //      ever-sleeping Komala, and the unbothered Snorlax line.
+    // ───────────────────────────────────────────────────────────────────────────
+
+    // Canon Unaware users
+    // Gen 1
+    { SPECIES_CLEFABLE,                 sInnateUnaware }, // Unaware is the HA
+    { SPECIES_CLEFABLE_MEGA,            sInnateUnaware }, // innate persists through the Mega
+
+    // Gen 4
+    { SPECIES_BIDOOF,                   sInnateUnaware },
+    { SPECIES_BIBAREL,                  sInnateUnaware },
+
+    // Gen 5
+    { SPECIES_WOOBAT,                   sInnateUnaware }, // Unaware is the primary ability
+    { SPECIES_SWOOBAT,                  sInnateUnaware },
+
+    // Gen 7
+    { SPECIES_PYUKUMUKU,                sInnateUnaware }, // Unaware is the HA
+
+    // Gen 9
+    { SPECIES_FUECOCO,                  sInnateUnaware }, // Unaware is the HA across the line
+    { SPECIES_CROCALOR,                 sInnateUnaware },
+    { SPECIES_SKELEDIRGE,               sInnateUnaware },
+    { SPECIES_DONDOZO,                  sInnateUnaware }, // Unaware is the primary ability
+
+    // Flavor Unaware (no native Unaware; too dull/dazed/asleep to notice the foe's buffs)
+    // Gen 1
+    { SPECIES_PSYDUCK,                  sInnateUnaware }, // perpetual headache leaves it dazed
+    { SPECIES_GOLDUCK,                  sInnateUnaware }, // flavor
+    { SPECIES_SNORLAX,                  sInnateUnaware }, // too busy eating/sleeping to be bothered
+    { SPECIES_SNORLAX_GMAX,             sInnateUnaware }, // flavor
+
+    // Gen 3
+    { SPECIES_NUMEL,                    sInnateUnaware }, // Pokédex: so dull-witted it doesn't notice being hit
+    { SPECIES_CAMERUPT,                 sInnateUnaware }, // flavor
+    { SPECIES_CAMERUPT_MEGA,            sInnateUnaware }, // flavor; innate persists through the Mega
+
+    // Gen 4
+    { SPECIES_MUNCHLAX,                 sInnateUnaware }, // flavor: only ever thinks about food
+
+    // Gen 7
+    { SPECIES_KOMALA,                   sInnateUnaware }, // sleeps its whole life, oblivious to its surroundings
 };
 
 static const enum Ability *GetSpeciesInnateList(u16 species)
