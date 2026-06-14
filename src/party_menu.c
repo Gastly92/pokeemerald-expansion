@@ -57,6 +57,7 @@
 #include "pokerus.h"
 #include "region_map.h"
 #include "reshow_battle_screen.h"
+#include "frontier_battle_info.h" // FORK: B_FRONTIER_BATTLE_INFO viewer from the in-battle party menu
 #include "scanline_effect.h"
 #include "script.h"
 #include "sound.h"
@@ -336,6 +337,8 @@ static u8 GetPartySlotEntryStatus(s8);
 static void Task_UpdateHeldItemSprite(u8);
 static void Task_HandleSelectionMenuInput(u8);
 static void CB2_ShowPokemonSummaryScreen(void);
+static void CB2_OpenBattleInfoFromPartyMenu(void); // FORK: B_FRONTIER_BATTLE_INFO
+static void CB2_ReturnToPartyMenuFromBattleInfo(void); // FORK: B_FRONTIER_BATTLE_INFO
 static void UpdatePartyToBattleOrder(void);
 static void SlidePartyMenuBoxOneStep(u8);
 static void Task_SlideSelectedSlotsOffscreen(u8);
@@ -1476,6 +1479,21 @@ void Task_HandleChooseMonInput(u8 taskId)
     if (!gPaletteFade.active && MenuHelpers_ShouldWaitForLinkRecv() != TRUE)
     {
         s8 *slotPtr = GetCurrentPartySlotPtr();
+
+        // FORK: SELECT opens the read-only battle info viewer during the in-battle
+        // "choose a Pokémon" screen (e.g. picking a replacement for a fainted mon),
+        // so the player can review field/foe state before deciding. Gated on
+        // ShouldReplaceBagWithInfo() (B_FRONTIER_BATTLE_INFO + a Frontier facility),
+        // so it's battle-only and compiles out to FALSE when the feature is off.
+        if (JOY_NEW(SELECT_BUTTON)
+         && gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE
+         && ShouldReplaceBagWithInfo())
+        {
+            PlaySE(SE_SELECT);
+            sPartyMenuInternal->exitCallback = CB2_OpenBattleInfoFromPartyMenu;
+            Task_ClosePartyMenu(taskId);
+            return;
+        }
 
         switch (PartyMenuButtonHandler(slotPtr))
         {
@@ -3170,6 +3188,27 @@ void CB2_ReturnToPartyMenuFromSummaryScreen(void)
     gPaletteFade.bufferTransferDisabled = TRUE;
     gPartyMenu.slotId = gLastViewedMonIndex;
     InitPartyMenu(gPartyMenu.menuType, KEEP_PARTY_LAYOUT, gPartyMenu.action, TRUE, PARTY_MSG_DO_WHAT_WITH_MON, Task_TryCreateSelectionWindow, gPartyMenu.exitCallback);
+}
+
+// FORK: B_FRONTIER_BATTLE_INFO. exitCallback set when SELECT is pressed in the
+// in-battle party menu; the menu has finished closing, so hand off to the battle
+// info viewer (which returns to CB2_ReturnToPartyMenuFromBattleInfo).
+// UpdatePartyToBattleOrder() undoes the field-order swap Task_ClosePartyMenuAndSetCB2
+// applies on close, so the menu is rebuilt in battle order on return (mirrors
+// CB2_ShowPokemonSummaryScreen's handling).
+static void CB2_OpenBattleInfoFromPartyMenu(void)
+{
+    UpdatePartyToBattleOrder();
+    OpenFrontierBattleInfo(CB2_ReturnToPartyMenuFromBattleInfo);
+}
+
+// FORK: B_FRONTIER_BATTLE_INFO. Re-open the in-battle "choose a Pokémon" menu after
+// the viewer closes, keeping the cursor position and the real exit callback (the
+// path back to the battle screen).
+static void CB2_ReturnToPartyMenuFromBattleInfo(void)
+{
+    gPaletteFade.bufferTransferDisabled = TRUE;
+    InitPartyMenu(gPartyMenu.menuType, KEEP_PARTY_LAYOUT, gPartyMenu.action, TRUE, PARTY_MSG_CHOOSE_MON, Task_HandleChooseMonInput, gPartyMenu.exitCallback);
 }
 
 static void CursorCb_Switch(u8 taskId)

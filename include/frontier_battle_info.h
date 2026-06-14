@@ -17,4 +17,8 @@ bool32 ShouldReplaceBagWithInfo(void);
 
 void CB2_FrontierBattleInfo(void);
 
+// Opens the viewer and returns to returnCallback when closed. Used from the
+// in-battle action menu (INFO slot) and the in-battle party menu (SELECT).
+void OpenFrontierBattleInfo(void (*returnCallback)(void));
+
 #endif // GUARD_FRONTIER_BATTLE_INFO_H
