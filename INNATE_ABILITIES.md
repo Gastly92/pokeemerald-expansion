@@ -62,6 +62,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 
 A species may list several innates: `{ ABILITY_X, ABILITY_Y, ABILITY_NONE }`.
 
+**One row per species — merge, don't duplicate.** `GetSpeciesInnateList()` returns
+the *first* matching row, so a species can appear only once. If a species you're
+adding is **already in the table** under a different innate (e.g. Quagsire already
+carries an innate Regenerator), do **not** add a second row — it would be dead. Give
+it a combined list and update the *existing* row in place:
+
+```c
+static const enum Ability sInnateRegeneratorUnaware[] = { ABILITY_REGENERATOR, ABILITY_UNAWARE, ABILITY_NONE };
+// ... in the table, change the existing Quagsire row's list pointer to the combined one:
+{ SPECIES_QUAGSIRE, sInnateRegeneratorUnaware }, // was sInnateRegenerator
+```
+
+Order within a list doesn't matter (membership lookups + display iterate the whole
+list). Reuse one combined list across every line that needs the same pair.
+
 ### Step 2 — put the ability on the allowlist
 
 Add `ABILITY_X` to the **allowlist comment** in `src/innate_abilities.c` (and the
@@ -69,6 +84,13 @@ SCOPE note in `include/innate_abilities.h` if the supported set's character
 changes). This is the human record of what's actually wired; keep it honest.
 
 ### Step 3 — wire the effect (the only per-ability work)
+
+**First, find *every* site.** `grep -n ABILITY_X src/` and wire each effect site —
+an ability often reads in several scattered places, not one. "Single site" below is
+the *easy class*, not a promise of one hit: Unaware took **four** (`battle_util.c`
+damage calc ×2 + `GetTotalAccuracy` + `GetAccEvasionStageDelta`). Skip the pure
+identity/AI-bookkeeping reads (`RecordAbilityBattle`, `gAiLogicData->abilities[]`,
+ability pop-up) — only the *effect* sites get the innate clause.
 
 How much is needed depends on the ability class:
 
@@ -162,6 +184,32 @@ How much is needed depends on the ability class:
     `MOVEEND_ABILITIES_ATTACKER_INNATE`): commit `e93911db`
     (`battle_move_resolution.c`)
 
+### Step 3.5 — free the frontier roster slots (if any set hardcoded the ability)
+
+The extended frontier roster (`src/frontier_extended_mons.c`) is drafted under
+`B_FRONTIER_EXTENDED_MONS`, and many sets were built **before** an ability became
+an innate, so they spent their single `.ability` slot on it. Once the species
+carries the ability *innately*, that slot is redundant — the mon always has the
+ability regardless. Free it to a **complementary** chosen ability so the set runs
+both. This happened for Levitate (commit `d5da59a3` freed Slowbro→`OWN_TEMPO`,
+Rotom→`LIGHTNING_ROD`, …) and again for Unaware (Clefable→`MAGIC_GUARD`,
+Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …).
+
+1. `grep -n ABILITY_X src/frontier_extended_mons.c` for every set that hardcoded it.
+2. For each, confirm the **species now carries the innate** (only those rows are
+   freed — a set on a species *without* the innate must keep its real ability).
+3. Replace `.ability = ABILITY_X` with a complementary ability and a short
+   `// X now innate; chosen Y does Z` comment. The role comment on the `.heldItem`
+   line (e.g. "Unaware wall") stays — it now describes the innate-backed playstyle.
+4. **The replacement must be a real ability slot for that species** (`CreateFacilityMon`
+   silently falls back to slot 0 otherwise). Pick from the species' own
+   `gSpeciesInfo[...].abilities[]`, or — for an "ability-locked" species whose only
+   real ability is the one now innate — add a row to the fork-owned override table
+   `src/species_ability_overrides.c` (see its callers / the `FORK:` note in
+   `src/battle_frontier.c`). `test/frontier_extended_roster.c` fails CI if any
+   `.ability` doesn't resolve to a real slot, so a bad pick can't slip through.
+5. Update the roster header's INNATE ABILITIES note to mention the new ability.
+
 ### Step 4 — test it
 
 Add a case to `test/battle/innate_abilities.c`. Opt into the feature with
@@ -175,14 +223,20 @@ Trace/identity still behave like the real ability. Run:
 make -j$(nproc) check TESTS="FEATURE_INNATE_ABILITIES"
 ```
 
-### Step 5 — update the index
+### Step 5 — update the indexes
 
-Edit the **Innate abilities** row in `FORK.md`: add the ability to the supported
-set and note any new wiring or limitation.
+Two human-facing records, both fork-owned:
+
+- **`FORK.md`** — edit the **Innate abilities** row: add the ability to the
+  supported-set parenthetical in the *status* column, to the "Today the allowlist
+  is …" sentence, and to the "Known limitations" list; note any new wiring.
+- **`INNATE_ABILITIES_PROGRESS.md`** — flip the ability's row from
+  `:white_large_square:` to `:white_check_mark:`.
 
 ## Why "mostly automatic" depends on the ability
 
-Steps 1, 2, 4, 5 are mechanical for every ability. Step 3 is the variable:
+Steps 1, 2, 4, 5 are mechanical for every ability; Step 3.5 only applies if a
+frontier set hardcoded the ability. Step 3 is the variable:
 single-site passive traits are a one-line swap; calc-modifier passives are a
 small clause; active abilities reuse the driver but need their trigger hook
 restored. Keeping the allowlist small and explicit is what bounds the
