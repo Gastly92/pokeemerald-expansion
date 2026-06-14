@@ -4,7 +4,7 @@ A central goal of this fork is to **strip as much random chance out of the game
 as possible**, so that what happens in a battle follows from the player's
 choices and the state on the field rather than from luck. This is rolled out
 gradually through a family of **`DETERMINISTIC_*`** flags (in
-[`include/config/deterministic.h`](include/config/deterministic.h)), each of
+[`include/config/deterministic.h`](../include/config/deterministic.h)), each of
 which removes one specific source of randomness. A flag set to `FALSE` is stock
 `pokeemerald-expansion` behavior; this fork enables them as features mature.
 

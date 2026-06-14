@@ -40,7 +40,7 @@
 // rather than in gSpeciesInfo, so it never conflicts on upstream sync and leaves
 // the upstream species data untouched. The first entry re-types Galarian Ponyta
 // and Galarian Rapidash from Psychic(/Fairy) to Fire/Fairy. The override is
-// applied inside GetSpeciesType() (src/pokemon.c); see NEW_TYPES.md (repo root)
+// applied inside GetSpeciesType() (src/pokemon.c); see fork-docs/NEW_TYPES.md
 // for how to add a species.
 #define FEATURE_NEW_TYPES TRUE
 

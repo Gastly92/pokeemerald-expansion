@@ -27,7 +27,7 @@
 // InnateUnawareBoonStage(), where a real Unaware would ignore the drop too and take more damage for it.
 // See the ALLOWLIST note in src/innate_abilities.c. To add another ability: wire its specific effect
 // (boon-only where the real ability has a downside), extend the allowlist comment in src/innate_abilities.c, and add a test.
-// The step-by-step extension playbook lives in INNATE_ABILITIES.md (repo root).
+// The step-by-step extension playbook lives in fork-docs/INNATE_ABILITIES.md.
 //
 // This header exposes only the raw data lookups (no battle/suppression logic).
 // The battle-facing predicate that decides whether an innate is *currently

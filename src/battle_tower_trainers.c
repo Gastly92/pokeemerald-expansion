@@ -23,7 +23,7 @@
 // are Lv100 with max IVs (built through CreateFacilityMon, like the roster), tuned
 // for this fork's DETERMINISTIC_* rules (accuracy never misses, etc.). All sets
 // are authored to bring exactly one Mega Stone; the bosses additionally each carry
-// one legendary-tier mon. See FORK.md / battle_tower_trainers.h.
+// one legendary-tier mon. See fork-docs/FORK.md / battle_tower_trainers.h.
 //
 // EVs use TRAINER_PARTY_EVS(hp, atk, def, speed, spatk, spdef) — speed is 4th.
 //

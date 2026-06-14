@@ -18,7 +18,7 @@ decompilation.
 
 ## What this fork changes
 
-See **[`FORK.md`](FORK.md)** for the full list of features this fork adds on top
+See **[`FORK.md`](fork-docs/FORK.md)** for the full list of features this fork adds on top
 of upstream, with status and known limitations. Conventions and the
 upstream-sync process live in **[`CLAUDE.md`](CLAUDE.md)**.
 
@@ -43,7 +43,7 @@ Facilities are converted one at a time. Progress (**1 / 7**):
 - 🔜 **Battle Tower** — next.
 - ⬜ Battle Dome · Battle Palace · Battle Arena · Battle Pyramid · Battle Pike.
 
-See **[`FORK.md`](FORK.md)** for the per-feature status, including which features
+See **[`FORK.md`](fork-docs/FORK.md)** for the per-feature status, including which features
 are still Factory-only and which already cover all facilities.
 
 ## Determinism: removing RNG
@@ -56,7 +56,7 @@ through a family of **`DETERMINISTIC_*`** flags (in
 removing one specific source of randomness — random crits, the damage roll,
 paralysis, secondary effects, and flinch so far, with more to come.
 
-See **[`DETERMINISM.md`](DETERMINISM.md)** for the rationale and the per-flag
+See **[`DETERMINISM.md`](fork-docs/DETERMINISM.md)** for the rationale and the per-flag
 breakdown of what each one changes.
 
 ## Base engine (upstream)

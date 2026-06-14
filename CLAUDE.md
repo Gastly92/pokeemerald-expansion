@@ -90,7 +90,7 @@ and never reports a conflict on it. If the driver is *not* set, git just falls
 back to a normal merge for that file (no worse than any other conflict). To add
 another fork-owned file to this scheme, list it in `.gitattributes` with
 `merge=ours` — only for files upstream *also* edits; new fork-only files (like
-`FORK.md`, `CLAUDE.md`) never conflict and don't need it.
+`fork-docs/FORK.md`, `CLAUDE.md`) never conflict and don't need it.
 
 ### Minimizing merge conflicts
 
@@ -204,20 +204,24 @@ intentionally ours and must never go upstream).
 
 ## Documenting fork features
 
-We keep two human-facing docs in files we own (so they never conflict on sync):
+We keep our human-facing docs in files we own (so they never conflict on sync).
+`README.md` stays at the repo root (it's the front page); all other fork docs
+live under **`fork-docs/`** (`FORK.md`, `DETERMINISM.md`, `FRONTIER_ENDLESS.md`,
+`INNATE_ABILITIES.md`, `INNATE_ABILITIES_PROGRESS.md`, `NEW_TYPES.md`). New files
+in a fork-owned directory never conflict on sync. The two top-level docs:
 
-- **`README.md`** — the repo's front page, rewritten as our own (a short intro
-  describing the standalone Battle Frontier romhack, linking to `FORK.md` and
-  crediting upstream).
+- **`README.md`** (root) — the repo's front page, rewritten as our own (a short
+  intro describing the standalone Battle Frontier romhack, linking to
+  `fork-docs/FORK.md` and crediting upstream).
   It is **not** upstream's README. See "Our own README" below for how that's
   kept conflict-free.
-- **`FORK.md`** — the inventory of every feature this fork adds on top of
-  upstream: a table of *feature · flag(s) · location · status · notes*. It is an
-  **index**, not a spec — the flag comment in `include/config/*.h` stays the
+- **`fork-docs/FORK.md`** — the inventory of every feature this fork adds on top
+  of upstream: a table of *feature · flag(s) · location · status · notes*. It is
+  an **index**, not a spec — the flag comment in `include/config/*.h` stays the
   source of truth for exact behavior; `FORK.md` records what the flag can't
   (status, known limitations, where to look).
 
-**When you add or change a fork feature, update `FORK.md` in the same PR.** Add or
+**When you add or change a fork feature, update `fork-docs/FORK.md` in the same PR.** Add or
 edit its row — especially the *status* and *notes* columns when something is
 partial or has a known limitation (e.g. "Battle Dome layout not yet generalized
 to 6"). Keep rows one line; don't restate the flag comment. The `FORK:` code tag
