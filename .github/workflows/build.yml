@@ -15,8 +15,36 @@ env:
   DEPRECATED_ERROR: 1
 
 jobs:
-  build-emerald:
+  # Detect whether this push/PR touches anything other than Markdown docs.
+  # Outputs code=true when any non-*.md file changed (the safe default — see
+  # below), code=false for docs-only changes so the heavy build/test jobs skip.
+  # We DON'T use the workflow-level `paths-ignore`: the `build` gate job is a
+  # required status check, and skipping the whole workflow would leave that
+  # check "waiting" forever and block the PR. Conditionally skipping the heavy
+  # jobs instead keeps the gate running and reporting.
+  changes:
     if: github.actor != 'allcontributors[bot]'
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # A filter of only negation patterns matches any changed file that is
+      # NOT markdown. If dorny can't determine the diff it returns true, so an
+      # unknown state runs full CI rather than skipping it.
+      - name: Detect non-docs changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            code:
+              - '!**/*.md'
+
+  build-emerald:
+    needs: changes
+    if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,7 +81,8 @@ jobs:
         run: make -j$(nproc) -O all
 
   build-firered:
-    if: github.actor != 'allcontributors[bot]'
+    needs: changes
+    if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -88,7 +117,8 @@ jobs:
         run: make firered -j$(nproc) -O
 
   build-leafgreen:
-    if: github.actor != 'allcontributors[bot]'
+    needs: changes
+    if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -123,7 +153,8 @@ jobs:
         run: make leafgreen -j$(nproc) -O
 
   release:
-    if: github.actor != 'allcontributors[bot]'
+    needs: changes
+    if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -170,7 +201,8 @@ jobs:
           if-no-files-found: error
 
   test:
-    if: github.actor != 'allcontributors[bot]'
+    needs: changes
+    if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -220,15 +252,19 @@ jobs:
   build:
     if: always() && github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
-    needs: [build-emerald, build-firered, build-leafgreen, release, test]
+    needs: [changes, build-emerald, build-firered, build-leafgreen, release, test]
     steps:
+      # 'skipped' is an accepted result: the heavy jobs are intentionally
+      # skipped on docs-only (*.md) changes, and the gate must still pass so the
+      # required check reports green. Any other non-success (failure/cancelled)
+      # still fails the gate.
       - name: Verify all build/test jobs succeeded
         env:
           RESULTS: ${{ join(needs.*.result, ' ') }}
         run: |
           echo "Dependency results: $RESULTS"
           for result in $RESULTS; do
-            if [ "$result" != "success" ]; then
+            if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
               echo "::error::A required build/test job did not succeed (got '$result')."
               exit 1
             fi

@@ -35,3 +35,4 @@ Makefile text eol=lf
 # defined, git falls back to a normal merge for these files — never worse than
 # today. Only list files upstream *also* owns; new fork-only files never conflict.
 README.md merge=ours
+.github/pull_request_template.md merge=ours
