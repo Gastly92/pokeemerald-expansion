@@ -745,6 +745,15 @@ struct BattleStruct
     // RecordItemEffectBattle; read in src/frontier_battle_info.c.
     u8 infoAbilityRevealed[NUM_BATTLE_SIDES];
     u8 infoItemRevealed[NUM_BATTLE_SIDES];
+    // FORK: the ability value the player genuinely *witnessed* per party slot,
+    // snapshotted at reveal time for the B_FRONTIER_BATTLE_INFO viewer.
+    // gAiPartyData->mons[].ability can't be trusted for display: the AI's
+    // speculative move/switch evaluation overwrites it (e.g. a benched Prankster
+    // mon simulated in the active slot scribbles Prankster onto the active slot's
+    // entry) while leaving an already-set reveal bit untouched, which made the
+    // viewer show the wrong ability. Set in RecordAbilityBattle under the same
+    // reveal gate as infoAbilityRevealed; read in src/frontier_battle_info.c.
+    u16 infoRevealedAbility[NUM_BATTLE_SIDES][PARTY_SIZE];
 };
 
 struct AiBattleData

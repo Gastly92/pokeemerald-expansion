@@ -437,8 +437,6 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     // are recorded into gAiPartyData as they show up in battle. Species and level
     // are read straight from the party once the mon has been on the field.
     bool32 seen = gBattleStruct->partyState[B_TRAINER_OPPONENT_A][foeIndex].sentOut;
-    struct AiPartyMon *revealed = (gAiPartyData != NULL)
-        ? &gAiPartyData->mons[B_SIDE_OPPONENT][foeIndex] : NULL;
 
     p = StringCopy(line, COMPOUND_STRING("BATTLE INFO  -  FOE "));
     p = ConvertIntToDecimalStringN(p, foeIndex + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
@@ -474,7 +472,10 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     y += LINE_H;
 
     // Ability — only once genuinely revealed in battle (gAiPartyData pre-knows it
-    // under AI_FLAG_OMNISCIENT, so gate on our own reveal flag instead).
+    // under AI_FLAG_OMNISCIENT, so gate on our own reveal flag instead). The value
+    // is read from our own reveal-time snapshot (infoRevealedAbility), not from
+    // gAiPartyData->ability: the latter is later clobbered by the AI's speculative
+    // switch/move evaluation, which would otherwise display the wrong ability.
     //
     // FORK: FEATURE_INNATE_ABILITIES — the foe's innate abilities (always-active
     // passives) share this single line instead of a separate "Innate:" row. The
@@ -487,10 +488,11 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     // ability, so the viewer still shows only what has been seen in action and
     // doesn't leak that the mon has innates until then.
     bool32 abilitySeen = (gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
+    enum Ability seenAbility = gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][foeIndex];
     p = StringCopy(line, COMPOUND_STRING("Ability: "));
-    if (abilitySeen && revealed != NULL && revealed->ability != ABILITY_NONE)
+    if (abilitySeen && seenAbility != ABILITY_NONE)
     {
-        p = StringCopy(p, gAbilitiesInfo[revealed->ability].name);
+        p = StringCopy(p, gAbilitiesInfo[seenAbility].name);
         if (GetConfig(FEATURE_INNATE_ABILITIES))
         {
             enum Species foeSpecies = GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL);
@@ -503,7 +505,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
                 // Skip an innate that just duplicates the revealed chosen ability
                 // (e.g. a species that still carries Levitate as its primary), so the
                 // line doesn't echo the same name twice.
-                if (innate == revealed->ability)
+                if (innate == seenAbility)
                     continue;
                 p = StringCopy(p, anyInnate ? COMPOUND_STRING(", ") : COMPOUND_STRING(" (+"));
                 p = StringCopy(p, gAbilitiesInfo[innate].name);

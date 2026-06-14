@@ -56,7 +56,15 @@ void RecordAbilityBattle(enum BattlerId battlerId, enum Ability abilityId)
     gBattleHistory->abilities[battlerId] = abilityId;
     gAiPartyData->mons[GetBattlerSide(battlerId)][gBattlerPartyIndexes[battlerId]].ability = abilityId;
     if (BattleInfoCanRevealNow())
+    {
         gBattleStruct->infoAbilityRevealed[GetBattlerSide(battlerId)] |= 1u << gBattlerPartyIndexes[battlerId];
+        // FORK: snapshot the witnessed ability for the B_FRONTIER_BATTLE_INFO viewer.
+        // gAiPartyData->mons[].ability above is later clobbered by the AI's speculative
+        // switch/move evaluation (a benched mon simulated in the active slot records its
+        // own ability onto this slot), so the viewer must read this gated snapshot — taken
+        // here, at the moment of a genuine reveal — rather than the AI's live knowledge model.
+        gBattleStruct->infoRevealedAbility[GetBattlerSide(battlerId)][gBattlerPartyIndexes[battlerId]] = abilityId;
+    }
 }
 
 void RecordItemEffectBattle(enum BattlerId battlerId, enum HoldEffect itemEffect)
