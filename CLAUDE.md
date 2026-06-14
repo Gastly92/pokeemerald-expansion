@@ -4,6 +4,26 @@ This is a **fork** of [rh-hideout/pokeemerald-expansion](https://github.com/rh-h
 (a GBA decompilation-based romhacking base). We layer our own custom features on
 top of upstream.
 
+## Navigating efficiently (token budget)
+
+This is a huge tree (~30k files, ~1.5M lines) with large auto-generated data
+files. Reading one whole costs 25–60k tokens — so don't, and scope searches so
+they don't fan out across 11k sprites and palettes.
+
+- **Never `Read` these whole** — `Grep` for the entry, then `Read` with
+  `offset`/`limit` around the hit: `data/battle_anim_scripts.s`,
+  `src/data/graphics/pokemon.h`, `src/data/moves_info.h`, `src/data/items.h`,
+  `src/data/pokemon/level_up_learnsets/*.h`,
+  `src/data/pokemon/species_info/*.h`.
+- **Scope every search.** Pass `type`/`glob` + a `path`; start with
+  `files_with_matches` or `count`, pull content only where it matches. Searches
+  that don't need assets should skip `graphics/`, `sound/`, and `data/`.
+- **Delegate broad sweeps to a subagent** (`Explore`/`general-purpose`) so the
+  file-churn stays out of the main thread — you get the conclusion, not the dump.
+- **Iterate with `make check TESTS="<name>"`**, not the full 951-file suite; run
+  the full `make check` only before pushing. Keep build logs out of context —
+  the actionable signal is the error lines, not the whole transcript.
+
 ## Fork & upstream sync
 
 - **We pull in upstream updates, but we do NOT push our features back upstream.**
