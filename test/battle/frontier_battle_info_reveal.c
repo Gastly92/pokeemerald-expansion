@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 #include "battle_ai_util.h"
+#include "battle_ai_record.h"
 
 // FORK: B_FRONTIER_BATTLE_INFO. The in-battle INFO viewer must only treat a foe's
 // ability/item as "revealed" once the player has actually witnessed it. The AI's
@@ -22,5 +23,37 @@ AI_SINGLE_BATTLE_TEST("Frontier INFO: AI scoring a Prankster status move does no
         // Value is known (omniscient), but it must not be flagged as seen by the player.
         EXPECT(gAiPartyData->mons[B_SIDE_OPPONENT][0].ability == ABILITY_PRANKSTER);
         EXPECT((gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & 1u) == 0);
+    }
+}
+
+// FORK: B_FRONTIER_BATTLE_INFO. Once a foe's ability is genuinely witnessed, the viewer must
+// keep showing *that* ability even though the AI's speculative move/switch evaluation later
+// overwrites gAiPartyData->mons[].ability (its live, mutable knowledge model). The viewer reads
+// a reveal-time snapshot (gBattleStruct->infoRevealedAbility) instead, so a speculative record of
+// a different ability — e.g. a benched Prankster mon simulated in the active slot whose turn-order
+// check records Prankster onto that slot — can't change what the player sees. Without the snapshot,
+// a Krookodile whose Intimidate fired at battle start displayed as "Prankster" in the viewer.
+AI_SINGLE_BATTLE_TEST("Frontier INFO: a speculative ability record does not corrupt an already-revealed foe ability")
+{
+    GIVEN {
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
+        PLAYER(SPECIES_SLOWKING) { Ability(ABILITY_OWN_TEMPO); Moves(MOVE_SPLASH); }
+        OPPONENT(SPECIES_KROOKODILE) { Ability(ABILITY_INTIMIDATE); Moves(MOVE_EARTHQUAKE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SPLASH); }
+    } THEN {
+        // Intimidate fired on switch-in: genuinely revealed (bit set, snapshot taken).
+        EXPECT(gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & 1u);
+        EXPECT(gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][0] == ABILITY_INTIMIDATE);
+
+        // Simulate the AI's speculative evaluation recording a different ability onto the
+        // active foe's slot (mid-calc, so it updates the knowledge model but takes no reveal).
+        gAiLogicData->aiCalcInProgress = TRUE;
+        RecordAbilityBattle(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), ABILITY_PRANKSTER);
+        gAiLogicData->aiCalcInProgress = FALSE;
+
+        // The AI's model is clobbered, but the player-facing snapshot the viewer reads is intact.
+        EXPECT(gAiPartyData->mons[B_SIDE_OPPONENT][0].ability == ABILITY_PRANKSTER);
+        EXPECT(gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][0] == ABILITY_INTIMIDATE);
     }
 }
