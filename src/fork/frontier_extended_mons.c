@@ -56,18 +56,20 @@
 // opponent's exact set can't be read off the species alone.
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
-// that carries an innate Levitate, Regenerator, Unaware, or Sturdy always has it in
-// battle, so its .ability slot here is free to carry a *complementary* chosen ability —
-// the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
+// that carries an innate Levitate, Regenerator, Unaware, Sturdy, or Natural Cure always
+// has it in battle, so its .ability slot here is free to carry a *complementary* chosen
+// ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
 // still floats on its innate Levitate; an Unaware staller like Clefable lists
 // ABILITY_MAGIC_GUARD yet still ignores the foe's boosts via its innate Unaware; a
 // Skarmory wall lists ABILITY_KEEN_EYE yet still endures a lethal hit via its innate
-// Sturdy. Role comments that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"
-// describe the set's innate-backed playstyle, not the .ability field. (Cornerstone
-// Ogerpon's only real ability WAS Sturdy; now that it's innate, a fork-owned ability
-// override — src/species_ability_overrides.c — gives it a chosen Defiant so the slot
-// isn't wasted, the same trick used for ability-locked innate-Levitate floaters.)
+// Sturdy; a Blissey lists ABILITY_SERENE_GRACE yet still self-cleanses on its innate
+// Natural Cure. Role comments that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/
+// "Natural Cure" describe the set's innate-backed playstyle, not the .ability field.
+// (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
+// ability WAS Natural Cure; now that those are innate, a fork-owned ability override —
+// src/species_ability_overrides.c — gives each a chosen ability so the slot isn't wasted,
+// the same trick used for ability-locked innate-Levitate floaters.)
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -1695,7 +1697,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EVIOLITE, // special wall
         .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_TOXIC, MOVE_HEAL_BELL},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_SERENE_GRACE, // Natural Cure now innate; chosen Serene Grace (real slot 1)
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_FAIRY,
@@ -1767,7 +1769,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure spinner
         .moves = {MOVE_CHILLING_WATER, MOVE_RAPID_SPIN, MOVE_RECOVER, MOVE_ICE_BEAM},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_ANALYTIC, // Natural Cure now innate; chosen Analytic (real slot 2)
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 252, 0, 0),
         .teraType = TYPE_WATER,
@@ -3312,7 +3314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Regenerator wall
         .moves = {MOVE_RECOVER, MOVE_CHILLING_WATER, MOVE_POWER_GEM, MOVE_STEALTH_ROCK},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_HUSTLE, // Regen + Natural Cure both innate; Hustle is the only other real slot (inert on this special set)
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
         .teraType = TYPE_WATER,
@@ -3323,7 +3325,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Natural Cure pivot
         .moves = {MOVE_RECOVER, MOVE_CHILLING_WATER, MOVE_POWER_GEM, MOVE_TOXIC},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_HUSTLE, // Regen + Natural Cure both innate; Hustle is the only other real slot (inert on this special set)
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
         .teraType = TYPE_ROCK,
@@ -3622,7 +3624,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // special wall / cleric
         .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_HEAL_BELL, MOVE_TOXIC},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_SERENE_GRACE, // Natural Cure now innate; chosen Serene Grace (real slot 1)
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(4, 0, 252, 0, 0, 252),
         .teraType = TYPE_GHOST,
@@ -3633,7 +3635,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // stallbreaker support with hazards
         .moves = {MOVE_SEISMIC_TOSS, MOVE_SOFT_BOILED, MOVE_STEALTH_ROCK, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_SERENE_GRACE, // Natural Cure now innate; chosen Serene Grace (real slot 1)
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(4, 0, 252, 0, 0, 252),
         .teraType = TYPE_STEEL,
@@ -3845,7 +3847,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
         .moves = {MOVE_NASTY_PLOT, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_EARTH_POWER},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_TRIAGE, // Natural Cure now innate; chosen Triage via override (priority Giga Drain)
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_GRASS,
@@ -3856,7 +3858,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
         .moves = {MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_RECOVER, MOVE_U_TURN},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_TRIAGE, // Natural Cure now innate; chosen Triage via override (priority Giga Drain / Recover)
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 240, 0, 0, 16),
         .teraType = TYPE_WATER,
@@ -3867,7 +3869,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
         .moves = {MOVE_CALM_MIND, MOVE_GIGA_DRAIN, MOVE_PSYCHIC, MOVE_RECOVER},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_TRIAGE, // Natural Cure now innate; chosen Triage via override (priority Giga Drain / Recover)
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 60, 196, 0),
         .teraType = TYPE_FAIRY,
@@ -4776,7 +4778,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ALTARIANITE, // Mega Altaria (Pixilate, Dragon/Fairy) — Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_RETURN, MOVE_EARTHQUAKE, MOVE_ROOST},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_CLOUD_NINE, // Natural Cure now innate; chosen Cloud Nine (real slot 2; becomes Pixilate on Mega)
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_FAIRY,
@@ -4787,7 +4789,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure defensive pivot (no mega)
         .moves = {MOVE_DRAGON_PULSE, MOVE_ROOST, MOVE_DEFOG, MOVE_HEAL_BELL},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_CLOUD_NINE, // Natural Cure now innate; chosen Cloud Nine (real slot 2) negates weather
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(248, 0, 8, 0, 0, 252),
         .teraType = TYPE_DRAGON,
@@ -5763,7 +5765,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // special attacker
         .moves = {MOVE_LEAF_STORM, MOVE_SLUDGE_BOMB, MOVE_SLEEP_POWDER, MOVE_FLAMETHROWER},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_POISON_POINT, // Natural Cure now innate; chosen Poison Point (real slot 1) chips contact attackers
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_GRASS,
@@ -7073,7 +7075,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure Seed Flare / Synthesis
         .moves = {MOVE_SEED_FLARE, MOVE_EARTH_POWER, MOVE_AIR_SLASH, MOVE_SYNTHESIS},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_SERENE_GRACE, // Natural Cure now innate; chosen Serene Grace via override (doubles Seed Flare's SpD drop)
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_GRASS,
@@ -9809,7 +9811,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Natural Cure trick-room-friendly breaker
         .moves = {MOVE_POLTERGEIST, MOVE_WOOD_HAMMER, MOVE_EARTHQUAKE, MOVE_SHADOW_SNEAK},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_HARVEST, // Natural Cure now innate; chosen Harvest (real slot 2), Trevenant's signature
         .nature = NATURE_BRAVE,
         .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
         .teraType = TYPE_GHOST,
@@ -13234,7 +13236,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_EXPERT_BELT, // coverage pivot
         .moves = {MOVE_VOLT_SWITCH, MOVE_CLOSE_COMBAT, MOVE_NUZZLE, MOVE_MACH_PUNCH},
-        .ability = ABILITY_NATURAL_CURE,
+        .ability = ABILITY_IRON_FIST, // Natural Cure now innate; chosen Iron Fist (real slot 2) boosts Mach Punch
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_FIGHTING,

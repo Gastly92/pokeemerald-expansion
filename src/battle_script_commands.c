@@ -9508,6 +9508,25 @@ static void Cmd_switchoutabilities(void)
         SetMonData(GetBattlerMon(battler), MON_DATA_HP, &regenerate);
     }
 
+    // FORK: innate Natural Cure (FEATURE_INNATE_ABILITIES). Mirrors the switch's chosen
+    // Natural Cure path, fired for a mon carrying Natural Cure as an innate. Guarded on
+    // GetBattlerAbility() so a chosen Natural Cure (already cured above) never double-runs;
+    // BattlerHasAbility() applies the same suppression (Gastro Acid / Neutralizing Gas /
+    // not-on-field) as the real ability. Writes the party mon's status DIRECTLY (like the
+    // controller does for REQUEST_STATUS_BATTLE) instead of a second BtlController_EmitSetMonData,
+    // so it can't clobber the single bufferA slot a chosen ability's emit (e.g. the innate
+    // Regenerator heal above, or a chosen Regenerator's) may have queued this switch-out.
+    if (GetBattlerAbility(battler) != ABILITY_NATURAL_CURE
+     && BattlerHasAbility(battler, ABILITY_NATURAL_CURE)
+     && (gBattleMons[battler].status1 & STATUS1_ANY))
+    {
+        u32 status = 0;
+        if (gBattleMons[battler].status1 & STATUS1_SLEEP)
+            TryDeactivateSleepClause(GetBattlerSide(battler), gBattlerPartyIndexes[battler]);
+        gBattleMons[battler].status1 = 0;
+        SetMonData(GetBattlerMon(battler), MON_DATA_STATUS, &status);
+    }
+
     gBattleStruct->battlerState[battler].notOnField = TRUE;
 
     gBattlescriptCurrInstr = cmd->nextInstr;

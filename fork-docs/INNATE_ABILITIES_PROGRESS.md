@@ -31,7 +31,7 @@
 | :white_large_square: | Effect Spore | Contact with the Pokémon may inflict poison, sleep, or paralysis on the attacker. |
 | :white_large_square: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
 | :white_large_square: | Clear Body | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
-| :white_large_square: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
+| :white_check_mark: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
 | :white_large_square: | Lightning Rod | The Pokémon draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage. |
 | :white_large_square: | Serene Grace | Raises the likelihood of additional effects occurring when the Pokémon uses its moves. |
 | :white_large_square: | Swift Swim | Doubles the Pokémon's Speed stat in rain. |

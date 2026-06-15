@@ -15,8 +15,8 @@ sweep. We don't do that. Instead we **wire up one ability's behavior at a time**
 and only let species declare innates from that supported set. Today the set is
 **`LEVITATE`** (a passive Ground immunity), **`REGENERATOR`** (a silent
 1/3-HP switch-out heal), **`UNAWARE`** (a passive calc modifier that ignores
-the foe's stat-stage changes), and **`STURDY`** (a full-HP endure + OHKO-move
-immunity).
+the foe's stat-stage changes), **`STURDY`** (a full-HP endure + OHKO-move
+immunity), and **`NATURAL_CURE`** (a silent status cure on switch-out).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
