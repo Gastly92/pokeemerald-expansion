@@ -2678,7 +2678,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_LANTURN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky Volt Absorb pivot
-        .moves = {MOVE_VOLT_SWITCH, MOVE_SCALD, MOVE_ICE_BEAM, MOVE_THUNDER_WAVE},
+        .moves = {MOVE_VOLT_SWITCH, MOVE_CHILLING_WATER, MOVE_ICE_BEAM, MOVE_THUNDER_WAVE},
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
@@ -2689,7 +2689,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_LANTURN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
-        .moves = {MOVE_THUNDERBOLT, MOVE_SCALD, MOVE_ICE_BEAM, MOVE_VOLT_SWITCH},
+        .moves = {MOVE_THUNDERBOLT, MOVE_CHILLING_WATER, MOVE_ICE_BEAM, MOVE_VOLT_SWITCH},
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 132, 124),
@@ -3311,7 +3311,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_CORSOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Regenerator wall
-        .moves = {MOVE_RECOVER, MOVE_SCALD, MOVE_POWER_GEM, MOVE_STEALTH_ROCK},
+        .moves = {MOVE_RECOVER, MOVE_CHILLING_WATER, MOVE_POWER_GEM, MOVE_STEALTH_ROCK},
         .ability = ABILITY_NATURAL_CURE,
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
@@ -3322,7 +3322,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_CORSOLA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Natural Cure pivot
-        .moves = {MOVE_RECOVER, MOVE_SCALD, MOVE_POWER_GEM, MOVE_TOXIC},
+        .moves = {MOVE_RECOVER, MOVE_CHILLING_WATER, MOVE_POWER_GEM, MOVE_TOXIC},
         .ability = ABILITY_NATURAL_CURE,
         .nature = NATURE_CALM,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
@@ -6260,7 +6260,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_LUMINEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Defog/U-turn utility
-        .moves = {MOVE_SCALD, MOVE_ICE_BEAM, MOVE_U_TURN, MOVE_DEFOG},
+        .moves = {MOVE_CHILLING_WATER, MOVE_ICE_BEAM, MOVE_U_TURN, MOVE_DEFOG},
         .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 4, 0),
@@ -12537,30 +12537,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE_RELAXED,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 4, 0),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-
-    // ---- Duraludon ----
-    {
-        .species = SPECIES_DURALUDON,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Light Metal special breaker
-        .moves = {MOVE_DRACO_METEOR, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT, MOVE_BODY_PRESS},
-        .ability = ABILITY_LIGHT_METAL,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_DURALUDON,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Stealth Rock bulky setup
-        .moves = {MOVE_STEALTH_ROCK, MOVE_FLASH_CANNON, MOVE_DRACO_METEOR, MOVE_BODY_PRESS},
-        .ability = ABILITY_STALWART,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(252, 0, 0, 0, 252, 4),
-        .teraType = TYPE_STEEL,
         .ball = BALL_POKE,
     },
 
