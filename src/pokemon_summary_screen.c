@@ -290,6 +290,13 @@ static void Task_PrintContestMoves(u8);
 static void PrintContestMoveDescription(u8);
 static bool32 InnateContestModeActive(void); // FORK: Contest Moves page lists innate abilities
 static void PrintInnateAbilitiesPage(void); // FORK
+static bool32 InnateCursorActive(void); // FORK: scrollable cursor on the innate-ability listing
+static void MoveInnateCursor(s8 direction); // FORK
+static u32 CountSpeciesInnates(u16 species); // FORK
+// FORK: cursor state for the scrollable innate-ability listing (repurposed Contest Moves page).
+static u8 sInnateCursorPos;          // absolute index of the highlighted innate
+static u8 sInnateScroll;             // index of the topmost visible innate (lets >4 innates scroll)
+static bool8 sInnateSelectorCreated; // whether the move-selector sprite is up for the innate list
 static void PrintMoveDetails(enum Move move);
 static void PrintNewMoveDetailsOrCancelText(void);
 static void AddAndFillMoveNamesWindow(void);
@@ -1767,11 +1774,19 @@ static void Task_HandleInput(u8 taskId)
     {
         if (JOY_NEW(DPAD_UP))
         {
-            ChangeSummaryPokemon(taskId, -1);
+            // FORK: on the innate-ability listing with more than one innate, Up/Down browse the
+            // list (and scroll past 4) instead of cycling the party Pokémon.
+            if (InnateCursorActive())
+                MoveInnateCursor(-1);
+            else
+                ChangeSummaryPokemon(taskId, -1);
         }
         else if (JOY_NEW(DPAD_DOWN))
         {
-            ChangeSummaryPokemon(taskId, 1);
+            if (InnateCursorActive())
+                MoveInnateCursor(1);
+            else
+                ChangeSummaryPokemon(taskId, 1);
         }
         else if (JOY_NEW(DPAD_LEFT))
         {
@@ -3395,6 +3410,13 @@ static void PutPageWindowTilemaps(u8 page)
             if (ShouldShowMoveRelearner() && !InnateContestModeActive())
                 PutWindowTilemap(PSS_LABEL_WINDOW_PROMPT_RELEARN);
         }
+        // FORK: raise the selector cursor for a browsable/scrollable innate list (when >1 innate),
+        // so Up/Down move it and show each innate's description. Torn down in ClearPageWindowTilemaps.
+        if (InnateCursorActive())
+        {
+            CreateMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
+            sInnateSelectorCreated = TRUE;
+        }
         break;
     }
 
@@ -3443,6 +3465,17 @@ static void ClearPageWindowTilemaps(u8 page)
             if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
                 ClearWindowTilemap(PSS_LABEL_WINDOW_MOVES_APPEAL_JAM);
         }
+        // FORK: leaving the innate-ability listing — tear down the selector cursor and reset its
+        // scroll so the next visit starts at the top (Up/Down go back to cycling the party). Only
+        // touch firstMoveIndex on the path that borrowed it, never during move reorder.
+        if (sInnateSelectorCreated)
+        {
+            DestroyMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
+            sInnateSelectorCreated = FALSE;
+            sMonSummaryScreen->firstMoveIndex = 0;
+        }
+        sInnateCursorPos = 0;
+        sInnateScroll = 0;
 
         ClearWindowTilemap(PSS_LABEL_WINDOW_PROMPT_RELEARN);
         break;
@@ -4171,32 +4204,84 @@ static bool32 InnateContestModeActive(void)
         && sMonSummaryScreen->mode != SUMMARY_MODE_RELEARNER_BATTLE;
 }
 
-// FORK: renders the species' innate abilities where the contest move slots normally
-// go (names in the move-name slots, the first innate's description below). PP, hearts
-// and category icons are suppressed elsewhere for this page. In practice a species has
-// one innate; if it ever has more, all names list but only the first's description shows.
+// FORK: number of innate abilities a species declares (the table is variable-length and
+// ABILITY_NONE-terminated, with no fixed cap — so count rather than assume <= 4).
+static u32 CountSpeciesInnates(u16 species)
+{
+    u32 count = 0;
+    while (GetSpeciesInnate(species, count) != ABILITY_NONE)
+        count++;
+    return count;
+}
+
+// FORK: TRUE when the innate listing should host a browsable Up/Down cursor — i.e. the page is
+// being shown as the innate list AND the species has more than one innate (a single innate, or
+// none, needs no cursor and Up/Down keep cycling the party as usual).
+static bool32 InnateCursorActive(void)
+{
+    return InnateContestModeActive()
+        && sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES
+        && CountSpeciesInnates(sMonSummaryScreen->summary.species) > 1;
+}
+
+// FORK: renders the species' innate abilities where the contest move slots normally go (names in
+// the move-name slots, the highlighted innate's description below). PP, hearts and category icons
+// are suppressed elsewhere for this page. The list is windowed to MAX_MON_MOVES rows starting at
+// sInnateScroll, so a species with more innates than fit can be scrolled into view; the move-
+// selector sprite (driven by firstMoveIndex) marks the highlighted row. Recomputes the scroll and
+// cursor each call, so it doubles as the redraw after the cursor moves.
 static void PrintInnateAbilitiesPage(void)
 {
     static const u8 sText_NoInnateAbilities[] = _("No innate abilities.");
     u8 nameWindowId = AddWindowFromTemplateList(sPageMovesTemplate, PSS_DATA_WINDOW_MOVE_NAMES);
     u8 descWindowId = AddWindowFromTemplateList(sPageMovesTemplate, PSS_DATA_WINDOW_MOVE_DESCRIPTION);
     u32 species = sMonSummaryScreen->summary.species;
-    enum Ability firstInnate = GetSpeciesInnate(species, 0);
+    u32 count = CountSpeciesInnates(species);
+    enum Ability selected;
 
+    // Keep the cursor in range and scroll it into the visible MAX_MON_MOVES-row window.
+    if (count != 0 && sInnateCursorPos >= count)
+        sInnateCursorPos = count - 1;
+    if (sInnateScroll > sInnateCursorPos)
+        sInnateScroll = sInnateCursorPos;
+    else if (sInnateCursorPos >= sInnateScroll + MAX_MON_MOVES)
+        sInnateScroll = sInnateCursorPos - (MAX_MON_MOVES - 1);
+    sMonSummaryScreen->firstMoveIndex = sInnateCursorPos - sInnateScroll; // selector-sprite row
+
+    FillWindowPixelBuffer(nameWindowId, PIXEL_FILL(0));
     for (u32 i = 0; i < MAX_MON_MOVES; i++)
     {
-        enum Ability innate = GetSpeciesInnate(species, i);
+        enum Ability innate = GetSpeciesInnate(species, sInnateScroll + i);
 
         if (innate == ABILITY_NONE)
             PrintTextOnWindow(nameWindowId, gText_OneDash, 0, i * 16 + 1, 0, 1);
         else
             PrintTextOnWindowToFit(nameWindowId, gAbilitiesInfo[innate].name, 0, i * 16 + 1, 0, 1);
     }
+    PutWindowTilemap(nameWindowId);
 
-    if (firstInnate == ABILITY_NONE)
+    FillWindowPixelBuffer(descWindowId, PIXEL_FILL(0));
+    selected = GetSpeciesInnate(species, sInnateCursorPos);
+    if (selected == ABILITY_NONE)
         PrintTextOnWindow(descWindowId, sText_NoInnateAbilities, 6, 1, 0, 0);
     else
-        PrintTextOnWindow(descWindowId, gAbilitiesInfo[firstInnate].description, 6, 1, 0, 0);
+        PrintTextOnWindow(descWindowId, gAbilitiesInfo[selected].description, 6, 1, 0, 0);
+    PutWindowTilemap(descWindowId);
+
+    ScheduleBgCopyTilemapToVram(0);
+}
+
+// FORK: move the innate-list cursor (Up = -1, Down = +1), wrapping around the list, then redraw.
+static void MoveInnateCursor(s8 direction)
+{
+    u32 count = CountSpeciesInnates(sMonSummaryScreen->summary.species);
+
+    if (count <= 1)
+        return;
+
+    sInnateCursorPos = (sInnateCursorPos + count + direction) % count;
+    PlaySE(SE_SELECT);
+    PrintInnateAbilitiesPage(); // recomputes scroll + firstMoveIndex and repaints names + description
 }
 
 static void PrintContestMoves(void)
