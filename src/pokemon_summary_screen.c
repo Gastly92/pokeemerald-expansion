@@ -290,13 +290,16 @@ static void Task_PrintContestMoves(u8);
 static void PrintContestMoveDescription(u8);
 static bool32 InnateContestModeActive(void); // FORK: Contest Moves page lists innate abilities
 static void PrintInnateAbilitiesPage(void); // FORK
-static bool32 InnateCursorActive(void); // FORK: scrollable cursor on the innate-ability listing
+static bool32 CanBrowseInnates(void); // FORK: A enters a scrollable cursor on the innate listing
+static void SwitchToInnateBrowse(u8 taskId); // FORK
+static void Task_HandleInput_InnateBrowse(u8 taskId); // FORK
+static void CloseInnateBrowse(u8 taskId); // FORK
 static void MoveInnateCursor(s8 direction); // FORK
 static u32 CountSpeciesInnates(u16 species); // FORK
-// FORK: cursor state for the scrollable innate-ability listing (repurposed Contest Moves page).
+// FORK: cursor state for the scrollable innate-ability listing (repurposed Contest Moves page),
+// live only while browsing (entered with A, like the Battle Moves move cursor).
 static u8 sInnateCursorPos;          // absolute index of the highlighted innate
 static u8 sInnateScroll;             // index of the topmost visible innate (lets >4 innates scroll)
-static bool8 sInnateSelectorCreated; // whether the move-selector sprite is up for the innate list
 static void PrintMoveDetails(enum Move move);
 static void PrintNewMoveDetailsOrCancelText(void);
 static void AddAndFillMoveNamesWindow(void);
@@ -1774,19 +1777,11 @@ static void Task_HandleInput(u8 taskId)
     {
         if (JOY_NEW(DPAD_UP))
         {
-            // FORK: on the innate-ability listing with more than one innate, Up/Down browse the
-            // list (and scroll past 4) instead of cycling the party Pokémon.
-            if (InnateCursorActive())
-                MoveInnateCursor(-1);
-            else
-                ChangeSummaryPokemon(taskId, -1);
+            ChangeSummaryPokemon(taskId, -1);
         }
         else if (JOY_NEW(DPAD_DOWN))
         {
-            if (InnateCursorActive())
-                MoveInnateCursor(1);
-            else
-                ChangeSummaryPokemon(taskId, 1);
+            ChangeSummaryPokemon(taskId, 1);
         }
         else if (JOY_NEW(DPAD_LEFT))
         {
@@ -1823,9 +1818,21 @@ static void Task_HandleInput(u8 taskId)
                 }
                 else if (IS_MOVE_PAGE(sMonSummaryScreen->currPageIndex))
                 {
-                    // FORK: the Contest Moves page lists innate abilities, not selectable
-                    // moves, so A does nothing there (move reordering stays on Battle Moves).
-                    if (!(sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES && InnateContestModeActive()))
+                    // FORK: the Contest Moves page lists innate abilities, not selectable moves.
+                    // A doesn't reorder moves there; instead, like the Battle Moves page's move
+                    // cursor, it enters a browse mode that highlights an innate and lets Up/Down
+                    // scroll the list (showing each one's description) — but only when there's more
+                    // than one innate to browse. With 0/1 innate, or a non-innate contest page, A
+                    // does nothing here (move reordering stays on Battle Moves).
+                    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES && InnateContestModeActive())
+                    {
+                        if (CanBrowseInnates())
+                        {
+                            PlaySE(SE_SELECT);
+                            SwitchToInnateBrowse(taskId);
+                        }
+                    }
+                    else
                     {
                         PlaySE(SE_SELECT);
                         SwitchToMoveSelection(taskId);
@@ -3410,13 +3417,6 @@ static void PutPageWindowTilemaps(u8 page)
             if (ShouldShowMoveRelearner() && !InnateContestModeActive())
                 PutWindowTilemap(PSS_LABEL_WINDOW_PROMPT_RELEARN);
         }
-        // FORK: raise the selector cursor for a browsable/scrollable innate list (when >1 innate),
-        // so Up/Down move it and show each innate's description. Torn down in ClearPageWindowTilemaps.
-        if (InnateCursorActive())
-        {
-            CreateMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
-            sInnateSelectorCreated = TRUE;
-        }
         break;
     }
 
@@ -3465,18 +3465,6 @@ static void ClearPageWindowTilemaps(u8 page)
             if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
                 ClearWindowTilemap(PSS_LABEL_WINDOW_MOVES_APPEAL_JAM);
         }
-        // FORK: leaving the innate-ability listing — tear down the selector cursor and reset its
-        // scroll so the next visit starts at the top (Up/Down go back to cycling the party). Only
-        // touch firstMoveIndex on the path that borrowed it, never during move reorder.
-        if (sInnateSelectorCreated)
-        {
-            DestroyMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
-            sInnateSelectorCreated = FALSE;
-            sMonSummaryScreen->firstMoveIndex = 0;
-        }
-        sInnateCursorPos = 0;
-        sInnateScroll = 0;
-
         ClearWindowTilemap(PSS_LABEL_WINDOW_PROMPT_RELEARN);
         break;
     }
@@ -4214,10 +4202,10 @@ static u32 CountSpeciesInnates(u16 species)
     return count;
 }
 
-// FORK: TRUE when the innate listing should host a browsable Up/Down cursor — i.e. the page is
-// being shown as the innate list AND the species has more than one innate (a single innate, or
-// none, needs no cursor and Up/Down keep cycling the party as usual).
-static bool32 InnateCursorActive(void)
+// FORK: TRUE when pressing A on the innate listing should open the browse cursor — i.e. the page is
+// the innate list AND the species has more than one innate (a single innate, or none, has nothing to
+// scroll, so A does nothing and its description already shows).
+static bool32 CanBrowseInnates(void)
 {
     return InnateContestModeActive()
         && sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES
@@ -4282,6 +4270,47 @@ static void MoveInnateCursor(s8 direction)
     sInnateCursorPos = (sInnateCursorPos + count + direction) % count;
     PlaySE(SE_SELECT);
     PrintInnateAbilitiesPage(); // recomputes scroll + firstMoveIndex and repaints names + description
+}
+
+// FORK: enter the innate-list browse cursor (the A-button counterpart to SwitchToMoveSelection on the
+// Battle Moves page). Highlights the first innate with the move-selector sprite and hands input to
+// Task_HandleInput_InnateBrowse, where Up/Down scroll the list and A/B leave. Kept minimal: no move
+// reorder, no power/acc windows, no extra prompt — just the cursor and the per-innate description.
+static void SwitchToInnateBrowse(u8 taskId)
+{
+    sInnateCursorPos = 0;
+    sInnateScroll = 0;
+    PrintInnateAbilitiesPage();                            // renders at cursor 0, sets firstMoveIndex = 0
+    CreateMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1); // highlight bar, positioned by firstMoveIndex
+    gTasks[taskId].func = Task_HandleInput_InnateBrowse;
+}
+
+static void Task_HandleInput_InnateBrowse(u8 taskId)
+{
+    if (MenuHelpers_ShouldWaitForLinkRecv() != TRUE && !gPaletteFade.active)
+    {
+        if (JOY_NEW(DPAD_UP))
+            MoveInnateCursor(-1);
+        else if (JOY_NEW(DPAD_DOWN))
+            MoveInnateCursor(1);
+        else if (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON))
+        {
+            PlaySE(SE_SELECT);
+            CloseInnateBrowse(taskId);
+        }
+    }
+}
+
+// FORK: leave the innate-list browse cursor — destroy the selector, reset the scroll back to the top
+// (so the description shows the first innate again), and restore the normal input handler.
+static void CloseInnateBrowse(u8 taskId)
+{
+    DestroyMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
+    sInnateCursorPos = 0;
+    sInnateScroll = 0;
+    sMonSummaryScreen->firstMoveIndex = 0;
+    PrintInnateAbilitiesPage(); // repaint at the top (first innate's description)
+    gTasks[taskId].func = Task_HandleInput;
 }
 
 static void PrintContestMoves(void)
