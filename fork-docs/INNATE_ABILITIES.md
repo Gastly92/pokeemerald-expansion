@@ -132,8 +132,11 @@ bookkeeping, and they are *not* covered by the shared calc — so they must be m
 innate-aware (`BattlerHasAbility(b, X)` for an on-field battler; `SpeciesHasInnate(species,
 X)` in the off-field switch sim, mirroring Levitate). Litmus test: *"if this mon's X were
 innate-only, would the AI here still do the right thing?"* If the answer rides on a bare
-`== ABILITY_X`, wire it. (Sturdy did this for four AI sites; **Regenerator's AI pivot reads
-are a known unwired gap of exactly this kind** — a good first cleanup.)
+`== ABILITY_X`, wire it. (Worked examples: **Sturdy** wired four AI sites — `CanEndureHit`,
+the OHKO-move avoidance, `BattlerHasMaxHPProtection`, the switch-in KO sim — and **Regenerator**
+wired its switch/pivot heuristics — `ShouldSwitchIfAbilityBenefit` (whose `switch(ability)` dispatch
+needed a small pre-check + a factored-out helper so the innate is considered even when the chosen
+ability differs), the bad-odds/hazard-switchin checks, and `ShouldPivot`.)
 
 How much is needed depends on the ability class:
 

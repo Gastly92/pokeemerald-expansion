@@ -27,7 +27,11 @@
 //     real Regenerator so a mon carrying it as an innate heals exactly like the real ability.
 //     The heal is silent (no script/pop-up), so no driver is needed. Suppression parity holds:
 //     the innate is gated by IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field),
-//     same as the real ability's GetBattlerAbility() path. This populates the canon Regenerator
+//     same as the real ability's GetBattlerAbility() path. AI is innate-aware: the heal isn't in
+//     any shared calc the AI runs, so the AI's dedicated Regenerator switch/pivot reads
+//     (ShouldSwitchIfAbilityBenefit, the bad-odds and hazard-switchin checks in src/battle_ai_switch.c,
+//     and ShouldPivot in src/battle_ai_util.c) credit an innate Regenerator via BattlerHasAbility(),
+//     so the AI values an innate-only Regenerator's pivot heal. This populates the canon Regenerator
 //     users so they keep their signature pivot heal regardless of which ability slot the build
 //     picks, plus a few flavor regenerators (Staryu/Starmie's regrowing core, the axolotl Wooper
 //     line, Zygarde's reassembling cells).

@@ -697,3 +697,25 @@ AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI treats an innate Sturdy as O
             TURN { EXPECT_MOVE(opponent, MOVE_FISSURE); } // no innate -> the guaranteed OHKO is the AI's best move
     }
 }
+
+// AI innate-awareness for Regenerator. Regenerator's effect (a switch-out heal) isn't in any shared
+// calc the AI runs — the AI reasons about it only in dedicated `== ABILITY_REGENERATOR` switch/pivot
+// reads, which are now innate-aware (BattlerHasAbility). Mirrors the chosen-Regenerator switch test
+// in ai_switching.c, but Staryu has NO native Regenerator (chosen Natural Cure, and it's unstatused
+// so Natural Cure offers no switch reason) — so the AI banks the 1/3 heal by switching only via the
+// innate pre-check in ShouldSwitchIfAbilityBenefit.
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI switches an innate-Regenerator mon to bank the heal")
+{
+    PASSES_RANDOMLY(SHOULD_SWITCH_REGENERATOR_PERCENTAGE, 100, RNG_AI_SWITCH_REGENERATOR);
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_STARYU, ABILITY_REGENERATOR));
+        ASSUME(gSpeciesInfo[SPECIES_STARYU].abilities[0] != ABILITY_REGENERATOR);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
+        PLAYER(SPECIES_ZIGZAGOON) { Moves(MOVE_SCRATCH); }
+        OPPONENT(SPECIES_STARYU) { MaxHP(100); HP(65); Ability(ABILITY_NATURAL_CURE); Moves(MOVE_SCRATCH); } // chosen != Regenerator; switch is driven by the innate
+        OPPONENT(SPECIES_STARYU) { Ability(ABILITY_NATURAL_CURE); Moves(MOVE_SCRATCH); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); EXPECT_SWITCH(opponent, 1); }
+    }
+}
