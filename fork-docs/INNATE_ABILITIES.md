@@ -114,8 +114,26 @@ changes). This is the human record of what's actually wired; keep it honest.
 an ability often reads in several scattered places, not one. "Single site" below is
 the *easy class*, not a promise of one hit: Unaware took **four** (`battle_util.c`
 damage calc ×2 + `GetTotalAccuracy` + `GetAccEvasionStageDelta`). Skip the pure
-identity/AI-bookkeeping reads (`RecordAbilityBattle`, `gAiLogicData->abilities[]`,
-ability pop-up) — only the *effect* sites get the innate clause.
+*identity* reads (`RecordAbilityBattle`, the ability pop-up's identity, the
+single-valued `gAiLogicData->abilities[b]` *as the mon's displayed ability*) — those
+stay the chosen-slot identity. Only the *effect* sites get the innate clause.
+
+**Don't skip the AI's *effect* reads, though — and `grep src/battle_ai_*.c` for them
+specifically.** This is the subtle one the early Unaware framing got wrong. The AI's
+*damage/type* prediction runs through the **shared** `DamageContext` calc, so any
+effect that lives *inside* that calc (Levitate's type immunity, Unaware's stat-ignore)
+is correct for the AI **for free**, keyed off the real battler. But an effect that does
+**not** live in the shared calc — an *event* effect (Regenerator's switch-out heal) or a
+*survival* effect with its own predictor (Sturdy's endure / OHKO-immunity) — has the AI
+reason about it in **dedicated helpers** that read `gAiLogicData->abilities[b] ==
+ABILITY_X` (e.g. `CanEndureHit`, `BattlerHasMaxHPProtection`, the OHKO predictor, the
+`battle_ai_switch.c` KO sim and pivot scoring). Those are **effect** reads, not identity
+bookkeeping, and they are *not* covered by the shared calc — so they must be made
+innate-aware (`BattlerHasAbility(b, X)` for an on-field battler; `SpeciesHasInnate(species,
+X)` in the off-field switch sim, mirroring Levitate). Litmus test: *"if this mon's X were
+innate-only, would the AI here still do the right thing?"* If the answer rides on a bare
+`== ABILITY_X`, wire it. (Sturdy did this for four AI sites; **Regenerator's AI pivot reads
+are a known unwired gap of exactly this kind** — a good first cleanup.)
 
 How much is needed depends on the ability class:
 
@@ -247,12 +265,20 @@ Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …).
    line (e.g. "Unaware wall") stays — it now describes the innate-backed playstyle.
 4. **The replacement must be a real ability slot for that species** (`CreateFacilityMon`
    silently falls back to slot 0 otherwise). Pick from the species' own
-   `gSpeciesInfo[...].abilities[]`, or — for an "ability-locked" species whose only
-   real ability is the one now innate — add a row to the fork-owned override table
-   `src/species_ability_overrides.c` (see its callers / the `FORK:` note in
-   `src/battle_frontier.c`). `test/frontier_extended_roster.c` fails CI if any
-   `.ability` doesn't resolve to a real slot, so a bad pick can't slip through.
-5. Update the roster header's INNATE ABILITIES note to mention the new ability.
+   `gSpeciesInfo[...].abilities[]`.
+5. **Ability-locked species whose *only* real ability is the one now innate** are the
+   important case (e.g. Cornerstone Ogerpon = only Sturdy; the innate-Levitate floaters
+   Rotom/Hydreigon/the lake trio). Their `.ability` slot has nothing complementary to point
+   at, so **don't** leave it on the now-redundant ability and **don't** just drop the set —
+   add a row to the fork-owned override table `src/species_ability_overrides.c` giving them a
+   *flavorful* chosen ability in an empty slot (Ogerpon-Cornerstone → `DEFIANT`, its signature),
+   then set `.ability` to it. The mon then runs that ability **and** the innate. This is also
+   why such a species is **not** omitted from the innate table as "redundant": omission only
+   applies to a sole-ability species that *isn't* in the roster (nothing observes its innate,
+   so it'd be dead weight) — a sole-ability species that *is* a frontier set instead takes the
+   innate + the override, so its slot pays off. `test/frontier_extended_roster.c` fails CI if any
+   `.ability` doesn't resolve to a real slot (through the override hook), so a bad pick can't slip through.
+6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it
 

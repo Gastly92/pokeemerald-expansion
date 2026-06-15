@@ -671,3 +671,29 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Sturdy user keeps it via i
         EXPECT_EQ(player->hp, 1);
     }
 }
+
+// AI coverage. Unlike Levitate (immunity in the shared type calc) and Unaware (stat-ignore in the
+// shared damage calc), Sturdy's survival reasoning lives in DEDICATED AI helpers that read the cached
+// chosen ability — so the innate had to be wired into them explicitly (BattlerHasAbility in
+// battle_ai_util.c, SpeciesHasInnate in the battle_ai_switch.c KO sim). Here the OHKO-move avoidance:
+// the AI won't throw a (No Guard, sure-hit) Fissure at a mon it knows is OHKO-immune via innate Sturdy.
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI treats an innate Sturdy as OHKO-move immunity")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_FISSURE) == EFFECT_OHKO);
+        ASSUME(SpeciesHasInnate(SPECIES_CLOYSTER, ABILITY_STURDY));
+        ASSUME(gSpeciesInfo[SPECIES_CLOYSTER].abilities[0] != ABILITY_STURDY);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
+        PLAYER(SPECIES_CLOYSTER); // innate Sturdy when the feature is on
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_NO_GUARD); Moves(MOVE_FISSURE, MOVE_TACKLE); } // No Guard -> Fissure is a sure OHKO
+    } WHEN {
+        if (enabled)
+            TURN { EXPECT_MOVE(opponent, MOVE_TACKLE); }  // innate Sturdy is OHKO-immune -> AI avoids the wasted Fissure
+        else
+            TURN { EXPECT_MOVE(opponent, MOVE_FISSURE); } // no innate -> the guaranteed OHKO is the AI's best move
+    }
+}

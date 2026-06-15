@@ -64,6 +64,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { SPECIES_AUDINO,          1, ABILITY_MAGIC_GUARD },  // slot 1 was Regenerator
     { SPECIES_ALOMOMOLA,       2, ABILITY_WATER_ABSORB }, // slot 2 was Regenerator
     { SPECIES_TORNADUS_THERIAN, 1, ABILITY_PRANKSTER },   // slot 1 was empty
+
+    // ── Innate Sturdy, ability-locked: Cornerstone Ogerpon's ONLY ability is Sturdy, now granted
+    //    innately, so its frontier set would otherwise waste its slot on the redundant Sturdy. Give
+    //    it a chosen Defiant in the empty slot 1 — Ogerpon's signature ability, and a fitting +2 Atk
+    //    punish for the Cornerstone Swords-Dance sweeper. It endures on the innate Sturdy regardless.
+    { SPECIES_OGERPON_CORNERSTONE, 1, ABILITY_DEFIANT },
 };
 
 enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)

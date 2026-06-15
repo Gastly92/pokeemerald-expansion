@@ -64,9 +64,10 @@
 // ABILITY_MAGIC_GUARD yet still ignores the foe's boosts via its innate Unaware; a
 // Skarmory wall lists ABILITY_KEEN_EYE yet still endures a lethal hit via its innate
 // Sturdy. Role comments that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"
-// describe the set's innate-backed playstyle, not the .ability field. (Ogerpon-
-// Cornerstone is the lone Sturdy exception: Sturdy is its sole ability, so it is not an
-// innate and keeps .ability = ABILITY_STURDY.)
+// describe the set's innate-backed playstyle, not the .ability field. (Cornerstone
+// Ogerpon's only real ability WAS Sturdy; now that it's innate, a fork-owned ability
+// override — src/species_ability_overrides.c — gives it a chosen Defiant so the slot
+// isn't wasted, the same trick used for ability-locked innate-Levitate floaters.)
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -14720,7 +14721,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CORNERSTONE_MASK, // Sturdy Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_STONE_EDGE},
-        .ability = ABILITY_STURDY, // kept: Sturdy is Cornerstone's sole ability, so it is NOT an innate (no free slot)
+        .ability = ABILITY_DEFIANT, // Sturdy now innate; Cornerstone's sole ability was Sturdy, so a fork override (species_ability_overrides.c) gives it a chosen Defiant
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_ROCK,
