@@ -387,7 +387,7 @@ static bool32 ShouldSwitchIfHasBadOdds(struct SwitchAiContext *switchContext)
     // Start assessing whether or not mon has bad odds
     // Jump straight to switching out in cases where mon gets OHKO'd
     if ((switchContext->battlerGetsOHKOd && !switchContext->canBattlerWin1v1) && (gBattleMons[switchContext->battler].hp >= gBattleMons[switchContext->battler].maxHP / 2 // And the current mon has at least 1/2 their HP, or 1/4 HP and Regenerator
-            || (gAiLogicData->abilities[switchContext->battler] == ABILITY_REGENERATOR && gBattleMons[switchContext->battler].hp >= gBattleMons[switchContext->battler].maxHP / 4)))
+            || (BattlerHasAbility(switchContext->battler, ABILITY_REGENERATOR) /* FORK: innate-aware */ && gBattleMons[switchContext->battler].hp >= gBattleMons[switchContext->battler].maxHP / 4)))
     {
         // 50% chance to stay in regardless
         if (RandomPercentage(RNG_AI_SWITCH_HASBADODDS, (100 - GetSwitchChance(SHOULD_SWITCH_HASBADODDS))) && !gAiLogicData->aiPredictionInProgress)
@@ -402,7 +402,7 @@ static bool32 ShouldSwitchIfHasBadOdds(struct SwitchAiContext *switchContext)
     {
         if (!switchContext->hasEffectiveMove // If the AI doesn't have a super effective move
         && (gBattleMons[switchContext->battler].hp >= gBattleMons[switchContext->battler].maxHP / 2 // And the current mon has at least 1/2 their HP, or 1/4 HP and Regenerator
-            || (gAiLogicData->abilities[switchContext->battler] == ABILITY_REGENERATOR
+            || (BattlerHasAbility(switchContext->battler, ABILITY_REGENERATOR) /* FORK: innate-aware */
             && gBattleMons[switchContext->battler].hp >= gBattleMons[switchContext->battler].maxHP / 4)))
         {
             // Then check if they have an important status move, which is worth using even in a bad matchup
@@ -991,12 +991,33 @@ static bool32 ShouldSwitchIfIntimidateBenefit(struct SwitchAiContext *switchCont
     return hasValidTarget;
 }
 
+// FORK: the Regenerator switch-for-heal heuristic, factored out so an innate Regenerator
+// (FEATURE_INNATE_ABILITIES) gets the same consideration as a real one even when the chosen
+// ability differs. Returns TRUE if the mon should switch to bank the 1/3 heal. Behavior-identical
+// to the body that used to live inline in ShouldSwitchIfAbilityBenefit's ABILITY_REGENERATOR case.
+static bool32 ShouldSwitchForRegenerator(struct SwitchAiContext *switchContext)
+{
+    if (gBattleMons[switchContext->battler].status1 & STATUS1_ANY) // don't switch if ailment
+        return FALSE;
+    return (gBattleMons[switchContext->battler].hp <= ((gBattleMons[switchContext->battler].maxHP * 2) / 3))
+        && gAiLogicData->mostSuitableMonId[switchContext->battler] != PARTY_SIZE
+        && (switchContext->hasStatRaised ? RandomPercentage(RNG_AI_SWITCH_REGENERATOR, GetSwitchChance(SHOULD_SWITCH_REGENERATOR_STATS_RAISED)) : RandomPercentage(RNG_AI_SWITCH_REGENERATOR, GetSwitchChance(SHOULD_SWITCH_REGENERATOR)));
+}
+
 static bool32 ShouldSwitchIfAbilityBenefit(struct SwitchAiContext *switchContext)
 {
     //Check if ability is blocked
     if (gBattleMons[switchContext->battler].volatiles.gastroAcid
         || IsNeutralizingGasOnField())
         return FALSE;
+
+    // FORK: an innate Regenerator gets the same switch-for-heal consideration as a real one even
+    // when the chosen ability differs. It only *adds* a switch reason — if it declines, fall through
+    // so the chosen ability's own benefit (the switch below) still gets a look.
+    if (gAiLogicData->abilities[switchContext->battler] != ABILITY_REGENERATOR
+        && BattlerHasAbility(switchContext->battler, ABILITY_REGENERATOR)
+        && ShouldSwitchForRegenerator(switchContext))
+        return SetSwitchinAndSwitch(switchContext->battler, PARTY_SIZE);
 
     switch (gAiLogicData->abilities[switchContext->battler])
     {
@@ -1016,14 +1037,8 @@ static bool32 ShouldSwitchIfAbilityBenefit(struct SwitchAiContext *switchContext
         return FALSE;
 
     case ABILITY_REGENERATOR:
-        //Don't switch if ailment
-        if (gBattleMons[switchContext->battler].status1 & STATUS1_ANY)
-            return FALSE;
-        if ((gBattleMons[switchContext->battler].hp <= ((gBattleMons[switchContext->battler].maxHP * 2) / 3))
-             && gAiLogicData->mostSuitableMonId[switchContext->battler] != PARTY_SIZE
-             && (switchContext->hasStatRaised ? RandomPercentage(RNG_AI_SWITCH_REGENERATOR, GetSwitchChance(SHOULD_SWITCH_REGENERATOR_STATS_RAISED)) : RandomPercentage(RNG_AI_SWITCH_REGENERATOR, GetSwitchChance(SHOULD_SWITCH_REGENERATOR))))
+        if (ShouldSwitchForRegenerator(switchContext))
             break;
-
         return FALSE;
 
     case ABILITY_INTIMIDATE:
@@ -1120,10 +1135,9 @@ static bool32 CanUseSuperEffectiveMoveAgainstOpponents(enum BattlerId battler, e
 static bool32 CanMonSurviveHazardSwitchin(struct SwitchAiContext *switchContext)
 {
     u32 hazardDamage = 0, battlerHp = gBattleMons[switchContext->battler].hp;
-    enum Ability ability = gAiLogicData->abilities[switchContext->battler];
     enum Move aiMove;
 
-    if (ability == ABILITY_REGENERATOR)
+    if (BattlerHasAbility(switchContext->battler, ABILITY_REGENERATOR)) // FORK: innate-aware
         battlerHp = (battlerHp * 133) / 100; // Account for Regenerator healing
 
     hazardDamage = GetSwitchinHazardsDamage(switchContext->battler);
@@ -1930,7 +1944,7 @@ static u32 GetSwitchinHitsToKO(s32 damageTaken, enum BattlerId battler, const st
         currentHP = currentHP - damageTaken;
 
         // One shot prevention effects
-        if (damageTaken >= maxHP && startingHP == maxHP && (heldItemEffect == HOLD_EFFECT_FOCUS_SASH || (!opponentCanBreakMold && GetConfig(B_STURDY) >= GEN_5 && ability == ABILITY_STURDY)) && hitsToKO < 1)
+        if (damageTaken >= maxHP && startingHP == maxHP && (heldItemEffect == HOLD_EFFECT_FOCUS_SASH || (!opponentCanBreakMold && GetConfig(B_STURDY) >= GEN_5 && (ability == ABILITY_STURDY || SpeciesHasInnate(gBattleMons[battler].species, ABILITY_STURDY)))) && hitsToKO < 1) // FORK: innate-aware (mirrors the innate-Levitate switch handling above)
             currentHP = 1;
 
         // If mon is still alive, apply weather impact first, as it might KO the mon before it can heal with its item (order is weather -> item -> status)

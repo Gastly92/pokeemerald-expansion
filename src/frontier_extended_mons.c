@@ -56,14 +56,18 @@
 // opponent's exact set can't be read off the species alone.
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
-// that carries an innate Levitate, Regenerator, or Unaware always has it in battle,
-// so its .ability slot here is free to carry a *complementary* chosen ability — the
-// mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
+// that carries an innate Levitate, Regenerator, Unaware, or Sturdy always has it in
+// battle, so its .ability slot here is free to carry a *complementary* chosen ability —
+// the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
 // still floats on its innate Levitate; an Unaware staller like Clefable lists
-// ABILITY_MAGIC_GUARD yet still ignores the foe's boosts via its innate Unaware.
-// Role comments that mention "Unaware"/"Levitate"/"Regenerator" describe the set's
-// innate-backed playstyle, not the .ability field.
+// ABILITY_MAGIC_GUARD yet still ignores the foe's boosts via its innate Unaware; a
+// Skarmory wall lists ABILITY_KEEN_EYE yet still endures a lethal hit via its innate
+// Sturdy. Role comments that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"
+// describe the set's innate-backed playstyle, not the .ability field. (Cornerstone
+// Ogerpon's only real ability WAS Sturdy; now that it's innate, a fork-owned ability
+// override — src/species_ability_overrides.c — gives it a chosen Defiant so the slot
+// isn't wasted, the same trick used for ability-locked innate-Levitate floaters.)
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -1042,7 +1046,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sturdy band breaker
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_EXPLOSION, MOVE_SUPERPOWER},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; chosen Rock Head is the recoil-proof complement
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GROUND,
@@ -1053,7 +1057,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CUSTAP_BERRY, // Sturdy + Custap lead w/ rocks
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_EXPLOSION},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; chosen Rock Head is the recoil-proof complement
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GHOST,
@@ -1077,7 +1081,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HARD_STONE, // Sturdy bulky tank
         .moves = {MOVE_STONE_EDGE, MOVE_THUNDER_PUNCH, MOVE_EARTHQUAKE, MOVE_CURSE},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_MAGNET_PULL, // Sturdy now innate; chosen Magnet Pull traps Steel-types for this slow tank
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(252, 252, 4, 0, 0, 0),
         .teraType = TYPE_ROCK,
@@ -2828,7 +2832,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // sturdy physical wall w/ rocks
         .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_BODY_PRESS},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; chosen Rock Head is the recoil-proof complement
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_STEEL,
@@ -3068,7 +3072,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // hazard setter / spinner
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_RAPID_SPIN, MOVE_GYRO_BALL},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_OVERCOAT, // Sturdy now innate; chosen Overcoat blocks weather/powder chip on this hazard wall
         .nature = NATURE_RELAXED,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
@@ -3080,7 +3084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // physical wall with Volt Switch pivot
         .moves = {MOVE_GYRO_BALL, MOVE_VOLT_SWITCH, MOVE_RAPID_SPIN, MOVE_BODY_PRESS},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_OVERCOAT, // Sturdy now innate; chosen Overcoat blocks weather/powder chip on this pivot
         .nature = NATURE_RELAXED,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
@@ -3094,7 +3098,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_STEELIXITE, // Mega Steelix (Sand Force) physical wall
         .moves = {MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM, MOVE_STEALTH_ROCK, MOVE_BODY_PRESS},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; this set Megas to Sand Force, chosen Rock Head is the pre-Mega slot
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_GROUND,
@@ -3105,7 +3109,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy hazard tank (no mega)
         .moves = {MOVE_STEALTH_ROCK, MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM, MOVE_TOXIC},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; chosen Rock Head is the recoil-proof complement
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_STEEL,
@@ -3212,7 +3216,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MENTAL_HERB, // anti-Taunt support
         .moves = {MOVE_STICKY_WEB, MOVE_ENCORE, MOVE_KNOCK_OFF, MOVE_TOXIC},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_CONTRARY, // Sturdy now innate; chosen Contrary turns stat drops into boosts on this staller
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 128, 0, 0, 128),
         .teraType = TYPE_BUG,
@@ -3393,7 +3397,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // hazard setter physical wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_ROOST, MOVE_BODY_PRESS},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_KEEN_EYE, // Sturdy now innate; chosen Keen Eye keeps this wall's accuracy undroppable
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_DRAGON,
@@ -3404,7 +3408,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // defogger pivot
         .moves = {MOVE_BRAVE_BIRD, MOVE_DEFOG, MOVE_ROOST, MOVE_WHIRLWIND},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_KEEN_EYE, // Sturdy now innate; chosen Keen Eye keeps this defogger's accuracy undroppable
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_STEEL,
@@ -3487,7 +3491,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy hazard setter / spinner
         .moves = {MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK, MOVE_RAPID_SPIN, MOVE_ICE_SHARD},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_SAND_VEIL, // Sturdy now innate; Sand Veil is Donphan's only other real slot
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_GROUND,
@@ -3509,7 +3513,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed bulk pivot
         .moves = {MOVE_EARTHQUAKE, MOVE_ICE_SHARD, MOVE_HEAVY_SLAM, MOVE_KNOCK_OFF},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_SAND_VEIL, // Sturdy now innate; Sand Veil is Donphan's only other real slot
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
         .teraType = TYPE_STEEL,
@@ -4430,7 +4434,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_AGGRONITE, // Mega Aggron (Filter, pure Steel) — physical wall
         .moves = {MOVE_HEAVY_SLAM, MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK, MOVE_ROAR},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; this set Megas to Filter, chosen Rock Head is the pre-Mega slot
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_STEEL,
@@ -4452,7 +4456,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Sturdy bait setup tank (no mega)
         .moves = {MOVE_AUTOTOMIZE, MOVE_HEAVY_SLAM, MOVE_EARTHQUAKE, MOVE_STONE_EDGE},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_HEAVY_METAL, // Sturdy now innate; chosen Heavy Metal powers up this set's Heavy Slam
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_STEEL,
@@ -5203,7 +5207,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy defensive rocker + Yawn
         .moves = {MOVE_STEALTH_ROCK, MOVE_YAWN, MOVE_WATERFALL, MOVE_TOXIC},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; chosen Rock Head is the recoil-proof complement
         .nature = NATURE_RELAXED,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_WATER,
@@ -5310,7 +5314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Sturdy bait setup tank
         .moves = {MOVE_ROCK_POLISH, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_HAMMER_ARM},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_CLEAR_BODY, // Sturdy now innate; chosen Clear Body protects the Rock Polish setup
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 4, 252, 0, 0),
         .teraType = TYPE_ROCK,
@@ -7540,7 +7544,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sturdy breaker band
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_ICE_PUNCH, MOVE_POISON_JAB},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_MOLD_BREAKER, // Sturdy now innate; chosen Mold Breaker ignores the target's ability on this band breaker
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_FIGHTING,
@@ -7758,7 +7762,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Sturdy Shell Smash + hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_SHELL_SMASH, MOVE_X_SCISSOR, MOVE_STONE_EDGE},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_SHELL_ARMOR, // Sturdy now innate; chosen Shell Armor blocks crits while it sets up
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_ROCK,
@@ -7866,7 +7870,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // Sturdy Shell Smash lead
         .moves = {MOVE_SHELL_SMASH, MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_EARTHQUAKE},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_SOLID_ROCK, // Sturdy now innate; chosen Solid Rock softens super-effective hits on this lead
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_ROCK,
@@ -9686,7 +9690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIGHT_CLAY, // Sturdy dual-screens / hazards wall
         .moves = {MOVE_STEALTH_ROCK, MOVE_LIGHT_SCREEN, MOVE_REFLECT, MOVE_BODY_PRESS},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_CLEAR_BODY, // Sturdy now innate; chosen Clear Body keeps this screens wall's stats intact
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_ROCK,
@@ -9844,7 +9848,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy physical wall / Rapid Spin
         .moves = {MOVE_RECOVER, MOVE_AVALANCHE, MOVE_BODY_PRESS, MOVE_RAPID_SPIN},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_OWN_TEMPO, // Sturdy now innate; chosen Own Tempo keeps this wall confusion-proof
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_ICE,
@@ -14717,7 +14721,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CORNERSTONE_MASK, // Sturdy Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_IVY_CUDGEL, MOVE_POWER_WHIP, MOVE_STONE_EDGE},
-        .ability = ABILITY_STURDY,
+        .ability = ABILITY_DEFIANT, // Sturdy now innate; Cornerstone's sole ability was Sturdy, so a fork override (species_ability_overrides.c) gives it a chosen Defiant
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_ROCK,

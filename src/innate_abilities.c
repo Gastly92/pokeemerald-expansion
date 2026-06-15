@@ -27,7 +27,11 @@
 //     real Regenerator so a mon carrying it as an innate heals exactly like the real ability.
 //     The heal is silent (no script/pop-up), so no driver is needed. Suppression parity holds:
 //     the innate is gated by IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field),
-//     same as the real ability's GetBattlerAbility() path. This populates the canon Regenerator
+//     same as the real ability's GetBattlerAbility() path. AI is innate-aware: the heal isn't in
+//     any shared calc the AI runs, so the AI's dedicated Regenerator switch/pivot reads
+//     (ShouldSwitchIfAbilityBenefit, the bad-odds and hazard-switchin checks in src/battle_ai_switch.c,
+//     and ShouldPivot in src/battle_ai_util.c) credit an innate Regenerator via BattlerHasAbility(),
+//     so the AI values an innate-only Regenerator's pivot heal. This populates the canon Regenerator
 //     users so they keep their signature pivot heal regardless of which ability slot the build
 //     picks, plus a few flavor regenerators (Staryu/Starmie's regrowing core, the axolotl Wooper
 //     line, Zygarde's reassembling cells).
@@ -46,6 +50,27 @@
 //     build picks, plus flavor picks too dull/dazed/asleep to notice the foe's buffs (Numel's
 //     "doesn't notice being hit", the dazed Psyduck line, the ever-sleeping Komala, the unbothered
 //     Snorlax line).
+//   - ABILITY_STURDY — endures a lethal hit at full HP (B_STURDY >= GEN_5) and is immune to OHKO
+//     moves, handled at the two effect sites in src/battle_util.c (the GetAdjustedDamage endure and
+//     the OHKO-move accuracy gate, each gets an IsInnateActive() clause beside the cached chosen-
+//     ability test). NO pure-boon divergence: Sturdy is a clean upside that never hurts its holder,
+//     so the innate is a 1:1 copy of the real ability. No driver/pop-up wiring is needed — the
+//     "endured / Sturdy" messages and the ability pop-up flow from the existing MOVE_RESULT_STURDIED
+//     / MOVE_RESULT_ONE_HIT_KO_STURDY flags. Suppression parity holds via IsInnateActive(): Sturdy is
+//     breakable, so an attacker's Mold Breaker pierces an innate Sturdy exactly as it would the real
+//     ability. AI is innate-aware too: Sturdy's survival reasoning lives in DEDICATED AI helpers, NOT
+//     the shared damage calc (so unlike Unaware it is NOT automatic and had to be wired) — the endure/KO
+//     predictor (CanEndureHit), the OHKO-move avoidance, BattlerHasMaxHPProtection (src/battle_ai_util.c),
+//     and the switch-in KO simulation (src/battle_ai_switch.c) each credit an innate Sturdy via
+//     BattlerHasAbility()/SpeciesHasInnate(), so the AI doesn't blunder a hit it can't actually KO. This
+//     populates the canon Sturdy users so they keep
+//     the signature endure no matter which slot the build picks (Mega/regional/form constants are
+//     listed so the innate survives a mid-battle form change), plus an "impenetrable shell" flavor line
+//     (Shellder/Cloyster, whose shell "even a missile can't break") that lacks the real ability. Species
+//     whose ONLY ability is Sturdy are omitted as redundant when unused by the frontier roster (Cosmoem,
+//     Togedemaru-Totem). Ogerpon-Cornerstone is the exception — it is also sole-Sturdy, but because it IS a
+//     frontier set it instead takes the innate AND a fork-owned chosen Defiant (species_ability_overrides.c),
+//     so its frontier slot isn't spent on the now-innate Sturdy.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -55,11 +80,16 @@ struct SpeciesInnates
     const enum Ability *innates; // ABILITY_NONE-terminated
 };
 
+// Most species have a single innate, so they share one of these ABILITY_NONE-terminated arrays.
 static const enum Ability sInnateLevitate[] = { ABILITY_LEVITATE, ABILITY_NONE };
 static const enum Ability sInnateRegenerator[] = { ABILITY_REGENERATOR, ABILITY_NONE };
 static const enum Ability sInnateUnaware[] = { ABILITY_UNAWARE, ABILITY_NONE };
-// Species that carry both innates (canon/flavor Regenerator + canon/flavor Unaware).
-static const enum Ability sInnateRegeneratorUnaware[] = { ABILITY_REGENERATOR, ABILITY_UNAWARE, ABILITY_NONE };
+static const enum Ability sInnateSturdy[] = { ABILITY_STURDY, ABILITY_NONE };
+
+// A species with SEVERAL innates lists them inline at its row with INNATES(...) instead of needing a
+// named combination array per pairing (which doesn't scale as the allowlist grows). The compound
+// literal has static storage at file scope; the terminator is appended automatically.
+#define INNATES(...) (const enum Ability[]){ __VA_ARGS__, ABILITY_NONE }
 
 static const struct SpeciesInnates sSpeciesInnates[] =
 {
@@ -158,9 +188,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // ───────────────────────────────────────────────────────────────────────────
 
     // Gen 1
-    { SPECIES_MAGNEMITE,                sInnateLevitate },
-    { SPECIES_MAGNETON,                 sInnateLevitate },
-    { SPECIES_MAGNEZONE,                sInnateLevitate },
+    { SPECIES_MAGNEMITE,                INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // flavor Levitate (hovers) + canon Sturdy (slot 1)
+    { SPECIES_MAGNETON,                 INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // flavor Levitate + canon Sturdy
+    { SPECIES_MAGNEZONE,                INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // flavor Levitate + canon Sturdy
     { SPECIES_MEW,                      sInnateLevitate },
     { SPECIES_MEWTWO,                   sInnateLevitate },
     { SPECIES_MEWTWO_MEGA_Y,            sInnateLevitate }, // Mega-X is a grounded bruiser, omitted
@@ -329,8 +359,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 2
     { SPECIES_CORSOLA,                  sInnateRegenerator },
     { SPECIES_HO_OH,                    sInnateRegenerator },
-    { SPECIES_WOOPER,                   sInnateRegeneratorUnaware }, // flavor Regen (axolotl limb regrowth) + canon Unaware (HA)
-    { SPECIES_QUAGSIRE,                 sInnateRegeneratorUnaware }, // flavor Regen + canon Unaware (HA)
+    { SPECIES_WOOPER,                   INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen (axolotl limb regrowth) + canon Unaware (HA)
+    { SPECIES_QUAGSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen + canon Unaware (HA)
 
     // Gen 5
     { SPECIES_AUDINO,                   sInnateRegenerator },
@@ -363,8 +393,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 9
     { SPECIES_KLAWF,                    sInnateRegenerator },
     { SPECIES_CYCLIZAR,                 sInnateRegenerator },
-    { SPECIES_WOOPER_PALDEA,            sInnateRegeneratorUnaware }, // flavor Regen (Paldean axolotl) + canon Unaware (HA)
-    { SPECIES_CLODSIRE,                 sInnateRegeneratorUnaware }, // flavor Regen + canon Unaware (HA)
+    { SPECIES_WOOPER_PALDEA,            INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen (Paldean axolotl) + canon Unaware (HA)
+    { SPECIES_CLODSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen + canon Unaware (HA)
 
     // ───────────────────────────────────────────────────────────────────────────
     // Innate Unaware (ignores the foe's stat-stage changes in the damage & accuracy
@@ -375,7 +405,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     //      listed so the innate survives the transformation mid-battle. (The Wooper,
     //      Quagsire, Paldean Wooper and Clodsire lines are also canon Unaware users,
     //      but they already carry innate Regenerator above, so they take the combined
-    //      sInnateRegeneratorUnaware list there instead of being repeated here.
+    //      combined INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) list there instead of being repeated here.
     //      Cosmog is omitted: Unaware is already its sole ability, so an innate copy
     //      would be redundant.)
     //   2) Flavor picks — species too dull, dazed or asleep to register the foe's
@@ -423,6 +453,96 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 
     // Gen 7
     { SPECIES_KOMALA,                   sInnateUnaware }, // sleeps its whole life, oblivious to its surroundings
+
+    // ───────────────────────────────────────────────────────────────────────────
+    // Innate Sturdy (endures a lethal hit at full HP + immune to OHKO moves). Two groups:
+    //   1) Canon Sturdy users — species that carry Sturdy in their ability data (often as
+    //      the primary). Giving it as an innate lets them keep the signature endure no
+    //      matter which slot the build picks. Mega/regional/Hisuian forms are listed so the
+    //      innate survives the transformation mid-battle (the species constant changes).
+    //      Species whose ONLY ability is Sturdy are omitted as redundant when unused by the frontier
+    //      roster (Cosmoem, Togedemaru-Totem); Ogerpon-Cornerstone is sole-Sturdy too but IS a frontier
+    //      set, so it is listed below with a chosen-ability override instead of omitted. The
+    //      Magnemite/Magneton/Magnezone line is
+    //      also a canon Sturdy user, but it already carries innate Levitate above, so it takes
+    //      the combined INNATES(ABILITY_LEVITATE, ABILITY_STURDY) list there instead of being repeated here.
+    //   2) Flavor pick — the Shellder/Cloyster line, whose shell "even a missile can't break,"
+    //      lacks the real ability but is the archetypal unbreakable body.
+    // ───────────────────────────────────────────────────────────────────────────
+
+    // Canon Sturdy users
+    // Gen 1
+    { SPECIES_GEODUDE,                  sInnateSturdy },
+    { SPECIES_GEODUDE_ALOLA,            sInnateSturdy },
+    { SPECIES_GRAVELER,                 sInnateSturdy },
+    { SPECIES_GRAVELER_ALOLA,           sInnateSturdy },
+    { SPECIES_GOLEM,                    sInnateSturdy },
+    { SPECIES_GOLEM_ALOLA,              sInnateSturdy },
+    { SPECIES_ONIX,                     sInnateSturdy },
+    { SPECIES_STEELIX,                  sInnateSturdy },
+    { SPECIES_STEELIX_MEGA,             sInnateSturdy }, // canon Mega is Sand Force; innate persists through the Mega
+
+    // Gen 2
+    { SPECIES_BONSLY,                   sInnateSturdy },
+    { SPECIES_SUDOWOODO,                sInnateSturdy },
+    { SPECIES_PINECO,                   sInnateSturdy },
+    { SPECIES_FORRETRESS,               sInnateSturdy },
+    { SPECIES_SHUCKLE,                  sInnateSturdy },
+    { SPECIES_SKARMORY,                 sInnateSturdy },
+    { SPECIES_SKARMORY_MEGA,            sInnateSturdy }, // innate persists through the Mega
+    { SPECIES_DONPHAN,                  sInnateSturdy },
+
+    // Gen 3
+    { SPECIES_NOSEPASS,                 sInnateSturdy },
+    { SPECIES_PROBOPASS,                sInnateSturdy },
+    { SPECIES_ARON,                     sInnateSturdy },
+    { SPECIES_LAIRON,                   sInnateSturdy },
+    { SPECIES_AGGRON,                   sInnateSturdy },
+    { SPECIES_AGGRON_MEGA,              sInnateSturdy }, // canon Mega is Filter; innate persists through the Mega
+    { SPECIES_RELICANTH,                sInnateSturdy },
+    { SPECIES_REGIROCK,                 sInnateSturdy },
+
+    // Gen 4
+    { SPECIES_SHIELDON,                 sInnateSturdy },
+    { SPECIES_BASTIODON,                sInnateSturdy },
+
+    // Gen 5
+    { SPECIES_ROGGENROLA,               sInnateSturdy },
+    { SPECIES_BOLDORE,                  sInnateSturdy },
+    { SPECIES_GIGALITH,                 sInnateSturdy },
+    { SPECIES_SAWK,                     sInnateSturdy },
+    { SPECIES_DWEBBLE,                  sInnateSturdy },
+    { SPECIES_CRUSTLE,                  sInnateSturdy },
+    { SPECIES_TIRTOUGA,                 sInnateSturdy },
+    { SPECIES_CARRACOSTA,               sInnateSturdy },
+
+    // Gen 6
+    { SPECIES_TYRUNT,                   sInnateSturdy },
+    { SPECIES_CARBINK,                  sInnateSturdy },
+    { SPECIES_BERGMITE,                 sInnateSturdy },
+    { SPECIES_AVALUGG,                  sInnateSturdy },
+    { SPECIES_AVALUGG_HISUI,            sInnateSturdy },
+
+    // Gen 7
+    { SPECIES_TOGEDEMARU,               sInnateSturdy }, // Totem form omitted (Sturdy is its sole ability — redundant)
+
+    // Gen 8
+    { SPECIES_ARCHALUDON,               sInnateSturdy },
+
+    // Gen 9
+    { SPECIES_NACLI,                    sInnateSturdy },
+    { SPECIES_NACLSTACK,                sInnateSturdy },
+    { SPECIES_GARGANACL,                sInnateSturdy },
+    // Sturdy is Cornerstone's SOLE ability, but it IS a frontier set — so rather than omit it as
+    // redundant, it takes the innate AND a fork-owned chosen Defiant (src/species_ability_overrides.c)
+    // so its frontier slot isn't wasted on the now-innate Sturdy. (The Tera form has Embody Aspect, not
+    // Sturdy, so it is not listed; Tera is disabled in this fork anyway.)
+    { SPECIES_OGERPON_CORNERSTONE,      sInnateSturdy },
+
+    // Flavor Sturdy (no native Sturdy; the archetypal unbreakable shell)
+    // Gen 1
+    { SPECIES_SHELLDER,                 sInnateSturdy }, // its shell "even a missile can't break"
+    { SPECIES_CLOYSTER,                 sInnateSturdy }, // "Its shell is harder than diamond"
 };
 
 static const enum Ability *GetSpeciesInnateList(u16 species)

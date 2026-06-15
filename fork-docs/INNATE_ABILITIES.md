@@ -14,8 +14,9 @@ hundreds of upstream-owned sites — a large, perpetually merge-conflict-prone
 sweep. We don't do that. Instead we **wire up one ability's behavior at a time**
 and only let species declare innates from that supported set. Today the set is
 **`LEVITATE`** (a passive Ground immunity), **`REGENERATOR`** (a silent
-1/3-HP switch-out heal), and **`UNAWARE`** (a passive calc modifier that ignores
-the foe's stat-stage changes).
+1/3-HP switch-out heal), **`UNAWARE`** (a passive calc modifier that ignores
+the foe's stat-stage changes), and **`STURDY`** (a full-HP endure + OHKO-move
+immunity).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -28,8 +29,8 @@ it"* breaks into two parts:
 
 An innate is bonus value layered on top of a mon's chosen ability, so it should
 **only ever help its holder — never carry the real ability's downside.** When the
-real ability is a clean upside (Regenerator, Levitate's Ground immunity), the innate
-copies it 1:1. But when the real ability has a *cost* — a case where it would hurt
+real ability is a clean upside (Regenerator, Levitate's Ground immunity, **Sturdy** — it
+never hurts its holder), the innate copies it 1:1. But when the real ability has a *cost* — a case where it would hurt
 the holder — the innate keeps the upside and drops the cost. This is a deliberate,
 suppression-independent divergence (`IsInnateActive()` still suppresses it exactly
 like the real ability; only the *effect* diverges). Two worked examples:
@@ -113,8 +114,29 @@ changes). This is the human record of what's actually wired; keep it honest.
 an ability often reads in several scattered places, not one. "Single site" below is
 the *easy class*, not a promise of one hit: Unaware took **four** (`battle_util.c`
 damage calc ×2 + `GetTotalAccuracy` + `GetAccEvasionStageDelta`). Skip the pure
-identity/AI-bookkeeping reads (`RecordAbilityBattle`, `gAiLogicData->abilities[]`,
-ability pop-up) — only the *effect* sites get the innate clause.
+*identity* reads (`RecordAbilityBattle`, the ability pop-up's identity, the
+single-valued `gAiLogicData->abilities[b]` *as the mon's displayed ability*) — those
+stay the chosen-slot identity. Only the *effect* sites get the innate clause.
+
+**Don't skip the AI's *effect* reads, though — and `grep src/battle_ai_*.c` for them
+specifically.** This is the subtle one the early Unaware framing got wrong. The AI's
+*damage/type* prediction runs through the **shared** `DamageContext` calc, so any
+effect that lives *inside* that calc (Levitate's type immunity, Unaware's stat-ignore)
+is correct for the AI **for free**, keyed off the real battler. But an effect that does
+**not** live in the shared calc — an *event* effect (Regenerator's switch-out heal) or a
+*survival* effect with its own predictor (Sturdy's endure / OHKO-immunity) — has the AI
+reason about it in **dedicated helpers** that read `gAiLogicData->abilities[b] ==
+ABILITY_X` (e.g. `CanEndureHit`, `BattlerHasMaxHPProtection`, the OHKO predictor, the
+`battle_ai_switch.c` KO sim and pivot scoring). Those are **effect** reads, not identity
+bookkeeping, and they are *not* covered by the shared calc — so they must be made
+innate-aware (`BattlerHasAbility(b, X)` for an on-field battler; `SpeciesHasInnate(species,
+X)` in the off-field switch sim, mirroring Levitate). Litmus test: *"if this mon's X were
+innate-only, would the AI here still do the right thing?"* If the answer rides on a bare
+`== ABILITY_X`, wire it. (Worked examples: **Sturdy** wired four AI sites — `CanEndureHit`,
+the OHKO-move avoidance, `BattlerHasMaxHPProtection`, the switch-in KO sim — and **Regenerator**
+wired its switch/pivot heuristics — `ShouldSwitchIfAbilityBenefit` (whose `switch(ability)` dispatch
+needed a small pre-check + a factored-out helper so the innate is considered even when the chosen
+ability differs), the bad-odds/hazard-switchin checks, and `ShouldPivot`.)
 
 How much is needed depends on the ability class:
 
@@ -184,6 +206,19 @@ How much is needed depends on the ability class:
   (`AI_IsAbilityOnSide` sites) are left as a known minor-quality gap, deliberately not
   wired — keeping the footprint small.
 
+  **Sturdy is the *clean-upside* worked example for this class** — a multi-site passive
+  immunity whose real ability has *no* downside, so the innate is a plain **1:1 copy** (no
+  pure-boon divergence). It took an `IsInnateActive(b, ABILITY_STURDY)` clause beside the two
+  cached `ABILITY_STURDY` reads in `src/battle_util.c`: the full-HP **endure** in
+  `GetAdjustedDamage` (gated `B_STURDY >= GEN_5`) and the **OHKO-move immunity** in the OHKO
+  accuracy gate. The "endured"/Sturdy pop-up & message need **no script** — they flow from the
+  existing `MOVE_RESULT_STURDIED` / `MOVE_RESULT_ONE_HIT_KO_STURDY` flags. The one extra step a
+  pop-up'd innate needs: because `CreateAbilityPopUp` reads the *primary* slot, set
+  `gBattleScripting.abilityPopupOverwrite = ABILITY_STURDY` so the pop-up shows Sturdy and not the
+  chosen ability — but **only when the chosen ability differs** (`cachedAbility != ABILITY_STURDY`),
+  so the real-ability path stays byte-for-byte untouched. Same precedent as Levitate's
+  `abilityPopupOverwrite`. Off-field AI survival heuristics are left unwired (the Unaware scope call).
+
 - **Silent on-event effect** (fires at a single event site with no script /
   pop-up / animation — e.g. **Regenerator**, the worked example). No driver
   needed: find the upstream event site (for Regenerator, the switch-out handler
@@ -233,12 +268,20 @@ Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …).
    line (e.g. "Unaware wall") stays — it now describes the innate-backed playstyle.
 4. **The replacement must be a real ability slot for that species** (`CreateFacilityMon`
    silently falls back to slot 0 otherwise). Pick from the species' own
-   `gSpeciesInfo[...].abilities[]`, or — for an "ability-locked" species whose only
-   real ability is the one now innate — add a row to the fork-owned override table
-   `src/species_ability_overrides.c` (see its callers / the `FORK:` note in
-   `src/battle_frontier.c`). `test/frontier_extended_roster.c` fails CI if any
-   `.ability` doesn't resolve to a real slot, so a bad pick can't slip through.
-5. Update the roster header's INNATE ABILITIES note to mention the new ability.
+   `gSpeciesInfo[...].abilities[]`.
+5. **Ability-locked species whose *only* real ability is the one now innate** are the
+   important case (e.g. Cornerstone Ogerpon = only Sturdy; the innate-Levitate floaters
+   Rotom/Hydreigon/the lake trio). Their `.ability` slot has nothing complementary to point
+   at, so **don't** leave it on the now-redundant ability and **don't** just drop the set —
+   add a row to the fork-owned override table `src/species_ability_overrides.c` giving them a
+   *flavorful* chosen ability in an empty slot (Ogerpon-Cornerstone → `DEFIANT`, its signature),
+   then set `.ability` to it. The mon then runs that ability **and** the innate. This is also
+   why such a species is **not** omitted from the innate table as "redundant": omission only
+   applies to a sole-ability species that *isn't* in the roster (nothing observes its innate,
+   so it'd be dead weight) — a sole-ability species that *is* a frontier set instead takes the
+   innate + the override, so its slot pays off. `test/frontier_extended_roster.c` fails CI if any
+   `.ability` doesn't resolve to a real slot (through the override hook), so a bad pick can't slip through.
+6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it
 

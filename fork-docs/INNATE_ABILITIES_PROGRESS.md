@@ -6,7 +6,7 @@
 | :white_large_square: | Drizzle | Summons rain for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Speed Boost | Boosts the Pokémon's Speed stat by 1 stage at the end of every turn. |
 | :white_large_square: | Battle Armor | Attacks landed on the Pokémon will never be critical hits. |
-| :white_large_square: | Sturdy | If the Pokémon has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. The Pokémon is also immune to one-hit KO moves. |
+| :white_check_mark: | Sturdy | If the Pokémon has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. The Pokémon is also immune to one-hit KO moves. |
 | :white_large_square: | Damp | All Pokémon become unable to use explosive moves. Explosive Abilities also fail to trigger. |
 | :white_large_square: | Limber | The Pokémon cannot be paralyzed. |
 | :white_large_square: | Sand Veil | Boosts the Pokémon's evasiveness by 25% in a sandstorm. |

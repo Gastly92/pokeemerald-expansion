@@ -8317,11 +8317,23 @@ s32 GetAdjustedDamage(struct DamageContext *ctx, s32 damage)
     {
         enduredHit = TRUE;
     }
-    else if (GetConfig(B_STURDY) >= GEN_5 && ctx->abilities[ctx->battlerDef] == ABILITY_STURDY && IsBattlerAtMaxHp(ctx->battlerDef))
+    // FORK: an innate Sturdy (FEATURE_INNATE_ABILITIES) endures a lethal hit at full HP exactly
+    // like the real ability. Sturdy is a clean upside (it never hurts its holder), so the innate is
+    // a 1:1 copy — no pure-boon divergence needed. IsInnateActive() applies the same Mold Breaker /
+    // suppression gates as the cached chosen-ability path beside it, and the endure message + the
+    // Sturdy pop-up flow from MOVE_RESULT_STURDIED below with no further per-innate work.
+    else if (GetConfig(B_STURDY) >= GEN_5
+          && (ctx->abilities[ctx->battlerDef] == ABILITY_STURDY || IsInnateActive(ctx->battlerDef, ABILITY_STURDY))
+          && IsBattlerAtMaxHp(ctx->battlerDef))
     {
         enduredHit = TRUE;
         RecordAbilityBattle(ctx->battlerDef, ABILITY_STURDY);
         gLastUsedAbility = ABILITY_STURDY;
+        // FORK: for an innate Sturdy the chosen ability differs, so force the "endured" pop-up to
+        // show Sturdy. CreateAbilityPopUp() otherwise reads the primary slot. Harmless no-op for a
+        // real Sturdy (overwrite == the real ability), so the real-ability path is left untouched.
+        if (ctx->abilities[ctx->battlerDef] != ABILITY_STURDY)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_STURDY;
         gBattleStruct->moveResultFlags[ctx->battlerDef] |= MOVE_RESULT_STURDIED;
     }
     // FORK: DETERMINISTIC_HOLD_EFFECTS turns Focus Band into a Focus Sash that works
@@ -11024,7 +11036,9 @@ bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv)
         return TRUE;
     }
 
-    if (cv->abilities[cv->battlerDef] == ABILITY_STURDY)
+    // FORK: an innate Sturdy (FEATURE_INNATE_ABILITIES) is immune to OHKO moves like the real one.
+    // The "Sturdy" pop-up/message comes from MOVE_RESULT_ONE_HIT_KO_STURDY in battle_move_resolution.c.
+    if (cv->abilities[cv->battlerDef] == ABILITY_STURDY || IsInnateActive(cv->battlerDef, ABILITY_STURDY))
     {
         gBattleStruct->moveResultFlags[cv->battlerDef] |= MOVE_RESULT_ONE_HIT_KO_STURDY;
         return TRUE;

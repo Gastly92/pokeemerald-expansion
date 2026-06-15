@@ -17,14 +17,17 @@
 // and only allows species to declare innates from that supported set. Today the
 // set is LEVITATE (a passive Ground immunity, handled inside src/battle_util.c),
 // REGENERATOR (a silent 1/3-HP heal fired at the single switch-out site in
-// src/battle_script_commands.c), and UNAWARE (a passive calc modifier that ignores
+// src/battle_script_commands.c), UNAWARE (a passive calc modifier that ignores
 // the foe's stat-stage changes, handled at the damage/accuracy calc sites in
-// src/battle_util.c). NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
+// src/battle_util.c), and STURDY (endures a lethal hit at full HP + OHKO-move immunity,
+// handled at the two effect sites in src/battle_util.c). NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground
 // interactions (field terrain, Toxic Spikes absorption) via IsBattlerGroundedForBenefit(); an innate
 // Unaware ignores the foe's stat *boosts* but keeps the foe's stat *drops* (the favorable half) via
 // InnateUnawareBoonStage(), where a real Unaware would ignore the drop too and take more damage for it.
+// Where the real ability is already a clean upside (no downside to drop), the innate is a plain 1:1
+// copy — Sturdy is such a case: an innate Sturdy endures/blocks OHKOs exactly like the real ability.
 // See the ALLOWLIST note in src/innate_abilities.c. To add another ability: wire its specific effect
 // (boon-only where the real ability has a downside), extend the allowlist comment in src/innate_abilities.c, and add a test.
 // The step-by-step extension playbook lives in fork-docs/INNATE_ABILITIES.md.
