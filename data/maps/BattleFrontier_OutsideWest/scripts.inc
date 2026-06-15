@@ -27,9 +27,10 @@ BattleFrontier_OutsideWest_EventScript_FacilityGuideEscort::
 	waitmovement 0
 	msgbox BattleFrontier_OutsideWest_Text_GuideWelcome, MSGBOX_DEFAULT
 	closemessage
-	@ greeter leads; player follows two tiles back (a step-delay keeps them from
-	@ ever contesting the same tile). Both paths are collision-checked and avoid
-	@ every NPC's home tile; lockall freezes the wanderers for the walk.
+	@ greeter leads with the player following directly behind, one tile back.
+	@ Scripted applymovement doesn't object-collide, so lockstep is safe; the
+	@ paths are still collision-checked and avoid every NPC's home tile, and
+	@ lockall freezes the wanderers so none stray across the route mid-walk.
 	applymovement LOCALID_FRONTIER_FACILITY_GUIDE_GREETER, BattleFrontier_OutsideWest_Movement_GuideEscortLead
 	applymovement LOCALID_PLAYER, BattleFrontier_OutsideWest_Movement_GuideEscortFollow
 	waitmovement 0
@@ -93,10 +94,9 @@ BattleFrontier_OutsideWest_Movement_GuideEscortLead:
 	walk_left
 	step_end
 
-@ Follow path from (26, 61) to (11, 39). The leading delay keeps the player a
-@ couple of tiles behind the greeter so the two never collide.
+@ Follow path from (26, 61) to (11, 39), staying one tile directly behind the
+@ greeter (whose lead path is this same route offset one tile ahead).
 BattleFrontier_OutsideWest_Movement_GuideEscortFollow:
-	delay_16
 	walk_up
 	walk_up
 	walk_up
