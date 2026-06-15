@@ -3,7 +3,7 @@
 Fork feature, gated by `FEATURE_NEW_TYPES` (`include/config/feature.h`). When on,
 a species' types are overwritten with a fork-defined typing in place of the stock
 `gSpeciesInfo` types. This doc is the extension playbook; the flag comment and the
-in-code comments (`include/new_types.h`, `src/new_types.c`) stay the source of
+in-code comments (`include/fork/new_types.h`, `src/fork/new_types.c`) stay the source of
 truth for exact semantics.
 
 ## How it works: one chokepoint
@@ -19,7 +19,7 @@ Every species type-identity read in the codebase routes through one accessor,
   uniform.
 
 So the override is applied in exactly one place — inside `GetSpeciesType()` — and
-flows everywhere. The fork-owned table (`src/new_types.c`) is **not** in
+flows everywhere. The fork-owned table (`src/fork/new_types.c`) is **not** in
 `gSpeciesInfo`, so upstream syncs never touch it and the upstream species data
 stays untouched.
 
@@ -31,7 +31,7 @@ the battle engine needs to change.
 
 ### Step 1 — add the data (the only required step)
 
-In `src/new_types.c`, add a row to `sSpeciesTypeOverrides`. A pure (single-type)
+In `src/fork/new_types.c`, add a row to `sSpeciesTypeOverrides`. A pure (single-type)
 species repeats the type in both slots, mirroring `MON_TYPES()`:
 
 ```c
@@ -48,7 +48,7 @@ mega, …) needs its own row.
 
 ### Step 2 — test it
 
-Add a case to `test/battle/new_types.c`. Opt into the feature with
+Add a case to `test/fork/new_types.c`. Opt into the feature with
 `WITH_CONFIG(FEATURE_NEW_TYPES, TRUE)` (the test baseline forces all `FEATURE_*`
 flags off, so the inherited suite keeps exercising stock behavior). The cleanest
 probes are defensive matchup *flips* the new typing creates versus the old one

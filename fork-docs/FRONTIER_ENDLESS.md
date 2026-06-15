@@ -34,7 +34,7 @@ C and `.if` in scripts. They are facility-agnostic; converting a facility means
   `TRUE`/`FALSE`** (see Footgun 1).
 - `B_FRONTIER_ENDLESS` — endless loop, per-win BP, rest/resume, Brain at 50/100.
 - `B_FRONTIER_FORCE_LVL_100` — Open Level only.
-- `B_FRONTIER_EXTENDED_MONS` — competitive roster (`src/frontier_extended_mons.c`).
+- `B_FRONTIER_EXTENDED_MONS` — competitive roster (`src/fork/frontier_extended_mons.c`).
 - Per-facility "disable a sub-mode" flag if needed, e.g.
   `B_FRONTIER_TOWER_DISABLE_MULTI_LINK`. Add a new one per facility/sub-mode.
 
@@ -51,16 +51,16 @@ These already exist and are facility-agnostic; a conversion *extends* them:
   to include the new facility, reading **that facility's** win-streak array
   (`<fac>WinStreaks[battleMode][lvlMode]`, or `[lvlMode]` for Arena/Pike/Pyramid).
   Scaling is 2 BP/win in set 1, 4 in set 2, …; Brain win = the win number.
-- **Roster draw** — `GetRandomFrontierExtendedMonId()` (`src/frontier_extended_mons.c`,
-  declared in `include/frontier_extended_mons.h`): one uniform, format-aware pull
+- **Roster draw** — `GetRandomFrontierExtendedMonId()` (`src/fork/frontier_extended_mons.c`,
+  declared in `include/fork/frontier_extended_mons.h`): one uniform, format-aware pull
   from the competitive roster. **Uniform = no difficulty scaling by streak.**
 - **Draft rules** — `TeamHasGimmickItemConflict` / `TierRejectsCandidate` /
-  `ReserveForcedTierSlot` (fork-owned `src/frontier_draft.c`, declared in
-  `include/frontier_draft.h`): the at-most-one-Mega/Z guard, the per-slot tier
+  `ReserveForcedTierSlot` (fork-owned `src/fork/frontier_draft.c`, declared in
+  `include/fork/frontier_draft.h`): the at-most-one-Mega/Z guard, the per-slot tier
   quota, and the random forced-tier-slot reservation. Shared by the Factory and
   the Tower; reuse them, don't re-implement.
 - **Static special teams** — the Tower's Salon Maiden and gym-leader bosses live
-  in the fork-owned `src/battle_tower_trainers.c` (authored `struct TrainerMon`
+  in the fork-owned `src/fork/battle_tower_trainers.c` (authored `struct TrainerMon`
   arrays built via `CreateFacilityMon`). A facility that wants hand-authored boss
   teams instead of (or beside) a draft can follow the same id-range + hook pattern
   (see the boss notes there and the hook list in the Tower's `FORK.md` row).

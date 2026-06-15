@@ -45,7 +45,7 @@
 #include "tv.h"
 #include "window.h"
 #include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
-#include "innate_abilities.h" // FORK: GetSpeciesInnate() for the innate display
+#include "fork/innate_abilities.h" // FORK: GetSpeciesInnate() for the innate display
 #include "constants/battle_move_effects.h"
 #include "constants/items.h"
 #include "constants/moves.h"

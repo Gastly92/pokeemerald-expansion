@@ -1,5 +1,5 @@
 #include "global.h"
-#include "new_types.h"
+#include "fork/new_types.h"
 #include "constants/pokemon.h"
 #include "constants/species.h"
 

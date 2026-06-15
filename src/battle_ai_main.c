@@ -6,7 +6,7 @@
 #include "battle_ai_util.h"
 #include "battle_ai_items.h"
 #include "battle_ai_switch.h"
-#include "battle_ai_species_overrides.h" // FORK: species-aware AI overrides
+#include "fork/battle_ai_species_overrides.h" // FORK: species-aware AI overrides
 #include "battle_ai_main.h"
 #include "battle_ai_record.h"
 #include "battle_stat_change.h"

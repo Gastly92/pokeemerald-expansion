@@ -1,5 +1,5 @@
 #include "global.h"
-#include "innate_abilities.h"
+#include "fork/innate_abilities.h"
 #include "constants/abilities.h"
 #include "constants/species.h"
 

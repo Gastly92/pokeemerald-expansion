@@ -6,7 +6,7 @@
 #include "battle_setup.h"
 #include "battle_tower.h"
 #include "battle_stat_change.h"
-#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — innate-aware move rating
+#include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — innate-aware move rating
 #include "frontier_util.h"
 #include "battle_message.h"
 #include "event_data.h"

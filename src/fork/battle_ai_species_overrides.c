@@ -3,7 +3,7 @@
 #include "battle_ai_main.h"   // ADJUST_SCORE, AI helpers
 #include "battle_ai_util.h"   // SetAIUsingGimmick, gimmick helpers
 #include "battle_ai_switch.h" // struct SwitchAiContext
-#include "battle_ai_species_overrides.h"
+#include "fork/battle_ai_species_overrides.h"
 #include "battle_gimmick.h"
 #include "battle_util.h"      // GetBattleFormChangeTargetSpecies
 #include "pokemon.h"          // GetSpeciesAbility

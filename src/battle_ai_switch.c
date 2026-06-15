@@ -4,9 +4,9 @@
 #include "battle_ai_main.h"
 #include "battle_ai_switch.h"
 #include "battle_ai_util.h"
-#include "battle_ai_species_overrides.h" // FORK: species-aware AI overrides
+#include "fork/battle_ai_species_overrides.h" // FORK: species-aware AI overrides
 #include "battle_util.h"
-#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — innate-aware switch evaluation
+#include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — innate-aware switch evaluation
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_main.h"

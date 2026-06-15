@@ -31,7 +31,7 @@
 #include "main.h"
 #include "move_relearner.h"
 #include "naming_screen.h"
-#include "new_types.h" // FORK: FEATURE_NEW_TYPES — species type overrides
+#include "fork/new_types.h" // FORK: FEATURE_NEW_TYPES — species type overrides
 #include "overworld.h"
 #include "party_menu.h"
 #include "pokedex.h"
@@ -40,7 +40,7 @@
 #include "pokemon_animation.h"
 #include "pokemon_icon.h"
 #include "pokemon_summary_screen.h"
-#include "species_ability_overrides.h" // FORK: ability-override hook in GetSpeciesAbility
+#include "fork/species_ability_overrides.h" // FORK: ability-override hook in GetSpeciesAbility
 #include "pokemon_storage_system.h"
 #include "pokerus.h"
 #include "random.h"

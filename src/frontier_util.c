@@ -8,9 +8,9 @@
 #include "battle_frontier.h"
 #include "battle_special.h"
 #include "battle_tower.h"
-#include "battle_tower_trainers.h" // FORK: tower brain/boss static teams
+#include "fork/battle_tower_trainers.h" // FORK: tower brain/boss static teams
 #include "field_specials.h"
-#include "frontier_legality.h"
+#include "fork/frontier_legality.h"
 #include "battle.h"
 #include "script_pokemon_util.h"
 #include "main.h"

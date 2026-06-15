@@ -1,8 +1,8 @@
 #include "global.h"
-#include "frontier_draft.h"
+#include "fork/frontier_draft.h"
 #include "item.h"
 #include "random.h"
-#include "species_tiers.h"
+#include "fork/species_tiers.h"
 #include "constants/hold_effects.h"
 
 // FORK: shared Battle Frontier competitive-draft rules, moved here from the
