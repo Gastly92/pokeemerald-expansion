@@ -27,7 +27,7 @@
 #include "fldeff.h"
 #include "fldeff_misc.h"
 #include "follower_npc.h"
-#include "frontier_legality.h"
+#include "fork/frontier_legality.h"
 #include "frontier_util.h"
 #include "gpu_regs.h"
 #include "graphics.h"
@@ -57,7 +57,7 @@
 #include "pokerus.h"
 #include "region_map.h"
 #include "reshow_battle_screen.h"
-#include "frontier_battle_info.h" // FORK: B_FRONTIER_BATTLE_INFO viewer from the in-battle party menu
+#include "fork/frontier_battle_info.h" // FORK: B_FRONTIER_BATTLE_INFO viewer from the in-battle party menu
 #include "scanline_effect.h"
 #include "script.h"
 #include "sound.h"

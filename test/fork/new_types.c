@@ -1,6 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
-#include "new_types.h"
+#include "fork/new_types.h"
 
 // FORK: coverage for FEATURE_NEW_TYPES (config/feature.h). Feature flags default
 // off in the test baseline (see TestInitConfigData), so each test that wants the

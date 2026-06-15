@@ -1,6 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
-#include "innate_abilities.h"
+#include "fork/innate_abilities.h"
 
 // FORK: coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
 // default off in the test baseline (see TestInitConfigData), so each test that

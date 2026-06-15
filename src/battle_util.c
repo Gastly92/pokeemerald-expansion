@@ -6,7 +6,7 @@
 #include "battle_pyramid.h"
 #include "battle_util.h"
 #include "battle_controllers.h"
-#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
+#include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"

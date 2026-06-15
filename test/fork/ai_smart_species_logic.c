@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 #include "battle_ai_util.h"
-#include "battle_ai_species_overrides.h"
+#include "fork/battle_ai_species_overrides.h"
 
 // Tests for AI_FLAG_SMART_SPECIES_LOGIC (species-aware AI overrides).
 

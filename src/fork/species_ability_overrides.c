@@ -1,5 +1,5 @@
 #include "global.h"
-#include "species_ability_overrides.h"
+#include "fork/species_ability_overrides.h"
 #include "constants/abilities.h"
 #include "constants/species.h"
 

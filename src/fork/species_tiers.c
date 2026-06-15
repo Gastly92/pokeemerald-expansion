@@ -1,5 +1,5 @@
 #include "global.h"
-#include "species_tiers.h"
+#include "fork/species_tiers.h"
 #include "constants/species.h"
 
 // FORK: species -> tier classification (see include/species_tiers.h for the full

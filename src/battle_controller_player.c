@@ -12,7 +12,7 @@
 #include "battle_gimmick.h"
 #include "bg.h"
 #include "config_changes.h" // FORK: GetConfig(DETERMINISTIC_ACCURACY_EVASION) for move-info PP cost
-#include "frontier_battle_info.h" // FORK: B_FRONTIER_BATTLE_INFO bag->info viewer
+#include "fork/frontier_battle_info.h" // FORK: B_FRONTIER_BATTLE_INFO bag->info viewer
 #include "data.h"
 #include "item.h"
 #include "item_menu.h"

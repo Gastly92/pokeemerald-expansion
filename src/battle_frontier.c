@@ -10,9 +10,9 @@
 #include "battle_tower.h"
 #include "battle_transition.h"
 #include "event_data.h"
-#include "frontier_extended_mons.h" // FORK: GetRandomFrontierExtendedMonId
-#include "frontier_draft.h"         // FORK: TeamHasGimmickItemConflict
-#include "battle_tower_trainers.h"  // FORK: gym-leader boss parties
+#include "fork/frontier_extended_mons.h" // FORK: GetRandomFrontierExtendedMonId
+#include "fork/frontier_draft.h"         // FORK: TeamHasGimmickItemConflict
+#include "fork/battle_tower_trainers.h"  // FORK: gym-leader boss parties
 #include "frontier_util.h"
 #include "item.h"                   // FORK: GetItemHoldEffect (exactly-1-mega rule)
 #include "overworld.h"

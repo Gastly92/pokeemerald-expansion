@@ -1,5 +1,5 @@
 #include "global.h"
-#include "battle_tower_trainers.h"
+#include "fork/battle_tower_trainers.h"
 #include "battle.h"
 #include "battle_frontier.h"
 #include "frontier_util.h"

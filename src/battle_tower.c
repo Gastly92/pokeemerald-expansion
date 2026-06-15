@@ -1,6 +1,6 @@
 #include "global.h"
 #include "battle_tower.h"
-#include "battle_tower_trainers.h" // FORK: gym-leader bosses
+#include "fork/battle_tower_trainers.h" // FORK: gym-leader bosses
 #include "apprentice.h"
 #include "event_data.h"
 #include "battle_setup.h"

@@ -1,8 +1,8 @@
 #include "global.h"
 #include "test/test.h"
 #include "data.h"
-#include "frontier_extended_mons.h"
-#include "innate_abilities.h"
+#include "fork/frontier_extended_mons.h"
+#include "fork/innate_abilities.h"
 #include "constants/abilities.h"
 
 // FORK: guards the fork-owned competitive Battle Factory roster

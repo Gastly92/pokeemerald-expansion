@@ -114,9 +114,12 @@ easily; rewrites of existing logic conflict the most.
   *usages* still hook into upstream files where the behavior lives, but the
   *definitions* never conflict. To add a flag, drop a `#define` in the right fork
   header — don't add it to an upstream one.
-- **Put feature code in new files** (`src/my_feature.c` + header) and register it
-  at the smallest possible hook point in an upstream file, instead of inlining a
-  whole feature into an existing function.
+- **Put feature code in new files under the fork code dirs** —
+  `src/fork/my_feature.c` + `include/fork/my_feature.h` (+ `test/fork/my_feature.c`)
+  — and register it at the smallest possible hook point in an upstream file,
+  instead of inlining a whole feature into an existing function. See "Fork-owned
+  code lives under `fork/`" below for the directory convention and the one
+  exception (config headers).
 - **When you must touch a shared file, keep edits additive and localized** (append
   a switch case / table entry / new function) rather than restructuring.
 - Caveats: this is not a silver bullet — adding enum values, species, moves, etc.
@@ -124,6 +127,44 @@ easily; rewrites of existing logic conflict the most.
   (upstream renaming a symbol we call breaks the build without a git conflict),
   which is why re-running `make`/`make check` after every sync is mandatory. Don't
   over-split files just to dodge conflicts; keep it idiomatic.
+
+### Fork-owned code lives under `fork/`
+
+Just like our docs live under `fork-docs/`, our **net-new code files** live under a
+`fork/` subdirectory of each tree, so the fork's own code is listable and
+greppable at a glance and never tangles with upstream's files:
+
+- **`src/fork/`** — fork-owned C sources (e.g. `src/fork/innate_abilities.c`).
+- **`include/fork/`** — fork-owned headers. Because the compiler's `-iquote` points
+  at `include/` (not `include/fork/`), these are included with the **`fork/`
+  prefix everywhere**: `#include "fork/innate_abilities.h"` — from upstream hook
+  points, from other fork sources, *and* from one fork header including another.
+- **`test/fork/`** — fork-owned tests (e.g. `test/fork/deterministic_*.c`). Battle
+  tests work the same from here; the runner discovers them by content, not path.
+
+This needs **no build-system change**: the Makefile globs sources recursively
+(`src/*/*.c`, `test/*/*.c`) and the linker script matches objects with broad
+`*.o(...)` wildcards (and `src/*.o` spans nested paths), so a `fork/` subdir is
+picked up automatically. New directories never conflict on sync; the only edits
+that land in upstream-owned files are the hook-point `#include "fork/…"` lines,
+which are conflict-neutral.
+
+**Exceptions (deliberately *not* moved):**
+- **Config flag headers stay in `include/config/`** (`config/fork.h`,
+  `config/deterministic.h`, `config/buff.h`, `config/feature.h`,
+  `config/frontier.h`, `config/accessibility.h`). They're fork-owned *files* but
+  belong with upstream's config headers conceptually, and are wired in through
+  upstream-owned files (`global.h`, `include/constants/global.h`,
+  `include/constants/config_changes.h`). Moving them would mean rewriting those
+  upstream `#include "config/…"` lines for zero conflict-reduction — the
+  separation that matters (own file, never edited by upstream) is already there.
+- **Assets stay where upstream references them by path** (e.g. the fork's
+  `graphics/battle_interface/healthbox_*_notail.png`), since relocating an asset
+  means chasing its `INCBIN`/graphics-table path through upstream code.
+
+When you add a fork feature, create its files under these `fork/` dirs from the
+start. Don't relocate an upstream file into `fork/` (that maximizes conflicts) —
+`fork/` is for files that are *ours*.
 
 ### Using config flags in scripts (`.inc`/`.s`) — use `.if`, NOT `#if`
 

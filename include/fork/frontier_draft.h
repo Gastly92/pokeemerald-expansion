@@ -1,7 +1,7 @@
 #ifndef GUARD_FRONTIER_DRAFT_H
 #define GUARD_FRONTIER_DRAFT_H
 
-#include "species_tiers.h"
+#include "fork/species_tiers.h"
 
 // FORK: shared Battle Frontier competitive-draft rules. Extracted out of the
 // upstream src/battle_factory.c into this fork-owned file so the rules carry no

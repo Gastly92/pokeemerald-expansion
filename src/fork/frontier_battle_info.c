@@ -10,8 +10,8 @@
 #include "battle_util.h"
 #include "bg.h"
 #include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
-#include "innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
-#include "frontier_battle_info.h"
+#include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
+#include "fork/frontier_battle_info.h"
 #include "gpu_regs.h"
 #include "item.h"
 #include "main.h"

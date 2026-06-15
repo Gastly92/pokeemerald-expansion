@@ -3,7 +3,7 @@
 Fork feature, gated by `FEATURE_INNATE_ABILITIES` (`include/config/feature.h`).
 A species' *innate* abilities are always active **in addition to** its single
 chosen ability. This doc is the extension playbook; the flag comment and the
-in-code comments (`include/innate_abilities.h`, `src/innate_abilities.c`) stay the
+in-code comments (`include/fork/innate_abilities.h`, `src/fork/innate_abilities.c`) stay the
 source of truth for exact semantics.
 
 ## The one rule: it's an allowlist, grown one ability at a time
@@ -51,7 +51,7 @@ comment + `FORK.md`). If no, a 1:1 copy is already pure-boon.
 
 ## What the generic tooling already gives you (no per-ability work)
 
-- **The species → innate table** (`src/innate_abilities.c`): a variable-length,
+- **The species → innate table** (`src/fork/innate_abilities.c`): a variable-length,
   `ABILITY_NONE`-terminated list per species (no fixed cap). `SpeciesHasInnate()`
   and `GetSpeciesInnate()` read it.
 - **The trait predicate** `BattlerHasAbility(battler, ability)` (`src/battle_util.c`):
@@ -70,7 +70,7 @@ comment + `FORK.md`). If no, a 1:1 copy is already pure-boon.
 
 ### Step 1 — add the data (always)
 
-In `src/innate_abilities.c`, give each species an `ABILITY_NONE`-terminated list.
+In `src/fork/innate_abilities.c`, give each species an `ABILITY_NONE`-terminated list.
 Reuse one list for an evolution line:
 
 ```c
@@ -104,8 +104,8 @@ list). Reuse one combined list across every line that needs the same pair.
 
 ### Step 2 — put the ability on the allowlist
 
-Add `ABILITY_X` to the **allowlist comment** in `src/innate_abilities.c` (and the
-SCOPE note in `include/innate_abilities.h` if the supported set's character
+Add `ABILITY_X` to the **allowlist comment** in `src/fork/innate_abilities.c` (and the
+SCOPE note in `include/fork/innate_abilities.h` if the supported set's character
 changes). This is the human record of what's actually wired; keep it honest.
 
 ### Step 3 — wire the effect (the only per-ability work)
@@ -181,7 +181,7 @@ How much is needed depends on the ability class:
     `src/battle_dome.c`).
   - displays: the summary screen Info page (`PrintMonAbilityName`,
     `src/pokemon_summary_screen.c`) and the Frontier battle-info viewer
-    (`src/frontier_battle_info.c`) already iterate the whole innate list, so they
+    (`src/fork/frontier_battle_info.c`) already iterate the whole innate list, so they
     show any allowlisted ability with no per-ability work.
 
   **Unaware is the *minimal* calc-modifier worked example** — no pop-up, and no AI
@@ -251,7 +251,7 @@ How much is needed depends on the ability class:
 
 ### Step 3.5 — free the frontier roster slots (if any set hardcoded the ability)
 
-The extended frontier roster (`src/frontier_extended_mons.c`) is drafted under
+The extended frontier roster (`src/fork/frontier_extended_mons.c`) is drafted under
 `B_FRONTIER_EXTENDED_MONS`, and many sets were built **before** an ability became
 an innate, so they spent their single `.ability` slot on it. Once the species
 carries the ability *innately*, that slot is redundant — the mon always has the
@@ -260,7 +260,7 @@ both. This happened for Levitate (commit `d5da59a3` freed Slowbro→`OWN_TEMPO`,
 Rotom→`LIGHTNING_ROD`, …) and again for Unaware (Clefable→`MAGIC_GUARD`,
 Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …).
 
-1. `grep -n ABILITY_X src/frontier_extended_mons.c` for every set that hardcoded it.
+1. `grep -n ABILITY_X src/fork/frontier_extended_mons.c` for every set that hardcoded it.
 2. For each, confirm the **species now carries the innate** (only those rows are
    freed — a set on a species *without* the innate must keep its real ability).
 3. Replace `.ability = ABILITY_X` with a complementary ability and a short
@@ -273,19 +273,19 @@ Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …).
    important case (e.g. Cornerstone Ogerpon = only Sturdy; the innate-Levitate floaters
    Rotom/Hydreigon/the lake trio). Their `.ability` slot has nothing complementary to point
    at, so **don't** leave it on the now-redundant ability and **don't** just drop the set —
-   add a row to the fork-owned override table `src/species_ability_overrides.c` giving them a
+   add a row to the fork-owned override table `src/fork/species_ability_overrides.c` giving them a
    *flavorful* chosen ability in an empty slot (Ogerpon-Cornerstone → `DEFIANT`, its signature),
    then set `.ability` to it. The mon then runs that ability **and** the innate. This is also
    why such a species is **not** omitted from the innate table as "redundant": omission only
    applies to a sole-ability species that *isn't* in the roster (nothing observes its innate,
    so it'd be dead weight) — a sole-ability species that *is* a frontier set instead takes the
-   innate + the override, so its slot pays off. `test/frontier_extended_roster.c` fails CI if any
+   innate + the override, so its slot pays off. `test/fork/frontier_extended_roster.c` fails CI if any
    `.ability` doesn't resolve to a real slot (through the override hook), so a bad pick can't slip through.
 6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it
 
-Add a case to `test/battle/innate_abilities.c`. Opt into the feature with
+Add a case to `test/fork/innate_abilities.c`. Opt into the feature with
 `WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE)` (the test baseline forces all
 `FEATURE_*` flags off, so the inherited suite keeps exercising stock behavior).
 Cover: the innate's effect fires; it does **not** fire with the feature off; and,
