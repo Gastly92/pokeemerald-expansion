@@ -322,6 +322,33 @@ static const struct MenuAction MultichoiceList_SSTidalSlateportNoBF[] =
     {gText_Exit},
 };
 
+// FORK: Battle Frontier facility-guide directions menus. Top menu picks a side;
+// the side menus list that side's facilities. The script
+// (BattleFrontier_OutsideWest_EventScript_FacilityGuide) reads the row indices.
+static const struct MenuAction MultichoiceList_FrontierGuideAreas[] =
+{
+    {COMPOUND_STRING("West facilities")},
+    {COMPOUND_STRING("East facilities")},
+    {gText_Exit},
+};
+
+static const struct MenuAction MultichoiceList_FrontierGuideWest[] =
+{
+    {COMPOUND_STRING("Battle Factory")},
+    {COMPOUND_STRING("Battle Dome")},
+    {COMPOUND_STRING("Battle Pike")},
+    {gText_Exit},
+};
+
+static const struct MenuAction MultichoiceList_FrontierGuideEast[] =
+{
+    {COMPOUND_STRING("Battle Tower")},
+    {COMPOUND_STRING("Battle Arena")},
+    {COMPOUND_STRING("Battle Palace")},
+    {COMPOUND_STRING("Battle Pyramid")},
+    {gText_Exit},
+};
+
 static const struct MenuAction MultichoiceList_Floors[] =
 {
     {gText_5F},
@@ -1315,6 +1342,9 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     // FORK: reduced Reception Gate guide menus (see constants/script_menu.h).
     [MULTI_FRONTIER_RULES_LV100]                       = MULTICHOICE(MultichoiceList_FrontierRulesLv100),
     [MULTI_FRONTIER_PASS_INFO_NO_RECORD]               = MULTICHOICE(MultichoiceList_FrontierPassInfoNoRecord),
+    [MULTI_FRONTIER_GUIDE_AREAS]                       = MULTICHOICE(MultichoiceList_FrontierGuideAreas),
+    [MULTI_FRONTIER_GUIDE_WEST]                        = MULTICHOICE(MultichoiceList_FrontierGuideWest),
+    [MULTI_FRONTIER_GUIDE_EAST]                        = MULTICHOICE(MultichoiceList_FrontierGuideEast),
 };
 
 const u8 *const gStdStrings[] =

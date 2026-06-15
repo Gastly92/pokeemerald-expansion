@@ -51,8 +51,12 @@
 
 #else
 
-#define FLAG_UNUSED_0x020    0x20 // Unused Flag
-#define FLAG_UNUSED_0x021    0x21 // Unused Flag
+// FORK: object-visibility flags for the Battle Frontier facility-guide NPC that
+// escorts a new player to the Battle Factory and then stands by it giving
+// directions (data/maps/BattleFrontier_OutsideWest). Repurposed from two free
+// saved flags; on conflict pick any other unused 0x0xx slot.
+#define FLAG_HIDE_FRONTIER_FACILITY_GUIDE_GREETER    0x20 // greeter shown only for the intro escort
+#define FLAG_HIDE_FRONTIER_FACILITY_GUIDE            0x21 // permanent directions-giver by the Factory
 #define FLAG_UNUSED_0x022    0x22 // Unused Flag
 #define FLAG_UNUSED_0x023    0x23 // Unused Flag
 #define FLAG_UNUSED_0x024    0x24 // Unused Flag
