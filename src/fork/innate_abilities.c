@@ -71,6 +71,24 @@
 //     Togedemaru-Totem). Ogerpon-Cornerstone is the exception — it is also sole-Sturdy, but because it IS a
 //     frontier set it instead takes the innate AND a fork-owned chosen Defiant (species_ability_overrides.c),
 //     so its frontier slot isn't spent on the now-innate Sturdy.
+//   - ABILITY_NATURAL_CURE — silently cures the holder's status1 on switch-out, handled at the
+//     same single switch-out site as Regenerator in src/battle_script_commands.c
+//     (Cmd_switchoutabilities), additively alongside the chosen Natural Cure path so a mon
+//     carrying it as an innate self-cleanses exactly like the real ability. Like the innate
+//     Regenerator there, it writes the party mon's status DIRECTLY (mirroring the controller's
+//     REQUEST_STATUS_BATTLE) rather than a second BtlController_EmitSetMonData, so it can't
+//     clobber the single bufferA slot a chosen ability (e.g. Slowking's Regenerator) may have
+//     queued this switch-out. Silent (no script/pop-up), so no driver is needed. NO pure-boon
+//     divergence: Natural Cure is a clean upside that never hurts its holder, so the innate is a
+//     1:1 copy. Suppression parity holds via IsInnateActive()/BattlerHasAbility() (Gastro Acid /
+//     Neutralizing Gas / not-on-field), same as the real ability's GetBattlerAbility() path. AI is
+//     innate-aware: the cure isn't in any shared calc, so the AI's dedicated Natural Cure switch
+//     reads credit an innate one via BattlerHasAbility() — the switch-to-cure heuristic
+//     (ShouldSwitchIfAbilityBenefit, factored into ShouldSwitchForNaturalCure like Regenerator),
+//     the Yawn anti-sleep switch (ShouldSwitchIfBadlyStatused), and the burned/frostbitten
+//     force-switch move scoring (src/battle_ai_main.c). This populates the canon Natural Cure users
+//     so they keep the signature self-cure no matter which slot the build picks, plus herbal/aromatic
+//     healer flavor (the Chikorita line's restorative aroma, Bellossom's revitalizing dance).
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -85,6 +103,7 @@ static const enum Ability sInnateLevitate[] = { ABILITY_LEVITATE, ABILITY_NONE }
 static const enum Ability sInnateRegenerator[] = { ABILITY_REGENERATOR, ABILITY_NONE };
 static const enum Ability sInnateUnaware[] = { ABILITY_UNAWARE, ABILITY_NONE };
 static const enum Ability sInnateSturdy[] = { ABILITY_STURDY, ABILITY_NONE };
+static const enum Ability sInnateNaturalCure[] = { ABILITY_NATURAL_CURE, ABILITY_NONE };
 
 // A species with SEVERAL innates lists them inline at its row with INNATES(...) instead of needing a
 // named combination array per pairing (which doesn't scale as the allowlist grows). The compound
@@ -199,7 +218,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_PORYGON_Z,                sInnateLevitate },
 
     // Gen 2
-    { SPECIES_CELEBI,                   sInnateLevitate },
+    { SPECIES_CELEBI,                   INNATES(ABILITY_LEVITATE, ABILITY_NATURAL_CURE) }, // floats + canon Natural Cure (its sole ability)
 
     // Gen 3
     { SPECIES_BANETTE,                  sInnateLevitate },
@@ -283,7 +302,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 
     // Gen 7
     { SPECIES_BLACEPHALON,              sInnateLevitate },
-    { SPECIES_COMFEY,                   sInnateLevitate },
+    { SPECIES_COMFEY,                   INNATES(ABILITY_LEVITATE, ABILITY_NATURAL_CURE) }, // floats (lei) + canon Natural Cure (HA)
     { SPECIES_COSMOEM,                  sInnateLevitate },
     { SPECIES_COSMOG,                   sInnateLevitate },
     { SPECIES_DHELMISE,                 sInnateLevitate },
@@ -353,11 +372,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_SLOWKING_GALAR,           sInnateRegenerator },
     { SPECIES_TANGELA,                  sInnateRegenerator },
     { SPECIES_TANGROWTH,                sInnateRegenerator },
-    { SPECIES_STARYU,                   sInnateRegenerator }, // flavor: regenerates as long as its core survives
-    { SPECIES_STARMIE,                  sInnateRegenerator }, // flavor
+    { SPECIES_STARYU,                   INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // flavor Regen (regrows from its core) + canon Natural Cure
+    { SPECIES_STARMIE,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // flavor Regen + canon Natural Cure
 
     // Gen 2
-    { SPECIES_CORSOLA,                  sInnateRegenerator },
+    { SPECIES_CORSOLA,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // canon Regen (HA) + canon Natural Cure
     { SPECIES_HO_OH,                    sInnateRegenerator },
     { SPECIES_WOOPER,                   INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen (axolotl limb regrowth) + canon Unaware (HA)
     { SPECIES_QUAGSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen + canon Unaware (HA)
@@ -543,6 +562,55 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 1
     { SPECIES_SHELLDER,                 sInnateSturdy }, // its shell "even a missile can't break"
     { SPECIES_CLOYSTER,                 sInnateSturdy }, // "Its shell is harder than diamond"
+
+    // ───────────────────────────────────────────────────────────────────────────
+    // Innate Natural Cure (status conditions are cured silently on switch-out). Two groups:
+    //   1) Canon Natural Cure users — species that carry Natural Cure in their ability
+    //      data (often as the primary). Giving it as an innate lets them keep the
+    //      signature self-cleansing pivot no matter which slot the build picks. Only
+    //      forms whose ability data ALSO lists Natural Cure are included, so the innate
+    //      never appears on a form the canon ability wouldn't (Altaria-Mega is Pixilate,
+    //      Starmie-Mega is Huge Power, Shaymin-Sky is Serene Grace — all omitted). The
+    //      Staryu/Starmie line (already innate Regenerator) and Corsola (canon Regen HA)
+    //      take the combined INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) list above;
+    //      Celebi and Comfey (already innate Levitate) take INNATES(ABILITY_LEVITATE,
+    //      ABILITY_NATURAL_CURE) above — so none are repeated here.
+    //   2) Flavor picks — herbal/aromatic healers that lack the real ability: the Chikorita
+    //      line (its leaf/aroma "soothes and restores health") and Bellossom (whose dance is
+    //      said to heal and revitalize).
+    // ───────────────────────────────────────────────────────────────────────────
+
+    // Canon Natural Cure users
+    // Gen 1
+    { SPECIES_HAPPINY,                  sInnateNaturalCure },
+    { SPECIES_CHANSEY,                  sInnateNaturalCure },
+    { SPECIES_BLISSEY,                  sInnateNaturalCure },
+
+    // Gen 3
+    { SPECIES_BUDEW,                    sInnateNaturalCure },
+    { SPECIES_ROSELIA,                  sInnateNaturalCure },
+    { SPECIES_ROSERADE,                 sInnateNaturalCure },
+    { SPECIES_SWABLU,                   sInnateNaturalCure },
+    { SPECIES_ALTARIA,                  sInnateNaturalCure }, // Mega is Pixilate, so the innate is base-form only
+
+    // Gen 4
+    { SPECIES_SHAYMIN_LAND,             sInnateNaturalCure }, // Sky forme is Serene Grace (SPECIES_SHAYMIN aliases Land)
+
+    // Gen 6
+    { SPECIES_PHANTUMP,                 sInnateNaturalCure },
+    { SPECIES_TREVENANT,                sInnateNaturalCure },
+
+    // Gen 9
+    { SPECIES_PAWMI,                    sInnateNaturalCure }, // Natural Cure is the line's HA
+    { SPECIES_PAWMO,                    sInnateNaturalCure },
+    { SPECIES_PAWMOT,                   sInnateNaturalCure },
+
+    // Flavor Natural Cure (no native Natural Cure; herbal/aromatic self-restoration)
+    // Gen 2
+    { SPECIES_CHIKORITA,                sInnateNaturalCure }, // its leaf gives off a soothing, restorative aroma
+    { SPECIES_BAYLEEF,                  sInnateNaturalCure }, // its aroma "perks people up and restores health"
+    { SPECIES_MEGANIUM,                 sInnateNaturalCure }, // its breath "can revive dead plants" and heal
+    { SPECIES_BELLOSSOM,                sInnateNaturalCure }, // its healing dance revitalizes the weary
 };
 
 static const enum Ability *GetSpeciesInnateList(u16 species)

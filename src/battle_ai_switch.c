@@ -757,6 +757,7 @@ static bool32 ShouldSwitchIfBadlyStatused(struct SwitchAiContext *switchContext)
 
             // Checks to see if active Pokemon can do something against sleep
             if ((monAbility == ABILITY_NATURAL_CURE
+                || BattlerHasAbility(switchContext->battler, ABILITY_NATURAL_CURE) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
                 || monAbility == ABILITY_SHED_SKIN
                 || monAbility == ABILITY_EARLY_BIRD)
                 || holdEffect == (HOLD_EFFECT_CURE_SLP | HOLD_EFFECT_CURE_STATUS)
@@ -1004,6 +1005,26 @@ static bool32 ShouldSwitchForRegenerator(struct SwitchAiContext *switchContext)
         && (switchContext->hasStatRaised ? RandomPercentage(RNG_AI_SWITCH_REGENERATOR, GetSwitchChance(SHOULD_SWITCH_REGENERATOR_STATS_RAISED)) : RandomPercentage(RNG_AI_SWITCH_REGENERATOR, GetSwitchChance(SHOULD_SWITCH_REGENERATOR)));
 }
 
+// FORK: the Natural Cure switch-to-cure heuristic, factored out so an innate Natural Cure
+// (FEATURE_INNATE_ABILITIES) gets the same consideration as a real one even when the chosen
+// ability differs. Returns TRUE if the mon should switch to cleanse its status. Behavior-identical
+// to the body that used to live inline in ShouldSwitchIfAbilityBenefit's ABILITY_NATURAL_CURE case.
+static bool32 ShouldSwitchForNaturalCure(struct SwitchAiContext *switchContext)
+{
+    // Attempt to cure bad ailment
+    if (gBattleMons[switchContext->battler].status1 & (STATUS1_SLEEP | STATUS1_FREEZE | STATUS1_TOXIC_POISON)
+        && gAiLogicData->mostSuitableMonId[switchContext->battler] != PARTY_SIZE
+        && (switchContext->hasStatRaised ? RandomPercentage(RNG_AI_SWITCH_NATURAL_CURE, GetSwitchChance(SHOULD_SWITCH_NATURAL_CURE_STRONG_STATS_RAISED)) : RandomPercentage(RNG_AI_SWITCH_NATURAL_CURE, GetSwitchChance(SHOULD_SWITCH_NATURAL_CURE_STRONG))))
+        return TRUE;
+    // Attempt to cure lesser ailment
+    if ((gBattleMons[switchContext->battler].status1 & STATUS1_ANY)
+        && (gBattleMons[switchContext->battler].hp >= gBattleMons[switchContext->battler].maxHP / 2)
+        && gAiLogicData->mostSuitableMonId[switchContext->battler] != PARTY_SIZE
+        && (switchContext->hasStatRaised ? RandomPercentage(RNG_AI_SWITCH_NATURAL_CURE, GetSwitchChance(SHOULD_SWITCH_NATURAL_CURE_WEAK_STATS_RAISED)) : RandomPercentage(RNG_AI_SWITCH_NATURAL_CURE, GetSwitchChance(SHOULD_SWITCH_NATURAL_CURE_WEAK))))
+        return TRUE;
+    return FALSE;
+}
+
 static bool32 ShouldSwitchIfAbilityBenefit(struct SwitchAiContext *switchContext)
 {
     //Check if ability is blocked
@@ -1019,21 +1040,19 @@ static bool32 ShouldSwitchIfAbilityBenefit(struct SwitchAiContext *switchContext
         && ShouldSwitchForRegenerator(switchContext))
         return SetSwitchinAndSwitch(switchContext->battler, PARTY_SIZE);
 
+    // FORK: an innate Natural Cure gets the same switch-to-cure consideration as a real one even
+    // when the chosen ability differs. It only *adds* a switch reason — if it declines, fall through
+    // so the chosen ability's own benefit (the switch below) still gets a look.
+    if (gAiLogicData->abilities[switchContext->battler] != ABILITY_NATURAL_CURE
+        && BattlerHasAbility(switchContext->battler, ABILITY_NATURAL_CURE)
+        && ShouldSwitchForNaturalCure(switchContext))
+        return SetSwitchinAndSwitch(switchContext->battler, PARTY_SIZE);
+
     switch (gAiLogicData->abilities[switchContext->battler])
     {
     case ABILITY_NATURAL_CURE:
-        //Attempt to cure bad ailment
-        if (gBattleMons[switchContext->battler].status1 & (STATUS1_SLEEP | STATUS1_FREEZE | STATUS1_TOXIC_POISON)
-            && gAiLogicData->mostSuitableMonId[switchContext->battler] != PARTY_SIZE
-            && (switchContext->hasStatRaised ? RandomPercentage(RNG_AI_SWITCH_NATURAL_CURE, GetSwitchChance(SHOULD_SWITCH_NATURAL_CURE_STRONG_STATS_RAISED)) : RandomPercentage(RNG_AI_SWITCH_NATURAL_CURE, GetSwitchChance(SHOULD_SWITCH_NATURAL_CURE_STRONG))))
+        if (ShouldSwitchForNaturalCure(switchContext))
             break;
-        //Attempt to cure lesser ailment
-        if ((gBattleMons[switchContext->battler].status1 & STATUS1_ANY)
-            && (gBattleMons[switchContext->battler].hp >= gBattleMons[switchContext->battler].maxHP / 2)
-            && gAiLogicData->mostSuitableMonId[switchContext->battler] != PARTY_SIZE
-            && (switchContext->hasStatRaised ? RandomPercentage(RNG_AI_SWITCH_NATURAL_CURE, GetSwitchChance(SHOULD_SWITCH_NATURAL_CURE_WEAK_STATS_RAISED)) : RandomPercentage(RNG_AI_SWITCH_NATURAL_CURE, GetSwitchChance(SHOULD_SWITCH_NATURAL_CURE_WEAK))))
-            break;
-
         return FALSE;
 
     case ABILITY_REGENERATOR:

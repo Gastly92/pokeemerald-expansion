@@ -6,8 +6,9 @@
 // default off in the test baseline (see TestInitConfigData), so each test that
 // wants innates opts in with WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE). The
 // supported innate set is LEVITATE (a passive Ground immunity), REGENERATOR
-// (a silent 1/3-HP switch-out heal), UNAWARE (a passive calc modifier) and STURDY
-// (full-HP endure + OHKO-move immunity); see src/innate_abilities.c.
+// (a silent 1/3-HP switch-out heal), UNAWARE (a passive calc modifier), STURDY
+// (full-HP endure + OHKO-move immunity) and NATURAL_CURE (a silent status cure on
+// switch-out); see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -716,6 +717,113 @@ AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI switches an innate-Regenerat
         OPPONENT(SPECIES_STARYU) { MaxHP(100); HP(65); Ability(ABILITY_NATURAL_CURE); Moves(MOVE_SCRATCH); } // chosen != Regenerator; switch is driven by the innate
         OPPONENT(SPECIES_STARYU) { Ability(ABILITY_NATURAL_CURE); Moves(MOVE_SCRATCH); }
     } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); EXPECT_SWITCH(opponent, 1); }
+    }
+}
+
+// ─── Innate Natural Cure ─────────────────────────────────────────────────────
+// A silent status cure on switch-out, wired additively at the same single switch-out
+// site as Regenerator (Cmd_switchoutabilities, src/battle_script_commands.c). Chikorita
+// is a flavor pick: it has no native Natural Cure (Overgrow/Leaf Guard), so the cure is
+// attributable solely to the innate, and toggling the feature isolates it.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Natural Cure cures status on switch-out")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CHIKORITA, ABILITY_NATURAL_CURE));
+        ASSUME(gSpeciesInfo[SPECIES_CHIKORITA].abilities[0] != ABILITY_NATURAL_CURE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CHIKORITA) { Status1(STATUS1_BURN); }
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); } // switches out at the start of the turn
+        TURN { SWITCH(player, 0); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->status1, STATUS1_NONE); // innate cured the burn on switch-out
+        else
+            EXPECT_EQ(player->status1, STATUS1_BURN);  // stock: the burn persists
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Natural Cure's switch-out cure")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CHIKORITA) { Status1(STATUS1_BURN); Moves(MOVE_CELEBRATE); }
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // innate suppressed before it can switch
+        TURN { SWITCH(player, 1); }
+        TURN { SWITCH(player, 0); }
+    } THEN {
+        EXPECT_EQ(player->status1, STATUS1_BURN); // suppressed -> no cure on switch-out
+    }
+}
+
+// A canon Natural Cure user (Blissey: Natural Cure/Serene Grace/Healer) whose *chosen* ability is
+// Serene Grace still carries Natural Cure as an innate, so it keeps the self-cleanse no matter which
+// slot the build picks (exactly the Frontier roster's Blissey set after Step 3.5 freed its slot).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Natural Cure user keeps it via innate when the chosen ability differs")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BLISSEY, ABILITY_NATURAL_CURE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_BLISSEY) { Ability(ABILITY_SERENE_GRACE); Status1(STATUS1_POISON); } // chosen ability is NOT Natural Cure
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+        TURN { SWITCH(player, 0); }
+    } THEN {
+        EXPECT_EQ(player->status1, STATUS1_NONE); // innate Natural Cure cleared the poison despite chosen Serene Grace
+    }
+}
+
+// Corsola carries BOTH an innate Regenerator and an innate Natural Cure (canon Hustle/Natural Cure/
+// Regenerator). With a chosen Hustle, NEITHER is the chosen ability, so both innate switch-out blocks
+// must fire and coexist: each writes the party mon directly (HP for Regenerator, status for Natural
+// Cure), so neither clobbers the other nor the single switch-out controller emit.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Regenerator and innate Natural Cure both fire on switch-out")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CORSOLA, ABILITY_REGENERATOR));
+        ASSUME(SpeciesHasInnate(SPECIES_CORSOLA, ABILITY_NATURAL_CURE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CORSOLA) { Ability(ABILITY_HUSTLE); HP(1); Status1(STATUS1_POISON); } // chosen is neither innate
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); } // switches first (start of turn), before any poison tick
+        TURN { SWITCH(player, 0); }
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP / 3 + 1); // innate Regenerator healed 1/3
+        EXPECT_EQ(player->status1, STATUS1_NONE);     // innate Natural Cure cured the poison
+    }
+}
+
+// AI innate-awareness for Natural Cure. Like Regenerator, the cure isn't in any shared calc the AI
+// runs — the AI reasons about it only in dedicated `== ABILITY_NATURAL_CURE` switch reads, now
+// innate-aware (BattlerHasAbility). Meganium has NO native Natural Cure (chosen Overgrow), so it
+// switches to cleanse a bad status only via the innate pre-check in ShouldSwitchIfAbilityBenefit.
+// Mirrors the chosen-Natural-Cure switch test in ai_switching.c.
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI switches an innate-Natural-Cure mon to cure a bad status")
+{
+    PASSES_RANDOMLY(SHOULD_SWITCH_NATURAL_CURE_STRONG_PERCENTAGE, 100, RNG_AI_SWITCH_NATURAL_CURE);
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MEGANIUM, ABILITY_NATURAL_CURE));
+        ASSUME(gSpeciesInfo[SPECIES_MEGANIUM].abilities[0] != ABILITY_NATURAL_CURE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
+        PLAYER(SPECIES_ODDISH) { Moves(MOVE_TOXIC, MOVE_SCRATCH); }
+        OPPONENT(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); Moves(MOVE_SCRATCH); } // chosen != Natural Cure; switch driven by the innate
+        OPPONENT(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); Moves(MOVE_SCRATCH); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TOXIC); }
         TURN { MOVE(player, MOVE_SCRATCH); EXPECT_SWITCH(opponent, 1); }
     }
 }

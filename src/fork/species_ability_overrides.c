@@ -70,6 +70,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     //    it a chosen Defiant in the empty slot 1 — Ogerpon's signature ability, and a fitting +2 Atk
     //    punish for the Cornerstone Swords-Dance sweeper. It endures on the innate Sturdy regardless.
     { SPECIES_OGERPON_CORNERSTONE, 1, ABILITY_DEFIANT },
+
+    // ── Innate Natural Cure, ability-locked: Celebi and Shaymin's ONLY ability is Natural Cure,
+    //    now granted innately, so their frontier sets would otherwise waste the slot on the
+    //    redundant ability. Give each a flavorful chosen ability in the empty slot 1; they still
+    //    self-cleanse on the innate Natural Cure regardless.
+    { SPECIES_CELEBI,              1, ABILITY_TRIAGE },      // forest life-energy → priority on its Giga Drain / Recover
+    { SPECIES_SHAYMIN,             1, ABILITY_SERENE_GRACE }, // its Sky forme's ability — doubles Seed Flare's SpD-drop chance
 };
 
 enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)
