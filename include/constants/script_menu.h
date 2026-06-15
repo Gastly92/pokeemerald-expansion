@@ -178,6 +178,13 @@ enum
     // .if on those flags. Added at the end so the enum stays additive on sync.
     MULTI_FRONTIER_RULES_LV100,
     MULTI_FRONTIER_PASS_INFO_NO_RECORD,
+    // FORK: facility-guide directions menus (BattleFrontier_OutsideWest). A short
+    // top menu picks a side of the Frontier; the side menus list that side's
+    // facilities. Kept two-level so each list stays short enough not to overlap
+    // the message box. Added at the end so the enum stays additive on sync.
+    MULTI_FRONTIER_GUIDE_AREAS,
+    MULTI_FRONTIER_GUIDE_WEST,
+    MULTI_FRONTIER_GUIDE_EAST,
 };
 
 #define MULTI_NONE 255

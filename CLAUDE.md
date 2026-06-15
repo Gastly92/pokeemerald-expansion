@@ -170,6 +170,26 @@ becomes `.if 1`). This bit the 6v6 party picker — `B_FRONTIER_PARTY_SIZE_6V6` 
 intentionally `1`, with a comment saying why. Flags that only ever appear in `.if`
 or as operands can stay `TRUE`/`FALSE`.
 
+### Text in `.string` — only charmap characters (no em-dash, no curly quotes you type)
+
+Map/script text (`.string "…"` in `data/maps/**/scripts.inc`, `data/text/…`) is
+encoded through `charmap.txt`, not raw UTF-8. Any character not in the charmap
+fails the build with `error: unknown character U+XXXX`. The one that bites
+repeatedly is the **em-dash `—` (U+2014): it is NOT in the charmap** — use a
+plain hyphen `-`, or the ellipsis `…` (U+2026, which *is* mapped) for a pause.
+Curly quotes `“ ” ‘ ’` and `é` (in `POKé`) are mapped and fine; the safe instinct
+is "ASCII punctuation + the handful of glyphs vanilla text already uses." Quick
+pre-build check for a script file you've edited:
+
+```bash
+python3 - <<'EOF'
+s=open('data/maps/.../scripts.inc').read()
+print(sorted({hex(ord(c)) for c in s if ord(c)>0x7f} - {hex(ord(c)) for c in '…“”‘’é'}))
+EOF
+```
+
+If it prints anything, that codepoint will break `build/.../event_scripts.o`.
+
 ### Marking intentional divergences: the `FORK:` tag
 
 When we deliberately diverge from upstream inside a file upstream also owns —

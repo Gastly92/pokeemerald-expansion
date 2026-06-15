@@ -1,10 +1,219 @@
 BattleFrontier_OutsideWest_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, BattleFrontier_OutsideWest_OnTransition
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, BattleFrontier_OutsideWest_OnFrame
 	.byte 0
 
 BattleFrontier_OutsideWest_OnTransition:
 	setvar VAR_BRAVO_TRAINER_BATTLE_TOWER_ON, 0
 	setflag FLAG_HIDE_BATTLE_TOWER_REPORTER
+	end
+
+@ FORK: when the player steps out of the Reception Gate just after the Scott
+@ intro (VAR_FRONTIER_FACILITY_GUIDE == 1, set by the gate's Scott scene), the
+@ waiting guide greets them and walks them to the Battle Factory entrance.
+BattleFrontier_OutsideWest_OnFrame:
+	map_script_2 VAR_FRONTIER_FACILITY_GUIDE, 1, BattleFrontier_OutsideWest_EventScript_FacilityGuideEscort
+	.2byte 0
+
+BattleFrontier_OutsideWest_EventScript_FacilityGuideEscort::
+	lockall
+	@ bump the state first so this trigger can never fire twice
+	setvar VAR_FRONTIER_FACILITY_GUIDE, 2
+	delay 30
+	playse SE_PIN
+	applymovement LOCALID_FRONTIER_FACILITY_GUIDE_GREETER, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_FRONTIER_FACILITY_GUIDE_GREETER, BattleFrontier_OutsideWest_Movement_GuideApproachPlayer
+	waitmovement 0
+	msgbox BattleFrontier_OutsideWest_Text_GuideWelcome, MSGBOX_DEFAULT
+	closemessage
+	@ greeter leads with the player following directly behind, one tile back.
+	@ Scripted applymovement doesn't object-collide, so lockstep is safe; the
+	@ paths are still collision-checked and avoid every NPC's home tile, and
+	@ lockall freezes the wanderers so none stray across the route mid-walk.
+	applymovement LOCALID_FRONTIER_FACILITY_GUIDE_GREETER, BattleFrontier_OutsideWest_Movement_GuideEscortLead
+	applymovement LOCALID_PLAYER, BattleFrontier_OutsideWest_Movement_GuideEscortFollow
+	waitmovement 0
+	applymovement LOCALID_FRONTIER_FACILITY_GUIDE_GREETER, BattleFrontier_OutsideWest_Movement_GuideFacePlayer
+	waitmovement 0
+	msgbox BattleFrontier_OutsideWest_Text_GuideFarewell, MSGBOX_DEFAULT
+	closemessage
+	@ swap the one-shot greeter for the permanent directions-giver standing here
+	removeobject LOCALID_FRONTIER_FACILITY_GUIDE_GREETER
+	setflag FLAG_HIDE_FRONTIER_FACILITY_GUIDE_GREETER
+	clearflag FLAG_HIDE_FRONTIER_FACILITY_GUIDE
+	addobject LOCALID_FRONTIER_FACILITY_GUIDE
+	releaseall
+	end
+
+@ Greeter starts at its home (26, 58) and walks down to (26, 60), just in front
+@ of the player, who exits the gate facing up at (26, 61).
+BattleFrontier_OutsideWest_Movement_GuideApproachPlayer:
+	walk_down
+	walk_down
+	step_end
+
+@ Lead path from (26, 60) to (10, 39), one tile ahead of the player throughout.
+BattleFrontier_OutsideWest_Movement_GuideEscortLead:
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_left
+	walk_left
+	step_end
+
+@ Follow path from (26, 61) to (11, 39), staying one tile directly behind the
+@ greeter (whose lead path is this same route offset one tile ahead).
+BattleFrontier_OutsideWest_Movement_GuideEscortFollow:
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_left
+	step_end
+
+@ Greeter (now at (10, 39)) turns east to face the player at (11, 39).
+BattleFrontier_OutsideWest_Movement_GuideFacePlayer:
+	face_right
+	step_end
+
+@ FORK: the permanent guide that lives by the Battle Factory. Gives directions to
+@ any facility via a short two-level menu (west side / east side -> facility).
+BattleFrontier_OutsideWest_EventScript_FacilityGuide::
+	lock
+	faceplayer
+	msgbox BattleFrontier_OutsideWest_Text_GuideNeedDirections, MSGBOX_DEFAULT
+BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu::
+	message BattleFrontier_OutsideWest_Text_GuideWhichArea
+	waitmessage
+	multichoice 1, 0, MULTI_FRONTIER_GUIDE_AREAS, FALSE
+	switch VAR_RESULT
+	case 0, BattleFrontier_OutsideWest_EventScript_FacilityGuideWest
+	case 1, BattleFrontier_OutsideWest_EventScript_FacilityGuideEast
+	case 2, BattleFrontier_OutsideWest_EventScript_FacilityGuideDone
+	case MULTI_B_PRESSED, BattleFrontier_OutsideWest_EventScript_FacilityGuideDone
+	end
+
+BattleFrontier_OutsideWest_EventScript_FacilityGuideWest::
+	message BattleFrontier_OutsideWest_Text_GuideWhichFacility
+	waitmessage
+	multichoice 1, 0, MULTI_FRONTIER_GUIDE_WEST, FALSE
+	switch VAR_RESULT
+	case 0, BattleFrontier_OutsideWest_EventScript_GuideDirFactory
+	case 1, BattleFrontier_OutsideWest_EventScript_GuideDirDome
+	case 2, BattleFrontier_OutsideWest_EventScript_GuideDirPike
+	case 3, BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+	case MULTI_B_PRESSED, BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+	end
+
+BattleFrontier_OutsideWest_EventScript_FacilityGuideEast::
+	message BattleFrontier_OutsideWest_Text_GuideWhichFacility
+	waitmessage
+	multichoice 1, 0, MULTI_FRONTIER_GUIDE_EAST, FALSE
+	switch VAR_RESULT
+	case 0, BattleFrontier_OutsideWest_EventScript_GuideDirTower
+	case 1, BattleFrontier_OutsideWest_EventScript_GuideDirArena
+	case 2, BattleFrontier_OutsideWest_EventScript_GuideDirPalace
+	case 3, BattleFrontier_OutsideWest_EventScript_GuideDirPyramid
+	case 4, BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+	case MULTI_B_PRESSED, BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+	end
+
+BattleFrontier_OutsideWest_EventScript_GuideDirFactory::
+	msgbox BattleFrontier_OutsideWest_Text_GuideDirFactory, MSGBOX_DEFAULT
+	goto BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+
+BattleFrontier_OutsideWest_EventScript_GuideDirDome::
+	msgbox BattleFrontier_OutsideWest_Text_GuideDirDome, MSGBOX_DEFAULT
+	goto BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+
+BattleFrontier_OutsideWest_EventScript_GuideDirPike::
+	msgbox BattleFrontier_OutsideWest_Text_GuideDirPike, MSGBOX_DEFAULT
+	goto BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+
+BattleFrontier_OutsideWest_EventScript_GuideDirTower::
+	msgbox BattleFrontier_OutsideWest_Text_GuideDirTower, MSGBOX_DEFAULT
+	goto BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+
+BattleFrontier_OutsideWest_EventScript_GuideDirArena::
+	msgbox BattleFrontier_OutsideWest_Text_GuideDirArena, MSGBOX_DEFAULT
+	goto BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+
+BattleFrontier_OutsideWest_EventScript_GuideDirPalace::
+	msgbox BattleFrontier_OutsideWest_Text_GuideDirPalace, MSGBOX_DEFAULT
+	goto BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+
+BattleFrontier_OutsideWest_EventScript_GuideDirPyramid::
+	msgbox BattleFrontier_OutsideWest_Text_GuideDirPyramid, MSGBOX_DEFAULT
+	goto BattleFrontier_OutsideWest_EventScript_FacilityGuideAreaMenu
+
+BattleFrontier_OutsideWest_EventScript_FacilityGuideDone::
+	msgbox BattleFrontier_OutsideWest_Text_GuideComeBack, MSGBOX_DEFAULT
+	release
 	end
 
 BattleFrontier_OutsideWest_EventScript_FerryAttendant::
@@ -514,4 +723,77 @@ BattleFrontier_OutsideWest_Text_MonWithLongTailInFrontier:
 	.string "It must be adorable. I'm sure of it…\p"
 	.string "Oh, challenges can wait. I feel driven\n"
 	.string "to find the delightful creature!$"
+
+@ FORK: facility-guide NPC dialogue (intro escort + permanent directions menu).
+BattleFrontier_OutsideWest_Text_GuideWelcome:
+	.string "Welcome to the BATTLE FRONTIER!\p"
+	.string "SCOTT radioed ahead - a brand-new\n"
+	.string "challenger with no POKéMON yet!\p"
+	.string "No worries. The BATTLE FACTORY lends\n"
+	.string "you a team, so it's the place to start.\p"
+	.string "Here, I'll take you right to it.\n"
+	.string "Follow me!$"
+
+BattleFrontier_OutsideWest_Text_GuideFarewell:
+	.string "And here we are - the BATTLE FACTORY!\p"
+	.string "Rent a team inside, win battles, and\n"
+	.string "earn BATTLE POINTS to make it yours.\p"
+	.string "I'll be right here by the entrance.\n"
+	.string "If you ever lose your way, just ask me\l"
+	.string "and I'll point you to any FACILITY.\p"
+	.string "Good luck out there!$"
+
+BattleFrontier_OutsideWest_Text_GuideNeedDirections:
+	.string "Need directions somewhere?$"
+
+BattleFrontier_OutsideWest_Text_GuideWhichArea:
+	.string "Which part of the FRONTIER?$"
+
+BattleFrontier_OutsideWest_Text_GuideWhichFacility:
+	.string "Which FACILITY?$"
+
+BattleFrontier_OutsideWest_Text_GuideComeBack:
+	.string "Come back any time you need a hand!$"
+
+BattleFrontier_OutsideWest_Text_GuideDirFactory:
+	.string "The BATTLE FACTORY is right here\n"
+	.string "behind me!\p"
+	.string "Rent a team and battle to earn\n"
+	.string "BATTLE POINTS.$"
+
+BattleFrontier_OutsideWest_Text_GuideDirDome:
+	.string "The BATTLE DOME is just to the north\n"
+	.string "of here - head up and a little east.\p"
+	.string "It's the tournament hall with the big\n"
+	.string "roaring crowds.$"
+
+BattleFrontier_OutsideWest_Text_GuideDirPike:
+	.string "The BATTLE PIKE is over on the east\n"
+	.string "edge of this western plaza.\p"
+	.string "Head northeast - look for the big\n"
+	.string "serpent-shaped building.$"
+
+BattleFrontier_OutsideWest_Text_GuideDirTower:
+	.string "The BATTLE TOWER is on the eastern\n"
+	.string "half of the FRONTIER.\p"
+	.string "Head east past the plaza, then north -\n"
+	.string "it's the tall tower at the top.$"
+
+BattleFrontier_OutsideWest_Text_GuideDirArena:
+	.string "The BATTLE ARENA is on the eastern\n"
+	.string "half of the FRONTIER.\p"
+	.string "Cross to the east side and look\n"
+	.string "toward the middle of that area.$"
+
+BattleFrontier_OutsideWest_Text_GuideDirPalace:
+	.string "The BATTLE PALACE sits at the far\n"
+	.string "southeast of the FRONTIER.\p"
+	.string "Cross to the east side, then head\n"
+	.string "down toward the cliffs.$"
+
+BattleFrontier_OutsideWest_Text_GuideDirPyramid:
+	.string "The BATTLE PYRAMID towers over the\n"
+	.string "far northeast corner.\p"
+	.string "Cross to the east side and head all\n"
+	.string "the way up and to the right.$"
 

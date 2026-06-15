@@ -62,6 +62,11 @@ BattleFrontier_ReceptionGate_EventScript_ScottScene::
 	@ FORK: our new game starts with this hide flag clear so Scott appears for the
 	@ restored intro; set it now so he doesn't respawn standing at the gate after.
 	setflag FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT
+	@ FORK: hand the player off to the facility guide waiting outside. Reveal the
+	@ greeter and arm its escort trigger (BattleFrontier_OutsideWest OnFrame), which
+	@ fires the moment the player steps out of the gate's north door.
+	setvar VAR_FRONTIER_FACILITY_GUIDE, 1
+	clearflag FLAG_HIDE_FRONTIER_FACILITY_GUIDE_GREETER
 	releaseall
 	end
 

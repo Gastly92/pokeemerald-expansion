@@ -2135,6 +2135,11 @@
 #define FLAG_HIDE_ROUTE_128_STEVEN                                  0
 #define FLAG_HIDE_SLATEPORT_CITY_GABBY_AND_TY                       0
 #define FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT              0
+// FORK: Emerald-only Battle Frontier facility-guide flags. Defined here as 0 so
+// the FRLG build compiles (the Frontier doesn't exist on FRLG, and the code that
+// uses them returns early on IS_FRLG); the real values live in flags.h.
+#define FLAG_HIDE_FRONTIER_FACILITY_GUIDE_GREETER                   0
+#define FLAG_HIDE_FRONTIER_FACILITY_GUIDE                           0
 #define FLAG_HIDE_ROUTE_110_BIRCH                                   0
 #define FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_POKEBALL_CHIKORITA     0
 #define FLAG_HIDE_SOOTOPOLIS_CITY_MAN_1                             0

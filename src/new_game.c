@@ -187,6 +187,14 @@ static void SetBattleFrontierFirstArrivalState(void)
     FlagSet(FLAG_MET_SCOTT_ON_SS_TIDAL);
     FlagSet(FLAG_LANDMARK_BATTLE_FRONTIER);
 
+    // FORK: hide both facility-guide NPCs at new game. The reception-gate Scott
+    // scene reveals the greeter (and sets VAR_FRONTIER_FACILITY_GUIDE) when it
+    // ends; the greeter's escort to the Battle Factory then reveals the
+    // permanent directions-giver. Object flags default clear (= shown), so they
+    // must be set here or both would appear immediately at the ferry.
+    FlagSet(FLAG_HIDE_FRONTIER_FACILITY_GUIDE_GREETER);
+    FlagSet(FLAG_HIDE_FRONTIER_FACILITY_GUIDE);
+
     // FORK: a new game in this hack gives the player no starter, so the stock
     // FLAG_SYS_POKEMON_GET (set when receiving the first mon from Birch's bag) is
     // never set and the overworld START menu hides the POKéMON option
