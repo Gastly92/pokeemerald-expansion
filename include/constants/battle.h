@@ -245,6 +245,8 @@ enum VolatileFlags
     F(VOLATILE_STICKY_SYRUPED_BY,           stickySyrupedBy,               (enum BattlerId, MAX_BITS(MAX_BATTLERS_COUNT))) \
     F(VOLATILE_GLAIVE_RUSH,                 glaiveRush,                    (u32, 1)) \
     F(VOLATILE_LEECH_SEED,                  leechSeed,                     (enum BattlerId, MAX_BITS(MAX_BATTLERS_COUNT)), V_BATON_PASSABLE) \
+    /* FORK: BUFF_LEECH_SEED bitmask of every battler currently seeding this mon (1 bit each). */ \
+    F(VOLATILE_LEECH_SEEDED_BY,             leechSeededBy,                 (u32, MAX_BITS(MAX_BATTLERS_COUNT)), V_BATON_PASSABLE) \
     F(VOLATILE_LOCK_ON,                     lockOn,                        (u32, 2)) \
     F(VOLATILE_PERISH_SONG,                 perishSong,                    (u32, 1), V_BATON_PASSABLE) \
     F(VOLATILE_MINIMIZE,                    minimize,                      (u32, 1)) \
@@ -346,6 +348,11 @@ enum Volatile
 // Helper macros
 #define INFATUATED_WITH(battler) (battler + 1)
 #define LEECHSEEDED_BY(battler) (battler + 1)
+// FORK: BUFF_LEECH_SEED stores the full set of seeders as a per-battler bitmask
+// in the leechSeededBy volatile (1 bit per battler), so several battlers can seed
+// the same target at once. The legacy single-seeder leechSeed volatile is kept
+// untouched as the "primary" seeder (truthiness, Baton Pass, AI).
+#define LEECH_SEED_BIT(battler) (1u << (battler))
 
 enum SemiInvulnerableState
 {

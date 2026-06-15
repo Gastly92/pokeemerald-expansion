@@ -65,6 +65,9 @@ extern const u8 BattleScript_SafeguardEnds[];
 extern const u8 BattleScript_LeechSeedTurnDrainLiquidOoze[];
 extern const u8 BattleScript_LeechSeedTurnDrainHealBlock[];
 extern const u8 BattleScript_LeechSeedTurnDrainRecovery[];
+extern const u8 BattleScript_LeechSeedReDrainRecovery[]; // FORK: BUFF_LEECH_SEED
+extern const u8 BattleScript_LeechSeedReDrainHealBlock[]; // FORK: BUFF_LEECH_SEED
+extern const u8 BattleScript_LeechSeedReDrainLiquidOoze[]; // FORK: BUFF_LEECH_SEED
 extern const u8 BattleScript_BideStoringEnergy[];
 extern const u8 BattleScript_BideAttack[];
 extern const u8 BattleScript_BideNoEnergyToAttack[];

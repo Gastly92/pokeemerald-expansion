@@ -43,7 +43,13 @@ EWRAM_DATA struct ConfigChanges *gConfigChangesTestOverride = NULL;
 
 // Gets the value of a volatile status flag for a certain battler
 // Primarily used for the debug menu and scripts. Outside of it explicit references are preferred
-u32 GetConfigInternal(enum ConfigTag _config)
+// FORK: compiled as ARM. In the TESTING build this function holds two large
+// switches whose per-case code (a pointer deref into gConfigChangesTestOverride)
+// overflows Thumb's branch range once the fork's extra config groups
+// (DETERMINISTIC_*/BUFF_*/FEATURE_*) are added ("Unexpected thumb1 far jump").
+// ARM's far larger branch range sidesteps it without splitting the generated
+// switches (cf. the GetClampedValue split for the same class of error).
+ARM_FUNC u32 GetConfigInternal(enum ConfigTag _config)
 {
 #if TESTING
     if (gConfigChangesTestOverride == NULL)

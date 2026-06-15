@@ -472,44 +472,106 @@ static bool32 HandleEndTurnIngrain(enum BattlerId battler)
     return effect;
 }
 
+// FORK: BUFF_LEECH_SEED - queues the end-turn drain script matching the branch
+// chosen by SetUpLeechSeedDrain().
+static void CallLeechSeedTurnDrainScript(enum LeechSeedDrainKind kind)
+{
+    switch (kind)
+    {
+    case LEECH_SEED_DRAIN_LIQUID_OOZE:
+        BattleScriptCall(BattleScript_LeechSeedTurnDrainLiquidOoze);
+        break;
+    case LEECH_SEED_DRAIN_HEAL_BLOCK:
+        BattleScriptCall(BattleScript_LeechSeedTurnDrainHealBlock);
+        break;
+    case LEECH_SEED_DRAIN_RECOVERY:
+    default:
+        BattleScriptCall(BattleScript_LeechSeedTurnDrainRecovery);
+        break;
+    }
+}
+
 static bool32 HandleEndTurnLeechSeed(enum BattlerId battler)
 {
     bool32 effect = FALSE;
-    enum BattlerId drainedBattler = gBattleMons[battler].volatiles.leechSeed;
 
-    gBattleStruct->eventState.endTurnBattler++;
+    if (!GetConfig(BUFF_LEECH_SEED))
+    {
+        enum BattlerId drainedBattler = gBattleMons[battler].volatiles.leechSeed;
 
-    if (drainedBattler
-     && IsBattlerPresent(drainedBattler - 1)
+        gBattleStruct->eventState.endTurnBattler++;
+
+        if (drainedBattler
+         && IsBattlerPresent(drainedBattler - 1)
+         && IsBattlerPresent(battler)
+         && !IsAbilityAndRecord(battler, GetBattlerAbility(battler), ABILITY_MAGIC_GUARD))
+        {
+            gBattlerTarget = drainedBattler - 1; // leech seed receiver
+            gBattleScripting.animArg1 = gBattlerTarget;
+            gBattleScripting.animArg2 = gBattlerAttacker;
+            s32 drainAmount = GetNonDynamaxMaxHP(gBattlerAttacker) / 8;
+            s32 healAmount = GetDrainedBigRootHp(gBattlerTarget, drainAmount);
+            if (GetBattlerAbility(battler) == ABILITY_LIQUID_OOZE)
+            {
+                SetPassiveDamageAmount(gBattlerAttacker, drainAmount);
+                SetPassiveDamageAmount(gBattlerTarget, healAmount);
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_OOZE;
+                BattleScriptCall(BattleScript_LeechSeedTurnDrainLiquidOoze);
+            }
+            else if (gBattleMons[gBattlerTarget].volatiles.healBlock)
+            {
+                BattleScriptCall(BattleScript_LeechSeedTurnDrainHealBlock);
+            }
+            else
+            {
+                SetPassiveDamageAmount(gBattlerAttacker, drainAmount);
+                SetHealAmount(gBattlerTarget, healAmount);
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_DRAIN;
+                BattleScriptCall(BattleScript_LeechSeedTurnDrainRecovery);
+            }
+            effect = TRUE;
+        }
+
+        return effect;
+    }
+
+    // FORK: BUFF_LEECH_SEED - a target may be seeded by several battlers at once
+    // (leechSeededBy is a per-battler bitmask). The end-turn engine processes one
+    // (victim) battler per step, so we drain a single seeder per call and hold
+    // endTurnBattler in place - tracking which seeders are already done this step
+    // in leechSeedDrainProcessed - until every seeder of this victim has drained,
+    // then reset and advance. Seeders drain low-index-first for determinism.
+    if (gBattleMons[battler].volatiles.leechSeededBy
      && IsBattlerPresent(battler)
      && !IsAbilityAndRecord(battler, GetBattlerAbility(battler), ABILITY_MAGIC_GUARD))
     {
-        gBattlerTarget = drainedBattler - 1; // leech seed receiver
-        gBattleScripting.animArg1 = gBattlerTarget;
-        gBattleScripting.animArg2 = gBattlerAttacker;
-        s32 drainAmount = GetNonDynamaxMaxHP(gBattlerAttacker) / 8;
-        s32 healAmount = GetDrainedBigRootHp(gBattlerTarget, drainAmount);
-        if (GetBattlerAbility(battler) == ABILITY_LIQUID_OOZE)
+        u32 remaining = gBattleMons[battler].volatiles.leechSeededBy
+                      & ~gBattleStruct->eventState.leechSeedDrainProcessed;
+
+        while (remaining != 0)
         {
-            SetPassiveDamageAmount(gBattlerAttacker, drainAmount);
-            SetPassiveDamageAmount(gBattlerTarget, healAmount);
-            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_OOZE;
-            BattleScriptCall(BattleScript_LeechSeedTurnDrainLiquidOoze);
+            enum BattlerId seeder = 0;
+            while (!(remaining & LEECH_SEED_BIT(seeder)))
+                seeder++;
+
+            remaining &= ~LEECH_SEED_BIT(seeder);
+            gBattleStruct->eventState.leechSeedDrainProcessed |= LEECH_SEED_BIT(seeder);
+
+            if (IsBattlerPresent(seeder))
+            {
+                gBattlerTarget = seeder; // leech seed receiver
+                gBattleScripting.animArg1 = gBattlerTarget;
+                gBattleScripting.animArg2 = gBattlerAttacker;
+                CallLeechSeedTurnDrainScript(SetUpLeechSeedDrain(battler, seeder));
+                return TRUE; // hold endTurnBattler; resume at the next seeder after this drain runs
+            }
         }
-        else if (gBattleMons[gBattlerTarget].volatiles.healBlock)
-        {
-            BattleScriptCall(BattleScript_LeechSeedTurnDrainHealBlock);
-        }
-        else
-        {
-            SetPassiveDamageAmount(gBattlerAttacker, drainAmount);
-            SetHealAmount(gBattlerTarget, healAmount);
-            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_DRAIN;
-            BattleScriptCall(BattleScript_LeechSeedTurnDrainRecovery);
-        }
-        effect = TRUE;
     }
 
+    // No (more) seeders to drain for this victim: clear the per-step tracker and
+    // advance to the next battler.
+    gBattleStruct->eventState.leechSeedDrainProcessed = 0;
+    gBattleStruct->eventState.endTurnBattler++;
     return effect;
 }
 
