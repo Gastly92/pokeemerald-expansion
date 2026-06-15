@@ -3338,6 +3338,55 @@ BattleScript_LeechSeedTurnDrain:
 	tryactivateitem BS_ATTACKER, ACTIVATION_ON_HP_THRESHOLD
 	return
 
+@ FORK: BUFF_LEECH_SEED - immediate drain when Leech Seed is used on a foe the
+@ user already seeds. Normal move roles here (attacker = seeder/gains HP,
+@ target = victim/loses HP), unlike the end-turn drain which treats the victim as
+@ the attacker. Cmd_setseeded sets up the amounts/message and jumps to one of the
+@ three variants below.
+BattleScript_LeechSeedReDrainRecovery::
+	attackanimation
+	waitanimation
+	call BattleScript_LeechSeedReDrainHurtVictim
+	healthbarupdate BS_ATTACKER, PASSIVE_HP_UPDATE
+	datahpupdate BS_ATTACKER, PASSIVE_HP_UPDATE
+	saveattacker
+	copybyte gBattlerAttacker, gBattlerTarget   @ "sapped" message names the victim
+	printfromtable gLeechSeedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	restoreattacker
+	tryfaintmon BS_ATTACKER
+	goto BattleScript_MoveEnd
+
+BattleScript_LeechSeedReDrainHealBlock::
+	attackanimation
+	waitanimation
+	call BattleScript_LeechSeedReDrainHurtVictim
+	goto BattleScript_MoveEnd
+
+BattleScript_LeechSeedReDrainLiquidOoze::
+	attackanimation
+	waitanimation
+	call BattleScript_LeechSeedReDrainHurtVictim
+	copybyte gBattlerAbility, gBattlerTarget     @ victim's Liquid Ooze
+	call BattleScript_AbilityPopUp
+	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_LeechSeedReDrainEnd
+	healthbarupdate BS_ATTACKER, PASSIVE_HP_UPDATE
+	datahpupdate BS_ATTACKER, PASSIVE_HP_UPDATE
+	printstring STRINGID_ITSUCKEDLIQUIDOOZE
+	waitmessage B_WAIT_TIME_LONG
+	tryfaintmon BS_ATTACKER
+BattleScript_LeechSeedReDrainEnd:
+	goto BattleScript_MoveEnd
+
+@ Hurts the re-drain victim (BS_TARGET) for the amount Cmd_setseeded stored.
+BattleScript_LeechSeedReDrainHurtVictim:
+	playanimation BS_TARGET, B_ANIM_LEECH_SEED_DRAIN, sB_ANIM_ARG1
+	healthbarupdate BS_TARGET, PASSIVE_HP_UPDATE
+	datahpupdate BS_TARGET, PASSIVE_HP_UPDATE
+	tryfaintmon BS_TARGET
+	tryactivateitem BS_TARGET, ACTIVATION_ON_HP_THRESHOLD
+	return
+
 BattleScript_BideStoringEnergy::
 	printstring STRINGID_PKMNSTORINGENERGY
 	waitmessage B_WAIT_TIME_LONG

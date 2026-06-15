@@ -206,6 +206,14 @@ u32 CheckMoveLimitations(enum BattlerId battler, u8 unusableMoves, u16 check);
 bool32 AreAllMovesUnusable(enum BattlerId battler);
 u8 GetImprisonedMovesCount(enum BattlerId battler, enum Move move);
 s32 GetDrainedBigRootHp(enum BattlerId battler, s32 hp);
+// FORK: BUFF_LEECH_SEED. Which branch a Leech Seed drain takes, returned by SetUpLeechSeedDrain.
+enum LeechSeedDrainKind
+{
+    LEECH_SEED_DRAIN_RECOVERY,    // victim loses HP, seeder heals
+    LEECH_SEED_DRAIN_LIQUID_OOZE, // victim loses HP, seeder takes recoil (victim has Liquid Ooze)
+    LEECH_SEED_DRAIN_HEAL_BLOCK,  // victim loses HP, seeder heals nothing (seeder under Heal Block)
+};
+enum LeechSeedDrainKind SetUpLeechSeedDrain(enum BattlerId victim, enum BattlerId seeder);
 bool32 IsAbilityAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck);
 bool32 HandleFaintedMonActions(void);
 bool32 HasNoMonsToSwitch(enum BattlerId battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2);

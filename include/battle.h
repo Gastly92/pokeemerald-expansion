@@ -549,6 +549,7 @@ struct EventStates
     enum EndTurnResolutionOrder endTurn:8;
     u32 endTurnBlock:8; // FirstEventBlock, SecondEventBlock, ThirdEventBlock
     enum BattlerId endTurnBattler:4;
+    u32 leechSeedDrainProcessed:4; // FORK: BUFF_LEECH_SEED - seeders already drained this end-turn step (re-entrancy across the per-seeder loop).
     u32 arenaTurn:8;
     enum BattleSide battlerSide:4;
     enum BattlerId moveEndBattler:4;

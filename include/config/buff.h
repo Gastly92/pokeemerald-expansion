@@ -31,4 +31,27 @@
 // nonzero. Ignored when BUFF_SHELL_BELL is FALSE.
 #define BUFF_SHELL_BELL_DENOMINATOR 4
 
+// When TRUE, Leech Seed is buffed in two ways:
+//  - Multiple battlers can seed the same target ("stacking"). Each seeder drains
+//    the victim independently every turn, so a doubly-seeded foe loses HP twice
+//    per turn, one share going to each seeder.
+//  - Using Leech Seed on a foe *you already seed* no longer just fails - it deals
+//    an immediate drain (instead of wasting the turn). Seeding a foe that only
+//    *another* battler has seeded stacks your seed on instead of failing.
+// The per-tick (and immediate) drain fraction is 1/BUFF_LEECH_SEED_DENOMINATOR.
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS)
+// so battle tests can flip it per-test; the magnitude lives in the plain
+// compile-time constant below. Stock behavior (flag off): a single seeder, and
+// re-seeding an already-seeded foe fails. See Cmd_setseeded() in
+// src/battle_script_commands.c and HandleEndTurnLeechSeed() in
+// src/battle_end_turn.c.
+#define BUFF_LEECH_SEED TRUE
+
+// Drain divisor used for Leech Seed when BUFF_LEECH_SEED is on: HP drained per
+// seeder per turn (and on an immediate re-drain) = victim's max HP /
+// BUFF_LEECH_SEED_DENOMINATOR. Stock behavior (flag off) is always 1/8. Lower =
+// more draining; must be nonzero. Kept at 8 so the per-tick rate matches vanilla
+// by default - the buff is the stacking + immediate re-drain, not a bigger tick.
+#define BUFF_LEECH_SEED_DENOMINATOR 8
+
 #endif // GUARD_CONFIG_BUFF_H

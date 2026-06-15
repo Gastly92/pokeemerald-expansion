@@ -1799,12 +1799,30 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             ADJUST_SCORE(-8);
         break;
     case EFFECT_LEECH_SEED:
-        if (gBattleMons[battlerDef].volatiles.leechSeed
-         || IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)
-         || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, aiData->partnerMove))
+        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS))
+        {
             ADJUST_SCORE(-10);
+        }
+        else if (GetConfig(BUFF_LEECH_SEED))
+        {
+            // FORK: BUFF_LEECH_SEED - re-seeding our own seed re-drains the foe, and
+            // seeding a foe another battler seeded stacks, so Leech Seed is only wasted
+            // when it truly does nothing (we already seed a Magic Guard foe) or hurts us.
+            if ((gBattleMons[battlerDef].volatiles.leechSeededBy & LEECH_SEED_BIT(battlerAtk))
+                && aiData->abilities[battlerDef] == ABILITY_MAGIC_GUARD)
+                ADJUST_SCORE(-10);
+            else if (aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE)
+                ADJUST_SCORE(-3);
+        }
+        else if (gBattleMons[battlerDef].volatiles.leechSeed
+              || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, aiData->partnerMove))
+        {
+            ADJUST_SCORE(-10);
+        }
         else if (aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE)
+        {
             ADJUST_SCORE(-3);
+        }
         break;
     case EFFECT_DISABLE:
         if (GetActiveGimmick(battlerDef) == GIMMICK_DYNAMAX)
@@ -4545,8 +4563,10 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
         }
         break;
     case EFFECT_LEECH_SEED:
+        // FORK: BUFF_LEECH_SEED - being already seeded no longer disqualifies the move
+        // (re-seeding re-drains / stacks); Magic Guard below still rules it out.
         if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)
-          || gBattleMons[battlerDef].volatiles.leechSeed
+          || (!GetConfig(BUFF_LEECH_SEED) && gBattleMons[battlerDef].volatiles.leechSeed)
           || HasMoveWithEffect(battlerDef, EFFECT_RAPID_SPIN)
           || aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE
           || aiData->abilities[battlerDef] == ABILITY_MAGIC_GUARD)

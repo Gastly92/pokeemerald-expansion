@@ -3309,6 +3309,21 @@ bool32 IsTwoTurnNotSemiInvulnerableMove(enum BattlerId battlerAtk, enum Move mov
 static u32 GetLeechSeedDamage(enum BattlerId battler)
 {
     u32 damage = 0;
+    if (GetConfig(BUFF_LEECH_SEED))
+    {
+        // FORK: BUFF_LEECH_SEED - several battlers can seed one target; each present
+        // seeder drains it independently, so sum their drains for the prediction.
+        u32 seeders = gBattleMons[battler].volatiles.leechSeededBy;
+        u32 perSeeder = GetNonDynamaxMaxHP(battler) / BUFF_LEECH_SEED_DENOMINATOR;
+        if (perSeeder == 0)
+            perSeeder = 1;
+        for (enum BattlerId i = 0; i < gBattlersCount; i++)
+        {
+            if ((seeders & LEECH_SEED_BIT(i)) && gBattleMons[i].hp != 0)
+                damage += perSeeder;
+        }
+        return damage;
+    }
     u32 leechSeeder = gBattleMons[battler].volatiles.leechSeed;
     if (leechSeeder && gBattleMons[leechSeeder - 1].hp != 0)
      {

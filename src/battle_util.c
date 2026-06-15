@@ -1758,6 +1758,37 @@ s32 GetDrainedBigRootHp(enum BattlerId battler, s32 hp)
     return hp;
 }
 
+// FORK: BUFF_LEECH_SEED. Computes a single Leech Seed drain of `victim` by
+// `seeder`: stores the passive HP deltas (victim loses, seeder gains - or takes
+// recoil under Liquid Ooze) and the drain message, then returns which drain
+// branch applies. Shared by the end-turn tick (HandleEndTurnLeechSeed) and the
+// immediate re-drain when re-seeding an already-seeded foe (Cmd_setseeded). The
+// caller is responsible for the Magic Guard / battler-present gating and for
+// selecting the matching battle script for the returned branch.
+enum LeechSeedDrainKind SetUpLeechSeedDrain(enum BattlerId victim, enum BattlerId seeder)
+{
+    s32 drainAmount = GetNonDynamaxMaxHP(victim) / BUFF_LEECH_SEED_DENOMINATOR;
+    s32 healAmount = GetDrainedBigRootHp(seeder, drainAmount);
+
+    SetPassiveDamageAmount(victim, drainAmount);
+    if (GetBattlerAbility(victim) == ABILITY_LIQUID_OOZE)
+    {
+        SetPassiveDamageAmount(seeder, healAmount); // seeder takes recoil instead of healing
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_OOZE;
+        return LEECH_SEED_DRAIN_LIQUID_OOZE;
+    }
+    else if (gBattleMons[seeder].volatiles.healBlock)
+    {
+        return LEECH_SEED_DRAIN_HEAL_BLOCK;
+    }
+    else
+    {
+        SetHealAmount(seeder, healAmount);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_DRAIN;
+        return LEECH_SEED_DRAIN_RECOVERY;
+    }
+}
+
 // Should always be the last check. Otherwise the ability might be wrongly recorded.
 bool32 IsAbilityAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck)
 {

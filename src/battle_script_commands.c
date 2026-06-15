@@ -2904,13 +2904,23 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
         gBattlescriptCurrInstr = BattleScript_MoveEffectHaze;
         break;
     case MOVE_EFFECT_LEECH_SEED:
-        if (!IS_BATTLER_OF_TYPE(effectBattler, TYPE_GRASS) && !gBattleMons[effectBattler].volatiles.leechSeed)
+    {
+        // FORK: BUFF_LEECH_SEED lets a new seeder stack on (gate on this battler's
+        // own bit rather than "any seed"); secondary-effect seeding never re-drains.
+        bool32 buff = GetConfig(BUFF_LEECH_SEED);
+        bool32 canSeed = buff ? !(gBattleMons[effectBattler].volatiles.leechSeededBy & LEECH_SEED_BIT(battlerAtk))
+                              : !gBattleMons[effectBattler].volatiles.leechSeed;
+        if (!IS_BATTLER_OF_TYPE(effectBattler, TYPE_GRASS) && canSeed)
         {
-            gBattleMons[effectBattler].volatiles.leechSeed = LEECHSEEDED_BY(battlerAtk);
+            if (buff)
+                gBattleMons[effectBattler].volatiles.leechSeededBy |= LEECH_SEED_BIT(battlerAtk);
+            if (!gBattleMons[effectBattler].volatiles.leechSeed)
+                gBattleMons[effectBattler].volatiles.leechSeed = LEECHSEEDED_BY(battlerAtk);
             BattleScriptPush(battleScript);
             gBattlescriptCurrInstr = BattleScript_MoveEffectLeechSeed;
         }
         break;
+    }
     case MOVE_EFFECT_REFLECT:
         if (TrySetReflect(effectBattler))
         {
@@ -7120,19 +7130,55 @@ static void Cmd_setseeded(void)
 {
     CMD_ARGS();
 
-    if (IsBattlerUnaffectedByMove(gBattlerTarget) || gBattleMons[gBattlerTarget].volatiles.leechSeed)
+    enum BattlerId victim = gBattlerTarget;
+    enum BattlerId seeder = gBattlerAttacker;
+    bool32 buff = GetConfig(BUFF_LEECH_SEED);
+
+    if (IsBattlerUnaffectedByMove(victim) || (!buff && gBattleMons[victim].volatiles.leechSeed))
     {
-        gBattleStruct->moveResultFlags[gBattlerTarget] |= MOVE_RESULT_MISSED;
+        gBattleStruct->moveResultFlags[victim] |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_MISS;
     }
-    else if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS))
+    else if (IS_BATTLER_OF_TYPE(victim, TYPE_GRASS))
     {
-        gBattleStruct->moveResultFlags[gBattlerTarget] |= MOVE_RESULT_MISSED;
+        gBattleStruct->moveResultFlags[victim] |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_FAIL;
+    }
+    else if (buff && (gBattleMons[victim].volatiles.leechSeededBy & LEECH_SEED_BIT(seeder)))
+    {
+        // FORK: BUFF_LEECH_SEED - re-seeding a foe this battler already seeds drains
+        // it immediately instead of wasting the turn. If no drain is possible (victim
+        // absent or has Magic Guard) fall back to the vanilla "missed" result.
+        if (IsBattlerPresent(victim) && GetBattlerAbility(victim) != ABILITY_MAGIC_GUARD)
+        {
+            gBattleScripting.animArg1 = seeder;
+            gBattleScripting.animArg2 = victim;
+            switch (SetUpLeechSeedDrain(victim, seeder))
+            {
+            case LEECH_SEED_DRAIN_LIQUID_OOZE:
+                gBattlescriptCurrInstr = BattleScript_LeechSeedReDrainLiquidOoze;
+                break;
+            case LEECH_SEED_DRAIN_HEAL_BLOCK:
+                gBattlescriptCurrInstr = BattleScript_LeechSeedReDrainHealBlock;
+                break;
+            case LEECH_SEED_DRAIN_RECOVERY:
+            default:
+                gBattlescriptCurrInstr = BattleScript_LeechSeedReDrainRecovery;
+                break;
+            }
+            return;
+        }
+        gBattleStruct->moveResultFlags[victim] |= MOVE_RESULT_MISSED;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_MISS;
     }
     else
     {
-        gBattleMons[gBattlerTarget].volatiles.leechSeed = LEECHSEEDED_BY(gBattlerAttacker);
+        // First seed by this battler: vanilla single-seed path, or - under
+        // BUFF_LEECH_SEED - a new seeder stacking onto a foe another battler seeds.
+        if (buff)
+            gBattleMons[victim].volatiles.leechSeededBy |= LEECH_SEED_BIT(seeder);
+        if (!gBattleMons[victim].volatiles.leechSeed)
+            gBattleMons[victim].volatiles.leechSeed = LEECHSEEDED_BY(seeder); // primary seeder (truthiness/Baton Pass/AI)
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_SET;
     }
 
@@ -8673,6 +8719,7 @@ static void Cmd_rapidspinfree(void)
     else if (gBattleMons[gBattlerAttacker].volatiles.leechSeed)
     {
         gBattleMons[gBattlerAttacker].volatiles.leechSeed = 0;
+        gBattleMons[gBattlerAttacker].volatiles.leechSeededBy = 0; // FORK: BUFF_LEECH_SEED - frees every stacked seeder at once
         BattleScriptCall(BattleScript_LeechSeedFree);
     }
     else if (AreAnyHazardsOnSide(atkSide))
