@@ -30,7 +30,8 @@ SINGLE_BATTLE_TEST("BUFF_LEECH_SEED: Re-seeding an already-seeded foe drains it 
         HP_BAR(opponent);
         HP_BAR(player);
         // Turn 2: re-using Leech Seed drains immediately instead of failing.
-        ANIMATION(ANIM_TYPE_MOVE, MOVE_LEECH_SEED, player);
+        // Only the drain animation plays - not the full seeding animation - to
+        // match the end-of-turn drain.
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_LEECH_SEED_DRAIN, opponent);
         HP_BAR(opponent, captureDamage: &drain);
         HP_BAR(player, captureDamage: &heal);
@@ -125,7 +126,7 @@ SINGLE_BATTLE_TEST("BUFF_LEECH_SEED: Liquid Ooze punishes the immediate re-drain
         ANIMATION(ANIM_TYPE_MOVE, MOVE_LEECH_SEED, player);
         MESSAGE("The opposing Grimer was seeded!");
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_LEECH_SEED_DRAIN, opponent);
-        ANIMATION(ANIM_TYPE_MOVE, MOVE_LEECH_SEED, player);
+        // Turn 2 re-drain plays only the drain animation, not the seeding move.
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_LEECH_SEED_DRAIN, opponent);
         HP_BAR(opponent);
         MESSAGE("Wynaut sucked up the liquid ooze!");
