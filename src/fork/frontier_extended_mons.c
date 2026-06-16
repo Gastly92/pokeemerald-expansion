@@ -6323,11 +6323,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_MAGNEZONE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Magnet Pull trapper
-        .moves = {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_TRI_ATTACK},
+        .moves = {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_TERA_BLAST},
         .ability = ABILITY_MAGNET_PULL,
         .nature = NATURE_MODEST,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_ELECTRIC,
+        .teraType = TYPE_FAIRY,
         .ball = BALL_POKE,
     },
     {
@@ -14343,7 +14343,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WO_CHIEN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Tablets stall wall
+        .heldItem = ITEM_LEFTOVERS, // Tablets stall wall
         .moves = {MOVE_LEECH_SEED, MOVE_GIGA_DRAIN, MOVE_FOUL_PLAY, MOVE_STUN_SPORE},
         .ability = ABILITY_TABLETS_OF_RUIN,
         .nature = NATURE_BOLD,
