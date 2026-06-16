@@ -336,3 +336,49 @@ AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: AI prefers a contact move so Poi
         TURN { SCORE_GT(opponent, MOVE_CUT, MOVE_ROCK_THROW); }
     }
 }
+
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: AI won't status a known Shed Skin target it can't keep statused")
+{
+    u32 move;
+    PARAMETRIZE { move = MOVE_TOXIC; }
+    PARAMETRIZE { move = MOVE_THUNDER_WAVE; }
+    PARAMETRIZE { move = MOVE_WILL_O_WISP; }
+    PARAMETRIZE { move = MOVE_HYPNOSIS; }
+
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT); // OMNISCIENT so the AI knows Shed Skin
+        // Dratini is pure Dragon, so it can take any of the four non-volatile statuses;
+        // Shed Skin then cures it at the end of every turn, so each status move is wasted.
+        PLAYER(SPECIES_DRATINI) { Ability(ABILITY_SHED_SKIN); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, move); }
+    } WHEN {
+        TURN { SCORE_EQ(opponent, MOVE_CELEBRATE, move); } // status is doomed -> -10, same as do-nothing Celebrate
+    }
+}
+
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: AI won't status a known Hydration target while it is raining")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        PLAYER(SPECIES_VAPOREON) { Ability(ABILITY_HYDRATION); Moves(MOVE_RAIN_DANCE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, MOVE_TOXIC); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_RAIN_DANCE); } // bring up rain, so Hydration will cure end of turn
+        TURN { SCORE_EQ(opponent, MOVE_CELEBRATE, MOVE_TOXIC); } // in rain the poison is doomed -> -10, same as Celebrate
+    }
+}
+
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: AI still statuses a known Hydration target when it is not raining")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        // No rain, so Hydration stays dormant and poison sticks - the AI should value it.
+        PLAYER(SPECIES_VAPOREON) { Ability(ABILITY_HYDRATION); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, MOVE_TOXIC); }
+    } WHEN {
+        TURN { SCORE_GT(opponent, MOVE_TOXIC, MOVE_CELEBRATE); }
+    }
+}

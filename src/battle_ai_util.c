@@ -3614,10 +3614,35 @@ bool32 IsBattlerIncapacitated(enum BattlerId battler, enum Ability ability)
     return FALSE;
 }
 
+// FORK: under DETERMINISTIC_ABILITIES, some abilities cure the holder's
+// non-volatile status at the *end of every turn*, so inflicting one on a known
+// holder of such an ability is always wasted - it is wiped before it can act. The
+// engine still applies-then-cures (Synchronize, status-flash messaging, etc. fire
+// normally); this only stops the AI valuing a doomed status. Shed Skin cures
+// unconditionally; Hydration cures only while the target is being rained on (same
+// condition as the engine in AbilityBattleEffects, but read through the AI's view
+// of weather). Healer is deliberately not handled here - it cures the *partner*,
+// not the holder, so it isn't keyed on the target's own ability (see notes).
+static bool32 StatusWillBeCuredDeterministically(enum BattlerId battlerDef, enum Ability defAbility)
+{
+    if (!GetConfig(DETERMINISTIC_ABILITIES))
+        return FALSE;
+    switch (defAbility)
+    {
+    case ABILITY_SHED_SKIN:
+        return TRUE;
+    case ABILITY_HYDRATION:
+        return IsBattlerWeatherAffected(gAiLogicData->holdEffects[battlerDef], AI_GetWeather(), B_WEATHER_RAIN);
+    default:
+        return FALSE;
+    }
+}
+
 bool32 AI_CanPutToSleep(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability defAbility, enum Move move, enum Move partnerMove)
 {
     if (!CanBeSlept(battlerAtk, battlerDef, defAbility, BLOCKED_BY_SLEEP_CLAUSE)
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
+      || StatusWillBeCuredDeterministically(battlerDef, defAbility)
       || PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))   // shouldn't try to sleep mon that partner is trying to make sleep
         return FALSE;
     // FORK: under DETERMINISTIC_ACCURACY_EVASION a sub-100% sleep move only makes the
@@ -3733,6 +3758,7 @@ bool32 AI_CanPoison(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum A
     if (!CanBePoisoned(battlerAtk, battlerDef, gAiLogicData->abilities[battlerAtk], defAbility)
       || gAiLogicData->effectiveness[battlerAtk][battlerDef][gAiThinkingStruct->movesetIndex] == UQ_4_12(0.0)
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
+      || StatusWillBeCuredDeterministically(battlerDef, defAbility)
       || PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))
         return FALSE;
 
@@ -3744,6 +3770,7 @@ bool32 AI_CanParalyze(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
     if (!CanBeParalyzed(battlerAtk, battlerDef, defAbility)
       || gAiLogicData->effectiveness[battlerAtk][battlerDef][gAiThinkingStruct->movesetIndex] == UQ_4_12(0.0)
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
+      || StatusWillBeCuredDeterministically(battlerDef, defAbility)
       || PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))
         return FALSE;
     return TRUE;
@@ -3779,6 +3806,7 @@ bool32 AI_CanBurn(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Abi
     if (!CanBeBurned(battlerAtk, battlerDef, defAbility)
       || gAiLogicData->effectiveness[battlerAtk][battlerDef][gAiThinkingStruct->movesetIndex] == UQ_4_12(0.0)
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
+      || StatusWillBeCuredDeterministically(battlerDef, defAbility)
       || PartnerMoveEffectIsStatusSameTarget(battlerAtkPartner, battlerDef, partnerMove))
     {
         return FALSE;
@@ -3791,6 +3819,7 @@ bool32 AI_CanGiveFrostbite(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     if (!CanBeFrozen(battlerAtk, battlerDef, defAbility)
       || gAiLogicData->effectiveness[battlerAtk][battlerDef][gAiThinkingStruct->movesetIndex] == UQ_4_12(0.0)
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
+      || StatusWillBeCuredDeterministically(battlerDef, defAbility)
       || PartnerMoveEffectIsStatusSameTarget(battlerAtkPartner, battlerDef, partnerMove))
     {
         return FALSE;
