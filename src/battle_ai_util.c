@@ -784,6 +784,16 @@ static inline void CalcDynamicMoveDamage(struct DamageContext *ctx, u16 *medianD
     }
     else if (strikeCount > 1 && effect != EFFECT_TRIPLE_KICK)
     {
+        // FORK: deterministic Population Bomb hits a fixed count (Loaded Dice / Skill
+        // Link guarantee the max), mirroring CancelerMultihitMoves, so the AI predicts
+        // the real strike count rather than the move's nominal 10.
+        if (effect == EFFECT_POPULATION_BOMB && GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            strikeCount = (ctx->holdEffects[ctx->battlerAtk] == HOLD_EFFECT_LOADED_DICE
+                        || ctx->abilities[ctx->battlerAtk] == ABILITY_SKILL_LINK)
+                        ? DETERMINISTIC_POPULATION_BOMB_LOADED_DICE_COUNT
+                        : DETERMINISTIC_POPULATION_BOMB_COUNT;
+        }
         median *= strikeCount;
         minimum *= strikeCount;
         maximum *= strikeCount;
