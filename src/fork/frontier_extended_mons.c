@@ -6960,7 +6960,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGIGIGAS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLAME_ORB, // Slow Start sit-out with Substitute
+        .heldItem = ITEM_LEFTOVERS, // Slow Start sit-out with Substitute
         .moves = {MOVE_SUBSTITUTE, MOVE_BODY_SLAM, MOVE_KNOCK_OFF, MOVE_DRAIN_PUNCH},
         .ability = ABILITY_SLOW_START,
         .nature = NATURE_ADAMANT,
