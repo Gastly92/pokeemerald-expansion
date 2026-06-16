@@ -273,9 +273,15 @@
 // state-based, so a move's result is read off the board rather than diced:
 //   - Multi-hit moves that roll 2-5 hits always hit DETERMINISTIC_MULTI_HIT_COUNT
 //     times (default 3); Skill Link and Loaded Dice instead guarantee
-//     DETERMINISTIC_MULTI_HIT_MAX_COUNT (default 6). Fixed-count moves (Triple
-//     Kick, Population Bomb, Beat Up, Dragon Darts) are unaffected. See
-//     SetRandomMultiHitCounter in src/battle_move_resolution.c.
+//     DETERMINISTIC_MULTI_HIT_MAX_COUNT (default 5). See SetRandomMultiHitCounter.
+//   - Population Bomb has a fixed 10 strikes but rolls accuracy per strike, so
+//     DETERMINISTIC_ACCURACY_EVASION (which makes every strike land) would turn it
+//     into a guaranteed 10-hit move. To keep it in check it is toned down to
+//     DETERMINISTIC_POPULATION_BOMB_COUNT hits (default 5); Loaded Dice or Skill
+//     Link guarantee the full DETERMINISTIC_POPULATION_BOMB_LOADED_DICE_COUNT
+//     (default 10). The other fixed-count moves (Triple Kick, Beat Up, Dragon
+//     Darts) are unaffected. See CancelerMultihitMoves in
+//     src/battle_move_resolution.c.
 //   - Protect-family moves used on consecutive turns always fail instead of
 //     keeping a shrinking success chance. See CanUseMoveConsecutively in
 //     src/battle_util.c.
@@ -312,7 +318,9 @@
 
 // Tuning for DETERMINISTIC_MOVE_RESULTS (ignored when it is FALSE).
 #define DETERMINISTIC_MULTI_HIT_COUNT 3
-#define DETERMINISTIC_MULTI_HIT_MAX_COUNT 6
+#define DETERMINISTIC_MULTI_HIT_MAX_COUNT 5
+#define DETERMINISTIC_POPULATION_BOMB_COUNT 5
+#define DETERMINISTIC_POPULATION_BOMB_LOADED_DICE_COUNT 10
 #define DETERMINISTIC_RAMPAGE_TURNS 2
 #define DETERMINISTIC_WRAP_TURNS 4
 #define DETERMINISTIC_WRAP_GRIP_CLAW_TURNS 7

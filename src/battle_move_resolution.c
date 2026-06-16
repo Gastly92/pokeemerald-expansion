@@ -2522,7 +2522,20 @@ static enum CancelerResult CancelerMultihitMoves(struct BattleCalcValues *cv)
     }
     else if (GetMoveStrikeCount(cv->move) > 1)
     {
-        if (GetMoveEffect(cv->move) == EFFECT_POPULATION_BOMB
+        bool32 guaranteedMaxStrikes = cv->holdEffects[cv->battlerAtk] == HOLD_EFFECT_LOADED_DICE
+                                   || cv->abilities[cv->battlerAtk] == ABILITY_SKILL_LINK;
+
+        if (GetMoveEffect(cv->move) == EFFECT_POPULATION_BOMB && GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            // FORK: deterministic Population Bomb. With DETERMINISTIC_ACCURACY_EVASION
+            // every strike lands, so the bare move would always hit its full 10 times;
+            // it is toned down to DETERMINISTIC_POPULATION_BOMB_COUNT, while Loaded Dice
+            // or Skill Link guarantee DETERMINISTIC_POPULATION_BOMB_LOADED_DICE_COUNT.
+            gMultiHitCounter = guaranteedMaxStrikes
+                             ? DETERMINISTIC_POPULATION_BOMB_LOADED_DICE_COUNT
+                             : DETERMINISTIC_POPULATION_BOMB_COUNT;
+        }
+        else if (GetMoveEffect(cv->move) == EFFECT_POPULATION_BOMB
          && cv->holdEffects[cv->battlerAtk] == HOLD_EFFECT_LOADED_DICE
          && cv->abilities[cv->battlerAtk] != ABILITY_SKILL_LINK)
         {

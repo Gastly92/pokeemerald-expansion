@@ -10245,7 +10245,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOUCANNON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LOADED_DICE, // guaranteed multi-hit
+        .heldItem = ITEM_LIFE_ORB, // Skill Link already maxes multi-hit; Life Orb adds power
         .moves = {MOVE_BULLET_SEED, MOVE_ROCK_BLAST, MOVE_BRAVE_BIRD, MOVE_BEAK_BLAST},
         .ability = ABILITY_SKILL_LINK,
         .nature = NATURE_JOLLY,
@@ -13247,7 +13247,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAUSHOLD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WIDE_LENS, // Technician Population Bomb sweeper
+        .heldItem = ITEM_LOADED_DICE, // Technician sweeper; Loaded Dice guarantees Population Bomb's full 10 hits (and Bullet Seed's 5)
         .moves = {MOVE_POPULATION_BOMB, MOVE_BULLET_SEED, MOVE_TIDY_UP, MOVE_ENCORE},
         .ability = ABILITY_TECHNICIAN,
         .nature = NATURE_JOLLY,

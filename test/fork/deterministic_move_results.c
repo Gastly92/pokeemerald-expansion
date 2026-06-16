@@ -30,7 +30,50 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Loaded Dice raises a multi-hit m
     } WHEN {
         TURN { MOVE(player, MOVE_DOUBLE_SLAP); }
     } SCENE {
-        MESSAGE("The Pokémon was hit 6 time(s)!");
+        MESSAGE("The Pokémon was hit 5 time(s)!");
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Population Bomb hits five times without Loaded Dice")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE);
+        ASSUME(GetMoveEffect(MOVE_POPULATION_BOMB) == EFFECT_POPULATION_BOMB);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_POPULATION_BOMB); }
+        OPPONENT(SPECIES_CHANSEY);
+    } WHEN {
+        TURN { MOVE(player, MOVE_POPULATION_BOMB); }
+    } SCENE {
+        MESSAGE("The Pokémon was hit 5 time(s)!");
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Population Bomb hits ten times while holding Loaded Dice")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE);
+        ASSUME(GetMoveEffect(MOVE_POPULATION_BOMB) == EFFECT_POPULATION_BOMB);
+        ASSUME(GetItemHoldEffect(ITEM_LOADED_DICE) == HOLD_EFFECT_LOADED_DICE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_LOADED_DICE); Moves(MOVE_POPULATION_BOMB); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_POPULATION_BOMB); }
+    } SCENE {
+        MESSAGE("The Pokémon was hit 10 time(s)!");
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Population Bomb hits ten times with Skill Link")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE);
+        ASSUME(GetMoveEffect(MOVE_POPULATION_BOMB) == EFFECT_POPULATION_BOMB);
+        PLAYER(SPECIES_PIKIPEK) { Ability(ABILITY_SKILL_LINK); Moves(MOVE_POPULATION_BOMB); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_POPULATION_BOMB); }
+    } SCENE {
+        MESSAGE("The Pokémon was hit 10 time(s)!");
     }
 }
 
