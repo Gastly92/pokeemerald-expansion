@@ -3342,10 +3342,9 @@ BattleScript_LeechSeedTurnDrain:
 @ user already seeds. Normal move roles here (attacker = seeder/gains HP,
 @ target = victim/loses HP), unlike the end-turn drain which treats the victim as
 @ the attacker. Cmd_setseeded sets up the amounts/message and jumps to one of the
-@ three variants below.
+@ three variants below. Like the end-turn drain, these skip the Leech Seed move
+@ animation and play only B_ANIM_LEECH_SEED_DRAIN (via LeechSeedReDrainHurtVictim).
 BattleScript_LeechSeedReDrainRecovery::
-	attackanimation
-	waitanimation
 	call BattleScript_LeechSeedReDrainHurtVictim
 	healthbarupdate BS_ATTACKER, PASSIVE_HP_UPDATE
 	datahpupdate BS_ATTACKER, PASSIVE_HP_UPDATE
@@ -3358,14 +3357,10 @@ BattleScript_LeechSeedReDrainRecovery::
 	goto BattleScript_MoveEnd
 
 BattleScript_LeechSeedReDrainHealBlock::
-	attackanimation
-	waitanimation
 	call BattleScript_LeechSeedReDrainHurtVictim
 	goto BattleScript_MoveEnd
 
 BattleScript_LeechSeedReDrainLiquidOoze::
-	attackanimation
-	waitanimation
 	call BattleScript_LeechSeedReDrainHurtVictim
 	copybyte gBattlerAbility, gBattlerTarget     @ victim's Liquid Ooze
 	call BattleScript_AbilityPopUp
