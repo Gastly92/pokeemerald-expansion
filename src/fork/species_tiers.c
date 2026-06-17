@@ -43,7 +43,6 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_ZYGARDE,             TIER_MYTHICAL }, // 718
     { SPECIES_SOLGALEO,            TIER_MYTHICAL }, // 791
     { SPECIES_LUNALA,              TIER_MYTHICAL }, // 792
-    { SPECIES_NECROZMA,            TIER_MYTHICAL }, // 800
     { SPECIES_NECROZMA_DAWN_WINGS, TIER_MYTHICAL }, // 800
     { SPECIES_NECROZMA_DUSK_MANE,  TIER_MYTHICAL }, // 800
     { SPECIES_ZACIAN,              TIER_MYTHICAL }, // 888
@@ -73,11 +72,7 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_KELDEO,               TIER_LEGENDARY }, // 647
     { SPECIES_MELOETTA,             TIER_LEGENDARY }, // 648
     { SPECIES_GENESECT,             TIER_LEGENDARY }, // 649
-    { SPECIES_DIANCIE,              TIER_LEGENDARY }, // 719
-    { SPECIES_HOOPA,                TIER_LEGENDARY }, // 720
     { SPECIES_HOOPA_UNBOUND,        TIER_LEGENDARY }, // 720
-    { SPECIES_MAGEARNA,             TIER_LEGENDARY }, // 801
-    { SPECIES_MARSHADOW,            TIER_LEGENDARY }, // 802
     { SPECIES_URSHIFU,              TIER_LEGENDARY }, // 892
     { SPECIES_URSHIFU_RAPID_STRIKE, TIER_LEGENDARY }, // 892
     { SPECIES_GLASTRIER,            TIER_LEGENDARY }, // 896
