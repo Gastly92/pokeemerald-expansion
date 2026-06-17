@@ -112,6 +112,10 @@ static const enum Ability sInnateNaturalCure[] = { ABILITY_NATURAL_CURE, ABILITY
 
 static const struct SpeciesInnates sSpeciesInnates[] =
 {
+    { SPECIES_BULBASAUR, INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR) },
+    { SPECIES_IVYSAUR,   INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR) },
+    { SPECIES_VENUSAUR,  INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR) },
+    
     // Gen 1
     { SPECIES_GASTLY,            sInnateLevitate },
     { SPECIES_HAUNTER,           sInnateLevitate },
