@@ -85,12 +85,16 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_OGERPON_WELLSPRING,   TIER_LEGENDARY }, // 1017
 
     // ---- Pseudo — At most 1 per frontier draft team ----
+    { SPECIES_ARTICUNO_GALAR,     TIER_PSEUDO }, // 144
+    { SPECIES_ZAPDOS_GALAR,       TIER_PSEUDO }, // 145
+    { SPECIES_MOLTRES_GALAR,      TIER_PSEUDO }, // 146
     { SPECIES_SALAMENCE,          TIER_PSEUDO }, // 373
     { SPECIES_GARCHOMP,           TIER_PSEUDO }, // 445
     { SPECIES_HEATRAN,            TIER_PSEUDO }, // 485
     { SPECIES_MANAPHY,            TIER_PSEUDO }, // 490
     { SPECIES_SHAYMIN,            TIER_PSEUDO }, // 492
     { SPECIES_VICTINI,            TIER_PSEUDO }, // 494
+    { SPECIES_TERRAKION,          TIER_PSEUDO }, // 639
     { SPECIES_KOMMO_O,            TIER_PSEUDO }, // 784
     { SPECIES_PHEROMOSA,          TIER_PSEUDO }, // 795
     { SPECIES_KARTANA,            TIER_PSEUDO }, // 798
@@ -99,9 +103,15 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_ZERAORA,            TIER_PSEUDO }, // 807
     { SPECIES_DRAGAPULT,          TIER_PSEUDO }, // 887
     { SPECIES_GREAT_TUSK,         TIER_PSEUDO }, // 984
+    { SPECIES_FLUTTER_MANE,       TIER_PSEUDO }, // 987
+    { SPECIES_SLITHER_WING,       TIER_PSEUDO }, // 988
+    { SPECIES_SANDY_SHOCKS,       TIER_PSEUDO }, // 989
+    { SPECIES_IRON_TREADS,        TIER_PSEUDO }, // 990
     { SPECIES_IRON_BUNDLE,        TIER_PSEUDO }, // 991
+    { SPECIES_IRON_HANDS,         TIER_PSEUDO }, // 992
     { SPECIES_IRON_JUGULIS,       TIER_PSEUDO }, // 993
     { SPECIES_IRON_MOTH,          TIER_PSEUDO }, // 994
+    { SPECIES_IRON_THORNS,        TIER_PSEUDO }, // 995
     { SPECIES_BAXCALIBUR,         TIER_PSEUDO }, // 998
     { SPECIES_CHIEN_PAO,          TIER_PSEUDO }, // 1002
     { SPECIES_CHI_YU,             TIER_PSEUDO }, // 1004
