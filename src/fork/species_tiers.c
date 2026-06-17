@@ -6,7 +6,7 @@
 // rationale and the fork's tier definitions). Keyed by EXACT species id so each
 // forme is classified on its own merits: a powerful forme can sit above its base
 // (Shaymin-Sky is TIER_LEGENDARY while ordinary Shaymin is TIER_PSEUDO and a weak
-// base can sit below its formes (basexCalyrex is TIER_NORMAL / absent while its
+// base can sit below its formes (base Calyrex is TIER_NORMAL / absent while its
 // Ice/Shadow riders are TIER_MYTHICAL).
 // Anything not listed is TIER_NORMAL. Add a row to classify another species/forme.
 
