@@ -88,7 +88,9 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_SALAMENCE,          TIER_PSEUDO }, // 373
     { SPECIES_GARCHOMP,           TIER_PSEUDO }, // 445
     { SPECIES_HEATRAN,            TIER_PSEUDO }, // 485
+    { SPECIES_MANAPHY,            TIER_PSEUDO }, // 490
     { SPECIES_SHAYMIN,            TIER_PSEUDO }, // 492
+    { SPECIES_VICTINI,            TIER_PSEUDO }, // 494
     { SPECIES_KOMMO_O,            TIER_PSEUDO }, // 784
     { SPECIES_PHEROMOSA,          TIER_PSEUDO }, // 795
     { SPECIES_KARTANA,            TIER_PSEUDO }, // 798
@@ -99,6 +101,7 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_GREAT_TUSK,         TIER_PSEUDO }, // 984
     { SPECIES_IRON_BUNDLE,        TIER_PSEUDO }, // 991
     { SPECIES_IRON_JUGULIS,       TIER_PSEUDO }, // 993
+    { SPECIES_IRON_MOTH,          TIER_PSEUDO }, // 994
     { SPECIES_BAXCALIBUR,         TIER_PSEUDO }, // 998
     { SPECIES_CHIEN_PAO,          TIER_PSEUDO }, // 1002
     { SPECIES_CHI_YU,             TIER_PSEUDO }, // 1004
