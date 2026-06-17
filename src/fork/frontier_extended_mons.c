@@ -1118,7 +1118,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAPIDASH_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TWISTED_SPOON, // Psychic boost
+        .heldItem = ITEM_LEFTOVERS,
         .moves = {MOVE_PSYCHIC, MOVE_DAZZLING_GLEAM, MOVE_MYSTICAL_FIRE, MOVE_CALM_MIND},
         .ability = ABILITY_PASTEL_VEIL,
         .nature = NATURE_TIMID,
@@ -1130,7 +1130,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_RAPIDASH_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical sweeper
-        .moves = {MOVE_PLAY_ROUGH, MOVE_HIGH_HORSEPOWER, MOVE_PSYCHIC, MOVE_AGILITY},
+        .moves = {MOVE_PLAY_ROUGH, MOVE_HIGH_HORSEPOWER, MOVE_FLARE_BLITZ, MOVE_AGILITY},
         .ability = ABILITY_ANTICIPATION,
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
