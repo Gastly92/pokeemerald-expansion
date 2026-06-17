@@ -107,8 +107,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_VENUSAURITE, // Mega Venusaur (Thick Fat) — bulky pivot
-        .moves = {MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_LEECH_SEED, MOVE_SYNTHESIS},
+        .heldItem = ITEM_VENUSAURITE,
+        .moves = {MOVE_SLUDGE_BOMB, MOVE_GIGA_DRAIN, MOVE_SPORE, MOVE_LEECH_SEED},
         .ability = ABILITY_OVERGROW,
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 220, 0, 0, 36),
@@ -118,34 +118,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper (no mega)
-        .moves = {MOVE_GROWTH, MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_EARTH_POWER},
-        .ability = ABILITY_CHLOROPHYLL,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_VENUSAUR,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // defensive status spreader
-        .moves = {MOVE_SLUDGE_BOMB, MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_LEECH_SEED},
+        .heldItem = ITEM_BLACK_SLUDGE,
+        .moves = {MOVE_SLUDGE_BOMB, MOVE_GIGA_DRAIN, MOVE_SPORE, MOVE_LEECH_SEED},
         .ability = ABILITY_OVERGROW,
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
-    },
-    {
-        .species = SPECIES_VENUSAUR,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GRASSIUM_Z, // Bloom Doom nuke
-        .moves = {MOVE_GROWTH, MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_WEATHER_BALL},
-        .ability = ABILITY_OVERGROW,
-        .nature = NATURE_MODEST,
-        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
-        .teraType = TYPE_GRASS,
         .ball = BALL_POKE,
     },
 
