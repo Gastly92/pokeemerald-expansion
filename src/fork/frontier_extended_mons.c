@@ -234,7 +234,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BUTTERFREE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Quiver Dance sweeper, sash = one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND, // Quiver Dance sweeper, sash = one-shot entry guard
         .moves = {MOVE_QUIVER_DANCE, MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_SLEEP_POWDER},
         .ability = ABILITY_COMPOUND_EYES,
         .nature = NATURE_TIMID,
@@ -269,7 +269,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BEEDRILL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast pivot lead
+        .heldItem = ITEM_FOCUS_BAND, // fast pivot lead
         .moves = {MOVE_POISON_JAB, MOVE_KNOCK_OFF, MOVE_U_TURN, MOVE_SWORDS_DANCE},
         .ability = ABILITY_SWARM,
         .nature = NATURE_JOLLY,
@@ -701,7 +701,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENOMOTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Quiver Dance + Sleep Powder sweeper
+        .heldItem = ITEM_FOCUS_BAND, // Quiver Dance + Sleep Powder sweeper
         .moves = {MOVE_QUIVER_DANCE, MOVE_BUG_BUZZ, MOVE_SLUDGE_BOMB, MOVE_SLEEP_POWDER},
         .ability = ABILITY_TINTED_LENS,
         .nature = NATURE_TIMID,
@@ -725,7 +725,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Arena Trap revenge / trapper
+        .heldItem = ITEM_FOCUS_BAND, // Arena Trap revenge / trapper
         .moves = {MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_SUCKER_PUNCH, MOVE_SWORDS_DANCE},
         .ability = ABILITY_ARENA_TRAP,
         .nature = NATURE_JOLLY,
@@ -749,7 +749,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // Sand Force trapper/revenge killer
+        .heldItem = ITEM_FOCUS_BAND, // Sand Force trapper/revenge killer
         .moves = {MOVE_EARTHQUAKE, MOVE_IRON_HEAD, MOVE_STONE_EDGE, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SAND_FORCE,
         .nature = NATURE_JOLLY,
@@ -950,7 +950,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast lead, sash = one-shot guard
+        .heldItem = ITEM_FOCUS_BAND, // fast lead, sash = one-shot guard
         .moves = {MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_SHADOW_BALL, MOVE_ENCORE},
         .ability = ABILITY_MAGIC_GUARD,
         .nature = NATURE_TIMID,
@@ -1009,7 +1009,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VICTREEBEL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH,
+        .heldItem = ITEM_FOCUS_BAND,
         .moves = {MOVE_SLEEP_POWDER, MOVE_GIGA_DRAIN, MOVE_SLUDGE_BOMB, MOVE_WEATHER_BALL},
         .ability = ABILITY_CHLOROPHYLL,
         .nature = NATURE_MODEST,
@@ -1322,7 +1322,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLOYSTER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // guaranteed Shell Smash via one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND, // guaranteed Shell Smash via one-shot entry guard
         .moves = {MOVE_SHELL_SMASH, MOVE_ICICLE_SPEAR, MOVE_ROCK_BLAST, MOVE_ICE_SHARD},
         .ability = ABILITY_SKILL_LINK,
         .nature = NATURE_JOLLY,
@@ -1357,7 +1357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast lead w/ Destiny Bond
+        .heldItem = ITEM_FOCUS_BAND, // fast lead w/ Destiny Bond
         .moves = {MOVE_SHADOW_BALL, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST, MOVE_DESTINY_BOND},
         .ability = ABILITY_CURSED_BODY,
         .nature = NATURE_TIMID,
@@ -1815,7 +1815,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JYNX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Lovely Kiss lead
+        .heldItem = ITEM_FOCUS_BAND, // Lovely Kiss lead
         .moves = {MOVE_LOVELY_KISS, MOVE_ICE_BEAM, MOVE_PSYCHIC, MOVE_NASTY_PLOT},
         .ability = ABILITY_DRY_SKIN,
         .nature = NATURE_TIMID,
@@ -2140,7 +2140,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AERODACTYL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // suicide lead
+        .heldItem = ITEM_FOCUS_BAND, // suicide lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_TAUNT, MOVE_ROCK_SLIDE, MOVE_EARTHQUAKE},
         .ability = ABILITY_UNNERVE,
         .nature = NATURE_JOLLY,
@@ -2891,7 +2891,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JUMPLUFF,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // chlorophyll offensive utility
+        .heldItem = ITEM_FLYING_GEM, // chlorophyll offensive utility
         .moves = {MOVE_GIGA_DRAIN, MOVE_ACROBATICS, MOVE_SLEEP_POWDER, MOVE_STRENGTH_SAP},
         .ability = ABILITY_CHLOROPHYLL,
         .nature = NATURE_TIMID,
@@ -3360,7 +3360,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DELIBIRD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // Pure flavor
+        .heldItem = ITEM_FOCUS_BAND, // Pure flavor
         .moves = {MOVE_ICE_SPINNER, MOVE_ICICLE_SPEAR, MOVE_DRILL_PECK, MOVE_RAPID_SPIN},
         .ability = ABILITY_HUSTLE,
         .nature = NATURE_JOLLY,
@@ -3550,7 +3550,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SMEARGLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // suicide lead, hazards + sleep (sash = one-shot guard)
+        .heldItem = ITEM_FOCUS_BAND, // suicide lead, hazards + sleep (sash = one-shot guard)
         .moves = {MOVE_SPORE, MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_WHIRLWIND},
         .ability = ABILITY_OWN_TEMPO,
         .nature = NATURE_JOLLY,
@@ -4109,7 +4109,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHIFTRY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Sticky Web lead, sash = one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND, // Sticky Web lead, sash = one-shot entry guard
         .moves = {MOVE_STICKY_WEB, MOVE_LEAF_BLADE, MOVE_KNOCK_OFF, MOVE_DEFOG},
         .ability = ABILITY_CHLOROPHYLL,
         .nature = NATURE_JOLLY,
@@ -4216,7 +4216,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MASQUERAIN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Quiver Dance sweeper, sash = one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND, // Quiver Dance sweeper, sash = one-shot entry guard
         .moves = {MOVE_QUIVER_DANCE, MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_HYDRO_PUMP},
         .ability = ABILITY_INTIMIDATE,
         .nature = NATURE_TIMID,
@@ -4251,7 +4251,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRELOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // Spore lead, sash = one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND, // Spore lead, sash = one-shot entry guard
         .moves = {MOVE_SPORE, MOVE_BULLET_SEED, MOVE_MACH_PUNCH, MOVE_SWORDS_DANCE},
         .ability = ABILITY_TECHNICIAN,
         .nature = NATURE_ADAMANT,
@@ -4299,7 +4299,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NINJASK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // baton-pass-style speed control lead
+        .heldItem = ITEM_FOCUS_BAND, // baton-pass-style speed control lead
         .moves = {MOVE_SWORDS_DANCE, MOVE_SUBSTITUTE, MOVE_X_SCISSOR, MOVE_PROTECT},
         .ability = ABILITY_SPEED_BOOST,
         .nature = NATURE_JOLLY,
@@ -4763,7 +4763,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CACTURNE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Spikes + Destiny Bond lead, sash = one-shot guard
+        .heldItem = ITEM_FOCUS_BAND, // Spikes + Destiny Bond lead, sash = one-shot guard
         .moves = {MOVE_SPIKES, MOVE_SEED_BOMB, MOVE_SUCKER_PUNCH, MOVE_DESTINY_BOND},
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE_ADAMANT,
@@ -5035,7 +5035,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BANETTE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Destiny Bond trapper (no mega)
+        .heldItem = ITEM_FOCUS_BAND, // Destiny Bond trapper (no mega)
         .moves = {MOVE_SHADOW_CLAW, MOVE_SUCKER_PUNCH, MOVE_DESTINY_BOND, MOVE_TAUNT},
         .ability = ABILITY_INSOMNIA,
         .nature = NATURE_ADAMANT,
@@ -5133,7 +5133,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLALIE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Spikes + Explosion lead (no mega)
+        .heldItem = ITEM_FOCUS_BAND, // Spikes + Explosion lead (no mega)
         .moves = {MOVE_SPIKES, MOVE_ICE_BEAM, MOVE_FREEZE_DRY, MOVE_EXPLOSION},
         .ability = ABILITY_INNER_FOCUS,
         .nature = NATURE_NAIVE,
@@ -5552,7 +5552,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DEOXYS_ATTACK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // sash glass cannon, one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND, // sash glass cannon, one-shot entry guard
         .moves = {MOVE_PSYCHO_BOOST, MOVE_THUNDERBOLT, MOVE_ICE_BEAM, MOVE_SUPERPOWER},
         .ability = ABILITY_PRESSURE,
         .nature = NATURE_TIMID,
@@ -5565,7 +5565,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DEOXYS_SPEED,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // hyper-offense hazard lead, one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND, // hyper-offense hazard lead, one-shot entry guard
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_TAUNT, MOVE_PSYCHO_BOOST},
         .ability = ABILITY_PRESSURE,
         .nature = NATURE_TIMID,
@@ -6504,7 +6504,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_YANMEGA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Speed Boost sweeper
+        .heldItem = ITEM_FOCUS_BAND, // Speed Boost sweeper
         .moves = {MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_ANCIENT_POWER, MOVE_GIGA_DRAIN},
         .ability = ABILITY_SPEED_BOOST,
         .nature = NATURE_MODEST,
@@ -6688,7 +6688,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FROSLASS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast spikes / Destiny Bond lead
+        .heldItem = ITEM_FOCUS_BAND, // fast spikes / Destiny Bond lead
         .moves = {MOVE_SPIKES, MOVE_ICE_BEAM, MOVE_SHADOW_BALL, MOVE_DESTINY_BOND},
         .ability = ABILITY_CURSED_BODY,
         .nature = NATURE_TIMID,
@@ -6838,7 +6838,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AZELF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast suicide lead
+        .heldItem = ITEM_FOCUS_BAND, // fast suicide lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_TAUNT, MOVE_PSYCHIC, MOVE_EXPLOSION},
         .ability = ABILITY_MAGIC_GUARD,
         .nature = NATURE_NAIVE,
@@ -7223,7 +7223,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAMUROTT_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // Sharpness Ceaseless Edge lead
+        .heldItem = ITEM_FOCUS_BAND, // Sharpness Ceaseless Edge lead
         .moves = {MOVE_CEASELESS_EDGE, MOVE_AQUA_JET, MOVE_SUCKER_PUNCH, MOVE_KNOCK_OFF},
         .ability = ABILITY_SHARPNESS,
         .nature = NATURE_JOLLY,
@@ -7568,7 +7568,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LEAVANNY,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // Sticky Web lead
+        .heldItem = ITEM_FOCUS_BAND, // Sticky Web lead
         .moves = {MOVE_STICKY_WEB, MOVE_LEAF_BLADE, MOVE_KNOCK_OFF, MOVE_X_SCISSOR},
         .ability = ABILITY_OVERCOAT,
         .nature = NATURE_JOLLY,
@@ -7616,7 +7616,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WHIMSICOTT,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // Prankster Tailwind + redirect support
+        .heldItem = ITEM_FOCUS_BAND, // Prankster Tailwind + redirect support
         .moves = {MOVE_TAILWIND, MOVE_HELPING_HAND, MOVE_MOONBLAST, MOVE_ENCORE},
         .ability = ABILITY_PRANKSTER,
         .nature = NATURE_TIMID,
@@ -7664,7 +7664,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LILLIGANT_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // sash setup sweeper
+        .heldItem = ITEM_FOCUS_BAND, // sash setup sweeper
         .moves = {MOVE_VICTORY_DANCE, MOVE_CLOSE_COMBAT, MOVE_LEAF_BLADE, MOVE_ICE_SPINNER},
         .ability = ABILITY_CHLOROPHYLL,
         .nature = NATURE_JOLLY,
@@ -7759,17 +7759,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
 
     // ---- Crustle ----
-    {
-        .species = SPECIES_CRUSTLE,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Sturdy Shell Smash + hazard lead
-        .moves = {MOVE_STEALTH_ROCK, MOVE_SHELL_SMASH, MOVE_X_SCISSOR, MOVE_STONE_EDGE},
-        .ability = ABILITY_SHELL_ARMOR, // Sturdy now innate; chosen Shell Armor blocks crits while it sets up
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
-    },
     {
         .species = SPECIES_CRUSTLE,
         .tags = FORMAT_BOTH,
@@ -7867,23 +7856,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
-    {
-        .species = SPECIES_CARRACOSTA,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Sturdy Shell Smash lead
-        .moves = {MOVE_SHELL_SMASH, MOVE_LIQUIDATION, MOVE_STONE_EDGE, MOVE_EARTHQUAKE},
-        .ability = ABILITY_SOLID_ROCK, // Sturdy now innate; chosen Solid Rock softens super-effective hits on this lead
-        .nature = NATURE_JOLLY,
-        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
-        .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
-    },
 
     // ---- Archeops ----
     {
         .species = SPECIES_ARCHEOPS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // glass cannon (Defeatist drawback)
+        .heldItem = ITEM_FLYING_GEM, // glass cannon (Defeatist drawback)
         .moves = {MOVE_ACROBATICS, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_U_TURN},
         .ability = ABILITY_DEFEATIST,
         .nature = NATURE_JOLLY,
@@ -7894,7 +7872,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCHEOPS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast hazard lead
+        .heldItem = ITEM_FOCUS_BAND, // fast hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_STONE_EDGE, MOVE_ACROBATICS, MOVE_TAUNT},
         .ability = ABILITY_DEFEATIST,
         .nature = NATURE_JOLLY,
@@ -8091,7 +8069,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EMOLGA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // doubles support glider
+        .heldItem = ITEM_FOCUS_BAND, // doubles support glider
         .moves = {MOVE_NUZZLE, MOVE_VOLT_SWITCH, MOVE_AIR_SLASH, MOVE_TAILWIND},
         .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE_TIMID,
@@ -8189,7 +8167,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GALVANTULA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Compound Eyes Sticky Web lead
+        .heldItem = ITEM_FOCUS_BAND, // Compound Eyes Sticky Web lead
         .moves = {MOVE_STICKY_WEB, MOVE_THUNDER, MOVE_BUG_BUZZ, MOVE_VOLT_SWITCH},
         .ability = ABILITY_COMPOUND_EYES,
         .nature = NATURE_TIMID,
@@ -8376,7 +8354,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ACCELGOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // fast lead, survives one hit
+        .heldItem = ITEM_FOCUS_BAND, // fast lead, survives one hit
         .moves = {MOVE_BUG_BUZZ, MOVE_FOCUS_BLAST, MOVE_ENERGY_BALL, MOVE_SPIKES},
         .ability = ABILITY_UNBURDEN,
         .nature = NATURE_TIMID,
@@ -8725,7 +8703,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TERRAKION,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Swords Dance / hazard lead
+        .heldItem = ITEM_FOCUS_BAND, // Swords Dance / hazard lead
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_STONE_EDGE, MOVE_STEALTH_ROCK},
         .ability = ABILITY_JUSTIFIED,
         .nature = NATURE_JOLLY,
@@ -8773,7 +8751,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORNADUS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // Prankster Tailwind support
+        .heldItem = ITEM_FOCUS_BAND, // Prankster Tailwind support
         .moves = {MOVE_TAILWIND, MOVE_HURRICANE, MOVE_TAUNT, MOVE_RAIN_DANCE},
         .ability = ABILITY_PRANKSTER,
         .nature = NATURE_TIMID,
@@ -8810,7 +8788,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_THUNDURUS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // Prankster Thunder Wave support
+        .heldItem = ITEM_FOCUS_BAND, // Prankster Thunder Wave support
         .moves = {MOVE_THUNDER_WAVE, MOVE_THUNDERBOLT, MOVE_TAUNT, MOVE_VOLT_SWITCH},
         .ability = ABILITY_PRANKSTER,
         .nature = NATURE_TIMID,
@@ -9139,7 +9117,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRENINJA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // suicide hazard lead
+        .heldItem = ITEM_FOCUS_BAND, // suicide hazard lead
         .moves = {MOVE_SPIKES, MOVE_TOXIC_SPIKES, MOVE_HYDRO_PUMP, MOVE_DARK_PULSE},
         .ability = ABILITY_PROTEAN,
         .nature = NATURE_TIMID,
@@ -9664,7 +9642,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HAWLUCHA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // Mold Breaker physical attacker
+        .heldItem = ITEM_FOCUS_BAND, // Mold Breaker physical attacker
         .moves = {MOVE_ACROBATICS, MOVE_CLOSE_COMBAT, MOVE_STONE_EDGE, MOVE_PROTECT},
         .ability = ABILITY_MOLD_BREAKER,
         .nature = NATURE_ADAMANT,
@@ -10345,7 +10323,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RIBOMBEE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast Sticky Web lead
+        .heldItem = ITEM_FOCUS_BAND, // fast Sticky Web lead
         .moves = {MOVE_STICKY_WEB, MOVE_MOONBLAST, MOVE_BUG_BUZZ, MOVE_STUN_SPORE},
         .ability = ABILITY_SWEET_VEIL,
         .nature = NATURE_TIMID,
@@ -10790,7 +10768,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MINIOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // Shields Down Shell Smash sweeper
+        .heldItem = ITEM_FOCUS_BAND, // Shields Down Shell Smash sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_ACROBATICS, MOVE_POWER_GEM, MOVE_EARTHQUAKE},
         .ability = ABILITY_SHIELDS_DOWN,
         .nature = NATURE_JOLLY,
@@ -11254,7 +11232,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PHEROMOSA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // fast lead
+        .heldItem = ITEM_FOCUS_BAND, // fast lead
         .moves = {MOVE_CLOSE_COMBAT, MOVE_ICE_BEAM, MOVE_THUNDERBOLT, MOVE_RAPID_SPIN},
         .ability = ABILITY_BEAST_BOOST,
         .nature = NATURE_NAIVE,
@@ -12063,7 +12041,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLTEAGEIST,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // Shell Smash sash sweeper
+        .heldItem = ITEM_FOCUS_BAND, // Shell Smash sash sweeper
         .moves = {MOVE_SHELL_SMASH, MOVE_SHADOW_BALL, MOVE_GIGA_DRAIN, MOVE_STORED_POWER},
         .ability = ABILITY_WEAK_ARMOR,
         .nature = NATURE_TIMID,
@@ -12930,7 +12908,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KLEAVOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Stone Axe hazard lead
+        .heldItem = ITEM_FOCUS_BAND, // Stone Axe hazard lead
         .moves = {MOVE_STONE_AXE, MOVE_X_SCISSOR, MOVE_CLOSE_COMBAT, MOVE_DEFOG},
         .ability = ABILITY_SHARPNESS,
         .nature = NATURE_JOLLY,
@@ -13114,7 +13092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSCARADA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast lead / spike support
+        .heldItem = ITEM_FOCUS_BAND, // fast lead / spike support
         .moves = {MOVE_SPIKES, MOVE_FLOWER_TRICK, MOVE_KNOCK_OFF, MOVE_TAUNT},
         .ability = ABILITY_OVERGROW,
         .nature = NATURE_JOLLY,
@@ -13199,7 +13177,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LOKIX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH, // priority bug
+        .heldItem = ITEM_FOCUS_BAND, // priority bug
         .moves = {MOVE_FIRST_IMPRESSION, MOVE_SUCKER_PUNCH, MOVE_LEECH_LIFE, MOVE_THROAT_CHOP},
         .ability = ABILITY_TINTED_LENS,
         .nature = NATURE_JOLLY,
@@ -13258,7 +13236,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAUSHOLD,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // Friend Guard support lead
+        .heldItem = ITEM_FOCUS_BAND, // Friend Guard support lead
         .moves = {MOVE_FOLLOW_ME, MOVE_BEAT_UP, MOVE_HELPING_HAND, MOVE_PROTECT},
         .ability = ABILITY_FRIEND_GUARD,
         .nature = NATURE_JOLLY,
@@ -13740,7 +13718,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLIMMORA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // Toxic Debris hazard lead
+        .heldItem = ITEM_FOCUS_BAND, // Toxic Debris hazard lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_SPIKES, MOVE_POWER_GEM, MOVE_MORTAL_SPIN},
         .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE_TIMID,
@@ -14101,7 +14079,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast Perish Trap / utility (innate Levitate)
+        .heldItem = ITEM_FOCUS_BAND, // fast Perish Trap / utility (innate Levitate)
         .moves = {MOVE_MOONBLAST, MOVE_SHADOW_BALL, MOVE_DAZZLING_GLEAM, MOVE_PROTECT},
         .ability = ABILITY_PROTOSYNTHESIS,
         .nature = NATURE_TIMID,
