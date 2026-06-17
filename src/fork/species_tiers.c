@@ -88,12 +88,15 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_ARTICUNO_GALAR,     TIER_PSEUDO }, // 144
     { SPECIES_ZAPDOS_GALAR,       TIER_PSEUDO }, // 145
     { SPECIES_MOLTRES_GALAR,      TIER_PSEUDO }, // 146
+    { SPECIES_DRAGONITE,          TIER_PSEUDO }, // 149
+    { SPECIES_TYRANITAR,          TIER_PSEUDO }, // 248
     { SPECIES_SALAMENCE,          TIER_PSEUDO }, // 373
     { SPECIES_GARCHOMP,           TIER_PSEUDO }, // 445
     { SPECIES_HEATRAN,            TIER_PSEUDO }, // 485
     { SPECIES_MANAPHY,            TIER_PSEUDO }, // 490
     { SPECIES_SHAYMIN,            TIER_PSEUDO }, // 492
     { SPECIES_VICTINI,            TIER_PSEUDO }, // 494
+    { SPECIES_HYDREIGON,          TIER_PSEUDO }, // 635
     { SPECIES_TERRAKION,          TIER_PSEUDO }, // 639
     { SPECIES_KOMMO_O,            TIER_PSEUDO }, // 784
     { SPECIES_PHEROMOSA,          TIER_PSEUDO }, // 795
