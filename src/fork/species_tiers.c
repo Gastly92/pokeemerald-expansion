@@ -88,6 +88,7 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_SALAMENCE,          TIER_PSEUDO }, // 373
     { SPECIES_GARCHOMP,           TIER_PSEUDO }, // 445
     { SPECIES_HEATRAN,            TIER_PSEUDO }, // 485
+    { SPECIES_SHAYMIN,            TIER_PSEUDO }, // 492
     { SPECIES_KOMMO_O,            TIER_PSEUDO }, // 784
     { SPECIES_PHEROMOSA,          TIER_PSEUDO }, // 795
     { SPECIES_KARTANA,            TIER_PSEUDO }, // 798
