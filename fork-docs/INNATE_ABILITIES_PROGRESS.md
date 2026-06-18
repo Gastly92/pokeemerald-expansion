@@ -150,7 +150,7 @@
 | :white_large_square: | Sand Rush | Doubles the Pokémon's Speed stat in a sandstorm. |
 | :white_large_square: | Wonder Skin | Makes status moves more likely to miss the Pokémon. |
 | :white_large_square: | Analytic | Boosts the power of the Pokémon's moves by 30% when the Pokémon is the last to move that turn. |
-| :white_large_square: | Illusion | The Pokémon enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move. |
+| :x: | Illusion | The Pokémon enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move. |
 | :x: | Imposter | The Pokémon transforms into the Pokémon in front of it. It also copies all of that Pokémon's stats apart from its HP. |
 | :white_large_square: | Infiltrator | When using its moves, the Pokémon ignores the effects of targets' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes. |
 | :white_large_square: | Mummy | When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy. |
