@@ -255,9 +255,9 @@
 | :white_large_square: | Screen Cleaner | When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses. |
 | :white_large_square: | Steely Spirit | Powers up the Steel-type moves of the Pokémon and its allies. |
 | :white_large_square: | Perish Body | When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle. |
-| :white_large_square: | Wandering Spirit | When the Pokémon is hit by a contact move, it swaps Abilities with the attacker. |
+| :x: | Wandering Spirit | When the Pokémon is hit by a contact move, it swaps Abilities with the attacker. |
 | :white_large_square: | Gorilla Tactics | Boosts the Pokémon's Attack stat, but only allows the use of the first selected move. |
-| :white_large_square: | Neutralizing Gas | While the Pokémon is in the battle, the effects of all other Pokémon's Abilities will be nullified or will not be triggered. |
+| :x: | Neutralizing Gas | While the Pokémon is in the battle, the effects of all other Pokémon's Abilities will be nullified or will not be triggered. |
 | :white_large_square: | Pastel Veil | Prevents the Pokémon and its allies from being poisoned. |
 | :x: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
 | :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
