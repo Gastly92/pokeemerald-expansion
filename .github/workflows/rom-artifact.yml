@@ -38,7 +38,7 @@ jobs:
       # conflict on sync; it shares the hardened composite action with build.yml.
       - name: Install binutils
         uses: ./.github/actions/install-binutils
-        timeout-minutes: 20
+        timeout-minutes: 26
 
       - name: Cache build tools
         uses: actions/cache@v5

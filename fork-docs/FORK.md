@@ -169,10 +169,13 @@ fork-owned file.
   intermittently on dpkg-lock/mirror stalls (retrying "fixed" it). We extracted
   it into a fork-owned composite action,
   [`.github/actions/install-binutils`](../.github/actions/install-binutils/action.yml),
-  that wraps each install attempt in a per-attempt `timeout` and retries it with
-  backoff — so a stalled mirror/dpkg-lock is killed and **auto-retried in-job**
-  (no manual workflow restart), failing only after 3 attempts exhaust. A
-  generous `timeout-minutes` backstop on each call site is the outer safety net. Every CI job (`build.yml`) and the on-demand ROM build
+  that (1) **caches the ~107 MB of toolchain `.deb`s** so jobs install from
+  GitHub's cache instead of the intermittently-slow Ubuntu mirror — the actual
+  root cause — and (2) wraps each apt invocation in a per-attempt `timeout` and
+  retries with backoff, so a stalled mirror/dpkg-lock is killed and
+  **auto-retried in-job** (no manual workflow restart), failing only after 3
+  attempts exhaust. A generous `timeout-minutes` backstop on each call site is
+  the outer safety net. Every CI job (`build.yml`) and the on-demand ROM build
   (`rom-artifact.yml`) call it via `uses:`. The `uses:` call sites in `build.yml`
   are tagged `FORK:` (it's upstream-owned); on a merge conflict, keep our
   `uses:` + `timeout-minutes` and port any upstream apt-package change into the

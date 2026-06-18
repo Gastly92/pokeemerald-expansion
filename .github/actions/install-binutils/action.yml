@@ -1,52 +1,78 @@
 name: Install binutils
 description: >-
   Install the GBA cross-toolchain (binutils/gcc/newlib) and build deps used by
-  every CI job. Each install attempt is hard-bounded by a per-attempt timeout
-  and retried with backoff, so a transient dpkg-lock or mirror stall is killed
-  and retried automatically — the step only fails after all attempts exhaust,
-  and it never hangs or needs a manual workflow restart.
+  every CI job. Caches the downloaded .deb packages so jobs install from GitHub's
+  cache instead of the (intermittently slow) Ubuntu mirror, and wraps each apt
+  invocation in a per-attempt timeout + retry so a transient stall is killed and
+  retried automatically rather than hanging or failing the job.
 
-# FORK: this composite action is fork-owned (it has no upstream counterpart, so
-# it never conflicts on sync). It exists to de-duplicate and harden what was an
-# inline "Install binutils" apt-get step copy-pasted into every CI job. The
-# workflow steps that call it (`uses: ./.github/actions/install-binutils`) DO
-# diverge from upstream's inline step — see the FORK notes at those call sites.
+# FORK: this composite action is fork-owned (no upstream counterpart, so it never
+# conflicts on sync). It de-duplicates and hardens what was an inline "Install
+# binutils" apt-get step copy-pasted into every CI job. The workflow steps that
+# call it (`uses: ./.github/actions/install-binutils`) DO diverge from upstream's
+# inline step — see the FORK notes at those call sites.
 
 runs:
   using: composite
   steps:
+    # Cache the downloaded .deb archives (~107 MB of toolchain). On a hit the
+    # install below resolves entirely from these local files and never touches
+    # the Ubuntu mirror — which is the actual source of the intermittent CI
+    # failures (it periodically trickles the packages too slowly to finish
+    # inside any sane timeout). Keyed on this action file, so editing the
+    # package list automatically busts the cache.
+    - name: Cache apt toolchain packages
+      uses: actions/cache@v5
+      with:
+        path: /tmp/apt-debs
+        key: apt-binutils-${{ runner.os }}-${{ hashFiles('.github/actions/install-binutils/action.yml') }}
+
     - name: Install binutils
       shell: bash
-      # Self-healing install: each attempt is wrapped in `timeout` so a hang
-      # (stalled mirror connection, or the dpkg lock held by the runner's
-      # background apt-daily/unattended-upgrades jobs) is KILLED and the loop
-      # retries — instead of running until the step's outer timeout-minutes cap
-      # fails the whole job. Layered bounds, innermost to outermost:
+      # Self-healing install. Layered bounds, innermost to outermost:
+      #   - Dir::Cache::archives=/tmp/apt-debs + Keep-Downloaded-Packages: install
+      #     from cached .debs and keep them for the cache to save; on a cache hit
+      #     the ~107 MB download is skipped entirely (the main reliability win).
       #   - Acquire::*::Timeout=30  : abort a stalled mirror connection (30s).
       #   - Acquire::Retries=3      : apt retries individual failed fetches.
       #   - DPkg::Lock::Timeout=120 : fail (not hang) if the dpkg lock is held;
-      #                               kept BELOW the per-attempt `timeout` so a
-      #                               lock wait ends the attempt, not the step.
-      #   - timeout -k 10 N         : hard wall-clock cap per apt invocation.
-      #   - for-loop + backoff      : retry the whole update+install 3x; by the
-      #                               next attempt the lock/mirror has cleared.
+      #                               kept BELOW the per-attempt `timeout`.
+      #   - timeout -k 10 N         : hard wall-clock cap per apt invocation, so a
+      #                               slow/stalled download is killed, not waited
+      #                               on. 360s for install covers a full
+      #                               cache-miss download even on a slow mirror.
+      #   - for-loop + backoff      : retry update+install 3x; a fresh attempt
+      #                               resumes partial downloads and by then the
+      #                               lock/mirror has usually cleared.
       #   - dpkg --configure -a     : heal dpkg if a `timeout` kill interrupted it.
-      # DEBIAN_FRONTEND=noninteractive keeps any debconf prompt from blocking.
+      # The outer step `timeout-minutes` (set at each call site) is the final
+      # backstop above this loop's worst case. DEBIAN_FRONTEND keeps debconf from
+      # blocking on stdin.
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
         set -u
         packages=(binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3)
+        # apt (run as root via sudo) and actions/cache (run as the runner user)
+        # share /tmp/apt-debs, so make it world-accessible and pre-create the
+        # `partial` subdir apt expects. Use an absolute path, not ~, because
+        # under sudo ~ would resolve to root's home, not the runner's.
+        sudo mkdir -p /tmp/apt-debs/partial
+        sudo chmod -R 0777 /tmp/apt-debs
         apt_opts=(
           -o Acquire::Retries=3
           -o Acquire::http::Timeout=30
           -o Acquire::https::Timeout=30
           -o DPkg::Lock::Timeout=120
+          -o Dir::Cache::archives=/tmp/apt-debs
+          -o APT::Keep-Downloaded-Packages=true
         )
         for attempt in 1 2 3; do
           if sudo timeout -k 10 120 apt-get update "${apt_opts[@]}" && \
-             sudo timeout -k 10 240 apt-get install -y --no-install-recommends \
+             sudo timeout -k 10 360 apt-get install -y --no-install-recommends \
                "${apt_opts[@]}" "${packages[@]}"; then
+            # Let the runner user read the root-owned .debs so the cache can save them.
+            sudo chmod -R a+rX /tmp/apt-debs || true
             echo "binutils toolchain installed (attempt ${attempt}/3)"
             exit 0
           fi
