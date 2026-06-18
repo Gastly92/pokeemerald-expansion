@@ -164,8 +164,8 @@
 | :white_large_square: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
 | :x: | Zen Mode | Changes the Pokémon's shape when its HP drops to half or less. |
 | :white_large_square: | Victory Star | Boosts the accuracy of the Pokémon and its allies. |
-| :white_large_square: | Turboblaze | The Pokémon's moves are unimpeded by the Ability of the target. |
-| :white_large_square: | Teravolt | The Pokémon's moves are unimpeded by the Ability of the target. |
+| :x: | Turboblaze | The Pokémon's moves are unimpeded by the Ability of the target. |
+| :x: | Teravolt | The Pokémon's moves are unimpeded by the Ability of the target. |
 | :white_large_square: | Aroma Veil | The Pokémon and its allies cannot gain the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, or Encore statuses. |
 | :white_large_square: | Flower Veil | Grass-type allies are immune to status conditions and cannot have their stats lowered. |
 | :white_large_square: | Cheek Pouch | The Pokémon has 1/3 of its max HP restored when it eats a Berry, in addition to the Berry's usual effect. |
