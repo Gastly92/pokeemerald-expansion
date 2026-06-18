@@ -119,7 +119,7 @@
 | :white_large_square: | Ice Body | The Pokémon has 1/16 of its max HP restored at the end of every turn in snow. |
 | :white_large_square: | Solid Rock | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :white_large_square: | Snow Warning | Summons snow for 5 turns when the Pokémon enters a battle. |
-| :white_large_square: | Honey Gather | The Pokémon may gather Honey after a battle. |
+| :x: | Honey Gather | The Pokémon may gather Honey after a battle. |
 | :white_large_square: | Frisk | When the Pokémon enters a battle, it identifies opponents' held items. |
 | :white_large_square: | Reckless | Boosts the power of the Pokémon's moves by 20% if they have recoil or crash damage. |
 | :x: | Multitype | Changes the Pokémon's type to match the plate it holds. |
@@ -153,7 +153,7 @@
 | :x: | Illusion | The Pokémon enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move. |
 | :x: | Imposter | The Pokémon transforms into the Pokémon in front of it. It also copies all of that Pokémon's stats apart from its HP. |
 | :white_large_square: | Infiltrator | When using its moves, the Pokémon ignores the effects of targets' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes. |
-| :white_large_square: | Mummy | When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy. |
+| :x: | Mummy | When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy. |
 | :white_large_square: | Moxie | When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage. |
 | :white_large_square: | Justified | When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage. |
 | :white_large_square: | Rattled | The Pokémon gets scared when hit by a Dark-, Ghost-, or Bug-type attack or if intimidated, which boosts its Speed stat. |
