@@ -179,7 +179,7 @@ static enum ItemEffect TryConsumeMirrorHerb(enum BattlerId battler)
                 SetStatChange(battler, stat, gQueuedStatBoosts[battler].statChanges[queuedStat]);
 
         }
-        gProtectStructs[battler].eatMirrorHerb = 0;
+        gProtectStructs[battler].eatMirrorHerb = FALSE;
         BattleScriptCall(BattleScript_MirrorHerbCopyStatChange);
         effect = ITEM_STATS_CHANGE;
     }
@@ -582,6 +582,8 @@ static enum ItemEffect TryShellBell(enum BattlerId battlerAtk)
         // (1/8). Divisor tunable via config/buff.h.
         if (GetConfig(BUFF_SHELL_BELL))
             healDivisor = BUFF_SHELL_BELL_DENOMINATOR;
+        if (EmergencyExitCanBeTriggered(battlerAtk, GetBattlerAbility(battlerAtk)))
+            gSpecialStatuses[battlerAtk].shellBellEmergencyExit = TRUE;
         SetHealAmount(battlerAtk, gBattleScripting.savedDmg / healDivisor);
         BattleScriptCall(BattleScript_ItemHealHP_Ret);
         effect = ITEM_HP_CHANGE;
