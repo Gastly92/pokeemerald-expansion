@@ -913,6 +913,27 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate P
     }
 }
 
+// Flavor-Prankster coverage: a mischievous species with no native Prankster in any
+// ability slot (Aipom is Run Away / Pickup / Skill Link) still gets the +1 priority from
+// the innate — mirrors the flavor-floater Levitate test above.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor Prankster (Aipom) gets innate priority on status moves")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_AIPOM, ABILITY_PRANKSTER));
+        ASSUME(gSpeciesInfo[SPECIES_AIPOM].abilities[0] != ABILITY_PRANKSTER);
+        ASSUME(GetMoveCategory(MOVE_CONFUSE_RAY) == DAMAGE_CATEGORY_STATUS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_AIPOM) { Speed(5); } // no native Prankster; only the innate supplies it
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+    } SCENE {
+        // innate Prankster elevates Confuse Ray: the slower Aipom moves first
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+    }
+}
+
 // ─── AI awareness of an innate Unaware (off-field setup heuristic) ──────────────
 // Companion to the chosen-Unaware test "AI won't boost stats against opponent with Unaware"
 // (test/battle/ai/ai.c): the AI shouldn't waste a Swords Dance against a foe whose Unaware

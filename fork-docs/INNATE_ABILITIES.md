@@ -91,6 +91,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 };
 ```
 
+**Who gets it — two groups (the established convention).** Every wired ability so far
+populates the table in two passes, and new abilities should follow suit:
+
+1. **Canon users (always).** Every species that carries ability X in its real ability
+   data (`gSpeciesInfo[...].abilities[]`), in any slot — primary, secondary, or Hidden.
+   Giving it as an innate lets them keep the signature behavior *no matter which slot a
+   build picks*. List Mega/regional/Gmax/form constants **only where that form's ability
+   data also carries X** (so the innate never appears on a form whose canon ability
+   replaced it — e.g. a Mega whose ability becomes something else is omitted), so the
+   innate survives a mid-battle form change where it should and not where it shouldn't.
+2. **Flavor picks (optional, a judgment call).** A handful of species that *lack* the
+   real ability but are strongly associated with its theme, so the innate is
+   **observable** flavor (and is what most tests exercise). Precedent: Levitate's
+   hover-by-design floaters, Unaware's too-dull/dazed/asleep mons, Sturdy's
+   unbreakable-shell Shellder/Cloyster, Natural Cure's herbal/aromatic healers,
+   Regenerator's regrowing Staryu/axolotls. Keep the set small and the theme tight, and
+   **say so in the allowlist comment** — including a deliberate *"canon-only, no flavor
+   picks"* decision when the ability is too strong or too hard to justify thematically
+   (Prankster's `+1` priority is the worked example of opting out, then later adding a
+   tight mischief-themed set: Hoopa, the Aipom line, the Zorua line).
+
 A species may list several innates: `{ ABILITY_X, ABILITY_Y, ABILITY_NONE }`.
 
 **One row per species — merge, don't duplicate.** `GetSpeciesInnateList()` returns

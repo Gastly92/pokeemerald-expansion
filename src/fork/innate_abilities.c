@@ -116,12 +116,15 @@
 //     (Psychic Terrain blanks priority moves regardless of source): beside its chosen-only
 //     AI_IsAbilityOnSide(ABILITY_PRANKSTER) reads, the fork helper AI_IsInnateOnSide() also credits
 //     an innate Prankster, so the AI values/avoids the terrain for an innate-Prankster side too.
-//     Canon Prankster users only (no flavor picks): the trickster lines keep the signature
-//     priority no matter which slot the build picks. Mega/regional/Gmax forms are listed only where
-//     the form's ability data ALSO carries Prankster (Grimmsnarl-Gmax yes; Banette/Sableye/Meowstic
-//     Megas and the Therian formes have a DIFFERENT signature ability, so they are omitted like the
-//     Natural Cure rule). Cottonee/Whimsicott and Klefki are also innate-Levitate floaters, so they
-//     take the combined INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) list below.
+//     Two species groups: the canon Prankster users (the trickster lines keep the signature priority
+//     no matter which slot the build picks; Mega/regional/Gmax forms are listed only where the form's
+//     ability data ALSO carries Prankster — Grimmsnarl-Gmax yes; Banette/Sableye/Meowstic Megas and
+//     the Therian formes have a DIFFERENT signature ability, so they are omitted like the Natural Cure
+//     rule), plus a deliberately small, on-theme flavor set lacking the real ability (Hoopa the
+//     "Mischief Pokémon," the playful Aipom line, the illusion-trickster Unovan Zorua line — the
+//     flavor set is narrower than other abilities' because Prankster's +1 priority is potent).
+//     Cottonee/Whimsicott, Klefki and Hoopa are also innate-Levitate floaters, so they take the
+//     combined INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) list below.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -326,9 +329,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GOURGEIST_SMALL,          sInnateLevitate },
     { SPECIES_GOURGEIST_SUPER,          sInnateLevitate },
     { SPECIES_HONEDGE,                  sInnateLevitate },
-    { SPECIES_HOOPA,                    sInnateLevitate },
-    { SPECIES_HOOPA_CONFINED,           sInnateLevitate },
-    { SPECIES_HOOPA_UNBOUND,            sInnateLevitate },
+    { SPECIES_HOOPA,                    INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats + flavor Prankster (the "Mischief Pokémon," ring trickery)
+    { SPECIES_HOOPA_CONFINED,           INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats + flavor Prankster
+    { SPECIES_HOOPA_UNBOUND,            INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats + flavor Prankster
     { SPECIES_INKAY,                    sInnateLevitate }, // Inkay floats; Malamar stands, so omitted
     { SPECIES_KLEFKI,                   INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats (key ring) + canon Prankster (primary)
     { SPECIES_PUMPKABOO,                sInnateLevitate },
@@ -649,20 +652,26 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_BELLOSSOM,                sInnateNaturalCure }, // its healing dance revitalizes the weary
 
     // ───────────────────────────────────────────────────────────────────────────
-    // Innate Prankster (the holder's status moves get +1 priority). Canon Prankster
-    // users only — the mischievous "trickster" lines that carry Prankster in their
-    // ability data (often primary or HA). Giving it as an innate lets them keep the
-    // signature priority no matter which slot the build picks. A form is listed only
-    // when ITS ability data also carries Prankster: Banette/Sableye/Meowstic Megas
-    // (Prankster -> a different Mega signature, or vanishes) and the Therian formes
-    // (Tornadus-Therian = Regenerator, Thundurus-Therian = Volt Absorb) are omitted,
-    // like the Natural Cure form rule; Grimmsnarl-Gmax keeps Prankster, so it is
-    // listed. Cottonee/Whimsicott and Klefki are also innate-Levitate floaters, so
-    // they take the combined INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) list above
-    // and are not repeated here. No flavor picks: Prankster's priority is potent and
-    // hard to justify thematically off the canon trickster roster.
+    // Innate Prankster (the holder's status moves get +1 priority). Two groups:
+    //   1) Canon Prankster users — the mischievous "trickster" lines that carry Prankster
+    //      in their ability data (often primary or HA). Giving it as an innate lets them
+    //      keep the signature priority no matter which slot the build picks. A form is
+    //      listed only when ITS ability data also carries Prankster: Banette/Sableye/
+    //      Meowstic Megas (Prankster -> a different Mega signature, or vanishes) and the
+    //      Therian formes (Tornadus-Therian = Regenerator, Thundurus-Therian = Volt Absorb)
+    //      are omitted, like the Natural Cure form rule; Grimmsnarl-Gmax keeps Prankster,
+    //      so it is listed. Cottonee/Whimsicott and Klefki are also innate-Levitate
+    //      floaters, so they take the combined INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER)
+    //      list above and are not repeated here.
+    //   2) Flavor picks — a tight mischief-themed set lacking the real ability: Hoopa (the
+    //      "Mischief Pokémon," ring trickery — combined with its innate Levitate above), the
+    //      Aipom line (playful, prank-pulling monkeys) and the Unovan Zorua line (illusion
+    //      tricksters that "delight in confusing"). Kept deliberately small and on-theme;
+    //      the vengeful Hisuian Zorua/Zoroark are excluded as a tonal mismatch. (Prankster's
+    //      +1 priority is potent, so the flavor set is narrower than, say, Levitate's.)
     // ───────────────────────────────────────────────────────────────────────────
 
+    // Canon Prankster users
     // Gen 2
     { SPECIES_MURKROW,                  sInnatePrankster }, // Prankster is the HA (Honchkrow loses it, so it is not listed)
 
@@ -692,6 +701,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 9
     { SPECIES_SHROODLE,                 sInnatePrankster }, // Prankster is the HA across the line
     { SPECIES_GRAFAIAI,                 sInnatePrankster },
+
+    // Flavor Prankster (no native Prankster; mischievous tricksters)
+    // (Hoopa's three forms take INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) above.)
+    // Gen 2
+    { SPECIES_AIPOM,                    sInnatePrankster }, // playful, mischievous tail-pranking monkey
+    // Gen 4
+    { SPECIES_AMBIPOM,                  sInnatePrankster }, // nimble and just as mischievous as Aipom
+    // Gen 5
+    { SPECIES_ZORUA,                    sInnatePrankster }, // illusion trickster that "delights in confusing people" (Unovan; Hisuian is vengeful, omitted)
+    { SPECIES_ZOROARK,                  sInnatePrankster }, // master of illusions and deception (Unovan)
 };
 
 static const enum Ability *GetSpeciesInnateList(u16 species)
