@@ -14,7 +14,7 @@
 | :x: | Volt Absorb | Electric-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :x: | Water Absorb | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :white_large_square: | Oblivious | The Pokémon cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate. |
-| :white_large_square: | Cloud Nine | Eliminates the effects of weather. |
+| :x: | Cloud Nine | Eliminates the effects of weather. |
 | :white_large_square: | Compound Eyes | Boosts the accuracy of the Pokémon's moves by 30%. |
 | :white_large_square: | Insomnia | The Pokémon cannot become drowsy or be put to sleep. |
 | :x: | Color Change | The Pokémon's type becomes the type of the move used on it. |
