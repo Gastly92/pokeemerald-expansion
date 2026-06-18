@@ -16,7 +16,8 @@ and only let species declare innates from that supported set. Today the set is
 **`LEVITATE`** (a passive Ground immunity), **`REGENERATOR`** (a silent
 1/3-HP switch-out heal), **`UNAWARE`** (a passive calc modifier that ignores
 the foe's stat-stage changes), **`STURDY`** (a full-HP endure + OHKO-move
-immunity), and **`NATURAL_CURE`** (a silent status cure on switch-out).
+immunity), **`NATURAL_CURE`** (a silent status cure on switch-out), and
+**`PRANKSTER`** (a +1 priority boost on status moves).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -44,6 +45,11 @@ like the real ability; only the *effect* diverges). Two worked examples:
   lowered its own Attack) and takes more damage / deals less for it. The innate ignores
   only the foe's *boosts* and keeps the foe's *drops* — always the favorable half
   (`InnateUnawareBoonStage()`).
+- **Prankster** carries a cost in the *Dark-type* direction: a real Prankster's boosted
+  status moves *fail* against Dark-types (Gen 7+), so it loses the ability to status them.
+  The innate keeps the +1 priority but never sets `pranksterElevated` — the flag the
+  Dark-type block keys off (`BlocksPrankster`) — so its status moves still land on
+  Dark-types (`GetBattleMovePriority`, `src/battle_main.c`).
 
 **When you wire a new ability, ask "does the real ability ever hurt its user?"** If
 yes, wire the innate to skip that branch (and note the divergence in the allowlist
