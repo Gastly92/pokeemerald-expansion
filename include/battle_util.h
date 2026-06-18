@@ -237,6 +237,12 @@ enum Ability GetBattlerAbility(enum BattlerId battler);
 // predicate: TRUE for the primary (chosen) ability or an active innate. Use this
 // for trait checks; keep GetBattlerAbility() for identity/copy/swap/display.
 bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability);
+// FORK: FEATURE_INNATE_ABILITIES. TRUE if `battler`'s species declares `ability` as an
+// innate AND it is currently active (same suppression gates as the chosen slot). Unlike
+// BattlerHasAbility(), this does NOT also match the chosen ability — use it at innate-only
+// effect sites that must not credit (or leak) the chosen slot, e.g. GetBattleMovePriority's
+// innate Prankster check. No-op (FALSE) when the feature flag is off. See src/battle_util.c.
+bool32 IsInnateActive(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnOpposingSide(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnField(enum Ability ability);

@@ -4761,9 +4761,22 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
     {
         priority++;
     }
-    else if (IsBattleMoveStatus(move) && IsAbilityAndRecord(battler, ability, ABILITY_PRANKSTER))
+    // FORK: innate-aware Prankster (FEATURE_INNATE_ABILITIES). IsAbilityAndRecord keeps the
+    // chosen-Prankster path byte-for-byte (records identity, keys off the passed `ability`);
+    // IsInnateActive adds an *active innate* Prankster. IsInnateActive is feature-gated and
+    // species-based, so with the feature off this is a strict no-op, and it never records or
+    // leaks the chosen ability (the AI's turn-order prediction passes a hypothetical ability
+    // that the chosen-slot test owns).
+    else if (IsBattleMoveStatus(move)
+          && (IsAbilityAndRecord(battler, ability, ABILITY_PRANKSTER) || IsInnateActive(battler, ABILITY_PRANKSTER)))
     {
-        gProtectStructs[battler].pranksterElevated = 1;
+        // FORK: pranksterElevated is what makes a Prankster-boosted status move fail against
+        // Dark-types (B_PRANKSTER_DARK_TYPES >= GEN_7, see BlocksPrankster). That Dark-type
+        // immunity is the real ability's cost; an innate is a *pure boon*, so it keeps the +1
+        // priority but never sets the flag — its status moves still land on Dark-types. The
+        // flag is set only on the chosen-ability path, leaving a real Prankster unchanged.
+        if (ability == ABILITY_PRANKSTER)
+            gProtectStructs[battler].pranksterElevated = 1;
         priority++;
     }
     else if (GetMoveEffect(move) == EFFECT_GRASSY_GLIDE

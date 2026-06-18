@@ -159,7 +159,7 @@
 | :white_large_square: | Rattled | The Pokémon gets scared when hit by a Dark-, Ghost-, or Bug-type attack or if intimidated, which boosts its Speed stat. |
 | :white_large_square: | Magic Bounce | Instead of being affected by other Pokémon's status moves, the Pokémon bounces them back at the user. |
 | :white_large_square: | Sap Sipper | Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage. |
-| :white_large_square: | Prankster | Increases the priority of the Pokémon's status moves by 1 stage. |
+| :white_check_mark: | Prankster | Increases the priority of the Pokémon's status moves by 1 stage. |
 | :white_large_square: | Sand Force | Boosts the power of the Pokémon's Rock-, Ground-, and Steel-type moves by 30% in a sandstorm. |
 | :white_large_square: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
 | :x: | Zen Mode | Changes the Pokémon's shape when its HP drops to half or less. |

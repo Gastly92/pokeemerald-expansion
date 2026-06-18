@@ -20,9 +20,11 @@
 // src/battle_script_commands.c), UNAWARE (a passive calc modifier that ignores
 // the foe's stat-stage changes, handled at the damage/accuracy calc sites in
 // src/battle_util.c), STURDY (endures a lethal hit at full HP + OHKO-move immunity,
-// handled at the two effect sites in src/battle_util.c), and NATURAL_CURE (silently
+// handled at the two effect sites in src/battle_util.c), NATURAL_CURE (silently
 // cures the holder's status on switch-out, fired at the single switch-out site in
-// src/battle_script_commands.c like Regenerator). NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
+// src/battle_script_commands.c like Regenerator), and PRANKSTER (gives the holder's
+// status moves +1 priority, handled at the single move-priority site in src/battle_main.c).
+// NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground
 // interactions (field terrain, Toxic Spikes absorption) via IsBattlerGroundedForBenefit(); an innate
@@ -30,7 +32,9 @@
 // InnateUnawareBoonStage(), where a real Unaware would ignore the drop too and take more damage for it.
 // Where the real ability is already a clean upside (no downside to drop), the innate is a plain 1:1
 // copy — Sturdy and Natural Cure are such cases: an innate Sturdy endures/blocks OHKOs, and an innate
-// Natural Cure cures status on switch-out, each exactly like the real ability.
+// Natural Cure cures status on switch-out, each exactly like the real ability. An innate Prankster
+// keeps the +1 status-move priority but drops the real ability's Dark-type immunity cost (its boosted
+// status moves still land on Dark-types), so it too is a pure boon, not a 1:1 copy.
 // See the ALLOWLIST note in src/innate_abilities.c. To add another ability: wire its specific effect
 // (boon-only where the real ability has a downside), extend the allowlist comment in src/innate_abilities.c, and add a test.
 // The step-by-step extension playbook lives in fork-docs/INNATE_ABILITIES.md.

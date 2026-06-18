@@ -56,16 +56,20 @@
 // opponent's exact set can't be read off the species alone.
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
-// that carries an innate Levitate, Regenerator, Unaware, Sturdy, or Natural Cure always
-// has it in battle, so its .ability slot here is free to carry a *complementary* chosen
+// that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, or Prankster
+// always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
 // still floats on its innate Levitate; an Unaware staller like Clefable lists
 // ABILITY_MAGIC_GUARD yet still ignores the foe's boosts via its innate Unaware; a
 // Skarmory wall lists ABILITY_KEEN_EYE yet still endures a lethal hit via its innate
 // Sturdy; a Blissey lists ABILITY_SERENE_GRACE yet still self-cleanses on its innate
-// Natural Cure. Role comments that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/
-// "Natural Cure" describe the set's innate-backed playstyle, not the .ability field.
+// Natural Cure; a Grimmsnarl lists ABILITY_PICKPOCKET yet still gets +1 priority on its
+// status moves via its innate Prankster. Role comments that mention "Unaware"/"Levitate"/
+// "Regenerator"/"Sturdy"/"Natural Cure"/"Prankster" describe the set's innate-backed
+// playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
+// its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
+// it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
 // (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
 // ability WAS Natural Cure; now that those are innate, a fork-owned ability override —
 // src/species_ability_overrides.c — gives each a chosen ability so the slot isn't wasted,
@@ -4366,7 +4370,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SABLENITE, // Mega Sableye (Magic Bounce) — defensive pivot
         .moves = {MOVE_CALM_MIND, MOVE_DARK_PULSE, MOVE_RECOVER, MOVE_WILL_O_WISP},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_KEEN_EYE, // Prankster now innate; Mega -> Magic Bounce anyway, Keen Eye is the pre-Mega filler
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_DARK,
@@ -4377,7 +4381,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Prankster utility staller (no mega)
         .moves = {MOVE_WILL_O_WISP, MOVE_RECOVER, MOVE_KNOCK_OFF, MOVE_TAUNT},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_KEEN_EYE, // Prankster now innate; chosen Keen Eye keeps its accuracy unloweable
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_DARK,
@@ -4523,7 +4527,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_DAMP_ROCK, // Prankster Tailwind/Rain support
         .moves = {MOVE_TAILWIND, MOVE_RAIN_DANCE, MOVE_THUNDER_WAVE, MOVE_U_TURN},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_ILLUMINATE, // Prankster now innate; chosen Illuminate (the firefly's glow) keeps accuracy
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(248, 0, 0, 8, 0, 252),
         .teraType = TYPE_BUG,
@@ -4536,7 +4540,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster utility setter
         .moves = {MOVE_TAILWIND, MOVE_ENCORE, MOVE_HELPING_HAND, MOVE_BUG_BUZZ},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_TINTED_LENS, // Prankster now innate; chosen Tinted Lens powers up its Bug Buzz
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(248, 0, 8, 0, 0, 252),
         .teraType = TYPE_BUG,
@@ -7264,7 +7268,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // prankster support
         .moves = {MOVE_THUNDER_WAVE, MOVE_ENCORE, MOVE_FOUL_PLAY, MOVE_KNOCK_OFF},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_LIMBER, // Prankster now innate; chosen Limber keeps the para-spreader para-immune
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 252, 0, 0),
         .teraType = TYPE_DARK,
@@ -7579,13 +7583,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ---- Whimsicott (innate Levitate not applicable; Prankster pivot) ----
+    // ---- Whimsicott (innate Levitate + innate Prankster; chosen Infiltrator) ----
     {
         .species = SPECIES_WHIMSICOTT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Prankster utility pivot
         .moves = {MOVE_MOONBLAST, MOVE_LEECH_SEED, MOVE_ENCORE, MOVE_U_TURN},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_INFILTRATOR, // Prankster now innate; chosen Infiltrator bypasses screens/Substitute
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
         .teraType = TYPE_FAIRY,
@@ -7596,7 +7600,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Prankster Tailwind + redirect support
         .moves = {MOVE_TAILWIND, MOVE_HELPING_HAND, MOVE_MOONBLAST, MOVE_ENCORE},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_INFILTRATOR, // Prankster now innate; chosen Infiltrator bypasses screens/Substitute
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
         .teraType = TYPE_FAIRY,
@@ -8720,7 +8724,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Prankster offensive pivot
         .moves = {MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_FOCUS_BLAST, MOVE_U_TURN},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_DEFIANT, // Prankster now innate (Incarnate forme); chosen Defiant punishes Intimidate/stat drops
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_FLYING,
@@ -8731,7 +8735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Prankster Tailwind support
         .moves = {MOVE_TAILWIND, MOVE_HURRICANE, MOVE_TAUNT, MOVE_RAIN_DANCE},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_DEFIANT, // Prankster now innate (Incarnate forme); chosen Defiant punishes Intimidate/stat drops
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_FLYING,
@@ -8757,7 +8761,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Prankster mixed attacker
         .moves = {MOVE_THUNDERBOLT, MOVE_FOCUS_BLAST, MOVE_KNOCK_OFF, MOVE_NASTY_PLOT},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_DEFIANT, // Prankster now innate (Incarnate forme); chosen Defiant punishes Intimidate/stat drops
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_ELECTRIC,
@@ -8768,7 +8772,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Prankster Thunder Wave support
         .moves = {MOVE_THUNDER_WAVE, MOVE_THUNDERBOLT, MOVE_TAUNT, MOVE_VOLT_SWITCH},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_DEFIANT, // Prankster now innate (Incarnate forme); chosen Defiant punishes Intimidate/stat drops
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_ELECTRIC,
@@ -9276,7 +9280,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster screens/support
         .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_FAKE_OUT, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_INFILTRATOR, // Prankster now innate; chosen Infiltrator ignores the foe's own screens/Substitute
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 252, 0, 0),
         .teraType = TYPE_PSYCHIC,
@@ -9287,7 +9291,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster disruption support
         .moves = {MOVE_FOLLOW_ME, MOVE_THUNDER_WAVE, MOVE_HELPING_HAND, MOVE_PSYCHIC},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_INFILTRATOR, // Prankster now innate; chosen Infiltrator ignores the foe's own screens/Substitute
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 252, 0, 0),
         .teraType = TYPE_PSYCHIC,
@@ -9732,7 +9736,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster screens + Spikes
         .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_THUNDER_WAVE, MOVE_SPIKES},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_MAGICIAN, // Prankster now innate; chosen Magician swipes a held item off whatever it hits
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_STEEL,
@@ -9743,7 +9747,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Prankster annoyer wall
         .moves = {MOVE_SPIKES, MOVE_THUNDER_WAVE, MOVE_FOUL_PLAY, MOVE_DAZZLING_GLEAM},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_MAGICIAN, // Prankster now innate; chosen Magician swipes a held item off whatever it hits
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_FAIRY,
@@ -12069,7 +12073,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster dual screens lead
         .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_SPIRIT_BREAK, MOVE_THUNDER_WAVE},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_PICKPOCKET, // Prankster now innate; chosen Pickpocket steals on contact (Spirit Break)
         .nature = NATURE_CAREFUL,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 0, 252),
         .teraType = TYPE_DARK,
@@ -12080,7 +12084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Bulk Up physical sweeper
         .moves = {MOVE_BULK_UP, MOVE_SPIRIT_BREAK, MOVE_SUCKER_PUNCH, MOVE_DRAIN_PUNCH},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_PICKPOCKET, // Prankster now innate; chosen Pickpocket steals on contact (this set is a contact sweeper)
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(252, 252, 0, 4, 0, 0),
         .teraType = TYPE_DARK,
@@ -12091,7 +12095,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster support / Taunt-proof
         .moves = {MOVE_SPIRIT_BREAK, MOVE_THUNDER_WAVE, MOVE_TAUNT, MOVE_PARTING_SHOT},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_PICKPOCKET, // Prankster now innate; chosen Pickpocket steals on contact (Spirit Break)
         .nature = NATURE_CAREFUL,
         .ev = TRAINER_PARTY_EVS(252, 0, 100, 0, 0, 156),
         .teraType = TYPE_DARK,
@@ -13413,7 +13417,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // prankster status
         .moves = {MOVE_TOXIC, MOVE_ENCORE, MOVE_GUNK_SHOT, MOVE_KNOCK_OFF},
-        .ability = ABILITY_PRANKSTER,
+        .ability = ABILITY_POISON_TOUCH, // Prankster now innate; chosen Poison Touch poisons on contact (Gunk Shot/Knock Off)
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(252, 0, 0, 252, 0, 4),
         .teraType = TYPE_POISON,

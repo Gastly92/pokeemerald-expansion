@@ -431,7 +431,8 @@ static enum FieldEffectOutcome BenefitsFromPsychicTerrain(enum BattlerId battler
         // harass priority
         if (AI_IsAbilityOnSide(LEFT_FOE(battler), ABILITY_GALE_WINGS)
          || AI_IsAbilityOnSide(LEFT_FOE(battler), ABILITY_TRIAGE)
-         || AI_IsAbilityOnSide(LEFT_FOE(battler), ABILITY_PRANKSTER))
+         || AI_IsAbilityOnSide(LEFT_FOE(battler), ABILITY_PRANKSTER)
+         || AI_IsInnateOnSide(LEFT_FOE(battler), ABILITY_PRANKSTER)) // FORK: innate-aware
             return FIELD_EFFECT_POSITIVE;
     }
 
@@ -444,7 +445,8 @@ static enum FieldEffectOutcome BenefitsFromPsychicTerrain(enum BattlerId battler
 
     if (AI_IsAbilityOnSide(battler, ABILITY_GALE_WINGS)
      || AI_IsAbilityOnSide(battler, ABILITY_TRIAGE)
-     || AI_IsAbilityOnSide(battler, ABILITY_PRANKSTER))
+     || AI_IsAbilityOnSide(battler, ABILITY_PRANKSTER)
+     || AI_IsInnateOnSide(battler, ABILITY_PRANKSTER)) // FORK: innate-aware
         return FIELD_EFFECT_NEGATIVE;
 
     return FIELD_EFFECT_NEUTRAL;

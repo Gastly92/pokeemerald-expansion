@@ -16,7 +16,8 @@ and only let species declare innates from that supported set. Today the set is
 **`LEVITATE`** (a passive Ground immunity), **`REGENERATOR`** (a silent
 1/3-HP switch-out heal), **`UNAWARE`** (a passive calc modifier that ignores
 the foe's stat-stage changes), **`STURDY`** (a full-HP endure + OHKO-move
-immunity), and **`NATURAL_CURE`** (a silent status cure on switch-out).
+immunity), **`NATURAL_CURE`** (a silent status cure on switch-out), and
+**`PRANKSTER`** (a +1 priority boost on status moves).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -44,6 +45,11 @@ like the real ability; only the *effect* diverges). Two worked examples:
   lowered its own Attack) and takes more damage / deals less for it. The innate ignores
   only the foe's *boosts* and keeps the foe's *drops* — always the favorable half
   (`InnateUnawareBoonStage()`).
+- **Prankster** carries a cost in the *Dark-type* direction: a real Prankster's boosted
+  status moves *fail* against Dark-types (Gen 7+), so it loses the ability to status them.
+  The innate keeps the +1 priority but never sets `pranksterElevated` — the flag the
+  Dark-type block keys off (`BlocksPrankster`) — so its status moves still land on
+  Dark-types (`GetBattleMovePriority`, `src/battle_main.c`).
 
 **When you wire a new ability, ask "does the real ability ever hurt its user?"** If
 yes, wire the innate to skip that branch (and note the divergence in the allowlist
@@ -84,6 +90,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_C, sExampleLineInnates },
 };
 ```
+
+**Who gets it — two groups (the established convention).** Every wired ability so far
+populates the table in two passes, and new abilities should follow suit:
+
+1. **Canon users (always).** Every species that carries ability X in its real ability
+   data (`gSpeciesInfo[...].abilities[]`), in any slot — primary, secondary, or Hidden.
+   Giving it as an innate lets them keep the signature behavior *no matter which slot a
+   build picks*. List Mega/regional/Gmax/form constants **only where that form's ability
+   data also carries X** (so the innate never appears on a form whose canon ability
+   replaced it — e.g. a Mega whose ability becomes something else is omitted), so the
+   innate survives a mid-battle form change where it should and not where it shouldn't.
+2. **Flavor picks (optional, a judgment call).** A handful of species that *lack* the
+   real ability but are strongly associated with its theme, so the innate is
+   **observable** flavor (and is what most tests exercise). Precedent: Levitate's
+   hover-by-design floaters, Unaware's too-dull/dazed/asleep mons, Sturdy's
+   unbreakable-shell Shellder/Cloyster, Natural Cure's herbal/aromatic healers,
+   Regenerator's regrowing Staryu/axolotls. Keep the set small and the theme tight, and
+   **say so in the allowlist comment** — including a deliberate *"canon-only, no flavor
+   picks"* decision when the ability is too strong or too hard to justify thematically
+   (Prankster's `+1` priority is the worked example of opting out, then later adding a
+   tight mischief-themed set: Hoopa, the Aipom line, the Zorua line).
 
 A species may list several innates: `{ ABILITY_X, ABILITY_Y, ABILITY_NONE }`.
 
@@ -202,9 +229,16 @@ How much is needed depends on the ability class:
   an attacker's Mold Breaker drops both the chosen-ability path (`GetBattlerAbility`
   already returns `NONE`) and the innate (`IsInnateActive` → `CanBreakThroughInnate`).
   On-field AI damage prediction is correct for free because it reads the real
-  battler's species through `IsInnateActive`; off-field AI heuristics
-  (`AI_IsAbilityOnSide` sites) are left as a known minor-quality gap, deliberately not
-  wired — keeping the footprint small.
+  battler's species through `IsInnateActive`. The off-field AI *setup* heuristics
+  (the `AI_IsAbilityOnSide(ABILITY_UNAWARE)` "don't boost against an Unaware foe" sites
+  in `ShouldRaiseAnyStat`, `GetAllyStatChangeScore`, and the Belly-Drum score, plus the
+  Yawn evasion-dodge check in `battle_ai_switch.c`) **are** innate-aware: each pairs the
+  chosen-ability read with the fork helper `AI_IsInnateOnSide()` (or `IsInnateActive()` at
+  the single-battler switch site). They're all about the AI's own *boosts* being ignored,
+  which an innate Unaware does exactly like the real one, so crediting the innate is correct.
+  (This pattern — `AI_IsInnateOnSide()` beside `AI_IsAbilityOnSide()` — is the reusable way
+  to make a side-level AI ability check innate-aware; Prankster's Psychic-Terrain heuristic
+  uses the same helper.)
 
   **Sturdy is the *clean-upside* worked example for this class** — a multi-site passive
   immunity whose real ability has *no* downside, so the innate is a plain **1:1 copy** (no

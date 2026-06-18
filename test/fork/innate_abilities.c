@@ -7,8 +7,8 @@
 // wants innates opts in with WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE). The
 // supported innate set is LEVITATE (a passive Ground immunity), REGENERATOR
 // (a silent 1/3-HP switch-out heal), UNAWARE (a passive calc modifier), STURDY
-// (full-HP endure + OHKO-move immunity) and NATURAL_CURE (a silent status cure on
-// switch-out); see src/innate_abilities.c.
+// (full-HP endure + OHKO-move immunity), NATURAL_CURE (a silent status cure on
+// switch-out) and PRANKSTER (+1 priority on status moves); see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -825,5 +825,141 @@ AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI switches an innate-Natural-C
     } WHEN {
         TURN { MOVE(player, MOVE_TOXIC); }
         TURN { MOVE(player, MOVE_SCRATCH); EXPECT_SWITCH(opponent, 1); }
+    }
+}
+
+// ─── Innate Prankster (status moves get +1 priority) ────────────────────────────
+// Murkrow carries Prankster as its Hidden Ability, so a build can pick a different
+// chosen ability (Insomnia) and only the innate supplies Prankster — that's what makes
+// the innate observable.
+
+// The signature effect: a slower mon with innate Prankster still moves first when using
+// a status move. Feature-off leg proves the priority comes only from the innate (stock
+// behavior: the faster mon goes first).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Prankster gives the holder's status moves +1 priority")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MURKROW, ABILITY_PRANKSTER));
+        ASSUME(GetMoveCategory(MOVE_CONFUSE_RAY) == DAMAGE_CATEGORY_STATUS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_MURKROW) { Speed(5); Ability(ABILITY_INSOMNIA); } // chosen Insomnia; Prankster only as innate
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+    } SCENE {
+        if (enabled) {
+            // innate Prankster elevates Confuse Ray: the slower Murkrow moves first
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        } else {
+            // feature off: no innate, the faster Wobbuffet moves first
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
+        }
+    }
+}
+
+// Pure-boon divergence: a *real* Prankster's boosted status move fails against Dark-types
+// (B_PRANKSTER_DARK_TYPES >= GEN_7); an *innate* Prankster keeps the +1 priority but never
+// sets pranksterElevated, so the move still lands on Dark-types — the favorable half, with
+// the real ability's only cost dropped.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Prankster status move still lands on Dark-types (pure boon)")
+{
+    enum Ability ability;
+    bool32 enabled;
+    PARAMETRIZE { ability = ABILITY_PRANKSTER; enabled = FALSE; } // real Prankster: blocked by the Dark-type
+    PARAMETRIZE { ability = ABILITY_INSOMNIA;  enabled = TRUE;  } // innate Prankster: NOT blocked (pure boon)
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MURKROW, ABILITY_PRANKSTER));
+        ASSUME(GetSpeciesType(SPECIES_UMBREON, 0) == TYPE_DARK);
+        WITH_CONFIG(B_PRANKSTER_DARK_TYPES, GEN_7);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_UMBREON);
+        OPPONENT(SPECIES_MURKROW) { Ability(ability); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); }
+    } SCENE {
+        if (ability == ABILITY_PRANKSTER) {
+            NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
+            MESSAGE("It doesn't affect Umbreon…");
+        } else {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
+            MESSAGE("Umbreon became confused!");
+        }
+    }
+}
+
+// Suppression parity: Gastro Acid disables the innate exactly like a real ability, so the
+// priority boost is gone and the faster mon moves first again.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Prankster's priority")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MURKROW, ABILITY_PRANKSTER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_MURKROW) { Speed(5); Ability(ABILITY_INSOMNIA); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); } // suppresses Murkrow's abilities, the innate Prankster included
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Gastro Acid!");
+        // turn 2: with the innate suppressed, Confuse Ray is no longer elevated, so the
+        // faster Wobbuffet moves first
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
+    }
+}
+
+// Flavor-Prankster coverage: a mischievous species with no native Prankster in any
+// ability slot (Aipom is Run Away / Pickup / Skill Link) still gets the +1 priority from
+// the innate — mirrors the flavor-floater Levitate test above.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor Prankster (Aipom) gets innate priority on status moves")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_AIPOM, ABILITY_PRANKSTER));
+        ASSUME(gSpeciesInfo[SPECIES_AIPOM].abilities[0] != ABILITY_PRANKSTER);
+        ASSUME(GetMoveCategory(MOVE_CONFUSE_RAY) == DAMAGE_CATEGORY_STATUS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_AIPOM) { Speed(5); } // no native Prankster; only the innate supplies it
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); MOVE(player, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+    } SCENE {
+        // innate Prankster elevates Confuse Ray: the slower Aipom moves first
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+    }
+}
+
+// ─── AI awareness of an innate Unaware (off-field setup heuristic) ──────────────
+// Companion to the chosen-Unaware test "AI won't boost stats against opponent with Unaware"
+// (test/battle/ai/ai.c): the AI shouldn't waste a Swords Dance against a foe whose Unaware
+// (boost-ignoring) makes the +Atk pointless — and that must hold when the foe's Unaware is
+// innate-only. A setup sweeper (Lopunny) freely boosts against the passive Pyukumuku wall;
+// the feature-off leg proves the AI *does* set up here when no Unaware is in play, so the
+// feature-on leg's restraint can only come from the innate. Pyukumuku's chosen ability is
+// forced to Innards Out so Unaware comes solely from the innate; the Wobbuffet backup keeps
+// the "only party member won't use a status move" rule from interfering.
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI won't boost stats against an innate-Unaware foe")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DONDOZO, ABILITY_UNAWARE));
+        ASSUME_STAT_CHANGE(MOVE_SWORDS_DANCE, attack: +2);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
+        PLAYER(SPECIES_DONDOZO) { Ability(ABILITY_OBLIVIOUS); Moves(MOVE_REST); } // bulky, passive wall; Unaware only via the innate
+        OPPONENT(SPECIES_LOPUNNY) { Moves(MOVE_SWORDS_DANCE, MOVE_SCRATCH); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SCRATCH); } // backup so the status-move-when-last rule doesn't apply
+    } WHEN {
+        if (enabled)
+            TURN { EXPECT_MOVE(opponent, MOVE_SCRATCH); }      // innate Unaware: boosting is pointless
+        else
+            TURN { EXPECT_MOVE(opponent, MOVE_SWORDS_DANCE); } // no innate: the AI sets up freely
     }
 }

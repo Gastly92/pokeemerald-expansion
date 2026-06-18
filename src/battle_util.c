@@ -5080,7 +5080,11 @@ static bool32 CanBreakThroughInnate(enum BattlerId battlerDef, enum Ability abil
 // honored); the Comatose-while-transformed micro-edge there does not apply to
 // innates (which key off the battler's species). Returns FALSE entirely when the
 // feature flag is off, so the BattlerHasAbility() sweep is a no-op in stock play.
-static bool32 IsInnateActive(enum BattlerId battler, enum Ability ability)
+// Exported (declared in battle_util.h) so the innate-only effect sites that must NOT
+// also credit the chosen ability — e.g. GetBattleMovePriority's innate Prankster check,
+// which receives a hypothetical ability the chosen-slot test owns — can query the
+// innate directly without leaking the real chosen ability through BattlerHasAbility().
+bool32 IsInnateActive(enum BattlerId battler, enum Ability ability)
 {
     bool32 hasAbilityShield;
 
