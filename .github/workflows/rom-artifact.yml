@@ -34,8 +34,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # This workflow is fork-owned (no upstream counterpart), so it won't
+      # conflict on sync; it shares the hardened composite action with build.yml.
       - name: Install binutils
         uses: ./.github/actions/install-binutils
+        timeout-minutes: 5
 
       - name: Cache build tools
         uses: actions/cache@v5

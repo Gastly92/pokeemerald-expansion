@@ -162,10 +162,25 @@ fork-owned file.
   fires for a save left mid-WON by a pre-update build, or with the flag off).
   Kept for that compatibility; a later cleanup can remove it.
 
+## CI / infrastructure
+
+- **Hardened `Install binutils` CI step.** Upstream's CI installs the GBA
+  toolchain with an inline `apt-get` step copy-pasted into each job, which hung
+  intermittently on dpkg-lock/mirror stalls (retrying "fixed" it). We extracted
+  it into a fork-owned composite action,
+  [`.github/actions/install-binutils`](../.github/actions/install-binutils/action.yml),
+  that bounds apt's lock wait, network connection timeouts, and fetch retries
+  and re-runs the whole install up to 3x, plus a `timeout-minutes` backstop on
+  each call site. Every CI job (`build.yml`) and the on-demand ROM build
+  (`rom-artifact.yml`) call it via `uses:`. The `uses:` call sites in `build.yml`
+  are tagged `FORK:` (it's upstream-owned); on a merge conflict, keep our
+  `uses:` + `timeout-minutes` and port any upstream apt-package change into the
+  action's package list rather than re-inlining the step.
+
 ## Conventions
 
 - Intentional divergences from upstream inside upstream-owned files are tagged
-  `FORK:` (greppable: `grep -rn "FORK:" src include`).
+  `FORK:` (greppable: `grep -rn "FORK:" src include .github`).
 - Prefer adding behavior behind a config flag in `include/config/*.h` over
   patching core logic, so changes land in files we own and survive upstream
   syncs cleanly. See `CLAUDE.md` for the full rationale.

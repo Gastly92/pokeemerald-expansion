@@ -2,25 +2,31 @@ name: Install binutils
 description: >-
   Install the GBA cross-toolchain (binutils/gcc/newlib) and build deps used by
   every CI job. Bounds apt's lock wait, network connection timeouts, and fetch
-  retries so a transient dpkg-lock or mirror stall self-resolves in seconds
-  instead of hanging the step indefinitely.
+  retries — and retries the whole install — so a transient dpkg-lock or mirror
+  stall self-resolves in seconds instead of hanging the step indefinitely.
+
+# FORK: this composite action is fork-owned (it has no upstream counterpart, so
+# it never conflicts on sync). It exists to de-duplicate and harden what was an
+# inline "Install binutils" apt-get step copy-pasted into every CI job. The
+# workflow steps that call it (`uses: ./.github/actions/install-binutils`) DO
+# diverge from upstream's inline step — see the FORK notes at those call sites.
 
 runs:
   using: composite
   steps:
     - name: Install binutils
       shell: bash
-      # Every apt failure mode that can hang this step is bounded here:
+      # Every apt failure mode that can hang or flake this step is bounded:
       #   - DPkg::Lock::Timeout=600: cap the wait for the dpkg/apt lock held by
       #     the runner's background unattended-upgrades/apt-daily jobs (without
       #     it, apt-get waits unbounded and the step appears to hang).
       #   - Acquire::*::Timeout=30: abort a STALLED mirror connection after 30s.
-      #     This is the key one — a half-open TCP connection never "fails", so
-      #     Retries alone can't recover it; without a connection timeout apt
-      #     sits on the dead socket forever. The timeout turns a stall into a
-      #     failure that Retries can then act on.
-      #   - Acquire::Retries=3: retry transient fetch failures (now including
-      #     timed-out stalls).
+      #     A half-open TCP connection never "fails", so Retries alone can't
+      #     recover it; the timeout turns a stall into a retryable failure.
+      #   - Acquire::Retries=3: retry transient per-fetch failures.
+      #   - retry loop: re-run the whole update+install up to 3x with backoff,
+      #     covering failures apt's own retries don't (e.g. a whole-archive 503
+      #     or a lock-timeout error), so one bad attempt doesn't fail the job.
       #   - DEBIAN_FRONTEND=noninteractive: no debconf prompt can block on stdin.
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -31,6 +37,14 @@ runs:
           -o Acquire::https::Timeout=30
           -o DPkg::Lock::Timeout=600
         )
-        sudo apt-get update "${apt_opts[@]}"
-        sudo apt-get install -y --no-install-recommends "${apt_opts[@]}" \
-          binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
+        for attempt in 1 2 3; do
+          if sudo apt-get update "${apt_opts[@]}" && \
+             sudo apt-get install -y --no-install-recommends "${apt_opts[@]}" \
+               binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3; then
+            exit 0
+          fi
+          echo "::warning::apt-get attempt ${attempt} failed; retrying in $((attempt * 10))s"
+          sleep $((attempt * 10))
+        done
+        echo "::error::apt-get failed after 3 attempts"
+        exit 1
