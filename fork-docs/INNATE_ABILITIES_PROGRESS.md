@@ -284,7 +284,7 @@
 | :white_large_square: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
 | :white_large_square: | Protosynthesis | Boosts the Pokémon's most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy. |
 | :white_large_square: | Quark Drive | Boosts the Pokémon's most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy. |
-| :white_large_square: | Good as Gold | A body of pure, solid gold gives the Pokémon full immunity to other Pokémon's status moves. |
+| :x: | Good as Gold | A body of pure, solid gold gives the Pokémon full immunity to other Pokémon's status moves. |
 | :white_large_square: | Vessel of Ruin | The power of the Pokémon's ruinous vessel lowers the Sp. Atk stats of all Pokémon except itself. |
 | :white_large_square: | Sword of Ruin | The power of the Pokémon's ruinous sword lowers the Defense stats of all Pokémon except itself. |
 | :white_large_square: | Tablets of Ruin | The power of the Pokémon's ruinous wooden tablets lowers the Attack stats of all Pokémon except itself. |
@@ -294,19 +294,19 @@
 | :white_large_square: | Opportunist | When an opponent's stats are boosted, the Pokémon boosts its own stats in the exact same way. |
 | :white_large_square: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
 | :white_large_square: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
-| :white_large_square: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
+| :x: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
 | :white_large_square: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |
 | :white_large_square: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |
 | :white_large_square: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :white_large_square: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :white_large_square: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
 | :white_large_square: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |
-| :white_large_square: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
+| :x: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Teal Mask to shine and the Pokémon's Speed stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Hearthflame Mask to shine and the Pokémon's Attack stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Wellspring Mask to shine and the Pokémon's Sp. Def stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Cornerstone Mask to shine and the Pokémon's Defense stat to be boosted. |
-| :white_large_square: | Toxic Chain | The power of the Pokémon's toxic chain may badly poison any target the Pokémon hits with a move. |
+| :x: | Toxic Chain | The power of the Pokémon's toxic chain may badly poison any target the Pokémon hits with a move. |
 | :white_large_square: | Supersweet Syrup | When the Pokémon enters a battle, opponents' evasiveness is lowered by 1 stage. This Ability is triggered only once per battle. |
 | :x: | Tera Shift | When the Pokémon enters a battle, it absorbs the energy around itself and transforms into its Terastal Form. |
 | :x: | Tera Shell | The Pokémon's shell contains the powers of each type. All damage-dealing moves that hit the Pokémon when its HP is full will not be very effective. |
