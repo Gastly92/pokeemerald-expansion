@@ -95,7 +95,7 @@
 | :white_large_square: | Adaptability | Boosts the power of moves of the same type as the Pokémon by 100% instead of 50%. |
 | :white_large_square: | Skill Link | The Pokémon's multistrike moves always hit the maximum number of times. |
 | :white_large_square: | Hydration | Cures the Pokémon's status conditions at the end of every turn in rain. |
-| :white_large_square: | Solar Power | In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn. |
+| :x: | Solar Power | In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn. |
 | :white_large_square: | Quick Feet | When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon's Speed stat. |
 | :white_large_square: | Normalize | All the Pokémon's moves become Normal type. The power of those moves is boosted a little. |
 | :white_large_square: | Sniper | Boosts the power of the Pokémon's critical hits by 125% instead of 50%. |
