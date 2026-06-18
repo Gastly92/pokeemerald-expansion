@@ -163,7 +163,7 @@
 | :white_large_square: | Sand Force | Boosts the power of the Pokémon's Rock-, Ground-, and Steel-type moves by 30% in a sandstorm. |
 | :white_large_square: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
 | :x: | Zen Mode | Changes the Pokémon's shape when its HP drops to half or less. |
-| :white_large_square: | Victory Star | Boosts the accuracy of the Pokémon and its allies. |
+| :x: | Victory Star | Boosts the accuracy of the Pokémon and its allies. |
 | :x: | Turboblaze | The Pokémon's moves are unimpeded by the Ability of the target. |
 | :x: | Teravolt | The Pokémon's moves are unimpeded by the Ability of the target. |
 | :white_large_square: | Aroma Veil | The Pokémon and its allies cannot gain the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, or Encore statuses. |
