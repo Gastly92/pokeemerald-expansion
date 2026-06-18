@@ -194,8 +194,8 @@
 | :x: | Desolate Land | The Pokémon changes the weather to nullify Water-type attacks. |
 | :x: | Delta Stream | The Pokémon changes the weather so that no moves are supereffective against the Flying type. |
 | :white_large_square: | Stamina | When the Pokémon takes damage from a move, its Defense stat is boosted by 1 stage. |
-| :white_large_square: | Wimp Out | The Pokémon cowardly switches out when its HP drops to half or less. |
-| :white_large_square: | Emergency Exit | The Pokémon, sensing danger, switches out when its HP drops to half or less. |
+| :x: | Wimp Out | The Pokémon cowardly switches out when its HP drops to half or less. |
+| :x: | Emergency Exit | The Pokémon, sensing danger, switches out when its HP drops to half or less. |
 | :white_large_square: | Water Compaction | Boosts the Defense stat sharply when the Pokémon is hit by a Water-type move. |
 | :white_large_square: | Merciless | The Pokémon's attacks become critical hits if the target is poisoned or badly poisoned. |
 | :x: | Shields Down | When its HP drops to half or less, the Pokémon's shell breaks and it becomes aggressive. |
