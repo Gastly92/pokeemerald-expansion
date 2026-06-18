@@ -1,25 +1,36 @@
 name: Install binutils
 description: >-
   Install the GBA cross-toolchain (binutils/gcc/newlib) and build deps used by
-  every CI job. Bounds apt's lock wait and network retries so a transient
-  dpkg-lock or mirror stall self-resolves instead of hanging the step.
+  every CI job. Bounds apt's lock wait, network connection timeouts, and fetch
+  retries so a transient dpkg-lock or mirror stall self-resolves in seconds
+  instead of hanging the step indefinitely.
 
 runs:
   using: composite
   steps:
     - name: Install binutils
       shell: bash
-      # DPkg::Lock::Timeout bounds the wait for the dpkg/apt lock held by the
-      # runner's background unattended-upgrades/apt-daily jobs — without it,
-      # apt-get waits unbounded and the step appears to hang (retrying "fixes"
-      # it only because the background job has since finished). Acquire::Retries
-      # retries transient mirror fetch failures, and DEBIAN_FRONTEND prevents
-      # any debconf prompt from blocking on stdin that never arrives.
+      # Every apt failure mode that can hang this step is bounded here:
+      #   - DPkg::Lock::Timeout=600: cap the wait for the dpkg/apt lock held by
+      #     the runner's background unattended-upgrades/apt-daily jobs (without
+      #     it, apt-get waits unbounded and the step appears to hang).
+      #   - Acquire::*::Timeout=30: abort a STALLED mirror connection after 30s.
+      #     This is the key one — a half-open TCP connection never "fails", so
+      #     Retries alone can't recover it; without a connection timeout apt
+      #     sits on the dead socket forever. The timeout turns a stall into a
+      #     failure that Retries can then act on.
+      #   - Acquire::Retries=3: retry transient fetch failures (now including
+      #     timed-out stalls).
+      #   - DEBIAN_FRONTEND=noninteractive: no debconf prompt can block on stdin.
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo apt-get update -o Acquire::Retries=3
-        sudo apt-get install -y --no-install-recommends \
-          -o Acquire::Retries=3 \
-          -o DPkg::Lock::Timeout=600 \
+        apt_opts=(
+          -o Acquire::Retries=3
+          -o Acquire::http::Timeout=30
+          -o Acquire::https::Timeout=30
+          -o DPkg::Lock::Timeout=600
+        )
+        sudo apt-get update "${apt_opts[@]}"
+        sudo apt-get install -y --no-install-recommends "${apt_opts[@]}" \
           binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
