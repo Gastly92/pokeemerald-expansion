@@ -541,7 +541,8 @@ struct PartyState
     u32 changedSpecies:11; // For forms when multiple mons can change into the same Pokémon.
     u32 sentOut:1;
     u32 isKnockedOff:1;
-    u32 padding:8;
+    u32 reachedPinchHp:1; // FORK: latch for innate pinch abilities (Overgrow/Blaze/Torrent/Swarm) — set once HP <= 1/3, kept the rest of the battle so a heal can't strip the boost.
+    u32 padding:7;
     u16 usedHeldItem;
 };
 
