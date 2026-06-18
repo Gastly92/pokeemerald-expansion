@@ -11,15 +11,15 @@
 | :white_large_square: | Limber | The Pokémon cannot be paralyzed. |
 | :white_large_square: | Sand Veil | Boosts the Pokémon's evasiveness by 25% in a sandstorm. |
 | :white_large_square: | Static | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being paralyzed. |
-| :white_large_square: | Volt Absorb | Electric-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
-| :white_large_square: | Water Absorb | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
+| :x: | Volt Absorb | Electric-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
+| :x: | Water Absorb | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :white_large_square: | Oblivious | The Pokémon cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate. |
 | :white_large_square: | Cloud Nine | Eliminates the effects of weather. |
 | :white_large_square: | Compound Eyes | Boosts the accuracy of the Pokémon's moves by 30%. |
 | :white_large_square: | Insomnia | The Pokémon cannot become drowsy or be put to sleep. |
 | :x: | Color Change | The Pokémon's type becomes the type of the move used on it. |
 | :white_large_square: | Immunity | The Pokémon cannot be poisoned or badly poisoned. |
-| :white_large_square: | Flash Fire | Fire-type moves do not work on the Pokémon. Instead, they give the Pokémon the Flash Fire status. |
+| :x: | Flash Fire | Fire-type moves do not work on the Pokémon. Instead, they give the Pokémon the Flash Fire status. |
 | :white_large_square: | Shield Dust | The Pokémon is immune to additional effects from attacks. |
 | :white_large_square: | Own Tempo | The Pokémon cannot become confused and is unaffected by Intimidate. |
 | :white_large_square: | Suction Cups | The Pokémon is unaffected by the moves and held items of other Pokémon that would force it to switch out of battle. |
@@ -32,19 +32,19 @@
 | :white_large_square: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
 | :white_large_square: | Clear Body | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
-| :white_large_square: | Lightning Rod | The Pokémon draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage. |
+| :x: | Lightning Rod | The Pokémon draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage. |
 | :white_large_square: | Serene Grace | Raises the likelihood of additional effects occurring when the Pokémon uses its moves. |
 | :white_large_square: | Swift Swim | Doubles the Pokémon's Speed stat in rain. |
 | :white_large_square: | Chlorophyll | Doubles the Pokémon's Speed stat in harsh sunlight. |
 | :white_large_square: | Illuminate | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
-| :white_large_square: | Trace | When the Pokémon enters a battle, it changes its Ability to match that of an opponent. |
+| :x: | Trace | When the Pokémon enters a battle, it changes its Ability to match that of an opponent. |
 | :white_large_square: | Huge Power | Doubles the power of the Pokémon's physical moves. |
 | :white_large_square: | Poison Point | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned. |
 | :white_large_square: | Inner Focus | The Pokémon never flinches when attacked and is unaffected by Intimidate. |
 | :white_large_square: | Magma Armor | The Pokémon cannot be frozen. |
 | :white_large_square: | Water Veil | The Pokémon's water veil prevents it from being burned. |
 | :white_large_square: | Magnet Pull | Prevents Steel-type Pokémon from fleeing by pulling them in with magnetism. |
-| :white_large_square: | Soundproof | The Pokémon is immune to sound-based moves. |
+| :x: | Soundproof | The Pokémon is immune to sound-based moves. |
 | :white_large_square: | Rain Dish | The Pokémon has 1/16 of its max HP restored at the end of every turn in rain. |
 | :x: | Sand Stream | Summons a sandstorm for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Pressure | Causes opponents to expend 1 more PP when using moves against the Pokémon. |
@@ -79,7 +79,7 @@
 | :white_large_square: | Shell Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :x: | Air Lock | Eliminates the effects of weather. |
 | :white_large_square: | Tangled Feet | Doubles the Pokémon's evasiveness if it is confused. |
-| :white_large_square: | Motor Drive | Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage. |
+| :x: | Motor Drive | Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage. |
 | :white_large_square: | Rivalry | Boosts the power of the Pokémon's moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon's gender is unknown. |
 | :white_large_square: | Steadfast | When the Pokémon flinches, its Speed stat is boosted by 1 stage. |
 | :white_large_square: | Snow Cloak | Boosts the Pokémon's evasiveness by 25% in snow. |
@@ -88,7 +88,7 @@
 | :white_large_square: | Unburden | Doubles the Pokémon's Speed stat when its held item is consumed or lost. |
 | :white_large_square: | Heatproof | Halves the damage the Pokémon takes from Fire-type moves and from being burned. |
 | :white_large_square: | Simple | Doubles the Pokémon's stat changes. |
-| :white_large_square: | Dry Skin | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. However, the Pokémon takes 25% more damage from Fire-type moves. The Pokémon has 1/8 of its max HP restored at the end of every turn in rain, but it loses 1/8 of its max HP at the end of every turn in harsh sunlight. |
+| :x: | Dry Skin | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. However, the Pokémon takes 25% more damage from Fire-type moves. The Pokémon has 1/8 of its max HP restored at the end of every turn in rain, but it loses 1/8 of its max HP at the end of every turn in harsh sunlight. |
 | :white_large_square: | Download | The Pokémon compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat — whichever will be more effective. |
 | :white_large_square: | Iron Fist | Boosts the power of the Pokémon's punching moves by 20%. |
 | :white_large_square: | Poison Heal | If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP. |
@@ -115,7 +115,7 @@
 | :white_large_square: | Filter | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :x: | Slow Start | For five turns, the Pokémon's Attack and Speed stats are halved. |
 | :white_large_square: | Scrappy | The Pokémon can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate. |
-| :white_large_square: | Storm Drain | The Pokémon draws in all Water-type moves. Instead of taking damage from them, its Sp. Atk stat is boosted. |
+| :x: | Storm Drain | The Pokémon draws in all Water-type moves. Instead of taking damage from them, its Sp. Atk stat is boosted. |
 | :white_large_square: | Ice Body | The Pokémon has 1/16 of its max HP restored at the end of every turn in snow. |
 | :white_large_square: | Solid Rock | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :x: | Snow Warning | Summons snow for 5 turns when the Pokémon enters a battle. |
@@ -158,7 +158,7 @@
 | :white_large_square: | Justified | When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage. |
 | :white_large_square: | Rattled | The Pokémon gets scared when hit by a Dark-, Ghost-, or Bug-type attack or if intimidated, which boosts its Speed stat. |
 | :white_large_square: | Magic Bounce | Instead of being affected by other Pokémon's status moves, the Pokémon bounces them back at the user. |
-| :white_large_square: | Sap Sipper | Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage. |
+| :x: | Sap Sipper | Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage. |
 | :white_check_mark: | Prankster | Increases the priority of the Pokémon's status moves by 1 stage. |
 | :white_large_square: | Sand Force | Boosts the power of the Pokémon's Rock-, Ground-, and Steel-type moves by 30% in a sandstorm. |
 | :white_large_square: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
@@ -172,7 +172,7 @@
 | :white_large_square: | Protean | Changes the Pokémon's type to the type of the move it's about to use. This works only once per time the Pokémon enters battle. |
 | :white_large_square: | Fur Coat | Halves the damage the Pokémon takes from physical moves. |
 | :white_large_square: | Magician | If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves. |
-| :white_large_square: | Bulletproof | The Pokémon is immune to ball and bomb moves. |
+| :x: | Bulletproof | The Pokémon is immune to ball and bomb moves. |
 | :white_large_square: | Competitive | When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages. |
 | :white_large_square: | Strong Jaw | Boosts the power of the Pokémon's biting moves by 50%. |
 | :white_large_square: | Refrigerate | The Pokémon's Normal-type moves become Ice-type moves and their power is boosted by 20%. |
@@ -223,8 +223,8 @@
 | :white_large_square: | Dazzling | The Pokémon dazzles its opponents, making them unable to use priority moves against the Pokémon or its allies. |
 | :white_large_square: | Soul-Heart | Boosts the Pokémon's Sp. Atk stat every time another Pokémon faints. |
 | :white_large_square: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
-| :white_large_square: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
-| :white_large_square: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |
+| :x: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
+| :x: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |
 | :x: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
 | :x: | RKS System | Changes the Pokémon's type to match the memory disc it holds. |
 | :x: | Electric Surge | Turns the ground into Electric Terrain when the Pokémon enters a battle. |
@@ -274,8 +274,8 @@
 | :white_large_square: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
 | :white_large_square: | Anger Shell | When an attack causes its HP to drop to half or less, the Pokémon gets angry. This lowers its Defense and Sp. Def stats but boosts its Attack, Sp. Atk, and Speed stats. |
 | :white_large_square: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
-| :white_large_square: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
-| :white_large_square: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
+| :x: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
+| :x: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
 | :white_large_square: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
 | :white_large_square: | Rocky Payload | Powers up Rock-type moves. |
 | :white_large_square: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
@@ -298,7 +298,7 @@
 | :white_large_square: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |
 | :white_large_square: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |
 | :white_large_square: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |
-| :white_large_square: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
+| :x: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :white_large_square: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
 | :white_large_square: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |
 | :x: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
