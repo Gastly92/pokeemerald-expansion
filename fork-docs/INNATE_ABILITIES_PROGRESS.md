@@ -265,11 +265,11 @@
 | :white_large_square: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
 | :white_large_square: | Transistor | Powers up Electric-type moves. |
 | :white_large_square: | Dragon's Maw | Powers up Dragon-type moves. |
-| :white_large_square: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
-| :white_large_square: | Grim Neigh | When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat. |
+| :x: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
+| :x: | Grim Neigh | When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat. |
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability. |
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability. |
-| :white_large_square: | Lingering Aroma | Contact with the Pokémon changes the attacker's Ability to Lingering Aroma. |
+| :x: | Lingering Aroma | Contact with the Pokémon changes the attacker's Ability to Lingering Aroma. |
 | :white_large_square: | Seed Sower | Turns the ground into Grassy Terrain when the Pokémon is hit by an attack. |
 | :white_large_square: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
 | :white_large_square: | Anger Shell | When an attack causes its HP to drop to half or less, the Pokémon gets angry. This lowers its Defense and Sp. Def stats but boosts its Attack, Sp. Atk, and Speed stats. |
