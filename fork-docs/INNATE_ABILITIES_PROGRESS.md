@@ -17,7 +17,7 @@
 | :white_large_square: | Cloud Nine | Eliminates the effects of weather. |
 | :white_large_square: | Compound Eyes | Boosts the accuracy of the Pokémon's moves by 30%. |
 | :white_large_square: | Insomnia | The Pokémon cannot become drowsy or be put to sleep. |
-| :white_large_square: | Color Change | The Pokémon's type becomes the type of the move used on it. |
+| :x: | Color Change | The Pokémon's type becomes the type of the move used on it. |
 | :white_large_square: | Immunity | The Pokémon cannot be poisoned or badly poisoned. |
 | :white_large_square: | Flash Fire | Fire-type moves do not work on the Pokémon. Instead, they give the Pokémon the Flash Fire status. |
 | :white_large_square: | Shield Dust | The Pokémon is immune to additional effects from attacks. |
