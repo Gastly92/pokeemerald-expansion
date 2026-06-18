@@ -274,7 +274,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_VANILLISH,                sInnateLevitate },
     { SPECIES_VANILLITE,                sInnateLevitate },
     { SPECIES_VANILLUXE,                sInnateLevitate },
-    { SPECIES_VICTINI,                  sInnateLevitate },
     { SPECIES_WHIMSICOTT,               sInnateLevitate },
     { SPECIES_YAMASK,                   sInnateLevitate },
     { SPECIES_YAMASK_GALAR,             sInnateLevitate },
@@ -342,7 +341,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 
     // Gen 9
     { SPECIES_FLUTTER_MANE,             sInnateLevitate },
-    { SPECIES_GHOLDENGO,                sInnateLevitate },
     { SPECIES_GIMMIGHOUL_ROAMING,       sInnateLevitate }, // Chest form sits on the ground, omitted
     { SPECIES_IRON_MOTH,                sInnateLevitate },
     { SPECIES_MIRAIDON,                 sInnateLevitate }, // Hadron Engine: floats AND reaps its own Electric Terrain
