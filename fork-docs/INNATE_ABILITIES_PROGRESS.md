@@ -186,13 +186,13 @@
 | :white_large_square: | Pixilate | The Pokémon's Normal-type moves become Fairy-type moves and their power is boosted by 20%. |
 | :white_large_square: | Gooey | When the Pokémon is hit by a contact move, the attacker's Speed stat is lowered by 1 stage. |
 | :white_large_square: | Aerilate | The Pokémon's Normal-type moves become Flying-type moves and their power is boosted by 20%. |
-| :white_large_square: | Parental Bond | The parent and child attack one after the other. The power of the child's attacks is 1/4 of those of the parent. |
-| :white_large_square: | Dark Aura | Powers up the Dark-type moves of all Pokémon on the field. |
-| :white_large_square: | Fairy Aura | Boosts the power of the Fairy-type moves of all Pokémon on the field by 33%. |
-| :white_large_square: | Aura Break | The effects of "Aura" Abilities are reversed to lower the power of affected moves. |
-| :white_large_square: | Primordial Sea | The Pokémon changes the weather to nullify Fire-type attacks. |
-| :white_large_square: | Desolate Land | The Pokémon changes the weather to nullify Water-type attacks. |
-| :white_large_square: | Delta Stream | The Pokémon changes the weather so that no moves are supereffective against the Flying type. |
+| :x: | Parental Bond | The parent and child attack one after the other. The power of the child's attacks is 1/4 of those of the parent. |
+| :x: | Dark Aura | Powers up the Dark-type moves of all Pokémon on the field. |
+| :x: | Fairy Aura | Boosts the power of the Fairy-type moves of all Pokémon on the field by 33%. |
+| :x: | Aura Break | The effects of "Aura" Abilities are reversed to lower the power of affected moves. |
+| :x: | Primordial Sea | The Pokémon changes the weather to nullify Fire-type attacks. |
+| :x: | Desolate Land | The Pokémon changes the weather to nullify Water-type attacks. |
+| :x: | Delta Stream | The Pokémon changes the weather so that no moves are supereffective against the Flying type. |
 | :white_large_square: | Stamina | When the Pokémon takes damage from a move, its Defense stat is boosted by 1 stage. |
 | :white_large_square: | Wimp Out | The Pokémon cowardly switches out when its HP drops to half or less. |
 | :white_large_square: | Emergency Exit | The Pokémon, sensing danger, switches out when its HP drops to half or less. |
