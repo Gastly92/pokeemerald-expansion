@@ -26,7 +26,7 @@
 | :white_large_square: | Intimidate | When the Pokémon enters a battle, it lowers the Attack stats of opponents by 1 stage. |
 | :white_large_square: | Shadow Tag | Opponents cannot be switched out of battle. |
 | :white_large_square: | Rough Skin | When the Pokémon is hit by a contact move, the attacker takes damage equal to 1/8 of its max HP. |
-| :white_large_square: | Wonder Guard | Its mysterious power only lets supereffective moves hit the Pokémon. |
+| :x: | Wonder Guard | Its mysterious power only lets supereffective moves hit the Pokémon. |
 | :white_check_mark: | Levitate | The Pokémon floats off the ground, making it immune to Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses. |
 | :white_large_square: | Effect Spore | Contact with the Pokémon may inflict poison, sleep, or paralysis on the attacker. |
 | :white_large_square: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
