@@ -1,9 +1,10 @@
 name: Install binutils
 description: >-
   Install the GBA cross-toolchain (binutils/gcc/newlib) and build deps used by
-  every CI job. Bounds apt's lock wait, network connection timeouts, and fetch
-  retries — and retries the whole install — so a transient dpkg-lock or mirror
-  stall self-resolves in seconds instead of hanging the step indefinitely.
+  every CI job. Each install attempt is hard-bounded by a per-attempt timeout
+  and retried with backoff, so a transient dpkg-lock or mirror stall is killed
+  and retried automatically — the step only fails after all attempts exhaust,
+  and it never hangs or needs a manual workflow restart.
 
 # FORK: this composite action is fork-owned (it has no upstream counterpart, so
 # it never conflicts on sync). It exists to de-duplicate and harden what was an
@@ -16,35 +17,45 @@ runs:
   steps:
     - name: Install binutils
       shell: bash
-      # Every apt failure mode that can hang or flake this step is bounded:
-      #   - DPkg::Lock::Timeout=600: cap the wait for the dpkg/apt lock held by
-      #     the runner's background unattended-upgrades/apt-daily jobs (without
-      #     it, apt-get waits unbounded and the step appears to hang).
-      #   - Acquire::*::Timeout=30: abort a STALLED mirror connection after 30s.
-      #     A half-open TCP connection never "fails", so Retries alone can't
-      #     recover it; the timeout turns a stall into a retryable failure.
-      #   - Acquire::Retries=3: retry transient per-fetch failures.
-      #   - retry loop: re-run the whole update+install up to 3x with backoff,
-      #     covering failures apt's own retries don't (e.g. a whole-archive 503
-      #     or a lock-timeout error), so one bad attempt doesn't fail the job.
-      #   - DEBIAN_FRONTEND=noninteractive: no debconf prompt can block on stdin.
+      # Self-healing install: each attempt is wrapped in `timeout` so a hang
+      # (stalled mirror connection, or the dpkg lock held by the runner's
+      # background apt-daily/unattended-upgrades jobs) is KILLED and the loop
+      # retries — instead of running until the step's outer timeout-minutes cap
+      # fails the whole job. Layered bounds, innermost to outermost:
+      #   - Acquire::*::Timeout=30  : abort a stalled mirror connection (30s).
+      #   - Acquire::Retries=3      : apt retries individual failed fetches.
+      #   - DPkg::Lock::Timeout=120 : fail (not hang) if the dpkg lock is held;
+      #                               kept BELOW the per-attempt `timeout` so a
+      #                               lock wait ends the attempt, not the step.
+      #   - timeout -k 10 N         : hard wall-clock cap per apt invocation.
+      #   - for-loop + backoff      : retry the whole update+install 3x; by the
+      #                               next attempt the lock/mirror has cleared.
+      #   - dpkg --configure -a     : heal dpkg if a `timeout` kill interrupted it.
+      # DEBIAN_FRONTEND=noninteractive keeps any debconf prompt from blocking.
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
+        set -u
+        packages=(binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3)
         apt_opts=(
           -o Acquire::Retries=3
           -o Acquire::http::Timeout=30
           -o Acquire::https::Timeout=30
-          -o DPkg::Lock::Timeout=600
+          -o DPkg::Lock::Timeout=120
         )
         for attempt in 1 2 3; do
-          if sudo apt-get update "${apt_opts[@]}" && \
-             sudo apt-get install -y --no-install-recommends "${apt_opts[@]}" \
-               binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3; then
+          if sudo timeout -k 10 120 apt-get update "${apt_opts[@]}" && \
+             sudo timeout -k 10 240 apt-get install -y --no-install-recommends \
+               "${apt_opts[@]}" "${packages[@]}"; then
+            echo "binutils toolchain installed (attempt ${attempt}/3)"
             exit 0
           fi
-          echo "::warning::apt-get attempt ${attempt} failed; retrying in $((attempt * 10))s"
-          sleep $((attempt * 10))
+          if [ "${attempt}" -lt 3 ]; then
+            backoff=$((attempt * 15))
+            echo "::warning::apt-get attempt ${attempt}/3 failed or timed out; healing dpkg and retrying in ${backoff}s"
+            sudo dpkg --configure -a || true
+            sleep "${backoff}"
+          fi
         done
         echo "::error::apt-get failed after 3 attempts"
         exit 1
