@@ -60,12 +60,6 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_LATIOS,               TIER_LEGENDARY }, // 381
     { SPECIES_JIRACHI,              TIER_LEGENDARY }, // 385
     { SPECIES_SHAYMIN_SKY,          TIER_LEGENDARY }, // 492
-    { SPECIES_TORNADUS,             TIER_LEGENDARY }, // 641
-    { SPECIES_TORNADUS_THERIAN,     TIER_LEGENDARY }, // 641
-    { SPECIES_THUNDURUS,            TIER_LEGENDARY }, // 642
-    { SPECIES_THUNDURUS_THERIAN,    TIER_LEGENDARY }, // 642
-    { SPECIES_LANDORUS,             TIER_LEGENDARY }, // 645
-    { SPECIES_LANDORUS_THERIAN,     TIER_LEGENDARY }, // 645
     { SPECIES_KYUREM,               TIER_LEGENDARY }, // 646
     { SPECIES_KYUREM_BLACK,         TIER_LEGENDARY }, // 646
     { SPECIES_KYUREM_WHITE,         TIER_LEGENDARY }, // 646
@@ -98,6 +92,12 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_VICTINI,            TIER_PSEUDO }, // 494
     { SPECIES_HYDREIGON,          TIER_PSEUDO }, // 635
     { SPECIES_TERRAKION,          TIER_PSEUDO }, // 639
+    { SPECIES_TORNADUS,           TIER_PSEUDO }, // 641
+    { SPECIES_TORNADUS_THERIAN,   TIER_PSEUDO }, // 641
+    { SPECIES_THUNDURUS,          TIER_PSEUDO }, // 642
+    { SPECIES_THUNDURUS_THERIAN,  TIER_PSEUDO }, // 642
+    { SPECIES_LANDORUS,           TIER_PSEUDO }, // 645
+    { SPECIES_LANDORUS_THERIAN,   TIER_PSEUDO }, // 645
     { SPECIES_KOMMO_O,            TIER_PSEUDO }, // 784
     { SPECIES_TAPU_KOKO,          TIER_PSEUDO }, // 785
     { SPECIES_TAPU_LELE,          TIER_PSEUDO }, // 786
