@@ -51,7 +51,7 @@
 | :white_large_square: | Thick Fat | Halves the damage the Pokémon takes from Fire- and Ice-type moves. |
 | :white_large_square: | Early Bird | The Pokémon awakens from sleep twice as fast as other Pokémon. |
 | :white_large_square: | Flame Body | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned. |
-| :white_large_square: | Run Away | Enables a sure getaway from wild Pokémon. |
+| :x: | Run Away | Enables a sure getaway from wild Pokémon. |
 | :white_large_square: | Keen Eye | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :white_large_square: | Hyper Cutter | The Pokémon's Attack stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
