@@ -7,7 +7,7 @@
 | :white_large_square: | Speed Boost | Boosts the Pokémon's Speed stat by 1 stage at the end of every turn. |
 | :white_large_square: | Battle Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :white_check_mark: | Sturdy | If the Pokémon has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. The Pokémon is also immune to one-hit KO moves. |
-| :white_large_square: | Damp | All Pokémon become unable to use explosive moves. Explosive Abilities also fail to trigger. |
+| :x: | Damp | All Pokémon become unable to use explosive moves. Explosive Abilities also fail to trigger. |
 | :white_large_square: | Limber | The Pokémon cannot be paralyzed. |
 | :white_large_square: | Sand Veil | Boosts the Pokémon's evasiveness by 25% in a sandstorm. |
 | :white_large_square: | Static | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being paralyzed. |
@@ -169,7 +169,7 @@
 | :white_large_square: | Aroma Veil | The Pokémon and its allies cannot gain the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, or Encore statuses. |
 | :white_large_square: | Flower Veil | Grass-type allies are immune to status conditions and cannot have their stats lowered. |
 | :white_large_square: | Cheek Pouch | The Pokémon has 1/3 of its max HP restored when it eats a Berry, in addition to the Berry's usual effect. |
-| :white_large_square: | Protean | Changes the Pokémon's type to the type of the move it's about to use. This works only once per time the Pokémon enters battle. |
+| :x: | Protean | Changes the Pokémon's type to the type of the move it's about to use. This works only once per time the Pokémon enters battle. |
 | :white_large_square: | Fur Coat | Halves the damage the Pokémon takes from physical moves. |
 | :white_large_square: | Magician | If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves. |
 | :x: | Bulletproof | The Pokémon is immune to ball and bomb moves. |
@@ -237,7 +237,7 @@
 | :white_large_square: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
 | :white_large_square: | Intrepid Sword | Boosts the Pokémon's Attack stat the first time the Pokémon enters a battle. |
 | :white_large_square: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
-| :white_large_square: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
+| :x: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
 | :x: | Ball Fetch | If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle. |
 | :white_large_square: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |
 | :white_large_square: | Propeller Tail | Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves. |
