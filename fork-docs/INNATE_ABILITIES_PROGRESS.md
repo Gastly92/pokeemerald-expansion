@@ -101,10 +101,10 @@
 | :white_large_square: | Sniper | Boosts the power of the Pokémon's critical hits by 125% instead of 50%. |
 | :white_large_square: | Magic Guard | The Pokémon takes damage only from attacks. |
 | :white_large_square: | No Guard | The accuracy of moves used both by and against the Pokémon becomes 100%. |
-| :white_large_square: | Stall | The Pokémon's moves go last among moves of the same priority. |
+| :x: | Stall | The Pokémon's moves go last among moves of the same priority. |
 | :white_large_square: | Technician | Boosts the power of the Pokémon's moves by 50% if their power is 60 or less. |
 | :white_large_square: | Leaf Guard | The Pokémon is immune to status conditions in harsh sunlight. |
-| :white_large_square: | Klutz | Items do not work when held by the Pokémon. |
+| :x: | Klutz | Items do not work when held by the Pokémon. |
 | :white_large_square: | Mold Breaker | The Pokémon's moves are unaffected by the Ability of the target (with certain exceptions). |
 | :white_large_square: | Super Luck | The Pokémon has a 1-stage Critical-Hit Ratio Boost. |
 | :white_large_square: | Aftermath | Attackers that knock out the Pokémon with a contact move take damage equal to 1/4 of their max HP. |
