@@ -99,6 +99,10 @@ static const struct SpeciesTierEntry sSpeciesTiers[] =
     { SPECIES_HYDREIGON,          TIER_PSEUDO }, // 635
     { SPECIES_TERRAKION,          TIER_PSEUDO }, // 639
     { SPECIES_KOMMO_O,            TIER_PSEUDO }, // 784
+    { SPECIES_TAPU_KOKO,          TIER_PSEUDO }, // 785
+    { SPECIES_TAPU_LELE,          TIER_PSEUDO }, // 786
+    { SPECIES_TAPU_BULU,          TIER_PSEUDO }, // 787
+    { SPECIES_TAPU_FINI,          TIER_PSEUDO }, // 788
     { SPECIES_PHEROMOSA,          TIER_PSEUDO }, // 795
     { SPECIES_KARTANA,            TIER_PSEUDO }, // 798
     { SPECIES_NAGANADEL,          TIER_PSEUDO }, // 804
