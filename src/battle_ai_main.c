@@ -1656,7 +1656,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         break;
     case EFFECT_STAT_CHANGE_HALF_HP:
     case EFFECT_BELLY_DRUM:
-        if (AI_IsAbilityOnSide(battlerDef, ABILITY_UNAWARE))
+        if (AI_IsAbilityOnSide(battlerDef, ABILITY_UNAWARE) || AI_IsInnateOnSide(battlerDef, ABILITY_UNAWARE)) // FORK: innate-aware
             ADJUST_SCORE(-10);
         else if (aiData->hpPercents[battlerAtk] <= 60 && !IsConsideringZMove(battlerAtk, battlerDef, move))
             ADJUST_SCORE(-10);

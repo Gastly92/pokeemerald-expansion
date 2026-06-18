@@ -208,9 +208,16 @@ How much is needed depends on the ability class:
   an attacker's Mold Breaker drops both the chosen-ability path (`GetBattlerAbility`
   already returns `NONE`) and the innate (`IsInnateActive` → `CanBreakThroughInnate`).
   On-field AI damage prediction is correct for free because it reads the real
-  battler's species through `IsInnateActive`; off-field AI heuristics
-  (`AI_IsAbilityOnSide` sites) are left as a known minor-quality gap, deliberately not
-  wired — keeping the footprint small.
+  battler's species through `IsInnateActive`. The off-field AI *setup* heuristics
+  (the `AI_IsAbilityOnSide(ABILITY_UNAWARE)` "don't boost against an Unaware foe" sites
+  in `ShouldRaiseAnyStat`, `GetAllyStatChangeScore`, and the Belly-Drum score, plus the
+  Yawn evasion-dodge check in `battle_ai_switch.c`) **are** innate-aware: each pairs the
+  chosen-ability read with the fork helper `AI_IsInnateOnSide()` (or `IsInnateActive()` at
+  the single-battler switch site). They're all about the AI's own *boosts* being ignored,
+  which an innate Unaware does exactly like the real one, so crediting the innate is correct.
+  (This pattern — `AI_IsInnateOnSide()` beside `AI_IsAbilityOnSide()` — is the reusable way
+  to make a side-level AI ability check innate-aware; Prankster's Psychic-Terrain heuristic
+  uses the same helper.)
 
   **Sturdy is the *clean-upside* worked example for this class** — a multi-site passive
   immunity whose real ability has *no* downside, so the innate is a plain **1:1 copy** (no

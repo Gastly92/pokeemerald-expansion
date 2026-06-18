@@ -912,3 +912,33 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate P
         ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
     }
 }
+
+// ─── AI awareness of an innate Unaware (off-field setup heuristic) ──────────────
+// Companion to the chosen-Unaware test "AI won't boost stats against opponent with Unaware"
+// (test/battle/ai/ai.c): the AI shouldn't waste a Swords Dance against a foe whose Unaware
+// (boost-ignoring) makes the +Atk pointless — and that must hold when the foe's Unaware is
+// innate-only. A setup sweeper (Lopunny) freely boosts against the passive Pyukumuku wall;
+// the feature-off leg proves the AI *does* set up here when no Unaware is in play, so the
+// feature-on leg's restraint can only come from the innate. Pyukumuku's chosen ability is
+// forced to Innards Out so Unaware comes solely from the innate; the Wobbuffet backup keeps
+// the "only party member won't use a status move" rule from interfering.
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI won't boost stats against an innate-Unaware foe")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DONDOZO, ABILITY_UNAWARE));
+        ASSUME_STAT_CHANGE(MOVE_SWORDS_DANCE, attack: +2);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
+        PLAYER(SPECIES_DONDOZO) { Ability(ABILITY_OBLIVIOUS); Moves(MOVE_REST); } // bulky, passive wall; Unaware only via the innate
+        OPPONENT(SPECIES_LOPUNNY) { Moves(MOVE_SWORDS_DANCE, MOVE_SCRATCH); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SCRATCH); } // backup so the status-move-when-last rule doesn't apply
+    } WHEN {
+        if (enabled)
+            TURN { EXPECT_MOVE(opponent, MOVE_SCRATCH); }      // innate Unaware: boosting is pointless
+        else
+            TURN { EXPECT_MOVE(opponent, MOVE_SWORDS_DANCE); } // no innate: the AI sets up freely
+    }
+}

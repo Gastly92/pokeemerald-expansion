@@ -771,6 +771,7 @@ static bool32 ShouldSwitchIfBadlyStatused(struct SwitchAiContext *switchContext)
             // Check if Active Pokemon evasion boosted and might be able to dodge until awake
             if (gBattleMons[switchContext->battler].statStages[STAT_EVASION] > (DEFAULT_STAT_STAGE + 3)
                 && gAiLogicData->abilities[switchContext->opposingBattler] != ABILITY_UNAWARE
+                && !IsInnateActive(switchContext->opposingBattler, ABILITY_UNAWARE) // FORK: innate-aware — an innate Unaware also ignores the AI's evasion boost
                 && gAiLogicData->abilities[switchContext->opposingBattler] != ABILITY_KEEN_EYE
                 && gAiLogicData->abilities[switchContext->opposingBattler] != ABILITY_MINDS_EYE
                 && (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && gAiLogicData->abilities[switchContext->opposingBattler] != ABILITY_ILLUMINATE)

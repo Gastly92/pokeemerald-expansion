@@ -42,6 +42,14 @@
 //     chosen-ability test). A pure calc-modifier passive like Levitate: no script / pop-up / driver.
 //     Suppression parity holds via IsInnateActive() — Unaware is breakable, so an attacker's Mold
 //     Breaker ignores an innate Unaware on the defender exactly as it would the real ability.
+//     AI: on-field damage prediction is correct for free (the stat-ignore lives in the shared
+//     damage calc, keyed off the real battler via IsInnateActive). The AI's off-field *setup*
+//     heuristics — "don't bother boosting against an Unaware foe" (ShouldRaiseAnyStat and the Belly
+//     Drum/half-HP-cost score in battle_ai_main.c), the doubles ally-stat-change score
+//     (GetAllyStatChangeScore), and the Yawn evasion-dodge stay-in check (battle_ai_switch.c) —
+//     read the chosen ability, so each now also credits an innate Unaware (AI_IsInnateOnSide beside
+//     the AI_IsAbilityOnSide reads; IsInnateActive at the switch site). All are about the AI's own
+//     *boosts* being ignored, which an innate Unaware (boost-ignoring) does just like the real one.
 //     DELIBERATE DIVERGENCE: an innate Unaware is a *pure boon*, NOT identical to a real Unaware. A
 //     real Unaware blanks the foe's stat stage in both directions (so it ignores a foe's *drop* too,
 //     and takes more damage / deals less for it); the innate ignores only the foe's *boosts* and
@@ -104,9 +112,11 @@
 //     Dark-types — the favorable half, dropping the real ability's only cost. (Because the innate
 //     never sets pranksterElevated, the AI's Dark-type avoidance check in src/battle_ai_main.c
 //     correctly leaves an innate Prankster's status moves unpenalized — no wiring needed there.)
-//     Known minor AI gap, mirroring Unaware: the doubles Psychic-Terrain heuristic in
-//     src/battle_ai_field_statuses.c reads chosen Prankster only (AI_IsAbilityOnSide) and is left
-//     unwired. Canon Prankster users only (no flavor picks): the trickster lines keep the signature
+//     The doubles Psychic-Terrain heuristic in src/battle_ai_field_statuses.c IS made innate-aware
+//     (Psychic Terrain blanks priority moves regardless of source): beside its chosen-only
+//     AI_IsAbilityOnSide(ABILITY_PRANKSTER) reads, the fork helper AI_IsInnateOnSide() also credits
+//     an innate Prankster, so the AI values/avoids the terrain for an innate-Prankster side too.
+//     Canon Prankster users only (no flavor picks): the trickster lines keep the signature
 //     priority no matter which slot the build picks. Mega/regional/Gmax forms are listed only where
 //     the form's ability data ALSO carries Prankster (Grimmsnarl-Gmax yes; Banette/Sableye/Meowstic
 //     Megas and the Therian formes have a DIFFERENT signature ability, so they are omitted like the

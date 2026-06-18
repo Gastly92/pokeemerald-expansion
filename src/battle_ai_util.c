@@ -1913,6 +1913,15 @@ bool32 AI_IsAbilityOnSide(enum BattlerId battlerId, enum Ability ability)
         return FALSE;
 }
 
+// FORK: FEATURE_INNATE_ABILITIES. Innate-aware companion to AI_IsAbilityOnSide — see the header.
+// IsInnateActive is feature-gated and species-based, so this is a strict no-op when the feature is
+// off and never leaks the chosen ability (it credits only the species' active innate).
+bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability)
+{
+    return (IsBattlerAlive(battlerId) && IsInnateActive(battlerId, ability))
+        || (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && IsInnateActive(BATTLE_PARTNER(battlerId), ability));
+}
+
 // does NOT include ability suppression checks
 enum Ability AI_DecideKnownAbilityForTurn(enum BattlerId battlerId)
 {
@@ -2313,8 +2322,9 @@ bool32 ShouldTryOHKO(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
 
 bool32 ShouldRaiseAnyStat(enum BattlerId battlerAtk, enum BattlerId battlerDef)
 {
-    // Don't increase stats if opposing battler has Unaware
-    if (AI_IsAbilityOnSide(battlerDef, ABILITY_UNAWARE))
+    // Don't increase stats if opposing battler has Unaware (innate-aware: an innate Unaware
+    // ignores the foe's *boosts* too, so raising stats against it is just as pointless)
+    if (AI_IsAbilityOnSide(battlerDef, ABILITY_UNAWARE) || AI_IsInnateOnSide(battlerDef, ABILITY_UNAWARE)) // FORK: innate-aware
         return FALSE;
 
     // Don't increase stats if Yawn'd
@@ -6646,7 +6656,8 @@ s32 GetAllyStatChangeScore(u32 battlerAtk, u32 partner, u32 move)
     s32 tempScore = 0;
     enum BattlerId foe = LEFT_FOE(battlerAtk);
 
-    if (AI_IsAbilityOnSide(foe, ABILITY_UNAWARE) || AI_IsAbilityOnSide(foe, ABILITY_OPPORTUNIST))
+    if (AI_IsAbilityOnSide(foe, ABILITY_UNAWARE) || AI_IsAbilityOnSide(foe, ABILITY_OPPORTUNIST)
+     || AI_IsInnateOnSide(foe, ABILITY_UNAWARE)) // FORK: innate-aware (Opportunist isn't an innate)
         return tempScore;
 
     if (gBattleMons[partner].volatiles.yawn && CanBeSlept(partner, partner, gAiLogicData->abilities[partner], BLOCKED_BY_SLEEP_CLAUSE))
