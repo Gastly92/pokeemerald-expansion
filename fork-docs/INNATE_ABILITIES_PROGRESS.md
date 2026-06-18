@@ -225,7 +225,7 @@
 | :white_large_square: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
 | :white_large_square: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
 | :white_large_square: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |
-| :white_large_square: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
+| :x: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
 | :x: | RKS System | Changes the Pokémon's type to match the memory disc it holds. |
 | :x: | Electric Surge | Turns the ground into Electric Terrain when the Pokémon enters a battle. |
 | :x: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |
@@ -238,7 +238,7 @@
 | :white_large_square: | Intrepid Sword | Boosts the Pokémon's Attack stat the first time the Pokémon enters a battle. |
 | :white_large_square: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
 | :white_large_square: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
-| :white_large_square: | Ball Fetch | If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle. |
+| :x: | Ball Fetch | If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle. |
 | :white_large_square: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |
 | :white_large_square: | Propeller Tail | Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves. |
 | :white_large_square: | Mirror Armor | Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them. |
