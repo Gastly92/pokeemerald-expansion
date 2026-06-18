@@ -134,7 +134,7 @@
 | :white_large_square: | Cursed Body | When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns. |
 | :white_large_square: | Healer | The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn. |
 | :white_large_square: | Friend Guard | Reduces the damage allies take by 25%. |
-| :white_large_square: | Weak Armor | When the Pokémon takes damage from a physical move, its Defense stat is lowered by 1 stage, but its Speed stat is boosted by 2 stages. |
+| :x: | Weak Armor | When the Pokémon takes damage from a physical move, its Defense stat is lowered by 1 stage, but its Speed stat is boosted by 2 stages. |
 | :white_large_square: | Heavy Metal | Doubles the Pokémon's weight. |
 | :white_large_square: | Light Metal | Halves the Pokémon's weight. |
 | :white_large_square: | Multiscale | Halves the damage the Pokémon takes while its HP is full. |
@@ -142,7 +142,7 @@
 | :white_large_square: | Flare Boost | Powers up special moves when the Pokémon is burned. |
 | :white_large_square: | Harvest | If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry. |
 | :white_large_square: | Telepathy | The Pokémon dodges attacks from its allies. |
-| :white_large_square: | Moody | At the end of every turn, one of the Pokémon's stats will be boosted by 2 stages, but another will be lowered by 1 stage. |
+| :x: | Moody | At the end of every turn, one of the Pokémon's stats will be boosted by 2 stages, but another will be lowered by 1 stage. |
 | :white_large_square: | Overcoat | The Pokémon takes no damage from sandstorms and is immune to moves and Abilities involving powder. |
 | :white_large_square: | Poison Touch | When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned. |
 | :white_check_mark: | Regenerator | The Pokémon has 1/3 of its max HP restored when it switches out of battle. |
@@ -246,15 +246,15 @@
 | :white_large_square: | Stalwart | The Pokémon ignores the effects of Abilities and moves that draw in moves. |
 | :white_large_square: | Steam Engine | Boosts the Speed stat drastically when the Pokémon is hit by a Fire- or Water-type move. |
 | :white_large_square: | Punk Rock | Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves. |
-| :white_large_square: | Sand Spit | Summons a sandstorm for 5 turns when the Pokémon takes damage from moves. |
+| :x: | Sand Spit | Summons a sandstorm for 5 turns when the Pokémon takes damage from moves. |
 | :white_large_square: | Ice Scales | The Pokémon is protected by ice scales, which halve the damage taken from special moves. |
 | :white_large_square: | Ripen | Doubles the effects of Berries eaten by the Pokémon. |
 | :x: | Ice Face | The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it snows. |
 | :white_large_square: | Power Spot | Just being next to the Pokémon powers up moves. |
-| :white_large_square: | Mimicry | The Pokémon's type changes depending on the terrain. |
+| :x: | Mimicry | The Pokémon's type changes depending on the terrain. |
 | :white_large_square: | Screen Cleaner | When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses. |
 | :white_large_square: | Steely Spirit | Powers up the Steel-type moves of the Pokémon and its allies. |
-| :white_large_square: | Perish Body | When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle. |
+| :x: | Perish Body | When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle. |
 | :x: | Wandering Spirit | When the Pokémon is hit by a contact move, it swaps Abilities with the attacker. |
 | :x: | Gorilla Tactics | Boosts the Pokémon's Attack stat, but only allows the use of the first selected move. |
 | :x: | Neutralizing Gas | While the Pokémon is in the battle, the effects of all other Pokémon's Abilities will be nullified or will not be triggered. |
@@ -270,9 +270,9 @@
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability. |
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability. |
 | :x: | Lingering Aroma | Contact with the Pokémon changes the attacker's Ability to Lingering Aroma. |
-| :white_large_square: | Seed Sower | Turns the ground into Grassy Terrain when the Pokémon is hit by an attack. |
+| :x: | Seed Sower | Turns the ground into Grassy Terrain when the Pokémon is hit by an attack. |
 | :white_large_square: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
-| :white_large_square: | Anger Shell | When an attack causes its HP to drop to half or less, the Pokémon gets angry. This lowers its Defense and Sp. Def stats but boosts its Attack, Sp. Atk, and Speed stats. |
+| :x: | Anger Shell | When an attack causes its HP to drop to half or less, the Pokémon gets angry. This lowers its Defense and Sp. Def stats but boosts its Attack, Sp. Atk, and Speed stats. |
 | :white_large_square: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
 | :x: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
 | :x: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
