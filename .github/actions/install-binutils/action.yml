@@ -1,0 +1,25 @@
+name: Install binutils
+description: >-
+  Install the GBA cross-toolchain (binutils/gcc/newlib) and build deps used by
+  every CI job. Bounds apt's lock wait and network retries so a transient
+  dpkg-lock or mirror stall self-resolves instead of hanging the step.
+
+runs:
+  using: composite
+  steps:
+    - name: Install binutils
+      shell: bash
+      # DPkg::Lock::Timeout bounds the wait for the dpkg/apt lock held by the
+      # runner's background unattended-upgrades/apt-daily jobs — without it,
+      # apt-get waits unbounded and the step appears to hang (retrying "fixes"
+      # it only because the background job has since finished). Acquire::Retries
+      # retries transient mirror fetch failures, and DEBIAN_FRONTEND prevents
+      # any debconf prompt from blocking on stdin that never arrives.
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt-get update -o Acquire::Retries=3
+        sudo apt-get install -y --no-install-recommends \
+          -o Acquire::Retries=3 \
+          -o DPkg::Lock::Timeout=600 \
+          binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
