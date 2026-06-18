@@ -311,7 +311,7 @@
 | :x: | Tera Shift | When the Pokémon enters a battle, it absorbs the energy around itself and transforms into its Terastal Form. |
 | :x: | Tera Shell | The Pokémon's shell contains the powers of each type. All damage-dealing moves that hit the Pokémon when its HP is full will not be very effective. |
 | :x: | Teraform Zero | When Terapagos changes into its Stellar Form, it uses its hidden powers to eliminate all effects of weather and terrain, reducing them to zero. |
-| :white_large_square: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
+| :x: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
 | :white_large_square: | Piercing Drill | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :white_large_square: | Dragonize | The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%. |
 | :white_large_square: | Mega Sol | Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight. |
