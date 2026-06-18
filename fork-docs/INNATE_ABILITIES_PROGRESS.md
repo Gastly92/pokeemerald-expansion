@@ -10,7 +10,7 @@
 | :x: | Damp | All Pokémon become unable to use explosive moves. Explosive Abilities also fail to trigger. |
 | :white_large_square: | Limber | The Pokémon cannot be paralyzed. |
 | :white_large_square: | Sand Veil | Boosts the Pokémon's evasiveness by 25% in a sandstorm. |
-| :white_large_square: | Static | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being paralyzed. |
+| :x: | Static | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being paralyzed. |
 | :x: | Volt Absorb | Electric-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :x: | Water Absorb | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :white_large_square: | Oblivious | The Pokémon cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate. |
@@ -28,7 +28,7 @@
 | :white_large_square: | Rough Skin | When the Pokémon is hit by a contact move, the attacker takes damage equal to 1/8 of its max HP. |
 | :x: | Wonder Guard | Its mysterious power only lets supereffective moves hit the Pokémon. |
 | :white_check_mark: | Levitate | The Pokémon floats off the ground, making it immune to Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses. |
-| :white_large_square: | Effect Spore | Contact with the Pokémon may inflict poison, sleep, or paralysis on the attacker. |
+| :x: | Effect Spore | Contact with the Pokémon may inflict poison, sleep, or paralysis on the attacker. |
 | :white_large_square: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
 | :white_large_square: | Clear Body | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
@@ -39,7 +39,7 @@
 | :white_large_square: | Illuminate | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :x: | Trace | When the Pokémon enters a battle, it changes its Ability to match that of an opponent. |
 | :white_large_square: | Huge Power | Doubles the power of the Pokémon's physical moves. |
-| :white_large_square: | Poison Point | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned. |
+| :x: | Poison Point | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned. |
 | :white_large_square: | Inner Focus | The Pokémon never flinches when attacked and is unaffected by Intimidate. |
 | :white_large_square: | Magma Armor | The Pokémon cannot be frozen. |
 | :white_large_square: | Water Veil | The Pokémon's water veil prevents it from being burned. |
@@ -50,14 +50,14 @@
 | :white_large_square: | Pressure | Causes opponents to expend 1 more PP when using moves against the Pokémon. |
 | :white_large_square: | Thick Fat | Halves the damage the Pokémon takes from Fire- and Ice-type moves. |
 | :white_large_square: | Early Bird | The Pokémon awakens from sleep twice as fast as other Pokémon. |
-| :white_large_square: | Flame Body | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned. |
+| :x: | Flame Body | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned. |
 | :x: | Run Away | Enables a sure getaway from wild Pokémon. |
 | :white_large_square: | Keen Eye | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :white_large_square: | Hyper Cutter | The Pokémon's Attack stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
 | :x: | Truant | Each time the Pokémon uses a move, it spends the next turn loafing around. |
 | :x: | Hustle | When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%. |
-| :white_large_square: | Cute Charm | When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if the attacker and the Pokémon are of opposite genders. |
+| :x: | Cute Charm | When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if the attacker and the Pokémon are of opposite genders. |
 | :x: | Plus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :x: | Minus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :x: | Forecast | The Pokémon transforms with the weather to change its type to Water, Fire, or Ice. |
@@ -144,7 +144,7 @@
 | :white_large_square: | Telepathy | The Pokémon dodges attacks from its allies. |
 | :x: | Moody | At the end of every turn, one of the Pokémon's stats will be boosted by 2 stages, but another will be lowered by 1 stage. |
 | :white_large_square: | Overcoat | The Pokémon takes no damage from sandstorms and is immune to moves and Abilities involving powder. |
-| :white_large_square: | Poison Touch | When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned. |
+| :x: | Poison Touch | When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned. |
 | :white_check_mark: | Regenerator | The Pokémon has 1/3 of its max HP restored when it switches out of battle. |
 | :white_large_square: | Big Pecks | The Pokémon's Defense stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Sand Rush | Doubles the Pokémon's Speed stat in a sandstorm. |
@@ -315,4 +315,4 @@
 | :white_large_square: | Piercing Drill | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :x: | Dragonize | The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%. |
 | :white_large_square: | Mega Sol | Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight. |
-| :white_large_square: | Spicy Spray | When the Pokémon takes damage from a move, it burns the attacker. |
+| :x: | Spicy Spray | When the Pokémon takes damage from a move, it burns the attacker. |
