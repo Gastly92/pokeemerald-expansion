@@ -50,10 +50,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # FORK: upstream owns this CI workflow and ships its own inline "Install
+      # binutils" apt-get step. We replaced that inline step with a hardened,
+      # de-duplicated composite action (.github/actions/install-binutils) to
+      # stop intermittent CI hangs, plus a timeout-minutes backstop. On a merge
+      # conflict here, KEEP our `uses:` + timeout-minutes; if upstream changed
+      # which apt packages get installed, port that into the action's package
+      # list rather than re-inlining their apt-get step.
       - name: Install binutils
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
+        uses: ./.github/actions/install-binutils
+        timeout-minutes: 26
 
       - name: Cache build tools
         uses: actions/cache@v5
@@ -88,10 +94,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # FORK: upstream owns this CI workflow and ships its own inline "Install
+      # binutils" apt-get step. We replaced that inline step with a hardened,
+      # de-duplicated composite action (.github/actions/install-binutils) to
+      # stop intermittent CI hangs, plus a timeout-minutes backstop. On a merge
+      # conflict here, KEEP our `uses:` + timeout-minutes; if upstream changed
+      # which apt packages get installed, port that into the action's package
+      # list rather than re-inlining their apt-get step.
       - name: Install binutils
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
+        uses: ./.github/actions/install-binutils
+        timeout-minutes: 26
 
       - name: Cache build tools
         uses: actions/cache@v5
@@ -124,10 +136,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # FORK: upstream owns this CI workflow and ships its own inline "Install
+      # binutils" apt-get step. We replaced that inline step with a hardened,
+      # de-duplicated composite action (.github/actions/install-binutils) to
+      # stop intermittent CI hangs, plus a timeout-minutes backstop. On a merge
+      # conflict here, KEEP our `uses:` + timeout-minutes; if upstream changed
+      # which apt packages get installed, port that into the action's package
+      # list rather than re-inlining their apt-get step.
       - name: Install binutils
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
+        uses: ./.github/actions/install-binutils
+        timeout-minutes: 26
 
       - name: Cache build tools
         uses: actions/cache@v5
@@ -160,10 +178,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # FORK: upstream owns this CI workflow and ships its own inline "Install
+      # binutils" apt-get step. We replaced that inline step with a hardened,
+      # de-duplicated composite action (.github/actions/install-binutils) to
+      # stop intermittent CI hangs, plus a timeout-minutes backstop. On a merge
+      # conflict here, KEEP our `uses:` + timeout-minutes; if upstream changed
+      # which apt packages get installed, port that into the action's package
+      # list rather than re-inlining their apt-get step.
       - name: Install binutils
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
+        uses: ./.github/actions/install-binutils
+        timeout-minutes: 26
 
       - name: Cache build tools
         uses: actions/cache@v5
@@ -208,10 +232,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # FORK: upstream owns this CI workflow and ships its own inline "Install
+      # binutils" apt-get step. We replaced that inline step with a hardened,
+      # de-duplicated composite action (.github/actions/install-binutils) to
+      # stop intermittent CI hangs, plus a timeout-minutes backstop. On a merge
+      # conflict here, KEEP our `uses:` + timeout-minutes; if upstream changed
+      # which apt packages get installed, port that into the action's package
+      # list rather than re-inlining their apt-get step.
       - name: Install binutils
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3
+        uses: ./.github/actions/install-binutils
+        timeout-minutes: 26
 
       - name: Cache build tools
         uses: actions/cache@v5
