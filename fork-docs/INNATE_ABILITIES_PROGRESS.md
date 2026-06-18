@@ -113,7 +113,7 @@
 | :white_check_mark: | Unaware | The Pokémon ignores the target's stat changes when attacking, and ignores the attacker's stat changes when being attacked. It cannot ignore changes to the Speed stat, however. |
 | :white_large_square: | Tinted Lens | The Pokémon can use "not very effective" moves to deal regular damage. |
 | :white_large_square: | Filter | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
-| :white_large_square: | Slow Start | For five turns, the Pokémon's Attack and Speed stats are halved. |
+| :x: | Slow Start | For five turns, the Pokémon's Attack and Speed stats are halved. |
 | :white_large_square: | Scrappy | The Pokémon can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate. |
 | :white_large_square: | Storm Drain | The Pokémon draws in all Water-type moves. Instead of taking damage from them, its Sp. Atk stat is boosted. |
 | :white_large_square: | Ice Body | The Pokémon has 1/16 of its max HP restored at the end of every turn in snow. |
@@ -130,7 +130,7 @@
 | :white_large_square: | Contrary | Reverses any stat changes affecting the Pokémon so that attempts to boost its stats instead lower them—and attempts to lower its stats will boost them. |
 | :white_large_square: | Unnerve | Makes opponents unable to eat Berries. |
 | :white_large_square: | Defiant | When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages. |
-| :white_large_square: | Defeatist | Halves the Pokémon's Attack and Sp. Atk stats when its HP drops to half or less. |
+| :x: | Defeatist | Halves the Pokémon's Attack and Sp. Atk stats when its HP drops to half or less. |
 | :white_large_square: | Cursed Body | When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns. |
 | :white_large_square: | Healer | The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn. |
 | :white_large_square: | Friend Guard | Reduces the damage allies take by 25%. |
