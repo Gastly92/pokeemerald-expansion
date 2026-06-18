@@ -3,7 +3,7 @@
 | Status | Ability | Description |
 | :---: | :---: | :--- |
 | :white_large_square: | Stench | When the Pokémon deals damage with its moves, there is a 10% chance that targets will flinch. |
-| :white_large_square: | Drizzle | Summons rain for 5 turns when the Pokémon enters a battle. |
+| :x: | Drizzle | Summons rain for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Speed Boost | Boosts the Pokémon's Speed stat by 1 stage at the end of every turn. |
 | :white_large_square: | Battle Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :white_check_mark: | Sturdy | If the Pokémon has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. The Pokémon is also immune to one-hit KO moves. |
@@ -46,7 +46,7 @@
 | :white_large_square: | Magnet Pull | Prevents Steel-type Pokémon from fleeing by pulling them in with magnetism. |
 | :white_large_square: | Soundproof | The Pokémon is immune to sound-based moves. |
 | :white_large_square: | Rain Dish | The Pokémon has 1/16 of its max HP restored at the end of every turn in rain. |
-| :white_large_square: | Sand Stream | Summons a sandstorm for 5 turns when the Pokémon enters a battle. |
+| :x: | Sand Stream | Summons a sandstorm for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Pressure | Causes opponents to expend 1 more PP when using moves against the Pokémon. |
 | :white_large_square: | Thick Fat | Halves the damage the Pokémon takes from Fire- and Ice-type moves. |
 | :white_large_square: | Early Bird | The Pokémon awakens from sleep twice as fast as other Pokémon. |
@@ -71,7 +71,7 @@
 | :white_large_square: | Torrent | Boosts the power of the Pokémon's Water-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_large_square: | Swarm | Boosts the power of the Pokémon's Bug-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_large_square: | Rock Head | The Pokémon will not lose HP due to recoil damage from its moves. |
-| :white_large_square: | Drought | Summons harsh sunlight for 5 turns when the Pokémon enters a battle. |
+| :x: | Drought | Summons harsh sunlight for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Arena Trap | Prevents opposing Pokémon from fleeing from battle. |
 | :white_large_square: | Vital Spirit | The Pokémon cannot become drowsy or be put to sleep. |
 | :white_large_square: | White Smoke | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
@@ -118,7 +118,7 @@
 | :white_large_square: | Storm Drain | The Pokémon draws in all Water-type moves. Instead of taking damage from them, its Sp. Atk stat is boosted. |
 | :white_large_square: | Ice Body | The Pokémon has 1/16 of its max HP restored at the end of every turn in snow. |
 | :white_large_square: | Solid Rock | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
-| :white_large_square: | Snow Warning | Summons snow for 5 turns when the Pokémon enters a battle. |
+| :x: | Snow Warning | Summons snow for 5 turns when the Pokémon enters a battle. |
 | :x: | Honey Gather | The Pokémon may gather Honey after a battle. |
 | :white_large_square: | Frisk | When the Pokémon enters a battle, it identifies opponents' held items. |
 | :white_large_square: | Reckless | Boosts the power of the Pokémon's moves by 20% if they have recoil or crash damage. |
@@ -227,10 +227,10 @@
 | :white_large_square: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |
 | :white_large_square: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
 | :x: | RKS System | Changes the Pokémon's type to match the memory disc it holds. |
-| :white_large_square: | Electric Surge | Turns the ground into Electric Terrain when the Pokémon enters a battle. |
-| :white_large_square: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |
-| :white_large_square: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
-| :white_large_square: | Grassy Surge | Turns the ground into Grassy Terrain when the Pokémon enters a battle. |
+| :x: | Electric Surge | Turns the ground into Electric Terrain when the Pokémon enters a battle. |
+| :x: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |
+| :x: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
+| :x: | Grassy Surge | Turns the ground into Grassy Terrain when the Pokémon enters a battle. |
 | :white_large_square: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
 | :white_large_square: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
 | :white_large_square: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
@@ -289,8 +289,8 @@
 | :white_large_square: | Sword of Ruin | The power of the Pokémon's ruinous sword lowers the Defense stats of all Pokémon except itself. |
 | :white_large_square: | Tablets of Ruin | The power of the Pokémon's ruinous wooden tablets lowers the Attack stats of all Pokémon except itself. |
 | :white_large_square: | Beads of Ruin | The power of the Pokémon's ruinous beads lowers the Sp. Def stats of all Pokémon except itself. |
-| :white_large_square: | Orichalcum Pulse | Turns the sunlight harsh when the Pokémon enters a battle. The ancient pulse thrumming through the Pokémon also boosts its Attack stat in harsh sunlight. |
-| :white_large_square: | Hadron Engine | Turns the ground into Electric Terrain when the Pokémon enters a battle. The futuristic engine within the Pokémon also boosts its Sp. Atk stat on Electric Terrain. |
+| :x: | Orichalcum Pulse | Turns the sunlight harsh when the Pokémon enters a battle. The ancient pulse thrumming through the Pokémon also boosts its Attack stat in harsh sunlight. |
+| :x: | Hadron Engine | Turns the ground into Electric Terrain when the Pokémon enters a battle. The futuristic engine within the Pokémon also boosts its Sp. Atk stat on Electric Terrain. |
 | :white_large_square: | Opportunist | When an opponent's stats are boosted, the Pokémon boosts its own stats in the exact same way. |
 | :white_large_square: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
 | :white_large_square: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
