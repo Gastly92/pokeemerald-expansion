@@ -55,7 +55,7 @@
 | :white_large_square: | Keen Eye | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :white_large_square: | Hyper Cutter | The Pokémon's Attack stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
-| :white_large_square: | Truant | Each time the Pokémon uses a move, it spends the next turn loafing around. |
+| :x: | Truant | Each time the Pokémon uses a move, it spends the next turn loafing around. |
 | :white_large_square: | Hustle | When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%. |
 | :white_large_square: | Cute Charm | When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if the attacker and the Pokémon are of opposite genders. |
 | :white_large_square: | Plus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
