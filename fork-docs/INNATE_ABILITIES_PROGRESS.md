@@ -56,7 +56,7 @@
 | :white_large_square: | Hyper Cutter | The Pokémon's Attack stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
 | :x: | Truant | Each time the Pokémon uses a move, it spends the next turn loafing around. |
-| :white_large_square: | Hustle | When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%. |
+| :x: | Hustle | When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%. |
 | :white_large_square: | Cute Charm | When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if the attacker and the Pokémon are of opposite genders. |
 | :x: | Plus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :x: | Minus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
@@ -80,14 +80,14 @@
 | :x: | Air Lock | Eliminates the effects of weather. |
 | :white_large_square: | Tangled Feet | Doubles the Pokémon's evasiveness if it is confused. |
 | :x: | Motor Drive | Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage. |
-| :white_large_square: | Rivalry | Boosts the power of the Pokémon's moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon's gender is unknown. |
+| :x: | Rivalry | Boosts the power of the Pokémon's moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon's gender is unknown. |
 | :white_large_square: | Steadfast | When the Pokémon flinches, its Speed stat is boosted by 1 stage. |
 | :white_large_square: | Snow Cloak | Boosts the Pokémon's evasiveness by 25% in snow. |
 | :white_large_square: | Gluttony | If the Pokémon is holding a Berry to be eaten when its HP drops to 1/4 or less of its max, it will instead eat the Berry when its HP drops to 1/2 or less of its max. |
 | :white_large_square: | Anger Point | Boosts the Pokémon's Attack stat to its sixth stage when the Pokémon takes a critical hit. |
 | :white_large_square: | Unburden | Doubles the Pokémon's Speed stat when its held item is consumed or lost. |
 | :white_large_square: | Heatproof | Halves the damage the Pokémon takes from Fire-type moves and from being burned. |
-| :white_large_square: | Simple | Doubles the Pokémon's stat changes. |
+| :x: | Simple | Doubles the Pokémon's stat changes. |
 | :x: | Dry Skin | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. However, the Pokémon takes 25% more damage from Fire-type moves. The Pokémon has 1/8 of its max HP restored at the end of every turn in rain, but it loses 1/8 of its max HP at the end of every turn in harsh sunlight. |
 | :white_large_square: | Download | The Pokémon compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat — whichever will be more effective. |
 | :white_large_square: | Iron Fist | Boosts the power of the Pokémon's punching moves by 20%. |
@@ -97,10 +97,10 @@
 | :white_large_square: | Hydration | Cures the Pokémon's status conditions at the end of every turn in rain. |
 | :x: | Solar Power | In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn. |
 | :white_large_square: | Quick Feet | When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon's Speed stat. |
-| :white_large_square: | Normalize | All the Pokémon's moves become Normal type. The power of those moves is boosted a little. |
+| :x: | Normalize | All the Pokémon's moves become Normal type. The power of those moves is boosted a little. |
 | :white_large_square: | Sniper | Boosts the power of the Pokémon's critical hits by 125% instead of 50%. |
 | :white_large_square: | Magic Guard | The Pokémon takes damage only from attacks. |
-| :white_large_square: | No Guard | The accuracy of moves used both by and against the Pokémon becomes 100%. |
+| :x: | No Guard | The accuracy of moves used both by and against the Pokémon becomes 100%. |
 | :x: | Stall | The Pokémon's moves go last among moves of the same priority. |
 | :white_large_square: | Technician | Boosts the power of the Pokémon's moves by 50% if their power is 60 or less. |
 | :white_large_square: | Leaf Guard | The Pokémon is immune to status conditions in harsh sunlight. |
@@ -126,8 +126,8 @@
 | :white_large_square: | Flower Gift | Boosts the Attack and Sp. Def stats of the Pokémon and its allies in harsh sunlight. |
 | :white_large_square: | Bad Dreams | Damages opposing Pokémon that are asleep. |
 | :white_large_square: | Pickpocket | When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item. |
-| :white_large_square: | Sheer Force | The Pokémon's moves lose their additional effects, but the power of those moves will be boosted by 30%. |
-| :white_large_square: | Contrary | Reverses any stat changes affecting the Pokémon so that attempts to boost its stats instead lower them—and attempts to lower its stats will boost them. |
+| :x: | Sheer Force | The Pokémon's moves lose their additional effects, but the power of those moves will be boosted by 30%. |
+| :x: | Contrary | Reverses any stat changes affecting the Pokémon so that attempts to boost its stats instead lower them—and attempts to lower its stats will boost them. |
 | :white_large_square: | Unnerve | Makes opponents unable to eat Berries. |
 | :white_large_square: | Defiant | When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages. |
 | :x: | Defeatist | Halves the Pokémon's Attack and Sp. Atk stats when its HP drops to half or less. |
@@ -256,7 +256,7 @@
 | :white_large_square: | Steely Spirit | Powers up the Steel-type moves of the Pokémon and its allies. |
 | :white_large_square: | Perish Body | When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle. |
 | :x: | Wandering Spirit | When the Pokémon is hit by a contact move, it swaps Abilities with the attacker. |
-| :white_large_square: | Gorilla Tactics | Boosts the Pokémon's Attack stat, but only allows the use of the first selected move. |
+| :x: | Gorilla Tactics | Boosts the Pokémon's Attack stat, but only allows the use of the first selected move. |
 | :x: | Neutralizing Gas | While the Pokémon is in the battle, the effects of all other Pokémon's Abilities will be nullified or will not be triggered. |
 | :white_large_square: | Pastel Veil | Prevents the Pokémon and its allies from being poisoned. |
 | :x: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
@@ -299,7 +299,7 @@
 | :white_large_square: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |
 | :white_large_square: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :x: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
-| :white_large_square: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
+| :x: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
 | :white_large_square: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |
 | :x: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Teal Mask to shine and the Pokémon's Speed stat to be boosted. |
