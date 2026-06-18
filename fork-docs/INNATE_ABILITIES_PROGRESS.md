@@ -175,7 +175,7 @@
 | :x: | Bulletproof | The Pokémon is immune to ball and bomb moves. |
 | :white_large_square: | Competitive | When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages. |
 | :white_large_square: | Strong Jaw | Boosts the power of the Pokémon's biting moves by 50%. |
-| :white_large_square: | Refrigerate | The Pokémon's Normal-type moves become Ice-type moves and their power is boosted by 20%. |
+| :x: | Refrigerate | The Pokémon's Normal-type moves become Ice-type moves and their power is boosted by 20%. |
 | :white_large_square: | Sweet Veil | The Pokémon and its allies cannot become drowsy or be put to sleep. |
 | :x: | Stance Change | The Pokémon changes into its Blade Forme when it attacks and changes into its Shield Forme when it uses the move King's Shield. |
 | :white_large_square: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
@@ -183,9 +183,9 @@
 | :white_large_square: | Grass Pelt | Boosts the Pokémon's Defense stat on Grassy Terrain. |
 | :white_large_square: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
 | :white_large_square: | Tough Claws | Boosts the power of the Pokémon's contact moves by 30%. |
-| :white_large_square: | Pixilate | The Pokémon's Normal-type moves become Fairy-type moves and their power is boosted by 20%. |
+| :x: | Pixilate | The Pokémon's Normal-type moves become Fairy-type moves and their power is boosted by 20%. |
 | :white_large_square: | Gooey | When the Pokémon is hit by a contact move, the attacker's Speed stat is lowered by 1 stage. |
-| :white_large_square: | Aerilate | The Pokémon's Normal-type moves become Flying-type moves and their power is boosted by 20%. |
+| :x: | Aerilate | The Pokémon's Normal-type moves become Flying-type moves and their power is boosted by 20%. |
 | :x: | Parental Bond | The parent and child attack one after the other. The power of the child's attacks is 1/4 of those of the parent. |
 | :x: | Dark Aura | Powers up the Dark-type moves of all Pokémon on the field. |
 | :x: | Fairy Aura | Boosts the power of the Fairy-type moves of all Pokémon on the field by 33%. |
@@ -205,9 +205,9 @@
 | :white_large_square: | Berserk | Boosts the Pokémon's Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max. |
 | :white_large_square: | Slush Rush | Doubles the Pokémon's Speed stat in snow. |
 | :white_large_square: | Long Reach | None of the moves used by the Pokémon are considered contact moves. |
-| :white_large_square: | Liquid Voice | The Pokémon's sound-based moves become Water-type moves. |
+| :x: | Liquid Voice | The Pokémon's sound-based moves become Water-type moves. |
 | :white_large_square: | Triage | Gives priority to the Pokémon's healing moves. |
-| :white_large_square: | Galvanize | Normal-type moves become Electric-type moves. The power of those moves is boosted a little. |
+| :x: | Galvanize | Normal-type moves become Electric-type moves. The power of those moves is boosted a little. |
 | :white_large_square: | Surge Surfer | Doubles the Pokémon's Speed stat on Electric Terrain. |
 | :x: | Schooling | When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low. |
 | :x: | Disguise | When the Pokémon is in its Disguised Form and would take damage from a move, it loses 1/8 of its max HP instead of taking the damage, then changes into its Busted Form. |
@@ -313,6 +313,6 @@
 | :x: | Teraform Zero | When Terapagos changes into its Stellar Form, it uses its hidden powers to eliminate all effects of weather and terrain, reducing them to zero. |
 | :x: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
 | :white_large_square: | Piercing Drill | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
-| :white_large_square: | Dragonize | The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%. |
+| :x: | Dragonize | The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%. |
 | :white_large_square: | Mega Sol | Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight. |
 | :white_large_square: | Spicy Spray | When the Pokémon takes damage from a move, it burns the attacker. |
