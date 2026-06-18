@@ -77,7 +77,7 @@
 | :white_large_square: | White Smoke | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pure Power | Doubles the power of the Pokémon's physical moves. |
 | :white_large_square: | Shell Armor | Attacks landed on the Pokémon will never be critical hits. |
-| :white_large_square: | Air Lock | Eliminates the effects of weather. |
+| :x: | Air Lock | Eliminates the effects of weather. |
 | :white_large_square: | Tangled Feet | Doubles the Pokémon's evasiveness if it is confused. |
 | :white_large_square: | Motor Drive | Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage. |
 | :white_large_square: | Rivalry | Boosts the power of the Pokémon's moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon's gender is unknown. |
