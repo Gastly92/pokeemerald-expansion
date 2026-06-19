@@ -174,713 +174,488 @@ static const enum Ability sInnateSwarm[] = { ABILITY_SWARM, ABILITY_NONE };
 
 static const struct SpeciesInnates sSpeciesInnates[] =
 {
-    { SPECIES_BULBASAUR, INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) }, // canon Overgrow
-    { SPECIES_IVYSAUR,   INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) },
-    { SPECIES_VENUSAUR,  INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) },
-    
-    // Gen 1
-    { SPECIES_GASTLY,            sInnateLevitate },
-    { SPECIES_HAUNTER,           sInnateLevitate },
-    { SPECIES_GENGAR,            sInnateLevitate }, // floats; primary is Cursed Body at GEN_LATEST, so observable
-    { SPECIES_GENGAR_GMAX,       sInnateLevitate }, // a Gigantamaxed Gengar still floats (NOT Gengar-Mega, which is grounded)
-    { SPECIES_KOFFING,           sInnateLevitate },
-    { SPECIES_WEEZING,           sInnateLevitate },
-    { SPECIES_WEEZING_GALAR,     sInnateLevitate }, // Misty Surge (HA) build floats AND reaps its terrain; Poison-type builds clear Toxic Spikes
-
-    // Gen 2
-    { SPECIES_MISDREAVUS,        sInnateLevitate },
-    { SPECIES_MISMAGIUS,         sInnateLevitate },
-    { SPECIES_UNOWN,             sInnateLevitate },
-    { SPECIES_UNOWN_B,           sInnateLevitate },
-    { SPECIES_UNOWN_C,           sInnateLevitate },
-    { SPECIES_UNOWN_D,           sInnateLevitate },
-    { SPECIES_UNOWN_E,           sInnateLevitate },
-    { SPECIES_UNOWN_F,           sInnateLevitate },
-    { SPECIES_UNOWN_G,           sInnateLevitate },
-    { SPECIES_UNOWN_H,           sInnateLevitate },
-    { SPECIES_UNOWN_I,           sInnateLevitate },
-    { SPECIES_UNOWN_J,           sInnateLevitate },
-    { SPECIES_UNOWN_K,           sInnateLevitate },
-    { SPECIES_UNOWN_L,           sInnateLevitate },
-    { SPECIES_UNOWN_M,           sInnateLevitate },
-    { SPECIES_UNOWN_N,           sInnateLevitate },
-    { SPECIES_UNOWN_O,           sInnateLevitate },
-    { SPECIES_UNOWN_P,           sInnateLevitate },
-    { SPECIES_UNOWN_Q,           sInnateLevitate },
-    { SPECIES_UNOWN_R,           sInnateLevitate },
-    { SPECIES_UNOWN_S,           sInnateLevitate },
-    { SPECIES_UNOWN_T,           sInnateLevitate },
-    { SPECIES_UNOWN_U,           sInnateLevitate },
-    { SPECIES_UNOWN_V,           sInnateLevitate },
-    { SPECIES_UNOWN_W,           sInnateLevitate },
-    { SPECIES_UNOWN_X,           sInnateLevitate },
-    { SPECIES_UNOWN_Y,           sInnateLevitate },
-    { SPECIES_UNOWN_Z,           sInnateLevitate },
-    { SPECIES_UNOWN_EXCLAMATION, sInnateLevitate },
-    { SPECIES_UNOWN_QUESTION,    sInnateLevitate },
-
-    // Gen 3
-    { SPECIES_VIBRAVA,           sInnateLevitate },
-    { SPECIES_FLYGON,            sInnateLevitate },
-    { SPECIES_LUNATONE,          sInnateLevitate },
-    { SPECIES_SOLROCK,           sInnateLevitate },
-    { SPECIES_BALTOY,            sInnateLevitate },
-    { SPECIES_CLAYDOL,           sInnateLevitate },
-    { SPECIES_DUSKULL,           sInnateLevitate },
-    { SPECIES_CHINGLING,         sInnateLevitate },
-    { SPECIES_CHIMECHO,          sInnateLevitate },
-    { SPECIES_CHIMECHO_MEGA,     sInnateLevitate },
-    { SPECIES_LATIAS,            sInnateLevitate },
-    { SPECIES_LATIAS_MEGA,       sInnateLevitate },
-    { SPECIES_LATIOS,            sInnateLevitate },
-    { SPECIES_LATIOS_MEGA,       sInnateLevitate },
-
-    // Gen 4
-    { SPECIES_BRONZOR,           sInnateLevitate },
-    { SPECIES_BRONZONG,          sInnateLevitate },
-    { SPECIES_CARNIVINE,         sInnateLevitate },
-    { SPECIES_ROTOM,             sInnateLevitate },
-    { SPECIES_ROTOM_HEAT,        sInnateLevitate },
-    { SPECIES_ROTOM_WASH,        sInnateLevitate },
-    { SPECIES_ROTOM_FROST,       sInnateLevitate },
-    { SPECIES_ROTOM_FAN,         sInnateLevitate },
-    { SPECIES_ROTOM_MOW,         sInnateLevitate },
-    { SPECIES_UXIE,              sInnateLevitate },
-    { SPECIES_MESPRIT,           sInnateLevitate },
-    { SPECIES_AZELF,             sInnateLevitate },
-    { SPECIES_GIRATINA_ORIGIN,   sInnateLevitate },
-    { SPECIES_CRESSELIA,         sInnateLevitate },
-
-    // Gen 5
-    { SPECIES_TYNAMO,            sInnateLevitate },
-    { SPECIES_EELEKTRIK,         sInnateLevitate },
-    { SPECIES_EELEKTROSS,        sInnateLevitate },
-    { SPECIES_EELEKTROSS_MEGA,   sInnateLevitate },
-    { SPECIES_CRYOGONAL,         sInnateLevitate },
-    { SPECIES_HYDREIGON,         sInnateLevitate },
-
-    // Gen 6
-    { SPECIES_DELPHOX_MEGA,      sInnateLevitate },
-
-    // Gen 7
-    { SPECIES_VIKAVOLT,          sInnateLevitate },
-    { SPECIES_VIKAVOLT_TOTEM,    sInnateLevitate },
-
-    // ───────────────────────────────────────────────────────────────────────────
-    // Flavor floaters: no native Levitate, hover/levitate by design (innate-only,
-    // observable). Base form constants (e.g. SPECIES_CASTFORM) are listed alongside
-    // their form constants so the lookup matches whichever value is queried.
-    // ───────────────────────────────────────────────────────────────────────────
-
-    // Gen 1
-    { SPECIES_MAGNEMITE,                INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // flavor Levitate (hovers) + canon Sturdy (slot 1)
-    { SPECIES_MAGNETON,                 INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // flavor Levitate + canon Sturdy
-    { SPECIES_MAGNEZONE,                INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // flavor Levitate + canon Sturdy
-    { SPECIES_MEW,                      sInnateLevitate },
-    { SPECIES_MEWTWO,                   sInnateLevitate },
-    { SPECIES_MEWTWO_MEGA_Y,            sInnateLevitate }, // Mega-X is a grounded bruiser, omitted
-    { SPECIES_PORYGON,                  sInnateLevitate },
-    { SPECIES_PORYGON2,                 sInnateLevitate },
-    { SPECIES_PORYGON_Z,                sInnateLevitate },
-
-    // Gen 2
-    { SPECIES_CELEBI,                   INNATES(ABILITY_LEVITATE, ABILITY_NATURAL_CURE) }, // floats + canon Natural Cure (its sole ability)
-
-    // Gen 3
-    { SPECIES_BANETTE,                  sInnateLevitate },
-    { SPECIES_BANETTE_MEGA,             sInnateLevitate },
-    { SPECIES_CASTFORM,                 sInnateLevitate },
-    { SPECIES_CASTFORM_NORMAL,          sInnateLevitate },
-    { SPECIES_CASTFORM_RAINY,           sInnateLevitate },
-    { SPECIES_CASTFORM_SNOWY,           sInnateLevitate },
-    { SPECIES_CASTFORM_SUNNY,           sInnateLevitate },
-    { SPECIES_DEOXYS,                   sInnateLevitate },
-    { SPECIES_DEOXYS_ATTACK,            sInnateLevitate },
-    { SPECIES_DEOXYS_DEFENSE,           sInnateLevitate },
-    { SPECIES_DEOXYS_NORMAL,            sInnateLevitate },
-    { SPECIES_DEOXYS_SPEED,             sInnateLevitate },
-    { SPECIES_DUSCLOPS,                 sInnateLevitate },
-    { SPECIES_FROSLASS,                 sInnateLevitate },
-    { SPECIES_FROSLASS_MEGA,            sInnateLevitate },
-    { SPECIES_GLALIE,                   sInnateLevitate },
-    { SPECIES_GLALIE_MEGA,              sInnateLevitate },
-    { SPECIES_JIRACHI,                  sInnateLevitate },
-    { SPECIES_SHEDINJA,                 sInnateLevitate },
-    { SPECIES_SHUPPET,                  sInnateLevitate },
-
-    // Gen 4
-    { SPECIES_DARKRAI,                  sInnateLevitate },
-    { SPECIES_DARKRAI_MEGA,             sInnateLevitate },
-    { SPECIES_GIRATINA_ALTERED,         sInnateLevitate }, // Origin form is already covered above
-
-    // Gen 5
-    { SPECIES_BEHEEYEM,                 sInnateLevitate },
-    { SPECIES_CHANDELURE,               sInnateLevitate },
-    { SPECIES_CHANDELURE_MEGA,          sInnateLevitate },
-    { SPECIES_COFAGRIGUS,               sInnateLevitate },
-    { SPECIES_COTTONEE,                 INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats (cotton) + canon Prankster (primary)
-    { SPECIES_DUOSION,                  sInnateLevitate },
-    { SPECIES_ELGYEM,                   sInnateLevitate },
-    { SPECIES_FRILLISH,                 sInnateLevitate },
-    { SPECIES_JELLICENT,                sInnateLevitate },
-    { SPECIES_KLANG,                    sInnateLevitate },
-    { SPECIES_KLINK,                    sInnateLevitate },
-    { SPECIES_KLINKLANG,                sInnateLevitate },
-    { SPECIES_LAMPENT,                  sInnateLevitate },
-    { SPECIES_LITWICK,                  sInnateLevitate },
-    { SPECIES_MUNNA,                    sInnateLevitate },
-    { SPECIES_MUSHARNA,                 sInnateLevitate },
-    { SPECIES_REUNICLUS,                sInnateLevitate },
-    { SPECIES_RUNERIGUS,                sInnateLevitate },
-    { SPECIES_SOLOSIS,                  sInnateLevitate },
-    { SPECIES_VANILLISH,                sInnateLevitate },
-    { SPECIES_VANILLITE,                sInnateLevitate },
-    { SPECIES_VANILLUXE,                sInnateLevitate },
-    { SPECIES_WHIMSICOTT,               INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats (cotton) + canon Prankster (primary)
-    { SPECIES_YAMASK,                   sInnateLevitate },
-    { SPECIES_YAMASK_GALAR,             sInnateLevitate },
-
-    // Gen 6
-    { SPECIES_AEGISLASH,                sInnateLevitate },
-    { SPECIES_AEGISLASH_BLADE,          sInnateLevitate },
-    { SPECIES_AEGISLASH_SHIELD,         sInnateLevitate },
-    { SPECIES_CARBINK,                  sInnateLevitate },
-    { SPECIES_DIANCIE,                  sInnateLevitate },
-    { SPECIES_DIANCIE_MEGA,             sInnateLevitate },
-    { SPECIES_DOUBLADE,                 sInnateLevitate },
-    { SPECIES_GOURGEIST,                sInnateLevitate },
-    { SPECIES_GOURGEIST_AVERAGE,        sInnateLevitate },
-    { SPECIES_GOURGEIST_LARGE,          sInnateLevitate },
-    { SPECIES_GOURGEIST_SMALL,          sInnateLevitate },
-    { SPECIES_GOURGEIST_SUPER,          sInnateLevitate },
-    { SPECIES_HONEDGE,                  sInnateLevitate },
-    { SPECIES_HOOPA,                    INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats + flavor Prankster (the "Mischief Pokémon," ring trickery)
-    { SPECIES_HOOPA_CONFINED,           INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats + flavor Prankster
-    { SPECIES_HOOPA_UNBOUND,            INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats + flavor Prankster
-    { SPECIES_INKAY,                    sInnateLevitate }, // Inkay floats; Malamar stands, so omitted
-    { SPECIES_KLEFKI,                   INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // floats (key ring) + canon Prankster (primary)
-    { SPECIES_PUMPKABOO,                sInnateLevitate },
-    { SPECIES_PUMPKABOO_AVERAGE,        sInnateLevitate },
-    { SPECIES_PUMPKABOO_LARGE,          sInnateLevitate },
-    { SPECIES_PUMPKABOO_SMALL,          sInnateLevitate },
-    { SPECIES_PUMPKABOO_SUPER,          sInnateLevitate },
-
-    // Gen 7
-    { SPECIES_BLACEPHALON,              sInnateLevitate },
-    { SPECIES_COMFEY,                   INNATES(ABILITY_LEVITATE, ABILITY_NATURAL_CURE) }, // floats (lei) + canon Natural Cure (HA)
-    { SPECIES_COSMOEM,                  sInnateLevitate },
-    { SPECIES_COSMOG,                   sInnateLevitate },
-    { SPECIES_DHELMISE,                 sInnateLevitate },
-    { SPECIES_KARTANA,                  sInnateLevitate },
-    { SPECIES_LUNALA,                   sInnateLevitate },
-    { SPECIES_MAGEARNA,                 sInnateLevitate },
-    { SPECIES_MAGEARNA_MEGA,            sInnateLevitate },
-    { SPECIES_MAGEARNA_ORIGINAL,        sInnateLevitate },
-    { SPECIES_MAGEARNA_ORIGINAL_MEGA,   sInnateLevitate },
-    { SPECIES_NECROZMA,                 sInnateLevitate },
-    { SPECIES_NECROZMA_DAWN_WINGS,      sInnateLevitate },
-    { SPECIES_NECROZMA_DUSK_MANE,       sInnateLevitate },
-    { SPECIES_NECROZMA_ULTRA,           sInnateLevitate },
-    { SPECIES_NIHILEGO,                 sInnateLevitate },
-    { SPECIES_POIPOLE,                  sInnateLevitate },
-    { SPECIES_TAPU_BULU,                sInnateLevitate }, // Grassy Surge: floats AND reaps its own terrain (innate Levitate is a pure boon)
-    { SPECIES_TAPU_FINI,                sInnateLevitate }, // Misty Surge
-    { SPECIES_TAPU_KOKO,                sInnateLevitate }, // Electric Surge
-    { SPECIES_TAPU_LELE,                sInnateLevitate }, // Psychic Surge
-    { SPECIES_XURKITREE,                sInnateLevitate },
-
-    // Gen 8
-    { SPECIES_DRAGAPULT,                sInnateLevitate },
-    { SPECIES_DRAKLOAK,                 sInnateLevitate },
-    { SPECIES_DREEPY,                   sInnateLevitate },
-    { SPECIES_POLTEAGEIST,              sInnateLevitate },
-    { SPECIES_POLTEAGEIST_ANTIQUE,      sInnateLevitate },
-    { SPECIES_POLTEAGEIST_PHONY,        sInnateLevitate },
-    { SPECIES_REGIELEKI,                sInnateLevitate },
-    { SPECIES_SINISTEA,                 sInnateLevitate },
-    { SPECIES_SINISTEA_ANTIQUE,         sInnateLevitate },
-    { SPECIES_SINISTEA_PHONY,           sInnateLevitate },
-
-    // Gen 9
-    { SPECIES_FLUTTER_MANE,             sInnateLevitate },
-    { SPECIES_GIMMIGHOUL_ROAMING,       sInnateLevitate }, // Chest form sits on the ground, omitted
-    { SPECIES_IRON_MOTH,                sInnateLevitate },
-    { SPECIES_MIRAIDON,                 sInnateLevitate }, // Hadron Engine: floats AND reaps its own Electric Terrain
-    { SPECIES_PECHARUNT,                sInnateLevitate },
-    { SPECIES_POLTCHAGEIST,             sInnateLevitate },
-    { SPECIES_POLTCHAGEIST_ARTISAN,     sInnateLevitate },
-    { SPECIES_POLTCHAGEIST_COUNTERFEIT, sInnateLevitate },
-    { SPECIES_SINISTCHA,                sInnateLevitate },
-    { SPECIES_SINISTCHA_MASTERPIECE,    sInnateLevitate },
-    { SPECIES_SINISTCHA_UNREMARKABLE,   sInnateLevitate },
-
-    // ───────────────────────────────────────────────────────────────────────────
-    // Innate Regenerator (heals 1/3 max HP on switch-out). Two groups:
-    //   1) Canon Regenerator users — the species that carry Regenerator in their
-    //      ability data (often as the Hidden Ability). Giving it as an innate lets
-    //      them keep the signature pivot heal no matter which slot the build picks.
-    //      Mega/regional forms of those lines are listed so the innate survives the
-    //      transformation mid-battle (the species constant changes on Mega Evolve).
-    //   2) Flavor regenerators — species strongly associated with regeneration that
-    //      lack the real ability: Staryu/Starmie (regrows from its core), the axolotl
-    //      Wooper lines (limb regrowth), and Zygarde (cells reassemble).
-    // ───────────────────────────────────────────────────────────────────────────
-
-    // Gen 1
-    { SPECIES_SLOWPOKE,                 sInnateRegenerator },
-    { SPECIES_SLOWBRO,                  sInnateRegenerator },
-    { SPECIES_SLOWBRO_MEGA,             sInnateRegenerator }, // canon Mega is Shell Armor; innate persists through the Mega
-    { SPECIES_SLOWKING,                 sInnateRegenerator },
-    { SPECIES_SLOWPOKE_GALAR,           sInnateRegenerator },
-    { SPECIES_SLOWBRO_GALAR,            sInnateRegenerator },
-    { SPECIES_SLOWKING_GALAR,           sInnateRegenerator },
-    { SPECIES_TANGELA,                  sInnateRegenerator },
-    { SPECIES_TANGROWTH,                sInnateRegenerator },
-    { SPECIES_STARYU,                   INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // flavor Regen (regrows from its core) + canon Natural Cure
-    { SPECIES_STARMIE,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // flavor Regen + canon Natural Cure
-
-    // Gen 2
-    { SPECIES_CORSOLA,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // canon Regen (HA) + canon Natural Cure
-    { SPECIES_HO_OH,                    sInnateRegenerator },
-    { SPECIES_WOOPER,                   INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen (axolotl limb regrowth) + canon Unaware (HA)
-    { SPECIES_QUAGSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen + canon Unaware (HA)
-
-    // Gen 5
-    { SPECIES_AUDINO,                   sInnateRegenerator },
-    { SPECIES_AUDINO_MEGA,              sInnateRegenerator }, // canon Mega is Healer; innate persists through the Mega
-    { SPECIES_SOLOSIS,                  sInnateRegenerator },
-    { SPECIES_DUOSION,                  sInnateRegenerator },
-    { SPECIES_REUNICLUS,                sInnateRegenerator },
-    { SPECIES_FOONGUS,                  sInnateRegenerator },
-    { SPECIES_AMOONGUSS,                sInnateRegenerator },
-    { SPECIES_ALOMOMOLA,                sInnateRegenerator },
-    { SPECIES_MIENFOO,                  sInnateRegenerator },
-    { SPECIES_MIENSHAO,                 sInnateRegenerator },
-    { SPECIES_TORNADUS_THERIAN,         sInnateRegenerator }, // only the Therian forme has Regenerator
-
-    // Gen 6
-    { SPECIES_ZYGARDE,                  sInnateRegenerator }, // flavor: a colony of cells that reassemble
-    { SPECIES_ZYGARDE_10,               sInnateRegenerator }, // flavor
-    { SPECIES_ZYGARDE_50,               sInnateRegenerator }, // flavor
-    { SPECIES_ZYGARDE_COMPLETE,         sInnateRegenerator }, // flavor
-
-    // Gen 7
-    { SPECIES_MAREANIE,                 sInnateRegenerator },
-    { SPECIES_TOXAPEX,                  sInnateRegenerator },
-
-    // Gen 8
-    { SPECIES_GOSSIFLEUR,               sInnateRegenerator },
-    { SPECIES_ELDEGOSS,                 sInnateRegenerator },
-    { SPECIES_HYDRAPPLE,                sInnateRegenerator },
-
-    // Gen 9
-    { SPECIES_KLAWF,                    sInnateRegenerator },
-    { SPECIES_CYCLIZAR,                 sInnateRegenerator },
-    { SPECIES_WOOPER_PALDEA,            INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen (Paldean axolotl) + canon Unaware (HA)
-    { SPECIES_CLODSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // flavor Regen + canon Unaware (HA)
-
-    // ───────────────────────────────────────────────────────────────────────────
-    // Innate Unaware (ignores the foe's stat-stage changes in the damage & accuracy
-    // calcs). Two groups:
-    //   1) Canon Unaware users — species that carry Unaware in their ability data
-    //      (often as the Hidden Ability). Giving it as an innate lets them keep the
-    //      signature stat-ignore no matter which slot the build picks. Mega forms are
-    //      listed so the innate survives the transformation mid-battle. (The Wooper,
-    //      Quagsire, Paldean Wooper and Clodsire lines are also canon Unaware users,
-    //      but they already carry innate Regenerator above, so they take the combined
-    //      combined INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) list there instead of being repeated here.
-    //      Cosmog is omitted: Unaware is already its sole ability, so an innate copy
-    //      would be redundant.)
-    //   2) Flavor picks — species too dull, dazed or asleep to register the foe's
-    //      buffs, lacking the real ability: Numel/Camerupt ("so dull-witted it doesn't
-    //      notice being hit"), the perpetually headache-dazed Psyduck line, the
-    //      ever-sleeping Komala, and the unbothered Snorlax line.
-    // ───────────────────────────────────────────────────────────────────────────
-
-    // Canon Unaware users
-    // Gen 1
-    { SPECIES_CLEFABLE,                 sInnateUnaware }, // Unaware is the HA
-    { SPECIES_CLEFABLE_MEGA,            sInnateUnaware }, // innate persists through the Mega
-
-    // Gen 4
-    { SPECIES_BIDOOF,                   sInnateUnaware },
-    { SPECIES_BIBAREL,                  sInnateUnaware },
-
-    // Gen 5
-    { SPECIES_WOOBAT,                   sInnateUnaware }, // Unaware is the primary ability
-    { SPECIES_SWOOBAT,                  sInnateUnaware },
-
-    // Gen 7
-    { SPECIES_PYUKUMUKU,                sInnateUnaware }, // Unaware is the HA
-
-    // Gen 9
-    { SPECIES_FUECOCO,                  INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) }, // Unaware is the HA, Blaze the primary
-    { SPECIES_CROCALOR,                 INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) },
-    { SPECIES_SKELEDIRGE,               INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) },
-    { SPECIES_DONDOZO,                  sInnateUnaware }, // Unaware is the primary ability
-
-    // Flavor Unaware (no native Unaware; too dull/dazed/asleep to notice the foe's buffs)
-    // Gen 1
-    { SPECIES_PSYDUCK,                  sInnateUnaware }, // perpetual headache leaves it dazed
-    { SPECIES_GOLDUCK,                  sInnateUnaware }, // flavor
-    { SPECIES_SNORLAX,                  sInnateUnaware }, // too busy eating/sleeping to be bothered
-    { SPECIES_SNORLAX_GMAX,             sInnateUnaware }, // flavor
-
-    // Gen 3
-    { SPECIES_NUMEL,                    sInnateUnaware }, // Pokédex: so dull-witted it doesn't notice being hit
-    { SPECIES_CAMERUPT,                 sInnateUnaware }, // flavor
-    { SPECIES_CAMERUPT_MEGA,            sInnateUnaware }, // flavor; innate persists through the Mega
-
-    // Gen 4
-    { SPECIES_MUNCHLAX,                 sInnateUnaware }, // flavor: only ever thinks about food
-
-    // Gen 7
-    { SPECIES_KOMALA,                   sInnateUnaware }, // sleeps its whole life, oblivious to its surroundings
-
-    // ───────────────────────────────────────────────────────────────────────────
-    // Innate Sturdy (endures a lethal hit at full HP + immune to OHKO moves). Two groups:
-    //   1) Canon Sturdy users — species that carry Sturdy in their ability data (often as
-    //      the primary). Giving it as an innate lets them keep the signature endure no
-    //      matter which slot the build picks. Mega/regional/Hisuian forms are listed so the
-    //      innate survives the transformation mid-battle (the species constant changes).
-    //      Species whose ONLY ability is Sturdy are omitted as redundant when unused by the frontier
-    //      roster (Cosmoem, Togedemaru-Totem); Ogerpon-Cornerstone is sole-Sturdy too but IS a frontier
-    //      set, so it is listed below with a chosen-ability override instead of omitted. The
-    //      Magnemite/Magneton/Magnezone line is
-    //      also a canon Sturdy user, but it already carries innate Levitate above, so it takes
-    //      the combined INNATES(ABILITY_LEVITATE, ABILITY_STURDY) list there instead of being repeated here.
-    //   2) Flavor pick — the Shellder/Cloyster line, whose shell "even a missile can't break,"
-    //      lacks the real ability but is the archetypal unbreakable body.
-    // ───────────────────────────────────────────────────────────────────────────
-
-    // Canon Sturdy users
-    // Gen 1
-    { SPECIES_GEODUDE,                  sInnateSturdy },
-    { SPECIES_GEODUDE_ALOLA,            sInnateSturdy },
-    { SPECIES_GRAVELER,                 sInnateSturdy },
-    { SPECIES_GRAVELER_ALOLA,           sInnateSturdy },
-    { SPECIES_GOLEM,                    sInnateSturdy },
-    { SPECIES_GOLEM_ALOLA,              sInnateSturdy },
-    { SPECIES_ONIX,                     sInnateSturdy },
-    { SPECIES_STEELIX,                  sInnateSturdy },
-    { SPECIES_STEELIX_MEGA,             sInnateSturdy }, // canon Mega is Sand Force; innate persists through the Mega
-
-    // Gen 2
-    { SPECIES_BONSLY,                   sInnateSturdy },
-    { SPECIES_SUDOWOODO,                sInnateSturdy },
-    { SPECIES_PINECO,                   sInnateSturdy },
-    { SPECIES_FORRETRESS,               sInnateSturdy },
-    { SPECIES_SHUCKLE,                  sInnateSturdy },
-    { SPECIES_SKARMORY,                 sInnateSturdy },
-    { SPECIES_SKARMORY_MEGA,            sInnateSturdy }, // innate persists through the Mega
-    { SPECIES_DONPHAN,                  sInnateSturdy },
-
-    // Gen 3
-    { SPECIES_NOSEPASS,                 sInnateSturdy },
-    { SPECIES_PROBOPASS,                sInnateSturdy },
-    { SPECIES_ARON,                     sInnateSturdy },
-    { SPECIES_LAIRON,                   sInnateSturdy },
-    { SPECIES_AGGRON,                   sInnateSturdy },
-    { SPECIES_AGGRON_MEGA,              sInnateSturdy }, // canon Mega is Filter; innate persists through the Mega
-    { SPECIES_RELICANTH,                sInnateSturdy },
-    { SPECIES_REGIROCK,                 sInnateSturdy },
-
-    // Gen 4
-    { SPECIES_SHIELDON,                 sInnateSturdy },
-    { SPECIES_BASTIODON,                sInnateSturdy },
-
-    // Gen 5
-    { SPECIES_ROGGENROLA,               sInnateSturdy },
-    { SPECIES_BOLDORE,                  sInnateSturdy },
-    { SPECIES_GIGALITH,                 sInnateSturdy },
-    { SPECIES_SAWK,                     sInnateSturdy },
-    { SPECIES_DWEBBLE,                  sInnateSturdy },
-    { SPECIES_CRUSTLE,                  sInnateSturdy },
-    { SPECIES_TIRTOUGA,                 sInnateSturdy },
-    { SPECIES_CARRACOSTA,               sInnateSturdy },
-
-    // Gen 6
-    { SPECIES_TYRUNT,                   sInnateSturdy },
-    { SPECIES_CARBINK,                  sInnateSturdy },
-    { SPECIES_BERGMITE,                 sInnateSturdy },
-    { SPECIES_AVALUGG,                  sInnateSturdy },
-    { SPECIES_AVALUGG_HISUI,            sInnateSturdy },
-
-    // Gen 7
-    { SPECIES_TOGEDEMARU,               sInnateSturdy }, // Totem form omitted (Sturdy is its sole ability — redundant)
-
-    // Gen 8
-    { SPECIES_ARCHALUDON,               sInnateSturdy },
-
-    // Gen 9
-    { SPECIES_NACLI,                    sInnateSturdy },
-    { SPECIES_NACLSTACK,                sInnateSturdy },
-    { SPECIES_GARGANACL,                sInnateSturdy },
-    // Sturdy is Cornerstone's SOLE ability, but it IS a frontier set — so rather than omit it as
-    // redundant, it takes the innate AND a fork-owned chosen Defiant (src/species_ability_overrides.c)
-    // so its frontier slot isn't wasted on the now-innate Sturdy. (The Tera form has Embody Aspect, not
-    // Sturdy, so it is not listed; Tera is disabled in this fork anyway.)
-    { SPECIES_OGERPON_CORNERSTONE,      sInnateSturdy },
-
-    // Flavor Sturdy (no native Sturdy; the archetypal unbreakable shell)
-    // Gen 1
-    { SPECIES_SHELLDER,                 sInnateSturdy }, // its shell "even a missile can't break"
-    { SPECIES_CLOYSTER,                 sInnateSturdy }, // "Its shell is harder than diamond"
-
-    // ───────────────────────────────────────────────────────────────────────────
-    // Innate Natural Cure (status conditions are cured silently on switch-out). Two groups:
-    //   1) Canon Natural Cure users — species that carry Natural Cure in their ability
-    //      data (often as the primary). Giving it as an innate lets them keep the
-    //      signature self-cleansing pivot no matter which slot the build picks. Only
-    //      forms whose ability data ALSO lists Natural Cure are included, so the innate
-    //      never appears on a form the canon ability wouldn't (Altaria-Mega is Pixilate,
-    //      Starmie-Mega is Huge Power, Shaymin-Sky is Serene Grace — all omitted). The
-    //      Staryu/Starmie line (already innate Regenerator) and Corsola (canon Regen HA)
-    //      take the combined INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) list above;
-    //      Celebi and Comfey (already innate Levitate) take INNATES(ABILITY_LEVITATE,
-    //      ABILITY_NATURAL_CURE) above — so none are repeated here.
-    //   2) Flavor picks — herbal/aromatic healers that lack the real ability: the Chikorita
-    //      line (its leaf/aroma "soothes and restores health") and Bellossom (whose dance is
-    //      said to heal and revitalize).
-    // ───────────────────────────────────────────────────────────────────────────
-
-    // Canon Natural Cure users
-    // Gen 1
-    { SPECIES_HAPPINY,                  sInnateNaturalCure },
-    { SPECIES_CHANSEY,                  sInnateNaturalCure },
-    { SPECIES_BLISSEY,                  sInnateNaturalCure },
-
-    // Gen 3
-    { SPECIES_BUDEW,                    sInnateNaturalCure },
-    { SPECIES_ROSELIA,                  sInnateNaturalCure },
-    { SPECIES_ROSERADE,                 sInnateNaturalCure },
-    { SPECIES_SWABLU,                   sInnateNaturalCure },
-    { SPECIES_ALTARIA,                  sInnateNaturalCure }, // Mega is Pixilate, so the innate is base-form only
-
-    // Gen 4
-    { SPECIES_SHAYMIN_LAND,             sInnateNaturalCure }, // Sky forme is Serene Grace (SPECIES_SHAYMIN aliases Land)
-
-    // Gen 6
-    { SPECIES_PHANTUMP,                 sInnateNaturalCure },
-    { SPECIES_TREVENANT,                sInnateNaturalCure },
-
-    // Gen 9
-    { SPECIES_PAWMI,                    sInnateNaturalCure }, // Natural Cure is the line's HA
-    { SPECIES_PAWMO,                    sInnateNaturalCure },
-    { SPECIES_PAWMOT,                   sInnateNaturalCure },
-
-    // Flavor Natural Cure (no native Natural Cure; herbal/aromatic self-restoration)
-    // Gen 2
-    { SPECIES_CHIKORITA,                INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) }, // flavor Natural Cure + canon Overgrow
-    { SPECIES_BAYLEEF,                  INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) },
-    { SPECIES_MEGANIUM,                 INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) },
-    { SPECIES_BELLOSSOM,                sInnateNaturalCure }, // its healing dance revitalizes the weary
-
-    // ───────────────────────────────────────────────────────────────────────────
-    // Innate Prankster (the holder's status moves get +1 priority). Two groups:
-    //   1) Canon Prankster users — the mischievous "trickster" lines that carry Prankster
-    //      in their ability data (often primary or HA). Giving it as an innate lets them
-    //      keep the signature priority no matter which slot the build picks. A form is
-    //      listed only when ITS ability data also carries Prankster: Banette/Sableye/
-    //      Meowstic Megas (Prankster -> a different Mega signature, or vanishes) and the
-    //      Therian formes (Tornadus-Therian = Regenerator, Thundurus-Therian = Volt Absorb)
-    //      are omitted, like the Natural Cure form rule; Grimmsnarl-Gmax keeps Prankster,
-    //      so it is listed. Cottonee/Whimsicott and Klefki are also innate-Levitate
-    //      floaters, so they take the combined INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER)
-    //      list above and are not repeated here.
-    //   2) Flavor picks — a tight mischief-themed set lacking the real ability: Hoopa (the
-    //      "Mischief Pokémon," ring trickery — combined with its innate Levitate above), the
-    //      Aipom line (playful, prank-pulling monkeys) and the Unovan Zorua line (illusion
-    //      tricksters that "delight in confusing"). Kept deliberately small and on-theme;
-    //      the vengeful Hisuian Zorua/Zoroark are excluded as a tonal mismatch. (Prankster's
-    //      +1 priority is potent, so the flavor set is narrower than, say, Levitate's.)
-    // ───────────────────────────────────────────────────────────────────────────
-
-    // Canon Prankster users
-    // Gen 2
-    { SPECIES_MURKROW,                  sInnatePrankster }, // Prankster is the HA (Honchkrow loses it, so it is not listed)
-
-    // Gen 3
-    { SPECIES_SABLEYE,                  sInnatePrankster }, // Prankster is the HA (Mega Sableye is Magic Bounce, omitted)
-    { SPECIES_VOLBEAT,                  INNATES(ABILITY_PRANKSTER, ABILITY_SWARM) }, // Prankster is the HA, Swarm the secondary
-    { SPECIES_ILLUMISE,                 sInnatePrankster }, // Prankster is the HA
-
-    // Gen 4
-    { SPECIES_RIOLU,                    sInnatePrankster }, // Prankster is the HA (Lucario loses it, so it is not listed)
-
-    // Gen 5
-    { SPECIES_PURRLOIN,                 sInnatePrankster }, // Prankster is the HA across the line
-    { SPECIES_LIEPARD,                  sInnatePrankster },
-    { SPECIES_TORNADUS_INCARNATE,       sInnatePrankster }, // Incarnate forme only (Therian is Regenerator)
-    { SPECIES_THUNDURUS_INCARNATE,      sInnatePrankster }, // Incarnate forme only (Therian is Volt Absorb)
-
-    // Gen 6
-    { SPECIES_MEOWSTIC_M,               sInnatePrankster }, // male Meowstic's HA (female is Competitive; Megas are Trace)
-
-    // Gen 8
-    { SPECIES_IMPIDIMP,                 sInnatePrankster }, // Prankster is the primary across the line
-    { SPECIES_MORGREM,                  sInnatePrankster },
-    { SPECIES_GRIMMSNARL,               sInnatePrankster },
-    { SPECIES_GRIMMSNARL_GMAX,          sInnatePrankster }, // Gmax keeps Prankster, so the innate survives the transformation
-
-    // Gen 9
-    { SPECIES_SHROODLE,                 sInnatePrankster }, // Prankster is the HA across the line
-    { SPECIES_GRAFAIAI,                 sInnatePrankster },
-
-    // Flavor Prankster (no native Prankster; mischievous tricksters)
-    // (Hoopa's three forms take INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) above.)
-    // Gen 2
-    { SPECIES_AIPOM,                    sInnatePrankster }, // playful, mischievous tail-pranking monkey
-    // Gen 4
-    { SPECIES_AMBIPOM,                  sInnatePrankster }, // nimble and just as mischievous as Aipom
-    // Gen 5
-    { SPECIES_ZORUA,                    sInnatePrankster }, // illusion trickster that "delights in confusing people" (Unovan; Hisuian is vengeful, omitted)
-    { SPECIES_ZOROARK,                  sInnatePrankster }, // master of illusions and deception (Unovan)
-
-    // ───────────────────────────────────────────────────────────────────────────
-    // Innate pinch abilities (Overgrow/Blaze/Torrent/Swarm): +50% to the matching
-    // type's moves once the holder is in "pinch" range. As innates these are a
-    // pure-boon DIVERGENCE: they LATCH — once the holder has reached <=1/3 HP this
-    // battle, the boost persists for the rest of the battle (reachedPinchHp), so a
-    // later heal (an innate Regenerator's switch-out heal, Leftovers, a Berry) can't
-    // strip it. A real/chosen pinch ability keeps the vanilla "must currently be
-    // <=1/3" behavior (its CalcAttackStat switch case is untouched), so the innate
-    // never double-applies on a starter running its real ability (the != ABILITY_X
-    // guard there). Canon-only — every species whose real ability data carries the
-    // pinch ability in any slot, so it survives whichever ability slot a build picks
-    // (e.g. a Chlorophyll Venusaur or Solar Power Charizard keeps its pinch boost);
-    // forms are listed only where the form's ability data still carries it (Megas
-    // become Thick Fat / Tough Claws / Drought / Mega Launcher, so they are omitted;
-    // Gigantamax and the Hisuian starters keep theirs). No flavor picks: the pinch
-    // boost is signature to these specific lines and has no natural flavor analog.
-    // (Bulbasaur/Ivysaur/Venusaur, the Chikorita line, the Fuecoco line and Volbeat
-    // already carry other innates above, so they take a combined INNATES(...) list
-    // there instead of being repeated here.)
-    // ───────────────────────────────────────────────────────────────────────────
-
-    // Overgrow (Grass starters)
-    { SPECIES_VENUSAUR_GMAX,            sInnateOvergrow },
-    { SPECIES_TREECKO,                  sInnateOvergrow },
-    { SPECIES_GROVYLE,                  sInnateOvergrow },
-    { SPECIES_SCEPTILE,                 sInnateOvergrow }, // Mega is Lightning Rod, omitted
-    { SPECIES_TURTWIG,                  sInnateOvergrow },
-    { SPECIES_GROTLE,                   sInnateOvergrow },
-    { SPECIES_TORTERRA,                 sInnateOvergrow },
-    { SPECIES_SNIVY,                    sInnateOvergrow },
-    { SPECIES_SERVINE,                  sInnateOvergrow },
-    { SPECIES_SERPERIOR,                sInnateOvergrow },
-    { SPECIES_PANSAGE,                  sInnateOvergrow }, // Overgrow is the HA
-    { SPECIES_SIMISAGE,                 sInnateOvergrow },
-    { SPECIES_CHESPIN,                  sInnateOvergrow },
-    { SPECIES_QUILLADIN,                sInnateOvergrow },
-    { SPECIES_CHESNAUGHT,               sInnateOvergrow },
-    { SPECIES_ROWLET,                   sInnateOvergrow },
-    { SPECIES_DARTRIX,                  sInnateOvergrow },
-    { SPECIES_DECIDUEYE,                sInnateOvergrow },
-    { SPECIES_DECIDUEYE_HISUI,          sInnateOvergrow },
-    { SPECIES_GROOKEY,                  sInnateOvergrow },
-    { SPECIES_THWACKEY,                 sInnateOvergrow },
-    { SPECIES_RILLABOOM,                sInnateOvergrow },
-    { SPECIES_RILLABOOM_GMAX,           sInnateOvergrow },
-    { SPECIES_SPRIGATITO,               sInnateOvergrow },
-    { SPECIES_FLORAGATO,                sInnateOvergrow },
-    { SPECIES_MEOWSCARADA,              sInnateOvergrow },
-
-    // Blaze (Fire starters)
-    { SPECIES_CHARMANDER,               sInnateBlaze },
-    { SPECIES_CHARMELEON,               sInnateBlaze },
-    { SPECIES_CHARIZARD,                sInnateBlaze }, // Mega-X is Tough Claws, Mega-Y is Drought; both omitted
-    { SPECIES_CHARIZARD_GMAX,           sInnateBlaze },
-    { SPECIES_CYNDAQUIL,                sInnateBlaze },
-    { SPECIES_QUILAVA,                  sInnateBlaze },
-    { SPECIES_TYPHLOSION,               sInnateBlaze },
-    { SPECIES_TYPHLOSION_HISUI,         sInnateBlaze },
-    { SPECIES_TORCHIC,                  sInnateBlaze },
-    { SPECIES_COMBUSKEN,                sInnateBlaze },
-    { SPECIES_BLAZIKEN,                 sInnateBlaze }, // Mega is Speed Boost, omitted
-    { SPECIES_CHIMCHAR,                 sInnateBlaze },
-    { SPECIES_MONFERNO,                 sInnateBlaze },
-    { SPECIES_INFERNAPE,                sInnateBlaze },
-    { SPECIES_TEPIG,                    sInnateBlaze },
-    { SPECIES_PIGNITE,                  sInnateBlaze },
-    { SPECIES_EMBOAR,                   sInnateBlaze },
-    { SPECIES_FENNEKIN,                 sInnateBlaze },
-    { SPECIES_BRAIXEN,                  sInnateBlaze },
-    { SPECIES_DELPHOX,                  sInnateBlaze },
-    { SPECIES_LITTEN,                   sInnateBlaze },
-    { SPECIES_TORRACAT,                 sInnateBlaze },
-    { SPECIES_INCINEROAR,               sInnateBlaze },
-    { SPECIES_SCORBUNNY,                sInnateBlaze },
-    { SPECIES_RABOOT,                   sInnateBlaze },
-    { SPECIES_CINDERACE,                sInnateBlaze },
-    { SPECIES_CINDERACE_GMAX,           sInnateBlaze },
-    { SPECIES_PANSEAR,                  sInnateBlaze }, // Blaze is the HA
-    { SPECIES_SIMISEAR,                 sInnateBlaze },
-
-    // Torrent (Water starters)
-    { SPECIES_SQUIRTLE,                 sInnateTorrent },
-    { SPECIES_WARTORTLE,                sInnateTorrent },
-    { SPECIES_BLASTOISE,                sInnateTorrent }, // Mega is Mega Launcher, omitted
-    { SPECIES_BLASTOISE_GMAX,           sInnateTorrent },
-    { SPECIES_TOTODILE,                 sInnateTorrent },
-    { SPECIES_CROCONAW,                 sInnateTorrent },
-    { SPECIES_FERALIGATR,               sInnateTorrent },
-    { SPECIES_MUDKIP,                   sInnateTorrent },
-    { SPECIES_MARSHTOMP,                sInnateTorrent },
-    { SPECIES_SWAMPERT,                 sInnateTorrent }, // Mega is Swift Swim, omitted
-    { SPECIES_PIPLUP,                   sInnateTorrent },
-    { SPECIES_PRINPLUP,                 sInnateTorrent },
-    { SPECIES_EMPOLEON,                 sInnateTorrent },
-    { SPECIES_OSHAWOTT,                 sInnateTorrent },
-    { SPECIES_DEWOTT,                   sInnateTorrent },
-    { SPECIES_SAMUROTT,                 sInnateTorrent },
-    { SPECIES_SAMUROTT_HISUI,           sInnateTorrent },
-    { SPECIES_FROAKIE,                  sInnateTorrent },
-    { SPECIES_FROGADIER,                sInnateTorrent },
-    { SPECIES_GRENINJA,                 sInnateTorrent }, // Battle Bond / Protean builds keep the Torrent boost
-    { SPECIES_POPPLIO,                  sInnateTorrent },
-    { SPECIES_BRIONNE,                  sInnateTorrent },
-    { SPECIES_PRIMARINA,                sInnateTorrent },
-    { SPECIES_SOBBLE,                   sInnateTorrent },
-    { SPECIES_DRIZZILE,                 sInnateTorrent },
-    { SPECIES_INTELEON,                 sInnateTorrent },
-    { SPECIES_INTELEON_GMAX,            sInnateTorrent },
-    { SPECIES_PANPOUR,                  sInnateTorrent }, // Torrent is the HA
-    { SPECIES_SIMIPOUR,                 sInnateTorrent },
-    { SPECIES_QUAXLY,                   sInnateTorrent },
-    { SPECIES_QUAXWELL,                 sInnateTorrent },
-    { SPECIES_QUAQUAVAL,                sInnateTorrent },
-
-    // Swarm (Bug users)
-    { SPECIES_BEEDRILL,                 sInnateSwarm }, // Mega is Adaptability, omitted
-    { SPECIES_SPINARAK,                 sInnateSwarm },
-    { SPECIES_ARIADOS,                  sInnateSwarm },
-    { SPECIES_LEDYBA,                   sInnateSwarm },
-    { SPECIES_LEDIAN,                   sInnateSwarm },
-    { SPECIES_SCYTHER,                  sInnateSwarm },
-    { SPECIES_SCIZOR,                   sInnateSwarm }, // Mega is Technician, omitted
-    { SPECIES_HERACROSS,                sInnateSwarm }, // Mega is Skill Link, omitted
-    { SPECIES_BEAUTIFLY,                sInnateSwarm },
-    { SPECIES_KRICKETUNE,               sInnateSwarm },
-    { SPECIES_VENIPEDE,                 sInnateSwarm },
-    { SPECIES_WHIRLIPEDE,               sInnateSwarm },
-    { SPECIES_SCOLIPEDE,                sInnateSwarm },
-    { SPECIES_SEWADDLE,                 sInnateSwarm },
-    { SPECIES_LEAVANNY,                 sInnateSwarm },
-    { SPECIES_KARRABLAST,               sInnateSwarm },
-    { SPECIES_ESCAVALIER,               sInnateSwarm },
-    { SPECIES_JOLTIK,                   sInnateSwarm },
-    { SPECIES_GALVANTULA,               sInnateSwarm },
-    { SPECIES_DURANT,                   sInnateSwarm },
-    { SPECIES_VOLCARONA,                sInnateSwarm },
-    { SPECIES_GRUBBIN,                  sInnateSwarm },
-    { SPECIES_NYMBLE,                   sInnateSwarm },
-    { SPECIES_LOKIX,                    sInnateSwarm },
-    { SPECIES_BLIPBUG,                  sInnateSwarm },
-    { SPECIES_DOTTLER,                  sInnateSwarm },
-    { SPECIES_ORBEETLE,                 sInnateSwarm },
-    { SPECIES_ORBEETLE_GMAX,            sInnateSwarm },
-    { SPECIES_KLEAVOR,                  sInnateSwarm },
+    // Sorted by National Pokédex number (shown in each row's trailing comment); formes share
+    // their base's number and follow it. A base-form constant (e.g. SPECIES_CASTFORM) is listed
+    // alongside its forme constants so the lookup matches whichever value is queried. Most rows use
+    // a shared single-innate array (sInnate*); a species with several innates uses INNATES(...).
+    // The per-ability rationale (canon vs flavor picks, included/omitted formes) is documented in
+    // the file header above; per-row notes record the species-specific reasoning.
+
+    // ----- Gen 1 -----
+    { SPECIES_BULBASAUR,                INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) }, // 1 canon Overgrow
+    { SPECIES_IVYSAUR,                  INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) }, // 2
+    { SPECIES_VENUSAUR,                 INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) }, // 3
+    { SPECIES_VENUSAUR_GMAX,            sInnateOvergrow }, // 3
+    { SPECIES_CHARMANDER,               sInnateBlaze }, // 4
+    { SPECIES_CHARMELEON,               sInnateBlaze }, // 5
+    { SPECIES_CHARIZARD,                sInnateBlaze }, // 6 Mega-X is Tough Claws, Mega-Y is Drought; both omitted
+    { SPECIES_CHARIZARD_GMAX,           sInnateBlaze }, // 6
+    { SPECIES_SQUIRTLE,                 sInnateTorrent }, // 7
+    { SPECIES_WARTORTLE,                sInnateTorrent }, // 8
+    { SPECIES_BLASTOISE,                sInnateTorrent }, // 9 Mega is Mega Launcher, omitted
+    { SPECIES_BLASTOISE_GMAX,           sInnateTorrent }, // 9
+    { SPECIES_BEEDRILL,                 sInnateSwarm }, // 15 Mega is Adaptability, omitted
+    { SPECIES_CLEFABLE,                 sInnateUnaware }, // 36 Unaware is the HA
+    { SPECIES_CLEFABLE_MEGA,            sInnateUnaware }, // 36 innate persists through the Mega
+    { SPECIES_PSYDUCK,                  sInnateUnaware }, // 54 perpetual headache leaves it dazed
+    { SPECIES_GOLDUCK,                  sInnateUnaware }, // 55 flavor
+    { SPECIES_GEODUDE,                  sInnateSturdy }, // 74
+    { SPECIES_GEODUDE_ALOLA,            sInnateSturdy }, // 74
+    { SPECIES_GRAVELER,                 sInnateSturdy }, // 75
+    { SPECIES_GRAVELER_ALOLA,           sInnateSturdy }, // 75
+    { SPECIES_GOLEM,                    sInnateSturdy }, // 76
+    { SPECIES_GOLEM_ALOLA,              sInnateSturdy }, // 76
+    { SPECIES_SLOWPOKE,                 sInnateRegenerator }, // 79
+    { SPECIES_SLOWPOKE_GALAR,           sInnateRegenerator }, // 79
+    { SPECIES_SLOWBRO,                  sInnateRegenerator }, // 80
+    { SPECIES_SLOWBRO_MEGA,             sInnateRegenerator }, // 80 canon Mega is Shell Armor; innate persists through the Mega
+    { SPECIES_SLOWBRO_GALAR,            sInnateRegenerator }, // 80
+    { SPECIES_MAGNEMITE,                INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // 81 flavor Levitate (hovers) + canon Sturdy (slot 1)
+    { SPECIES_MAGNETON,                 INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // 82 flavor Levitate + canon Sturdy
+    { SPECIES_SHELLDER,                 sInnateSturdy }, // 90 its shell "even a missile can't break"
+    { SPECIES_CLOYSTER,                 sInnateSturdy }, // 91 "Its shell is harder than diamond"
+    { SPECIES_GASTLY,                   sInnateLevitate }, // 92
+    { SPECIES_HAUNTER,                  sInnateLevitate }, // 93
+    { SPECIES_GENGAR,                   sInnateLevitate }, // 94 floats; primary is Cursed Body at GEN_LATEST, so observable
+    { SPECIES_GENGAR_GMAX,              sInnateLevitate }, // 94 a Gigantamaxed Gengar still floats (NOT Gengar-Mega, which is grounded)
+    { SPECIES_ONIX,                     sInnateSturdy }, // 95
+    { SPECIES_KOFFING,                  sInnateLevitate }, // 109
+    { SPECIES_WEEZING,                  sInnateLevitate }, // 110
+    { SPECIES_WEEZING_GALAR,            sInnateLevitate }, // 110 Misty Surge (HA) build floats AND reaps its terrain; Poison-type builds clear Toxic Spikes
+    { SPECIES_CHANSEY,                  sInnateNaturalCure }, // 113
+    { SPECIES_TANGELA,                  sInnateRegenerator }, // 114
+    { SPECIES_STARYU,                   INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // 120 flavor Regen (regrows from its core) + canon Natural Cure
+    { SPECIES_STARMIE,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // 121 flavor Regen + canon Natural Cure
+    { SPECIES_SCYTHER,                  sInnateSwarm }, // 123
+    { SPECIES_PORYGON,                  sInnateLevitate }, // 137
+    { SPECIES_SNORLAX,                  sInnateUnaware }, // 143 too busy eating/sleeping to be bothered
+    { SPECIES_SNORLAX_GMAX,             sInnateUnaware }, // 143 flavor
+    { SPECIES_MEWTWO,                   sInnateLevitate }, // 150
+    { SPECIES_MEWTWO_MEGA_Y,            sInnateLevitate }, // 150 Mega-X is a grounded bruiser, omitted
+    { SPECIES_MEW,                      sInnateLevitate }, // 151
+
+    // ----- Gen 2 -----
+    { SPECIES_CHIKORITA,                INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) }, // 152 flavor Natural Cure + canon Overgrow
+    { SPECIES_BAYLEEF,                  INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) }, // 153
+    { SPECIES_MEGANIUM,                 INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) }, // 154
+    { SPECIES_CYNDAQUIL,                sInnateBlaze }, // 155
+    { SPECIES_QUILAVA,                  sInnateBlaze }, // 156
+    { SPECIES_TYPHLOSION,               sInnateBlaze }, // 157
+    { SPECIES_TYPHLOSION_HISUI,         sInnateBlaze }, // 157
+    { SPECIES_TOTODILE,                 sInnateTorrent }, // 158
+    { SPECIES_CROCONAW,                 sInnateTorrent }, // 159
+    { SPECIES_FERALIGATR,               sInnateTorrent }, // 160
+    { SPECIES_LEDYBA,                   sInnateSwarm }, // 165
+    { SPECIES_LEDIAN,                   sInnateSwarm }, // 166
+    { SPECIES_SPINARAK,                 sInnateSwarm }, // 167
+    { SPECIES_ARIADOS,                  sInnateSwarm }, // 168
+    { SPECIES_BELLOSSOM,                sInnateNaturalCure }, // 182 its healing dance revitalizes the weary
+    { SPECIES_SUDOWOODO,                sInnateSturdy }, // 185
+    { SPECIES_AIPOM,                    sInnatePrankster }, // 190 playful, mischievous tail-pranking monkey
+    { SPECIES_WOOPER,                   INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // 194 flavor Regen (axolotl limb regrowth) + canon Unaware (HA)
+    { SPECIES_WOOPER_PALDEA,            INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // 194 flavor Regen (Paldean axolotl) + canon Unaware (HA)
+    { SPECIES_QUAGSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // 195 flavor Regen + canon Unaware (HA)
+    { SPECIES_MURKROW,                  sInnatePrankster }, // 198 Prankster is the HA (Honchkrow loses it, so it is not listed)
+    { SPECIES_SLOWKING,                 sInnateRegenerator }, // 199
+    { SPECIES_SLOWKING_GALAR,           sInnateRegenerator }, // 199
+    { SPECIES_MISDREAVUS,               sInnateLevitate }, // 200
+    { SPECIES_UNOWN,                    sInnateLevitate }, // 201
+    { SPECIES_UNOWN_B,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_C,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_D,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_E,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_F,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_G,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_H,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_I,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_J,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_K,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_L,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_M,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_N,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_O,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_P,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_Q,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_R,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_S,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_T,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_U,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_V,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_W,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_X,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_Y,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_Z,                  sInnateLevitate }, // 201
+    { SPECIES_UNOWN_EXCLAMATION,        sInnateLevitate }, // 201
+    { SPECIES_UNOWN_QUESTION,           sInnateLevitate }, // 201
+    { SPECIES_PINECO,                   sInnateSturdy }, // 204
+    { SPECIES_FORRETRESS,               sInnateSturdy }, // 205
+    { SPECIES_STEELIX,                  sInnateSturdy }, // 208
+    { SPECIES_STEELIX_MEGA,             sInnateSturdy }, // 208 canon Mega is Sand Force; innate persists through the Mega
+    { SPECIES_SCIZOR,                   sInnateSwarm }, // 212 Mega is Technician, omitted
+    { SPECIES_SHUCKLE,                  sInnateSturdy }, // 213
+    { SPECIES_HERACROSS,                sInnateSwarm }, // 214 Mega is Skill Link, omitted
+    { SPECIES_CORSOLA,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // 222 canon Regen (HA) + canon Natural Cure
+    { SPECIES_SKARMORY,                 sInnateSturdy }, // 227
+    { SPECIES_SKARMORY_MEGA,            sInnateSturdy }, // 227 innate persists through the Mega
+    { SPECIES_DONPHAN,                  sInnateSturdy }, // 232
+    { SPECIES_PORYGON2,                 sInnateLevitate }, // 233
+    { SPECIES_BLISSEY,                  sInnateNaturalCure }, // 242
+    { SPECIES_HO_OH,                    sInnateRegenerator }, // 250
+    { SPECIES_CELEBI,                   INNATES(ABILITY_LEVITATE, ABILITY_NATURAL_CURE) }, // 251 floats + canon Natural Cure (its sole ability)
+
+    // ----- Gen 3 -----
+    { SPECIES_TREECKO,                  sInnateOvergrow }, // 252
+    { SPECIES_GROVYLE,                  sInnateOvergrow }, // 253
+    { SPECIES_SCEPTILE,                 sInnateOvergrow }, // 254 Mega is Lightning Rod, omitted
+    { SPECIES_TORCHIC,                  sInnateBlaze }, // 255
+    { SPECIES_COMBUSKEN,                sInnateBlaze }, // 256
+    { SPECIES_BLAZIKEN,                 sInnateBlaze }, // 257 Mega is Speed Boost, omitted
+    { SPECIES_MUDKIP,                   sInnateTorrent }, // 258
+    { SPECIES_MARSHTOMP,                sInnateTorrent }, // 259
+    { SPECIES_SWAMPERT,                 sInnateTorrent }, // 260 Mega is Swift Swim, omitted
+    { SPECIES_BEAUTIFLY,                sInnateSwarm }, // 267
+    { SPECIES_SHEDINJA,                 sInnateLevitate }, // 292
+    { SPECIES_NOSEPASS,                 sInnateSturdy }, // 299
+    { SPECIES_SABLEYE,                  sInnatePrankster }, // 302 Prankster is the HA (Mega Sableye is Magic Bounce, omitted)
+    { SPECIES_ARON,                     sInnateSturdy }, // 304
+    { SPECIES_LAIRON,                   sInnateSturdy }, // 305
+    { SPECIES_AGGRON,                   sInnateSturdy }, // 306
+    { SPECIES_AGGRON_MEGA,              sInnateSturdy }, // 306 canon Mega is Filter; innate persists through the Mega
+    { SPECIES_VOLBEAT,                  INNATES(ABILITY_PRANKSTER, ABILITY_SWARM) }, // 313 Prankster is the HA, Swarm the secondary
+    { SPECIES_ILLUMISE,                 sInnatePrankster }, // 314 Prankster is the HA
+    { SPECIES_ROSELIA,                  sInnateNaturalCure }, // 315
+    { SPECIES_NUMEL,                    sInnateUnaware }, // 322 Pokédex: so dull-witted it doesn't notice being hit
+    { SPECIES_CAMERUPT,                 sInnateUnaware }, // 323 flavor
+    { SPECIES_CAMERUPT_MEGA,            sInnateUnaware }, // 323 flavor; innate persists through the Mega
+    { SPECIES_VIBRAVA,                  sInnateLevitate }, // 329
+    { SPECIES_FLYGON,                   sInnateLevitate }, // 330
+    { SPECIES_SWABLU,                   sInnateNaturalCure }, // 333
+    { SPECIES_ALTARIA,                  sInnateNaturalCure }, // 334 Mega is Pixilate, so the innate is base-form only
+    { SPECIES_LUNATONE,                 sInnateLevitate }, // 337
+    { SPECIES_SOLROCK,                  sInnateLevitate }, // 338
+    { SPECIES_BALTOY,                   sInnateLevitate }, // 343
+    { SPECIES_CLAYDOL,                  sInnateLevitate }, // 344
+    { SPECIES_CASTFORM,                 sInnateLevitate }, // 351
+    { SPECIES_CASTFORM_NORMAL,          sInnateLevitate }, // 351
+    { SPECIES_CASTFORM_SUNNY,           sInnateLevitate }, // 351
+    { SPECIES_CASTFORM_RAINY,           sInnateLevitate }, // 351
+    { SPECIES_CASTFORM_SNOWY,           sInnateLevitate }, // 351
+    { SPECIES_SHUPPET,                  sInnateLevitate }, // 353
+    { SPECIES_BANETTE,                  sInnateLevitate }, // 354
+    { SPECIES_BANETTE_MEGA,             sInnateLevitate }, // 354
+    { SPECIES_DUSKULL,                  sInnateLevitate }, // 355
+    { SPECIES_DUSCLOPS,                 sInnateLevitate }, // 356
+    { SPECIES_CHIMECHO,                 sInnateLevitate }, // 358
+    { SPECIES_CHIMECHO_MEGA,            sInnateLevitate }, // 358
+    { SPECIES_GLALIE,                   sInnateLevitate }, // 362
+    { SPECIES_GLALIE_MEGA,              sInnateLevitate }, // 362
+    { SPECIES_RELICANTH,                sInnateSturdy }, // 369
+    { SPECIES_REGIROCK,                 sInnateSturdy }, // 377
+    { SPECIES_LATIAS,                   sInnateLevitate }, // 380
+    { SPECIES_LATIAS_MEGA,              sInnateLevitate }, // 380
+    { SPECIES_LATIOS,                   sInnateLevitate }, // 381
+    { SPECIES_LATIOS_MEGA,              sInnateLevitate }, // 381
+    { SPECIES_JIRACHI,                  sInnateLevitate }, // 385
+    { SPECIES_DEOXYS,                   sInnateLevitate }, // 386
+    { SPECIES_DEOXYS_NORMAL,            sInnateLevitate }, // 386
+    { SPECIES_DEOXYS_ATTACK,            sInnateLevitate }, // 386
+    { SPECIES_DEOXYS_DEFENSE,           sInnateLevitate }, // 386
+    { SPECIES_DEOXYS_SPEED,             sInnateLevitate }, // 386
+
+    // ----- Gen 4 -----
+    { SPECIES_TURTWIG,                  sInnateOvergrow }, // 387
+    { SPECIES_GROTLE,                   sInnateOvergrow }, // 388
+    { SPECIES_TORTERRA,                 sInnateOvergrow }, // 389
+    { SPECIES_CHIMCHAR,                 sInnateBlaze }, // 390
+    { SPECIES_MONFERNO,                 sInnateBlaze }, // 391
+    { SPECIES_INFERNAPE,                sInnateBlaze }, // 392
+    { SPECIES_PIPLUP,                   sInnateTorrent }, // 393
+    { SPECIES_PRINPLUP,                 sInnateTorrent }, // 394
+    { SPECIES_EMPOLEON,                 sInnateTorrent }, // 395
+    { SPECIES_BIDOOF,                   sInnateUnaware }, // 399
+    { SPECIES_BIBAREL,                  sInnateUnaware }, // 400
+    { SPECIES_KRICKETUNE,               sInnateSwarm }, // 402
+    { SPECIES_BUDEW,                    sInnateNaturalCure }, // 406
+    { SPECIES_ROSERADE,                 sInnateNaturalCure }, // 407
+    { SPECIES_SHIELDON,                 sInnateSturdy }, // 410
+    { SPECIES_BASTIODON,                sInnateSturdy }, // 411
+    { SPECIES_AMBIPOM,                  sInnatePrankster }, // 424 nimble and just as mischievous as Aipom
+    { SPECIES_MISMAGIUS,                sInnateLevitate }, // 429
+    { SPECIES_CHINGLING,                sInnateLevitate }, // 433
+    { SPECIES_BRONZOR,                  sInnateLevitate }, // 436
+    { SPECIES_BRONZONG,                 sInnateLevitate }, // 437
+    { SPECIES_BONSLY,                   sInnateSturdy }, // 438
+    { SPECIES_HAPPINY,                  sInnateNaturalCure }, // 440
+    { SPECIES_MUNCHLAX,                 sInnateUnaware }, // 446 flavor: only ever thinks about food
+    { SPECIES_RIOLU,                    sInnatePrankster }, // 447 Prankster is the HA (Lucario loses it, so it is not listed)
+    { SPECIES_CARNIVINE,                sInnateLevitate }, // 455
+    { SPECIES_MAGNEZONE,                INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // 462 flavor Levitate + canon Sturdy
+    { SPECIES_TANGROWTH,                sInnateRegenerator }, // 465
+    { SPECIES_PORYGON_Z,                sInnateLevitate }, // 474
+    { SPECIES_PROBOPASS,                sInnateSturdy }, // 476
+    { SPECIES_FROSLASS,                 sInnateLevitate }, // 478
+    { SPECIES_FROSLASS_MEGA,            sInnateLevitate }, // 478
+    { SPECIES_ROTOM,                    sInnateLevitate }, // 479
+    { SPECIES_ROTOM_HEAT,               sInnateLevitate }, // 479
+    { SPECIES_ROTOM_WASH,               sInnateLevitate }, // 479
+    { SPECIES_ROTOM_FROST,              sInnateLevitate }, // 479
+    { SPECIES_ROTOM_FAN,                sInnateLevitate }, // 479
+    { SPECIES_ROTOM_MOW,                sInnateLevitate }, // 479
+    { SPECIES_UXIE,                     sInnateLevitate }, // 480
+    { SPECIES_MESPRIT,                  sInnateLevitate }, // 481
+    { SPECIES_AZELF,                    sInnateLevitate }, // 482
+    { SPECIES_GIRATINA_ALTERED,         sInnateLevitate }, // 487 Origin form is already covered above
+    { SPECIES_GIRATINA_ORIGIN,          sInnateLevitate }, // 487
+    { SPECIES_CRESSELIA,                sInnateLevitate }, // 488
+    { SPECIES_DARKRAI,                  sInnateLevitate }, // 491
+    { SPECIES_DARKRAI_MEGA,             sInnateLevitate }, // 491
+    { SPECIES_SHAYMIN_LAND,             sInnateNaturalCure }, // 492 Sky forme is Serene Grace (SPECIES_SHAYMIN aliases Land)
+
+    // ----- Gen 5 -----
+    { SPECIES_SNIVY,                    sInnateOvergrow }, // 495
+    { SPECIES_SERVINE,                  sInnateOvergrow }, // 496
+    { SPECIES_SERPERIOR,                sInnateOvergrow }, // 497
+    { SPECIES_TEPIG,                    sInnateBlaze }, // 498
+    { SPECIES_PIGNITE,                  sInnateBlaze }, // 499
+    { SPECIES_EMBOAR,                   sInnateBlaze }, // 500
+    { SPECIES_OSHAWOTT,                 sInnateTorrent }, // 501
+    { SPECIES_DEWOTT,                   sInnateTorrent }, // 502
+    { SPECIES_SAMUROTT,                 sInnateTorrent }, // 503
+    { SPECIES_SAMUROTT_HISUI,           sInnateTorrent }, // 503
+    { SPECIES_PURRLOIN,                 sInnatePrankster }, // 509 Prankster is the HA across the line
+    { SPECIES_LIEPARD,                  sInnatePrankster }, // 510
+    { SPECIES_PANSAGE,                  sInnateOvergrow }, // 511 Overgrow is the HA
+    { SPECIES_SIMISAGE,                 sInnateOvergrow }, // 512
+    { SPECIES_PANSEAR,                  sInnateBlaze }, // 513 Blaze is the HA
+    { SPECIES_SIMISEAR,                 sInnateBlaze }, // 514
+    { SPECIES_PANPOUR,                  sInnateTorrent }, // 515 Torrent is the HA
+    { SPECIES_SIMIPOUR,                 sInnateTorrent }, // 516
+    { SPECIES_MUNNA,                    sInnateLevitate }, // 517
+    { SPECIES_MUSHARNA,                 sInnateLevitate }, // 518
+    { SPECIES_ROGGENROLA,               sInnateSturdy }, // 524
+    { SPECIES_BOLDORE,                  sInnateSturdy }, // 525
+    { SPECIES_GIGALITH,                 sInnateSturdy }, // 526
+    { SPECIES_WOOBAT,                   sInnateUnaware }, // 527 Unaware is the primary ability
+    { SPECIES_SWOOBAT,                  sInnateUnaware }, // 528
+    { SPECIES_AUDINO,                   sInnateRegenerator }, // 531
+    { SPECIES_AUDINO_MEGA,              sInnateRegenerator }, // 531 canon Mega is Healer; innate persists through the Mega
+    { SPECIES_SAWK,                     sInnateSturdy }, // 539
+    { SPECIES_SEWADDLE,                 sInnateSwarm }, // 540
+    { SPECIES_LEAVANNY,                 sInnateSwarm }, // 542
+    { SPECIES_VENIPEDE,                 sInnateSwarm }, // 543
+    { SPECIES_WHIRLIPEDE,               sInnateSwarm }, // 544
+    { SPECIES_SCOLIPEDE,                sInnateSwarm }, // 545
+    { SPECIES_COTTONEE,                 INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // 546 floats (cotton) + canon Prankster (primary)
+    { SPECIES_WHIMSICOTT,               INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // 547 floats (cotton) + canon Prankster (primary)
+    { SPECIES_DWEBBLE,                  sInnateSturdy }, // 557
+    { SPECIES_CRUSTLE,                  sInnateSturdy }, // 558
+    { SPECIES_YAMASK,                   sInnateLevitate }, // 562
+    { SPECIES_YAMASK_GALAR,             sInnateLevitate }, // 562
+    { SPECIES_COFAGRIGUS,               sInnateLevitate }, // 563
+    { SPECIES_TIRTOUGA,                 sInnateSturdy }, // 564
+    { SPECIES_CARRACOSTA,               sInnateSturdy }, // 565
+    { SPECIES_ZORUA,                    sInnatePrankster }, // 570 illusion trickster that "delights in confusing people" (Unovan; Hisuian is vengeful, omitted)
+    { SPECIES_ZOROARK,                  sInnatePrankster }, // 571 master of illusions and deception (Unovan)
+    { SPECIES_SOLOSIS,                  INNATES(ABILITY_LEVITATE, ABILITY_REGENERATOR) }, // 577 floats + canon Regenerator
+    { SPECIES_DUOSION,                  INNATES(ABILITY_LEVITATE, ABILITY_REGENERATOR) }, // 578 floats + canon Regenerator
+    { SPECIES_REUNICLUS,                INNATES(ABILITY_LEVITATE, ABILITY_REGENERATOR) }, // 579 floats + canon Regenerator
+    { SPECIES_VANILLITE,                sInnateLevitate }, // 582
+    { SPECIES_VANILLISH,                sInnateLevitate }, // 583
+    { SPECIES_VANILLUXE,                sInnateLevitate }, // 584
+    { SPECIES_KARRABLAST,               sInnateSwarm }, // 588
+    { SPECIES_ESCAVALIER,               sInnateSwarm }, // 589
+    { SPECIES_FOONGUS,                  sInnateRegenerator }, // 590
+    { SPECIES_AMOONGUSS,                sInnateRegenerator }, // 591
+    { SPECIES_FRILLISH,                 sInnateLevitate }, // 592
+    { SPECIES_JELLICENT,                sInnateLevitate }, // 593
+    { SPECIES_ALOMOMOLA,                sInnateRegenerator }, // 594
+    { SPECIES_JOLTIK,                   sInnateSwarm }, // 595
+    { SPECIES_GALVANTULA,               sInnateSwarm }, // 596
+    { SPECIES_KLINK,                    sInnateLevitate }, // 599
+    { SPECIES_KLANG,                    sInnateLevitate }, // 600
+    { SPECIES_KLINKLANG,                sInnateLevitate }, // 601
+    { SPECIES_TYNAMO,                   sInnateLevitate }, // 602
+    { SPECIES_EELEKTRIK,                sInnateLevitate }, // 603
+    { SPECIES_EELEKTROSS,               sInnateLevitate }, // 604
+    { SPECIES_EELEKTROSS_MEGA,          sInnateLevitate }, // 604
+    { SPECIES_ELGYEM,                   sInnateLevitate }, // 605
+    { SPECIES_BEHEEYEM,                 sInnateLevitate }, // 606
+    { SPECIES_LITWICK,                  sInnateLevitate }, // 607
+    { SPECIES_LAMPENT,                  sInnateLevitate }, // 608
+    { SPECIES_CHANDELURE,               sInnateLevitate }, // 609
+    { SPECIES_CHANDELURE_MEGA,          sInnateLevitate }, // 609
+    { SPECIES_CRYOGONAL,                sInnateLevitate }, // 615
+    { SPECIES_MIENFOO,                  sInnateRegenerator }, // 619
+    { SPECIES_MIENSHAO,                 sInnateRegenerator }, // 620
+    { SPECIES_DURANT,                   sInnateSwarm }, // 632
+    { SPECIES_HYDREIGON,                sInnateLevitate }, // 635
+    { SPECIES_VOLCARONA,                sInnateSwarm }, // 637
+    { SPECIES_TORNADUS_INCARNATE,       sInnatePrankster }, // 641 Incarnate forme only (Therian is Regenerator)
+    { SPECIES_TORNADUS_THERIAN,         sInnateRegenerator }, // 641 only the Therian forme has Regenerator
+    { SPECIES_THUNDURUS_INCARNATE,      sInnatePrankster }, // 642 Incarnate forme only (Therian is Volt Absorb)
+
+    // ----- Gen 6 -----
+    { SPECIES_CHESPIN,                  sInnateOvergrow }, // 650
+    { SPECIES_QUILLADIN,                sInnateOvergrow }, // 651
+    { SPECIES_CHESNAUGHT,               sInnateOvergrow }, // 652
+    { SPECIES_FENNEKIN,                 sInnateBlaze }, // 653
+    { SPECIES_BRAIXEN,                  sInnateBlaze }, // 654
+    { SPECIES_DELPHOX,                  sInnateBlaze }, // 655
+    { SPECIES_DELPHOX_MEGA,             sInnateLevitate }, // 655
+    { SPECIES_FROAKIE,                  sInnateTorrent }, // 656
+    { SPECIES_FROGADIER,                sInnateTorrent }, // 657
+    { SPECIES_GRENINJA,                 sInnateTorrent }, // 658 Battle Bond / Protean builds keep the Torrent boost
+    { SPECIES_MEOWSTIC_M,               sInnatePrankster }, // 678 male Meowstic's HA (female is Competitive; Megas are Trace)
+    { SPECIES_HONEDGE,                  sInnateLevitate }, // 679
+    { SPECIES_DOUBLADE,                 sInnateLevitate }, // 680
+    { SPECIES_AEGISLASH,                sInnateLevitate }, // 681
+    { SPECIES_AEGISLASH_SHIELD,         sInnateLevitate }, // 681
+    { SPECIES_AEGISLASH_BLADE,          sInnateLevitate }, // 681
+    { SPECIES_INKAY,                    sInnateLevitate }, // 686 Inkay floats; Malamar stands, so omitted
+    { SPECIES_TYRUNT,                   sInnateSturdy }, // 696
+    { SPECIES_CARBINK,                  INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // 703 floats + canon Sturdy
+    { SPECIES_KLEFKI,                   INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // 707 floats (key ring) + canon Prankster (primary)
+    { SPECIES_PHANTUMP,                 sInnateNaturalCure }, // 708
+    { SPECIES_TREVENANT,                sInnateNaturalCure }, // 709
+    { SPECIES_PUMPKABOO,                sInnateLevitate }, // 710
+    { SPECIES_PUMPKABOO_AVERAGE,        sInnateLevitate }, // 710
+    { SPECIES_PUMPKABOO_SMALL,          sInnateLevitate }, // 710
+    { SPECIES_PUMPKABOO_LARGE,          sInnateLevitate }, // 710
+    { SPECIES_PUMPKABOO_SUPER,          sInnateLevitate }, // 710
+    { SPECIES_GOURGEIST,                sInnateLevitate }, // 711
+    { SPECIES_GOURGEIST_AVERAGE,        sInnateLevitate }, // 711
+    { SPECIES_GOURGEIST_SMALL,          sInnateLevitate }, // 711
+    { SPECIES_GOURGEIST_LARGE,          sInnateLevitate }, // 711
+    { SPECIES_GOURGEIST_SUPER,          sInnateLevitate }, // 711
+    { SPECIES_BERGMITE,                 sInnateSturdy }, // 712
+    { SPECIES_AVALUGG,                  sInnateSturdy }, // 713
+    { SPECIES_AVALUGG_HISUI,            sInnateSturdy }, // 713
+    { SPECIES_ZYGARDE,                  sInnateRegenerator }, // 718 flavor: a colony of cells that reassemble
+    { SPECIES_ZYGARDE_50,               sInnateRegenerator }, // 718 flavor
+    { SPECIES_ZYGARDE_10,               sInnateRegenerator }, // 718 flavor
+    { SPECIES_ZYGARDE_COMPLETE,         sInnateRegenerator }, // 718 flavor
+    { SPECIES_DIANCIE,                  sInnateLevitate }, // 719
+    { SPECIES_DIANCIE_MEGA,             sInnateLevitate }, // 719
+    { SPECIES_HOOPA,                    INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // 720 floats + flavor Prankster (the "Mischief Pokémon," ring trickery)
+    { SPECIES_HOOPA_CONFINED,           INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // 720 floats + flavor Prankster
+    { SPECIES_HOOPA_UNBOUND,            INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // 720 floats + flavor Prankster
+
+    // ----- Gen 7 -----
+    { SPECIES_ROWLET,                   sInnateOvergrow }, // 722
+    { SPECIES_DARTRIX,                  sInnateOvergrow }, // 723
+    { SPECIES_DECIDUEYE,                sInnateOvergrow }, // 724
+    { SPECIES_DECIDUEYE_HISUI,          sInnateOvergrow }, // 724
+    { SPECIES_LITTEN,                   sInnateBlaze }, // 725
+    { SPECIES_TORRACAT,                 sInnateBlaze }, // 726
+    { SPECIES_INCINEROAR,               sInnateBlaze }, // 727
+    { SPECIES_POPPLIO,                  sInnateTorrent }, // 728
+    { SPECIES_BRIONNE,                  sInnateTorrent }, // 729
+    { SPECIES_PRIMARINA,                sInnateTorrent }, // 730
+    { SPECIES_GRUBBIN,                  sInnateSwarm }, // 736
+    { SPECIES_VIKAVOLT,                 sInnateLevitate }, // 738
+    { SPECIES_VIKAVOLT_TOTEM,           sInnateLevitate }, // 738
+    { SPECIES_MAREANIE,                 sInnateRegenerator }, // 747
+    { SPECIES_TOXAPEX,                  sInnateRegenerator }, // 748
+    { SPECIES_COMFEY,                   INNATES(ABILITY_LEVITATE, ABILITY_NATURAL_CURE) }, // 764 floats (lei) + canon Natural Cure (HA)
+    { SPECIES_PYUKUMUKU,                sInnateUnaware }, // 771 Unaware is the HA
+    { SPECIES_KOMALA,                   sInnateUnaware }, // 775 sleeps its whole life, oblivious to its surroundings
+    { SPECIES_TOGEDEMARU,               sInnateSturdy }, // 777 Totem form omitted (Sturdy is its sole ability — redundant)
+    { SPECIES_DHELMISE,                 sInnateLevitate }, // 781
+    { SPECIES_TAPU_KOKO,                sInnateLevitate }, // 785 Electric Surge
+    { SPECIES_TAPU_LELE,                sInnateLevitate }, // 786 Psychic Surge
+    { SPECIES_TAPU_BULU,                sInnateLevitate }, // 787 Grassy Surge: floats AND reaps its own terrain (innate Levitate is a pure boon)
+    { SPECIES_TAPU_FINI,                sInnateLevitate }, // 788 Misty Surge
+    { SPECIES_COSMOG,                   sInnateLevitate }, // 789
+    { SPECIES_COSMOEM,                  sInnateLevitate }, // 790
+    { SPECIES_LUNALA,                   sInnateLevitate }, // 792
+    { SPECIES_NIHILEGO,                 sInnateLevitate }, // 793
+    { SPECIES_XURKITREE,                sInnateLevitate }, // 796
+    { SPECIES_KARTANA,                  sInnateLevitate }, // 798
+    { SPECIES_NECROZMA,                 sInnateLevitate }, // 800
+    { SPECIES_NECROZMA_DUSK_MANE,       sInnateLevitate }, // 800
+    { SPECIES_NECROZMA_DAWN_WINGS,      sInnateLevitate }, // 800
+    { SPECIES_NECROZMA_ULTRA,           sInnateLevitate }, // 800
+    { SPECIES_MAGEARNA,                 sInnateLevitate }, // 801
+    { SPECIES_MAGEARNA_ORIGINAL,        sInnateLevitate }, // 801
+    { SPECIES_MAGEARNA_MEGA,            sInnateLevitate }, // 801
+    { SPECIES_MAGEARNA_ORIGINAL_MEGA,   sInnateLevitate }, // 801
+    { SPECIES_POIPOLE,                  sInnateLevitate }, // 803
+    { SPECIES_BLACEPHALON,              sInnateLevitate }, // 806
+
+    // ----- Gen 8 -----
+    { SPECIES_GROOKEY,                  sInnateOvergrow }, // 810
+    { SPECIES_THWACKEY,                 sInnateOvergrow }, // 811
+    { SPECIES_RILLABOOM,                sInnateOvergrow }, // 812
+    { SPECIES_RILLABOOM_GMAX,           sInnateOvergrow }, // 812
+    { SPECIES_SCORBUNNY,                sInnateBlaze }, // 813
+    { SPECIES_RABOOT,                   sInnateBlaze }, // 814
+    { SPECIES_CINDERACE,                sInnateBlaze }, // 815
+    { SPECIES_CINDERACE_GMAX,           sInnateBlaze }, // 815
+    { SPECIES_SOBBLE,                   sInnateTorrent }, // 816
+    { SPECIES_DRIZZILE,                 sInnateTorrent }, // 817
+    { SPECIES_INTELEON,                 sInnateTorrent }, // 818
+    { SPECIES_INTELEON_GMAX,            sInnateTorrent }, // 818
+    { SPECIES_BLIPBUG,                  sInnateSwarm }, // 824
+    { SPECIES_DOTTLER,                  sInnateSwarm }, // 825
+    { SPECIES_ORBEETLE,                 sInnateSwarm }, // 826
+    { SPECIES_ORBEETLE_GMAX,            sInnateSwarm }, // 826
+    { SPECIES_GOSSIFLEUR,               sInnateRegenerator }, // 829
+    { SPECIES_ELDEGOSS,                 sInnateRegenerator }, // 830
+    { SPECIES_SINISTEA,                 sInnateLevitate }, // 854
+    { SPECIES_SINISTEA_PHONY,           sInnateLevitate }, // 854
+    { SPECIES_SINISTEA_ANTIQUE,         sInnateLevitate }, // 854
+    { SPECIES_POLTEAGEIST,              sInnateLevitate }, // 855
+    { SPECIES_POLTEAGEIST_PHONY,        sInnateLevitate }, // 855
+    { SPECIES_POLTEAGEIST_ANTIQUE,      sInnateLevitate }, // 855
+    { SPECIES_IMPIDIMP,                 sInnatePrankster }, // 859 Prankster is the primary across the line
+    { SPECIES_MORGREM,                  sInnatePrankster }, // 860
+    { SPECIES_GRIMMSNARL,               sInnatePrankster }, // 861
+    { SPECIES_GRIMMSNARL_GMAX,          sInnatePrankster }, // 861 Gmax keeps Prankster, so the innate survives the transformation
+    { SPECIES_RUNERIGUS,                sInnateLevitate }, // 867
+    { SPECIES_DREEPY,                   sInnateLevitate }, // 885
+    { SPECIES_DRAKLOAK,                 sInnateLevitate }, // 886
+    { SPECIES_DRAGAPULT,                sInnateLevitate }, // 887
+    { SPECIES_REGIELEKI,                sInnateLevitate }, // 894
+    { SPECIES_KLEAVOR,                  sInnateSwarm }, // 900
+
+    // ----- Gen 9 -----
+    { SPECIES_SPRIGATITO,               sInnateOvergrow }, // 906
+    { SPECIES_FLORAGATO,                sInnateOvergrow }, // 907
+    { SPECIES_MEOWSCARADA,              sInnateOvergrow }, // 908
+    { SPECIES_FUECOCO,                  INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) }, // 909 Unaware is the HA, Blaze the primary
+    { SPECIES_CROCALOR,                 INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) }, // 910
+    { SPECIES_SKELEDIRGE,               INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) }, // 911
+    { SPECIES_QUAXLY,                   sInnateTorrent }, // 912
+    { SPECIES_QUAXWELL,                 sInnateTorrent }, // 913
+    { SPECIES_QUAQUAVAL,                sInnateTorrent }, // 914
+    { SPECIES_NYMBLE,                   sInnateSwarm }, // 919
+    { SPECIES_LOKIX,                    sInnateSwarm }, // 920
+    { SPECIES_PAWMI,                    sInnateNaturalCure }, // 921 Natural Cure is the line's HA
+    { SPECIES_PAWMO,                    sInnateNaturalCure }, // 922
+    { SPECIES_PAWMOT,                   sInnateNaturalCure }, // 923
+    { SPECIES_NACLI,                    sInnateSturdy }, // 932
+    { SPECIES_NACLSTACK,                sInnateSturdy }, // 933
+    { SPECIES_GARGANACL,                sInnateSturdy }, // 934
+    { SPECIES_SHROODLE,                 sInnatePrankster }, // 944 Prankster is the HA across the line
+    { SPECIES_GRAFAIAI,                 sInnatePrankster }, // 945
+    { SPECIES_KLAWF,                    sInnateRegenerator }, // 950
+    { SPECIES_CYCLIZAR,                 sInnateRegenerator }, // 967
+    { SPECIES_DONDOZO,                  sInnateUnaware }, // 977 Unaware is the primary ability
+    { SPECIES_CLODSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // 980 flavor Regen + canon Unaware (HA)
+    { SPECIES_FLUTTER_MANE,             sInnateLevitate }, // 987
+    { SPECIES_IRON_MOTH,                sInnateLevitate }, // 994
+    { SPECIES_GIMMIGHOUL_ROAMING,       sInnateLevitate }, // 999 Chest form sits on the ground, omitted
+    { SPECIES_MIRAIDON,                 sInnateLevitate }, // 1008 Hadron Engine: floats AND reaps its own Electric Terrain
+    { SPECIES_POLTCHAGEIST,             sInnateLevitate }, // 1012
+    { SPECIES_POLTCHAGEIST_COUNTERFEIT, sInnateLevitate }, // 1012
+    { SPECIES_POLTCHAGEIST_ARTISAN,     sInnateLevitate }, // 1012
+    { SPECIES_SINISTCHA,                sInnateLevitate }, // 1013
+    { SPECIES_SINISTCHA_UNREMARKABLE,   sInnateLevitate }, // 1013
+    { SPECIES_SINISTCHA_MASTERPIECE,    sInnateLevitate }, // 1013
+    { SPECIES_OGERPON_CORNERSTONE,      sInnateSturdy }, // 1017
+    { SPECIES_ARCHALUDON,               sInnateSturdy }, // 1018
+    { SPECIES_HYDRAPPLE,                sInnateRegenerator }, // 1019
+    { SPECIES_PECHARUNT,                sInnateLevitate }, // 1025
 };
 
 static const enum Ability *GetSpeciesInnateList(u16 species)
