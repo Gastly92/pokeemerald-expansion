@@ -79,8 +79,9 @@ bool32 CanDynamax(enum BattlerId battler)
     if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE && !IsOnPlayerSide(battler))
         return FALSE;
 
-    // Check if Player has a Dynamax Band.
-    if (!TESTING && (GetBattlerPosition(battler) == B_POSITION_PLAYER_LEFT
+    // Check if Player has a Dynamax Band. With item-free gimmicks the player needs
+    // neither the Dynamax Band nor the B_FLAG_DYNAMAX_BATTLE flag.
+    if (!GetConfig(FEATURE_FREE_GIMMICKS) && !TESTING && (GetBattlerPosition(battler) == B_POSITION_PLAYER_LEFT
         || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && GetBattlerPosition(battler) == B_POSITION_PLAYER_RIGHT)))
     {
         if (!CheckBagHasItem(ITEM_DYNAMAX_BAND, 1))

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "config_changes.h"
 #include "fork/frontier_draft.h"
 #include "item.h"
 #include "random.h"
@@ -18,6 +19,12 @@ bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem)
 {
     enum HoldEffect newEffect = GetItemHoldEffect(newItem);
     u32 i;
+
+    // FORK: with item-free gimmicks the held Mega Stone / Z-Crystal no longer gates
+    // the gimmick (any mon may Mega/Z), so a team is no longer limited to one of
+    // each. Balance is maintained through the species tier map instead.
+    if (GetConfig(FEATURE_FREE_GIMMICKS))
+        return FALSE;
 
     if (newEffect != HOLD_EFFECT_MEGA_STONE && newEffect != HOLD_EFFECT_Z_CRYSTAL)
         return FALSE;

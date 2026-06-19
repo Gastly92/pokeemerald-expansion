@@ -16,21 +16,145 @@
 
 #include "data/gimmicks.h"
 
-// Populates gBattleStruct->gimmick.usableGimmick for each battler.
+// Populates gBattleStruct->gimmick.usableGimmick (the selected gimmick) and
+// gimmickCandidates (the full set of usable gimmicks) for each battler. When more
+// than one gimmick is usable, usableGimmick seeds to the highest-priority one
+// (the first that passes) and the player/AI may pick another from the set; with
+// only one usable gimmick this matches the historical "first usable" behavior.
 void AssignUsableGimmicks(void)
 {
     for (enum BattlerId battler = 0; battler < gBattlersCount; ++battler)
     {
-        gBattleStruct->gimmick.usableGimmick[battler] = GIMMICK_NONE;
-        for (enum Gimmick gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
+        u32 candidates = 0;
+        enum Gimmick selected = GIMMICK_NONE;
+
+        // FORK: a mon gets one gimmick per battle; once spent it offers none. (For
+        // Mega/Tera/Dynamax the active-gimmick form already blocks reuse, but a
+        // Z-Move leaves no form, so this is enforced via the per-mon record.)
+        if (!(GetConfig(FEATURE_FREE_GIMMICKS) && HasMonUsedGimmick(battler)))
         {
-            if (CanActivateGimmick(battler, gimmick))
+            for (enum Gimmick gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
             {
-                gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
-                break;
+                if (CanActivateGimmick(battler, gimmick))
+                {
+                    candidates |= 1u << gimmick;
+                    if (selected == GIMMICK_NONE)
+                        selected = gimmick;
+                }
             }
         }
+
+        gBattleStruct->gimmick.gimmickCandidates[battler] = candidates;
+        gBattleStruct->gimmick.usableGimmick[battler] = selected;
+
+        #if TESTING
+        // In battle tests there is no picker, so when several gimmicks are usable
+        // (item-free) honor the one the test fixed via the DSL rather than the
+        // default highest-priority pick, so the intended gimmick activates.
+        {
+            enum Gimmick chosen = TestRunner_Battle_GetChosenGimmick(GetBattlerTrainer(battler), gBattlerPartyIndexes[battler]);
+            // Ultra Burst and Z-Move are a coupled pair the DSL stores as one value
+            // (the last set wins, i.e. Z-Move): a mon ultra bursts first, then uses
+            // its Z-Move, so while Ultra Burst is still available it takes precedence.
+            if (chosen == GIMMICK_Z_MOVE && (candidates & (1u << GIMMICK_ULTRA_BURST)))
+                gBattleStruct->gimmick.usableGimmick[battler] = GIMMICK_ULTRA_BURST;
+            else if (chosen != GIMMICK_NONE && (candidates & (1u << chosen)))
+                gBattleStruct->gimmick.usableGimmick[battler] = chosen;
+        }
+        #endif
     }
+}
+
+// Returns the bitmask of gimmicks a battler may currently use.
+u32 GetGimmickCandidates(enum BattlerId battler)
+{
+    return gBattleStruct->gimmick.gimmickCandidates[battler];
+}
+
+// Returns the number of gimmicks a battler may currently choose between.
+u32 CountGimmickCandidates(enum BattlerId battler)
+{
+    u32 candidates = gBattleStruct->gimmick.gimmickCandidates[battler];
+    u32 count = 0;
+
+    while (candidates != 0)
+    {
+        candidates &= candidates - 1;
+        count++;
+    }
+    return count;
+}
+
+// Whether a battler may currently select a given gimmick from its candidate set.
+// Re-checks HasTrainerUsedGimmick so that, in doubles, a gimmick type a same-trainer
+// partner has already armed/used this battle drops out of the picker (the candidate
+// set itself is only recomputed at the start of each turn).
+static bool32 IsGimmickCandidateAvailable(enum BattlerId battler, enum Gimmick gimmick)
+{
+    return (gBattleStruct->gimmick.gimmickCandidates[battler] & (1u << gimmick))
+        && !HasTrainerUsedGimmick(battler, gimmick);
+}
+
+// Returns the lowest-index (highest-priority) gimmick a battler may use.
+static enum Gimmick FirstGimmickCandidate(enum BattlerId battler)
+{
+    enum Gimmick gimmick;
+
+    for (gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
+    {
+        if (IsGimmickCandidateAvailable(battler, gimmick))
+            return gimmick;
+    }
+    return GIMMICK_NONE;
+}
+
+// Advances the player's gimmick picker on a Start press. The rotation is:
+//   unarmed -> first candidate (armed) -> next candidate (armed) -> ... ->
+//   last candidate (armed) -> unarmed (showing the first candidate) -> ...
+// usableGimmick always holds a real candidate so the trigger sprite has an icon to
+// show; playerSelect tracks whether that gimmick is armed. Returns TRUE if anything
+// changed (i.e. the battler has at least one candidate).
+bool32 CycleGimmickSelection(enum BattlerId battler)
+{
+    enum Gimmick first = FirstGimmickCandidate(battler);
+    enum Gimmick gimmick;
+
+    if (first == GIMMICK_NONE)
+        return FALSE;
+
+    if (!gBattleStruct->gimmick.playerSelect)
+    {
+        // Unarmed -> arm the highest-priority candidate.
+        gBattleStruct->gimmick.usableGimmick[battler] = first;
+        gBattleStruct->gimmick.playerSelect = TRUE;
+        return TRUE;
+    }
+
+    // Armed -> advance to the next available candidate after the current selection.
+    for (gimmick = gBattleStruct->gimmick.usableGimmick[battler] + 1; gimmick < GIMMICKS_COUNT; ++gimmick)
+    {
+        if (IsGimmickCandidateAvailable(battler, gimmick))
+        {
+            gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
+            return TRUE;
+        }
+    }
+
+    // Past the last candidate -> unarm, resetting the display to the first one.
+    gBattleStruct->gimmick.playerSelect = FALSE;
+    gBattleStruct->gimmick.usableGimmick[battler] = first;
+    return TRUE;
+}
+
+// Rebuilds the trigger sprite so its icon matches the battler's currently selected
+// gimmick (each gimmick has its own sheet/palette sharing one tile tag, so the only
+// way to swap icons is to free and reload), then sets its armed/unarmed frame.
+void RefreshGimmickTriggerSprite(enum BattlerId battler)
+{
+    DestroyGimmickTriggerSprite();
+    CreateGimmickTriggerSprite(battler);
+    if (gBattleStruct->gimmick.triggerSpriteId != 0xFF)
+        ChangeGimmickTriggerSprite(gBattleStruct->gimmick.triggerSpriteId, gBattleStruct->gimmick.playerSelect);
 }
 
 // Returns whether a battler is able to use a gimmick. Checks consumption and gimmick specific functions.
@@ -77,6 +201,11 @@ bool32 ShouldTrainerBattlerUseGimmick(enum BattlerId battler, enum Gimmick gimmi
     // Check the trainer party data to see if a gimmick is intended.
     else
     {
+        // FORK: with item-free gimmicks, AI trainers may use any gimmick their mons
+        // are eligible for (Tera/Dynamax are no longer opt-in via party data), so
+        // every eligible mon can pick its best available gimmick.
+        if (GetConfig(FEATURE_FREE_GIMMICKS))
+            return TRUE;
         if (gimmick == GIMMICK_TERA && gBattleStruct->opponentMonCanTera & 1 << gBattlerPartyIndexes[battler])
             return TRUE;
         if (gimmick == GIMMICK_DYNAMAX && gBattleStruct->opponentMonCanDynamax & 1 << gBattlerPartyIndexes[battler])
@@ -107,6 +236,20 @@ void SetGimmickAsActivated(enum BattlerId battler, enum Gimmick gimmick)
     gBattleStruct->gimmick.activated[battler][gimmick] = TRUE;
     if (IsDoubleBattle() && (IsPartnerMonFromSameTrainer(battler) || (gimmick == GIMMICK_DYNAMAX)))
         gBattleStruct->gimmick.activated[BATTLE_PARTNER(battler)][gimmick] = TRUE;
+
+    // FORK: record that this specific mon has spent its one gimmick for the battle.
+    // Ultra Burst is excluded because it only enables Necrozma's Z-Move, which is the
+    // actual gimmick use that follows.
+    if (gimmick != GIMMICK_ULTRA_BURST)
+        gBattleStruct->gimmick.monGimmickUsed[GetBattlerTrainer(battler)][gBattlerPartyIndexes[battler]] = TRUE;
+}
+
+// FORK: whether a specific mon has already used a gimmick this battle (item-free
+// gimmicks enforce one gimmick per mon; unlike Mega/Tera/Dynamax, a Z-Move leaves no
+// active gimmick to detect, so this persistent per-mon record is needed).
+bool32 HasMonUsedGimmick(enum BattlerId battler)
+{
+    return gBattleStruct->gimmick.monGimmickUsed[GetBattlerTrainer(battler)][gBattlerPartyIndexes[battler]];
 }
 
 #define SINGLES_GIMMICK_TRIGGER_POS_X_OPTIMAL (30)

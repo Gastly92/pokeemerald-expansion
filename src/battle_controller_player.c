@@ -938,7 +938,17 @@ void HandleInputChooseMove(enum BattlerId battler)
     }
     else if (JOY_NEW(START_BUTTON))
     {
-        if (gBattleStruct->gimmick.usableGimmick[battler] != GIMMICK_NONE
+        if (GetConfig(FEATURE_FREE_GIMMICKS))
+        {
+            // Cycle the picker through every gimmick this mon can currently use.
+            if (CycleGimmickSelection(battler))
+            {
+                ReloadMoveNames(battler);
+                RefreshGimmickTriggerSprite(battler);
+                PlaySE(SE_SELECT);
+            }
+        }
+        else if (gBattleStruct->gimmick.usableGimmick[battler] != GIMMICK_NONE
             && !HasTrainerUsedGimmick(battler, gBattleStruct->gimmick.usableGimmick[battler])
             && !(gBattleStruct->gimmick.usableGimmick[battler] == GIMMICK_Z_MOVE
                  && GetUsableZMove(battler, moveInfo->moves[gMoveSelectionCursor[battler]]) == MOVE_NONE))
@@ -953,7 +963,13 @@ void HandleInputChooseMove(enum BattlerId battler)
 
 static void ReloadMoveNames(enum BattlerId battler)
 {
-    if (gBattleStruct->zmove.viable && !gBattleStruct->zmove.viewing)
+    // With the picker, the Z-Move preview shows only while Z-Move is the armed
+    // selection; otherwise it depends on the legacy single-gimmick viewing toggle.
+    bool32 showZMove = GetConfig(FEATURE_FREE_GIMMICKS)
+        ? (IsGimmickSelected(battler, GIMMICK_Z_MOVE) && gBattleStruct->zmove.viable)
+        : (gBattleStruct->zmove.viable && !gBattleStruct->zmove.viewing);
+
+    if (showZMove)
     {
         struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
         MoveSelectionDisplayZMove(GetUsableZMove(battler, moveInfo->moves[gMoveSelectionCursor[battler]]), battler);
