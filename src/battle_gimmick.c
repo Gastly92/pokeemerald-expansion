@@ -170,6 +170,11 @@ bool32 ShouldTrainerBattlerUseGimmick(enum BattlerId battler, enum Gimmick gimmi
     // Check the trainer party data to see if a gimmick is intended.
     else
     {
+        // FORK: with item-free gimmicks, AI trainers may use any gimmick their mons
+        // are eligible for (Tera/Dynamax are no longer opt-in via party data), so
+        // every eligible mon can pick its best available gimmick.
+        if (GetConfig(FEATURE_FREE_GIMMICKS))
+            return TRUE;
         if (gimmick == GIMMICK_TERA && gBattleStruct->opponentMonCanTera & 1 << gBattlerPartyIndexes[battler])
             return TRUE;
         if (gimmick == GIMMICK_DYNAMAX && gBattleStruct->opponentMonCanDynamax & 1 << gBattlerPartyIndexes[battler])
