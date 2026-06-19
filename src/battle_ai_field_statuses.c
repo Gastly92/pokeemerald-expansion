@@ -22,7 +22,8 @@
 #include "constants/moves.h"
 #include "constants/items.h"
 
-static bool32 DoesAbilityBenefitFromWeather(enum BattlerId battler, enum Ability ability, u32 weather);
+static bool32 DoesAbilityBenefitFromWeather(enum Ability ability, u32 weather);
+static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather); // FORK: FEATURE_INNATE_ABILITIES
 static bool32 DoesAbilityBenefitFromFieldStatus(enum Ability ability, u32 fieldStatus);
 // A move is light sensitive if it is boosted by Sunny Day and weakened by low light weathers.
 static bool32 IsLightSensitiveMove(enum Move move);
@@ -141,17 +142,21 @@ bool32 FieldStatusChecker(enum BattlerId battler, u32 fieldStatus, enum FieldEff
     return (result == desiredResult);
 }
 
-static bool32 DoesAbilityBenefitFromWeather(enum BattlerId battler, enum Ability ability, u32 weather)
+// FORK: FEATURE_INNATE_ABILITIES — innate-aware companion to DoesAbilityBenefitFromWeather (which
+// stays upstream-pristine). TRUE if the battler has an *active innate* weather speed-doubler that
+// benefits from `weather`, so the AI's weather-setting heuristics value setting it. ORed in at each
+// DoesAbilityBenefitFromWeather call site (kept additive so the upstream function/signature/call-arg
+// lists never diverge), mirroring this file's AI_IsInnateOnSide pattern. No-op when the feature is off.
+static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather)
 {
-    // FORK: credit an active innate weather speed-doubler (FEATURE_INNATE_ABILITIES) so the AI's
-    // weather-setting heuristics value setting the matching weather for an innate Swift Swim /
-    // Chlorophyll / Sand Rush / Slush Rush too.
-    if (((weather & B_WEATHER_RAIN)      && IsInnateActive(battler, ABILITY_SWIFT_SWIM))
-     || ((weather & B_WEATHER_SUN)       && IsInnateActive(battler, ABILITY_CHLOROPHYLL))
-     || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_RUSH))
-     || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SLUSH_RUSH)))
-        return TRUE;
+    return ((weather & B_WEATHER_RAIN)      && IsInnateActive(battler, ABILITY_SWIFT_SWIM))
+        || ((weather & B_WEATHER_SUN)       && IsInnateActive(battler, ABILITY_CHLOROPHYLL))
+        || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_RUSH))
+        || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SLUSH_RUSH));
+}
 
+static bool32 DoesAbilityBenefitFromWeather(enum Ability ability, u32 weather)
+{
     switch (ability)
     {
     case ABILITY_FORECAST:
@@ -250,7 +255,8 @@ static enum FieldEffectOutcome BenefitsFromSun(enum BattlerId battler)
             return FIELD_EFFECT_NEUTRAL;
     }
 
-    if (DoesAbilityBenefitFromWeather(battler, ability, B_WEATHER_SUN)
+    if (DoesAbilityBenefitFromWeather(ability, B_WEATHER_SUN)
+     || DoesInnateBenefitFromWeather(battler, B_WEATHER_SUN) // FORK: innate-aware
      || HasLightSensitiveMove(battler)
      || HasDamagingMoveOfType(battler, TYPE_FIRE)
      || HasMoveWithEffect(battler, EFFECT_WEATHER_BALL)
@@ -266,7 +272,8 @@ static enum FieldEffectOutcome BenefitsFromSun(enum BattlerId battler)
 // Sandstorm
 static enum FieldEffectOutcome BenefitsFromSandstorm(enum BattlerId battler)
 {
-    if (DoesAbilityBenefitFromWeather(battler, gAiLogicData->abilities[battler], B_WEATHER_SANDSTORM)
+    if (DoesAbilityBenefitFromWeather(gAiLogicData->abilities[battler], B_WEATHER_SANDSTORM)
+     || DoesInnateBenefitFromWeather(battler, B_WEATHER_SANDSTORM) // FORK: innate-aware
      || IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
      || HasMoveWithEffect(battler, EFFECT_WEATHER_BALL))
         return FIELD_EFFECT_POSITIVE;
@@ -275,7 +282,8 @@ static enum FieldEffectOutcome BenefitsFromSandstorm(enum BattlerId battler)
     {
         if (!IS_BATTLER_ANY_TYPE(LEFT_FOE(battler), TYPE_ROCK, TYPE_GROUND, TYPE_STEEL)
          && gAiLogicData->holdEffects[LEFT_FOE(battler)] != HOLD_EFFECT_SAFETY_GOGGLES
-         && !DoesAbilityBenefitFromWeather(LEFT_FOE(battler), gAiLogicData->abilities[LEFT_FOE(battler)], B_WEATHER_SANDSTORM))
+         && !DoesAbilityBenefitFromWeather(gAiLogicData->abilities[LEFT_FOE(battler)], B_WEATHER_SANDSTORM)
+         && !DoesInnateBenefitFromWeather(LEFT_FOE(battler), B_WEATHER_SANDSTORM)) // FORK: innate-aware
             return FIELD_EFFECT_POSITIVE;
         else
             return FIELD_EFFECT_NEUTRAL;
@@ -287,7 +295,8 @@ static enum FieldEffectOutcome BenefitsFromSandstorm(enum BattlerId battler)
 // Hail or Snow
 static enum FieldEffectOutcome BenefitsFromHailOrSnow(enum BattlerId battler, u32 weather)
 {
-    if (DoesAbilityBenefitFromWeather(battler, gAiLogicData->abilities[battler], weather)
+    if (DoesAbilityBenefitFromWeather(gAiLogicData->abilities[battler], weather)
+     || DoesInnateBenefitFromWeather(battler, weather) // FORK: innate-aware
      || IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
      || HasMoveWithEffect(battler, EFFECT_WEATHER_BALL)
      || HasMoveWithFlag(battler, MoveAlwaysHitsInHailSnow)
@@ -312,7 +321,8 @@ static enum FieldEffectOutcome BenefitsFromRain(enum BattlerId battler)
     if (gAiLogicData->holdEffects[battler] == HOLD_EFFECT_UTILITY_UMBRELLA)
         return FIELD_EFFECT_NEUTRAL;
 
-    if (DoesAbilityBenefitFromWeather(battler, gAiLogicData->abilities[battler], B_WEATHER_RAIN)
+    if (DoesAbilityBenefitFromWeather(gAiLogicData->abilities[battler], B_WEATHER_RAIN)
+      || DoesInnateBenefitFromWeather(battler, B_WEATHER_RAIN) // FORK: innate-aware
       || HasMoveWithFlag(battler, MoveAlwaysHitsInRain)
       || HasDamagingMoveOfType(battler, TYPE_WATER)
       || HasMoveWithEffect(battler, EFFECT_WEATHER_BALL)
