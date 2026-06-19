@@ -29,7 +29,9 @@
 // reached — see the ALLOWLIST note in src/fork/innate_abilities.c), and the weather speed-doublers
 // SWIFT_SWIM / CHLOROPHYLL / SAND_RUSH / SLUSH_RUSH (x2 Speed in rain / sun / sandstorm / snow, handled
 // at the GetBattlerTotalSpeedStat calc site in src/battle_main.c; Sand Rush also shrugs off sandstorm
-// damage, mirrored in src/battle_end_turn.c and the AI's sandstorm-damage predictors).
+// damage, mirrored in src/battle_end_turn.c and the AI's sandstorm-damage predictors), and FILTER
+// (reduces supereffective damage taken by 25%, handled at the GetDefenderAbilitiesModifier calc site
+// in src/battle_util.c — a clean-upside 1:1 copy like Sturdy).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

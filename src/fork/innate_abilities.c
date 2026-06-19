@@ -169,6 +169,23 @@
 //     Beartic carries BOTH Swift Swim (primary) and Slush Rush (HA), so it takes the combined pair. Many
 //     species already carry other innates (the Bulbasaur/Tangela/Bellossom/Cottonee/Psyduck/Relicanth/...
 //     lines), so they take a combined INNATES(...) list with the speed-doubler added.
+//   - ABILITY_FILTER — reduces the damage the holder takes from supereffective moves by 25%, handled
+//     at the single defensive calc site GetDefenderAbilitiesModifier (src/battle_util.c): an
+//     IsInnateActive() clause beside the chosen-ability Filter / Solid Rock / Prism Armor switch case
+//     applies the 0.75 modifier (guarded against those three so it never double-applies, and stacking
+//     correctly with any other defender-ability modifier). A pure calc-modifier passive like Unaware:
+//     no script / pop-up / driver, and the innate is NOT recorded as identity. NO pure-boon divergence:
+//     Filter is a clean upside that never hurts its holder, so the innate is a 1:1 copy of the real
+//     ability. Suppression parity holds via IsInnateActive(): Filter is breakable, so an attacker's Mold
+//     Breaker pierces an innate Filter exactly as it would the real ability. AI is correct for FREE: the
+//     reduction lives in the shared damage calc the AI runs keyed off the real battler (like Unaware's
+//     stat-ignore), so the AI both threatens and respects an innate Filter on-field; the off-field
+//     switch-in damage prediction is left unwired (the Unaware scope call — a 25% reduction is not a
+//     KO-flipping immunity like Levitate/Sturdy). Canon-only (no flavor picks — the Filter theme is hard
+//     to attribute beyond its real users): every species whose ability data carries Filter in any slot
+//     (Mr. Mime and Mime Jr.'s slot-1 Filter, Revavroom's HA, Mega Aggron whose Mega ability data is
+//     Filter), so the signature survives whichever slot a build picks. Mega Aggron already carries innate
+//     Sturdy (persisting from base Aggron), so it takes the combined INNATES(STURDY, FILTER) list.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -193,6 +210,7 @@ static const enum Ability sInnateSwiftSwim[] = { ABILITY_SWIFT_SWIM, ABILITY_NON
 static const enum Ability sInnateChlorophyll[] = { ABILITY_CHLOROPHYLL, ABILITY_NONE };
 static const enum Ability sInnateSandRush[] = { ABILITY_SAND_RUSH, ABILITY_NONE };
 static const enum Ability sInnateSlushRush[] = { ABILITY_SLUSH_RUSH, ABILITY_NONE };
+static const enum Ability sInnateFilter[] = { ABILITY_FILTER, ABILITY_NONE };
 
 // A species with SEVERAL innates lists them inline at its row with INNATES(...) instead of needing a
 // named combination array per pairing (which doesn't scale as the allowlist grows). The compound
@@ -271,6 +289,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_SEAKING,                  sInnateSwiftSwim }, // 119
     { SPECIES_STARYU,                   INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // 120 flavor Regen (regrows from its core) + canon Natural Cure
     { SPECIES_STARMIE,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // 121 flavor Regen + canon Natural Cure
+    { SPECIES_MR_MIME,                  sInnateFilter }, // 122 Filter is the secondary ability (Kanto form; Galarian Mr. Mime lacks it)
     { SPECIES_SCYTHER,                  sInnateSwarm }, // 123
     { SPECIES_MAGIKARP,                 sInnateSwiftSwim }, // 129 Swift Swim is the primary
     { SPECIES_PORYGON,                  sInnateLevitate }, // 137
@@ -387,7 +406,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_ARON,                     sInnateSturdy }, // 304
     { SPECIES_LAIRON,                   sInnateSturdy }, // 305
     { SPECIES_AGGRON,                   sInnateSturdy }, // 306
-    { SPECIES_AGGRON_MEGA,              sInnateSturdy }, // 306 canon Mega is Filter; innate persists through the Mega
+    { SPECIES_AGGRON_MEGA,              INNATES(ABILITY_STURDY, ABILITY_FILTER) }, // 306 innate Sturdy persists from base; Mega's ability data is Filter (canon)
     { SPECIES_VOLBEAT,                  INNATES(ABILITY_PRANKSTER, ABILITY_SWARM) }, // 313 Prankster is the HA, Swarm the secondary
     { SPECIES_ILLUMISE,                 sInnatePrankster }, // 314 Prankster is the HA
     { SPECIES_ROSELIA,                  sInnateNaturalCure }, // 315
@@ -462,6 +481,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_BRONZOR,                  sInnateLevitate }, // 436
     { SPECIES_BRONZONG,                 sInnateLevitate }, // 437
     { SPECIES_BONSLY,                   sInnateSturdy }, // 438
+    { SPECIES_MIME_JR,                  sInnateFilter }, // 439 Filter is the secondary ability
     { SPECIES_HAPPINY,                  sInnateNaturalCure }, // 440
     { SPECIES_MUNCHLAX,                 sInnateUnaware }, // 446 flavor: only ever thinks about food
     { SPECIES_RIOLU,                    sInnatePrankster }, // 447 Prankster is the HA (Lucario loses it, so it is not listed)
@@ -757,6 +777,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_KLAWF,                    sInnateRegenerator }, // 950
     { SPECIES_CAPSAKID,                 sInnateChlorophyll }, // 951 Chlorophyll is the primary
     { SPECIES_SCOVILLAIN,               sInnateChlorophyll }, // 952
+    { SPECIES_REVAVROOM,                sInnateFilter }, // 965 Filter is the HA
     { SPECIES_CYCLIZAR,                 sInnateRegenerator }, // 967
     { SPECIES_HOUNDSTONE,               sInnateSandRush }, // 972 Sand Rush is the primary
     { SPECIES_CETITAN,                  sInnateSlushRush }, // 975 Slush Rush is the secondary
