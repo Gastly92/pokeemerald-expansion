@@ -2106,6 +2106,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
         .ball = BALL_POKE,
     },
+    {
+        .species = SPECIES_JOLTEON,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK, // outspeeds almost everything; its first Thunderbolt (no innate flinch) flinches via King's Rock, stealing a turn
+        .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_SHADOW_BALL, MOVE_ALLURING_VOICE},
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE_TIMID,
+        .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
+        .teraType = TYPE_ELECTRIC,
+        .ball = BALL_POKE,
+    },
 
     // ---- Aerodactyl ----
     {
@@ -2125,6 +2136,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_FOCUS_BAND, // suicide lead
         .moves = {MOVE_STEALTH_ROCK, MOVE_TAUNT, MOVE_ROCK_SLIDE, MOVE_EARTHQUAKE},
         .ability = ABILITY_UNNERVE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ROCK,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_AERODACTYL,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK, // fast lead, no flinching move in the set: King's Rock supplies the turn-1 flinch
+        .moves = {MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_DUAL_WINGBEAT, MOVE_AQUA_TAIL},
+        .ability = ABILITY_PRESSURE,
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_ROCK,
@@ -4265,6 +4287,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GROUND,
         .ball = BALL_POKE,
     },
+    {
+        .species = SPECIES_SLAKING,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SHELL_BELL, // monstrous Attack -> each hit banks a big 1/4 heal, and offsets Double-Edge recoil on the Truant loaf turn
+        .moves = {MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE, MOVE_NIGHT_SLASH, MOVE_HAMMER_ARM},
+        .ability = ABILITY_TRUANT,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_NORMAL,
+        .ball = BALL_POKE,
+    },
 
     // ---- Ninjask ----
     {
@@ -4895,6 +4928,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Adaptability band breaker
         .moves = {MOVE_KNOCK_OFF, MOVE_LIQUIDATION, MOVE_AQUA_JET, MOVE_CLOSE_COMBAT},
+        .ability = ABILITY_ADAPTABILITY,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_WATER,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_CRAWDAUNT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SHELL_BELL, // Adaptability Crabhammer hits enormously hard; the 1/4 heal patches its glassy bulk between swings
+        .moves = {MOVE_SWORDS_DANCE, MOVE_CRABHAMMER, MOVE_KNOCK_OFF, MOVE_AQUA_JET},
         .ability = ABILITY_ADAPTABILITY,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
@@ -6299,6 +6343,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DARK,
         .ball = BALL_POKE,
     },
+    {
+        .species = SPECIES_WEAVILE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK, // base 125 Speed and no flinch move: its opening Knock Off flinches via King's Rock for a free turn
+        .moves = {MOVE_KNOCK_OFF, MOVE_ICE_PUNCH, MOVE_LOW_KICK, MOVE_ICE_SHARD},
+        .ability = ABILITY_PRESSURE,
+        .nature = NATURE_JOLLY,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_ICE,
+        .ball = BALL_POKE,
+    },
 
     // ---- Magnezone (Gen IV evolution of Magneton; innate Levitate = Ground-immune) ----
     {
@@ -7696,6 +7751,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force band wallbreaker
         .moves = {MOVE_FLARE_BLITZ, MOVE_EARTHQUAKE, MOVE_SUPERPOWER, MOVE_U_TURN},
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE_ADAMANT,
+        .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
+        .teraType = TYPE_FIRE,
+        .ball = BALL_POKE,
+    },
+    {
+        .species = SPECIES_DARMANITAN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SHELL_BELL, // Sheer Force Flare Blitz hits huge but Sheer Force does not strip its recoil; the 1/4 heal pays that recoil back
+        .moves = {MOVE_FLARE_BLITZ, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_SUPERPOWER},
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE_ADAMANT,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
