@@ -70,9 +70,10 @@ bool32 CanTerastallize(enum BattlerId battler)
     if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE && !IsOnPlayerSide(battler))
         return FALSE;
 
-    if (TESTING || !IsOnPlayerSide(battler))
+    if (TESTING || !IsOnPlayerSide(battler) || GetConfig(FEATURE_FREE_GIMMICKS))
     {
-        // Skip all other checks in this block, go to HasTrainerUsedGimmick
+        // Skip the Tera Orb bag/charge checks. With item-free gimmicks the player
+        // needs neither the Tera Orb nor the B_FLAG_TERA_ORB_* charge flags.
     }
     else if (!CheckBagHasItem(ITEM_TERA_ORB, 1))
     {

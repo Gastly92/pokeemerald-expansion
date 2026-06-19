@@ -26,7 +26,8 @@ struct GimmickInfo
 void AssignUsableGimmicks(void);
 u32 GetGimmickCandidates(enum BattlerId battler);
 u32 CountGimmickCandidates(enum BattlerId battler);
-enum Gimmick CycleSelectedGimmick(enum BattlerId battler);
+bool32 CycleGimmickSelection(enum BattlerId battler);
+void RefreshGimmickTriggerSprite(enum BattlerId battler);
 bool32 CanActivateGimmick(enum BattlerId battler, enum Gimmick gimmick);
 bool32 IsGimmickSelected(enum BattlerId battler, enum Gimmick gimmick);
 void SetActiveGimmick(enum BattlerId battler, enum Gimmick gimmick);

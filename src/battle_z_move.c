@@ -112,11 +112,12 @@ bool32 IsZMove(enum Move move)
 
 bool32 CanUseZMove(enum BattlerId battler)
 {
+    bool32 freeGimmicks = GetConfig(FEATURE_FREE_GIMMICKS);
     enum HoldEffect holdEffect = GetBattlerHoldEffectIgnoreNegation(battler);
     enum BattlerPosition position = GetBattlerPosition(battler);
 
-    // Check if Player has Z-Power Ring.
-    if (!TESTING && (position == B_POSITION_PLAYER_LEFT
+    // Check if Player has Z-Power Ring. Skipped with item-free gimmicks.
+    if (!freeGimmicks && !TESTING && (position == B_POSITION_PLAYER_LEFT
         || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && position == B_POSITION_PLAYER_RIGHT))
         && !CheckBagHasItem(ITEM_Z_POWER_RING, 1))
         return FALSE;
@@ -133,8 +134,9 @@ bool32 CanUseZMove(enum BattlerId battler)
     if (GetActiveGimmick(battler) != GIMMICK_NONE && GetActiveGimmick(battler) != GIMMICK_ULTRA_BURST)
         return FALSE;
 
-    // Check if battler isn't holding a Z-Crystal.
-    if (holdEffect != HOLD_EFFECT_Z_CRYSTAL)
+    // With item-free gimmicks any mon may use a Z-Move (its moves become type-based
+    // or signature Z-Moves); otherwise it must hold a matching Z-Crystal.
+    if (!freeGimmicks && holdEffect != HOLD_EFFECT_Z_CRYSTAL)
         return FALSE;
 
     // All checks passed!
@@ -145,6 +147,20 @@ enum Move GetUsableZMove(enum BattlerId battler, enum Move move)
 {
     enum Item item = gBattleMons[battler].item;
     enum HoldEffect holdEffect = GetBattlerHoldEffectIgnoreNegation(battler);
+
+    // With item-free gimmicks, any move can become a Z-Move: its signature Z-Move
+    // if one exists for this species+move, otherwise its type-based Z-Move.
+    if (GetConfig(FEATURE_FREE_GIMMICKS))
+    {
+        if (move == MOVE_NONE)
+            return MOVE_NONE;
+
+        enum Move zMove = GetSignatureZMove(move, gBattleMons[battler].species, item);
+        if (zMove != MOVE_NONE)
+            return zMove;
+
+        return GetTypeBasedZMove(move);
+    }
 
     if (holdEffect == HOLD_EFFECT_Z_CRYSTAL)
     {
@@ -166,14 +182,25 @@ void ActivateZMove(enum BattlerId battler)
 
 bool32 IsViableZMove(enum BattlerId battler, enum Move move)
 {
+    bool32 freeGimmicks = GetConfig(FEATURE_FREE_GIMMICKS);
     enum Item item;
     enum HoldEffect holdEffect = GetBattlerHoldEffectIgnoreNegation(battler);
     int moveSlotIndex;
 
     item = gBattleMons[battler].item;
 
-    if (gBattleStruct->gimmick.usableGimmick[battler] != GIMMICK_Z_MOVE)
+    // With item-free gimmicks the Z-Move trigger may be one of several picker
+    // options, so gate on Z-Move being a candidate rather than the live selection;
+    // otherwise it must be the selected gimmick.
+    if (freeGimmicks)
+    {
+        if (!(GetGimmickCandidates(battler) & (1u << GIMMICK_Z_MOVE)))
+            return FALSE;
+    }
+    else if (gBattleStruct->gimmick.usableGimmick[battler] != GIMMICK_Z_MOVE)
+    {
         return FALSE;
+    }
 
     for (moveSlotIndex = 0; moveSlotIndex < MAX_MON_MOVES; moveSlotIndex++)
     {
@@ -182,12 +209,17 @@ bool32 IsViableZMove(enum BattlerId battler, enum Move move)
     }
 
     enum BattlerPosition position = GetBattlerPosition(battler);
-    // Check if Player has Z-Power Ring.
-    if ((position == B_POSITION_PLAYER_LEFT || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && position == B_POSITION_PLAYER_RIGHT))
+    // Check if Player has Z-Power Ring. Skipped with item-free gimmicks.
+    if (!freeGimmicks
+        && (position == B_POSITION_PLAYER_LEFT || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && position == B_POSITION_PLAYER_RIGHT))
         && !CheckBagHasItem(ITEM_Z_POWER_RING, 1))
     {
         return FALSE;
     }
+
+    // With item-free gimmicks any move with PP is Z-able.
+    if (freeGimmicks)
+        return (move != MOVE_NONE);
 
     // Check for signature Z-Move or type-based Z-Move.
     if (holdEffect == HOLD_EFFECT_Z_CRYSTAL)
@@ -218,6 +250,14 @@ bool32 TryChangeZTrigger(enum BattlerId battler, u32 moveIndex)
 {
     bool32 viableZMove = (gBattleStruct->zmove.possibleZMoves[battler] & (1u << moveIndex)) != 0;
 
+    // With item-free gimmicks the trigger may be showing a different picker option;
+    // only slide it in/out from here when Z-Move is the selected gimmick.
+    if (GetConfig(FEATURE_FREE_GIMMICKS) && gBattleStruct->gimmick.usableGimmick[battler] != GIMMICK_Z_MOVE)
+    {
+        gBattleStruct->zmove.viable = viableZMove;
+        return viableZMove;
+    }
+
     if (gBattleStruct->zmove.viable && !viableZMove)
         HideGimmickTriggerSprite();   // Was a viable z move, now is not -> slide out
     else if (!gBattleStruct->zmove.viable && viableZMove)
@@ -230,12 +270,15 @@ bool32 TryChangeZTrigger(enum BattlerId battler, u32 moveIndex)
 
 enum Move GetSignatureZMove(enum Move move, enum Species species, enum Item item)
 {
+    bool32 freeGimmicks = GetConfig(FEATURE_FREE_GIMMICKS);
     u32 i;
 
-    // Check signature z move
+    // Check signature z move. With item-free gimmicks the held Z-Crystal no longer
+    // matters, so match on species + base move alone.
     for (i = 0; i < ARRAY_COUNT(sSignatureZMoves); ++i)
     {
-        if (sSignatureZMoves[i].item == item && sSignatureZMoves[i].species == species &&  sSignatureZMoves[i].move == move)
+        if ((freeGimmicks || sSignatureZMoves[i].item == item)
+            && sSignatureZMoves[i].species == species && sSignatureZMoves[i].move == move)
             return sSignatureZMoves[i].zmove;
     }
 

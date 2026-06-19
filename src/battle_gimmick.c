@@ -63,37 +63,67 @@ u32 CountGimmickCandidates(enum BattlerId battler)
     return count;
 }
 
-// Advances usableGimmick to the next gimmick in the candidate set after the one
-// currently selected, wrapping around. With the picker, this is what cycling the
-// trigger steps through. Returns the newly selected gimmick.
-enum Gimmick CycleSelectedGimmick(enum BattlerId battler)
+// Returns the lowest-index (highest-priority) gimmick a battler may use.
+static enum Gimmick FirstGimmickCandidate(enum BattlerId battler)
 {
     u32 candidates = gBattleStruct->gimmick.gimmickCandidates[battler];
-    enum Gimmick current = gBattleStruct->gimmick.usableGimmick[battler];
     enum Gimmick gimmick;
 
-    if (candidates == 0)
-        return GIMMICK_NONE;
-
-    // Look for the next set candidate strictly after the current selection...
-    for (gimmick = current + 1; gimmick < GIMMICKS_COUNT; ++gimmick)
-    {
-        if (candidates & (1u << gimmick))
-        {
-            gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
-            return gimmick;
-        }
-    }
-    // ...otherwise wrap to the first one.
     for (gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
     {
         if (candidates & (1u << gimmick))
-        {
-            gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
             return gimmick;
-        }
     }
     return GIMMICK_NONE;
+}
+
+// Advances the player's gimmick picker on a Start press. The rotation is:
+//   unarmed -> first candidate (armed) -> next candidate (armed) -> ... ->
+//   last candidate (armed) -> unarmed (showing the first candidate) -> ...
+// usableGimmick always holds a real candidate so the trigger sprite has an icon to
+// show; playerSelect tracks whether that gimmick is armed. Returns TRUE if anything
+// changed (i.e. the battler has at least one candidate).
+bool32 CycleGimmickSelection(enum BattlerId battler)
+{
+    u32 candidates = gBattleStruct->gimmick.gimmickCandidates[battler];
+    enum Gimmick gimmick;
+
+    if (candidates == 0)
+        return FALSE;
+
+    if (!gBattleStruct->gimmick.playerSelect)
+    {
+        // Unarmed -> arm the highest-priority candidate.
+        gBattleStruct->gimmick.usableGimmick[battler] = FirstGimmickCandidate(battler);
+        gBattleStruct->gimmick.playerSelect = TRUE;
+        return TRUE;
+    }
+
+    // Armed -> advance to the next candidate after the current selection.
+    for (gimmick = gBattleStruct->gimmick.usableGimmick[battler] + 1; gimmick < GIMMICKS_COUNT; ++gimmick)
+    {
+        if (candidates & (1u << gimmick))
+        {
+            gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
+            return TRUE;
+        }
+    }
+
+    // Past the last candidate -> unarm, resetting the display to the first one.
+    gBattleStruct->gimmick.playerSelect = FALSE;
+    gBattleStruct->gimmick.usableGimmick[battler] = FirstGimmickCandidate(battler);
+    return TRUE;
+}
+
+// Rebuilds the trigger sprite so its icon matches the battler's currently selected
+// gimmick (each gimmick has its own sheet/palette sharing one tile tag, so the only
+// way to swap icons is to free and reload), then sets its armed/unarmed frame.
+void RefreshGimmickTriggerSprite(enum BattlerId battler)
+{
+    DestroyGimmickTriggerSprite();
+    CreateGimmickTriggerSprite(battler);
+    if (gBattleStruct->gimmick.triggerSpriteId != 0xFF)
+        ChangeGimmickTriggerSprite(gBattleStruct->gimmick.triggerSpriteId, gBattleStruct->gimmick.playerSelect);
 }
 
 // Returns whether a battler is able to use a gimmick. Checks consumption and gimmick specific functions.
