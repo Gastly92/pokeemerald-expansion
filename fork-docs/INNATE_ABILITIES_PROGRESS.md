@@ -295,8 +295,8 @@
 | :white_large_square: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
 | :white_large_square: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
 | :x: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
-| :white_large_square: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |
-| :white_large_square: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |
+| :x: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |
+| :x: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |
 | :white_large_square: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :x: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :x: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
