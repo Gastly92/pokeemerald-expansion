@@ -252,7 +252,7 @@
 | :x: | Ice Face | The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it snows. |
 | :white_large_square: | Power Spot | Just being next to the Pokémon powers up moves. |
 | :x: | Mimicry | The Pokémon's type changes depending on the terrain. |
-| :white_large_square: | Screen Cleaner | When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses. |
+| :x: | Screen Cleaner | When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses. |
 | :white_large_square: | Steely Spirit | Powers up the Steel-type moves of the Pokémon and its allies. |
 | :x: | Perish Body | When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle. |
 | :x: | Wandering Spirit | When the Pokémon is hit by a contact move, it swaps Abilities with the attacker. |
