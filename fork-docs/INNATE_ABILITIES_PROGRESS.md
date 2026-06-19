@@ -232,9 +232,9 @@
 | :x: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
 | :x: | Grassy Surge | Turns the ground into Grassy Terrain when the Pokémon enters a battle. |
 | :white_large_square: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
-| :white_large_square: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
-| :white_large_square: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
-| :white_large_square: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
+| :x: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
+| :x: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
+| :x: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
 | :x: | Intrepid Sword | Boosts the Pokémon's Attack stat the first time the Pokémon enters a battle. |
 | :x: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
 | :x: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
