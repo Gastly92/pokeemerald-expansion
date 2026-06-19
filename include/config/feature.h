@@ -44,4 +44,28 @@
 // for how to add a species.
 #define FEATURE_NEW_TYPES TRUE
 
+// When TRUE, the held-item requirement for the battle transformation gimmicks is
+// dropped and a single mon may have MORE than one gimmick available at once,
+// chosen from a picker. Specifically:
+//   - Mega Evolution no longer needs a Mega Stone (any species with a Mega form
+//     can evolve); for species with X/Y Megas (Charizard, Mewtwo) the form is
+//     chosen by the base form's higher attacking stat (Attack vs Sp. Atk, tie
+//     -> X) via GetMegaTargetSpecies() instead of by which stone is held.
+//   - Z-Moves no longer need a Z-Crystal (any damaging move becomes its type's
+//     Z-Move; signature Z-Moves still require the specific base move).
+//   - Terastallization and Dynamax no longer need the Tera Orb / Dynamax Band in
+//     the bag nor their B_FLAG_* charge/enable flags (those upstream config flags
+//     are left untouched; the checks are simply skipped for the player).
+//   - The player presses Start during move selection to cycle a per-mon picker
+//     through every gimmick that mon can currently use, then off.
+// The once-per-mon and once-per-type-per-trainer restrictions are unchanged (a
+// mon that has used any gimmick can't use another; each gimmick type is still
+// usable once per trainer per battle), so a trainer may e.g. use one Z-Move and
+// one Mega Evolution across a battle, but a single mon picks exactly one.
+// AI trainers use the best gimmick any of their eligible mons can, which makes
+// existing trainer battles noticeably tougher; this is intentional. FALSE =
+// stock pokeemerald-expansion behavior (item-gated, single Start toggle). See
+// fork-docs/FORK.md.
+#define FEATURE_FREE_GIMMICKS TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H

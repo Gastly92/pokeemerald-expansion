@@ -16,21 +16,84 @@
 
 #include "data/gimmicks.h"
 
-// Populates gBattleStruct->gimmick.usableGimmick for each battler.
+// Populates gBattleStruct->gimmick.usableGimmick (the selected gimmick) and
+// gimmickCandidates (the full set of usable gimmicks) for each battler. When more
+// than one gimmick is usable, usableGimmick seeds to the highest-priority one
+// (the first that passes) and the player/AI may pick another from the set; with
+// only one usable gimmick this matches the historical "first usable" behavior.
 void AssignUsableGimmicks(void)
 {
     for (enum BattlerId battler = 0; battler < gBattlersCount; ++battler)
     {
-        gBattleStruct->gimmick.usableGimmick[battler] = GIMMICK_NONE;
+        u32 candidates = 0;
+        enum Gimmick selected = GIMMICK_NONE;
+
         for (enum Gimmick gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
         {
             if (CanActivateGimmick(battler, gimmick))
             {
-                gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
-                break;
+                candidates |= 1u << gimmick;
+                if (selected == GIMMICK_NONE)
+                    selected = gimmick;
             }
         }
+
+        gBattleStruct->gimmick.gimmickCandidates[battler] = candidates;
+        gBattleStruct->gimmick.usableGimmick[battler] = selected;
     }
+}
+
+// Returns the bitmask of gimmicks a battler may currently use.
+u32 GetGimmickCandidates(enum BattlerId battler)
+{
+    return gBattleStruct->gimmick.gimmickCandidates[battler];
+}
+
+// Returns the number of gimmicks a battler may currently choose between.
+u32 CountGimmickCandidates(enum BattlerId battler)
+{
+    u32 candidates = gBattleStruct->gimmick.gimmickCandidates[battler];
+    u32 count = 0;
+
+    while (candidates != 0)
+    {
+        candidates &= candidates - 1;
+        count++;
+    }
+    return count;
+}
+
+// Advances usableGimmick to the next gimmick in the candidate set after the one
+// currently selected, wrapping around. With the picker, this is what cycling the
+// trigger steps through. Returns the newly selected gimmick.
+enum Gimmick CycleSelectedGimmick(enum BattlerId battler)
+{
+    u32 candidates = gBattleStruct->gimmick.gimmickCandidates[battler];
+    enum Gimmick current = gBattleStruct->gimmick.usableGimmick[battler];
+    enum Gimmick gimmick;
+
+    if (candidates == 0)
+        return GIMMICK_NONE;
+
+    // Look for the next set candidate strictly after the current selection...
+    for (gimmick = current + 1; gimmick < GIMMICKS_COUNT; ++gimmick)
+    {
+        if (candidates & (1u << gimmick))
+        {
+            gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
+            return gimmick;
+        }
+    }
+    // ...otherwise wrap to the first one.
+    for (gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
+    {
+        if (candidates & (1u << gimmick))
+        {
+            gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
+            return gimmick;
+        }
+    }
+    return GIMMICK_NONE;
 }
 
 // Returns whether a battler is able to use a gimmick. Checks consumption and gimmick specific functions.
