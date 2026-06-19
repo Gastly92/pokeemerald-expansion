@@ -328,6 +328,22 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
    takes the innate + the override, so its slot pays off. `test/fork/frontier_extended_roster.c`
    fails CI if any `.ability` doesn't resolve to a real slot (through the override hook), so a bad
    pick can't slip through.
+
+   > **Pick a *stable* chosen ability — cross-reference it against `INNATE_ABILITIES_PROGRESS.md`.**
+   > Prefer an ability marked `:x:` there (rejected — it will *never* be wired as an innate: Lightning
+   > Rod, Soundproof, Water Absorb, Sheer Force, …) over one still marked `:white_large_square:`
+   > (pending). A `:white_large_square:` ability is on track to become an innate, and the moment it
+   > does, *this* Step 3.5 sweep has to come back and re-point every override (and roster set) that
+   > hands it out — so a pending pick is churn baked in, while a `:x:` pick is stable for good.
+   > Sceptile→`LIGHTNING_ROD` is the model: Lightning Rod is `:x:`, so that override never needs
+   > revisiting. (The whole table was audited on this rule — every row now hands out a `:x:` ability
+   > except the two that hand out an already-implemented `:white_check_mark:` innate, Carnivine→
+   > Chlorophyll and Tornadus-Therian→Prankster, which are likewise stable.) Separately, the slot a row *frees* must
+   > already be redundant via an *implemented* (`:white_check_mark:`) innate — that's the row's whole
+   > premise. A row may even repurpose a *real, non-empty* slot whose ability is dead weight on the
+   > roster's sets (Sceptile's HA Unburden does nothing on its non-consumable-item sets, so with
+   > Overgrow innately latched the slot is freed to `LIGHTNING_ROD`), so long as that freeing innate
+   > (Overgrow) is implemented and the new chosen ability is itself stable (`:x:`).
 6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it

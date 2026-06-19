@@ -10,11 +10,14 @@
 // editing upstream gSpeciesInfo. GetSpeciesAbility() (src/pokemon.c) consults this
 // table first; where no row matches, the upstream ability data is used unchanged.
 //
-// Each row replaces ability SLOT `slot` for `species` with `ability`. The chosen
-// slot is always either empty in the upstream data (a free normal slot on an
+// Each row replaces ability SLOT `slot` for `species` with `ability`. The replaced
+// slot is usually either empty in the upstream data (a free normal slot on an
 // ability-locked species) or holds an ability that is redundant because it is now
-// granted innately (e.g. the Regenerator slot on Tangrowth/Audino/Alomomola). The
-// roster test test/frontier_extended_roster.c verifies every set's chosen ability
+// granted innately (e.g. the Regenerator slot on Tangrowth/Audino/Alomomola). One
+// row (Sceptile) instead replaces a real Hidden Ability — its Overgrow is innately
+// latched, so a frontier slot is free, and its HA (Unburden) is dead weight on the
+// roster's non-consumable-item sets, so the slot is repurposed for a flavorful pick.
+// The roster test test/frontier_extended_roster.c verifies every set's chosen ability
 // resolves to a real slot through this hook, so an out-of-place row fails CI.
 
 struct SpeciesAbilityOverride
@@ -24,73 +27,56 @@ struct SpeciesAbilityOverride
     enum Ability ability;
 };
 
+// Sorted by National Pokédex number (shown in each row's trailing comment); formes share their
+// base's number and follow it. Adding a row: drop it at its dex position with a trailing `// <dex>`.
+//
+// PICK A STABLE CHOSEN ABILITY — cross-reference it against fork-docs/INNATE_ABILITIES_PROGRESS.md.
+// Prefer an ability that will NEVER be wired as an innate (marked :x: there — e.g. Lightning Rod,
+// Soundproof, Water Absorb, Sheer Force) over one still PENDING (:white_large_square:). A pending
+// ability is on track to become an innate, and the moment it is, the Step 3.5 sweep
+// (INNATE_ABILITIES.md) has to revisit every set and override that hands it out — so a
+// :white_large_square: pick is future churn baked in, while a :x: pick is stable for good. Sceptile's
+// LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
+// *implemented* :white_check_mark: innate — that's the row's whole premise; noted in each comment.)
+// The table below was audited on this rule: every row hands out a :x: (never-an-innate) ability,
+// except CARNIVINE and TORNADUS_THERIAN, whose picks (Chlorophyll, Prankster) are already
+// *implemented* :white_check_mark: innates and so are likewise stable.
 static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 {
-    // ── Innate Levitate, ability-locked: add a chosen ability in the empty slot 1.
-    //    The mon floats on its innate Levitate and also runs the ability below.
-    { SPECIES_LUNATONE,        1, ABILITY_SOLID_ROCK },
-    { SPECIES_SOLROCK,         1, ABILITY_SOLID_ROCK },
-    { SPECIES_CLAYDOL,         1, ABILITY_SOLID_ROCK },
-    { SPECIES_CHIMECHO,        1, ABILITY_SOUNDPROOF },
-    { SPECIES_MISMAGIUS,       1, ABILITY_INFILTRATOR },
-    { SPECIES_CARNIVINE,       1, ABILITY_CHLOROPHYLL },
-    { SPECIES_CRYOGONAL,       1, ABILITY_ICE_BODY },
-    { SPECIES_VIKAVOLT,        1, ABILITY_COMPOUND_EYES },
-    { SPECIES_EELEKTROSS,      1, ABILITY_LIGHTNING_ROD },
-    { SPECIES_HYDREIGON,       1, ABILITY_SHEER_FORCE },
-    { SPECIES_ROTOM,           1, ABILITY_LIGHTNING_ROD },
-    { SPECIES_ROTOM_HEAT,      1, ABILITY_LIGHTNING_ROD },
-    { SPECIES_ROTOM_WASH,      1, ABILITY_LIGHTNING_ROD },
-    { SPECIES_ROTOM_FROST,     1, ABILITY_LIGHTNING_ROD },
-    { SPECIES_ROTOM_FAN,       1, ABILITY_LIGHTNING_ROD },
-    { SPECIES_ROTOM_MOW,       1, ABILITY_LIGHTNING_ROD },
-
-    // ── Innate Levitate legendaries (strong, deliberate Frontier buffs).
-    { SPECIES_LATIAS,          1, ABILITY_MAGIC_GUARD },
-    { SPECIES_LATIOS,          1, ABILITY_MAGIC_GUARD },
-    { SPECIES_UXIE,            1, ABILITY_MAGIC_GUARD },
-    { SPECIES_MESPRIT,         1, ABILITY_MAGIC_GUARD },
-    { SPECIES_AZELF,           1, ABILITY_MAGIC_GUARD },
-    { SPECIES_CRESSELIA,       1, ABILITY_MULTISCALE },
-    { SPECIES_GIRATINA_ORIGIN, 1, ABILITY_PRESSURE },
-
-    // ── Innate Levitate, slots already full of (redundant) Levitate: replace the
-    //    redundant slot-1 Levitate. The mon still floats on the innate.
-    { SPECIES_FLYGON,          1, ABILITY_TOUGH_CLAWS },
-
-    // ── Innate Regenerator, slots full: replace the now-redundant Regenerator slot
-    //    (the heal comes from the innate). The chosen ability runs alongside it.
-    { SPECIES_TANGROWTH,       2, ABILITY_THICK_FAT },    // slot 2 was Regenerator
-    { SPECIES_AUDINO,          1, ABILITY_MAGIC_GUARD },  // slot 1 was Regenerator
-    { SPECIES_ALOMOMOLA,       2, ABILITY_WATER_ABSORB }, // slot 2 was Regenerator
-    { SPECIES_TORNADUS_THERIAN, 1, ABILITY_PRANKSTER },   // slot 1 was empty
-
-    // ── Innate Sturdy, ability-locked: Cornerstone Ogerpon's ONLY ability is Sturdy, now granted
-    //    innately, so its frontier set would otherwise waste its slot on the redundant Sturdy. Give
-    //    it a chosen Defiant in the empty slot 1 — Ogerpon's signature ability, and a fitting +2 Atk
-    //    punish for the Cornerstone Swords-Dance sweeper. It endures on the innate Sturdy regardless.
-    { SPECIES_OGERPON_CORNERSTONE, 1, ABILITY_DEFIANT },
-
-    // ── Innate Natural Cure, ability-locked: Celebi and Shaymin's ONLY ability is Natural Cure,
-    //    now granted innately, so their frontier sets would otherwise waste the slot on the
-    //    redundant ability. Give each a flavorful chosen ability in the empty slot 1; they still
-    //    self-cleanse on the innate Natural Cure regardless.
-    { SPECIES_CELEBI,              1, ABILITY_TRIAGE },      // forest life-energy → priority on its Giga Drain / Recover
-    { SPECIES_SHAYMIN,             1, ABILITY_SERENE_GRACE }, // its Sky forme's ability — doubles Seed Flare's SpD-drop chance
-
-    // ── BOTH abilities now innate (the pinch-ability case): the Fuecoco line's only abilities are
-    //    Blaze (primary) and Unaware (HA), and both are now granted innately, so a frontier set has
-    //    no real slot left for a chosen ability. Give Skeledirge — the only line member in the roster
-    //    — a chosen Cursed Body in the empty slot 1 (fitting its ghostly Fire/Ghost "singer" theme);
-    //    it still gets the latched innate Blaze boost and the innate Unaware stat-ignore regardless.
-    { SPECIES_SKELEDIRGE,          1, ABILITY_CURSED_BODY },
-
-    // ── BOTH abilities now innate (the weather speed-doubler case): Venusaur's only abilities are
-    //    Overgrow (primary) and Chlorophyll (HA), and both are now granted innately, so a frontier set
-    //    has no real slot left for a chosen ability. Give it a chosen Thick Fat in the empty slot 1 —
-    //    its Mega's signature ability and a fitting bulk boon for the sun sweeper. It still keeps the
-    //    latched innate Overgrow boost and the innate Chlorophyll speed regardless.
-    { SPECIES_VENUSAUR,            1, ABILITY_THICK_FAT },
+    { SPECIES_VENUSAUR,            1, ABILITY_DROUGHT },        // 3 Overgrow + Chlorophyll BOTH innate (weather-doubler pinch case): empty slot 1 → Drought, the sun flower sets its own sun for the innate Chlorophyll
+    { SPECIES_CELEBI,              1, ABILITY_GRASSY_SURGE },   // 251 sole-Natural-Cure (innate): empty slot 1 → Grassy Surge, the forest guardian carpets the field (its boon-innate Levitate still reaps the terrain)
+    { SPECIES_SCEPTILE,            2, ABILITY_LIGHTNING_ROD },  // 254 Overgrow innate (latched); its HA Unburden is dead weight on the roster's non-consumable-item sets, so replace it with its Mega's signature Lightning Rod
+    { SPECIES_FLYGON,              1, ABILITY_SAND_STREAM },    // 330 innate Levitate; slot-1 Levitate was redundant → Sand Stream, the desert spirit (Ground-type, immune to its own sand chip)
+    { SPECIES_LUNATONE,            1, ABILITY_AIR_LOCK },       // 337 ability-locked innate Levitate: empty slot 1 → Air Lock, the serene moon meteorite stills the weather (floats on the innate, runs this too)
+    { SPECIES_SOLROCK,             1, ABILITY_DROUGHT },        // 338 ability-locked innate Levitate: empty slot 1 → Drought, the sun meteorite
+    { SPECIES_CLAYDOL,             1, ABILITY_SAND_STREAM },    // 344 ability-locked innate Levitate: empty slot 1 → Sand Stream, the ancient desert clay automaton (Ground-type, immune to sand chip)
+    { SPECIES_CHIMECHO,            1, ABILITY_SOUNDPROOF },     // 358 ability-locked innate Levitate: empty slot 1 → Soundproof
+    { SPECIES_LATIAS,              1, ABILITY_ILLUSION },       // 380 innate-Levitate legendary: empty slot 1 → Illusion, the Eon refracts light to vanish/disguise
+    { SPECIES_LATIOS,              1, ABILITY_ILLUSION },       // 381 innate-Levitate legendary: empty slot 1 → Illusion (light-bending Eon)
+    { SPECIES_MISMAGIUS,           1, ABILITY_WANDERING_SPIRIT },// 429 ability-locked innate Levitate: empty slot 1 → Wandering Spirit, the roaming magical ghost swaps abilities on contact
+    { SPECIES_CARNIVINE,           1, ABILITY_CHLOROPHYLL },    // 455 ability-locked innate Levitate: empty slot 1 → Chlorophyll
+    { SPECIES_TANGROWTH,           2, ABILITY_SAP_SIPPER },     // 465 innate Regenerator; slot 2 was Regenerator → Sap Sipper, its vine tangle drinks Grass energy for +Atk (heal comes from the innate)
+    { SPECIES_ROTOM,               1, ABILITY_LIGHTNING_ROD },  // 479 ability-locked innate Levitate
+    { SPECIES_ROTOM_HEAT,          1, ABILITY_LIGHTNING_ROD },  // 479 "
+    { SPECIES_ROTOM_WASH,          1, ABILITY_LIGHTNING_ROD },  // 479 "
+    { SPECIES_ROTOM_FROST,         1, ABILITY_LIGHTNING_ROD },  // 479 "
+    { SPECIES_ROTOM_FAN,           1, ABILITY_LIGHTNING_ROD },  // 479 "
+    { SPECIES_ROTOM_MOW,           1, ABILITY_LIGHTNING_ROD },  // 479 "
+    { SPECIES_UXIE,                1, ABILITY_TRACE },          // 480 innate-Levitate legendary: empty slot 1 → Trace, the Being of Knowledge reads/copies the foe
+    { SPECIES_MESPRIT,             1, ABILITY_MOODY },          // 481 innate-Levitate legendary: empty slot 1 → Moody, the Being of Emotion's volatile moods
+    { SPECIES_AZELF,               1, ABILITY_VICTORY_STAR },   // 482 innate-Levitate legendary: empty slot 1 → Victory Star, the Being of Willpower's will to win
+    { SPECIES_GIRATINA_ORIGIN,     1, ABILITY_DRAGONS_MAW },    // 487 innate-Levitate legendary (Origin forme floats): empty slot 1 → Dragon's Maw, the Renegade's draconic might
+    { SPECIES_CRESSELIA,           1, ABILITY_CLOUD_NINE },     // 488 innate-Levitate legendary: empty slot 1 → Cloud Nine, the serene lunar presence stills the weather
+    { SPECIES_SHAYMIN,             1, ABILITY_EFFECT_SPORE },   // 492 sole-Natural-Cure (innate): empty slot 1 → Effect Spore, the flowery Gratitude hedgehog scatters spores (Sky forme keeps its real Serene Grace)
+    { SPECIES_AUDINO,              1, ABILITY_CUTE_CHARM },     // 531 innate Regenerator; slot 1 was Regenerator → Cute Charm, the gentle nurse (heal comes from the innate)
+    { SPECIES_ALOMOMOLA,           2, ABILITY_WATER_ABSORB },   // 594 innate Regenerator; slot 2 was Regenerator → Water Absorb
+    { SPECIES_EELEKTROSS,          1, ABILITY_LIGHTNING_ROD },  // 604 ability-locked innate Levitate
+    { SPECIES_CRYOGONAL,           1, ABILITY_SNOW_WARNING },   // 615 ability-locked innate Levitate: empty slot 1 → Snow Warning, the ice-crystal being radiates snow (Ice-type: +Def in snow, no chip)
+    { SPECIES_HYDREIGON,           1, ABILITY_SHEER_FORCE },    // 635 ability-locked innate Levitate
+    { SPECIES_TORNADUS_THERIAN,    1, ABILITY_PRANKSTER },      // 641 sole-Regenerator (innate): empty slot 1 → its Incarnate forme's Prankster
+    { SPECIES_VIKAVOLT,            1, ABILITY_MOTOR_DRIVE },    // 738 ability-locked innate Levitate: empty slot 1 → Motor Drive, the electromagnetic beetle banks electricity into Speed
+    { SPECIES_SKELEDIRGE,          1, ABILITY_MUMMY },          // 911 Blaze + Unaware BOTH innate (pinch case): empty slot 1 → Mummy, the ghostly fire-singer's curse spreads on contact
+    { SPECIES_OGERPON_CORNERSTONE, 1, ABILITY_EARTH_EATER },   // 1017 sole-Sturdy (innate): empty slot 1 → Earth Eater (the stone-masked ogre is nourished by the earth; Ground immunity+heal covers its Rock weakness)
 };
 
 enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)
