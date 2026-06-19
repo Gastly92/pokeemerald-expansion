@@ -40,6 +40,17 @@ void AssignUsableGimmicks(void)
 
         gBattleStruct->gimmick.gimmickCandidates[battler] = candidates;
         gBattleStruct->gimmick.usableGimmick[battler] = selected;
+
+        #if TESTING
+        // In battle tests there is no picker, so when several gimmicks are usable
+        // (item-free) honor the one the test fixed via the DSL rather than the
+        // default highest-priority pick, so the intended gimmick activates.
+        {
+            enum Gimmick chosen = TestRunner_Battle_GetChosenGimmick(GetBattlerTrainer(battler), gBattlerPartyIndexes[battler]);
+            if (chosen != GIMMICK_NONE && (candidates & (1u << chosen)))
+                gBattleStruct->gimmick.usableGimmick[battler] = chosen;
+        }
+        #endif
     }
 }
 

@@ -2960,15 +2960,19 @@ void MoveGetIdAndSlot(enum BattlerId battlerId, struct MoveContext *ctx, u32 *mo
         enum HoldEffect holdEffect = GetItemHoldEffect(item);
         u32 species = GetMonData(mon, MON_DATA_SPECIES);
 
-        // Check invalid item usage.
-        INVALID_IF(ctx->gimmick == GIMMICK_MEGA && holdEffect != HOLD_EFFECT_MEGA_STONE && species != SPECIES_RAYQUAZA, "Cannot Mega Evolve without a Mega Stone");
-        INVALID_IF(ctx->gimmick == GIMMICK_Z_MOVE && holdEffect != HOLD_EFFECT_Z_CRYSTAL, "Cannot use a Z-Move without a Z-Crystal");
-        INVALID_IF(ctx->gimmick == GIMMICK_Z_MOVE && GetItemSecondaryId(item) != GetMoveType(*moveId)
-                   && GetSignatureZMove(*moveId, species, item) == MOVE_NONE
-                   && *moveId != MOVE_PHOTON_GEYSER, // exception because test won't recognize Ultra Necrozma pre-Burst
-                   "Cannot turn %S into a Z-Move with %S", GetMoveName(ctx->move), GetItemName(item));
-        INVALID_IF(ctx->gimmick != GIMMICK_MEGA && holdEffect == HOLD_EFFECT_MEGA_STONE, "Cannot use another gimmick while holding a Mega Stone");
-        INVALID_IF(ctx->gimmick != GIMMICK_Z_MOVE && ctx->gimmick != GIMMICK_ULTRA_BURST && holdEffect == HOLD_EFFECT_Z_CRYSTAL, "Cannot use another gimmick while holding a Z-Crystal");
+        // Check invalid item usage. FORK: skipped under FEATURE_FREE_GIMMICKS, where
+        // the held item no longer gates the gimmick (any mon can Mega/Z item-free).
+        if (!GetConfig(FEATURE_FREE_GIMMICKS))
+        {
+            INVALID_IF(ctx->gimmick == GIMMICK_MEGA && holdEffect != HOLD_EFFECT_MEGA_STONE && species != SPECIES_RAYQUAZA, "Cannot Mega Evolve without a Mega Stone");
+            INVALID_IF(ctx->gimmick == GIMMICK_Z_MOVE && holdEffect != HOLD_EFFECT_Z_CRYSTAL, "Cannot use a Z-Move without a Z-Crystal");
+            INVALID_IF(ctx->gimmick == GIMMICK_Z_MOVE && GetItemSecondaryId(item) != GetMoveType(*moveId)
+                       && GetSignatureZMove(*moveId, species, item) == MOVE_NONE
+                       && *moveId != MOVE_PHOTON_GEYSER, // exception because test won't recognize Ultra Necrozma pre-Burst
+                       "Cannot turn %S into a Z-Move with %S", GetMoveName(ctx->move), GetItemName(item));
+            INVALID_IF(ctx->gimmick != GIMMICK_MEGA && holdEffect == HOLD_EFFECT_MEGA_STONE, "Cannot use another gimmick while holding a Mega Stone");
+            INVALID_IF(ctx->gimmick != GIMMICK_Z_MOVE && ctx->gimmick != GIMMICK_ULTRA_BURST && holdEffect == HOLD_EFFECT_Z_CRYSTAL, "Cannot use another gimmick while holding a Z-Crystal");
+        }
 
         // Check multiple gimmick use.
         SetGimmick(sourceLine, Test_GetBattlerTrainer(battlerId), DATA.currentMonIndexes[battlerId], ctx->gimmick);

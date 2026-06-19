@@ -8918,7 +8918,13 @@ void ActivateMegaEvolution(enum BattlerId battler)
     else
     {
         TryBattleFormChange(battler, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM, ability);
-        BattleScriptPushCursorAndCallback(BattleScript_MegaEvolution);
+        // FORK: the normal Mega message names the held stone and the Mega Ring, which
+        // don't exist with item-free gimmicks; use the item-neutral "fervent wish"
+        // message (shared with move-based Mega Evolution) instead.
+        if (GetConfig(FEATURE_FREE_GIMMICKS))
+            BattleScriptPushCursorAndCallback(BattleScript_WishMegaEvolution);
+        else
+            BattleScriptPushCursorAndCallback(BattleScript_MegaEvolution);
     }
 }
 
