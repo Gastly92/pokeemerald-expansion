@@ -328,6 +328,19 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
    takes the innate + the override, so its slot pays off. `test/fork/frontier_extended_roster.c`
    fails CI if any `.ability` doesn't resolve to a real slot (through the override hook), so a bad
    pick can't slip through.
+
+   > **An override is only valid once its freeing innate is *implemented*.** Every row in
+   > `species_ability_overrides.c` exists because the slot it replaces is redundant *now that the
+   > ability is granted innately* — so each row must be backed by a `:white_check_mark:` ability in
+   > `INNATE_ABILITIES_PROGRESS.md`. **Cross-reference before adding a row** (and audit the table
+   > when an innate's status changes): if the freeing ability is still pending
+   > (`:white_large_square:` / `:x:`), the slot isn't actually redundant yet, so the species would
+   > just lose a real ability for nothing — don't add the row until the innate lands. (This applies
+   > to the ability the row *frees*, not the one it hands out: the chosen ability is a normal real
+   > ability and need not be an innate at all.) A row may also repurpose a *real, non-empty* slot
+   > whose ability is dead weight on the roster's sets — e.g. Sceptile's HA Unburden does nothing on
+   > its non-consumable-item sets, so with Overgrow innately latched the slot is freed to its Mega's
+   > `LIGHTNING_ROD` — but the same rule holds: that freeing innate (Overgrow) must be implemented.
 6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it

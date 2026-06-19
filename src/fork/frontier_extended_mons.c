@@ -78,7 +78,9 @@
 // src/species_ability_overrides.c — gives each a chosen ability so the slot isn't wasted,
 // the same trick used for ability-locked innate-Levitate floaters. Venusaur is the weather-doubler
 // version: BOTH its real abilities — Overgrow and Chlorophyll — are now innate, so the override gives
-// it a chosen Thick Fat.)
+// it a chosen Thick Fat. Sceptile is the lone non-ability-locked override: only its Overgrow is
+// innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
+// repurposes that slot for its Mega's Lightning Rod.)
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -3895,7 +3897,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SCEPTILITE, // Mega Sceptile (Lightning Rod, Grass/Dragon) — fast special breaker
         .moves = {MOVE_LEAF_STORM, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST, MOVE_GIGA_DRAIN},
-        .ability = ABILITY_UNBURDEN, // Overgrow now innate (latched); chosen Unburden
+        .ability = ABILITY_LIGHTNING_ROD, // Overgrow now innate (latched); chosen Lightning Rod via override (matches its Mega's ability)
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_DRAGON,
@@ -3906,7 +3908,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical Swords Dance sweeper (no mega)
         .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW},
-        .ability = ABILITY_UNBURDEN, // Overgrow now innate (latched); chosen Unburden
+        .ability = ABILITY_LIGHTNING_ROD, // Overgrow now innate (latched); chosen Lightning Rod via override (its Mega's ability)
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_GRASS,
@@ -3917,7 +3919,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Overgrow special revenge killer
         .moves = {MOVE_LEAF_STORM, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST, MOVE_GIGA_DRAIN},
-        .ability = ABILITY_UNBURDEN, // Overgrow now innate (latched); chosen Unburden
+        .ability = ABILITY_LIGHTNING_ROD, // Overgrow now innate (latched); chosen Lightning Rod via override (its Mega's ability)
         .nature = NATURE_TIMID,
         .ev = TRAINER_PARTY_EVS(0, 0, 0, 252, 252, 4),
         .teraType = TYPE_GRASS,
