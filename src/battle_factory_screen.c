@@ -2404,6 +2404,25 @@ static void CopySwappedMonData(void)
     u8 friendship;
 
     gParties[B_TRAINER_PLAYER][sFactorySwapScreen->playerMonId] = gParties[B_TRAINER_OPPONENT_A][sFactorySwapScreen->enemyMonId];
+
+    // FORK: A defeated opponent's in-battle form change (e.g. Palafin's Zero to
+    // Hero -> PALAFIN_HERO) is only reverted on the *player's* party at the end
+    // of battle (TryRevertPartyMonFormChange iterates B_TRAINER_PLAYER only), so
+    // the opponent's party mon keeps the changed species. Renting that mon copies
+    // the Hero form into our party, and because the Factory keeps the player's
+    // party across battles, it would re-enter the next battle pre-transformed
+    // (Zero to Hero firing on send-out). Revert the swapped-in mon to its base
+    // form so it starts the next battle in its rental form.
+    {
+        struct Pokemon *swappedMon = &gParties[B_TRAINER_PLAYER][sFactorySwapScreen->playerMonId];
+        enum Species baseForm = GetFormChangeTargetSpecies(swappedMon, FORM_CHANGE_END_BATTLE);
+        if (baseForm != SPECIES_NONE)
+        {
+            SetMonData(swappedMon, MON_DATA_SPECIES, &baseForm);
+            CalculateMonStats(swappedMon);
+        }
+    }
+
     friendship = 0;
     SetMonData(&gParties[B_TRAINER_PLAYER][sFactorySwapScreen->playerMonId], MON_DATA_FRIENDSHIP, &friendship);
     gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].monId = gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->enemyMonId + FRONTIER_PARTY_SIZE].monId;
