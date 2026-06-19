@@ -8,7 +8,8 @@
 // supported innate set is LEVITATE (a passive Ground immunity), REGENERATOR
 // (a silent 1/3-HP switch-out heal), UNAWARE (a passive calc modifier), STURDY
 // (full-HP endure + OHKO-move immunity), NATURAL_CURE (a silent status cure on
-// switch-out) and PRANKSTER (+1 priority on status moves); see src/innate_abilities.c.
+// switch-out), PRANKSTER (+1 priority on status moves), the pinch and weather-speed
+// abilities, and FILTER (−25% supereffective damage taken); see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -1206,5 +1207,105 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate S
             ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
             ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
         }
+    }
+}
+
+// ---- Filter ----
+// A pure calc-modifier passive: the holder takes 25% less damage from supereffective moves,
+// applied at the GetDefenderAbilitiesModifier site (src/battle_util.c). No script / pop-up /
+// driver, like Unaware. Mr. Mime is a canon Filter user whose slot-0 ability is Soundproof, so
+// with the feature off it runs Soundproof (which never touches Poison Jab) and the reduction is
+// attributable solely to the innate. Mr. Mime is Psychic/Fairy, so Poison Jab is supereffective.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Filter reduces supereffective damage by 0.75", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MR_MIME, ABILITY_FILTER));
+        ASSUME(gSpeciesInfo[SPECIES_MR_MIME].abilities[0] != ABILITY_FILTER);
+        ASSUME(GetMoveType(MOVE_POISON_JAB) == TYPE_POISON);
+        ASSUME(gTypeEffectivenessTable[TYPE_POISON][TYPE_FAIRY] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MR_MIME);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_POISON_JAB); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+        MESSAGE("It's super effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.75), results[1].damage); // off: full; on: 0.75x
+    }
+}
+
+// Filter only touches supereffective moves: a neutral hit is unchanged whether or not the
+// innate is active.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Filter does not reduce non-supereffective damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MR_MIME, ABILITY_FILTER));
+        ASSUME(GetMoveType(MOVE_TACKLE) == TYPE_NORMAL);
+        ASSUME(gTypeEffectivenessTable[TYPE_NORMAL][TYPE_PSYCHIC] == UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MR_MIME);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_EQ(results[0].damage, results[1].damage); // neutral hit: Filter does nothing
+    }
+}
+
+// Suppression parity: Filter is breakable, so an attacker's Mold Breaker pierces an innate Filter
+// exactly as it would the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Filter", s16 damage)
+{
+    enum Ability ability;
+    PARAMETRIZE { ability = ABILITY_PRESSURE; }     // innate Filter applies -> reduced
+    PARAMETRIZE { ability = ABILITY_MOLD_BREAKER; } // pierces -> full damage
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_FILTER].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_MR_MIME, ABILITY_FILTER));
+        ASSUME(gTypeEffectivenessTable[TYPE_POISON][TYPE_FAIRY] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MR_MIME);
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ability); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_POISON_JAB); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+        MESSAGE("It's super effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.75), results[0].damage); // Mold Breaker full; Filter 0.75x
+    }
+}
+
+// Gastro Acid suppresses an innate Filter (suppression parity), so the supereffective hit lands
+// at full power once the innate is off.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Filter", s16 damage)
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MR_MIME, ABILITY_FILTER));
+        ASSUME(gTypeEffectivenessTable[TYPE_POISON][TYPE_FAIRY] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MR_MIME);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_POISON_JAB, MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(opponent, MOVE_POISON_JAB); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_POISON_JAB, opponent);
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.75), results[0].damage); // suppressed: full; active: 0.75x
     }
 }

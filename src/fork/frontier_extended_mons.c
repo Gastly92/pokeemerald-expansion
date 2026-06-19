@@ -56,7 +56,7 @@
 // opponent's exact set can't be read off the species alone.
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
-// that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster,
+// that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -68,8 +68,9 @@
 // Natural Cure; a Grimmsnarl lists ABILITY_PICKPOCKET yet still gets +1 priority on its
 // status moves via its innate Prankster; a Ludicolo lists ABILITY_RAIN_DISH yet still
 // doubles its Speed in rain via its innate Swift Swim, and an Excadrill lists
-// ABILITY_SAND_FORCE yet still doubles in sand via its innate Sand Rush. Role comments
-// that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/
+// ABILITY_SAND_FORCE yet still doubles in sand via its innate Sand Rush; a Revavroom set lists
+// ABILITY_OVERCOAT yet still shaves supereffective hits via its innate Filter. Role comments
+// that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/
 // the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
 // its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
 // it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
@@ -1784,7 +1785,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Screens support
         .moves = {MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_DAZZLING_GLEAM, MOVE_FOLLOW_ME},
-        .ability = ABILITY_FILTER,
+        .ability = ABILITY_SOUNDPROOF, // Filter now innate; chosen Soundproof shrugs off spread sound moves (doubles support)
         .nature = NATURE_BOLD,
         .ev = TRAINER_PARTY_EVS(252, 0, 4, 0, 252, 0),
         .teraType = TYPE_FAIRY,
@@ -13705,7 +13706,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Filter Shift Gear sweeper
         .moves = {MOVE_SHIFT_GEAR, MOVE_GUNK_SHOT, MOVE_IRON_HEAD, MOVE_HIGH_HORSEPOWER},
-        .ability = ABILITY_FILTER,
+        .ability = ABILITY_OVERCOAT, // Filter now innate; chosen Overcoat (only other real slot) blocks powder/weather chip
         .nature = NATURE_JOLLY,
         .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .teraType = TYPE_POISON,
@@ -13716,7 +13717,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // bulky pivot / hazard support
         .moves = {MOVE_GUNK_SHOT, MOVE_SPIKES, MOVE_PARTING_SHOT, MOVE_HIGH_HORSEPOWER},
-        .ability = ABILITY_FILTER,
+        .ability = ABILITY_OVERCOAT, // Filter now innate; chosen Overcoat (only other real slot) blocks powder/weather chip
         .nature = NATURE_IMPISH,
         .ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 4),
         .teraType = TYPE_STEEL,

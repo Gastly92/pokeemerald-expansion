@@ -7771,6 +7771,21 @@ static inline uq4_12_t GetDefenderAbilitiesModifier(struct DamageContext *ctx)
     if (recordAbility && ctx->updateFlags)
         RecordAbilityBattle(ctx->battlerDef, ctx->abilities[ctx->battlerDef]);
 
+    // FORK: an innate Filter (FEATURE_INNATE_ABILITIES) reduces supereffective damage by 25% exactly
+    // like the real ability. Filter is a clean upside (it never hurts its holder), so the innate is a
+    // 1:1 copy — no pure-boon divergence. The switch above already applied the chosen-ability Filter /
+    // Solid Rock / Prism Armor reduction, so guard against those to avoid double-applying; the multiply
+    // stacks correctly with any other defender-ability modifier the switch set (e.g. a chosen Multiscale).
+    // IsInnateActive() supplies the same suppression gates as the chosen-ability path (Filter is breakable,
+    // so an attacker's Mold Breaker pierces an innate Filter just like the real ability). Identity is
+    // untouched: the innate is not recorded via RecordAbilityBattle, matching the silent Unaware calc modifier.
+    if (ctx->typeEffectivenessModifier >= UQ_4_12(2.0)
+     && ctx->abilities[ctx->battlerDef] != ABILITY_FILTER
+     && ctx->abilities[ctx->battlerDef] != ABILITY_SOLID_ROCK
+     && ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR
+     && IsInnateActive(ctx->battlerDef, ABILITY_FILTER))
+        modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+
     return modifier;
 }
 

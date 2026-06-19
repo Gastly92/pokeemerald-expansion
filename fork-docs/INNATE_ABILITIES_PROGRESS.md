@@ -112,7 +112,7 @@
 | :white_large_square: | Forewarn | When it enters a battle, the Pokémon can tell one of the moves an opposing Pokémon has. |
 | :white_check_mark: | Unaware | The Pokémon ignores the target's stat changes when attacking, and ignores the attacker's stat changes when being attacked. It cannot ignore changes to the Speed stat, however. |
 | :white_large_square: | Tinted Lens | The Pokémon can use "not very effective" moves to deal regular damage. |
-| :white_large_square: | Filter | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
+| :white_check_mark: | Filter | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :x: | Slow Start | For five turns, the Pokémon's Attack and Speed stats are halved. |
 | :white_large_square: | Scrappy | The Pokémon can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate. |
 | :x: | Storm Drain | The Pokémon draws in all Water-type moves. Instead of taking damage from them, its Sp. Atk stat is boosted. |
