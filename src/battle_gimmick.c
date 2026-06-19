@@ -47,7 +47,12 @@ void AssignUsableGimmicks(void)
         // default highest-priority pick, so the intended gimmick activates.
         {
             enum Gimmick chosen = TestRunner_Battle_GetChosenGimmick(GetBattlerTrainer(battler), gBattlerPartyIndexes[battler]);
-            if (chosen != GIMMICK_NONE && (candidates & (1u << chosen)))
+            // Ultra Burst and Z-Move are a coupled pair the DSL stores as one value
+            // (the last set wins, i.e. Z-Move): a mon ultra bursts first, then uses
+            // its Z-Move, so while Ultra Burst is still available it takes precedence.
+            if (chosen == GIMMICK_Z_MOVE && (candidates & (1u << GIMMICK_ULTRA_BURST)))
+                gBattleStruct->gimmick.usableGimmick[battler] = GIMMICK_ULTRA_BURST;
+            else if (chosen != GIMMICK_NONE && (candidates & (1u << chosen)))
                 gBattleStruct->gimmick.usableGimmick[battler] = chosen;
         }
         #endif
