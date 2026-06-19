@@ -227,10 +227,46 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // the file header above; per-row notes record the species-specific reasoning.
 
     // ----- Gen 1 -----
-    { SPECIES_BULBASAUR,                INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW, ABILITY_CHLOROPHYLL) }, // 1 canon Overgrow + canon Chlorophyll (HA)
-    { SPECIES_IVYSAUR,                  INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW, ABILITY_CHLOROPHYLL) }, // 2
-    { SPECIES_VENUSAUR,                 INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW, ABILITY_CHLOROPHYLL) }, // 3 both real abilities now innate -> chosen Thick Fat via override
-    { SPECIES_VENUSAUR_GMAX,            INNATES(ABILITY_OVERGROW, ABILITY_CHLOROPHYLL) }, // 3 Gmax keeps both
+    { // 0001
+        SPECIES_BULBASAUR,
+        INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_FILTER,
+            ABILITY_NATURAL_CURE,
+            ABILITY_OVERGROW,
+            ABILITY_REGENERATOR,
+        )
+    },
+    { // 0002
+        SPECIES_IVYSAUR,
+        INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_FILTER,
+            ABILITY_NATURAL_CURE,
+            ABILITY_OVERGROW,
+            ABILITY_REGENERATOR,
+        )
+    },
+    { // 0003
+        SPECIES_VENUSAUR,
+        INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_FILTER,
+            ABILITY_NATURAL_CURE,
+            ABILITY_OVERGROW,
+            ABILITY_REGENERATOR,
+        )
+    },
+    { // 0003
+        SPECIES_VENUSAUR_GMAX,
+        INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_FILTER,
+            ABILITY_NATURAL_CURE,
+            ABILITY_OVERGROW,
+            ABILITY_REGENERATOR,
+        )
+    },
     { SPECIES_CHARMANDER,               sInnateBlaze }, // 4
     { SPECIES_CHARMELEON,               sInnateBlaze }, // 5
     { SPECIES_CHARIZARD,                sInnateBlaze }, // 6 Mega-X is Tough Claws, Mega-Y is Drought; both omitted
