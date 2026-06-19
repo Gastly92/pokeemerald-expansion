@@ -28,13 +28,19 @@ void AssignUsableGimmicks(void)
         u32 candidates = 0;
         enum Gimmick selected = GIMMICK_NONE;
 
-        for (enum Gimmick gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
+        // FORK: a mon gets one gimmick per battle; once spent it offers none. (For
+        // Mega/Tera/Dynamax the active-gimmick form already blocks reuse, but a
+        // Z-Move leaves no form, so this is enforced via the per-mon record.)
+        if (!(GetConfig(FEATURE_FREE_GIMMICKS) && HasMonUsedGimmick(battler)))
         {
-            if (CanActivateGimmick(battler, gimmick))
+            for (enum Gimmick gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
             {
-                candidates |= 1u << gimmick;
-                if (selected == GIMMICK_NONE)
-                    selected = gimmick;
+                if (CanActivateGimmick(battler, gimmick))
+                {
+                    candidates |= 1u << gimmick;
+                    if (selected == GIMMICK_NONE)
+                        selected = gimmick;
+                }
             }
         }
 
@@ -230,6 +236,20 @@ void SetGimmickAsActivated(enum BattlerId battler, enum Gimmick gimmick)
     gBattleStruct->gimmick.activated[battler][gimmick] = TRUE;
     if (IsDoubleBattle() && (IsPartnerMonFromSameTrainer(battler) || (gimmick == GIMMICK_DYNAMAX)))
         gBattleStruct->gimmick.activated[BATTLE_PARTNER(battler)][gimmick] = TRUE;
+
+    // FORK: record that this specific mon has spent its one gimmick for the battle.
+    // Ultra Burst is excluded because it only enables Necrozma's Z-Move, which is the
+    // actual gimmick use that follows.
+    if (gimmick != GIMMICK_ULTRA_BURST)
+        gBattleStruct->gimmick.monGimmickUsed[GetBattlerTrainer(battler)][gBattlerPartyIndexes[battler]] = TRUE;
+}
+
+// FORK: whether a specific mon has already used a gimmick this battle (item-free
+// gimmicks enforce one gimmick per mon; unlike Mega/Tera/Dynamax, a Z-Move leaves no
+// active gimmick to detect, so this persistent per-mon record is needed).
+bool32 HasMonUsedGimmick(enum BattlerId battler)
+{
+    return gBattleStruct->gimmick.monGimmickUsed[GetBattlerTrainer(battler)][gBattlerPartyIndexes[battler]];
 }
 
 #define SINGLES_GIMMICK_TRIGGER_POS_X_OPTIMAL (30)

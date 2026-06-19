@@ -467,6 +467,7 @@ struct BattleGimmickData
     u8 indicatorSpriteId[MAX_BATTLERS_COUNT];
     u8 toActivate;                                       // stores whether a battler should transform at start of turn as bitfield
     u8 activeGimmick[MAX_BATTLE_TRAINERS][PARTY_SIZE];   // stores the active gimmick for each party member
+    bool8 monGimmickUsed[MAX_BATTLE_TRAINERS][PARTY_SIZE]; // FORK (FEATURE_FREE_GIMMICKS): per-mon "has used a gimmick this battle" (Z-Move clears activeGimmick, so that alone can't enforce one-gimmick-per-mon); Ultra Burst is excluded as it only enables Necrozma's Z-Move
     bool8 activated[MAX_BATTLERS_COUNT][GIMMICKS_COUNT]; // stores whether a trainer has used gimmick
 };
 
