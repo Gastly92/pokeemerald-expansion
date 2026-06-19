@@ -283,16 +283,26 @@ How much is needed depends on the ability class:
     `MOVEEND_ABILITIES_ATTACKER_INNATE`): commit `e93911db`
     (`battle_move_resolution.c`)
 
-### Step 3.5 — free the frontier roster slots (if any set hardcoded the ability)
+### Step 3.5 — free the frontier roster slots (NOT optional — run the grep first)
 
-The extended frontier roster (`src/fork/frontier_extended_mons.c`) is drafted under
-`B_FRONTIER_EXTENDED_MONS`, and many sets were built **before** an ability became
-an innate, so they spent their single `.ability` slot on it. Once the species
-carries the ability *innately*, that slot is redundant — the mon always has the
-ability regardless. Free it to a **complementary** chosen ability so the set runs
-both. This happened for Levitate (commit `d5da59a3` freed Slowbro→`OWN_TEMPO`,
-Rotom→`LIGHTNING_ROD`, …) and again for Unaware (Clefable→`MAGIC_GUARD`,
-Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …).
+**Do not skip this by assuming no set uses the ability — run the grep and let the
+result decide.** This step is the easiest to glide past (it sits between the "real
+work" of Step 3 and the wrap-up), but for any common ability it fires *hard*: the
+pinch abilities (`OVERGROW`/`BLAZE`/`TORRENT`/`SWARM`) freed **55** sets across
+every starter line. The extended frontier roster (`src/fork/frontier_extended_mons.c`)
+is drafted under `B_FRONTIER_EXTENDED_MONS`, and many sets were built **before** an
+ability became an innate, so they spent their single `.ability` slot on it. Once the
+species carries the ability *innately*, that slot is better spent — free it to a
+**complementary** chosen ability so the set runs both. This happened for Levitate
+(commit `d5da59a3` freed Slowbro→`OWN_TEMPO`, Rotom→`LIGHTNING_ROD`, …), Unaware
+(Clefable→`MAGIC_GUARD`, Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …), and the
+pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja→`PROTEAN`, …).
+
+> **Pinch-ability caveat:** unlike a 1:1 innate (Sturdy etc.) where the chosen slot is
+> *truly* redundant, a pinch innate uses a `chosen != ABILITY_X` guard in `CalcAttackStat`,
+> so a set left on `.ability = ABILITY_BLAZE` keeps working but runs the *vanilla* (non-latched)
+> boost and forgoes a second ability. Freeing it is therefore an *upgrade*, not dead-weight
+> removal — but still do it, for consistency and the latch.
 
 1. `grep -n ABILITY_X src/fork/frontier_extended_mons.c` for every set that hardcoded it.
 2. For each, confirm the **species now carries the innate** (only those rows are
@@ -302,19 +312,22 @@ Pyukumuku→`INNARDS_OUT`, Dondozo→`WATER_VEIL`, …).
    line (e.g. "Unaware wall") stays — it now describes the innate-backed playstyle.
 4. **The replacement must be a real ability slot for that species** (`CreateFacilityMon`
    silently falls back to slot 0 otherwise). Pick from the species' own
-   `gSpeciesInfo[...].abilities[]`.
-5. **Ability-locked species whose *only* real ability is the one now innate** are the
-   important case (e.g. Cornerstone Ogerpon = only Sturdy; the innate-Levitate floaters
-   Rotom/Hydreigon/the lake trio). Their `.ability` slot has nothing complementary to point
-   at, so **don't** leave it on the now-redundant ability and **don't** just drop the set —
-   add a row to the fork-owned override table `src/fork/species_ability_overrides.c` giving them a
-   *flavorful* chosen ability in an empty slot (Ogerpon-Cornerstone → `DEFIANT`, its signature),
-   then set `.ability` to it. The mon then runs that ability **and** the innate. This is also
-   why such a species is **not** omitted from the innate table as "redundant": omission only
-   applies to a sole-ability species that *isn't* in the roster (nothing observes its innate,
-   so it'd be dead weight) — a sole-ability species that *is* a frontier set instead takes the
-   innate + the override, so its slot pays off. `test/fork/frontier_extended_roster.c` fails CI if any
-   `.ability` doesn't resolve to a real slot (through the override hook), so a bad pick can't slip through.
+   `gSpeciesInfo[...].abilities[]` — usually the Hidden Ability; skip a drawback ability
+   (e.g. Durant's HA is `TRUANT` — use its `HUSTLE` slot instead, complementary means a *boon*).
+5. **Ability-locked species** — where the `.ability` slot has nothing complementary to point
+   at — take a row in the fork-owned override table `src/fork/species_ability_overrides.c`
+   giving them a *flavorful* chosen ability in an empty slot, then set `.ability` to it. Two
+   sub-cases: (a) the species' *only* real ability is the one now innate (Cornerstone Ogerpon =
+   only Sturdy → `DEFIANT`; the innate-Levitate floaters Rotom/Hydreigon/the lake trio); and
+   (b) ***all* of the species' real abilities are now innate** — the pinch case: the Fuecoco line
+   is `{BLAZE, NONE, UNAWARE}` and *both* Blaze and Unaware are innate, so Skeledirge takes a
+   chosen `CURSED_BODY` override. Either way the mon then runs that ability **and** the innate(s).
+   This is also why such a species is **not** omitted from the innate table as "redundant":
+   omission only applies to a sole-ability species that *isn't* in the roster (nothing observes
+   its innate, so it'd be dead weight) — a sole-ability species that *is* a frontier set instead
+   takes the innate + the override, so its slot pays off. `test/fork/frontier_extended_roster.c`
+   fails CI if any `.ability` doesn't resolve to a real slot (through the override hook), so a bad
+   pick can't slip through.
 6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it
@@ -330,6 +343,11 @@ Trace/identity still behave like the real ability. Run:
 make -j$(nproc) check TESTS="FEATURE_INNATE_ABILITIES"
 ```
 
+The filtered run is for fast iteration. **Before pushing, run the *full* `make -j$(nproc) check`**
+(not just `TESTS=`) whenever Step 3 touched a *shared* battle file — `battle_util.c`,
+`battle_end_turn.c`, the `battle.h` structs, etc. — since those affect every battle, not just
+the innate's. Build the ROM with CI's flags too (`UNUSED_ERROR=1 DEPRECATED_ERROR=1 make -O all`).
+
 ### Step 5 — update the indexes
 
 Two human-facing records, both fork-owned:
@@ -342,10 +360,22 @@ Two human-facing records, both fork-owned:
 
 ## Why "mostly automatic" depends on the ability
 
-Steps 1, 2, 4, 5 are mechanical for every ability; Step 3.5 only applies if a
-frontier set hardcoded the ability. Step 3 is the variable:
-single-site passive traits are a one-line swap; calc-modifier passives are a
+Steps 1, 2, 4, 5 are mechanical for every ability; Step 3.5 fires whenever a
+frontier set hardcoded the ability (run the grep — don't assume). Step 3 is the
+variable: single-site passive traits are a one-line swap; calc-modifier passives are a
 small clause; active abilities reuse the driver but need their trigger hook
 restored. Keeping the allowlist small and explicit is what bounds the
 upstream-file footprint and the merge-conflict surface — that is the whole point
 of going ability by ability.
+
+## Definition of Done (pre-push checklist)
+
+Run through this every time — it exists because Step 3.5 and the full test run are
+the two things easiest to skip:
+
+- [ ] **Step 1** — species rows added (merged into existing rows where the species already has an innate).
+- [ ] **Step 2** — allowlist comment in `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h` updated.
+- [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
+- [ ] **Step 3.5 — ran `grep -n ABILITY_X src/fork/frontier_extended_mons.c`** and freed every hardcoded set (override-table rows for ability-locked / all-abilities-innate species). *This is the step that gets forgotten.*
+- [ ] **Step 4** — tests added; `make check TESTS="FEATURE_INNATE_ABILITIES"` green; **full `make check` green** if a shared battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.
+- [ ] **Step 5** — `FORK.md` (status parenthetical, allowlist sentence, known-limitations, wiring note **and** the frontier-freeing note) + `INNATE_ABILITIES_PROGRESS.md` flipped to `:white_check_mark:`.

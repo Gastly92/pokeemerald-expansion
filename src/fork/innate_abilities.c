@@ -125,6 +125,27 @@
 //     flavor set is narrower than other abilities' because Prankster's +1 priority is potent).
 //     Cottonee/Whimsicott, Klefki and Hoopa are also innate-Levitate floaters, so they take the
 //     combined INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) list below.
+//   - ABILITY_OVERGROW / ABILITY_BLAZE / ABILITY_TORRENT / ABILITY_SWARM — the "pinch" abilities:
+//     +50% to Grass/Fire/Water/Bug moves respectively while the holder is low on HP. Handled by an
+//     additive block in CalcAttackStat (src/battle_util.c), beside (not inside) the chosen-ability
+//     switch. DELIBERATE DIVERGENCE: an innate pinch ability is a *pure boon* that LATCHES. A real
+//     pinch ability only boosts while the holder is *currently* <=1/3 HP, so healing back up (notably
+//     an innate Regenerator's switch-out heal, but also Leftovers / a Berry) strips the boost; the
+//     innate instead sets gBattleStruct's per-mon reachedPinchHp flag the first time the holder hits
+//     <=1/3 HP (latched each end-of-turn in src/battle_end_turn.c) and keeps the boost for the rest of
+//     the battle. The chosen-ability switch case is left untouched (a real pinch ability stays vanilla),
+//     and the block's `chosen != ABILITY_X` guard means a starter running its real pinch ability never
+//     double-applies. Suppression parity holds via IsInnateActive() (feature flag + Gastro Acid /
+//     Neutralizing Gas / not-on-field); pinch abilities aren't breakable, so Mold Breaker never touches
+//     them, same as the real ability. AI is correct for FREE: the boost lives in the shared damage calc
+//     (CalcAttackStat), which the AI runs keyed off the real battler via IsInnateActive(), so it both
+//     threatens and respects an innate pinch boost. Canon-only (no flavor picks): every species whose
+//     ability data carries the pinch ability in any slot, so the signature survives whichever slot a
+//     build picks (a Chlorophyll Venusaur / Solar Power Charizard / Protean Greninja keeps its boost);
+//     forms are listed only where the form's ability data still carries it (Megas swap to Thick Fat /
+//     Tough Claws / Drought / Mega Launcher / etc. and are omitted; Gigantamax forms and the Hisuian
+//     starters keep theirs). The Bulbasaur, Chikorita and Fuecoco lines and Volbeat already carry other
+//     innates, so they take a combined INNATES(...) list with the pinch ability added.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -141,6 +162,10 @@ static const enum Ability sInnateUnaware[] = { ABILITY_UNAWARE, ABILITY_NONE };
 static const enum Ability sInnateSturdy[] = { ABILITY_STURDY, ABILITY_NONE };
 static const enum Ability sInnateNaturalCure[] = { ABILITY_NATURAL_CURE, ABILITY_NONE };
 static const enum Ability sInnatePrankster[] = { ABILITY_PRANKSTER, ABILITY_NONE };
+static const enum Ability sInnateOvergrow[] = { ABILITY_OVERGROW, ABILITY_NONE };
+static const enum Ability sInnateBlaze[] = { ABILITY_BLAZE, ABILITY_NONE };
+static const enum Ability sInnateTorrent[] = { ABILITY_TORRENT, ABILITY_NONE };
+static const enum Ability sInnateSwarm[] = { ABILITY_SWARM, ABILITY_NONE };
 
 // A species with SEVERAL innates lists them inline at its row with INNATES(...) instead of needing a
 // named combination array per pairing (which doesn't scale as the allowlist grows). The compound
@@ -149,9 +174,9 @@ static const enum Ability sInnatePrankster[] = { ABILITY_PRANKSTER, ABILITY_NONE
 
 static const struct SpeciesInnates sSpeciesInnates[] =
 {
-    { SPECIES_BULBASAUR, INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR) },
-    { SPECIES_IVYSAUR,   INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR) },
-    { SPECIES_VENUSAUR,  INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR) },
+    { SPECIES_BULBASAUR, INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) }, // canon Overgrow
+    { SPECIES_IVYSAUR,   INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) },
+    { SPECIES_VENUSAUR,  INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) },
     
     // Gen 1
     { SPECIES_GASTLY,            sInnateLevitate },
@@ -489,9 +514,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_PYUKUMUKU,                sInnateUnaware }, // Unaware is the HA
 
     // Gen 9
-    { SPECIES_FUECOCO,                  sInnateUnaware }, // Unaware is the HA across the line
-    { SPECIES_CROCALOR,                 sInnateUnaware },
-    { SPECIES_SKELEDIRGE,               sInnateUnaware },
+    { SPECIES_FUECOCO,                  INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) }, // Unaware is the HA, Blaze the primary
+    { SPECIES_CROCALOR,                 INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) },
+    { SPECIES_SKELEDIRGE,               INNATES(ABILITY_UNAWARE, ABILITY_BLAZE) },
     { SPECIES_DONDOZO,                  sInnateUnaware }, // Unaware is the primary ability
 
     // Flavor Unaware (no native Unaware; too dull/dazed/asleep to notice the foe's buffs)
@@ -646,9 +671,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 
     // Flavor Natural Cure (no native Natural Cure; herbal/aromatic self-restoration)
     // Gen 2
-    { SPECIES_CHIKORITA,                sInnateNaturalCure }, // its leaf gives off a soothing, restorative aroma
-    { SPECIES_BAYLEEF,                  sInnateNaturalCure }, // its aroma "perks people up and restores health"
-    { SPECIES_MEGANIUM,                 sInnateNaturalCure }, // its breath "can revive dead plants" and heal
+    { SPECIES_CHIKORITA,                INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) }, // flavor Natural Cure + canon Overgrow
+    { SPECIES_BAYLEEF,                  INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) },
+    { SPECIES_MEGANIUM,                 INNATES(ABILITY_NATURAL_CURE, ABILITY_OVERGROW) },
     { SPECIES_BELLOSSOM,                sInnateNaturalCure }, // its healing dance revitalizes the weary
 
     // ───────────────────────────────────────────────────────────────────────────
@@ -677,7 +702,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 
     // Gen 3
     { SPECIES_SABLEYE,                  sInnatePrankster }, // Prankster is the HA (Mega Sableye is Magic Bounce, omitted)
-    { SPECIES_VOLBEAT,                  sInnatePrankster }, // Prankster is the HA
+    { SPECIES_VOLBEAT,                  INNATES(ABILITY_PRANKSTER, ABILITY_SWARM) }, // Prankster is the HA, Swarm the secondary
     { SPECIES_ILLUMISE,                 sInnatePrankster }, // Prankster is the HA
 
     // Gen 4
@@ -711,6 +736,151 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // Gen 5
     { SPECIES_ZORUA,                    sInnatePrankster }, // illusion trickster that "delights in confusing people" (Unovan; Hisuian is vengeful, omitted)
     { SPECIES_ZOROARK,                  sInnatePrankster }, // master of illusions and deception (Unovan)
+
+    // ───────────────────────────────────────────────────────────────────────────
+    // Innate pinch abilities (Overgrow/Blaze/Torrent/Swarm): +50% to the matching
+    // type's moves once the holder is in "pinch" range. As innates these are a
+    // pure-boon DIVERGENCE: they LATCH — once the holder has reached <=1/3 HP this
+    // battle, the boost persists for the rest of the battle (reachedPinchHp), so a
+    // later heal (an innate Regenerator's switch-out heal, Leftovers, a Berry) can't
+    // strip it. A real/chosen pinch ability keeps the vanilla "must currently be
+    // <=1/3" behavior (its CalcAttackStat switch case is untouched), so the innate
+    // never double-applies on a starter running its real ability (the != ABILITY_X
+    // guard there). Canon-only — every species whose real ability data carries the
+    // pinch ability in any slot, so it survives whichever ability slot a build picks
+    // (e.g. a Chlorophyll Venusaur or Solar Power Charizard keeps its pinch boost);
+    // forms are listed only where the form's ability data still carries it (Megas
+    // become Thick Fat / Tough Claws / Drought / Mega Launcher, so they are omitted;
+    // Gigantamax and the Hisuian starters keep theirs). No flavor picks: the pinch
+    // boost is signature to these specific lines and has no natural flavor analog.
+    // (Bulbasaur/Ivysaur/Venusaur, the Chikorita line, the Fuecoco line and Volbeat
+    // already carry other innates above, so they take a combined INNATES(...) list
+    // there instead of being repeated here.)
+    // ───────────────────────────────────────────────────────────────────────────
+
+    // Overgrow (Grass starters)
+    { SPECIES_VENUSAUR_GMAX,            sInnateOvergrow },
+    { SPECIES_TREECKO,                  sInnateOvergrow },
+    { SPECIES_GROVYLE,                  sInnateOvergrow },
+    { SPECIES_SCEPTILE,                 sInnateOvergrow }, // Mega is Lightning Rod, omitted
+    { SPECIES_TURTWIG,                  sInnateOvergrow },
+    { SPECIES_GROTLE,                   sInnateOvergrow },
+    { SPECIES_TORTERRA,                 sInnateOvergrow },
+    { SPECIES_SNIVY,                    sInnateOvergrow },
+    { SPECIES_SERVINE,                  sInnateOvergrow },
+    { SPECIES_SERPERIOR,                sInnateOvergrow },
+    { SPECIES_PANSAGE,                  sInnateOvergrow }, // Overgrow is the HA
+    { SPECIES_SIMISAGE,                 sInnateOvergrow },
+    { SPECIES_CHESPIN,                  sInnateOvergrow },
+    { SPECIES_QUILLADIN,                sInnateOvergrow },
+    { SPECIES_CHESNAUGHT,               sInnateOvergrow },
+    { SPECIES_ROWLET,                   sInnateOvergrow },
+    { SPECIES_DARTRIX,                  sInnateOvergrow },
+    { SPECIES_DECIDUEYE,                sInnateOvergrow },
+    { SPECIES_DECIDUEYE_HISUI,          sInnateOvergrow },
+    { SPECIES_GROOKEY,                  sInnateOvergrow },
+    { SPECIES_THWACKEY,                 sInnateOvergrow },
+    { SPECIES_RILLABOOM,                sInnateOvergrow },
+    { SPECIES_RILLABOOM_GMAX,           sInnateOvergrow },
+    { SPECIES_SPRIGATITO,               sInnateOvergrow },
+    { SPECIES_FLORAGATO,                sInnateOvergrow },
+    { SPECIES_MEOWSCARADA,              sInnateOvergrow },
+
+    // Blaze (Fire starters)
+    { SPECIES_CHARMANDER,               sInnateBlaze },
+    { SPECIES_CHARMELEON,               sInnateBlaze },
+    { SPECIES_CHARIZARD,                sInnateBlaze }, // Mega-X is Tough Claws, Mega-Y is Drought; both omitted
+    { SPECIES_CHARIZARD_GMAX,           sInnateBlaze },
+    { SPECIES_CYNDAQUIL,                sInnateBlaze },
+    { SPECIES_QUILAVA,                  sInnateBlaze },
+    { SPECIES_TYPHLOSION,               sInnateBlaze },
+    { SPECIES_TYPHLOSION_HISUI,         sInnateBlaze },
+    { SPECIES_TORCHIC,                  sInnateBlaze },
+    { SPECIES_COMBUSKEN,                sInnateBlaze },
+    { SPECIES_BLAZIKEN,                 sInnateBlaze }, // Mega is Speed Boost, omitted
+    { SPECIES_CHIMCHAR,                 sInnateBlaze },
+    { SPECIES_MONFERNO,                 sInnateBlaze },
+    { SPECIES_INFERNAPE,                sInnateBlaze },
+    { SPECIES_TEPIG,                    sInnateBlaze },
+    { SPECIES_PIGNITE,                  sInnateBlaze },
+    { SPECIES_EMBOAR,                   sInnateBlaze },
+    { SPECIES_FENNEKIN,                 sInnateBlaze },
+    { SPECIES_BRAIXEN,                  sInnateBlaze },
+    { SPECIES_DELPHOX,                  sInnateBlaze },
+    { SPECIES_LITTEN,                   sInnateBlaze },
+    { SPECIES_TORRACAT,                 sInnateBlaze },
+    { SPECIES_INCINEROAR,               sInnateBlaze },
+    { SPECIES_SCORBUNNY,                sInnateBlaze },
+    { SPECIES_RABOOT,                   sInnateBlaze },
+    { SPECIES_CINDERACE,                sInnateBlaze },
+    { SPECIES_CINDERACE_GMAX,           sInnateBlaze },
+    { SPECIES_PANSEAR,                  sInnateBlaze }, // Blaze is the HA
+    { SPECIES_SIMISEAR,                 sInnateBlaze },
+
+    // Torrent (Water starters)
+    { SPECIES_SQUIRTLE,                 sInnateTorrent },
+    { SPECIES_WARTORTLE,                sInnateTorrent },
+    { SPECIES_BLASTOISE,                sInnateTorrent }, // Mega is Mega Launcher, omitted
+    { SPECIES_BLASTOISE_GMAX,           sInnateTorrent },
+    { SPECIES_TOTODILE,                 sInnateTorrent },
+    { SPECIES_CROCONAW,                 sInnateTorrent },
+    { SPECIES_FERALIGATR,               sInnateTorrent },
+    { SPECIES_MUDKIP,                   sInnateTorrent },
+    { SPECIES_MARSHTOMP,                sInnateTorrent },
+    { SPECIES_SWAMPERT,                 sInnateTorrent }, // Mega is Swift Swim, omitted
+    { SPECIES_PIPLUP,                   sInnateTorrent },
+    { SPECIES_PRINPLUP,                 sInnateTorrent },
+    { SPECIES_EMPOLEON,                 sInnateTorrent },
+    { SPECIES_OSHAWOTT,                 sInnateTorrent },
+    { SPECIES_DEWOTT,                   sInnateTorrent },
+    { SPECIES_SAMUROTT,                 sInnateTorrent },
+    { SPECIES_SAMUROTT_HISUI,           sInnateTorrent },
+    { SPECIES_FROAKIE,                  sInnateTorrent },
+    { SPECIES_FROGADIER,                sInnateTorrent },
+    { SPECIES_GRENINJA,                 sInnateTorrent }, // Battle Bond / Protean builds keep the Torrent boost
+    { SPECIES_POPPLIO,                  sInnateTorrent },
+    { SPECIES_BRIONNE,                  sInnateTorrent },
+    { SPECIES_PRIMARINA,                sInnateTorrent },
+    { SPECIES_SOBBLE,                   sInnateTorrent },
+    { SPECIES_DRIZZILE,                 sInnateTorrent },
+    { SPECIES_INTELEON,                 sInnateTorrent },
+    { SPECIES_INTELEON_GMAX,            sInnateTorrent },
+    { SPECIES_PANPOUR,                  sInnateTorrent }, // Torrent is the HA
+    { SPECIES_SIMIPOUR,                 sInnateTorrent },
+    { SPECIES_QUAXLY,                   sInnateTorrent },
+    { SPECIES_QUAXWELL,                 sInnateTorrent },
+    { SPECIES_QUAQUAVAL,                sInnateTorrent },
+
+    // Swarm (Bug users)
+    { SPECIES_BEEDRILL,                 sInnateSwarm }, // Mega is Adaptability, omitted
+    { SPECIES_SPINARAK,                 sInnateSwarm },
+    { SPECIES_ARIADOS,                  sInnateSwarm },
+    { SPECIES_LEDYBA,                   sInnateSwarm },
+    { SPECIES_LEDIAN,                   sInnateSwarm },
+    { SPECIES_SCYTHER,                  sInnateSwarm },
+    { SPECIES_SCIZOR,                   sInnateSwarm }, // Mega is Technician, omitted
+    { SPECIES_HERACROSS,                sInnateSwarm }, // Mega is Skill Link, omitted
+    { SPECIES_BEAUTIFLY,                sInnateSwarm },
+    { SPECIES_KRICKETUNE,               sInnateSwarm },
+    { SPECIES_VENIPEDE,                 sInnateSwarm },
+    { SPECIES_WHIRLIPEDE,               sInnateSwarm },
+    { SPECIES_SCOLIPEDE,                sInnateSwarm },
+    { SPECIES_SEWADDLE,                 sInnateSwarm },
+    { SPECIES_LEAVANNY,                 sInnateSwarm },
+    { SPECIES_KARRABLAST,               sInnateSwarm },
+    { SPECIES_ESCAVALIER,               sInnateSwarm },
+    { SPECIES_JOLTIK,                   sInnateSwarm },
+    { SPECIES_GALVANTULA,               sInnateSwarm },
+    { SPECIES_DURANT,                   sInnateSwarm },
+    { SPECIES_VOLCARONA,                sInnateSwarm },
+    { SPECIES_GRUBBIN,                  sInnateSwarm },
+    { SPECIES_NYMBLE,                   sInnateSwarm },
+    { SPECIES_LOKIX,                    sInnateSwarm },
+    { SPECIES_BLIPBUG,                  sInnateSwarm },
+    { SPECIES_DOTTLER,                  sInnateSwarm },
+    { SPECIES_ORBEETLE,                 sInnateSwarm },
+    { SPECIES_ORBEETLE_GMAX,            sInnateSwarm },
+    { SPECIES_KLEAVOR,                  sInnateSwarm },
 };
 
 static const enum Ability *GetSpeciesInnateList(u16 species)

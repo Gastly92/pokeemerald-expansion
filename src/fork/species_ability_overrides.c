@@ -77,6 +77,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     //    self-cleanse on the innate Natural Cure regardless.
     { SPECIES_CELEBI,              1, ABILITY_TRIAGE },      // forest life-energy → priority on its Giga Drain / Recover
     { SPECIES_SHAYMIN,             1, ABILITY_SERENE_GRACE }, // its Sky forme's ability — doubles Seed Flare's SpD-drop chance
+
+    // ── BOTH abilities now innate (the pinch-ability case): the Fuecoco line's only abilities are
+    //    Blaze (primary) and Unaware (HA), and both are now granted innately, so a frontier set has
+    //    no real slot left for a chosen ability. Give Skeledirge — the only line member in the roster
+    //    — a chosen Cursed Body in the empty slot 1 (fitting its ghostly Fire/Ghost "singer" theme);
+    //    it still gets the latched innate Blaze boost and the innate Unaware stat-ignore regardless.
+    { SPECIES_SKELEDIRGE,          1, ABILITY_CURSED_BODY },
 };
 
 enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)

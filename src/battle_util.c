@@ -7223,6 +7223,25 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
         break;
     }
 
+    // FORK: innate pinch abilities (Overgrow/Blaze/Torrent/Swarm). The chosen-ability switch above
+    // leaves a real pinch ability vanilla (boost only while currently <= 1/3 HP); the INNATE version
+    // is a pure-boon divergence that LATCHES — once the holder has reached <= 1/3 HP this battle
+    // (GetBattlerPartyState()->reachedPinchHp, set each end-of-turn in battle_end_turn.c), the boost
+    // persists for the rest of the battle, so a heal (e.g. an innate Regenerator's switch-out heal,
+    // Leftovers, a Berry) can't strip it. The `!= ABILITY_X` guard skips the case the switch already
+    // handled, so a starter running its real pinch ability never double-applies. IsInnateActive()
+    // handles feature gating + Gastro Acid / Neutralizing Gas / not-on-field suppression.
+    if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3)
+     || GetBattlerPartyState(battlerAtk)->reachedPinchHp)
+    {
+        enum Ability atkAbility = ctx->abilities[battlerAtk];
+        if ((moveType == TYPE_GRASS && atkAbility != ABILITY_OVERGROW && IsInnateActive(battlerAtk, ABILITY_OVERGROW))
+         || (moveType == TYPE_FIRE  && atkAbility != ABILITY_BLAZE    && IsInnateActive(battlerAtk, ABILITY_BLAZE))
+         || (moveType == TYPE_WATER && atkAbility != ABILITY_TORRENT  && IsInnateActive(battlerAtk, ABILITY_TORRENT))
+         || (moveType == TYPE_BUG   && atkAbility != ABILITY_SWARM    && IsInnateActive(battlerAtk, ABILITY_SWARM)))
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+    }
+
     // target's abilities
     switch (ctx->abilities[ctx->battlerDef])
     {

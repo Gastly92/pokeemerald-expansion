@@ -963,3 +963,73 @@ AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI won't boost stats against an
             TURN { EXPECT_MOVE(opponent, MOVE_SWORDS_DANCE); } // no innate: the AI sets up freely
     }
 }
+
+// ───────────────────────────────────────────────────────────────────────────
+// Pinch abilities (Overgrow/Blaze/Torrent/Swarm) as innates. The innate is a
+// pure-boon DIVERGENCE that LATCHES: once the holder has reached <=1/3 HP this
+// battle, the +50% boost sticks for the rest of the battle (so a later heal can't
+// strip it), unlike a real pinch ability that only boosts while currently <=1/3.
+// Venusaur carries innate Overgrow (its row also lists Natural Cure/Regenerator);
+// running it with chosen Chlorophyll isolates the innate as the boost source.
+// ───────────────────────────────────────────────────────────────────────────
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate pinch ability boosts at <=1/3 HP", s16 damage)
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VENUSAUR, ABILITY_OVERGROW));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_VENUSAUR) { Ability(ABILITY_CHLOROPHYLL); MaxHP(120); HP(30); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SEED_BOMB); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Feature off: chosen Chlorophyll, no Overgrow, no boost. Feature on: innate Overgrow at <=1/3 HP -> 1.5x.
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate pinch boost LATCHES and persists after healing above 1/3", s16 damage)
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_VENUSAUR) { Ability(ABILITY_CHLOROPHYLL); MaxHP(120); HP(30); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_GROWL); }      // stays at 30 HP; end-of-turn latches the pinch flag
+        TURN { MOVE(player, MOVE_SYNTHESIS); }  // heals to ~90 HP, back above 1/3
+        TURN { MOVE(player, MOVE_SEED_BOMB); }  // above 1/3 now; a real Overgrow would be off, the latch keeps it
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Feature off: no boost above 1/3. Feature on: the latched innate Overgrow still gives 1.5x.
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate pinch ability", s16 damage)
+{
+    u32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_VENUSAUR) { Ability(ABILITY_CHLOROPHYLL); MaxHP(120); HP(30); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_SEED_BOMB); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Gastro Acid suppresses the innate exactly like a real ability, so the boost is gone.
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.5), results[0].damage);
+    }
+}

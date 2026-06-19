@@ -22,8 +22,11 @@
 // src/battle_util.c), STURDY (endures a lethal hit at full HP + OHKO-move immunity,
 // handled at the two effect sites in src/battle_util.c), NATURAL_CURE (silently
 // cures the holder's status on switch-out, fired at the single switch-out site in
-// src/battle_script_commands.c like Regenerator), and PRANKSTER (gives the holder's
-// status moves +1 priority, handled at the single move-priority site in src/battle_main.c).
+// src/battle_script_commands.c like Regenerator), PRANKSTER (gives the holder's
+// status moves +1 priority, handled at the single move-priority site in src/battle_main.c),
+// and the pinch abilities OVERGROW / BLAZE / TORRENT / SWARM (+50% to the matching move type at
+// low HP, handled in CalcAttackStat in src/battle_util.c, with a latch so the boost persists once
+// reached — see the ALLOWLIST note in src/fork/innate_abilities.c).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

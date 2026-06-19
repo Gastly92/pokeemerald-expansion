@@ -66,10 +66,10 @@
 | :white_large_square: | Guts | When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon's physical moves. |
 | :white_large_square: | Marvel Scale | When the Pokémon has a status condition, its Defense stat is boosted by 50%. |
 | :white_large_square: | Liquid Ooze | The strong stench of the Pokémon's oozed liquid damages attackers that use HP-draining moves. |
-| :white_large_square: | Overgrow | Boosts the power of the Pokémon's Grass-type moves by 50% when its HP drops to 1/3 or less of its max. |
-| :white_large_square: | Blaze | Boosts the power of the Pokémon's Fire-type moves by 50% when its HP drops to 1/3 or less of its max. |
-| :white_large_square: | Torrent | Boosts the power of the Pokémon's Water-type moves by 50% when its HP drops to 1/3 or less of its max. |
-| :white_large_square: | Swarm | Boosts the power of the Pokémon's Bug-type moves by 50% when its HP drops to 1/3 or less of its max. |
+| :white_check_mark: | Overgrow | Boosts the power of the Pokémon's Grass-type moves by 50% when its HP drops to 1/3 or less of its max. |
+| :white_check_mark: | Blaze | Boosts the power of the Pokémon's Fire-type moves by 50% when its HP drops to 1/3 or less of its max. |
+| :white_check_mark: | Torrent | Boosts the power of the Pokémon's Water-type moves by 50% when its HP drops to 1/3 or less of its max. |
+| :white_check_mark: | Swarm | Boosts the power of the Pokémon's Bug-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_large_square: | Rock Head | The Pokémon will not lose HP due to recoil damage from its moves. |
 | :x: | Drought | Summons harsh sunlight for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Arena Trap | Prevents opposing Pokémon from fleeing from battle. |

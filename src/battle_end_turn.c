@@ -75,6 +75,13 @@ static bool32 HandleEndTurnVarious(enum BattlerId battler)
             gBattleMons[i].volatiles.laserFocus = FALSE;
 
         gBattleStruct->battlerState[i].wasAboveHalfHp = gBattleMons[i].hp > gBattleMons[i].maxHP / 2;
+
+        // FORK: latch the innate pinch boost (Overgrow/Blaze/Torrent/Swarm). Once a mon has been at
+        // <= 1/3 HP it stays "in pinch" for the rest of the battle, so a later heal (an innate
+        // Regenerator's switch-out heal, Leftovers, a Berry) can't strip the boost. Read in
+        // CalcAttackStat (src/battle_util.c); only consulted for innate pinch holders.
+        if (gBattleMons[i].hp <= (gBattleMons[i].maxHP / 3))
+            GetBattlerPartyState(i)->reachedPinchHp = TRUE;
     }
 
     if (gBattleStruct->incrementEchoedVoice)
