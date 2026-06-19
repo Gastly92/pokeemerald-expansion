@@ -281,9 +281,9 @@
 | :white_large_square: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
 | :x: | Zero to Hero | The Pokémon changes into its Hero Form when it switches out of battle. |
 | :x: | Commander | When the Pokémon enters a battle, it goes inside the mouth of an ally Dondozo if one is on the field. The Pokémon then issues commands from there. |
-| :white_large_square: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
-| :white_large_square: | Protosynthesis | Boosts the Pokémon's most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy. |
-| :white_large_square: | Quark Drive | Boosts the Pokémon's most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy. |
+| :x: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
+| :x: | Protosynthesis | Boosts the Pokémon's most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy. |
+| :x: | Quark Drive | Boosts the Pokémon's most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy. |
 | :x: | Good as Gold | A body of pure, solid gold gives the Pokémon full immunity to other Pokémon's status moves. |
 | :x: | Vessel of Ruin | The power of the Pokémon's ruinous vessel lowers the Sp. Atk stats of all Pokémon except itself. |
 | :x: | Sword of Ruin | The power of the Pokémon's ruinous sword lowers the Defense stats of all Pokémon except itself. |
