@@ -24,9 +24,12 @@
 // cures the holder's status on switch-out, fired at the single switch-out site in
 // src/battle_script_commands.c like Regenerator), PRANKSTER (gives the holder's
 // status moves +1 priority, handled at the single move-priority site in src/battle_main.c),
-// and the pinch abilities OVERGROW / BLAZE / TORRENT / SWARM (+50% to the matching move type at
+// the pinch abilities OVERGROW / BLAZE / TORRENT / SWARM (+50% to the matching move type at
 // low HP, handled in CalcAttackStat in src/battle_util.c, with a latch so the boost persists once
-// reached — see the ALLOWLIST note in src/fork/innate_abilities.c).
+// reached — see the ALLOWLIST note in src/fork/innate_abilities.c), and the weather speed-doublers
+// SWIFT_SWIM / CHLOROPHYLL / SAND_RUSH / SLUSH_RUSH (x2 Speed in rain / sun / sandstorm / snow, handled
+// at the GetBattlerTotalSpeedStat calc site in src/battle_main.c; Sand Rush also shrugs off sandstorm
+// damage, mirrored in src/battle_end_turn.c and the AI's sandstorm-damage predictors).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

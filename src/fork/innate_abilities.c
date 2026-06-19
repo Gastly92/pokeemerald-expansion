@@ -146,6 +146,29 @@
 //     Tough Claws / Drought / Mega Launcher / etc. and are omitted; Gigantamax forms and the Hisuian
 //     starters keep theirs). The Bulbasaur, Chikorita and Fuecoco lines and Volbeat already carry other
 //     innates, so they take a combined INNATES(...) list with the pinch ability added.
+//   - ABILITY_SWIFT_SWIM / ABILITY_CHLOROPHYLL / ABILITY_SAND_RUSH / ABILITY_SLUSH_RUSH — the weather
+//     speed-doublers: x2 Speed in rain / harsh sun / sandstorm / snow respectively (Sand Rush also
+//     shrugs off sandstorm chip damage, like the real ability). Handled at the single speed-calc site
+//     GetBattlerTotalSpeedStat (src/battle_main.c): each `ability == ABILITY_X` test gains an
+//     `|| IsInnateActive(battler, ABILITY_X)` clause, so an innate holder doubles exactly like the real
+//     ability. Sand Rush's sandstorm-damage immunity is mirrored at the end-turn damage site
+//     (src/battle_end_turn.c) and the AI's two sandstorm-damage predictors (DoesBattlerTakeSandstormDamage
+//     in src/battle_ai_util.c, GetSwitchinWeatherImpact in src/battle_ai_switch.c). NO pure-boon divergence:
+//     a weather speed-doubler is a clean upside that never hurts its holder, so each innate is a 1:1 copy.
+//     Suppression parity holds via IsInnateActive() (none of the four is breakable, so Mold Breaker never
+//     touches them — same as the real ability). AI is innate-aware: turn-order prediction runs the same
+//     GetBattlerTotalSpeedStat keyed off the real battler, so the AI both threatens and respects an innate
+//     doubler's speed for FREE (innates are species-derived, so this never leaks a hidden chosen ability);
+//     the AI's weather-SETTING heuristics (DoesAbilityBenefitFromWeather in src/battle_ai_field_statuses.c,
+//     DoesAbilityBenefitFromSunOrRain in src/battle_ai_main.c) also credit an innate doubler so the AI sets
+//     the matching weather to enable it. Canon-only (no flavor picks — a x2-Speed weather sweeper is potent,
+//     so like the pinch abilities the set stays to species whose ability data carries it in any slot): the
+//     signature survives whichever slot a build picks (a Rain Dish Ludicolo / Sand Force Excadrill keeps its
+//     doubling), and forms are listed only where the form's ability data still carries it (Mega Swampert,
+//     Gigantamax Drednaw/Venusaur, Hisuian Qwilfish/Lilligant/Overqwil, the seasonal Deerling/Sawsbuck).
+//     Beartic carries BOTH Swift Swim (primary) and Slush Rush (HA), so it takes the combined pair. Many
+//     species already carry other innates (the Bulbasaur/Tangela/Bellossom/Cottonee/Psyduck/Relicanth/...
+//     lines), so they take a combined INNATES(...) list with the speed-doubler added.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -166,6 +189,10 @@ static const enum Ability sInnateOvergrow[] = { ABILITY_OVERGROW, ABILITY_NONE }
 static const enum Ability sInnateBlaze[] = { ABILITY_BLAZE, ABILITY_NONE };
 static const enum Ability sInnateTorrent[] = { ABILITY_TORRENT, ABILITY_NONE };
 static const enum Ability sInnateSwarm[] = { ABILITY_SWARM, ABILITY_NONE };
+static const enum Ability sInnateSwiftSwim[] = { ABILITY_SWIFT_SWIM, ABILITY_NONE };
+static const enum Ability sInnateChlorophyll[] = { ABILITY_CHLOROPHYLL, ABILITY_NONE };
+static const enum Ability sInnateSandRush[] = { ABILITY_SAND_RUSH, ABILITY_NONE };
+static const enum Ability sInnateSlushRush[] = { ABILITY_SLUSH_RUSH, ABILITY_NONE };
 
 // A species with SEVERAL innates lists them inline at its row with INNATES(...) instead of needing a
 // named combination array per pairing (which doesn't scale as the allowlist grows). The compound
@@ -182,10 +209,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     // the file header above; per-row notes record the species-specific reasoning.
 
     // ----- Gen 1 -----
-    { SPECIES_BULBASAUR,                INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) }, // 1 canon Overgrow
-    { SPECIES_IVYSAUR,                  INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) }, // 2
-    { SPECIES_VENUSAUR,                 INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW) }, // 3
-    { SPECIES_VENUSAUR_GMAX,            sInnateOvergrow }, // 3
+    { SPECIES_BULBASAUR,                INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW, ABILITY_CHLOROPHYLL) }, // 1 canon Overgrow + canon Chlorophyll (HA)
+    { SPECIES_IVYSAUR,                  INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW, ABILITY_CHLOROPHYLL) }, // 2
+    { SPECIES_VENUSAUR,                 INNATES(ABILITY_NATURAL_CURE, ABILITY_REGENERATOR, ABILITY_OVERGROW, ABILITY_CHLOROPHYLL) }, // 3 both real abilities now innate -> chosen Thick Fat via override
+    { SPECIES_VENUSAUR_GMAX,            INNATES(ABILITY_OVERGROW, ABILITY_CHLOROPHYLL) }, // 3 Gmax keeps both
     { SPECIES_CHARMANDER,               sInnateBlaze }, // 4
     { SPECIES_CHARMELEON,               sInnateBlaze }, // 5
     { SPECIES_CHARIZARD,                sInnateBlaze }, // 6 Mega-X is Tough Claws, Mega-Y is Drought; both omitted
@@ -195,10 +222,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_BLASTOISE,                sInnateTorrent }, // 9 Mega is Mega Launcher, omitted
     { SPECIES_BLASTOISE_GMAX,           sInnateTorrent }, // 9
     { SPECIES_BEEDRILL,                 sInnateSwarm }, // 15 Mega is Adaptability, omitted
+    { SPECIES_SANDSHREW,                sInnateSandRush }, // 27 Sand Rush is the HA
+    { SPECIES_SANDSHREW_ALOLA,          sInnateSlushRush }, // 27 Alolan line's HA is Slush Rush
+    { SPECIES_SANDSLASH,                sInnateSandRush }, // 28
+    { SPECIES_SANDSLASH_ALOLA,          sInnateSlushRush }, // 28
     { SPECIES_CLEFABLE,                 sInnateUnaware }, // 36 Unaware is the HA
     { SPECIES_CLEFABLE_MEGA,            sInnateUnaware }, // 36 innate persists through the Mega
-    { SPECIES_PSYDUCK,                  sInnateUnaware }, // 54 perpetual headache leaves it dazed
-    { SPECIES_GOLDUCK,                  sInnateUnaware }, // 55 flavor
+    { SPECIES_ODDISH,                   sInnateChlorophyll }, // 43 Chlorophyll is the primary
+    { SPECIES_GLOOM,                    sInnateChlorophyll }, // 44
+    { SPECIES_VILEPLUME,                sInnateChlorophyll }, // 45
+    { SPECIES_PSYDUCK,                  INNATES(ABILITY_UNAWARE, ABILITY_SWIFT_SWIM) }, // 54 dazed (flavor Unaware) + canon Swift Swim (HA)
+    { SPECIES_GOLDUCK,                  INNATES(ABILITY_UNAWARE, ABILITY_SWIFT_SWIM) }, // 55 flavor Unaware + canon Swift Swim (HA)
+    { SPECIES_POLIWAG,                  sInnateSwiftSwim }, // 60 Swift Swim is the HA
+    { SPECIES_POLIWHIRL,                sInnateSwiftSwim }, // 61
+    { SPECIES_POLIWRATH,                sInnateSwiftSwim }, // 62
+    { SPECIES_BELLSPROUT,               sInnateChlorophyll }, // 69 Chlorophyll is the primary
+    { SPECIES_WEEPINBELL,               sInnateChlorophyll }, // 70
+    { SPECIES_VICTREEBEL,               sInnateChlorophyll }, // 71
     { SPECIES_GEODUDE,                  sInnateSturdy }, // 74
     { SPECIES_GEODUDE_ALOLA,            sInnateSturdy }, // 74
     { SPECIES_GRAVELER,                 sInnateSturdy }, // 75
@@ -219,15 +259,25 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GENGAR,                   sInnateLevitate }, // 94 floats; primary is Cursed Body at GEN_LATEST, so observable
     { SPECIES_GENGAR_GMAX,              sInnateLevitate }, // 94 a Gigantamaxed Gengar still floats (NOT Gengar-Mega, which is grounded)
     { SPECIES_ONIX,                     sInnateSturdy }, // 95
+    { SPECIES_EXEGGCUTE,                sInnateChlorophyll }, // 102 Chlorophyll is the primary
+    { SPECIES_EXEGGUTOR,                sInnateChlorophyll }, // 103 Kanto form (Alolan is Frisk/Harvest, omitted)
     { SPECIES_KOFFING,                  sInnateLevitate }, // 109
     { SPECIES_WEEZING,                  sInnateLevitate }, // 110
     { SPECIES_WEEZING_GALAR,            sInnateLevitate }, // 110 Misty Surge (HA) build floats AND reaps its terrain; Poison-type builds clear Toxic Spikes
     { SPECIES_CHANSEY,                  sInnateNaturalCure }, // 113
-    { SPECIES_TANGELA,                  sInnateRegenerator }, // 114
+    { SPECIES_TANGELA,                  INNATES(ABILITY_REGENERATOR, ABILITY_CHLOROPHYLL) }, // 114 canon Regen (HA) + canon Chlorophyll (primary)
+    { SPECIES_HORSEA,                   sInnateSwiftSwim }, // 116 Swift Swim is the HA
+    { SPECIES_GOLDEEN,                  sInnateSwiftSwim }, // 118 Swift Swim is the primary
+    { SPECIES_SEAKING,                  sInnateSwiftSwim }, // 119
     { SPECIES_STARYU,                   INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // 120 flavor Regen (regrows from its core) + canon Natural Cure
     { SPECIES_STARMIE,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // 121 flavor Regen + canon Natural Cure
     { SPECIES_SCYTHER,                  sInnateSwarm }, // 123
+    { SPECIES_MAGIKARP,                 sInnateSwiftSwim }, // 129 Swift Swim is the primary
     { SPECIES_PORYGON,                  sInnateLevitate }, // 137
+    { SPECIES_OMANYTE,                  sInnateSwiftSwim }, // 138 Swift Swim is the HA
+    { SPECIES_OMASTAR,                  sInnateSwiftSwim }, // 139
+    { SPECIES_KABUTO,                   sInnateSwiftSwim }, // 140 Swift Swim is the primary
+    { SPECIES_KABUTOPS,                 sInnateSwiftSwim }, // 141
     { SPECIES_SNORLAX,                  sInnateUnaware }, // 143 too busy eating/sleeping to be bothered
     { SPECIES_SNORLAX_GMAX,             sInnateUnaware }, // 143 flavor
     { SPECIES_MEWTWO,                   sInnateLevitate }, // 150
@@ -249,9 +299,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_LEDIAN,                   sInnateSwarm }, // 166
     { SPECIES_SPINARAK,                 sInnateSwarm }, // 167
     { SPECIES_ARIADOS,                  sInnateSwarm }, // 168
-    { SPECIES_BELLOSSOM,                sInnateNaturalCure }, // 182 its healing dance revitalizes the weary
+    { SPECIES_BELLOSSOM,                INNATES(ABILITY_NATURAL_CURE, ABILITY_CHLOROPHYLL) }, // 182 flavor Natural Cure (healing dance) + canon Chlorophyll (primary)
     { SPECIES_SUDOWOODO,                sInnateSturdy }, // 185
+    { SPECIES_HOPPIP,                   sInnateChlorophyll }, // 187 Chlorophyll is the primary
+    { SPECIES_SKIPLOOM,                 sInnateChlorophyll }, // 188
+    { SPECIES_JUMPLUFF,                 sInnateChlorophyll }, // 189
     { SPECIES_AIPOM,                    sInnatePrankster }, // 190 playful, mischievous tail-pranking monkey
+    { SPECIES_SUNKERN,                  sInnateChlorophyll }, // 191 Chlorophyll is the primary
+    { SPECIES_SUNFLORA,                 sInnateChlorophyll }, // 192
     { SPECIES_WOOPER,                   INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // 194 flavor Regen (axolotl limb regrowth) + canon Unaware (HA)
     { SPECIES_WOOPER_PALDEA,            INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // 194 flavor Regen (Paldean axolotl) + canon Unaware (HA)
     { SPECIES_QUAGSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // 195 flavor Regen + canon Unaware (HA)
@@ -291,12 +346,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_FORRETRESS,               sInnateSturdy }, // 205
     { SPECIES_STEELIX,                  sInnateSturdy }, // 208
     { SPECIES_STEELIX_MEGA,             sInnateSturdy }, // 208 canon Mega is Sand Force; innate persists through the Mega
+    { SPECIES_QWILFISH,                 sInnateSwiftSwim }, // 211 Swift Swim is the HA (Kanto/Johto form)
+    { SPECIES_QWILFISH_HISUI,           sInnateSwiftSwim }, // 211 Hisuian form keeps Swift Swim (HA)
     { SPECIES_SCIZOR,                   sInnateSwarm }, // 212 Mega is Technician, omitted
     { SPECIES_SHUCKLE,                  sInnateSturdy }, // 213
     { SPECIES_HERACROSS,                sInnateSwarm }, // 214 Mega is Skill Link, omitted
     { SPECIES_CORSOLA,                  INNATES(ABILITY_REGENERATOR, ABILITY_NATURAL_CURE) }, // 222 canon Regen (HA) + canon Natural Cure
+    { SPECIES_MANTINE,                  sInnateSwiftSwim }, // 226 Swift Swim is the HA
     { SPECIES_SKARMORY,                 sInnateSturdy }, // 227
     { SPECIES_SKARMORY_MEGA,            sInnateSturdy }, // 227 innate persists through the Mega
+    { SPECIES_KINGDRA,                  sInnateSwiftSwim }, // 230 Swift Swim is the primary
     { SPECIES_DONPHAN,                  sInnateSturdy }, // 232
     { SPECIES_PORYGON2,                 sInnateLevitate }, // 233
     { SPECIES_BLISSEY,                  sInnateNaturalCure }, // 242
@@ -312,8 +371,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_BLAZIKEN,                 sInnateBlaze }, // 257 Mega is Speed Boost, omitted
     { SPECIES_MUDKIP,                   sInnateTorrent }, // 258
     { SPECIES_MARSHTOMP,                sInnateTorrent }, // 259
-    { SPECIES_SWAMPERT,                 sInnateTorrent }, // 260 Mega is Swift Swim, omitted
+    { SPECIES_SWAMPERT,                 sInnateTorrent }, // 260 base is Torrent; Mega's ability data is Swift Swim (next row)
+    { SPECIES_SWAMPERT_MEGA,            sInnateSwiftSwim }, // 260 Mega Swampert's ability is Swift Swim
     { SPECIES_BEAUTIFLY,                sInnateSwarm }, // 267
+    { SPECIES_LOTAD,                    sInnateSwiftSwim }, // 270 Swift Swim is the primary
+    { SPECIES_LOMBRE,                   sInnateSwiftSwim }, // 271
+    { SPECIES_LUDICOLO,                 sInnateSwiftSwim }, // 272
+    { SPECIES_SEEDOT,                   sInnateChlorophyll }, // 273 Chlorophyll is the primary
+    { SPECIES_NUZLEAF,                  sInnateChlorophyll }, // 274
+    { SPECIES_SHIFTRY,                  sInnateChlorophyll }, // 275
+    { SPECIES_SURSKIT,                  sInnateSwiftSwim }, // 283 Swift Swim is the primary
     { SPECIES_SHEDINJA,                 sInnateLevitate }, // 292
     { SPECIES_NOSEPASS,                 sInnateSturdy }, // 299
     { SPECIES_SABLEYE,                  sInnatePrankster }, // 302 Prankster is the HA (Mega Sableye is Magic Bounce, omitted)
@@ -335,6 +402,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_SOLROCK,                  sInnateLevitate }, // 338
     { SPECIES_BALTOY,                   sInnateLevitate }, // 343
     { SPECIES_CLAYDOL,                  sInnateLevitate }, // 344
+    { SPECIES_ANORITH,                  sInnateSwiftSwim }, // 347 Swift Swim is the HA
+    { SPECIES_ARMALDO,                  sInnateSwiftSwim }, // 348
+    { SPECIES_FEEBAS,                   sInnateSwiftSwim }, // 349 Swift Swim is the primary
     { SPECIES_CASTFORM,                 sInnateLevitate }, // 351
     { SPECIES_CASTFORM_NORMAL,          sInnateLevitate }, // 351
     { SPECIES_CASTFORM_SUNNY,           sInnateLevitate }, // 351
@@ -345,11 +415,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_BANETTE_MEGA,             sInnateLevitate }, // 354
     { SPECIES_DUSKULL,                  sInnateLevitate }, // 355
     { SPECIES_DUSCLOPS,                 sInnateLevitate }, // 356
+    { SPECIES_TROPIUS,                  sInnateChlorophyll }, // 357 Chlorophyll is the primary
     { SPECIES_CHIMECHO,                 sInnateLevitate }, // 358
     { SPECIES_CHIMECHO_MEGA,            sInnateLevitate }, // 358
     { SPECIES_GLALIE,                   sInnateLevitate }, // 362
     { SPECIES_GLALIE_MEGA,              sInnateLevitate }, // 362
-    { SPECIES_RELICANTH,                sInnateSturdy }, // 369
+    { SPECIES_HUNTAIL,                  sInnateSwiftSwim }, // 367 Swift Swim is the primary
+    { SPECIES_GOREBYSS,                 sInnateSwiftSwim }, // 368
+    { SPECIES_RELICANTH,                INNATES(ABILITY_STURDY, ABILITY_SWIFT_SWIM) }, // 369 canon Sturdy (HA) + canon Swift Swim (primary)
+    { SPECIES_LUVDISC,                  sInnateSwiftSwim }, // 370 Swift Swim is the primary
     { SPECIES_REGIROCK,                 sInnateSturdy }, // 377
     { SPECIES_LATIAS,                   sInnateLevitate }, // 380
     { SPECIES_LATIAS_MEGA,              sInnateLevitate }, // 380
@@ -379,6 +453,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_ROSERADE,                 sInnateNaturalCure }, // 407
     { SPECIES_SHIELDON,                 sInnateSturdy }, // 410
     { SPECIES_BASTIODON,                sInnateSturdy }, // 411
+    { SPECIES_BUIZEL,                   sInnateSwiftSwim }, // 418 Swift Swim is the primary
+    { SPECIES_FLOATZEL,                 sInnateSwiftSwim }, // 419
+    { SPECIES_CHERUBI,                  sInnateChlorophyll }, // 420 Chlorophyll is the primary
     { SPECIES_AMBIPOM,                  sInnatePrankster }, // 424 nimble and just as mischievous as Aipom
     { SPECIES_MISMAGIUS,                sInnateLevitate }, // 429
     { SPECIES_CHINGLING,                sInnateLevitate }, // 433
@@ -389,8 +466,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_MUNCHLAX,                 sInnateUnaware }, // 446 flavor: only ever thinks about food
     { SPECIES_RIOLU,                    sInnatePrankster }, // 447 Prankster is the HA (Lucario loses it, so it is not listed)
     { SPECIES_CARNIVINE,                sInnateLevitate }, // 455
+    { SPECIES_FINNEON,                  sInnateSwiftSwim }, // 456 Swift Swim is the primary
+    { SPECIES_LUMINEON,                 sInnateSwiftSwim }, // 457
+    { SPECIES_MANTYKE,                  sInnateSwiftSwim }, // 458 Swift Swim is the HA
     { SPECIES_MAGNEZONE,                INNATES(ABILITY_LEVITATE, ABILITY_STURDY) }, // 462 flavor Levitate + canon Sturdy
-    { SPECIES_TANGROWTH,                sInnateRegenerator }, // 465
+    { SPECIES_TANGROWTH,                INNATES(ABILITY_REGENERATOR, ABILITY_CHLOROPHYLL) }, // 465 canon Regen (HA) + canon Chlorophyll (primary)
+    { SPECIES_LEAFEON,                  sInnateChlorophyll }, // 470 Chlorophyll is the HA
     { SPECIES_PORYGON_Z,                sInnateLevitate }, // 474
     { SPECIES_PROBOPASS,                sInnateSturdy }, // 476
     { SPECIES_FROSLASS,                 sInnateLevitate }, // 478
@@ -422,6 +503,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_DEWOTT,                   sInnateTorrent }, // 502
     { SPECIES_SAMUROTT,                 sInnateTorrent }, // 503
     { SPECIES_SAMUROTT_HISUI,           sInnateTorrent }, // 503
+    { SPECIES_HERDIER,                  sInnateSandRush }, // 507 Sand Rush is the HA
+    { SPECIES_STOUTLAND,                sInnateSandRush }, // 508
     { SPECIES_PURRLOIN,                 sInnatePrankster }, // 509 Prankster is the HA across the line
     { SPECIES_LIEPARD,                  sInnatePrankster }, // 510
     { SPECIES_PANSAGE,                  sInnateOvergrow }, // 511 Overgrow is the HA
@@ -437,23 +520,33 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GIGALITH,                 sInnateSturdy }, // 526
     { SPECIES_WOOBAT,                   sInnateUnaware }, // 527 Unaware is the primary ability
     { SPECIES_SWOOBAT,                  sInnateUnaware }, // 528
+    { SPECIES_DRILBUR,                  sInnateSandRush }, // 529 Sand Rush is the primary
+    { SPECIES_EXCADRILL,                sInnateSandRush }, // 530
     { SPECIES_AUDINO,                   sInnateRegenerator }, // 531
     { SPECIES_AUDINO_MEGA,              sInnateRegenerator }, // 531 canon Mega is Healer; innate persists through the Mega
+    { SPECIES_TYMPOLE,                  sInnateSwiftSwim }, // 535 Swift Swim is the primary
+    { SPECIES_PALPITOAD,                sInnateSwiftSwim }, // 536
+    { SPECIES_SEISMITOAD,               sInnateSwiftSwim }, // 537
     { SPECIES_SAWK,                     sInnateSturdy }, // 539
-    { SPECIES_SEWADDLE,                 sInnateSwarm }, // 540
-    { SPECIES_LEAVANNY,                 sInnateSwarm }, // 542
+    { SPECIES_SEWADDLE,                 INNATES(ABILITY_SWARM, ABILITY_CHLOROPHYLL) }, // 540 canon Swarm (primary) + canon Chlorophyll (secondary)
+    { SPECIES_SWADLOON,                 sInnateChlorophyll }, // 541 Chlorophyll is the secondary (loses Swarm)
+    { SPECIES_LEAVANNY,                 INNATES(ABILITY_SWARM, ABILITY_CHLOROPHYLL) }, // 542 canon Swarm (primary) + canon Chlorophyll (secondary)
     { SPECIES_VENIPEDE,                 sInnateSwarm }, // 543
     { SPECIES_WHIRLIPEDE,               sInnateSwarm }, // 544
     { SPECIES_SCOLIPEDE,                sInnateSwarm }, // 545
-    { SPECIES_COTTONEE,                 INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // 546 floats (cotton) + canon Prankster (primary)
-    { SPECIES_WHIMSICOTT,               INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER) }, // 547 floats (cotton) + canon Prankster (primary)
+    { SPECIES_COTTONEE,                 INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER, ABILITY_CHLOROPHYLL) }, // 546 floats + canon Prankster (primary) + canon Chlorophyll (HA)
+    { SPECIES_WHIMSICOTT,               INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER, ABILITY_CHLOROPHYLL) }, // 547 floats + canon Prankster (primary) + canon Chlorophyll (HA)
+    { SPECIES_PETILIL,                  sInnateChlorophyll }, // 548 Chlorophyll is the primary
+    { SPECIES_LILLIGANT,                sInnateChlorophyll }, // 549 Unovan form (Hisuian also has Chlorophyll, next row)
+    { SPECIES_LILLIGANT_HISUI,          sInnateChlorophyll }, // 549 Hisuian form keeps Chlorophyll (primary)
+    { SPECIES_MARACTUS,                 sInnateChlorophyll }, // 556 Chlorophyll is the secondary
     { SPECIES_DWEBBLE,                  sInnateSturdy }, // 557
     { SPECIES_CRUSTLE,                  sInnateSturdy }, // 558
     { SPECIES_YAMASK,                   sInnateLevitate }, // 562
     { SPECIES_YAMASK_GALAR,             sInnateLevitate }, // 562
     { SPECIES_COFAGRIGUS,               sInnateLevitate }, // 563
-    { SPECIES_TIRTOUGA,                 sInnateSturdy }, // 564
-    { SPECIES_CARRACOSTA,               sInnateSturdy }, // 565
+    { SPECIES_TIRTOUGA,                 INNATES(ABILITY_STURDY, ABILITY_SWIFT_SWIM) }, // 564 canon Sturdy (primary) + canon Swift Swim (HA)
+    { SPECIES_CARRACOSTA,               INNATES(ABILITY_STURDY, ABILITY_SWIFT_SWIM) }, // 565
     { SPECIES_ZORUA,                    sInnatePrankster }, // 570 illusion trickster that "delights in confusing people" (Unovan; Hisuian is vengeful, omitted)
     { SPECIES_ZOROARK,                  sInnatePrankster }, // 571 master of illusions and deception (Unovan)
     { SPECIES_SOLOSIS,                  INNATES(ABILITY_LEVITATE, ABILITY_REGENERATOR) }, // 577 floats + canon Regenerator
@@ -462,6 +555,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_VANILLITE,                sInnateLevitate }, // 582
     { SPECIES_VANILLISH,                sInnateLevitate }, // 583
     { SPECIES_VANILLUXE,                sInnateLevitate }, // 584
+    { SPECIES_DEERLING_SPRING,          sInnateChlorophyll }, // 585 Chlorophyll is the primary (SPECIES_DEERLING aliases Spring)
+    { SPECIES_DEERLING_SUMMER,          sInnateChlorophyll }, // 585
+    { SPECIES_DEERLING_AUTUMN,          sInnateChlorophyll }, // 585
+    { SPECIES_DEERLING_WINTER,          sInnateChlorophyll }, // 585
+    { SPECIES_SAWSBUCK_SPRING,          sInnateChlorophyll }, // 586 Chlorophyll is the primary (SPECIES_SAWSBUCK aliases Spring)
+    { SPECIES_SAWSBUCK_SUMMER,          sInnateChlorophyll }, // 586
+    { SPECIES_SAWSBUCK_AUTUMN,          sInnateChlorophyll }, // 586
+    { SPECIES_SAWSBUCK_WINTER,          sInnateChlorophyll }, // 586
     { SPECIES_KARRABLAST,               sInnateSwarm }, // 588
     { SPECIES_ESCAVALIER,               sInnateSwarm }, // 589
     { SPECIES_FOONGUS,                  sInnateRegenerator }, // 590
@@ -484,6 +585,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_LAMPENT,                  sInnateLevitate }, // 608
     { SPECIES_CHANDELURE,               sInnateLevitate }, // 609
     { SPECIES_CHANDELURE_MEGA,          sInnateLevitate }, // 609
+    { SPECIES_CUBCHOO,                  sInnateSlushRush }, // 613 Slush Rush is the HA
+    { SPECIES_BEARTIC,                  INNATES(ABILITY_SWIFT_SWIM, ABILITY_SLUSH_RUSH) }, // 614 canon Swift Swim (primary) + canon Slush Rush (HA)
     { SPECIES_CRYOGONAL,                sInnateLevitate }, // 615
     { SPECIES_MIENFOO,                  sInnateRegenerator }, // 619
     { SPECIES_MIENSHAO,                 sInnateRegenerator }, // 620
@@ -554,6 +657,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GRUBBIN,                  sInnateSwarm }, // 736
     { SPECIES_VIKAVOLT,                 sInnateLevitate }, // 738
     { SPECIES_VIKAVOLT_TOTEM,           sInnateLevitate }, // 738
+    { SPECIES_LYCANROC_MIDDAY,          sInnateSandRush }, // 745 Sand Rush is the HA (Midday form; SPECIES_LYCANROC aliases it. Midnight/Dusk lack it)
     { SPECIES_MAREANIE,                 sInnateRegenerator }, // 747
     { SPECIES_TOXAPEX,                  sInnateRegenerator }, // 748
     { SPECIES_COMFEY,                   INNATES(ABILITY_LEVITATE, ABILITY_NATURAL_CURE) }, // 764 floats (lei) + canon Natural Cure (HA)
@@ -601,6 +705,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_ORBEETLE_GMAX,            sInnateSwarm }, // 826
     { SPECIES_GOSSIFLEUR,               sInnateRegenerator }, // 829
     { SPECIES_ELDEGOSS,                 sInnateRegenerator }, // 830
+    { SPECIES_CHEWTLE,                  sInnateSwiftSwim }, // 833 Swift Swim is the HA
+    { SPECIES_DREDNAW,                  sInnateSwiftSwim }, // 834
+    { SPECIES_DREDNAW_GMAX,             sInnateSwiftSwim }, // 834 Gmax keeps Swift Swim (HA)
+    { SPECIES_ARROKUDA,                 sInnateSwiftSwim }, // 846 Swift Swim is the primary
+    { SPECIES_BARRASKEWDA,              sInnateSwiftSwim }, // 847
     { SPECIES_SINISTEA,                 sInnateLevitate }, // 854
     { SPECIES_SINISTEA_PHONY,           sInnateLevitate }, // 854
     { SPECIES_SINISTEA_ANTIQUE,         sInnateLevitate }, // 854
@@ -612,11 +721,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_GRIMMSNARL,               sInnatePrankster }, // 861
     { SPECIES_GRIMMSNARL_GMAX,          sInnatePrankster }, // 861 Gmax keeps Prankster, so the innate survives the transformation
     { SPECIES_RUNERIGUS,                sInnateLevitate }, // 867
+    { SPECIES_DRACOZOLT,                sInnateSandRush }, // 880 Sand Rush is the HA
+    { SPECIES_ARCTOZOLT,                sInnateSlushRush }, // 881 Slush Rush is the HA
+    { SPECIES_DRACOVISH,                sInnateSandRush }, // 882 Sand Rush is the HA
+    { SPECIES_ARCTOVISH,                sInnateSlushRush }, // 883 Slush Rush is the HA
     { SPECIES_DREEPY,                   sInnateLevitate }, // 885
     { SPECIES_DRAKLOAK,                 sInnateLevitate }, // 886
     { SPECIES_DRAGAPULT,                sInnateLevitate }, // 887
     { SPECIES_REGIELEKI,                sInnateLevitate }, // 894
     { SPECIES_KLEAVOR,                  sInnateSwarm }, // 900
+    { SPECIES_BASCULEGION_M,            sInnateSwiftSwim }, // 902 Swift Swim is the primary
+    { SPECIES_BASCULEGION_F,            sInnateSwiftSwim }, // 902 (SPECIES_BASCULEGION aliases the male form)
+    { SPECIES_OVERQWIL,                 sInnateSwiftSwim }, // 904 Swift Swim is the HA
 
     // ----- Gen 9 -----
     { SPECIES_SPRIGATITO,               sInnateOvergrow }, // 906
@@ -639,7 +755,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { SPECIES_SHROODLE,                 sInnatePrankster }, // 944 Prankster is the HA across the line
     { SPECIES_GRAFAIAI,                 sInnatePrankster }, // 945
     { SPECIES_KLAWF,                    sInnateRegenerator }, // 950
+    { SPECIES_CAPSAKID,                 sInnateChlorophyll }, // 951 Chlorophyll is the primary
+    { SPECIES_SCOVILLAIN,               sInnateChlorophyll }, // 952
     { SPECIES_CYCLIZAR,                 sInnateRegenerator }, // 967
+    { SPECIES_HOUNDSTONE,               sInnateSandRush }, // 972 Sand Rush is the primary
+    { SPECIES_CETITAN,                  sInnateSlushRush }, // 975 Slush Rush is the secondary
     { SPECIES_DONDOZO,                  sInnateUnaware }, // 977 Unaware is the primary ability
     { SPECIES_CLODSIRE,                 INNATES(ABILITY_REGENERATOR, ABILITY_UNAWARE) }, // 980 flavor Regen + canon Unaware (HA)
     { SPECIES_FLUTTER_MANE,             sInnateLevitate }, // 987

@@ -84,6 +84,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     //    — a chosen Cursed Body in the empty slot 1 (fitting its ghostly Fire/Ghost "singer" theme);
     //    it still gets the latched innate Blaze boost and the innate Unaware stat-ignore regardless.
     { SPECIES_SKELEDIRGE,          1, ABILITY_CURSED_BODY },
+
+    // ── BOTH abilities now innate (the weather speed-doubler case): Venusaur's only abilities are
+    //    Overgrow (primary) and Chlorophyll (HA), and both are now granted innately, so a frontier set
+    //    has no real slot left for a chosen ability. Give it a chosen Thick Fat in the empty slot 1 —
+    //    its Mega's signature ability and a fitting bulk boon for the sun sweeper. It still keeps the
+    //    latched innate Overgrow boost and the innate Chlorophyll speed regardless.
+    { SPECIES_VENUSAUR,            1, ABILITY_THICK_FAT },
 };
 
 enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)

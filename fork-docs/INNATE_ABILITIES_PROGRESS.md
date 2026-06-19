@@ -34,8 +34,8 @@
 | :white_check_mark: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
 | :x: | Lightning Rod | The Pokémon draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage. |
 | :white_large_square: | Serene Grace | Raises the likelihood of additional effects occurring when the Pokémon uses its moves. |
-| :white_large_square: | Swift Swim | Doubles the Pokémon's Speed stat in rain. |
-| :white_large_square: | Chlorophyll | Doubles the Pokémon's Speed stat in harsh sunlight. |
+| :white_check_mark: | Swift Swim | Doubles the Pokémon's Speed stat in rain. |
+| :white_check_mark: | Chlorophyll | Doubles the Pokémon's Speed stat in harsh sunlight. |
 | :white_large_square: | Illuminate | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :x: | Trace | When the Pokémon enters a battle, it changes its Ability to match that of an opponent. |
 | :white_large_square: | Huge Power | Doubles the power of the Pokémon's physical moves. |
@@ -147,7 +147,7 @@
 | :x: | Poison Touch | When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned. |
 | :white_check_mark: | Regenerator | The Pokémon has 1/3 of its max HP restored when it switches out of battle. |
 | :white_large_square: | Big Pecks | The Pokémon's Defense stat cannot be lowered by other Pokémon's moves or Abilities. |
-| :white_large_square: | Sand Rush | Doubles the Pokémon's Speed stat in a sandstorm. |
+| :white_check_mark: | Sand Rush | Doubles the Pokémon's Speed stat in a sandstorm. |
 | :white_large_square: | Wonder Skin | Makes status moves more likely to miss the Pokémon. |
 | :white_large_square: | Analytic | Boosts the power of the Pokémon's moves by 30% when the Pokémon is the last to move that turn. |
 | :x: | Illusion | The Pokémon enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move. |
@@ -203,7 +203,7 @@
 | :white_large_square: | Water Bubble | Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned. |
 | :white_large_square: | Steelworker | Powers up Steel-type moves. |
 | :white_large_square: | Berserk | Boosts the Pokémon's Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max. |
-| :white_large_square: | Slush Rush | Doubles the Pokémon's Speed stat in snow. |
+| :white_check_mark: | Slush Rush | Doubles the Pokémon's Speed stat in snow. |
 | :white_large_square: | Long Reach | None of the moves used by the Pokémon are considered contact moves. |
 | :x: | Liquid Voice | The Pokémon's sound-based moves become Water-type moves. |
 | :white_large_square: | Triage | Gives priority to the Pokémon's healing moves. |

@@ -3432,6 +3432,7 @@ static bool32 DoesBattlerTakeSandstormDamage(enum BattlerId battlerId, enum Abil
       && ability != ABILITY_SAND_VEIL
       && ability != ABILITY_SAND_FORCE
       && ability != ABILITY_SAND_RUSH
+      && !IsInnateActive(battlerId, ABILITY_SAND_RUSH) // FORK: AI knows an innate Sand Rush ignores sandstorm too
       && ability != ABILITY_MAGIC_GUARD
       && ability != ABILITY_OVERCOAT)
         return TRUE;
