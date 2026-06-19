@@ -74,15 +74,24 @@ u32 CountGimmickCandidates(enum BattlerId battler)
     return count;
 }
 
+// Whether a battler may currently select a given gimmick from its candidate set.
+// Re-checks HasTrainerUsedGimmick so that, in doubles, a gimmick type a same-trainer
+// partner has already armed/used this battle drops out of the picker (the candidate
+// set itself is only recomputed at the start of each turn).
+static bool32 IsGimmickCandidateAvailable(enum BattlerId battler, enum Gimmick gimmick)
+{
+    return (gBattleStruct->gimmick.gimmickCandidates[battler] & (1u << gimmick))
+        && !HasTrainerUsedGimmick(battler, gimmick);
+}
+
 // Returns the lowest-index (highest-priority) gimmick a battler may use.
 static enum Gimmick FirstGimmickCandidate(enum BattlerId battler)
 {
-    u32 candidates = gBattleStruct->gimmick.gimmickCandidates[battler];
     enum Gimmick gimmick;
 
     for (gimmick = 0; gimmick < GIMMICKS_COUNT; ++gimmick)
     {
-        if (candidates & (1u << gimmick))
+        if (IsGimmickCandidateAvailable(battler, gimmick))
             return gimmick;
     }
     return GIMMICK_NONE;
@@ -96,24 +105,24 @@ static enum Gimmick FirstGimmickCandidate(enum BattlerId battler)
 // changed (i.e. the battler has at least one candidate).
 bool32 CycleGimmickSelection(enum BattlerId battler)
 {
-    u32 candidates = gBattleStruct->gimmick.gimmickCandidates[battler];
+    enum Gimmick first = FirstGimmickCandidate(battler);
     enum Gimmick gimmick;
 
-    if (candidates == 0)
+    if (first == GIMMICK_NONE)
         return FALSE;
 
     if (!gBattleStruct->gimmick.playerSelect)
     {
         // Unarmed -> arm the highest-priority candidate.
-        gBattleStruct->gimmick.usableGimmick[battler] = FirstGimmickCandidate(battler);
+        gBattleStruct->gimmick.usableGimmick[battler] = first;
         gBattleStruct->gimmick.playerSelect = TRUE;
         return TRUE;
     }
 
-    // Armed -> advance to the next candidate after the current selection.
+    // Armed -> advance to the next available candidate after the current selection.
     for (gimmick = gBattleStruct->gimmick.usableGimmick[battler] + 1; gimmick < GIMMICKS_COUNT; ++gimmick)
     {
-        if (candidates & (1u << gimmick))
+        if (IsGimmickCandidateAvailable(battler, gimmick))
         {
             gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
             return TRUE;
@@ -122,7 +131,7 @@ bool32 CycleGimmickSelection(enum BattlerId battler)
 
     // Past the last candidate -> unarm, resetting the display to the first one.
     gBattleStruct->gimmick.playerSelect = FALSE;
-    gBattleStruct->gimmick.usableGimmick[battler] = FirstGimmickCandidate(battler);
+    gBattleStruct->gimmick.usableGimmick[battler] = first;
     return TRUE;
 }
 
