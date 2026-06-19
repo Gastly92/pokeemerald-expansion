@@ -3834,6 +3834,12 @@ static bool32 IsPinchBerryItemEffect(enum HoldEffect holdEffect)
 
 static bool32 DoesAbilityBenefitFromSunOrRain(enum BattlerId battler, enum Ability ability, u32 weather)
 {
+    // FORK: credit an active innate Swift Swim / Chlorophyll (FEATURE_INNATE_ABILITIES) so the AI's
+    // weather-move scoring values setting rain/sun for an innate speed-doubler too.
+    if (((weather & B_WEATHER_RAIN) && IsInnateActive(battler, ABILITY_SWIFT_SWIM))
+     || ((weather & B_WEATHER_SUN)  && IsInnateActive(battler, ABILITY_CHLOROPHYLL)))
+        return TRUE;
+
     switch (ability)
     {
     case ABILITY_DRY_SKIN:

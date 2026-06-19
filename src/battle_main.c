@@ -4667,13 +4667,18 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
 
     u32 weather = GetWeather();
     // weather abilities
-    if (ability == ABILITY_SWIFT_SWIM       && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && weather  & B_WEATHER_RAIN)
+    // FORK: the four weather speed-doublers are also supported as innates (FEATURE_INNATE_ABILITIES);
+    // crediting IsInnateActive() here makes the doubling — and, since the AI's turn-order prediction
+    // runs this same function, the AI's threat/respect of it — innate-aware. Innates are species-derived
+    // (public knowledge), so this never leaks the foe's hidden chosen ability. Pure 1:1 boon (no
+    // downside to drop). See src/fork/innate_abilities.c.
+    if ((ability == ABILITY_SWIFT_SWIM       || IsInnateActive(battler, ABILITY_SWIFT_SWIM))  && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && weather  & B_WEATHER_RAIN)
         speed *= 2;
-    else if (ability == ABILITY_CHLOROPHYLL && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && weather  & B_WEATHER_SUN)
+    else if ((ability == ABILITY_CHLOROPHYLL || IsInnateActive(battler, ABILITY_CHLOROPHYLL)) && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && weather  & B_WEATHER_SUN)
         speed *= 2;
-    else if (ability == ABILITY_SAND_RUSH   && weather & B_WEATHER_SANDSTORM)
+    else if ((ability == ABILITY_SAND_RUSH   || IsInnateActive(battler, ABILITY_SAND_RUSH))   && weather & B_WEATHER_SANDSTORM)
         speed *= 2;
-    else if (ability == ABILITY_SLUSH_RUSH  && weather & B_WEATHER_ICY_ANY)
+    else if ((ability == ABILITY_SLUSH_RUSH  || IsInnateActive(battler, ABILITY_SLUSH_RUSH))  && weather & B_WEATHER_ICY_ANY)
         speed *= 2;
 
     // other abilities

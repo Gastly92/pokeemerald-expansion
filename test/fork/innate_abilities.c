@@ -1033,3 +1033,178 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate p
         EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.5), results[0].damage);
     }
 }
+
+// ───────────────────────── Weather speed-doublers ─────────────────────────
+// Swift Swim / Chlorophyll / Sand Rush / Slush Rush: x2 Speed in rain / sun / sandstorm / snow.
+// Wired at the single speed-calc site GetBattlerTotalSpeedStat (src/battle_main.c); a 1:1 boon
+// (the real abilities have no downside). Sand Rush also shrugs off sandstorm chip damage. Each
+// test gives a canon user a *different* chosen ability so the doubling comes purely from the innate.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Swift Swim doubles Speed in rain")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_LUDICOLO, ABILITY_SWIFT_SWIM));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_LUDICOLO) { Ability(ABILITY_OWN_TEMPO); Speed(100); } // chosen Own Tempo, NOT Swift Swim
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(199); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_RAIN_DANCE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_RAIN_DANCE, player);
+        if (enabled) // innate Swift Swim -> 200 Speed -> player outspeeds 199
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        }
+        else // no innate -> 100 Speed -> opponent still faster
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chlorophyll doubles Speed in harsh sun")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_LEAFEON, ABILITY_CHLOROPHYLL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_LEAFEON) { Ability(ABILITY_LEAF_GUARD); Speed(100); } // chosen Leaf Guard, NOT Chlorophyll
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(199); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_SUNNY_DAY); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SUNNY_DAY, player);
+        if (enabled)
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        }
+        else
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sand Rush doubles Speed in a sandstorm")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_EXCADRILL, ABILITY_SAND_RUSH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_EXCADRILL) { Ability(ABILITY_SAND_FORCE); Speed(100); } // chosen Sand Force, NOT Sand Rush
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(199); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_SANDSTORM); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SANDSTORM, player);
+        if (enabled)
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        }
+        else
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Slush Rush doubles Speed in snow")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CETITAN, ABILITY_SLUSH_RUSH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CETITAN) { Ability(ABILITY_THICK_FAT); Speed(100); } // chosen Thick Fat, NOT Slush Rush
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(199); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_SNOWSCAPE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SNOWSCAPE, player);
+        if (enabled)
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        }
+        else
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        }
+    }
+}
+
+// Sand Rush's second effect: like the real ability, an innate Sand Rush also shrugs off the
+// end-of-turn sandstorm chip damage (a pure boon). Houndstone is Ghost-type, so it is NOT
+// naturally exempt by type — the immunity here comes purely from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sand Rush prevents sandstorm chip damage")
+{
+    enum Type type1 = GetSpeciesType(SPECIES_HOUNDSTONE, 0);
+    enum Type type2 = GetSpeciesType(SPECIES_HOUNDSTONE, 1);
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HOUNDSTONE, ABILITY_SAND_RUSH));
+        ASSUME(type1 != TYPE_ROCK && type1 != TYPE_GROUND && type1 != TYPE_STEEL);
+        ASSUME(type2 != TYPE_ROCK && type2 != TYPE_GROUND && type2 != TYPE_STEEL);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_HOUNDSTONE) { Ability(ABILITY_FLUFFY); } // chosen Fluffy, NOT Sand Rush
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SANDSTORM); }
+    } SCENE {
+        if (enabled)
+            NONE_OF { HP_BAR(player); } // innate Sand Rush -> no sandstorm chip
+        else
+            HP_BAR(player); // no innate -> takes the chip
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Swift Swim")
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_LUDICOLO) { Ability(ABILITY_OWN_TEMPO); Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(199); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_RAIN_DANCE); if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        if (gastro) // innate suppressed -> 100 Speed -> opponent faster
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        }
+        else // innate active in rain -> 200 Speed -> player faster
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        }
+    }
+}
