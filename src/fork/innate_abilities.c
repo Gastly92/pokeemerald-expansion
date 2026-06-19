@@ -234,7 +234,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_REGENERATOR,
+            ABILITY_REGENERATOR
         )
     },
     { // 0002
@@ -244,7 +244,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_REGENERATOR,
+            ABILITY_REGENERATOR
         )
     },
     { // 0003
@@ -254,7 +254,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_REGENERATOR,
+            ABILITY_REGENERATOR
         )
     },
     { // 0003
@@ -264,7 +264,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_REGENERATOR,
+            ABILITY_REGENERATOR
         )
     },
     { SPECIES_CHARMANDER,               sInnateBlaze }, // 4
