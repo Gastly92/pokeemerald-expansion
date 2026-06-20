@@ -760,6 +760,17 @@ struct BattleStruct
     // viewer show the wrong ability. Set in RecordAbilityBattle under the same
     // reveal gate as infoAbilityRevealed; read in src/frontier_battle_info.c.
     u16 infoRevealedAbility[NUM_BATTLE_SIDES][PARTY_SIZE];
+    // FORK: FEATURE_INNATE_ABILITIES — per-party-slot bitmask of which *innate*
+    // ability slots (indexed exactly as GetSpeciesInnate iterates a species' list)
+    // the player has witnessed in battle, tracked separately from the chosen
+    // ability above. An innate is a passive that's independent of the chosen
+    // ability, so witnessing one (e.g. an innate Levitate blocking a Ground move)
+    // must NOT imply the chosen ability is known: the viewer keeps showing the
+    // chosen ability as "?" until it too is seen, e.g. "? (+Levitate)". Set in
+    // RecordAbilityBattle under the same reveal gate as infoAbilityRevealed; read
+    // in src/fork/frontier_battle_info.c. (Widen past u8 only if a species ever
+    // declares more than 8 innates — none does today.)
+    u8 infoRevealedInnates[NUM_BATTLE_SIDES][PARTY_SIZE];
 };
 
 struct AiBattleData

@@ -6,6 +6,8 @@
 #include "constants/abilities.h"
 #include "constants/hold_effects.h"
 #include "constants/battle_ai.h"
+#include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
+#include "fork/innate_abilities.h" // FORK: SpeciesHasInnate / GetSpeciesInnate
 
 void RecordLastUsedMoveBy(enum BattlerId battlerId, enum Move move)
 {
@@ -57,13 +59,51 @@ void RecordAbilityBattle(enum BattlerId battlerId, enum Ability abilityId)
     gAiPartyData->mons[GetBattlerSide(battlerId)][gBattlerPartyIndexes[battlerId]].ability = abilityId;
     if (BattleInfoCanRevealNow())
     {
-        gBattleStruct->infoAbilityRevealed[GetBattlerSide(battlerId)] |= 1u << gBattlerPartyIndexes[battlerId];
-        // FORK: snapshot the witnessed ability for the B_FRONTIER_BATTLE_INFO viewer.
-        // gAiPartyData->mons[].ability above is later clobbered by the AI's speculative
-        // switch/move evaluation (a benched mon simulated in the active slot records its
-        // own ability onto this slot), so the viewer must read this gated snapshot — taken
-        // here, at the moment of a genuine reveal — rather than the AI's live knowledge model.
-        gBattleStruct->infoRevealedAbility[GetBattlerSide(battlerId)][gBattlerPartyIndexes[battlerId]] = abilityId;
+        u32 side = GetBattlerSide(battlerId);
+        u32 partyIndex = gBattlerPartyIndexes[battlerId];
+        // FORK: B_FRONTIER_BATTLE_INFO reveals what the player actually SAW. When an ability
+        // pop-up is showing an overwritten ability (an innate Levitate/Sturdy forces the
+        // pop-up via gBattleScripting.abilityPopupOverwrite), the pop-up script's
+        // `recordability` still hands us the mon's *chosen* ability — but the player saw the
+        // overwrite, not the chosen one. Mirror the pop-up by revealing the overwrite when one
+        // is set, so an innate reveal never leaks the chosen ability. The AI knowledge model
+        // (gAiPartyData / gBattleHistory above) always uses the real abilityId, unchanged.
+        enum Ability witnessed = (gBattleScripting.abilityPopupOverwrite != ABILITY_NONE)
+                               ? gBattleScripting.abilityPopupOverwrite
+                               : abilityId;
+        // FORK: FEATURE_INNATE_ABILITIES — an innate is a passive that's separate from the
+        // chosen ability, so when the witnessed ability is one of this species' innates (and
+        // not its chosen ability) mark *only* that innate slot as revealed; the chosen ability
+        // stays unknown so the viewer shows e.g. "? (+Levitate)" rather than leaking it. The
+        // chosen ability is gBattleMons[battler].ability (innates live in a separate species
+        // table, never in the .ability slot), so a witnessed ability differing from it that the
+        // species declares as an innate is an innate reveal.
+        if (GetConfig(FEATURE_INNATE_ABILITIES)
+            && witnessed != gBattleMons[battlerId].ability
+            && SpeciesHasInnate(gBattleMons[battlerId].species, witnessed))
+        {
+            for (u32 slot = 0; ; slot++)
+            {
+                enum Ability innate = GetSpeciesInnate(gBattleMons[battlerId].species, slot);
+                if (innate == ABILITY_NONE)
+                    break;
+                if (innate == witnessed)
+                {
+                    gBattleStruct->infoRevealedInnates[side][partyIndex] |= 1u << slot;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            gBattleStruct->infoAbilityRevealed[side] |= 1u << partyIndex;
+            // FORK: snapshot the witnessed ability for the B_FRONTIER_BATTLE_INFO viewer.
+            // gAiPartyData->mons[].ability above is later clobbered by the AI's speculative
+            // switch/move evaluation (a benched mon simulated in the active slot records its
+            // own ability onto this slot), so the viewer must read this gated snapshot — taken
+            // here, at the moment of a genuine reveal — rather than the AI's live knowledge model.
+            gBattleStruct->infoRevealedAbility[side][partyIndex] = witnessed;
+        }
     }
 }
 
