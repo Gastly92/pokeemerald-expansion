@@ -425,6 +425,45 @@ static struct Pokemon *GetFoeDisplayMon(struct Pokemon *foeParty, u32 foeIndex)
     return &foeParty[foeIndex];
 }
 
+// FORK: append the species' type(s) as text ("Fire/Flying", or a single name for a
+// pure type), via GetSpeciesType so FEATURE_NEW_TYPES re-typings are reflected.
+static u8 *AppendTypeNames(u8 *p, enum Species species)
+{
+    enum Type t1 = GetSpeciesType(species, 0);
+    enum Type t2 = GetSpeciesType(species, 1);
+
+    p = StringCopy(p, gTypesInfo[t1].name);
+    if (t2 != t1)
+    {
+        *p++ = CHAR_SLASH;
+        p = StringCopy(p, gTypesInfo[t2].name);
+    }
+    return p;
+}
+
+// FORK: append the foe mon's gimmick state. activeGimmick persists per party mon for
+// the forms that stay transformed (Mega/Ultra Burst/Dynamax/Tera); a Z-Move reverts
+// and is detected via the per-mon monGimmickUsed record. Nothing is shown until the
+// mon has actually used or entered a gimmick (always observed in battle).
+static u8 *AppendFoeGimmickLabel(u8 *p, struct Pokemon *foeParty, u32 foeIndex)
+{
+    enum Gimmick gimmick = gBattleStruct->gimmick.activeGimmick[B_TRAINER_OPPONENT_A][foeIndex];
+
+    switch (gimmick)
+    {
+    case GIMMICK_MEGA:        return StringCopy(p, COMPOUND_STRING("  Mega"));
+    case GIMMICK_ULTRA_BURST: return StringCopy(p, COMPOUND_STRING("  Ultra Burst"));
+    case GIMMICK_DYNAMAX:     return StringCopy(p, COMPOUND_STRING("  Dynamax"));
+    case GIMMICK_TERA:
+        p = StringCopy(p, COMPOUND_STRING("  Tera "));
+        return StringCopy(p, gTypesInfo[GetMonData(&foeParty[foeIndex], MON_DATA_TERA_TYPE, NULL)].name);
+    default:
+        if (gBattleStruct->gimmick.monGimmickUsed[B_TRAINER_OPPONENT_A][foeIndex])
+            return StringCopy(p, COMPOUND_STRING("  Z-Move"));
+        return p;
+    }
+}
+
 static void DrawFoePage(u8 windowId, u32 foeIndex)
 {
     u8 line[64];
@@ -457,15 +496,20 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     // disguise, not the real species; HP/FNT stays on the real slot (its health
     // box shows the real HP, and a fainting mon's Illusion has already broken).
     struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
+    enum Species displaySpecies = GetMonData(displayMon, MON_DATA_SPECIES, NULL);
     u32 gender = GetMonGender(displayMon);
-    p = StringCopy(line, GetSpeciesName(GetMonData(displayMon, MON_DATA_SPECIES, NULL)));
+    p = StringCopy(line, GetSpeciesName(displaySpecies));
     if (gender == MON_MALE)
         *p++ = CHAR_MALE;
     else if (gender == MON_FEMALE)
         *p++ = CHAR_FEMALE;
+    // FORK: Frontier levels are fixed (always 100/50), so show the mon's type(s) here
+    // instead - far more useful at a glance - plus its gimmick state (Mega/Tera/etc.)
+    // once used. Both are public the moment the mon is seen / transforms.
     *p++ = CHAR_SPACE;
-    *p++ = CHAR_LV;
-    p = ConvertIntToDecimalStringN(p, GetMonData(displayMon, MON_DATA_LEVEL, NULL), STR_CONV_MODE_LEFT_ALIGN, 3);
+    *p++ = CHAR_SPACE;
+    p = AppendTypeNames(p, displaySpecies);
+    p = AppendFoeGimmickLabel(p, foeParty, foeIndex);
     if (GetMonData(&foeParty[foeIndex], MON_DATA_HP, NULL) == 0)
         StringCopy(p, COMPOUND_STRING("  FNT"));
     PrintLine(windowId, line, 0, y);
