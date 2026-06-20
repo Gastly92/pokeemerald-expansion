@@ -2170,8 +2170,14 @@ void PlayerHandleChooseMove(enum BattlerId battler)
     {
         struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
 
-        InitMoveSelectionsVarsAndStrings(battler);
+        // FORK (FEATURE_FREE_GIMMICKS): clear the picker's armed flag BEFORE the initial
+        // move-name display. InitMoveSelectionsVarsAndStrings paints the move names based
+        // on the currently-armed gimmick (e.g. Max move names while Dynamax is selected),
+        // so a stale playerSelect left TRUE from a previous selection would make the menu
+        // open as if a gimmick were still armed. The menu must always default to the base
+        // moves, unarmed; the per-mon last-move cursor is remembered separately.
         gBattleStruct->gimmick.playerSelect = FALSE;
+        InitMoveSelectionsVarsAndStrings(battler);
         TryToAddMoveInfoWindow();
 
         AssignUsableZMoves(battler, moveInfo->moves);

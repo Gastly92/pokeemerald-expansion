@@ -64,6 +64,37 @@ SINGLE_BATTLE_TEST("FREE_GIMMICKS: an equal-stat mon defaults to the X Mega form
     }
 }
 
+// FORK regression: with item-free Mega Evolution the held Mega Stone no longer gates
+// the gimmick, which previously let a transformed mon (Ditto/Imposter, which copies its
+// target's species but not its item) arm Mega Evolution. The form change is then refused
+// by CanBattlerFormChange (B_TRANSFORM_FORM_CHANGES >= GEN_5) AFTER the gimmick was marked
+// used, so nothing happened yet the Mega was spent. CanMegaEvolve now blocks transformed
+// mons up front, so the option is never offered and the gimmick is preserved.
+SINGLE_BATTLE_TEST("FREE_GIMMICKS: a transformed mon cannot Mega Evolve")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_FREE_GIMMICKS, TRUE);
+        ASSUME(GetConfig(B_TRANSFORM_FORM_CHANGES) >= GEN_5);
+        // Transform copies the target's moves into battle while the move-slot the
+        // test resolves comes from Ditto's party moveset, so align Celebrate to the
+        // same slot (1) in both so turn 2's MOVE is legal after transforming.
+        PLAYER(SPECIES_DITTO) { Moves(MOVE_TRANSFORM, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_VENUSAUR) { Moves(MOVE_TACKLE, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TRANSFORM); }
+        TURN { MOVE(player, MOVE_CELEBRATE, gimmick: GIMMICK_MEGA); }
+    } SCENE {
+        MESSAGE("Ditto transformed into Venusaur!");
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_MEGA_EVOLUTION, player);
+            MESSAGE("Venusaur has Mega Evolved into Mega Venusaur!");
+        }
+    } THEN {
+        // Stays the transformed (non-Mega) Venusaur; the Mega gimmick is never consumed.
+        EXPECT_EQ(player->species, SPECIES_VENUSAUR);
+    }
+}
+
 SINGLE_BATTLE_TEST("FREE_GIMMICKS: a mon can use a Z-Move without holding a Z-Crystal")
 {
     GIVEN {
