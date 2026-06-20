@@ -44,6 +44,7 @@ struct SpeciesAbilityOverride
 static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 {
     { SPECIES_VENUSAUR,            1, ABILITY_DROUGHT },        // 3 Overgrow + Chlorophyll BOTH innate (weather-doubler pinch case): empty slot 1 → Drought, the sun flower sets its own sun for the innate Chlorophyll
+    { SPECIES_HO_OH,               1, ABILITY_FLAME_BODY },     // 250 Pressure + Regenerator BOTH innate (all real abilities innate): empty slot 1 → Flame Body, the rainbow phoenix's sacred fire burns on contact
     { SPECIES_CELEBI,              1, ABILITY_GRASSY_SURGE },   // 251 sole-Natural-Cure (innate): empty slot 1 → Grassy Surge, the forest guardian carpets the field (its boon-innate Levitate still reaps the terrain)
     { SPECIES_SCEPTILE,            2, ABILITY_LIGHTNING_ROD },  // 254 Overgrow innate (latched); its HA Unburden is dead weight on the roster's non-consumable-item sets, so replace it with its Mega's signature Lightning Rod
     { SPECIES_FLYGON,              1, ABILITY_SAND_STREAM },    // 330 innate Levitate; slot-1 Levitate was redundant → Sand Stream, the desert spirit (Ground-type, immune to its own sand chip)
@@ -53,6 +54,9 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { SPECIES_CHIMECHO,            1, ABILITY_SOUNDPROOF },     // 358 ability-locked innate Levitate: empty slot 1 → Soundproof
     { SPECIES_LATIAS,              1, ABILITY_ILLUSION },       // 380 innate-Levitate legendary: empty slot 1 → Illusion, the Eon refracts light to vanish/disguise
     { SPECIES_LATIOS,              1, ABILITY_ILLUSION },       // 381 innate-Levitate legendary: empty slot 1 → Illusion (light-bending Eon)
+    { SPECIES_DEOXYS_ATTACK,       1, ABILITY_TRACE },          // 386 sole-Pressure (innate; also innate Levitate): empty slot 1 → Trace, the DNA alien adapts by copying the foe's ability
+    { SPECIES_DEOXYS_DEFENSE,      1, ABILITY_TRACE },          // 386 "
+    { SPECIES_DEOXYS_SPEED,        1, ABILITY_TRACE },          // 386 "
     { SPECIES_MISMAGIUS,           1, ABILITY_WANDERING_SPIRIT },// 429 ability-locked innate Levitate: empty slot 1 → Wandering Spirit, the roaming magical ghost swaps abilities on contact
     { SPECIES_CARNIVINE,           1, ABILITY_CHLOROPHYLL },    // 455 ability-locked innate Levitate: empty slot 1 → Chlorophyll
     { SPECIES_TANGROWTH,           2, ABILITY_SAP_SIPPER },     // 465 innate Regenerator; slot 2 was Regenerator → Sap Sipper, its vine tangle drinks Grass energy for +Atk (heal comes from the innate)
@@ -74,7 +78,9 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { SPECIES_CRYOGONAL,           1, ABILITY_SNOW_WARNING },   // 615 ability-locked innate Levitate: empty slot 1 → Snow Warning, the ice-crystal being radiates snow (Ice-type: +Def in snow, no chip)
     { SPECIES_HYDREIGON,           1, ABILITY_SHEER_FORCE },    // 635 ability-locked innate Levitate
     { SPECIES_TORNADUS_THERIAN,    1, ABILITY_PRANKSTER },      // 641 sole-Regenerator (innate): empty slot 1 → its Incarnate forme's Prankster
+    { SPECIES_KYUREM,              1, ABILITY_SNOW_WARNING },   // 646 sole-Pressure (innate): empty slot 1 → Snow Warning, the boundary ice dragon brings an everlasting freeze
     { SPECIES_VIKAVOLT,            1, ABILITY_MOTOR_DRIVE },    // 738 ability-locked innate Levitate: empty slot 1 → Motor Drive, the electromagnetic beetle banks electricity into Speed
+    { SPECIES_ETERNATUS,           1, ABILITY_POISON_TOUCH },   // 890 sole-Pressure (innate): empty slot 1 → Poison Touch, the toxic alien dragon poisons on contact
     { SPECIES_SKELEDIRGE,          1, ABILITY_MUMMY },          // 911 Blaze + Unaware BOTH innate (pinch case): empty slot 1 → Mummy, the ghostly fire-singer's curse spreads on contact
     { SPECIES_OGERPON_CORNERSTONE, 1, ABILITY_EARTH_EATER },   // 1017 sole-Sturdy (innate): empty slot 1 → Earth Eater (the stone-masked ogre is nourished by the earth; Ground immunity+heal covers its Rock weakness)
 };

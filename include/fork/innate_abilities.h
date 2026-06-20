@@ -31,7 +31,9 @@
 // at the GetBattlerTotalSpeedStat calc site in src/battle_main.c; Sand Rush also shrugs off sandstorm
 // damage, mirrored in src/battle_end_turn.c and the AI's sandstorm-damage predictors), and FILTER
 // (reduces supereffective damage taken by 25%, handled at the GetDefenderAbilitiesModifier calc site
-// in src/battle_util.c — a clean-upside 1:1 copy like Sturdy).
+// in src/battle_util.c — a clean-upside 1:1 copy like Sturdy), and PRESSURE (the holder's foes spend
+// 1 extra PP per move used against it, handled at the two PP-deduction sites in
+// src/battle_move_resolution.c and src/battle_util.c — a clean-upside 1:1 copy with no AI wiring needed).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

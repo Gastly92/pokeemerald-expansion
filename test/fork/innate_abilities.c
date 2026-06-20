@@ -9,7 +9,8 @@
 // (a silent 1/3-HP switch-out heal), UNAWARE (a passive calc modifier), STURDY
 // (full-HP endure + OHKO-move immunity), NATURAL_CURE (a silent status cure on
 // switch-out), PRANKSTER (+1 priority on status moves), the pinch and weather-speed
-// abilities, and FILTER (−25% supereffective damage taken); see src/innate_abilities.c.
+// abilities, FILTER (−25% supereffective damage taken), and PRESSURE (the holder's foes
+// spend 1 extra PP per move used against it); see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -1307,5 +1308,65 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate F
         HP_BAR(player, captureDamage: &results[i].damage);
     } FINALLY {
         EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.75), results[0].damage); // suppressed: full; active: 0.75x
+    }
+}
+
+// ===== Pressure =====
+// Pressure makes the holder's foes spend 1 extra PP per move used against it. It's wired innate-
+// aware at the two PP-deduction sites (CancelerPPDeduction in src/battle_move_resolution.c and the
+// deterministic PP-refund mirror in src/battle_util.c). Aerodactyl is the test vehicle: its chosen
+// ability is Rock Head (slot 0), so the extra PP tax can only come from its innate Pressure. With the
+// feature off the innate is inert and the foe loses the usual single PP.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pressure makes the foe spend 1 extra PP")
+{
+    u32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_AERODACTYL, ABILITY_PRESSURE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { MovesWithPP({MOVE_POUND, 35}); }
+        OPPONENT(SPECIES_AERODACTYL) { Ability(ABILITY_ROCK_HEAD); } // chosen ability is not Pressure
+    } WHEN {
+        TURN { MOVE(player, MOVE_POUND); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], enabled ? 33 : 34); // innate Pressure: -2 PP; feature off: -1 PP
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Pressure exactly like a real one, so the foe's
+// PP loss drops back to the usual single PP once the innate is suppressed.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Pressure")
+{
+    u32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_AERODACTYL, ABILITY_PRESSURE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_CELEBRATE, MOVE_POUND); }
+        OPPONENT(SPECIES_AERODACTYL) { Ability(ABILITY_ROCK_HEAD); }
+    } WHEN {
+        TURN { if (gastro) MOVE(player, MOVE_GASTRO_ACID); else MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_POUND); }
+    } THEN {
+        EXPECT_EQ(player->pp[2], gastro ? 34 : 33); // suppressed: -1 PP; active: -2 PP (Pound is move index 2)
+    }
+}
+
+// A canon Pressure user (Mewtwo: Pressure / - / Unnerve) carries Pressure innately too, as a combined
+// INNATES(Levitate, Pressure) row. With its chosen ability set to Unnerve, the extra PP tax can only
+// come from the innate Pressure — confirming the merged list still honors it.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Pressure user keeps it via innate when the chosen ability differs")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MEWTWO, ABILITY_PRESSURE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { MovesWithPP({MOVE_POUND, 35}); }
+        OPPONENT(SPECIES_MEWTWO) { Ability(ABILITY_UNNERVE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_POUND); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], 33); // innate Pressure taxes the extra PP even though chosen is Unnerve
     }
 }

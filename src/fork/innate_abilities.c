@@ -186,6 +186,27 @@
 //     (Mr. Mime and Mime Jr.'s slot-1 Filter, Revavroom's HA, Mega Aggron whose Mega ability data is
 //     Filter), so the signature survives whichever slot a build picks. Mega Aggron already carries innate
 //     Sturdy (persisting from base Aggron), so it takes the combined INNATES(STURDY, FILTER) list.
+//   - ABILITY_PRESSURE — makes the holder's foes spend 1 extra PP per move used against it, handled at
+//     the two PP-deduction sites that read ABILITY_PRESSURE: the real deduction in CancelerPPDeduction
+//     (src/battle_move_resolution.c) and the fork-owned deterministic PP-refund mirror in src/battle_util.c
+//     (both the spread-move loop and the single-target branch swap GetBattlerAbility(x) == ABILITY_PRESSURE
+//     for BattlerHasAbility(x, ABILITY_PRESSURE)). A pure passive trait checked at a single kind of site:
+//     no script / pop-up / driver, and the innate is NOT recorded as identity (the cosmetic "exerting its
+//     Pressure!" switch-in message still fires only for the chosen ability, like all innate announcements).
+//     NO pure-boon divergence: Pressure only ever costs the FOE extra PP, so it never hurts its holder —
+//     the innate is a 1:1 copy of the real ability. Suppression parity holds via BattlerHasAbility() ->
+//     IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field); Pressure is not breakable, so Mold
+//     Breaker never touches it, same as the real ability. AI needs no wiring: nothing in src/battle_ai_*.c
+//     reads ABILITY_PRESSURE for an effect (the PP tax isn't modeled in the AI's damage/turn calcs), so an
+//     innate Pressure is exactly as (in)visible to the AI as a real one. Canon-only (no flavor picks — the
+//     "exerts pressure" theme is hard to attribute beyond its real users, and the +1 PP tax is a potent
+//     stall tool): every species whose ability data carries Pressure in any slot, so the signature survives
+//     whichever slot a build picks (Aerodactyl/Aggron-style slot-2/HA Pressure included). Forms are listed
+//     only where the form's ability data still carries Pressure (Giratina-Origin/Dialga-Origin/Palkia-Origin
+//     keep it; the Galarian birds, the Mega/Kyurem-B/W and Mewtwo-Mega-Y forms swap to a different signature
+//     and are omitted). Mewtwo (innate Levitate), Ho-Oh (innate Regenerator), Dusclops, the Deoxys formes
+//     and Giratina-Altered (all innate Levitate) already carry an innate, so they take a combined
+//     INNATES(...) list with Pressure added.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -653,6 +674,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0142
+        SPECIES_AERODACTYL,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0143
         SPECIES_SNORLAX,
         INNATES(
@@ -665,10 +692,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_UNAWARE
         )
     },
+    { // 0144
+        SPECIES_ARTICUNO,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0145
+        SPECIES_ZAPDOS,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0146
+        SPECIES_MOLTRES,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0150
         SPECIES_MEWTWO,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0150
@@ -1137,9 +1183,34 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_NATURAL_CURE
         )
     },
+    { // 0243
+        SPECIES_RAIKOU,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0244
+        SPECIES_ENTEI,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0245
+        SPECIES_SUICUNE,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0249
+        SPECIES_LUGIA,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0250
         SPECIES_HO_OH,
         INNATES(
+            ABILITY_PRESSURE,
             ABILITY_REGENERATOR
         )
     },
@@ -1322,6 +1393,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_NATURAL_CURE
         )
     },
+    { // 0320
+        SPECIES_WAILMER,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0321
+        SPECIES_WAILORD,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0322
         SPECIES_NUMEL,
         INNATES(
@@ -1463,7 +1546,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0356
         SPECIES_DUSCLOPS,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0357
@@ -1482,6 +1566,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHIMECHO_MEGA,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0359
+        SPECIES_ABSOL,
+        INNATES(
+            ABILITY_PRESSURE
         )
     },
     { // 0362
@@ -1560,31 +1650,36 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0386
         SPECIES_DEOXYS,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0386
         SPECIES_DEOXYS_NORMAL,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0386
         SPECIES_DEOXYS_ATTACK,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0386
         SPECIES_DEOXYS_DEFENSE,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0386
         SPECIES_DEOXYS_SPEED,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
 
@@ -1685,6 +1780,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0416
+        SPECIES_VESPIQUEN,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0418
         SPECIES_BUIZEL,
         INNATES(
@@ -1751,6 +1852,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_NATURAL_CURE
         )
     },
+    { // 0442
+        SPECIES_SPIRITOMB,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0446
         SPECIES_MUNCHLAX,
         INNATES(
@@ -1787,6 +1894,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0461
+        SPECIES_WEAVILE,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0462
         SPECIES_MAGNEZONE,
         INNATES(
@@ -1817,6 +1930,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PROBOPASS,
         INNATES(
             ABILITY_STURDY
+        )
+    },
+    { // 0477
+        SPECIES_DUSKNOIR,
+        INNATES(
+            ABILITY_PRESSURE
         )
     },
     { // 0478
@@ -1885,10 +2004,35 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0483
+        SPECIES_DIALGA,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0483
+        SPECIES_DIALGA_ORIGIN,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0484
+        SPECIES_PALKIA,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0484
+        SPECIES_PALKIA_ORIGIN,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0487
         SPECIES_GIRATINA_ALTERED,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0487
@@ -2517,6 +2661,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0624
+        SPECIES_PAWNIARD,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0625
+        SPECIES_BISHARP,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0632
         SPECIES_DURANT,
         INNATES(
@@ -2551,6 +2707,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_THUNDURUS_INCARNATE,
         INNATES(
             ABILITY_PRANKSTER
+        )
+    },
+    { // 0646
+        SPECIES_KYUREM,
+        INNATES(
+            ABILITY_PRESSURE
         )
     },
 
@@ -3147,6 +3309,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0823
+        SPECIES_CORVIKNIGHT,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0823
+        SPECIES_CORVIKNIGHT_GMAX,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0824
         SPECIES_BLIPBUG,
         INNATES(
@@ -3321,6 +3495,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0890
+        SPECIES_ETERNATUS,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0890
+        SPECIES_ETERNATUS_ETERNAMAX,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0894
         SPECIES_REGIELEKI,
         INNATES(
@@ -3343,6 +3529,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULEGION_F,
         INNATES(
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0903
+        SPECIES_SNEASLER,
+        INNATES(
+            ABILITY_PRESSURE
         )
     },
     { // 0904
@@ -3523,6 +3715,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
+        )
+    },
+    { // 0983
+        SPECIES_KINGAMBIT,
+        INNATES(
+            ABILITY_PRESSURE
         )
     },
     { // 0987
