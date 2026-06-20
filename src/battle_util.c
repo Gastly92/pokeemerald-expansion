@@ -11059,12 +11059,12 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
         for (u32 i = 0; i < gBattlersCount; i++)
         {
             if (!IsBattlerAlly(i, battlerAtk))
-                ppToDeduct += (GetBattlerAbility(i) == ABILITY_PRESSURE);
+                ppToDeduct += BattlerHasAbility(i, ABILITY_PRESSURE); // FORK: innate-aware
         }
     }
     else if (moveTarget != TARGET_OPPONENTS_FIELD)
     {
-        if (primaryDef != battlerAtk && GetBattlerAbility(primaryDef) == ABILITY_PRESSURE)
+        if (primaryDef != battlerAtk && BattlerHasAbility(primaryDef, ABILITY_PRESSURE)) // FORK: innate-aware
             ppToDeduct++;
     }
 
