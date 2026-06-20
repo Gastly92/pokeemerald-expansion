@@ -8852,6 +8852,16 @@ bool32 CanMegaEvolve(enum BattlerId battler)
     if (gBattleMons[battler].volatiles.semiInvulnerable == STATE_SKY_DROP_TARGET)
         return FALSE;
 
+    // FORK (FEATURE_FREE_GIMMICKS): a transformed mon (e.g. Ditto/Imposter) copies its
+    // target's species but not its held item. Upstream's item gate masked this because a
+    // transformed Ditto never holds the Mega Stone; with item-free gimmicks the stone no
+    // longer gates Mega Evolution, so the form change would later be refused by
+    // CanBattlerFormChange (B_TRANSFORM_FORM_CHANGES >= GEN_5) AFTER the gimmick was
+    // already marked used. Mirror that condition here so the option is never offered.
+    if (gBattleMons[battler].volatiles.transformed
+        && GetConfig(B_TRANSFORM_FORM_CHANGES) >= GEN_5)
+        return FALSE;
+
     // Check if battler is holding a Z-Crystal. With item-free gimmicks the held
     // item doesn't gate the gimmick, so a Z-Crystal no longer blocks Mega Evolution.
     if (!freeGimmicks && holdEffect == HOLD_EFFECT_Z_CRYSTAL)
