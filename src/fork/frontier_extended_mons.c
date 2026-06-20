@@ -50,10 +50,14 @@
 //  - Sub-100% additional effects (burn/para/flinch) are gated on super effective
 //    or STAB; sub-100% sleep moves only drowse (Yawn-like); 100% Spore sleeps.
 //
-// Roster rules enforced at draft time (src/battle_factory.c): unique species,
-// unique held item, and at most ONE Mega Stone + at most ONE Z-Crystal per team.
-// The roster intentionally carries several distinct builds per species so the
-// opponent's exact set can't be read off the species alone.
+// Roster rules enforced at draft time (src/battle_factory.c): unique species and
+// unique held item per team. (The old "one Mega Stone + one Z-Crystal per team"
+// limit is gone: under FEATURE_FREE_GIMMICKS the gimmicks are item-free, so these
+// sets no longer carry stones/crystals — Mega builds hold a real competitive item
+// and the former Z builds hold a Type Gem or utility item; the mon still Mega
+// Evolves / uses its Z-Move via the gimmick picker.) The roster intentionally
+// carries several distinct builds per species so the opponent's exact set can't be
+// read off the species alone.
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
 // that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
@@ -121,7 +125,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_VENUSAURITE,
+        .heldItem = ITEM_BLACK_SLUDGE, // Mega Venusaur; passive recovery for the defensive Poison sweeper
         .moves = {MOVE_SLUDGE_BOMB, MOVE_GIGA_DRAIN, MOVE_SPORE, MOVE_LEECH_SEED},
         .ability = ABILITY_DROUGHT, // Overgrow + Chlorophyll now innate; chosen Drought sets its own sun for the innate Chlorophyll (slot-1 override)
         .nature = NATURE_BOLD,
@@ -145,7 +149,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHARIZARDITE_Y, // Mega Charizard Y (Drought)
+        .heldItem = ITEM_HEAT_ROCK, // Mega Charizard Y (Drought); extends its own sun
         .moves = {MOVE_FIRE_BLAST, MOVE_SOLAR_BEAM, MOVE_AIR_SLASH, MOVE_ROOST},
         .ability = ABILITY_SOLAR_POWER, // Blaze now innate (latched); chosen Solar Power
         .nature = NATURE_TIMID,
@@ -156,7 +160,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHARIZARDITE_X, // Mega Charizard X (Tough Claws, Fire/Dragon)
+        .heldItem = ITEM_LIFE_ORB, // Mega Charizard X (Tough Claws); power for the Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_FLARE_BLITZ, MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE},
         .ability = ABILITY_SOLAR_POWER, // Blaze now innate (latched); chosen Solar Power
         .nature = NATURE_JOLLY,
@@ -191,7 +195,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLASTOISINITE, // Mega Blastoise (Mega Launcher)
+        .heldItem = ITEM_MYSTIC_WATER, // Mega Blastoise (Mega Launcher); Water STAB boost for the pulse spammer
         .moves = {MOVE_HYDRO_PUMP, MOVE_AURA_SPHERE, MOVE_DARK_PULSE, MOVE_ICE_BEAM},
         .ability = ABILITY_RAIN_DISH, // Torrent now innate (latched); chosen Rain Dish
         .nature = NATURE_MODEST,
@@ -250,7 +254,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BEEDRILL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BEEDRILLITE, // Mega Beedrill (Adaptability)
+        .heldItem = ITEM_POISON_BARB, // Mega Beedrill (Adaptability); sustained Poison STAB
         .moves = {MOVE_X_SCISSOR, MOVE_POISON_JAB, MOVE_DRILL_RUN, MOVE_KNOCK_OFF},
         .ability = ABILITY_SNIPER, // Swarm now innate (latched); chosen Sniper
         .nature = NATURE_JOLLY,
@@ -274,7 +278,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PIDGEOT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PIDGEOTITE, // Mega Pidgeot (No Guard)
+        .heldItem = ITEM_SHARP_BEAK, // Mega Pidgeot (No Guard); boosts its perfect-accuracy Hurricane
         .moves = {MOVE_HURRICANE, MOVE_HEAT_WAVE, MOVE_U_TURN, MOVE_ROOST},
         .ability = ABILITY_KEEN_EYE,
         .nature = NATURE_TIMID,
@@ -453,7 +457,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SANDSLASH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_GROUNDIUM_Z, // SD + Tectonic Rage
+        .heldItem = ITEM_GROUND_GEM, // one-shot Ground burst for the Swords Dance attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_EARTHQUAKE, MOVE_STONE_EDGE, MOVE_KNOCK_OFF},
         .ability = ABILITY_SAND_VEIL, // Sand Rush now innate; chosen Sand Veil (sand evasion)
         .nature = NATURE_ADAMANT,
@@ -584,7 +588,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NINETALES,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FIRIUM_Z, // sun-boosted Inferno Overdrive
+        .heldItem = ITEM_HEAT_ROCK, // extends its own Drought sun
         .moves = {MOVE_NASTY_PLOT, MOVE_FIRE_BLAST, MOVE_SOLAR_BEAM, MOVE_SCORCHING_SANDS},
         .ability = ABILITY_DROUGHT,
         .nature = NATURE_TIMID,
@@ -931,7 +935,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ALAKAZITE, // Mega Alakazam (Trace)
+        .heldItem = ITEM_TWISTED_SPOON, // Mega Alakazam (Trace); Psychic STAB boost
         .moves = {MOVE_PSYCHIC, MOVE_FOCUS_BLAST, MOVE_SHADOW_BALL, MOVE_ENERGY_BALL},
         .ability = ABILITY_MAGIC_GUARD,
         .nature = NATURE_TIMID,
@@ -1134,7 +1138,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWBRO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SLOWBRONITE, // Mega Slowbro (Shell Armor) CM wall
+        .heldItem = ITEM_LEFTOVERS, // Mega Slowbro (Shell Armor); recovery for the Calm Mind wall
         .moves = {MOVE_CHILLING_WATER, MOVE_PSYSHOCK, MOVE_CALM_MIND, MOVE_SLACK_OFF},
         .ability = ABILITY_OWN_TEMPO,
         .nature = NATURE_BOLD,
@@ -1218,7 +1222,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DODRIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYINIUM_Z, // SD + Supersonic Skystrike
+        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Swords Dance
         .moves = {MOVE_SWORDS_DANCE, MOVE_BRAVE_BIRD, MOVE_DOUBLE_EDGE, MOVE_KNOCK_OFF},
         .ability = ABILITY_EARLY_BIRD,
         .nature = NATURE_JOLLY,
@@ -1338,7 +1342,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GENGARITE, // Mega Gengar (Shadow Tag) trapper
+        .heldItem = ITEM_LIFE_ORB, // Mega Gengar (Shadow Tag); power for the trapping nuke
         .moves = {MOVE_SHADOW_BALL, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST, MOVE_NASTY_PLOT},
         .ability = ABILITY_CURSED_BODY,
         .nature = NATURE_TIMID,
@@ -1371,7 +1375,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GHOSTIUM_Z, // Never-Ending Nightmare nuke
+        .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst nuke
         .moves = {MOVE_NASTY_PLOT, MOVE_SHADOW_BALL, MOVE_SLUDGE_WAVE, MOVE_FOCUS_BLAST},
         .ability = ABILITY_CURSED_BODY,
         .nature = NATURE_TIMID,
@@ -1591,7 +1595,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HITMONLEE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FIGHTINIUM_Z, // All-Out Pummeling nuke
+        .heldItem = ITEM_FIGHTING_GEM, // one-shot Fighting burst nuke
         .moves = {MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_STONE_EDGE, MOVE_BLAZE_KICK},
         .ability = ABILITY_RECKLESS,
         .nature = NATURE_JOLLY,
@@ -1700,7 +1704,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KANGASKHAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_KANGASKHANITE, // Mega Kangaskhan (Parental Bond)
+        .heldItem = ITEM_SILK_SCARF, // Mega Kangaskhan (Parental Bond); boosts its Normal double-hits
         .moves = {MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE, MOVE_SUCKER_PUNCH, MOVE_POWER_UP_PUNCH},
         .ability = ABILITY_SCRAPPY,
         .nature = NATURE_JOLLY,
@@ -1818,7 +1822,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JYNX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ICIUM_Z, // Subzero Slammer
+        .heldItem = ITEM_ICE_GEM, // one-shot Ice burst nuke
         .moves = {MOVE_NASTY_PLOT, MOVE_ICE_BEAM, MOVE_PSYCHIC, MOVE_FOCUS_BLAST},
         .ability = ABILITY_DRY_SKIN,
         .nature = NATURE_TIMID,
@@ -1831,7 +1835,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PINSIR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PINSIRITE, // Mega Pinsir (Aerilate)
+        .heldItem = ITEM_SHARP_BEAK, // Mega Pinsir (Aerilate); boosts its -ate Flying moves
         .moves = {MOVE_SWORDS_DANCE, MOVE_RETURN, MOVE_CLOSE_COMBAT, MOVE_EARTHQUAKE},
         .ability = ABILITY_HYPER_CUTTER,
         .nature = NATURE_JOLLY,
@@ -1929,7 +1933,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GYARADOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GYARADOSITE, // Mega Gyarados (Mold Breaker)
+        .heldItem = ITEM_LUM_BERRY, // Mega Gyarados (Mold Breaker); status insurance for the Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_WATERFALL, MOVE_CRUNCH, MOVE_EARTHQUAKE},
         .ability = ABILITY_INTIMIDATE,
         .nature = NATURE_JOLLY,
@@ -1951,7 +1955,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GYARADOS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYINIUM_Z, // DD + Supersonic Skystrike
+        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Dragon Dance
         .moves = {MOVE_DRAGON_DANCE, MOVE_BOUNCE, MOVE_WATERFALL, MOVE_EARTHQUAKE},
         .ability = ABILITY_MOXIE,
         .nature = NATURE_JOLLY,
@@ -1975,7 +1979,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LAPRAS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ICIUM_Z, // Water Absorb Aurora Veil setter (relies on ally hail)
+        .heldItem = ITEM_LIGHT_CLAY, // extends the screens for the Aurora Veil setter
         .moves = {MOVE_AURORA_VEIL, MOVE_FREEZE_DRY, MOVE_SURF, MOVE_PROTECT},
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE_MODEST,
@@ -2025,7 +2029,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JOLTEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIUM_Z, // Gigavolt Havoc
+        .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_SHADOW_BALL, MOVE_HYPER_VOICE},
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE_TIMID,
@@ -2132,7 +2136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AERODACTYL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_AERODACTYLITE, // Mega Aerodactyl (Tough Claws)
+        .heldItem = ITEM_HARD_STONE, // Mega Aerodactyl (Tough Claws); Rock STAB boost
         .moves = {MOVE_ROCK_SLIDE, MOVE_DUAL_WINGBEAT, MOVE_EARTHQUAKE, MOVE_AQUA_TAIL},
         .ability = ABILITY_ROCK_HEAD,
         .nature = NATURE_JOLLY,
@@ -2189,7 +2193,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SNORLIUM_Z, // Pulverizing Pancake (Gluttony recovery elsewhere)
+        .heldItem = ITEM_NORMAL_GEM, // one-shot Normal burst for the Giga Impact set
         .moves = {MOVE_BELLY_DRUM, MOVE_BODY_SLAM, MOVE_EARTHQUAKE, MOVE_CRUNCH},
         .ability = ABILITY_GLUTTONY,
         .nature = NATURE_ADAMANT,
@@ -2368,7 +2372,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAGONITE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYINIUM_Z, // DD + Supersonic Skystrike
+        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Dragon Dance
         .moves = {MOVE_DRAGON_DANCE, MOVE_FLY, MOVE_EARTHQUAKE, MOVE_OUTRAGE},
         .ability = ABILITY_MULTISCALE,
         .nature = NATURE_ADAMANT,
@@ -2381,7 +2385,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEWTWO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MEWTWONITE_Y, // Mega Mewtwo Y (Insomnia) special nuke
+        .heldItem = ITEM_LIFE_ORB, // Mega Mewtwo Y (Insomnia); power for the special nuke
         .moves = {MOVE_PSYSTRIKE, MOVE_AURA_SPHERE, MOVE_ICE_BEAM, MOVE_NASTY_PLOT},
         .ability = ABILITY_PRESSURE,
         .nature = NATURE_TIMID,
@@ -2392,7 +2396,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEWTWO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MEWTWONITE_X, // Mega Mewtwo X (Steadfast) physical
+        .heldItem = ITEM_MUSCLE_BAND, // Mega Mewtwo X (Steadfast); physical boost
         .moves = {MOVE_BULK_UP, MOVE_PSYCHIC_FANGS, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH},
         .ability = ABILITY_PRESSURE,
         .nature = NATURE_JOLLY,
@@ -2741,7 +2745,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMPHAROS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_AMPHAROSITE, // Mega Ampharos (Mold Breaker, Electric/Dragon)
+        .heldItem = ITEM_MAGNET, // Mega Ampharos (Mold Breaker); Electric STAB boost
         .moves = {MOVE_THUNDERBOLT, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST, MOVE_VOLT_SWITCH},
         .ability = ABILITY_STATIC,
         .nature = NATURE_MODEST,
@@ -3112,7 +3116,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STEELIX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_STEELIXITE, // Mega Steelix (Sand Force) physical wall
+        .heldItem = ITEM_ROCKY_HELMET, // Mega Steelix (Sand Force); chips the physical attackers it walls
         .moves = {MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM, MOVE_STEALTH_ROCK, MOVE_BODY_PRESS},
         .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; this set Megas to Sand Force, chosen Rock Head is the pre-Mega slot
         .nature = NATURE_IMPISH,
@@ -3195,7 +3199,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCIZOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SCIZORITE, // Mega Scizor (Technician) swords dance sweeper
+        .heldItem = ITEM_METAL_COAT, // Mega Scizor (Technician); Steel STAB boost for Bullet Punch
         .moves = {MOVE_SWORDS_DANCE, MOVE_BULLET_PUNCH, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF},
         .ability = ABILITY_TECHNICIAN,
         .nature = NATURE_ADAMANT,
@@ -3243,7 +3247,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HERACROSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HERACRONITE, // Mega Heracross (Skill Link) multi-hit breaker
+        .heldItem = ITEM_BLACK_BELT, // Mega Heracross (Skill Link); Fighting STAB boost for the multi-hit breaker
         .moves = {MOVE_PIN_MISSILE, MOVE_ROCK_BLAST, MOVE_BULLET_SEED, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_GUTS,
         .nature = NATURE_ADAMANT,
@@ -3435,7 +3439,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HOUNDOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HOUNDOOMINITE, // Mega Houndoom (Solar Power) nasty plot sweeper
+        .heldItem = ITEM_CHARCOAL, // Mega Houndoom (Solar Power); Fire STAB boost
         .moves = {MOVE_NASTY_PLOT, MOVE_FIRE_BLAST, MOVE_DARK_PULSE, MOVE_SLUDGE_BOMB},
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE_TIMID,
@@ -3765,7 +3769,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TYRANITARITE, // Mega Tyranitar (Sand Stream) dragon dance sweeper
+        .heldItem = ITEM_SMOOTH_ROCK, // Mega Tyranitar (Sand Stream); extends its own sandstorm
         .moves = {MOVE_DRAGON_DANCE, MOVE_STONE_EDGE, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
         .ability = ABILITY_SAND_STREAM,
         .nature = NATURE_JOLLY,
@@ -3898,7 +3902,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SCEPTILITE, // Mega Sceptile (Lightning Rod, Grass/Dragon) — fast special breaker
+        .heldItem = ITEM_MIRACLE_SEED, // Mega Sceptile (Lightning Rod); Grass STAB boost
         .moves = {MOVE_LEAF_STORM, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST, MOVE_GIGA_DRAIN},
         .ability = ABILITY_LIGHTNING_ROD, // Overgrow now innate (latched); chosen Lightning Rod via override (matches its Mega's ability)
         .nature = NATURE_TIMID,
@@ -3933,7 +3937,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLAZIKENITE, // Mega Blaziken (Speed Boost) — snowballing sweeper
+        .heldItem = ITEM_LIFE_ORB, // Mega Blaziken (Speed Boost); power for the snowballing sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_FLARE_BLITZ, MOVE_HIGH_JUMP_KICK, MOVE_THUNDER_PUNCH},
         .ability = ABILITY_SPEED_BOOST,
         .nature = NATURE_JOLLY,
@@ -3968,7 +3972,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWAMPERT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SWAMPERTITE, // Mega Swampert (Swift Swim) — rain sweeper
+        .heldItem = ITEM_MYSTIC_WATER, // Mega Swampert (Swift Swim); Water STAB boost for the rain sweeper
         .moves = {MOVE_WATERFALL, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH, MOVE_SUPERPOWER},
         .ability = ABILITY_DAMP, // Torrent now innate (latched); chosen Damp
         .nature = NATURE_ADAMANT,
@@ -4099,7 +4103,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUDICOLO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WATERIUM_Z, // Hydro Vortex nuke under rain
+        .heldItem = ITEM_MYSTIC_WATER, // Water STAB boost for the rain sweeper
         .moves = {MOVE_HYDRO_PUMP, MOVE_ENERGY_BALL, MOVE_ICE_BEAM, MOVE_RAIN_DANCE},
         .ability = ABILITY_RAIN_DISH, // Swift Swim now innate; chosen Rain Dish (rain heal)
         .nature = NATURE_MODEST,
@@ -4195,7 +4199,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARDEVOIR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GARDEVOIRITE, // Mega Gardevoir (Pixilate) — Hyper Voice nuke
+        .heldItem = ITEM_THROAT_SPRAY, // Mega Gardevoir (Pixilate); Hyper Voice is a sound move -> +SpAtk
         .moves = {MOVE_HYPER_VOICE, MOVE_PSYSHOCK, MOVE_MOONBLAST, MOVE_FOCUS_BLAST},
         .ability = ABILITY_TRACE,
         .nature = NATURE_TIMID,
@@ -4411,7 +4415,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SABLEYE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SABLENITE, // Mega Sableye (Magic Bounce) — defensive pivot
+        .heldItem = ITEM_LEFTOVERS, // Mega Sableye (Magic Bounce); recovery for the defensive pivot
         .moves = {MOVE_CALM_MIND, MOVE_DARK_PULSE, MOVE_RECOVER, MOVE_WILL_O_WISP},
         .ability = ABILITY_KEEN_EYE, // Prankster now innate; Mega -> Magic Bounce anyway, Keen Eye is the pre-Mega filler
         .nature = NATURE_BOLD,
@@ -4435,7 +4439,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAWILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MAWILITE, // Mega Mawile (Huge Power) — Swords Dance wallbreaker
+        .heldItem = ITEM_FAIRY_FEATHER, // Mega Mawile (Huge Power); Fairy STAB boost for Play Rough
         .moves = {MOVE_SWORDS_DANCE, MOVE_PLAY_ROUGH, MOVE_IRON_HEAD, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_INTIMIDATE,
         .nature = NATURE_ADAMANT,
@@ -4459,7 +4463,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_AGGRONITE, // Mega Aggron (Filter, pure Steel) — physical wall
+        .heldItem = ITEM_ROCKY_HELMET, // Mega Aggron (Filter); chips the physical attackers it walls
         .moves = {MOVE_HEAVY_SLAM, MOVE_EARTHQUAKE, MOVE_STEALTH_ROCK, MOVE_ROAR},
         .ability = ABILITY_ROCK_HEAD, // Sturdy now innate; this set Megas to Filter, chosen Rock Head is the pre-Mega slot
         .nature = NATURE_IMPISH,
@@ -4494,7 +4498,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEDICHAM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MEDICHAMITE, // Mega Medicham (Pure Power) — fast breaker
+        .heldItem = ITEM_BLACK_BELT, // Mega Medicham (Pure Power); Fighting STAB boost
         .moves = {MOVE_HIGH_JUMP_KICK, MOVE_ZEN_HEADBUTT, MOVE_ICE_PUNCH, MOVE_FAKE_OUT},
         .ability = ABILITY_PURE_POWER,
         .nature = NATURE_JOLLY,
@@ -4518,7 +4522,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANECTRIC,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MANECTITE, // Mega Manectric (Intimidate) — fast special pivot
+        .heldItem = ITEM_MAGNET, // Mega Manectric (Intimidate); Electric STAB boost
         .moves = {MOVE_THUNDERBOLT, MOVE_VOLT_SWITCH, MOVE_FLAMETHROWER, MOVE_ENERGY_BALL},
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE_TIMID,
@@ -4607,7 +4611,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHARPEDONITE, // Mega Sharpedo (Strong Jaw) — Speed Boost sweeper
+        .heldItem = ITEM_BLACK_GLASSES, // Mega Sharpedo (Strong Jaw); Dark STAB boost
         .moves = {MOVE_PROTECT, MOVE_CRUNCH, MOVE_WATERFALL, MOVE_PSYCHIC_FANGS},
         .ability = ABILITY_SPEED_BOOST,
         .nature = NATURE_ADAMANT,
@@ -4655,7 +4659,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CAMERUPT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CAMERUPTITE, // Mega Camerupt (Sheer Force) — Trick Room breaker
+        .heldItem = ITEM_LIFE_ORB, // Mega Camerupt (Sheer Force); Sheer Force negates the Life Orb recoil
         .moves = {MOVE_ERUPTION, MOVE_EARTH_POWER, MOVE_FIRE_BLAST, MOVE_ANCIENT_POWER},
         .ability = ABILITY_SOLID_ROCK,
         .nature = NATURE_QUIET,
@@ -4801,7 +4805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ALTARIA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ALTARIANITE, // Mega Altaria (Pixilate, Dragon/Fairy) — Dragon Dance sweeper
+        .heldItem = ITEM_FAIRY_FEATHER, // Mega Altaria (Pixilate); boosts its -ate Fairy moves
         .moves = {MOVE_DRAGON_DANCE, MOVE_RETURN, MOVE_EARTHQUAKE, MOVE_ROOST},
         .ability = ABILITY_CLOUD_NINE, // Natural Cure now innate; chosen Cloud Nine (real slot 2; becomes Pixilate on Mega)
         .nature = NATURE_JOLLY,
@@ -5060,7 +5064,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BANETTE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BANETTITE, // Mega Banette (Prankster) — fast disruptor
+        .heldItem = ITEM_SPELL_TAG, // Mega Banette (Prankster); Ghost STAB boost for the disruptor
         .moves = {MOVE_SHADOW_CLAW, MOVE_KNOCK_OFF, MOVE_WILL_O_WISP, MOVE_DESTINY_BOND},
         .ability = ABILITY_FRISK,
         .nature = NATURE_ADAMANT,
@@ -5123,7 +5127,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ABSOL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ABSOLITE, // Mega Absol (Magic Bounce) — Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB, // Mega Absol (Magic Bounce); power for the Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_KNOCK_OFF, MOVE_PLAY_ROUGH, MOVE_SUCKER_PUNCH},
         .ability = ABILITY_SUPER_LUCK,
         .nature = NATURE_JOLLY,
@@ -5158,7 +5162,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLALIE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GLALITITE, // Mega Glalie (Refrigerate) — Return/Explosion nuke
+        .heldItem = ITEM_NEVER_MELT_ICE, // Mega Glalie (Refrigerate); boosts its -ate Ice Return
         .moves = {MOVE_RETURN, MOVE_ICICLE_CRASH, MOVE_EARTHQUAKE, MOVE_FREEZE_DRY},
         .ability = ABILITY_INNER_FOCUS,
         .nature = NATURE_JOLLY,
@@ -5269,7 +5273,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SALAMENCE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SALAMENCITE, // Mega Salamence (Aerilate) — Dragon Dance sweeper
+        .heldItem = ITEM_LIFE_ORB, // Mega Salamence (Aerilate); power for the Dragon Dance sweeper
         .moves = {MOVE_DRAGON_DANCE, MOVE_DOUBLE_EDGE, MOVE_EARTHQUAKE, MOVE_ROOST},
         .ability = ABILITY_INTIMIDATE,
         .nature = NATURE_JOLLY,
@@ -5304,7 +5308,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_METAGROSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_METAGROSSITE, // Mega Metagross (Tough Claws) — fast physical breaker
+        .heldItem = ITEM_LIFE_ORB, // Mega Metagross (Tough Claws); power for the fast physical breaker
         .moves = {MOVE_METEOR_MASH, MOVE_ZEN_HEADBUTT, MOVE_EARTHQUAKE, MOVE_ICE_PUNCH},
         .ability = ABILITY_CLEAR_BODY,
         .nature = NATURE_JOLLY,
@@ -5411,7 +5415,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LATIAS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LATIASITE, // Mega Latias — bulky Calm Mind sweeper
+        .heldItem = ITEM_LEFTOVERS, // Mega Latias; recovery for the bulky Calm Mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_DRAGON_PULSE, MOVE_ROOST},
         .ability = ABILITY_ILLUSION, // Levitate now innate; chosen Illusion (the Eon refracts light to vanish)
         .nature = NATURE_TIMID,
@@ -5435,7 +5439,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LATIOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LATIOSITE, // Mega Latios — fast special sweeper
+        .heldItem = ITEM_DRAGON_FANG, // Mega Latios; Dragon STAB boost for the fast special sweeper
         .moves = {MOVE_CALM_MIND, MOVE_PSYSHOCK, MOVE_DRACO_METEOR, MOVE_ROOST},
         .ability = ABILITY_ILLUSION, // Levitate now innate; chosen Illusion (the Eon refracts light to vanish)
         .nature = NATURE_TIMID,
@@ -5736,7 +5740,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STARAPTOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYINIUM_Z, // Supersonic Skystrike nuke
+        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst nuke
         .moves = {MOVE_BRAVE_BIRD, MOVE_CLOSE_COMBAT, MOVE_QUICK_ATTACK, MOVE_DOUBLE_EDGE},
         .ability = ABILITY_RECKLESS,
         .nature = NATURE_JOLLY,
@@ -5982,7 +5986,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LOPUNNY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LOPUNNITE, // Mega Lopunny (Scrappy)
+        .heldItem = ITEM_LIFE_ORB, // Mega Lopunny (Scrappy); power for the fast breaker
         .moves = {MOVE_FAKE_OUT, MOVE_HIGH_JUMP_KICK, MOVE_RETURN, MOVE_ICE_PUNCH},
         .ability = ABILITY_LIMBER,
         .nature = NATURE_JOLLY,
@@ -6142,7 +6146,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GARCHOMPITE, // Mega Garchomp (Sand Force)
+        .heldItem = ITEM_SOFT_SAND, // Mega Garchomp (Sand Force); Ground STAB boost
         .moves = {MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW, MOVE_FIRE_BLAST, MOVE_STONE_EDGE},
         .ability = ABILITY_ROUGH_SKIN,
         .nature = NATURE_NAUGHTY,
@@ -6177,7 +6181,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUCARIO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LUCARIONITE, // Mega Lucario (Adaptability)
+        .heldItem = ITEM_LIFE_ORB, // Mega Lucario (Adaptability); power for the mixed breaker
         .moves = {MOVE_SWORDS_DANCE, MOVE_METEOR_MASH, MOVE_CLOSE_COMBAT, MOVE_BULLET_PUNCH},
         .ability = ABILITY_JUSTIFIED,
         .nature = NATURE_JOLLY,
@@ -6199,7 +6203,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUCARIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FIGHTINIUM_Z, // SD + All-Out Pummeling
+        .heldItem = ITEM_FIGHTING_GEM, // one-shot Fighting burst after Swords Dance
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_BULLET_PUNCH, MOVE_EXTREME_SPEED},
         .ability = ABILITY_STEADFAST,
         .nature = NATURE_JOLLY,
@@ -6310,7 +6314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ABOMASNOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ABOMASITE, // Mega Abomasnow (Snow Warning)
+        .heldItem = ITEM_ICY_ROCK, // Mega Abomasnow (Snow Warning); extends its own snow
         .moves = {MOVE_BLIZZARD, MOVE_GIGA_DRAIN, MOVE_EARTHQUAKE, MOVE_ICE_SHARD},
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE_QUIET,
@@ -6321,7 +6325,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ABOMASNOW,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ICIUM_Z, // Aurora Veil + Blizzard support
+        .heldItem = ITEM_ICY_ROCK, // extends its own snow for Aurora Veil + Blizzard
         .moves = {MOVE_AURORA_VEIL, MOVE_BLIZZARD, MOVE_GIGA_DRAIN, MOVE_PROTECT},
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE_MODEST,
@@ -6673,7 +6677,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GALLADE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GALLADITE, // Mega Gallade (Inner Focus)
+        .heldItem = ITEM_LIFE_ORB, // Mega Gallade (Inner Focus); power for the Swords Dance sweeper
         .moves = {MOVE_SWORDS_DANCE, MOVE_CLOSE_COMBAT, MOVE_PSYCHO_CUT, MOVE_KNOCK_OFF},
         .ability = ABILITY_JUSTIFIED,
         .nature = NATURE_JOLLY,
@@ -10040,7 +10044,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIANCIE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DIANCITE, // Mega Diancie (Magic Bounce) glass cannon
+        .heldItem = ITEM_LIFE_ORB, // Mega Diancie (Magic Bounce); power for the glass cannon
         .moves = {MOVE_DIAMOND_STORM, MOVE_MOONBLAST, MOVE_EARTH_POWER, MOVE_PROTECT},
         .ability = ABILITY_CLEAR_BODY,
         .nature = NATURE_NAIVE,
@@ -10141,7 +10145,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DECIDUEYE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DECIDIUM_Z, // Sinister Arrow Raid nuke
+        .heldItem = ITEM_SPELL_TAG, // Ghost STAB boost for the Spirit Shackle attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_SPIRIT_SHACKLE, MOVE_LEAF_BLADE, MOVE_BRAVE_BIRD},
         .ability = ABILITY_LONG_REACH, // Overgrow now innate (latched); chosen Long Reach
         .nature = NATURE_ADAMANT,
@@ -10211,7 +10215,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INCINEROAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_INCINIUM_Z, // Malicious Moonsault nuke
+        .heldItem = ITEM_BLACK_GLASSES, // Dark STAB boost for the Darkest Lariat attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_FLARE_BLITZ, MOVE_DARKEST_LARIAT, MOVE_EARTHQUAKE},
         .ability = ABILITY_INTIMIDATE, // Blaze now innate (latched); chosen Intimidate
         .nature = NATURE_ADAMANT,
@@ -10257,7 +10261,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PRIMARINA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PRIMARIUM_Z, // Oceanic Operetta nuke
+        .heldItem = ITEM_THROAT_SPRAY, // Sparkling Aria is a sound move -> +SpAtk
         .moves = {MOVE_HYDRO_PUMP, MOVE_MOONBLAST, MOVE_ENERGY_BALL, MOVE_PSYCHIC},
         .ability = ABILITY_LIQUID_VOICE, // Torrent now innate (latched); chosen Liquid Voice
         .nature = NATURE_MODEST,
@@ -10416,7 +10420,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LYCANROC_DUSK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LYCANIUM_Z, // Splintered Stormshards nuke, Tough Claws
+        .heldItem = ITEM_LIFE_ORB, // power for the Tough Claws Stone Edge attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_STONE_EDGE, MOVE_ACCELEROCK, MOVE_CLOSE_COMBAT},
         .ability = ABILITY_TOUGH_CLAWS,
         .nature = NATURE_JOLLY,
@@ -10765,7 +10769,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PALOSSAND,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GHOSTIUM_Z, // Never-Ending Nightmare setup
+        .heldItem = ITEM_LEFTOVERS, // recovery for the defensive Ghost/Ground trapper
         .moves = {MOVE_SHADOW_BALL, MOVE_EARTH_POWER, MOVE_GIGA_DRAIN, MOVE_SHORE_UP},
         .ability = ABILITY_WATER_COMPACTION,
         .nature = NATURE_MODEST,
@@ -10911,7 +10915,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIMIKYU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MIMIKIUM_Z, // Let's Snuggle Forever nuke, Disguise
+        .heldItem = ITEM_LIFE_ORB, // power for the Disguise attacker
         .moves = {MOVE_SWORDS_DANCE, MOVE_PLAY_ROUGH, MOVE_SHADOW_CLAW, MOVE_SHADOW_SNEAK},
         .ability = ABILITY_DISGUISE,
         .nature = NATURE_JOLLY,
@@ -11019,7 +11023,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KOMMO_O,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_KOMMONIUM_Z, // Clangorous Soulblaze setup
+        .heldItem = ITEM_DRAGON_GEM, // one-shot Dragon burst after Clangorous setup
         .moves = {MOVE_CLANGING_SCALES, MOVE_CLOSE_COMBAT, MOVE_FLAMETHROWER, MOVE_FLASH_CANNON},
         .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE_NAIVE,
@@ -11054,7 +11058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_KOKO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TAPUNIUM_Z, // Guardian of Alola / Electric Surge
+        .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
         .moves = {MOVE_THUNDERBOLT, MOVE_DAZZLING_GLEAM, MOVE_VOLT_SWITCH, MOVE_NATURES_MADNESS},
         .ability = ABILITY_ELECTRIC_SURGE,
         .nature = NATURE_TIMID,
@@ -11111,7 +11115,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_LELE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PSYCHIUM_Z, // Shattered Psyche nuke
+        .heldItem = ITEM_PSYCHIC_GEM, // one-shot Psychic burst nuke
         .moves = {MOVE_PSYCHIC, MOVE_MOONBLAST, MOVE_PSYSHOCK, MOVE_THUNDERBOLT},
         .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE_TIMID,
@@ -11207,7 +11211,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUNALA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LUNALIUM_Z, // Menacing Moonraze Maelstrom nuke
+        .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst nuke
         .moves = {MOVE_MOONGEIST_BEAM, MOVE_SHADOW_BALL, MOVE_MOONBLAST, MOVE_CALM_MIND},
         .ability = ABILITY_SHADOW_SHIELD,
         .nature = NATURE_TIMID,
@@ -11303,7 +11307,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_XURKITREE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIUM_Z, // Gigavolt Havoc nuke
+        .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
         .moves = {MOVE_TAIL_GLOW, MOVE_THUNDERBOLT, MOVE_ENERGY_BALL, MOVE_DAZZLING_GLEAM},
         .ability = ABILITY_BEAST_BOOST,
         .nature = NATURE_TIMID,
@@ -11362,7 +11366,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KARTANA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GRASSIUM_Z, // Bloom Doom Swords Dance sweeper
+        .heldItem = ITEM_GRASS_GEM, // one-shot Grass burst after Swords Dance
         .moves = {MOVE_SWORDS_DANCE, MOVE_LEAF_BLADE, MOVE_SACRED_SWORD, MOVE_SMART_STRIKE},
         .ability = ABILITY_BEAST_BOOST,
         .nature = NATURE_JOLLY,
@@ -11421,7 +11425,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NECROZMA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_PSYCHIUM_Z, // Calm Mind Shattered Psyche
+        .heldItem = ITEM_PSYCHIC_GEM, // Psychic burst for the Calm Mind sweeper
         .moves = {MOVE_CALM_MIND, MOVE_PHOTON_GEYSER, MOVE_HEAT_WAVE, MOVE_MOONLIGHT},
         .ability = ABILITY_PRISM_ARMOR,
         .nature = NATURE_TIMID,
@@ -11456,7 +11460,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FAIRIUM_Z, // Twinkle Tackle / Trick Room nuke
+        .heldItem = ITEM_FAIRY_GEM, // one-shot Fairy burst for the Trick Room nuke
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .moves = {MOVE_TRICK_ROOM, MOVE_FLEUR_CANNON, MOVE_FLASH_CANNON, MOVE_THUNDERBOLT},
         .ability = ABILITY_SOUL_HEART,
@@ -11470,7 +11474,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MARSHADOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MARSHADIUM_Z, // Soul-Stealing 7-Star Strike nuke
+        .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst for the Spectral Thief nuke
         .moves = {MOVE_SPECTRAL_THIEF, MOVE_CLOSE_COMBAT, MOVE_SHADOW_SNEAK, MOVE_BULK_UP},
         .ability = ABILITY_TECHNICIAN,
         .nature = NATURE_JOLLY,
@@ -11554,7 +11558,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLACEPHALON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FIRIUM_Z, // Inferno Overdrive nuke
+        .heldItem = ITEM_FIRE_GEM, // one-shot Fire burst nuke
         .moves = {MOVE_CALM_MIND, MOVE_FIRE_BLAST, MOVE_SHADOW_BALL, MOVE_FOCUS_BLAST},
         .ability = ABILITY_BEAST_BOOST,
         .nature = NATURE_TIMID,
@@ -11578,7 +11582,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZERAORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIUM_Z, // Gigavolt Havoc + Bulk Up
+        .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst after Bulk Up
         .moves = {MOVE_BULK_UP, MOVE_PLASMA_FISTS, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF},
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE_JOLLY,
