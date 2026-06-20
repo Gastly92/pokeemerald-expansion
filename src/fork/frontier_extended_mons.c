@@ -128,33 +128,11 @@
 
 const struct TrainerMon gFrontierExtendedMons[] =
 {
-
-    // ============================================================
-    //                       Generation I
-    // ============================================================
+    // ====================================
+    // Generation I
+    // ====================================
 
     // ---- Venusaur ----
-    { // 0003
-        .species = SPECIES_VENUSAUR,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_SLUDGE, // Mega Venusaur; passive recovery for the defensive Poison sweeper
-        .moves =
-        {
-            MOVE_SLUDGE_BOMB,
-            MOVE_GIGA_DRAIN,
-            MOVE_SPORE,
-            MOVE_LEECH_SEED
-        },
-        .ability = ABILITY_DROUGHT, // Overgrow + Chlorophyll now innate; chosen Drought sets its own sun for the innate Chlorophyll (slot-1 override)
-        .nature = NATURE(DEF_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .def = 220,
-            .spd = 36
-        ),
-        .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
-    },
     { // 0003
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
@@ -166,7 +144,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPORE,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_DROUGHT, // Overgrow + Chlorophyll now innate; chosen Drought sets its own sun for the innate Chlorophyll (slot-1 override)
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -174,7 +152,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
     // ---- Charizard ----
@@ -4413,9 +4390,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //                       Generation II
-    // ============================================================
+    // ====================================
+    // Generation II
+    // ====================================
 
     // ---- Meganium ----
     { // 0154
@@ -7066,9 +7043,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //                       Generation III
-    // ============================================================
+    // ====================================
+    // Generation III
+    // ====================================
 
     // ---- Sceptile ----
     { // 0254
@@ -10250,9 +10227,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //                       Generation IV
-    // ============================================================
+    // ====================================
+    // Generation IV
+    // ====================================
 
     // ---- Torterra ----
     { // 0389
@@ -13031,9 +13008,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //                       Generation V
-    // ============================================================
+    // ====================================
+    // Generation V
+    // ====================================
 
     // ---- Victini ----
     { // 0494
@@ -16521,9 +16498,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //                       Generation VI
-    // ============================================================
+    // ====================================
+    // Generation VI
+    // ====================================
 
     // ---- Chesnaught ----
     { // 0652
@@ -18438,9 +18415,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //                       Generation VII
-    // ============================================================
+    // ====================================
+    // Generation VII
+    // ====================================
 
     // ---- Decidueye ----
     { // 0724
@@ -21146,9 +21123,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //                       Generation VIII
-    // ============================================================
+    // ====================================
+    // Generation VIII
+    // ====================================
 
     // ---- Rillaboom ----
     { // 0812
@@ -23905,9 +23882,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_POKE,
     },
 
-    // ============================================================
-    //                       Generation IX
-    // ============================================================
+    // ====================================
+    // Generation IX
+    // ====================================
 
     // ---- Meowscarada ----
     { // 0908
