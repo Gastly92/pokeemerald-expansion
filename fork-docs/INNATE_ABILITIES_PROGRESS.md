@@ -29,7 +29,7 @@
 | :x: | Wonder Guard | Its mysterious power only lets supereffective moves hit the Pokémon. |
 | :white_check_mark: | Levitate | The Pokémon floats off the ground, making it immune to Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses. |
 | :x: | Effect Spore | Contact with the Pokémon may inflict poison, sleep, or paralysis on the attacker. |
-| :white_large_square: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
+| :x: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
 | :white_large_square: | Clear Body | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
 | :x: | Lightning Rod | The Pokémon draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage. |
