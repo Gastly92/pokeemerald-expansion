@@ -528,40 +528,44 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     // here (mirroring the space-separated hazard list on the Field page) keeps the
     // page within its fixed height. The chosen ability is listed plainly; innates
     // follow in "(+Name, ...)" with a leading '+' to mark them as additional
-    // passives. Innates are gated on the same in-battle reveal flag as the chosen
-    // ability, so the viewer still shows only what has been seen in action and
-    // doesn't leak that the mon has innates until then.
+    // passives. The chosen ability and each innate are revealed *independently* —
+    // an innate is its own passive, so seeing one (e.g. an innate Levitate block a
+    // Ground move) does NOT reveal the chosen ability, which keeps showing "?" until
+    // it too is witnessed (so the line reads "? (+Levitate)"). Each tracks its own
+    // reveal bit, so the viewer shows only what has actually been seen in action; a
+    // silent passive innate (Regenerator, Unaware, ...) is never recorded and so
+    // never leaks here.
     bool32 abilitySeen = (gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
     enum Ability seenAbility = gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][foeIndex];
     p = StringCopy(line, COMPOUND_STRING("Ability: "));
     if (abilitySeen && seenAbility != ABILITY_NONE)
-    {
         p = StringCopy(p, gAbilitiesInfo[seenAbility].name);
-        if (GetConfig(FEATURE_INNATE_ABILITIES))
-        {
-            enum Species foeSpecies = GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL);
-            bool32 anyInnate = FALSE;
-            for (u32 slot = 0; ; slot++)
-            {
-                enum Ability innate = GetSpeciesInnate(foeSpecies, slot);
-                if (innate == ABILITY_NONE)
-                    break;
-                // Skip an innate that just duplicates the revealed chosen ability
-                // (e.g. a species that still carries Levitate as its primary), so the
-                // line doesn't echo the same name twice.
-                if (innate == seenAbility)
-                    continue;
-                p = StringCopy(p, anyInnate ? COMPOUND_STRING(", ") : COMPOUND_STRING(" (+"));
-                p = StringCopy(p, gAbilitiesInfo[innate].name);
-                anyInnate = TRUE;
-            }
-            if (anyInnate)
-                p = StringCopy(p, COMPOUND_STRING(")"));
-        }
-    }
     else
+        p = StringCopy(p, COMPOUND_STRING("?"));
+    if (GetConfig(FEATURE_INNATE_ABILITIES))
     {
-        StringCopy(p, COMPOUND_STRING("?"));
+        enum Species foeSpecies = GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL);
+        u32 revealedInnates = gBattleStruct->infoRevealedInnates[B_SIDE_OPPONENT][foeIndex];
+        bool32 anyInnate = FALSE;
+        for (u32 slot = 0; ; slot++)
+        {
+            enum Ability innate = GetSpeciesInnate(foeSpecies, slot);
+            if (innate == ABILITY_NONE)
+                break;
+            // Only innates the player has individually witnessed in battle.
+            if (!(revealedInnates & (1u << slot)))
+                continue;
+            // Skip an innate that just duplicates the revealed chosen ability
+            // (e.g. a species that still carries Levitate as its primary), so the
+            // line doesn't echo the same name twice.
+            if (abilitySeen && innate == seenAbility)
+                continue;
+            p = StringCopy(p, anyInnate ? COMPOUND_STRING(", ") : COMPOUND_STRING(" (+"));
+            p = StringCopy(p, gAbilitiesInfo[innate].name);
+            anyInnate = TRUE;
+        }
+        if (anyInnate)
+            p = StringCopy(p, COMPOUND_STRING(")"));
     }
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
