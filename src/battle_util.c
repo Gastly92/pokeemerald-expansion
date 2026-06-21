@@ -3721,6 +3721,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 if (CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility) && !BattlerJustSwitchedIn(battler))
                 {
                     gEffectBattler = gBattlerAbility = battler;
+                    // FORK: innate Speed Boost — make the pop-up show Speed Boost, not the chosen
+                    // ability. CreateAbilityPopUp() reads the primary slot; only override when the
+                    // chosen ability differs, so a real Speed Boost stays byte-for-byte unchanged.
+                    if (GetBattlerAbility(battler) != ABILITY_SPEED_BOOST)
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_SPEED_BOOST;
                     SetStatChange(battler, STAT_SPEED, 1);
                     BattleScriptCall(BattleScript_AbilityStatChange);
                     effect++;

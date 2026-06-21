@@ -1,4 +1,6 @@
 #include "global.h"
+#include "battle.h"
+#include "battle_util.h"
 #include "fork/innate_abilities.h"
 #include "constants/abilities.h"
 #include "constants/species.h"
@@ -264,6 +266,38 @@
 //     Weak Armor, Drapion its Sniper, Goodra-Hisui its Sap Sipper, Drednaw its Strong Jaw, while the
 //     all-real-abilities-now-innate species take a fork-owned chosen override (Armaldo/Samurott → Water
 //     Absorb, Torterra → Sand Stream, Turtonator → Flame Body) in species_ability_overrides.c.
+//   - ABILITY_SPEED_BOOST — raises the holder's Speed by 1 stage at the end of every turn. This is the
+//     fork's first ACTIVE, scripted end-turn innate, so unlike the passive abilities above it needs an
+//     end-turn driver: TryActivateInnateEndTurnEffects (below in this file) is hooked from the
+//     THIRD_EVENT_BLOCK_ABILITIES_INNATE step of the end-turn loop (src/battle_end_turn.c), right after
+//     the chosen-ability end-turn block. The driver delegates to the upstream end-turn handler with the
+//     innate ability passed explicitly — AbilityBattleEffects(ABILITYEFFECT_ENDTURN, battler, ABILITY_SPEED_BOOST, ...)
+//     — so the +1 Speed, the stat-change script (BattleScript_AbilityStatChange) and the pop-up are
+//     identical to the real ability; the pop-up is overridden to show Speed Boost (not the chosen
+//     ability) at the effect site in src/battle_util.c, but ONLY when the chosen ability differs, so a
+//     real Speed Boost stays byte-for-byte unchanged (Sturdy/Levitate precedent). The driver skips an
+//     innate that equals the chosen ability so a real Speed Boost never boosts twice. The driver is
+//     RE-ENTRANT (a per-battler cursor in gBattleStruct->eventState, see TryActivateInnateEndTurnEffects),
+//     so a battler can carry several active end-turn innates and fire each in turn; Speed Boost is just
+//     the only one on the allowlist today. NO pure-boon
+//     divergence: Speed Boost is a clean upside that never hurts its holder, so the innate is a 1:1 copy.
+//     Suppression parity holds via IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field);
+//     Speed Boost is not breakable, so Mold Breaker never touches it, same as the real ability. AI is
+//     innate-aware: the boost isn't in any shared damage calc, but the two AI reads that key off a foe's
+//     Speed Boost — "don't bother lowering an innate Speed Boost foe's Speed" in CanLowerStat
+//     (src/battle_ai_util.c) and CanStatChange (src/battle_stat_change.c) — now credit an innate holder
+//     via IsInnateActive(); the ability-transfer scoring (BattlerBenefitsFromAbilityScore) is left alone
+//     since innates are never transferable. Canon-only (no flavor picks — a +1 Speed-per-turn snowball is
+//     potent, like the pinch / weather-doubler / Pressure abilities): every species whose ability data
+//     carries Speed Boost in any slot, so the signature survives whichever slot a build picks. Forms are
+//     listed only where the form's ability data still carries it (Blaziken-Mega's ability data IS Speed
+//     Boost, so it gets the innate; Sharpedo-Mega → Strong Jaw and Scolipede-Mega → Shell Armor are
+//     omitted for Speed Boost). The Torchic line (innate Blaze) and the Venipede line (innate Swarm)
+//     already carry an innate, so they take a combined INNATES(...) list with Speed Boost added.
+//     Frontier roster sets that hardcoded Speed Boost are freed (Step 3.5): Ninjask → Infiltrator,
+//     Sharpedo → Rough Skin, Yanmega → Tinted Lens, Scolipede → Poison Point, Espathra → Opportunist
+//     (each a real, complementary slot), while Blaziken — whose only real abilities (Blaze, Speed Boost)
+//     are now BOTH innate — takes a fork-owned chosen Sheer Force override in species_ability_overrides.c.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -990,6 +1024,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL
         )
     },
+    { // 0193
+        SPECIES_YANMA,
+        INNATES(
+            ABILITY_SPEED_BOOST
+        )
+    },
     { // 0194
         SPECIES_WOOPER,
         INNATES(
@@ -1367,19 +1407,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0255
         SPECIES_TORCHIC,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0256
         SPECIES_COMBUSKEN,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0257
         SPECIES_BLAZIKEN,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_SPEED_BOOST
+        )
+    },
+    { // 0257
+        SPECIES_BLAZIKEN_MEGA,
+        INNATES(
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0258
@@ -1454,6 +1503,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0291
+        SPECIES_NINJASK,
+        INNATES(
+            ABILITY_SPEED_BOOST
+        )
+    },
     { // 0292
         SPECIES_SHEDINJA,
         INNATES(
@@ -1526,6 +1581,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SWALOT,
         INNATES(
             ABILITY_STENCH
+        )
+    },
+    { // 0318
+        SPECIES_CARVANHA,
+        INNATES(
+            ABILITY_SPEED_BOOST
+        )
+    },
+    { // 0319
+        SPECIES_SHARPEDO,
+        INNATES(
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0320
@@ -2090,6 +2157,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0469
+        SPECIES_YANMEGA,
+        INNATES(
+            ABILITY_SPEED_BOOST
+        )
+    },
     { // 0470
         SPECIES_LEAFEON,
         INNATES(
@@ -2479,18 +2552,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0543
         SPECIES_VENIPEDE,
         INNATES(
+            ABILITY_SPEED_BOOST,
             ABILITY_SWARM
         )
     },
     { // 0544
         SPECIES_WHIRLIPEDE,
         INNATES(
+            ABILITY_SPEED_BOOST,
             ABILITY_SWARM
         )
     },
     { // 0545
         SPECIES_SCOLIPEDE,
         INNATES(
+            ABILITY_SPEED_BOOST,
             ABILITY_SWARM
         )
     },
@@ -3932,6 +4008,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL
         )
     },
+    { // 0955
+        SPECIES_FLITTLE,
+        INNATES(
+            ABILITY_SPEED_BOOST
+        )
+    },
+    { // 0956
+        SPECIES_ESPATHRA,
+        INNATES(
+            ABILITY_SPEED_BOOST
+        )
+    },
     { // 0965
         SPECIES_REVAVROOM,
         INNATES(
@@ -4110,4 +4198,56 @@ enum Ability GetSpeciesInnate(u16 species, u32 index)
     }
 
     return ABILITY_NONE;
+}
+
+// Active, scripted innate abilities that fire at the end of every turn. Today only
+// Speed Boost (raises Speed +1). Add a future end-turn active here; the driver
+// (TryActivateInnateEndTurnEffects) is already re-entrant, so a battler may carry
+// more than one and each fires in turn.
+static bool32 IsActiveEndTurnInnate(enum Ability ability)
+{
+    return ability == ABILITY_SPEED_BOOST;
+}
+
+// FORK: end-turn innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active,
+// scripted end-turn innates (today only Speed Boost), hooked from the
+// THIRD_EVENT_BLOCK_ABILITIES_INNATE step of the end-turn loop (src/battle_end_turn.c)
+// right after the chosen-ability end-turn block.
+//
+// RE-ENTRANT: a battle script fires one at a time, so this resumes from a per-battler
+// cursor. *index is the next innate-list slot to consider; the end-turn loop holds the
+// THIRD_EVENT_BLOCK_ABILITIES_INNATE step (keeping the cursor) while this returns TRUE,
+// and only advances the block once it returns FALSE (list exhausted). The caller resets
+// the cursor to 0 for the next battler. Each fired effect leaves *index pointing past it,
+// so a battler with several active end-turn innates fires them across successive turns of
+// the loop. Returns TRUE if an effect fired this call.
+//
+// The effect is delegated to the upstream end-turn ability handler with the innate
+// passed explicitly: AbilityBattleEffects(ABILITYEFFECT_ENDTURN, battler, innate, ...)
+// sets gLastUsedAbility = innate and runs that ability's existing case, so the stat
+// change / script / pop-up match the real ability exactly (the pop-up is overridden to
+// show the innate at the Speed Boost effect site in src/battle_util.c, but only when the
+// chosen ability differs). An innate equal to the chosen ability is skipped so the
+// chosen-ability block (which already ran it) never boosts twice; IsInnateActive() applies
+// the usual suppression (feature flag, Gastro Acid, Neutralizing Gas, not-on-field). An
+// eligible innate that does nothing this turn (e.g. Speed already maxed) is stepped over
+// without firing, so the scan continues to the battler's next end-turn innate.
+bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index)
+{
+    enum Ability innate;
+
+    while ((innate = GetSpeciesInnate(gBattleMons[battler].species, *index)) != ABILITY_NONE)
+    {
+        (*index)++; // step past this slot now, so a fired effect resumes at the next one
+        if (!IsActiveEndTurnInnate(innate))
+            continue;
+        if (GetBattlerAbility(battler) == innate) // chosen-ability end-turn block already ran it
+            continue;
+        if (!IsInnateActive(battler, innate))
+            continue;
+        if (AbilityBattleEffects(ABILITYEFFECT_ENDTURN, battler, innate, MOVE_NONE, TRUE))
+            return TRUE;
+    }
+
+    return FALSE;
 }

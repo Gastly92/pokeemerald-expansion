@@ -74,8 +74,8 @@
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
 // that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
-// Pressure, Stench, Battle Armor / Shell Armor (crit immunity), or a weather speed-doubler
-// (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
+// Pressure, Stench, Speed Boost (+1 Speed each end-turn), Battle Armor / Shell Armor (crit immunity),
+// or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -89,9 +89,10 @@
 // ABILITY_SAND_FORCE yet still doubles in sand via its innate Sand Rush; a Revavroom set lists
 // ABILITY_OVERCOAT yet still shaves supereffective hits via its innate Filter; an Aerodactyl lists
 // ABILITY_ROCK_HEAD yet still taxes the foe's PP via its innate Pressure; a Drapion lists
-// ABILITY_SNIPER yet still shrugs off crits via its innate Battle Armor. Role comments
+// ABILITY_SNIPER yet still shrugs off crits via its innate Battle Armor; a Ninjask lists
+// ABILITY_INFILTRATOR yet still snowballs +1 Speed each turn via its innate Speed Boost. Role comments
 // that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/
-// "Pressure"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
+// "Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
 // its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
 // it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
 // (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
@@ -99,7 +100,8 @@
 // src/species_ability_overrides.c — gives each a chosen ability so the slot isn't wasted,
 // the same trick used for ability-locked innate-Levitate floaters. Venusaur is the weather-doubler
 // version: BOTH its real abilities — Overgrow and Chlorophyll — are now innate, so the override gives
-// it a chosen Drought. Sceptile is the lone non-ability-locked override: only its Overgrow is
+// it a chosen Drought. Blaziken is the Speed-Boost version of the same case: BOTH its real abilities —
+// Blaze and Speed Boost — are now innate, so the override gives it a chosen Sheer Force. Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
 // repurposes that slot for its Mega's Lightning Rod. Each override hands out a deliberately STABLE
 // ability — one marked :x: in INNATE_ABILITIES_PROGRESS.md (never an innate), so it won't need
@@ -6803,7 +6805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Blaziken (Speed Boost); power for the snowballing sweeper
+        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) snowballing sweeper; chosen Sheer Force adds power
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -6811,7 +6813,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_JUMP_KICK,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_SHEER_FORCE, // Blaze + Speed Boost both now innate; chosen Sheer Force (override)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6823,7 +6825,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost mixed wallbreaker (no mega)
+        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) mixed wallbreaker
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -6831,7 +6833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_SHEER_FORCE, // Blaze + Speed Boost both now innate; chosen Sheer Force (override)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6851,7 +6853,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_SPEED_BOOST, // Blaze now innate (latched); chosen Speed Boost
+        .ability = ABILITY_SHEER_FORCE, // Blaze + Speed Boost both now innate; chosen Sheer Force (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7471,7 +7473,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NINJASK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost fast sweeper
+        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) fast sweeper
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -7479,7 +7481,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AERIAL_ACE,
             MOVE_DIG
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_INFILTRATOR, // Speed Boost now innate; chosen Infiltrator (HA) ignores screens/subs
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7491,7 +7493,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NINJASK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // baton-pass-style speed control lead
+        .heldItem = ITEM_FOCUS_BAND, // baton-pass-style speed control lead (Speed Boost now innate)
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -7499,7 +7501,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_PROTECT
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_INFILTRATOR, // Speed Boost now innate; chosen Infiltrator (HA) ignores screens/subs
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7981,7 +7983,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Mega Sharpedo (Strong Jaw); Dark STAB boost
+        .heldItem = ITEM_BLACK_GLASSES, // Mega Sharpedo (Strong Jaw); Dark STAB boost (Speed Boost now innate)
         .moves =
         {
             MOVE_PROTECT,
@@ -7989,7 +7991,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATERFALL,
             MOVE_PSYCHIC_FANGS
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_ROUGH_SKIN, // Speed Boost now innate; chosen Rough Skin chips contact attackers
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8001,7 +8003,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost wallbreaker (no mega)
+        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) wallbreaker (no mega)
         .moves =
         {
             MOVE_CRUNCH,
@@ -8009,7 +8011,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_ROUGH_SKIN, // Speed Boost now innate; chosen Rough Skin chips contact attackers
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11368,7 +11370,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_YANMEGA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Speed Boost sweeper
+        .heldItem = ITEM_FOCUS_BAND, // Speed Boost (now innate) sweeper
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -11376,7 +11378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ANCIENT_POWER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_TINTED_LENS, // Speed Boost now innate; chosen Tinted Lens boosts resisted hits
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -13228,7 +13230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost sweeper
+        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) sweeper
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -13236,7 +13238,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_POISON_POINT, // Swarm + Speed Boost both now innate; chosen Poison Point
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13248,7 +13250,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Tailwind support
+        .heldItem = ITEM_BLACK_SLUDGE, // Tailwind support (Speed Boost now innate)
         .moves =
         {
             MOVE_TAILWIND,
@@ -13256,7 +13258,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_MEGAHORN
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_POISON_POINT, // Swarm + Speed Boost both now innate; chosen Poison Point
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23680,7 +23682,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ESPATHRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // fast special breaker
+        .heldItem = ITEM_CHOICE_SPECS, // fast special breaker (Speed Boost now innate)
         .moves =
         {
             MOVE_PSYSHOCK,
@@ -23688,7 +23690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_SPEED_BOOST,
+        .ability = ABILITY_OPPORTUNIST, // Speed Boost now innate; chosen Opportunist mirrors foe boosts
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
