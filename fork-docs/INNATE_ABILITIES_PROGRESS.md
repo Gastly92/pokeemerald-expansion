@@ -231,7 +231,7 @@
 | :x: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |
 | :x: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
 | :x: | Grassy Surge | Turns the ground into Grassy Terrain when the Pokémon enters a battle. |
-| :white_large_square: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
+| :x: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
 | :x: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
 | :x: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
 | :x: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
