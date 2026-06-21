@@ -43,14 +43,38 @@ struct SpeciesAbilityOverride
 // *implemented* :white_check_mark: innates and so are likewise stable.
 static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 {
-    { SPECIES_VENUSAUR,            1, ABILITY_DROUGHT },        // 3 Overgrow + Chlorophyll BOTH innate (weather-doubler pinch case): empty slot 1 → Drought, the sun flower sets its own sun for the innate Chlorophyll
-    { SPECIES_HO_OH,               1, ABILITY_FLAME_BODY },     // 250 Pressure + Regenerator BOTH innate (all real abilities innate): empty slot 1 → Flame Body, the rainbow phoenix's sacred fire burns on contact
-    { SPECIES_CELEBI,              1, ABILITY_GRASSY_SURGE },   // 251 sole-Natural-Cure (innate): empty slot 1 → Grassy Surge, the forest guardian carpets the field (its boon-innate Levitate still reaps the terrain)
-    { SPECIES_SCEPTILE,            2, ABILITY_LIGHTNING_ROD },  // 254 Overgrow innate (latched); its HA Unburden is dead weight on the roster's non-consumable-item sets, so replace it with its Mega's signature Lightning Rod
-    { SPECIES_FLYGON,              1, ABILITY_SAND_STREAM },    // 330 innate Levitate; slot-1 Levitate was redundant → Sand Stream, the desert spirit (Ground-type, immune to its own sand chip)
-    { SPECIES_LUNATONE,            1, ABILITY_AIR_LOCK },       // 337 ability-locked innate Levitate: empty slot 1 → Air Lock, the serene moon meteorite stills the weather (floats on the innate, runs this too)
-    { SPECIES_SOLROCK,             1, ABILITY_DROUGHT },        // 338 ability-locked innate Levitate: empty slot 1 → Drought, the sun meteorite
-    { SPECIES_CLAYDOL,             1, ABILITY_SAND_STREAM },    // 344 ability-locked innate Levitate: empty slot 1 → Sand Stream, the ancient desert clay automaton (Ground-type, immune to sand chip)
+    { // 0003
+        SPECIES_VENUSAUR, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    { // 0250
+        SPECIES_HO_OH, 1,
+        ABILITY_FLAME_BODY
+    },
+    { // 0251
+        SPECIES_CELEBI, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    { // 0254
+        SPECIES_SCEPTILE, 2,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0330
+        SPECIES_FLYGON, 1, 
+        ABILITY_SAND_STREAM
+    },
+    { // 0337
+        SPECIES_LUNATONE, 1,
+        ABILITY_CLOUD_NINE
+    },
+    { // 0338
+        SPECIES_SOLROCK, 1,
+        ABILITY_DROUGHT
+    },
+    { // 0344
+        SPECIES_CLAYDOL, 1, 
+        ABILITY_SAND_STREAM
+    },
     { SPECIES_CHIMECHO,            1, ABILITY_SOUNDPROOF },     // 358 ability-locked innate Levitate: empty slot 1 → Soundproof
     { SPECIES_LATIAS,              1, ABILITY_ILLUSION },       // 380 innate-Levitate legendary: empty slot 1 → Illusion, the Eon refracts light to vanish/disguise
     { SPECIES_LATIOS,              1, ABILITY_ILLUSION },       // 381 innate-Levitate legendary: empty slot 1 → Illusion (light-bending Eon)
