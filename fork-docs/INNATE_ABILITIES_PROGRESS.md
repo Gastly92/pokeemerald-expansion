@@ -181,7 +181,7 @@
 | :white_large_square: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
 | :white_large_square: | Mega Launcher | Boosts the power of the Pokémon's pulse moves by 50%. |
 | :white_large_square: | Grass Pelt | Boosts the Pokémon's Defense stat on Grassy Terrain. |
-| :white_large_square: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
+| :x: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
 | :white_large_square: | Tough Claws | Boosts the power of the Pokémon's contact moves by 30%. |
 | :x: | Pixilate | The Pokémon's Normal-type moves become Fairy-type moves and their power is boosted by 20%. |
 | :white_large_square: | Gooey | When the Pokémon is hit by a contact move, the attacker's Speed stat is lowered by 1 stage. |
