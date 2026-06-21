@@ -1465,3 +1465,27 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Stench flinch is blocked
         NONE_OF { MESSAGE("The opposing Vivillon flinched and couldn't move!"); }
     }
 }
+
+// The fork ships with DETERMINISTIC_ABILITIES on (config/deterministic.h), so the *primary* behavior
+// of a Stench holder is a guaranteed first-turn flinch (no RNG), mirroring a King's Rock entry flinch.
+// An innate Stench honors that exactly like the real ability — it runs through the same TryStenchFlinch
+// helper and its DETERMINISTIC_ABILITIES branch. Both feature flags are opt-in here (the baseline forces
+// each off); chosen Sticky Hold isolates the innate. Companion to the chosen-ability deterministic Stench
+// test in test/fork/deterministic_abilities.c.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Stench flinches on the first turn but not after")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUK, ABILITY_STENCH));
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_STICKY_HOLD); Speed(50); } // chosen ability is NOT Stench
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(10); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // turn 1 only
+        NONE_OF { MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); }
+    }
+}
