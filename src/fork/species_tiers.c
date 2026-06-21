@@ -105,6 +105,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_TAPU_FINI,           // 0788
     SPECIES_PHEROMOSA,           // 0795
     SPECIES_KARTANA,             // 0798
+    SPECIES_MARSHADOW,           // 0802
     SPECIES_NAGANADEL,           // 0804
     SPECIES_BLACEPHALON,         // 0806
     SPECIES_ZERAORA,             // 0807
