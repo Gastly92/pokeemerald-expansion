@@ -78,6 +78,7 @@ static const u16 sLegendarySpecies[] =
 // Pseudo: at most 1 per frontier draft team
 static const u16 sPseudoSpecies[] =
 {
+    SPECIES_ALAKAZAM,            // 0065
     SPECIES_ARTICUNO_GALAR,      // 0144
     SPECIES_ZAPDOS_GALAR,        // 0145
     SPECIES_MOLTRES_GALAR,       // 0146
@@ -104,6 +105,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_TAPU_FINI,           // 0788
     SPECIES_PHEROMOSA,           // 0795
     SPECIES_KARTANA,             // 0798
+    SPECIES_MARSHADOW,           // 0802
     SPECIES_NAGANADEL,           // 0804
     SPECIES_BLACEPHALON,         // 0806
     SPECIES_ZERAORA,             // 0807
