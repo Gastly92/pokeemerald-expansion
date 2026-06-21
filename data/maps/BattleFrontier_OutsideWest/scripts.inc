@@ -6,19 +6,34 @@ BattleFrontier_OutsideWest_MapScripts::
 BattleFrontier_OutsideWest_OnTransition:
 	setvar VAR_BRAVO_TRAINER_BATTLE_TOWER_ON, 0
 	setflag FLAG_HIDE_BATTLE_TOWER_REPORTER
+	call BattleFrontier_OutsideWest_EventScript_TryArmGuideEscort
 	end
 
-@ FORK: when the player steps out of the Reception Gate just after the Scott
-@ intro (VAR_FRONTIER_FACILITY_GUIDE == 1, set by the gate's Scott scene), the
-@ waiting guide greets them and walks them to the Battle Factory entrance.
+@ FORK: the gate's Scott scene leaves VAR_FRONTIER_FACILITY_GUIDE == 1 ("escort
+@ pending") before it knows which gate door the player takes. Both doors land back
+@ in this map -- the NORTH door at warp 9 (26, 61), the SOUTH door at warp 8
+@ (26, 65) -- so promote "pending" (1) to "ready" (2) only when the player landed
+@ at the north tile. Leaving by the south door keeps it pending so the escort
+@ never fires at the dock, and walking back up and out the north door re-arms it.
+BattleFrontier_OutsideWest_EventScript_TryArmGuideEscort::
+	goto_if_ne VAR_FRONTIER_FACILITY_GUIDE, 1, BattleFrontier_OutsideWest_EventScript_GuideEscortNotArmed
+	getplayerxy VAR_TEMP_0, VAR_TEMP_1
+	goto_if_ne VAR_TEMP_1, 61, BattleFrontier_OutsideWest_EventScript_GuideEscortNotArmed
+	setvar VAR_FRONTIER_FACILITY_GUIDE, 2
+BattleFrontier_OutsideWest_EventScript_GuideEscortNotArmed::
+	return
+
+@ FORK: once "ready" (2) -- the player exited the gate's north door just after the
+@ Scott intro -- the waiting guide greets them and walks them to the Battle
+@ Factory entrance.
 BattleFrontier_OutsideWest_OnFrame:
-	map_script_2 VAR_FRONTIER_FACILITY_GUIDE, 1, BattleFrontier_OutsideWest_EventScript_FacilityGuideEscort
+	map_script_2 VAR_FRONTIER_FACILITY_GUIDE, 2, BattleFrontier_OutsideWest_EventScript_FacilityGuideEscort
 	.2byte 0
 
 BattleFrontier_OutsideWest_EventScript_FacilityGuideEscort::
 	lockall
-	@ bump the state first so this trigger can never fire twice
-	setvar VAR_FRONTIER_FACILITY_GUIDE, 2
+	@ bump the state to "done" (3) first so this trigger can never fire twice
+	setvar VAR_FRONTIER_FACILITY_GUIDE, 3
 	delay 30
 	playse SE_PIN
 	applymovement LOCALID_FRONTIER_FACILITY_GUIDE_GREETER, Common_Movement_ExclamationMark

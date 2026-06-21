@@ -148,7 +148,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPORE,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_DROUGHT,
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8433,7 +8433,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_AIR_LOCK, // Levitate now innate; chosen Air Lock (serene moon meteorite stills the weather)
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -8453,7 +8453,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STORED_POWER,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_AIR_LOCK, // Levitate now innate; chosen Air Lock (serene moon meteorite stills the weather)
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
