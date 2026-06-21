@@ -219,7 +219,7 @@
 | :white_large_square: | Innards Out | When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker. |
 | :white_large_square: | Dancer | Whenever a dance move is used in battle, the Pokémon will copy the user to immediately perform that dance move itself. |
 | :white_large_square: | Battery | Powers up ally Pokémon's special moves. |
-| :white_large_square: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |
+| :x: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |
 | :white_large_square: | Dazzling | The Pokémon dazzles its opponents, making them unable to use priority moves against the Pokémon or its allies. |
 | :white_large_square: | Soul-Heart | Boosts the Pokémon's Sp. Atk stat every time another Pokémon faints. |
 | :white_large_square: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
