@@ -1848,3 +1848,128 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Limber cures pre-existing p
         EXPECT_EQ(player->status1 & STATUS1_PARALYSIS, 0);
     }
 }
+
+// ===== Cute Charm =====
+// Cute Charm gives a 30% chance (Gen 4+) to infatuate an opposite-gender attacker that lands a
+// contact move on the holder. Wired innate-aware at the ABILITYEFFECT_MOVE_END on-hit site
+// (src/battle_util.c): the chosen-ability dispatch keys off the target's gLastUsedAbility, so an
+// innate Cute Charm is run additively in a pre-check beside the switch (TryCuteCharmInfatuate), and
+// the pop-up is overwritten to Cute Charm. A clean upside (it only ever infatuates the FOE), so the
+// innate is a 1:1 copy of the real ability. Milotic is the vehicle: it carries Cute Charm as its
+// Hidden Ability, so with a chosen Marvel Scale the infatuation can only come from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cute Charm infatuates an opposite-gender attacker on contact")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MILOTIC, ABILITY_CUTE_CHARM));
+        ASSUME(gSpeciesInfo[SPECIES_MILOTIC].abilities[0] != ABILITY_CUTE_CHARM);
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Gender(MON_MALE); Speed(100); }
+        OPPONENT(SPECIES_MILOTIC) { Gender(MON_FEMALE); Ability(ABILITY_MARVEL_SCALE); Speed(50); } // chosen ability is NOT Cute Charm
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_CUTE_CHARM, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_CUTE_CHARM); // pop-up shows Cute Charm, not the chosen Marvel Scale
+        MESSAGE("Wobbuffet fell in love!");
+    }
+}
+
+// Feature-off leg: the same forced Cute Charm roll produces no infatuation, proving it comes only
+// from the innate (stock behavior: a Marvel Scale Milotic never infatuates).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Cute Charm infatuation (stock behavior)")
+{
+    GIVEN {
+        ASSUME(gSpeciesInfo[SPECIES_MILOTIC].abilities[0] != ABILITY_CUTE_CHARM);
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        // Feature is off by default in the test baseline.
+        PLAYER(SPECIES_WOBBUFFET) { Gender(MON_MALE); Speed(100); }
+        OPPONENT(SPECIES_MILOTIC) { Gender(MON_FEMALE); Ability(ABILITY_MARVEL_SCALE); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_CUTE_CHARM, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF {
+            ABILITY_POPUP(opponent, ABILITY_CUTE_CHARM);
+            MESSAGE("Wobbuffet fell in love!");
+        }
+    }
+}
+
+// A non-contact move never triggers Cute Charm, innate included (parity with the real ability): the
+// infatuation routes through CanBattlerAvoidContactEffects, so Swift (no contact) leaves the attacker
+// uninfatuated even with the roll forced.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cute Charm does not trigger on a non-contact move")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MILOTIC, ABILITY_CUTE_CHARM));
+        ASSUME(!MoveMakesContact(MOVE_SWIFT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Gender(MON_MALE); Speed(100); }
+        OPPONENT(SPECIES_MILOTIC) { Gender(MON_FEMALE); Ability(ABILITY_MARVEL_SCALE); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWIFT, WITH_RNG(RNG_CUTE_CHARM, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF {
+            ABILITY_POPUP(opponent, ABILITY_CUTE_CHARM);
+            MESSAGE("Wobbuffet fell in love!");
+        }
+    }
+}
+
+// Cute Charm cannot infatuate a same-gender attacker, innate included (parity with the real ability).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cute Charm cannot infatuate a same-gender attacker")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MILOTIC, ABILITY_CUTE_CHARM));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Gender(MON_FEMALE); Speed(100); }
+        OPPONENT(SPECIES_MILOTIC) { Gender(MON_FEMALE); Ability(ABILITY_MARVEL_SCALE); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_CUTE_CHARM, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF {
+            ABILITY_POPUP(opponent, ABILITY_CUTE_CHARM);
+            MESSAGE("Wobbuffet fell in love!");
+        }
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Cute Charm exactly like a real ability, so the
+// forced roll produces no infatuation once the innate is suppressed.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Cute Charm")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MILOTIC, ABILITY_CUTE_CHARM));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Gender(MON_MALE); Speed(100); Moves(MOVE_SCRATCH, MOVE_GASTRO_ACID); }
+        OPPONENT(SPECIES_MILOTIC) { Gender(MON_FEMALE); Ability(ABILITY_MARVEL_SCALE); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); MOVE(opponent, MOVE_CELEBRATE); } // innate suppressed
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_CUTE_CHARM, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF {
+            ABILITY_POPUP(opponent, ABILITY_CUTE_CHARM);
+            MESSAGE("Wobbuffet fell in love!");
+        }
+    }
+}
+
+// The 30% trigger chance is unchanged for an innate Cute Charm (the same RNG_CUTE_CHARM roll as the
+// real ability), confirmed with PASSES_RANDOMLY over the innate-only Milotic.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cute Charm triggers 30% of the time")
+{
+    PASSES_RANDOMLY(3, 10, RNG_CUTE_CHARM);
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MILOTIC, ABILITY_CUTE_CHARM));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_ABILITY_TRIGGER_CHANCE, GEN_4);
+        PLAYER(SPECIES_WOBBUFFET) { Gender(MON_MALE); Speed(100); }
+        OPPONENT(SPECIES_MILOTIC) { Gender(MON_FEMALE); Ability(ABILITY_MARVEL_SCALE); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet fell in love!");
+    }
+}

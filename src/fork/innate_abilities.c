@@ -324,6 +324,39 @@
 //     added. Frontier roster sets that hardcoded Limber are freed (Step 3.5): Persian → Technician, Lopunny →
 //     Cute Charm, Liepard → Unburden, Toxapex → Merciless, Graploct → Technician (each a real, complementary
 //     slot the now-innate Limber freed).
+//   - ABILITY_CUTE_CHARM — when the holder is hit by a contact move, a 30% chance to infatuate the
+//     attacker if they are of opposite genders (under DETERMINISTIC_ABILITIES, a guaranteed infatuation
+//     regardless of gender). Wired innate-aware at the ABILITYEFFECT_MOVE_END on-hit site in
+//     src/battle_util.c: the chosen-ability dispatch keys off the target's gLastUsedAbility, so an innate
+//     Cute Charm whose chosen ability differs is run additively in a pre-check beside the switch
+//     (TryCuteCharmInfatuate, guarded `!= ABILITY_CUTE_CHARM` so a real Cute Charm never infatuates twice).
+//     The effect runs the same BattleScript_CuteCharmActivates (pop-up + infatuation), so the one extra
+//     step a pop-up'd innate needs is forcing gBattleScripting.abilityPopupOverwrite = ABILITY_CUTE_CHARM
+//     when the chosen ability differs (the Limber/Speed Boost pop-up precedent), so the pop-up shows Cute
+//     Charm and not the chosen ability; a real Cute Charm stays byte-for-byte unchanged. NO pure-boon
+//     divergence: Cute Charm only ever infatuates the FOE, so it never hurts its holder — the innate is a
+//     1:1 copy of the real ability. Suppression parity holds via IsInnateActive() (Gastro Acid /
+//     Neutralizing Gas / not-on-field); Cute Charm is not breakable, so Mold Breaker never touches it, same
+//     as the real ability. AI is innate-aware: the only AI read of ABILITY_CUTE_CHARM is the
+//     DETERMINISTIC_ABILITIES contact-punish predictor AI_DeterministicContactAbilityPunishes
+//     (src/battle_ai_util.c), which now also credits an innate Cute Charm on the defender via
+//     BattlerHasAbility() so the AI treats contact as a downside even when the chosen ability differs;
+//     under non-deterministic play neither a real nor an innate Cute Charm is modeled, so parity holds.
+//     Canon-only (no flavor picks — infatuation can fully disable a foe for a turn, a potent disruption,
+//     so like Prankster / the pinch abilities the set stays to species whose ability data carries Cute
+//     Charm in any slot): the signature survives whichever slot a build picks (Milotic's HA Cute Charm,
+//     Stufful's HA, Skitty/Delcatty/Minccino/Cinccino/Lopunny/Sylveon/Enamorus, the Clefairy and
+//     Jigglypuff lines). Forms are listed only where the form's ability data still carries Cute Charm:
+//     Buneary (Run Away/Klutz/Limber), Bewear (Fluffy/Klutz/Unnerve), Enamorus-Therian (Overcoat) and
+//     Clefable-Mega lack it in their data and are omitted; only base Lopunny / Stufful's own line member /
+//     Enamorus-Incarnate carry it. Clefable already carries innate Unaware and Lopunny innate Limber, so
+//     they take a combined INNATES(...) list with Cute Charm added. Frontier roster sets that hardcoded a
+//     chosen Cute Charm are freed (Step 3.5): Enamorus → Contrary (its real HA), while Lopunny — whose only
+//     real non-drawback abilities (Cute Charm, Limber) are now BOTH innate — takes a fork-owned chosen
+//     Sheer Force override in species_ability_overrides.c (its slot-2 Limber, now innate-redundant). Audino
+//     is intentionally NOT given the innate: its ability data lacks Cute Charm (Healer/Regenerator/Klutz);
+//     it only runs Cute Charm as a fork-chosen ability via the override table, so its frontier set is left
+//     to keep that chosen Cute Charm and needs no freeing.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -478,9 +511,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SLUSH_RUSH
         )
     },
+    { // 0035
+        SPECIES_CLEFAIRY,
+        INNATES(
+            ABILITY_CUTE_CHARM
+        )
+    },
     { // 0036
         SPECIES_CLEFABLE,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_UNAWARE
         )
     },
@@ -488,6 +528,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFABLE_MEGA,
         INNATES(
             ABILITY_UNAWARE
+        )
+    },
+    { // 0039
+        SPECIES_JIGGLYPUFF,
+        INNATES(
+            ABILITY_CUTE_CHARM
+        )
+    },
+    { // 0040
+        SPECIES_WIGGLYTUFF,
+        INNATES(
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0043
@@ -1029,6 +1081,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARIADOS,
         INNATES(
             ABILITY_SWARM
+        )
+    },
+    { // 0173
+        SPECIES_CLEFFA,
+        INNATES(
+            ABILITY_CUTE_CHARM
+        )
+    },
+    { // 0174
+        SPECIES_IGGLYBUFF,
+        INNATES(
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0182
@@ -1577,6 +1641,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0300
+        SPECIES_SKITTY,
+        INNATES(
+            ABILITY_CUTE_CHARM
+        )
+    },
+    { // 0301
+        SPECIES_DELCATTY,
+        INNATES(
+            ABILITY_CUTE_CHARM
+        )
+    },
     { // 0302
         SPECIES_SABLEYE,
         INNATES(
@@ -1771,6 +1847,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FEEBAS,
         INNATES(
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0350
+        SPECIES_MILOTIC,
+        INNATES(
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0351
@@ -2112,6 +2194,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0428
         SPECIES_LOPUNNY,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_LIMBER
         )
     },
@@ -2774,6 +2857,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRANKSTER
         )
     },
+    { // 0572
+        SPECIES_MINCCINO,
+        INNATES(
+            ABILITY_CUTE_CHARM
+        )
+    },
+    { // 0573
+        SPECIES_CINCCINO,
+        INNATES(
+            ABILITY_CUTE_CHARM
+        )
+    },
     { // 0577
         SPECIES_SOLOSIS,
         INNATES(
@@ -3201,6 +3296,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0700
+        SPECIES_SYLVEON,
+        INNATES(
+            ABILITY_CUTE_CHARM
+        )
+    },
     { // 0701
         SPECIES_HAWLUCHA,
         INNATES(
@@ -3478,6 +3579,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LIMBER,
             ABILITY_REGENERATOR
+        )
+    },
+    { // 0759
+        SPECIES_STUFFUL,
+        INNATES(
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0764
@@ -3976,6 +4083,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OVERQWIL,
         INNATES(
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0905
+        SPECIES_ENAMORUS_INCARNATE,
+        INNATES(
+            ABILITY_CUTE_CHARM
         )
     },
 

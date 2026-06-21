@@ -115,6 +115,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TORTERRA, 1,
         ABILITY_SAND_STREAM
     },
+    { // 0428
+        // Lopunny's only real non-drawback abilities (Cute Charm, Limber) are BOTH now innate
+        // (Klutz, slot 1, is a drawback), so its slot-2 Limber — now innate-redundant — takes a
+        // flavorful chosen ability for the frontier set. Sheer Force is :x: (never an innate ->
+        // stable) and a pure boon for its offensive Fake Out / Ice Punch breaker set.
+        SPECIES_LOPUNNY, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0429
         SPECIES_MISMAGIUS, 1,
         ABILITY_WANDERING_SPIRIT

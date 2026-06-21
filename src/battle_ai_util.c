@@ -1280,8 +1280,20 @@ static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, 
             && abilityAtk != ABILITY_OBLIVIOUS
             && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL);
     default:
-        return FALSE;
+        break;
     }
+
+    // FORK: innate Cute Charm (FEATURE_INNATE_ABILITIES) — when the defender carries Cute Charm
+    // innately but its chosen ability differs, the switch above misses it, yet making contact still
+    // risks infatuation, so treat it as a downside too. (Static / Flame Body / Poison Point / Effect
+    // Spore are never innates, so only Cute Charm needs this; BattlerHasAbility is a no-op with the
+    // feature off.)
+    if (abilityDef != ABILITY_CUTE_CHARM && BattlerHasAbility(battlerDef, ABILITY_CUTE_CHARM))
+        return !gBattleMons[battlerAtk].volatiles.infatuation
+            && abilityAtk != ABILITY_OBLIVIOUS
+            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL);
+
+    return FALSE;
 }
 
 static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
