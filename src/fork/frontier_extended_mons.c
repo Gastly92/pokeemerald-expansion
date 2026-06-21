@@ -146,7 +146,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPORE,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_DROUGHT,
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
