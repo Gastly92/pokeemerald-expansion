@@ -2965,6 +2965,26 @@ static bool32 TryDancer(void)
     return FALSE;
 }
 
+// Stench's on-hit flinch attempt, shared by the chosen-ability dispatch in
+// ABILITYEFFECT_MOVE_END_ATTACKER and the innate-Stench path beside it
+// (FEATURE_INNATE_ABILITIES). FORK: under DETERMINISTIC_ABILITIES, Stench always
+// attempts its flinch, but only on the holder's first turn out (mirrors a King's
+// Rock-style entry flinch). It resolves at MOVEEND_ABILITIES_ATTACKER, before
+// attacker hold items, so it lands before a flinch item is consumed.
+static bool32 TryStenchFlinch(void)
+{
+    if (IsBattlerAlive(gBattlerTarget)
+     && !gBattleStruct->unableToUseMove
+     && (GetConfig(DETERMINISTIC_ABILITIES) ? IsBattlersFirstTurn(gBattlerAttacker) : RandomChance(RNG_STENCH, 1, 10))
+     && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
+     && !MoveHasAdditionalEffect(gCurrentMove, MOVE_EFFECT_FLINCH))
+    {
+        SetMoveEffect(gBattlerAttacker, gBattlerTarget, MOVE_EFFECT_FLINCH, gBattlescriptCurrInstr, NO_FLAGS);
+        return TRUE;
+    }
+    return FALSE;
+}
+
 u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum Ability ability, enum Move move, bool32 shouldAbilityTrigger)
 {
     u32 effect = 0;
@@ -4457,6 +4477,16 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         }
         break;
     case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker
+        // FORK: innate Stench (FEATURE_INNATE_ABILITIES). The dispatch below keys off the
+        // attacker's chosen ability (gLastUsedAbility), so an innate Stench on a mon whose
+        // chosen ability differs would never reach the case below — run the same flinch
+        // additively here. The `!= ABILITY_STENCH` guard means a real Stench (handled by the
+        // switch case) never flinches twice. Stench is a clean upside — it only ever flinches
+        // the FOE — so the innate is a 1:1 copy of the real ability, no pure-boon divergence.
+        if (gLastUsedAbility != ABILITY_STENCH
+         && IsInnateActive(gBattlerAttacker, ABILITY_STENCH)
+         && TryStenchFlinch())
+            effect++;
         switch (gLastUsedAbility)
         {
         case ABILITY_POISON_TOUCH:
@@ -4491,19 +4521,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             }
             break;
         case ABILITY_STENCH:
-            // FORK: under DETERMINISTIC_ABILITIES, Stench always attempts its flinch,
-            // but only on the holder's first turn out (mirrors a King's Rock-style
-            // entry flinch). It resolves at MOVEEND_ABILITIES_ATTACKER, before attacker
-            // hold items, so it lands before a flinch item is consumed.
-            if (IsBattlerAlive(gBattlerTarget)
-             && !gBattleStruct->unableToUseMove
-             && (GetConfig(DETERMINISTIC_ABILITIES) ? IsBattlersFirstTurn(gBattlerAttacker) : RandomChance(RNG_STENCH, 1, 10))
-             && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
-             && !MoveHasAdditionalEffect(gCurrentMove, MOVE_EFFECT_FLINCH))
-            {
-                SetMoveEffect(gBattlerAttacker, gBattlerTarget, MOVE_EFFECT_FLINCH, gBattlescriptCurrInstr, NO_FLAGS);
+            if (TryStenchFlinch())
                 effect++;
-            }
             break;
         case ABILITY_POISON_PUPPETEER:
             if (IsRestrictedAbility(gBattlerAttacker, ABILITY_POISON_PUPPETEER)

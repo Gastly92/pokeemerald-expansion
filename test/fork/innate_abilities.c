@@ -1370,3 +1370,98 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Pressure user keeps it via
         EXPECT_EQ(player->pp[0], 33); // innate Pressure taxes the extra PP even though chosen is Unnerve
     }
 }
+
+// ===== Stench =====
+// Stench gives the holder's damaging moves a 10% chance to flinch the target (under
+// DETERMINISTIC_ABILITIES, a guaranteed first-turn flinch). Wired innate-aware at the
+// ABILITYEFFECT_MOVE_END_ATTACKER on-hit site (src/battle_util.c): the chosen-ability dispatch keys
+// off gLastUsedAbility, so an innate Stench is run additively in a pre-check beside the switch. A
+// clean upside (it only ever flinches the FOE), so the innate is a 1:1 copy of the real ability.
+// Gulpin is the flavor vehicle: a foul poison-gas bag with no native Stench (Liquid Ooze / Sticky
+// Hold / Gluttony), so any flinch can only come from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Stench has a 10% chance to flinch")
+{
+    PASSES_RANDOMLY(1, 10, RNG_STENCH);
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_STENCH));
+        ASSUME(gSpeciesInfo[SPECIES_GULPIN].abilities[0] != ABILITY_STENCH);
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GULPIN) { Speed(100); } // chosen Liquid Ooze; Stench only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+    }
+}
+
+// Feature-off leg: the same forced Stench roll produces no flinch, proving the flinch comes only
+// from the innate (stock behavior: Liquid Ooze never flinches).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Stench flinch (stock behavior)")
+{
+    GIVEN {
+        ASSUME(gSpeciesInfo[SPECIES_GULPIN].abilities[0] != ABILITY_STENCH);
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        // Feature is off by default in the test baseline.
+        PLAYER(SPECIES_GULPIN) { Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_STENCH, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF { MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); }
+    }
+}
+
+// A canon Stench user (Muk: Stench / Sticky Hold / Poison Touch) carries Stench innately too, so it
+// keeps the signature flinch no matter which slot the build picks. Chosen Sticky Hold isolates the
+// innate; the forced roll lands the flinch even though Stench is not the chosen ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Stench user keeps it via innate when the chosen ability differs")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUK, ABILITY_STENCH));
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_STICKY_HOLD); Speed(100); } // chosen ability is NOT Stench
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_STENCH, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Stench exactly like a real ability, so the
+// forced roll produces no flinch once the innate is suppressed.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Stench")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_STENCH));
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GULPIN) { Speed(100); Moves(MOVE_SCRATCH, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // innate suppressed
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_STENCH, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF { MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); } // suppressed -> no flinch
+    }
+}
+
+// The innate runs through the same shared flinch path as the real ability, so the existing blockers
+// still apply with no extra wiring: Shield Dust stops the added flinch effect even with the roll forced.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Stench flinch is blocked by Shield Dust")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_STENCH));
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GULPIN) { Speed(100); }
+        OPPONENT(SPECIES_VIVILLON) { Ability(ABILITY_SHIELD_DUST); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_STENCH, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF { MESSAGE("The opposing Vivillon flinched and couldn't move!"); }
+    }
+}

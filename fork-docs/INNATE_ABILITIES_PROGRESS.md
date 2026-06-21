@@ -2,7 +2,7 @@
 
 | Status | Ability | Description |
 | :---: | :---: | :--- |
-| :white_large_square: | Stench | When the Pokémon deals damage with its moves, there is a 10% chance that targets will flinch. |
+| :white_check_mark: | Stench | When the Pokémon deals damage with its moves, there is a 10% chance that targets will flinch. |
 | :x: | Drizzle | Summons rain for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Speed Boost | Boosts the Pokémon's Speed stat by 1 stage at the end of every turn. |
 | :white_large_square: | Battle Armor | Attacks landed on the Pokémon will never be critical hits. |

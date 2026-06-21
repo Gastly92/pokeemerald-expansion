@@ -207,6 +207,27 @@
 //     and are omitted). Mewtwo (innate Levitate), Ho-Oh (innate Regenerator), Dusclops, the Deoxys formes
 //     and Giratina-Altered (all innate Levitate) already carry an innate, so they take a combined
 //     INNATES(...) list with Pressure added.
+//   - ABILITY_STENCH — on a damaging hit, a 10% chance to make the target flinch (under
+//     DETERMINISTIC_ABILITIES: a guaranteed flinch on the holder's first turn out, like a King's
+//     Rock entry flinch). Handled at the single on-hit site in src/battle_util.c
+//     (ABILITYEFFECT_MOVE_END_ATTACKER): the chosen-ability switch keys off gLastUsedAbility, so an
+//     innate Stench whose chosen ability differs is run additively in a pre-check beside the switch
+//     (TryStenchFlinch, guarded `chosen != ABILITY_STENCH` so a real Stench never flinches twice).
+//     No script/pop-up/driver — the flinch flows through SetMoveEffect(MOVE_EFFECT_FLINCH), and the
+//     innate is NOT recorded as identity (no ability pop-up, exactly like the real Stench, which has
+//     none either). NO pure-boon divergence: Stench only ever flinches the FOE, so it never hurts its
+//     holder — the innate is a 1:1 copy of the real ability. It still doesn't stack with a King's Rock
+//     flinch and is still blocked by Shield Dust / Covert Cloak, same as the real ability (those checks
+//     live in the shared flinch path, not the ability dispatch). Suppression parity holds via
+//     IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field); Stench is not breakable, so Mold
+//     Breaker never touches it, same as the real ability. AI needs no wiring: nothing in src/battle_ai_*.c
+//     reads ABILITY_STENCH (the AI doesn't model the flinch chance), so an innate Stench is exactly as
+//     (in)visible to the AI as a real one. Two species groups: the canon Stench users (Grimer/Muk,
+//     Koffing/Weezing's HA, Stunky/Skuntank, the Trubbish/Garbodor line incl. Gmax, and Gloom's HA — each
+//     keeps the signature flinch no matter which slot the build picks; Galarian Weezing swaps its HA to
+//     Misty Surge and is omitted), plus a tight foul-odor flavor set lacking the real ability (Oddish and
+//     Vileplume completing the canon Gloom line — the "smells atrocious" weed line — and the Gulpin line's
+//     poison-gas bags). No frontier roster sets hardcoded Stench, so none needed freeing.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -364,19 +385,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0043
         SPECIES_ODDISH,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_STENCH
         )
     },
     { // 0044
         SPECIES_GLOOM,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_STENCH
         )
     },
     { // 0045
         SPECIES_VILEPLUME,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_STENCH
         )
     },
     { // 0054
@@ -509,6 +533,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0088
+        SPECIES_GRIMER,
+        INNATES(
+            ABILITY_STENCH
+        )
+    },
+    { // 0089
+        SPECIES_MUK,
+        INNATES(
+            ABILITY_STENCH
+        )
+    },
     { // 0090
         SPECIES_SHELLDER,
         INNATES(
@@ -566,13 +602,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0109
         SPECIES_KOFFING,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_STENCH
         )
     },
     { // 0110
         SPECIES_WEEZING,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_STENCH
         )
     },
     { // 0110
@@ -1393,6 +1431,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_NATURAL_CURE
         )
     },
+    { // 0316
+        SPECIES_GULPIN,
+        INNATES(
+            ABILITY_STENCH
+        )
+    },
+    { // 0317
+        SPECIES_SWALOT,
+        INNATES(
+            ABILITY_STENCH
+        )
+    },
     { // 0320
         SPECIES_WAILMER,
         INNATES(
@@ -1820,6 +1870,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHINGLING,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0434
+        SPECIES_STUNKY,
+        INNATES(
+            ABILITY_STENCH
+        )
+    },
+    { // 0435
+        SPECIES_SKUNTANK,
+        INNATES(
+            ABILITY_STENCH
         )
     },
     { // 0436
@@ -2397,6 +2459,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_STURDY,
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0568
+        SPECIES_TRUBBISH,
+        INNATES(
+            ABILITY_STENCH
+        )
+    },
+    { // 0569
+        SPECIES_GARBODOR,
+        INNATES(
+            ABILITY_STENCH
+        )
+    },
+    { // 0569
+        SPECIES_GARBODOR_GMAX,
+        INNATES(
+            ABILITY_STENCH
         )
     },
     { // 0570
