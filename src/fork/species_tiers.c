@@ -79,6 +79,7 @@ static const u16 sLegendarySpecies[] =
 static const u16 sPseudoSpecies[] =
 {
     SPECIES_ALAKAZAM,            // 0065
+    SPECIES_GENGAR,              // 0094
     SPECIES_ARTICUNO_GALAR,      // 0144
     SPECIES_ZAPDOS_GALAR,        // 0145
     SPECIES_MOLTRES_GALAR,       // 0146
