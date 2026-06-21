@@ -75,7 +75,7 @@
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
 // that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
 // Pressure, Stench, Speed Boost (+1 Speed each end-turn), Battle Armor / Shell Armor (crit immunity),
-// or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
+// Limber (paralysis immunity), or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -90,8 +90,9 @@
 // ABILITY_OVERCOAT yet still shaves supereffective hits via its innate Filter; an Aerodactyl lists
 // ABILITY_ROCK_HEAD yet still taxes the foe's PP via its innate Pressure; a Drapion lists
 // ABILITY_SNIPER yet still shrugs off crits via its innate Battle Armor; a Ninjask lists
-// ABILITY_INFILTRATOR yet still snowballs +1 Speed each turn via its innate Speed Boost. Role comments
-// that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/
+// ABILITY_INFILTRATOR yet still snowballs +1 Speed each turn via its innate Speed Boost; a Toxapex wall
+// lists ABILITY_MERCILESS yet still cannot be paralyzed via its innate Limber. Role comments
+// that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/"Limber"/
 // "Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
 // its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
 // it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
@@ -1322,7 +1323,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_LIMBER,
+        .ability = ABILITY_TECHNICIAN, // Limber now innate; chosen Technician powers Fake Out on the fast pivot
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10385,7 +10386,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RETURN,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_LIMBER,
+        .ability = ABILITY_CUTE_CHARM, // Limber now innate; chosen Cute Charm may infatuate on this all-contact set
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12725,7 +12726,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_LIMBER, // Prankster now innate; chosen Limber keeps the para-spreader para-immune
+        .ability = ABILITY_UNBURDEN, // Limber + Prankster now innate; chosen Unburden doubles Speed once Sitrus is eaten
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18182,7 +18183,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_HAZE
         },
-        .ability = ABILITY_LIMBER,
+        .ability = ABILITY_MERCILESS, // Limber + Regenerator now innate; chosen Merciless crits its Toxic'd foes
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18202,7 +18203,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_CHILLING_WATER
         },
-        .ability = ABILITY_LIMBER,
+        .ability = ABILITY_MERCILESS, // Limber + Regenerator now innate; chosen Merciless crits its Toxic-Spikes'd foes
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21004,7 +21005,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_LIMBER,
+        .ability = ABILITY_TECHNICIAN, // Limber now innate; chosen Technician powers Mach Punch
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 160,

@@ -5583,10 +5583,16 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         {
             battleScript = BattleScript_ButItFailed;
         }
-        else if (abilityDef == ABILITY_LIMBER)
+        else if (abilityDef == ABILITY_LIMBER || IsInnateActive(battlerDef, ABILITY_LIMBER)) // FORK: innate Limber blocks paralysis like the real ability
         {
             abilityAffected = TRUE;
             battleScript = BattleScript_ImmunityProtected;
+            // FORK: when an innate Limber (the chosen ability differs) blocks the paralysis, show/record
+            // Limber: reassign abilityDef so IsNonVolatileStatusBlocked records it, and overwrite the pop-up
+            // since CreateAbilityPopUp reads the primary slot. The real-Limber path is left byte-for-byte.
+            if (option == RUN_SCRIPT && abilityDef != ABILITY_LIMBER)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_LIMBER;
+            abilityDef = ABILITY_LIMBER;
         }
         break;
     case MOVE_EFFECT_BURN:
@@ -9422,6 +9428,19 @@ enum ImmunityHealStatusOutcome TryImmunityAbilityHealStatus(enum BattlerId battl
         break;
     default:
         break;
+    }
+
+    // FORK: an innate Limber (chosen ability differs, so the switch above missed it) cures pre-existing
+    // paralysis on switch-in exactly like the real ability. Overwrite the pop-up to show Limber since the
+    // cure script's pop-up reads the primary slot. IsInnateActive() supplies suppression parity (Mold
+    // Breaker / Gastro Acid / Neutralizing Gas). Reached only when the chosen ability isn't Limber.
+    if (outcome == IMMUNITY_NO_EFFECT
+     && (gBattleMons[battler].status1 & STATUS1_PARALYSIS)
+     && IsInnateActive(battler, ABILITY_LIMBER))
+    {
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_PARALYSIS;
+        outcome = IMMUNITY_STATUS_CLEARED;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_LIMBER;
     }
 
     switch (outcome)

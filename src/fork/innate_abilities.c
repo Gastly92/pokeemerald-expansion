@@ -298,6 +298,32 @@
 //     Sharpedo → Rough Skin, Yanmega → Tinted Lens, Scolipede → Poison Point, Espathra → Opportunist
 //     (each a real, complementary slot), while Blaziken — whose only real abilities (Blaze, Speed Boost)
 //     are now BOTH innate — takes a fork-owned chosen Sheer Force override in species_ability_overrides.c.
+//   - ABILITY_LIMBER — the holder cannot be paralyzed, handled at the paralysis-immunity sites in
+//     src/battle_util.c: the block site in CanSetNonVolatileStatus (the MOVE_EFFECT_PARALYSIS branch
+//     gains an IsInnateActive() clause beside the chosen-ability test, and when an innate Limber — chosen
+//     ability differs — blocks the paralysis it reassigns abilityDef to LIMBER and overwrites the pop-up
+//     so the "protected by Limber" message/record shows Limber, the Levitate/Sturdy pop-up precedent), and
+//     the switch-in cure site in TryImmunityAbilityHealStatus (an innate Limber cures pre-existing paralysis
+//     on switch-in like the real ability, again with the pop-up overwritten to Limber). Also mirrored at the
+//     out-of-battle Battle Pike status room (DoesAbilityPreventStatus, src/battle_pike.c) so an innate-Limber
+//     party mon shrugs off the Pike's paralysis room exactly like a real Limber. A pure passive immunity
+//     checked at a single kind of site (like Sturdy/Filter): no driver. NO pure-boon divergence: paralysis
+//     immunity is a clean upside that never hurts its holder, so the innate is a 1:1 copy of the real ability.
+//     Suppression parity holds via IsInnateActive(): Limber is breakable, so an attacker's Mold Breaker
+//     pierces an innate Limber exactly as it would the real ability. AI is innate-aware FOR FREE: the AI's
+//     paralysis reasoning runs through CanBeParalyzed()/AI_CanParalyze() -> CanSetNonVolatileStatus(), whose
+//     fork clause reads IsInnateActive(battlerDef, ABILITY_LIMBER) keyed off the real on-field battler (not
+//     the passed-in abilityDef), so the AI correctly never tries to paralyze an innate-Limber foe; nothing in
+//     src/battle_ai_*.c reads ABILITY_LIMBER directly. Two species groups: the canon Limber users (the agile
+//     cats Persian/Glameow, the boneless contortionists Hitmonlee/Hawlucha/Clobbopus/Graploct, the flexible
+//     rabbits Buneary/Lopunny, the formless Ditto, and Stunfisk — each keeps the para-immunity no matter which
+//     slot the build picks; Mega Lopunny → Scrappy and Galarian Stunfisk → Mimicry swap their data and are
+//     omitted), plus a tight supple-serpent flavor set lacking the real ability (the coiling snakes Ekans/Arbok
+//     and Seviper, whose limber bodies fit the theme). Purrloin/Liepard already carry innate Prankster and
+//     Mareanie/Toxapex already carry innate Regenerator, so they take a combined INNATES(...) list with Limber
+//     added. Frontier roster sets that hardcoded Limber are freed (Step 3.5): Persian → Technician, Lopunny →
+//     Cute Charm, Liepard → Unburden, Toxapex → Merciless, Graploct → Technician (each a real, complementary
+//     slot the now-innate Limber freed).
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -416,6 +442,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWARM
         )
     },
+    { // 0023
+        SPECIES_EKANS,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
+    { // 0024
+        SPECIES_ARBOK,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
     { // 0027
         SPECIES_SANDSHREW,
         INNATES(
@@ -471,6 +509,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_STENCH
+        )
+    },
+    { // 0053
+        SPECIES_PERSIAN,
+        INNATES(
+            ABILITY_LIMBER
         )
     },
     { // 0054
@@ -702,6 +746,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BATTLE_ARMOR
         )
     },
+    { // 0106
+        SPECIES_HITMONLEE,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
     { // 0109
         SPECIES_KOFFING,
         INNATES(
@@ -795,6 +845,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LAPRAS_GMAX,
         INNATES(
             ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 0132
+        SPECIES_DITTO,
+        INNATES(
+            ABILITY_LIMBER
         )
     },
     { // 0137
@@ -1655,6 +1711,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_NATURAL_CURE
         )
     },
+    { // 0336
+        SPECIES_SEVIPER,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
     { // 0337
         SPECIES_LUNATONE,
         INNATES(
@@ -2041,10 +2103,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRANKSTER
         )
     },
+    { // 0427
+        SPECIES_BUNEARY,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
+    { // 0428
+        SPECIES_LOPUNNY,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
     { // 0429
         SPECIES_MISMAGIUS,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0431
+        SPECIES_GLAMEOW,
+        INNATES(
+            ABILITY_LIMBER
         )
     },
     { // 0433
@@ -2394,12 +2474,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0509
         SPECIES_PURRLOIN,
         INNATES(
+            ABILITY_LIMBER,
             ABILITY_PRANKSTER
         )
     },
     { // 0510
         SPECIES_LIEPARD,
         INNATES(
+            ABILITY_LIMBER,
             ABILITY_PRANKSTER
         )
     },
@@ -2937,6 +3019,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SHELL_ARMOR
         )
     },
+    { // 0618
+        SPECIES_STUNFISK,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
     { // 0619
         SPECIES_MIENFOO,
         INNATES(
@@ -3111,6 +3199,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TYRUNT,
         INNATES(
             ABILITY_STURDY
+        )
+    },
+    { // 0701
+        SPECIES_HAWLUCHA,
+        INNATES(
+            ABILITY_LIMBER
         )
     },
     { // 0703
@@ -3375,12 +3469,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0747
         SPECIES_MAREANIE,
         INNATES(
+            ABILITY_LIMBER,
             ABILITY_REGENERATOR
         )
     },
     { // 0748
         SPECIES_TOXAPEX,
         INNATES(
+            ABILITY_LIMBER,
             ABILITY_REGENERATOR
         )
     },
@@ -3700,6 +3796,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BARRASKEWDA,
         INNATES(
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0852
+        SPECIES_CLOBBOPUS,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
+    { // 0853
+        SPECIES_GRAPPLOCT,
+        INNATES(
+            ABILITY_LIMBER
         )
     },
     { // 0854
