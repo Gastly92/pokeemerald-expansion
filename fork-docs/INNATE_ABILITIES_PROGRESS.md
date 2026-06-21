@@ -239,7 +239,7 @@
 | :x: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
 | :x: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
 | :x: | Ball Fetch | If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle. |
-| :white_large_square: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |
+| :x: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |
 | :white_large_square: | Propeller Tail | Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves. |
 | :white_large_square: | Mirror Armor | Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them. |
 | :x: | Gulp Missile | When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack. |
