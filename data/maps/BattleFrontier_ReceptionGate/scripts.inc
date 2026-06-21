@@ -63,8 +63,11 @@ BattleFrontier_ReceptionGate_EventScript_ScottScene::
 	@ restored intro; set it now so he doesn't respawn standing at the gate after.
 	setflag FLAG_HIDE_BATTLE_FRONTIER_RECEPTION_GATE_SCOTT
 	@ FORK: hand the player off to the facility guide waiting outside. Reveal the
-	@ greeter and arm its escort trigger (BattleFrontier_OutsideWest OnFrame), which
-	@ fires the moment the player steps out of the gate's north door.
+	@ greeter and mark the escort "pending" (1). Both gate doors lead back to
+	@ BattleFrontier_OutsideWest, so its OnTransition promotes this to "ready" (2)
+	@ -- and only then does the OnFrame escort fire -- when the player leaves by the
+	@ NORTH door; leaving by the south door keeps it pending so no escort happens at
+	@ the dock (re-entering and exiting north still arms it).
 	setvar VAR_FRONTIER_FACILITY_GUIDE, 1
 	clearflag FLAG_HIDE_FRONTIER_FACILITY_GUIDE_GREETER
 	releaseall
