@@ -1490,6 +1490,31 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate S
     }
 }
 
+// "First turn" is per-entry, not per-battle: isFirstTurn resets to 2 on every switch-in (not just at
+// battle start), and there's no once-per-battle latch, so a Stench holder that switches out and back in
+// flinches again on each fresh entry turn — exactly like a King's Rock entry flinch. The innate reads
+// the live battler state (IsBattlersFirstTurn(gBattlerAttacker)), so it re-triggers on re-entry too.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Stench flinches again on each re-entry")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUK, ABILITY_STENCH));
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_STICKY_HOLD); Speed(50); } // chosen ability is NOT Stench
+        PLAYER(SPECIES_WYNAUT) { Speed(50); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(10); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); } // entry turn: flinch
+        TURN { SWITCH(player, 1); }                                         // Muk leaves the field
+        TURN { SWITCH(player, 0); }                                         // Muk returns (fresh entry)
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); } // re-entry turn: flinch again
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // turn 1 (first entry)
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); // turn 4 (re-entry)
+    }
+}
+
 // Stench pre-empts its holder's own flinch item so the two don't stack (and the item isn't
 // redundantly consumed). That guard in TryKingsRock (src/battle_hold_effects.c) reads the attacker's
 // ability, so it must credit an innate Stench too — otherwise an innate holder's King's Rock would
