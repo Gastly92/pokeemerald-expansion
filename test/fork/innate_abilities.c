@@ -1699,3 +1699,46 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a real Speed Boost does not double
         EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1); // exactly one boost, not two
     }
 }
+
+// Re-entrancy: the end-turn driver resumes from a per-battler cursor and resets it each turn, so an
+// innate Speed Boost fires again on the next turn — Speed climbs +1 per turn over consecutive turns.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Speed Boost fires every turn (cursor resets per turn)")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SHARPEDO, ABILITY_SPEED_BOOST));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SHARPEDO) { Ability(ABILITY_ROUGH_SKIN); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_SPEED_BOOST);
+        MESSAGE("Sharpedo's Speed rose!");
+        ABILITY_POPUP(player, ABILITY_SPEED_BOOST);
+        MESSAGE("Sharpedo's Speed rose!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 2); // +1 each of the two turns
+    }
+}
+
+// The driver scans the whole innate list and skips innates that aren't active end-turn effects:
+// Scolipede carries INNATES(Speed Boost, Swarm), and the non-end-turn Swarm is stepped over so the
+// end-turn Speed Boost still fires. (Also exercises the cursor advancing across a multi-innate list.)
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Speed Boost fires past a non-end-turn innate in the list")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SCOLIPEDE, ABILITY_SPEED_BOOST));
+        ASSUME(SpeciesHasInnate(SPECIES_SCOLIPEDE, ABILITY_SWARM)); // a passive innate sharing the list
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SCOLIPEDE) { Ability(ABILITY_POISON_POINT); } // chosen ability is neither innate
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_SPEED_BOOST);
+        MESSAGE("Scolipede's Speed rose!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1);
+    }
+}

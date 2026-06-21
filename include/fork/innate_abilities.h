@@ -72,11 +72,13 @@ bool32 SpeciesHasInnate(u16 species, enum Ability ability);
 // species' innates without needing to know how many it has.
 enum Ability GetSpeciesInnate(u16 species, u32 index);
 
-// FORK: end-turn innate driver. Fires `battler`'s active, scripted end-turn innate
+// FORK: end-turn innate driver. Fires `battler`'s active, scripted end-turn innates
 // (today only Speed Boost: +1 Speed). Hooked from THIRD_EVENT_BLOCK_ABILITIES_INNATE
 // in the end-turn loop (src/battle_end_turn.c), right after the chosen-ability block.
-// Returns TRUE if an effect fired. See the definition in src/fork/innate_abilities.c
-// for the suppression/double-fire guards and the one-effect-per-turn limitation.
-bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler);
+// Re-entrant: *index is the per-battler resume cursor into the innate list — fires one
+// effect per call (leaving *index past it) and returns TRUE, or returns FALSE once the
+// list is exhausted, so a battler with several end-turn innates fires them across passes.
+// See the definition in src/fork/innate_abilities.c for the suppression/double-fire guards.
+bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index);
 
 #endif // GUARD_INNATE_ABILITIES_H

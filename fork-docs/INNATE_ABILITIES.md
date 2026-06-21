@@ -274,9 +274,9 @@ How much is needed depends on the ability class:
   Rough Skin). These need a **driver** at the relevant event site plus a trigger
   hook. **Speed Boost is the live, worked example for the end-of-turn case** —
   use it as the reference rather than the older removed-from-history machinery:
-  - driver: **`TryActivateInnateEndTurnEffects(battler)`** (`src/fork/innate_abilities.c`)
-    iterates the species' innate list and, for any *active end-turn* innate
-    (`IsActiveEndTurnInnate`) that is active (`IsInnateActive`) and not the chosen
+  - driver: **`TryActivateInnateEndTurnEffects(battler, *index)`** (`src/fork/innate_abilities.c`)
+    scans the species' innate list from `*index` and, for the first *active end-turn*
+    innate (`IsActiveEndTurnInnate`) that is active (`IsInnateActive`) and not the chosen
     ability, delegates to the **existing** upstream end-turn handler with the innate
     passed explicitly: `AbilityBattleEffects(ABILITYEFFECT_ENDTURN, battler, innate,
     MOVE_NONE, TRUE)`. Reusing the upstream case means the stat change / script /
@@ -287,11 +287,14 @@ How much is needed depends on the ability class:
   - end-turn hook: a new `THIRD_EVENT_BLOCK_ABILITIES_INNATE` step
     (`include/constants/battle_end_turn.h`) inserted right after the chosen-ability
     block, dispatched in `HandleEndTurnThirdEventBlock` (`src/battle_end_turn.c`).
-  - **one-effect-per-turn caveat:** the driver fires at most one active end-turn
-    innate per battler per turn — fine while Speed Boost is the only one. A *second*
-    active end-turn innate needs the driver made re-entrant (hold the end-turn block,
-    advance a per-battler index past each fired effect, reset when the list is
-    exhausted) so both fire across successive turns of the loop.
+  - **re-entrancy:** the driver is re-entrant via a per-battler cursor
+    (`endTurnInnateIndex` in `gBattleStruct->eventState`). Because a battle script fires
+    one at a time, the hook **holds** the `THIRD_EVENT_BLOCK_ABILITIES_INNATE` step
+    (keeping the cursor) while the driver returns TRUE, and only resets the cursor +
+    advances the block once it returns FALSE (list exhausted). Each fired effect leaves
+    the cursor past it, so a battler carrying **several** active end-turn innates fires
+    each across successive passes of the loop. So adding a second end-turn active is just
+    a one-line addition to `IsActiveEndTurnInnate` — no driver change needed.
   - **switch-in / on-contact actives** (Intimidate, Static, Rough Skin, …) still
     need their own event hooks; model them on the end-turn driver above (a per-event
     `TryActivateInnate…` that delegates to the matching `AbilityBattleEffects` case),

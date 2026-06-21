@@ -1346,6 +1346,7 @@ static bool32 HandleEndTurnThirdEventBlock(enum BattlerId battler)
 
     if (!IsBattlerPresent(battler))
     {
+        gBattleStruct->eventState.endTurnInnateIndex = 0; // FORK: don't carry a stale innate cursor to the next battler
         gBattleStruct->eventState.endTurnBattler++;
         return effect;
     }
@@ -1424,10 +1425,23 @@ static bool32 HandleEndTurnThirdEventBlock(enum BattlerId battler)
         break;
     }
     case THIRD_EVENT_BLOCK_ABILITIES_INNATE: // FORK: active end-turn innates (Speed Boost)
-        if (TryActivateInnateEndTurnEffects(battler))
+    {
+        // Re-entrant: fire one active end-turn innate per pass, resuming from the per-battler
+        // cursor. Hold this block (keeping the cursor) while effects keep firing; once the list
+        // is exhausted, reset the cursor and advance to the next block.
+        u32 innateIndex = gBattleStruct->eventState.endTurnInnateIndex;
+        if (TryActivateInnateEndTurnEffects(battler, &innateIndex))
+        {
+            gBattleStruct->eventState.endTurnInnateIndex = innateIndex;
             effect = TRUE;
-        gBattleStruct->eventState.endTurnBlock++;
+        }
+        else
+        {
+            gBattleStruct->eventState.endTurnInnateIndex = 0;
+            gBattleStruct->eventState.endTurnBlock++;
+        }
         break;
+    }
     case THIRD_EVENT_BLOCK_ITEMS:
     {
         // TODO: simplify

@@ -276,9 +276,10 @@
 //     identical to the real ability; the pop-up is overridden to show Speed Boost (not the chosen
 //     ability) at the effect site in src/battle_util.c, but ONLY when the chosen ability differs, so a
 //     real Speed Boost stays byte-for-byte unchanged (Sturdy/Levitate precedent). The driver skips an
-//     innate that equals the chosen ability so a real Speed Boost never boosts twice. Today Speed Boost
-//     is the ONLY active end-turn innate, so the driver fires at most one such effect per battler per
-//     turn; a second one would need a re-entrant per-battler index (see the driver comment). NO pure-boon
+//     innate that equals the chosen ability so a real Speed Boost never boosts twice. The driver is
+//     RE-ENTRANT (a per-battler cursor in gBattleStruct->eventState, see TryActivateInnateEndTurnEffects),
+//     so a battler can carry several active end-turn innates and fire each in turn; Speed Boost is just
+//     the only one on the allowlist today. NO pure-boon
 //     divergence: Speed Boost is a clean upside that never hurts its holder, so the innate is a 1:1 copy.
 //     Suppression parity holds via IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field);
 //     Speed Boost is not breakable, so Mold Breaker never touches it, same as the real ability. AI is
@@ -4200,17 +4201,26 @@ enum Ability GetSpeciesInnate(u16 species, u32 index)
 }
 
 // Active, scripted innate abilities that fire at the end of every turn. Today only
-// Speed Boost (raises Speed +1). Add a future end-turn active here AND make
-// TryActivateInnateEndTurnEffects re-entrant (see its comment) before relying on it.
+// Speed Boost (raises Speed +1). Add a future end-turn active here; the driver
+// (TryActivateInnateEndTurnEffects) is already re-entrant, so a battler may carry
+// more than one and each fires in turn.
 static bool32 IsActiveEndTurnInnate(enum Ability ability)
 {
     return ability == ABILITY_SPEED_BOOST;
 }
 
 // FORK: end-turn innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active,
-// scripted end-turn innate (today only Speed Boost), hooked from the
+// scripted end-turn innates (today only Speed Boost), hooked from the
 // THIRD_EVENT_BLOCK_ABILITIES_INNATE step of the end-turn loop (src/battle_end_turn.c)
-// right after the chosen-ability end-turn block. Returns TRUE if an effect fired.
+// right after the chosen-ability end-turn block.
+//
+// RE-ENTRANT: a battle script fires one at a time, so this resumes from a per-battler
+// cursor. *index is the next innate-list slot to consider; the end-turn loop holds the
+// THIRD_EVENT_BLOCK_ABILITIES_INNATE step (keeping the cursor) while this returns TRUE,
+// and only advances the block once it returns FALSE (list exhausted). The caller resets
+// the cursor to 0 for the next battler. Each fired effect leaves *index pointing past it,
+// so a battler with several active end-turn innates fires them across successive turns of
+// the loop. Returns TRUE if an effect fired this call.
 //
 // The effect is delegated to the upstream end-turn ability handler with the innate
 // passed explicitly: AbilityBattleEffects(ABILITYEFFECT_ENDTURN, battler, innate, ...)
@@ -4219,19 +4229,16 @@ static bool32 IsActiveEndTurnInnate(enum Ability ability)
 // show the innate at the Speed Boost effect site in src/battle_util.c, but only when the
 // chosen ability differs). An innate equal to the chosen ability is skipped so the
 // chosen-ability block (which already ran it) never boosts twice; IsInnateActive() applies
-// the usual suppression (feature flag, Gastro Acid, Neutralizing Gas, not-on-field).
-//
-// NOTE: this fires at most ONE end-turn innate per battler per turn — sufficient while
-// Speed Boost is the only active end-turn innate. A second one would need a re-entrant
-// per-battler index (hold the end-turn block, advance the index past each fired effect,
-// reset when the list is exhausted) so each fires across successive turns of the loop.
-bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler)
+// the usual suppression (feature flag, Gastro Acid, Neutralizing Gas, not-on-field). An
+// eligible innate that does nothing this turn (e.g. Speed already maxed) is stepped over
+// without firing, so the scan continues to the battler's next end-turn innate.
+bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index)
 {
-    u32 i;
     enum Ability innate;
 
-    for (i = 0; (innate = GetSpeciesInnate(gBattleMons[battler].species, i)) != ABILITY_NONE; i++)
+    while ((innate = GetSpeciesInnate(gBattleMons[battler].species, *index)) != ABILITY_NONE)
     {
+        (*index)++; // step past this slot now, so a fired effect resumes at the next one
         if (!IsActiveEndTurnInnate(innate))
             continue;
         if (GetBattlerAbility(battler) == innate) // chosen-ability end-turn block already ran it
