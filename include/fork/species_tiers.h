@@ -51,4 +51,12 @@ enum SpeciesTier GetSpeciesTier(u16 species);
 // Convenience predicate: TRUE if `species` is classified as exactly `tier`.
 bool32 SpeciesIsTier(u16 species, enum SpeciesTier tier);
 
+#if TESTING
+// Test-only: the per-tier arrays are static, so GetSpeciesTier's first-match
+// priority (Mythical > Legendary > Pseudo) would silently mask a species
+// accidentally listed twice (within one array or across two). Returns TRUE
+// and writes the offending species to *outSpecies if any duplicate exists.
+bool32 SpeciesTierListsOverlap(u16 *outSpecies);
+#endif
+
 #endif // GUARD_SPECIES_TIERS_H
