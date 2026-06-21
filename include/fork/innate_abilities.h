@@ -33,7 +33,10 @@
 // (reduces supereffective damage taken by 25%, handled at the GetDefenderAbilitiesModifier calc site
 // in src/battle_util.c — a clean-upside 1:1 copy like Sturdy), and PRESSURE (the holder's foes spend
 // 1 extra PP per move used against it, handled at the two PP-deduction sites in
-// src/battle_move_resolution.c and src/battle_util.c — a clean-upside 1:1 copy with no AI wiring needed).
+// src/battle_move_resolution.c and src/battle_util.c — a clean-upside 1:1 copy with no AI wiring needed),
+// and STENCH (a 10% on-hit flinch — guaranteed first-turn under DETERMINISTIC_ABILITIES — handled at the
+// ABILITYEFFECT_MOVE_END_ATTACKER on-hit site in src/battle_util.c, run additively beside the chosen-ability
+// dispatch so an innate holder flinches like the real ability; a clean-upside 1:1 copy with no AI wiring needed).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

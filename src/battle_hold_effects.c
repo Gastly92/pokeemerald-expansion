@@ -238,10 +238,13 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
                               && !gBattleMons[battlerDef].volatiles.flinched
                               && GetBattlerAbility(battlerDef) != ABILITY_INNER_FOCUS
                               && GetActiveGimmick(battlerDef) != GIMMICK_DYNAMAX;
-        flinches = (ability != ABILITY_STENCH) && flinchWouldLand;
+        // FORK: innate-aware (FEATURE_INNATE_ABILITIES) — a Stench holder pre-empts its own
+        // flinch item so the rock isn't redundantly consumed; BattlerHasAbility credits an
+        // innate Stench too, so it behaves exactly like a chosen Stench here.
+        flinches = !BattlerHasAbility(battlerAtk, ABILITY_STENCH) && flinchWouldLand;
     }
     else
-        flinches = (ability != ABILITY_STENCH) && RandomPercentage(RNG_HOLD_EFFECT_FLINCH, holdEffectParam);
+        flinches = !BattlerHasAbility(battlerAtk, ABILITY_STENCH) && RandomPercentage(RNG_HOLD_EFFECT_FLINCH, holdEffectParam); // FORK: innate-aware
 
     if (flinches)
     {
