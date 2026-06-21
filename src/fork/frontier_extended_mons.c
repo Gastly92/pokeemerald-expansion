@@ -36,7 +36,9 @@
 //          (31 in every stat under B_FRONTIER_MAX_IVS). Only set .iv =
 //          TRAINER_PARTY_IVS(...) for an intentional non-max spread (e.g. 0 Speed
 //          for a Trick Room attacker).
-//  - .ball is cosmetic; default BALL_POKE.
+//  - .ball is cosmetic and OPTIONAL. Leave it out for BALL_POKE (CreateFacilityMon
+//          treats an unset .ball, value 0/BALL_STRANGE, as BALL_POKE); only set it
+//          for an intentional non-Poke ball look (e.g. BALL_DIVE, BALL_NEST).
 //  - .teraType TYPE_NORMAL (0) reads as "unset" in CreateFacilityMon, so a Tera
 //          Normal set would not apply — fine, Tera is disabled in this fork for now
 //          (B_FLAG_TERA_ORB_* = 0), so teraType is recorded as future-proofing only.
@@ -132,8 +134,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // Generation I
     // ====================================
 
-    // ---- Venusaur ----
-    { // 0003
+    // 0003
+    {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE,
@@ -154,8 +156,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
     },
 
-    // ---- Charizard ----
-    { // 0006
+    // 0006
+    {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAT_ROCK, // Mega Charizard Y (Drought); extends its own sun
@@ -174,9 +176,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0006
+    {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Charizard X (Tough Claws); power for the Dragon Dance sweeper
@@ -195,9 +196,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0006
+    {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // no-mega special breaker
@@ -216,9 +216,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0006
+    {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sub-Roost stallbreaker
@@ -237,11 +236,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Blastoise ----
-    { // 0009
+    // 0009
+    {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MYSTIC_WATER, // Mega Blastoise (Mega Launcher); Water STAB boost for the pulse spammer
@@ -260,9 +258,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0009
+    {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky spinner
@@ -281,9 +278,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0009
+    {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
@@ -302,11 +298,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Butterfree ----
-    { // 0012
+    // 0012
+    {
         .species = SPECIES_BUTTERFREE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Quiver Dance sweeper, sash = one-shot entry guard
@@ -325,9 +320,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0012
+    {
         .species = SPECIES_BUTTERFREE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // doubles spread + support
@@ -346,11 +340,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Beedrill ----
-    { // 0015
+    // 0015
+    {
         .species = SPECIES_BEEDRILL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_POISON_BARB, // Mega Beedrill (Adaptability); sustained Poison STAB
@@ -369,9 +362,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0015
+    {
         .species = SPECIES_BEEDRILL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // fast pivot lead
@@ -390,11 +382,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pidgeot ----
-    { // 0018
+    // 0018
+    {
         .species = SPECIES_PIDGEOT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SHARP_BEAK, // Mega Pidgeot (No Guard); boosts its perfect-accuracy Hurricane
@@ -413,9 +404,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0018
+    {
         .species = SPECIES_PIDGEOT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Keen Eye Choice Specs (Tinted Lens needs the Mega)
@@ -434,11 +424,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Raticate ----
-    { // 0020
+    // 0020
+    {
         .species = SPECIES_RATICATE_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // Hustle wallbreaker
@@ -457,9 +446,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0020
+    {
         .species = SPECIES_RATICATE_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // bulky pivot, Thick Fat eats fire/ice
@@ -478,11 +466,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 176
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Raticate ----
-    { // 0020
+    // 0020
+    {
         .species = SPECIES_RATICATE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Guts attacker
@@ -501,9 +488,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0020
+    {
         .species = SPECIES_RATICATE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // Hustle hits
@@ -522,11 +508,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Fearow ----
-    { // 0022
+    // 0022
+    {
         .species = SPECIES_FEAROW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SCOPE_LENS, // Sniper crits
@@ -545,9 +530,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0022
+    {
         .species = SPECIES_FEAROW,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SHARP_BEAK, // Sharp Beak sweeper
@@ -566,11 +550,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Arbok ----
-    { // 0024
+    // 0024
+    {
         .species = SPECIES_ARBOK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_GLASSES, // Intimidate pivot
@@ -589,9 +572,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0024
+    {
         .species = SPECIES_ARBOK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_POISON_BARB, // STAB poison
@@ -610,11 +592,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Raichu ----
-    { // 0026
+    // 0026
+    {
         .species = SPECIES_RAICHU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -633,9 +614,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0026
+    {
         .species = SPECIES_RAICHU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // fast Fake Out support
@@ -654,11 +634,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Raichu ----
-    { // 0026
+    // 0026
+    {
         .species = SPECIES_RAICHU_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_TWISTED_SPOON, // Surge Surfer sweeper
@@ -677,9 +656,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0026
+    {
         .species = SPECIES_RAICHU_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MAGNET, // fast pivot variant
@@ -698,11 +676,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sandslash ----
-    { // 0028
+    // 0028
+    {
         .species = SPECIES_SANDSLASH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS,
@@ -721,9 +698,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0028
+    {
         .species = SPECIES_SANDSLASH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_GROUND_GEM, // one-shot Ground burst for the Swords Dance attacker
@@ -742,11 +718,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Sandslash ----
-    { // 0028
+    // 0028
+    {
         .species = SPECIES_SANDSLASH_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_NEVER_MELT_ICE, // Slush Rush physical sweeper
@@ -765,9 +740,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0028
+    {
         .species = SPECIES_SANDSLASH_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky spinner/hazard control
@@ -786,11 +760,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Nidoqueen ----
-    { // 0031
+    // 0031
+    {
         .species = SPECIES_NIDOQUEEN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sheer Force nuke
@@ -809,9 +782,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0031
+    {
         .species = SPECIES_NIDOQUEEN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky hazards
@@ -830,11 +802,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 56
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Nidoking ----
-    { // 0034
+    // 0034
+    {
         .species = SPECIES_NIDOKING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sheer Force nuke
@@ -853,9 +824,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0034
+    {
         .species = SPECIES_NIDOKING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
@@ -874,11 +844,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Clefable ----
-    { // 0036
+    // 0036
+    {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Magic Guard CM wall
@@ -897,9 +866,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0036
+    {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Unaware / offensive
@@ -918,9 +886,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0036
+    {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware staller (toggle-friendly)
@@ -939,11 +906,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ninetales ----
-    { // 0038
+    // 0038
+    {
         .species = SPECIES_NINETALES,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAT_ROCK, // Drought setter
@@ -962,9 +928,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0038
+    {
         .species = SPECIES_NINETALES,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAT_ROCK, // extends its own Drought sun
@@ -983,11 +948,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Ninetales ----
-    { // 0038
+    // 0038
+    {
         .species = SPECIES_NINETALES_ALOLA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Snow Warning + Aurora Veil support
@@ -1006,9 +970,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0038
+    {
         .species = SPECIES_NINETALES_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_NEVER_MELT_ICE, // offensive Snow Warning special attacker
@@ -1027,11 +990,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Wigglytuff ----
-    { // 0040
+    // 0040
+    {
         .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulky fairy
@@ -1050,9 +1012,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0040
+    {
         .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Doubles support
@@ -1071,11 +1032,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Vileplume ----
-    { // 0045
+    // 0045
+    {
         .species = SPECIES_VILEPLUME,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // boosts Sludge Bomb chip
@@ -1094,9 +1054,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0045
+    {
         .species = SPECIES_VILEPLUME,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-proof Chlorophyll
@@ -1115,11 +1074,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Parasect ----
-    { // 0047
+    // 0047
+    {
         .species = SPECIES_PARASECT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Spore disabler
@@ -1138,9 +1096,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0047
+    {
         .species = SPECIES_PARASECT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FIGY_BERRY, // Dry Skin sweeper
@@ -1159,11 +1116,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Venomoth ----
-    { // 0049
+    // 0049
+    {
         .species = SPECIES_VENOMOTH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Quiver Dance + Sleep Powder sweeper
@@ -1182,9 +1138,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0049
+    {
         .species = SPECIES_VENOMOTH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE,
@@ -1203,11 +1158,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dugtrio ----
-    { // 0051
+    // 0051
+    {
         .species = SPECIES_DUGTRIO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Arena Trap revenge / trapper
@@ -1226,9 +1180,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0051
+    {
         .species = SPECIES_DUGTRIO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sand Force band
@@ -1247,11 +1200,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Dugtrio ----
-    { // 0051
+    // 0051
+    {
         .species = SPECIES_DUGTRIO_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // Sand Force trapper/revenge killer
@@ -1270,9 +1222,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0051
+    {
         .species = SPECIES_DUGTRIO_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SOFT_SAND, // Tangling Hair contact-punisher
@@ -1291,11 +1242,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Persian ----
-    { // 0053
+    // 0053
+    {
         .species = SPECIES_PERSIAN_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Technician fast attacker
@@ -1314,9 +1264,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0053
+    {
         .species = SPECIES_PERSIAN_ALOLA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET, // Fur Coat physical wall + support
@@ -1335,11 +1284,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Persian ----
-    { // 0053
+    // 0053
+    {
         .species = SPECIES_PERSIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // Technician Fake Out
@@ -1358,9 +1306,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0053
+    {
         .species = SPECIES_PERSIAN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Fast support
@@ -1379,11 +1326,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Golduck ----
-    { // 0055
+    // 0055
+    {
         .species = SPECIES_GOLDUCK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
@@ -1402,9 +1348,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0055
+    {
         .species = SPECIES_GOLDUCK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS,
@@ -1423,11 +1368,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Arcanine ----
-    { // 0059
+    // 0059
+    {
         .species = SPECIES_ARCANINE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky pivot
@@ -1446,9 +1390,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0059
+    {
         .species = SPECIES_ARCANINE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band wallbreaker
@@ -1467,9 +1410,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0059
+    {
         .species = SPECIES_ARCANINE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // doubles Intimidate support
@@ -1488,11 +1430,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Arcanine-Hisui ----
-    { // 0059
+    // 0059
+    {
         .species = SPECIES_ARCANINE_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Rock Head Head Smash breaker
@@ -1511,9 +1452,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0059
+    {
         .species = SPECIES_ARCANINE_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Intimidate bulky pivot
@@ -1532,11 +1472,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Poliwrath ----
-    { // 0062
+    // 0062
+    {
         .species = SPECIES_POLIWRATH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Bulk Up
@@ -1555,9 +1494,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0062
+    {
         .species = SPECIES_POLIWRATH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim attacker
@@ -1576,11 +1514,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alakazam ----
-    { // 0065
+    // 0065
+    {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Magic Guard nuke
@@ -1599,9 +1536,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0065
+    {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_TWISTED_SPOON, // Mega Alakazam (Trace); Psychic STAB boost
@@ -1620,9 +1556,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0065
+    {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // fast lead, sash = one-shot guard
@@ -1641,11 +1576,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Machamp ----
-    { // 0068
+    // 0068
+    {
         .species = SPECIES_MACHAMP,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // No Guard band breaker
@@ -1664,9 +1598,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0068
+    {
         .species = SPECIES_MACHAMP,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Guts staller-breaker
@@ -1685,9 +1618,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0068
+    {
         .species = SPECIES_MACHAMP,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // doubles bulk
@@ -1706,11 +1638,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Victreebel ----
-    { // 0071
+    // 0071
+    {
         .species = SPECIES_VICTREEBEL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
@@ -1729,9 +1660,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0071
+    {
         .species = SPECIES_VICTREEBEL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND,
@@ -1750,11 +1680,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tentacruel ----
-    { // 0073
+    // 0073
+    {
         .species = SPECIES_TENTACRUEL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky spinner / hazards
@@ -1773,9 +1702,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 132
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0073
+    {
         .species = SPECIES_TENTACRUEL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Rain Dish / offensive
@@ -1794,11 +1722,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Golem ----
-    { // 0076
+    // 0076
+    {
         .species = SPECIES_GOLEM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sturdy band breaker
@@ -1817,9 +1744,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0076
+    {
         .species = SPECIES_GOLEM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CUSTAP_BERRY, // Sturdy + Custap lead w/ rocks
@@ -1838,11 +1764,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Golem ----
-    { // 0076
+    // 0076
+    {
         .species = SPECIES_GOLEM_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // Galvanize Explosion/STAB attacker
@@ -1861,9 +1786,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0076
+    {
         .species = SPECIES_GOLEM_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HARD_STONE, // Sturdy bulky tank
@@ -1882,11 +1806,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rapidash ----
-    { // 0078
+    // 0078
+    {
         .species = SPECIES_RAPIDASH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -1905,9 +1828,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0078
+    {
         .species = SPECIES_RAPIDASH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND,
@@ -1926,11 +1848,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galarian Rapidash ----
-    { // 0078
+    // 0078
+    {
         .species = SPECIES_RAPIDASH_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS,
@@ -1949,9 +1870,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0078
+    {
         .species = SPECIES_RAPIDASH_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical sweeper
@@ -1970,11 +1890,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Slowbro ----
-    { // 0080
+    // 0080
+    {
         .species = SPECIES_SLOWBRO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Mega Slowbro (Shell Armor); recovery for the Calm Mind wall
@@ -1993,9 +1912,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0080
+    {
         .species = SPECIES_SLOWBRO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator pivot wall
@@ -2014,9 +1932,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0080
+    {
         .species = SPECIES_SLOWBRO,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker (0 Spe IV)
@@ -2036,11 +1953,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galarian Slowbro ----
-    { // 0080
+    // 0080
+    {
         .species = SPECIES_SLOWBRO_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed tank
@@ -2059,9 +1975,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0080
+    {
         .species = SPECIES_SLOWBRO_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky pivot
@@ -2080,11 +1995,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Farfetch'd ----
-    { // 0083
+    // 0083
+    {
         .species = SPECIES_FARFETCHD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEEK, // Guaranteed crit
@@ -2103,11 +2017,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dodrio ----
-    { // 0085
+    // 0085
+    {
         .species = SPECIES_DODRIO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // fast band
@@ -2126,9 +2039,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0085
+    {
         .species = SPECIES_DODRIO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Swords Dance
@@ -2147,11 +2059,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dewgong ----
-    { // 0087
+    // 0087
+    {
         .species = SPECIES_DEWGONG,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat tank
@@ -2170,9 +2081,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0087
+    {
         .species = SPECIES_DEWGONG,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_NEVER_MELT_ICE, // Freeze-Dry tech
@@ -2191,11 +2101,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Muk ----
-    { // 0089
+    // 0089
+    {
         .species = SPECIES_MUK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky special tank
@@ -2214,9 +2123,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 172
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0089
+    {
         .species = SPECIES_MUK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST,
@@ -2235,11 +2143,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Muk ----
-    { // 0089
+    // 0089
+    {
         .species = SPECIES_MUK_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Power of Alchemy special wall
@@ -2258,9 +2165,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0089
+    {
         .species = SPECIES_MUK_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Poison Touch bulky attacker
@@ -2279,11 +2185,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cloyster ----
-    { // 0091
+    // 0091
+    {
         .species = SPECIES_CLOYSTER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper, Skill Link max multi-hit
@@ -2302,9 +2207,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0091
+    {
         .species = SPECIES_CLOYSTER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // guaranteed Shell Smash via one-shot entry guard
@@ -2323,9 +2227,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0091
+    {
         .species = SPECIES_CLOYSTER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive spiker
@@ -2344,11 +2247,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gengar ----
-    { // 0094
+    // 0094
+    {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Gengar (Shadow Tag); power for the trapping nuke
@@ -2367,9 +2269,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0094
+    {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // fast lead w/ Destiny Bond
@@ -2388,9 +2289,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0094
+    {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
@@ -2409,9 +2309,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0094
+    {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst nuke
@@ -2430,11 +2329,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hypno ----
-    { // 0097
+    // 0097
+    {
         .species = SPECIES_HYPNO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // CM wall
@@ -2453,9 +2351,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0097
+    {
         .species = SPECIES_HYPNO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -2474,11 +2371,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kingler ----
-    { // 0099
+    // 0099
+    {
         .species = SPECIES_KINGLER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MYSTIC_WATER, // Sheer Force pincer
@@ -2497,9 +2393,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0099
+    {
         .species = SPECIES_KINGLER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SCOPE_LENS, // Guaranteed crit claw
@@ -2518,11 +2413,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Electrode-Hisui ----
-    { // 0101
+    // 0101
+    {
         .species = SPECIES_ELECTRODE_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MAGNET, // boosts STAB Electric
@@ -2541,9 +2435,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0101
+    {
         .species = SPECIES_ELECTRODE_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // fast Thunder Wave support
@@ -2562,11 +2455,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Electrode ----
-    { // 0101
+    // 0101
+    {
         .species = SPECIES_ELECTRODE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MAGNET, // Blazing speed
@@ -2585,9 +2477,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0101
+    {
         .species = SPECIES_ELECTRODE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Screens setter
@@ -2606,11 +2497,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Exeggutor ----
-    { // 0103
+    // 0103
+    {
         .species = SPECIES_EXEGGUTOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun nuke
@@ -2629,9 +2519,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0103
+    {
         .species = SPECIES_EXEGGUTOR,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker
@@ -2651,11 +2540,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Exeggutor ----
-    { // 0103
+    // 0103
+    {
         .species = SPECIES_EXEGGUTOR_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Trick Room sweeper (0 Speed IVs)
@@ -2675,9 +2563,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0103
+    {
         .species = SPECIES_EXEGGUTOR_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // Harvest bulky mixed attacker
@@ -2697,11 +2584,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Marowak ----
-    { // 0105
+    // 0105
+    {
         .species = SPECIES_MAROWAK,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_THICK_CLUB, // doubles up Attack; Trick Room sweeper
@@ -2721,9 +2607,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0105
+    {
         .species = SPECIES_MAROWAK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_THICK_CLUB, // SD physical sweeper
@@ -2742,11 +2627,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alolan Marowak ----
-    { // 0105
+    // 0105
+    {
         .species = SPECIES_MAROWAK_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_THICK_CLUB, // iconic Thick Club + Rock Head Flare Blitz
@@ -2765,9 +2649,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 8
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0105
+    {
         .species = SPECIES_MAROWAK_ALOLA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_THICK_CLUB, // Lightning Rod redirection bruiser
@@ -2786,11 +2669,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 8
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hitmonlee ----
-    { // 0106
+    // 0106
+    {
         .species = SPECIES_HITMONLEE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_QUICK_CLAW, // Reckless / Unburden sweeper
@@ -2809,9 +2691,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0106
+    {
         .species = SPECIES_HITMONLEE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FIGHTING_GEM, // one-shot Fighting burst nuke
@@ -2830,11 +2711,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hitmonchan ----
-    { // 0107
+    // 0107
+    {
         .species = SPECIES_HITMONCHAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Iron Fist bulky attacker
@@ -2853,9 +2733,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0107
+    {
         .species = SPECIES_HITMONCHAN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
@@ -2874,11 +2753,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Weezing ----
-    { // 0110
+    // 0110
+    {
         .species = SPECIES_WEEZING,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Levitate phys wall
@@ -2897,9 +2775,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0110
+    {
         .species = SPECIES_WEEZING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -2918,11 +2795,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galarian Weezing ----
-    { // 0110
+    // 0110
+    {
         .species = SPECIES_WEEZING_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE, // defensive wall
@@ -2941,9 +2817,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0110
+    {
         .species = SPECIES_WEEZING_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // hazard control & Neutralizing Gas
@@ -2962,9 +2837,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0110
+    {
         .species = SPECIES_WEEZING_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Misty Surge support
@@ -2983,11 +2857,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Chansey ----
-    { // 0113
+    // 0113
+    {
         .species = SPECIES_CHANSEY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EVIOLITE, // special wall
@@ -3006,11 +2879,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kangaskhan ----
-    { // 0115
+    // 0115
+    {
         .species = SPECIES_KANGASKHAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // Mega Kangaskhan (Parental Bond); boosts its Normal double-hits
@@ -3029,9 +2901,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0115
+    {
         .species = SPECIES_KANGASKHAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // no-mega Scrappy attacker
@@ -3050,11 +2921,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Seaking ----
-    { // 0119
+    // 0119
+    {
         .species = SPECIES_SEAKING,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MYSTIC_WATER, // Lightning Rod draw
@@ -3073,9 +2943,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0119
+    {
         .species = SPECIES_SEAKING,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LUM_BERRY, // Swift Swim sweep
@@ -3094,11 +2963,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Starmie ----
-    { // 0121
+    // 0121
+    {
         .species = SPECIES_STARMIE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast special pivot
@@ -3117,9 +2985,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0121
+    {
         .species = SPECIES_STARMIE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure spinner
@@ -3138,9 +3005,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0121
+    {
         .species = SPECIES_STARMIE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // breaker
@@ -3159,11 +3025,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mr. Mime ----
-    { // 0122
+    // 0122
+    {
         .species = SPECIES_MR_MIME,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Screens support
@@ -3182,9 +3047,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0122
+    {
         .species = SPECIES_MR_MIME,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_TWISTED_SPOON, // Technician special
@@ -3203,11 +3067,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Jynx ----
-    { // 0124
+    // 0124
+    {
         .species = SPECIES_JYNX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Lovely Kiss lead
@@ -3226,9 +3089,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0124
+    {
         .species = SPECIES_JYNX,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ICE_GEM, // one-shot Ice burst nuke
@@ -3247,11 +3109,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pinsir ----
-    { // 0127
+    // 0127
+    {
         .species = SPECIES_PINSIR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SHARP_BEAK, // Mega Pinsir (Aerilate); boosts its -ate Flying moves
@@ -3270,9 +3131,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0127
+    {
         .species = SPECIES_PINSIR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // Moxie revenge (no mega)
@@ -3291,11 +3151,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tauros ----
-    { // 0128
+    // 0128
+    {
         .species = SPECIES_TAUROS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force band
@@ -3314,9 +3173,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0128
+    {
         .species = SPECIES_TAUROS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Intimidate lure
@@ -3335,11 +3193,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tauros-Paldea-Combat ----
-    { // 0128
+    // 0128
+    {
         .species = SPECIES_TAUROS_PALDEA_COMBAT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // chip + Intimidate pivot
@@ -3358,9 +3215,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0128
+    {
         .species = SPECIES_TAUROS_PALDEA_COMBAT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up sweeper
@@ -3379,11 +3235,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tauros-Paldea-Blaze ----
-    { // 0128
+    // 0128
+    {
         .species = SPECIES_TAUROS_PALDEA_BLAZE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-immune attacker
@@ -3402,11 +3257,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tauros-Paldea-Aqua ----
-    { // 0128
+    // 0128
+    {
         .species = SPECIES_TAUROS_PALDEA_AQUA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MYSTIC_WATER, // boosts Raging Bull (Water)
@@ -3425,11 +3279,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gyarados ----
-    { // 0130
+    // 0130
+    {
         .species = SPECIES_GYARADOS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LUM_BERRY, // Mega Gyarados (Mold Breaker); status insurance for the Dragon Dance sweeper
@@ -3448,9 +3301,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0130
+    {
         .species = SPECIES_GYARADOS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // no-mega DD sweeper
@@ -3469,9 +3321,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0130
+    {
         .species = SPECIES_GYARADOS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Dragon Dance
@@ -3490,11 +3341,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lapras ----
-    { // 0131
+    // 0131
+    {
         .species = SPECIES_LAPRAS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Water Absorb tank
@@ -3513,9 +3363,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0131
+    {
         .species = SPECIES_LAPRAS,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // extends the screens for the Aurora Veil setter
@@ -3534,11 +3383,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ditto ----
-    { // 0132
+    // 0132
+    {
         .species = SPECIES_DITTO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // outspeed copied foe
@@ -3557,11 +3405,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Vaporeon ----
-    { // 0134
+    // 0134
+    {
         .species = SPECIES_VAPOREON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Wish pivot wall
@@ -3580,9 +3427,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0134
+    {
         .species = SPECIES_VAPOREON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST,
@@ -3601,11 +3447,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Jolteon ----
-    { // 0135
+    // 0135
+    {
         .species = SPECIES_JOLTEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
@@ -3624,9 +3469,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0135
+    {
         .species = SPECIES_JOLTEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // fast breaker
@@ -3645,11 +3489,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Flareon ----
-    { // 0136
+    // 0136
+    {
         .species = SPECIES_FLAREON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Flash Fire / Guts band
@@ -3668,9 +3511,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0136
+    {
         .species = SPECIES_FLAREON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Guts breaker
@@ -3689,11 +3531,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Omastar ----
-    { // 0139
+    // 0139
+    {
         .species = SPECIES_OMASTAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Shell Smash sweeper
@@ -3712,9 +3553,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0139
+    {
         .species = SPECIES_OMASTAR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HARD_STONE, // Rain abuser
@@ -3733,11 +3573,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kabutops ----
-    { // 0141
+    // 0141
+    {
         .species = SPECIES_KABUTOPS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LUM_BERRY, // Battle Armor blade
@@ -3756,9 +3595,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0141
+    {
         .species = SPECIES_KABUTOPS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Weak Armor sweep
@@ -3777,9 +3615,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0135
+    {
         .species = SPECIES_JOLTEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_KINGS_ROCK, // outspeeds almost everything; its first Thunderbolt (no innate flinch) flinches via King's Rock, stealing a turn
@@ -3798,11 +3635,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Aerodactyl ----
-    { // 0142
+    // 0142
+    {
         .species = SPECIES_AERODACTYL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HARD_STONE, // Mega Aerodactyl (Tough Claws); Rock STAB boost
@@ -3821,9 +3657,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0142
+    {
         .species = SPECIES_AERODACTYL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // suicide lead
@@ -3842,9 +3677,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0142
+    {
         .species = SPECIES_AERODACTYL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_KINGS_ROCK, // fast lead, no flinching move in the set: King's Rock supplies the turn-1 flinch
@@ -3863,11 +3697,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Snorlax ----
-    { // 0143
+    // 0143
+    {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Curse setup
@@ -3886,9 +3719,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0143
+    {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
@@ -3907,9 +3739,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 124
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0143
+    {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_NORMAL_GEM, // one-shot Normal burst for the Giga Impact set
@@ -3928,11 +3759,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Articuno ----
-    { // 0144
+    // 0144
+    {
         .species = SPECIES_ARTICUNO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky special wall
@@ -3951,9 +3781,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0144
+    {
         .species = SPECIES_ARTICUNO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -3972,11 +3801,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galarian Articuno ----
-    { // 0144
+    // 0144
+    {
         .species = SPECIES_ARTICUNO_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind setup
@@ -3995,9 +3823,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0144
+    {
         .species = SPECIES_ARTICUNO_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_TWISTED_SPOON, // immediate special attacker
@@ -4016,11 +3843,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zapdos ----
-    { // 0145
+    // 0145
+    {
         .species = SPECIES_ZAPDOS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // pivot
@@ -4039,9 +3865,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0145
+    {
         .species = SPECIES_ZAPDOS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive sub-roost
@@ -4060,11 +3885,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 84
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galarian Zapdos ----
-    { // 0145
+    // 0145
+    {
         .species = SPECIES_ZAPDOS_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // physical breaker
@@ -4083,9 +3907,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0145
+    {
         .species = SPECIES_ZAPDOS_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up sweeper
@@ -4104,11 +3927,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Moltres ----
-    { // 0146
+    // 0146
+    {
         .species = SPECIES_MOLTRES,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky pivot
@@ -4127,9 +3949,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0146
+    {
         .species = SPECIES_MOLTRES,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // breaker
@@ -4148,11 +3969,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galarian Moltres ----
-    { // 0146
+    // 0146
+    {
         .species = SPECIES_MOLTRES_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot sweeper
@@ -4171,9 +3991,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0146
+    {
         .species = SPECIES_MOLTRES_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Berserk + WP snowball
@@ -4192,11 +4011,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dragonite ----
-    { // 0149
+    // 0149
+    {
         .species = SPECIES_DRAGONITE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Multiscale DD sweeper
@@ -4215,9 +4033,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0149
+    {
         .species = SPECIES_DRAGONITE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Extreme Speed band
@@ -4236,9 +4053,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0149
+    {
         .species = SPECIES_DRAGONITE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Dragon Dance
@@ -4257,11 +4073,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mewtwo ----
-    { // 0150
+    // 0150
+    {
         .species = SPECIES_MEWTWO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Mewtwo Y (Insomnia); power for the special nuke
@@ -4280,9 +4095,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0150
+    {
         .species = SPECIES_MEWTWO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MUSCLE_BAND, // Mega Mewtwo X (Steadfast); physical boost
@@ -4301,9 +4115,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0150
+    {
         .species = SPECIES_MEWTWO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // no-mega all-out attacker
@@ -4322,11 +4135,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mew ----
-    { // 0151
+    // 0151
+    {
         .species = SPECIES_MEW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed nasty plot
@@ -4345,9 +4157,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0151
+    {
         .species = SPECIES_MEW,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // utility lead
@@ -4366,9 +4177,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0151
+    {
         .species = SPECIES_MEW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // physical pivot
@@ -4387,15 +4197,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
     // ====================================
     // Generation II
     // ====================================
 
-    // ---- Meganium ----
-    { // 0154
+    // 0154
+    {
         .species = SPECIES_MEGANIUM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky defensive pivot / cleric
@@ -4414,9 +4223,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0154
+    {
         .species = SPECIES_MEGANIUM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MIRACLE_SEED, // dragon dance physical attacker
@@ -4435,9 +4243,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0154
+    {
         .species = SPECIES_MEGANIUM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // defensive spreader with hazards
@@ -4456,11 +4263,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Typhlosion ----
-    { // 0157
+    // 0157
+    {
         .species = SPECIES_TYPHLOSION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -4479,9 +4285,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0157
+    {
         .species = SPECIES_TYPHLOSION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // nasty plot sweeper
@@ -4500,9 +4305,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0157
+    {
         .species = SPECIES_TYPHLOSION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAT_ROCK, // sun setter for the team
@@ -4521,11 +4325,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Typhlosion-Hisui ----
-    { // 0157
+    // 0157
+    {
         .species = SPECIES_TYPHLOSION_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Frisk Ghost/Fire breaker
@@ -4544,9 +4347,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0157
+    {
         .species = SPECIES_TYPHLOSION_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot Hex sweeper
@@ -4565,11 +4367,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Feraligatr ----
-    { // 0160
+    // 0160
+    {
         .species = SPECIES_FERALIGATR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // dragon dance physical sweeper
@@ -4588,9 +4389,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0160
+    {
         .species = SPECIES_FERALIGATR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band wallbreaker with priority
@@ -4609,9 +4409,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0160
+    {
         .species = SPECIES_FERALIGATR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky belly-drum sweeper
@@ -4630,11 +4429,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Furret ----
-    { // 0162
+    // 0162
+    {
         .species = SPECIES_FURRET,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SHELL_BELL, // scrappy U-turn pivot
@@ -4653,11 +4451,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Noctowl ----
-    { // 0164
+    // 0164
+    {
         .species = SPECIES_NOCTOWL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Tinted Lens special
@@ -4676,9 +4473,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0164
+    {
         .species = SPECIES_NOCTOWL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Insomnia staller
@@ -4697,11 +4493,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ledian ----
-    { // 0166
+    // 0166
+    {
         .species = SPECIES_LEDIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_EXPERT_BELT, // Iron Fist mixed
@@ -4720,11 +4515,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ariados ----
-    { // 0168
+    // 0168
+    {
         .species = SPECIES_ARIADOS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Web setter
@@ -4743,9 +4537,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0168
+    {
         .species = SPECIES_ARIADOS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SCOPE_LENS, // Sniper jabs
@@ -4764,11 +4557,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Crobat ----
-    { // 0169
+    // 0169
+    {
         .species = SPECIES_CROBAT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast physical attacker / pivot
@@ -4787,9 +4579,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0169
+    {
         .species = SPECIES_CROBAT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // defensive defogger / status
@@ -4808,9 +4599,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0169
+    {
         .species = SPECIES_CROBAT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band pivot wallbreaker
@@ -4829,11 +4619,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lanturn ----
-    { // 0171
+    // 0171
+    {
         .species = SPECIES_LANTURN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky Volt Absorb pivot
@@ -4852,9 +4641,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0171
+    {
         .species = SPECIES_LANTURN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
@@ -4873,11 +4661,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 124
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Xatu ----
-    { // 0178
+    // 0178
+    {
         .species = SPECIES_XATU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Magic Bounce support
@@ -4896,9 +4683,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0178
+    {
         .species = SPECIES_XATU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_TWISTED_SPOON, // Tailwind setter
@@ -4917,11 +4703,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ampharos ----
-    { // 0181
+    // 0181
+    {
         .species = SPECIES_AMPHAROS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MAGNET, // Mega Ampharos (Mold Breaker); Electric STAB boost
@@ -4940,9 +4725,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0181
+    {
         .species = SPECIES_AMPHAROS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker (no mega)
@@ -4961,9 +4745,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0181
+    {
         .species = SPECIES_AMPHAROS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special tank
@@ -4982,11 +4765,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Bellossom ----
-    { // 0182
+    // 0182
+    {
         .species = SPECIES_BELLOSSOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // chlorophyll sun sweeper
@@ -5005,9 +4787,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0182
+    {
         .species = SPECIES_BELLOSSOM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive quiver dance + sleep
@@ -5026,11 +4807,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Azumarill ----
-    { // 0184
+    // 0184
+    {
         .species = SPECIES_AZUMARILL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Huge Power band breaker w/ priority
@@ -5049,9 +4829,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 164
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0184
+    {
         .species = SPECIES_AZUMARILL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // belly drum + aqua jet sweeper
@@ -5070,9 +4849,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 164
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0184
+    {
         .species = SPECIES_AZUMARILL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
@@ -5091,11 +4869,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sudowoodo ----
-    { // 0185
+    // 0185
+    {
         .species = SPECIES_SUDOWOODO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Rock Head reckless band attacker
@@ -5114,9 +4891,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0185
+    {
         .species = SPECIES_SUDOWOODO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // sturdy physical wall w/ rocks
@@ -5135,11 +4911,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Politoed ----
-    { // 0186
+    // 0186
+    {
         .species = SPECIES_POLITOED,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_DAMP_ROCK, // Drizzle rain setter
@@ -5158,9 +4933,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0186
+    {
         .species = SPECIES_POLITOED,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky water with utility
@@ -5179,9 +4953,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 56
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0186
+    {
         .species = SPECIES_POLITOED,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // rain-boosted special breaker
@@ -5200,11 +4973,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Jumpluff ----
-    { // 0189
+    // 0189
+    {
         .species = SPECIES_JUMPLUFF,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // fast sleep + leech seed staller
@@ -5223,9 +4995,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0189
+    {
         .species = SPECIES_JUMPLUFF,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLYING_GEM, // chlorophyll offensive utility
@@ -5244,11 +5015,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sunflora ----
-    { // 0192
+    // 0192
+    {
         .species = SPECIES_SUNFLORA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Chlorophyll sun nuke
@@ -5267,9 +5037,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0192
+    {
         .species = SPECIES_SUNFLORA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // growth sun sweeper
@@ -5288,11 +5057,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Quagsire ----
-    { // 0195
+    // 0195
+    {
         .species = SPECIES_QUAGSIRE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware physical wall
@@ -5311,9 +5079,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0195
+    {
         .species = SPECIES_QUAGSIRE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed bulk water absorber
@@ -5332,11 +5099,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Espeon ----
-    { // 0196
+    // 0196
+    {
         .species = SPECIES_ESPEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Magic Bounce special sweeper
@@ -5355,9 +5121,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0196
+    {
         .species = SPECIES_ESPEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // hazard-bouncing special breaker
@@ -5376,11 +5141,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Umbreon ----
-    { // 0197
+    // 0197
+    {
         .species = SPECIES_UMBREON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // wish-passing special wall
@@ -5399,9 +5163,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0197
+    {
         .species = SPECIES_UMBREON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // physically defensive cleric
@@ -5420,11 +5183,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Slowking ----
-    { // 0199
+    // 0199
+    {
         .species = SPECIES_SLOWKING,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator special wall / pivot
@@ -5443,9 +5205,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 240
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0199
+    {
         .species = SPECIES_SLOWKING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special attacker
@@ -5464,9 +5225,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0199
+    {
         .species = SPECIES_SLOWKING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_TWISTED_SPOON, // calm mind sweeper
@@ -5485,11 +5245,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galarian Slowking ----
-    { // 0199
+    // 0199
+    {
         .species = SPECIES_SLOWKING_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky special pivot
@@ -5508,9 +5267,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0199
+    {
         .species = SPECIES_SLOWKING_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE, // Nasty Plot wallbreaker
@@ -5529,11 +5287,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Wobbuffet ----
-    { // 0202
+    // 0202
+    {
         .species = SPECIES_WOBBUFFET,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shadow Tag trapper
@@ -5552,11 +5309,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 128
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Forretress ----
-    { // 0205
+    // 0205
+    {
         .species = SPECIES_FORRETRESS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // hazard setter / spinner
@@ -5576,9 +5332,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0205
+    {
         .species = SPECIES_FORRETRESS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // physical wall with Volt Switch pivot
@@ -5598,11 +5353,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Steelix ----
-    { // 0208
+    // 0208
+    {
         .species = SPECIES_STEELIX,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Mega Steelix (Sand Force); chips the physical attackers it walls
@@ -5621,9 +5375,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0208
+    {
         .species = SPECIES_STEELIX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy hazard tank (no mega)
@@ -5642,9 +5395,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0208
+    {
         .species = SPECIES_STEELIX,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band trapper-style breaker
@@ -5663,11 +5415,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Granbull ----
-    { // 0210
+    // 0210
+    {
         .species = SPECIES_GRANBULL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Intimidate band breaker
@@ -5686,9 +5437,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0210
+    {
         .species = SPECIES_GRANBULL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot with status
@@ -5707,11 +5457,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Qwilfish ----
-    { // 0211
+    // 0211
+    {
         .species = SPECIES_QWILFISH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Intimidate hazard setter
@@ -5730,9 +5479,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0211
+    {
         .species = SPECIES_QWILFISH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // swift swim rain attacker
@@ -5751,11 +5499,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Scizor ----
-    { // 0212
+    // 0212
+    {
         .species = SPECIES_SCIZOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_METAL_COAT, // Mega Scizor (Technician); Steel STAB boost for Bullet Punch
@@ -5774,9 +5521,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0212
+    {
         .species = SPECIES_SCIZOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Technician band breaker w/ priority
@@ -5795,9 +5541,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0212
+    {
         .species = SPECIES_SCIZOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive defogger / pivot
@@ -5816,11 +5561,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Shuckle ----
-    { // 0213
+    // 0213
+    {
         .species = SPECIES_SHUCKLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MENTAL_HERB, // anti-Taunt support
@@ -5839,11 +5583,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 128
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Heracross ----
-    { // 0214
+    // 0214
+    {
         .species = SPECIES_HERACROSS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_BELT, // Mega Heracross (Skill Link); Fighting STAB boost for the multi-hit breaker
@@ -5862,9 +5605,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0214
+    {
         .species = SPECIES_HERACROSS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Guts band breaker (no mega)
@@ -5883,9 +5625,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0214
+    {
         .species = SPECIES_HERACROSS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Guts self-status breaker
@@ -5904,11 +5645,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ursaring ----
-    { // 0217
+    // 0217
+    {
         .species = SPECIES_URSARING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts Facade wallbreaker
@@ -5927,9 +5667,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0217
+    {
         .species = SPECIES_URSARING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker with coverage
@@ -5948,11 +5687,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Magcargo ----
-    { // 0219
+    // 0219
+    {
         .species = SPECIES_MAGCARGO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Shell Smash + WP payoff
@@ -5971,9 +5709,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0219
+    {
         .species = SPECIES_MAGCARGO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // hazard setter
@@ -5992,11 +5729,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 124
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Corsola ----
-    { // 0222
+    // 0222
+    {
         .species = SPECIES_CORSOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Regenerator wall
@@ -6015,9 +5751,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0222
+    {
         .species = SPECIES_CORSOLA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Natural Cure pivot
@@ -6036,11 +5771,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Octillery ----
-    { // 0224
+    // 0224
+    {
         .species = SPECIES_OCTILLERY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Sniper / special breaker
@@ -6059,9 +5793,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0224
+    {
         .species = SPECIES_OCTILLERY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sniper Life Orb attacker
@@ -6080,11 +5813,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Delibird ----
-    { // 0225
+    // 0225
+    {
         .species = SPECIES_DELIBIRD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // Pure flavor
@@ -6103,11 +5835,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mantine ----
-    { // 0226
+    // 0226
+    {
         .species = SPECIES_MANTINE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky defogger / special wall
@@ -6126,9 +5857,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0226
+    {
         .species = SPECIES_MANTINE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
@@ -6147,11 +5877,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Skarmory ----
-    { // 0227
+    // 0227
+    {
         .species = SPECIES_SKARMORY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // hazard setter physical wall
@@ -6170,9 +5899,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0227
+    {
         .species = SPECIES_SKARMORY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // defogger pivot
@@ -6191,11 +5919,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Houndoom ----
-    { // 0229
+    // 0229
+    {
         .species = SPECIES_HOUNDOOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHARCOAL, // Mega Houndoom (Solar Power); Fire STAB boost
@@ -6214,9 +5941,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0229
+    {
         .species = SPECIES_HOUNDOOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Flash Fire special breaker (no mega)
@@ -6235,9 +5961,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0229
+    {
         .species = SPECIES_HOUNDOOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
@@ -6256,11 +5981,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kingdra ----
-    { // 0230
+    // 0230
+    {
         .species = SPECIES_KINGDRA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
@@ -6279,9 +6003,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0230
+    {
         .species = SPECIES_KINGDRA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // dragon dance physical sweeper
@@ -6300,9 +6023,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0230
+    {
         .species = SPECIES_KINGDRA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // specs special breaker
@@ -6321,11 +6043,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Donphan ----
-    { // 0232
+    // 0232
+    {
         .species = SPECIES_DONPHAN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy hazard setter / spinner
@@ -6344,9 +6065,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0232
+    {
         .species = SPECIES_DONPHAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker with priority
@@ -6365,9 +6085,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0232
+    {
         .species = SPECIES_DONPHAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed bulk pivot
@@ -6386,11 +6105,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Porygon2 ---- (Eviolite NFE niche: Porygon-Z is a glass cannon, Porygon2 the bulky tank)
-    { // 0233
+    // 0233 (Eviolite NFE niche: Porygon-Z is a glass cannon, Porygon2 the bulky tank)
+    {
         .species = SPECIES_PORYGON2,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EVIOLITE, // Trace bulky tank / recovery (Porygon2 NFE niche)
@@ -6409,9 +6127,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0233
+    {
         .species = SPECIES_PORYGON2,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_EVIOLITE, // Download offensive Eviolite pivot
@@ -6430,11 +6147,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Smeargle ----
-    { // 0235
+    // 0235
+    {
         .species = SPECIES_SMEARGLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // suicide lead, hazards + sleep (sash = one-shot guard)
@@ -6453,9 +6169,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0235
+    {
         .species = SPECIES_SMEARGLE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // doubles support lead (Spore + Fake Out)
@@ -6474,11 +6189,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hitmontop ----
-    { // 0237
+    // 0237
+    {
         .species = SPECIES_HITMONTOP,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Intimidate doubles support attacker
@@ -6497,9 +6211,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0237
+    {
         .species = SPECIES_HITMONTOP,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Technician spinner / pivot
@@ -6518,11 +6231,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Miltank ----
-    { // 0241
+    // 0241
+    {
         .species = SPECIES_MILTANK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky physical wall / cleric
@@ -6541,9 +6253,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0241
+    {
         .species = SPECIES_MILTANK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Scrappy band breaker
@@ -6562,11 +6273,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Blissey ----
-    { // 0242
+    // 0242
+    {
         .species = SPECIES_BLISSEY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // special wall / cleric
@@ -6585,9 +6295,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0242
+    {
         .species = SPECIES_BLISSEY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // stallbreaker support with hazards
@@ -6606,11 +6315,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Raikou ----
-    { // 0243
+    // 0243
+    {
         .species = SPECIES_RAIKOU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // calm mind special sweeper
@@ -6629,9 +6337,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0243
+    {
         .species = SPECIES_RAIKOU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // specs special breaker / pivot
@@ -6650,9 +6357,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0243
+    {
         .species = SPECIES_RAIKOU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
@@ -6671,11 +6377,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Entei ----
-    { // 0244
+    // 0244
+    {
         .species = SPECIES_ENTEI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sacred Fire band breaker w/ priority
@@ -6694,9 +6399,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0244
+    {
         .species = SPECIES_ENTEI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
@@ -6715,9 +6419,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0244
+    {
         .species = SPECIES_ENTEI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot
@@ -6736,11 +6439,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Suicune ----
-    { // 0245
+    // 0245
+    {
         .species = SPECIES_SUICUNE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // calm mind bulky sweeper
@@ -6759,9 +6461,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0245
+    {
         .species = SPECIES_SUICUNE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // offensive calm mind sweeper
@@ -6780,9 +6481,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0245
+    {
         .species = SPECIES_SUICUNE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // bulky defogger / wall
@@ -6801,11 +6501,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tyranitar ----
-    { // 0248
+    // 0248
+    {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SMOOTH_ROCK, // Mega Tyranitar (Sand Stream); extends its own sandstorm
@@ -6824,9 +6523,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0248
+    {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sand Stream band breaker
@@ -6845,9 +6543,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0248
+    {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // sand tank with hazards
@@ -6866,9 +6563,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0248
+    {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank in sand
@@ -6887,11 +6583,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lugia ----
-    { // 0249
+    // 0249
+    {
         .species = SPECIES_LUGIA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Multiscale physical wall / defogger
@@ -6910,9 +6605,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0249
+    {
         .species = SPECIES_LUGIA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
@@ -6931,11 +6625,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 60
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ho-Oh ----
-    { // 0250
+    // 0250
+    {
         .species = SPECIES_HO_OH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sacred Fire band breaker
@@ -6954,9 +6647,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0250
+    {
         .species = SPECIES_HO_OH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot / cleric
@@ -6975,11 +6667,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Celebi ---- (innate Levitate — Ground immune, never give an Air Balloon)
-    { // 0251
+    // 0251 (innate Levitate — Ground immune, never give an Air Balloon)
+    {
         .species = SPECIES_CELEBI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
@@ -6998,9 +6689,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0251
+    {
         .species = SPECIES_CELEBI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
@@ -7019,9 +6709,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 16
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0251
+    {
         .species = SPECIES_CELEBI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
@@ -7040,15 +6729,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 60
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
     // ====================================
     // Generation III
     // ====================================
 
-    // ---- Sceptile ----
-    { // 0254
+    // 0254
+    {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MIRACLE_SEED, // Mega Sceptile (Lightning Rod); Grass STAB boost
@@ -7067,9 +6755,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0254
+    {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical Swords Dance sweeper (no mega)
@@ -7088,9 +6775,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0254
+    {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Overgrow special revenge killer
@@ -7109,11 +6795,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Blaziken ----
-    { // 0257
+    // 0257
+    {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Blaziken (Speed Boost); power for the snowballing sweeper
@@ -7132,9 +6817,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0257
+    {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Speed Boost mixed wallbreaker (no mega)
@@ -7153,9 +6837,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0257
+    {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // immediate banded breaker
@@ -7174,11 +6857,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Swampert ----
-    { // 0260
+    // 0260
+    {
         .species = SPECIES_SWAMPERT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MYSTIC_WATER, // Mega Swampert (Swift Swim); Water STAB boost for the rain sweeper
@@ -7197,9 +6879,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0260
+    {
         .species = SPECIES_SWAMPERT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky hazard setter
@@ -7218,9 +6899,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 40
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0260
+    {
         .species = SPECIES_SWAMPERT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed-tank pivot
@@ -7239,11 +6919,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 128
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mightyena ----
-    { // 0262
+    // 0262
+    {
         .species = SPECIES_MIGHTYENA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB, // Quick Feet status-fueled attacker
@@ -7262,9 +6941,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0262
+    {
         .species = SPECIES_MIGHTYENA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Intimidate hit-and-run band
@@ -7283,11 +6961,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Linoone ----
-    { // 0264
+    // 0264
+    {
         .species = SPECIES_LINOONE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Gluttony Belly Drum + Extreme Speed sweeper
@@ -7306,9 +6983,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0264
+    {
         .species = SPECIES_LINOONE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Quick Feet Flame Orb priority breaker
@@ -7327,11 +7003,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Beautifly ----
-    { // 0267
+    // 0267
+    {
         .species = SPECIES_BEAUTIFLY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // Quiver Dance flavor sweeper
@@ -7350,11 +7025,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dustox ----
-    { // 0269
+    // 0269
+    {
         .species = SPECIES_DUSTOX,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // bulky flavor wall
@@ -7373,11 +7047,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ludicolo ----
-    { // 0272
+    // 0272
+    {
         .species = SPECIES_LUDICOLO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
@@ -7396,9 +7069,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0272
+    {
         .species = SPECIES_LUDICOLO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Rain Dish bulky pivot
@@ -7417,9 +7089,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0272
+    {
         .species = SPECIES_LUDICOLO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MYSTIC_WATER, // Water STAB boost for the rain sweeper
@@ -7438,11 +7109,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Shiftry ----
-    { // 0275
+    // 0275
+    {
         .species = SPECIES_SHIFTRY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
@@ -7461,9 +7131,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0275
+    {
         .species = SPECIES_SHIFTRY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Sticky Web lead, sash = one-shot entry guard
@@ -7482,9 +7151,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0275
+    {
         .species = SPECIES_SHIFTRY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Swords-less band breaker
@@ -7503,11 +7171,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Swellow ----
-    { // 0277
+    // 0277
+    {
         .species = SPECIES_SWELLOW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_TOXIC_ORB, // Guts Facade sweeper
@@ -7526,9 +7193,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0277
+    {
         .species = SPECIES_SWELLOW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Scrappy-less band hit-and-run
@@ -7547,11 +7213,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pelipper ----
-    { // 0279
+    // 0279
+    {
         .species = SPECIES_PELIPPER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_DAMP_ROCK, // Drizzle rain setter
@@ -7570,9 +7235,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 8
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0279
+    {
         .species = SPECIES_PELIPPER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Defog pivot
@@ -7591,11 +7255,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 8
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gardevoir ----
-    { // 0282
+    // 0282
+    {
         .species = SPECIES_GARDEVOIR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY, // Mega Gardevoir (Pixilate); Hyper Voice is a sound move -> +SpAtk
@@ -7614,9 +7277,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0282
+    {
         .species = SPECIES_GARDEVOIR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Trace revenge killer (no mega)
@@ -7635,9 +7297,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0282
+    {
         .species = SPECIES_GARDEVOIR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind setup sweeper
@@ -7656,11 +7317,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Masquerain ----
-    { // 0284
+    // 0284
+    {
         .species = SPECIES_MASQUERAIN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Quiver Dance sweeper, sash = one-shot entry guard
@@ -7679,11 +7339,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Breloom ----
-    { // 0286
+    // 0286
+    {
         .species = SPECIES_BRELOOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Technician-less Spore + priority breaker
@@ -7702,9 +7361,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0286
+    {
         .species = SPECIES_BRELOOM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_TOXIC_ORB, // Poison Heal Sub-Punch staller
@@ -7723,9 +7381,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 36
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0286
+    {
         .species = SPECIES_BRELOOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // Spore lead, sash = one-shot entry guard
@@ -7744,11 +7401,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Slaking ----
-    { // 0289
+    // 0289
+    {
         .species = SPECIES_SLAKING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Truant banded wallbreaker
@@ -7767,9 +7423,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0289
+    {
         .species = SPECIES_SLAKING,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // coverage breaker
@@ -7788,9 +7443,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0289
+    {
         .species = SPECIES_SLAKING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SHELL_BELL, // monstrous Attack -> each hit banks a big 1/4 heal, and offsets Double-Edge recoil on the Truant loaf turn
@@ -7809,11 +7463,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ninjask ----
-    { // 0291
+    // 0291
+    {
         .species = SPECIES_NINJASK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Speed Boost fast sweeper
@@ -7832,9 +7485,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0291
+    {
         .species = SPECIES_NINJASK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // baton-pass-style speed control lead
@@ -7853,11 +7505,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Shedinja ----
-    { // 0292
+    // 0292
+    {
         .species = SPECIES_SHEDINJA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Wonder Guard sweeper (boots dodge hazards)
@@ -7876,11 +7527,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Exploud ----
-    { // 0295
+    // 0295
+    {
         .species = SPECIES_EXPLOUD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Boomburst spam breaker
@@ -7899,9 +7549,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0295
+    {
         .species = SPECIES_EXPLOUD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed sound attacker
@@ -7920,11 +7569,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hariyama ----
-    { // 0297
+    // 0297
+    {
         .species = SPECIES_HARIYAMA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts status-fueled bruiser
@@ -7943,9 +7591,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0297
+    {
         .species = SPECIES_HARIYAMA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Thick Fat special tank
@@ -7964,11 +7611,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 88
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Delcatty ----
-    { // 0301
+    // 0301
+    {
         .species = SPECIES_DELCATTY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SILK_SCARF, // Normalized everything
@@ -7987,11 +7633,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sableye ----
-    { // 0302
+    // 0302
+    {
         .species = SPECIES_SABLEYE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Mega Sableye (Magic Bounce); recovery for the defensive pivot
@@ -8010,9 +7655,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0302
+    {
         .species = SPECIES_SABLEYE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Prankster utility staller (no mega)
@@ -8031,11 +7675,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mawile ----
-    { // 0303
+    // 0303
+    {
         .species = SPECIES_MAWILE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FAIRY_FEATHER, // Mega Mawile (Huge Power); Fairy STAB boost for Play Rough
@@ -8054,9 +7697,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0303
+    {
         .species = SPECIES_MAWILE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Intimidate utility setter (no mega)
@@ -8075,11 +7717,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Aggron ----
-    { // 0306
+    // 0306
+    {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Mega Aggron (Filter); chips the physical attackers it walls
@@ -8098,9 +7739,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0306
+    {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Rock Head band breaker (no mega)
@@ -8119,9 +7759,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0306
+    {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Sturdy bait setup tank (no mega)
@@ -8140,11 +7779,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Medicham ----
-    { // 0308
+    // 0308
+    {
         .species = SPECIES_MEDICHAM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_BELT, // Mega Medicham (Pure Power); Fighting STAB boost
@@ -8163,9 +7801,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0308
+    {
         .species = SPECIES_MEDICHAM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // Pure Power revenge killer (no mega)
@@ -8184,11 +7821,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Manectric ----
-    { // 0310
+    // 0310
+    {
         .species = SPECIES_MANECTRIC,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MAGNET, // Mega Manectric (Intimidate); Electric STAB boost
@@ -8207,9 +7843,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0310
+    {
         .species = SPECIES_MANECTRIC,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Lightning Rod special breaker (no mega)
@@ -8228,11 +7863,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Plusle ---- (doubles support)
-    { // 0311
+    // 0311 (doubles support)
+    {
         .species = SPECIES_PLUSLE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Plus partner special attacker
@@ -8251,11 +7885,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Minun ---- (doubles support)
-    { // 0312
+    // 0312 (doubles support)
+    {
         .species = SPECIES_MINUN,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Minus support pivot
@@ -8274,11 +7907,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Volbeat ---- (doubles support)
-    { // 0313
+    // 0313 (doubles support)
+    {
         .species = SPECIES_VOLBEAT,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_DAMP_ROCK, // Prankster Tailwind/Rain support
@@ -8297,11 +7929,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 8
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Illumise ---- (doubles support)
-    { // 0314
+    // 0314 (doubles support)
+    {
         .species = SPECIES_ILLUMISE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster utility setter
@@ -8320,11 +7951,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Swalot ----
-    { // 0317
+    // 0317
+    {
         .species = SPECIES_SWALOT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Sticky Hold status tank
@@ -8343,11 +7973,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sharpedo ----
-    { // 0319
+    // 0319
+    {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Mega Sharpedo (Strong Jaw); Dark STAB boost
@@ -8366,9 +7995,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0319
+    {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Speed Boost wallbreaker (no mega)
@@ -8387,9 +8015,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0319
+    {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // rough-skin revenge killer
@@ -8408,11 +8035,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Wailord ----
-    { // 0321
+    // 0321
+    {
         .species = SPECIES_WAILORD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Water Spout cannon
@@ -8431,11 +8057,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Camerupt ----
-    { // 0323
+    // 0323
+    {
         .species = SPECIES_CAMERUPT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Camerupt (Sheer Force); Sheer Force negates the Life Orb recoil
@@ -8455,9 +8080,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0323
+    {
         .species = SPECIES_CAMERUPT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Solid Rock special wall (no mega)
@@ -8476,11 +8100,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Torkoal ----
-    { // 0324
+    // 0324
+    {
         .species = SPECIES_TORKOAL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAT_ROCK, // Drought sun setter
@@ -8500,9 +8123,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0324
+    {
         .species = SPECIES_TORKOAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // White Smoke defensive setter
@@ -8521,11 +8143,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Grumpig ----
-    { // 0326
+    // 0326
+    {
         .species = SPECIES_GRUMPIG,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat Calm Mind tank
@@ -8544,11 +8165,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Spinda ----
-    { // 0327
+    // 0327
+    {
         .species = SPECIES_SPINDA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Contrary Superpower flavor
@@ -8567,11 +8187,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Flygon ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0330
+    // 0330 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_FLYGON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Levitate banded pivot
@@ -8590,9 +8209,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0330
+    {
         .species = SPECIES_FLYGON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // fast revenge killer
@@ -8611,9 +8229,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0330
+    {
         .species = SPECIES_FLYGON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SOFT_SAND, // Dragon Dance setup sweeper
@@ -8632,9 +8249,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0330
+    {
         .species = SPECIES_FLYGON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // defensive Defog pivot (innate/native Levitate)
@@ -8653,11 +8269,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 60
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cacturne ----
-    { // 0332
+    // 0332
+    {
         .species = SPECIES_CACTURNE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance priority breaker
@@ -8676,9 +8291,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0332
+    {
         .species = SPECIES_CACTURNE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Spikes + Destiny Bond lead, sash = one-shot guard
@@ -8697,11 +8311,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Altaria ---- (Swablu line)
-    { // 0334
+    // 0334 (Swablu line)
+    {
         .species = SPECIES_ALTARIA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FAIRY_FEATHER, // Mega Altaria (Pixilate); boosts its -ate Fairy moves
@@ -8720,9 +8333,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0334
+    {
         .species = SPECIES_ALTARIA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure defensive pivot (no mega)
@@ -8741,11 +8353,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zangoose ----
-    { // 0335
+    // 0335
+    {
         .species = SPECIES_ZANGOOSE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_TOXIC_ORB, // Toxic Boost Facade breaker
@@ -8764,9 +8375,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0335
+    {
         .species = SPECIES_ZANGOOSE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
@@ -8785,11 +8395,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Seviper ----
-    { // 0336
+    // 0336
+    {
         .species = SPECIES_SEVIPER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // mixed special breaker
@@ -8808,11 +8417,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lunatone ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0337
+    // 0337 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_LUNATONE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Levitate Cosmic Power / Trick Room attacker
@@ -8831,9 +8439,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0337
+    {
         .species = SPECIES_LUNATONE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Trick Room setter / Cosmic Power tank
@@ -8853,11 +8460,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Solrock ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0338
+    // 0338 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_SOLROCK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Levitate physical setup attacker
@@ -8876,9 +8482,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0338
+    {
         .species = SPECIES_SOLROCK,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // doubles support / Trick Room
@@ -8898,11 +8503,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Whiscash ----
-    { // 0340
+    // 0340
+    {
         .species = SPECIES_WHISCASH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Dragon Dance bulky sweeper
@@ -8921,11 +8525,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Crawdaunt ----
-    { // 0342
+    // 0342
+    {
         .species = SPECIES_CRAWDAUNT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Adaptability wallbreaker
@@ -8944,9 +8547,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0342
+    {
         .species = SPECIES_CRAWDAUNT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Adaptability band breaker
@@ -8965,9 +8567,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0342
+    {
         .species = SPECIES_CRAWDAUNT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SHELL_BELL, // Adaptability Crabhammer hits enormously hard; the 1/4 heal patches its glassy bulk between swings
@@ -8986,11 +8587,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Claydol ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0344
+    // 0344 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_CLAYDOL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Levitate hazard setter / spinner
@@ -9009,11 +8609,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cradily ----
-    { // 0346
+    // 0346
+    {
         .species = SPECIES_CRADILY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Storm Drain Curse setup tank
@@ -9032,11 +8631,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Armaldo ----
-    { // 0348
+    // 0348
+    {
         .species = SPECIES_ARMALDO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance physical attacker
@@ -9055,9 +8653,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0348
+    {
         .species = SPECIES_ARMALDO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive Rapid Spin + Stealth Rock
@@ -9076,11 +8673,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Milotic ----
-    { // 0350
+    // 0350
+    {
         .species = SPECIES_MILOTIC,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Marvel Scale defensive pivot
@@ -9099,9 +8695,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 8
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0350
+    {
         .species = SPECIES_MILOTIC,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Marvel Scale flame-orb tank
@@ -9120,11 +8715,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 8
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Castform ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0351
+    // 0351 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_CASTFORM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Forecast Weather Ball attacker
@@ -9143,11 +8737,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kecleon ----
-    { // 0352
+    // 0352
+    {
         .species = SPECIES_KECLEON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Color Change special tank
@@ -9166,11 +8759,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Banette ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0354
+    // 0354 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_BANETTE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SPELL_TAG, // Mega Banette (Prankster); Ghost STAB boost for the disruptor
@@ -9189,9 +8781,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0354
+    {
         .species = SPECIES_BANETTE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Destiny Bond trapper (no mega)
@@ -9210,11 +8801,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dusclops ---- (Eviolite NFE wall — INNATE LEVITATE; Dusknoir intentionally omitted)
-    { // 0356
+    // 0356 (Eviolite NFE wall — INNATE LEVITATE; Dusknoir intentionally omitted)
+    {
         .species = SPECIES_DUSCLOPS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EVIOLITE, // Eviolite physical/special wall
@@ -9233,11 +8823,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 88
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tropius ----
-    { // 0357
+    // 0357
+    {
         .species = SPECIES_TROPIUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Harvest Sitrus staller
@@ -9256,11 +8845,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Chimecho ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0358
+    // 0358 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_CHIMECHO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Levitate Calm Mind tank
@@ -9279,11 +8867,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Absol ----
-    { // 0359
+    // 0359
+    {
         .species = SPECIES_ABSOL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Absol (Magic Bounce); power for the Swords Dance sweeper
@@ -9302,9 +8889,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0359
+    {
         .species = SPECIES_ABSOL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Super Luck band breaker (no mega)
@@ -9323,9 +8909,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0359
+    {
         .species = SPECIES_ABSOL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SCOPE_LENS, // Super Luck guaranteed-crit attacker
@@ -9344,11 +8929,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Glalie ---- (Gen III mega OK — INNATE LEVITATE — no Air Balloon)
-    { // 0362
+    // 0362 (Gen III mega OK — INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_GLALIE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_NEVER_MELT_ICE, // Mega Glalie (Refrigerate); boosts its -ate Ice Return
@@ -9367,9 +8951,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0362
+    {
         .species = SPECIES_GLALIE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Spikes + Explosion lead (no mega)
@@ -9388,11 +8971,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Walrein ----
-    { // 0365
+    // 0365
+    {
         .species = SPECIES_WALREIN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat defensive staller
@@ -9411,9 +8993,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0365
+    {
         .species = SPECIES_WALREIN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Thick Fat special tank
@@ -9432,11 +9013,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Huntail ---- (Clamperl line)
-    { // 0367
+    // 0367 (Clamperl line)
+    {
         .species = SPECIES_HUNTAIL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash physical sweeper
@@ -9455,11 +9035,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gorebyss ---- (Clamperl line)
-    { // 0368
+    // 0368 (Clamperl line)
+    {
         .species = SPECIES_GOREBYSS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash special sweeper
@@ -9478,11 +9057,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Relicanth ----
-    { // 0369
+    // 0369
+    {
         .species = SPECIES_RELICANTH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Rock Head Rock Polish setup tank
@@ -9501,9 +9079,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0369
+    {
         .species = SPECIES_RELICANTH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy defensive rocker + Yawn
@@ -9522,11 +9099,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Luvdisc ----
-    { // 0370
+    // 0370
+    {
         .species = SPECIES_LUVDISC,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // pure flavor pivot
@@ -9548,8 +9124,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_LOVE,
     },
 
-    // ---- Salamence ---- (Bagon line)
-    { // 0373
+    // 0373 (Bagon line)
+    {
         .species = SPECIES_SALAMENCE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Salamence (Aerilate); power for the Dragon Dance sweeper
@@ -9568,9 +9144,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0373
+    {
         .species = SPECIES_SALAMENCE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Intimidate revenge killer (no mega)
@@ -9589,9 +9164,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0373
+    {
         .species = SPECIES_SALAMENCE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Draco breaker (no mega)
@@ -9610,11 +9184,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Metagross ---- (Beldum line — INNATE LEVITATE — no Air Balloon)
-    { // 0376
+    // 0376 (Beldum line — INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_METAGROSS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Metagross (Tough Claws); power for the fast physical breaker
@@ -9633,9 +9206,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0376
+    {
         .species = SPECIES_METAGROSS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Clear Body band breaker (no mega)
@@ -9654,9 +9226,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0376
+    {
         .species = SPECIES_METAGROSS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Agility setup / utility tank
@@ -9675,11 +9246,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Regirock ----
-    { // 0377
+    // 0377
+    {
         .species = SPECIES_REGIROCK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Clear Body Curse setup wall
@@ -9698,9 +9268,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 160
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0377
+    {
         .species = SPECIES_REGIROCK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Sturdy bait setup tank
@@ -9719,11 +9288,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Regice ----
-    { // 0378
+    // 0378
+    {
         .species = SPECIES_REGICE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Clear Body special wall
@@ -9742,9 +9310,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0378
+    {
         .species = SPECIES_REGICE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
@@ -9763,11 +9330,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Registeel ----
-    { // 0379
+    // 0379
+    {
         .species = SPECIES_REGISTEEL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Clear Body Curse setup wall
@@ -9786,9 +9352,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0379
+    {
         .species = SPECIES_REGISTEEL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // defensive setter / pivot
@@ -9807,11 +9372,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Latias ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0380
+    // 0380 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_LATIAS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Mega Latias; recovery for the bulky Calm Mind sweeper
@@ -9830,9 +9394,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 132
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0380
+    {
         .species = SPECIES_LATIAS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // defensive Levitate pivot (no mega)
@@ -9851,11 +9414,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Latios ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0381
+    // 0381 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_LATIOS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_DRAGON_FANG, // Mega Latios; Dragon STAB boost for the fast special sweeper
@@ -9874,9 +9436,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0381
+    {
         .species = SPECIES_LATIOS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Levitate special breaker (no mega)
@@ -9895,11 +9456,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kyogre ----
-    { // 0382
+    // 0382
+    {
         .species = SPECIES_KYOGRE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLUE_ORB, // Primal Kyogre (Primordial Sea) — rain nuke
@@ -9918,9 +9478,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0382
+    {
         .species = SPECIES_KYOGRE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Drizzle revenge killer (no primal)
@@ -9939,9 +9498,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0382
+    {
         .species = SPECIES_KYOGRE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind + Rest (rain, no primal)
@@ -9960,11 +9518,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Groudon ----
-    { // 0383
+    // 0383
+    {
         .species = SPECIES_GROUDON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_RED_ORB, // Primal Groudon (Desolate Land) — sun breaker
@@ -9983,9 +9540,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0383
+    {
         .species = SPECIES_GROUDON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Drought bulky setter (no primal)
@@ -10004,11 +9560,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rayquaza ---- (Mega via Dragon Ascent + no item)
-    { // 0384
+    // 0384 (Mega via Dragon Ascent + no item)
+    {
         .species = SPECIES_RAYQUAZA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_NONE, // Mega Rayquaza (Delta Stream, via Dragon Ascent) — Dragon Dance sweeper
@@ -10027,9 +9582,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0384
+    {
         .species = SPECIES_RAYQUAZA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Draco breaker (no Dragon Ascent / no mega)
@@ -10048,11 +9602,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Jirachi ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0385
+    // 0385 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_JIRACHI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Serene Grace flinch revenge killer
@@ -10071,9 +9624,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0385
+    {
         .species = SPECIES_JIRACHI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Serene Grace Wish support / Iron Head flinch
@@ -10092,9 +9644,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0385
+    {
         .species = SPECIES_JIRACHI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind special setup sweeper
@@ -10113,11 +9664,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Deoxys-Attack ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0386
+    // 0386 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_DEOXYS_ATTACK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // glass-cannon mixed attacker
@@ -10136,9 +9686,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0386
+    {
         .species = SPECIES_DEOXYS_ATTACK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // sash glass cannon, one-shot entry guard
@@ -10157,11 +9706,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Deoxys-Speed ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0386
+    // 0386 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_DEOXYS_SPEED,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // hyper-offense hazard lead, one-shot entry guard
@@ -10180,9 +9728,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0386
+    {
         .species = SPECIES_DEOXYS_SPEED,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast Nasty Plot sweeper
@@ -10201,11 +9748,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Deoxys-Defense ---- (INNATE LEVITATE — no Air Balloon)
-    { // 0386
+    // 0386 (INNATE LEVITATE — no Air Balloon)
+    {
         .species = SPECIES_DEOXYS_DEFENSE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky hazard / status wall
@@ -10224,15 +9770,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
     // ====================================
     // Generation IV
     // ====================================
 
-    // ---- Torterra ----
-    { // 0389
+    // 0389
+    {
         .species = SPECIES_TORTERRA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky Rock Polish / Shell Smash setup
@@ -10251,9 +9796,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0389
+    {
         .species = SPECIES_TORTERRA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // bulky hazards + Synthesis
@@ -10272,11 +9816,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Infernape ----
-    { // 0392
+    // 0392
+    {
         .species = SPECIES_INFERNAPE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed wallbreaker
@@ -10295,9 +9838,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0392
+    {
         .species = SPECIES_INFERNAPE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_SASH, // fast suicide lead
@@ -10316,9 +9858,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0392
+    {
         .species = SPECIES_INFERNAPE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
@@ -10337,11 +9878,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Empoleon ----
-    { // 0395
+    // 0395
+    {
         .species = SPECIES_EMPOLEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky special pivot
@@ -10359,9 +9899,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0395
+    {
         .species = SPECIES_EMPOLEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Torrent special breaker
@@ -10380,11 +9919,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Staraptor ----
-    { // 0398
+    // 0398
+    {
         .species = SPECIES_STARAPTOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Reckless band
@@ -10403,9 +9941,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0398
+    {
         .species = SPECIES_STARAPTOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst nuke
@@ -10424,11 +9961,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Bibarel ----
-    { // 0400
+    // 0400
+    {
         .species = SPECIES_BIBAREL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware wall
@@ -10450,8 +9986,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Kricketune ----
-    { // 0402
+    // 0402
+    {
         .species = SPECIES_KRICKETUNE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WIDE_LENS, // Technician Fury Cutter ramp
@@ -10473,8 +10009,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_NET,
     },
 
-    // ---- Luxray ----
-    { // 0405
+    // 0405
+    {
         .species = SPECIES_LUXRAY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Intimidate physical attacker
@@ -10493,9 +10029,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0405
+    {
         .species = SPECIES_LUXRAY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Guts band
@@ -10514,11 +10049,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Roserade ----
-    { // 0407
+    // 0407
+    {
         .species = SPECIES_ROSERADE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // special attacker
@@ -10537,9 +10071,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0407
+    {
         .species = SPECIES_ROSERADE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Technician status spreader
@@ -10558,11 +10091,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rampardos ----
-    { // 0409
+    // 0409
+    {
         .species = SPECIES_RAMPARDOS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Mold Breaker glass cannon
@@ -10581,9 +10113,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0409
+    {
         .species = SPECIES_RAMPARDOS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCK_GEM, // Sheer Force Swords Dance nuke
@@ -10602,11 +10133,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Bastiodon ----
-    { // 0411
+    // 0411
+    {
         .species = SPECIES_BASTIODON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // physically defensive wall
@@ -10625,11 +10155,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Vespiquen ----
-    { // 0416
+    // 0416
+    {
         .species = SPECIES_VESPIQUEN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Pressure stall / defensive pivot
@@ -10648,11 +10177,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pachirisu ----
-    { // 0417
+    // 0417
+    {
         .species = SPECIES_PACHIRISU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Follow Me redirection support
@@ -10671,11 +10199,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 128
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Floatzel ----
-    { // 0419
+    // 0419
+    {
         .species = SPECIES_FLOATZEL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim / fast attacker
@@ -10694,9 +10221,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0419
+    {
         .species = SPECIES_FLOATZEL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // Water Veil band breaker
@@ -10715,11 +10241,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gastrodon ----
-    { // 0423
+    // 0423
+    {
         .species = SPECIES_GASTRODON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Storm Drain special tank
@@ -10738,9 +10263,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0423
+    {
         .species = SPECIES_GASTRODON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Sticky Hold special tank
@@ -10759,11 +10283,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ambipom ----
-    { // 0424
+    // 0424
+    {
         .species = SPECIES_AMBIPOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // Technician Fake Out pivot
@@ -10782,9 +10305,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0424
+    {
         .species = SPECIES_AMBIPOM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
@@ -10803,11 +10325,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Drifblim ----
-    { // 0426
+    // 0426
+    {
         .species = SPECIES_DRIFBLIM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_QUICK_CLAW, // Unburden sweeper
@@ -10826,9 +10347,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0426
+    {
         .species = SPECIES_DRIFBLIM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Flare Boost special attacker
@@ -10847,11 +10367,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lopunny ----
-    { // 0428
+    // 0428
+    {
         .species = SPECIES_LOPUNNY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Lopunny (Scrappy); power for the fast breaker
@@ -10870,9 +10389,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0428
+    {
         .species = SPECIES_LOPUNNY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_TOXIC_ORB, // Klutz Switcheroo / status spreader
@@ -10891,11 +10409,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mismagius (Gen IV evolution of Misdreavus; innate Levitate) ----
-    { // 0429
+    // 0429
+    {
         .species = SPECIES_MISMAGIUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot special sweeper
@@ -10914,9 +10431,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0429
+    {
         .species = SPECIES_MISMAGIUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_COLBUR_BERRY, // utility / Taunt + Will-O-Wisp
@@ -10935,11 +10451,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Honchkrow (Gen IV evolution of Murkrow) ----
-    { // 0430
+    // 0430
+    {
         .species = SPECIES_HONCHKROW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Moxie sweeper
@@ -10958,9 +10473,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0430
+    {
         .species = SPECIES_HONCHKROW,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // Super Luck band (guaranteed crits on crit moves)
@@ -10979,11 +10493,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Purugly ----
-    { // 0432
+    // 0432
+    {
         .species = SPECIES_PURUGLY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF, // Fake Out + Facade attacker
@@ -11002,11 +10515,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Skuntank ----
-    { // 0435
+    // 0435
+    {
         .species = SPECIES_SKUNTANK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Aftermath pivot
@@ -11025,11 +10537,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Bronzong (innate Levitate) ----
-    { // 0437
+    // 0437
+    {
         .species = SPECIES_BRONZONG,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // dual-screen / Trick Room setter
@@ -11049,9 +10560,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room / Gyro Ball
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0437
+    {
         .species = SPECIES_BRONZONG,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIGHT_CLAY, // Heatproof screens wall
@@ -11070,11 +10580,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Chatot ----
-    { // 0441
+    // 0441
+    {
         .species = SPECIES_CHATOT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_THROAT_SPRAY, // Boomburst spam
@@ -11093,11 +10602,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Spiritomb (innate Levitate) ----
-    { // 0442
+    // 0442
+    {
         .species = SPECIES_SPIRITOMB,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Infiltrator Calm Mind wall
@@ -11116,9 +10624,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0442
+    {
         .species = SPECIES_SPIRITOMB,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Pressure / Pursuit trapper
@@ -11137,11 +10644,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Garchomp ----
-    { // 0445
+    // 0445
+    {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SOFT_SAND, // Mega Garchomp (Sand Force); Ground STAB boost
@@ -11160,9 +10666,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0445
+    {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
@@ -11181,9 +10686,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0445
+    {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Rough Skin hazards lead
@@ -11202,11 +10706,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lucario ----
-    { // 0448
+    // 0448
+    {
         .species = SPECIES_LUCARIO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Lucario (Adaptability); power for the mixed breaker
@@ -11225,9 +10728,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0448
+    {
         .species = SPECIES_LUCARIO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot special
@@ -11246,9 +10748,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0448
+    {
         .species = SPECIES_LUCARIO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FIGHTING_GEM, // one-shot Fighting burst after Swords Dance
@@ -11267,11 +10768,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hippowdon ----
-    { // 0450
+    // 0450
+    {
         .species = SPECIES_HIPPOWDON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Sand Stream physical wall
@@ -11290,9 +10790,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0450
+    {
         .species = SPECIES_HIPPOWDON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SMOOTH_ROCK, // sand setter + Slack Off
@@ -11311,11 +10810,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Drapion ----
-    { // 0452
+    // 0452
+    {
         .species = SPECIES_DRAPION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE, // Sniper / Knock Off pivot
@@ -11334,9 +10832,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0452
+    {
         .species = SPECIES_DRAPION,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Swords Dance sweeper
@@ -11355,11 +10852,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Toxicroak ----
-    { // 0454
+    // 0454
+    {
         .species = SPECIES_TOXICROAK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dry Skin rain sweeper
@@ -11378,9 +10874,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0454
+    {
         .species = SPECIES_TOXICROAK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Poison Touch bulk
@@ -11399,11 +10894,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Carnivine (innate Levitate) ----
-    { // 0455
+    // 0455
+    {
         .species = SPECIES_CARNIVINE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance grass attacker
@@ -11422,11 +10916,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lumineon ----
-    { // 0457
+    // 0457
+    {
         .species = SPECIES_LUMINEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Defog/U-turn utility
@@ -11448,8 +10941,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Abomasnow ----
-    { // 0460
+    // 0460
+    {
         .species = SPECIES_ABOMASNOW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ICY_ROCK, // Mega Abomasnow (Snow Warning); extends its own snow
@@ -11468,9 +10961,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0460
+    {
         .species = SPECIES_ABOMASNOW,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ICY_ROCK, // extends its own snow for Aurora Veil + Blizzard
@@ -11489,11 +10981,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Weavile (Gen IV evolution of Sneasel) ----
-    { // 0461
+    // 0461
+    {
         .species = SPECIES_WEAVILE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast physical attacker
@@ -11512,9 +11003,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0461
+    {
         .species = SPECIES_WEAVILE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Swords Dance + Pickpocket
@@ -11533,9 +11023,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0461
+    {
         .species = SPECIES_WEAVILE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_KINGS_ROCK, // base 125 Speed and no flinch move: its opening Knock Off flinches via King's Rock for a free turn
@@ -11554,11 +11043,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Magnezone (Gen IV evolution of Magneton; innate Levitate = Ground-immune) ----
-    { // 0462
+    // 0462
+    {
         .species = SPECIES_MAGNEZONE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Magnet Pull trapper
@@ -11577,9 +11065,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0462
+    {
         // Innate Levitate already dodges Ground, so no Air Balloon needed — run a
         // bulky Analytic special tank instead.
         .species = SPECIES_MAGNEZONE,
@@ -11600,11 +11087,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lickilicky ----
-    { // 0463
+    // 0463
+    {
         .species = SPECIES_LICKILICKY,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Own Tempo Trick Room support
@@ -11624,9 +11110,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0463
+    {
         .species = SPECIES_LICKILICKY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Wish + Protect cleric wall
@@ -11645,11 +11130,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rhyperior (Gen IV evolution of Rhydon) ----
-    { // 0464
+    // 0464
+    {
         .species = SPECIES_RHYPERIOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky Lightning Rod rocker
@@ -11668,9 +11152,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0464
+    {
         .species = SPECIES_RHYPERIOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Solid Rock + WP sweeper
@@ -11689,11 +11172,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tangrowth (Gen IV evolution of Tangela) ----
-    { // 0465
+    // 0465
+    {
         .species = SPECIES_TANGROWTH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator wall
@@ -11712,9 +11194,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0465
+    {
         .species = SPECIES_TANGROWTH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Regenerator physical tank
@@ -11733,11 +11214,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Electivire (Gen IV evolution of Electabuzz) ----
-    { // 0466
+    // 0466
+    {
         .species = SPECIES_ELECTIVIRE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Motor Drive mixed sweeper
@@ -11756,9 +11236,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0466
+    {
         .species = SPECIES_ELECTIVIRE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // bulky Vital Spirit pivot
@@ -11777,11 +11256,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 144
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Magmortar (Gen IV evolution of Magmar) ----
-    { // 0467
+    // 0467
+    {
         .species = SPECIES_MAGMORTAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Vital Spirit special breaker
@@ -11800,9 +11278,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0467
+    {
         .species = SPECIES_MAGMORTAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Vital Spirit revenge killer
@@ -11821,11 +11298,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Togekiss ----
-    { // 0468
+    // 0468
+    {
         .species = SPECIES_TOGEKISS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Serene Grace flinch / Nasty Plot
@@ -11844,9 +11320,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 176
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0468
+    {
         .species = SPECIES_TOGEKISS,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // doubles support (Follow Me + Tailwind)
@@ -11865,11 +11340,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Yanmega (Gen IV evolution of Yanma) ----
-    { // 0469
+    // 0469
+    {
         .species = SPECIES_YANMEGA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Tinted Lens breaker
@@ -11888,9 +11362,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0469
+    {
         .species = SPECIES_YANMEGA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Speed Boost sweeper
@@ -11909,11 +11382,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Leafeon ----
-    { // 0470
+    // 0470
+    {
         .species = SPECIES_LEAFEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll / Swords Dance sweeper
@@ -11932,11 +11404,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Glaceon ----
-    { // 0471
+    // 0471
+    {
         .species = SPECIES_GLACEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -11955,11 +11426,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gliscor ----
-    { // 0472
+    // 0472
+    {
         .species = SPECIES_GLISCOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_TOXIC_ORB, // Poison Heal stall
@@ -11978,9 +11448,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 16
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0472
+    {
         .species = SPECIES_GLISCOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_TOXIC_ORB, // Poison Heal Swords Dance sweeper
@@ -11999,11 +11468,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 12
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mamoswine (Gen IV evolution of Piloswine) ----
-    { // 0473
+    // 0473
+    {
         .species = SPECIES_MAMOSWINE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Thick Fat physical attacker
@@ -12022,9 +11490,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0473
+    {
         .species = SPECIES_MAMOSWINE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
@@ -12043,9 +11510,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0473
+    {
         .species = SPECIES_MAMOSWINE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat tank rocker
@@ -12064,11 +11530,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 240
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Porygon-Z (innate Levitate) ----
-    { // 0474
+    // 0474
+    {
         .species = SPECIES_PORYGON_Z,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Adaptability Nasty Plot nuke
@@ -12087,9 +11552,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0474
+    {
         .species = SPECIES_PORYGON_Z,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Download breaker
@@ -12108,11 +11572,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gallade (Gen IV evolution of Kirlia) ----
-    { // 0475
+    // 0475
+    {
         .species = SPECIES_GALLADE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Gallade (Inner Focus); power for the Swords Dance sweeper
@@ -12131,9 +11594,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0475
+    {
         .species = SPECIES_GALLADE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Sharpness slicer
@@ -12152,11 +11614,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Probopass ----
-    { // 0476
+    // 0476
+    {
         .species = SPECIES_PROBOPASS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Magnet Pull steel trapper / hazards
@@ -12175,11 +11636,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dusknoir (Gen IV evolution of Dusclops) ----
-    { // 0477
+    // 0477
+    {
         .species = SPECIES_DUSKNOIR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky utility / Pain Split
@@ -12198,9 +11658,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0477
+    {
         .species = SPECIES_DUSKNOIR,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker
@@ -12220,11 +11679,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Froslass (innate Levitate) ----
-    { // 0478
+    // 0478
+    {
         .species = SPECIES_FROSLASS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // fast spikes / Destiny Bond lead
@@ -12243,9 +11701,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0478
+    {
         .species = SPECIES_FROSLASS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Snow Cloak offensive
@@ -12264,11 +11721,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rotom-Heat (innate Levitate) ----
-    { // 0479
+    // 0479
+    {
         .species = SPECIES_ROTOM_HEAT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // fire/electric breaker
@@ -12287,9 +11743,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0479
+    {
         .species = SPECIES_ROTOM_HEAT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot
@@ -12308,11 +11763,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 16
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rotom-Wash (innate Levitate) ----
-    { // 0479
+    // 0479
+    {
         .species = SPECIES_ROTOM_WASH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky water/electric pivot
@@ -12331,9 +11785,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 92
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0479
+    {
         .species = SPECIES_ROTOM_WASH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge pivot
@@ -12352,11 +11805,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rotom-Mow (innate Levitate) ----
-    { // 0479
+    // 0479
+    {
         .species = SPECIES_ROTOM_MOW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // grass/electric attacker
@@ -12375,11 +11827,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rotom ----
-    { // 0479
+    // 0479
+    {
         .species = SPECIES_ROTOM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Levitate, no Air Balloon
@@ -12398,11 +11849,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rotom-Frost ----
-    { // 0479
+    // 0479
+    {
         .species = SPECIES_ROTOM_FROST,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Levitate, no Air Balloon
@@ -12421,11 +11871,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rotom-Fan ----
-    { // 0479
+    // 0479
+    {
         .species = SPECIES_ROTOM_FAN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Levitate, no Air Balloon
@@ -12444,11 +11893,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Uxie (innate Levitate) ----
-    { // 0480
+    // 0480
+    {
         .species = SPECIES_UXIE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // dual-screen / hazards wall
@@ -12467,11 +11915,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mesprit (innate Levitate) ----
-    { // 0481
+    // 0481
+    {
         .species = SPECIES_MESPRIT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed pivot
@@ -12490,11 +11937,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Azelf (innate Levitate) ----
-    { // 0482
+    // 0482
+    {
         .species = SPECIES_AZELF,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // fast suicide lead
@@ -12513,9 +11959,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0482
+    {
         .species = SPECIES_AZELF,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
@@ -12534,11 +11979,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dialga ----
-    { // 0483
+    // 0483
+    {
         .species = SPECIES_DIALGA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky special legend
@@ -12557,9 +12001,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0483
+    {
         .species = SPECIES_DIALGA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Roar of Time breaker
@@ -12578,11 +12021,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dialga-Origin ----
-    { // 0483
+    // 0483
+    {
         .species = SPECIES_DIALGA_ORIGIN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ADAMANT_CRYSTAL, // forme-locked item
@@ -12601,11 +12043,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Palkia ----
-    { // 0484
+    // 0484
+    {
         .species = SPECIES_PALKIA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast special legend
@@ -12624,9 +12065,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0484
+    {
         .species = SPECIES_PALKIA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge legend
@@ -12645,11 +12085,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Palkia-Origin ----
-    { // 0484
+    // 0484
+    {
         .species = SPECIES_PALKIA_ORIGIN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LUSTROUS_GLOBE, // forme-locked item
@@ -12668,11 +12107,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Heatran ----
-    { // 0485
+    // 0485
+    {
         .species = SPECIES_HEATRAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Flash Fire pivot / hazards
@@ -12691,9 +12129,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 100
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0485
+    {
         .species = SPECIES_HEATRAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -12712,11 +12149,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Regigigas ----
-    { // 0486
+    // 0486
+    {
         .species = SPECIES_REGIGIGAS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Slow Start sit-out with Substitute
@@ -12735,11 +12171,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Giratina (Altered, innate Levitate) ----
-    { // 0487
+    // 0487
+    {
         .species = SPECIES_GIRATINA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Will-O / Defog wall
@@ -12758,11 +12193,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Giratina-Origin (innate Levitate) ----
-    { // 0487
+    // 0487
+    {
         .species = SPECIES_GIRATINA_ORIGIN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_GRISEOUS_ORB, // Origin forme nuke
@@ -12781,11 +12215,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cresselia (innate Levitate) ----
-    { // 0488
+    // 0488
+    {
         .species = SPECIES_CRESSELIA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky sweeper
@@ -12804,9 +12237,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0488
+    {
         .species = SPECIES_CRESSELIA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // doubles support
@@ -12825,11 +12257,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Phione ----
-    { // 0489
+    // 0489
+    {
         .species = SPECIES_PHIONE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind staller
@@ -12848,11 +12279,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Manaphy ----
-    { // 0490
+    // 0490
+    {
         .species = SPECIES_MANAPHY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Tail Glow sweeper
@@ -12871,9 +12301,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0490
+    {
         .species = SPECIES_MANAPHY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MYSTIC_WATER, // hard-hitting setup
@@ -12892,11 +12321,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Darkrai (innate Levitate) ----
-    { // 0491
+    // 0491
+    {
         .species = SPECIES_DARKRAI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot / Dark Void sweeper
@@ -12915,11 +12343,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Shaymin (Land) ----
-    { // 0492
+    // 0492
+    {
         .species = SPECIES_SHAYMIN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Natural Cure Seed Flare / Synthesis
@@ -12938,11 +12365,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Shaymin-Sky ----
-    { // 0492
+    // 0492
+    {
         .species = SPECIES_SHAYMIN_SKY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Serene Grace Air Slash flincher
@@ -12961,11 +12387,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Arceus ----
-    { // 0493
+    // 0493
+    {
         .species = SPECIES_ARCEUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Extreme Speed Swords Dance sweeper
@@ -12984,9 +12409,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0493
+    {
         .species = SPECIES_ARCEUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind special sweeper
@@ -13005,15 +12429,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
     // ====================================
     // Generation V
     // ====================================
 
-    // ---- Victini ----
-    { // 0494
+    // 0494
+    {
         .species = SPECIES_VICTINI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHARCOAL, // V-create physical wallbreaker
@@ -13032,9 +12455,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0494
+    {
         .species = SPECIES_VICTINI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EXPERT_BELT, // special mixed coverage
@@ -13053,11 +12475,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Serperior ----
-    { // 0497
+    // 0497
+    {
         .species = SPECIES_SERPERIOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Contrary Leaf Storm sweeper
@@ -13076,9 +12497,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0497
+    {
         .species = SPECIES_SERPERIOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Sub + Glare pivot
@@ -13097,11 +12517,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Emboar ----
-    { // 0500
+    // 0500
+    {
         .species = SPECIES_EMBOAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Reckless wallbreaker
@@ -13120,9 +12539,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0500
+    {
         .species = SPECIES_EMBOAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed attacker
@@ -13141,11 +12559,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Samurott ----
-    { // 0503
+    // 0503
+    {
         .species = SPECIES_SAMUROTT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Swords Dance attacker
@@ -13164,9 +12581,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0503
+    {
         .species = SPECIES_SAMUROTT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
@@ -13185,11 +12601,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Samurott-Hisui ----
-    { // 0503
+    // 0503
+    {
         .species = SPECIES_SAMUROTT_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // Sharpness Ceaseless Edge lead
@@ -13208,9 +12623,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0503
+    {
         .species = SPECIES_SAMUROTT_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sharpness Swords Dance sweeper
@@ -13229,11 +12643,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Watchog ----
-    { // 0505
+    // 0505
+    {
         .species = SPECIES_WATCHOG,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EXPERT_BELT, // Analytic coverage
@@ -13252,11 +12665,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Stoutland ----
-    { // 0508
+    // 0508
+    {
         .species = SPECIES_STOUTLAND,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sand Rush band
@@ -13275,9 +12687,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0508
+    {
         .species = SPECIES_STOUTLAND,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Intimidate physical wall
@@ -13296,11 +12707,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Liepard ----
-    { // 0510
+    // 0510
+    {
         .species = SPECIES_LIEPARD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // prankster support
@@ -13319,11 +12729,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Simisage ----
-    { // 0512
+    // 0512
+    {
         .species = SPECIES_SIMISAGE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Nasty Plot mixed
@@ -13342,11 +12751,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Simisear ----
-    { // 0514
+    // 0514
+    {
         .species = SPECIES_SIMISEAR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHARCOAL, // Nasty Plot fire
@@ -13365,11 +12773,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Simipour ----
-    { // 0516
+    // 0516
+    {
         .species = SPECIES_SIMIPOUR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MYSTIC_WATER, // Nasty Plot water
@@ -13388,11 +12795,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Musharna (innate Levitate per roster rule) ----
-    { // 0518
+    // 0518
+    {
         .species = SPECIES_MUSHARNA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
@@ -13411,9 +12817,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0518
+    {
         .species = SPECIES_MUSHARNA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Telepathy Trick Room setter
@@ -13433,11 +12838,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Unfezant ----
-    { // 0521
+    // 0521
+    {
         .species = SPECIES_UNFEZANT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SCOPE_LENS, // Super Luck guaranteed crits
@@ -13456,11 +12860,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zebstrika ----
-    { // 0523
+    // 0523
+    {
         .species = SPECIES_ZEBSTRIKA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_EXPERT_BELT, // fast Motor Drive attacker
@@ -13479,11 +12882,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gigalith ----
-    { // 0526
+    // 0526
+    {
         .species = SPECIES_GIGALITH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // sand setter
@@ -13502,9 +12904,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0526
+    {
         .species = SPECIES_GIGALITH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HARD_STONE, // Sand Force hitter
@@ -13523,11 +12924,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Swoobat ----
-    { // 0528
+    // 0528
+    {
         .species = SPECIES_SWOOBAT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Simple Calm Mind + Stored Power
@@ -13546,11 +12946,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Excadrill ----
-    { // 0530
+    // 0530
+    {
         .species = SPECIES_EXCADRILL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sand Rush sweeper
@@ -13569,9 +12968,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0530
+    {
         .species = SPECIES_EXCADRILL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Mold Breaker hazard lead + spinner
@@ -13590,9 +12988,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0530
+    {
         .species = SPECIES_EXCADRILL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
@@ -13611,11 +13008,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Audino ----
-    { // 0531
+    // 0531
+    {
         .species = SPECIES_AUDINO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator cleric wall
@@ -13634,11 +13030,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 128
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Conkeldurr ----
-    { // 0534
+    // 0534
+    {
         .species = SPECIES_CONKELDURR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts bulk-up tank
@@ -13657,9 +13052,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0534
+    {
         .species = SPECIES_CONKELDURR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Sheer Force mixed tank
@@ -13678,11 +13072,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Seismitoad ----
-    { // 0537
+    // 0537
+    {
         .species = SPECIES_SEISMITOAD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
@@ -13701,9 +13094,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0537
+    {
         .species = SPECIES_SEISMITOAD,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky pivot
@@ -13722,11 +13114,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Throh ----
-    { // 0538
+    // 0538
+    {
         .species = SPECIES_THROH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Guts Bulk Up tank
@@ -13745,11 +13136,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sawk ----
-    { // 0539
+    // 0539
+    {
         .species = SPECIES_SAWK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Mold Breaker revenge killer
@@ -13768,9 +13158,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0539
+    {
         .species = SPECIES_SAWK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sturdy breaker band
@@ -13789,11 +13178,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Leavanny ----
-    { // 0542
+    // 0542
+    {
         .species = SPECIES_LEAVANNY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance attacker
@@ -13812,9 +13200,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0542
+    {
         .species = SPECIES_LEAVANNY,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Sticky Web lead
@@ -13833,11 +13220,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Scolipede ----
-    { // 0545
+    // 0545
+    {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Speed Boost sweeper
@@ -13856,9 +13242,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0545
+    {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Tailwind support
@@ -13877,11 +13262,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Whimsicott (innate Levitate + innate Prankster; chosen Infiltrator) ----
-    { // 0547
+    // 0547
+    {
         .species = SPECIES_WHIMSICOTT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Prankster utility pivot
@@ -13900,9 +13284,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0547
+    {
         .species = SPECIES_WHIMSICOTT,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Prankster Tailwind + redirect support
@@ -13921,11 +13304,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lilligant ----
-    { // 0549
+    // 0549
+    {
         .species = SPECIES_LILLIGANT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Quiver Dance sweeper
@@ -13944,9 +13326,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0549
+    {
         .species = SPECIES_LILLIGANT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Chlorophyll sun sweeper
@@ -13965,11 +13346,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lilligant-Hisui ----
-    { // 0549
+    // 0549
+    {
         .species = SPECIES_LILLIGANT_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll Victory Dance sweeper
@@ -13988,9 +13368,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0549
+    {
         .species = SPECIES_LILLIGANT_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // sash setup sweeper
@@ -14009,11 +13388,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Krookodile ----
-    { // 0553
+    // 0553
+    {
         .species = SPECIES_KROOKODILE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Moxie band
@@ -14032,9 +13410,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0553
+    {
         .species = SPECIES_KROOKODILE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Intimidate bulky hazard lead
@@ -14053,11 +13430,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Darmanitan ----
-    { // 0555
+    // 0555
+    {
         .species = SPECIES_DARMANITAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Sheer Force revenge killer
@@ -14076,9 +13452,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0555
+    {
         .species = SPECIES_DARMANITAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force band wallbreaker
@@ -14097,9 +13472,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0555
+    {
         .species = SPECIES_DARMANITAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SHELL_BELL, // Sheer Force Flare Blitz hits huge but Sheer Force does not strip its recoil; the 1/4 heal pays that recoil back
@@ -14118,11 +13492,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galarian Darmanitan ----
-    { // 0555
+    // 0555
+    {
         .species = SPECIES_DARMANITAN_GALAR_STANDARD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Gorilla Tactics revenge killer
@@ -14141,9 +13514,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0555
+    {
         .species = SPECIES_DARMANITAN_GALAR_STANDARD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // wallbreaker
@@ -14162,11 +13534,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Maractus ----
-    { // 0556
+    // 0556
+    {
         .species = SPECIES_MARACTUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
@@ -14185,11 +13556,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Crustle ----
-    { // 0558
+    // 0558
+    {
         .species = SPECIES_CRUSTLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper
@@ -14208,11 +13578,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Scrafty ----
-    { // 0560
+    // 0560
+    {
         .species = SPECIES_SCRAFTY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up Moxie sweeper
@@ -14231,9 +13600,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0560
+    {
         .species = SPECIES_SCRAFTY,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Intimidate Fake Out support tank
@@ -14252,11 +13620,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sigilyph ----
-    { // 0561
+    // 0561
+    {
         .species = SPECIES_SIGILYPH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Magic Guard Cosmic Power stallbreaker
@@ -14275,9 +13642,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0561
+    {
         .species = SPECIES_SIGILYPH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // special attacker
@@ -14296,11 +13662,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cofagrigus (innate Levitate) ----
-    { // 0563
+    // 0563
+    {
         .species = SPECIES_COFAGRIGUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Mummy bulky special wall
@@ -14319,9 +13684,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0563
+    {
         .species = SPECIES_COFAGRIGUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Nasty Plot Trick Room attacker
@@ -14341,11 +13705,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Carracosta ----
-    { // 0565
+    // 0565
+    {
         .species = SPECIES_CARRACOSTA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Solid Rock Shell Smash sweeper
@@ -14364,11 +13727,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Archeops ----
-    { // 0567
+    // 0567
+    {
         .species = SPECIES_ARCHEOPS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLYING_GEM, // glass cannon (Defeatist drawback)
@@ -14387,9 +13749,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0567
+    {
         .species = SPECIES_ARCHEOPS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // fast hazard lead
@@ -14408,11 +13769,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Garbodor ----
-    { // 0569
+    // 0569
+    {
         .species = SPECIES_GARBODOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Aftermath hazard setter
@@ -14431,9 +13791,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0569
+    {
         .species = SPECIES_GARBODOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Weak Armor attacker
@@ -14452,11 +13811,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zoroark ----
-    { // 0571
+    // 0571
+    {
         .species = SPECIES_ZOROARK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Illusion mixed attacker
@@ -14475,9 +13833,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0571
+    {
         .species = SPECIES_ZOROARK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Illusion special breaker
@@ -14496,11 +13853,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zoroark-Hisui ----
-    { // 0571
+    // 0571
+    {
         .species = SPECIES_ZOROARK_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Illusion Normal/Ghost breaker
@@ -14519,9 +13875,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0571
+    {
         .species = SPECIES_ZOROARK_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
@@ -14540,11 +13895,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cinccino ----
-    { // 0573
+    // 0573
+    {
         .species = SPECIES_CINCCINO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Skill Link multi-hit sweeper
@@ -14563,9 +13917,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0573
+    {
         .species = SPECIES_CINCCINO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Skill Link band
@@ -14584,11 +13937,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gothitelle ----
-    { // 0576
+    // 0576
+    {
         .species = SPECIES_GOTHITELLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shadow Tag Calm Mind trapper
@@ -14607,11 +13959,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Reuniclus (innate Levitate per roster rule) ----
-    { // 0579
+    // 0579
+    {
         .species = SPECIES_REUNICLUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Magic Guard Calm Mind tank
@@ -14630,9 +13981,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0579
+    {
         .species = SPECIES_REUNICLUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Trick Room attacker
@@ -14652,11 +14002,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Swanna ----
-    { // 0581
+    // 0581
+    {
         .species = SPECIES_SWANNA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // hydration / offensive pivot
@@ -14675,11 +14024,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Vanilluxe (innate Levitate per roster rule) ----
-    { // 0584
+    // 0584
+    {
         .species = SPECIES_VANILLUXE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Snow Warning special attacker
@@ -14698,11 +14046,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sawsbuck ----
-    { // 0586
+    // 0586
+    {
         .species = SPECIES_SAWSBUCK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll Swords Dance sweeper
@@ -14721,9 +14068,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0586
+    {
         .species = SPECIES_SAWSBUCK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sap Sipper band
@@ -14742,11 +14088,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Emolga ----
-    { // 0587
+    // 0587
+    {
         .species = SPECIES_EMOLGA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // doubles support glider
@@ -14765,11 +14110,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Escavalier ----
-    { // 0589
+    // 0589
+    {
         .species = SPECIES_ESCAVALIER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Swarm band breaker
@@ -14788,9 +14132,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0589
+    {
         .species = SPECIES_ESCAVALIER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Overcoat bulky tank
@@ -14809,11 +14152,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Amoonguss ----
-    { // 0591
+    // 0591
+    {
         .species = SPECIES_AMOONGUSS,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET, // Regenerator Rage Powder redirect
@@ -14832,9 +14174,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0591
+    {
         .species = SPECIES_AMOONGUSS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Regenerator status wall
@@ -14853,11 +14194,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Jellicent (innate Levitate per roster rule) ----
-    { // 0593
+    // 0593
+    {
         .species = SPECIES_JELLICENT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky spinblocker
@@ -14876,9 +14216,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0593
+    {
         .species = SPECIES_JELLICENT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Cursed Body special wall
@@ -14897,11 +14236,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Alomomola ----
-    { // 0594
+    // 0594
+    {
         .species = SPECIES_ALOMOMOLA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator Wish wall
@@ -14920,11 +14258,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Galvantula ----
-    { // 0596
+    // 0596
+    {
         .species = SPECIES_GALVANTULA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Compound Eyes Sticky Web lead
@@ -14943,9 +14280,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0596
+    {
         .species = SPECIES_GALVANTULA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // special attacker
@@ -14964,11 +14300,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ferrothorn ----
-    { // 0598
+    // 0598
+    {
         .species = SPECIES_FERROTHORN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Iron Barbs hazard wall
@@ -14988,9 +14323,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0598
+    {
         .species = SPECIES_FERROTHORN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Iron Barbs + Helmet contact punisher
@@ -15010,11 +14344,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Klinklang (innate Levitate per roster rule) ----
-    { // 0601
+    // 0601
+    {
         .species = SPECIES_KLINKLANG,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Clear Body Shift Gear sweeper
@@ -15033,11 +14366,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Eelektross (native Levitate) ----
-    { // 0604
+    // 0604
+    {
         .species = SPECIES_EELEKTROSS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Levitate mixed tank
@@ -15056,9 +14388,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0604
+    {
         .species = SPECIES_EELEKTROSS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Coil physical attacker
@@ -15077,11 +14408,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Beheeyem (innate Levitate per roster rule) ----
-    { // 0606
+    // 0606
+    {
         .species = SPECIES_BEHEEYEM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Trick Room attacker
@@ -15101,11 +14431,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Chandelure (innate Levitate per roster rule) ----
-    { // 0609
+    // 0609
+    {
         .species = SPECIES_CHANDELURE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Infiltrator revenge killer
@@ -15124,9 +14453,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0609
+    {
         .species = SPECIES_CHANDELURE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Flash Fire Calm Mind sweeper
@@ -15145,9 +14473,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0609
+    {
         .species = SPECIES_CHANDELURE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Trick Room wallbreaker
@@ -15167,11 +14494,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Haxorus ----
-    { // 0612
+    // 0612
+    {
         .species = SPECIES_HAXORUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mold Breaker Dragon Dance sweeper
@@ -15190,9 +14516,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0612
+    {
         .species = SPECIES_HAXORUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Mold Breaker band breaker
@@ -15211,11 +14536,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Beartic ----
-    { // 0614
+    // 0614
+    {
         .species = SPECIES_BEARTIC,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swift Swim Swords Dance sweeper
@@ -15234,11 +14558,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cryogonal (innate Levitate per roster rule) ----
-    { // 0615
+    // 0615
+    {
         .species = SPECIES_CRYOGONAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Levitate special wall + Rapid Spin
@@ -15257,11 +14580,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Accelgor ----
-    { // 0617
+    // 0617
+    {
         .species = SPECIES_ACCELGOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // fast lead, survives one hit
@@ -15282,7 +14604,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_BUG,
         .ball = BALL_NET,
     },
-    { // 0617
+    {
         .species = SPECIES_ACCELGOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // disruptive Yawn/Encore lead
@@ -15304,8 +14626,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_NET,
     },
 
-    // ---- Galarian Stunfisk ----
-    { // 0618
+    // 0618
+    {
         .species = SPECIES_STUNFISK_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // defensive trapper
@@ -15324,9 +14646,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0618
+    {
         .species = SPECIES_STUNFISK_GALAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // bulky utility
@@ -15345,11 +14666,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Stunfisk ----
-    { // 0618
+    // 0618
+    {
         .species = SPECIES_STUNFISK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky Ground/Electric pivot
@@ -15368,11 +14688,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mienshao ----
-    { // 0620
+    // 0620
+    {
         .species = SPECIES_MIENSHAO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Regenerator revenge killer / pivot
@@ -15391,9 +14710,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0620
+    {
         .species = SPECIES_MIENSHAO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Reckless wallbreaker
@@ -15412,11 +14730,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Druddigon ----
-    { // 0621
+    // 0621
+    {
         .species = SPECIES_DRUDDIGON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Rough Skin bulky pivot
@@ -15435,9 +14752,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0621
+    {
         .species = SPECIES_DRUDDIGON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force band
@@ -15456,11 +14772,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Golurk ----
-    { // 0623
+    // 0623
+    {
         .species = SPECIES_GOLURK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // No Guard band breaker
@@ -15479,9 +14794,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0623
+    {
         .species = SPECIES_GOLURK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Iron Fist bulky hazard lead
@@ -15500,11 +14814,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Bouffalant ----
-    { // 0626
+    // 0626
+    {
         .species = SPECIES_BOUFFALANT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Reckless head-charge band
@@ -15523,11 +14836,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Braviary ----
-    { // 0628
+    // 0628
+    {
         .species = SPECIES_BRAVIARY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Defiant band
@@ -15546,9 +14858,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0628
+    {
         .species = SPECIES_BRAVIARY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Sheer Force Bulk Up sweeper
@@ -15567,11 +14878,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Braviary-Hisui ----
-    { // 0628
+    // 0628
+    {
         .species = SPECIES_BRAVIARY_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Tinted Lens special attacker
@@ -15590,9 +14900,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0628
+    {
         .species = SPECIES_BRAVIARY_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind sweeper
@@ -15611,11 +14920,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mandibuzz ----
-    { // 0630
+    // 0630
+    {
         .species = SPECIES_MANDIBUZZ,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Overcoat defensive Defog pivot
@@ -15634,9 +14942,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0630
+    {
         .species = SPECIES_MANDIBUZZ,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Weak Armor physical wall
@@ -15655,11 +14962,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Heatmor ----
-    { // 0631
+    // 0631
+    {
         .species = SPECIES_HEATMOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // White Smoke mixed attacker
@@ -15678,11 +14984,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Durant ----
-    { // 0632
+    // 0632
+    {
         .species = SPECIES_DURANT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Hustle band breaker
@@ -15701,9 +15006,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0632
+    {
         .species = SPECIES_DURANT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swarm Hone Claws sweeper
@@ -15722,11 +15026,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hydreigon (native Levitate) ----
-    { // 0635
+    // 0635
+    {
         .species = SPECIES_HYDREIGON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Levitate revenge killer
@@ -15745,9 +15048,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0635
+    {
         .species = SPECIES_HYDREIGON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
@@ -15766,9 +15068,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0635
+    {
         .species = SPECIES_HYDREIGON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Defog pivot
@@ -15787,11 +15088,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 96
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Volcarona ----
-    { // 0637
+    // 0637
+    {
         .species = SPECIES_VOLCARONA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Quiver Dance sweeper
@@ -15810,9 +15110,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0637
+    {
         .species = SPECIES_VOLCARONA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Quiver Dance + Roost
@@ -15831,11 +15130,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 100
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cobalion ----
-    { // 0638
+    // 0638
+    {
         .species = SPECIES_COBALION,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Justified Swords Dance setup
@@ -15854,9 +15152,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0638
+    {
         .species = SPECIES_COBALION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer / pivot
@@ -15875,11 +15172,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Terrakion ----
-    { // 0639
+    // 0639
+    {
         .species = SPECIES_TERRAKION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Justified band breaker
@@ -15898,9 +15194,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0639
+    {
         .species = SPECIES_TERRAKION,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Swords Dance / hazard lead
@@ -15919,11 +15214,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Virizion ----
-    { // 0640
+    // 0640
+    {
         .species = SPECIES_VIRIZION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
@@ -15942,9 +15236,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0640
+    {
         .species = SPECIES_VIRIZION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Calm Mind special tank
@@ -15963,11 +15256,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tornadus ----
-    { // 0641
+    // 0641
+    {
         .species = SPECIES_TORNADUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Prankster offensive pivot
@@ -15986,9 +15278,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0641
+    {
         .species = SPECIES_TORNADUS,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Prankster Tailwind support
@@ -16007,11 +15298,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tornadus-Therian ----
-    { // 0641
+    // 0641
+    {
         .species = SPECIES_TORNADUS_THERIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Regenerator special pivot
@@ -16030,11 +15320,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Thundurus ----
-    { // 0642
+    // 0642
+    {
         .species = SPECIES_THUNDURUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Prankster mixed attacker
@@ -16053,9 +15342,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0642
+    {
         .species = SPECIES_THUNDURUS,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Prankster Thunder Wave support
@@ -16074,11 +15362,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Thundurus-Therian ----
-    { // 0642
+    // 0642
+    {
         .species = SPECIES_THUNDURUS_THERIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Volt Absorb revenge killer
@@ -16097,11 +15384,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Reshiram ----
-    { // 0643
+    // 0643
+    {
         .species = SPECIES_RESHIRAM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Turboblaze special breaker
@@ -16120,9 +15406,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0643
+    {
         .species = SPECIES_RESHIRAM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Roost attacker
@@ -16141,11 +15426,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 56
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zekrom ----
-    { // 0644
+    // 0644
+    {
         .species = SPECIES_ZEKROM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Teravolt Dragon Dance sweeper
@@ -16164,9 +15448,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0644
+    {
         .species = SPECIES_ZEKROM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Teravolt band breaker
@@ -16185,11 +15468,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Landorus ----
-    { // 0645
+    // 0645
+    {
         .species = SPECIES_LANDORUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sheer Force special nuke
@@ -16208,11 +15490,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Landorus-Therian ----
-    { // 0645
+    // 0645
+    {
         .species = SPECIES_LANDORUS_THERIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Intimidate revenge killer
@@ -16231,9 +15512,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0645
+    {
         .species = SPECIES_LANDORUS_THERIAN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Intimidate bulky hazard pivot
@@ -16252,11 +15532,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 40
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kyurem ----
-    { // 0646
+    // 0646
+    {
         .species = SPECIES_KYUREM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Pressure special breaker
@@ -16275,9 +15554,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0646
+    {
         .species = SPECIES_KYUREM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sub-Roost stallbreaker
@@ -16296,11 +15574,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 56
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kyurem-Black ----
-    { // 0646
+    // 0646
+    {
         .species = SPECIES_KYUREM_BLACK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Teravolt physical breaker
@@ -16319,9 +15596,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0646
+    {
         .species = SPECIES_KYUREM_BLACK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dragon Dance sweeper
@@ -16340,11 +15616,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kyurem-White ----
-    { // 0646
+    // 0646
+    {
         .species = SPECIES_KYUREM_WHITE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Turboblaze special nuke
@@ -16363,11 +15638,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Keldeo ----
-    { // 0647
+    // 0647
+    {
         .species = SPECIES_KELDEO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Justified special breaker
@@ -16386,9 +15660,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0647
+    {
         .species = SPECIES_KELDEO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
@@ -16407,11 +15680,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Meloetta ----
-    { // 0648
+    // 0648
+    {
         .species = SPECIES_MELOETTA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Serene Grace Calm Mind attacker
@@ -16430,9 +15702,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0648
+    {
         .species = SPECIES_MELOETTA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special pivot
@@ -16451,11 +15722,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Genesect ----
-    { // 0649
+    // 0649
+    {
         .species = SPECIES_GENESECT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Download revenge killer / pivot
@@ -16474,9 +15744,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0649
+    {
         .species = SPECIES_GENESECT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Download Techno Blast attacker
@@ -16495,15 +15764,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
     // ====================================
     // Generation VI
     // ====================================
 
-    // ---- Chesnaught ----
-    { // 0652
+    // 0652
+    {
         .species = SPECIES_CHESNAUGHT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Spikes / pivot wall
@@ -16522,9 +15790,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0652
+    {
         .species = SPECIES_CHESNAUGHT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // mixed bulky attacker
@@ -16543,9 +15810,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0652
+    {
         .species = SPECIES_CHESNAUGHT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance breaker
@@ -16564,11 +15830,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Delphox ----
-    { // 0655
+    // 0655
+    {
         .species = SPECIES_DELPHOX,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -16587,9 +15852,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0655
+    {
         .species = SPECIES_DELPHOX,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
@@ -16608,9 +15872,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0655
+    {
         .species = SPECIES_DELPHOX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sub stallbreaker
@@ -16629,11 +15892,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Greninja ----
-    { // 0658
+    // 0658
+    {
         .species = SPECIES_GRENINJA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Protean wallbreaker
@@ -16652,9 +15914,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0658
+    {
         .species = SPECIES_GRENINJA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // suicide hazard lead
@@ -16673,9 +15934,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0658
+    {
         .species = SPECIES_GRENINJA_BATTLE_BOND,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Battle Bond revenge killer
@@ -16694,11 +15954,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Diggersby ----
-    { // 0660
+    // 0660
+    {
         .species = SPECIES_DIGGERSBY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Huge Power band
@@ -16717,9 +15976,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0660
+    {
         .species = SPECIES_DIGGERSBY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
@@ -16738,11 +15996,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Talonflame ----
-    { // 0663
+    // 0663
+    {
         .species = SPECIES_TALONFLAME,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Gale Wings priority sweeper
@@ -16761,9 +16018,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0663
+    {
         .species = SPECIES_TALONFLAME,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Roost / hazard control
@@ -16782,9 +16038,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 20
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0663
+    {
         .species = SPECIES_TALONFLAME,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SHARP_BEAK, // Tailwind setter + priority
@@ -16803,11 +16058,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pyroar ----
-    { // 0668
+    // 0668
+    {
         .species = SPECIES_PYROAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -16826,9 +16080,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0668
+    {
         .species = SPECIES_PYROAR,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_THROAT_SPRAY, // Hyper Voice spread attacker
@@ -16847,11 +16100,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Florges ----
-    { // 0671
+    // 0671
+    {
         .species = SPECIES_FLORGES,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind cleric wall
@@ -16870,9 +16122,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0671
+    {
         .species = SPECIES_FLORGES,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Pixilate breaker
@@ -16891,11 +16142,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gogoat ----
-    { // 0673
+    // 0673
+    {
         .species = SPECIES_GOGOAT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up Sap Sipper tank
@@ -16914,9 +16164,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0673
+    {
         .species = SPECIES_GOGOAT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical attacker
@@ -16935,11 +16184,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pangoro ----
-    { // 0675
+    // 0675
+    {
         .species = SPECIES_PANGORO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Iron Fist / Scrappy band
@@ -16958,9 +16206,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0675
+    {
         .species = SPECIES_PANGORO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance breaker
@@ -16979,11 +16226,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Meowstic (Male) ----
-    { // 0678
+    // 0678
+    {
         .species = SPECIES_MEOWSTIC,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster screens/support
@@ -17002,9 +16248,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0678
+    {
         .species = SPECIES_MEOWSTIC,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster disruption support
@@ -17023,11 +16268,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Meowstic (Female) ----
-    { // 0678
+    // 0678
+    {
         .species = SPECIES_MEOWSTIC_F,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Competitive special attacker
@@ -17046,9 +16290,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0678
+    {
         .species = SPECIES_MEOWSTIC_F,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Competitive breaker
@@ -17067,11 +16310,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Aegislash (innate Stance Change; no Air Balloon) ----
-    { // 0681
+    // 0681
+    {
         .species = SPECIES_AEGISLASH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // King's Shield stance tank
@@ -17090,9 +16332,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0681
+    {
         .species = SPECIES_AEGISLASH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Weakness Policy sweeper
@@ -17111,9 +16352,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0681
+    {
         .species = SPECIES_AEGISLASH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance / Spectral Thief
@@ -17132,11 +16372,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Aromatisse ----
-    { // 0683
+    // 0683
+    {
         .species = SPECIES_AROMATISSE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Aroma Veil Trick Room cleric
@@ -17155,12 +16394,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
     },
 
-    // ---- Slurpuff ----
-    { // 0685
+    // 0685
+    {
         .species = SPECIES_SLURPUFF,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // Unburden Belly Drum sweeper
@@ -17179,9 +16417,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0685
+    {
         .species = SPECIES_SLURPUFF,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind special wall
@@ -17200,11 +16437,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Malamar ----
-    { // 0687
+    // 0687
+    {
         .species = SPECIES_MALAMAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Contrary Superpower sweeper
@@ -17223,9 +16459,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0687
+    {
         .species = SPECIES_MALAMAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Superpower + priority
@@ -17244,11 +16479,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Barbaracle ----
-    { // 0689
+    // 0689
+    {
         .species = SPECIES_BARBARACLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper
@@ -17267,9 +16501,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0689
+    {
         .species = SPECIES_BARBARACLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // physical Tough Claws attacker
@@ -17288,11 +16521,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dragalge ----
-    { // 0691
+    // 0691
+    {
         .species = SPECIES_DRAGALGE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Adaptability special tank
@@ -17311,9 +16543,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0691
+    {
         .species = SPECIES_DRAGALGE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky Toxic Spikes pivot
@@ -17332,11 +16563,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Clawitzer ----
-    { // 0693
+    // 0693
+    {
         .species = SPECIES_CLAWITZER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Mega Launcher breaker
@@ -17355,9 +16585,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0693
+    {
         .species = SPECIES_CLAWITZER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special pivot
@@ -17376,11 +16605,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Heliolisk ----
-    { // 0695
+    // 0695
+    {
         .species = SPECIES_HELIOLISK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dry Skin fast special attacker
@@ -17399,9 +16627,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0695
+    {
         .species = SPECIES_HELIOLISK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
@@ -17420,11 +16647,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tyrantrum ----
-    { // 0697
+    // 0697
+    {
         .species = SPECIES_TYRANTRUM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Strong Jaw band breaker
@@ -17443,9 +16669,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0697
+    {
         .species = SPECIES_TYRANTRUM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dragon Dance sweeper
@@ -17464,9 +16689,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0697
+    {
         .species = SPECIES_TYRANTRUM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF, // Strong Jaw revenge killer
@@ -17485,11 +16709,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Aurorus ----
-    { // 0699
+    // 0699
+    {
         .species = SPECIES_AURORUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Refrigerate bulky attacker / Aurora Veil
@@ -17508,9 +16731,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0699
+    {
         .species = SPECIES_AURORUS,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Snow Warning Aurora Veil setter
@@ -17529,11 +16751,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sylveon ----
-    { // 0700
+    // 0700
+    {
         .species = SPECIES_SYLVEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Pixilate Hyper Voice breaker
@@ -17552,9 +16773,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0700
+    {
         .species = SPECIES_SYLVEON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind cleric wall
@@ -17573,9 +16793,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0700
+    {
         .species = SPECIES_SYLVEON,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_THROAT_SPRAY, // Hyper Voice spread support
@@ -17594,11 +16813,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hawlucha ----
-    { // 0701
+    // 0701
+    {
         .species = SPECIES_HAWLUCHA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_QUICK_CLAW, // Unburden Swords Dance sweeper
@@ -17617,9 +16835,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0701
+    {
         .species = SPECIES_HAWLUCHA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Mold Breaker physical attacker
@@ -17638,11 +16855,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dedenne ----
-    { // 0702
+    // 0702
+    {
         .species = SPECIES_DEDENNE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Cheek Pouch / screens support
@@ -17661,11 +16877,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Carbink (innate; no Air Balloon) ----
-    { // 0703
+    // 0703
+    {
         .species = SPECIES_CARBINK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIGHT_CLAY, // Sturdy dual-screens / hazards wall
@@ -17684,9 +16899,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0703
+    {
         .species = SPECIES_CARBINK,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Trick Room screens setter
@@ -17705,12 +16919,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
     },
 
-    // ---- Goodra ----
-    { // 0706
+    // 0706
+    {
         .species = SPECIES_GOODRA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Sap Sipper special tank
@@ -17729,9 +16942,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 8
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0706
+    {
         .species = SPECIES_GOODRA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Gooey bulky pivot
@@ -17750,9 +16962,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0706
+    {
         .species = SPECIES_GOODRA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Hydration breaker
@@ -17771,11 +16982,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Goodra-Hisui ----
-    { // 0706
+    // 0706
+    {
         .species = SPECIES_GOODRA_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Sap Sipper special tank
@@ -17794,9 +17004,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0706
+    {
         .species = SPECIES_GOODRA_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shell Armor bulky setup
@@ -17815,11 +17024,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Klefki (innate Levitate; no Air Balloon) ----
-    { // 0707
+    // 0707
+    {
         .species = SPECIES_KLEFKI,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster screens + Spikes
@@ -17838,9 +17046,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0707
+    {
         .species = SPECIES_KLEFKI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Prankster annoyer wall
@@ -17859,11 +17066,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Trevenant ----
-    { // 0709
+    // 0709
+    {
         .species = SPECIES_TREVENANT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Harvest Sitrus stall
@@ -17882,9 +17088,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0709
+    {
         .species = SPECIES_TREVENANT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Natural Cure trick-room-friendly breaker
@@ -17903,12 +17108,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
     },
 
-    // ---- Gourgeist-Super (innate; no Air Balloon) ----
-    { // 0711
+    // 0711
+    {
         .species = SPECIES_GOURGEIST_SUPER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // physically defensive WoW wall
@@ -17927,9 +17131,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0711
+    {
         .species = SPECIES_GOURGEIST_SUPER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Trick Room band breaker
@@ -17948,12 +17151,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
     },
 
-    // ---- Avalugg ----
-    { // 0713
+    // 0713
+    {
         .species = SPECIES_AVALUGG,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sturdy physical wall / Rapid Spin
@@ -17972,9 +17174,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0713
+    {
         .species = SPECIES_AVALUGG,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Ice Body chip wall
@@ -17993,12 +17194,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
     },
 
-    // ---- Avalugg-Hisui ----
-    { // 0713
+    // 0713
+    {
         .species = SPECIES_AVALUGG_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Strong Jaw bulky setup
@@ -18017,9 +17217,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0713
+    {
         .species = SPECIES_AVALUGG_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Strong Jaw band attacker
@@ -18038,11 +17237,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Noivern ----
-    { // 0715
+    // 0715
+    {
         .species = SPECIES_NOIVERN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Infiltrator special breaker
@@ -18061,9 +17259,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0715
+    {
         .species = SPECIES_NOIVERN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Defog pivot
@@ -18082,9 +17279,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0715
+    {
         .species = SPECIES_NOIVERN,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Tailwind setter
@@ -18103,11 +17299,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Xerneas ----
-    { // 0716
+    // 0716
+    {
         .species = SPECIES_XERNEAS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_POWER_HERB, // Geomancy sweeper
@@ -18126,9 +17321,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0716
+    {
         .species = SPECIES_XERNEAS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // physical Swords Dance variant
@@ -18147,11 +17341,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Yveltal ----
-    { // 0717
+    // 0717
+    {
         .species = SPECIES_YVELTAL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dark Aura mixed attacker
@@ -18170,9 +17363,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0717
+    {
         .species = SPECIES_YVELTAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Roost pivot
@@ -18191,11 +17383,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 56
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zygarde ----
-    { // 0718
+    // 0718
+    {
         .species = SPECIES_ZYGARDE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Dragon Dance bulky sweeper
@@ -18214,9 +17405,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0718
+    {
         .species = SPECIES_ZYGARDE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Coil bulky setup wall (innate Regenerator)
@@ -18235,11 +17425,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Diancie (innate Levitate-class; no Air Balloon) ----
-    { // 0719
+    // 0719
+    {
         .species = SPECIES_DIANCIE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Mega Diancie (Magic Bounce); power for the glass cannon
@@ -18258,9 +17447,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0719
+    {
         .species = SPECIES_DIANCIE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Clear Body hazards / dual-screens wall
@@ -18279,11 +17467,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hoopa (Confined; innate Levitate-class; no Air Balloon) ----
-    { // 0720
+    // 0720
+    {
         .species = SPECIES_HOOPA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Magician special breaker
@@ -18302,11 +17489,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hoopa-Unbound (innate Levitate-class; no Air Balloon) ----
-    { // 0720
+    // 0720
+    {
         .species = SPECIES_HOOPA_UNBOUND,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Magician wallbreaker
@@ -18325,9 +17511,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0720
+    {
         .species = SPECIES_HOOPA_UNBOUND,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special tank breaker
@@ -18346,12 +17531,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
     },
 
-    // ---- Volcanion ----
-    { // 0721
+    // 0721
+    {
         .species = SPECIES_VOLCANION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Water Absorb special breaker
@@ -18370,9 +17554,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0721
+    {
         .species = SPECIES_VOLCANION,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Substitute pivot
@@ -18391,9 +17574,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0721
+    {
         .species = SPECIES_VOLCANION,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // spread special tank
@@ -18412,15 +17594,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
     // ====================================
     // Generation VII
     // ====================================
 
-    // ---- Decidueye ----
-    { // 0724
+    // 0724
+    {
         .species = SPECIES_DECIDUEYE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SPELL_TAG, // Ghost STAB boost for the Spirit Shackle attacker
@@ -18439,9 +17620,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0724
+    {
         .species = SPECIES_DECIDUEYE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Long Reach trap-shooter
@@ -18460,9 +17640,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0724
+    {
         .species = SPECIES_DECIDUEYE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed attacker
@@ -18481,11 +17660,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Decidueye-Hisui ----
-    { // 0724
+    // 0724
+    {
         .species = SPECIES_DECIDUEYE_HISUI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Scrappy Triple Arrows attacker
@@ -18504,9 +17682,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0724
+    {
         .species = SPECIES_DECIDUEYE_HISUI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Swords Dance bulky setup
@@ -18525,11 +17702,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 244
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Incineroar ----
-    { // 0727
+    // 0727
+    {
         .species = SPECIES_INCINEROAR,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Intimidate pivot, Fake Out support
@@ -18548,9 +17724,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0727
+    {
         .species = SPECIES_INCINEROAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Dark STAB boost for the Darkest Lariat attacker
@@ -18569,9 +17744,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0727
+    {
         .species = SPECIES_INCINEROAR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Intimidate pivot
@@ -18590,11 +17764,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Primarina ----
-    { // 0730
+    // 0730
+    {
         .species = SPECIES_PRIMARINA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Liquid Voice special breaker
@@ -18613,9 +17786,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0730
+    {
         .species = SPECIES_PRIMARINA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky setup
@@ -18634,9 +17806,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0730
+    {
         .species = SPECIES_PRIMARINA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY, // Sparkling Aria is a sound move -> +SpAtk
@@ -18655,11 +17826,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Toucannon ----
-    { // 0733
+    // 0733
+    {
         .species = SPECIES_TOUCANNON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Skill Link Bullet Seed band
@@ -18678,9 +17848,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0733
+    {
         .species = SPECIES_TOUCANNON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Skill Link already maxes multi-hit; Life Orb adds power
@@ -18699,11 +17868,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gumshoos ----
-    { // 0735
+    // 0735
+    {
         .species = SPECIES_GUMSHOOS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // Stakeout switch punisher
@@ -18722,11 +17890,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Vikavolt ----
-    { // 0738
+    // 0738
+    {
         .species = SPECIES_VIKAVOLT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -18745,9 +17912,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0738
+    {
         .species = SPECIES_VIKAVOLT,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room special attacker
@@ -18767,11 +17933,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Crabominable ----
-    { // 0740
+    // 0740
+    {
         .species = SPECIES_CRABOMINABLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Iron Fist punch band
@@ -18790,9 +17955,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0740
+    {
         .species = SPECIES_CRABOMINABLE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room bruiser
@@ -18812,11 +17976,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Oricorio (Baile) ----
-    { // 0741
+    // 0741
+    {
         .species = SPECIES_ORICORIO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Dancer Fire/Flying special attacker
@@ -18835,9 +17998,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0741
+    {
         .species = SPECIES_ORICORIO_PAU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Psychic/Flying pivot
@@ -18856,11 +18018,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ribombee ----
-    { // 0743
+    // 0743
+    {
         .species = SPECIES_RIBOMBEE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // fast Sticky Web lead
@@ -18879,9 +18040,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0743
+    {
         .species = SPECIES_RIBOMBEE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Quiver Dance sweeper
@@ -18900,11 +18060,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lycanroc (Midday) ----
-    { // 0745
+    // 0745
+    {
         .species = SPECIES_LYCANROC,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sand Rush attacker
@@ -18923,9 +18082,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0745
+    {
         .species = SPECIES_LYCANROC_DUSK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // power for the Tough Claws Stone Edge attacker
@@ -18944,9 +18102,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0745
+    {
         .species = SPECIES_LYCANROC_MIDNIGHT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // No Guard band
@@ -18965,11 +18122,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Wishiwashi (School) ----
-    { // 0746
+    // 0746
+    {
         .species = SPECIES_WISHIWASHI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Schooling special tank
@@ -18988,9 +18144,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0746
+    {
         .species = SPECIES_WISHIWASHI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot
@@ -19009,11 +18164,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Toxapex ----
-    { // 0748
+    // 0748
+    {
         .species = SPECIES_TOXAPEX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Regenerator wall
@@ -19032,9 +18186,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0748
+    {
         .species = SPECIES_TOXAPEX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // physically defensive Banded Bunker stall
@@ -19053,9 +18206,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0748
+    {
         .species = SPECIES_TOXAPEX,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Merciless redirect support
@@ -19074,11 +18226,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mudsdale ----
-    { // 0750
+    // 0750
+    {
         .species = SPECIES_MUDSDALE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Stamina physical wall
@@ -19097,9 +18248,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0750
+    {
         .species = SPECIES_MUDSDALE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Stamina hazard tank
@@ -19118,11 +18268,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Araquanid ----
-    { // 0752
+    // 0752
+    {
         .species = SPECIES_ARAQUANID,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Bubble bulky attacker
@@ -19141,9 +18290,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0752
+    {
         .species = SPECIES_ARAQUANID,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room Water Bubble nuke
@@ -19163,11 +18311,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lurantis ----
-    { // 0754
+    // 0754
+    {
         .species = SPECIES_LURANTIS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Contrary Leaf Storm attacker
@@ -19186,9 +18333,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0754
+    {
         .species = SPECIES_LURANTIS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky support
@@ -19207,11 +18353,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Shiinotic ----
-    { // 0756
+    // 0756
+    {
         .species = SPECIES_SHIINOTIC,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Spore + Strength Sap support
@@ -19230,11 +18375,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Salazzle ----
-    { // 0758
+    // 0758
+    {
         .species = SPECIES_SALAZZLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Corrosion toxic staller
@@ -19253,9 +18397,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0758
+    {
         .species = SPECIES_SALAZZLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
@@ -19274,11 +18417,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Bewear ----
-    { // 0760
+    // 0760
+    {
         .species = SPECIES_BEWEAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Fluffy / Force band
@@ -19297,9 +18439,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0760
+    {
         .species = SPECIES_BEWEAR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Fluffy bulky setup
@@ -19318,11 +18459,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tsareena ----
-    { // 0763
+    // 0763
+    {
         .species = SPECIES_TSAREENA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Queenly Majesty attacker
@@ -19341,9 +18481,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0763
+    {
         .species = SPECIES_TSAREENA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky priority-block pivot
@@ -19362,11 +18501,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Comfey ---- (innate Levitate)
-    { // 0764
+    // 0764 (innate Levitate)
+    {
         .species = SPECIES_COMFEY,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Triage priority healer
@@ -19385,9 +18523,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0764
+    {
         .species = SPECIES_COMFEY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Triage Calm Mind sweeper
@@ -19406,11 +18543,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Oranguru ----
-    { // 0765
+    // 0765
+    {
         .species = SPECIES_ORANGURU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Trick Room setter / Instruct support
@@ -19430,9 +18566,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0765
+    {
         .species = SPECIES_ORANGURU,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
@@ -19451,11 +18586,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Passimian ----
-    { // 0766
+    // 0766
+    {
         .species = SPECIES_PASSIMIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Defiant revenge killer
@@ -19474,9 +18608,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0766
+    {
         .species = SPECIES_PASSIMIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // physical breaker
@@ -19495,11 +18628,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Golisopod ----
-    { // 0768
+    // 0768
+    {
         .species = SPECIES_GOLISOPOD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Emergency Exit First Impression band
@@ -19518,9 +18650,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0768
+    {
         .species = SPECIES_GOLISOPOD,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky pivot
@@ -19539,11 +18670,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Palossand ----
-    { // 0770
+    // 0770
+    {
         .species = SPECIES_PALOSSAND,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Compaction defensive trapper
@@ -19562,9 +18692,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0770
+    {
         .species = SPECIES_PALOSSAND,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // recovery for the defensive Ghost/Ground trapper
@@ -19583,11 +18712,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pyukumuku ----
-    { // 0771
+    // 0771
+    {
         .species = SPECIES_PYUKUMUKU,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware Counter/Toxic staller
@@ -19606,11 +18734,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Silvally ----
-    { // 0773
+    // 0773
+    {
         .species = SPECIES_SILVALLY_DRAGON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_DRAGON_MEMORY, // RKS System Dragon pivot
@@ -19629,9 +18756,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0774
+    {
         .species = SPECIES_SILVALLY_FAIRY,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FAIRY_MEMORY, // defensive pivot
@@ -19650,9 +18776,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0773
+    {
         .species = SPECIES_SILVALLY_STEEL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_STEEL_MEMORY, // Steel attacker
@@ -19671,11 +18796,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Minior (Core) ----
-    { // 0774
+    // 0774
+    {
         .species = SPECIES_MINIOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // Shields Down Shell Smash sweeper
@@ -19694,9 +18818,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0774
+    {
         .species = SPECIES_MINIOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WHITE_HERB, // Shell Smash, White Herb restores drops
@@ -19715,11 +18838,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Komala ----
-    { // 0775
+    // 0775
+    {
         .species = SPECIES_KOMALA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Comatose status-immune attacker
@@ -19738,11 +18860,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Turtonator ----
-    { // 0776
+    // 0776
+    {
         .species = SPECIES_TURTONATOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shell Trap defensive attacker
@@ -19761,9 +18882,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0776
+    {
         .species = SPECIES_TURTONATOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Fire/Dragon special attacker
@@ -19782,11 +18902,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Togedemaru ----
-    { // 0777
+    // 0777
+    {
         .species = SPECIES_TOGEDEMARU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Iron Barbs / Lightning Rod attacker
@@ -19805,9 +18924,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0777
+    {
         .species = SPECIES_TOGEDEMARU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH, // Lightning Rod redirect support
@@ -19826,11 +18944,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mimikyu ----
-    { // 0778
+    // 0778
+    {
         .species = SPECIES_MIMIKYU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // power for the Disguise attacker
@@ -19849,9 +18966,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0778
+    {
         .species = SPECIES_MIMIKYU,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Disguise sweeper
@@ -19870,9 +18986,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0778
+    {
         .species = SPECIES_MIMIKYU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LUM_BERRY, // Disguise disruptor
@@ -19891,11 +19006,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Bruxish ----
-    { // 0779
+    // 0779
+    {
         .species = SPECIES_BRUXISH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Strong Jaw attacker
@@ -19914,9 +19028,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0779
+    {
         .species = SPECIES_BRUXISH,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_CHOICE_SCARF, // Wonder Skin / disruption pivot
@@ -19935,11 +19048,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Drampa ----
-    { // 0780
+    // 0780
+    {
         .species = SPECIES_DRAMPA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Berserk special breaker
@@ -19958,9 +19070,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0780
+    {
         .species = SPECIES_DRAMPA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Berserk Roost staller
@@ -19979,11 +19090,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dhelmise ----
-    { // 0781
+    // 0781
+    {
         .species = SPECIES_DHELMISE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Steelworker Anchor Shot band
@@ -20002,9 +19112,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 8
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0781
+    {
         .species = SPECIES_DHELMISE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room trapper
@@ -20024,11 +19133,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kommo-o ----
-    { // 0784
+    // 0784
+    {
         .species = SPECIES_KOMMO_O,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_DRAGON_GEM, // one-shot Dragon burst after Clangorous setup
@@ -20047,9 +19155,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0784
+    {
         .species = SPECIES_KOMMO_O,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up / Body Press setup
@@ -20068,9 +19175,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0784
+    {
         .species = SPECIES_KOMMO_O,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LOADED_DICE, // Dragon Dance physical sweeper
@@ -20089,11 +19195,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tapu Koko ---- (innate Levitate)
-    { // 0785
+    // 0785 (innate Levitate)
+    {
         .species = SPECIES_TAPU_KOKO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
@@ -20112,9 +19217,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0785
+    {
         .species = SPECIES_TAPU_KOKO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Electric Surge breaker
@@ -20133,9 +19237,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0785
+    {
         .species = SPECIES_TAPU_KOKO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Electric Terrain sweeper
@@ -20154,11 +19257,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tapu Lele ---- (innate Levitate)
-    { // 0786
+    // 0786 (innate Levitate)
+    {
         .species = SPECIES_TAPU_LELE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Psychic Surge breaker
@@ -20177,9 +19279,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0786
+    {
         .species = SPECIES_TAPU_LELE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_PSYCHIC_SEED, // Calm Mind sweeper, terrain-boosted SpD
@@ -20198,9 +19299,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0786
+    {
         .species = SPECIES_TAPU_LELE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_PSYCHIC_GEM, // one-shot Psychic burst nuke
@@ -20219,11 +19319,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tapu Bulu ---- (innate Levitate)
-    { // 0787
+    // 0787 (innate Levitate)
+    {
         .species = SPECIES_TAPU_BULU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Grassy Surge band
@@ -20242,9 +19341,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0787
+    {
         .species = SPECIES_TAPU_BULU,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_GRASSY_SEED, // Swords Dance bulky setup
@@ -20263,11 +19361,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tapu Fini ---- (innate Levitate)
-    { // 0788
+    // 0788 (innate Levitate)
+    {
         .species = SPECIES_TAPU_FINI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Misty Surge Calm Mind wall
@@ -20286,9 +19383,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0788
+    {
         .species = SPECIES_TAPU_FINI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -20307,9 +19403,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0788
+    {
         .species = SPECIES_TAPU_FINI,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MISTY_SEED, // bulky support, terrain-boosted SpD
@@ -20328,11 +19423,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Solgaleo ----
-    { // 0791
+    // 0791
+    {
         .species = SPECIES_SOLGALEO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Full Metal Body physical attacker
@@ -20351,9 +19445,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0791
+    {
         .species = SPECIES_SOLGALEO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky setup pivot
@@ -20372,11 +19465,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lunala ----
-    { // 0792
+    // 0792
+    {
         .species = SPECIES_LUNALA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst nuke
@@ -20395,9 +19487,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0792
+    {
         .species = SPECIES_LUNALA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shadow Shield Calm Mind tank
@@ -20416,11 +19507,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Nihilego ---- (innate Levitate)
-    { // 0793
+    // 0793 (innate Levitate)
+    {
         .species = SPECIES_NIHILEGO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Beast Boost special breaker
@@ -20439,9 +19529,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0793
+    {
         .species = SPECIES_NIHILEGO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // special wall / status spreader
@@ -20460,11 +19549,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Buzzwole ----
-    { // 0794
+    // 0794
+    {
         .species = SPECIES_BUZZWOLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Beast Boost physical breaker
@@ -20483,9 +19571,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0794
+    {
         .species = SPECIES_BUZZWOLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up bulky setup
@@ -20504,11 +19591,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pheromosa ----
-    { // 0795
+    // 0795
+    {
         .species = SPECIES_PHEROMOSA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Beast Boost glass cannon
@@ -20527,9 +19613,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0795
+    {
         .species = SPECIES_PHEROMOSA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // fast lead
@@ -20548,11 +19633,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Xurkitree ---- (innate Levitate)
-    { // 0796
+    // 0796 (innate Levitate)
+    {
         .species = SPECIES_XURKITREE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
@@ -20571,9 +19655,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0796
+    {
         .species = SPECIES_XURKITREE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Beast Boost revenge killer
@@ -20592,11 +19675,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Celesteela ----
-    { // 0797
+    // 0797
+    {
         .species = SPECIES_CELESTEELA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Beast Boost defensive wall
@@ -20615,9 +19697,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0797
+    {
         .species = SPECIES_CELESTEELA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Autotomize sweeper
@@ -20636,11 +19717,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kartana ---- (innate Levitate)
-    { // 0798
+    // 0798 (innate Levitate)
+    {
         .species = SPECIES_KARTANA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Beast Boost physical breaker
@@ -20659,9 +19739,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0798
+    {
         .species = SPECIES_KARTANA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_GRASS_GEM, // one-shot Grass burst after Swords Dance
@@ -20680,11 +19759,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Guzzlord ----
-    { // 0799
+    // 0799
+    {
         .species = SPECIES_GUZZLORD,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // massive HP mixed tank
@@ -20703,9 +19781,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0799
+    {
         .species = SPECIES_GUZZLORD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank attacker
@@ -20724,11 +19801,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Necrozma ---- (innate Levitate)
-    { // 0800
+    // 0800 (innate Levitate)
+    {
         .species = SPECIES_NECROZMA_DUSK_MANE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance physical sweeper
@@ -20747,9 +19823,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0800
+    {
         .species = SPECIES_NECROZMA_DAWN_WINGS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind special sweeper
@@ -20768,9 +19843,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0800
+    {
         .species = SPECIES_NECROZMA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_PSYCHIC_GEM, // Psychic burst for the Calm Mind sweeper
@@ -20789,11 +19863,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Magearna ---- (innate Levitate)
-    { // 0801
+    // 0801 (innate Levitate)
+    {
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Soul-Heart Calm Mind sweeper
@@ -20812,9 +19885,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0801
+    {
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
@@ -20833,9 +19905,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0801
+    {
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FAIRY_GEM, // one-shot Fairy burst for the Trick Room nuke
@@ -20855,11 +19926,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Marshadow ----
-    { // 0802
+    // 0802
+    {
         .species = SPECIES_MARSHADOW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst for the Spectral Thief nuke
@@ -20878,9 +19948,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0802
+    {
         .species = SPECIES_MARSHADOW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Technician priority sweeper
@@ -20899,11 +19968,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Naganadel ---- (innate Levitate)
-    { // 0804
+    // 0804 (innate Levitate)
+    {
         .species = SPECIES_NAGANADEL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Beast Boost Nasty Plot sweeper
@@ -20922,9 +19990,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0804
+    {
         .species = SPECIES_NAGANADEL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
@@ -20943,11 +20010,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Stakataka ----
-    { // 0805
+    // 0805
+    {
         .species = SPECIES_STAKATAKA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Trick Room Beast Boost wallbreaker
@@ -20967,9 +20033,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0805
+    {
         .species = SPECIES_STAKATAKA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // physical wall / hazard setter
@@ -20988,11 +20053,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Blacephalon ---- (innate Levitate)
-    { // 0806
+    // 0806 (innate Levitate)
+    {
         .species = SPECIES_BLACEPHALON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Beast Boost revenge killer
@@ -21011,9 +20075,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0806
+    {
         .species = SPECIES_BLACEPHALON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FIRE_GEM, // one-shot Fire burst nuke
@@ -21032,11 +20095,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zeraora ----
-    { // 0807
+    // 0807
+    {
         .species = SPECIES_ZERAORA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Volt Absorb fast physical attacker
@@ -21055,9 +20117,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0807
+    {
         .species = SPECIES_ZERAORA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst after Bulk Up
@@ -21076,11 +20137,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Melmetal ----
-    { // 0809
+    // 0809
+    {
         .species = SPECIES_MELMETAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Iron Fist breaker
@@ -21099,9 +20159,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0809
+    {
         .species = SPECIES_MELMETAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // special bulk tank
@@ -21120,15 +20179,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
     // ====================================
     // Generation VIII
     // ====================================
 
-    // ---- Rillaboom ----
-    { // 0812
+    // 0812
+    {
         .species = SPECIES_RILLABOOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Grassy Surge band breaker
@@ -21147,9 +20205,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0812
+    {
         .species = SPECIES_RILLABOOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance terrain sweeper
@@ -21168,9 +20225,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0812
+    {
         .species = SPECIES_RILLABOOM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Grassy Terrain pivot
@@ -21189,11 +20245,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 56
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cinderace ----
-    { // 0815
+    // 0815
+    {
         .species = SPECIES_CINDERACE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Libero offensive pivot
@@ -21212,9 +20267,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0815
+    {
         .species = SPECIES_CINDERACE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Libero band breaker
@@ -21233,9 +20287,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0815
+    {
         .species = SPECIES_CINDERACE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Court Change utility sweeper
@@ -21254,11 +20307,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Inteleon ----
-    { // 0818
+    // 0818
+    {
         .species = SPECIES_INTELEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Sniper special breaker
@@ -21277,9 +20329,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0818
+    {
         .species = SPECIES_INTELEON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SCOPE_LENS, // Sniper guaranteed-crit Snipe Shot
@@ -21298,9 +20349,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0818
+    {
         .species = SPECIES_INTELEON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // revenge killer
@@ -21319,11 +20369,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Greedent ----
-    { // 0820
+    // 0820
+    {
         .species = SPECIES_GREEDENT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // Cheek Pouch heal loop
@@ -21342,11 +20391,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Corviknight ----
-    { // 0823
+    // 0823
+    {
         .species = SPECIES_CORVIKNIGHT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Pressure Defog wall
@@ -21365,9 +20413,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 88
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0823
+    {
         .species = SPECIES_CORVIKNIGHT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Mirror Armor physical wall
@@ -21386,9 +20433,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0823
+    {
         .species = SPECIES_CORVIKNIGHT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot
@@ -21407,11 +20453,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Orbeetle ----
-    { // 0826
+    // 0826
+    {
         .species = SPECIES_ORBEETLE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // dual screens support
@@ -21432,7 +20477,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
         .ball = BALL_NET,
     },
-    { // 0826
+    {
         .species = SPECIES_ORBEETLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind
@@ -21454,8 +20499,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_NET,
     },
 
-    // ---- Thievul ----
-    { // 0828
+    // 0828
+    {
         .species = SPECIES_THIEVUL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Nasty Plot special sweeper
@@ -21474,11 +20519,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Eldegoss ----
-    { // 0830
+    // 0830
+    {
         .species = SPECIES_ELDEGOSS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Regenerator support pivot
@@ -21497,11 +20541,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 128
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dubwool ----
-    { // 0832
+    // 0832
+    {
         .species = SPECIES_DUBWOOL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Cotton Guard Body Press wall
@@ -21520,11 +20563,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Drednaw ----
-    { // 0834
+    // 0834
+    {
         .species = SPECIES_DREDNAW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LUM_BERRY, // status insurance for setup
@@ -21543,9 +20585,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0834
+    {
         .species = SPECIES_DREDNAW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HARD_STONE, // jaw-boosted Crunch bite set
@@ -21567,8 +20608,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Boltund ----
-    { // 0836
+    // 0836
+    {
         .species = SPECIES_BOLTUND,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MAGNET, // Strong Jaw Bolt Beak
@@ -21587,11 +20628,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Coalossal ----
-    { // 0839
+    // 0839
+    {
         .species = SPECIES_COALOSSAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Steam Engine bulky hazards
@@ -21610,9 +20650,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0839
+    {
         .species = SPECIES_COALOSSAL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Steam Engine sweeper
@@ -21631,11 +20670,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Flapple ----
-    { // 0841
+    // 0841
+    {
         .species = SPECIES_FLAPPLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Hustle physical attacker
@@ -21654,9 +20692,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0841
+    {
         .species = SPECIES_FLAPPLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -21675,11 +20712,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Appletun ----
-    { // 0842
+    // 0842
+    {
         .species = SPECIES_APPLETUN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Thick Fat bulky special wall
@@ -21698,9 +20734,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0842
+    {
         .species = SPECIES_APPLETUN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
@@ -21719,11 +20754,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sandaconda ----
-    { // 0844
+    // 0844
+    {
         .species = SPECIES_SANDACONDA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Sand Spit Coil wall
@@ -21742,9 +20776,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0844
+    {
         .species = SPECIES_SANDACONDA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // bulky hazard lead
@@ -21763,11 +20796,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cramorant ----
-    { // 0845
+    // 0845
+    {
         .species = SPECIES_CRAMORANT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Gulp Missile spam
@@ -21789,8 +20821,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Barraskewda ----
-    { // 0847
+    // 0847
+    {
         .species = SPECIES_BARRASKEWDA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Swift Swim band breaker
@@ -21809,9 +20841,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0847
+    {
         .species = SPECIES_BARRASKEWDA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // fast revenge killer
@@ -21830,11 +20861,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Toxtricity ----
-    { // 0849
+    // 0849
+    {
         .species = SPECIES_TOXTRICITY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY, // Punk Rock Boomburst nuke (Amped)
@@ -21853,9 +20883,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0849
+    {
         .species = SPECIES_TOXTRICITY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Punk Rock special breaker
@@ -21874,9 +20903,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0849
+    {
         .species = SPECIES_TOXTRICITY_LOW_KEY,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Low Key revenge killer
@@ -21895,11 +20923,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Centiskorch ----
-    { // 0851
+    // 0851
+    {
         .species = SPECIES_CENTISKORCH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Flash Fire bulky attacker
@@ -21918,9 +20945,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0851
+    {
         .species = SPECIES_CENTISKORCH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY, // Fiery Dance / Coil setup
@@ -21939,11 +20965,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Grapploct ----
-    { // 0853
+    // 0853
+    {
         .species = SPECIES_GRAPPLOCT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Technician punches + Bulk Up
@@ -21964,7 +20989,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FIGHTING,
         .ball = BALL_DIVE,
     },
-    { // 0853
+    {
         .species = SPECIES_GRAPPLOCT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // priority Mach Punch attacker
@@ -21983,11 +21008,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 96
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Polteageist ---- (innate Levitate)
-    { // 0855
+    // 0855 (innate Levitate)
+    {
         .species = SPECIES_POLTEAGEIST,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Shell Smash Stored Power sweeper
@@ -22006,9 +21030,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0855
+    {
         .species = SPECIES_POLTEAGEIST,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // Shell Smash sash sweeper
@@ -22027,11 +21050,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hatterene ---- (innate Magic Bounce)
-    { // 0858
+    // 0858 (innate Magic Bounce)
+    {
         .species = SPECIES_HATTERENE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Magic Bounce Calm Mind wall
@@ -22050,9 +21072,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0858
+    {
         .species = SPECIES_HATTERENE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Psychic Terrain breaker
@@ -22071,9 +21092,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0858
+    {
         .species = SPECIES_HATTERENE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
@@ -22092,11 +21112,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Grimmsnarl ----
-    { // 0861
+    // 0861
+    {
         .species = SPECIES_GRIMMSNARL,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY, // Prankster dual screens lead
@@ -22115,9 +21134,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0861
+    {
         .species = SPECIES_GRIMMSNARL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Bulk Up physical sweeper
@@ -22136,9 +21154,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0861
+    {
         .species = SPECIES_GRIMMSNARL,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB, // Prankster support / Taunt-proof
@@ -22157,11 +21174,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 156
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Obstagoon ----
-    { // 0862
+    // 0862
+    {
         .species = SPECIES_OBSTAGOON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts Facade breaker
@@ -22180,9 +21196,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0862
+    {
         .species = SPECIES_OBSTAGOON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up Guts wall-breaker
@@ -22201,11 +21216,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Perrserker ----
-    { // 0863
+    // 0863
+    {
         .species = SPECIES_PERRSERKER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Steely Spirit band breaker
@@ -22224,9 +21238,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0863
+    {
         .species = SPECIES_PERRSERKER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Swords Dance
@@ -22245,11 +21258,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cursola ---- (innate Perish Body)
-    { // 0864
+    // 0864 (innate Perish Body)
+    {
         .species = SPECIES_CURSOLA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Perish Body bulky special attacker
@@ -22268,9 +21280,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0864
+    {
         .species = SPECIES_CURSOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // glass cannon
@@ -22289,11 +21300,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sirfetch'd ----
-    { // 0865
+    // 0865
+    {
         .species = SPECIES_SIRFETCHD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEEK, // guaranteed-crit Leaf Blade Scrappy fighter
@@ -22312,9 +21322,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0865
+    {
         .species = SPECIES_SIRFETCHD,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
@@ -22333,11 +21342,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mr. Rime ----
-    { // 0866
+    // 0866
+    {
         .species = SPECIES_MR_RIME,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY, // Aurora Veil support
@@ -22356,9 +21364,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0866
+    {
         .species = SPECIES_MR_RIME,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // bulky Nasty Plot
@@ -22377,11 +21384,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Runerigus ---- (innate Levitate)
-    { // 0867
+    // 0867 (innate Levitate)
+    {
         .species = SPECIES_RUNERIGUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // Wandering Spirit bulky hazards
@@ -22400,9 +21406,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0867
+    {
         .species = SPECIES_RUNERIGUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Iron Defense Body Press wall
@@ -22421,11 +21426,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Falinks ----
-    { // 0870
+    // 0870
+    {
         .species = SPECIES_FALINKS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // No Retreat setup sweeper
@@ -22444,9 +21448,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0870
+    {
         .species = SPECIES_FALINKS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WHITE_HERB, // No Retreat sweeper with herb reset
@@ -22465,11 +21468,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pincurchin ----
-    { // 0871
+    // 0871
+    {
         .species = SPECIES_PINCURCHIN,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // terrain setter
@@ -22492,8 +21494,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Frosmoth ----
-    { // 0873
+    // 0873
+    {
         .species = SPECIES_FROSMOTH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Quiver Dance sweeper
@@ -22512,9 +21514,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0873
+    {
         .species = SPECIES_FROSMOTH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Ice Scales special wall
@@ -22533,11 +21534,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 100
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Stonjourner ----
-    { // 0874
+    // 0874
+    {
         .species = SPECIES_STONJOURNER,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY, // Power Spot ally booster
@@ -22556,11 +21556,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Eiscue ----
-    { // 0875
+    // 0875
+    {
         .species = SPECIES_EISCUE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Ice Face Belly Drum sweeper
@@ -22579,9 +21578,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0875
+    {
         .species = SPECIES_EISCUE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Ice Face band attacker
@@ -22600,11 +21598,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Indeedee ----
-    { // 0876
+    // 0876
+    {
         .species = SPECIES_INDEEDEE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Psychic Surge attacker
@@ -22623,9 +21620,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
-    { // 0876
+    {
         .species = SPECIES_INDEEDEE_F,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Healer redirect support (Indeedee-F)
@@ -22644,11 +21640,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Morpeko ----
-    { // 0877
+    // 0877
+    {
         .species = SPECIES_MORPEKO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Hunger Switch Aura Wheel attacker
@@ -22667,11 +21662,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Copperajah ----
-    { // 0879
+    // 0879
+    {
         .species = SPECIES_COPPERAJAH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sheer Force Heavy Slam breaker
@@ -22690,9 +21684,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0879
+    {
         .species = SPECIES_COPPERAJAH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky hazard setter
@@ -22711,11 +21704,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dracozolt ----
-    { // 0880
+    // 0880
+    {
         .species = SPECIES_DRACOZOLT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Hustle Bolt Beak nuke
@@ -22734,9 +21726,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0880
+    {
         .species = SPECIES_DRACOZOLT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Sand Rush sweeper
@@ -22755,11 +21746,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Arctozolt ----
-    { // 0881
+    // 0881
+    {
         .species = SPECIES_ARCTOZOLT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Slush Rush Bolt Beak nuke
@@ -22778,9 +21768,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0881
+    {
         .species = SPECIES_ARCTOZOLT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Static special breaker
@@ -22799,11 +21788,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dracovish ----
-    { // 0882
+    // 0882
+    {
         .species = SPECIES_DRACOVISH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Strong Jaw Fishious Rend nuke
@@ -22822,9 +21810,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0882
+    {
         .species = SPECIES_DRACOVISH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sand Rush band breaker
@@ -22843,11 +21830,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Arctovish ----
-    { // 0883
+    // 0883
+    {
         .species = SPECIES_ARCTOVISH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND, // Slush Rush Fishious Rend
@@ -22866,9 +21852,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0883
+    {
         .species = SPECIES_ARCTOVISH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky pivot
@@ -22887,11 +21872,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dragapult ---- (innate Levitate)
-    { // 0887
+    // 0887 (innate Levitate)
+    {
         .species = SPECIES_DRAGAPULT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Draco/Shadow Ball breaker
@@ -22910,9 +21894,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0887
+    {
         .species = SPECIES_DRAGAPULT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Dragon Darts band breaker
@@ -22931,9 +21914,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0887
+    {
         .species = SPECIES_DRAGAPULT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Dragon Dance physical sweeper
@@ -22952,11 +21934,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zacian (Crowned) ----
-    { // 0888
+    // 0888
+    {
         .species = SPECIES_ZACIAN_CROWNED,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_RUSTED_SWORD, // Intrepid Sword Behemoth Blade
@@ -22975,9 +21956,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0888
+    {
         .species = SPECIES_ZACIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // base Zacian band breaker
@@ -22996,11 +21976,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zamazenta (Crowned) ----
-    { // 0889
+    // 0889
+    {
         .species = SPECIES_ZAMAZENTA_CROWNED,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_RUSTED_SHIELD, // Dauntless Shield Body Press wall
@@ -23019,9 +21998,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 112
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0889
+    {
         .species = SPECIES_ZAMAZENTA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // base Zamazenta bulky setup
@@ -23040,11 +22018,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Eternatus ----
-    { // 0890
+    // 0890
+    {
         .species = SPECIES_ETERNATUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Pressure special breaker
@@ -23063,9 +22040,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0890
+    {
         .species = SPECIES_ETERNATUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // bulky Toxic Spikes / Cosmic Power
@@ -23084,11 +22060,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 100
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Urshifu (Single Strike) ----
-    { // 0892
+    // 0892
+    {
         .species = SPECIES_URSHIFU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Unseen Fist Wicked Blow breaker
@@ -23107,9 +22082,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0892
+    {
         .species = SPECIES_URSHIFU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
@@ -23128,11 +22102,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Urshifu (Rapid Strike) ----
-    { // 0892
+    // 0892
+    {
         .species = SPECIES_URSHIFU_RAPID_STRIKE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Surging Strikes always-crit breaker
@@ -23151,9 +22124,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0892
+    {
         .species = SPECIES_URSHIFU_RAPID_STRIKE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
@@ -23172,11 +22144,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Zarude ----
-    { // 0893
+    // 0893
+    {
         .species = SPECIES_ZARUDE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Swords Dance + recovery
@@ -23195,9 +22166,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0893
+    {
         .species = SPECIES_ZARUDE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_GLASSES, // Dark-boosted pivot
@@ -23216,11 +22186,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Regieleki ---- (innate Transistor / Levitate-tier speed)
-    { // 0894
+    // 0894 (innate Transistor / Levitate-tier speed)
+    {
         .species = SPECIES_REGIELEKI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Transistor electric nuke
@@ -23239,9 +22208,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0894
+    {
         .species = SPECIES_REGIELEKI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIGHT_CLAY, // screens lead
@@ -23260,11 +22228,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Regidrago ----
-    { // 0895
+    // 0895
+    {
         .species = SPECIES_REGIDRAGO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Dragon's Maw Dragon Energy breaker
@@ -23283,9 +22250,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0895
+    {
         .species = SPECIES_REGIDRAGO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special Dragon Energy breaker
@@ -23304,11 +22270,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Glastrier ----
-    { // 0896
+    // 0896
+    {
         .species = SPECIES_GLASTRIER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Chilling Neigh band breaker
@@ -23327,9 +22292,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0896
+    {
         .species = SPECIES_GLASTRIER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Swords Dance
@@ -23348,11 +22312,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Spectrier ---- (innate Levitate-tier)
-    { // 0897
+    // 0897 (innate Levitate-tier)
+    {
         .species = SPECIES_SPECTRIER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Grim Neigh special breaker
@@ -23371,9 +22334,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0897
+    {
         .species = SPECIES_SPECTRIER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot snowball sweeper
@@ -23392,11 +22354,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Calyrex (Ice Rider) ----
-    { // 0898
+    // 0898
+    {
         .species = SPECIES_CALYREX_ICE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // As One Glacial Lance breaker
@@ -23416,9 +22377,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
-    { // 0898
+    {
         .species = SPECIES_CALYREX_ICE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Chilling Neigh band breaker
@@ -23437,11 +22397,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Calyrex (Shadow Rider) ----
-    { // 0898
+    // 0898
+    {
         .species = SPECIES_CALYREX_SHADOW,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Grim Neigh Astral Barrage nuke
@@ -23460,9 +22419,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0898
+    {
         .species = SPECIES_CALYREX_SHADOW,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Nasty Plot Substitute sweeper
@@ -23481,11 +22439,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Calyrex ----
-    { // 0898
+    // 0898
+    {
         .species = SPECIES_CALYREX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky setup
@@ -23504,9 +22461,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0898
+    {
         .species = SPECIES_CALYREX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // Trick Room utility
@@ -23526,11 +22482,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Wyrdeer ----
-    { // 0899
+    // 0899
+    {
         .species = SPECIES_WYRDEER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sap Sipper band attacker
@@ -23549,9 +22504,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0899
+    {
         .species = SPECIES_WYRDEER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // Intimidate special tank
@@ -23570,11 +22524,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kleavor ----
-    { // 0900
+    // 0900
+    {
         .species = SPECIES_KLEAVOR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sharpness Stone Axe breaker
@@ -23593,9 +22546,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0900
+    {
         .species = SPECIES_KLEAVOR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Stone Axe hazard lead
@@ -23614,11 +22566,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ursaluna ----
-    { // 0901
+    // 0901
+    {
         .species = SPECIES_URSALUNA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // Guts Facade wallbreaker
@@ -23638,9 +22589,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0901
+    {
         .species = SPECIES_URSALUNA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Swords Dance Bulk Up bruiser
@@ -23659,11 +22609,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ursaluna-Bloodmoon ----
-    { // 0901
+    // 0901
+    {
         .species = SPECIES_URSALUNA_BLOODMOON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // special tank
@@ -23682,11 +22631,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Basculegion ----
-    { // 0902
+    // 0902
+    {
         .species = SPECIES_BASCULEGION,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Adaptability Wave Crash breaker
@@ -23705,9 +22653,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0902
+    {
         .species = SPECIES_BASCULEGION_F,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special Basculegion-F breaker
@@ -23726,11 +22673,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sneasler ----
-    { // 0903
+    // 0903
+    {
         .species = SPECIES_SNEASLER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Poison Touch Dire Claw attacker
@@ -23749,9 +22695,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0903
+    {
         .species = SPECIES_SNEASLER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SCOPE_LENS, // Swords Dance Unburden-style sweeper
@@ -23770,11 +22715,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Overqwil ----
-    { // 0904
+    // 0904
+    {
         .species = SPECIES_OVERQWIL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Intimidate Toxic Spikes pivot
@@ -23793,9 +22737,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0904
+    {
         .species = SPECIES_OVERQWIL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
@@ -23814,11 +22757,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Enamorus ----
-    { // 0905
+    // 0905
+    {
         .species = SPECIES_ENAMORUS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Cute Charm special attacker (Incarnate)
@@ -23837,9 +22779,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0905
+    {
         .species = SPECIES_ENAMORUS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind setup
@@ -23858,9 +22799,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0905
+    {
         .species = SPECIES_ENAMORUS_THERIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Overcoat Therian physical breaker
@@ -23879,15 +22819,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
     // ====================================
     // Generation IX
     // ====================================
 
-    // ---- Meowscarada ----
-    { // 0908
+    // 0908
+    {
         .species = SPECIES_MEOWSCARADA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Protean physical attacker
@@ -23906,9 +22845,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0908
+    {
         .species = SPECIES_MEOWSCARADA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // hit-and-run wallbreaker
@@ -23927,9 +22865,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0908
+    {
         .species = SPECIES_MEOWSCARADA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // fast lead / spike support
@@ -23948,11 +22885,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Skeledirge ----
-    { // 0911
+    // 0911
+    {
         .species = SPECIES_SKELEDIRGE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Torch Song bulky setup pivot
@@ -23971,9 +22907,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0911
+    {
         .species = SPECIES_SKELEDIRGE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware special wall
@@ -23992,9 +22927,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0911
+    {
         .species = SPECIES_SKELEDIRGE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY, // Torch Song snowball sweeper
@@ -24013,11 +22947,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Quaquaval ----
-    { // 0914
+    // 0914
+    {
         .species = SPECIES_QUAQUAVAL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Aqua Step setup sweeper
@@ -24036,9 +22969,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0914
+    {
         .species = SPECIES_QUAQUAVAL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Moxie band breaker
@@ -24057,11 +22989,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Spidops ----
-    { // 0918
+    // 0918
+    {
         .species = SPECIES_SPIDOPS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // hazard setter
@@ -24080,11 +23011,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
 
-    // ---- Lokix ----
-    { // 0920
+    // 0920
+    {
         .species = SPECIES_LOKIX,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND, // priority bug
@@ -24103,9 +23033,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
-        .ball = BALL_POKE,
     },
-    { // 0920
+    {
         .species = SPECIES_LOKIX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SILK_SCARF, // SD wallbreaker
@@ -24124,11 +23053,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pawmot ----
-    { // 0923
+    // 0923
+    {
         .species = SPECIES_PAWMOT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // pivot/punch
@@ -24147,9 +23075,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0923
+    {
         .species = SPECIES_PAWMOT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_EXPERT_BELT, // coverage pivot
@@ -24168,11 +23095,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Maushold ----
-    { // 0925
+    // 0925
+    {
         .species = SPECIES_MAUSHOLD,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LOADED_DICE, // Technician sweeper; Loaded Dice guarantees Population Bomb's full 10 hits (and Bullet Seed's 5)
@@ -24191,9 +23117,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 0925
+    {
         .species = SPECIES_MAUSHOLD,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // Friend Guard support lead
@@ -24212,11 +23137,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dachsbun ----
-    { // 0927
+    // 0927
+    {
         .species = SPECIES_DACHSBUN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // baked bread wall
@@ -24235,11 +23159,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Arboliva ----
-    { // 0930
+    // 0930
+    {
         .species = SPECIES_ARBOLIVA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky grass
@@ -24261,8 +23184,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_NEST,
     },
 
-    // ---- Squawkabilly Green ----
-    { // 0931
+    // 0931
+    {
         .species = SPECIES_SQUAWKABILLY_GREEN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FLAME_ORB, // guts attacker
@@ -24281,11 +23204,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Garganacl ----
-    { // 0934
+    // 0934
+    {
         .species = SPECIES_GARGANACL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Purifying Salt physical wall
@@ -24304,9 +23226,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0934
+    {
         .species = SPECIES_GARGANACL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Iron Defense + Body Press sweeper
@@ -24325,9 +23246,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0934
+    {
         .species = SPECIES_GARGANACL,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET, // doubles Salt Cure chip + Wide Guard
@@ -24346,11 +23266,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Armarouge ----
-    { // 0936
+    // 0936
+    {
         .species = SPECIES_ARMAROUGE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WEAKNESS_POLICY, // Armor Cannon special sweeper
@@ -24369,9 +23288,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 0936
+    {
         .species = SPECIES_ARMAROUGE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // Expanding Force Trick Room attacker
@@ -24391,11 +23309,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ceruledge ----
-    { // 0937
+    // 0937
+    {
         .species = SPECIES_CERULEDGE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Bitter Blade Swords Dance sweeper
@@ -24414,9 +23331,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0937
+    {
         .species = SPECIES_CERULEDGE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Bulk Up bulky setup
@@ -24435,11 +23351,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Bellibolt ----
-    { // 0939
+    // 0939
+    {
         .species = SPECIES_BELLIBOLT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky frog
@@ -24460,7 +23375,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
         .ball = BALL_DIVE,
     },
-    { // 0939
+    {
         .species = SPECIES_BELLIBOLT,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // special wall
@@ -24482,8 +23397,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Kilowattrel ----
-    { // 0941
+    // 0941
+    {
         .species = SPECIES_KILOWATTREL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // fast special
@@ -24502,11 +23417,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Mabosstiff ----
-    { // 0943
+    // 0943
+    {
         .species = SPECIES_MABOSSTIFF,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY, // guard dog mauler
@@ -24525,9 +23439,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0943
+    {
         .species = SPECIES_MABOSSTIFF,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // intimidate punish
@@ -24546,11 +23459,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Grafaiai ----
-    { // 0945
+    // 0945
+    {
         .species = SPECIES_GRAFAIAI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // prankster status
@@ -24569,11 +23481,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Brambleghast ----
-    { // 0947
+    // 0947
+    {
         .species = SPECIES_BRAMBLEGHAST,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Wind Rider spin / hazard control
@@ -24592,9 +23503,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0947
+    {
         .species = SPECIES_BRAMBLEGHAST,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // physical breaker
@@ -24613,11 +23523,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Toedscruel ----
-    { // 0949
+    // 0949
+    {
         .species = SPECIES_TOEDSCRUEL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Mycelium Might hazard control
@@ -24636,9 +23545,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0949
+    {
         .species = SPECIES_TOEDSCRUEL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // fast special attacker
@@ -24657,11 +23565,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Klawf ----
-    { // 0950
+    // 0950
+    {
         .species = SPECIES_KLAWF,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // rock setter
@@ -24680,9 +23587,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
-    { // 0950
+    {
         .species = SPECIES_KLAWF,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // anger shell sweep
@@ -24701,11 +23607,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Scovillain ----
-    { // 0952
+    // 0952
+    {
         .species = SPECIES_SCOVILLAIN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Chlorophyll mixed sun attacker
@@ -24724,11 +23629,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Rabsca ----
-    { // 0954
+    // 0954
+    {
         .species = SPECIES_RABSCA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MENTAL_HERB, // trick room setter
@@ -24748,11 +23652,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
         .teraType = TYPE_PSYCHIC,
-        .ball = BALL_POKE,
     },
 
-    // ---- Espathra ----
-    { // 0956
+    // 0956
+    {
         .species = SPECIES_ESPATHRA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Opportunist Calm Mind sweeper
@@ -24771,9 +23674,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0956
+    {
         .species = SPECIES_ESPATHRA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // fast special breaker
@@ -24792,11 +23694,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tinkaton ----
-    { // 0959
+    // 0959
+    {
         .species = SPECIES_TINKATON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_AIR_BALLOON, // Gigaton Hammer + hazards utility
@@ -24815,9 +23716,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0959
+    {
         .species = SPECIES_TINKATON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Gigaton Hammer band breaker
@@ -24836,11 +23736,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Wugtrio ----
-    { // 0961
+    // 0961
+    {
         .species = SPECIES_WUGTRIO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MYSTIC_WATER, // priority eel
@@ -24862,8 +23761,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Bombirdier ----
-    { // 0962
+    // 0962
+    {
         .species = SPECIES_BOMBIRDIER,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Big Pecks hazard / utility pivot
@@ -24882,14 +23781,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Palafin (Zero to Hero) ----
+    // 0964
     // Enter in Zero form; Zero to Hero transforms it to Hero after its first switch-out
     // (the form table has no FORM_CHANGE_BEGIN_BATTLE, so naming the Hero form here would
     //  wrongly start it transformed).
-    { // 0964
+    {
         .species = SPECIES_PALAFIN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Zero to Hero band breaker
@@ -24908,9 +23806,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0964
+    {
         .species = SPECIES_PALAFIN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Bulk Up Hero sweeper
@@ -24929,11 +23826,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Revavroom ----
-    { // 0966
+    // 0966
+    {
         .species = SPECIES_REVAVROOM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Filter Shift Gear sweeper
@@ -24952,9 +23848,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 0966
+    {
         .species = SPECIES_REVAVROOM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET, // bulky pivot / hazard support
@@ -24973,11 +23868,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cyclizar ----
-    { // 0967
+    // 0967
+    {
         .species = SPECIES_CYCLIZAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Regenerator Shed Tail pivot
@@ -24996,9 +23890,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0967
+    {
         .species = SPECIES_CYCLIZAR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // fast U-turn pivot
@@ -25017,11 +23910,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Orthworm ----
-    { // 0968
+    // 0968
+    {
         .species = SPECIES_ORTHWORM,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Earth Eater Iron Defense + Body Press wall
@@ -25040,9 +23932,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0968
+    {
         .species = SPECIES_ORTHWORM,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET, // Shed Tail pivot
@@ -25061,11 +23952,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Glimmora ----
-    { // 0970
+    // 0970
+    {
         .species = SPECIES_GLIMMORA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND, // Toxic Debris hazard lead
@@ -25084,9 +23974,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0970
+    {
         .species = SPECIES_GLIMMORA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // special attacker
@@ -25105,11 +23994,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Houndstone ----
-    { // 0972
+    // 0972
+    {
         .species = SPECIES_HOUNDSTONE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sand Rush Last Respects sweeper
@@ -25128,11 +24016,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Flamigo ----
-    { // 0973
+    // 0973
+    {
         .species = SPECIES_FLAMIGO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // scrappy bird
@@ -25151,9 +24038,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 0973
+    {
         .species = SPECIES_FLAMIGO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // SD sweeper
@@ -25172,11 +24058,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Cetitan ----
-    { // 0975
+    // 0975
+    {
         .species = SPECIES_CETITAN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_NEVER_MELT_ICE, // belly drum whale
@@ -25197,7 +24082,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ICE,
         .ball = BALL_DIVE,
     },
-    { // 0975
+    {
         .species = SPECIES_CETITAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // sheer force tank
@@ -25219,8 +24104,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Veluza ----
-    { // 0976
+    // 0976
+    {
         .species = SPECIES_VELUZA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_MYSTIC_WATER, // sharpness slicer
@@ -25241,7 +24126,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
         .ball = BALL_DIVE,
     },
-    { // 0976
+    {
         .species = SPECIES_VELUZA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY, // fillet away sweep
@@ -25263,8 +24148,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_DIVE,
     },
 
-    // ---- Dondozo ----
-    { // 0977
+    // 0977
+    {
         .species = SPECIES_DONDOZO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Unaware Curse physical wall
@@ -25283,9 +24168,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0977
+    {
         .species = SPECIES_DONDOZO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Order Up / bulky pivot
@@ -25304,11 +24188,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Tatsugiri ----
-    { // 0978
+    // 0978
+    {
         .species = SPECIES_TATSUGIRI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_THROAT_SPRAY, // SpA boost off spread move
@@ -25327,11 +24210,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Annihilape ----
-    { // 0979
+    // 0979
+    {
         .species = SPECIES_ANNIHILAPE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Bulk Up + Rage Fist snowball
@@ -25350,9 +24232,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0979
+    {
         .species = SPECIES_ANNIHILAPE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SCARF, // Defiant revenge killer
@@ -25371,11 +24252,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Clodsire ----
-    { // 0980
+    // 0980
+    {
         .species = SPECIES_CLODSIRE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Unaware special wall / status spreader
@@ -25394,9 +24274,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0980
+    {
         .species = SPECIES_CLODSIRE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Water Absorb stall pivot
@@ -25415,11 +24294,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Farigiraf ----
-    { // 0981
+    // 0981
+    {
         .species = SPECIES_FARIGIRAF,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Armor Tail Calm Mind wall
@@ -25438,9 +24316,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0981
+    {
         .species = SPECIES_FARIGIRAF,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room support tank
@@ -25460,11 +24337,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Dudunsparce ----
-    { // 0982
+    // 0982
+    {
         .species = SPECIES_DUDUNSPARCE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Serene Grace Coil + flinch / status
@@ -25483,9 +24359,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0982
+    {
         .species = SPECIES_DUDUNSPARCE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind + Boomburst special
@@ -25504,11 +24379,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Kingambit ----
-    { // 0983
+    // 0983
+    {
         .species = SPECIES_KINGAMBIT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Supreme Overlord Swords Dance sweeper
@@ -25527,9 +24401,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 144
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 0983
+    {
         .species = SPECIES_KINGAMBIT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_GLASSES, // Defiant pivot punisher
@@ -25548,9 +24421,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 144
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 0983
+    {
         .species = SPECIES_KINGAMBIT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST, // bulky special tank
@@ -25569,11 +24441,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Great Tusk ----
-    { // 0984
+    // 0984
+    {
         .species = SPECIES_GREAT_TUSK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis hazard control sweeper
@@ -25592,9 +24463,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0984
+    {
         .species = SPECIES_GREAT_TUSK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Bulk Up physical wall / spinner
@@ -25613,11 +24483,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Scream Tail ----
-    { // 0985
+    // 0985
+    {
         .species = SPECIES_SCREAM_TAIL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Protosynthesis utility wall
@@ -25636,9 +24505,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 0985
+    {
         .species = SPECIES_SCREAM_TAIL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // fast support pivot
@@ -25657,11 +24525,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Brute Bonnet ----
-    { // 0986
+    // 0986
+    {
         .species = SPECIES_BRUTE_BONNET,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis bulky breaker
@@ -25680,11 +24547,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Flutter Mane ----
-    { // 0987
+    // 0987
+    {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special sweeper (innate Levitate)
@@ -25703,9 +24569,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 0987
+    {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // special nuke (innate Levitate)
@@ -25724,9 +24589,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 0987
+    {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND, // fast Perish Trap / utility (innate Levitate)
@@ -25745,11 +24609,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Slither Wing ----
-    { // 0988
+    // 0988
+    {
         .species = SPECIES_SLITHER_WING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis bulky attacker
@@ -25768,11 +24631,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sandy Shocks ----
-    { // 0989
+    // 0989
+    {
         .species = SPECIES_SANDY_SHOCKS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special attacker (innate Levitate)
@@ -25791,9 +24653,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0989
+    {
         .species = SPECIES_SANDY_SHOCKS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard lead (innate Levitate)
@@ -25812,11 +24673,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Treads ----
-    { // 0990
+    // 0990
+    {
         .species = SPECIES_IRON_TREADS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive hazard control sweeper
@@ -25835,9 +24695,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
-    { // 0990
+    {
         .species = SPECIES_IRON_TREADS,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky hazard lead
@@ -25856,11 +24715,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Bundle ----
-    { // 0991
+    // 0991
+    {
         .species = SPECIES_IRON_BUNDLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive fast special attacker
@@ -25879,9 +24737,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 0991
+    {
         .species = SPECIES_IRON_BUNDLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // hydro specs nuke
@@ -25900,11 +24757,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Hands ----
-    { // 0992
+    // 0992
+    {
         .species = SPECIES_IRON_HANDS,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Quark Drive bulky attacker
@@ -25923,9 +24779,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 0992
+    {
         .species = SPECIES_IRON_HANDS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Belly Drum + Drain Punch sweeper
@@ -25944,11 +24799,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Jugulis ----
-    { // 0993
+    // 0993
+    {
         .species = SPECIES_IRON_JUGULIS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive fast special attacker
@@ -25967,11 +24821,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Moth ----
-    { // 0994
+    // 0994
+    {
         .species = SPECIES_IRON_MOTH,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive special sweeper (innate Levitate)
@@ -25990,9 +24843,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
-    { // 0994
+    {
         .species = SPECIES_IRON_MOTH,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Toxic Spikes / special pivot (innate Levitate)
@@ -26011,11 +24863,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Thorns ----
-    { // 0995
+    // 0995
+    {
         .species = SPECIES_IRON_THORNS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Dragon Dance sweeper
@@ -26034,11 +24885,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Baxcalibur ----
-    { // 0998
+    // 0998
+    {
         .species = SPECIES_BAXCALIBUR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LOADED_DICE, // Dragon Dance + Icicle Spear sweeper
@@ -26057,9 +24907,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
-    { // 0998
+    {
         .species = SPECIES_BAXCALIBUR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // mixed Dragon Dance breaker
@@ -26078,11 +24927,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gholdengo ----
-    { // 1000
+    // 1000
+    {
         .species = SPECIES_GHOLDENGO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Nasty Plot + Make It Rain sweeper (innate Levitate)
@@ -26101,9 +24949,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 1000
+    {
         .species = SPECIES_GHOLDENGO,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Good as Gold status blocker / pivot (innate Levitate)
@@ -26122,9 +24969,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 1000
+    {
         .species = SPECIES_GHOLDENGO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // special nuke (innate Levitate)
@@ -26143,11 +24989,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Wo-Chien ----
-    { // 1001
+    // 1001
+    {
         .species = SPECIES_WO_CHIEN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Tablets of Ruin defensive status spreader
@@ -26166,9 +25011,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 1001
+    {
         .species = SPECIES_WO_CHIEN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Tablets stall wall
@@ -26187,11 +25031,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Chien-Pao ----
-    { // 1002
+    // 1002
+    {
         .species = SPECIES_CHIEN_PAO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sword of Ruin Swords Dance sweeper
@@ -26210,9 +25053,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
-    { // 1002
+    {
         .species = SPECIES_CHIEN_PAO,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Sword of Ruin band breaker
@@ -26231,11 +25073,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ting-Lu ----
-    { // 1003
+    // 1003
+    {
         .species = SPECIES_TING_LU,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Vessel of Ruin physical wall / hazards
@@ -26254,9 +25095,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 1003
+    {
         .species = SPECIES_TING_LU,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Ruination staller
@@ -26275,11 +25115,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Chi-Yu ----
-    { // 1004
+    // 1004
+    {
         .species = SPECIES_CHI_YU,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Beads of Ruin special sweeper
@@ -26298,9 +25137,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 1004
+    {
         .species = SPECIES_CHI_YU,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // Beads of Ruin nuke
@@ -26319,11 +25157,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
 
-    // ---- Roaring Moon ----
-    { // 1005
+    // 1005
+    {
         .species = SPECIES_ROARING_MOON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
@@ -26342,9 +25179,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
-        .ball = BALL_POKE,
     },
-    { // 1005
+    {
         .species = SPECIES_ROARING_MOON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // Dragon's Maw band breaker
@@ -26363,11 +25199,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Valiant ----
-    { // 1006
+    // 1006
+    {
         .species = SPECIES_IRON_VALIANT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive mixed Swords Dance sweeper
@@ -26386,9 +25221,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
-    { // 1006
+    {
         .species = SPECIES_IRON_VALIANT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // special breaker
@@ -26407,11 +25241,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Koraidon ----
-    { // 1007
+    // 1007
+    {
         .species = SPECIES_KORAIDON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Orichalcum Pulse sun sweeper
@@ -26430,9 +25263,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 1007
+    {
         .species = SPECIES_KORAIDON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND, // band breaker
@@ -26451,11 +25283,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
-        .ball = BALL_POKE,
     },
 
-    // ---- Miraidon ----
-    { // 1008
+    // 1008
+    {
         .species = SPECIES_MIRAIDON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS, // Hadron Engine special nuke (innate Levitate)
@@ -26474,9 +25305,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 1008
+    {
         .species = SPECIES_MIRAIDON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Calm Mind sweeper (innate Levitate)
@@ -26495,11 +25325,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Walking Wake ----
-    { // 1009
+    // 1009
+    {
         .species = SPECIES_WALKING_WAKE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special attacker
@@ -26518,9 +25347,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 1009
+    {
         .species = SPECIES_WALKING_WAKE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS, // Draco specs nuke
@@ -26539,11 +25367,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Leaves ----
-    { // 1010
+    // 1010
+    {
         .species = SPECIES_IRON_LEAVES,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Swords Dance sweeper
@@ -26562,11 +25389,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Sinistcha ----
-    { // 1013
+    // 1013
+    {
         .species = SPECIES_SINISTCHA,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Calm Mind Matcha Gotcha wall (innate Levitate)
@@ -26585,9 +25411,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
-    { // 1013
+    {
         .species = SPECIES_SINISTCHA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Hospitality support tank (innate Levitate)
@@ -26607,11 +25432,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Okidogi ----
-    { // 1014
+    // 1014
+    {
         .species = SPECIES_OKIDOGI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Toxic Chain Bulk Up sweeper
@@ -26630,9 +25454,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 1014
+    {
         .species = SPECIES_OKIDOGI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Guard Dog Bulk Up wall breaker
@@ -26651,11 +25474,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Munkidori ----
-    { // 1015
+    // 1015
+    {
         .species = SPECIES_MUNKIDORI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB, // Toxic Chain special attacker
@@ -26674,9 +25496,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
-    { // 1015
+    {
         .species = SPECIES_MUNKIDORI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Toxic Chain defensive pivot
@@ -26695,11 +25516,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Fezandipiti ----
-    { // 1016
+    // 1016
+    {
         .species = SPECIES_FEZANDIPITI,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_SLUDGE, // Toxic Chain utility pivot
@@ -26718,9 +25538,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 1016
+    {
         .species = SPECIES_FEZANDIPITI,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind special pivot
@@ -26739,11 +25558,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ogerpon (Teal) ----
-    { // 1017
+    // 1017
+    {
         .species = SPECIES_OGERPON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS, // Defiant Swords Dance sweeper
@@ -26762,11 +25580,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ogerpon (Wellspring) ----
-    { // 1017
+    // 1017
+    {
         .species = SPECIES_OGERPON_WELLSPRING,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_WELLSPRING_MASK, // Water Absorb Swords Dance sweeper
@@ -26785,11 +25602,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ogerpon (Hearthflame) ----
-    { // 1017
+    // 1017
+    {
         .species = SPECIES_OGERPON_HEARTHFLAME,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_HEARTHFLAME_MASK, // Mold Breaker Swords Dance sweeper
@@ -26808,11 +25624,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ogerpon (Cornerstone) ----
-    { // 1017
+    // 1017
+    {
         .species = SPECIES_OGERPON_CORNERSTONE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CORNERSTONE_MASK, // Sturdy Swords Dance sweeper
@@ -26831,11 +25646,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Ogerpon-Teal ----
-    { // 1017
+    // 1017
+    {
         .species = SPECIES_OGERPON_TEAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-immune Defiant pivot
@@ -26854,11 +25668,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
-        .ball = BALL_POKE,
     },
 
-    // ---- Archaludon ----
-    { // 1018
+    // 1018
+    {
         .species = SPECIES_ARCHALUDON,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // Electro Shot special tank
@@ -26877,9 +25690,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
-    { // 1018
+    {
         .species = SPECIES_ARCHALUDON,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Stamina Body Press wall
@@ -26898,9 +25710,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .ball = BALL_POKE,
     },
-    { // 1018
+    {
         .species = SPECIES_ARCHALUDON,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB, // rain Electro Shot nuke
@@ -26919,11 +25730,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Hydrapple ----
-    { // 1019
+    // 1019
+    {
         .species = SPECIES_HYDRAPPLE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Regenerator bulky special tank
@@ -26942,9 +25752,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 1019
+    {
         .species = SPECIES_HYDRAPPLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
@@ -26963,11 +25772,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Gouging Fire ----
-    { // 1020
+    // 1020
+    {
         .species = SPECIES_GOUGING_FIRE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
@@ -26986,9 +25794,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
-        .ball = BALL_POKE,
     },
-    { // 1020
+    {
         .species = SPECIES_GOUGING_FIRE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Morning Sun setup
@@ -27007,11 +25814,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
-        .ball = BALL_POKE,
     },
 
-    // ---- Raging Bolt ----
-    { // 1021
+    // 1021
+    {
         .species = SPECIES_RAGING_BOLT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Calm Mind special sweeper
@@ -27030,9 +25836,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ELECTRIC,
-        .ball = BALL_POKE,
     },
-    { // 1021
+    {
         .species = SPECIES_RAGING_BOLT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
@@ -27051,11 +25856,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Boulder ----
-    { // 1022
+    // 1022
+    {
         .species = SPECIES_IRON_BOULDER,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Mighty Cleave sweeper
@@ -27074,11 +25878,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
-        .ball = BALL_POKE,
     },
 
-    // ---- Iron Crown ----
-    { // 1023
+    // 1023
+    {
         .species = SPECIES_IRON_CROWN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Calm Mind special sweeper
@@ -27097,11 +25900,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
 
-    // ---- Terapagos ----
-    { // 1024
+    // 1024
+    {
         .species = SPECIES_TERAPAGOS_TERASTAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Tera Shell Calm Mind tank
@@ -27120,9 +25922,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .teraType = TYPE_NORMAL,
-        .ball = BALL_POKE,
     },
-    { // 1024
+    {
         .species = SPECIES_TERAPAGOS_TERASTAL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST, // special tank
@@ -27141,11 +25942,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STELLAR,
-        .ball = BALL_POKE,
     },
 
-    // ---- Pecharunt ----
-    { // 1025
+    // 1025
+    {
         .species = SPECIES_PECHARUNT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS, // Poison Puppeteer Nasty Plot tank (innate Levitate)
@@ -27164,9 +25964,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4
         ),
         .teraType = TYPE_STEEL,
-        .ball = BALL_POKE,
     },
-    { // 1025
+    {
         .species = SPECIES_PECHARUNT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_BLACK_SLUDGE, // Malignant Chain status tank (innate Levitate)
@@ -27185,7 +25984,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .ball = BALL_POKE,
     },
 };
 

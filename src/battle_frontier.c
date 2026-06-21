@@ -376,7 +376,11 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
 
 void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32 otID, u32 flags, struct Pokemon *dst)
 {
-    enum PokeBall ball = (fmon->ball == 0xFF) ? Random() % POKEBALL_COUNT : fmon->ball;
+    // FORK: an unset .ball (0 == BALL_STRANGE) defaults to BALL_POKE rather than
+    // literally using the Strange Ball, so roster entries can omit a cosmetic
+    // Poke Ball line entirely.
+    enum PokeBall ball = (fmon->ball == 0xFF) ? Random() % POKEBALL_COUNT
+        : (fmon->ball == BALL_STRANGE) ? BALL_POKE : fmon->ball;
     enum Move move;
     u32 personality = 0, ability, friendship, j;
 
