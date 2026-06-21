@@ -9,136 +9,150 @@
 // base can sit below its formes (base Calyrex is TIER_NORMAL / absent while its
 // Ice/Shadow riders are TIER_MYTHICAL).
 // Anything not listed is TIER_NORMAL. Add a row to classify another species/forme.
+// Each tier is its own array — membership in the array is the classification, so
+// rows only need the species (no per-row TIER_* token to keep in sync).
 
-struct SpeciesTierEntry
-{
-    u16 species;    // exact SPECIES_* id (forme-specific)
-    u8 tier;        // enum SpeciesTier
-};
-
-static const struct SpeciesTierEntry sSpeciesTiers[] =
+// ---- Mythical — exactly 1 per frontier brain battle ----
+static const u16 sMythicalSpecies[] =
 {
     // Nat Dex # in trailing comments (formes share their base's number); keep rows sorted by it.
-    // ---- Mythical — exactly 1 per frontier brain battle ----
-    { SPECIES_MEWTWO,              TIER_MYTHICAL }, // 150
-    { SPECIES_LUGIA,               TIER_MYTHICAL }, // 249
-    { SPECIES_HO_OH,               TIER_MYTHICAL }, // 250
-    { SPECIES_KYOGRE,              TIER_MYTHICAL }, // 382
-    { SPECIES_GROUDON,             TIER_MYTHICAL }, // 383
-    { SPECIES_RAYQUAZA,            TIER_MYTHICAL }, // 384
-    { SPECIES_DEOXYS_ATTACK,       TIER_MYTHICAL }, // 386
-    { SPECIES_DEOXYS_SPEED,        TIER_MYTHICAL }, // 386
-    { SPECIES_DIALGA,              TIER_MYTHICAL }, // 483
-    { SPECIES_DIALGA_ORIGIN,       TIER_MYTHICAL }, // 483
-    { SPECIES_PALKIA,              TIER_MYTHICAL }, // 484
-    { SPECIES_PALKIA_ORIGIN,       TIER_MYTHICAL }, // 484
-    { SPECIES_GIRATINA,            TIER_MYTHICAL }, // 487
-    { SPECIES_GIRATINA_ORIGIN,     TIER_MYTHICAL }, // 487
-    { SPECIES_DARKRAI,             TIER_MYTHICAL }, // 491
-    { SPECIES_ARCEUS,              TIER_MYTHICAL }, // 493
-    { SPECIES_RESHIRAM,            TIER_MYTHICAL }, // 643
-    { SPECIES_ZEKROM,              TIER_MYTHICAL }, // 644
-    { SPECIES_XERNEAS,             TIER_MYTHICAL }, // 716
-    { SPECIES_YVELTAL,             TIER_MYTHICAL }, // 717
-    { SPECIES_ZYGARDE,             TIER_MYTHICAL }, // 718
-    { SPECIES_SOLGALEO,            TIER_MYTHICAL }, // 791
-    { SPECIES_LUNALA,              TIER_MYTHICAL }, // 792
-    { SPECIES_NECROZMA_DAWN_WINGS, TIER_MYTHICAL }, // 800
-    { SPECIES_NECROZMA_DUSK_MANE,  TIER_MYTHICAL }, // 800
-    { SPECIES_ZACIAN,              TIER_MYTHICAL }, // 888
-    { SPECIES_ZACIAN_CROWNED,      TIER_MYTHICAL }, // 888
-    { SPECIES_ZAMAZENTA,           TIER_MYTHICAL }, // 889
-    { SPECIES_ZAMAZENTA_CROWNED,   TIER_MYTHICAL }, // 889
-    { SPECIES_ETERNATUS,           TIER_MYTHICAL }, // 890
-    { SPECIES_CALYREX_ICE,         TIER_MYTHICAL }, // 898
-    { SPECIES_CALYREX_SHADOW,      TIER_MYTHICAL }, // 898
-    { SPECIES_KORAIDON,            TIER_MYTHICAL }, // 1007
-    { SPECIES_MIRAIDON,            TIER_MYTHICAL }, // 1008
-
-    // ---- Legendary — exactly 1 per frontier boss battle ----
-    { SPECIES_LATIAS,               TIER_LEGENDARY }, // 380
-    { SPECIES_LATIOS,               TIER_LEGENDARY }, // 381
-    { SPECIES_JIRACHI,              TIER_LEGENDARY }, // 385
-    { SPECIES_SHAYMIN_SKY,          TIER_LEGENDARY }, // 492
-    { SPECIES_KYUREM,               TIER_LEGENDARY }, // 646
-    { SPECIES_KYUREM_BLACK,         TIER_LEGENDARY }, // 646
-    { SPECIES_KYUREM_WHITE,         TIER_LEGENDARY }, // 646
-    { SPECIES_KELDEO,               TIER_LEGENDARY }, // 647
-    { SPECIES_MELOETTA,             TIER_LEGENDARY }, // 648
-    { SPECIES_GENESECT,             TIER_LEGENDARY }, // 649
-    { SPECIES_HOOPA_UNBOUND,        TIER_LEGENDARY }, // 720
-    { SPECIES_URSHIFU,              TIER_LEGENDARY }, // 892
-    { SPECIES_URSHIFU_RAPID_STRIKE, TIER_LEGENDARY }, // 892
-    { SPECIES_GLASTRIER,            TIER_LEGENDARY }, // 896
-    { SPECIES_SPECTRIER,            TIER_LEGENDARY }, // 897
-    { SPECIES_WALKING_WAKE,         TIER_LEGENDARY }, // 1009
-    { SPECIES_OGERPON,              TIER_LEGENDARY }, // 1017
-    { SPECIES_OGERPON_CORNERSTONE,  TIER_LEGENDARY }, // 1017
-    { SPECIES_OGERPON_HEARTHFLAME,  TIER_LEGENDARY }, // 1017
-    { SPECIES_OGERPON_TEAL,         TIER_LEGENDARY }, // 1017
-    { SPECIES_OGERPON_WELLSPRING,   TIER_LEGENDARY }, // 1017
-
-    // ---- Pseudo — At most 1 per frontier draft team ----
-    { SPECIES_ARTICUNO_GALAR,     TIER_PSEUDO }, // 144
-    { SPECIES_ZAPDOS_GALAR,       TIER_PSEUDO }, // 145
-    { SPECIES_MOLTRES_GALAR,      TIER_PSEUDO }, // 146
-    { SPECIES_DRAGONITE,          TIER_PSEUDO }, // 149
-    { SPECIES_TYRANITAR,          TIER_PSEUDO }, // 248
-    { SPECIES_SALAMENCE,          TIER_PSEUDO }, // 373
-    { SPECIES_GARCHOMP,           TIER_PSEUDO }, // 445
-    { SPECIES_HEATRAN,            TIER_PSEUDO }, // 485
-    { SPECIES_MANAPHY,            TIER_PSEUDO }, // 490
-    { SPECIES_SHAYMIN,            TIER_PSEUDO }, // 492
-    { SPECIES_VICTINI,            TIER_PSEUDO }, // 494
-    { SPECIES_HYDREIGON,          TIER_PSEUDO }, // 635
-    { SPECIES_TERRAKION,          TIER_PSEUDO }, // 639
-    { SPECIES_TORNADUS,           TIER_PSEUDO }, // 641
-    { SPECIES_TORNADUS_THERIAN,   TIER_PSEUDO }, // 641
-    { SPECIES_THUNDURUS,          TIER_PSEUDO }, // 642
-    { SPECIES_THUNDURUS_THERIAN,  TIER_PSEUDO }, // 642
-    { SPECIES_LANDORUS,           TIER_PSEUDO }, // 645
-    { SPECIES_LANDORUS_THERIAN,   TIER_PSEUDO }, // 645
-    { SPECIES_KOMMO_O,            TIER_PSEUDO }, // 784
-    { SPECIES_TAPU_KOKO,          TIER_PSEUDO }, // 785
-    { SPECIES_TAPU_LELE,          TIER_PSEUDO }, // 786
-    { SPECIES_TAPU_BULU,          TIER_PSEUDO }, // 787
-    { SPECIES_TAPU_FINI,          TIER_PSEUDO }, // 788
-    { SPECIES_PHEROMOSA,          TIER_PSEUDO }, // 795
-    { SPECIES_KARTANA,            TIER_PSEUDO }, // 798
-    { SPECIES_NAGANADEL,          TIER_PSEUDO }, // 804
-    { SPECIES_BLACEPHALON,        TIER_PSEUDO }, // 806
-    { SPECIES_ZERAORA,            TIER_PSEUDO }, // 807
-    { SPECIES_DRAGAPULT,          TIER_PSEUDO }, // 887
-    { SPECIES_GREAT_TUSK,         TIER_PSEUDO }, // 984
-    { SPECIES_FLUTTER_MANE,       TIER_PSEUDO }, // 987
-    { SPECIES_SLITHER_WING,       TIER_PSEUDO }, // 988
-    { SPECIES_SANDY_SHOCKS,       TIER_PSEUDO }, // 989
-    { SPECIES_IRON_TREADS,        TIER_PSEUDO }, // 990
-    { SPECIES_IRON_BUNDLE,        TIER_PSEUDO }, // 991
-    { SPECIES_IRON_HANDS,         TIER_PSEUDO }, // 992
-    { SPECIES_IRON_JUGULIS,       TIER_PSEUDO }, // 993
-    { SPECIES_IRON_MOTH,          TIER_PSEUDO }, // 994
-    { SPECIES_IRON_THORNS,        TIER_PSEUDO }, // 995
-    { SPECIES_BAXCALIBUR,         TIER_PSEUDO }, // 998
-    { SPECIES_CHIEN_PAO,          TIER_PSEUDO }, // 1002
-    { SPECIES_CHI_YU,             TIER_PSEUDO }, // 1004
-    { SPECIES_ROARING_MOON,       TIER_PSEUDO }, // 1005
-    { SPECIES_IRON_VALIANT,       TIER_PSEUDO }, // 1006
-    { SPECIES_GOUGING_FIRE,       TIER_PSEUDO }, // 1020
-    { SPECIES_RAGING_BOLT,        TIER_PSEUDO }, // 1021
-    { SPECIES_IRON_BOULDER,       TIER_PSEUDO }, // 1022
-    { SPECIES_TERAPAGOS_TERASTAL, TIER_PSEUDO }, // 1024
+    SPECIES_MEWTWO,              // 150
+    SPECIES_LUGIA,                // 249
+    SPECIES_HO_OH,                // 250
+    SPECIES_KYOGRE,               // 382
+    SPECIES_GROUDON,              // 383
+    SPECIES_RAYQUAZA,             // 384
+    SPECIES_DEOXYS_ATTACK,        // 386
+    SPECIES_DEOXYS_SPEED,         // 386
+    SPECIES_DIALGA,               // 483
+    SPECIES_DIALGA_ORIGIN,        // 483
+    SPECIES_PALKIA,               // 484
+    SPECIES_PALKIA_ORIGIN,        // 484
+    SPECIES_GIRATINA,             // 487
+    SPECIES_GIRATINA_ORIGIN,      // 487
+    SPECIES_DARKRAI,              // 491
+    SPECIES_ARCEUS,               // 493
+    SPECIES_RESHIRAM,             // 643
+    SPECIES_ZEKROM,               // 644
+    SPECIES_XERNEAS,              // 716
+    SPECIES_YVELTAL,              // 717
+    SPECIES_ZYGARDE,              // 718
+    SPECIES_SOLGALEO,             // 791
+    SPECIES_LUNALA,               // 792
+    SPECIES_NECROZMA_DAWN_WINGS,  // 800
+    SPECIES_NECROZMA_DUSK_MANE,   // 800
+    SPECIES_ZACIAN,               // 888
+    SPECIES_ZACIAN_CROWNED,       // 888
+    SPECIES_ZAMAZENTA,            // 889
+    SPECIES_ZAMAZENTA_CROWNED,    // 889
+    SPECIES_ETERNATUS,            // 890
+    SPECIES_CALYREX_ICE,          // 898
+    SPECIES_CALYREX_SHADOW,       // 898
+    SPECIES_KORAIDON,             // 1007
+    SPECIES_MIRAIDON,             // 1008
 };
 
-enum SpeciesTier GetSpeciesTier(u16 species)
+// ---- Legendary — exactly 1 per frontier boss battle ----
+static const u16 sLegendarySpecies[] =
+{
+    SPECIES_LATIAS,               // 380
+    SPECIES_LATIOS,                // 381
+    SPECIES_JIRACHI,               // 385
+    SPECIES_SHAYMIN_SKY,           // 492
+    SPECIES_KYUREM,                // 646
+    SPECIES_KYUREM_BLACK,          // 646
+    SPECIES_KYUREM_WHITE,          // 646
+    SPECIES_KELDEO,                // 647
+    SPECIES_MELOETTA,              // 648
+    SPECIES_GENESECT,              // 649
+    SPECIES_HOOPA_UNBOUND,         // 720
+    SPECIES_URSHIFU,               // 892
+    SPECIES_URSHIFU_RAPID_STRIKE,  // 892
+    SPECIES_GLASTRIER,             // 896
+    SPECIES_SPECTRIER,             // 897
+    SPECIES_WALKING_WAKE,          // 1009
+    SPECIES_OGERPON,               // 1017
+    SPECIES_OGERPON_CORNERSTONE,   // 1017
+    SPECIES_OGERPON_HEARTHFLAME,   // 1017
+    SPECIES_OGERPON_TEAL,          // 1017
+    SPECIES_OGERPON_WELLSPRING,    // 1017
+};
+
+// ---- Pseudo — at most 1 per frontier draft team ----
+static const u16 sPseudoSpecies[] =
+{
+    SPECIES_ARTICUNO_GALAR,       // 144
+    SPECIES_ZAPDOS_GALAR,         // 145
+    SPECIES_MOLTRES_GALAR,        // 146
+    SPECIES_DRAGONITE,            // 149
+    SPECIES_TYRANITAR,            // 248
+    SPECIES_SALAMENCE,            // 373
+    SPECIES_GARCHOMP,             // 445
+    SPECIES_HEATRAN,              // 485
+    SPECIES_MANAPHY,              // 490
+    SPECIES_SHAYMIN,              // 492
+    SPECIES_VICTINI,              // 494
+    SPECIES_HYDREIGON,            // 635
+    SPECIES_TERRAKION,            // 639
+    SPECIES_TORNADUS,             // 641
+    SPECIES_TORNADUS_THERIAN,     // 641
+    SPECIES_THUNDURUS,            // 642
+    SPECIES_THUNDURUS_THERIAN,    // 642
+    SPECIES_LANDORUS,             // 645
+    SPECIES_LANDORUS_THERIAN,     // 645
+    SPECIES_KOMMO_O,              // 784
+    SPECIES_TAPU_KOKO,            // 785
+    SPECIES_TAPU_LELE,            // 786
+    SPECIES_TAPU_BULU,            // 787
+    SPECIES_TAPU_FINI,            // 788
+    SPECIES_PHEROMOSA,            // 795
+    SPECIES_KARTANA,              // 798
+    SPECIES_NAGANADEL,            // 804
+    SPECIES_BLACEPHALON,          // 806
+    SPECIES_ZERAORA,              // 807
+    SPECIES_DRAGAPULT,            // 887
+    SPECIES_GREAT_TUSK,           // 984
+    SPECIES_FLUTTER_MANE,         // 987
+    SPECIES_SLITHER_WING,         // 988
+    SPECIES_SANDY_SHOCKS,         // 989
+    SPECIES_IRON_TREADS,          // 990
+    SPECIES_IRON_BUNDLE,          // 991
+    SPECIES_IRON_HANDS,           // 992
+    SPECIES_IRON_JUGULIS,         // 993
+    SPECIES_IRON_MOTH,            // 994
+    SPECIES_IRON_THORNS,          // 995
+    SPECIES_BAXCALIBUR,           // 998
+    SPECIES_CHIEN_PAO,            // 1002
+    SPECIES_CHI_YU,               // 1004
+    SPECIES_ROARING_MOON,         // 1005
+    SPECIES_IRON_VALIANT,         // 1006
+    SPECIES_GOUGING_FIRE,         // 1020
+    SPECIES_RAGING_BOLT,          // 1021
+    SPECIES_IRON_BOULDER,         // 1022
+    SPECIES_TERAPAGOS_TERASTAL,   // 1024
+};
+
+static bool32 SpeciesInList(u16 species, const u16 *list, u32 count)
 {
     u32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sSpeciesTiers); i++)
+    for (i = 0; i < count; i++)
     {
-        if (sSpeciesTiers[i].species == species)
-            return sSpeciesTiers[i].tier;
+        if (list[i] == species)
+            return TRUE;
     }
+
+    return FALSE;
+}
+
+enum SpeciesTier GetSpeciesTier(u16 species)
+{
+    if (SpeciesInList(species, sMythicalSpecies, ARRAY_COUNT(sMythicalSpecies)))
+        return TIER_MYTHICAL;
+    if (SpeciesInList(species, sLegendarySpecies, ARRAY_COUNT(sLegendarySpecies)))
+        return TIER_LEGENDARY;
+    if (SpeciesInList(species, sPseudoSpecies, ARRAY_COUNT(sPseudoSpecies)))
+        return TIER_PSEUDO;
 
     return TIER_NORMAL;
 }
