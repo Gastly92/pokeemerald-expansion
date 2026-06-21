@@ -217,8 +217,13 @@
 //     innate is NOT recorded as identity (no ability pop-up, exactly like the real Stench, which has
 //     none either). NO pure-boon divergence: Stench only ever flinches the FOE, so it never hurts its
 //     holder — the innate is a 1:1 copy of the real ability. It still doesn't stack with a King's Rock
-//     flinch and is still blocked by Shield Dust / Covert Cloak, same as the real ability (those checks
-//     live in the shared flinch path, not the ability dispatch). Suppression parity holds via
+//     flinch — TryKingsRock (src/battle_hold_effects.c) pre-empts the holder's own flinch item via a
+//     BattlerHasAbility(ATK, STENCH) guard, made innate-aware so an innate holder's item bows out (and
+//     isn't consumed) exactly like a chosen Stench's. The flinch is also still blocked by Shield Dust /
+//     Covert Cloak, same as the real ability (those checks live in the shared flinch path, not the
+//     ability dispatch). Because Stench sets the flinch via SetMoveEffect (not TryTriggerAdditionalEffect),
+//     it bypasses DETERMINISTIC_FLINCH's anti-lock cap exactly like the real ability / King's Rock / Fake
+//     Out — no flinchedLastTurn check. Suppression parity holds via
 //     IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field); Stench is not breakable, so Mold
 //     Breaker never touches it, same as the real ability. AI needs no wiring: nothing in src/battle_ai_*.c
 //     reads ABILITY_STENCH (the AI doesn't model the flinch chance), so an innate Stench is exactly as

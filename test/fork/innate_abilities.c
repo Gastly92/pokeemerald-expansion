@@ -1489,3 +1489,30 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate S
         NONE_OF { MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); }
     }
 }
+
+// Stench pre-empts its holder's own flinch item so the two don't stack (and the item isn't
+// redundantly consumed). That guard in TryKingsRock (src/battle_hold_effects.c) reads the attacker's
+// ability, so it must credit an innate Stench too — otherwise an innate holder's King's Rock would
+// fire/consume where a chosen-Stench holder's bows out. To isolate the guard, Stench's own roll is
+// forced to MISS (so it sets no flinch volatile that would also stop the rock) while King's Rock is a
+// guaranteed deterministic entry flinch: with the innate-aware guard the rock still bows out, so there
+// is no flinch and the item is retained; without it the rock would flinch and be consumed.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Stench holder's King's Rock bows out (no stacking, not consumed)")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUK, ABILITY_STENCH));
+        ASSUME(gItemsInfo[ITEM_KINGS_ROCK].holdEffect == HOLD_EFFECT_FLINCH);
+        ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE); // King's Rock = guaranteed first-turn flinch
+        // DETERMINISTIC_ABILITIES off (baseline): Stench takes its RNG path, forced to miss below.
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_STICKY_HOLD); Item(ITEM_KINGS_ROCK); Speed(50); } // chosen ability is NOT Stench
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(10); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_STENCH, FALSE)); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF { MESSAGE("The opposing Wobbuffet flinched and couldn't move!"); } // rock suppressed by innate Stench
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_KINGS_ROCK); // King's Rock left untouched
+    }
+}
