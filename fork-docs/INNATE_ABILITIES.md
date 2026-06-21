@@ -16,8 +16,12 @@ and only let species declare innates from that supported set. Today the set is
 **`LEVITATE`** (a passive Ground immunity), **`REGENERATOR`** (a silent
 1/3-HP switch-out heal), **`UNAWARE`** (a passive calc modifier that ignores
 the foe's stat-stage changes), **`STURDY`** (a full-HP endure + OHKO-move
-immunity), **`NATURAL_CURE`** (a silent status cure on switch-out), and
-**`PRANKSTER`** (a +1 priority boost on status moves).
+immunity), **`NATURAL_CURE`** (a silent status cure on switch-out),
+**`PRANKSTER`** (a +1 priority boost on status moves), the pinch abilities, the
+weather speed-doublers, **`FILTER`**, **`PRESSURE`**, **`STENCH`**,
+**`BATTLE_ARMOR`**/**`SHELL_ARMOR`**, and **`SPEED_BOOST`** (a +1 Speed boost at
+the end of every turn — the first *active, scripted* end-turn innate, fired
+through an end-turn driver; see the active-ability recipe below).
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -267,21 +271,31 @@ How much is needed depends on the ability class:
 
 - **Active / on-event ability with a script** (fires a battle script on
   switch-in, end-of-turn, or on-contact — e.g. Intimidate, Speed Boost, Static,
-  Rough Skin). These need the re-entrant
-  **`TryActivateInnateEffects(caseID, battler, *index, trigger)`** driver and a
-  trigger hook. That driver + the switch-in / end-turn / move-end
-  hooks were written and then removed when we scoped back to Levitate; restore
-  them from git history as the reference implementation when the first active
-  ability joins the allowlist:
-  - driver + per-battler index fields: commit `198160fe` (`battle_util.c`,
-    `battle.h`)
-  - switch-in hook (`FIRST_EVENT_BLOCK_INNATE_ABILITIES`): commit `935f1674`
-    (`battle_switch_in.c`)
-  - end-turn hook (`THIRD_EVENT_BLOCK_ABILITIES_INNATE`): commit `198160fe`
-    (`battle_end_turn.c`)
-  - move-end / on-contact hooks (`MOVEEND_ABILITIES_INNATE`,
-    `MOVEEND_ABILITIES_ATTACKER_INNATE`): commit `e93911db`
-    (`battle_move_resolution.c`)
+  Rough Skin). These need a **driver** at the relevant event site plus a trigger
+  hook. **Speed Boost is the live, worked example for the end-of-turn case** —
+  use it as the reference rather than the older removed-from-history machinery:
+  - driver: **`TryActivateInnateEndTurnEffects(battler)`** (`src/fork/innate_abilities.c`)
+    iterates the species' innate list and, for any *active end-turn* innate
+    (`IsActiveEndTurnInnate`) that is active (`IsInnateActive`) and not the chosen
+    ability, delegates to the **existing** upstream end-turn handler with the innate
+    passed explicitly: `AbilityBattleEffects(ABILITYEFFECT_ENDTURN, battler, innate,
+    MOVE_NONE, TRUE)`. Reusing the upstream case means the stat change / script /
+    pop-up are identical to the real ability for free — the only edit at the effect
+    site (`src/battle_util.c`) is forcing `gBattleScripting.abilityPopupOverwrite`
+    to the innate when the chosen ability differs (the Sturdy/Levitate pop-up
+    precedent), so the real-ability path stays byte-for-byte unchanged.
+  - end-turn hook: a new `THIRD_EVENT_BLOCK_ABILITIES_INNATE` step
+    (`include/constants/battle_end_turn.h`) inserted right after the chosen-ability
+    block, dispatched in `HandleEndTurnThirdEventBlock` (`src/battle_end_turn.c`).
+  - **one-effect-per-turn caveat:** the driver fires at most one active end-turn
+    innate per battler per turn — fine while Speed Boost is the only one. A *second*
+    active end-turn innate needs the driver made re-entrant (hold the end-turn block,
+    advance a per-battler index past each fired effect, reset when the list is
+    exhausted) so both fire across successive turns of the loop.
+  - **switch-in / on-contact actives** (Intimidate, Static, Rough Skin, …) still
+    need their own event hooks; model them on the end-turn driver above (a per-event
+    `TryActivateInnate…` that delegates to the matching `AbilityBattleEffects` case),
+    not on the older `TryActivateInnateEffects` machinery that was removed from history.
 
 ### Step 3.5 — free the frontier roster slots (NOT optional — run the grep first)
 

@@ -9,8 +9,9 @@
 // (a silent 1/3-HP switch-out heal), UNAWARE (a passive calc modifier), STURDY
 // (full-HP endure + OHKO-move immunity), NATURAL_CURE (a silent status cure on
 // switch-out), PRANKSTER (+1 priority on status moves), the pinch and weather-speed
-// abilities, FILTER (−25% supereffective damage taken), and PRESSURE (the holder's foes
-// spend 1 extra PP per move used against it); see src/innate_abilities.c.
+// abilities, FILTER (−25% supereffective damage taken), PRESSURE (the holder's foes
+// spend 1 extra PP per move used against it), and SPEED_BOOST (+1 Speed at the end of
+// every turn — the first active, scripted end-turn innate); see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -1622,5 +1623,79 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate S
         TURN { MOVE(opponent, MOVE_STORM_THROW); MOVE(player, MOVE_CELEBRATE); }
     } SCENE {
         MESSAGE("A critical hit!"); // innate suppressed by Gastro Acid -> the crit lands
+    }
+}
+
+// Speed Boost is the fork's first ACTIVE, scripted end-turn innate: a canon Speed Boost user whose
+// chosen ability differs (Sharpedo's Rough Skin, not Speed Boost) still raises its Speed +1 at the end
+// of every turn via the innate. The pop-up is overridden to show Speed Boost (not the chosen ability).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Speed Boost raises Speed at the end of the turn")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SHARPEDO, ABILITY_SPEED_BOOST));
+        ASSUME(gSpeciesInfo[SPECIES_SHARPEDO].abilities[0] != ABILITY_SPEED_BOOST);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SHARPEDO) { Ability(ABILITY_ROUGH_SKIN); } // chosen ability is NOT Speed Boost
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_SPEED_BOOST); // pop-up shows the innate, not Rough Skin
+        MESSAGE("Sharpedo's Speed rose!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Speed Boost (stock behavior)")
+{
+    GIVEN {
+        // Feature off by default in the baseline; Sharpedo carries no native Speed Boost in slot 0.
+        ASSUME(gSpeciesInfo[SPECIES_SHARPEDO].abilities[0] != ABILITY_SPEED_BOOST);
+        PLAYER(SPECIES_SHARPEDO) { Ability(ABILITY_ROUGH_SKIN); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_SPEED_BOOST); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE); // no boost without the feature
+    }
+}
+
+// Suppression parity: Gastro Acid blanks the innate just like the real ability, so no end-turn boost.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Speed Boost")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SHARPEDO, ABILITY_SPEED_BOOST));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SHARPEDO) { Ability(ABILITY_ROUGH_SKIN); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Sharpedo's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(player, ABILITY_SPEED_BOOST); } // suppressed -> no boost
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE);
+    }
+}
+
+// A real Speed Boost user with the feature ON must NOT boost twice (chosen + innate). The driver skips
+// an innate that equals the chosen ability, so a real Speed Boost mon still raises Speed exactly +1/turn.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a real Speed Boost does not double up with the innate")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TORCHIC, ABILITY_SPEED_BOOST));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TORCHIC) { Ability(ABILITY_SPEED_BOOST); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_SPEED_BOOST);
+        MESSAGE("Torchic's Speed rose!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1); // exactly one boost, not two
     }
 }

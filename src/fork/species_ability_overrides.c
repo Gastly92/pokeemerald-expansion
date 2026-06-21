@@ -59,6 +59,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SCEPTILE, 2,
         ABILITY_LIGHTNING_ROD
     },
+    { // 0257
+        // Blaziken's only real abilities (Blaze, Speed Boost) are BOTH now innate, so its empty
+        // slot 1 takes a flavorful chosen ability for the frontier sets. Sheer Force is :x:
+        // (never an innate -> stable) and complements its snowballing physical wallbreaker sets
+        // (Close Combat / Blaze Kick / Thunder Punch all gain the +30% and drop their secondaries).
+        SPECIES_BLAZIKEN, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0330
         SPECIES_FLYGON, 1, 
         ABILITY_SAND_STREAM

@@ -1047,7 +1047,9 @@ bool32 CanStatChange(struct BattleCalcValues *cv, struct StatChange *st)
     {
         // Special Case for speed boost since shouldn't try to lower opposing stats on speed boost
         // Also for user it might make sense to lower the stat. Regardless this whole check is better suited for CheckViability since the move wouldn't fail in this case
-        if (cv->battlerAtk != cv->battlerDef && st->stat == STAT_SPEED && st->stage < 0 && cv->abilities[cv->battlerDef] == ABILITY_SPEED_BOOST)
+        // FORK: innate-aware — also credit a foe's innate Speed Boost here.
+        if (cv->battlerAtk != cv->battlerDef && st->stat == STAT_SPEED && st->stage < 0
+         && (cv->abilities[cv->battlerDef] == ABILITY_SPEED_BOOST || IsInnateActive(cv->battlerDef, ABILITY_SPEED_BOOST)))
             return FALSE;
 
         if (CompareStat(cv->battlerDef, st->stat, MIN_STAT_STAGE, CMP_EQUAL, ABILITY_NONE))

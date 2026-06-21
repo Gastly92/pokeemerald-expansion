@@ -92,6 +92,7 @@ enum ThirdEventBlock
 {
     THIRD_EVENT_BLOCK_UPROAR,
     THIRD_EVENT_BLOCK_ABILITIES,
+    THIRD_EVENT_BLOCK_ABILITIES_INNATE, // FORK: active end-turn innates (Speed Boost), see TryActivateInnateEndTurnEffects
     THIRD_EVENT_BLOCK_ITEMS,
 };
 

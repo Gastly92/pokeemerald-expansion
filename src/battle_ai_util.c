@@ -2472,6 +2472,11 @@ bool32 CanLowerStat(enum BattlerId battlerAtk, enum BattlerId battlerDef, struct
         if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) && AI_IsAbilityOnSide(battlerDef, ABILITY_FLOWER_VEIL))
             return FALSE;
 
+        // FORK: innate-aware Speed Boost — don't bother lowering an innate Speed Boost foe's Speed
+        // (the chosen-ability case below already handles a real Speed Boost).
+        if (stat == STAT_SPEED && IsInnateActive(battlerDef, ABILITY_SPEED_BOOST))
+            return FALSE;
+
         switch (aiData->abilities[battlerDef])
         {
         case ABILITY_SPEED_BOOST:

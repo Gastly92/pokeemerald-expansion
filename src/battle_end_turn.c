@@ -8,6 +8,7 @@
 #include "battle_stat_change.h"
 #include "battle_gimmick.h"
 #include "battle_scripts.h"
+#include "fork/innate_abilities.h"
 #include "constants/battle.h"
 #include "constants/battle_string_ids.h"
 #include "constants/abilities.h"
@@ -1422,6 +1423,11 @@ static bool32 HandleEndTurnThirdEventBlock(enum BattlerId battler)
         gBattleStruct->eventState.endTurnBlock++;
         break;
     }
+    case THIRD_EVENT_BLOCK_ABILITIES_INNATE: // FORK: active end-turn innates (Speed Boost)
+        if (TryActivateInnateEndTurnEffects(battler))
+            effect = TRUE;
+        gBattleStruct->eventState.endTurnBlock++;
+        break;
     case THIRD_EVENT_BLOCK_ITEMS:
     {
         // TODO: simplify

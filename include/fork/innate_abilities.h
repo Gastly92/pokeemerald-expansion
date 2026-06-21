@@ -36,7 +36,12 @@
 // src/battle_move_resolution.c and src/battle_util.c — a clean-upside 1:1 copy with no AI wiring needed),
 // and STENCH (a 10% on-hit flinch — guaranteed first-turn under DETERMINISTIC_ABILITIES — handled at the
 // ABILITYEFFECT_MOVE_END_ATTACKER on-hit site in src/battle_util.c, run additively beside the chosen-ability
-// dispatch so an innate holder flinches like the real ability; a clean-upside 1:1 copy with no AI wiring needed).
+// dispatch so an innate holder flinches like the real ability; a clean-upside 1:1 copy with no AI wiring needed),
+// and SPEED_BOOST (+1 Speed at the end of every turn — the fork's first ACTIVE, scripted end-turn innate, so
+// it needs the end-turn driver TryActivateInnateEndTurnEffects, hooked from THIRD_EVENT_BLOCK_ABILITIES_INNATE
+// in src/battle_end_turn.c; it delegates to the upstream ABILITYEFFECT_ENDTURN handler so the stat change /
+// script / pop-up match the real ability — a clean-upside 1:1 copy, AI made innate-aware only at the two foe
+// "don't lower its Speed" reads in src/battle_ai_util.c and src/battle_stat_change.c).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground
@@ -66,5 +71,12 @@ bool32 SpeciesHasInnate(u16 species, enum Ability ability);
 // the slot is past the end / the species has no innates. Lets callers iterate a
 // species' innates without needing to know how many it has.
 enum Ability GetSpeciesInnate(u16 species, u32 index);
+
+// FORK: end-turn innate driver. Fires `battler`'s active, scripted end-turn innate
+// (today only Speed Boost: +1 Speed). Hooked from THIRD_EVENT_BLOCK_ABILITIES_INNATE
+// in the end-turn loop (src/battle_end_turn.c), right after the chosen-ability block.
+// Returns TRUE if an effect fired. See the definition in src/fork/innate_abilities.c
+// for the suppression/double-fire guards and the one-effect-per-turn limitation.
+bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler);
 
 #endif // GUARD_INNATE_ABILITIES_H
