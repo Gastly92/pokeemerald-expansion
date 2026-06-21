@@ -75,8 +75,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CLAYDOL, 1, 
         ABILITY_SAND_STREAM
     },
+    { // 0348
+        SPECIES_ARMALDO, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0358
-        SPECIES_CHIMECHO, 1, 
+        SPECIES_CHIMECHO, 1,
         ABILITY_SOUNDPROOF
     },
     { // 0380
@@ -98,6 +102,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0386
         SPECIES_DEOXYS_SPEED, 1, 
         ABILITY_TRACE
+    },
+    { // 0389
+        SPECIES_TORTERRA, 1,
+        ABILITY_SAND_STREAM
     },
     { // 0429
         SPECIES_MISMAGIUS, 1,
@@ -159,6 +167,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SHAYMIN, 1,
         ABILITY_EFFECT_SPORE
     },
+    { // 0503
+        SPECIES_SAMUROTT, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0531
         SPECIES_AUDINO, 1,
         ABILITY_CUTE_CHARM
@@ -190,8 +202,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VIKAVOLT, 1,
         ABILITY_MOTOR_DRIVE
     },
+    { // 0776
+        SPECIES_TURTONATOR, 1,
+        ABILITY_FLAME_BODY
+    },
     { // 0890
-        SPECIES_ETERNATUS, 1, 
+        SPECIES_ETERNATUS, 1,
         ABILITY_POISON_TOUCH
     },
     { // 0911

@@ -5,7 +5,7 @@
 | :white_check_mark: | Stench | When the Pokémon deals damage with its moves, there is a 10% chance that targets will flinch. |
 | :x: | Drizzle | Summons rain for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Speed Boost | Boosts the Pokémon's Speed stat by 1 stage at the end of every turn. |
-| :white_large_square: | Battle Armor | Attacks landed on the Pokémon will never be critical hits. |
+| :white_check_mark: | Battle Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :white_check_mark: | Sturdy | If the Pokémon has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. The Pokémon is also immune to one-hit KO moves. |
 | :x: | Damp | All Pokémon become unable to use explosive moves. Explosive Abilities also fail to trigger. |
 | :white_large_square: | Limber | The Pokémon cannot be paralyzed. |
@@ -76,7 +76,7 @@
 | :white_large_square: | Vital Spirit | The Pokémon cannot become drowsy or be put to sleep. |
 | :white_large_square: | White Smoke | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pure Power | Doubles the power of the Pokémon's physical moves. |
-| :white_large_square: | Shell Armor | Attacks landed on the Pokémon will never be critical hits. |
+| :white_check_mark: | Shell Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :x: | Air Lock | Eliminates the effects of weather. |
 | :white_large_square: | Tangled Feet | Doubles the Pokémon's evasiveness if it is confused. |
 | :x: | Motor Drive | Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage. |

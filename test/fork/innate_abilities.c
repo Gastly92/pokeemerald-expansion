@@ -1541,3 +1541,86 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Stench holder's King's R
         EXPECT_EQ(player->item, ITEM_KINGS_ROCK); // King's Rock left untouched
     }
 }
+
+// Battle Armor and Shell Armor both block critical hits. They are a clean upside (they never hurt the
+// holder), so each innate is a 1:1 copy of the real ability. Storm Throw always crits, so this is an
+// RNG-free proof: a Kingler whose chosen ability is Hyper Cutter (not Shell Armor) still shrugs off the
+// guaranteed crit via its innate Shell Armor; with the feature off the always-crit move crits.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Shell Armor blocks a guaranteed critical hit")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(MoveAlwaysCrits(MOVE_STORM_THROW));
+        ASSUME(SpeciesHasInnate(SPECIES_KINGLER, ABILITY_SHELL_ARMOR));
+        ASSUME(gSpeciesInfo[SPECIES_KINGLER].abilities[0] != ABILITY_SHELL_ARMOR);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KINGLER) { Ability(ABILITY_HYPER_CUTTER); } // chosen ability is NOT Shell Armor
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_STORM_THROW); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_STORM_THROW, opponent);
+        if (enabled)
+            NONE_OF { MESSAGE("A critical hit!"); } // innate Shell Armor blocks the crit
+        else
+            MESSAGE("A critical hit!");              // no innate -> the always-crit move crits
+    }
+}
+
+// The same effect via a Battle Armor user whose chosen ability differs (Cubone's Rock Head, not Battle
+// Armor) — both crit-immunity abilities are wired, so the innate honors either constant.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Battle Armor blocks a guaranteed critical hit")
+{
+    GIVEN {
+        ASSUME(MoveAlwaysCrits(MOVE_STORM_THROW));
+        ASSUME(SpeciesHasInnate(SPECIES_CUBONE, ABILITY_BATTLE_ARMOR));
+        ASSUME(gSpeciesInfo[SPECIES_CUBONE].abilities[0] != ABILITY_BATTLE_ARMOR);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CUBONE) { Ability(ABILITY_ROCK_HEAD); } // chosen ability is NOT Battle Armor
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_STORM_THROW); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_STORM_THROW, opponent);
+        NONE_OF { MESSAGE("A critical hit!"); } // innate Battle Armor blocks the crit
+    }
+}
+
+// Suppression parity: Battle/Shell Armor are breakable, so an attacker's Mold Breaker pierces an innate
+// one exactly as it would the real ability (GetBattlerAbility() and IsInnateActive() are both broken
+// through) — the guaranteed crit lands.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Shell Armor")
+{
+    GIVEN {
+        ASSUME(MoveAlwaysCrits(MOVE_STORM_THROW));
+        ASSUME(gAbilitiesInfo[ABILITY_SHELL_ARMOR].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_KINGLER, ABILITY_SHELL_ARMOR));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_KINGLER) { Ability(ABILITY_HYPER_CUTTER); } // innate Shell Armor
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_STORM_THROW); }
+    } SCENE {
+        MESSAGE("A critical hit!"); // Mold Breaker ignores the innate -> the crit lands
+    }
+}
+
+// Suppression parity: Gastro Acid blanks the innate just like it blanks the real ability, so the
+// guaranteed crit lands once the holder's innate is suppressed.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Shell Armor")
+{
+    GIVEN {
+        ASSUME(MoveAlwaysCrits(MOVE_STORM_THROW));
+        ASSUME(SpeciesHasInnate(SPECIES_KINGLER, ABILITY_SHELL_ARMOR));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_KINGLER) { Ability(ABILITY_HYPER_CUTTER); Moves(MOVE_CELEBRATE); } // innate Shell Armor
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_STORM_THROW); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(opponent, MOVE_STORM_THROW); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("A critical hit!"); // innate suppressed by Gastro Acid -> the crit lands
+    }
+}

@@ -74,7 +74,8 @@
 //
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
 // that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
-// Pressure, or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
+// Pressure, Stench, Battle Armor / Shell Armor (crit immunity), or a weather speed-doubler
+// (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -87,9 +88,10 @@
 // doubles its Speed in rain via its innate Swift Swim, and an Excadrill lists
 // ABILITY_SAND_FORCE yet still doubles in sand via its innate Sand Rush; a Revavroom set lists
 // ABILITY_OVERCOAT yet still shaves supereffective hits via its innate Filter; an Aerodactyl lists
-// ABILITY_ROCK_HEAD yet still taxes the foe's PP via its innate Pressure. Role comments
+// ABILITY_ROCK_HEAD yet still taxes the foe's PP via its innate Pressure; a Drapion lists
+// ABILITY_SNIPER yet still shrugs off crits via its innate Battle Armor. Role comments
 // that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/
-// "Pressure"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
+// "Pressure"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
 // its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
 // it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
 // (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
@@ -3565,7 +3567,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_SHELL_ARMOR, // Swift Swim now innate; chosen Shell Armor
+        .ability = ABILITY_WEAK_ARMOR, // Swift Swim & Shell Armor now innate; chosen Weak Armor banks Speed when hit
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -3587,7 +3589,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_BATTLE_ARMOR,
+        .ability = ABILITY_WEAK_ARMOR, // Battle Armor & Swift Swim now innate; chosen Weak Armor banks Speed when hit
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8645,7 +8647,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_AQUA_TAIL
         },
-        .ability = ABILITY_BATTLE_ARMOR,
+        .ability = ABILITY_WATER_ABSORB, // Battle Armor & Swift Swim now innate; chosen Water Absorb (override) heals off Water
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8665,7 +8667,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_BATTLE_ARMOR,
+        .ability = ABILITY_WATER_ABSORB, // Battle Armor & Swift Swim now innate; chosen Water Absorb (override) heals off Water
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9788,7 +9790,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SHELL_ARMOR, // Overgrow now innate (latched); chosen Shell Armor
+        .ability = ABILITY_SAND_STREAM, // Overgrow & Shell Armor now innate; chosen Sand Stream (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -9808,7 +9810,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SYNTHESIS
         },
-        .ability = ABILITY_SHELL_ARMOR,
+        .ability = ABILITY_SAND_STREAM, // Overgrow & Shell Armor now innate; chosen Sand Stream (override)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10824,7 +10826,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TAUNT
         },
-        .ability = ABILITY_BATTLE_ARMOR,
+        .ability = ABILITY_SNIPER, // Battle Armor now innate; chosen Sniper sharpens its own crits
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12573,7 +12575,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SACRED_SWORD,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SHELL_ARMOR, // Torrent now innate (latched); chosen Shell Armor
+        .ability = ABILITY_WATER_ABSORB, // Torrent & Shell Armor now innate; chosen Water Absorb (override) heals off Water
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12593,7 +12595,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_SHELL_ARMOR, // Torrent now innate (latched); chosen Shell Armor
+        .ability = ABILITY_WATER_ABSORB, // Torrent & Shell Armor now innate; chosen Water Absorb (override) heals off Water
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17016,7 +17018,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_RECOVER
         },
-        .ability = ABILITY_SHELL_ARMOR,
+        .ability = ABILITY_SAP_SIPPER, // Shell Armor now innate; chosen Sap Sipper walls Grass
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18874,7 +18876,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_PULSE,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_SHELL_ARMOR,
+        .ability = ABILITY_FLAME_BODY, // Shell Armor now innate; chosen Flame Body (override) burns on contact
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18894,7 +18896,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_FLASH_CANNON
         },
-        .ability = ABILITY_SHELL_ARMOR,
+        .ability = ABILITY_FLAME_BODY, // Shell Armor now innate; chosen Flame Body (override) burns on contact
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20597,7 +20599,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SHELL_ARMOR,
+        .ability = ABILITY_STRONG_JAW, // Shell Armor & Swift Swim now innate; chosen Strong Jaw powers up Crunch
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
