@@ -8,7 +8,7 @@
 | :white_check_mark: | Battle Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :white_check_mark: | Sturdy | If the Pokémon has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. The Pokémon is also immune to one-hit KO moves. |
 | :x: | Damp | All Pokémon become unable to use explosive moves. Explosive Abilities also fail to trigger. |
-| :white_large_square: | Limber | The Pokémon cannot be paralyzed. |
+| :white_check_mark: | Limber | The Pokémon cannot be paralyzed. |
 | :white_large_square: | Sand Veil | Boosts the Pokémon's evasiveness by 25% in a sandstorm. |
 | :x: | Static | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being paralyzed. |
 | :x: | Volt Absorb | Electric-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |

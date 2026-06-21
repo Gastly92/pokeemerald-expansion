@@ -23,6 +23,7 @@
 #include "constants/moves.h"
 #include "constants/party_menu.h"
 #include "constants/battle_pike.h"
+#include "fork/innate_abilities.h" // FORK: innate-Limber para immunity in the Pike status room
 
 struct PikeRoomNPC
 {
@@ -829,7 +830,10 @@ static bool8 DoesAbilityPreventStatus(struct Pokemon *mon, u32 status)
             ret = TRUE;
         break;
     case STATUS1_PARALYSIS:
-        if (ability == ABILITY_LIMBER)
+        // FORK: credit an innate Limber too, so an innate-Limber party mon shrugs off the Pike's
+        // paralysis room exactly like a real Limber (out of battle, so gated on the feature flag).
+        if (ability == ABILITY_LIMBER
+         || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(GetMonData(mon, MON_DATA_SPECIES), ABILITY_LIMBER)))
             ret = TRUE;
         break;
     case STATUS1_SLEEP:

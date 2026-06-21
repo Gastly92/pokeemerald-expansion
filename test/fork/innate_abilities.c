@@ -1742,3 +1742,109 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Speed Boost fires past a no
         EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1);
     }
 }
+
+// ----- Limber (paralysis immunity) -----
+// A flavor Seviper (Shed Skin / Infiltrator — no native Limber) cannot be paralyzed via its innate
+// Limber, and the pop-up shows Limber, not the chosen Infiltrator. With the feature off it's stock
+// behavior, so Thunder Wave paralyzes normally.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Limber prevents paralysis")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_THUNDER_WAVE) == EFFECT_NON_VOLATILE_STATUS);
+        ASSUME(GetMoveNonVolatileStatus(MOVE_THUNDER_WAVE) == MOVE_EFFECT_PARALYSIS);
+        ASSUME(SpeciesHasInnate(SPECIES_SEVIPER, ABILITY_LIMBER));
+        ASSUME(gSpeciesInfo[SPECIES_SEVIPER].abilities[0] != ABILITY_LIMBER);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SEVIPER) { Ability(ABILITY_INFILTRATOR); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_LIMBER); // pop-up shows Limber, not the chosen Infiltrator
+            MESSAGE("It doesn't affect Seviper…");
+            NONE_OF {
+                ANIMATION(ANIM_TYPE_STATUS, B_ANIM_STATUS_PRZ, player);
+                STATUS_ICON(player, paralysis: TRUE);
+            }
+        } else {
+            STATUS_ICON(player, paralysis: TRUE); // no innate -> Thunder Wave paralyzes
+        }
+    }
+}
+
+// Suppression parity: Limber is breakable, so an attacker's Mold Breaker pierces an innate Limber
+// exactly as it would the real ability — the paralysis lands and no Limber pop-up shows.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Limber")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_LIMBER].breakable);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SEVIPER) { Ability(ABILITY_INFILTRATOR); } // innate Limber
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        STATUS_ICON(player, paralysis: TRUE); // Mold Breaker ignores the innate -> paralyzed
+        NONE_OF { ABILITY_POPUP(player, ABILITY_LIMBER); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Limber")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SEVIPER) { Ability(ABILITY_INFILTRATOR); Moves(MOVE_CELEBRATE); } // innate Limber
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_THUNDER_WAVE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses the innate
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        MESSAGE("Seviper's Ability was suppressed!");
+        STATUS_ICON(player, paralysis: TRUE); // suppressed -> Thunder Wave paralyzes
+    }
+}
+
+// A canon Limber user (Persian: Limber/Technician/Unnerve) whose *chosen* ability is Technician still
+// carries Limber as an innate, so it keeps the para-immunity no matter which slot the build picks.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Limber user keeps it via innate when the chosen ability differs")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PERSIAN, ABILITY_LIMBER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_PERSIAN) { Ability(ABILITY_TECHNICIAN); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_LIMBER);
+        MESSAGE("It doesn't affect Persian…");
+        NONE_OF { STATUS_ICON(player, paralysis: TRUE); }
+    }
+}
+
+// The switch-in cure site: a mon paralyzed while its innate Limber was suppressed (Gastro Acid) gets
+// the paralysis cured the moment it switches back in (Gastro Acid clears on switch-out), exactly like a
+// real Limber. The pop-up shows Limber.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Limber cures pre-existing paralysis on switch-in")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SEVIPER) { Ability(ABILITY_INFILTRATOR); Moves(MOVE_CELEBRATE); } // innate Limber
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_THUNDER_WAVE, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); }   // suppress the innate
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_THUNDER_WAVE); }  // Seviper paralyzed
+        TURN { SWITCH(player, 1); MOVE(opponent, MOVE_CELEBRATE); }                // Seviper out -> Gastro clears
+        TURN { SWITCH(player, 0); MOVE(opponent, MOVE_CELEBRATE); }                // Seviper back in -> innate cures
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_LIMBER);
+        MESSAGE("Seviper was cured of paralysis!");
+    } THEN {
+        EXPECT_EQ(player->status1 & STATUS1_PARALYSIS, 0);
+    }
+}

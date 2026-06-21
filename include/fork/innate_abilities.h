@@ -41,7 +41,12 @@
 // it needs the end-turn driver TryActivateInnateEndTurnEffects, hooked from THIRD_EVENT_BLOCK_ABILITIES_INNATE
 // in src/battle_end_turn.c; it delegates to the upstream ABILITYEFFECT_ENDTURN handler so the stat change /
 // script / pop-up match the real ability — a clean-upside 1:1 copy, AI made innate-aware only at the two foe
-// "don't lower its Speed" reads in src/battle_ai_util.c and src/battle_stat_change.c).
+// "don't lower its Speed" reads in src/battle_ai_util.c and src/battle_stat_change.c),
+// and LIMBER (the holder cannot be paralyzed, handled at the paralysis block site in
+// CanSetNonVolatileStatus and the switch-in cure site in TryImmunityAbilityHealStatus in
+// src/battle_util.c, plus the out-of-battle Battle Pike status room in src/battle_pike.c — a
+// clean-upside 1:1 copy; AI is correct for free since its paralysis checks funnel through
+// CanSetNonVolatileStatus, whose fork clause reads the real battler).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground
