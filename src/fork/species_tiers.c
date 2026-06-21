@@ -71,7 +71,6 @@ static const u16 sLegendarySpecies[] =
     SPECIES_GLASTRIER,             // 896
     SPECIES_SPECTRIER,             // 897
     SPECIES_WALKING_WAKE,          // 1009
-    SPECIES_OGERPON,               // 1017
     SPECIES_OGERPON_CORNERSTONE,   // 1017
     SPECIES_OGERPON_HEARTHFLAME,   // 1017
     SPECIES_OGERPON_TEAL,          // 1017
@@ -161,3 +160,47 @@ bool32 SpeciesIsTier(u16 species, enum SpeciesTier tier)
 {
     return GetSpeciesTier(species) == tier;
 }
+
+#if TESTING
+bool32 SpeciesTierListsOverlap(u16 *outSpecies)
+{
+    static const struct { const u16 *list; u32 count; } sAllTierLists[] =
+    {
+        { sMythicalSpecies,  ARRAY_COUNT(sMythicalSpecies) },
+        { sLegendarySpecies, ARRAY_COUNT(sLegendarySpecies) },
+        { sPseudoSpecies,    ARRAY_COUNT(sPseudoSpecies) },
+    };
+    u32 listA, listB, i, j;
+
+    for (listA = 0; listA < ARRAY_COUNT(sAllTierLists); listA++)
+    {
+        for (i = 0; i < sAllTierLists[listA].count; i++)
+        {
+            // Duplicates within the same list.
+            for (j = i + 1; j < sAllTierLists[listA].count; j++)
+            {
+                if (sAllTierLists[listA].list[i] == sAllTierLists[listA].list[j])
+                {
+                    *outSpecies = sAllTierLists[listA].list[i];
+                    return TRUE;
+                }
+            }
+
+            // Duplicates across other lists.
+            for (listB = listA + 1; listB < ARRAY_COUNT(sAllTierLists); listB++)
+            {
+                for (j = 0; j < sAllTierLists[listB].count; j++)
+                {
+                    if (sAllTierLists[listA].list[i] == sAllTierLists[listB].list[j])
+                    {
+                        *outSpecies = sAllTierLists[listA].list[i];
+                        return TRUE;
+                    }
+                }
+            }
+        }
+    }
+
+    return FALSE;
+}
+#endif // TESTING
