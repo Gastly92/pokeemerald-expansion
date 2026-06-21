@@ -7,6 +7,7 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_controllers.h"
+#include "battle_main.h" // FORK: GetBattlerTotalSpeedStat for the player's effective Speed
 #include "battle_util.h"
 #include "bg.h"
 #include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
@@ -78,10 +79,12 @@ static u16 *sFrameTilemapBuffer = NULL;
 
 enum
 {
+    // FORK: Speed Tiers leads — it's the page that actually drives a turn
+    // decision, so it's both first in the L/R cycle and the default landing page.
+    INFO_PAGE_SPEED,
     INFO_PAGE_FIELD,
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
-    INFO_PAGE_SPEED,
     INFO_PAGE_FOE,
     INFO_PAGE_COUNT,
 };
@@ -90,6 +93,14 @@ enum
 #define tWindowId  data[0]
 #define tPage      data[1]
 #define tFoeIndex  data[2]
+
+// FORK: remember the last page/foe the player was viewing, so re-opening the
+// viewer (often once per turn) returns to where they left off instead of always
+// resetting to the front. The viewer is modal, so saving on close is enough to
+// have the value ready for the next open. Defaults to the Speed Tiers page on
+// the very first open of the session.
+static u8 sLastPage = INFO_PAGE_SPEED;
+static s8 sLastFoeIndex = 0;
 
 static const struct BgTemplate sBgTemplates[] =
 {
@@ -298,6 +309,21 @@ static void PrintTitle(u8 windowId, const u8 *str)
 static void PrintFooter(u8 windowId, const u8 *str)
 {
     PrintLineEx(windowId, str, 0, (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
+}
+
+// FORK: compact "n/N" page counter, right-aligned on the footer row, so the
+// player can see how many pages exist and where they are. Same blue chrome as
+// the footer hint; the two never collide because every footer hint is short
+// enough to leave the right edge free.
+static void PrintPageIndicator(u8 windowId, u32 page)
+{
+    u8 str[8];
+    u8 *p = ConvertIntToDecimalStringN(str, page + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
+
+    *p++ = CHAR_SLASH;
+    ConvertIntToDecimalStringN(p, INFO_PAGE_COUNT, STR_CONV_MODE_LEFT_ALIGN, 1);
+    PrintLineEx(windowId, str, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, str, 0),
+                (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
 }
 
 // FORK: draw the window frame ring on FRAME_BG, around the text window's bounds.
@@ -616,7 +642,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         y += LINE_H;
     }
 
-    PrintFooter(windowId, COMPOUND_STRING("<>: Mon  R: Next  B: Close"));
+    PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
 }
 
 // Name of the battler's primary (status1) condition, or NULL if healthy.
@@ -836,66 +862,144 @@ static u32 CalcSpeedBound(u32 baseSpeed, u32 level, u32 iv, u32 ev, u32 natureNu
     return n * natureNum / 100;
 }
 
+// FORK: append a speed-comparison glyph to a foe row. The reference is the
+// player's fastest active mon's *effective* Speed (GetBattlerTotalSpeedStat,
+// which already folds in the player's own Choice Scarf, Tailwind, paralysis and
+// stat stages - all known to the player about their own side). The foe range is
+// the raw base-stat span only; it deliberately ignores the foe's hidden item and
+// ability, so this is purely a number comparison (your known Speed vs the foe's
+// *possible* base Speed), NOT a guarantee of turn order. A down arrow means your
+// Speed already exceeds the foe's best-case base Speed; an up arrow that even the
+// foe's worst-case base Speed exceeds yours; no arrow that it depends on the
+// foe's unseen investment. Colour-free on purpose (the arrows read for everyone).
+static u8 *AppendSpeedGlyph(u8 *p, bool32 haveRef, u32 ref, u32 lo, u32 hi)
+{
+    if (haveRef && hi < ref)
+    {
+        *p++ = CHAR_SPACE;
+        *p++ = CHAR_DOWN_ARROW;
+    }
+    else if (haveRef && lo > ref)
+    {
+        *p++ = CHAR_SPACE;
+        *p++ = CHAR_UP_ARROW;
+    }
+    *p = EOS;
+    return p;
+}
+
 static void DrawSpeedPage(u8 windowId)
 {
     u8 line[64];
     u8 *p;
     u32 y = 0;
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+    u32 slots[PARTY_SIZE];
+    u32 los[PARTY_SIZE];
+    u32 his[PARTY_SIZE];
+    u32 n = 0;
+    u32 ref = 0;
+    bool32 haveRef = FALSE;
 
     PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"));
     y += LINE_H;
 
-    // The player's active mons: their actual (already-known) Speed stat, so the
-    // foe ranges below can be read against a concrete reference point.
+    // The player's active mons: their actual *effective* Speed - everything the
+    // player already knows about their own side (Choice Scarf, Tailwind,
+    // paralysis, stat stages) is folded in, so the foe ranges read against a
+    // concrete reference. The fastest such mon anchors the comparison arrows.
     for (u32 battler = 0; battler < gBattlersCount; battler++)
     {
+        u32 spe;
+
         if (!IsOnPlayerSide(battler) || !IsBattlerAlive(battler))
             continue;
+
+        spe = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
+        if (!haveRef || spe > ref)
+        {
+            ref = spe;
+            haveRef = TRUE;
+        }
 
         p = StringCopy(line, COMPOUND_STRING("You: "));
         p = StringCopy(p, gBattleMons[battler].nickname);
         p = StringCopy(p, COMPOUND_STRING("  Spe "));
-        ConvertIntToDecimalStringN(p, gBattleMons[battler].speed, STR_CONV_MODE_LEFT_ALIGN, 3);
+        ConvertIntToDecimalStringN(p, spe, STR_CONV_MODE_LEFT_ALIGN, 4);
         PrintLine(windowId, line, 0, y);
         y += LINE_H;
     }
 
-    // Each foe party slot's possible Speed range, but only the species/level of a
-    // slot the player has actually seen sent out (same reveal gate as the Foe
-    // page). Unseen slots show "?" so the report never leaks an unrevealed mon.
+    // Collect only the foe slots the player has actually seen sent out (same
+    // reveal gate as the Foe page; unseen slots are omitted entirely, so the
+    // report never leaks an unrevealed mon - or even the foe's party size), then
+    // sort by the top of each possible Speed range so the list reads as a speed
+    // tier (fastest first). The "Foe N" label keeps the true party slot.
     for (u32 i = 0; i < PARTY_SIZE; i++)
     {
         enum Species species = GetMonData(&foeParty[i], MON_DATA_SPECIES, NULL);
+        struct Pokemon *displayMon;
+        u32 level, baseSpeed;
+
         if (species == SPECIES_NONE || GetMonData(&foeParty[i], MON_DATA_IS_EGG, NULL))
             continue;
-
-        p = StringCopy(line, COMPOUND_STRING("Foe "));
-        p = ConvertIntToDecimalStringN(p, i + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
-        p = StringCopy(p, COMPOUND_STRING(": "));
         if (!gBattleStruct->partyState[B_TRAINER_OPPONENT_A][i].sentOut)
-        {
-            StringCopy(p, COMPOUND_STRING("?"));
-        }
-        else
-        {
-            // Use the display mon so an active Illusion reports the disguise's
-            // Speed tier (what the player believes they face), not the real mon's.
-            struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, i);
-            enum Species displaySpecies = GetMonData(displayMon, MON_DATA_SPECIES, NULL);
-            u32 level = GetMonData(displayMon, MON_DATA_LEVEL, NULL);
-            u32 baseSpeed = GetSpeciesBaseSpeed(displaySpecies);
-            u32 lo = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
-            u32 hi = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
+            continue;
 
-            p = StringCopy(p, GetSpeciesName(displaySpecies));
-            *p++ = CHAR_SPACE;
-            p = ConvertIntToDecimalStringN(p, lo, STR_CONV_MODE_LEFT_ALIGN, 3);
-            *p++ = CHAR_HYPHEN;
-            ConvertIntToDecimalStringN(p, hi, STR_CONV_MODE_LEFT_ALIGN, 3);
+        // Use the display mon so an active Illusion reports the disguise's Speed
+        // tier (what the player believes they face), not the real mon's.
+        displayMon = GetFoeDisplayMon(foeParty, i);
+        level = GetMonData(displayMon, MON_DATA_LEVEL, NULL);
+        baseSpeed = GetSpeciesBaseSpeed(GetMonData(displayMon, MON_DATA_SPECIES, NULL));
+
+        slots[n] = i;
+        los[n] = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
+        his[n] = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
+        n++;
+    }
+
+    // Selection sort by descending high bound (n <= PARTY_SIZE, so trivial).
+    for (u32 a = 0; a < n; a++)
+    {
+        u32 best = a;
+
+        for (u32 b = a + 1; b < n; b++)
+        {
+            if (his[b] > his[best])
+                best = b;
         }
-        PrintLine(windowId, line, 0, y);
-        y += LINE_H;
+        if (best != a)
+        {
+            u32 t;
+
+            t = slots[a]; slots[a] = slots[best]; slots[best] = t;
+            t = los[a];   los[a]   = los[best];   los[best]   = t;
+            t = his[a];   his[a]   = his[best];   his[best]   = t;
+        }
+    }
+
+    if (n == 0)
+    {
+        PrintLine(windowId, COMPOUND_STRING("No foes seen yet."), 0, y);
+    }
+    else
+    {
+        for (u32 k = 0; k < n; k++)
+        {
+            struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, slots[k]);
+
+            p = StringCopy(line, COMPOUND_STRING("Foe "));
+            p = ConvertIntToDecimalStringN(p, slots[k] + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
+            p = StringCopy(p, COMPOUND_STRING(": "));
+            p = StringCopy(p, GetSpeciesName(GetMonData(displayMon, MON_DATA_SPECIES, NULL)));
+            *p++ = CHAR_SPACE;
+            p = ConvertIntToDecimalStringN(p, los[k], STR_CONV_MODE_LEFT_ALIGN, 3);
+            *p++ = CHAR_HYPHEN;
+            p = ConvertIntToDecimalStringN(p, his[k], STR_CONV_MODE_LEFT_ALIGN, 3);
+            AppendSpeedGlyph(p, haveRef, ref, los[k], his[k]);
+            PrintLine(windowId, line, 0, y);
+            y += LINE_H;
+        }
     }
 
     PrintFooter(windowId, COMPOUND_STRING("L/R: Page    B: Close"));
@@ -926,6 +1030,7 @@ static void RedrawInfo(u8 taskId)
         DrawFieldPage(windowId);
         break;
     }
+    PrintPageIndicator(windowId, gTasks[taskId].tPage);
     CopyWindowToVram(windowId, COPYWIN_FULL);
 }
 
@@ -951,6 +1056,10 @@ static void Task_InfoProcessInput(u8 taskId)
 
     if (JOY_NEW(B_BUTTON) || JOY_NEW(A_BUTTON))
     {
+        // Remember where the player was for the next open (the viewer is modal,
+        // so it can't be reopened before this runs).
+        sLastPage = gTasks[taskId].tPage;
+        sLastFoeIndex = gTasks[taskId].tFoeIndex;
         PlaySE(SE_SELECT);
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
         gTasks[taskId].func = Task_InfoFadeOut;
@@ -1065,8 +1174,9 @@ void CB2_FrontierBattleInfo(void)
     case 4:
         taskId = CreateTask(Task_InfoFadeIn, 0);
         gTasks[taskId].tWindowId = AddWindow(&sInfoWindowTemplate);
-        gTasks[taskId].tPage = INFO_PAGE_FIELD;
-        gTasks[taskId].tFoeIndex = 0;
+        // Resume on the page/foe the player last viewed (defaults to Speed Tiers).
+        gTasks[taskId].tPage = sLastPage;
+        gTasks[taskId].tFoeIndex = sLastFoeIndex;
         PutWindowTilemap(gTasks[taskId].tWindowId);
         // FRAME_BG has no window, so give it its own tilemap buffer (heap, like
         // AddWindow does for the text window) and draw the border ring into it.
