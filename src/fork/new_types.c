@@ -23,9 +23,14 @@ struct SpeciesTypeOverride
 
 static const struct SpeciesTypeOverride sSpeciesTypeOverrides[] =
 {
-    // Galarian Ponyta/Rapidash: stock Psychic / Psychic-Fairy -> Fire/Fairy.
-    { SPECIES_PONYTA_GALAR,   { TYPE_FIRE, TYPE_FAIRY } },
-    { SPECIES_RAPIDASH_GALAR, { TYPE_FIRE, TYPE_FAIRY } },
+    { // 0077
+        SPECIES_PONYTA_GALAR,
+        { TYPE_FIRE, TYPE_FAIRY }
+    },
+    { // 0078
+        SPECIES_RAPIDASH_GALAR,
+        { TYPE_FIRE, TYPE_FAIRY }
+    },
 };
 
 bool32 GetSpeciesTypeOverride(enum Species species, u8 slot, enum Type *outType)

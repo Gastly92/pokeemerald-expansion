@@ -43,46 +43,165 @@ struct SpeciesAbilityOverride
 // *implemented* :white_check_mark: innates and so are likewise stable.
 static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 {
-    { SPECIES_VENUSAUR,            1, ABILITY_DROUGHT },        // 3 Overgrow + Chlorophyll BOTH innate (weather-doubler pinch case): empty slot 1 → Drought, the sun flower sets its own sun for the innate Chlorophyll
-    { SPECIES_HO_OH,               1, ABILITY_FLAME_BODY },     // 250 Pressure + Regenerator BOTH innate (all real abilities innate): empty slot 1 → Flame Body, the rainbow phoenix's sacred fire burns on contact
-    { SPECIES_CELEBI,              1, ABILITY_GRASSY_SURGE },   // 251 sole-Natural-Cure (innate): empty slot 1 → Grassy Surge, the forest guardian carpets the field (its boon-innate Levitate still reaps the terrain)
-    { SPECIES_SCEPTILE,            2, ABILITY_LIGHTNING_ROD },  // 254 Overgrow innate (latched); its HA Unburden is dead weight on the roster's non-consumable-item sets, so replace it with its Mega's signature Lightning Rod
-    { SPECIES_FLYGON,              1, ABILITY_SAND_STREAM },    // 330 innate Levitate; slot-1 Levitate was redundant → Sand Stream, the desert spirit (Ground-type, immune to its own sand chip)
-    { SPECIES_LUNATONE,            1, ABILITY_AIR_LOCK },       // 337 ability-locked innate Levitate: empty slot 1 → Air Lock, the serene moon meteorite stills the weather (floats on the innate, runs this too)
-    { SPECIES_SOLROCK,             1, ABILITY_DROUGHT },        // 338 ability-locked innate Levitate: empty slot 1 → Drought, the sun meteorite
-    { SPECIES_CLAYDOL,             1, ABILITY_SAND_STREAM },    // 344 ability-locked innate Levitate: empty slot 1 → Sand Stream, the ancient desert clay automaton (Ground-type, immune to sand chip)
-    { SPECIES_CHIMECHO,            1, ABILITY_SOUNDPROOF },     // 358 ability-locked innate Levitate: empty slot 1 → Soundproof
-    { SPECIES_LATIAS,              1, ABILITY_ILLUSION },       // 380 innate-Levitate legendary: empty slot 1 → Illusion, the Eon refracts light to vanish/disguise
-    { SPECIES_LATIOS,              1, ABILITY_ILLUSION },       // 381 innate-Levitate legendary: empty slot 1 → Illusion (light-bending Eon)
-    { SPECIES_DEOXYS_ATTACK,       1, ABILITY_TRACE },          // 386 sole-Pressure (innate; also innate Levitate): empty slot 1 → Trace, the DNA alien adapts by copying the foe's ability
-    { SPECIES_DEOXYS_DEFENSE,      1, ABILITY_TRACE },          // 386 "
-    { SPECIES_DEOXYS_SPEED,        1, ABILITY_TRACE },          // 386 "
-    { SPECIES_MISMAGIUS,           1, ABILITY_WANDERING_SPIRIT },// 429 ability-locked innate Levitate: empty slot 1 → Wandering Spirit, the roaming magical ghost swaps abilities on contact
-    { SPECIES_CARNIVINE,           1, ABILITY_CHLOROPHYLL },    // 455 ability-locked innate Levitate: empty slot 1 → Chlorophyll
-    { SPECIES_TANGROWTH,           2, ABILITY_SAP_SIPPER },     // 465 innate Regenerator; slot 2 was Regenerator → Sap Sipper, its vine tangle drinks Grass energy for +Atk (heal comes from the innate)
-    { SPECIES_ROTOM,               1, ABILITY_LIGHTNING_ROD },  // 479 ability-locked innate Levitate
-    { SPECIES_ROTOM_HEAT,          1, ABILITY_LIGHTNING_ROD },  // 479 "
-    { SPECIES_ROTOM_WASH,          1, ABILITY_LIGHTNING_ROD },  // 479 "
-    { SPECIES_ROTOM_FROST,         1, ABILITY_LIGHTNING_ROD },  // 479 "
-    { SPECIES_ROTOM_FAN,           1, ABILITY_LIGHTNING_ROD },  // 479 "
-    { SPECIES_ROTOM_MOW,           1, ABILITY_LIGHTNING_ROD },  // 479 "
-    { SPECIES_UXIE,                1, ABILITY_TRACE },          // 480 innate-Levitate legendary: empty slot 1 → Trace, the Being of Knowledge reads/copies the foe
-    { SPECIES_MESPRIT,             1, ABILITY_MOODY },          // 481 innate-Levitate legendary: empty slot 1 → Moody, the Being of Emotion's volatile moods
-    { SPECIES_AZELF,               1, ABILITY_VICTORY_STAR },   // 482 innate-Levitate legendary: empty slot 1 → Victory Star, the Being of Willpower's will to win
-    { SPECIES_GIRATINA_ORIGIN,     1, ABILITY_DRAGONS_MAW },    // 487 innate-Levitate legendary (Origin forme floats): empty slot 1 → Dragon's Maw, the Renegade's draconic might
-    { SPECIES_CRESSELIA,           1, ABILITY_CLOUD_NINE },     // 488 innate-Levitate legendary: empty slot 1 → Cloud Nine, the serene lunar presence stills the weather
-    { SPECIES_SHAYMIN,             1, ABILITY_EFFECT_SPORE },   // 492 sole-Natural-Cure (innate): empty slot 1 → Effect Spore, the flowery Gratitude hedgehog scatters spores (Sky forme keeps its real Serene Grace)
-    { SPECIES_AUDINO,              1, ABILITY_CUTE_CHARM },     // 531 innate Regenerator; slot 1 was Regenerator → Cute Charm, the gentle nurse (heal comes from the innate)
-    { SPECIES_ALOMOMOLA,           2, ABILITY_WATER_ABSORB },   // 594 innate Regenerator; slot 2 was Regenerator → Water Absorb
-    { SPECIES_EELEKTROSS,          1, ABILITY_LIGHTNING_ROD },  // 604 ability-locked innate Levitate
-    { SPECIES_CRYOGONAL,           1, ABILITY_SNOW_WARNING },   // 615 ability-locked innate Levitate: empty slot 1 → Snow Warning, the ice-crystal being radiates snow (Ice-type: +Def in snow, no chip)
-    { SPECIES_HYDREIGON,           1, ABILITY_SHEER_FORCE },    // 635 ability-locked innate Levitate
-    { SPECIES_TORNADUS_THERIAN,    1, ABILITY_PRANKSTER },      // 641 sole-Regenerator (innate): empty slot 1 → its Incarnate forme's Prankster
-    { SPECIES_KYUREM,              1, ABILITY_SNOW_WARNING },   // 646 sole-Pressure (innate): empty slot 1 → Snow Warning, the boundary ice dragon brings an everlasting freeze
-    { SPECIES_VIKAVOLT,            1, ABILITY_MOTOR_DRIVE },    // 738 ability-locked innate Levitate: empty slot 1 → Motor Drive, the electromagnetic beetle banks electricity into Speed
-    { SPECIES_ETERNATUS,           1, ABILITY_POISON_TOUCH },   // 890 sole-Pressure (innate): empty slot 1 → Poison Touch, the toxic alien dragon poisons on contact
-    { SPECIES_SKELEDIRGE,          1, ABILITY_MUMMY },          // 911 Blaze + Unaware BOTH innate (pinch case): empty slot 1 → Mummy, the ghostly fire-singer's curse spreads on contact
-    { SPECIES_OGERPON_CORNERSTONE, 1, ABILITY_EARTH_EATER },   // 1017 sole-Sturdy (innate): empty slot 1 → Earth Eater (the stone-masked ogre is nourished by the earth; Ground immunity+heal covers its Rock weakness)
+    { // 0003
+        SPECIES_VENUSAUR, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    { // 0250
+        SPECIES_HO_OH, 1,
+        ABILITY_FLAME_BODY
+    },
+    { // 0251
+        SPECIES_CELEBI, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    { // 0254
+        SPECIES_SCEPTILE, 2,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0330
+        SPECIES_FLYGON, 1, 
+        ABILITY_SAND_STREAM
+    },
+    { // 0337
+        SPECIES_LUNATONE, 1,
+        ABILITY_CLOUD_NINE
+    },
+    { // 0338
+        SPECIES_SOLROCK, 1,
+        ABILITY_DROUGHT
+    },
+    { // 0344
+        SPECIES_CLAYDOL, 1, 
+        ABILITY_SAND_STREAM
+    },
+    { // 0358
+        SPECIES_CHIMECHO, 1, 
+        ABILITY_SOUNDPROOF
+    },
+    { // 0380
+        SPECIES_LATIAS, 1,
+        ABILITY_ILLUSION
+    },
+    { // 0381
+        SPECIES_LATIOS, 1,
+        ABILITY_ILLUSION
+    },
+    { // 0386
+        SPECIES_DEOXYS_ATTACK, 1,
+        ABILITY_TRACE
+    },
+    { // 0386
+        SPECIES_DEOXYS_DEFENSE, 1,
+        ABILITY_TRACE
+    },
+    { // 0386
+        SPECIES_DEOXYS_SPEED, 1, 
+        ABILITY_TRACE
+    },
+    { // 0429
+        SPECIES_MISMAGIUS, 1,
+        ABILITY_WANDERING_SPIRIT
+    },
+    { // 0455
+        SPECIES_CARNIVINE, 1, 
+        ABILITY_CHLOROPHYLL
+    },
+    { // 0465
+        SPECIES_TANGROWTH, 2,
+        ABILITY_SAP_SIPPER
+    },
+    { // 0479
+        SPECIES_ROTOM, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0479
+        SPECIES_ROTOM_HEAT, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0479
+        SPECIES_ROTOM_WASH, 1, 
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0479
+        SPECIES_ROTOM_FROST, 1, 
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0479
+        SPECIES_ROTOM_FAN, 1, 
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0479
+        SPECIES_ROTOM_MOW, 1, 
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0480
+        SPECIES_UXIE, 1,
+        ABILITY_TRACE
+    },
+    { // 0481
+        SPECIES_MESPRIT, 1,
+        ABILITY_MOODY
+    },
+    { // 0482
+        SPECIES_AZELF, 1,
+        ABILITY_VICTORY_STAR
+    },
+    { // 0487
+        SPECIES_GIRATINA_ORIGIN, 1, 
+        ABILITY_DRAGONS_MAW
+    },
+    { // 0488
+        SPECIES_CRESSELIA, 1,
+        ABILITY_CLOUD_NINE
+    },
+    { // 0492
+        SPECIES_SHAYMIN, 1,
+        ABILITY_EFFECT_SPORE
+    },
+    { // 0531
+        SPECIES_AUDINO, 1,
+        ABILITY_CUTE_CHARM
+    },
+    { // 0594
+        SPECIES_ALOMOMOLA, 2, 
+        ABILITY_WATER_ABSORB
+    },
+    { // 0604
+        SPECIES_EELEKTROSS, 1, 
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0615
+        SPECIES_CRYOGONAL, 1, 
+        ABILITY_SNOW_WARNING
+    },
+    { // 0635
+        SPECIES_HYDREIGON, 1, 
+        ABILITY_SHEER_FORCE },
+    { // 0641
+        SPECIES_TORNADUS_THERIAN, 1, 
+        ABILITY_PRANKSTER
+    },
+    { // 0646
+        SPECIES_KYUREM, 1, 
+        ABILITY_SNOW_WARNING
+    },
+    { // 0738
+        SPECIES_VIKAVOLT, 1,
+        ABILITY_MOTOR_DRIVE
+    },
+    { // 0890
+        SPECIES_ETERNATUS, 1, 
+        ABILITY_POISON_TOUCH
+    },
+    { // 0911
+        SPECIES_SKELEDIRGE, 1,
+        ABILITY_MUMMY
+    },
+    { // 1017
+        SPECIES_OGERPON_CORNERSTONE, 1, 
+        ABILITY_EARTH_EATER
+    },
 };
 
 enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)
