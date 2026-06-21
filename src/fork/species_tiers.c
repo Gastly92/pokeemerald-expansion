@@ -111,6 +111,9 @@ static const u16 sPseudoSpecies[] =
     SPECIES_BLACEPHALON,         // 0806
     SPECIES_ZERAORA,             // 0807
     SPECIES_DRAGAPULT,           // 0887
+    SPECIES_ZARUDE,              // 0893
+    SPECIES_REGIELEKI,           // 0894
+    SPECIES_REGIDRAGO,           // 0895
     SPECIES_GREAT_TUSK,          // 0984
     SPECIES_FLUTTER_MANE,        // 0987
     SPECIES_SLITHER_WING,        // 0988
