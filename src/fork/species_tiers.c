@@ -12,64 +12,62 @@
 // Each tier is its own array — membership in the array is the classification, so
 // rows only need the species (no per-row TIER_* token to keep in sync).
 
-// ---- Mythical — exactly 1 per frontier brain battle ----
+// Mythical: exactly 1 per frontier brain battle
 static const u16 sMythicalSpecies[] =
 {
-    // Nat Dex # in trailing comments (formes share their base's number); keep rows sorted by it.
-    SPECIES_MEWTWO,              // 150
-    SPECIES_LUGIA,                // 249
-    SPECIES_HO_OH,                // 250
-    SPECIES_KYOGRE,               // 382
-    SPECIES_GROUDON,              // 383
-    SPECIES_RAYQUAZA,             // 384
-    SPECIES_DEOXYS_ATTACK,        // 386
-    SPECIES_DEOXYS_SPEED,         // 386
-    SPECIES_DIALGA,               // 483
-    SPECIES_DIALGA_ORIGIN,        // 483
-    SPECIES_PALKIA,               // 484
-    SPECIES_PALKIA_ORIGIN,        // 484
-    SPECIES_GIRATINA,             // 487
-    SPECIES_GIRATINA_ORIGIN,      // 487
-    SPECIES_DARKRAI,              // 491
-    SPECIES_ARCEUS,               // 493
-    SPECIES_RESHIRAM,             // 643
-    SPECIES_ZEKROM,               // 644
-    SPECIES_XERNEAS,              // 716
-    SPECIES_YVELTAL,              // 717
-    SPECIES_ZYGARDE,              // 718
-    SPECIES_SOLGALEO,             // 791
-    SPECIES_LUNALA,               // 792
-    SPECIES_NECROZMA_DAWN_WINGS,  // 800
-    SPECIES_NECROZMA_DUSK_MANE,   // 800
-    SPECIES_ZACIAN,               // 888
-    SPECIES_ZACIAN_CROWNED,       // 888
-    SPECIES_ZAMAZENTA,            // 889
-    SPECIES_ZAMAZENTA_CROWNED,    // 889
-    SPECIES_ETERNATUS,            // 890
-    SPECIES_CALYREX_ICE,          // 898
-    SPECIES_CALYREX_SHADOW,       // 898
+    SPECIES_MEWTWO,               // 0150
+    SPECIES_LUGIA,                // 0249
+    SPECIES_HO_OH,                // 0250
+    SPECIES_KYOGRE,               // 0382
+    SPECIES_GROUDON,              // 0383
+    SPECIES_RAYQUAZA,             // 0384
+    SPECIES_DEOXYS_ATTACK,        // 0386
+    SPECIES_DEOXYS_SPEED,         // 0386
+    SPECIES_DIALGA,               // 0483
+    SPECIES_DIALGA_ORIGIN,        // 0483
+    SPECIES_PALKIA,               // 0484
+    SPECIES_PALKIA_ORIGIN,        // 0484
+    SPECIES_GIRATINA,             // 0487
+    SPECIES_GIRATINA_ORIGIN,      // 0487
+    SPECIES_DARKRAI,              // 0491
+    SPECIES_ARCEUS,               // 0493
+    SPECIES_RESHIRAM,             // 0643
+    SPECIES_ZEKROM,               // 0644
+    SPECIES_XERNEAS,              // 0716
+    SPECIES_YVELTAL,              // 0717
+    SPECIES_ZYGARDE,              // 0718
+    SPECIES_SOLGALEO,             // 0791
+    SPECIES_LUNALA,               // 0792
+    SPECIES_NECROZMA_DAWN_WINGS,  // 0800
+    SPECIES_NECROZMA_DUSK_MANE,   // 0800
+    SPECIES_ZACIAN,               // 0888
+    SPECIES_ZACIAN_CROWNED,       // 0888
+    SPECIES_ZAMAZENTA,            // 0889
+    SPECIES_ZAMAZENTA_CROWNED,    // 0889
+    SPECIES_ETERNATUS,            // 0890
+    SPECIES_CALYREX_ICE,          // 0898
+    SPECIES_CALYREX_SHADOW,       // 0898
     SPECIES_KORAIDON,             // 1007
     SPECIES_MIRAIDON,             // 1008
 };
 
-// ---- Legendary — exactly 1 per frontier boss battle ----
+// Legendary: exactly 1 per frontier boss battle
 static const u16 sLegendarySpecies[] =
 {
-    SPECIES_LATIAS,               // 380
-    SPECIES_LATIOS,                // 381
-    SPECIES_JIRACHI,               // 385
-    SPECIES_SHAYMIN_SKY,           // 492
-    SPECIES_KYUREM,                // 646
-    SPECIES_KYUREM_BLACK,          // 646
-    SPECIES_KYUREM_WHITE,          // 646
-    SPECIES_KELDEO,                // 647
-    SPECIES_MELOETTA,              // 648
-    SPECIES_GENESECT,              // 649
-    SPECIES_HOOPA_UNBOUND,         // 720
-    SPECIES_URSHIFU,               // 892
-    SPECIES_URSHIFU_RAPID_STRIKE,  // 892
-    SPECIES_GLASTRIER,             // 896
-    SPECIES_SPECTRIER,             // 897
+    SPECIES_LATIAS,                // 0380
+    SPECIES_LATIOS,                // 0381
+    SPECIES_JIRACHI,               // 0385
+    SPECIES_SHAYMIN_SKY,           // 0492
+    SPECIES_KYUREM_BLACK,          // 0646
+    SPECIES_KYUREM_WHITE,          // 0646
+    SPECIES_KELDEO,                // 0647
+    SPECIES_MELOETTA,              // 0648
+    SPECIES_GENESECT,              // 0649
+    SPECIES_HOOPA_UNBOUND,         // 0720
+    SPECIES_URSHIFU,               // 0892
+    SPECIES_URSHIFU_RAPID_STRIKE,  // 0892
+    SPECIES_GLASTRIER,             // 0896
+    SPECIES_SPECTRIER,             // 0897
     SPECIES_WALKING_WAKE,          // 1009
     SPECIES_OGERPON_CORNERSTONE,   // 1017
     SPECIES_OGERPON_HEARTHFLAME,   // 1017
@@ -77,58 +75,58 @@ static const u16 sLegendarySpecies[] =
     SPECIES_OGERPON_WELLSPRING,    // 1017
 };
 
-// ---- Pseudo — at most 1 per frontier draft team ----
+// Pseudo: at most 1 per frontier draft team
 static const u16 sPseudoSpecies[] =
 {
-    SPECIES_ARTICUNO_GALAR,       // 144
-    SPECIES_ZAPDOS_GALAR,         // 145
-    SPECIES_MOLTRES_GALAR,        // 146
-    SPECIES_DRAGONITE,            // 149
-    SPECIES_TYRANITAR,            // 248
-    SPECIES_SALAMENCE,            // 373
-    SPECIES_GARCHOMP,             // 445
-    SPECIES_HEATRAN,              // 485
-    SPECIES_MANAPHY,              // 490
-    SPECIES_SHAYMIN,              // 492
-    SPECIES_VICTINI,              // 494
-    SPECIES_HYDREIGON,            // 635
-    SPECIES_TERRAKION,            // 639
-    SPECIES_TORNADUS,             // 641
-    SPECIES_TORNADUS_THERIAN,     // 641
-    SPECIES_THUNDURUS,            // 642
-    SPECIES_THUNDURUS_THERIAN,    // 642
-    SPECIES_LANDORUS,             // 645
-    SPECIES_LANDORUS_THERIAN,     // 645
-    SPECIES_KOMMO_O,              // 784
-    SPECIES_TAPU_KOKO,            // 785
-    SPECIES_TAPU_LELE,            // 786
-    SPECIES_TAPU_BULU,            // 787
-    SPECIES_TAPU_FINI,            // 788
-    SPECIES_PHEROMOSA,            // 795
-    SPECIES_KARTANA,              // 798
-    SPECIES_NAGANADEL,            // 804
-    SPECIES_BLACEPHALON,          // 806
-    SPECIES_ZERAORA,              // 807
-    SPECIES_DRAGAPULT,            // 887
-    SPECIES_GREAT_TUSK,           // 984
-    SPECIES_FLUTTER_MANE,         // 987
-    SPECIES_SLITHER_WING,         // 988
-    SPECIES_SANDY_SHOCKS,         // 989
-    SPECIES_IRON_TREADS,          // 990
-    SPECIES_IRON_BUNDLE,          // 991
-    SPECIES_IRON_HANDS,           // 992
-    SPECIES_IRON_JUGULIS,         // 993
-    SPECIES_IRON_MOTH,            // 994
-    SPECIES_IRON_THORNS,          // 995
-    SPECIES_BAXCALIBUR,           // 998
-    SPECIES_CHIEN_PAO,            // 1002
-    SPECIES_CHI_YU,               // 1004
-    SPECIES_ROARING_MOON,         // 1005
-    SPECIES_IRON_VALIANT,         // 1006
-    SPECIES_GOUGING_FIRE,         // 1020
-    SPECIES_RAGING_BOLT,          // 1021
-    SPECIES_IRON_BOULDER,         // 1022
-    SPECIES_TERAPAGOS_TERASTAL,   // 1024
+    SPECIES_ARTICUNO_GALAR,      // 0144
+    SPECIES_ZAPDOS_GALAR,        // 0145
+    SPECIES_MOLTRES_GALAR,       // 0146
+    SPECIES_DRAGONITE,           // 0149
+    SPECIES_TYRANITAR,           // 0248
+    SPECIES_SALAMENCE,           // 0373
+    SPECIES_GARCHOMP,            // 0445
+    SPECIES_HEATRAN,             // 0485
+    SPECIES_MANAPHY,             // 0490
+    SPECIES_SHAYMIN,             // 0492
+    SPECIES_VICTINI,             // 0494
+    SPECIES_HYDREIGON,           // 0635
+    SPECIES_TERRAKION,           // 0639
+    SPECIES_TORNADUS,            // 0641
+    SPECIES_TORNADUS_THERIAN,    // 0641
+    SPECIES_THUNDURUS,           // 0642
+    SPECIES_THUNDURUS_THERIAN,   // 0642
+    SPECIES_LANDORUS,            // 0645
+    SPECIES_LANDORUS_THERIAN,    // 0645
+    SPECIES_KOMMO_O,             // 0784
+    SPECIES_TAPU_KOKO,           // 0785
+    SPECIES_TAPU_LELE,           // 0786
+    SPECIES_TAPU_BULU,           // 0787
+    SPECIES_TAPU_FINI,           // 0788
+    SPECIES_PHEROMOSA,           // 0795
+    SPECIES_KARTANA,             // 0798
+    SPECIES_NAGANADEL,           // 0804
+    SPECIES_BLACEPHALON,         // 0806
+    SPECIES_ZERAORA,             // 0807
+    SPECIES_DRAGAPULT,           // 0887
+    SPECIES_GREAT_TUSK,          // 0984
+    SPECIES_FLUTTER_MANE,        // 0987
+    SPECIES_SLITHER_WING,        // 0988
+    SPECIES_SANDY_SHOCKS,        // 0989
+    SPECIES_IRON_TREADS,         // 0990
+    SPECIES_IRON_BUNDLE,         // 0991
+    SPECIES_IRON_HANDS,          // 0992
+    SPECIES_IRON_JUGULIS,        // 0993
+    SPECIES_IRON_MOTH,           // 0994
+    SPECIES_IRON_THORNS,         // 0995
+    SPECIES_BAXCALIBUR,          // 0998
+    SPECIES_CHIEN_PAO,           // 1002
+    SPECIES_CHI_YU,              // 1004
+    SPECIES_ROARING_MOON,        // 1005
+    SPECIES_IRON_VALIANT,        // 1006
+    SPECIES_GOUGING_FIRE,        // 1020
+    SPECIES_RAGING_BOLT,         // 1021
+    SPECIES_IRON_BOULDER,        // 1022
+    SPECIES_TERAPAGOS_TERASTAL,  // 1024
 };
 
 static bool32 SpeciesInList(u16 species, const u16 *list, u32 count)
