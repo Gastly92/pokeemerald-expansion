@@ -29,7 +29,7 @@
 | :x: | Wonder Guard | Its mysterious power only lets supereffective moves hit the Pokémon. |
 | :white_check_mark: | Levitate | The Pokémon floats off the ground, making it immune to Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses. |
 | :x: | Effect Spore | Contact with the Pokémon may inflict poison, sleep, or paralysis on the attacker. |
-| :white_large_square: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
+| :x: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
 | :white_large_square: | Clear Body | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
 | :x: | Lightning Rod | The Pokémon draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage. |
@@ -57,7 +57,7 @@
 | :white_large_square: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
 | :x: | Truant | Each time the Pokémon uses a move, it spends the next turn loafing around. |
 | :x: | Hustle | When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%. |
-| :x: | Cute Charm | When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if the attacker and the Pokémon are of opposite genders. |
+| :white_large_square: | Cute Charm | When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if the attacker and the Pokémon are of opposite genders. |
 | :x: | Plus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :x: | Minus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :x: | Forecast | The Pokémon transforms with the weather to change its type to Water, Fire, or Ice. |
@@ -181,7 +181,7 @@
 | :white_large_square: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
 | :white_large_square: | Mega Launcher | Boosts the power of the Pokémon's pulse moves by 50%. |
 | :white_large_square: | Grass Pelt | Boosts the Pokémon's Defense stat on Grassy Terrain. |
-| :white_large_square: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
+| :x: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
 | :white_large_square: | Tough Claws | Boosts the power of the Pokémon's contact moves by 30%. |
 | :x: | Pixilate | The Pokémon's Normal-type moves become Fairy-type moves and their power is boosted by 20%. |
 | :white_large_square: | Gooey | When the Pokémon is hit by a contact move, the attacker's Speed stat is lowered by 1 stage. |
@@ -219,7 +219,7 @@
 | :white_large_square: | Innards Out | When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker. |
 | :white_large_square: | Dancer | Whenever a dance move is used in battle, the Pokémon will copy the user to immediately perform that dance move itself. |
 | :white_large_square: | Battery | Powers up ally Pokémon's special moves. |
-| :white_large_square: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |
+| :x: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |
 | :white_large_square: | Dazzling | The Pokémon dazzles its opponents, making them unable to use priority moves against the Pokémon or its allies. |
 | :white_large_square: | Soul-Heart | Boosts the Pokémon's Sp. Atk stat every time another Pokémon faints. |
 | :white_large_square: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
@@ -231,7 +231,7 @@
 | :x: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |
 | :x: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
 | :x: | Grassy Surge | Turns the ground into Grassy Terrain when the Pokémon enters a battle. |
-| :white_large_square: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
+| :x: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
 | :x: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
 | :x: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
 | :x: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
@@ -239,7 +239,7 @@
 | :x: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
 | :x: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
 | :x: | Ball Fetch | If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle. |
-| :white_large_square: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |
+| :x: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |
 | :white_large_square: | Propeller Tail | Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves. |
 | :white_large_square: | Mirror Armor | Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them. |
 | :x: | Gulp Missile | When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack. |
@@ -262,7 +262,7 @@
 | :x: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
 | :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
 | :white_large_square: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
-| :white_large_square: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
+| :x: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
 | :x: | Transistor | Powers up Electric-type moves. |
 | :x: | Dragon's Maw | Powers up Dragon-type moves. |
 | :x: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
@@ -273,7 +273,7 @@
 | :x: | Seed Sower | Turns the ground into Grassy Terrain when the Pokémon is hit by an attack. |
 | :white_large_square: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
 | :x: | Anger Shell | When an attack causes its HP to drop to half or less, the Pokémon gets angry. This lowers its Defense and Sp. Def stats but boosts its Attack, Sp. Atk, and Speed stats. |
-| :white_large_square: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
+| :x: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
 | :x: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
 | :x: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
 | :white_large_square: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
