@@ -233,6 +233,37 @@
 //     Misty Surge and is omitted), plus a tight foul-odor flavor set lacking the real ability (Oddish and
 //     Vileplume completing the canon Gloom line — the "smells atrocious" weed line — and the Gulpin line's
 //     poison-gas bags). No frontier roster sets hardcoded Stench, so none needed freeing.
+//   - ABILITY_BATTLE_ARMOR / ABILITY_SHELL_ARMOR — the two crit-immunity abilities (identical effect:
+//     attacks landed on the holder are never critical hits), handled at the two crit-calc sites in
+//     src/battle_util.c (CalcCritChanceStage and the Gen-1 CalcCritChanceStageGen1): each gains a clause
+//     beside the cached chosen-ability test that forces critChance = CRITICAL_HIT_BLOCKED for an innate
+//     holder too. A pure passive immunity checked at a single kind of site (like Sturdy): no script /
+//     pop-up / driver. NO pure-boon divergence: crit immunity is a clean upside that never hurts its
+//     holder, so each innate is a 1:1 copy of the real ability. The innate is NOT recorded as identity —
+//     only the chosen-ability path calls RecordAbilityBattle (the innate blocks silently, like Filter),
+//     so Trace/Skill Swap/the ability pop-up still read the chosen slot. Suppression parity holds via
+//     IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field); neither is breakable, so Mold
+//     Breaker never touches them, same as the real ability. AI is innate-aware: nothing in the shared
+//     damage calc needs it (the calc's crit result already runs through CalcCritChanceStage keyed off the
+//     real battler, so a predicted crit against an innate holder is correctly blocked for FREE), and the
+//     one dedicated AI read — "don't waste Laser Focus on a crit-immune target" (EFFECT_LASER_FOCUS in
+//     src/battle_ai_main.c) — now credits an innate holder via BattlerHasAbility(). Canon-only (no flavor
+//     picks — crit immunity is hard to theme beyond an actual armored shell, and the set is already
+//     large): every species whose ability data carries Battle Armor or Shell Armor in any slot, so the
+//     signature survives whichever slot a build picks. Forms are listed only where the form's ability
+//     data still carries it: Slowbro-Mega and Scolipede-Mega gain Shell Armor (their Mega ability data is
+//     Shell Armor, replacing the base's), the Hisuian Sliggoo/Goodra carry Shell Armor where the base
+//     forms carry Hydration instead (so only the Hisui rows get it), and the Drednaw-Gmax / Kingler-Gmax /
+//     Lapras-Gmax forms keep theirs. Many species already carry other innates (Kabuto/Kabutops/Omastar/
+//     Anorith/Armaldo's Swift Swim, the Turtwig and Oshawott lines' Overgrow/Torrent, Shellder/Cloyster/
+//     Dwebble/Crustle's Sturdy, Slowbro-Mega's Regenerator, Escavalier's Swarm, Chewtle/Drednaw's Swift
+//     Swim, Klawf's Regenerator), so they take a combined INNATES(...) list with the armor added. NOTE:
+//     base Slowbro/Samurott-Hisui are intentionally NOT given the armor — their data carries Regenerator /
+//     Sharpness there, not the armor, so only the form whose data actually carries it gets the innate.
+//     Frontier roster sets that hardcoded an armor are freed (Step 3.5): Omastar/Kabutops keep their real
+//     Weak Armor, Drapion its Sniper, Goodra-Hisui its Sap Sipper, Drednaw its Strong Jaw, while the
+//     all-real-abilities-now-innate species take a fork-owned chosen override (Armaldo/Samurott → Water
+//     Absorb, Torterra → Sand Stream, Turtonator → Flame Body) in species_ability_overrides.c.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -515,7 +546,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0080
         SPECIES_SLOWBRO_MEGA,
         INNATES(
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 0080
@@ -553,12 +585,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0090
         SPECIES_SHELLDER,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
     },
     { // 0091
         SPECIES_CLOYSTER,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
     },
@@ -592,6 +626,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0098
+        SPECIES_KRABBY,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 0099
+        SPECIES_KINGLER,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 0099
+        SPECIES_KINGLER_GMAX,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
     { // 0102
         SPECIES_EXEGGCUTE,
         INNATES(
@@ -602,6 +654,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_EXEGGUTOR,
         INNATES(
             ABILITY_CHLOROPHYLL
+        )
+    },
+    { // 0104
+        SPECIES_CUBONE,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0105
+        SPECIES_MAROWAK,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
         )
     },
     { // 0109
@@ -687,6 +751,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0131
+        SPECIES_LAPRAS,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 0131
+        SPECIES_LAPRAS_GMAX,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
     { // 0137
         SPECIES_PORYGON,
         INNATES(
@@ -696,24 +772,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0138
         SPECIES_OMANYTE,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0139
         SPECIES_OMASTAR,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0140
         SPECIES_KABUTO,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0141
         SPECIES_KABUTOPS,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -1478,6 +1558,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_UNAWARE
         )
     },
+    { // 0324
+        SPECIES_TORKOAL,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
     { // 0329
         SPECIES_VIBRAVA,
         INNATES(
@@ -1514,6 +1600,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0341
+        SPECIES_CORPHISH,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 0342
+        SPECIES_CRAWDAUNT,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
     { // 0343
         SPECIES_BALTOY,
         INNATES(
@@ -1529,12 +1627,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0347
         SPECIES_ANORITH,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0348
         SPECIES_ARMALDO,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -1641,6 +1741,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0366
+        SPECIES_CLAMPERL,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
     { // 0367
         SPECIES_HUNTAIL,
         INNATES(
@@ -1742,19 +1848,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0387
         SPECIES_TURTWIG,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 0388
         SPECIES_GROTLE,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 0389
         SPECIES_TORTERRA,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 0390
@@ -2173,18 +2282,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0501
         SPECIES_OSHAWOTT,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
     },
     { // 0502
         SPECIES_DEWOTT,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
     },
     { // 0503
         SPECIES_SAMUROTT,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
     },
@@ -2382,6 +2494,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWARM
         )
     },
+    { // 0545
+        SPECIES_SCOLIPEDE_MEGA,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
     { // 0546
         SPECIES_COTTONEE,
         INNATES(
@@ -2425,12 +2543,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0557
         SPECIES_DWEBBLE,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
     },
     { // 0558
         SPECIES_CRUSTLE,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
     },
@@ -2592,6 +2712,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0589
         SPECIES_ESCAVALIER,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_SWARM
         )
     },
@@ -2732,6 +2853,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRYOGONAL,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0616
+        SPECIES_SHELMET,
+        INNATES(
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 0619
@@ -2915,6 +3042,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LEVITATE,
             ABILITY_STURDY
+        )
+    },
+    { // 0705
+        SPECIES_SLIGGOO_HISUI,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 0706
+        SPECIES_GOODRA_HISUI,
+        INNATES(
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 0707
@@ -3182,10 +3321,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_UNAWARE
         )
     },
+    { // 0772
+        SPECIES_TYPE_NULL,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
     { // 0775
         SPECIES_KOMALA,
         INNATES(
             ABILITY_UNAWARE
+        )
+    },
+    { // 0776
+        SPECIES_TURTONATOR,
+        INNATES(
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 0777
@@ -3445,18 +3596,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0833
         SPECIES_CHEWTLE,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0834
         SPECIES_DREDNAW,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0834
         SPECIES_DREDNAW_GMAX,
         INNATES(
+            ABILITY_SHELL_ARMOR,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -3532,10 +3686,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRANKSTER
         )
     },
+    { // 0863
+        SPECIES_PERRSERKER,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
     { // 0867
         SPECIES_RUNERIGUS,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0870
+        SPECIES_FALINKS,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
         )
     },
     { // 0880
@@ -3750,7 +3916,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0950
         SPECIES_KLAWF,
         INNATES(
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 0951

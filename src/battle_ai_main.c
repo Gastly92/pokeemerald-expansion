@@ -2257,7 +2257,8 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     case EFFECT_LASER_FOCUS:
         if (gBattleMons[battlerDef].volatiles.laserFocus)
             ADJUST_SCORE(-10);
-        else if (aiData->abilities[battlerDef] == ABILITY_SHELL_ARMOR || aiData->abilities[battlerDef] == ABILITY_BATTLE_ARMOR)
+        else if (aiData->abilities[battlerDef] == ABILITY_SHELL_ARMOR || aiData->abilities[battlerDef] == ABILITY_BATTLE_ARMOR
+              || BattlerHasAbility(battlerDef, ABILITY_SHELL_ARMOR) || BattlerHasAbility(battlerDef, ABILITY_BATTLE_ARMOR)) // FORK: innate-aware (Laser Focus is wasted on a crit-immune target)
             ADJUST_SCORE(-8);
         break;
     case EFFECT_SKETCH:

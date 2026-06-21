@@ -8234,10 +8234,22 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
             critChance = ARRAY_COUNT(sCriticalHitOdds) - 1;
     }
 
-    if (critChance != CRITICAL_HIT_BLOCKED && (ctx->abilities[ctx->battlerDef] == ABILITY_BATTLE_ARMOR || ctx->abilities[ctx->battlerDef] == ABILITY_SHELL_ARMOR))
+    // FORK: an innate Battle/Shell Armor (FEATURE_INNATE_ABILITIES) blocks crits exactly like the real
+    // ability. Both are a clean upside (they never hurt their holder), so the innate is a 1:1 copy — no
+    // pure-boon divergence. IsInnateActive() supplies the same suppression gates (Mold Breaker / Gastro
+    // Acid / not-on-field) as the chosen-ability path. The innate is kept silent (identity stays the
+    // chosen ability), so only the chosen-ability path records via RecordAbilityBattle — matching the
+    // silent Filter calc modifier. This runs in the AI's per-move damage prediction (AI_CalcDamage), so
+    // the inner IsInnateActive() lookups are gated behind a single cheap GetConfig() — when the feature
+    // is off they're skipped entirely, keeping the AI's hot-path cost flat.
+    bool32 defChosenArmor = (ctx->abilities[ctx->battlerDef] == ABILITY_BATTLE_ARMOR || ctx->abilities[ctx->battlerDef] == ABILITY_SHELL_ARMOR);
+    bool32 defArmor = defChosenArmor;
+    if (!defArmor && GetConfig(FEATURE_INNATE_ABILITIES))
+        defArmor = IsInnateActive(ctx->battlerDef, ABILITY_BATTLE_ARMOR) || IsInnateActive(ctx->battlerDef, ABILITY_SHELL_ARMOR);
+    if (critChance != CRITICAL_HIT_BLOCKED && defArmor)
     {
-        // Record ability only if move had 100% chance to get a crit
-        if (ctx->updateFlags)
+        // Record ability only if move had 100% chance to get a crit (chosen-ability path only — the innate stays silent)
+        if (ctx->updateFlags && defChosenArmor)
         {
             if (critChance == CRITICAL_HIT_ALWAYS)
                 RecordAbilityBattle(ctx->battlerDef, ctx->abilities[ctx->battlerDef]);
@@ -8290,6 +8302,14 @@ s32 CalcCritChanceStageGen1(struct DamageContext *ctx)
     {
         if (ctx->updateFlags)
             RecordAbilityBattle(ctx->battlerDef, ctx->abilities[ctx->battlerDef]);
+        critChance = CRITICAL_HIT_BLOCKED;
+    }
+    // FORK: innate Battle/Shell Armor blocks crits in the Gen-1 crit formula too (see CalcCritChanceStage).
+    // Kept as a separate silent else-if so the chosen-ability path above stays byte-for-byte unchanged; the
+    // GetConfig() gate short-circuits the IsInnateActive() lookups when the feature is off (AI hot path).
+    else if (GetConfig(FEATURE_INNATE_ABILITIES)
+          && (IsInnateActive(ctx->battlerDef, ABILITY_BATTLE_ARMOR) || IsInnateActive(ctx->battlerDef, ABILITY_SHELL_ARMOR)))
+    {
         critChance = CRITICAL_HIT_BLOCKED;
     }
     else if (gBattleMons[ctx->battlerAtk].volatiles.laserFocus
