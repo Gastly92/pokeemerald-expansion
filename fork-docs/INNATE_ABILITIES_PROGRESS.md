@@ -262,7 +262,7 @@
 | :x: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
 | :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
 | :white_large_square: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
-| :white_large_square: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
+| :x: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
 | :x: | Transistor | Powers up Electric-type moves. |
 | :x: | Dragon's Maw | Powers up Dragon-type moves. |
 | :x: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
