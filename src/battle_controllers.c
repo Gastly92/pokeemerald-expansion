@@ -2401,7 +2401,15 @@ void BtlController_HandleSwitchInAnim(enum BattlerId battler)
                         || IsControllerRecordedPartner(battler)
                         || IsControllerLinkPartner(battler));
 
-    if (IsControllerPlayer(battler))
+    // FORK: Dynamax reuses the switch-in animation (BattleScript_DynamaxBegins) for its
+    // "shrink into the ball, grow back out" visual, passing dontClearTransform = TRUE
+    // (bufferA[2]) to mark it as the SAME mon re-entering, not a genuine switch. A real
+    // switch brings in a different Pokemon with different moves, so clearing the menu
+    // cursors is correct; for the Dynamax re-entry it wrongly forgot the player's
+    // last-move position (regular moves keep it). Skip the reset when we're told not to
+    // clear the mon's battle state. On conflict, keep this guard rather than re-inlining
+    // the unconditional reset.
+    if (IsControllerPlayer(battler) && !gBattleResources->bufferA[battler][2])
     {
         gActionSelectionCursor[battler] = 0;
         gMoveSelectionCursor[battler] = 0;
