@@ -76,7 +76,7 @@
 // that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
 // Pressure, Stench, Speed Boost (+1 Speed each end-turn), Battle Armor / Shell Armor (crit immunity),
 // Limber (paralysis immunity), Cute Charm (infatuates an opposite-gender attacker on contact),
-// Oblivious (infatuation/Taunt/Intimidate immunity),
+// Oblivious (infatuation/Taunt/Intimidate immunity), Sand Veil / Snow Cloak (weather evasion + chip immunity),
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -96,7 +96,7 @@
 // lists ABILITY_MERCILESS yet still cannot be paralyzed via its innate Limber; a Whiscash lists
 // ABILITY_HYDRATION yet still shrugs off Taunt/Intimidate/infatuation via its innate Oblivious. Role comments
 // that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/"Limber"/
-// "Cute Charm"/"Oblivious"/"Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
+// "Cute Charm"/"Oblivious"/"Sand Veil"/"Snow Cloak"/"Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
 // its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
 // it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
 // (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
@@ -107,7 +107,10 @@
 // it a chosen Drought. Blaziken is the Speed-Boost version of the same case: BOTH its real abilities —
 // Blaze and Speed Boost — are now innate, so the override gives it a chosen Sheer Force; Lopunny is the
 // Cute Charm version: both its real non-drawback abilities — Cute Charm and Limber — are now innate
-// (Klutz is a drawback), so the override gives it a chosen Sheer Force too. Sceptile is the lone non-ability-locked override: only its Overgrow is
+// (Klutz is a drawback), so the override gives it a chosen Sheer Force too. The weather-evasion abilities add more
+// all-real-abilities-innate cases: Sandslash and Donphan (Sand Veil + Sand Rush / Sturdy) get a chosen Sand Stream,
+// while Sandslash-Alola, Articuno and Beartic (Snow Cloak alongside Slush Rush/Swift Swim/Pressure) get a chosen
+// Snow Warning — each a stable :x: weather-setter that also turns on the mon's own evasion innate. Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
 // repurposes that slot for its Mega's Lightning Rod. Each override hands out a deliberately STABLE
 // ability — one marked :x: in INNATE_ABILITIES_PROGRESS.md (never an innate), so it won't need
@@ -700,7 +703,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SAND_VEIL, // Sand Rush now innate; chosen Sand Veil (sand evasion)
+        .ability = ABILITY_SAND_STREAM, // Sand Rush + Sand Veil now innate; chosen Sand Stream (override) sets sand to power both
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -720,7 +723,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SAND_VEIL, // Sand Rush now innate; chosen Sand Veil (sand evasion)
+        .ability = ABILITY_SAND_STREAM, // Sand Rush + Sand Veil now innate; chosen Sand Stream (override) sets sand to power both
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -742,7 +745,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SNOW_CLOAK, // Slush Rush now innate; chosen Snow Cloak
+        .ability = ABILITY_SNOW_WARNING, // Slush Rush + Snow Cloak now innate; chosen Snow Warning (override) sets snow to power both
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -762,7 +765,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SNOW_CLOAK, // Slush Rush now innate; chosen Snow Cloak
+        .ability = ABILITY_SNOW_WARNING, // Slush Rush + Snow Cloak now innate; chosen Snow Warning (override) sets snow to power both
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -3783,7 +3786,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_HAZE
         },
-        .ability = ABILITY_SNOW_CLOAK, // Pressure now innate; chosen Snow Cloak (only other real slot) adds snow evasion
+        .ability = ABILITY_SNOW_WARNING, // Pressure + Snow Cloak now innate; chosen Snow Warning (override) sets snow for Snow Cloak
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3803,7 +3806,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_ROOST
         },
-        .ability = ABILITY_SNOW_CLOAK,
+        .ability = ABILITY_SNOW_WARNING, // Pressure + Snow Cloak now innate; chosen Snow Warning (override)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6067,7 +6070,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_SAND_VEIL, // Sturdy now innate; Sand Veil is Donphan's only other real slot
+        .ability = ABILITY_SAND_STREAM, // Sturdy + Sand Veil now innate; chosen Sand Stream (override) sets sand for Sand Veil
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6087,7 +6090,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SAND_VEIL,
+        .ability = ABILITY_SAND_STREAM, // Sturdy + Sand Veil now innate; chosen Sand Stream (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6107,7 +6110,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SAND_VEIL, // Sturdy now innate; Sand Veil is Donphan's only other real slot
+        .ability = ABILITY_SAND_STREAM, // Sturdy + Sand Veil now innate; chosen Sand Stream (override) sets sand for Sand Veil
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11428,7 +11431,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATER_PULSE,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_SNOW_CLOAK,
+        .ability = ABILITY_ICE_BODY, // Snow Cloak now innate; chosen Ice Body (real slot 2) heals in snow
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11723,7 +11726,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_TAUNT
         },
-        .ability = ABILITY_SNOW_CLOAK,
+        .ability = ABILITY_CURSED_BODY, // Snow Cloak now innate; chosen Cursed Body (real HA)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14560,7 +14563,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SNOW_CLOAK, // Swift Swim + Slush Rush now innate; chosen Snow Cloak
+        .ability = ABILITY_SNOW_WARNING, // Snow Cloak + Slush Rush + Swift Swim all now innate; chosen Snow Warning (override) sets snow
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23760,7 +23763,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SAND_VEIL,
+        .ability = ABILITY_GOOEY, // Sand Veil now innate; chosen Gooey (real slot 0) drops attacker Speed on contact
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,

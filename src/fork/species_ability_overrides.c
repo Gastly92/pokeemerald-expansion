@@ -47,6 +47,36 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VENUSAUR, 1,
         ABILITY_GRASSY_SURGE
     },
+    { // 0028
+        // Sandslash's only real abilities (Sand Veil, Sand Rush) are BOTH now innate, so its empty
+        // slot 1 takes a flavorful chosen ability. Sand Stream is :x: (never an innate -> stable) and
+        // self-synergistic: it sets the sandstorm that turns on Sandslash's own innate Sand Rush (Speed)
+        // and Sand Veil (evasion). Precedent: Flygon/Claydol/Torterra also hand out Sand Stream.
+        SPECIES_SANDSLASH, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0028
+        // Sandslash-Alola's only real abilities (Snow Cloak, Slush Rush) are BOTH now innate, so its
+        // empty slot 1 takes Snow Warning — :x: (never an innate -> stable) and self-synergistic: the
+        // snow it sets turns on its own innate Slush Rush (Speed) and Snow Cloak (evasion). Snowy
+        // counterpart to base Sandslash's Sand Stream above.
+        SPECIES_SANDSLASH_ALOLA, 1,
+        ABILITY_SNOW_WARNING
+    },
+    { // 0144
+        // Articuno's only real abilities (Pressure, Snow Cloak) are BOTH now innate, so its empty
+        // slot 1 takes Snow Warning — :x: (never an innate -> stable) and flavorful (the legendary ice
+        // bird heralds the blizzard), setting the snow that turns on its own innate Snow Cloak evasion.
+        SPECIES_ARTICUNO, 1,
+        ABILITY_SNOW_WARNING
+    },
+    { // 0232
+        // Donphan's only real abilities (Sturdy, Sand Veil) are BOTH now innate, so its empty slot 1
+        // takes Sand Stream — :x: (never an innate -> stable) and self-synergistic: the sandstorm it
+        // sets turns on its own innate Sand Veil evasion. Same pick as base Sandslash above.
+        SPECIES_DONPHAN, 1,
+        ABILITY_SAND_STREAM
+    },
     { // 0250
         SPECIES_HO_OH, 1,
         ABILITY_FLAME_BODY
@@ -196,11 +226,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0604
-        SPECIES_EELEKTROSS, 1, 
+        SPECIES_EELEKTROSS, 1,
         ABILITY_LIGHTNING_ROD
     },
+    { // 0614
+        // Beartic's three real abilities (Snow Cloak, Slush Rush, Swift Swim) are ALL now innate, so
+        // its slot-1 Slush Rush — now innate-redundant — is repurposed to Snow Warning, :x: (never an
+        // innate -> stable) and self-synergistic: the snow it sets turns on its own innate Slush Rush
+        // (Speed) and Snow Cloak (evasion).
+        SPECIES_BEARTIC, 1,
+        ABILITY_SNOW_WARNING
+    },
     { // 0615
-        SPECIES_CRYOGONAL, 1, 
+        SPECIES_CRYOGONAL, 1,
         ABILITY_SNOW_WARNING
     },
     { // 0635

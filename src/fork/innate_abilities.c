@@ -386,6 +386,43 @@
 //     Frontier roster sets that hardcoded a chosen Oblivious are freed (Step 3.5): Whiscash → Hydration (its real HA),
 //     while Dondozo — whose only non-Water-Veil real abilities (Unaware, Oblivious) are now BOTH innate — takes its
 //     real Water Veil slot (burn immunity), no override needed.
+//   - ABILITY_SAND_VEIL / ABILITY_SNOW_CLOAK — the two weather evasion abilities: +25% evasion (a 0.8
+//     accuracy modifier on incoming moves) while their weather is up — sandstorm for Sand Veil, hail/snow
+//     for Snow Cloak — and immunity to that weather's chip damage (sandstorm / hail), exactly like the
+//     real abilities. Wired as passive calc-modifiers (like Filter / Unaware): the evasion lives at the
+//     accuracy site GetTotalAccuracy (src/battle_util.c), applied additively beside the chosen-ability
+//     switch (guarded `defAbility != ABILITY_X` so a real holder never applies the 0.8 twice), plus the
+//     deterministic PP-tax mirror GetDeterministicMoveTargetPPTax in the same file. The weather-damage
+//     immunity is mirrored at the end-turn chip sites (src/battle_end_turn.c), exactly as the innate Sand
+//     Rush's sandstorm immunity already is. No script / pop-up / driver, and the innate is NOT recorded as
+//     identity. NO pure-boon divergence: both are clean upsides that never hurt their holder, so each
+//     innate is a 1:1 copy of the real ability. Suppression parity holds via IsInnateActive(): both are
+//     breakable, so an attacker's Mold Breaker pierces an innate Sand Veil / Snow Cloak exactly as it
+//     would the real ability (and the move then ignores the evasion). AI is innate-aware: on-field
+//     accuracy prediction is correct for FREE (GetTotalAccuracy runs keyed off the real battler), and the
+//     dedicated weather-damage / weather-setting reads credit the innate too — the sandstorm/hail chip
+//     predictors (DoesBattlerTakeSandstormDamage / DoesBattlerTakeHailDamage in src/battle_ai_util.c, the
+//     switch-in GetSwitchinWeatherImpact in src/battle_ai_switch.c) and the weather-setting heuristic
+//     (DoesInnateBenefitFromWeather in src/battle_ai_field_statuses.c, so the AI values setting the matching
+//     weather to enable the evasion). The off-field accuracy prediction is left unwired (the Unaware/Filter
+//     scope call — a 25% evasion boost is not a KO-flipping immunity). The overworld wild-encounter-rate
+//     halving (src/wild_encounter.c) reads the party lead's chosen ability only and is deliberately left
+//     alone: innates are a battle-only feature (no battle state out of battle). Canon-only (no flavor
+//     picks — evasion is a contentious, can-be-frustrating mechanic, so like Prankster / the potent
+//     abilities the set stays tight to species whose ability data carries it in any slot): the signature
+//     survives whichever slot a build picks (Garchomp's slot-1 Sand Veil, Gliscor's, Donphan's HA, etc.).
+//     Forms are listed only where the form's ability data still carries it (Garchomp-Mega-Z keeps Sand Veil,
+//     but the regular Garchomp-Mega swaps to Sand Force and is omitted; Sandaconda-Gmax keeps Sand Veil;
+//     Vanilluxe / Cetitan / Tyranitar lose it on evolving and are omitted, so only the pre-evos get it).
+//     Many species already carry other innates (Sandshrew/Sandslash's Sand Rush, the Geodude line and
+//     Donphan's Sturdy, Stunfisk's Limber, the Swinub line's Oblivious, Articuno's Pressure, the Vanillite
+//     line and Froslass's Levitate, the Sandshrew-Alola line / Cubchoo / Beartic's Slush Rush), so they take
+//     a combined INNATES(...) list with the evasion ability added. Frontier roster sets that hardcoded a
+//     chosen Sand Veil / Snow Cloak are freed (Step 3.5): Glaceon → Ice Body, Froslass → Cursed Body and
+//     Wugtrio → Gooey each take a real complementary slot, while the species whose ALL relevant real
+//     abilities are now innate take a fork-owned chosen override (species_ability_overrides.c) — Sandslash
+//     and Donphan → Sand Stream, Sandslash-Alola / Articuno / Beartic → Snow Warning — each a stable :x:
+//     weather-setter that also turns on the mon's own evasion innate.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -519,25 +556,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0027
         SPECIES_SANDSHREW,
         INNATES(
-            ABILITY_SAND_RUSH
+            ABILITY_SAND_RUSH,
+            ABILITY_SAND_VEIL
         )
     },
     { // 0027
         SPECIES_SANDSHREW_ALOLA,
         INNATES(
-            ABILITY_SLUSH_RUSH
+            ABILITY_SLUSH_RUSH,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0028
         SPECIES_SANDSLASH,
         INNATES(
-            ABILITY_SAND_RUSH
+            ABILITY_SAND_RUSH,
+            ABILITY_SAND_VEIL
         )
     },
     { // 0028
         SPECIES_SANDSLASH_ALOLA,
         INNATES(
-            ABILITY_SLUSH_RUSH
+            ABILITY_SLUSH_RUSH,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0035
@@ -557,6 +598,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFABLE_MEGA,
         INNATES(
             ABILITY_UNAWARE
+        )
+    },
+    { // 0037
+        SPECIES_VULPIX_ALOLA,
+        INNATES(
+            ABILITY_SNOW_CLOAK
+        )
+    },
+    { // 0038
+        SPECIES_NINETALES_ALOLA,
+        INNATES(
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0039
@@ -590,6 +643,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_STENCH
+        )
+    },
+    { // 0050
+        SPECIES_DIGLETT,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0050
+        SPECIES_DIGLETT_ALOLA,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0051
+        SPECIES_DUGTRIO,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0051
+        SPECIES_DUGTRIO_ALOLA,
+        INNATES(
+            ABILITY_SAND_VEIL
         )
     },
     { // 0053
@@ -651,6 +728,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0074
         SPECIES_GEODUDE,
         INNATES(
+            ABILITY_SAND_VEIL,
             ABILITY_STURDY
         )
     },
@@ -663,6 +741,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0075
         SPECIES_GRAVELER,
         INNATES(
+            ABILITY_SAND_VEIL,
             ABILITY_STURDY
         )
     },
@@ -675,6 +754,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0076
         SPECIES_GOLEM,
         INNATES(
+            ABILITY_SAND_VEIL,
             ABILITY_STURDY
         )
     },
@@ -1003,7 +1083,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0144
         SPECIES_ARTICUNO,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0145
@@ -1419,6 +1500,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0207
+        SPECIES_GLIGAR,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
     { // 0208
         SPECIES_STEELIX,
         INNATES(
@@ -1464,13 +1551,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0220
         SPECIES_SWINUB,
         INNATES(
-            ABILITY_OBLIVIOUS
+            ABILITY_OBLIVIOUS,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0221
         SPECIES_PILOSWINE,
         INNATES(
-            ABILITY_OBLIVIOUS
+            ABILITY_OBLIVIOUS,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0222
@@ -1504,9 +1593,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0231
+        SPECIES_PHANPY,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
     { // 0232
         SPECIES_DONPHAN,
         INNATES(
+            ABILITY_SAND_VEIL,
             ABILITY_STURDY
         )
     },
@@ -1544,6 +1640,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SUICUNE,
         INNATES(
             ABILITY_PRESSURE
+        )
+    },
+    { // 0246
+        SPECIES_LARVITAR,
+        INNATES(
+            ABILITY_SAND_VEIL
         )
     },
     { // 0249
@@ -1839,6 +1941,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FLYGON,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0331
+        SPECIES_CACNEA,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0332
+        SPECIES_CACTURNE,
+        INNATES(
+            ABILITY_SAND_VEIL
         )
     },
     { // 0333
@@ -2361,6 +2475,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRESSURE
         )
     },
+    { // 0443
+        SPECIES_GIBLE,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0444
+        SPECIES_GABITE,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0445
+        SPECIES_GARCHOMP,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA_Z,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
     { // 0446
         SPECIES_MUNCHLAX,
         INNATES(
@@ -2435,10 +2573,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL
         )
     },
+    { // 0471
+        SPECIES_GLACEON,
+        INNATES(
+            ABILITY_SNOW_CLOAK
+        )
+    },
+    { // 0472
+        SPECIES_GLISCOR,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
     { // 0473
         SPECIES_MAMOSWINE,
         INNATES(
-            ABILITY_OBLIVIOUS
+            ABILITY_OBLIVIOUS,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0474
@@ -2462,7 +2613,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0478
         SPECIES_FROSLASS,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0478
@@ -3002,13 +3154,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0582
         SPECIES_VANILLITE,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0583
         SPECIES_VANILLISH,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0584
@@ -3201,13 +3355,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0613
         SPECIES_CUBCHOO,
         INNATES(
-            ABILITY_SLUSH_RUSH
+            ABILITY_SLUSH_RUSH,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0614
         SPECIES_BEARTIC,
         INNATES(
             ABILITY_SLUSH_RUSH,
+            ABILITY_SNOW_CLOAK,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -3226,7 +3382,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0618
         SPECIES_STUNFISK,
         INNATES(
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_SAND_VEIL
         )
     },
     { // 0619
@@ -3397,6 +3554,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_INKAY,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0694
+        SPECIES_HELIOPTILE,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0695
+        SPECIES_HELIOLISK,
+        INNATES(
+            ABILITY_SAND_VEIL
         )
     },
     { // 0696
@@ -3727,6 +3896,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_NATURAL_CURE
         )
     },
+    { // 0769
+        SPECIES_SANDYGAST,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0770
+        SPECIES_PALOSSAND,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
     { // 0771
         SPECIES_PYUKUMUKU,
         INNATES(
@@ -4024,6 +4205,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_SHELL_ARMOR,
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0843
+        SPECIES_SILICOBRA,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0844
+        SPECIES_SANDACONDA,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0844
+        SPECIES_SANDACONDA_GMAX,
+        INNATES(
+            ABILITY_SAND_VEIL
         )
     },
     { // 0846
@@ -4374,6 +4573,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SPEED_BOOST
         )
     },
+    { // 0960
+        SPECIES_WIGLETT,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0961
+        SPECIES_WUGTRIO,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
     { // 0965
         SPECIES_REVAVROOM,
         INNATES(
@@ -4386,10 +4597,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0968
+        SPECIES_ORTHWORM,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
     { // 0972
         SPECIES_HOUNDSTONE,
         INNATES(
             ABILITY_SAND_RUSH
+        )
+    },
+    { // 0974
+        SPECIES_CETODDLE,
+        INNATES(
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0975
