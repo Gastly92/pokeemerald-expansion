@@ -35,7 +35,7 @@ static const u16 sMythicalSpecies[] =
     SPECIES_ZEKROM,               // 0644
     SPECIES_XERNEAS,              // 0716
     SPECIES_YVELTAL,              // 0717
-    SPECIES_ZYGARDE_50_POWER_CONSTRUCT, // 0718 (1166): morphs to Complete at <=50% HP
+    SPECIES_ZYGARDE_50_POWER_CONSTRUCT, //0718
     SPECIES_SOLGALEO,             // 0791
     SPECIES_LUNALA,               // 0792
     SPECIES_NECROZMA_DAWN_WINGS,  // 0800
@@ -101,7 +101,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_KELDEO,              // 0647
     SPECIES_MELOETTA,            // 0648
     SPECIES_GENESECT,            // 0649
-    SPECIES_ZYGARDE_10_POWER_CONSTRUCT, // 0718 (1165): morphs to Complete at <=50% HP
+    SPECIES_ZYGARDE_10_POWER_CONSTRUCT, // 0718
     SPECIES_DIANCIE,             // 0719
     SPECIES_HOOPA,               // 0720
     SPECIES_VOLCANION,           // 0721
