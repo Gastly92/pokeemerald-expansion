@@ -52,7 +52,12 @@
 // site in src/battle_util.c, run additively beside the chosen-ability dispatch via TryCuteCharmInfatuate
 // so an innate holder infatuates like the real ability and the pop-up is overwritten to Cute Charm; a
 // clean-upside 1:1 copy, AI made innate-aware only at the DETERMINISTIC_ABILITIES contact-punish
-// predictor in src/battle_ai_util.c).
+// predictor in src/battle_ai_util.c),
+// and OBLIVIOUS (the holder cannot be infatuated or Taunted (GEN_6+) and is unaffected by Intimidate (GEN_8+),
+// a passive trait wired innate-aware at the scattered immunity sites in src/battle_script_commands.c and
+// src/battle_stat_change.c and src/battle_util.c — the infatuation/Taunt/Captivate/Intimidate blocks and the
+// switch-in cure, each overwriting the pop-up to Oblivious; a clean-upside 1:1 copy, AI made innate-aware at the
+// foe Attract/Intimidate/Cute-Charm reads in src/battle_ai_util.c and src/battle_ai_switch.c).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

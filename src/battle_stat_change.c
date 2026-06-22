@@ -83,7 +83,8 @@ static bool32 CheckSpecificMoveCondition(struct BattleCalcValues *cv, struct Sta
     switch (cv->moveEffect)
     {
     case EFFECT_CAPTIVATE:
-        if (cv->abilities[cv->battlerDef] == ABILITY_OBLIVIOUS)
+        // FORK: innate Oblivious blocks Captivate like the real ability (IsInnateActive supplies suppression parity).
+        if (cv->abilities[cv->battlerDef] == ABILITY_OBLIVIOUS || IsInnateActive(cv->battlerDef, ABILITY_OBLIVIOUS))
         {
             if (!st->onlyChecking)
             {
@@ -91,6 +92,9 @@ static bool32 CheckSpecificMoveCondition(struct BattleCalcValues *cv, struct Sta
                 gBattlerAbility = gBattleScripting.battler = cv->battlerDef;
                 gLastUsedAbility = ABILITY_OBLIVIOUS;
                 RecordAbilityBattle(cv->battlerDef, ABILITY_OBLIVIOUS);
+                // FORK: innate — the pop-up reads the primary slot, so show Oblivious; real path untouched.
+                if (cv->abilities[cv->battlerDef] != ABILITY_OBLIVIOUS)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
             }
             return TRUE;
         }
@@ -661,6 +665,31 @@ static bool32 IsIntimidateBlocked(struct BattleCalcValues *cv, struct StatChange
 {
     if (!st->intimidate)
         return FALSE;
+
+    // FORK: an innate Oblivious (the chosen ability differs, so the switch below would miss it) is unaffected
+    // by Intimidate exactly like the real ability (GEN_8+). Mirror the OBLIVIOUS case and overwrite the
+    // pop-up/record to Oblivious (CreateAbilityPopUp reads the primary slot). Only fires when the chosen
+    // ability isn't itself an Intimidate-immune one (those are handled by the switch). IsInnateActive
+    // supplies suppression parity. Inner Focus/Scrappy/Own Tempo/Guard Dog are never innates.
+    if (cv->abilities[cv->battlerDef] != ABILITY_OBLIVIOUS
+     && cv->abilities[cv->battlerDef] != ABILITY_INNER_FOCUS
+     && cv->abilities[cv->battlerDef] != ABILITY_SCRAPPY
+     && cv->abilities[cv->battlerDef] != ABILITY_OWN_TEMPO
+     && cv->abilities[cv->battlerDef] != ABILITY_GUARD_DOG
+     && IsInnateActive(cv->battlerDef, ABILITY_OBLIVIOUS))
+    {
+        if (GetConfig(B_UPDATED_INTIMIDATE) < GEN_8)
+            return FALSE;
+        PREPARE_STAT_BUFFER(gBattleTextBuff1, st->stat);
+        st->script = BattleScript_AbilityNoSpecificStatLoss;
+        gLastUsedAbility = ABILITY_OBLIVIOUS;
+        gBattlerAbility = cv->battlerDef;
+        gBattleScripting.battler = cv->battlerDef;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
+        MarkStatsAsDone(st, st->stat);
+        RecordAbilityBattle(cv->battlerDef, ABILITY_OBLIVIOUS);
+        return TRUE;
+    }
 
     switch (cv->abilities[cv->battlerDef])
     {

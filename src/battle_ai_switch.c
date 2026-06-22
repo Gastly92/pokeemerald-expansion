@@ -954,6 +954,12 @@ static bool32 CanIntimidateLowerOpponentAtk(enum BattlerId battler, enum Battler
         default:
             break;
         }
+
+        // FORK: an innate Oblivious (chosen ability differs) on the opponent is Intimidate-immune too (GEN_8+),
+        // so don't switch in an Intimidator expecting to lower its Attack. Inner Focus/Scrappy/Own Tempo are
+        // never innates, so only Oblivious needs this.
+        if (IsInnateActive(opposingBattler, ABILITY_OBLIVIOUS))
+            return FALSE;
     }
 
     return TRUE;

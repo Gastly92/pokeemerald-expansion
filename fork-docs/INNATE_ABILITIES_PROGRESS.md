@@ -13,7 +13,7 @@
 | :x: | Static | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being paralyzed. |
 | :x: | Volt Absorb | Electric-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :x: | Water Absorb | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
-| :white_large_square: | Oblivious | The Pokémon cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate. |
+| :white_check_mark: | Oblivious | The Pokémon cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate. |
 | :x: | Cloud Nine | Eliminates the effects of weather. |
 | :white_large_square: | Compound Eyes | Boosts the accuracy of the Pokémon's moves by 30%. |
 | :white_large_square: | Insomnia | The Pokémon cannot become drowsy or be put to sleep. |

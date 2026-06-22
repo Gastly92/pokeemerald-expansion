@@ -357,6 +357,35 @@
 //     is intentionally NOT given the innate: its ability data lacks Cute Charm (Healer/Regenerator/Klutz);
 //     it only runs Cute Charm as a fork-chosen ability via the override table, so its frontier set is left
 //     to keep that chosen Cute Charm and needs no freeing.
+//   - ABILITY_OBLIVIOUS — the holder cannot be infatuated or Taunted (B_OBLIVIOUS_TAUNT >= GEN_6) and
+//     is unaffected by Intimidate (B_UPDATED_INTIMIDATE >= GEN_8). A passive trait checked at several
+//     scattered immunity sites; no script/pop-up driver. Wired innate-aware at: the Attract infatuation
+//     block (Cmd_setdrowsy/Attract in src/battle_script_commands.c), the Taunt block (Cmd_settaunt), the
+//     generic infatuation setter (BS_TrySetInfatuation), the Captivate stat-drop immunity (EFFECT_CAPTIVATE
+//     in src/battle_stat_change.c), the Intimidate immunity (IsIntimidateBlocked in src/battle_stat_change.c),
+//     the Cute-Charm self-infatuation check on the contacting attacker (src/battle_util.c), and the switch-in
+//     cure of pre-existing infatuation/Taunt (TryImmunityAbilityHealStatus in src/battle_util.c). Each pairs
+//     the chosen-ability test with IsInnateActive()/BattlerHasAbility(); the visible blocks (Attract, Taunt,
+//     Captivate, Intimidate, switch-in cure) overwrite the pop-up to Oblivious when the chosen ability differs
+//     (the Limber/Cute Charm pop-up precedent), so a real Oblivious stays byte-for-byte unchanged. NO pure-boon
+//     divergence: Oblivious is a clean upside that never hurts its holder, so the innate is a 1:1 copy.
+//     Suppression parity holds via IsInnateActive(): Oblivious is breakable, so an attacker's Mold Breaker
+//     pierces an innate Oblivious exactly as it would the real ability. AI is innate-aware: the foe-side reads
+//     are credited via IsInnateActive()/BattlerHasAbility() — AI_CanBeInfatuated (don't Attract an innate-Oblivious
+//     foe), CanIntimidateLowerOpponentAtk (don't switch in an Intimidator against one, in src/battle_ai_switch.c),
+//     and the Cute-Charm contact-punish predictor's attacker-Oblivious check (src/battle_ai_util.c). The AI's Taunt
+//     scoring does not model Oblivious immunity even for the real ability, so it needs no innate wiring (parity).
+//     Canon-only (no flavor picks): the canon roster — the perpetually-dazed Slowpoke/Numel/Spheal lines, the
+//     clueless Smoochum/Jynx, the spaced-out Swinub line, etc. — already embodies the "oblivious" theme, so no
+//     extra flavor picks are warranted (keeping the set tight). Every species whose ability data carries Oblivious
+//     in any slot gets it, so the immunity survives whichever slot a build picks; forms are listed only where the
+//     form's data still carries it (the Slowpoke line's Galarian/Mega forms swap to Own Tempo/Shell Armor and are
+//     omitted; Tsareena loses Oblivious on evolving, so only Bounsweet/Steenee get it). Many species already carry
+//     other innates (the Slowpoke line's Regenerator, Illumise's Prankster, the Wailmer line's Pressure, Numel's and
+//     Dondozo's Unaware, Feebas's Swift Swim), so they take a combined INNATES(...) list with Oblivious added.
+//     Frontier roster sets that hardcoded a chosen Oblivious are freed (Step 3.5): Whiscash → Hydration (its real HA),
+//     while Dondozo — whose only non-Water-Veil real abilities (Unaware, Oblivious) are now BOTH innate — takes its
+//     real Water Veil slot (burn immunity), no override needed.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 
@@ -658,6 +687,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0079
         SPECIES_SLOWPOKE,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_REGENERATOR
         )
     },
@@ -670,6 +700,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0080
         SPECIES_SLOWBRO,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_REGENERATOR
         )
     },
@@ -804,6 +835,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LIMBER
         )
     },
+    { // 0108
+        SPECIES_LICKITUNG,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
     { // 0109
         SPECIES_KOFFING,
         INNATES(
@@ -879,6 +916,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SCYTHER,
         INNATES(
             ABILITY_SWARM
+        )
+    },
+    { // 0124
+        SPECIES_JYNX,
+        INNATES(
+            ABILITY_OBLIVIOUS
         )
     },
     { // 0129
@@ -1180,6 +1223,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0199
         SPECIES_SLOWKING,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_REGENERATOR
         )
     },
@@ -1417,6 +1461,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWARM
         )
     },
+    { // 0220
+        SPECIES_SWINUB,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0221
+        SPECIES_PILOSWINE,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
     { // 0222
         SPECIES_CORSOLA,
         INNATES(
@@ -1458,6 +1514,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PORYGON2,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0238
+        SPECIES_SMOOCHUM,
+        INNATES(
+            ABILITY_OBLIVIOUS
         )
     },
     { // 0242
@@ -1694,6 +1756,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0314
         SPECIES_ILLUMISE,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_PRANKSTER
         )
     },
@@ -1730,18 +1793,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0320
         SPECIES_WAILMER,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_PRESSURE
         )
     },
     { // 0321
         SPECIES_WAILORD,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_PRESSURE
         )
     },
     { // 0322
         SPECIES_NUMEL,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_UNAWARE
         )
     },
@@ -1805,6 +1871,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0339
+        SPECIES_BARBOACH,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0340
+        SPECIES_WHISCASH,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
     { // 0341
         SPECIES_CORPHISH,
         INNATES(
@@ -1846,6 +1924,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0349
         SPECIES_FEEBAS,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -1950,6 +2029,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GLALIE_MEGA,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0363
+        SPECIES_SPHEAL,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0364
+        SPECIES_SEALEO,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0365
+        SPECIES_WALREIN,
+        INNATES(
+            ABILITY_OBLIVIOUS
         )
     },
     { // 0366
@@ -2313,6 +2410,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0463
+        SPECIES_LICKILICKY,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
     { // 0465
         SPECIES_TANGROWTH,
         INNATES(
@@ -2330,6 +2433,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LEAFEON,
         INNATES(
             ABILITY_CHLOROPHYLL
+        )
+    },
+    { // 0473
+        SPECIES_MAMOSWINE,
+        INNATES(
+            ABILITY_OBLIVIOUS
         )
     },
     { // 0474
@@ -3581,10 +3690,34 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0757
+        SPECIES_SALANDIT,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0758
+        SPECIES_SALAZZLE,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
     { // 0759
         SPECIES_STUFFUL,
         INNATES(
             ABILITY_CUTE_CHARM
+        )
+    },
+    { // 0761
+        SPECIES_BOUNSWEET,
+        INNATES(
+            ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0762
+        SPECIES_STEENEE,
+        INNATES(
+            ABILITY_OBLIVIOUS
         )
     },
     { // 0764
@@ -4268,6 +4401,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0977
         SPECIES_DONDOZO,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_UNAWARE
         )
     },
