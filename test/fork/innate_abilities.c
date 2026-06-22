@@ -2334,6 +2334,23 @@ TEST("Innate abilities: grounded Megas do not gain innate Levitate")
     EXPECT(!SpeciesHasInnate(SPECIES_MEWTWO_MEGA_X, ABILITY_LEVITATE));
 }
 
+// Mega forms mirror innates the base gained later (Sand Veil / Snow Cloak), across BOTH the
+// standard Mega and the fork's Mega Z variant, so a Garchomp/Absol keeps the trait whichever
+// Mega Stone it holds (ITEM_GARCHOMPITE -> _MEGA, ITEM_GARCHOMPITE_Z -> _MEGA_Z).
+TEST("Innate abilities: Mega forms inherit later-added base innates")
+{
+    // Garchomp's Sand Veil rides through both Mega variants.
+    EXPECT(SpeciesHasInnate(SPECIES_GARCHOMP, ABILITY_SAND_VEIL));
+    EXPECT(SpeciesHasInnate(SPECIES_GARCHOMP_MEGA, ABILITY_SAND_VEIL));
+    EXPECT(SpeciesHasInnate(SPECIES_GARCHOMP_MEGA_Z, ABILITY_SAND_VEIL));
+    // Absol's Pressure rides through both Mega variants.
+    EXPECT(SpeciesHasInnate(SPECIES_ABSOL_MEGA, ABILITY_PRESSURE));
+    EXPECT(SpeciesHasInnate(SPECIES_ABSOL_MEGA_Z, ABILITY_PRESSURE));
+    // Froslass keeps both its innates (the flavor-floater Levitate and its Snow Cloak) when Mega.
+    EXPECT(SpeciesHasInnate(SPECIES_FROSLASS_MEGA, ABILITY_LEVITATE));
+    EXPECT(SpeciesHasInnate(SPECIES_FROSLASS_MEGA, ABILITY_SNOW_CLOAK));
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.

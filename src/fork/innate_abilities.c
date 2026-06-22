@@ -2256,6 +2256,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRESSURE
         )
     },
+    { // 0359
+        SPECIES_ABSOL_MEGA_Z,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0362
         SPECIES_GLALIE,
         INNATES(
@@ -2617,6 +2623,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0445
+        SPECIES_GARCHOMP_MEGA,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
+    { // 0445
         SPECIES_GARCHOMP_MEGA_Z,
         INNATES(
             ABILITY_SAND_VEIL
@@ -2743,7 +2755,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0478
         SPECIES_FROSLASS_MEGA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0479
