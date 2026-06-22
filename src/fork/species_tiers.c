@@ -60,7 +60,6 @@ static const u16 sLegendarySpecies[] =
     SPECIES_HOOPA_UNBOUND,         // 0720
     SPECIES_URSHIFU,               // 0892
     SPECIES_URSHIFU_RAPID_STRIKE,  // 0892
-    SPECIES_GLASTRIER,             // 0896
     SPECIES_SPECTRIER,             // 0897
     SPECIES_WALKING_WAKE,          // 1009
 };
@@ -85,6 +84,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_JIRACHI,             // 0385
     SPECIES_DEOXYS_DEFENSE,      // 0386
     SPECIES_GARCHOMP,            // 0445
+    SPECIES_LUCARIO,             // 0448
     SPECIES_HEATRAN,             // 0485
     SPECIES_MANAPHY,             // 0490
     SPECIES_SHAYMIN,             // 0492
@@ -129,6 +129,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_ZARUDE,              // 0893
     SPECIES_REGIELEKI,           // 0894
     SPECIES_REGIDRAGO,           // 0895
+    SPECIES_GLASTRIER,           // 0896
     SPECIES_CALYREX,             // 0898
     SPECIES_ENAMORUS,            // 0905
     SPECIES_ENAMORUS_THERIAN,    // 0905
