@@ -17400,9 +17400,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0718
     {
-        .species = SPECIES_ZYGARDE,
+        .species = SPECIES_ZYGARDE_50_POWER_CONSTRUCT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Dragon Dance bulky sweeper
+        .heldItem = ITEM_LEFTOVERS, // 50% Dragon Dance bulky sweeper; Power Construct -> Complete at <=50% HP
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -17410,7 +17410,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_COIL
         },
-        .ability = ABILITY_AURA_BREAK,
+        .ability = ABILITY_POWER_CONSTRUCT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17420,24 +17420,24 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GROUND,
     },
     {
-        .species = SPECIES_ZYGARDE,
+        .species = SPECIES_ZYGARDE_10_POWER_CONSTRUCT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Coil bulky setup wall (innate Regenerator)
+        .heldItem = ITEM_LIFE_ORB, // 10% fast Dragon Dance sweeper; Power Construct -> Complete at <=50% HP
         .moves =
         {
-            MOVE_COIL,
+            MOVE_DRAGON_DANCE,
             MOVE_THOUSAND_ARROWS,
-            MOVE_DRAGON_TAIL,
-            MOVE_GLARE
+            MOVE_OUTRAGE,
+            MOVE_EXTREME_SPEED
         },
-        .ability = ABILITY_AURA_BREAK,
-        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ability = ABILITY_POWER_CONSTRUCT,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .def = 252,
-            .spd = 4
+            .atk = 252,
+            .spe = 252,
+            .hp = 4
         ),
-        .teraType = TYPE_DRAGON,
+        .teraType = TYPE_GROUND,
     },
 
     // 0719
