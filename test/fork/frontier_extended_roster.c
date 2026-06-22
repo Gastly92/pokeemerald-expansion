@@ -1,9 +1,11 @@
 #include "global.h"
 #include "test/test.h"
 #include "data.h"
+#include "battle_frontier.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/innate_abilities.h"
 #include "constants/abilities.h"
+#include "constants/species.h"
 
 // FORK: guards the fork-owned competitive Battle Factory roster
 // (gFrontierExtendedMons, src/frontier_extended_mons.c). A set's .ability is
@@ -53,4 +55,22 @@ TEST("Frontier extended roster: every set's ability is legal for its species")
     }
 
     EXPECT_EQ(illegalCount, 0);
+}
+
+// FORK: CreateFacilityMon grants the Gigantamax Factor at draft time to any mon
+// whose species has a G-Max form, so gmax-capable Factory/Tower mons Gigantamax
+// instead of plain Dynamaxing (without annotating each roster entry). A species
+// with no G-Max form must NOT receive the factor.
+TEST("Frontier extended roster: drafted mon gets Gigantamax Factor iff its species has a G-Max form")
+{
+    struct Pokemon mon;
+    // Minimal sets; CreateFacilityMon reads species/moves, the rest may stay 0.
+    const struct TrainerMon gmaxSet = { .species = SPECIES_CHARIZARD, .moves = { MOVE_TACKLE } };
+    const struct TrainerMon plainSet = { .species = SPECIES_SALAMENCE, .moves = { MOVE_TACKLE } };
+
+    CreateFacilityMon(&gmaxSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+    EXPECT(GetMonData(&mon, MON_DATA_GIGANTAMAX_FACTOR));
+
+    CreateFacilityMon(&plainSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+    EXPECT(!GetMonData(&mon, MON_DATA_GIGANTAMAX_FACTOR));
 }
