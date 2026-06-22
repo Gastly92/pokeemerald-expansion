@@ -101,10 +101,17 @@ populates the table in two passes, and new abilities should follow suit:
 1. **Canon users (always).** Every species that carries ability X in its real ability
    data (`gSpeciesInfo[...].abilities[]`), in any slot — primary, secondary, or Hidden.
    Giving it as an innate lets them keep the signature behavior *no matter which slot a
-   build picks*. List Mega/regional/Gmax/form constants **only where that form's ability
-   data also carries X** (so the innate never appears on a form whose canon ability
-   replaced it — e.g. a Mega whose ability becomes something else is omitted), so the
-   innate survives a mid-battle form change where it should and not where it shouldn't.
+   build picks*. The lookup is keyed by **exact species with no base-species fallback**, so
+   every form needs its own row to carry an innate (after a form change `gBattleMons[].species`
+   becomes the form constant). **Mega forms** are populated as a **pure boon**: a Mega whose
+   *base creature* has innates gets its own row mirroring the base's list, even if the Mega's
+   own ability data replaced X (e.g. Mega Venusaur keeps Overgrow though its ability is Thick
+   Fat) — the innate models the base creature's trait persisting through the Mega. **Grounded
+   Megas are the exception**: omit (or trim) any innate the Mega physically can't have, e.g.
+   Mega Gengar gets no row so it doesn't float, and Mega Mewtwo X keeps only Pressure (not
+   Levitate). Regional/Gmax/forme constants outside the Mega convention are still listed only
+   where that form's ability data carries X, so the innate survives a mid-battle form change
+   where it should and not where it shouldn't.
 2. **Flavor picks (optional, a judgment call).** A handful of species that *lack* the
    real ability but are strongly associated with its theme, so the innate is
    **observable** flavor (and is what most tests exercise). Precedent: Levitate's

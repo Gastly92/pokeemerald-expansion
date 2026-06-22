@@ -388,6 +388,17 @@
 //     real Water Veil slot (burn immunity), no override needed.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
+//
+// FORMS ARE KEYED EXACTLY (no base-species fallback): the lookup matches the exact battle species,
+// so a Mega / Gigantamax / regional / forme variant gets innates ONLY if it has its own row. After
+// a form change gBattleMons[].species becomes the form constant, so the form must be listed to keep
+// any innate. Mega forms are populated as a PURE BOON: each Mega whose BASE creature has innates has
+// its own row mirroring the base's list, so e.g. Mega Venusaur keeps Overgrow / Chlorophyll / etc.
+// even though its real ability is Thick Fat — the innate models the base creature's trait persisting
+// through the Mega, not the Mega's own ability data. (This SUPERSEDES the older per-ability notes
+// below that say a Mega "swaps to <ability> and is omitted".) DELIBERATE EXCEPTIONS — grounded Megas
+// must not float: Mega Gengar has NO row (Levitate was its only inheritable innate), and Mega Mewtwo X
+// keeps only the non-floating boon (Pressure), dropping base Mewtwo's Levitate.
 
 struct SpeciesInnates
 {
@@ -404,10 +415,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 {
     // Sorted by National Pokédex number (shown in each row's `{ // NNNN` comment); formes share
     // their base's number and follow it. A base-form constant (e.g. SPECIES_CASTFORM) is listed
-    // alongside its forme constants so the lookup matches whichever value is queried. Every row
-    // lists its innates inline with INNATES(...), one ability per line, sorted alphabetically.
-    // The per-ability rationale (canon vs flavor picks, included/omitted formes) is documented in
-    // the file header above.
+    // alongside its forme constants so the lookup matches whichever value is queried — there is no
+    // base-species fallback, so each form (incl. Megas) needs its own row to carry innates (see the
+    // FORMS note in the file header above). Every row lists its innates inline with INNATES(...),
+    // one ability per line, sorted alphabetically. The per-ability rationale (canon vs flavor picks,
+    // included/omitted formes) is documented in the file header above.
 
     // ----- Gen 1 -----
     { // 0001
@@ -432,6 +444,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0003
         SPECIES_VENUSAUR,
+        INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_FILTER,
+            ABILITY_NATURAL_CURE,
+            ABILITY_OVERGROW,
+            ABILITY_REGENERATOR
+        )
+    },
+    { // 0003
+        SPECIES_VENUSAUR_MEGA,
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_FILTER,
@@ -469,6 +491,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0006
+        SPECIES_CHARIZARD_MEGA_X,
+        INNATES(
+            ABILITY_BLAZE
+        )
+    },
+    { // 0006
+        SPECIES_CHARIZARD_MEGA_Y,
+        INNATES(
+            ABILITY_BLAZE
+        )
+    },
+    { // 0006
         SPECIES_CHARIZARD_GMAX,
         INNATES(
             ABILITY_BLAZE
@@ -493,6 +527,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0009
+        SPECIES_BLASTOISE_MEGA,
+        INNATES(
+            ABILITY_TORRENT
+        )
+    },
+    { // 0009
         SPECIES_BLASTOISE_GMAX,
         INNATES(
             ABILITY_TORRENT
@@ -500,6 +540,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0015
         SPECIES_BEEDRILL,
+        INNATES(
+            ABILITY_SWARM
+        )
+    },
+    { // 0015
+        SPECIES_BEEDRILL_MEGA,
         INNATES(
             ABILITY_SWARM
         )
@@ -644,6 +690,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0071
         SPECIES_VICTREEBEL,
+        INNATES(
+            ABILITY_CHLOROPHYLL
+        )
+    },
+    { // 0071
+        SPECIES_VICTREEBEL_MEGA,
         INNATES(
             ABILITY_CHLOROPHYLL
         )
@@ -906,6 +958,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0121
+        SPECIES_STARMIE_MEGA,
+        INNATES(
+            ABILITY_NATURAL_CURE,
+            ABILITY_REGENERATOR
+        )
+    },
     { // 0122
         SPECIES_MR_MIME,
         INNATES(
@@ -988,6 +1047,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRESSURE
         )
     },
+    { // 0142
+        SPECIES_AERODACTYL_MEGA,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
     { // 0143
         SPECIES_SNORLAX,
         INNATES(
@@ -1026,6 +1091,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0150
+        SPECIES_MEWTWO_MEGA_X,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0150
         SPECIES_MEWTWO_MEGA_Y,
         INNATES(
             ABILITY_LEVITATE
@@ -1055,6 +1126,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0154
         SPECIES_MEGANIUM,
+        INNATES(
+            ABILITY_NATURAL_CURE,
+            ABILITY_OVERGROW
+        )
+    },
+    { // 0154
+        SPECIES_MEGANIUM_MEGA,
         INNATES(
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW
@@ -1098,6 +1176,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0160
         SPECIES_FERALIGATR,
+        INNATES(
+            ABILITY_TORRENT
+        )
+    },
+    { // 0160
+        SPECIES_FERALIGATR_MEGA,
         INNATES(
             ABILITY_TORRENT
         )
@@ -1449,6 +1533,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWARM
         )
     },
+    { // 0212
+        SPECIES_SCIZOR_MEGA,
+        INNATES(
+            ABILITY_SWARM
+        )
+    },
     { // 0213
         SPECIES_SHUCKLE,
         INNATES(
@@ -1457,6 +1547,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0214
         SPECIES_HERACROSS,
+        INNATES(
+            ABILITY_SWARM
+        )
+    },
+    { // 0214
+        SPECIES_HERACROSS_MEGA,
         INNATES(
             ABILITY_SWARM
         )
@@ -1582,6 +1678,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0254
         SPECIES_SCEPTILE,
+        INNATES(
+            ABILITY_OVERGROW
+        )
+    },
+    { // 0254
+        SPECIES_SCEPTILE_MEGA,
         INNATES(
             ABILITY_OVERGROW
         )
@@ -1721,6 +1823,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRANKSTER
         )
     },
+    { // 0302
+        SPECIES_SABLEYE_MEGA,
+        INNATES(
+            ABILITY_PRANKSTER
+        )
+    },
     { // 0304
         SPECIES_ARON,
         INNATES(
@@ -1790,6 +1898,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SPEED_BOOST
         )
     },
+    { // 0319
+        SPECIES_SHARPEDO_MEGA,
+        INNATES(
+            ABILITY_SPEED_BOOST
+        )
+    },
     { // 0320
         SPECIES_WAILMER,
         INNATES(
@@ -1849,6 +1963,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0334
         SPECIES_ALTARIA,
+        INNATES(
+            ABILITY_NATURAL_CURE
+        )
+    },
+    { // 0334
+        SPECIES_ALTARIA_MEGA,
         INNATES(
             ABILITY_NATURAL_CURE
         )
@@ -2015,6 +2135,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0359
         SPECIES_ABSOL,
+        INNATES(
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0359
+        SPECIES_ABSOL_MEGA,
         INNATES(
             ABILITY_PRESSURE
         )
@@ -2290,6 +2416,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0428
         SPECIES_LOPUNNY,
+        INNATES(
+            ABILITY_CUTE_CHARM,
+            ABILITY_LIMBER
+        )
+    },
+    { // 0428
+        SPECIES_LOPUNNY_MEGA,
         INNATES(
             ABILITY_CUTE_CHARM,
             ABILITY_LIMBER
@@ -2624,6 +2757,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE
         )
     },
+    { // 0500
+        SPECIES_EMBOAR_MEGA,
+        INNATES(
+            ABILITY_BLAZE
+        )
+    },
     { // 0501
         SPECIES_OSHAWOTT,
         INNATES(
@@ -2763,6 +2902,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0530
         SPECIES_EXCADRILL,
+        INNATES(
+            ABILITY_SAND_RUSH
+        )
+    },
+    { // 0530
+        SPECIES_EXCADRILL_MEGA,
         INNATES(
             ABILITY_SAND_RUSH
         )
@@ -3315,6 +3460,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_OVERGROW
         )
     },
+    { // 0652
+        SPECIES_CHESNAUGHT_MEGA,
+        INNATES(
+            ABILITY_OVERGROW
+        )
+    },
     { // 0653
         SPECIES_FENNEKIN,
         INNATES(
@@ -3357,8 +3508,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0658
+        SPECIES_GRENINJA_MEGA,
+        INNATES(
+            ABILITY_TORRENT
+        )
+    },
     { // 0678
         SPECIES_MEOWSTIC_M,
+        INNATES(
+            ABILITY_PRANKSTER
+        )
+    },
+    { // 0678
+        SPECIES_MEOWSTIC_M_MEGA,
         INNATES(
             ABILITY_PRANKSTER
         )
@@ -3413,6 +3576,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0701
         SPECIES_HAWLUCHA,
+        INNATES(
+            ABILITY_LIMBER
+        )
+    },
+    { // 0701
+        SPECIES_HAWLUCHA_MEGA,
         INNATES(
             ABILITY_LIMBER
         )
@@ -3535,6 +3704,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0718
         SPECIES_ZYGARDE,
+        INNATES(
+            ABILITY_REGENERATOR
+        )
+    },
+    { // 0718
+        SPECIES_ZYGARDE_MEGA,
         INNATES(
             ABILITY_REGENERATOR
         )
@@ -4128,6 +4303,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BATTLE_ARMOR
         )
     },
+    { // 0870
+        SPECIES_FALINKS_MEGA,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
     { // 0880
         SPECIES_DRACOZOLT,
         INNATES(
@@ -4358,6 +4539,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0952
         SPECIES_SCOVILLAIN,
+        INNATES(
+            ABILITY_CHLOROPHYLL
+        )
+    },
+    { // 0952
+        SPECIES_SCOVILLAIN_MEGA,
         INNATES(
             ABILITY_CHLOROPHYLL
         )
