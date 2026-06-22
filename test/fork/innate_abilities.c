@@ -1321,6 +1321,33 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Sno
     }
 }
 
+// Under DETERMINISTIC_ACCURACY_EVASION (the romhack's shipping default) accuracy/evasion stop
+// deciding hit/miss and instead drive a PP economy — so the innate Sand Veil evasion manifests as a
+// +1 PP tax on incoming offensive moves while a sandstorm is up, exactly like a real Sand Veil /
+// BrightPowder (the chosen-ability case is the BrightPowder test in deterministic_accuracy_evasion.c).
+// This exercises the GetDeterministicMoveTargetPPTax half of the wiring (the RNG-accuracy tests above
+// exercise the GetTotalAccuracy half). DETERMINISTIC_ABILITIES is irrelevant here: Sand Veil / Snow
+// Cloak have no chance-based effect to make deterministic.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_ACCURACY_EVASION an innate Sand Veil taxes the attacker's PP")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; } // no innate -> base 1 PP only
+    PARAMETRIZE { enabled = TRUE; }  // innate Sand Veil in sand -> +1 PP
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GARCHOMP, ABILITY_SAND_VEIL));
+        ASSUME(GetMovePP(MOVE_POUND) == 35);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_POUND, MOVE_SANDSTORM); }
+        OPPONENT(SPECIES_GARCHOMP) { Ability(ABILITY_ROUGH_SKIN); Moves(MOVE_CELEBRATE); } // chosen Rough Skin, NOT Sand Veil
+    } WHEN {
+        TURN { MOVE(player, MOVE_SANDSTORM); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], enabled ? 33 : 34); // 35 - 1 base [- 1 innate Sand Veil tax]
+    }
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Swift Swim")
 {
     bool32 gastro;
