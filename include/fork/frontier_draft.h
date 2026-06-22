@@ -8,8 +8,13 @@
 // upstream merge-conflict surface and can be reused by any facility that drafts
 // teams from the extended roster (the Battle Factory and the Battle Tower). See
 // src/frontier_draft.c. Used under B_FRONTIER_EXTENDED_MONS.
+struct TrainerMon;
+
 bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem);
 bool32 TierRejectsCandidate(enum SpeciesTier slotTier, enum SpeciesTier candTier, u32 pseudoCount);
 void ReserveForcedTierSlot(enum SpeciesTier *slotTiers, enum SpeciesTier tier);
+// Reject an Illusion-ability candidate from the team's last party slot (where the
+// disguise can't form); harmless for non-Illusion mons / non-last slots.
+bool32 IllusionMonRejectsSlot(u32 slot, u32 partySize, const struct TrainerMon *fmon);
 
 #endif // GUARD_FRONTIER_DRAFT_H

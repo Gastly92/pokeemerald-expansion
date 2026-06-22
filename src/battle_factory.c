@@ -423,6 +423,10 @@ static void GenerateOpponentMons(void)
         // one; a slot reserved above must be filled by its forced tier.
         if (TierRejectsCandidate(slotTiers[i], GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
             continue;
+
+        // Keep Illusion mons out of the last slot, where the disguise can't form.
+        if (IllusionMonRejectsSlot(i, FRONTIER_PARTY_SIZE, &gFacilityTrainerMons[monId]))
+            continue;
     #endif
 
         // Successful selection
@@ -897,6 +901,10 @@ void FillFactoryBrainParty(void)
         // Tier quota: the two reserved slots demand a mythical / legendary; the
         // rest ban legendaries/mythicals and cap pseudos at one.
         if (TierRejectsCandidate(slotTiers[i], GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
+            continue;
+
+        // Keep Illusion mons out of the last slot, where the disguise can't form.
+        if (IllusionMonRejectsSlot(i, FRONTIER_PARTY_SIZE, &gFacilityTrainerMons[monId]))
             continue;
     #endif
 

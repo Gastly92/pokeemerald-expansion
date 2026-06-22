@@ -319,6 +319,9 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
             // return earlier, so their fixed legendaries are unaffected.
             if (TierRejectsCandidate(TIER_NORMAL, GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
                 continue;
+            // Keep Illusion mons out of the last slot, where the disguise can't form.
+            if (IllusionMonRejectsSlot(i, monCount, &gFacilityTrainerMons[monId]))
+                continue;
         }
     #else
         u16 monId = monSet[Random() % bfMonCount];
