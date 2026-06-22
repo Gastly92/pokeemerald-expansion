@@ -110,6 +110,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_NIHILEGO,            // 0793
     SPECIES_BUZZWOLE,            // 0794
     SPECIES_PHEROMOSA,           // 0795
+    SPECIES_XURKITREE,           // 0796
     SPECIES_CELESTEELA,          // 0797
     SPECIES_KARTANA,             // 0798
     SPECIES_GUZZLORD,            // 0799
@@ -117,9 +118,11 @@ static const u16 sPseudoSpecies[] =
     SPECIES_MAGEARNA,            // 0801
     SPECIES_MARSHADOW,           // 0802
     SPECIES_NAGANADEL,           // 0804
+    SPECIES_STAKATAKA,           // 0805
     SPECIES_BLACEPHALON,         // 0806
     SPECIES_ZERAORA,             // 0807
     SPECIES_MELMETAL,            // 0809
+    SPECIES_DRACOVISH,           // 0882
     SPECIES_DRAGAPULT,           // 0887
     SPECIES_ZARUDE,              // 0893
     SPECIES_REGIELEKI,           // 0894
@@ -128,6 +131,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_ENAMORUS,            // 0905
     SPECIES_ENAMORUS_THERIAN,    // 0905
     SPECIES_GREAT_TUSK,          // 0984
+    SPECIES_SCREAM_TAIL,         // 0985
     SPECIES_BRUTE_BONNET,        // 0986
     SPECIES_FLUTTER_MANE,        // 0987
     SPECIES_SLITHER_WING,        // 0988
