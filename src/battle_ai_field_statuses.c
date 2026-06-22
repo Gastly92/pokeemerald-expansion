@@ -143,8 +143,9 @@ bool32 FieldStatusChecker(enum BattlerId battler, u32 fieldStatus, enum FieldEff
 }
 
 // FORK: FEATURE_INNATE_ABILITIES — innate-aware companion to DoesAbilityBenefitFromWeather (which
-// stays upstream-pristine). TRUE if the battler has an *active innate* weather speed-doubler that
-// benefits from `weather`, so the AI's weather-setting heuristics value setting it. ORed in at each
+// stays upstream-pristine). TRUE if the battler has an *active innate* weather-keyed ability (a speed
+// doubler, or a Sand Veil / Snow Cloak evasion boost) that benefits from `weather`, so the AI's
+// weather-setting heuristics value setting it. ORed in at each
 // DoesAbilityBenefitFromWeather call site (kept additive so the upstream function/signature/call-arg
 // lists never diverge), mirroring this file's AI_IsInnateOnSide pattern. No-op when the feature is off.
 static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather)
@@ -152,7 +153,9 @@ static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather)
     return ((weather & B_WEATHER_RAIN)      && IsInnateActive(battler, ABILITY_SWIFT_SWIM))
         || ((weather & B_WEATHER_SUN)       && IsInnateActive(battler, ABILITY_CHLOROPHYLL))
         || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_RUSH))
-        || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SLUSH_RUSH));
+        || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_VEIL))
+        || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SLUSH_RUSH))
+        || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SNOW_CLOAK));
 }
 
 static bool32 DoesAbilityBenefitFromWeather(enum Ability ability, u32 weather)

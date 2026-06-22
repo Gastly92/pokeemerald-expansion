@@ -1186,6 +1186,141 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sand Rush prevents sandstor
     }
 }
 
+// ---- Sand Veil / Snow Cloak ----
+// Passive calc-modifier evasion abilities: +25% evasion (a 0.8 accuracy modifier on incoming moves)
+// while the holder's weather is up — sandstorm for Sand Veil, hail/snow for Snow Cloak — plus immunity
+// to that weather's chip damage, applied at GetTotalAccuracy / the end-turn chip sites (src/battle_util.c,
+// src/battle_end_turn.c). No script / pop-up / driver. Both are clean upsides, so each innate is a 1:1
+// copy. Garchomp (chosen Rough Skin, slot 2) and Articuno (chosen Pressure, slot 0) carry the innate but
+// run a different chosen ability, so the evasion is attributable solely to the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sand Veil ups evasion in a sandstorm")
+{
+    PASSES_RANDOMLY(4, 5, RNG_ACCURACY); // Pound 100 acc -> 80 with the innate -> hits 4/5
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GARCHOMP, ABILITY_SAND_VEIL));
+        ASSUME(GetMoveAccuracy(MOVE_POUND) == 100);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GARCHOMP) { Ability(ABILITY_ROUGH_SKIN); Moves(MOVE_CELEBRATE, MOVE_SANDSTORM); } // chosen Rough Skin, NOT Sand Veil
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SANDSTORM); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_POUND); } // player no-ops so it can't KO the attacker first
+    } SCENE {
+        HP_BAR(player);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Sand Veil evasion (stock behavior)")
+{
+    PASSES_RANDOMLY(5, 5, RNG_ACCURACY); // no innate -> Pound always hits
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
+        PLAYER(SPECIES_GARCHOMP) { Ability(ABILITY_ROUGH_SKIN); Moves(MOVE_CELEBRATE, MOVE_SANDSTORM); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SANDSTORM); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_POUND); }
+    } SCENE {
+        HP_BAR(player);
+    }
+}
+
+// Suppression parity: Sand Veil is breakable, so an attacker's Mold Breaker pierces an innate Sand Veil
+// exactly as it would the real ability (the move ignores the evasion and always hits).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Sand Veil")
+{
+    PASSES_RANDOMLY(5, 5, RNG_ACCURACY);
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_SAND_VEIL].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_GARCHOMP, ABILITY_SAND_VEIL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GARCHOMP) { Ability(ABILITY_ROUGH_SKIN); Moves(MOVE_CELEBRATE, MOVE_SANDSTORM); }
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SANDSTORM); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_POUND); }
+    } SCENE {
+        HP_BAR(player);
+    }
+}
+
+// Sand Veil's second effect: like the real ability, an innate Sand Veil also shrugs off the end-of-turn
+// sandstorm chip damage (a pure boon). Cacturne is Grass/Dark, so it is NOT naturally exempt by type —
+// the immunity here comes purely from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sand Veil prevents sandstorm chip damage")
+{
+    enum Type type1 = GetSpeciesType(SPECIES_CACTURNE, 0);
+    enum Type type2 = GetSpeciesType(SPECIES_CACTURNE, 1);
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CACTURNE, ABILITY_SAND_VEIL));
+        ASSUME(type1 != TYPE_ROCK && type1 != TYPE_GROUND && type1 != TYPE_STEEL);
+        ASSUME(type2 != TYPE_ROCK && type2 != TYPE_GROUND && type2 != TYPE_STEEL);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CACTURNE) { Ability(ABILITY_WATER_ABSORB); } // chosen Water Absorb, NOT Sand Veil
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SANDSTORM); }
+    } SCENE {
+        if (enabled)
+            NONE_OF { HP_BAR(player); } // innate Sand Veil -> no sandstorm chip
+        else
+            HP_BAR(player); // no innate -> takes the chip
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Snow Cloak ups evasion in snow")
+{
+    PASSES_RANDOMLY(4, 5, RNG_ACCURACY); // Pound 100 acc -> 80 with the innate -> hits 4/5
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ARTICUNO, ABILITY_SNOW_CLOAK));
+        ASSUME(GetMoveAccuracy(MOVE_POUND) == 100);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ARTICUNO) { Ability(ABILITY_PRESSURE); Moves(MOVE_CELEBRATE, MOVE_SNOWSCAPE); } // chosen Pressure, NOT Snow Cloak
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SNOWSCAPE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_POUND); }
+    } SCENE {
+        HP_BAR(player);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Snow Cloak evasion (stock behavior)")
+{
+    PASSES_RANDOMLY(5, 5, RNG_ACCURACY); // no innate -> Pound always hits
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
+        PLAYER(SPECIES_ARTICUNO) { Ability(ABILITY_PRESSURE); Moves(MOVE_CELEBRATE, MOVE_SNOWSCAPE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SNOWSCAPE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_POUND); }
+    } SCENE {
+        HP_BAR(player);
+    }
+}
+
+// Suppression parity: Snow Cloak is breakable, so an attacker's Mold Breaker pierces an innate Snow Cloak.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Snow Cloak")
+{
+    PASSES_RANDOMLY(5, 5, RNG_ACCURACY);
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_SNOW_CLOAK].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_ARTICUNO, ABILITY_SNOW_CLOAK));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ARTICUNO) { Ability(ABILITY_PRESSURE); Moves(MOVE_CELEBRATE, MOVE_SNOWSCAPE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SNOWSCAPE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_POUND); }
+    } SCENE {
+        HP_BAR(player);
+    }
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Swift Swim")
 {
     bool32 gastro;

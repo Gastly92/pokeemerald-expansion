@@ -3452,6 +3452,7 @@ static bool32 DoesBattlerTakeSandstormDamage(enum BattlerId battlerId, enum Abil
       && ability != ABILITY_SAND_FORCE
       && ability != ABILITY_SAND_RUSH
       && !IsInnateActive(battlerId, ABILITY_SAND_RUSH) // FORK: AI knows an innate Sand Rush ignores sandstorm too
+      && !IsInnateActive(battlerId, ABILITY_SAND_VEIL) // FORK: AI knows an innate Sand Veil ignores sandstorm too
       && ability != ABILITY_MAGIC_GUARD
       && ability != ABILITY_OVERCOAT)
         return TRUE;
@@ -3465,6 +3466,7 @@ static bool32 DoesBattlerTakeHailDamage(enum BattlerId battlerId, enum Ability a
 
     if (!IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)
       && ability != ABILITY_SNOW_CLOAK
+      && !IsInnateActive(battlerId, ABILITY_SNOW_CLOAK) // FORK: AI knows an innate Snow Cloak ignores hail too
       && ability != ABILITY_ICE_BODY
       && ability != ABILITY_MAGIC_GUARD
       && ability != ABILITY_OVERCOAT)
