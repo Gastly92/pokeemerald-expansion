@@ -46,7 +46,13 @@
 // CanSetNonVolatileStatus and the switch-in cure site in TryImmunityAbilityHealStatus in
 // src/battle_util.c, plus the out-of-battle Battle Pike status room in src/battle_pike.c — a
 // clean-upside 1:1 copy; AI is correct for free since its paralysis checks funnel through
-// CanSetNonVolatileStatus, whose fork clause reads the real battler).
+// CanSetNonVolatileStatus, whose fork clause reads the real battler),
+// and CUTE_CHARM (a 30% chance to infatuate an opposite-gender attacker on contact — guaranteed
+// regardless of gender under DETERMINISTIC_ABILITIES — handled at the ABILITYEFFECT_MOVE_END on-hit
+// site in src/battle_util.c, run additively beside the chosen-ability dispatch via TryCuteCharmInfatuate
+// so an innate holder infatuates like the real ability and the pop-up is overwritten to Cute Charm; a
+// clean-upside 1:1 copy, AI made innate-aware only at the DETERMINISTIC_ABILITIES contact-punish
+// predictor in src/battle_ai_util.c).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

@@ -75,7 +75,8 @@
 // INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
 // that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
 // Pressure, Stench, Speed Boost (+1 Speed each end-turn), Battle Armor / Shell Armor (crit immunity),
-// Limber (paralysis immunity), or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
+// Limber (paralysis immunity), Cute Charm (infatuates an opposite-gender attacker on contact),
+// or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -93,7 +94,7 @@
 // ABILITY_INFILTRATOR yet still snowballs +1 Speed each turn via its innate Speed Boost; a Toxapex wall
 // lists ABILITY_MERCILESS yet still cannot be paralyzed via its innate Limber. Role comments
 // that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/"Limber"/
-// "Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
+// "Cute Charm"/"Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
 // its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
 // it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
 // (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
@@ -102,7 +103,9 @@
 // the same trick used for ability-locked innate-Levitate floaters. Venusaur is the weather-doubler
 // version: BOTH its real abilities — Overgrow and Chlorophyll — are now innate, so the override gives
 // it a chosen Drought. Blaziken is the Speed-Boost version of the same case: BOTH its real abilities —
-// Blaze and Speed Boost — are now innate, so the override gives it a chosen Sheer Force. Sceptile is the lone non-ability-locked override: only its Overgrow is
+// Blaze and Speed Boost — are now innate, so the override gives it a chosen Sheer Force; Lopunny is the
+// Cute Charm version: both its real non-drawback abilities — Cute Charm and Limber — are now innate
+// (Klutz is a drawback), so the override gives it a chosen Sheer Force too. Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
 // repurposes that slot for its Mega's Lightning Rod. Each override hands out a deliberately STABLE
 // ability — one marked :x: in INNATE_ABILITIES_PROGRESS.md (never an innate), so it won't need
@@ -10386,7 +10389,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RETURN,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_CUTE_CHARM, // Limber now innate; chosen Cute Charm may infatuate on this all-contact set
+        .ability = ABILITY_SHEER_FORCE, // Cute Charm + Limber now both innate; chosen Sheer Force (override) powers Fake Out / Ice Punch
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22776,7 +22779,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_MYSTICAL_FIRE
         },
-        .ability = ABILITY_CUTE_CHARM,
+        .ability = ABILITY_CONTRARY, // Cute Charm now innate; chosen Contrary (its real HA)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

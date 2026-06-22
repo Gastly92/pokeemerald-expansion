@@ -2985,6 +2985,41 @@ static bool32 TryStenchFlinch(void)
     return FALSE;
 }
 
+// Cute Charm's on-hit infatuation attempt, shared by the chosen-ability dispatch in
+// ABILITYEFFECT_MOVE_END and the innate-Cute-Charm path beside it (FEATURE_INNATE_ABILITIES).
+// The Cute Charm holder is gBattlerTarget (the one hit by the contact move); the attacker
+// (gBattlerAttacker) is the one infatuated. Cute Charm only ever infatuates the FOE, so it is a
+// clean upside and the innate is a 1:1 copy of the real ability (no pure-boon divergence).
+// FORK: under DETERMINISTIC_ABILITIES it always attempts infatuation regardless of gender.
+static bool32 TryCuteCharmInfatuate(enum Move move)
+{
+    if (IsBattlerAlive(gBattlerAttacker)
+     && !gSpecialStatuses[gBattlerAttacker].attackerInParty
+     && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
+     && IsBattlerAlive(gBattlerTarget)
+     // FORK: Cute Charm always attempts infatuation, regardless of gender.
+     && (GetConfig(DETERMINISTIC_ABILITIES)
+      || (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_CUTE_CHARM, 30) : RandomChance(RNG_CUTE_CHARM, 1, 3)))
+     && !(gBattleMons[gBattlerAttacker].volatiles.infatuation)
+     && (GetConfig(DETERMINISTIC_ABILITIES) || AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget))
+     && !IsAbilityAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_OBLIVIOUS)
+     && !CanBattlerAvoidContactEffects(gBattlerAttacker, gBattlerTarget, GetBattlerAbility(gBattlerAttacker), GetBattlerHoldEffect(gBattlerAttacker), move)
+     && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL))
+    {
+        gBattleMons[gBattlerAttacker].volatiles.infatuation = INFATUATED_WITH(gBattlerTarget);
+        if (GetConfig(DETERMINISTIC_STATUS)) // FORK: fixed-duration infatuation
+            gBattleMons[gBattlerAttacker].volatiles.infatuationTimer = DETERMINISTIC_INFATUATION_TURNS;
+        // FORK: innate Cute Charm — make the pop-up show Cute Charm, not the chosen ability.
+        // CreateAbilityPopUp() reads the primary slot; only override when the chosen ability
+        // differs, so a real Cute Charm stays byte-for-byte unchanged (Speed Boost precedent).
+        if (GetBattlerAbility(gBattlerTarget) != ABILITY_CUTE_CHARM)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_CUTE_CHARM;
+        BattleScriptCall(BattleScript_CuteCharmActivates);
+        return TRUE;
+    }
+    return FALSE;
+}
+
 u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum Ability ability, enum Move move, bool32 shouldAbilityTrigger)
 {
     u32 effect = 0;
@@ -3950,6 +3985,16 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         }
         break;
     case ABILITYEFFECT_MOVE_END: // Think contact abilities.
+        // FORK: innate Cute Charm (FEATURE_INNATE_ABILITIES). The dispatch below keys off the
+        // target's chosen ability (gLastUsedAbility), so an innate Cute Charm on a mon whose
+        // chosen ability differs would never reach the case below — run the same infatuation
+        // additively here. The `!= ABILITY_CUTE_CHARM` guard means a real Cute Charm (handled by
+        // the switch case) never infatuates twice. Cute Charm is a clean upside — it only ever
+        // infatuates the FOE — so the innate is a 1:1 copy, no pure-boon divergence.
+        if (gLastUsedAbility != ABILITY_CUTE_CHARM
+         && IsInnateActive(gBattlerTarget, ABILITY_CUTE_CHARM)
+         && TryCuteCharmInfatuate(move))
+            effect++;
         switch (gLastUsedAbility)
         {
         case ABILITY_JUSTIFIED:
@@ -4327,25 +4372,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             }
             break;
         case ABILITY_CUTE_CHARM:
-            if (IsBattlerAlive(gBattlerAttacker)
-             && !gSpecialStatuses[gBattlerAttacker].attackerInParty
-             && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
-             && IsBattlerAlive(gBattlerTarget)
-             // FORK: Cute Charm always attempts infatuation, regardless of gender.
-             && (GetConfig(DETERMINISTIC_ABILITIES)
-              || (GetConfig(B_ABILITY_TRIGGER_CHANCE) >= GEN_4 ? RandomPercentage(RNG_CUTE_CHARM, 30) : RandomChance(RNG_CUTE_CHARM, 1, 3)))
-             && !(gBattleMons[gBattlerAttacker].volatiles.infatuation)
-             && (GetConfig(DETERMINISTIC_ABILITIES) || AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget))
-             && !IsAbilityAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_OBLIVIOUS)
-             && !CanBattlerAvoidContactEffects(gBattlerAttacker, gBattlerTarget, GetBattlerAbility(gBattlerAttacker), GetBattlerHoldEffect(gBattlerAttacker), move)
-             && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL))
-            {
-                gBattleMons[gBattlerAttacker].volatiles.infatuation = INFATUATED_WITH(gBattlerTarget);
-                if (GetConfig(DETERMINISTIC_STATUS)) // FORK: fixed-duration infatuation
-                    gBattleMons[gBattlerAttacker].volatiles.infatuationTimer = DETERMINISTIC_INFATUATION_TURNS;
-                BattleScriptCall(BattleScript_CuteCharmActivates);
+            if (TryCuteCharmInfatuate(move))
                 effect++;
-            }
             break;
         case ABILITY_ILLUSION:
             if (gBattleStruct->illusion[gBattlerTarget].state == ILLUSION_ON && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES))
