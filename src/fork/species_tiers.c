@@ -77,7 +77,9 @@ static const u16 sPseudoSpecies[] =
     SPECIES_MEW,                 // 0151
     SPECIES_TYRANITAR,           // 0248
     SPECIES_CELEBI,              // 0251
+    SPECIES_BLAZIKEN,            // 0257
     SPECIES_SALAMENCE,           // 0373
+    SPECIES_METAGROSS,           // 0376
     SPECIES_LATIAS,              // 0380
     SPECIES_LATIOS,              // 0381
     SPECIES_JIRACHI,             // 0385
