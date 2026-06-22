@@ -88,6 +88,15 @@ bool32 SpeciesHasInnate(u16 species, enum Ability ability);
 // species' innates without needing to know how many it has.
 enum Ability GetSpeciesInnate(u16 species, u32 index);
 
+// Raw-table accessors for table-integrity tests ONLY (test/fork/innate_abilities.c):
+// they walk the underlying rows by position, so a duplicate species row (which the
+// species-keyed lookups above hide) stays observable. GetSpeciesInnatesEntryCount() is
+// the number of rows; GetSpeciesInnatesEntry() returns row `row`'s ABILITY_NONE-
+// terminated innate list and writes its species to *outSpecies (NULL if out of range).
+// Battle/AI code must use SpeciesHasInnate / GetSpeciesInnate, never these.
+u32 GetSpeciesInnatesEntryCount(void);
+const enum Ability *GetSpeciesInnatesEntry(u32 row, u16 *outSpecies);
+
 // FORK: end-turn innate driver. Fires `battler`'s active, scripted end-turn innates
 // (today only Speed Boost: +1 Speed). Hooked from THIRD_EVENT_BLOCK_ABILITIES_INNATE
 // in the end-turn loop (src/battle_end_turn.c), right after the chosen-ability block.

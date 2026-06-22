@@ -2171,3 +2171,109 @@ TEST("Innate abilities: grounded Megas do not gain innate Levitate")
     EXPECT(SpeciesHasInnate(SPECIES_MEWTWO_MEGA_X, ABILITY_PRESSURE));
     EXPECT(!SpeciesHasInnate(SPECIES_MEWTWO_MEGA_X, ABILITY_LEVITATE));
 }
+
+// FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
+// These are pure data-lookup tests (no battle), walking the raw rows via the
+// GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
+
+// (1) Every declared innate must be on the implemented allowlist — an ability whose innate
+// behavior is actually wired at an effect site. An off-allowlist innate has no effect site
+// to honor it, so it would silently do NOTHING (the footgun the file header warns about);
+// this fails loudly instead. Keep this set in sync with the ALLOWLIST note in
+// src/fork/innate_abilities.c when a new ability is wired.
+TEST("Innate abilities: every declared innate is on the implemented allowlist")
+{
+    static const enum Ability sImplementedInnates[] =
+    {
+        ABILITY_LEVITATE, ABILITY_REGENERATOR, ABILITY_UNAWARE, ABILITY_STURDY,
+        ABILITY_NATURAL_CURE, ABILITY_PRANKSTER, ABILITY_OVERGROW, ABILITY_BLAZE,
+        ABILITY_TORRENT, ABILITY_SWARM, ABILITY_SWIFT_SWIM, ABILITY_CHLOROPHYLL,
+        ABILITY_SAND_RUSH, ABILITY_SLUSH_RUSH, ABILITY_FILTER, ABILITY_PRESSURE,
+        ABILITY_STENCH, ABILITY_BATTLE_ARMOR, ABILITY_SHELL_ARMOR, ABILITY_SPEED_BOOST,
+        ABILITY_LIMBER, ABILITY_CUTE_CHARM, ABILITY_OBLIVIOUS,
+    };
+    u32 row, i, j, count = GetSpeciesInnatesEntryCount();
+    u32 offenders = 0;
+
+    for (row = 0; row < count; row++)
+    {
+        u16 species;
+        const enum Ability *list = GetSpeciesInnatesEntry(row, &species);
+
+        for (i = 0; list[i] != ABILITY_NONE; i++)
+        {
+            bool32 allowed = FALSE;
+            for (j = 0; j < ARRAY_COUNT(sImplementedInnates); j++)
+            {
+                if (list[i] == sImplementedInnates[j])
+                {
+                    allowed = TRUE;
+                    break;
+                }
+            }
+            if (!allowed)
+            {
+                offenders++;
+                Test_MgbaPrintf("%S declares unwired innate %S (no effect site honors it)",
+                                gSpeciesInfo[species].speciesName, gAbilitiesInfo[list[i]].name);
+            }
+        }
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
+// (2) No species may appear in the table more than once. GetSpeciesInnateList returns the
+// FIRST matching row, so a second row for the same species would be silently dead data.
+TEST("Innate abilities: no species appears in the table more than once")
+{
+    u32 a, b, count = GetSpeciesInnatesEntryCount();
+    u32 dups = 0;
+
+    for (a = 0; a < count; a++)
+    {
+        u16 spA;
+        GetSpeciesInnatesEntry(a, &spA);
+        for (b = a + 1; b < count; b++)
+        {
+            u16 spB;
+            GetSpeciesInnatesEntry(b, &spB);
+            if (spA == spB)
+            {
+                dups++;
+                Test_MgbaPrintf("%S is listed more than once (rows %d and %d)",
+                                gSpeciesInfo[spA].speciesName, a, b);
+            }
+        }
+    }
+
+    EXPECT_EQ(dups, 0);
+}
+
+// (3) No species may list the same innate twice within its own list (a copy-paste slip).
+TEST("Innate abilities: no species lists the same innate twice")
+{
+    u32 row, i, j, count = GetSpeciesInnatesEntryCount();
+    u32 dups = 0;
+
+    for (row = 0; row < count; row++)
+    {
+        u16 species;
+        const enum Ability *list = GetSpeciesInnatesEntry(row, &species);
+
+        for (i = 0; list[i] != ABILITY_NONE; i++)
+        {
+            for (j = i + 1; list[j] != ABILITY_NONE; j++)
+            {
+                if (list[i] == list[j])
+                {
+                    dups++;
+                    Test_MgbaPrintf("%S lists innate %S more than once",
+                                    gSpeciesInfo[species].speciesName, gAbilitiesInfo[list[i]].name);
+                }
+            }
+        }
+    }
+
+    EXPECT_EQ(dups, 0);
+}

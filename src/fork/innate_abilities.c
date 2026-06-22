@@ -413,13 +413,16 @@ struct SpeciesInnates
 
 static const struct SpeciesInnates sSpeciesInnates[] =
 {
-    // Sorted by National Pokédex number (shown in each row's `{ // NNNN` comment); formes share
-    // their base's number and follow it. A base-form constant (e.g. SPECIES_CASTFORM) is listed
-    // alongside its forme constants so the lookup matches whichever value is queried — there is no
-    // base-species fallback, so each form (incl. Megas) needs its own row to carry innates (see the
-    // FORMS note in the file header above). Every row lists its innates inline with INNATES(...),
-    // one ability per line, sorted alphabetically. The per-ability rationale (canon vs flavor picks,
-    // included/omitted formes) is documented in the file header above.
+    // Sorted by National Pokédex number (shown in each row's `{ // NNNN` comment); a distinct forme
+    // that needs innates follows its base's number. There is no base-species fallback, so each form
+    // (incl. Megas) that should carry innates needs its OWN row (see the FORMS note in the file
+    // header above). List a forme ONLY when its species id differs from the base: a DEFAULT-form
+    // alias (e.g. SPECIES_CASTFORM_NORMAL == SPECIES_CASTFORM, SPECIES_HOOPA_CONFINED == SPECIES_HOOPA)
+    // is the same id as the bare base, so a row for it is dead duplicate data — list the bare base
+    // only. The "no species appears more than once" integrity test (test/fork/innate_abilities.c)
+    // enforces this. Every row
+    // lists its innates inline with INNATES(...), one ability per line, sorted alphabetically. The
+    // per-ability rationale (canon vs flavor picks) is documented in the file header above.
 
     // ----- Gen 1 -----
     { // 0001
@@ -2061,12 +2064,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0351
-        SPECIES_CASTFORM_NORMAL,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
-    { // 0351
         SPECIES_CASTFORM_SUNNY,
         INNATES(
             ABILITY_LEVITATE
@@ -2244,13 +2241,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0386
         SPECIES_DEOXYS,
-        INNATES(
-            ABILITY_LEVITATE,
-            ABILITY_PRESSURE
-        )
-    },
-    { // 0386
-        SPECIES_DEOXYS_NORMAL,
         INNATES(
             ABILITY_LEVITATE,
             ABILITY_PRESSURE
@@ -3545,12 +3535,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0681
-        SPECIES_AEGISLASH_SHIELD,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
-    { // 0681
         SPECIES_AEGISLASH_BLADE,
         INNATES(
             ABILITY_LEVITATE
@@ -3631,12 +3615,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0710
-        SPECIES_PUMPKABOO_AVERAGE,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
-    { // 0710
         SPECIES_PUMPKABOO_SMALL,
         INNATES(
             ABILITY_LEVITATE
@@ -3656,12 +3634,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0711
         SPECIES_GOURGEIST,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
-    { // 0711
-        SPECIES_GOURGEIST_AVERAGE,
         INNATES(
             ABILITY_LEVITATE
         )
@@ -3715,12 +3687,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0718
-        SPECIES_ZYGARDE_50,
-        INNATES(
-            ABILITY_REGENERATOR
-        )
-    },
-    { // 0718
         SPECIES_ZYGARDE_10,
         INNATES(
             ABILITY_REGENERATOR
@@ -3746,13 +3712,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0720
         SPECIES_HOOPA,
-        INNATES(
-            ABILITY_LEVITATE,
-            ABILITY_PRANKSTER
-        )
-    },
-    { // 0720
-        SPECIES_HOOPA_CONFINED,
         INNATES(
             ABILITY_LEVITATE,
             ABILITY_PRANKSTER
@@ -4232,12 +4191,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0854
-        SPECIES_SINISTEA_PHONY,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
-    { // 0854
         SPECIES_SINISTEA_ANTIQUE,
         INNATES(
             ABILITY_LEVITATE
@@ -4245,12 +4198,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0855
         SPECIES_POLTEAGEIST,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
-    { // 0855
-        SPECIES_POLTEAGEIST_PHONY,
         INNATES(
             ABILITY_LEVITATE
         )
@@ -4636,12 +4583,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 1012
-        SPECIES_POLTCHAGEIST_COUNTERFEIT,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
-    { // 1012
         SPECIES_POLTCHAGEIST_ARTISAN,
         INNATES(
             ABILITY_LEVITATE
@@ -4649,12 +4590,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 1013
         SPECIES_SINISTCHA,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
-    { // 1013
-        SPECIES_SINISTCHA_UNREMARKABLE,
         INNATES(
             ABILITY_LEVITATE
         )
@@ -4740,6 +4675,24 @@ enum Ability GetSpeciesInnate(u16 species, u32 index)
     }
 
     return ABILITY_NONE;
+}
+
+// FORK: raw-table accessors for table-integrity tests (test/fork/innate_abilities.c).
+// These walk the sSpeciesInnates rows directly (NOT keyed by species), so a duplicate
+// species row — invisible to GetSpeciesInnateList, which returns the first match — is
+// still observable. Not for battle logic: use SpeciesHasInnate / GetSpeciesInnate there.
+u32 GetSpeciesInnatesEntryCount(void)
+{
+    return ARRAY_COUNT(sSpeciesInnates);
+}
+
+const enum Ability *GetSpeciesInnatesEntry(u32 row, u16 *outSpecies)
+{
+    if (row >= ARRAY_COUNT(sSpeciesInnates))
+        return NULL;
+    if (outSpecies != NULL)
+        *outSpecies = sSpeciesInnates[row].species;
+    return sSpeciesInnates[row].innates;
 }
 
 // Active, scripted innate abilities that fire at the end of every turn. Today only
