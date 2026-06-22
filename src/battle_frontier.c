@@ -477,9 +477,13 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
         u32 data = fmon->dynamaxLevel;
         SetMonData(dst, MON_DATA_DYNAMAX_LEVEL, &data);
     }
-    if (fmon->gigantamaxFactor)
+    // FORK: grant the Gigantamax Factor at draft time to every facility mon whose
+    // species has a G-Max form, so gmax-capable Factory/Tower mons Gigantamax
+    // (instead of plain Dynamaxing) without annotating each roster entry. Still
+    // honors an explicit per-entry .gigantamaxFactor for anything else.
+    if (fmon->gigantamaxFactor || DoesSpeciesHaveFormChangeMethod(fmon->species, FORM_CHANGE_BATTLE_GIGANTAMAX))
     {
-        u32 data = fmon->gigantamaxFactor;
+        u32 data = TRUE;
         SetMonData(dst, MON_DATA_GIGANTAMAX_FACTOR, &data);
     }
     if (fmon->teraType)
