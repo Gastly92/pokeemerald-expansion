@@ -1278,6 +1278,7 @@ static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, 
     case ABILITY_CUTE_CHARM:
         return !gBattleMons[battlerAtk].volatiles.infatuation
             && abilityAtk != ABILITY_OBLIVIOUS
+            && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
             && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL);
     default:
         break;
@@ -1291,6 +1292,7 @@ static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, 
     if (abilityDef != ABILITY_CUTE_CHARM && BattlerHasAbility(battlerDef, ABILITY_CUTE_CHARM))
         return !gBattleMons[battlerAtk].volatiles.infatuation
             && abilityAtk != ABILITY_OBLIVIOUS
+            && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
             && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL);
 
     return FALSE;
@@ -3870,6 +3872,7 @@ bool32 AI_CanBeInfatuated(enum BattlerId battlerAtk, enum BattlerId battlerDef, 
     if (gBattleMons[battlerDef].volatiles.infatuation
       || gAiLogicData->effectiveness[battlerAtk][battlerDef][gAiThinkingStruct->movesetIndex] == UQ_4_12(0.0)
       || defAbility == ABILITY_OBLIVIOUS
+      || IsInnateActive(battlerDef, ABILITY_OBLIVIOUS) // FORK: innate Oblivious also blocks infatuation
       || !AreBattlersOfOppositeGender(battlerAtk, battlerDef)
       || AI_IsAbilityOnSide(battlerDef, ABILITY_AROMA_VEIL))
         return FALSE;

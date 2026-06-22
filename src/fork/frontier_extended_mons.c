@@ -76,6 +76,7 @@
 // that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
 // Pressure, Stench, Speed Boost (+1 Speed each end-turn), Battle Armor / Shell Armor (crit immunity),
 // Limber (paralysis immunity), Cute Charm (infatuates an opposite-gender attacker on contact),
+// Oblivious (infatuation/Taunt/Intimidate immunity),
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -92,9 +93,10 @@
 // ABILITY_ROCK_HEAD yet still taxes the foe's PP via its innate Pressure; a Drapion lists
 // ABILITY_SNIPER yet still shrugs off crits via its innate Battle Armor; a Ninjask lists
 // ABILITY_INFILTRATOR yet still snowballs +1 Speed each turn via its innate Speed Boost; a Toxapex wall
-// lists ABILITY_MERCILESS yet still cannot be paralyzed via its innate Limber. Role comments
+// lists ABILITY_MERCILESS yet still cannot be paralyzed via its innate Limber; a Whiscash lists
+// ABILITY_HYDRATION yet still shrugs off Taunt/Intimidate/infatuation via its innate Oblivious. Role comments
 // that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/"Limber"/
-// "Cute Charm"/"Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
+// "Cute Charm"/"Oblivious"/"Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
 // its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
 // it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
 // (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
@@ -8525,7 +8527,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ZEN_HEADBUTT
         },
-        .ability = ABILITY_OBLIVIOUS,
+        .ability = ABILITY_HYDRATION, // Oblivious now innate; chosen Hydration cures status in rain
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24188,7 +24190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_OBLIVIOUS, // Unaware now innate; chosen Oblivious keeps the pivot Taunt/Intimidate-proof
+        .ability = ABILITY_WATER_VEIL, // Unaware & Oblivious now innate; chosen Water Veil prevents burn on the bulky pivot
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

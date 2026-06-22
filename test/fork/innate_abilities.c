@@ -1973,3 +1973,171 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cute Charm triggers 30% of 
         MESSAGE("Wobbuffet fell in love!");
     }
 }
+
+// ===== Oblivious =====
+// Oblivious prevents the holder from being infatuated or Taunted (B_OBLIVIOUS_TAUNT >= GEN_6) and
+// makes it immune to Intimidate (B_UPDATED_INTIMIDATE >= GEN_8). A passive trait wired innate-aware at
+// the scattered immunity sites (the Attract/Taunt/Captivate/Intimidate blocks and the switch-in cure),
+// each overwriting the pop-up to Oblivious when the chosen ability differs. A clean upside (it only ever
+// helps its holder), so the innate is a 1:1 copy of the real ability. Whiscash is the vehicle: it carries
+// Oblivious as its slot-0 ability, so a build that picks Anticipation/Hydration still wants the immunity.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Oblivious prevents infatuation")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_ATTRACT) == EFFECT_ATTRACT);
+        ASSUME(SpeciesHasInnate(SPECIES_WHISCASH, ABILITY_OBLIVIOUS));
+        ASSUME(gSpeciesInfo[SPECIES_WHISCASH].abilities[1] != ABILITY_OBLIVIOUS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WHISCASH) { Ability(ABILITY_ANTICIPATION); Gender(MON_MALE); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET) { Gender(MON_FEMALE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_ATTRACT); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_OBLIVIOUS); // pop-up shows Oblivious, not the chosen Anticipation
+            MESSAGE("It doesn't affect Whiscash…");
+        } else {
+            MESSAGE("Whiscash fell in love!"); // no innate -> Attract infatuates
+        }
+    } THEN {
+        EXPECT_EQ(player->volatiles.infatuation != 0, !enabled);
+    }
+}
+
+// Oblivious also blocks Taunt (Gen 6+), via its innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Oblivious prevents Taunt (Gen6+)")
+{
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TAUNT) == EFFECT_TAUNT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_OBLIVIOUS_TAUNT, GEN_6);
+        PLAYER(SPECIES_WHISCASH) { Ability(ABILITY_ANTICIPATION); } // innate Oblivious
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TAUNT); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_OBLIVIOUS);
+        MESSAGE("It doesn't affect Whiscash…");
+    } THEN {
+        EXPECT(player->volatiles.tauntTimer == 0);
+    }
+}
+
+// Oblivious blocks Captivate's Sp. Atk drop, via its innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Oblivious prevents Captivate")
+{
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_CAPTIVATE) == EFFECT_CAPTIVATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WHISCASH) { Ability(ABILITY_ANTICIPATION); Gender(MON_MALE); } // innate Oblivious
+        OPPONENT(SPECIES_WOBBUFFET) { Gender(MON_FEMALE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CAPTIVATE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_OBLIVIOUS);
+        NONE_OF { ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Oblivious makes the holder Intimidate-immune (Gen 8+), via its innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Oblivious prevents Intimidate (Gen8+)")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_UPDATED_INTIMIDATE, GEN_8);
+        PLAYER(SPECIES_WHISCASH) { Ability(ABILITY_ANTICIPATION); } // innate Oblivious
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_EKANS) { Ability(ABILITY_INTIMIDATE); }
+    } WHEN {
+        TURN { SWITCH(opponent, 1); }
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_INTIMIDATE);
+        ABILITY_POPUP(player, ABILITY_OBLIVIOUS);
+        NONE_OF { ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); }
+        MESSAGE("Whiscash's Attack was not lowered!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Suppression parity: Oblivious is breakable, so an attacker's Mold Breaker pierces an innate Oblivious
+// exactly as it would the real ability — the Attract lands and no Oblivious pop-up shows.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Oblivious")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_OBLIVIOUS].breakable);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WHISCASH) { Ability(ABILITY_ANTICIPATION); Gender(MON_MALE); } // innate Oblivious
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Gender(MON_FEMALE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_ATTRACT); }
+    } SCENE {
+        MESSAGE("Whiscash fell in love!"); // Mold Breaker ignores the innate -> infatuated
+        NONE_OF { ABILITY_POPUP(player, ABILITY_OBLIVIOUS); }
+    } THEN {
+        EXPECT(player->volatiles.infatuation);
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Oblivious, so a later Attract lands.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Oblivious")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WHISCASH) { Ability(ABILITY_ANTICIPATION); Gender(MON_MALE); Moves(MOVE_CELEBRATE); } // innate Oblivious
+        OPPONENT(SPECIES_WOBBUFFET) { Gender(MON_FEMALE); Moves(MOVE_GASTRO_ACID, MOVE_ATTRACT); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses the innate
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_ATTRACT); }
+    } SCENE {
+        MESSAGE("Whiscash's Ability was suppressed!");
+        MESSAGE("Whiscash fell in love!"); // suppressed -> Attract infatuates
+    } THEN {
+        EXPECT(player->volatiles.infatuation);
+    }
+}
+
+// The immunity-ability cure site (TryImmunityAbilityHealStatus): once a mon has been infatuated through a
+// Mold Breaker Attract (which pierces the innate), the innate Oblivious clears that infatuation at the next
+// move-end where it is active (i.e. the holder's own move, when no Mold Breaker attacker suppresses it),
+// exactly like a real Oblivious. The pop-up shows Oblivious, not the chosen Anticipation.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Oblivious clears infatuation inflicted through Mold Breaker")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WHISCASH) { Ability(ABILITY_ANTICIPATION); Gender(MON_MALE); Speed(100); Moves(MOVE_CELEBRATE); } // innate Oblivious
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Gender(MON_FEMALE); Speed(50); Moves(MOVE_ATTRACT, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_ATTRACT); }        // Mold Breaker pierces -> Whiscash infatuated
+        TURN { MOVE(player, MOVE_CELEBRATE, WITH_RNG(RNG_INFATUATION, FALSE)); MOVE(opponent, MOVE_CELEBRATE); } // holder's move-end -> innate cures
+    } SCENE {
+        MESSAGE("Whiscash fell in love!");
+        ABILITY_POPUP(player, ABILITY_OBLIVIOUS);
+        MESSAGE("Whiscash got over its infatuation!");
+    } THEN {
+        EXPECT(!player->volatiles.infatuation);
+    }
+}
+
+// A canon Oblivious user whose *chosen* ability differs (Dondozo: Unaware/Oblivious/Water Veil) still
+// carries Oblivious as an innate, so it keeps the immunity no matter which slot the build picks.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Oblivious user keeps it via innate when the chosen ability differs")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DONDOZO, ABILITY_OBLIVIOUS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_DONDOZO) { Ability(ABILITY_WATER_VEIL); Gender(MON_MALE); } // chosen ability is NOT Oblivious
+        OPPONENT(SPECIES_WOBBUFFET) { Gender(MON_FEMALE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_ATTRACT); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_OBLIVIOUS);
+        MESSAGE("It doesn't affect Dondozo…");
+        NONE_OF { ANIMATION(ANIM_TYPE_STATUS, B_ANIM_STATUS_INFATUATION, player); }
+    }
+}

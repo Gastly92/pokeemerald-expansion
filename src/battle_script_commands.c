@@ -7727,13 +7727,16 @@ static void Cmd_tryinfatuating(void)
         return;
     }
 
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
+    if (BattlerHasAbility(gBattlerTarget, ABILITY_OBLIVIOUS)) // FORK: innate Oblivious blocks infatuation like the real ability
     {
         gBattlescriptCurrInstr = BattleScript_NotAffectedAbilityPopUp;
         gBattleStruct->moveResultFlags[gBattlerTarget] |= MOVE_RESULT_DOESNT_AFFECT_FOE;
         gBattlerAbility = gBattlerTarget;
         gLastUsedAbility = ABILITY_OBLIVIOUS;
         RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
+        // FORK: innate — CreateAbilityPopUp reads the primary slot, so show Oblivious; real-ability path untouched.
+        if (GetBattlerAbility(gBattlerTarget) != ABILITY_OBLIVIOUS)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
     }
     else
     {
@@ -8918,13 +8921,16 @@ static void Cmd_settaunt(void)
 {
     CMD_ARGS(const u8 *failInstr);
 
-    if (GetConfig(B_OBLIVIOUS_TAUNT) >= GEN_6 && GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
+    if (GetConfig(B_OBLIVIOUS_TAUNT) >= GEN_6 && BattlerHasAbility(gBattlerTarget, ABILITY_OBLIVIOUS)) // FORK: innate Oblivious blocks Taunt
     {
         gBattlescriptCurrInstr = BattleScript_NotAffectedAbilityPopUp;
         gBattleStruct->moveResultFlags[gBattlerTarget] |= MOVE_RESULT_DOESNT_AFFECT_FOE;
         gBattlerAbility = gBattlerTarget;
         gLastUsedAbility = ABILITY_OBLIVIOUS;
         RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
+        // FORK: innate — CreateAbilityPopUp reads the primary slot, so show Oblivious; real-ability path untouched.
+        if (GetBattlerAbility(gBattlerTarget) != ABILITY_OBLIVIOUS)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
     }
     else if (gBattleMons[gBattlerTarget].volatiles.tauntTimer == 0)
     {
@@ -12425,6 +12431,7 @@ void BS_TrySetInfatuation(void)
 
     if (!gBattleMons[gBattlerTarget].volatiles.infatuation
         && gBattleMons[gBattlerTarget].ability != ABILITY_OBLIVIOUS
+        && !IsInnateActive(gBattlerTarget, ABILITY_OBLIVIOUS) // FORK: innate Oblivious also blocks infatuation
         && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
         // FORK: DETERMINISTIC_STATUS drops the opposite-gender requirement.
         && (GetConfig(DETERMINISTIC_STATUS) || AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget)))

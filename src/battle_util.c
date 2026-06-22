@@ -3003,6 +3003,7 @@ static bool32 TryCuteCharmInfatuate(enum Move move)
      && !(gBattleMons[gBattlerAttacker].volatiles.infatuation)
      && (GetConfig(DETERMINISTIC_ABILITIES) || AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget))
      && !IsAbilityAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_OBLIVIOUS)
+     && !IsInnateActive(gBattlerAttacker, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker also resists Cute Charm
      && !CanBattlerAvoidContactEffects(gBattlerAttacker, gBattlerTarget, GetBattlerAbility(gBattlerAttacker), GetBattlerHoldEffect(gBattlerAttacker), move)
      && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL))
     {
@@ -9469,6 +9470,25 @@ enum ImmunityHealStatusOutcome TryImmunityAbilityHealStatus(enum BattlerId battl
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_PARALYSIS;
         outcome = IMMUNITY_STATUS_CLEARED;
         gBattleScripting.abilityPopupOverwrite = ABILITY_LIMBER;
+    }
+
+    // FORK: an innate Oblivious (chosen ability differs, so the switch above missed it) clears pre-existing
+    // infatuation / Taunt on switch-in exactly like the real ability. Overwrite the pop-up to Oblivious since
+    // the cure script reads the primary slot. IsInnateActive() supplies suppression parity.
+    if (outcome == IMMUNITY_NO_EFFECT && IsInnateActive(battler, ABILITY_OBLIVIOUS))
+    {
+        if (gBattleMons[battler].volatiles.infatuation)
+        {
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_INFATUATION;
+            outcome = IMMUNITY_INFATUATION_CLEARED;
+            gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
+        }
+        else if (GetConfig(B_OBLIVIOUS_TAUNT) >= GEN_6 && gBattleMons[battler].volatiles.tauntTimer != 0)
+        {
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_TAUNT;
+            outcome = IMMUNITY_TAUNT_CLEARED;
+            gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
+        }
     }
 
     switch (outcome)
