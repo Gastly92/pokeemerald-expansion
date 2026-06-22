@@ -1,9 +1,11 @@
 #include "global.h"
 #include "config_changes.h"
 #include "fork/frontier_draft.h"
+#include "data.h"
 #include "item.h"
 #include "random.h"
 #include "fork/species_tiers.h"
+#include "constants/abilities.h"
 #include "constants/hold_effects.h"
 
 // FORK: shared Battle Frontier competitive-draft rules, moved here from the
@@ -71,4 +73,19 @@ void ReserveForcedTierSlot(enum SpeciesTier *slotTiers, enum SpeciesTier tier)
         slot = Random() % FRONTIER_PARTY_SIZE;
     while (slotTiers[slot] != TIER_NORMAL);
     slotTiers[slot] = tier;
+}
+
+// Illusion (Zoroark, and this fork's Eon duo) disguises its holder as the team's
+// *last* conscious party member, so it has nothing to copy when it is itself the
+// final filled slot — GetIllusionMonPartyId() bails in that case and the disguise
+// never forms (see battle_util.c). Keep drafted Illusion mons out of the last
+// slot: a draft loop rejects such a candidate there, so it stays eligible for
+// every earlier slot and the disguise always has a mon behind it. We read
+// fmon->ability directly, which is exactly what CreateFacilityMon assigns. The
+// last slot is `partySize - 1` so this is correct for 3v3, 6v6, and the shorter
+// teams of multi/doubles facilities alike. Returns TRUE if `fmon` must be
+// rejected for `slot`.
+bool32 IllusionMonRejectsSlot(u32 slot, u32 partySize, const struct TrainerMon *fmon)
+{
+    return slot == partySize - 1 && fmon->ability == ABILITY_ILLUSION;
 }

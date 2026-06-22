@@ -57,7 +57,13 @@
 // a passive trait wired innate-aware at the scattered immunity sites in src/battle_script_commands.c and
 // src/battle_stat_change.c and src/battle_util.c — the infatuation/Taunt/Captivate/Intimidate blocks and the
 // switch-in cure, each overwriting the pop-up to Oblivious; a clean-upside 1:1 copy, AI made innate-aware at the
-// foe Attract/Intimidate/Cute-Charm reads in src/battle_ai_util.c and src/battle_ai_switch.c).
+// foe Attract/Intimidate/Cute-Charm reads in src/battle_ai_util.c and src/battle_ai_switch.c),
+// and the weather evasion abilities SAND_VEIL / SNOW_CLOAK (+25% evasion in sandstorm / hail-or-snow plus
+// immunity to that weather's chip damage, passive calc modifiers handled at the GetTotalAccuracy accuracy
+// site in src/battle_util.c with the chip immunity mirrored in src/battle_end_turn.c — clean-upside 1:1
+// copies; on-field accuracy prediction is innate-aware for free, with the AI's weather-damage and
+// weather-setting reads in src/battle_ai_util.c / src/battle_ai_switch.c / src/battle_ai_field_statuses.c
+// credited too).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

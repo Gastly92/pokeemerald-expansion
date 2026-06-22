@@ -11012,6 +11012,17 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
         break;
     }
 
+    // FORK: an innate Sand Veil / Snow Cloak ups the holder's evasion in its weather exactly like
+    // the real ability (1:1 copy — both are clean upsides). Guarded against the chosen-ability case
+    // above so a real holder never applies the 1.2 evasion loss twice; IsInnateActive() supplies the
+    // same suppression (Mold Breaker pierces these breakable abilities) as the defAbility path.
+    if (defAbility != ABILITY_SAND_VEIL && (attackerWeather & B_WEATHER_SANDSTORM)
+     && IsInnateActive(battlerDef, ABILITY_SAND_VEIL))
+        calc = (calc * 80) / 100;
+    if (defAbility != ABILITY_SNOW_CLOAK && (attackerWeather & B_WEATHER_ICY_ANY)
+     && IsInnateActive(battlerDef, ABILITY_SNOW_CLOAK))
+        calc = (calc * 80) / 100;
+
     // Attacker's ally's ability
     enum BattlerId atkAlly = BATTLE_PARTNER(battlerAtk);
     switch (GetBattlerAbility(atkAlly))
@@ -11137,9 +11148,11 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
         u32 weather = GetAttackerWeather(GetBattlerHoldEffect(battlerAtk), GetBattlerAbility(battlerAtk), GetWeather());
         if (defHoldEffect == HOLD_EFFECT_EVASION_UP)
             tax++;
-        if (defAbility == ABILITY_SAND_VEIL && (weather & B_WEATHER_SANDSTORM))
+        if ((weather & B_WEATHER_SANDSTORM) // FORK: credit an innate Sand Veil too
+         && (defAbility == ABILITY_SAND_VEIL || IsInnateActive(battlerDef, ABILITY_SAND_VEIL)))
             tax++;
-        if (defAbility == ABILITY_SNOW_CLOAK && (weather & B_WEATHER_ICY_ANY))
+        if ((weather & B_WEATHER_ICY_ANY) // FORK: credit an innate Snow Cloak too
+         && (defAbility == ABILITY_SNOW_CLOAK || IsInnateActive(battlerDef, ABILITY_SNOW_CLOAK)))
             tax++;
         if (defAbility == ABILITY_TANGLED_FEET && gBattleMons[battlerDef].volatiles.confusionTurns)
             tax++;
