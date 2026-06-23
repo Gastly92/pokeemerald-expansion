@@ -1764,7 +1764,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CELEBI,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_NATURAL_CURE
+            ABILITY_NATURAL_CURE,
+            ABILITY_REGENERATOR
         )
     },
 
