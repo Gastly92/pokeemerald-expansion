@@ -15,7 +15,7 @@
 | :x: | Water Absorb | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :white_check_mark: | Oblivious | The Pokémon cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate. |
 | :x: | Cloud Nine | Eliminates the effects of weather. |
-| :white_large_square: | Compound Eyes | Boosts the accuracy of the Pokémon's moves by 30%. |
+| :white_check_mark: | Compound Eyes | Boosts the accuracy of the Pokémon's moves by 30%. |
 | :white_large_square: | Insomnia | The Pokémon cannot become drowsy or be put to sleep. |
 | :x: | Color Change | The Pokémon's type becomes the type of the move used on it. |
 | :white_large_square: | Immunity | The Pokémon cannot be poisoned or badly poisoned. |
@@ -36,7 +36,7 @@
 | :white_large_square: | Serene Grace | Raises the likelihood of additional effects occurring when the Pokémon uses its moves. |
 | :white_check_mark: | Swift Swim | Doubles the Pokémon's Speed stat in rain. |
 | :white_check_mark: | Chlorophyll | Doubles the Pokémon's Speed stat in harsh sunlight. |
-| :white_large_square: | Illuminate | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
+| :white_check_mark: | Illuminate | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :x: | Trace | When the Pokémon enters a battle, it changes its Ability to match that of an opponent. |
 | :white_large_square: | Huge Power | Doubles the power of the Pokémon's physical moves. |
 | :x: | Poison Point | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned. |
@@ -52,7 +52,7 @@
 | :white_large_square: | Early Bird | The Pokémon awakens from sleep twice as fast as other Pokémon. |
 | :x: | Flame Body | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned. |
 | :x: | Run Away | Enables a sure getaway from wild Pokémon. |
-| :white_large_square: | Keen Eye | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
+| :white_check_mark: | Keen Eye | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :white_large_square: | Hyper Cutter | The Pokémon's Attack stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
 | :x: | Truant | Each time the Pokémon uses a move, it spends the next turn loafing around. |

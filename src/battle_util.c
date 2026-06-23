@@ -10944,6 +10944,16 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     if (atkAbility == ABILITY_UNAWARE || atkAbility == ABILITY_KEEN_EYE || atkAbility == ABILITY_MINDS_EYE
             || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE))
         evasionStage = DEFAULT_STAT_STAGE;
+    // FORK: the fork models an innate Compound Eyes / Keen Eye / Illuminate as "ignore the target's evasion"
+    // (Compound Eyes' real +30% accuracy is repurposed as evasion-ignore everywhere in the fork, see
+    // GetAccEvasionStageDelta). PURE BOON: it only ignores a *boost* (evasionStage > default), keeping a foe's
+    // evasion *drop* in the attacker's favor — like InnateUnawareBoonStage. The boost guard also keeps the
+    // IsInnateActive lookups off the common no-boost path (the AI runs this calc constantly). Gen 9+ for Illuminate.
+    else if (evasionStage > DEFAULT_STAT_STAGE
+            && (IsInnateActive(battlerAtk, ABILITY_COMPOUND_EYES)
+             || IsInnateActive(battlerAtk, ABILITY_KEEN_EYE)
+             || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerAtk, ABILITY_ILLUMINATE))))
+        evasionStage = DEFAULT_STAT_STAGE;
     else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
         evasionStage = InnateUnawareBoonStage(battlerAtk, evasionStage);
     if (MoveIgnoresDefenseEvasionStages(move))
@@ -11102,6 +11112,15 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
     if (atkAbility == ABILITY_UNAWARE || atkAbility == ABILITY_KEEN_EYE || atkAbility == ABILITY_MINDS_EYE
             || atkAbility == ABILITY_COMPOUND_EYES || atkAbility == ABILITY_VICTORY_STAR
             || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE))
+        evasionStage = DEFAULT_STAT_STAGE;
+    // FORK: an innate Compound Eyes / Keen Eye / Illuminate ignores the target's evasion in the deterministic
+    // PP economy too (their accuracy boost is repurposed as evasion-ignore). PURE BOON: boost-only, like
+    // InnateUnawareBoonStage; the boost guard also keeps the IsInnateActive lookups off the common no-boost
+    // path. Gen 9+ for Illuminate.
+    else if (evasionStage > DEFAULT_STAT_STAGE
+            && (IsInnateActive(battlerAtk, ABILITY_COMPOUND_EYES)
+             || IsInnateActive(battlerAtk, ABILITY_KEEN_EYE)
+             || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerAtk, ABILITY_ILLUMINATE))))
         evasionStage = DEFAULT_STAT_STAGE;
     else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
         evasionStage = InnateUnawareBoonStage(battlerAtk, evasionStage);

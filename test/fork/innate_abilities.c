@@ -10,8 +10,11 @@
 // (full-HP endure + OHKO-move immunity), NATURAL_CURE (a silent status cure on
 // switch-out), PRANKSTER (+1 priority on status moves), the pinch and weather-speed
 // abilities, FILTER (−25% supereffective damage taken), PRESSURE (the holder's foes
-// spend 1 extra PP per move used against it), and SPEED_BOOST (+1 Speed at the end of
-// every turn — the first active, scripted end-turn innate); see src/innate_abilities.c.
+// spend 1 extra PP per move used against it), SPEED_BOOST (+1 Speed at the end of
+// every turn — the first active, scripted end-turn innate), and the accuracy abilities
+// COMPOUND_EYES / KEEN_EYE / ILLUMINATE (which all ignore the target's evasion — under
+// DETERMINISTIC_ACCURACY_EVASION a PP-economy boon — and, for KEEN_EYE/ILLUMINATE, keep
+// the holder's accuracy from being lowered); see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -2351,6 +2354,181 @@ TEST("Innate abilities: Mega forms inherit later-added base innates")
     EXPECT(SpeciesHasInnate(SPECIES_FROSLASS_MEGA, ABILITY_SNOW_CLOAK));
 }
 
+// ============================== Compound Eyes / Keen Eye / Illuminate ==============================
+// The accuracy abilities. The fork sets DETERMINISTIC_ACCURACY_EVASION, so a move's accuracy never
+// decides hit/miss — accuracy/evasion stages are a per-use PP economy instead. There, all three make
+// the holder IGNORE the target's evasion (so an evasive foe never PP-taxes it). Keen Eye / Illuminate
+// additionally keep the holder's own accuracy from being lowered. Each test uses a species whose CHOSEN
+// ability differs from the innate, so the effect is attributable solely to the innate.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Compound Eyes ignores the target's evasion (no PP tax)")
+{
+    u32 enabled, expectedPP;
+    PARAMETRIZE { enabled = TRUE;  expectedPP = 34; } // innate Compound Eyes -> evasion ignored -> only the base 1 PP
+    PARAMETRIZE { enabled = FALSE; expectedPP = 33; } // no innate -> the foe's +1 evasion taxes an extra 1 PP
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BUTTERFREE, ABILITY_COMPOUND_EYES));
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BUTTERFREE) { Ability(ABILITY_TINTED_LENS); Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); } // chosen Tinted Lens, NOT Compound Eyes
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // opponent +1 evasion
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], expectedPP);
+    }
+}
+
+// In a non-deterministic build the fork models an innate Compound Eyes as "ignore the target's evasion"
+// in the raw hit calc too (GetTotalAccuracy): a 100%-accuracy move into a +1-evasion foe still always hits.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Compound Eyes ignores the target's evasion in the hit calc")
+{
+    PASSES_RANDOMLY(5, 5, RNG_ACCURACY); // evasion ignored -> 100 acc -> never misses
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BUTTERFREE, ABILITY_COMPOUND_EYES));
+        ASSUME(GetMoveAccuracy(MOVE_POUND) == 100);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_BUTTERFREE) { Ability(ABILITY_TINTED_LENS); Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); } // chosen Tinted Lens, NOT Compound Eyes
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // opponent +1 evasion
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        HP_BAR(opponent);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, Compound Eyes does not ignore evasion (stock behavior)")
+{
+    PASSES_RANDOMLY(3, 4, RNG_ACCURACY); // +1 evasion -> 100 * 3/4 = 75 acc -> hits 3/4
+    GIVEN {
+        ASSUME(GetMoveAccuracy(MOVE_POUND) == 100);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
+        PLAYER(SPECIES_BUTTERFREE) { Ability(ABILITY_TINTED_LENS); Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); }
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        HP_BAR(opponent);
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Compound Eyes, so the foe's evasion taxes PP again.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Compound Eyes")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_BUTTERFREE) { Ability(ABILITY_TINTED_LENS); Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); } // innate Compound Eyes
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); }   // opponent +1 evasion
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); }   // suppress the innate
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], 33); // innate suppressed -> the +1 evasion taxes 1 PP again
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Keen Eye ignores the target's evasion (no PP tax)")
+{
+    u32 enabled, expectedPP;
+    PARAMETRIZE { enabled = TRUE;  expectedPP = 34; }
+    PARAMETRIZE { enabled = FALSE; expectedPP = 33; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FEAROW, ABILITY_KEEN_EYE));
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_FEAROW) { Ability(ABILITY_SNIPER); Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); } // chosen Sniper, NOT Keen Eye
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // opponent +1 evasion
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], expectedPP);
+    }
+}
+
+// Keen Eye's second effect: the holder's accuracy cannot be lowered. The pop-up/message show Keen Eye
+// even though the chosen ability is Sniper (the Limber/Oblivious pop-up precedent).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Keen Eye keeps the holder's accuracy from being lowered")
+{
+    u32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FEAROW, ABILITY_KEEN_EYE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_FEAROW) { Ability(ABILITY_SNIPER); } // chosen Sniper, NOT Keen Eye
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SAND_ATTACK); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SAND_ATTACK); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_KEEN_EYE);
+            MESSAGE("Fearow's accuracy was not lowered!");
+        }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], enabled ? DEFAULT_STAT_STAGE : DEFAULT_STAT_STAGE - 1);
+    }
+}
+
+// Suppression parity: Keen Eye is breakable, so an attacker's Mold Breaker pierces the innate
+// accuracy-drop immunity exactly as it would the real ability (the accuracy drop lands, no pop-up).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Keen Eye's accuracy-drop immunity")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_KEEN_EYE].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_FEAROW, ABILITY_KEEN_EYE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_FEAROW) { Ability(ABILITY_SNIPER); } // innate Keen Eye
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_SAND_ATTACK); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SAND_ATTACK); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_KEEN_EYE); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], DEFAULT_STAT_STAGE - 1); // pierced -> accuracy drops
+    }
+}
+
+// Illuminate's in-battle effect (Gen 9+) matches Keen Eye: it too keeps the holder's accuracy undroppable.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Illuminate keeps the holder's accuracy from being lowered (Gen 9+)")
+{
+    GIVEN {
+        ASSUME(B_ILLUMINATE_EFFECT >= GEN_9);
+        ASSUME(SpeciesHasInnate(SPECIES_CHINCHOU, ABILITY_ILLUMINATE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CHINCHOU) { Ability(ABILITY_VOLT_ABSORB); } // chosen Volt Absorb, NOT Illuminate
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SAND_ATTACK); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SAND_ATTACK); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_ILLUMINATE);
+        MESSAGE("Chinchou's accuracy was not lowered!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Data: canon users (incl. Gmax), Mega mirrors (the FORMS pure-boon convention), Watchog's Keen Eye +
+// Illuminate pair, and Spewpa correctly excluded (its data is Shed Skin/Friend Guard, not Compound Eyes).
+TEST("Innate abilities: accuracy abilities — canon users, Mega mirrors, Watchog's pair")
+{
+    EXPECT(SpeciesHasInnate(SPECIES_BUTTERFREE, ABILITY_COMPOUND_EYES));
+    EXPECT(SpeciesHasInnate(SPECIES_BUTTERFREE_GMAX, ABILITY_COMPOUND_EYES));
+    EXPECT(SpeciesHasInnate(SPECIES_PIDGEOT, ABILITY_KEEN_EYE));
+    EXPECT(SpeciesHasInnate(SPECIES_PIDGEOT_MEGA, ABILITY_KEEN_EYE)); // Mega mirrors the base though its data is No Guard
+    EXPECT(SpeciesHasInnate(SPECIES_SABLEYE_MEGA, ABILITY_KEEN_EYE)); // Mega mirrors the base (its data is Magic Bounce)
+    EXPECT(SpeciesHasInnate(SPECIES_SABLEYE_MEGA, ABILITY_PRANKSTER));
+    EXPECT(SpeciesHasInnate(SPECIES_WATCHOG, ABILITY_KEEN_EYE));
+    EXPECT(SpeciesHasInnate(SPECIES_WATCHOG, ABILITY_ILLUMINATE));
+    EXPECT(SpeciesHasInnate(SPECIES_VOLBEAT, ABILITY_ILLUMINATE));
+    EXPECT(!SpeciesHasInnate(SPECIES_SPEWPA, ABILITY_COMPOUND_EYES));
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -2370,7 +2548,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_SAND_RUSH, ABILITY_SLUSH_RUSH, ABILITY_FILTER, ABILITY_PRESSURE,
         ABILITY_STENCH, ABILITY_BATTLE_ARMOR, ABILITY_SHELL_ARMOR, ABILITY_SPEED_BOOST,
         ABILITY_LIMBER, ABILITY_CUTE_CHARM, ABILITY_OBLIVIOUS, ABILITY_SAND_VEIL,
-        ABILITY_SNOW_CLOAK,
+        ABILITY_SNOW_CLOAK, ABILITY_COMPOUND_EYES, ABILITY_KEEN_EYE, ABILITY_ILLUMINATE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

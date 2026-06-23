@@ -77,6 +77,8 @@
 // Pressure, Stench, Speed Boost (+1 Speed each end-turn), Battle Armor / Shell Armor (crit immunity),
 // Limber (paralysis immunity), Cute Charm (infatuates an opposite-gender attacker on contact),
 // Oblivious (infatuation/Taunt/Intimidate immunity), Sand Veil / Snow Cloak (weather evasion + chip immunity),
+// Compound Eyes / Keen Eye / Illuminate (ignore the target's evasion — under DETERMINISTIC_ACCURACY_EVASION a
+// PP-economy boon — with Keen Eye / Illuminate also keeping the holder's own accuracy from being lowered),
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -110,7 +112,11 @@
 // (Klutz is a drawback), so the override gives it a chosen Sheer Force too. The weather-evasion abilities add more
 // all-real-abilities-innate cases: Sandslash and Donphan (Sand Veil + Sand Rush / Sturdy) get a chosen Sand Stream,
 // while Sandslash-Alola, Articuno and Beartic (Snow Cloak alongside Slush Rush/Swift Swim/Pressure) get a chosen
-// Snow Warning — each a stable :x: weather-setter that also turns on the mon's own evasion innate. Sceptile is the lone non-ability-locked override: only its Overgrow is
+// Snow Warning — each a stable :x: weather-setter that also turns on the mon's own evasion innate. The accuracy
+// abilities add two more: Skarmory (Keen Eye + Sturdy innate; Weak Armor is a drawback) gets a chosen Bulletproof,
+// and Volbeat (Illuminate + Swarm + Prankster all innate) gets a chosen Victory Star — each a stable :x: pick.
+// (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
+// Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
 // repurposes that slot for its Mega's Lightning Rod. Each override hands out a deliberately STABLE
 // ability — one marked :x: in INNATE_ABILITIES_PROGRESS.md (never an innate), so it won't need
@@ -325,7 +331,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_COMPOUND_EYES,
+        .ability = ABILITY_TINTED_LENS, // Compound Eyes now innate; chosen Tinted Lens makes resisted coverage hit for neutral
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -409,7 +415,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_ROOST
         },
-        .ability = ABILITY_KEEN_EYE,
+        .ability = ABILITY_BIG_PECKS, // Keen Eye now innate; Mega -> No Guard anyway, Big Pecks is the pre-Mega filler
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -429,7 +435,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_KEEN_EYE,
+        .ability = ABILITY_BIG_PECKS, // Keen Eye now innate; chosen Big Pecks keeps this Specs attacker's Defense undroppable
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -555,7 +561,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_KEEN_EYE,
+        .ability = ABILITY_SNIPER, // Keen Eye now innate; chosen Sniper powers up this sweeper's critical hits
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4456,7 +4462,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SUPER_FANG
         },
-        .ability = ABILITY_KEEN_EYE,
+        .ability = ABILITY_FRISK, // Keen Eye now innate; chosen Frisk scouts the foe's item on the pivot
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -5904,7 +5910,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_KEEN_EYE, // Sturdy now innate; chosen Keen Eye keeps this wall's accuracy undroppable
+        .ability = ABILITY_BULLETPROOF, // Sturdy + Keen Eye now both innate; chosen Bulletproof (fork override) blocks ball/bomb moves on this wall
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5924,7 +5930,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_WHIRLWIND
         },
-        .ability = ABILITY_KEEN_EYE, // Sturdy now innate; chosen Keen Eye keeps this defogger's accuracy undroppable
+        .ability = ABILITY_BULLETPROOF, // Sturdy + Keen Eye now both innate; chosen Bulletproof (fork override) shields this defogger from Focus Blast/Sludge Bomb
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7660,7 +7666,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_KEEN_EYE, // Prankster now innate; Mega -> Magic Bounce anyway, Keen Eye is the pre-Mega filler
+        .ability = ABILITY_KEEN_EYE, // Prankster + Keen Eye now both innate; Mega -> Magic Bounce anyway, chosen Keen Eye is redundant-but-harmless filler (Sableye's only free real slot, Stall, is a drawback)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7680,7 +7686,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_TAUNT
         },
-        .ability = ABILITY_KEEN_EYE, // Prankster now innate; chosen Keen Eye keeps its accuracy unloweable
+        .ability = ABILITY_KEEN_EYE, // Prankster + Keen Eye now both innate; chosen Keen Eye is redundant-but-harmless (Sableye's only free real slot, Stall, is a drawback used by tests, so not overridden)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7934,7 +7940,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_ILLUMINATE, // Prankster now innate; chosen Illuminate (the firefly's glow) keeps accuracy
+        .ability = ABILITY_VICTORY_STAR, // Illuminate + Prankster + Swarm now all innate; chosen Victory Star (fork override) boosts ally accuracy for this doubles supporter
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -14285,7 +14291,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_COMPOUND_EYES,
+        .ability = ABILITY_UNNERVE, // Compound Eyes + Swarm now innate; chosen Unnerve denies the foe its Berry
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14305,7 +14311,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_COMPOUND_EYES,
+        .ability = ABILITY_UNNERVE, // Compound Eyes + Swarm now innate; chosen Unnerve denies the foe its Berry
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18087,7 +18093,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_PSYCHIC_FANGS
         },
-        .ability = ABILITY_KEEN_EYE, // Sand Rush now innate; chosen Keen Eye
+        .ability = ABILITY_STEADFAST, // Sand Rush + Keen Eye now innate; chosen Steadfast snowballs Speed on flinch
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
