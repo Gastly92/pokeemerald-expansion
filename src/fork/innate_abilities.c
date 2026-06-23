@@ -423,6 +423,57 @@
 //     abilities are now innate take a fork-owned chosen override (species_ability_overrides.c) — Sandslash
 //     and Donphan → Sand Stream, Sandslash-Alola / Articuno / Beartic → Snow Warning — each a stable :x:
 //     weather-setter that also turns on the mon's own evasion innate.
+//   - ABILITY_COMPOUND_EYES / ABILITY_KEEN_EYE / ABILITY_ILLUMINATE — the accuracy abilities, all wired as
+//     passive calc-modifiers (like Unaware / Filter). THE FORK SETS DETERMINISTIC_ACCURACY_EVASION, so a
+//     move's accuracy never decides hit/miss — instead accuracy/evasion stages are a per-use PP economy
+//     (see config/deterministic.h). What each ability does there:
+//       * The fork models all three (Compound Eyes' real +30% accuracy is repurposed to match Keen Eye /
+//         Illuminate's real ignore-the-target's-evasion) as IGNORE THE TARGET'S EVASION, so the holder is
+//         never PP-taxed by an evasive foe. Wired at the two accuracy sites in src/battle_util.c — the raw
+//         hit calc GetTotalAccuracy and the deterministic PP-economy delta GetAccEvasionStageDelta (the latter
+//         read by both the real deduction in CancelerPPDeduction and the AI's PP mirror). PURE BOON at both:
+//         the innate ignores only a foe's evasion *boost* (evasionStage > default), keeping a foe's evasion
+//         *drop* in the holder's favor — like InnateUnawareBoonStage. That boost guard also keeps the
+//         IsInnateActive lookups off the common no-boost path (the AI runs the hit calc constantly), so there
+//         is no measurable AI-thinking-time cost.
+//       * Keen Eye / Illuminate ADDITIONALLY keep the holder's own accuracy from being lowered, wired at the
+//         stat-drop site IsAbilityBlocked (src/battle_stat_change.c), beside the chosen-ability path, with the
+//         pop-up/record overwritten to the innate (Limber/Oblivious precedent) so it shows Keen Eye / Illuminate.
+//     Illuminate's in-battle effect only exists under B_ILLUMINATE_EFFECT >= GEN_9 (the fork's default), so
+//     every innate Illuminate clause mirrors that gate; below Gen 9 an innate Illuminate is inert in battle
+//     (it would only affect the overworld encounter rate, which innates deliberately never touch). NO pure-boon
+//     divergence: all three are clean upsides that never hurt their holder, so each innate is a 1:1 copy.
+//     Suppression parity via IsInnateActive(): Compound Eyes isn't breakable (and its holder is the attacker,
+//     so Mold Breaker never touches it); Keen Eye / Illuminate are breakable, so an attacker's Mold Breaker
+//     pierces the innate accuracy-drop immunity exactly as it would the real ability. The innate is NOT
+//     recorded as identity for the silent evasion-ignore (a pure calc modifier like Unaware). AI: the PP-economy
+//     delta lives in the shared GetAccEvasionStageDelta keyed off the real battler, so the AI both threatens and
+//     respects an innate evasion-ignore for FREE; the one dedicated AI read — "don't bother lowering an innate
+//     Keen Eye / Illuminate foe's accuracy" in CanLowerStat (src/battle_ai_util.c) — is made innate-aware. The
+//     ability-transfer scoring (BattlerBenefitsFromAbilityScore, the Compound Eyes case) is left alone since
+//     innates are never transferable, and the overworld held-item-rarity / encounter-rate reads (Compound Eyes
+//     in src/pokemon.c, Keen Eye in src/battle_pike.c & src/wild_encounter.c) are deliberately untouched —
+//     innates are a battle-only feature, the same call made for Sand Veil's wild-encounter halving. CANON-ONLY
+//     (no flavor picks — accuracy/evasion is a contentious mechanic, like the weather-evasion abilities, so the
+//     set stays tight to species whose ability data carries it): every species whose data carries Compound Eyes
+//     (the Butterfree/Venonat/Yanma/Dustox/Nincada/Joltik/Galvantula/Scatterbug-Vivillon/Blipbug-Dottler/Rellor
+//     lines), Keen Eye (the many bird lines plus Sneasel/Sableye/Skunk/Drapion/Lycanroc/...), or Illuminate
+//     (Staryu/Starmie, Chinchou/Lanturn, Volbeat, Watchog, the Morelull line) keeps it no matter which slot the
+//     build picks. Forms are listed where the form's data still carries it (Butterfree-Gmax keeps Compound Eyes;
+//     Sneasel-Hisui / Braviary-Hisui keep Keen Eye), and per the FORMS convention the Megas mirror the base as a
+//     pure boon (Pidgeot-Mega keeps Keen Eye though its Mega data is No Guard; Sableye-Mega keeps the base's
+//     Keen Eye + Prankster though its Mega data is Magic Bounce). Watchog carries BOTH Keen Eye and Illuminate.
+//     Many species already carry other innates (Yanma's Speed Boost; the Joltik/Galvantula/Blipbug/Dottler
+//     Swarm; Staryu/Starmie's Natural Cure + Regenerator; Volbeat's Prankster + Swarm; Sableye/Sableye-Mega/
+//     Meowstic-M's Prankster; Skarmory's Sturdy; Glameow's Limber; Stunky/Skuntank's Stench; Lycanroc-Midday's
+//     Sand Rush), so they take a combined INNATES(...) list with the accuracy ability added. Frontier roster
+//     sets that hardcoded one of these are freed (Step 3.5): Butterfree → Tinted Lens, Galvantula → Unnerve,
+//     Pidgeot → Big Pecks, Fearow → Sniper, Furret → Frisk, Lycanroc → Steadfast (each a real complementary
+//     slot), while the species whose ALL relevant real abilities are now innate take a fork-owned chosen
+//     override (species_ability_overrides.c) — Skarmory → Bulletproof and Volbeat → Victory Star, each a
+//     stable :x: pick. (Sableye is the exception: its only free real slot is Stall, a drawback that the
+//     vanilla Stall tests rely on, so it can't be overridden — its roster sets keep a redundant-but-harmless
+//     chosen Keen Eye instead.)
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 //
@@ -578,6 +629,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0012
+        SPECIES_BUTTERFREE,
+        INNATES(
+            ABILITY_COMPOUND_EYES
+        )
+    },
+    { // 0012
+        SPECIES_BUTTERFREE_GMAX,
+        INNATES(
+            ABILITY_COMPOUND_EYES
+        )
+    },
     { // 0015
         SPECIES_BEEDRILL,
         INNATES(
@@ -588,6 +651,42 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BEEDRILL_MEGA,
         INNATES(
             ABILITY_SWARM
+        )
+    },
+    { // 0016
+        SPECIES_PIDGEY,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0017
+        SPECIES_PIDGEOTTO,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0018
+        SPECIES_PIDGEOT,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0018
+        SPECIES_PIDGEOT_MEGA,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0021
+        SPECIES_SPEAROW,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0022
+        SPECIES_FEAROW,
+        INNATES(
+            ABILITY_KEEN_EYE
         )
     },
     { // 0023
@@ -692,6 +791,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_STENCH
+        )
+    },
+    { // 0048
+        SPECIES_VENONAT,
+        INNATES(
+            ABILITY_COMPOUND_EYES
         )
     },
     { // 0050
@@ -866,6 +971,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0083
+        SPECIES_FARFETCHD,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0088
         SPECIES_GRIMER,
         INNATES(
@@ -970,6 +1081,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LIMBER
         )
     },
+    { // 0107
+        SPECIES_HITMONCHAN,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0108
         SPECIES_LICKITUNG,
         INNATES(
@@ -1030,6 +1147,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0120
         SPECIES_STARYU,
         INNATES(
+            ABILITY_ILLUMINATE,
             ABILITY_NATURAL_CURE,
             ABILITY_REGENERATOR
         )
@@ -1037,6 +1155,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0121
         SPECIES_STARMIE,
         INNATES(
+            ABILITY_ILLUMINATE,
             ABILITY_NATURAL_CURE,
             ABILITY_REGENERATOR
         )
@@ -1270,6 +1389,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0161
+        SPECIES_SENTRET,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0162
+        SPECIES_FURRET,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0163
+        SPECIES_HOOTHOOT,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0164
+        SPECIES_NOCTOWL,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0165
         SPECIES_LEDYBA,
         INNATES(
@@ -1292,6 +1435,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARIADOS,
         INNATES(
             ABILITY_SWARM
+        )
+    },
+    { // 0170
+        SPECIES_CHINCHOU,
+        INNATES(
+            ABILITY_ILLUMINATE
+        )
+    },
+    { // 0171
+        SPECIES_LANTURN,
+        INNATES(
+            ABILITY_ILLUMINATE
         )
     },
     { // 0173
@@ -1358,6 +1513,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0193
         SPECIES_YANMA,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_SPEED_BOOST
         )
     },
@@ -1647,6 +1803,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWARM
         )
     },
+    { // 0215
+        SPECIES_SNEASEL,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0215
+        SPECIES_SNEASEL_HISUI,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0220
         SPECIES_SWINUB,
         INNATES(
@@ -1677,6 +1845,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0227
         SPECIES_SKARMORY,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_STURDY
         )
     },
@@ -1851,6 +2020,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWARM
         )
     },
+    { // 0269
+        SPECIES_DUSTOX,
+        INNATES(
+            ABILITY_COMPOUND_EYES
+        )
+    },
     { // 0270
         SPECIES_LOTAD,
         INNATES(
@@ -1887,10 +2062,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL
         )
     },
+    { // 0278
+        SPECIES_WINGULL,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0279
+        SPECIES_PELIPPER,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0283
         SPECIES_SURSKIT,
         INNATES(
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0290
+        SPECIES_NINCADA,
+        INNATES(
+            ABILITY_COMPOUND_EYES
         )
     },
     { // 0291
@@ -1926,12 +2119,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0302
         SPECIES_SABLEYE,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_PRANKSTER
         )
     },
     { // 0302
         SPECIES_SABLEYE_MEGA,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_PRANKSTER
         )
     },
@@ -1963,6 +2158,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0313
         SPECIES_VOLBEAT,
         INNATES(
+            ABILITY_ILLUMINATE,
             ABILITY_PRANKSTER,
             ABILITY_SWARM
         )
@@ -2447,6 +2643,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0396
+        SPECIES_STARLY,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0399
         SPECIES_BIDOOF,
         INNATES(
@@ -2548,6 +2750,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0431
         SPECIES_GLAMEOW,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_LIMBER
         )
     },
@@ -2560,12 +2763,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0434
         SPECIES_STUNKY,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_STENCH
         )
     },
     { // 0435
         SPECIES_SKUNTANK,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_STENCH
         )
     },
@@ -2597,6 +2802,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HAPPINY,
         INNATES(
             ABILITY_NATURAL_CURE
+        )
+    },
+    { // 0441
+        SPECIES_CHATOT,
+        INNATES(
+            ABILITY_KEEN_EYE
         )
     },
     { // 0442
@@ -2645,6 +2856,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RIOLU,
         INNATES(
             ABILITY_PRANKSTER
+        )
+    },
+    { // 0451
+        SPECIES_SKORUPI,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0452
+        SPECIES_DRAPION,
+        INNATES(
+            ABILITY_KEEN_EYE
         )
     },
     { // 0455
@@ -2944,6 +3167,19 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SAMUROTT_HISUI,
         INNATES(
             ABILITY_TORRENT
+        )
+    },
+    { // 0504
+        SPECIES_PATRAT,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0505
+        SPECIES_WATCHOG,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_KEEN_EYE
         )
     },
     { // 0507
@@ -3300,6 +3536,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0580
+        SPECIES_DUCKLETT,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0581
+        SPECIES_SWANNA,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0582
         SPECIES_VANILLITE,
         INNATES(
@@ -3414,12 +3662,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0595
         SPECIES_JOLTIK,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_SWARM
         )
     },
     { // 0596
         SPECIES_GALVANTULA,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_SWARM
         )
     },
@@ -3559,6 +3809,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRESSURE
         )
     },
+    { // 0627
+        SPECIES_RUFFLET,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0628
+        SPECIES_BRAVIARY,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0628
+        SPECIES_BRAVIARY_HISUI,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0632
         SPECIES_DURANT,
         INNATES(
@@ -3675,9 +3943,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0664
+        SPECIES_SCATTERBUG,
+        INNATES(
+            ABILITY_COMPOUND_EYES
+        )
+    },
+    { // 0666
+        SPECIES_VIVILLON,
+        INNATES(
+            ABILITY_COMPOUND_EYES
+        )
+    },
+    { // 0677
+        SPECIES_ESPURR,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0678
         SPECIES_MEOWSTIC_M,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_PRANKSTER
         )
     },
@@ -3685,6 +3972,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MEOWSTIC_M_MEGA,
         INNATES(
             ABILITY_PRANKSTER
+        )
+    },
+    { // 0678
+        SPECIES_MEOWSTIC_F,
+        INNATES(
+            ABILITY_KEEN_EYE
         )
     },
     { // 0679
@@ -3969,6 +4262,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0731
+        SPECIES_PIKIPEK,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0732
+        SPECIES_TRUMBEAK,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0733
+        SPECIES_TOUCANNON,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0736
         SPECIES_GRUBBIN,
         INNATES(
@@ -3987,10 +4298,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0744
+        SPECIES_ROCKRUFF,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0745
         SPECIES_LYCANROC_MIDDAY,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_SAND_RUSH
+        )
+    },
+    { // 0745
+        SPECIES_LYCANROC_MIDNIGHT,
+        INNATES(
+            ABILITY_KEEN_EYE
         )
     },
     { // 0747
@@ -4286,6 +4610,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0821
+        SPECIES_ROOKIDEE,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0822
+        SPECIES_CORVISQUIRE,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0823
         SPECIES_CORVIKNIGHT,
         INNATES(
@@ -4301,12 +4637,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0824
         SPECIES_BLIPBUG,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_SWARM
         )
     },
     { // 0825
         SPECIES_DOTTLER,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_SWARM
         )
     },
@@ -4709,6 +5047,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL
         )
     },
+    { // 0953
+        SPECIES_RELLOR,
+        INNATES(
+            ABILITY_COMPOUND_EYES
+        )
+    },
     { // 0955
         SPECIES_FLITTLE,
         INNATES(
@@ -4731,6 +5075,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WUGTRIO,
         INNATES(
             ABILITY_SAND_VEIL
+        )
+    },
+    { // 0962
+        SPECIES_BOMBIRDIER,
+        INNATES(
+            ABILITY_KEEN_EYE
         )
     },
     { // 0965

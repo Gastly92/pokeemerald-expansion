@@ -735,6 +735,40 @@ static bool32 IsAbilityBlocked(struct BattleCalcValues *cv, struct StatChange *s
     if (st->certain)
         return FALSE;
 
+    // FORK: an innate Keen Eye / Illuminate prevents the holder's accuracy from being lowered exactly
+    // like the real ability (pure boon, 1:1 copy). The chosen-ability paths below miss it when the
+    // chosen ability differs, so handle it here when the chosen ability doesn't already block the drop,
+    // overwriting the pop-up/record to the innate (CreateAbilityPopUp reads the primary slot; the
+    // overwrite also stops the reveal leaking the chosen ability). IsInnateActive supplies suppression
+    // parity (both are breakable, so an attacker's Mold Breaker pierces them). Illuminate only does this
+    // in Gen 9+. Mirrors the innate-Oblivious block in IsIntimidateBlocked.
+    if (st->stat == STAT_ACC
+     && !CanAbilityPreventStatLoss(cv->abilities[cv->battlerDef])
+     && !AbilityPreventsSpecificStatDrop(cv->abilities[cv->battlerDef], st->stat))
+    {
+        enum Ability innate = ABILITY_NONE;
+        if (IsInnateActive(cv->battlerDef, ABILITY_KEEN_EYE))
+            innate = ABILITY_KEEN_EYE;
+        else if (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(cv->battlerDef, ABILITY_ILLUMINATE))
+            innate = ABILITY_ILLUMINATE;
+
+        if (innate != ABILITY_NONE)
+        {
+            if (!st->onlyChecking)
+            {
+                PREPARE_STAT_BUFFER(gBattleTextBuff1, st->stat);
+                st->script = BattleScript_AbilityNoSpecificStatLoss;
+                gLastUsedAbility = innate;
+                gBattlerAbility = cv->battlerDef;
+                gBattleScripting.battler = cv->battlerDef;
+                gBattleScripting.abilityPopupOverwrite = innate;
+                MarkStatsAsDone(st, st->stat);
+                RecordAbilityBattle(cv->battlerDef, innate);
+            }
+            return TRUE;
+        }
+    }
+
     if (CanAbilityPreventStatLoss(cv->abilities[cv->battlerDef]))
     {
         if (!st->onlyChecking)

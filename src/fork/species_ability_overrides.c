@@ -70,6 +70,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ARTICUNO, 1,
         ABILITY_SNOW_WARNING
     },
+    { // 0227
+        // Skarmory's only non-drawback real abilities (Keen Eye, Sturdy) are BOTH now innate (Weak Armor,
+        // slot 2, is a drawback on a wall), so its slot-1 Sturdy — now innate-redundant — takes Bulletproof.
+        // Bulletproof is :x: (never an innate -> stable) and a clean defensive boon: this Spikes/Defog wall
+        // shrugs off Focus Blast, Sludge Bomb, Energy Ball and the other ball/bomb moves that threaten it.
+        SPECIES_SKARMORY, 1,
+        ABILITY_BULLETPROOF
+    },
     { // 0232
         // Donphan's only real abilities (Sturdy, Sand Veil) are BOTH now innate, so its empty slot 1
         // takes Sand Stream — :x: (never an innate -> stable) and self-synergistic: the sandstorm it
@@ -96,6 +104,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // (Close Combat / Blaze Kick / Thunder Punch all gain the +30% and drop their secondaries).
         SPECIES_BLAZIKEN, 1,
         ABILITY_SHEER_FORCE
+    },
+    { // 0313
+        // Volbeat's three real abilities (Illuminate, Swarm, Prankster) are ALL now innate, so its slot-1
+        // Swarm — now innate-redundant — takes Victory Star. Victory Star is :x: (never an innate -> stable)
+        // and flavorful for the firefly's guiding light: it boosts its doubles allies' accuracy. (Azelf also
+        // hands out Victory Star.)
+        SPECIES_VOLBEAT, 1,
+        ABILITY_VICTORY_STAR
     },
     { // 0330
         SPECIES_FLYGON, 1, 

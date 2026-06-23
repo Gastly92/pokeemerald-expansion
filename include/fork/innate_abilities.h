@@ -63,7 +63,15 @@
 // site in src/battle_util.c with the chip immunity mirrored in src/battle_end_turn.c — clean-upside 1:1
 // copies; on-field accuracy prediction is innate-aware for free, with the AI's weather-damage and
 // weather-setting reads in src/battle_ai_util.c / src/battle_ai_switch.c / src/battle_ai_field_statuses.c
-// credited too).
+// credited too),
+// and the accuracy abilities COMPOUND_EYES / KEEN_EYE / ILLUMINATE (the fork models all three as "ignore the
+// target's evasion" — Compound Eyes' real +30% accuracy is repurposed to match Keen Eye / Illuminate — which
+// under DETERMINISTIC_ACCURACY_EVASION is a PP-economy boon; wired at GetTotalAccuracy and
+// GetAccEvasionStageDelta in src/battle_util.c as a PURE BOON, ignoring only a foe's evasion *boost* and
+// keeping its *drop*, like InnateUnawareBoonStage. Keen Eye / Illuminate ALSO keep the holder's own accuracy
+// from being lowered, wired at IsAbilityBlocked in src/battle_stat_change.c with the pop-up overwritten to the
+// innate. Illuminate's in-battle effect is gated to B_ILLUMINATE_EFFECT >= GEN_9 like the real ability, and the
+// AI's "don't lower its accuracy" read in src/battle_ai_util.c is credited too).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground
