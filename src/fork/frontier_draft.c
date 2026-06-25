@@ -3,9 +3,11 @@
 #include "fork/frontier_draft.h"
 #include "data.h"
 #include "item.h"
+#include "pokemon.h"
 #include "random.h"
 #include "fork/species_tiers.h"
 #include "constants/abilities.h"
+#include "constants/form_change_types.h"
 #include "constants/hold_effects.h"
 
 // FORK: shared Battle Frontier competitive-draft rules, moved here from the
@@ -88,4 +90,27 @@ void ReserveForcedTierSlot(enum SpeciesTier *slotTiers, enum SpeciesTier tier)
 bool32 IllusionMonRejectsSlot(u32 slot, u32 partySize, const struct TrainerMon *fmon)
 {
     return slot == partySize - 1 && fmon->ability == ABILITY_ILLUSION;
+}
+
+// Finalize a freshly-built facility mon's max-gimmick readiness. Called once from
+// CreateFacilityMon (src/battle_frontier.c) so it covers every facility that drafts
+// through that chokepoint, while the logic stays in this fork-owned file (the only
+// upstream edit is the single additive call line). Two grants, each still honoring
+// an explicit per-roster-entry override:
+//   - Dynamax Level: default to the maximum (MAX_DYNAMAX_LEVEL) so a mon that
+//     Dynamaxes gets the full HP boost. Roster entries leave .dynamaxLevel 0, which
+//     would otherwise mean no boost; a nonzero .dynamaxLevel still wins.
+//   - Gigantamax Factor: granted to any species that has a G-Max form, so
+//     gmax-capable mons Gigantamax instead of plain Dynamaxing with no per-entry
+//     annotation; an explicit .gigantamaxFactor still forces it on.
+void ApplyDraftGimmickReadiness(const struct TrainerMon *fmon, struct Pokemon *dst)
+{
+    u32 dynamaxLevel = (fmon->dynamaxLevel > 0) ? fmon->dynamaxLevel : MAX_DYNAMAX_LEVEL;
+    SetMonData(dst, MON_DATA_DYNAMAX_LEVEL, &dynamaxLevel);
+
+    if (fmon->gigantamaxFactor || DoesSpeciesHaveFormChangeMethod(fmon->species, FORM_CHANGE_BATTLE_GIGANTAMAX))
+    {
+        u32 gigantamaxFactor = TRUE;
+        SetMonData(dst, MON_DATA_GIGANTAMAX_FACTOR, &gigantamaxFactor);
+    }
 }

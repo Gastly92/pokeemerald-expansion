@@ -74,3 +74,19 @@ TEST("Frontier extended roster: drafted mon gets Gigantamax Factor iff its speci
     CreateFacilityMon(&plainSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
     EXPECT(!GetMonData(&mon, MON_DATA_GIGANTAMAX_FACTOR));
 }
+
+// FORK: CreateFacilityMon grants the maximum Dynamax Level at draft time so a
+// Dynamaxed mon gets the full HP boost. An explicit per-entry .dynamaxLevel
+// still overrides the default.
+TEST("Frontier extended roster: drafted mon gets the maximum Dynamax Level by default")
+{
+    struct Pokemon mon;
+    const struct TrainerMon defaultSet = { .species = SPECIES_SALAMENCE, .moves = { MOVE_TACKLE } };
+    const struct TrainerMon explicitSet = { .species = SPECIES_SALAMENCE, .moves = { MOVE_TACKLE }, .dynamaxLevel = 5 };
+
+    CreateFacilityMon(&defaultSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_DYNAMAX_LEVEL), MAX_DYNAMAX_LEVEL);
+
+    CreateFacilityMon(&explicitSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_DYNAMAX_LEVEL), 5);
+}

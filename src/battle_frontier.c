@@ -472,20 +472,11 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
         u32 data = TRUE;
         SetMonData(dst, MON_DATA_IS_SHINY, &data);
     }
-    if (fmon->dynamaxLevel > 0)
-    {
-        u32 data = fmon->dynamaxLevel;
-        SetMonData(dst, MON_DATA_DYNAMAX_LEVEL, &data);
-    }
-    // FORK: grant the Gigantamax Factor at draft time to every facility mon whose
-    // species has a G-Max form, so gmax-capable Factory/Tower mons Gigantamax
-    // (instead of plain Dynamaxing) without annotating each roster entry. Still
-    // honors an explicit per-entry .gigantamaxFactor for anything else.
-    if (fmon->gigantamaxFactor || DoesSpeciesHaveFormChangeMethod(fmon->species, FORM_CHANGE_BATTLE_GIGANTAMAX))
-    {
-        u32 data = TRUE;
-        SetMonData(dst, MON_DATA_GIGANTAMAX_FACTOR, &data);
-    }
+    // FORK: grant max-gimmick readiness at draft time (maximum Dynamax Level by
+    // default + the Gigantamax Factor for gmax-capable species). Logic lives in the
+    // fork-owned ApplyDraftGimmickReadiness (src/fork/frontier_draft.c) so the only
+    // upstream edit is this call; on conflict, port changes there, not back inline.
+    ApplyDraftGimmickReadiness(fmon, dst);
     if (fmon->teraType)
     {
         u32 data = fmon->teraType;
