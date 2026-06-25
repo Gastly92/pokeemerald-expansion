@@ -472,9 +472,11 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
         u32 data = TRUE;
         SetMonData(dst, MON_DATA_IS_SHINY, &data);
     }
-    if (fmon->dynamaxLevel > 0)
+    // FORK: drafted facility mons get the maximum Dynamax Level by default, so a
+    // mon that Dynamaxes gets the full HP boost (mirrors the Gigantamax Factor
+    // grant below). An explicit per-entry .dynamaxLevel still overrides.
     {
-        u32 data = fmon->dynamaxLevel;
+        u32 data = (fmon->dynamaxLevel > 0) ? fmon->dynamaxLevel : MAX_DYNAMAX_LEVEL;
         SetMonData(dst, MON_DATA_DYNAMAX_LEVEL, &data);
     }
     // FORK: grant the Gigantamax Factor at draft time to every facility mon whose
