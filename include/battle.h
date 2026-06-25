@@ -772,6 +772,14 @@ struct BattleStruct
     // in src/fork/frontier_battle_info.c. (Widen past u8 only if a species ever
     // declares more than 8 innates — none does today.)
     u8 infoRevealedInnates[NUM_BATTLE_SIDES][PARTY_SIZE];
+    // FORK: the B_FRONTIER_BATTLE_INFO viewer's last page / foe-tab, so re-opening
+    // it mid-battle (often once per turn) returns where the player left off. Kept
+    // here in gBattleStruct (zero-allocated per battle) rather than in file statics
+    // so the position resets between battles — to INFO_PAGE_SPEED (0) and foe 0 —
+    // and never carries a stale foe index into a fresh battle. Set/read in
+    // src/fork/frontier_battle_info.c.
+    u8 infoViewerPage;
+    u8 infoViewerFoeIndex;
 };
 
 struct AiBattleData

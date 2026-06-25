@@ -94,13 +94,14 @@ enum
 #define tPage      data[1]
 #define tFoeIndex  data[2]
 
-// FORK: remember the last page/foe the player was viewing, so re-opening the
+// FORK: the last page/foe the player was viewing is remembered so re-opening the
 // viewer (often once per turn) returns to where they left off instead of always
-// resetting to the front. The viewer is modal, so saving on close is enough to
-// have the value ready for the next open. Defaults to the Speed Tiers page on
-// the very first open of the session.
-static u8 sLastPage = INFO_PAGE_SPEED;
-static s8 sLastFoeIndex = 0;
+// resetting to the front. It lives in gBattleStruct (infoViewerPage /
+// infoViewerFoeIndex), which is zero-allocated per battle, so the position is kept
+// across open/closes WITHIN a battle but resets to INFO_PAGE_SPEED (0) / foe 0
+// BETWEEN battles — a file static would instead carry a stale foe index (possibly
+// past the new foe's revealed slots) into the next battle. The viewer is modal, so
+// saving on close is enough to have the value ready for the next open.
 
 static const struct BgTemplate sBgTemplates[] =
 {
@@ -1058,8 +1059,8 @@ static void Task_InfoProcessInput(u8 taskId)
     {
         // Remember where the player was for the next open (the viewer is modal,
         // so it can't be reopened before this runs).
-        sLastPage = gTasks[taskId].tPage;
-        sLastFoeIndex = gTasks[taskId].tFoeIndex;
+        gBattleStruct->infoViewerPage = gTasks[taskId].tPage;
+        gBattleStruct->infoViewerFoeIndex = gTasks[taskId].tFoeIndex;
         PlaySE(SE_SELECT);
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
         gTasks[taskId].func = Task_InfoFadeOut;
@@ -1174,9 +1175,10 @@ void CB2_FrontierBattleInfo(void)
     case 4:
         taskId = CreateTask(Task_InfoFadeIn, 0);
         gTasks[taskId].tWindowId = AddWindow(&sInfoWindowTemplate);
-        // Resume on the page/foe the player last viewed (defaults to Speed Tiers).
-        gTasks[taskId].tPage = sLastPage;
-        gTasks[taskId].tFoeIndex = sLastFoeIndex;
+        // Resume on the page/foe last viewed THIS battle (zero-init => Speed Tiers,
+        // foe 0 — a fresh battle always starts at the front, never a stale foe tab).
+        gTasks[taskId].tPage = gBattleStruct->infoViewerPage;
+        gTasks[taskId].tFoeIndex = gBattleStruct->infoViewerFoeIndex;
         PutWindowTilemap(gTasks[taskId].tWindowId);
         // FRAME_BG has no window, so give it its own tilemap buffer (heap, like
         // AddWindow does for the text window) and draw the border ring into it.
