@@ -5505,6 +5505,39 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
             return acc < LOW_ACCURACY_THRESHOLD;
         }
 
+        // FORK: a damaging Z-Move (e.g. Knock Off -> Black Hole Eclipse) keeps NONE of
+        // Knock Off's utility: it doesn't strip the target's item, and Knock Off's own
+        // 1.5x boost vs item holders makes the regular hit competitive. With free gimmicks
+        // (FEATURE_FREE_GIMMICKS) the AI always has a Z-Move available, so it used to burn
+        // it on Knock Off every time. Only keep the Z-Move here if it secures a KO the
+        // regular Knock Off can't (we already returned above when the regular move KOs);
+        // otherwise just Knock the worthwhile item off and save the one-shot Z-Move.
+        if (GetMoveEffect(chosenMove) == EFFECT_KNOCK_OFF
+            && CanKnockOffItem(battlerDef, battlerAtk, gAiLogicData->items[battlerDef]))
+        {
+            bool32 worthRemoving;
+            switch (gAiLogicData->holdEffects[battlerDef])
+            {
+            case HOLD_EFFECT_IRON_BALL:
+                worthRemoving = HasMoveWithEffect(battlerDef, EFFECT_FLING);
+                break;
+            case HOLD_EFFECT_LAGGING_TAIL:
+            case HOLD_EFFECT_STICKY_BARB:
+                worthRemoving = FALSE; // these items hurt the holder; leave them on
+                break;
+            default:
+                worthRemoving = TRUE;
+                break;
+            }
+
+            if (worthRemoving)
+            {
+                struct SimulatedDamage zDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &effectiveness, USE_GIMMICK, NO_GIMMICK);
+                if (zDmg.minimum < gBattleMons[battlerDef].hp)
+                    return FALSE;
+            }
+        }
+
         return TRUE;
     }
 
