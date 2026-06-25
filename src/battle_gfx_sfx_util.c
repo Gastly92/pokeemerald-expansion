@@ -956,13 +956,21 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
             else
                 targetSpecies = GetMonData(monDef, MON_DATA_SPECIES);
         }
+        else if (gBattleMons[battlerAtk].volatiles.transformed)
+        {
+            // A transformed battler (e.g. a Ditto that copied another Pokémon) must keep
+            // its copied appearance through form-change-style gfx reloads such as the
+            // Terastallization animation, instead of reverting to its underlying party
+            // species. Mirror the transform branch below for personality/shininess too.
+            targetSpecies = gBattleSpritesDataPtr->battlerData[battlerAtk].transformSpecies;
+        }
         else
         {
             targetSpecies = GetMonData(monAtk, MON_DATA_SPECIES);
         }
         gBattleSpritesDataPtr->battlerData[battlerAtk].transformSpecies = targetSpecies;
 
-        if (changeType == SPECIES_GFX_CHANGE_TRANSFORM)
+        if (changeType == SPECIES_GFX_CHANGE_TRANSFORM || gBattleMons[battlerAtk].volatiles.transformed)
         {
             personalityValue = gTransformedPersonalities[battlerAtk];
             isShiny = gTransformedShininess[battlerAtk];
