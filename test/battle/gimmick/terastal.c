@@ -759,6 +759,30 @@ SINGLE_BATTLE_TEST("(TERA) Transformed Pokémon can't Terastalize")
     }
 }
 
+SINGLE_BATTLE_TEST("(TERA) A transformed Ditto keeps its copied appearance after Terastallizing")
+{
+    GIVEN {
+        // Force the Terastallization animation to actually play in headless mode so its
+        // sprite-reload (AnimTask_HideSwapSprite -> HandleSpeciesGfxDataChange) runs.
+        FORCE_MOVE_ANIM(TRUE);
+        ASSUME(GetMoveEffect(MOVE_TRANSFORM) == EFFECT_TRANSFORM);
+        PLAYER(SPECIES_DITTO) { Moves(MOVE_TRANSFORM, MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TRANSFORM); }
+        // The copied move is still usable, and Terastallizing on the same turn must not revert the sprite.
+        TURN { MOVE(player, MOVE_TACKLE, gimmick: GIMMICK_TERA); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_TERA_ACTIVATE, player);
+    } THEN {
+        FORCE_MOVE_ANIM(FALSE);
+        // The battler is mechanically still the Pokémon it copied...
+        EXPECT_EQ(player->species, SPECIES_WOBBUFFET);
+        // ...and its on-screen sprite must stay Wobbuffet rather than reverting to Ditto.
+        EXPECT_EQ(gBattleSpritesDataPtr->battlerData[B_POSITION_PLAYER_LEFT].transformSpecies, SPECIES_WOBBUFFET);
+    }
+}
+
 SINGLE_BATTLE_TEST("(TERA) Pokemon with Tera forms change upon Terastallizing")
 {
     u32 species, target, item;
