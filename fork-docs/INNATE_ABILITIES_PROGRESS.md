@@ -16,7 +16,7 @@
 | :white_check_mark: | Oblivious | The Pokémon cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate. |
 | :x: | Cloud Nine | Eliminates the effects of weather. |
 | :white_check_mark: | Compound Eyes | Boosts the accuracy of the Pokémon's moves by 30%. |
-| :white_large_square: | Insomnia | The Pokémon cannot become drowsy or be put to sleep. |
+| :white_check_mark: | Insomnia | The Pokémon cannot become drowsy or be put to sleep. |
 | :x: | Color Change | The Pokémon's type becomes the type of the move used on it. |
 | :white_large_square: | Immunity | The Pokémon cannot be poisoned or badly poisoned. |
 | :x: | Flash Fire | Fire-type moves do not work on the Pokémon. Instead, they give the Pokémon the Flash Fire status. |
@@ -49,7 +49,7 @@
 | :x: | Sand Stream | Summons a sandstorm for 5 turns when the Pokémon enters a battle. |
 | :white_check_mark: | Pressure | Causes opponents to expend 1 more PP when using moves against the Pokémon. |
 | :white_large_square: | Thick Fat | Halves the damage the Pokémon takes from Fire- and Ice-type moves. |
-| :white_large_square: | Early Bird | The Pokémon awakens from sleep twice as fast as other Pokémon. |
+| :white_check_mark: | Early Bird | The Pokémon awakens from sleep twice as fast as other Pokémon. |
 | :x: | Flame Body | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned. |
 | :x: | Run Away | Enables a sure getaway from wild Pokémon. |
 | :white_check_mark: | Keen Eye | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
@@ -73,7 +73,7 @@
 | :white_large_square: | Rock Head | The Pokémon will not lose HP due to recoil damage from its moves. |
 | :x: | Drought | Summons harsh sunlight for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Arena Trap | Prevents opposing Pokémon from fleeing from battle. |
-| :white_large_square: | Vital Spirit | The Pokémon cannot become drowsy or be put to sleep. |
+| :white_check_mark: | Vital Spirit | The Pokémon cannot become drowsy or be put to sleep. |
 | :white_large_square: | White Smoke | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pure Power | Doubles the power of the Pokémon's physical moves. |
 | :white_check_mark: | Shell Armor | Attacks landed on the Pokémon will never be critical hits. |
@@ -176,7 +176,7 @@
 | :white_large_square: | Competitive | When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages. |
 | :white_large_square: | Strong Jaw | Boosts the power of the Pokémon's biting moves by 50%. |
 | :x: | Refrigerate | The Pokémon's Normal-type moves become Ice-type moves and their power is boosted by 20%. |
-| :white_large_square: | Sweet Veil | The Pokémon and its allies cannot become drowsy or be put to sleep. |
+| :white_check_mark: | Sweet Veil | The Pokémon and its allies cannot become drowsy or be put to sleep. |
 | :x: | Stance Change | The Pokémon changes into its Blade Forme when it attacks and changes into its Shield Forme when it uses the move King's Shield. |
 | :white_large_square: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
 | :white_large_square: | Mega Launcher | Boosts the power of the Pokémon's pulse moves by 50%. |

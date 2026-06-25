@@ -2529,6 +2529,187 @@ TEST("Innate abilities: accuracy abilities — canon users, Mega mirrors, Watcho
     EXPECT(!SpeciesHasInnate(SPECIES_SPEWPA, ABILITY_COMPOUND_EYES));
 }
 
+// ===== Insomnia / Vital Spirit / Sweet Veil (sleep immunity) + Early Bird (faster wake) =====
+// All three immunity abilities are wired at the single MOVE_EFFECT_SLEEP chokepoint in
+// CanSetNonVolatileStatus (src/battle_util.c), which every sleep path funnels through. A canon Insomnia
+// user (Hypno: Insomnia/Forewarn/Inner Focus) with a chosen Inner Focus keeps the immunity via the innate
+// and the pop-up shows Insomnia. With the feature off it's stock behavior, so Spore sleeps normally.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Insomnia prevents sleep")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveNonVolatileStatus(MOVE_SPORE) == MOVE_EFFECT_SLEEP);
+        ASSUME(SpeciesHasInnate(SPECIES_HYPNO, ABILITY_INSOMNIA));
+        ASSUME(gSpeciesInfo[SPECIES_HYPNO].abilities[0] != ABILITY_INNER_FOCUS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_HYPNO) { Ability(ABILITY_INNER_FOCUS); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SPORE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_INSOMNIA); // pop-up shows Insomnia, not the chosen Inner Focus
+            NONE_OF { STATUS_ICON(player, sleep: TRUE); }
+        } else {
+            STATUS_ICON(player, sleep: TRUE); // no innate -> Spore sleeps
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->status1 & STATUS1_SLEEP, 0);
+    }
+}
+
+// Suppression parity: Insomnia is breakable, so an attacker's Mold Breaker pierces an innate Insomnia
+// exactly as it would the real ability — the sleep lands and no Insomnia pop-up shows.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Insomnia")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_INSOMNIA].breakable);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HYPNO) { Ability(ABILITY_INNER_FOCUS); } // innate Insomnia
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_SPORE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SPORE); }
+    } SCENE {
+        STATUS_ICON(player, sleep: TRUE); // Mold Breaker ignores the innate -> asleep
+        NONE_OF { ABILITY_POPUP(player, ABILITY_INSOMNIA); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Insomnia")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HYPNO) { Ability(ABILITY_INNER_FOCUS); Moves(MOVE_CELEBRATE); } // innate Insomnia
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_SPORE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses the innate
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_SPORE); }
+    } SCENE {
+        MESSAGE("Hypno's Ability was suppressed!");
+        STATUS_ICON(player, sleep: TRUE); // suppressed -> Spore sleeps
+    }
+}
+
+// Vital Spirit is the identical-effect twin of Insomnia. A canon Vital Spirit user (Electivire:
+// Motor Drive/Vital Spirit) keeps the immunity via the innate when the chosen ability differs.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Vital Spirit prevents sleep")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ELECTIVIRE, ABILITY_VITAL_SPIRIT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ELECTIVIRE) { Ability(ABILITY_MOTOR_DRIVE); } // chosen Motor Drive, innate Vital Spirit
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SPORE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_VITAL_SPIRIT);
+        NONE_OF { STATUS_ICON(player, sleep: TRUE); }
+    } THEN {
+        EXPECT_EQ(player->status1 & STATUS1_SLEEP, 0);
+    }
+}
+
+// Innate Insomnia also blocks Yawn: it fails at use (via Cmd_trynonvolatilestatus -> CanSetNonVolatileStatus),
+// so the drowsy volatile is never set and the holder never falls asleep.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Insomnia blocks Yawn (no drowsy)")
+{
+    GIVEN {
+        ASSUME(GetMoveNonVolatileStatus(MOVE_YAWN) == MOVE_EFFECT_SLEEP);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HYPNO) { Ability(ABILITY_INNER_FOCUS); } // innate Insomnia
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_YAWN); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_YAWN); }
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_INSOMNIA);
+    } THEN {
+        EXPECT_EQ(player->status1 & STATUS1_SLEEP, 0); // never made drowsy -> never asleep
+    }
+}
+
+// PURE-BOON DIVERGENCE: a real Insomnia/Vital Spirit BLOCKS the holder's own Rest (it can't sleep), a cost.
+// The innate intentionally does NOT block Rest, so an innate-Insomnia mon may still Rest to full HP (and sleeps
+// from its own move). The chosen-ability Rest gate is left untouched, so this only diverges for the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Insomnia does NOT block the holder's own Rest (pure boon)")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HYPNO) { Ability(ABILITY_INNER_FOCUS); MaxHP(200); HP(100); Moves(MOVE_REST); } // innate Insomnia
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_REST); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Hypno slept and restored its HP!");
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP);              // Rest healed to full
+        EXPECT_NE(player->status1 & STATUS1_SLEEP, 0);     // and put it to sleep (not blocked by the innate)
+    }
+}
+
+// Sweet Veil is side-wide: a Swirlix carrying it as an innate (chosen Unburden) protects its PARTNER from
+// sleep too, with the pop-up shown on the Sweet Veil holder.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sweet Veil protects the whole side from sleep")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SWIRLIX, ABILITY_SWEET_VEIL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SWIRLIX) { Ability(ABILITY_UNBURDEN); } // chosen Unburden, innate Sweet Veil
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_SPORE, target: playerRight); MOVE(opponentRight, MOVE_CELEBRATE); }
+    } SCENE {
+        ABILITY_POPUP(playerLeft, ABILITY_SWEET_VEIL); // the Swirlix's Sweet Veil blocks it for the partner
+        NONE_OF { STATUS_ICON(playerRight, sleep: TRUE); }
+    } THEN {
+        EXPECT_EQ(playerRight->status1 & STATUS1_SLEEP, 0);
+    }
+}
+
+// Identity stays the chosen slot: Trace copies Hypno's chosen Inner Focus, never its innate Insomnia.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies the chosen ability, never an innate Insomnia")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HYPNO) { Ability(ABILITY_INNER_FOCUS); } // innate Insomnia, chosen Inner Focus
+        OPPONENT(SPECIES_GARDEVOIR) { Ability(ABILITY_TRACE); }
+    } WHEN {
+        TURN {}
+    } THEN {
+        EXPECT_EQ(opponent->ability, ABILITY_INNER_FOCUS); // traced the chosen ability, not Insomnia
+    }
+}
+
+// Early Bird: the holder wakes from sleep twice as fast. Houndoom (Early Bird/Flash Fire/Unnerve) with a
+// chosen Flash Fire carries Early Bird only via the innate; with DETERMINISTIC_SLEEP_TURNS a 2-turn sleep
+// is shed in one turn (counter -2), so it acts turn 1; with the feature off it stays asleep.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Early Bird wakes from sleep twice as fast")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HOUNDOOM, ABILITY_EARLY_BIRD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_HOUNDOOM) { Ability(ABILITY_FLASH_FIRE); Status1(STATUS1_SLEEP_TURN(2)); Moves(MOVE_EMBER); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_EMBER); }
+    } SCENE {
+        if (enabled) {
+            MESSAGE("Houndoom woke up!"); // innate Early Bird sheds the 2-turn sleep in one turn
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_EMBER, player);
+        } else {
+            MESSAGE("Houndoom is fast asleep."); // no innate -> still asleep turn 1
+        }
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -2549,6 +2730,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_STENCH, ABILITY_BATTLE_ARMOR, ABILITY_SHELL_ARMOR, ABILITY_SPEED_BOOST,
         ABILITY_LIMBER, ABILITY_CUTE_CHARM, ABILITY_OBLIVIOUS, ABILITY_SAND_VEIL,
         ABILITY_SNOW_CLOAK, ABILITY_COMPOUND_EYES, ABILITY_KEEN_EYE, ABILITY_ILLUMINATE,
+        ABILITY_INSOMNIA, ABILITY_VITAL_SPIRIT, ABILITY_SWEET_VEIL, ABILITY_EARLY_BIRD,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

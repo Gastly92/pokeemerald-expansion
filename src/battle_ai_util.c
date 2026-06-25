@@ -4038,7 +4038,8 @@ bool32 IsWakeupTurn(enum BattlerId battler)
         return FALSE;
 
     // Early Bird reduces the sleep timer twice as fast.
-    if (gAiLogicData->abilities[battler] == ABILITY_EARLY_BIRD)
+    if (gAiLogicData->abilities[battler] == ABILITY_EARLY_BIRD
+     || IsInnateActive(battler, ABILITY_EARLY_BIRD)) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
         toSub = 2;
     else
         toSub = 1;

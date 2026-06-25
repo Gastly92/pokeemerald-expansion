@@ -79,6 +79,8 @@
 // Oblivious (infatuation/Taunt/Intimidate immunity), Sand Veil / Snow Cloak (weather evasion + chip immunity),
 // Compound Eyes / Keen Eye / Illuminate (ignore the target's evasion — under DETERMINISTIC_ACCURACY_EVASION a
 // PP-economy boon — with Keen Eye / Illuminate also keeping the holder's own accuracy from being lowered),
+// Insomnia / Vital Spirit / Sweet Veil (cannot be put to sleep or made drowsy — Sweet Veil side-wide),
+// Early Bird (wakes from sleep twice as fast),
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -2050,7 +2052,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_EARLY_BIRD,
+        .ability = ABILITY_TANGLED_FEET, // Early Bird now innate; chosen Tangled Feet
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2070,7 +2072,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DOUBLE_EDGE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_EARLY_BIRD,
+        .ability = ABILITY_TANGLED_FEET, // Early Bird now innate; chosen Tangled Feet
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2362,7 +2364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_WISH
         },
-        .ability = ABILITY_INSOMNIA,
+        .ability = ABILITY_INNER_FOCUS, // Insomnia now innate; chosen Inner Focus
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2382,7 +2384,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_INSOMNIA,
+        .ability = ABILITY_INNER_FOCUS, // Insomnia now innate; chosen Inner Focus
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4504,7 +4506,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_INSOMNIA,
+        .ability = ABILITY_TINTED_LENS, // Insomnia & Keen Eye now innate; chosen Tinted Lens
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4548,7 +4550,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_INSOMNIA,
+        .ability = ABILITY_SNIPER, // Swarm & Insomnia now innate; chosen Sniper
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8812,7 +8814,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DESTINY_BOND,
             MOVE_TAUNT
         },
-        .ability = ABILITY_INSOMNIA,
+        .ability = ABILITY_CURSED_BODY, // Insomnia now innate; chosen Cursed Body
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11267,7 +11269,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_VITAL_SPIRIT,
+        .ability = ABILITY_MOTOR_DRIVE, // Vital Spirit now innate; chosen Motor Drive
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 112,
@@ -11289,7 +11291,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_OVERHEAT
         },
-        .ability = ABILITY_VITAL_SPIRIT,
+        .ability = ABILITY_FLAME_BODY, // Vital Spirit now innate; chosen Flame Body
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11309,7 +11311,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_VITAL_SPIRIT,
+        .ability = ABILITY_FLAME_BODY, // Vital Spirit now innate; chosen Flame Body
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16448,7 +16450,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_DRAINING_KISS
         },
-        .ability = ABILITY_SWEET_VEIL,
+        .ability = ABILITY_UNAWARE, // Sweet Veil now innate; chosen Unaware (fork override)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17162,7 +17164,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_INSOMNIA,
+        .ability = ABILITY_FRISK, // Insomnia now innate; chosen Frisk
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18051,7 +18053,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_STUN_SPORE
         },
-        .ability = ABILITY_SWEET_VEIL,
+        .ability = ABILITY_SHIELD_DUST, // Sweet Veil now innate; chosen Shield Dust
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23022,7 +23024,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_CIRCLE_THROW
         },
-        .ability = ABILITY_INSOMNIA,
+        .ability = ABILITY_STAKEOUT, // Insomnia now innate; chosen Stakeout
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23640,7 +23642,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_INSOMNIA, // Chlorophyll now innate; chosen Insomnia
+        .ability = ABILITY_SHEER_FORCE, // Chlorophyll & Insomnia now innate; chosen Sheer Force (fork override)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -24243,7 +24245,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_TAUNT
         },
-        .ability = ABILITY_VITAL_SPIRIT,
+        .ability = ABILITY_DEFIANT, // Vital Spirit now innate; chosen Defiant
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

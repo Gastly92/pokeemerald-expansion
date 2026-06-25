@@ -5226,6 +5226,20 @@ u32 IsAbilityOnOpposingSide(enum BattlerId battler, enum Ability ability)
     return IsAbilityOnSide(BATTLE_OPPOSITE(battler), ability);
 }
 
+// FORK: innate-aware companion to IsAbilityOnSide (FEATURE_INNATE_ABILITIES). Returns battler+1 of
+// the first side member (self, then partner) carrying `ability` as an ACTIVE innate, else 0 — used
+// for side-wide innates like Sweet Veil. IsInnateActive() is feature-gated and species-based, so this
+// is a strict no-op when the feature is off and never leaks the chosen ability.
+u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability)
+{
+    if (IsBattlerAlive(battler) && IsInnateActive(battler, ability))
+        return battler + 1;
+    else if (IsBattlerAlive(BATTLE_PARTNER(battler)) && IsInnateActive(BATTLE_PARTNER(battler), ability))
+        return BATTLE_PARTNER(battler) + 1;
+    else
+        return 0;
+}
+
 u32 IsAbilityOnField(enum Ability ability)
 {
     for (enum BattlerId i = 0; i < gBattlersCount; i++)
@@ -5661,17 +5675,37 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         {
             battleScript = BattleScript_ElectricTerrainPrevents;
         }
-        else if ((sideBattler = IsAbilityOnSide(battlerDef, ABILITY_SWEET_VEIL)))
+        // FORK: credit an innate Sweet Veil on the side too (FEATURE_INNATE_ABILITIES). The real
+        // ability is checked first; only if neither side member chose it do we look for an innate.
+        // When an innate Sweet Veil holder blocks the sleep its chosen ability differs, so overwrite
+        // the pop-up to Sweet Veil (CreateAbilityPopUp reads the primary slot). Same as the real path
+        // otherwise — IsNonVolatileStatusBlocked records ABILITY_SWEET_VEIL via the reassigned abilityDef.
+        else if ((sideBattler = IsAbilityOnSide(battlerDef, ABILITY_SWEET_VEIL))
+              || (sideBattler = IsInnateOnSide(battlerDef, ABILITY_SWEET_VEIL)))
         {
             abilityAffected = TRUE;
             battlerDef = sideBattler - 1;
+            if (option == RUN_SCRIPT && GetBattlerAbility(battlerDef) != ABILITY_SWEET_VEIL)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_SWEET_VEIL;
             abilityDef = ABILITY_SWEET_VEIL;
             battleScript = BattleScript_ImmunityProtected;
         }
-        else if (abilityDef == ABILITY_VITAL_SPIRIT || abilityDef == ABILITY_INSOMNIA)
+        // FORK: an innate Insomnia / Vital Spirit (FEATURE_INNATE_ABILITIES) blocks sleep like the real
+        // ability. IsInnateActive() keys off the on-field battlerDef and supplies suppression parity (both
+        // are breakable, so Mold Breaker pierces them). When the chosen ability differs, reassign abilityDef
+        // (so the right ability is recorded) and overwrite the pop-up — the Limber/Oblivious pop-up precedent.
+        else if (abilityDef == ABILITY_VITAL_SPIRIT || abilityDef == ABILITY_INSOMNIA
+              || IsInnateActive(battlerDef, ABILITY_INSOMNIA) || IsInnateActive(battlerDef, ABILITY_VITAL_SPIRIT))
         {
             abilityAffected = TRUE;
             battleScript = BattleScript_PrintAbilityMadeIneffective;
+            if (abilityDef != ABILITY_VITAL_SPIRIT && abilityDef != ABILITY_INSOMNIA)
+            {
+                enum Ability innate = IsInnateActive(battlerDef, ABILITY_INSOMNIA) ? ABILITY_INSOMNIA : ABILITY_VITAL_SPIRIT;
+                if (option == RUN_SCRIPT)
+                    gBattleScripting.abilityPopupOverwrite = innate;
+                abilityDef = innate;
+            }
         }
         break;
     case MOVE_EFFECT_FREEZE:
@@ -9472,6 +9506,13 @@ enum ImmunityHealStatusOutcome TryImmunityAbilityHealStatus(enum BattlerId battl
         gBattleScripting.abilityPopupOverwrite = ABILITY_LIMBER;
     }
 
+    // FORK: an innate Insomnia / Vital Spirit deliberately does NOT cure pre-existing sleep here (unlike
+    // the real ability's switch case above, and unlike the innate Limber/Oblivious cures below). The cure
+    // hook (ABILITYEFFECT_IMMUNITY) fires post-move too, not only on switch-in, so curing an innate holder's
+    // sleep would also un-sleep a fresh Rest the same turn — turning Rest into a free, sleepless Recover.
+    // Dropping the cure keeps the innate a clean pure boon: it can't be slept by a foe, yet Rest works fully
+    // (heals + sleeps) and the rare sleep-while-suppressed simply runs its normal counter down.
+
     // FORK: an innate Oblivious (chosen ability differs, so the switch above missed it) clears pre-existing
     // infatuation / Taunt on switch-in exactly like the real ability. Overwrite the pop-up to Oblivious since
     // the cure script reads the primary slot. IsInnateActive() supplies suppression parity.
@@ -11279,6 +11320,11 @@ bool32 MoveGainsDeterministicRecharge(enum Move move)
 bool32 MoveSleepBecomesDrowsy(enum Move move)
 {
     u32 moveAcc = GetMoveAccuracy(move);
+    // FORK: Dark Void is Darkrai's signature move and is meant to inflict sleep outright, so it is
+    // exempt from the DETERMINISTIC_ACCURACY_EVASION sleep->drowsy weakening despite its sub-100%
+    // accuracy. (Under DETERMINISTIC_ACCURACY_EVASION accuracy never misses, so it always sleeps.)
+    if (move == MOVE_DARK_VOID)
+        return FALSE;
     return GetConfig(DETERMINISTIC_ACCURACY_EVASION)
         && GetMoveNonVolatileStatus(move) == MOVE_EFFECT_SLEEP
         && moveAcc > 0 && moveAcc < 100;

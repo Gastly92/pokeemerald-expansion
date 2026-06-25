@@ -759,7 +759,8 @@ static bool32 ShouldSwitchIfBadlyStatused(struct SwitchAiContext *switchContext)
             if ((monAbility == ABILITY_NATURAL_CURE
                 || BattlerHasAbility(switchContext->battler, ABILITY_NATURAL_CURE) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
                 || monAbility == ABILITY_SHED_SKIN
-                || monAbility == ABILITY_EARLY_BIRD)
+                || monAbility == ABILITY_EARLY_BIRD
+                || BattlerHasAbility(switchContext->battler, ABILITY_EARLY_BIRD)) // FORK: innate-aware
                 || holdEffect == (HOLD_EFFECT_CURE_SLP | HOLD_EFFECT_CURE_STATUS)
                 || HasMoveWithEffect(switchContext->battler, EFFECT_SLEEP_TALK)
                 || (HasMoveWithEffect(switchContext->battler, EFFECT_SNORE) && gAiLogicData->effectiveness[switchContext->battler][switchContext->opposingBattler][GetBattlerMoveIndexWithEffect(switchContext->battler, EFFECT_SNORE)] >= UQ_4_12(1.0))

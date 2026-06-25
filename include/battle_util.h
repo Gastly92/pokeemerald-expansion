@@ -245,6 +245,7 @@ bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability);
 bool32 IsInnateActive(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnOpposingSide(enum BattlerId battler, enum Ability ability);
+u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability); // FORK: FEATURE_INNATE_ABILITIES
 u32 IsAbilityOnField(enum Ability ability);
 u32 IsAbilityOnFieldExcept(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityPreventingEscape(enum BattlerId battler);

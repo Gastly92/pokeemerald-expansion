@@ -268,6 +268,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_KYUREM, 1, 
         ABILITY_SNOW_WARNING
     },
+    { // 0685
+        // Slurpuff's only real abilities are Sweet Veil (slot 0, now innate) and Unburden (slot 2, dead
+        // weight on its non-consumable Leftovers wall set), so its empty slot 1 takes Unaware — an
+        // already-implemented :white_check_mark: innate (stable, like Carnivine/Tornadus-Therian) and a pure
+        // boon for its Calm Mind wall: it ignores the foe's stat boosts. (Slot 2 Unburden is left intact for
+        // any future consumable-item set.)
+        SPECIES_SLURPUFF, 1,
+        ABILITY_UNAWARE
+    },
     { // 0738
         SPECIES_VIKAVOLT, 1,
         ABILITY_MOTOR_DRIVE
@@ -284,8 +293,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SKELEDIRGE, 1,
         ABILITY_MUMMY
     },
+    { // 0952
+        // Scovillain's only non-drawback real abilities (Chlorophyll, Insomnia) are BOTH now innate (Klutz,
+        // slot 2, is a drawback that disables its Life Orb), so its slot-2 Klutz is repurposed to Sheer Force.
+        // Sheer Force is :x: (never an innate -> stable) and a strong boon for its mixed sun attacker set:
+        // Flamethrower / Earth Power gain +30% and drop their secondaries (and skip Life Orb recoil too).
+        SPECIES_SCOVILLAIN, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 1017
-        SPECIES_OGERPON_CORNERSTONE, 1, 
+        SPECIES_OGERPON_CORNERSTONE, 1,
         ABILITY_EARTH_EATER
     },
 };
