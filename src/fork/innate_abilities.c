@@ -474,6 +474,63 @@
 //     stable :x: pick. (Sableye is the exception: its only free real slot is Stall, a drawback that the
 //     vanilla Stall tests rely on, so it can't be overridden — its roster sets keep a redundant-but-harmless
 //     chosen Keen Eye instead.)
+//   - ABILITY_INSOMNIA / ABILITY_VITAL_SPIRIT / ABILITY_SWEET_VEIL — the sleep-immunity abilities: the
+//     holder (and, for Sweet Veil, its whole side) cannot be put to sleep or made drowsy (Yawn). All three
+//     are wired at ONE central chokepoint — the MOVE_EFFECT_SLEEP case of CanSetNonVolatileStatus
+//     (src/battle_util.c) — which every sleep path funnels through: direct sleep moves and Yawn (via
+//     Cmd_trynonvolatilestatus), secondary sleep effects (SetMoveEffect), Effect Spore / G-Max Snooze (via
+//     CanBeSlept), and the AI's AI_CanPutToSleep (also CanBeSlept). Insomnia / Vital Spirit gain an
+//     IsInnateActive(battlerDef, ...) clause beside the chosen-ability test (reassigning abilityDef + the
+//     pop-up overwrite when the chosen ability differs, the Limber/Oblivious precedent); Sweet Veil gains a
+//     side-wide IsInnateOnSide() clause beside its IsAbilityOnSide() test (same pop-up handling). One more
+//     manual site: the end-turn drowsy->sleep (HandleEndTurnYawn, src/battle_end_turn.c — its inline
+//     Insomnia/Vital Spirit gate becomes !BattlerHasAbility(...) and its Sweet Veil side check gains
+//     IsInnateOnSide). Also mirrored at the out-of-battle Battle Pike sleep room (DoesAbilityPreventStatus,
+//     src/battle_pike.c) for innate Insomnia/Vital Spirit, like the Limber precedent. DELIBERATE PURE-BOON
+//     DIVERGENCE: a real Insomnia/Vital Spirit/Sweet Veil also BLOCKS the holder's own Rest (it can't sleep),
+//     a *cost*; the innate intentionally does NOT block Rest (the EFFECT_REST gate in
+//     src/battle_move_resolution.c and the Sweet-Veil Rest gate in BS_JumpIfAbilityPreventsRest are left
+//     chosen-ability-only), so the innate keeps the upside (enemy-sleep immunity) and drops the cost — a mon
+//     may still Rest fully (heals + sleeps normally). The corollary: unlike the innate Limber/Oblivious, the
+//     innate Insomnia/Vital Spirit deliberately does NOT wire the switch-in self-cure of pre-existing sleep
+//     (TryImmunityAbilityHealStatus). That hook fires post-move too, so curing the holder's sleep would
+//     un-sleep a fresh Rest the same turn (a free, sleepless Recover); dropping it is what keeps Rest a clean
+//     pure boon. The rare sleep-while-suppressed case (slept under Mold Breaker, then suppression ends) simply
+//     runs its normal sleep counter down instead of auto-curing. AI is innate-aware
+//     for FREE via the shared CanBeSlept chokepoint (AI_CanPutToSleep won't try to sleep an innate-immune
+//     foe); the redundant hardcoded Sweet Veil cases in AI_CheckBadMove (src/battle_ai_main.c) are left
+//     chosen-only since AI_CanPutToSleep already covers them (Insomnia/Vital Spirit have no such case even for
+//     the real ability). Suppression parity via IsInnateActive(): all three are breakable, so an attacker's
+//     Mold Breaker pierces an innate one exactly as the real ability. The overworld wild-encounter read of
+//     Vital Spirit (src/wild_encounter.c) is deliberately untouched (innates are battle-only). CANON-ONLY (no
+//     flavor picks — sleep immunity is a strong defensive boon and this is a 4-ability batch, so the set stays
+//     tight to species whose ability data carries it in any slot): every such species keeps the immunity no
+//     matter which slot a build picks, with forms listed where their own data carries it (Galarian Mr. Mime's
+//     Vital Spirit; Megas mirror the base as a pure boon — Banette-Mega keeps Insomnia+Levitate). Alcremie's
+//     60+ cosmetic cream/sweet form constants are omitted to avoid bloating the table (Sweet Veil is its
+//     slot-0 default ability, so it keeps it regardless; the single pre-evo Milcery carries the innate), and
+//     sole-Sweet-Veil Ribombee-Totem is omitted (sole-ability + not in the roster, the Togedemaru-Totem
+//     precedent). Mewtwo-Mega-Y (its data is Insomnia in all three slots, so the chosen ability is always
+//     Insomnia) is left as its existing Levitate row — an innate Insomnia would be dead weight. Many species
+//     already carry other innates (Hoothoot/Noctowl's Keen Eye, Spinarak/Ariados's Swarm, Murkrow's Prankster,
+//     the Shuppet/Pumpkaboo/Gourgeist Levitate, Capsakid/Scovillain's Chlorophyll, Rockruff/Lycanroc-Midnight's
+//     Keen Eye, Bounsweet/Steenee's Oblivious), so they take a combined INNATES(...) list. Frontier roster sets
+//     that hardcoded a chosen Insomnia / Vital Spirit / Sweet Veil are freed (Step 3.5) to a complementary real
+//     slot where one exists, or a fork-owned chosen override (species_ability_overrides.c) where all the
+//     species' real abilities are now innate.
+//   - ABILITY_EARLY_BIRD — the holder wakes from sleep twice as fast (its sleep counter drops by 2 per turn).
+//     A clean-upside pure boon (1:1 copy), wired at the two real sleep-counter sites — the move-use wake check
+//     in CancelerForSleep (src/battle_move_resolution.c) and the per-turn wake check in src/battle_util2.c —
+//     each gains an IsInnateActive()/BattlerHasAbility() clause so toSub becomes 2 for an innate holder too
+//     (the move-resolution site uses IsInnateActive beside IsAbilityAndRecord, so the innate is NOT recorded as
+//     identity). AI is made innate-aware at its three Early Bird reads: the wake-turn predictor IsWakeupTurn
+//     and the Rest-value heuristic (src/battle_ai_util.c / src/battle_ai_main.c) and the Yawn stay-in switch
+//     heuristic (src/battle_ai_switch.c). No script/pop-up/driver. Suppression parity via IsInnateActive()
+//     (Early Bird is not breakable, so Mold Breaker never touches it, same as the real ability). CANON-ONLY
+//     (no flavor picks, matching the batch): every species whose data carries Early Bird in any slot, forms
+//     where their data carries it (Megas mirror the base as a pure boon — Houndoom-Mega / Kangaskhan-Mega keep
+//     Early Bird). Many already carry other innates (Ledyba/Ledian's Swarm, the Sunkern/Seedot/Nuzleaf/Shiftry
+//     Chlorophyll), so they take a combined INNATES(...) list.
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 //
@@ -843,6 +900,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_UNAWARE
         )
     },
+    { // 0056
+        SPECIES_MANKEY,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0057
+        SPECIES_PRIMEAPE,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
+        )
+    },
     { // 0060
         SPECIES_POLIWAG,
         INNATES(
@@ -977,6 +1046,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_KEEN_EYE
         )
     },
+    { // 0084
+        SPECIES_DODUO,
+        INNATES(
+            ABILITY_EARLY_BIRD
+        )
+    },
+    { // 0085
+        SPECIES_DODRIO,
+        INNATES(
+            ABILITY_EARLY_BIRD
+        )
+    },
     { // 0088
         SPECIES_GRIMER,
         INNATES(
@@ -1031,6 +1112,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ONIX,
         INNATES(
             ABILITY_STURDY
+        )
+    },
+    { // 0096
+        SPECIES_DROWZEE,
+        INNATES(
+            ABILITY_INSOMNIA
+        )
+    },
+    { // 0097
+        SPECIES_HYPNO,
+        INNATES(
+            ABILITY_INSOMNIA
         )
     },
     { // 0098
@@ -1126,6 +1219,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0115
+        SPECIES_KANGASKHAN,
+        INNATES(
+            ABILITY_EARLY_BIRD
+        )
+    },
+    { // 0115
+        SPECIES_KANGASKHAN_MEGA,
+        INNATES(
+            ABILITY_EARLY_BIRD
+        )
+    },
     { // 0116
         SPECIES_HORSEA,
         INNATES(
@@ -1173,6 +1278,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER
         )
     },
+    { // 0122
+        SPECIES_MR_MIME_GALAR,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
+        )
+    },
     { // 0123
         SPECIES_SCYTHER,
         INNATES(
@@ -1183,6 +1294,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_JYNX,
         INNATES(
             ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0125
+        SPECIES_ELECTABUZZ,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0126
+        SPECIES_MAGMAR,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0129
@@ -1404,36 +1527,42 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0163
         SPECIES_HOOTHOOT,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_KEEN_EYE
         )
     },
     { // 0164
         SPECIES_NOCTOWL,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_KEEN_EYE
         )
     },
     { // 0165
         SPECIES_LEDYBA,
         INNATES(
+            ABILITY_EARLY_BIRD,
             ABILITY_SWARM
         )
     },
     { // 0166
         SPECIES_LEDIAN,
         INNATES(
+            ABILITY_EARLY_BIRD,
             ABILITY_SWARM
         )
     },
     { // 0167
         SPECIES_SPINARAK,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_SWARM
         )
     },
     { // 0168
         SPECIES_ARIADOS,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_SWARM
         )
     },
@@ -1459,6 +1588,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_IGGLYBUFF,
         INNATES(
             ABILITY_CUTE_CHARM
+        )
+    },
+    { // 0177
+        SPECIES_NATU,
+        INNATES(
+            ABILITY_EARLY_BIRD
+        )
+    },
+    { // 0178
+        SPECIES_XATU,
+        INNATES(
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0182
@@ -1501,13 +1642,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0191
         SPECIES_SUNKERN,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0192
         SPECIES_SUNFLORA,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0193
@@ -1541,6 +1684,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0198
         SPECIES_MURKROW,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_PRANKSTER
         )
     },
@@ -1731,6 +1875,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0203
+        SPECIES_GIRAFARIG,
+        INNATES(
+            ABILITY_EARLY_BIRD
+        )
+    },
     { // 0204
         SPECIES_PINECO,
         INNATES(
@@ -1836,6 +1986,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0225
+        SPECIES_DELIBIRD,
+        INNATES(
+            ABILITY_INSOMNIA,
+            ABILITY_VITAL_SPIRIT
+        )
+    },
     { // 0226
         SPECIES_MANTINE,
         INNATES(
@@ -1853,6 +2010,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SKARMORY_MEGA,
         INNATES(
             ABILITY_STURDY
+        )
+    },
+    { // 0228
+        SPECIES_HOUNDOUR,
+        INNATES(
+            ABILITY_EARLY_BIRD
+        )
+    },
+    { // 0229
+        SPECIES_HOUNDOOM,
+        INNATES(
+            ABILITY_EARLY_BIRD
+        )
+    },
+    { // 0229
+        SPECIES_HOUNDOOM_MEGA,
+        INNATES(
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0230
@@ -1880,10 +2055,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0236
+        SPECIES_TYROGUE,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
+        )
+    },
     { // 0238
         SPECIES_SMOOCHUM,
         INNATES(
             ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0239
+        SPECIES_ELEKID,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0240
+        SPECIES_MAGBY,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0242
@@ -2047,19 +2240,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0273
         SPECIES_SEEDOT,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0274
         SPECIES_NUZLEAF,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0275
         SPECIES_SHIFTRY,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0278
@@ -2078,6 +2274,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SURSKIT,
         INNATES(
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0288
+        SPECIES_VIGOROTH,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0290
@@ -2395,18 +2597,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0353
         SPECIES_SHUPPET,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0354
         SPECIES_BANETTE,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0354
         SPECIES_BANETTE_MEGA,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
@@ -2747,6 +2952,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0430
+        SPECIES_HONCHKROW,
+        INNATES(
+            ABILITY_INSOMNIA
+        )
+    },
     { // 0431
         SPECIES_GLAMEOW,
         INNATES(
@@ -2918,6 +3129,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_REGENERATOR
+        )
+    },
+    { // 0466
+        SPECIES_ELECTIVIRE,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0467
+        SPECIES_MAGMORTAR,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0469
@@ -3180,6 +3403,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ILLUMINATE,
             ABILITY_KEEN_EYE
+        )
+    },
+    { // 0506
+        SPECIES_LILLIPUP,
+        INNATES(
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0507
@@ -4004,6 +4233,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0684
+        SPECIES_SWIRLIX,
+        INNATES(
+            ABILITY_SWEET_VEIL
+        )
+    },
+    { // 0685
+        SPECIES_SLURPUFF,
+        INNATES(
+            ABILITY_SWEET_VEIL
+        )
+    },
     { // 0686
         SPECIES_INKAY,
         INNATES(
@@ -4087,48 +4328,56 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0710
         SPECIES_PUMPKABOO,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0710
         SPECIES_PUMPKABOO_SMALL,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0710
         SPECIES_PUMPKABOO_LARGE,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0710
         SPECIES_PUMPKABOO_SUPER,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0711
         SPECIES_GOURGEIST,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0711
         SPECIES_GOURGEIST_SMALL,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0711
         SPECIES_GOURGEIST_LARGE,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
     { // 0711
         SPECIES_GOURGEIST_SUPER,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
     },
@@ -4298,10 +4547,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0742
+        SPECIES_CUTIEFLY,
+        INNATES(
+            ABILITY_SWEET_VEIL
+        )
+    },
+    { // 0743
+        SPECIES_RIBOMBEE,
+        INNATES(
+            ABILITY_SWEET_VEIL
+        )
+    },
     { // 0744
         SPECIES_ROCKRUFF,
         INNATES(
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0745
@@ -4314,7 +4576,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0745
         SPECIES_LYCANROC_MIDNIGHT,
         INNATES(
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0747
@@ -4352,13 +4615,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0761
         SPECIES_BOUNSWEET,
         INNATES(
-            ABILITY_OBLIVIOUS
+            ABILITY_OBLIVIOUS,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0762
         SPECIES_STEENEE,
         INNATES(
-            ABILITY_OBLIVIOUS
+            ABILITY_OBLIVIOUS,
+            ABILITY_SWEET_VEIL
+        )
+    },
+    { // 0763
+        SPECIES_TSAREENA,
+        INNATES(
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0764
@@ -4795,6 +5066,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0868
+        SPECIES_MILCERY,
+        INNATES(
+            ABILITY_SWEET_VEIL
+        )
+    },
     { // 0870
         SPECIES_FALINKS,
         INNATES(
@@ -4962,6 +5239,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0917
+        SPECIES_TAROUNTULA,
+        INNATES(
+            ABILITY_INSOMNIA
+        )
+    },
+    { // 0918
+        SPECIES_SPIDOPS,
+        INNATES(
+            ABILITY_INSOMNIA
+        )
+    },
     { // 0919
         SPECIES_NYMBLE,
         INNATES(
@@ -5032,19 +5321,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0951
         SPECIES_CAPSAKID,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_INSOMNIA
         )
     },
     { // 0952
         SPECIES_SCOVILLAIN,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_INSOMNIA
         )
     },
     { // 0952
         SPECIES_SCOVILLAIN_MEGA,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_INSOMNIA
         )
     },
     { // 0953

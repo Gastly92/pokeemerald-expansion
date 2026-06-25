@@ -4527,7 +4527,8 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
                 ADJUST_SCORE(GOOD_EFFECT);
             }
             else if (aiData->abilities[battlerAtk] == ABILITY_SHED_SKIN
-                  || aiData->abilities[battlerAtk] == ABILITY_EARLY_BIRD)
+                  || aiData->abilities[battlerAtk] == ABILITY_EARLY_BIRD
+                  || IsInnateActive(battlerAtk, ABILITY_EARLY_BIRD)) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
             {
                 ADJUST_SCORE(DECENT_EFFECT);
             }

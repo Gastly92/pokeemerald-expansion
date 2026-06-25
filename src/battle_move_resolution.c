@@ -131,7 +131,8 @@ static enum CancelerResult CancelerAsleepOrFrozen(struct BattleCalcValues *cv)
         else
         {
             u32 toSub;
-            if (IsAbilityAndRecord(cv->battlerAtk, cv->abilities[cv->battlerAtk], ABILITY_EARLY_BIRD))
+            if (IsAbilityAndRecord(cv->battlerAtk, cv->abilities[cv->battlerAtk], ABILITY_EARLY_BIRD)
+             || IsInnateActive(cv->battlerAtk, ABILITY_EARLY_BIRD)) // FORK: innate Early Bird wakes twice as fast (FEATURE_INNATE_ABILITIES)
                 toSub = 2;
             else
                 toSub = 1;
@@ -1417,6 +1418,11 @@ static enum CancelerResult CancelerMoveFailure(struct BattleCalcValues *cv)
             battleScript = BattleScript_RestIsAlreadyAsleep;
         else if (gBattleMons[cv->battlerAtk].hp == gBattleMons[cv->battlerAtk].maxHP)
             battleScript = BattleScript_AlreadyAtFullHp;
+        // FORK: deliberately chosen-ability-only (no BattlerHasAbility) — an innate Insomnia / Vital Spirit
+        // is a PURE BOON that does NOT block the holder's own Rest. Rest works fully (heals + sleeps) for an
+        // innate holder; only the immunity to *another* battler's sleep is granted. (See the ALLOWLIST note
+        // in src/fork/innate_abilities.c: the innate switch-in sleep-cure is intentionally dropped to keep
+        // this clean — otherwise the cure would un-sleep a fresh Rest the same turn = a free Recover.)
         else if (cv->abilities[cv->battlerAtk] == ABILITY_INSOMNIA
               || cv->abilities[cv->battlerAtk] == ABILITY_VITAL_SPIRIT
               || cv->abilities[cv->battlerAtk] == ABILITY_PURIFYING_SALT)

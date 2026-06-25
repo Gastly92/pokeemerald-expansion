@@ -999,8 +999,8 @@ static bool32 HandleEndTurnYawn(enum BattlerId battler)
         gBattleMons[battler].volatiles.yawn--;
         if (!gBattleMons[battler].volatiles.yawn
          && !(gBattleMons[battler].status1 & STATUS1_ANY)
-         && ability != ABILITY_VITAL_SPIRIT
-         && ability != ABILITY_INSOMNIA
+         && !BattlerHasAbility(battler, ABILITY_VITAL_SPIRIT) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
+         && !BattlerHasAbility(battler, ABILITY_INSOMNIA)     // FORK: innate-aware
          && !UproarWakeUpCheck(battler)
          && !IsLeafGuardProtected(battler, ability))
         {
@@ -1020,11 +1020,18 @@ static bool32 HandleEndTurnYawn(enum BattlerId battler)
             {
                 BattleScriptCall(BattleScript_SleepClausePrevents);
             }
-            else if ((gBattleScripting.battler = IsAbilityOnSide(battler, ABILITY_SWEET_VEIL)))
+            // FORK: an innate Sweet Veil on the side (FEATURE_INNATE_ABILITIES) blocks the Yawn sleep like
+            // the real ability. The real ability is checked first; only then is an innate holder sought.
+            // When the holder's chosen ability differs, overwrite the pop-up to Sweet Veil (the pop-up reads
+            // the primary slot); RecordAbilityBattle still records Sweet Veil so the foe "learns" the block.
+            else if ((gBattleScripting.battler = IsAbilityOnSide(battler, ABILITY_SWEET_VEIL))
+                  || (gBattleScripting.battler = IsInnateOnSide(battler, ABILITY_SWEET_VEIL)))
             {
                 gBattleScripting.battler--;
                 gLastUsedAbility = ABILITY_SWEET_VEIL;
                 gBattlerAbility = gBattleScripting.battler;
+                if (GetBattlerAbility(gBattleScripting.battler) != ABILITY_SWEET_VEIL)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_SWEET_VEIL;
                 RecordAbilityBattle(gBattleScripting.battler, ABILITY_SWEET_VEIL);
                 BattleScriptCall(BattleScript_ImmunityProtectedRet);
             }

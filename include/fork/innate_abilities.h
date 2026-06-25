@@ -71,7 +71,18 @@
 // keeping its *drop*, like InnateUnawareBoonStage. Keen Eye / Illuminate ALSO keep the holder's own accuracy
 // from being lowered, wired at IsAbilityBlocked in src/battle_stat_change.c with the pop-up overwritten to the
 // innate. Illuminate's in-battle effect is gated to B_ILLUMINATE_EFFECT >= GEN_9 like the real ability, and the
-// AI's "don't lower its accuracy" read in src/battle_ai_util.c is credited too).
+// AI's "don't lower its accuracy" read in src/battle_ai_util.c is credited too),
+// and the sleep-immunity abilities INSOMNIA / VITAL_SPIRIT / SWEET_VEIL (the holder — and, for Sweet Veil,
+// its whole side — cannot be put to sleep or made drowsy), all wired at the single MOVE_EFFECT_SLEEP
+// chokepoint in CanSetNonVolatileStatus (src/battle_util.c) that every sleep path funnels through, plus the
+// end-turn drowsy->sleep site (src/battle_end_turn.c) and the out-of-battle Battle Pike sleep room
+// (src/battle_pike.c). PURE-BOON DIVERGENCE: unlike the real ability, an innate one does NOT block the
+// holder's own Rest (Rest heals + sleeps normally); the switch-in sleep-cure is intentionally dropped so the
+// post-move cure hook can't un-sleep a fresh Rest into a free Recover. AI is innate-aware for free via the
+// shared CanBeSlept chokepoint. Sweet Veil's side-wide check uses the new fork helper IsInnateOnSide(),
+// and EARLY_BIRD (the holder wakes from sleep twice as fast, a clean-upside 1:1 copy wired at the two
+// sleep-counter sites in src/battle_move_resolution.c and src/battle_util2.c, with the AI's three Early Bird
+// reads in src/battle_ai_util.c / src/battle_ai_main.c / src/battle_ai_switch.c made innate-aware).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

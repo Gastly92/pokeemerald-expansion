@@ -837,7 +837,12 @@ static bool8 DoesAbilityPreventStatus(struct Pokemon *mon, u32 status)
             ret = TRUE;
         break;
     case STATUS1_SLEEP:
-        if (ability == ABILITY_INSOMNIA || ability == ABILITY_VITAL_SPIRIT)
+        // FORK: credit an innate Insomnia / Vital Spirit too, so an innate-immune party mon shrugs off the
+        // Pike's sleep room exactly like the real ability (out of battle, so gated on the feature flag).
+        if (ability == ABILITY_INSOMNIA || ability == ABILITY_VITAL_SPIRIT
+         || (GetConfig(FEATURE_INNATE_ABILITIES)
+             && (SpeciesHasInnate(GetMonData(mon, MON_DATA_SPECIES), ABILITY_INSOMNIA)
+              || SpeciesHasInnate(GetMonData(mon, MON_DATA_SPECIES), ABILITY_VITAL_SPIRIT))))
             ret = TRUE;
         break;
     case STATUS1_TOXIC_POISON:
