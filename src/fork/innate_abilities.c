@@ -21,7 +21,8 @@
 //   SAND_RUSH / SLUSH_RUSH (weather speed), FILTER, PRESSURE, STENCH,
 //   BATTLE_ARMOR / SHELL_ARMOR, SPEED_BOOST, LIMBER, CUTE_CHARM, OBLIVIOUS,
 //   SAND_VEIL / SNOW_CLOAK, COMPOUND_EYES / KEEN_EYE / ILLUMINATE,
-//   INSOMNIA / VITAL_SPIRIT / SWEET_VEIL, EARLY_BIRD, IMMUNITY / PASTEL_VEIL.
+//   INSOMNIA / VITAL_SPIRIT / SWEET_VEIL, EARLY_BIRD, IMMUNITY / PASTEL_VEIL,
+//   THICK_FAT.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -102,7 +103,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_THICK_FAT
         )
     },
     { // 0003
@@ -227,6 +229,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PIDGEOT_MEGA,
         INNATES(
             ABILITY_KEEN_EYE
+        )
+    },
+    { // 0019
+        SPECIES_RATTATA_ALOLA,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0020
+        SPECIES_RATICATE_ALOLA,
+        INNATES(
+            ABILITY_THICK_FAT
         )
     },
     { // 0021
@@ -565,6 +579,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_EARLY_BIRD
         )
     },
+    { // 0086
+        SPECIES_SEEL,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0087
+        SPECIES_DEWGONG,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0088
         SPECIES_GRIMER,
         INNATES(
@@ -889,6 +915,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SNORLAX,
         INNATES(
             ABILITY_IMMUNITY,
+            ABILITY_THICK_FAT,
             ABILITY_UNAWARE
         )
     },
@@ -896,6 +923,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SNORLAX_GMAX,
         INNATES(
             ABILITY_IMMUNITY,
+            ABILITY_THICK_FAT,
             ABILITY_UNAWARE
         )
     },
@@ -1116,6 +1144,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_NATURAL_CURE
+        )
+    },
+    { // 0183
+        SPECIES_MARILL,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0184
+        SPECIES_AZUMARILL,
+        INNATES(
+            ABILITY_THICK_FAT
         )
     },
     { // 0185
@@ -1479,14 +1519,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SWINUB,
         INNATES(
             ABILITY_OBLIVIOUS,
-            ABILITY_SNOW_CLOAK
+            ABILITY_SNOW_CLOAK,
+            ABILITY_THICK_FAT
         )
     },
     { // 0221
         SPECIES_PILOSWINE,
         INNATES(
             ABILITY_OBLIVIOUS,
-            ABILITY_SNOW_CLOAK
+            ABILITY_SNOW_CLOAK,
+            ABILITY_THICK_FAT
         )
     },
     { // 0222
@@ -1587,6 +1629,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MAGBY,
         INNATES(
             ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0241
+        SPECIES_MILTANK,
+        INNATES(
+            ABILITY_THICK_FAT
         )
     },
     { // 0242
@@ -1810,6 +1858,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0296
+        SPECIES_MAKUHITA,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0297
+        SPECIES_HARIYAMA,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0298
+        SPECIES_AZURILL,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0299
         SPECIES_NOSEPASS,
         INNATES(
@@ -1922,14 +1988,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WAILMER,
         INNATES(
             ABILITY_OBLIVIOUS,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_THICK_FAT
         )
     },
     { // 0321
         SPECIES_WAILORD,
         INNATES(
             ABILITY_OBLIVIOUS,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_THICK_FAT
         )
     },
     { // 0322
@@ -1955,6 +2023,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TORKOAL,
         INNATES(
             ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 0325
+        SPECIES_SPOINK,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0326
+        SPECIES_GRUMPIG,
+        INNATES(
+            ABILITY_THICK_FAT
         )
     },
     { // 0329
@@ -2195,19 +2275,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0363
         SPECIES_SPHEAL,
         INNATES(
-            ABILITY_OBLIVIOUS
+            ABILITY_OBLIVIOUS,
+            ABILITY_THICK_FAT
         )
     },
     { // 0364
         SPECIES_SEALEO,
         INNATES(
-            ABILITY_OBLIVIOUS
+            ABILITY_OBLIVIOUS,
+            ABILITY_THICK_FAT
         )
     },
     { // 0365
         SPECIES_WALREIN,
         INNATES(
-            ABILITY_OBLIVIOUS
+            ABILITY_OBLIVIOUS,
+            ABILITY_THICK_FAT
         )
     },
     { // 0366
@@ -2481,6 +2564,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LIMBER
         )
     },
+    { // 0432
+        SPECIES_PURUGLY,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0433
         SPECIES_CHINGLING,
         INNATES(
@@ -2576,6 +2665,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0446
         SPECIES_MUNCHLAX,
         INNATES(
+            ABILITY_THICK_FAT,
             ABILITY_UNAWARE
         )
     },
@@ -2687,7 +2777,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MAMOSWINE,
         INNATES(
             ABILITY_OBLIVIOUS,
-            ABILITY_SNOW_CLOAK
+            ABILITY_SNOW_CLOAK,
+            ABILITY_THICK_FAT
         )
     },
     { // 0474
@@ -2860,13 +2951,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0498
         SPECIES_TEPIG,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_THICK_FAT
         )
     },
     { // 0499
         SPECIES_PIGNITE,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_THICK_FAT
         )
     },
     { // 0500
@@ -4480,6 +4573,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0842
+        SPECIES_APPLETUN,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0842
+        SPECIES_APPLETUN_GMAX,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0843
         SPECIES_SILICOBRA,
         INNATES(
@@ -4755,6 +4860,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0915
+        SPECIES_LECHONK,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0916
+        SPECIES_OINKOLOGNE_M,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0916
+        SPECIES_OINKOLOGNE_F,
+        INNATES(
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0917
         SPECIES_TAROUNTULA,
         INNATES(
@@ -4918,13 +5041,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0974
         SPECIES_CETODDLE,
         INNATES(
-            ABILITY_SNOW_CLOAK
+            ABILITY_SNOW_CLOAK,
+            ABILITY_THICK_FAT
         )
     },
     { // 0975
         SPECIES_CETITAN,
         INNATES(
-            ABILITY_SLUSH_RUSH
+            ABILITY_SLUSH_RUSH,
+            ABILITY_THICK_FAT
         )
     },
     { // 0977

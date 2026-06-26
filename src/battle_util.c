@@ -7369,6 +7369,19 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
         break;
     }
 
+    // FORK: an innate Thick Fat (FEATURE_INNATE_ABILITIES) halves Fire/Ice damage exactly like the
+    // real ability. Thick Fat is a clean upside (it never hurts its holder), so the innate is a 1:1
+    // copy — no pure-boon divergence. The switch above already applied a chosen Thick Fat, so guard
+    // against it to avoid double-applying. IsInnateActive() supplies the same suppression gates as the
+    // chosen-ability path (Thick Fat is breakable, so an attacker's Mold Breaker pierces an innate
+    // Thick Fat just like the real ability). Identity is untouched: the innate isn't recorded via
+    // RecordAbilityBattle, matching the silent Filter/Unaware calc modifiers; on-field AI damage
+    // prediction is correct for free because it runs this shared calc keyed off the real battler.
+    if ((moveType == TYPE_FIRE || moveType == TYPE_ICE)
+     && ctx->abilities[battlerDef] != ABILITY_THICK_FAT
+     && IsInnateActive(battlerDef, ABILITY_THICK_FAT))
+        modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(0.5));
+
     // ally's abilities
     if (IsBattlerAlive(BATTLE_PARTNER(battlerAtk)))
     {

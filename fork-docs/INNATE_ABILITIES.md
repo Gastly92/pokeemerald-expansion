@@ -1046,3 +1046,31 @@ and Zangoose, each whose real ability data carries Immunity in some slot; Pastel
 Galarian Ponyta/Rapidash, the only species whose real ability data carries it. Frontier roster sets
 that hardcoded Pastel Veil are freed (Step 3.5): Rapidash-Galar → Anticipation (its real Hidden
 Ability slot).
+
+### ABILITY_THICK_FAT
+
+Halves the damage the holder takes from Fire- and Ice-type moves, handled at the
+single effect site in `src/battle_util.c` (`CalcAttackStat`, the "target's abilities" switch that
+applies the defender's move-type damage modifiers): an `IsInnateActive()` clause beside the chosen-
+ability `ABILITY_THICK_FAT` case applies the same `x0.5` to a Fire/Ice move, guarded `chosen !=
+ABILITY_THICK_FAT` so a real Thick Fat never double-halves. A pure calc-modifier passive like Filter:
+no script / pop-up / driver, and the innate is NOT recorded as identity (`RecordAbilityBattle` stays on
+the chosen-ability path). NO pure-boon divergence: Thick Fat is a clean upside that never hurts its
+holder, so the innate is a 1:1 copy of the real ability. Suppression parity holds via `IsInnateActive()`:
+Thick Fat is breakable, so an attacker's Mold Breaker pierces an innate Thick Fat exactly as it would
+the real ability. AI is correct for FREE: the reduction lives in the shared damage calc (`CalcAttackStat`)
+the AI runs keyed off the real battler (like Filter's / Unaware's reads), so the AI both threatens and
+respects an innate Thick Fat on-field; the off-field switch-in damage prediction is left unwired (the
+Unaware/Filter scope call — a 50% Fire/Ice reduction is not a KO-flipping immunity like Levitate/Sturdy).
+Two species groups: the canon Thick Fat users (every species whose ability data carries it in any slot,
+so the signature survives whichever slot a build picks — the Marill/Azumarill, Seel/Dewgong, Spheal line,
+Swinub line, Makuhita line, Spoink line, Miltank, Purugly, Snorlax line, Alolan Rattata line, Tepig/Pignite,
+Appletun, Lechonk line, and Cetoddle line, plus Mega Venusaur whose Mega ability data is Thick Fat — listed
+only where the form's ability data carries it; Raticate-Alola-Totem, sole-Thick-Fat and unused by the roster,
+is omitted as redundant like the Sturdy precedent), plus a tight blubber-themed flavor pick lacking the real
+ability (the Wailmer/Wailord whale line — insulated by thick blubber against heat and cold). Frontier roster
+sets that hardcoded Thick Fat are freed (Step 3.5): Raticate-Alola → Gluttony (eats its Sitrus early),
+Dewgong/Walrein → Ice Body, Snorlax → Gluttony (Immunity also innate), Miltank → Sap Sipper, Hariyama/Cetitan
+→ Sheer Force, Grumpig → Own Tempo, Purugly → Defiant, Appletun → Ripen, and the Mamoswine sets — whose three
+real abilities (Oblivious/Snow Cloak/Thick Fat) are ALL now innate — take a fork-owned chosen Snow Warning
+override (`species_ability_overrides.c`), self-synergistic with their innate Snow Cloak.

@@ -81,6 +81,7 @@
 // PP-economy boon — with Keen Eye / Illuminate also keeping the holder's own accuracy from being lowered),
 // Insomnia / Vital Spirit / Sweet Veil (cannot be put to sleep or made drowsy — Sweet Veil side-wide),
 // Early Bird (wakes from sleep twice as fast),
+// Immunity / Pastel Veil (poison immunity), Thick Fat (halves Fire/Ice damage),
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -479,7 +480,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SUPER_FANG
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat now innate; chosen Gluttony eats the Sitrus Berry early (at 1/2 HP).
+        .ability = ABILITY_GLUTTONY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2095,7 +2097,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICY_WIND,
             MOVE_PROTECT
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat now innate; chosen Ice Body (HA) heals 1/16 HP each turn in snow.
+        .ability = ABILITY_ICE_BODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3733,7 +3736,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat (and Immunity) now innate; chosen Gluttony fills the slot.
+        .ability = ABILITY_GLUTTONY,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3753,7 +3757,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_SELF_DESTRUCT
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat (and Immunity) now innate; chosen Gluttony fills the slot.
+        .ability = ABILITY_GLUTTONY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 132,
@@ -6267,7 +6272,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAL_BELL,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat now innate; chosen Sap Sipper (HA) absorbs Grass moves for an Attack boost.
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7625,7 +7631,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_BULLET_PUNCH
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat now innate; chosen Sheer Force (HA) powers up this Assault Vest attacker.
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 168,
@@ -8179,7 +8186,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_REST
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat now innate; chosen Own Tempo keeps this wall safe from confusion/Intimidate.
+        .ability = ABILITY_OWN_TEMPO,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9007,7 +9015,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_PROTECT
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat (and Oblivious) now innate; chosen Ice Body heals 1/16 HP each turn in snow.
+        .ability = ABILITY_ICE_BODY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9027,7 +9036,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_BODY_SLAM
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat (and Oblivious) now innate; chosen Ice Body heals 1/16 HP each turn in snow.
+        .ability = ABILITY_ICE_BODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10529,7 +10539,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_PLAY_ROUGH
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat now innate; chosen Defiant (HA) punishes stat drops with a +2 Attack boost.
+        .ability = ABILITY_DEFIANT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -11504,7 +11515,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_THICK_FAT,
+        // All three real abilities (Oblivious/Snow Cloak/Thick Fat) now innate; chosen Snow Warning
+        // (fork override) sets the snow that turns on its own innate Snow Cloak evasion.
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11524,7 +11537,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_THICK_FAT,
+        // All three real abilities (Oblivious/Snow Cloak/Thick Fat) now innate; chosen Snow Warning
+        // (fork override) sets the snow that turns on its own innate Snow Cloak evasion.
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11544,7 +11559,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_THICK_FAT,
+        // All three real abilities (Oblivious/Snow Cloak/Thick Fat) now innate; chosen Snow Warning
+        // (fork override) sets the snow that turns on its own innate Snow Cloak evasion.
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20748,7 +20765,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat now innate; chosen Ripen fills the slot (doubles any Berry's effect).
+        .ability = ABILITY_RIPEN,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -20768,7 +20786,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat now innate; chosen Ripen fills the slot (doubles any Berry's effect).
+        .ability = ABILITY_RIPEN,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24094,7 +24113,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_THICK_FAT,
+        // Thick Fat (and Slush Rush) now innate; chosen Sheer Force (HA) powers up this Ice attacker.
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
