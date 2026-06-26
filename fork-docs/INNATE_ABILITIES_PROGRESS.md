@@ -1,5 +1,10 @@
 ## Innate Abilities Progress
 
+Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
+:x: rejected (won't be wired). To take on the pending set efficiently, see the
+[batching plan](INNATE_ABILITIES_BATCHES.md), which groups the
+:white_large_square: rows by shared code site / wiring class.
+
 | Status | Ability | Description |
 | :---: | :---: | :--- |
 | :white_check_mark: | Stench | When the Pokémon deals damage with its moves, there is a 10% chance that targets will flinch. |
