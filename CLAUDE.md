@@ -42,8 +42,10 @@ session (the session-start hook does this automatically; the manual command is):
 git remote add upstream https://github.com/rh-hideout/pokeemerald-expansion.git
 ```
 
-Verified working from web sessions: `git fetch upstream` succeeds (both ref
-listing and object download). To sync:
+**Web-session caveat (important):** the `upstream` remote does **not** fetch out
+of the box from a web session — see "Fetching upstream from a web session" just
+below for why and the working recipe. The rest of this section (unshallow, merge,
+conflict rules) applies once the upstream commits are reachable. To sync:
 
 ```bash
 # 0. Web containers clone the fork SHALLOWLY. A shallow clone has no common
@@ -75,6 +77,49 @@ git merge upstream/master      # MERGE, not rebase — this is a long-lived shar
   changes everywhere else.
 - After every sync, re-verify the build and tests (see below) before merging to
   `master`.
+
+#### Fetching upstream from a web session (egress is blocked by default)
+
+Findings from a real sync session (the earlier "Verified working" claim was
+stale — it is **not** true by default):
+
+- **GitHub traffic uses a separate, scoped GitHub proxy, independent of the
+  network-access level.** All git remotes are transparently rewritten (via an
+  `insteadOf` rule in `/root/.gitconfig`: `https://github.com/` →
+  `http://local_proxy@127.0.0.1:<port>/git/`) to that proxy, which only allows
+  the repos in the session's scope — i.e. **our fork only**. So
+  `git fetch upstream` against `rh-hideout/...` returns **`403`** ("requested URL
+  returned error: 403"). This is a repo-scope denial, not a network outage.
+- **`origin/upstream-mirror/master` is unreliable.** The fork carries
+  `upstream-mirror/*` branches meant as an in-scope mirror, but they can be far
+  out of date (observed sitting at the merge-base, i.e. behind *our* HEAD), so
+  merging them may be a no-op. Check `git rev-list --count HEAD..origin/upstream-mirror/master`
+  before trusting it.
+- **The working recipe — set Full network access, then fetch the public upstream
+  directly over egress:**
+  1. In the **website UI** (cloud/environment → edit → **Network access → Full**),
+     not the iOS app — the iOS app cannot change network access (see Workflow
+     conventions). Full access opens general HTTPS egress (verify with
+     `curl -o /dev/null -w '%{http_code}' https://github.com/rh-hideout/pokeemerald-expansion`
+     → `200`). This takes effect in the **same session** — no restart needed.
+  2. Temporarily drop the `insteadOf` rewrite so git won't redirect github.com to
+     the scoped proxy, fetch upstream directly, then **restore** the config:
+     ```bash
+     cp /root/.gitconfig /root/.gitconfig.bak
+     git config --global --unset-all "url.http://local_proxy@127.0.0.1:<port>/git/.insteadof"  # exact key: git config --global --get-regexp insteadof
+     git remote add upstream-direct https://github.com/rh-hideout/pokeemerald-expansion.git
+     git fetch --filter=blob:none upstream-direct master
+     mv /root/.gitconfig.bak /root/.gitconfig   # restore the rewrite (origin must keep using the scoped proxy)
+     git merge --no-edit upstream-direct/master   # MERGE, not rebase
+     ```
+  This works because upstream is **public** (unauthenticated fetch). For a private
+  upstream you'd instead grant the Claude GitHub App access to that repo and start
+  a fresh session (repo scope is fixed at session start). One real run this way
+  pulled 19 upstream bugfix commits and merged with **zero conflicts**.
+- Alternative with no in-session egress change: use GitHub's **"Sync fork"**
+  button / `gh repo sync` to land upstream commits on our fork server-side, then a
+  plain `git fetch origin && git merge origin/master` here — but a heavily
+  diverged branch often makes "Sync fork" refuse with conflicts.
 
 #### Our own README (`merge=ours`)
 
@@ -291,10 +336,24 @@ the table indexes the feature for a human.
 
 ## Workflow conventions
 
+- **The maintainer develops exclusively from a phone** using the Claude Code iOS
+  app, occasionally switching to the **website (Safari)** for things the iOS app
+  can't do. Concretely: the iOS app **cannot change a session's network access
+  level** — setting **Full** access (needed to fetch the public upstream directly,
+  see "Fetching upstream from a web session") is only possible from the website.
+  Assume there is **no local dev machine** to fall back on — anything that "just
+  do it locally" would solve has to be done in-session instead.
 - **One branch + one session per feature/PR.** Keep changes scoped; don't tangle
   unrelated features together.
 - Branch names use the `claude/<short-description>` prefix.
 - Open PRs against our fork's `master`. Don't push directly to `master`.
+- **CI runs a full build + test suite on every PR before it can merge, so don't
+  burn in-session tokens re-running `make`/`make check` for changes CI will cover
+  anyway.** For docs/comment-only changes (e.g. editing `CLAUDE.md`, `fork-docs/`,
+  or a code comment), skip the local build/test and let CI gate the PR. Reserve
+  local verification for actual code changes, where catching a break before CI is
+  worth the tokens (and even then prefer `make check TESTS="<name>"` over the full
+  suite — see Building & testing).
 
 ### Merging
 
