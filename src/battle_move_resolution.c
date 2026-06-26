@@ -4,6 +4,7 @@
 #include "battle_hold_effects.h"
 #include "battle_ai_record.h"
 #include "battle_util.h"
+#include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
 #include "battle_move_resolution.h"
 #include "battle_script_commands.h"
 #include "battle_stat_change.h"

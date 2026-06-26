@@ -7,6 +7,7 @@
 #include "battle_ai_items.h"
 #include "battle_ai_switch.h"
 #include "fork/battle_ai_species_overrides.h" // FORK: species-aware AI overrides
+#include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
 #include "battle_ai_main.h"
 #include "battle_ai_record.h"
 #include "battle_stat_change.h"

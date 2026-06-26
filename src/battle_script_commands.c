@@ -68,6 +68,7 @@
 #include "constants/trainers.h"
 #include "test/battle.h"
 #include "battle_util.h"
+#include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
 #include "constants/pokemon.h"
 #include "config/battle.h"
 #include "data/battle_move_effects.h"

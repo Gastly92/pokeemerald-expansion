@@ -6,6 +6,7 @@
 #include "battle_ai_field_statuses.h"
 #include "battle_ai_util.h"
 #include "battle_ai_main.h"
+#include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
 #include "battle_stat_change.h"
 #include "battle_controllers.h"
 #include "battle_factory.h"
