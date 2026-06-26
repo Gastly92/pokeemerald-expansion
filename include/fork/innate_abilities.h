@@ -82,7 +82,14 @@
 // shared CanBeSlept chokepoint. Sweet Veil's side-wide check uses the new fork helper IsInnateOnSide(),
 // and EARLY_BIRD (the holder wakes from sleep twice as fast, a clean-upside 1:1 copy wired at the two
 // sleep-counter sites in src/battle_move_resolution.c and src/battle_util2.c, with the AI's three Early Bird
-// reads in src/battle_ai_util.c / src/battle_ai_main.c / src/battle_ai_switch.c made innate-aware).
+// reads in src/battle_ai_util.c / src/battle_ai_main.c / src/battle_ai_switch.c made innate-aware), and
+// the poison-immunity abilities IMMUNITY / PASTEL_VEIL (the holder — and, for Pastel Veil, its whole
+// side — cannot be poisoned or badly poisoned), wired at the MOVE_EFFECT_POISON / MOVE_EFFECT_TOXIC
+// chokepoint in CanSetNonVolatileStatus (src/battle_util.c), the switch-in self-cure in
+// TryImmunityAbilityHealStatus (src/battle_util.c), the out-of-battle Battle Pike poison room
+// (src/battle_pike.c), and the AI's Toxic Spikes switch-in damage prediction (src/battle_ai_switch.c);
+// a clean-upside 1:1 copy of the real ability, with the real Pastel Veil's switch-in ally-cure not
+// replicated for an innate holder (see the ALLOWLIST note in src/fork/innate_abilities.c).
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. An innate Levitate grants Ground / entry-hazard
 // immunity like the real thing, but the fork also keeps the mon grounded for the beneficial ground

@@ -2710,6 +2710,155 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Early Bird wakes from sleep
     }
 }
 
+// ----- Immunity (poison immunity) -----
+// A canon Immunity user (Zangoose: Immunity/none/Toxic Boost) whose *chosen* ability is Toxic Boost
+// still carries Immunity as an innate, so Toxic still cannot poison it, and the pop-up shows Immunity.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Immunity prevents poison")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TOXIC) == EFFECT_NON_VOLATILE_STATUS);
+        ASSUME(GetMoveNonVolatileStatus(MOVE_TOXIC) == MOVE_EFFECT_TOXIC);
+        ASSUME(SpeciesHasInnate(SPECIES_ZANGOOSE, ABILITY_IMMUNITY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_TOXIC_BOOST); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TOXIC); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_IMMUNITY); // pop-up shows Immunity, not the chosen Toxic Boost
+            MESSAGE("It doesn't affect Zangoose…");
+            NONE_OF { STATUS_ICON(player, badPoison: TRUE); }
+        } else {
+            STATUS_ICON(player, badPoison: TRUE); // no innate -> Toxic poisons
+        }
+    }
+}
+
+// Suppression parity: Immunity is breakable, so an attacker's Mold Breaker pierces an innate Immunity
+// exactly as it would the real ability — the poison lands and no Immunity pop-up shows.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Immunity")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_IMMUNITY].breakable);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_TOXIC_BOOST); } // innate Immunity
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TOXIC); }
+    } SCENE {
+        STATUS_ICON(player, badPoison: TRUE); // Mold Breaker ignores the innate -> poisoned
+        NONE_OF { ABILITY_POPUP(player, ABILITY_IMMUNITY); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Immunity")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_TOXIC_BOOST); Moves(MOVE_CELEBRATE); } // innate Immunity
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_TOXIC); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses the innate
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TOXIC); }
+    } SCENE {
+        MESSAGE("Zangoose's Ability was suppressed!");
+        STATUS_ICON(player, badPoison: TRUE); // suppressed -> Toxic poisons
+    }
+}
+
+// The switch-in cure site: a mon poisoned while its innate Immunity was suppressed (Gastro Acid) gets
+// the poison cured the moment it switches back in (Gastro Acid clears on switch-out), exactly like a
+// real Immunity. The pop-up shows Immunity.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Immunity cures pre-existing poison on switch-in")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_TOXIC_BOOST); Moves(MOVE_CELEBRATE); } // innate Immunity
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_TOXIC, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppress the innate
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TOXIC); }       // Zangoose poisoned
+        TURN { SWITCH(player, 1); MOVE(opponent, MOVE_CELEBRATE); }             // Zangoose out -> Gastro clears
+        TURN { SWITCH(player, 0); MOVE(opponent, MOVE_CELEBRATE); }             // Zangoose back in -> innate cures
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_IMMUNITY);
+        MESSAGE("Zangoose was cured of its poisoning!");
+    } THEN {
+        EXPECT_EQ(player->status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON), 0);
+    }
+}
+
+// ----- Pastel Veil (side-wide poison immunity) -----
+// A canon Pastel Veil user (Rapidash-Galar: Run Away/Pastel Veil/Anticipation) whose *chosen* ability
+// is Run Away still carries Pastel Veil as an innate, protecting itself AND its partner.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pastel Veil protects the holder and its partner from poison")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_RAPIDASH_GALAR, ABILITY_PASTEL_VEIL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_RAPIDASH_GALAR) { Ability(ABILITY_RUN_AWAY); } // chosen ability differs from the innate
+        PLAYER(SPECIES_WYNAUT);
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_TOXIC, target: playerRight); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(playerLeft, ABILITY_PASTEL_VEIL);
+            NONE_OF { STATUS_ICON(playerRight, badPoison: TRUE); }
+        } else {
+            STATUS_ICON(playerRight, badPoison: TRUE); // no innate -> Toxic poisons the partner
+        }
+    }
+}
+
+// Suppression parity: Pastel Veil is breakable, so an attacker's Mold Breaker pierces an innate Pastel
+// Veil exactly as it would the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Pastel Veil")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_PASTEL_VEIL].breakable);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_RAPIDASH_GALAR) { Ability(ABILITY_RUN_AWAY); } // innate Pastel Veil
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TOXIC); }
+    } SCENE {
+        STATUS_ICON(player, badPoison: TRUE); // Mold Breaker ignores the innate -> poisoned
+        NONE_OF { ABILITY_POPUP(player, ABILITY_PASTEL_VEIL); }
+    }
+}
+
+// Known limitation (documented in the ALLOWLIST note): an innate Pastel Veil still cures its OWN
+// pre-existing poison on switch-in via TryImmunityAbilityHealStatus, but does NOT cure an ally's
+// pre-existing poison the way the real ability's switch-in script does.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pastel Veil cures its own pre-existing poison but not its partner's")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_RAPIDASH_GALAR) { Ability(ABILITY_RUN_AWAY); Status1(STATUS1_POISON); } // innate Pastel Veil
+        PLAYER(SPECIES_WYNAUT) { Status1(STATUS1_POISON); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WYNAUT);
+    } WHEN {
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(playerLeft, ABILITY_PASTEL_VEIL);
+        MESSAGE("Rapidash was cured of its poisoning!");
+    } THEN {
+        EXPECT_EQ(playerLeft->status1 & STATUS1_POISON, 0);
+        EXPECT_NE(playerRight->status1 & STATUS1_POISON, 0); // ally cure is NOT replicated for an innate
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -2731,6 +2880,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_LIMBER, ABILITY_CUTE_CHARM, ABILITY_OBLIVIOUS, ABILITY_SAND_VEIL,
         ABILITY_SNOW_CLOAK, ABILITY_COMPOUND_EYES, ABILITY_KEEN_EYE, ABILITY_ILLUMINATE,
         ABILITY_INSOMNIA, ABILITY_VITAL_SPIRIT, ABILITY_SWEET_VEIL, ABILITY_EARLY_BIRD,
+        ABILITY_IMMUNITY, ABILITY_PASTEL_VEIL,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

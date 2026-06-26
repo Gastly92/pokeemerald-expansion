@@ -5600,17 +5600,27 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         {
             battleScript = BattleScript_NotAffected;
         }
-        else if ((sideBattler = IsAbilityOnSide(battlerDef, ABILITY_PASTEL_VEIL)))
+        // FORK: credit an innate Pastel Veil on the side too (FEATURE_INNATE_ABILITIES), mirroring the
+        // Sweet Veil sleep-immunity precedent. When an innate holder (chosen ability differs) blocks the
+        // poisoning, overwrite the pop-up to Pastel Veil since CreateAbilityPopUp reads the primary slot.
+        else if ((sideBattler = IsAbilityOnSide(battlerDef, ABILITY_PASTEL_VEIL))
+              || (sideBattler = IsInnateOnSide(battlerDef, ABILITY_PASTEL_VEIL)))
         {
             abilityAffected = TRUE;
             battlerDef = sideBattler - 1;
+            if (option == RUN_SCRIPT && GetBattlerAbility(battlerDef) != ABILITY_PASTEL_VEIL)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_PASTEL_VEIL;
             abilityDef = ABILITY_PASTEL_VEIL;
             battleScript = BattleScript_ImmunityProtected;
         }
-        else if (abilityDef == ABILITY_IMMUNITY)
+        // FORK: innate Immunity blocks poison like the real ability (FEATURE_INNATE_ABILITIES).
+        else if (abilityDef == ABILITY_IMMUNITY || IsInnateActive(battlerDef, ABILITY_IMMUNITY))
         {
             abilityAffected = TRUE;
             battleScript = BattleScript_ImmunityProtected;
+            if (option == RUN_SCRIPT && abilityDef != ABILITY_IMMUNITY)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_IMMUNITY;
+            abilityDef = ABILITY_IMMUNITY;
         }
         break;
     case MOVE_EFFECT_PARALYSIS:
@@ -9504,6 +9514,22 @@ enum ImmunityHealStatusOutcome TryImmunityAbilityHealStatus(enum BattlerId battl
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_PARALYSIS;
         outcome = IMMUNITY_STATUS_CLEARED;
         gBattleScripting.abilityPopupOverwrite = ABILITY_LIMBER;
+    }
+
+    // FORK: an innate Immunity / Pastel Veil (chosen ability differs, so the switch above missed it) cures
+    // the holder's own pre-existing poison on switch-in exactly like the real ability, the same Limber
+    // precedent. Note this only cures the HOLDER's poison: Pastel Veil's real switch-in script also cures
+    // an ally's pre-existing poison with its own pop-up/message (BattleScript_PastelVeilActivates), which
+    // is not replicated here for an innate holder — that ally-cure is an active scripted effect that would
+    // need its own switch-in driver (the doc's "active / on-event ability with a script" class), left
+    // unwired for now; only the passive block (above) and this self-cure are covered.
+    if (outcome == IMMUNITY_NO_EFFECT
+     && (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON | STATUS1_TOXIC_COUNTER))
+     && (IsInnateActive(battler, ABILITY_IMMUNITY) || IsInnateActive(battler, ABILITY_PASTEL_VEIL)))
+    {
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_POISON;
+        outcome = IMMUNITY_STATUS_CLEARED;
+        gBattleScripting.abilityPopupOverwrite = IsInnateActive(battler, ABILITY_IMMUNITY) ? ABILITY_IMMUNITY : ABILITY_PASTEL_VEIL;
     }
 
     // FORK: an innate Insomnia / Vital Spirit deliberately does NOT cure pre-existing sleep here (unlike

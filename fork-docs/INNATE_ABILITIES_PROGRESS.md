@@ -18,7 +18,7 @@
 | :white_check_mark: | Compound Eyes | Boosts the accuracy of the Pokémon's moves by 30%. |
 | :white_check_mark: | Insomnia | The Pokémon cannot become drowsy or be put to sleep. |
 | :x: | Color Change | The Pokémon's type becomes the type of the move used on it. |
-| :white_large_square: | Immunity | The Pokémon cannot be poisoned or badly poisoned. |
+| :white_check_mark: | Immunity | The Pokémon cannot be poisoned or badly poisoned. |
 | :x: | Flash Fire | Fire-type moves do not work on the Pokémon. Instead, they give the Pokémon the Flash Fire status. |
 | :white_large_square: | Shield Dust | The Pokémon is immune to additional effects from attacks. |
 | :white_large_square: | Own Tempo | The Pokémon cannot become confused and is unaffected by Intimidate. |
@@ -258,7 +258,7 @@
 | :x: | Wandering Spirit | When the Pokémon is hit by a contact move, it swaps Abilities with the attacker. |
 | :x: | Gorilla Tactics | Boosts the Pokémon's Attack stat, but only allows the use of the first selected move. |
 | :x: | Neutralizing Gas | While the Pokémon is in the battle, the effects of all other Pokémon's Abilities will be nullified or will not be triggered. |
-| :white_large_square: | Pastel Veil | Prevents the Pokémon and its allies from being poisoned. |
+| :white_check_mark: | Pastel Veil | Prevents the Pokémon and its allies from being poisoned. |
 | :x: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
 | :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
 | :white_large_square: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |

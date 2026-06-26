@@ -846,7 +846,12 @@ static bool8 DoesAbilityPreventStatus(struct Pokemon *mon, u32 status)
             ret = TRUE;
         break;
     case STATUS1_TOXIC_POISON:
-        if (ability == ABILITY_IMMUNITY || ability == ABILITY_PASTEL_VEIL)
+        // FORK: credit an innate Immunity / Pastel Veil too, so an innate-immune party mon shrugs off the
+        // Pike's poison room exactly like the real ability (out of battle, so gated on the feature flag).
+        if (ability == ABILITY_IMMUNITY || ability == ABILITY_PASTEL_VEIL
+         || (GetConfig(FEATURE_INNATE_ABILITIES)
+             && (SpeciesHasInnate(GetMonData(mon, MON_DATA_SPECIES), ABILITY_IMMUNITY)
+              || SpeciesHasInnate(GetMonData(mon, MON_DATA_SPECIES), ABILITY_PASTEL_VEIL))))
             ret = TRUE;
         break;
     }

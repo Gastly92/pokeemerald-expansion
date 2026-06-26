@@ -1883,7 +1883,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_PASTEL_VEIL,
+        // FORK: Pastel Veil is now an innate (Step 3.5) — freed to its real Hidden Ability slot.
+        .ability = ABILITY_ANTICIPATION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
