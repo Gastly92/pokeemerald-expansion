@@ -22,7 +22,7 @@
 //   BATTLE_ARMOR / SHELL_ARMOR, SPEED_BOOST, LIMBER, CUTE_CHARM, OBLIVIOUS,
 //   SAND_VEIL / SNOW_CLOAK, COMPOUND_EYES / KEEN_EYE / ILLUMINATE,
 //   INSOMNIA / VITAL_SPIRIT / SWEET_VEIL, EARLY_BIRD, IMMUNITY / PASTEL_VEIL,
-//   THICK_FAT.
+//   THICK_FAT, TECHNICIAN.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -389,10 +389,35 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SAND_VEIL
         )
     },
+    { // 0052
+        SPECIES_MEOWTH,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
+    { // 0052
+        SPECIES_MEOWTH_ALOLA,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
+    { // 0052
+        SPECIES_MEOWTH_GMAX,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
     { // 0053
         SPECIES_PERSIAN,
         INNATES(
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_TECHNICIAN
+        )
+    },
+    { // 0053
+        SPECIES_PERSIAN_ALOLA,
+        INNATES(
+            ABILITY_TECHNICIAN
         )
     },
     { // 0054
@@ -808,7 +833,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0122
         SPECIES_MR_MIME,
         INNATES(
-            ABILITY_FILTER
+            ABILITY_FILTER,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0122
@@ -820,7 +846,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0123
         SPECIES_SCYTHER,
         INNATES(
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0124
@@ -1476,13 +1503,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0212
         SPECIES_SCIZOR,
         INNATES(
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0212
         SPECIES_SCIZOR_MEGA,
         INNATES(
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0213
@@ -1607,10 +1636,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0235
+        SPECIES_SMEARGLE,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
     { // 0236
         SPECIES_TYROGUE,
         INNATES(
             ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0237
+        SPECIES_HITMONTOP,
+        INNATES(
+            ABILITY_TECHNICIAN
         )
     },
     { // 0238
@@ -1832,6 +1873,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SURSKIT,
         INNATES(
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0286
+        SPECIES_BRELOOM,
+        INNATES(
+            ABILITY_TECHNICIAN
         )
     },
     { // 0288
@@ -2468,7 +2515,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0402
         SPECIES_KRICKETUNE,
         INNATES(
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0406
@@ -2480,7 +2528,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0407
         SPECIES_ROSERADE,
         INNATES(
-            ABILITY_NATURAL_CURE
+            ABILITY_NATURAL_CURE,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0410
@@ -2522,7 +2571,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0424
         SPECIES_AMBIPOM,
         INNATES(
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0427
@@ -2611,7 +2661,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0439
         SPECIES_MIME_JR,
         INNATES(
-            ABILITY_FILTER
+            ABILITY_FILTER,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0440
@@ -3344,13 +3395,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0572
         SPECIES_MINCCINO,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0573
         SPECIES_CINCCINO,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0577
@@ -4404,6 +4457,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0802
+        SPECIES_MARSHADOW,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
     { // 0803
         SPECIES_POIPOLE,
         INNATES(
@@ -4615,16 +4674,42 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0849
+        SPECIES_TOXTRICITY,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
+    { // 0849
+        SPECIES_TOXTRICITY_AMPED_GMAX,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
+    { // 0849
+        SPECIES_TOXTRICITY_LOW_KEY,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
+    { // 0849
+        SPECIES_TOXTRICITY_LOW_KEY_GMAX,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
     { // 0852
         SPECIES_CLOBBOPUS,
         INNATES(
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0853
         SPECIES_GRAPPLOCT,
         INNATES(
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0854
@@ -4920,6 +5005,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_NATURAL_CURE
         )
     },
+    { // 0925
+        SPECIES_MAUSHOLD,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
+    { // 0925
+        SPECIES_MAUSHOLD_FOUR,
+        INNATES(
+            ABILITY_TECHNICIAN
+        )
+    },
     { // 0932
         SPECIES_NACLI,
         INNATES(
@@ -5118,6 +5215,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SINISTCHA_MASTERPIECE,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 1016
+        SPECIES_FEZANDIPITI,
+        INNATES(
+            ABILITY_TECHNICIAN
         )
     },
     { // 1017

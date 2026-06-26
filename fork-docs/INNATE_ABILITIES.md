@@ -1074,3 +1074,33 @@ Dewgong/Walrein → Ice Body, Snorlax → Gluttony (Immunity also innate), Milta
 → Sheer Force, Grumpig → Own Tempo, Purugly → Defiant, Appletun → Ripen, and the Mamoswine sets — whose three
 real abilities (Oblivious/Snow Cloak/Thick Fat) are ALL now innate — take a fork-owned chosen Snow Warning
 override (`species_ability_overrides.c`), self-synergistic with their innate Snow Cloak.
+
+### ABILITY_TECHNICIAN
+
+Boosts the holder's moves of base power 60 or less by 50%, handled at the single
+effect site in `src/battle_util.c` (`CalcMoveBasePowerAfterModifiers`, the attacker-abilities switch
+that applies move-power modifiers): an `IsInnateActive()` clause beside the chosen-ability
+`ABILITY_TECHNICIAN` case applies the same `x1.5` when `basePower <= 60`, guarded `chosen !=
+ABILITY_TECHNICIAN` so a real Technician never double-boosts. A pure calc-modifier passive like Filter /
+Thick Fat: no script / pop-up / driver, and the innate is NOT recorded as identity (`RecordAbilityBattle`
+stays on the chosen-ability path). NO pure-boon divergence: Technician is a clean upside that never hurts
+its holder, so the innate is a 1:1 copy of the real ability. Suppression parity holds via `IsInnateActive()`:
+Technician is NOT breakable, so Mold Breaker never touches it (same as the real ability) — Gastro Acid /
+Neutralizing Gas / not-on-field are the relevant suppressors. AI is correct for FREE: the boost lives in the
+shared move-power calc the AI runs keyed off the real battler (like Filter's / Thick Fat's reads, and unlike
+Sturdy's dedicated survival helpers), so the AI both threatens and respects an innate Technician on-field; no
+dedicated `== ABILITY_TECHNICIAN` AI reads exist, so nothing else needs wiring. Canon-only (no flavor picks):
+a flat +50% on every weak move is potent, so like the pinch / weather-speed abilities the set stays to species
+whose ability data carries Technician in any slot, so the signature survives whichever slot a build picks (the
+Meowth/Persian lines incl. their Alolan forms, the Scyther/Scizor line incl. Mega, Hitmontop, Smeargle, the
+Mr. Mime / Mime Jr. line, Breloom, Roserade, Kricketune, Ambipom, the Minccino/Cinccino line, Marshadow, the
+Toxtricity forms incl. Gigantamax, the Clobbopus/Grapploct line, the Maushold forms, and Fezandipiti). Many of
+these already carry other innates (Persian's Limber, Mr. Mime's / Mime Jr.'s Filter, the Scyther/Scizor line's
+Swarm, Kricketune's Swarm, Roserade's Natural Cure, Ambipom's Prankster, the Minccino/Cinccino line's Cute
+Charm, the Clobbopus/Grapploct line's Limber), so they take a combined `INNATES(...)` list with Technician
+added. Frontier roster sets that hardcoded Technician are freed (Step 3.5): Persian-Alola → Fur Coat, Kanto
+Persian → Unnerve, Mr. Mime → Soundproof, Scizor → Light Metal, Hitmontop → Intimidate, Breloom → Effect Spore,
+Roserade → Poison Point, Ambipom → Skill Link, Maushold → Friend Guard, Fezandipiti → Toxic Chain; and the
+three species whose every real ability is now innate take a fork-owned chosen-ability override
+(`species_ability_overrides.c`): Marshadow (sole Technician) → Illusion, Kricketune (Swarm + Technician) →
+Sheer Force, Grapploct (Limber + Technician) → Water Absorb.

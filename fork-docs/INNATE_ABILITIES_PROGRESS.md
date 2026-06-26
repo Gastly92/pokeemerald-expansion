@@ -102,7 +102,7 @@
 | :white_large_square: | Magic Guard | The Pokémon takes damage only from attacks. |
 | :x: | No Guard | The accuracy of moves used both by and against the Pokémon becomes 100%. |
 | :x: | Stall | The Pokémon's moves go last among moves of the same priority. |
-| :white_large_square: | Technician | Boosts the power of the Pokémon's moves by 50% if their power is 60 or less. |
+| :white_check_mark: | Technician | Boosts the power of the Pokémon's moves by 50% if their power is 60 or less. |
 | :white_large_square: | Leaf Guard | The Pokémon is immune to status conditions in harsh sunlight. |
 | :x: | Klutz | Items do not work when held by the Pokémon. |
 | :white_large_square: | Mold Breaker | The Pokémon's moves are unaffected by the Ability of the target (with certain exceptions). |
