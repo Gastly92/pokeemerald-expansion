@@ -9,7 +9,8 @@
 // (a silent 1/3-HP switch-out heal), UNAWARE (a passive calc modifier), STURDY
 // (full-HP endure + OHKO-move immunity), NATURAL_CURE (a silent status cure on
 // switch-out), PRANKSTER (+1 priority on status moves), the pinch and weather-speed
-// abilities, FILTER (−25% supereffective damage taken), PRESSURE (the holder's foes
+// abilities, FILTER (−25% supereffective damage taken), THICK_FAT (halves Fire/Ice
+// damage taken), PRESSURE (the holder's foes
 // spend 1 extra PP per move used against it), SPEED_BOOST (+1 Speed at the end of
 // every turn — the first active, scripted end-turn innate), and the accuracy abilities
 // COMPOUND_EYES / KEEN_EYE / ILLUMINATE (which all ignore the target's evasion — under
@@ -1477,6 +1478,123 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate F
     }
 }
 
+// ---- Thick Fat ----
+// A pure calc-modifier passive: the holder takes half damage from Fire- and Ice-type moves, applied
+// at the CalcAttackStat "target's abilities" site (src/battle_util.c). No script / pop-up / driver,
+// like Filter. Snorlax is a canon Thick Fat user whose slot-0 ability is Immunity, so with the
+// feature off it runs Immunity (which never touches Fire damage) and the reduction is attributable
+// solely to the innate. Snorlax is Normal, so Flamethrower is a neutral hit — Thick Fat halves it
+// regardless of effectiveness, isolating the ability from any type interaction.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Thick Fat halves Fire damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_THICK_FAT));
+        ASSUME(gSpeciesInfo[SPECIES_SNORLAX].abilities[0] != ABILITY_THICK_FAT);
+        ASSUME(GetMoveType(MOVE_FLAMETHROWER) == TYPE_FIRE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SNORLAX);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FLAMETHROWER); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x
+    }
+}
+
+// Thick Fat also halves Ice-type damage (the other half of the ability).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Thick Fat halves Ice damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_THICK_FAT));
+        ASSUME(GetMoveType(MOVE_ICE_BEAM) == TYPE_ICE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SNORLAX);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_ICE_BEAM); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x
+    }
+}
+
+// Thick Fat only touches Fire/Ice moves: a Normal hit is unchanged whether or not the innate is active.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Thick Fat does not reduce non-Fire/Ice damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_THICK_FAT));
+        ASSUME(GetMoveType(MOVE_TACKLE) == TYPE_NORMAL);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SNORLAX);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_EQ(results[0].damage, results[1].damage); // Normal hit: Thick Fat does nothing
+    }
+}
+
+// Suppression parity: Thick Fat is breakable, so an attacker's Mold Breaker pierces an innate Thick Fat
+// exactly as it would the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Thick Fat", s16 damage)
+{
+    enum Ability ability;
+    PARAMETRIZE { ability = ABILITY_PRESSURE; }     // innate Thick Fat applies -> halved
+    PARAMETRIZE { ability = ABILITY_MOLD_BREAKER; } // pierces -> full damage
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_THICK_FAT].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_THICK_FAT));
+        ASSUME(GetMoveType(MOVE_FLAMETHROWER) == TYPE_FIRE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SNORLAX);
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ability); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FLAMETHROWER); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.5), results[0].damage); // Mold Breaker full; Thick Fat 0.5x
+    }
+}
+
+// Gastro Acid suppresses an innate Thick Fat (suppression parity), so the Fire hit lands at full
+// power once the innate is off.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Thick Fat", s16 damage)
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_THICK_FAT));
+        ASSUME(GetMoveType(MOVE_FLAMETHROWER) == TYPE_FIRE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SNORLAX);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_FLAMETHROWER, MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(opponent, MOVE_FLAMETHROWER); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_FLAMETHROWER, opponent);
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.5), results[0].damage); // suppressed: full; active: 0.5x
+    }
+}
+
 // ===== Pressure =====
 // Pressure makes the holder's foes spend 1 extra PP per move used against it. It's wired innate-
 // aware at the two PP-deduction sites (CancelerPPDeduction in src/battle_move_resolution.c and the
@@ -2880,7 +2998,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_LIMBER, ABILITY_CUTE_CHARM, ABILITY_OBLIVIOUS, ABILITY_SAND_VEIL,
         ABILITY_SNOW_CLOAK, ABILITY_COMPOUND_EYES, ABILITY_KEEN_EYE, ABILITY_ILLUMINATE,
         ABILITY_INSOMNIA, ABILITY_VITAL_SPIRIT, ABILITY_SWEET_VEIL, ABILITY_EARLY_BIRD,
-        ABILITY_IMMUNITY, ABILITY_PASTEL_VEIL,
+        ABILITY_IMMUNITY, ABILITY_PASTEL_VEIL, ABILITY_THICK_FAT,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

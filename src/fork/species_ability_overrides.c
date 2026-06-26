@@ -181,6 +181,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TANGROWTH, 2,
         ABILITY_SAP_SIPPER
     },
+    { // 0473
+        // Mamoswine's three real abilities (Oblivious, Snow Cloak, Thick Fat) are ALL now innate, so
+        // its slot-2 Thick Fat — now innate-redundant — is repurposed to Snow Warning. Snow Warning is
+        // :x: (never an innate -> stable) and self-synergistic: the snow the prehistoric mammoth heralds
+        // turns on its own innate Snow Cloak evasion. Same pick as Beartic/Articuno above.
+        SPECIES_MAMOSWINE, 2,
+        ABILITY_SNOW_WARNING
+    },
     { // 0479
         SPECIES_ROTOM, 1,
         ABILITY_LIGHTNING_ROD

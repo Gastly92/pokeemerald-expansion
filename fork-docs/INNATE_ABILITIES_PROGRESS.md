@@ -48,7 +48,7 @@
 | :white_large_square: | Rain Dish | The Pokémon has 1/16 of its max HP restored at the end of every turn in rain. |
 | :x: | Sand Stream | Summons a sandstorm for 5 turns when the Pokémon enters a battle. |
 | :white_check_mark: | Pressure | Causes opponents to expend 1 more PP when using moves against the Pokémon. |
-| :white_large_square: | Thick Fat | Halves the damage the Pokémon takes from Fire- and Ice-type moves. |
+| :white_check_mark: | Thick Fat | Halves the damage the Pokémon takes from Fire- and Ice-type moves. |
 | :white_check_mark: | Early Bird | The Pokémon awakens from sleep twice as fast as other Pokémon. |
 | :x: | Flame Body | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned. |
 | :x: | Run Away | Enables a sure getaway from wild Pokémon. |
