@@ -3009,6 +3009,7 @@ static void BattleStartClearSetData(void)
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
         gBattleStruct->battlerState[i].isFirstTurn = 2;
+        gBattleStruct->battlerState[i].facedFoeAction = FALSE; // FORK: DETERMINISTIC_HOLD_EFFECTS — Focus Band entry-turn window starts open for the lead
         gLastMoves[i] = MOVE_NONE;
         gLastLandedMoves[i] = MOVE_NONE;
         gLastHitByType[i] = 0;
@@ -3196,6 +3197,7 @@ void SwitchInClearSetData(enum BattlerId battler, struct Volatiles *volatilesCop
 
     gBattleStruct->moveResultFlags[battler] = 0;
     gBattleStruct->battlerState[battler].isFirstTurn = 2;
+    gBattleStruct->battlerState[battler].facedFoeAction = FALSE; // FORK: DETERMINISTIC_HOLD_EFFECTS — reopen the Focus Band entry-turn window on switch-in
     gBattleStruct->battlerState[battler].notOnField = FALSE;
     gBattleMons[battler].volatiles.truantSwitchInHack = volatilesCopy->truantSwitchInHack;
     gLastMoves[battler] = MOVE_NONE;
@@ -3307,6 +3309,7 @@ void FaintClearSetData(enum BattlerId battler)
     gSpecialStatuses[battler].shellBellEmergencyExit = FALSE;
 
     gBattleStruct->battlerState[battler].isFirstTurn = 2;
+    gBattleStruct->battlerState[battler].facedFoeAction = FALSE; // FORK: DETERMINISTIC_HOLD_EFFECTS — reopen the Focus Band entry-turn window on switch-in
 
     gLastMoves[battler] = MOVE_NONE;
     gLastLandedMoves[battler] = MOVE_NONE;

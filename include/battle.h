@@ -527,7 +527,8 @@ struct BattlerState
     u16 isFirstTurn:2; // Starts at 2 on switch in and counts down during end turn
     u16 flinchedLastTurn:1; // FORK: DETERMINISTIC_FLINCH — was this battler flinched on the previous turn (anti flinch-lock)
     u16 deterministicHoldConsumePending:1; // FORK: DETERMINISTIC_HOLD_EFFECTS — a guaranteed crit/flinch entry item fired this move; consume at move end
-    u16 padding:9;
+    u16 facedFoeAction:1; // FORK: DETERMINISTIC_HOLD_EFFECTS — has a foe acted while this battler was on the field since it entered (closes the Focus Band entry-turn window); cleared on switch-in
+    u16 padding:8;
     // End of Word
 };
 

@@ -56,6 +56,94 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Focus Band does not save after t
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Focus Band saves on the switch-in (entry) turn but not the turn after")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_ZIGZAGOON);
+        // The band holder enters MID-battle (not as the lead). Its entry turn is the
+        // switch-in turn; the band must not still be active the following turn.
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_FOCUS_BAND); HP(1); MaxHP(200); }
+    } WHEN {
+        // Turn 1: the holder switches in (its entry turn) and is not hit lethally,
+        // so the band never triggers and is never consumed.
+        TURN { MOVE(player, MOVE_CELEBRATE); SWITCH(opponent, 1); }
+        // Turn 2: a lethal hit now lands — the entry turn is over, so the band must
+        // NOT save (this is the bug being fixed: it used to survive here). The holder
+        // faints, so the original lead (party index 0) is sent back out.
+        TURN { MOVE(player, MOVE_SCRATCH); SEND_OUT(opponent, 0); }
+    } SCENE {
+        NONE_OF { MESSAGE("The opposing Wobbuffet hung on using its Focus Band!"); }
+    } THEN {
+        // The holder fainted and was replaced, so check it via its party slot (index 1).
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_OPPONENT_A][1], MON_DATA_HP), 0);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_OPPONENT_A][1], MON_DATA_HELD_ITEM), ITEM_FOCUS_BAND);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Focus Band still saves a lethal hit on the switch-in turn itself")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_ZIGZAGOON);
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_FOCUS_BAND); HP(1); MaxHP(200); }
+    } WHEN {
+        // The holder switches in and is hit lethally that same turn (switches resolve
+        // before attacks), so the band must save it — switching in counts as round one.
+        TURN { MOVE(player, MOVE_SCRATCH); SWITCH(opponent, 1); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet hung on using its Focus Band!");
+    } THEN {
+        EXPECT_EQ(opponent->hp, 1);
+        EXPECT_EQ(opponent->item, ITEM_NONE);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Focus Band saves a faint replacement on its first playable turn")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_ZIGZAGOON) { HP(1); }
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_FOCUS_BAND); HP(1); MaxHP(200); }
+    } WHEN {
+        // Turn A: the lead faints and the band holder is sent in as a replacement. It
+        // enters after the foe already acted, so this is NOT its first playable turn.
+        TURN { MOVE(player, MOVE_SCRATCH); SEND_OUT(opponent, 1); }
+        // Turn B: the holder's first turn actually facing an attack — the band must save it.
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet hung on using its Focus Band!");
+    } THEN {
+        EXPECT_EQ(opponent->hp, 1);
+        EXPECT_EQ(opponent->item, ITEM_NONE);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a faint replacement's Focus Band lapses the turn after its first playable turn")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_ZIGZAGOON) { HP(1); }
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_FOCUS_BAND); HP(1); MaxHP(200); }
+    } WHEN {
+        // Turn A: lead faints, band holder sent in as a replacement.
+        TURN { MOVE(player, MOVE_SCRATCH); SEND_OUT(opponent, 1); }
+        // Turn B: its first playable turn passes without a lethal hit (band untriggered).
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+        // Turn C: the window has closed, so a lethal hit now KOs it.
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        NONE_OF { MESSAGE("The opposing Wobbuffet hung on using its Focus Band!"); }
+    } THEN {
+        EXPECT_EQ(opponent->hp, 0);
+        EXPECT_EQ(opponent->item, ITEM_FOCUS_BAND);
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a multi-hit move gets around Focus Band")
 {
     GIVEN {

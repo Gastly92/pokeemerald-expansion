@@ -136,10 +136,20 @@ priority-bracket demotion instead of the stale Speed-halving check. Test:
 ### `DETERMINISTIC_HOLD_EFFECTS`
 
 Turns chance-to-trigger hold items into guaranteed one-shot **entry items**: the
-effect always fires, but only on the first turn the holder is on the field (its
-entry turn — `IsBattlersFirstTurn`, so leads *and* mid-battle switch-ins each get
-one window), then the item is consumed. **Focus Band** becomes a Focus Sash that
-works from **any** HP (not just full) but only on the entry turn — survives one
+effect always fires, but only on the holder's first turn, then the item is
+consumed. The exact "first turn" differs by item kind. *Attacking* items (Quick
+Claw, crit/flinch items) fire on the holder's first action — `IsBattlersFirstTurn`,
+so leads *and* mid-battle switch-ins each get one window. *Defending* items (Focus
+Band) instead fire on the holder's first turn as a live **target** —
+`IsBattlersEntryTurn`, which is the lead/chosen-switch turn the holder actually
+faces an attack, and **not** the turn after. (`IsBattlersFirstTurn` alone is true
+for *two* turns after a mid-battle switch — `isFirstTurn == 2` then `1` — which
+used to let a switched-in Focus Band holder survive twice; the entry window is now
+closed by `facedFoeAction`, a per-battler flag cleared on switch-in and set at move
+end once a foe has acted while the holder was on the field. A faint replacement,
+sent in *after* the foe already acted, therefore still gets its window on its first
+*playable* turn, like a lead.) **Focus Band** becomes a Focus Sash that
+works from **any** HP (not just full) but only on that entry turn — survives one
 lethal hit at 1 HP then is consumed (`GetAdjustedDamage` in `src/battle_util.c`,
 consumed via `BattleScript_HangedOnMsg`); like Sash, a multi-hit move still gets
 around it. **Quick Claw** always moves first in-bracket on the entry turn

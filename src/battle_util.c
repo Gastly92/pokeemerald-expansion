@@ -8552,7 +8552,7 @@ s32 GetAdjustedDamage(struct DamageContext *ctx, s32 damage)
     // (the next strike finds no band), mirroring Focus Sash.
     else if (ctx->holdEffects[ctx->battlerDef] == HOLD_EFFECT_FOCUS_BAND
           && (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
-                  ? IsBattlersFirstTurn(ctx->battlerDef)
+                  ? IsBattlersEntryTurn(ctx->battlerDef)
                   : rand < GetBattlerHoldEffectParam(ctx->battlerDef)))
     {
         enduredHit = TRUE;
@@ -12028,6 +12028,27 @@ bool32 IsBattlersFirstTurn(enum BattlerId battler)
 {
     return gBattleStruct->battlerState[battler].isFirstTurn == 1
         || gBattleStruct->battlerState[battler].isFirstTurn == 2;
+}
+
+// FORK: DETERMINISTIC_HOLD_EFFECTS — "entry turn" for an on-field/defending battler:
+// the single turn it is first a live target after appearing on the field, and never
+// the turn after. IsBattlersFirstTurn() alone can't express this: its counter is
+// true for two turns for a mid-battle switch-in (isFirstTurn == 2 on the switch turn,
+// then == 1 the turn after), so a defending item gated on it would protect a
+// switched-in holder for two turns. But it also can't simply be narrowed to "just
+// switched in", because the three ways a mon appears make the first-target turn differ:
+//   - lead: first targeted on turn 1 (isFirstTurn == 1, after the pre-turn-1 decrement);
+//   - chosen switch: switches in before the foe's move, so it is targeted on the
+//     switch turn itself (isFirstTurn == 2);
+//   - faint replacement: sent in after the foe already acted, so it is first targeted
+//     the FOLLOWING turn (isFirstTurn == 1), exactly like a lead.
+// The unifying rule is "the holder has not yet weathered a foe's action since it
+// entered": facedFoeAction is cleared on entry and set (at move end) once a foe acts
+// while the holder is on the field, which is precisely when the entry window closes.
+bool32 IsBattlersEntryTurn(enum BattlerId battler)
+{
+    return IsBattlersFirstTurn(battler)
+        && !gBattleStruct->battlerState[battler].facedFoeAction;
 }
 
 struct PartyState *GetBattlerPartyState(enum BattlerId battler)
