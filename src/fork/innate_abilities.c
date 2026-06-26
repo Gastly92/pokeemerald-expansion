@@ -531,6 +531,35 @@
 //     where their data carries it (Megas mirror the base as a pure boon — Houndoom-Mega / Kangaskhan-Mega keep
 //     Early Bird). Many already carry other innates (Ledyba/Ledian's Swarm, the Sunkern/Seedot/Nuzleaf/Shiftry
 //     Chlorophyll), so they take a combined INNATES(...) list.
+//   - ABILITY_IMMUNITY / ABILITY_PASTEL_VEIL — the poison-immunity abilities: the holder (and, for
+//     Pastel Veil, its whole side) cannot be poisoned or badly poisoned. Both are wired at the single
+//     chokepoint every poison path funnels through — the MOVE_EFFECT_POISON / MOVE_EFFECT_TOXIC cases
+//     of CanSetNonVolatileStatus (src/battle_util.c) — which Immunity gains as an IsInnateActive()
+//     clause beside the chosen-ability test (reassigning abilityDef + overwriting the pop-up to Immunity
+//     when the chosen ability differs, the Limber/Insomnia precedent), and Pastel Veil gains as a
+//     side-wide IsInnateOnSide() clause beside its IsAbilityOnSide() test (same pop-up handling). Also
+//     wired into TryImmunityAbilityHealStatus (src/battle_util.c) so an innate Immunity / Pastel Veil
+//     cures the holder's own pre-existing poison/toxic on switch-in like the real ability, same pop-up
+//     overwrite. Also mirrored at the out-of-battle Battle Pike poison room (DoesAbilityPreventStatus,
+//     src/battle_pike.c) and at the AI's Toxic Spikes switch-in damage prediction (IsSwitchinTSpikesAffected
+//     and the Toxic Spikes branch of GetSwitchinHazardsDamage, src/battle_ai_switch.c — both gain a
+//     SpeciesHasInnate() / AI_IsInnateOnSide() clause beside the real-ability checks, the Sturdy
+//     precedent in the same file) so the AI never predicts phantom Toxic Spikes poison damage for an
+//     innate-immune switch-in candidate. NO pure-boon divergence: poison immunity is a clean upside that
+//     never hurts its holder, so both innates are a 1:1 copy of the real ability. Suppression parity
+//     holds via IsInnateActive() / AI_IsInnateOnSide(): both are breakable, so an attacker's Mold Breaker
+//     pierces an innate Immunity/Pastel Veil exactly as it would the real ability. KNOWN LIMITATION: the
+//     real Pastel Veil's switch-in ALLY-cure (BattleScript_PastelVeilActivates, looping self+partner to
+//     cure pre-existing poison on the holder's switch-in) is NOT replicated for an innate holder — that
+//     would need a brand-new generic "active switch-in ability with a script" driver, for which no
+//     precedent exists yet (only an end-turn equivalent, Speed Boost's TryActivateInnateEndTurnEffects);
+//     an innate Pastel Veil still cures and blocks the holder's OWN poison via the chokepoints above, just
+//     not its ally's pre-existing poison on switch-in. CANON-ONLY (no flavor picks): Immunity goes to
+//     Gligar (combined with its innate Sand Veil), Snorlax/Snorlax-Gmax (combined with innate Unaware),
+//     and Zangoose, each whose real ability data carries Immunity in some slot; Pastel Veil goes to
+//     Galarian Ponyta/Rapidash, the only species whose real ability data carries it. Frontier roster sets
+//     that hardcoded Pastel Veil are freed (Step 3.5): Rapidash-Galar → Anticipation (its real Hidden
+//     Ability slot).
 // Do NOT give a species an innate that is not on this list: nothing would honor it
 // (no effect site activates it), so it would silently do nothing.
 //
@@ -993,6 +1022,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0077
+        SPECIES_PONYTA_GALAR,
+        INNATES(
+            ABILITY_PASTEL_VEIL
+        )
+    },
+    { // 0078
+        SPECIES_RAPIDASH_GALAR,
+        INNATES(
+            ABILITY_PASTEL_VEIL
+        )
+    },
     { // 0079
         SPECIES_SLOWPOKE,
         INNATES(
@@ -1381,12 +1422,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0143
         SPECIES_SNORLAX,
         INNATES(
+            ABILITY_IMMUNITY,
             ABILITY_UNAWARE
         )
     },
     { // 0143
         SPECIES_SNORLAX_GMAX,
         INNATES(
+            ABILITY_IMMUNITY,
             ABILITY_UNAWARE
         )
     },
@@ -1896,6 +1939,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0207
         SPECIES_GLIGAR,
         INNATES(
+            ABILITY_IMMUNITY,
             ABILITY_SAND_VEIL
         )
     },
@@ -2487,6 +2531,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ALTARIA_MEGA,
         INNATES(
             ABILITY_NATURAL_CURE
+        )
+    },
+    { // 0335
+        SPECIES_ZANGOOSE,
+        INNATES(
+            ABILITY_IMMUNITY
         )
     },
     { // 0336

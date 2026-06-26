@@ -280,7 +280,8 @@ bool32 IsSwitchinTSpikesAffected(enum BattlerId battler)
         return FALSE;
     if (IS_BATTLER_ANY_TYPE(battler, TYPE_POISON, TYPE_STEEL))
         return FALSE;
-    if (ability == ABILITY_IMMUNITY || AI_IsAbilityOnSide(battler, ABILITY_PASTEL_VEIL))
+    if (ability == ABILITY_IMMUNITY || SpeciesHasInnate(gBattleMons[battler].species, ABILITY_IMMUNITY) // FORK: innate-aware
+     || AI_IsAbilityOnSide(battler, ABILITY_PASTEL_VEIL) || AI_IsInnateOnSide(battler, ABILITY_PASTEL_VEIL)) // FORK: innate-aware
         return FALSE;
     if ((heldItemEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS || heldItemEffect == HOLD_EFFECT_CURE_PSN || heldItemEffect == HOLD_EFFECT_CURE_STATUS) && !ignoreItem)
         return FALSE;
@@ -1695,10 +1696,11 @@ static u32 GetSwitchinHazardsDamage(enum BattlerId battler)
         }
 
         if (IsHazardOnSide(side, HAZARDS_TOXIC_SPIKES) && (!IS_BATTLER_ANY_TYPE(battler, TYPE_POISON, TYPE_STEEL)
-            && ability != ABILITY_IMMUNITY && ability != ABILITY_POISON_HEAL && ability != ABILITY_COMATOSE
+            && ability != ABILITY_IMMUNITY && !SpeciesHasInnate(gBattleMons[battler].species, ABILITY_IMMUNITY) // FORK: innate-aware
+            && ability != ABILITY_POISON_HEAL && ability != ABILITY_COMATOSE
             && status == 0
             && !(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
-            && !IsAbilityOnSide(battler, ABILITY_PASTEL_VEIL)
+            && !IsAbilityOnSide(battler, ABILITY_PASTEL_VEIL) && !AI_IsInnateOnSide(battler, ABILITY_PASTEL_VEIL) // FORK: innate-aware
             && !IsMistyTerrainAffected(battler, ability, gAiLogicData->holdEffects[battler], gFieldStatuses)
             && !IsAbilityStatusProtected(battler, ability)
             && heldItemEffect != HOLD_EFFECT_CURE_PSN && heldItemEffect != HOLD_EFFECT_CURE_STATUS
