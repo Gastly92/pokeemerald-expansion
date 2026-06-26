@@ -74,7 +74,7 @@
 // first-turn-only flincher, which can't be used on consecutive turns anyway) are
 // exempt and always flinch. Inner Focus / Shield Dust / Covert Cloak immunity is
 // unchanged. Required by DETERMINISTIC_ADDITIONAL_EFFECTS so its super-effective/
-// STAB flinches can't lock. See TryTriggerAdditionalEffect() in src/battle_util.c.
+// STAB flinches can't lock. See TryTriggerAdditionalEffect() in src/fork/deterministic_moves.c.
 #define DETERMINISTIC_FLINCH TRUE
 
 // When TRUE, a move's chance-based additional effect (burn, paralysis, a stat
@@ -98,7 +98,7 @@
 // next turn, so the boosters can't restore flinch-lock. The AI's valuation is taught the
 // same conditions so it credits an effect exactly when it will actually happen.
 // See TryTriggerAdditionalEffect() and DeterministicAdditionalEffectApplies() in
-// src/battle_util.c.
+// src/fork/deterministic_moves.c.
 #define DETERMINISTIC_ADDITIONAL_EFFECTS TRUE
 
 // When TRUE, hold items whose effect is a random chance to trigger stop rolling

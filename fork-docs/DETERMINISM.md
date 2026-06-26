@@ -75,7 +75,7 @@ a flinch effect is first gated on super effective / STAB like any other effect
 only from a Normal user), and this flag then prevents a *gated* flinch from being
 re-applied to a foe that was flinched the previous turn, so a fast flincher can't
 chain it into an inescapable lock (each flinch "uses up" the next turn's).
-Implemented in `TryTriggerAdditionalEffect()` (`src/battle_util.c`); the "flinched
+Implemented in `TryTriggerAdditionalEffect()` (`src/fork/deterministic_moves.c`); the "flinched
 last turn" bit is snapshotted per battler in `HandleEndTurn_ContinueBattle`
 (`src/battle_main.c`, `BattlerState.flinchedLastTurn`) just before the volatile is
 cleared. Guaranteed flinches (chance ≥ 100%) and **Fake Out** / any first-turn-only
@@ -106,7 +106,7 @@ free). This **includes flinch**: a boosted flinch lands even on a neutral/resist
 hit, but still keeps the anti-lock cap (it just can't be re-applied next turn), so
 the boosters can't restore flinch-lock. Implemented in
 `TryTriggerAdditionalEffect()` / `DeterministicAdditionalEffectApplies()`
-(`src/battle_util.c`), called from `Cmd_setadditionaleffects`; the AI is taught
+(`src/fork/deterministic_moves.c`), called from `Cmd_setadditionaleffects`; the AI is taught
 the same condition via `AI_IsAdditionalEffectReliable` (`src/battle_ai_util.c`,
 used by `AI_CalcAdditionalEffectScore`). (The super-effective branch relies on a
 recorded damage result; in practice every one of the game's chance-based
@@ -213,11 +213,11 @@ Sleep Powder, …) now cause drowsiness like Yawn instead of sleeping outright
 Inferno, DynamicPunch) now require a recharge turn like Hyper Beam, set at move end
 via the new `MOVEEND_DETERMINISTIC_RECHARGE` reusing Hyper Beam's
 `rechargeTimer`/`gLockedMoves` state. **AI awareness:** the shared
-`MoveGainsDeterministicRecharge` predicate (`src/battle_util.c`) drives both the
+`MoveGainsDeterministicRecharge` predicate (`src/fork/deterministic_moves.c`) drives both the
 move-end hook and the AI, so the AI treats a 50% move as a recharge move
 (`AI_IsMoveEffectInMinus` downside + Instruct avoidance,
 `src/battle_ai_util.c`/`battle_ai_main.c`). For the sub-100% sleep→drowse
-conversion, the shared `MoveSleepBecomesDrowsy` predicate (`src/battle_util.c`,
+conversion, the shared `MoveSleepBecomesDrowsy` predicate (`src/fork/deterministic_moves.c`,
 also driving the engine's `Cmd_setnonvolatilestatus`) gates `AI_CanPutToSleep`:
 such a move is treated like Yawn, so the AI won't waste it on a foe that is already
 drowsy. **Move-info display:** because accuracy is now meaningless, the in-battle
