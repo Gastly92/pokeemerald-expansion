@@ -5553,11 +5553,6 @@ void SetAIUsingGimmick(enum BattlerId battler, enum AIConsiderGimmick use)
         gAiBattleData->aiUsingGimmick &= ~(1<<battler);
 }
 
-bool32 IsAIUsingGimmick(enum BattlerId battler)
-{
-    return (gAiBattleData->aiUsingGimmick & (1<<battler)) != 0;
-}
-
 struct AltTeraCalcs
 {
     struct SimulatedDamage takenWithTera[MAX_MON_MOVES];
@@ -6584,7 +6579,7 @@ bool32 IsPartyMonPlannedToBeSwitchedInByPartner(u32 partyIndex, enum BattlerId b
     return FALSE;
 }
 
-static u32 AI_GetAdjustedStatStage(enum BattlerId battler, enum Move move, s32 stage)
+u32 AI_GetAdjustedStatStage(enum BattlerId battler, enum Move move, s32 stage)
 {
     if (GetMoveEffect(move) == EFFECT_GROWTH
      && GetAttackerWeather(gAiLogicData->holdEffects[battler], gAiLogicData->abilities[battler], AI_GetWeather()) & B_WEATHER_SUN)
@@ -6747,6 +6742,9 @@ s32 GetAllyStatChangeScore(u32 battlerAtk, u32 partner, u32 move)
         for (enum Stat stat = STAT_ATK; stat < NUM_STATS; stat++)
         {
             s32 stage = GetStatStage(stat, effect);
+
+            if (stage == 0)
+                continue;
 
             if (effect->moveEffect == STAT_CHANGE_EFFECT_MINUS)
                 stage = -1 * stage;
