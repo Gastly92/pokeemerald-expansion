@@ -4339,6 +4339,18 @@ static enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValue
 {
     enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
 
+    // FORK: DETERMINISTIC_HOLD_EFFECTS — the attacker just took an action, so every foe
+    // still on the field has now weathered a foe's action since it entered. This closes
+    // their Focus Band entry-turn window (see IsBattlersEntryTurn): a holder is protected
+    // only on the turn it actually faces an attack, not the turn after. Done at move end so
+    // the band can still fire during this very move (the holder's entry turn). Cheap and
+    // harmless when the config is off, so left ungated.
+    for (u32 i = 0; i < gBattlersCount; i++)
+    {
+        if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(cv->battlerAtk))
+            gBattleStruct->battlerState[i].facedFoeAction = TRUE;
+    }
+
     if (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
      && gBattleStruct->battlerState[cv->battlerAtk].deterministicHoldConsumePending)
     {

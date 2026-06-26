@@ -2310,7 +2310,7 @@ bool32 ShouldTryOHKO(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     // turn (like a Sash), so the AI should never expect to OHKO through it then.
     if (holdEffect == HOLD_EFFECT_FOCUS_BAND
      && (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
-            ? IsBattlersFirstTurn(battlerDef)
+            ? IsBattlersEntryTurn(battlerDef)
             : (Random() % 100) < GetBattlerHoldEffectParam(battlerDef)))
         return FALSE;   //probabilistically speaking, focus band should activate so dont OHKO
     else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && AI_BattlerAtMaxHp(battlerDef))

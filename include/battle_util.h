@@ -452,6 +452,7 @@ bool32 IsNaturalEnemy(enum Species speciesAttacker, enum Species speciesTarget);
 enum Stat GetDownloadStat(enum BattlerId battler);
 bool32 BattlerJustSwitchedIn(enum BattlerId battler);
 bool32 IsBattlersFirstTurn(enum BattlerId battler);
+bool32 IsBattlersEntryTurn(enum BattlerId battler); // FORK: DETERMINISTIC_HOLD_EFFECTS — true only on a battler's field-entry turn (lead or switch-in)
 struct PartyState *GetBattlerPartyState(enum BattlerId battler);
 void SetValuesOnFaint(enum BattlerId battler);
 

@@ -103,14 +103,18 @@
 
 // When TRUE, hold items whose effect is a random chance to trigger stop rolling
 // and instead become guaranteed one-shot "entry" items: the effect always
-// activates, but only on the first turn the holder is on the field (its entry
-// turn, whether it leads or switches in mid-battle — see IsBattlersFirstTurn),
-// and the item is then consumed. Covered items (by hold effect, so shared
-// effects come along):
+// activates, but only on the holder's first turn (whether it leads or switches in
+// mid-battle), and the item is then consumed. The exact "first turn" differs by
+// item kind: defending/on-field items (Focus Band) anchor on the field-entry turn
+// (IsBattlersEntryTurn — the lead/switch-in turn, and not the turn after), while
+// attacking items (Quick Claw, crit items) anchor on the holder's first action
+// (IsBattlersFirstTurn). Covered items (by hold effect, so shared effects come
+// along):
 //   - Focus Band (HOLD_EFFECT_FOCUS_BAND): like a Focus Sash that works from ANY
-//     HP, but only on the entry turn; survives one lethal hit at 1 HP, then is
-//     consumed. As with Focus Sash, a multi-hit move gets around it (the first
-//     strike consumes the band, the next KOs). See GetAdjustedDamage().
+//     HP, but only on the entry turn (the lead/switch-in turn, never the turn
+//     after); survives one lethal hit at 1 HP, then is consumed. As with Focus
+//     Sash, a multi-hit move gets around it (the first strike consumes the band,
+//     the next KOs). See GetAdjustedDamage() / IsBattlersEntryTurn().
 //   - Quick Claw (HOLD_EFFECT_QUICK_CLAW): always moves first within its priority
 //     bracket on the entry turn, regardless of move, then is consumed. See
 //     TryChangingTurnOrderEffects() in battle_main.c.
