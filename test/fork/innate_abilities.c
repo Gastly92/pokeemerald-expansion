@@ -10,7 +10,7 @@
 // (full-HP endure + OHKO-move immunity), NATURAL_CURE (a silent status cure on
 // switch-out), PRANKSTER (+1 priority on status moves), the pinch and weather-speed
 // abilities, FILTER (−25% supereffective damage taken), THICK_FAT (halves Fire/Ice
-// damage taken), PRESSURE (the holder's foes
+// damage taken), TECHNICIAN (+50% to moves of base power 60 or less), PRESSURE (the holder's foes
 // spend 1 extra PP per move used against it), SPEED_BOOST (+1 Speed at the end of
 // every turn — the first active, scripted end-turn innate), and the accuracy abilities
 // COMPOUND_EYES / KEEN_EYE / ILLUMINATE (which all ignore the target's evasion — under
@@ -1595,6 +1595,81 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate T
     }
 }
 
+// ---- Technician ----
+// A pure calc-modifier passive: the holder's moves of base power 60 or less get +50%, applied at the
+// CalcMoveBasePowerAfterModifiers attacker-abilities site (src/battle_util.c). No script / pop-up /
+// driver, like Filter / Thick Fat. Persian is a canon Technician user whose slot-0 ability is Limber,
+// so with the feature off it runs Limber (which never touches damage) and the boost is attributable
+// solely to the innate. Swift is a 60-BP, never-miss Normal move, so it sits exactly on the <= 60
+// boundary and gets the boost on both branches' identical type interaction.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Technician boosts a base-power-60 move", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PERSIAN, ABILITY_TECHNICIAN));
+        ASSUME(gSpeciesInfo[SPECIES_PERSIAN].abilities[0] != ABILITY_TECHNICIAN);
+        ASSUME(GetMovePower(MOVE_SWIFT) == 60);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_PERSIAN) { Moves(MOVE_SWIFT); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWIFT); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage); // off: base; on: 1.5x
+    }
+}
+
+// Technician only touches moves of base power <= 60: an 85-BP Body Slam is unchanged whether or not
+// the innate is active.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Technician does not boost a move over base power 60", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PERSIAN, ABILITY_TECHNICIAN));
+        ASSUME(GetMovePower(MOVE_BODY_SLAM) > 60);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_PERSIAN) { Moves(MOVE_BODY_SLAM); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_BODY_SLAM); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_EQ(results[0].damage, results[1].damage); // >60 BP: Technician does nothing
+    }
+}
+
+// Gastro Acid suppresses an innate Technician (suppression parity), so the 60-BP move lands at base
+// power once the innate is off. Technician is NOT breakable, so Mold Breaker can't pierce it — Gastro
+// Acid is the relevant suppressor, same as the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Technician", s16 damage)
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(!gAbilitiesInfo[ABILITY_TECHNICIAN].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_PERSIAN, ABILITY_TECHNICIAN));
+        ASSUME(GetMovePower(MOVE_SWIFT) == 60);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_PERSIAN) { Moves(MOVE_SWIFT); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_SWIFT); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.5), results[0].damage); // suppressed: base; active: 1.5x
+    }
+}
+
 // ===== Pressure =====
 // Pressure makes the holder's foes spend 1 extra PP per move used against it. It's wired innate-
 // aware at the two PP-deduction sites (CancelerPPDeduction in src/battle_move_resolution.c and the
@@ -2998,7 +3073,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_LIMBER, ABILITY_CUTE_CHARM, ABILITY_OBLIVIOUS, ABILITY_SAND_VEIL,
         ABILITY_SNOW_CLOAK, ABILITY_COMPOUND_EYES, ABILITY_KEEN_EYE, ABILITY_ILLUMINATE,
         ABILITY_INSOMNIA, ABILITY_VITAL_SPIRIT, ABILITY_SWEET_VEIL, ABILITY_EARLY_BIRD,
-        ABILITY_IMMUNITY, ABILITY_PASTEL_VEIL, ABILITY_THICK_FAT,
+        ABILITY_IMMUNITY, ABILITY_PASTEL_VEIL, ABILITY_THICK_FAT, ABILITY_TECHNICIAN,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

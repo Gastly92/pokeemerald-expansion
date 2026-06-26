@@ -6968,6 +6968,19 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         break;
     }
 
+    // FORK: an innate Technician (FEATURE_INNATE_ABILITIES) boosts moves of base power <= 60 by 50%
+    // exactly like the real ability. Technician is a clean upside (it never hurts its holder), so the
+    // innate is a 1:1 copy — no pure-boon divergence. The switch above already applied a chosen
+    // Technician, so guard against it to avoid double-applying. IsInnateActive() supplies the same
+    // suppression gates as the chosen-ability path (Technician is not breakable, so Mold Breaker never
+    // touches it, same as the real ability). Identity is untouched (not recorded via
+    // RecordAbilityBattle); on-field AI damage prediction is correct for free because it runs this
+    // shared calc keyed off the real battler.
+    if (basePower <= 60
+     && ctx->abilities[battlerAtk] != ABILITY_TECHNICIAN
+     && IsInnateActive(battlerAtk, ABILITY_TECHNICIAN))
+        modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+
     // field abilities
     if ((IsAbilityOnField(ABILITY_DARK_AURA) && moveType == TYPE_DARK)
      || (IsAbilityOnField(ABILITY_FAIRY_AURA) && moveType == TYPE_FAIRY))

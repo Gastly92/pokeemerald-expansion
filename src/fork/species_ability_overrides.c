@@ -169,6 +169,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LOPUNNY, 2,
         ABILITY_SHEER_FORCE
     },
+    { // 0401
+        // Kricketune's only real abilities (Swarm, Technician) are BOTH now innate, so its empty slot 1
+        // takes a flavorful chosen ability for the frontier set. Sheer Force is :x: (never an innate ->
+        // stable) and a pure boon for its WIDE_LENS Swords Dance sweeper: Pounce gains the +30% and drops
+        // its Speed-lowering secondary, on top of the innate Technician Fury Cutter ramp.
+        SPECIES_KRICKETUNE, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0429
         SPECIES_MISMAGIUS, 1,
         ABILITY_WANDERING_SPIRIT
@@ -292,6 +300,21 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0776
         SPECIES_TURTONATOR, 1,
         ABILITY_FLAME_BODY
+    },
+    { // 0802
+        // Marshadow's only real ability (Technician) is now innate, so its empty slot 1 takes a flavorful
+        // chosen ability for the frontier sets. Illusion is :x: (never an innate -> stable) and on-theme:
+        // the Gloomdweller lurks in shadows and mimics, so it enters disguised as the party's last mon.
+        SPECIES_MARSHADOW, 1,
+        ABILITY_ILLUSION
+    },
+    { // 0853
+        // Grapploct's only real abilities (Limber, Technician) are BOTH now innate, so its empty slot 1
+        // takes a flavorful chosen ability for the frontier sets. Water Absorb is :x: (never an innate ->
+        // stable) and on-theme for the octopus: it shrugs off Water moves and heals from them, a clean
+        // boon for its bulky Octolock / Bulk Up setup sweeper.
+        SPECIES_GRAPPLOCT, 1,
+        ABILITY_WATER_ABSORB
     },
     { // 0890
         SPECIES_ETERNATUS, 1,

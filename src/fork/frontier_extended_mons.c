@@ -82,6 +82,7 @@
 // Insomnia / Vital Spirit / Sweet Veil (cannot be put to sleep or made drowsy — Sweet Veil side-wide),
 // Early Bird (wakes from sleep twice as fast),
 // Immunity / Pastel Veil (poison immunity), Thick Fat (halves Fire/Ice damage),
+// Technician (+50% to moves of base power 60 or less),
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -118,6 +119,9 @@
 // Snow Warning — each a stable :x: weather-setter that also turns on the mon's own evasion innate. The accuracy
 // abilities add two more: Skarmory (Keen Eye + Sturdy innate; Weak Armor is a drawback) gets a chosen Bulletproof,
 // and Volbeat (Illuminate + Swarm + Prankster all innate) gets a chosen Victory Star — each a stable :x: pick.
+// Technician adds three more all-real-abilities-innate cases: Marshadow (sole Technician) gets a chosen Illusion,
+// while Kricketune (Swarm + Technician) and Grapploct (Limber + Technician) get a chosen Sheer Force / Water Absorb
+// respectively — each a stable :x: pick.
 // (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
 // Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
@@ -1279,7 +1283,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_FUR_COAT, // Technician now innate; chosen Fur Coat halves physical damage on the fast attacker
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1321,7 +1325,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_DARK_PULSE
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_UNNERVE, // Limber + Technician now innate; chosen Unnerve denies the foe its Berry
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1341,7 +1345,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_TECHNICIAN, // Limber now innate; chosen Technician powers Fake Out on the fast pivot
+        .ability = ABILITY_UNNERVE, // Limber + Technician now innate; chosen Unnerve denies the foe its Berry on the fast pivot
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3084,7 +3088,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICY_WIND,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_SOUNDPROOF, // Filter + Technician now innate; chosen Soundproof blanks sound moves on the special pivot
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5540,7 +5544,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_LIGHT_METAL, // Swarm + Technician now innate; chosen Light Metal softens Low Kick / Heavy Slam
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5560,7 +5564,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_LIGHT_METAL, // Swarm + Technician now innate; chosen Light Metal softens Low Kick / Heavy Slam
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5580,7 +5584,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_LIGHT_METAL, // Swarm + Technician now innate; chosen Light Metal softens Low Kick / Heavy Slam on the wall
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6250,7 +6254,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_TRIPLE_AXEL
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_INTIMIDATE, // Technician now innate; chosen Intimidate drops the foe's Attack on switch-in
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7381,7 +7385,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_ROCK_TOMB
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_EFFECT_SPORE, // Technician now innate; chosen Effect Spore punishes contact attackers
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7421,7 +7425,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_EFFECT_SPORE, // Technician now innate; chosen Effect Spore punishes contact attackers
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10030,7 +10034,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POUNCE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_SHEER_FORCE, // Swarm + Technician now innate; chosen Sheer Force (override) powers Pounce
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -10115,7 +10119,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIKES,
             MOVE_TOXIC_SPIKES
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_POISON_POINT, // Natural Cure + Technician now innate; chosen Poison Point punishes contact on the status spreader
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10329,7 +10333,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_U_TURN
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_SKILL_LINK, // Prankster + Technician now innate; chosen Skill Link maxes Double Hit
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10349,7 +10353,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LOW_KICK,
             MOVE_TRIPLE_AXEL
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_SKILL_LINK, // Prankster + Technician now innate; chosen Skill Link maxes Double Hit
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19979,7 +19983,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_SNEAK,
             MOVE_BULK_UP
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_ILLUSION, // Technician now innate; chosen Illusion (override) disguises the shadow
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19999,7 +20003,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_ILLUSION, // Technician now innate; chosen Illusion (override) disguises the shadow
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21020,7 +21024,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_BULK_UP
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_WATER_ABSORB, // Limber + Technician now innate; chosen Water Absorb (override) heals off Water moves
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21041,7 +21045,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TECHNICIAN, // Limber now innate; chosen Technician powers Mach Punch
+        .ability = ABILITY_WATER_ABSORB, // Limber + Technician now innate; chosen Water Absorb (override) heals off Water moves
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 160,
@@ -23150,7 +23154,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TIDY_UP,
             MOVE_ENCORE
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_FRIEND_GUARD, // Technician now innate; chosen Friend Guard shields the doubles ally
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -25592,7 +25596,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_ROOST
         },
-        .ability = ABILITY_TECHNICIAN,
+        .ability = ABILITY_TOXIC_CHAIN, // Technician now innate; chosen Toxic Chain may badly poison on hit
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
