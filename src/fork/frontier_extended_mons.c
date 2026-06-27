@@ -12411,7 +12411,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHAYMIN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Natural Cure Seed Flare / Synthesis
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SEED_FLARE,
@@ -12419,7 +12419,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_SYNTHESIS
         },
-        .ability = ABILITY_EFFECT_SPORE, // Natural Cure now innate; chosen Effect Spore via override (flowery Gratitude hedgehog)
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
