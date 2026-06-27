@@ -542,26 +542,24 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
-    // Ability — only once genuinely revealed in battle (gAiPartyData pre-knows it
-    // under AI_FLAG_OMNISCIENT, so gate on our own reveal flag instead). The value
-    // is read from our own reveal-time snapshot (infoRevealedAbility), not from
-    // gAiPartyData->ability: the latter is later clobbered by the AI's speculative
+    // Ability — the *chosen* ability is shown only once genuinely revealed in battle
+    // (gAiPartyData pre-knows it under AI_FLAG_OMNISCIENT, so gate on our own reveal flag
+    // instead). The value is read from our own reveal-time snapshot (infoRevealedAbility),
+    // not from gAiPartyData->ability: the latter is later clobbered by the AI's speculative
     // switch/move evaluation, which would otherwise display the wrong ability.
     //
-    // FORK: FEATURE_INNATE_ABILITIES — the foe's innate abilities (always-active
-    // passives) share this single line instead of a separate "Innate:" row. The
-    // dedicated row pushed every line below it down by LINE_H, sliding the bottom
-    // Moves slot under the navigation bar; folding the innates into a parenthetical
-    // here (mirroring the space-separated hazard list on the Field page) keeps the
-    // page within its fixed height. The chosen ability is listed plainly; innates
-    // follow in "(+Name, ...)" with a leading '+' to mark them as additional
-    // passives. The chosen ability and each innate are revealed *independently* —
-    // an innate is its own passive, so seeing one (e.g. an innate Levitate block a
-    // Ground move) does NOT reveal the chosen ability, which keeps showing "?" until
-    // it too is witnessed (so the line reads "? (+Levitate)"). Each tracks its own
-    // reveal bit, so the viewer shows only what has actually been seen in action; a
-    // silent passive innate (Regenerator, Unaware, ...) is never recorded and so
-    // never leaks here.
+    // FORK: FEATURE_INNATE_ABILITIES — innate abilities are a *static property of the species*
+    // (like the type line above), fully determined the moment the foe's species is known. So,
+    // unlike the genuinely-hidden 1-of-N chosen-ability roll, they are NOT reveal-gated: the
+    // viewer lists every innate of the *displayed* species as soon as the mon is seen. (Keyed
+    // off displaySpecies, the Illusion-aware species, so a disguised Zoroark/Zorua never leaks
+    // its real identity through its innate list.) They share this single line instead of a
+    // separate "Innate:" row, which would push every line below it down by LINE_H and slide the
+    // bottom Moves slot under the navigation bar (the page is at its fixed height); the chosen
+    // ability is listed plainly and the innates follow in "(+Name, ...)" with a leading '+'
+    // marking them as additional passives — e.g. "Magnet Pull (+Levitate, Sturdy)", or
+    // "? (+Levitate, Sturdy)" while the chosen ability is still unseen (passives are public, the
+    // rolled ability stays hidden until witnessed).
     bool32 abilitySeen = (gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
     enum Ability seenAbility = gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][foeIndex];
     p = StringCopy(line, COMPOUND_STRING("Ability: "));
@@ -571,17 +569,12 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         p = StringCopy(p, COMPOUND_STRING("?"));
     if (GetConfig(FEATURE_INNATE_ABILITIES))
     {
-        enum Species foeSpecies = GetMonData(&foeParty[foeIndex], MON_DATA_SPECIES, NULL);
-        u32 revealedInnates = gBattleStruct->infoRevealedInnates[B_SIDE_OPPONENT][foeIndex];
         bool32 anyInnate = FALSE;
         for (u32 slot = 0; ; slot++)
         {
-            enum Ability innate = GetSpeciesInnate(foeSpecies, slot);
+            enum Ability innate = GetSpeciesInnate(displaySpecies, slot);
             if (innate == ABILITY_NONE)
                 break;
-            // Only innates the player has individually witnessed in battle.
-            if (!(revealedInnates & (1u << slot)))
-                continue;
             // Skip an innate that just duplicates the revealed chosen ability
             // (e.g. a species that still carries Levitate as its primary), so the
             // line doesn't echo the same name twice.

@@ -7,7 +7,7 @@
 #include "constants/hold_effects.h"
 #include "constants/battle_ai.h"
 #include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
-#include "fork/innate_abilities.h" // FORK: SpeciesHasInnate / GetSpeciesInnate
+#include "fork/innate_abilities.h" // FORK: SpeciesHasInnate
 
 void RecordLastUsedMoveBy(enum BattlerId battlerId, enum Move move)
 {
@@ -71,30 +71,19 @@ void RecordAbilityBattle(enum BattlerId battlerId, enum Ability abilityId)
         enum Ability witnessed = (gBattleScripting.abilityPopupOverwrite != ABILITY_NONE)
                                ? gBattleScripting.abilityPopupOverwrite
                                : abilityId;
-        // FORK: FEATURE_INNATE_ABILITIES — an innate is a passive that's separate from the
-        // chosen ability, so when the witnessed ability is one of this species' innates (and
-        // not its chosen ability) mark *only* that innate slot as revealed; the chosen ability
-        // stays unknown so the viewer shows e.g. "? (+Levitate)" rather than leaking it. The
-        // chosen ability is gBattleMons[battler].ability (innates live in a separate species
-        // table, never in the .ability slot), so a witnessed ability differing from it that the
-        // species declares as an innate is an innate reveal.
-        if (GetConfig(FEATURE_INNATE_ABILITIES)
-            && witnessed != gBattleMons[battlerId].ability
-            && SpeciesHasInnate(gBattleMons[battlerId].species, witnessed))
-        {
-            for (u32 slot = 0; ; slot++)
-            {
-                enum Ability innate = GetSpeciesInnate(gBattleMons[battlerId].species, slot);
-                if (innate == ABILITY_NONE)
-                    break;
-                if (innate == witnessed)
-                {
-                    gBattleStruct->infoRevealedInnates[side][partyIndex] |= 1u << slot;
-                    break;
-                }
-            }
-        }
-        else
+        // FORK: FEATURE_INNATE_ABILITIES — only the *chosen* ability is reveal-gated. Innates are a
+        // static property of the species (the viewer shows them unconditionally, like the type
+        // line), so a witnessed ability that is one of this species' innates — and not its chosen
+        // ability — carries no information about the still-hidden chosen ability: don't mark the
+        // chosen ability revealed (the viewer keeps showing "?", e.g. "? (+Levitate)"). The chosen
+        // ability is gBattleMons[battler].ability (innates live in a separate species table, never
+        // in the .ability slot), so a witnessed ability differing from it that the species declares
+        // as an innate is an innate pop-up (e.g. an innate Levitate/Sturdy forcing the pop-up to its
+        // name via abilityPopupOverwrite) and must not leak the chosen ability.
+        bool32 witnessedIsInnate = GetConfig(FEATURE_INNATE_ABILITIES)
+                                && witnessed != gBattleMons[battlerId].ability
+                                && SpeciesHasInnate(gBattleMons[battlerId].species, witnessed);
+        if (!witnessedIsInnate)
         {
             gBattleStruct->infoAbilityRevealed[side] |= 1u << partyIndex;
             // FORK: snapshot the witnessed ability for the B_FRONTIER_BATTLE_INFO viewer.

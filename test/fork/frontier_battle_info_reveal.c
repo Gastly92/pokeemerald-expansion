@@ -59,32 +59,25 @@ AI_SINGLE_BATTLE_TEST("Frontier INFO: a speculative ability record does not corr
     }
 }
 
-// FORK: FEATURE_INNATE_ABILITIES + B_FRONTIER_BATTLE_INFO. An innate ability is a passive
-// independent of the chosen ability, so witnessing an innate (here an innate Levitate blocking
-// a Ground move) must NOT reveal the chosen ability. The chosen-ability reveal bit stays clear
-// (the viewer keeps showing "?"), while only the matching innate slot's bit is set, so the line
-// reads "? (+Levitate)". Magnemite's chosen ability is Magnet Pull, and its innates are
-// Levitate (slot 0) and Sturdy (slot 1); only Levitate is witnessed here.
-SINGLE_BATTLE_TEST("Frontier INFO: an innate Levitate reveal does not reveal the chosen ability")
+// FORK: FEATURE_INNATE_ABILITIES + B_FRONTIER_BATTLE_INFO. Innates are a static property of the
+// species, so the viewer shows them unconditionally (they are not reveal-gated). But witnessing an
+// innate (here an innate Levitate blocking a Ground move, which forces its own ability pop-up) must
+// still NOT reveal the *chosen* ability: the chosen-ability reveal bit stays clear, so the viewer
+// keeps the chosen slot as "?" and the line reads "? (+Levitate, Sturdy)". Magnemite's chosen
+// ability is forced to Honey Gather (no in-battle effect, so the engine never records it),
+// isolating the effect under test to the innate Levitate pop-up.
+SINGLE_BATTLE_TEST("Frontier INFO: witnessing an innate does not reveal the chosen ability")
 {
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_MAGNEMITE, ABILITY_LEVITATE));
-        ASSUME(GetSpeciesInnate(SPECIES_MAGNEMITE, 0) == ABILITY_LEVITATE);
-        ASSUME(GetSpeciesInnate(SPECIES_MAGNEMITE, 1) == ABILITY_STURDY);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        // Magnemite's chosen ability is forced to Honey Gather (no in-battle effect, so the
-        // engine never records it), isolating the reveal under test to the innate Levitate
-        // blocking the Ground move.
         PLAYER(SPECIES_SANDSLASH) { Moves(MOVE_EARTHQUAKE); }
         OPPONENT(SPECIES_MAGNEMITE) { Ability(ABILITY_HONEY_GATHER); Moves(MOVE_THUNDER_WAVE); }
     } WHEN {
         TURN { MOVE(player, MOVE_EARTHQUAKE); }
     } THEN {
-        // Innate Levitate was seen blocking the Ground move: its slot bit is set...
-        EXPECT(gBattleStruct->infoRevealedInnates[B_SIDE_OPPONENT][0] & (1u << 0));
-        // ...but the unseen innate Sturdy (slot 1) and the chosen ability stay hidden,
-        // so the viewer shows "? (+Levitate)".
-        EXPECT((gBattleStruct->infoRevealedInnates[B_SIDE_OPPONENT][0] & (1u << 1)) == 0);
+        // The innate Levitate pop-up fired, but the chosen ability stays hidden — the viewer
+        // shows "? (+Levitate, Sturdy)" rather than leaking the chosen ability.
         EXPECT((gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & 1u) == 0);
     }
 }
