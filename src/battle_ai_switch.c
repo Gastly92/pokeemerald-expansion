@@ -1878,7 +1878,7 @@ static u32 GetSwitchinStatusDamage(enum BattlerId battler)
                 statusDamage = maxHP / 16;
             else
                 statusDamage = maxHP / 8;
-            if (ability == ABILITY_HEATPROOF)
+            if (BattlerHasAbility(battler, ABILITY_HEATPROOF)) // FORK: innate Heatproof halves burn damage too
                 statusDamage = statusDamage / 2;
             if (statusDamage == 0)
                 statusDamage = 1;

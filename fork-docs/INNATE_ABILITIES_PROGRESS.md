@@ -91,7 +91,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Gluttony | If the Pokémon is holding a Berry to be eaten when its HP drops to 1/4 or less of its max, it will instead eat the Berry when its HP drops to 1/2 or less of its max. |
 | :white_large_square: | Anger Point | Boosts the Pokémon's Attack stat to its sixth stage when the Pokémon takes a critical hit. |
 | :white_large_square: | Unburden | Doubles the Pokémon's Speed stat when its held item is consumed or lost. |
-| :white_large_square: | Heatproof | Halves the damage the Pokémon takes from Fire-type moves and from being burned. |
+| :white_check_mark: | Heatproof | Halves the damage the Pokémon takes from Fire-type moves and from being burned. |
 | :x: | Simple | Doubles the Pokémon's stat changes. |
 | :x: | Dry Skin | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. However, the Pokémon takes 25% more damage from Fire-type moves. The Pokémon has 1/8 of its max HP restored at the end of every turn in rain, but it loses 1/8 of its max HP at the end of every turn in harsh sunlight. |
 | :white_large_square: | Download | The Pokémon compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat — whichever will be more effective. |
@@ -122,7 +122,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Scrappy | The Pokémon can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate. |
 | :x: | Storm Drain | The Pokémon draws in all Water-type moves. Instead of taking damage from them, its Sp. Atk stat is boosted. |
 | :white_large_square: | Ice Body | The Pokémon has 1/16 of its max HP restored at the end of every turn in snow. |
-| :white_large_square: | Solid Rock | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
+| :white_check_mark: | Solid Rock | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :x: | Snow Warning | Summons snow for 5 turns when the Pokémon enters a battle. |
 | :x: | Honey Gather | The Pokémon may gather Honey after a battle. |
 | :white_large_square: | Frisk | When the Pokémon enters a battle, it identifies opponents' held items. |
@@ -138,11 +138,11 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Defeatist | Halves the Pokémon's Attack and Sp. Atk stats when its HP drops to half or less. |
 | :white_large_square: | Cursed Body | When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns. |
 | :white_large_square: | Healer | The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn. |
-| :white_large_square: | Friend Guard | Reduces the damage allies take by 25%. |
+| :white_check_mark: | Friend Guard | Reduces the damage allies take by 25%. |
 | :x: | Weak Armor | When the Pokémon takes damage from a physical move, its Defense stat is lowered by 1 stage, but its Speed stat is boosted by 2 stages. |
 | :white_large_square: | Heavy Metal | Doubles the Pokémon's weight. |
 | :white_large_square: | Light Metal | Halves the Pokémon's weight. |
-| :white_large_square: | Multiscale | Halves the damage the Pokémon takes while its HP is full. |
+| :white_check_mark: | Multiscale | Halves the damage the Pokémon takes while its HP is full. |
 | :white_large_square: | Toxic Boost | Powers up physical moves when the Pokémon is poisoned. |
 | :white_large_square: | Flare Boost | Powers up special moves when the Pokémon is burned. |
 | :white_large_square: | Harvest | If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry. |
@@ -175,7 +175,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Flower Veil | Grass-type allies are immune to status conditions and cannot have their stats lowered. |
 | :white_large_square: | Cheek Pouch | The Pokémon has 1/3 of its max HP restored when it eats a Berry, in addition to the Berry's usual effect. |
 | :x: | Protean | Changes the Pokémon's type to the type of the move it's about to use. This works only once per time the Pokémon enters battle. |
-| :white_large_square: | Fur Coat | Halves the damage the Pokémon takes from physical moves. |
+| :white_check_mark: | Fur Coat | Halves the damage the Pokémon takes from physical moves. |
 | :white_large_square: | Magician | If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves. |
 | :x: | Bulletproof | The Pokémon is immune to ball and bomb moves. |
 | :white_large_square: | Competitive | When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages. |
@@ -205,7 +205,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Merciless | The Pokémon's attacks become critical hits if the target is poisoned or badly poisoned. |
 | :x: | Shields Down | When its HP drops to half or less, the Pokémon's shell breaks and it becomes aggressive. |
 | :white_check_mark: | Stakeout | Doubles the damage dealt to a target that has just switched into battle. |
-| :white_large_square: | Water Bubble | Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned. |
+| :white_check_mark: | Water Bubble | Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned. |
 | :white_check_mark: | Steelworker | Powers up Steel-type moves. |
 | :white_large_square: | Berserk | Boosts the Pokémon's Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max. |
 | :white_check_mark: | Slush Rush | Doubles the Pokémon's Speed stat in snow. |
@@ -252,7 +252,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Steam Engine | Boosts the Speed stat drastically when the Pokémon is hit by a Fire- or Water-type move. |
 | :white_check_mark: | Punk Rock | Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves. |
 | :x: | Sand Spit | Summons a sandstorm for 5 turns when the Pokémon takes damage from moves. |
-| :white_large_square: | Ice Scales | The Pokémon is protected by ice scales, which halve the damage taken from special moves. |
+| :white_check_mark: | Ice Scales | The Pokémon is protected by ice scales, which halve the damage taken from special moves. |
 | :white_large_square: | Ripen | Doubles the effects of Berries eaten by the Pokémon. |
 | :x: | Ice Face | The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it snows. |
 | :white_large_square: | Power Spot | Just being next to the Pokémon powers up moves. |

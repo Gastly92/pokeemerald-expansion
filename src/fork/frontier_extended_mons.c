@@ -87,7 +87,9 @@
 // Mega Launcher / Steelworker / Steely Spirit / Rocky Payload / Sand Force / Analytic / Adaptability /
 // Punk Rock / Stakeout — Sand Force also shrugs off sandstorm chip),
 // Serene Grace (doubles the chance of the holder's moves' additional effects),
-// or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
+// a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush),
+// or a defensive damage reducer (Multiscale / Solid Rock / Fur Coat / Ice Scales / Heatproof / Friend Guard /
+// Water Bubble — Heatproof also halves burn damage; Water Bubble also doubles the holder's Water moves and blocks burn)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -132,6 +134,13 @@
 // a chosen Sand Rush — the latter two already-implemented :white_check_mark: innates (stable, like Slurpuff's Unaware).
 // Most booster sets instead free their slot to a complementary REAL ability (e.g. Gigalith's Sand Force -> chosen Sand
 // Stream; Kleavor's Sharpness -> chosen Sheer Force; Dracovish's Strong Jaw -> chosen Water Absorb).
+// The defensive damage reducers (Batch B) add four more all-real-abilities-innate override cases: Lugia (Pressure +
+// Multiscale) gets a chosen Storm Drain, Carracosta (Solid Rock + Sturdy + Swift Swim) a chosen Water Absorb, Maushold
+// (Friend Guard + Technician) a chosen No Guard, and Bronzong / Sinistcha (Levitate/Heatproof / Hospitality-dead-in-singles)
+// repurpose a dead-weight slot to a chosen Soundproof / Flash Fire respectively — each a stable :x: pick. The rest free
+// their slot to a complementary REAL ability (Dragonite's Multiscale -> chosen Inner Focus; Camerupt's Solid Rock ->
+// chosen Magma Armor; Frosmoth's Ice Scales -> chosen Shield Dust; Persian-Alola's Fur Coat -> chosen Rattled;
+// Rhyperior's Solid Rock -> chosen Lightning Rod; Araquanid's Water Bubble -> chosen Water Absorb).
 // (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
 // Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
@@ -1293,7 +1302,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_FUR_COAT, // Technician now innate; chosen Fur Coat halves physical damage on the fast attacker
+        .ability = ABILITY_RATTLED, // Fur Coat (+ Technician) now innate; chosen Rattled boosts Speed when struck
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1313,7 +1322,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_TAUNT
         },
-        .ability = ABILITY_FUR_COAT,
+        .ability = ABILITY_RATTLED,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -4066,7 +4075,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
-        .ability = ABILITY_MULTISCALE,
+        .ability = ABILITY_INNER_FOCUS, // Multiscale now innate; chosen Inner Focus blocks flinches on the setup sweeper
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4086,7 +4095,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_MULTISCALE,
+        .ability = ABILITY_INNER_FOCUS,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4106,7 +4115,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_OUTRAGE
         },
-        .ability = ABILITY_MULTISCALE,
+        .ability = ABILITY_INNER_FOCUS,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -6639,7 +6648,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_TOXIC
         },
-        .ability = ABILITY_MULTISCALE,
+        .ability = ABILITY_STORM_DRAIN, // Multiscale now innate; chosen Storm Drain (override) gives the sea guardian a Water immunity + SpA boost
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6659,7 +6668,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_MULTISCALE,
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8114,7 +8123,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ANCIENT_POWER
         },
-        .ability = ABILITY_SOLID_ROCK,
+        .ability = ABILITY_MAGMA_ARMOR, // Solid Rock now innate; chosen Magma Armor keeps the wall from being frozen
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8135,7 +8144,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SOLID_ROCK,
+        .ability = ABILITY_MAGMA_ARMOR,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10598,7 +10607,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GYRO_BALL,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_HEATPROOF,
+        .ability = ABILITY_SOUNDPROOF, // Heatproof (+ Levitate) now innate; chosen Soundproof (override) makes the bell immune to sound moves
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10619,7 +10628,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_TOXIC
         },
-        .ability = ABILITY_HEATPROOF,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11211,7 +11220,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_MEGAHORN
         },
-        .ability = ABILITY_SOLID_ROCK,
+        .ability = ABILITY_LIGHTNING_ROD, // Solid Rock now innate; chosen Lightning Rod redirects Electric + SpA boost
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13772,7 +13781,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SOLID_ROCK,
+        .ability = ABILITY_WATER_ABSORB, // Solid Rock (+ Sturdy + Swift Swim) now innate; chosen Water Absorb (override) heals the shell turtle
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18335,7 +18344,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MIRROR_COAT,
             MOVE_TOXIC
         },
-        .ability = ABILITY_WATER_BUBBLE,
+        .ability = ABILITY_WATER_ABSORB, // Water Bubble now innate; chosen Water Absorb heals the water spider on Water hits
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18356,7 +18365,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_BUG_BITE
         },
-        .ability = ABILITY_WATER_BUBBLE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21561,7 +21570,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_ICE_SCALES,
+        .ability = ABILITY_SHIELD_DUST, // Ice Scales now innate; chosen Shield Dust spares the sweeper from added effects
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21581,7 +21590,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_ICE_SCALES,
+        .ability = ABILITY_SHIELD_DUST,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23164,7 +23173,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TIDY_UP,
             MOVE_ENCORE
         },
-        .ability = ABILITY_FRIEND_GUARD, // Technician now innate; chosen Friend Guard shields the doubles ally
+        .ability = ABILITY_NO_GUARD, // Friend Guard (+ Technician) now innate; chosen No Guard (override) lands Population Bomb / Beat Up reliably
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23184,7 +23193,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_PROTECT
         },
-        .ability = ABILITY_FRIEND_GUARD,
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25459,7 +25468,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_HEATPROOF,
+        .ability = ABILITY_FLASH_FIRE, // Heatproof now innate; chosen Flash Fire (override) turns the hot tea's Fire weakness into an immunity
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
