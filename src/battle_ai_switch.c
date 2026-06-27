@@ -1751,7 +1751,8 @@ static s32 GetSwitchinWeatherImpact(enum BattlerId battler)
             && !IS_BATTLER_ANY_TYPE(battler, TYPE_ROCK, TYPE_GROUND, TYPE_STEEL)
             && ability != ABILITY_SAND_VEIL && ability != ABILITY_SAND_RUSH && ability != ABILITY_SAND_FORCE
             && !IsInnateActive(battler, ABILITY_SAND_RUSH) // FORK: innate Sand Rush ignores sandstorm too
-            && !IsInnateActive(battler, ABILITY_SAND_VEIL)) // FORK: innate Sand Veil ignores sandstorm too
+            && !IsInnateActive(battler, ABILITY_SAND_VEIL) // FORK: innate Sand Veil ignores sandstorm too
+            && !IsInnateActive(battler, ABILITY_SAND_FORCE)) // FORK: innate Sand Force ignores sandstorm too
         {
             weatherImpact = maxHP / 16;
             if (weatherImpact == 0)
