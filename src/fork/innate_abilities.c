@@ -3209,12 +3209,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0492
         SPECIES_SHAYMIN_LAND,
         INNATES(
-            ABILITY_NATURAL_CURE
+            ABILITY_NATURAL_CURE,
+            ABILITY_REGENERATOR,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0492
         SPECIES_SHAYMIN_SKY,
         INNATES(
+            ABILITY_NATURAL_CURE,
+            ABILITY_REGENERATOR,
             ABILITY_SERENE_GRACE
         )
     },
