@@ -18,6 +18,7 @@
 // the holder's accuracy from being lowered); plus the Batch A offensive move-power boosters
 // (IRON_FIST / RECKLESS / STRONG_JAW / TOUGH_CLAWS / SHARPNESS / MEGA_LAUNCHER / STEELWORKER /
 // STEELY_SPIRIT / ROCKY_PAYLOAD / SAND_FORCE / ANALYTIC / ADAPTABILITY / PUNK_ROCK / STAKEOUT);
+// plus SERENE_GRACE (doubles the chance of the holder's moves' additional effects).
 // see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
@@ -3374,6 +3375,73 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate I
     }
 }
 
+// Serene Grace: doubles the chance of the holder's moves' additional effects. We test the
+// doubling deterministically with a 50%-chance secondary (Sacred Fire's burn): the innate
+// doubles 50% -> 100%, which is *certain* and never consults the RNG, so the burn lands even
+// when we force the secondary-effect roll to FALSE (which would deny a stock 50% burn).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Serene Grace doubles a 50% secondary effect to a guarantee")
+{
+    GIVEN {
+        ASSUME(MoveHasAdditionalEffect(MOVE_SACRED_FIRE, MOVE_EFFECT_BURN));
+        ASSUME(SpeciesHasInnate(SPECIES_TOGEKISS, ABILITY_SERENE_GRACE));
+        ASSUME(gSpeciesInfo[SPECIES_TOGEKISS].abilities[0] != ABILITY_SERENE_GRACE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TOGEKISS) { Ability(ABILITY_SUPER_LUCK); } // chosen ability is NOT Serene Grace
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SACRED_FIRE, WITH_RNG(RNG_SECONDARY_EFFECT, FALSE)); }
+    } SCENE {
+        STATUS_ICON(opponent, burn: TRUE);
+    }
+}
+
+// Control: with the feature off Togekiss has no innate Serene Grace, so the same forced-FALSE
+// roll denies the stock 50% burn.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Serene Grace doubling (stock behavior)")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
+        PLAYER(SPECIES_TOGEKISS) { Ability(ABILITY_SUPER_LUCK); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SACRED_FIRE, WITH_RNG(RNG_SECONDARY_EFFECT, FALSE)); }
+    } SCENE {
+        NONE_OF { STATUS_ICON(opponent, burn: TRUE); }
+    }
+}
+
+// Suppression parity: Gastro Acid silences the innate, so the burn falls back to the stock 50%
+// roll, which the forced FALSE denies.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Serene Grace")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TOGEKISS) { Ability(ABILITY_SUPER_LUCK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_SACRED_FIRE, WITH_RNG(RNG_SECONDARY_EFFECT, FALSE)); }
+    } SCENE {
+        NONE_OF { STATUS_ICON(opponent, burn: TRUE); }
+    }
+}
+
+// A flavor pick (Gardevoir, no native Serene Grace) gets the doubling too.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor Serene Grace (Gardevoir) doubles secondary chances")
+{
+    GIVEN {
+        ASSUME(gSpeciesInfo[SPECIES_GARDEVOIR].abilities[0] != ABILITY_SERENE_GRACE);
+        ASSUME(SpeciesHasInnate(SPECIES_GARDEVOIR, ABILITY_SERENE_GRACE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GARDEVOIR);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SACRED_FIRE, WITH_RNG(RNG_SECONDARY_EFFECT, FALSE)); }
+    } SCENE {
+        STATUS_ICON(opponent, burn: TRUE);
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -3399,7 +3467,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_IRON_FIST, ABILITY_RECKLESS, ABILITY_STRONG_JAW, ABILITY_TOUGH_CLAWS,
         ABILITY_SHARPNESS, ABILITY_MEGA_LAUNCHER, ABILITY_STEELWORKER, ABILITY_STEELY_SPIRIT,
         ABILITY_ROCKY_PAYLOAD, ABILITY_SAND_FORCE, ABILITY_ANALYTIC, ABILITY_ADAPTABILITY,
-        ABILITY_PUNK_ROCK, ABILITY_STAKEOUT,
+        ABILITY_PUNK_ROCK, ABILITY_STAKEOUT, ABILITY_SERENE_GRACE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

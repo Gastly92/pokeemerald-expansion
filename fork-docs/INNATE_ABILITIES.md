@@ -1153,3 +1153,30 @@ Fist → chosen Inner Focus); sets whose only complementary slots are themselves
 (still correct — the chosen Batch A ability provides the boost). Three sole-real-ability species take a
 fork-owned chosen-ability override (`species_ability_overrides.c`): Clawitzer (sole Mega Launcher) → Water
 Absorb, Melmetal (sole Iron Fist) → Filter, Lycanroc-Dusk (sole Tough Claws) → Sand Rush.
+
+### ABILITY_SERENE_GRACE
+
+Doubles the chance of the additional effects of the holder's moves (flinch, status,
+stat changes, …), handled at the single shared effect site `CalcSecondaryEffectChance` (`src/battle_util.c`):
+the cached `hasSereneGrace` test gains an `|| IsInnateActive(battler, ABILITY_SERENE_GRACE)` clause, so an
+innate holder's secondary-effect chances double exactly like the real ability. The King's Rock / Razor Fang
+flinch boost (`src/battle_hold_effects.c`, gated `B_SERENE_GRACE_BOOST >= GEN_5`) is the second effect site —
+its `GetBattlerAbility() == ABILITY_SERENE_GRACE` read becomes `BattlerHasAbility(battlerAtk, ABILITY_SERENE_GRACE)`.
+NO pure-boon divergence: Serene Grace is a clean upside (a real Serene Grace likewise doubles every additional
+effect, self-targeting ones included), so the innate is a plain 1:1 copy — no script / pop-up / driver. Suppression
+parity holds via `IsInnateActive()` (feature flag + Gastro Acid / Neutralizing Gas / not-on-field); Serene Grace is
+not breakable, so Mold Breaker never touches it, same as the real ability. AI is correct for FREE where the prediction
+runs through the shared chance calc: the AI's reliability check (`MoveEffectIsGuaranteed` / `CalcSecondaryEffectChance`
+in `AI_IsAdditionalEffectReliable`) passes the real on-field `battlerAtk`, so an innate Serene Grace is credited
+automatically. The two DEDICATED AI heuristics that read the chosen ability directly — the "flinching is worthwhile"
+nudge (`ShouldTryToFlinch`) and the confusion-move synergy score (`IncreaseConfusionScore`, both `src/battle_ai_util.c`) —
+are made innate-aware with an `IsInnateActive(battlerAtk, ABILITY_SERENE_GRACE)` clause beside the chosen-ability read.
+This populates the canon Serene Grace users so they keep the signature effect-doubling no matter which slot a build
+picks (Togepi/Togetic/Togekiss, the Chansey/Happiny/Blissey line, Dunsparce/Dudunsparce incl. the three-segment form,
+Jirachi, Shaymin-Sky, the seasonal Deerling/Sawsbuck, Meloetta incl. the Pirouette form), plus a tight graceful/elegant
+flavor set lacking the real ability: the Gardevoir line (Ralts/Kirlia/Gardevoir/Gardevoir-Mega, the elegant "Embrace
+Pokémon"), the serene beauty Milotic, and the lunar-blessing Cresselia. Several flavor/canon picks already carry other
+innates, so they take a combined `INNATES(...)` list. Frontier roster sets that hardcoded Serene Grace are freed
+(Step 3.5) to a complementary REAL slot where one exists (Chansey/Blissey → Healer, Togekiss → Super Luck, Dudunsparce →
+Rattled); the three sole-real-ability species take a fork-owned chosen-ability override (`species_ability_overrides.c`):
+Jirachi → Victory Star, Shaymin-Sky → Effect Spore, Meloetta → Punk Rock.

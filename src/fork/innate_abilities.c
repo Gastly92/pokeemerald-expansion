@@ -26,7 +26,9 @@
 //   IRON_FIST / RECKLESS / STRONG_JAW / TOUGH_CLAWS / SHARPNESS / MEGA_LAUNCHER /
 //   STEELWORKER / STEELY_SPIRIT / ROCKY_PAYLOAD / SAND_FORCE / ANALYTIC /
 //   ADAPTABILITY / PUNK_ROCK / STAKEOUT (offensive move-power boosters, Batch A — all
-//   1:1 clean-upside copies; Sand Force also grants sandstorm-damage immunity).
+//   1:1 clean-upside copies; Sand Force also grants sandstorm-damage immunity),
+//   SERENE_GRACE (doubles the chance of the holder's moves' additional effects —
+//   a 1:1 clean-upside copy).
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -800,7 +802,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0113
         SPECIES_CHANSEY,
         INNATES(
-            ABILITY_NATURAL_CURE
+            ABILITY_NATURAL_CURE,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0114
@@ -1199,6 +1202,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CUTE_CHARM
         )
     },
+    { // 0175
+        SPECIES_TOGEPI,
+        INNATES(
+            ABILITY_SERENE_GRACE
+        )
+    },
+    { // 0176
+        SPECIES_TOGETIC,
+        INNATES(
+            ABILITY_SERENE_GRACE
+        )
+    },
     { // 0177
         SPECIES_NATU,
         INNATES(
@@ -1514,6 +1529,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0206
+        SPECIES_DUNSPARCE,
+        INNATES(
+            ABILITY_SERENE_GRACE
+        )
+    },
     { // 0207
         SPECIES_GLIGAR,
         INNATES(
@@ -1728,7 +1749,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0242
         SPECIES_BLISSEY,
         INNATES(
-            ABILITY_NATURAL_CURE
+            ABILITY_NATURAL_CURE,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0243
@@ -1914,6 +1936,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PELIPPER,
         INNATES(
             ABILITY_KEEN_EYE
+        )
+    },
+    { // 0280
+        SPECIES_RALTS,
+        INNATES(
+            ABILITY_SERENE_GRACE
+        )
+    },
+    { // 0281
+        SPECIES_KIRLIA,
+        INNATES(
+            ABILITY_SERENE_GRACE
+        )
+    },
+    { // 0282
+        SPECIES_GARDEVOIR,
+        INNATES(
+            ABILITY_SERENE_GRACE
+        )
+    },
+    { // 0282
+        SPECIES_GARDEVOIR_MEGA,
+        INNATES(
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0283
@@ -2262,7 +2308,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0350
         SPECIES_MILOTIC,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0351
@@ -2462,7 +2509,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0385
         SPECIES_JIRACHI,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0386
@@ -2772,7 +2820,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0440
         SPECIES_HAPPINY,
         INNATES(
-            ABILITY_NATURAL_CURE
+            ABILITY_NATURAL_CURE,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0441
@@ -2928,6 +2977,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MAGMORTAR,
         INNATES(
             ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0468
+        SPECIES_TOGEKISS,
+        INNATES(
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0469
@@ -3103,7 +3158,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0488
         SPECIES_CRESSELIA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0491
@@ -3122,6 +3178,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHAYMIN_LAND,
         INNATES(
             ABILITY_NATURAL_CURE
+        )
+    },
+    { // 0492
+        SPECIES_SHAYMIN_SKY,
+        INNATES(
+            ABILITY_SERENE_GRACE
         )
     },
 
@@ -3655,49 +3717,57 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0585
         SPECIES_DEERLING_SPRING,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0585
         SPECIES_DEERLING_SUMMER,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0585
         SPECIES_DEERLING_AUTUMN,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0585
         SPECIES_DEERLING_WINTER,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0586
         SPECIES_SAWSBUCK_SPRING,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0586
         SPECIES_SAWSBUCK_SUMMER,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0586
         SPECIES_SAWSBUCK_AUTUMN,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0586
         SPECIES_SAWSBUCK_WINTER,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0588
@@ -3985,6 +4055,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KYUREM,
         INNATES(
             ABILITY_PRESSURE
+        )
+    },
+    { // 0648
+        SPECIES_MELOETTA,
+        INNATES(
+            ABILITY_SERENE_GRACE
+        )
+    },
+    { // 0648
+        SPECIES_MELOETTA_PIROUETTE,
+        INNATES(
+            ABILITY_SERENE_GRACE
         )
     },
 
@@ -5588,6 +5670,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
+        )
+    },
+    { // 0982
+        SPECIES_DUDUNSPARCE,
+        INNATES(
+            ABILITY_SERENE_GRACE
+        )
+    },
+    { // 0982
+        SPECIES_DUDUNSPARCE_THREE_SEGMENT,
+        INNATES(
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0983

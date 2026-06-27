@@ -86,6 +86,7 @@
 // an offensive move-power booster (Iron Fist / Reckless / Strong Jaw / Tough Claws / Sharpness /
 // Mega Launcher / Steelworker / Steely Spirit / Rocky Payload / Sand Force / Analytic / Adaptability /
 // Punk Rock / Stakeout — Sand Force also shrugs off sandstorm chip),
+// Serene Grace (doubles the chance of the holder's moves' additional effects),
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -93,8 +94,9 @@
 // still floats on its innate Levitate; an Unaware staller like Clefable lists
 // ABILITY_MAGIC_GUARD yet still ignores the foe's boosts via its innate Unaware; a
 // Skarmory wall lists ABILITY_KEEN_EYE yet still endures a lethal hit via its innate
-// Sturdy; a Blissey lists ABILITY_SERENE_GRACE yet still self-cleanses on its innate
-// Natural Cure; a Grimmsnarl lists ABILITY_PICKPOCKET yet still gets +1 priority on its
+// Sturdy; a Blissey lists ABILITY_HEALER yet still self-cleanses on its innate
+// Natural Cure (and doubles its moves' effect chances via its innate Serene Grace); a
+// Grimmsnarl lists ABILITY_PICKPOCKET yet still gets +1 priority on its
 // status moves via its innate Prankster; a Ludicolo lists ABILITY_RAIN_DISH yet still
 // doubles its Speed in rain via its innate Swift Swim, and an Excadrill lists
 // ABILITY_SAND_FORCE yet still doubles in sand via its innate Sand Rush; a Revavroom set lists
@@ -2908,7 +2910,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_HEAL_BELL
         },
-        .ability = ABILITY_SERENE_GRACE, // Natural Cure now innate; chosen Serene Grace (real slot 1)
+        .ability = ABILITY_HEALER, // Natural Cure + Serene Grace now innate; chosen Healer (real slot 2)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6327,7 +6329,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAL_BELL,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SERENE_GRACE, // Natural Cure now innate; chosen Serene Grace (real slot 1)
+        .ability = ABILITY_HEALER, // Natural Cure + Serene Grace now innate; chosen Healer (real slot 2)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -6347,7 +6349,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_SERENE_GRACE, // Natural Cure now innate; chosen Serene Grace (real slot 1)
+        .ability = ABILITY_HEALER, // Natural Cure + Serene Grace now innate; chosen Healer (real slot 2)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -9660,7 +9662,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_VICTORY_STAR, // Serene Grace now innate; chosen Victory Star (override, real slot empty)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9680,7 +9682,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_VICTORY_STAR, // Serene Grace now innate; chosen Victory Star (override, real slot empty)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9700,7 +9702,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_VICTORY_STAR, // Serene Grace now innate; chosen Victory Star (override, real slot empty)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11357,7 +11359,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_SUPER_LUCK, // Serene Grace now innate; chosen Super Luck (real slot 2)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12430,7 +12432,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_EFFECT_SPORE, // Serene Grace now innate; chosen Effect Spore (override, real slot empty)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15745,7 +15747,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_PUNK_ROCK, // Serene Grace now innate; chosen Punk Rock (override, real slot empty)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15765,7 +15767,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_PUNK_ROCK, // Serene Grace now innate; chosen Punk Rock (override, real slot empty)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24405,7 +24407,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_RATTLED, // Serene Grace now innate; chosen Rattled (real slot 2)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24425,7 +24427,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ROOST
         },
-        .ability = ABILITY_SERENE_GRACE,
+        .ability = ABILITY_RATTLED, // Serene Grace now innate; chosen Rattled (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

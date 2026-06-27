@@ -3901,6 +3901,7 @@ bool32 ShouldTryToFlinch(enum BattlerId battlerAtk, enum BattlerId battlerDef, e
         return FALSE;
     }
     else if ((atkAbility == ABILITY_SERENE_GRACE
+      || IsInnateActive(battlerAtk, ABILITY_SERENE_GRACE) // FORK: innate Serene Grace also makes flinching worthwhile
       || gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS
       || gBattleMons[battlerDef].volatiles.infatuation
       || gBattleMons[battlerDef].volatiles.confusionTurns > 0)
@@ -5232,7 +5233,8 @@ void IncreaseConfusionScore(enum BattlerId battlerAtk, enum BattlerId battlerDef
             ADJUST_SCORE_PTR(WEAK_EFFECT);
         else if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS
           || gBattleMons[battlerDef].volatiles.infatuation
-          || (gAiLogicData->abilities[battlerAtk] == ABILITY_SERENE_GRACE && HasMoveWithMoveEffectExcept(battlerAtk, MOVE_EFFECT_FLINCH, EFFECT_FIRST_TURN_ONLY)))
+          || ((gAiLogicData->abilities[battlerAtk] == ABILITY_SERENE_GRACE || IsInnateActive(battlerAtk, ABILITY_SERENE_GRACE)) // FORK: innate-aware
+              && HasMoveWithMoveEffectExcept(battlerAtk, MOVE_EFFECT_FLINCH, EFFECT_FIRST_TURN_ONLY)))
             ADJUST_SCORE_PTR(GOOD_EFFECT);
         else
             ADJUST_SCORE_PTR(DECENT_EFFECT);

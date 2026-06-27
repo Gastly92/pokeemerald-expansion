@@ -25,7 +25,8 @@
 //   THICK_FAT, TECHNICIAN,
 //   IRON_FIST / RECKLESS / STRONG_JAW / TOUGH_CLAWS / SHARPNESS / MEGA_LAUNCHER /
 //   STEELWORKER / STEELY_SPIRIT / ROCKY_PAYLOAD / SAND_FORCE / ANALYTIC /
-//   ADAPTABILITY / PUNK_ROCK / STAKEOUT (offensive move-power boosters, Batch A).
+//   ADAPTABILITY / PUNK_ROCK / STAKEOUT (offensive move-power boosters, Batch A),
+//   SERENE_GRACE (doubles the holder's moves' additional-effect chances).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
