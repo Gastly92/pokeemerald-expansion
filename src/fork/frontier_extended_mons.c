@@ -15711,7 +15711,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HYDRO_PUMP,
             MOVE_SECRET_SWORD,
-            MOVE_CHILLING_WATER,
+            MOVE_VACUUM_WAVE,
             MOVE_ICY_WIND
         },
         .ability = ABILITY_JUSTIFIED,
@@ -15731,7 +15731,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HYDRO_PUMP,
             MOVE_SECRET_SWORD,
-            MOVE_HYDRO_PUMP,
+            MOVE_TERA_BLAST,
             MOVE_ICY_WIND
         },
         .ability = ABILITY_JUSTIFIED,
@@ -15741,7 +15741,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_WATER,
+        .teraType = TYPE_ELECTRIC,
     },
 
     // 0648
