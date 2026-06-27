@@ -1,5 +1,38 @@
 # Innate abilities — batching plan
 
+## ▶ Standing instruction: "let's do the next batch of innate abilities"
+
+When the maintainer says that (or anything like it), this is the whole job — no
+other context needed:
+
+1. **Find the next batch.** It is the **first row in the [Execution queue](#execution-queue)
+   whose status is still `open`.** That single rule decides "next" — don't
+   improvise the order. (The queue interleaves the two driver-build steps, so
+   "next" never lands on a batch that's blocked on a missing driver.)
+2. **Do it by the recipe.** Open [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) and
+   run its 5-step Definition of Done for that batch. **Re-grep every site first**
+   (`grep -n ABILITY_X src/` and `grep src/battle_ai_*.c`) — the line numbers in
+   this doc drift after upstream syncs, and the newer batches' sites are only
+   *(grep to confirm)*.
+3. **One batch → one branch (`claude/...`) → one PR** against `master`. Don't
+   bundle two batches.
+4. **Update the records (all of them):** flip each ability's row to
+   `:white_check_mark:` in `INNATE_ABILITIES_PROGRESS.md`; add/extend its block in
+   the [wiring reference](INNATE_ABILITIES.md#per-ability-wiring-reference) and
+   `FORK.md`; and **mark the batch `done` in the Execution queue + the
+   [batch index](#batch-index-coverage-checklist--all-133-pending-abilities) of
+   this doc** (so the *next* session's step 1 finds the right row).
+
+**Doc hygiene / lifecycle (don't skip):** mark a finished batch `done` **in
+place — never delete its rows** while any batch is still `open`. The batch index
+must keep summing to **133**; that sum is the tripwire proving every pending
+ability is still accounted for, and deleting rows breaks it. Only once the entire
+queue reads `done` is the doc retired — at that point delete it (or reduce it to a
+one-line stub pointing at the progress doc + wiring reference), because the
+progress doc and wiring reference are then the complete record.
+
+---
+
 A worksheet for taking the **pending** abilities in
 [`INNATE_ABILITIES_PROGRESS.md`](INNATE_ABILITIES_PROGRESS.md) and wiring them as
 innates in efficient groups. This doc is the *what to batch and why*; the
@@ -303,18 +336,43 @@ abilities. Listed so they're not silently dropped.
 
 ---
 
-## Suggested order of attack
+## Execution queue
 
-1. **A, B, N, O, P, Q, R** (Tier 1 calc batches) + **C–G** (clones) +
-   **H, I, S** (trait swaps) — ~80 abilities, all calc/single-site, AI mostly
-   free, no new drivers. This is the bulk and the low-risk majority.
-2. **J + T** (end-turn / berry) — reuse the existing end-turn driver.
-3. **K** — build the on-contact driver, then its identical pairs.
-4. **L** — build the switch-in driver (unblocks the Intimidate-immunity halves).
-5. **M, U** — on-event stat boosts and ally support.
-6. **Tier 5** — bespoke, one at a time, last.
+**This is the source of truth for "the next batch."** Work strictly top-down; the
+next batch is the first row still marked `open`. Front-loads the ~80 low-risk
+calc/trait abilities before any new driver is built, and inserts each driver-build
+as its own queue step so a batch is never reached before the hook it needs exists.
+Mark a row `done` (in place, don't delete) when its PR merges.
 
-That front-loads ~80 abilities across low-risk PRs before any new driver is built.
+| # | Queue step | Kind | Status |
+| :-: | :-- | :-- | :-: |
+| 1 | Batch A — Offensive move-power boosters | calc, no driver | open |
+| 2 | Batch B — Defensive damage reducers | calc, no driver | open |
+| 3 | Batch N — Status-conditional stat boosts | calc, no driver | open |
+| 4 | Batch O — Crit-rate / crit-damage modifiers | calc, no driver | open |
+| 5 | Batch P — Accuracy / type-eff / effect-chance | calc, no driver | open |
+| 6 | Batch Q — Priority granters | calc, no driver | open |
+| 7 | Batch R — Terrain modifiers | calc, no driver | open |
+| 8 | Batch C — Double physical Attack | clone, no driver | open |
+| 9 | Batch D+E — Stat-drop protection (fold E into D) | trait, no driver | open |
+| 10 | Batch F — Priority-move block | clone, no driver | open |
+| 11 | Batch G — Redirection-ignore | clone, no driver | open |
+| 12 | Batch H — Trapping | trait, no driver | open |
+| 13 | Batch I — Status-condition immunities | trait, no driver | open |
+| 14 | Batch S — Misc single-site traits | trait, no driver | open |
+| 15 | Batch J — End-of-turn effects | active, **existing** driver | open |
+| 16 | Batch T — Berry/item synergy | active/trait | open |
+| 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | open |
+| 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | open |
+| 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | open |
+| 20 | Batch L — Switch-in actives | active, needs step 19 | open |
+| 21 | Batch M — On-KO/on-hit stat boosts | active | open |
+| 22 | Batch U — Ally-support (doubles) | calc/trait | open |
+| 23 | Tier 5 — Bespoke/deferred (one ability per session) | one-off | open |
+
+> Steps 9 folds Batch E into D (same code block). Step 23 is **not** one batch —
+> each Tier 5 ability is its own session; treat "next batch" there as the next
+> unticked Tier 5 row in the batch index.
 
 ## Per-batch checklist (run the recipe's Definition of Done for each)
 
@@ -332,12 +390,15 @@ That front-loads ~80 abilities across low-risk PRs before any new driver is buil
   battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.
 - [ ] **Step 5** — flip each row to `:white_check_mark:` in
   `INNATE_ABILITIES_PROGRESS.md`, update `FORK.md` and the
-  [wiring reference](INNATE_ABILITIES.md#per-ability-wiring-reference), and tick
-  the batch off below.
+  [wiring reference](INNATE_ABILITIES.md#per-ability-wiring-reference), and mark
+  the batch `done` (in place) in **both** the [Execution queue](#execution-queue)
+  and the batch index below.
 
 ## Batch index (coverage checklist — all 133 pending abilities)
 
-Nothing started yet — all batches open.
+Mark batches `done` in place as they merge — never delete rows while any batch is
+`open` (the count must keep summing to 133). Retire the whole doc only once every
+row is `done`.
 
 | Batch | Class | # | Status |
 | :-- | :-- | :-: | :-: |
