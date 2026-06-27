@@ -38,7 +38,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Clear Body | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
 | :x: | Lightning Rod | The Pokémon draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage. |
-| :white_large_square: | Serene Grace | Raises the likelihood of additional effects occurring when the Pokémon uses its moves. |
+| :white_check_mark: | Serene Grace | Raises the likelihood of additional effects occurring when the Pokémon uses its moves. |
 | :white_check_mark: | Swift Swim | Doubles the Pokémon's Speed stat in rain. |
 | :white_check_mark: | Chlorophyll | Doubles the Pokémon's Speed stat in harsh sunlight. |
 | :white_check_mark: | Illuminate | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |

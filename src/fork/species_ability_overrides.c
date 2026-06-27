@@ -145,6 +145,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LATIOS, 1,
         ABILITY_ILLUSION
     },
+    { // 0385
+        // Jirachi's only real ability (Serene Grace) is now innate, so its empty slot 1 takes a
+        // flavorful chosen ability. Victory Star is :x: (never an innate -> stable) and on-theme: the
+        // wishing star grants fortune, boosting the accuracy of itself and its doubles allies. (Azelf
+        // and Volbeat also hand out Victory Star.)
+        SPECIES_JIRACHI, 1,
+        ABILITY_VICTORY_STAR
+    },
     { // 0386
         SPECIES_DEOXYS_ATTACK, 1,
         ABILITY_TRACE
@@ -245,6 +253,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SHAYMIN, 1,
         ABILITY_EFFECT_SPORE
     },
+    { // 0492
+        // Shaymin-Sky's only real ability (Serene Grace) is now innate, so its empty slot 1 takes
+        // Effect Spore — :x: (never an innate -> stable) and on-theme for the Gratitude flower hedgehog
+        // (same pick as base Shaymin above).
+        SPECIES_SHAYMIN_SKY, 1,
+        ABILITY_EFFECT_SPORE
+    },
     { // 0503
         SPECIES_SAMUROTT, 1,
         ABILITY_WATER_ABSORB
@@ -281,8 +296,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PRANKSTER
     },
     { // 0646
-        SPECIES_KYUREM, 1, 
+        SPECIES_KYUREM, 1,
         ABILITY_SNOW_WARNING
+    },
+    { // 0648
+        // Meloetta's only real ability (Serene Grace) is now innate, so its empty slot 1 takes Punk
+        // Rock — an already-implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) and
+        // on-theme: the Melody Pokemon's powerful voice boosts its sound-based Hyper Voice / Relic Song
+        // (and softens incoming sound moves).
+        SPECIES_MELOETTA, 1,
+        ABILITY_PUNK_ROCK
     },
     { // 0685
         // Slurpuff's only real abilities are Sweet Veil (slot 0, now innate) and Unburden (slot 2, dead
