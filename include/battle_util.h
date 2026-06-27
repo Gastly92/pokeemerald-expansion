@@ -132,7 +132,8 @@ struct DamageContext
     u32 airBalloonBlocked:1;
     u32 abilityBlocked:1;
     u32 runScript:1;  // Used during actual combat where scripts have to be run / flags need to be set
-    u32 padding:22;
+    u32 innatesEnabled:1; // FORK: cached GetConfig(FEATURE_INNATE_ABILITIES), set once in DoMoveDamageCalcVars
+    u32 padding:21;
 };
 
 // Helper struct to keep the arg list small and prevent constant recalculations of abilities/hold effects.
