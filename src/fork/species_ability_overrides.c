@@ -266,12 +266,9 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0492
         SPECIES_SHAYMIN, 1,
-        ABILITY_EFFECT_SPORE
+        ABILITY_GRASSY_SURGE
     },
     { // 0492
-        // Shaymin-Sky's only real ability (Serene Grace) is now innate, so its empty slot 1 takes
-        // Effect Spore — :x: (never an innate -> stable) and on-theme for the Gratitude flower hedgehog
-        // (same pick as base Shaymin above).
         SPECIES_SHAYMIN_SKY, 1,
         ABILITY_EFFECT_SPORE
     },
