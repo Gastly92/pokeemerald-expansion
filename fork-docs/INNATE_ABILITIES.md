@@ -1171,6 +1171,12 @@ in `AI_IsAdditionalEffectReliable`) passes the real on-field `battlerAtk`, so an
 automatically. The two DEDICATED AI heuristics that read the chosen ability directly — the "flinching is worthwhile"
 nudge (`ShouldTryToFlinch`) and the confusion-move synergy score (`IncreaseConfusionScore`, both `src/battle_ai_util.c`) —
 are made innate-aware with an `IsInnateActive(battlerAtk, ABILITY_SERENE_GRACE)` clause beside the chosen-ability read.
+**Composes with `DETERMINISTIC_ADDITIONAL_EFFECTS` for free:** under that flag a chance-based effect is gated on a
+super-effective / STAB hit, but the resolver (`TryTriggerAdditionalEffect`, `src/fork/deterministic_moves.c`) makes a
+Serene Grace / Rainbow boost *certain* by detecting a **computed chance above the move's base**
+(`percentChance > additionalEffect->chance`) — NOT a direct `== ABILITY_SERENE_GRACE` check. Because the innate feeds
+its boost through `CalcSecondaryEffectChance`, an innate holder trips that gate exactly like the real ability, so no
+extra deterministic wiring is needed.
 This populates the canon Serene Grace users so they keep the signature effect-doubling no matter which slot a build
 picks (Togepi/Togetic/Togekiss, the Chansey/Happiny/Blissey line, Dunsparce/Dudunsparce incl. the three-segment form,
 Jirachi, Shaymin-Sky, the seasonal Deerling/Sawsbuck, Meloetta incl. the Pirouette form), plus a tight graceful/elegant

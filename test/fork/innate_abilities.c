@@ -3426,6 +3426,47 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate S
     }
 }
 
+// Interaction with DETERMINISTIC_ADDITIONAL_EFFECTS (the actual in-game default; the other
+// Serene Grace tests above run with it forced OFF by the test baseline). Under that flag a
+// chance-based effect is gated on a super-effective / STAB hit, but a Serene Grace / Rainbow
+// boost (a computed chance ABOVE the move's base) bypasses the gate and makes the effect
+// certain. The deterministic resolver keys off the boosted chance, NOT a direct ability check
+// (TryTriggerAdditionalEffect, src/fork/deterministic_moves.c), so an innate Serene Grace —
+// which feeds the boost through CalcSecondaryEffectChance — trips the gate exactly like the
+// real ability. Fire Punch (Fire, 10% burn) vs a Psychic target is neutral and non-STAB for a
+// Fairy/Flying Togekiss, so without the booster the burn would be gated out.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Serene Grace guarantees a gated effect under DETERMINISTIC_ADDITIONAL_EFFECTS")
+{
+    GIVEN {
+        ASSUME(MoveHasAdditionalEffect(MOVE_FIRE_PUNCH, MOVE_EFFECT_BURN));
+        ASSUME(SpeciesHasInnate(SPECIES_TOGEKISS, ABILITY_SERENE_GRACE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        PLAYER(SPECIES_TOGEKISS) { Ability(ABILITY_SUPER_LUCK); Moves(MOVE_FIRE_PUNCH); } // chosen ability is NOT Serene Grace
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(600); HP(600); Defense(255); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_FIRE_PUNCH); }
+    } THEN {
+        EXPECT(opponent->status1 & STATUS1_BURN);
+    }
+}
+
+// Control for the deterministic case: with the feature off Togekiss has no innate Serene
+// Grace, so the same neutral, non-STAB Fire Punch is gated out and does NOT burn.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: feature off — a gated effect stays gated under DETERMINISTIC_ADDITIONAL_EFFECTS")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        PLAYER(SPECIES_TOGEKISS) { Ability(ABILITY_SUPER_LUCK); Moves(MOVE_FIRE_PUNCH); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(600); HP(600); Defense(255); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_FIRE_PUNCH); }
+    } THEN {
+        EXPECT(!(opponent->status1 & STATUS1_BURN));
+    }
+}
+
 // A flavor pick (Gardevoir, no native Serene Grace) gets the doubling too.
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor Serene Grace (Gardevoir) doubles secondary chances")
 {
