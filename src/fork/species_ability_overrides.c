@@ -85,6 +85,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DONPHAN, 1,
         ABILITY_SAND_STREAM
     },
+    { // 0249
+        // Lugia's only real abilities (Pressure, Multiscale) are BOTH now innate, so its empty slot 1 takes
+        // a chosen Storm Drain — :x: (never an innate -> stable) and flavorful (the guardian of the seas draws
+        // in Water), giving the Calm Mind set a Water immunity + Sp. Atk boost.
+        SPECIES_LUGIA, 1,
+        ABILITY_STORM_DRAIN
+    },
     { // 0250
         SPECIES_HO_OH, 1,
         ABILITY_FLAME_BODY
@@ -189,6 +196,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MISMAGIUS, 1,
         ABILITY_WANDERING_SPIRIT
     },
+    { // 0437
+        // Bronzong's Levitate and Heatproof are now innate, freeing its frontier slot; its remaining slot-2
+        // Heavy Metal is dead weight (it sets no weight moves and only worsens Low Kick / Grass Knot), so the
+        // slot is repurposed to Soundproof — :x: (never an innate -> stable) and a thematic clean boon: the
+        // bell shrugs off Hyper Voice / Boomburst and other sound moves. (Sceptile-style dead-weight repurpose.)
+        SPECIES_BRONZONG, 2,
+        ABILITY_SOUNDPROOF
+    },
     { // 0455
         SPECIES_CARNIVINE, 1, 
         ABILITY_CHLOROPHYLL
@@ -267,6 +282,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0531
         SPECIES_AUDINO, 1,
         ABILITY_CUTE_CHARM
+    },
+    { // 0565
+        // Carracosta's only real abilities (Solid Rock, Sturdy, Swift Swim) are ALL now innate, so its
+        // innate-redundant slot-2 Swift Swim takes a chosen Water Absorb — :x: (never an innate -> stable)
+        // and flavorful: the prehistoric shell turtle heals on the Water hits a Shell Smash sweeper invites.
+        SPECIES_CARRACOSTA, 2,
+        ABILITY_WATER_ABSORB
     },
     { // 0594
         SPECIES_ALOMOMOLA, 2, 
@@ -371,6 +393,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SKELEDIRGE, 1,
         ABILITY_MUMMY
     },
+    { // 0925
+        // Maushold's only real abilities (Friend Guard, Technician) are BOTH now innate, so its empty slot 1
+        // takes a chosen No Guard — :x: (never an innate -> stable) and synergistic: the whole family attacks
+        // as one, so Population Bomb / Beat Up land their full multi-hit reliably.
+        SPECIES_MAUSHOLD, 1,
+        ABILITY_NO_GUARD
+    },
     { // 0952
         // Scovillain's only non-drawback real abilities (Chlorophyll, Insomnia) are BOTH now innate (Klutz,
         // slot 2, is a drawback that disables its Life Orb), so its slot-2 Klutz is repurposed to Sheer Force.
@@ -378,6 +407,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Flamethrower / Earth Power gain +30% and drop their secondaries (and skip Life Orb recoil too).
         SPECIES_SCOVILLAIN, 2,
         ABILITY_SHEER_FORCE
+    },
+    { // 1013
+        // Sinistcha's Heatproof is now innate, freeing its frontier slot; its slot-0 Hospitality is dead in
+        // singles (it heals an ally), so the innate-redundant slot-2 (Heatproof) is repurposed to a chosen
+        // Flash Fire — :x: (never an innate -> stable) and thematic: the haunted hot tea turns its Fire
+        // weakness into an immunity (stacking with the innate Heatproof's burn-damage halving).
+        SPECIES_SINISTCHA, 2,
+        ABILITY_FLASH_FIRE
     },
     { // 1017
         SPECIES_OGERPON_CORNERSTONE, 1,

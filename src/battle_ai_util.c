@@ -3592,7 +3592,8 @@ bool32 BattlerHasMaxHPProtection(enum BattlerId battler)
         return TRUE;
     if (B_STURDY >= GEN_5 && BattlerHasAbility(battler, ABILITY_STURDY)) // FORK: innate-aware
         return TRUE;
-    if (ability == ABILITY_MULTISCALE || ability == ABILITY_SHADOW_SHIELD)
+    if (ability == ABILITY_MULTISCALE || ability == ABILITY_SHADOW_SHIELD
+     || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battler, ABILITY_MULTISCALE))) // FORK: innate Multiscale is full-HP protection too
         return TRUE;
     return FALSE;
 }
@@ -3741,6 +3742,7 @@ bool32 ShouldBurn(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Abi
     if (CanBeBurned(battlerAtk, battlerDef, abilityDef) && (
         DoesBattlerBenefitFromAllVolatileStatus(battlerDef, abilityDef)
         || abilityDef == ABILITY_HEATPROOF
+        || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_HEATPROOF)) // FORK: innate Heatproof also softens burn
         || (abilityDef == ABILITY_FLARE_BOOST && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_SPECIAL))))
     {
         if (battlerAtk == battlerDef) // Targeting self

@@ -3483,6 +3483,268 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor Serene Grace (Gardevoir) 
     }
 }
 
+// ===== Batch B: defensive damage reducers =====
+// All seven are pure calc-modifier passives wired beside the existing defender-ability sites in
+// src/battle_util.c (Multiscale/Solid Rock/Ice Scales in GetDefenderAbilitiesModifier, Fur Coat in the
+// defense-stat calc, Heatproof/Water Bubble in the Fire-damage calc, Friend Guard in the partner
+// modifier). Each is a 1:1 clean-upside copy, so on-field AI damage prediction is correct for free (the
+// AI runs the same shared calc keyed off the real battler). Each test sets the chosen ability to a
+// non-reducing one so the feature-off run is stock and the off-vs-on ratio isolates the innate.
+
+// ---- Multiscale ----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Multiscale halves damage at full HP", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DRAGONITE, ABILITY_MULTISCALE));
+        ASSUME(gSpeciesInfo[SPECIES_DRAGONITE].abilities[0] != ABILITY_MULTISCALE); // off-run runs Inner Focus
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_DRAGONITE);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_BODY_SLAM); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_BODY_SLAM); } // lands while the holder is at full HP
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x at full HP
+    }
+}
+
+// Suppression parity: Gastro Acid turns off the innate, so the same hit lands at full power.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Multiscale", s16 damage)
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DRAGONITE, ABILITY_MULTISCALE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_DRAGONITE) { Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_BODY_SLAM, MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_BODY_SLAM); } // still full HP
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.5), results[0].damage); // suppressed(full) *0.5 == active(reduced)
+    }
+}
+
+// ---- Solid Rock ----
+// Rhyperior is a canon Solid Rock user whose slot-0 ability is Lightning Rod, so the off-run never
+// touches Surf. Rhyperior is Ground/Rock, so Surf is supereffective (4x) -> Solid Rock reduces by 0.75.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Solid Rock reduces supereffective damage by 0.75", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_RHYPERIOR, ABILITY_SOLID_ROCK));
+        ASSUME(gSpeciesInfo[SPECIES_RHYPERIOR].abilities[0] != ABILITY_SOLID_ROCK);
+        ASSUME(gTypeEffectivenessTable[TYPE_WATER][TYPE_GROUND] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_RHYPERIOR);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SURF); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SURF); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+        MESSAGE("It's super effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.75), results[1].damage); // off: full; on: 0.75x
+    }
+}
+
+// Suppression parity: Solid Rock is breakable, so an attacker's Mold Breaker pierces the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Solid Rock", s16 damage)
+{
+    enum Ability ability;
+    PARAMETRIZE { ability = ABILITY_PRESSURE; }     // innate Solid Rock applies -> reduced
+    PARAMETRIZE { ability = ABILITY_MOLD_BREAKER; } // pierces -> full damage
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_SOLID_ROCK].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_RHYPERIOR, ABILITY_SOLID_ROCK));
+        ASSUME(gTypeEffectivenessTable[TYPE_WATER][TYPE_GROUND] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_RHYPERIOR);
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ability); Moves(MOVE_SURF); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SURF); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+        MESSAGE("It's super effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.75), results[0].damage); // Mold Breaker full; Solid Rock 0.75x
+    }
+}
+
+// ---- Fur Coat ----
+// Persian-Alola carries innate Fur Coat (and Technician); its chosen ability is set to Technician
+// (a no-op on defense), so the off-run takes full physical damage and the halving is the innate's.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Fur Coat halves physical damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PERSIAN_ALOLA, ABILITY_FUR_COAT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_PERSIAN_ALOLA) { Ability(ABILITY_TECHNICIAN); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_BODY_SLAM); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_BODY_SLAM); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // doubled Defense -> 0.5x physical
+    }
+}
+
+// ---- Ice Scales ----
+// Frosmoth is a canon Ice Scales user whose slot-0 ability is Shield Dust, so the off-run never touches
+// special damage. Frosmoth is Ice/Bug, so Surf is a neutral special hit -> Ice Scales halves it.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Ice Scales halves special damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FROSMOTH, ABILITY_ICE_SCALES));
+        ASSUME(gSpeciesInfo[SPECIES_FROSMOTH].abilities[0] != ABILITY_ICE_SCALES);
+        ASSUME(GetMoveCategory(MOVE_SURF) == DAMAGE_CATEGORY_SPECIAL);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_FROSMOTH) { Ability(ABILITY_SHIELD_DUST); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SURF); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SURF); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage);
+    }
+}
+
+// ---- Heatproof ----
+// Heatproof's Fire-damage halving shares a single code clause with Water Bubble (the CalcAttackStat
+// defender switch in src/battle_util.c), so it is exercised by the neutral-target "Water Bubble halves
+// Fire damage" test below (a clean 0.5 ratio — a canon Heatproof user is always 2x or resistant to Fire,
+// whose extra type multiplier muddies the ±1 EXPECT_MUL_EQ tolerance). Heatproof's distinct half — the
+// burn-damage halving at the end-turn site (src/battle_end_turn.c) — gets its own test here.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Heatproof halves burn damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BRONZONG, ABILITY_HEATPROOF));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BRONZONG) { Ability(ABILITY_LEVITATE); Status1(STATUS1_BURN); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage); // end-of-turn burn tick
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full burn; on: half burn
+    }
+}
+
+// ---- Friend Guard ----
+// In doubles, an innate Friend Guard on the partner reduces the holder's damage taken by 0.75. Clefable
+// carries innate Friend Guard; its chosen ability (Cute Charm) is a no-op here, so the off-run is stock.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Friend Guard partner reduces the ally's damage by 0.75", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_FRIEND_GUARD));
+        ASSUME(gSpeciesInfo[SPECIES_CLEFABLE].abilities[0] != ABILITY_FRIEND_GUARD);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);     // the protected ally
+        PLAYER(SPECIES_CLEFABLE);      // partner carrying innate Friend Guard
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_BODY_SLAM); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_BODY_SLAM, target: playerLeft); MOVE(opponentRight, MOVE_CELEBRATE); }
+    } SCENE {
+        HP_BAR(playerLeft, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.75), results[1].damage); // off: full; on: 0.75x via the partner
+    }
+}
+
+// ---- Water Bubble (defensive Fire half + offensive Water half + burn immunity) ----
+// Araquanid carries innate Water Bubble; its chosen ability is set to Water Absorb (a no-op vs Fire), so
+// the off-run takes full Fire damage. Araquanid is Water/Bug, so Flamethrower is neutral -> halved.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Water Bubble halves Fire damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ARAQUANID, ABILITY_WATER_BUBBLE));
+        ASSUME(GetMoveType(MOVE_FLAMETHROWER) == TYPE_FIRE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ARAQUANID) { Ability(ABILITY_WATER_ABSORB); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_FLAMETHROWER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FLAMETHROWER); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage);
+    }
+}
+
+// Water Bubble also doubles the holder's Water-move power (offensive half).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Water Bubble doubles the holder's Water-move power", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ARAQUANID, ABILITY_WATER_BUBBLE));
+        ASSUME(GetMoveType(MOVE_SURF) == TYPE_WATER);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ARAQUANID) { Ability(ABILITY_WATER_ABSORB); Moves(MOVE_SURF); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SURF); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(2.0), results[1].damage); // off: 1x; on: 2x Water power
+    }
+}
+
+// Water Bubble also blocks burn (the status-set site, Limber-style pop-up).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Water Bubble blocks burn")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ARAQUANID, ABILITY_WATER_BUBBLE));
+        ASSUME(gSpeciesInfo[SPECIES_ARAQUANID].types[0] != TYPE_FIRE && gSpeciesInfo[SPECIES_ARAQUANID].types[1] != TYPE_FIRE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ARAQUANID) { Ability(ABILITY_WATER_ABSORB); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_WILL_O_WISP); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WILL_O_WISP); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_WATER_BUBBLE); // pop-up shows Water Bubble, not the chosen Water Absorb
+            NONE_OF { STATUS_ICON(player, burn: TRUE); }
+        } else {
+            STATUS_ICON(player, burn: TRUE); // no innate -> burned
+        }
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -3509,6 +3771,8 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_SHARPNESS, ABILITY_MEGA_LAUNCHER, ABILITY_STEELWORKER, ABILITY_STEELY_SPIRIT,
         ABILITY_ROCKY_PAYLOAD, ABILITY_SAND_FORCE, ABILITY_ANALYTIC, ABILITY_ADAPTABILITY,
         ABILITY_PUNK_ROCK, ABILITY_STAKEOUT, ABILITY_SERENE_GRACE,
+        ABILITY_MULTISCALE, ABILITY_SOLID_ROCK, ABILITY_FUR_COAT, ABILITY_ICE_SCALES,
+        ABILITY_HEATPROOF, ABILITY_FRIEND_GUARD, ABILITY_WATER_BUBBLE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

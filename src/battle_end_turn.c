@@ -651,9 +651,12 @@ static bool32 HandleEndTurnBurn(enum BattlerId battler)
      && !IsAbilityAndRecord(battler, ability, ABILITY_MAGIC_GUARD))
     {
         s32 burnDamage = GetNonDynamaxMaxHP(battler) / ((GetConfig(B_BURN_DAMAGE) >= GEN_7 || GetConfig(B_BURN_DAMAGE) == GEN_1) ? 16 : 8);
-        if (ability == ABILITY_HEATPROOF)
+        // FORK: an innate Heatproof (FEATURE_INNATE_ABILITIES) halves burn damage exactly like the real
+        // ability — a 1:1 clean upside. Only the real ability is recorded (the innate is silent, matching
+        // the fork's other silent calc modifiers); the halving itself applies for an innate holder too.
+        if (ability == ABILITY_HEATPROOF || BattlerHasAbility(battler, ABILITY_HEATPROOF))
         {
-            if (burnDamage > (burnDamage / 2) + 1) // Record ability if the burn takes less damage than it normally would.
+            if (ability == ABILITY_HEATPROOF && burnDamage > (burnDamage / 2) + 1) // Record ability if the burn takes less damage than it normally would.
                 RecordAbilityBattle(battler, ABILITY_HEATPROOF);
             burnDamage /= 2;
         }

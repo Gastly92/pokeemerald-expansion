@@ -5658,10 +5658,22 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         {
             battleScript = BattleScript_NotAffected;
         }
-        else if (abilityDef == ABILITY_WATER_VEIL || abilityDef == ABILITY_WATER_BUBBLE)
+        else if (abilityDef == ABILITY_WATER_VEIL || abilityDef == ABILITY_WATER_BUBBLE
+              || IsInnateActive(battlerDef, ABILITY_WATER_BUBBLE)) // FORK: innate Water Bubble blocks burn like the real ability
         {
             abilityAffected = TRUE;
             battleScript = BattleScript_ImmunityProtected;
+            // FORK: when an innate Water Bubble (the chosen ability differs) blocks the burn, show/record
+            // Water Bubble: reassign abilityDef so IsNonVolatileStatusBlocked records it, and overwrite the
+            // pop-up since CreateAbilityPopUp reads the primary slot. The real Water Veil / Water Bubble path
+            // is left byte-for-byte (mirrors the Limber / Pastel Veil precedents above). Routing through
+            // CanSetNonVolatileStatus also makes CanBeBurned (and its AI callers) innate-aware for free.
+            if (abilityDef != ABILITY_WATER_VEIL && abilityDef != ABILITY_WATER_BUBBLE)
+            {
+                if (option == RUN_SCRIPT)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_WATER_BUBBLE;
+                abilityDef = ABILITY_WATER_BUBBLE;
+            }
         }
         else if (abilityDef == ABILITY_THERMAL_EXCHANGE)
         {
@@ -6989,9 +7001,10 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
     // chosen-ability path (none of these are breakable, so Mold Breaker never touches them, same as the
     // real ability). Identity is untouched (not recorded via RecordAbilityBattle); on-field AI damage
     // prediction is correct for free because it runs this shared calc keyed off the real battler.
-    // The whole block is gated by one cheap feature check (not one per ability) so that with the
-    // feature off it costs a single branch in this hot, AI-run calc rather than ~11 IsInnateActive calls.
-    if (GetConfig(FEATURE_INNATE_ABILITIES))
+    // The whole block is gated by the cached ctx->innatesEnabled flag (the feature flag is read once per
+    // damage calc in DoMoveDamageCalcVars, not once per ability) so that with the feature off it costs a
+    // single bitfield branch in this hot, AI-run calc rather than ~11 IsInnateActive calls.
+    if (ctx->innatesEnabled)
     {
         enum Ability atkAbility = ctx->abilities[battlerAtk];
         if (IsPunchingMove(move) && atkAbility != ABILITY_IRON_FIST && IsInnateActive(battlerAtk, ABILITY_IRON_FIST))
@@ -7018,6 +7031,11 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         if (moveEffect != EFFECT_FUTURE_SIGHT && atkAbility != ABILITY_ANALYTIC && IsInnateActive(battlerAtk, ABILITY_ANALYTIC)
          && (ctx->aiCalc ? Ai_AttackerMovesLast(battlerAtk) : IsLastMonToMove(battlerAtk)))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        // FORK: Water Bubble's offensive half (Batch B) — an innate Water Bubble doubles the holder's
+        // Water-move power like the real ability. A clean upside (1:1 copy); guard against a chosen
+        // Water Bubble the switch above already doubled so it never stacks.
+        if (moveType == TYPE_WATER && atkAbility != ABILITY_WATER_BUBBLE && IsInnateActive(battlerAtk, ABILITY_WATER_BUBBLE))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(2.0));
     }
 
     // field abilities
@@ -7078,6 +7096,20 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
     default:
         break;
     }
+
+    // FORK: an innate Heatproof or Water Bubble (FEATURE_INNATE_ABILITIES) halves Fire-move damage exactly
+    // like the real ability. Both are clean upsides (they never hurt the holder), so the innates are 1:1
+    // copies. The switch above already applied a chosen Heatproof / Water Bubble, so guard against them to
+    // avoid double-applying (and so a mon running the real ability never stacks). IsInnateActive() supplies
+    // the same suppression gates as the chosen-ability path (neither is breakable, so Mold Breaker never
+    // pierces them — same as the real ability). Identity is untouched (not recorded via RecordAbilityBattle,
+    // matching the silent Thick Fat innate); on-field AI damage prediction is correct for free because it
+    // runs this shared calc keyed off the real battler.
+    if (moveType == TYPE_FIRE && ctx->innatesEnabled
+     && ctx->abilities[battlerDef] != ABILITY_HEATPROOF
+     && ctx->abilities[battlerDef] != ABILITY_WATER_BUBBLE
+     && (IsInnateActive(battlerDef, ABILITY_HEATPROOF) || IsInnateActive(battlerDef, ABILITY_WATER_BUBBLE)))
+        modifier = uq4_12_multiply(modifier, UQ_4_12(0.5));
 
     holdEffectParamAtk = GetBattlerHoldEffectParam(battlerAtk);
     if (holdEffectParamAtk > 100)
@@ -7411,9 +7443,9 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
     // skips the case already handled so a mon running the real ability never double-applies. Both are
     // clean upsides (a conditional damage boost never hurts the holder), so each innate is a 1:1 copy.
     // IsInnateActive() supplies the same suppression gates (neither is breakable). On-field AI damage
-    // prediction is correct for free (shared calc keyed off the real battler). Gated by one cheap
-    // feature check so the off-path costs a single branch in this hot, AI-run calc.
-    if (GetConfig(FEATURE_INNATE_ABILITIES))
+    // prediction is correct for free (shared calc keyed off the real battler). Gated by the cached
+    // ctx->innatesEnabled flag so the off-path costs a single bitfield branch in this hot, AI-run calc.
+    if (ctx->innatesEnabled)
     {
         enum Ability atkAbility = ctx->abilities[battlerAtk];
         if (BattlerJustSwitchedIn(battlerDef) && atkAbility != ABILITY_STAKEOUT && IsInnateActive(battlerAtk, ABILITY_STAKEOUT))
@@ -7647,6 +7679,16 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
         break;
     }
 
+    // FORK: an innate Fur Coat (FEATURE_INNATE_ABILITIES) doubles the holder's Defense against physical
+    // moves exactly like the real ability. A clean upside (1:1 copy); the switch above already applied a
+    // chosen Fur Coat, so guard against it to avoid double-applying. usesDefStat means the move reads
+    // Defense (a physical hit), the same gate the real ability uses. IsInnateActive() supplies the same
+    // suppression gates as the chosen-ability path (Fur Coat is not breakable, so Mold Breaker never
+    // touches it). On-field AI damage prediction is correct for free (shared calc keyed off the real battler).
+    if (usesDefStat && ctx->abilities[battlerDef] != ABILITY_FUR_COAT
+     && ctx->innatesEnabled && IsInnateActive(battlerDef, ABILITY_FUR_COAT))
+        modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
+
     // ally's abilities
     if (IsBattlerAlive(BATTLE_PARTNER(battlerDef)))
     {
@@ -7755,10 +7797,10 @@ static inline uq4_12_t GetSameTypeAttackBonusModifier(struct DamageContext *ctx)
     // IsInnateActive() check sits beside the chosen-ability read (it never double-counts — STAB is a
     // single multiplier choice, not an accumulating one). AI is correct for free (shared calc).
     else if (gBattleStruct->pledgeState == PLEDGE_COMBO_ATTACK && IS_BATTLER_OF_TYPE(BATTLE_PARTNER(ctx->battlerAtk), ctx->moveType))
-        return (ctx->abilities[ctx->battlerAtk] == ABILITY_ADAPTABILITY || (GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(ctx->battlerAtk, ABILITY_ADAPTABILITY))) ? UQ_4_12(2.0) : UQ_4_12(1.5);
+        return (ctx->abilities[ctx->battlerAtk] == ABILITY_ADAPTABILITY || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_ADAPTABILITY))) ? UQ_4_12(2.0) : UQ_4_12(1.5);
     else if (!IS_BATTLER_OF_TYPE(ctx->battlerAtk, ctx->moveType) || ctx->move == MOVE_STRUGGLE || ctx->move == MOVE_NONE)
         return UQ_4_12(1.0);
-    return (ctx->abilities[ctx->battlerAtk] == ABILITY_ADAPTABILITY || (GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(ctx->battlerAtk, ABILITY_ADAPTABILITY))) ? UQ_4_12(2.0) : UQ_4_12(1.5);
+    return (ctx->abilities[ctx->battlerAtk] == ABILITY_ADAPTABILITY || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_ADAPTABILITY))) ? UQ_4_12(2.0) : UQ_4_12(1.5);
 }
 
 // Utility Umbrella holders take normal damage from what would be rain- and sun-weakened attacks.
@@ -7968,20 +8010,36 @@ static inline uq4_12_t GetDefenderAbilitiesModifier(struct DamageContext *ctx)
     if (recordAbility && ctx->updateFlags)
         RecordAbilityBattle(ctx->battlerDef, ctx->abilities[ctx->battlerDef]);
 
-    // FORK: an innate Filter (FEATURE_INNATE_ABILITIES) reduces supereffective damage by 25% exactly
-    // like the real ability. Filter is a clean upside (it never hurts its holder), so the innate is a
-    // 1:1 copy — no pure-boon divergence. The switch above already applied the chosen-ability Filter /
-    // Solid Rock / Prism Armor reduction, so guard against those to avoid double-applying; the multiply
-    // stacks correctly with any other defender-ability modifier the switch set (e.g. a chosen Multiscale).
-    // IsInnateActive() supplies the same suppression gates as the chosen-ability path (Filter is breakable,
-    // so an attacker's Mold Breaker pierces an innate Filter just like the real ability). Identity is
-    // untouched: the innate is not recorded via RecordAbilityBattle, matching the silent Unaware calc modifier.
-    if (ctx->typeEffectivenessModifier >= UQ_4_12(2.0)
-     && ctx->abilities[ctx->battlerDef] != ABILITY_FILTER
-     && ctx->abilities[ctx->battlerDef] != ABILITY_SOLID_ROCK
-     && ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR
-     && IsInnateActive(ctx->battlerDef, ABILITY_FILTER))
-        modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+    // FORK: innate defensive damage reducers (FEATURE_INNATE_ABILITIES) — Filter / Solid Rock (-25% vs a
+    // supereffective hit, sharing one 1:1 clause), Multiscale (halve at full HP) and Ice Scales (halve
+    // special damage), each a 1:1 clean-upside copy applied beside (not inside) the chosen-ability switch
+    // with a `chosen != ABILITY_X` guard so the real ability never double-applies; the multiplies stack
+    // with any other defender modifier the switch set. IsInnateActive() supplies suppression parity (all
+    // breakable -> Mold Breaker pierces them like the real ability); the innate is not RecordAbilityBattle'd,
+    // matching the silent Unaware/Filter calc modifiers. The whole block sits behind the cached
+    // ctx->innatesEnabled flag (GetConfig() is read once per damage calc in DoMoveDamageCalcVars) so that
+    // with the feature off — including the AI's repeated damage simulations — it costs a single bitfield
+    // branch instead of several IsInnateActive / GetConfig calls.
+    if (ctx->innatesEnabled)
+    {
+        if (ctx->typeEffectivenessModifier >= UQ_4_12(2.0)
+         && ctx->abilities[ctx->battlerDef] != ABILITY_FILTER
+         && ctx->abilities[ctx->battlerDef] != ABILITY_SOLID_ROCK
+         && ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR
+         && (IsInnateActive(ctx->battlerDef, ABILITY_FILTER) || IsInnateActive(ctx->battlerDef, ABILITY_SOLID_ROCK)))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+
+        if (IsBattlerAtMaxHp(ctx->battlerDef)
+         && ctx->abilities[ctx->battlerDef] != ABILITY_MULTISCALE
+         && ctx->abilities[ctx->battlerDef] != ABILITY_SHADOW_SHIELD
+         && IsInnateActive(ctx->battlerDef, ABILITY_MULTISCALE))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(0.5));
+
+        if (IsBattleMoveSpecial(ctx->move)
+         && ctx->abilities[ctx->battlerDef] != ABILITY_ICE_SCALES
+         && IsInnateActive(ctx->battlerDef, ABILITY_ICE_SCALES))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(0.5));
+    }
 
     return modifier;
 }
@@ -8003,6 +8061,17 @@ static inline uq4_12_t GetDefenderPartnerAbilitiesModifier(struct DamageContext 
     default:
         break;
     }
+
+    // FORK: an innate Friend Guard on the partner (FEATURE_INNATE_ABILITIES) reduces the holder's damage
+    // by 25% exactly like the real ability — a 1:1 clean upside (ally-side). Guard against a chosen Friend
+    // Guard the switch above already credited. Like the real ability it doesn't reduce confusion self-hits
+    // (battlerAtk == battlerDef). AI spread-damage scoring runs this shared calc keyed off the real partner.
+    if (ctx->battlerAtk != ctx->battlerDef
+     && ctx->abilities[battlerDefPartner] != ABILITY_FRIEND_GUARD
+     && ctx->innatesEnabled
+     && IsInnateActive(battlerDefPartner, ABILITY_FRIEND_GUARD))
+        return UQ_4_12(0.75);
+
     return UQ_4_12(1.0);
 }
 
@@ -8117,6 +8186,13 @@ static inline s32 DoMoveDamageCalcVars(struct DamageContext *ctx)
     s32 dmg;
     u32 userFinalAttack;
     u32 targetFinalDefense;
+
+    // FORK: cache the innate-abilities feature flag once per damage calc so the defender-side innate clauses
+    // (and the AI's repeated ApplyModifiersAfterDmgRoll passes over the same ctx) read a cheap bitfield rather
+    // than calling the non-inline GetConfig() several times in this hot, AI-run path (keeps AI thinking time
+    // in budget). Every damage path — real combat and the AI's CalculateMoveDamageVars — funnels through here
+    // before any modifier function runs, so the flag is always set before it is read.
+    ctx->innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES);
 
     if (ctx->fixedBasePower)
         gBattleMovePower = ctx->fixedBasePower;

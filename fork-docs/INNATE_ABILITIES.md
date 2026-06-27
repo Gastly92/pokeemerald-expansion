@@ -1186,3 +1186,54 @@ innates, so they take a combined `INNATES(...)` list. Frontier roster sets that 
 (Step 3.5) to a complementary REAL slot where one exists (Chansey/Blissey → Healer, Togekiss → Super Luck, Dudunsparce →
 Rattled); the three sole-real-ability species take a fork-owned chosen-ability override (`species_ability_overrides.c`):
 Jirachi → Victory Star, Shaymin-Sky → Effect Spore, Meloetta → Punk Rock.
+
+### ABILITY_MULTISCALE / ABILITY_SOLID_ROCK / ABILITY_FUR_COAT / ABILITY_ICE_SCALES / ABILITY_HEATPROOF / ABILITY_FRIEND_GUARD / ABILITY_WATER_BUBBLE
+
+The "defensive damage reducers" (Batch B): all seven cut the damage the holder (or its ally) takes,
+handled by additive `IsInnateActive()` clauses beside the existing chosen-ability reads in the damage
+calc (`src/battle_util.c`), with a `chosen != ABILITY_X` guard so a mon running the real ability never
+double-applies. NO pure-boon divergence — each real ability is a clean upside that never hurts its holder,
+so every innate is a plain 1:1 copy. All are breakable, so suppression parity (feature flag + Gastro Acid /
+Neutralizing Gas / not-on-field + an attacker's Mold Breaker) matches the real ability via `IsInnateActive()`.
+AI is correct for FREE for the damage-calc halves: the reductions live in the shared damage calc the AI runs
+keyed off the real battler, so it both threatens and respects them. Per-ability sites:
+- **Multiscale** (halve damage at full HP): the `GetDefenderAbilitiesModifier` clause (beside the chosen
+  Multiscale / Shadow Shield case). The one DEDICATED AI read — `BattlerHasMaxHPProtection` (`src/battle_ai_util.c`,
+  which tells the AI a battler survives at full HP, the same helper Sturdy was wired into) — is made innate-aware
+  with `BattlerHasAbility(battler, ABILITY_MULTISCALE)`.
+- **Solid Rock** (−25% from supereffective hits): shares Filter's effect 1:1, so it just rides the existing
+  innate-Filter clause in `GetDefenderAbilitiesModifier` (now `IsInnateActive(FILTER) || IsInnateActive(SOLID_ROCK)`).
+- **Fur Coat** (double Defense vs physical): the defense-stat modifier clause (beside the chosen Fur Coat case),
+  gated on `usesDefStat`.
+- **Ice Scales** (halve special damage): the `GetDefenderAbilitiesModifier` clause, gated on a special move.
+- **Heatproof** (halve Fire damage + halve burn damage): the Fire-damage clause in the CalcAttackStat defender
+  switch (shared with Water Bubble below), plus the burn-damage halving at the end-turn site
+  (`HandleEndTurnBurn`, `src/battle_end_turn.c`) — `ability == ABILITY_HEATPROOF || BattlerHasAbility(...)`, with
+  only the real ability recorded (the innate stays silent). Two DEDICATED AI burn reads are made innate-aware:
+  `ShouldBurn` (`src/battle_ai_util.c`) and the switch-in status-damage predictor `GetSwitchinStatusDamage`
+  (`src/battle_ai_switch.c`), each via `BattlerHasAbility(battler, ABILITY_HEATPROOF)`.
+- **Friend Guard** (ally-side −25%): the `GetDefenderPartnerAbilitiesModifier` clause (beside the chosen Friend
+  Guard case), keyed off the partner; like the real ability it does not reduce confusion self-hits.
+- **Water Bubble** (halve Fire damage + double the holder's Water moves + burn immunity): wired in FULL as a
+  pure-boon innate, not just the Batch B "fire-half". (1) Fire-damage halving shares Heatproof's clause in the
+  CalcAttackStat defender switch. (2) Water-move doubling is an `IsInnateActive(battlerAtk, ABILITY_WATER_BUBBLE)`
+  clause in the offensive-booster innate block (`CalcAttackStat`), beside the chosen Water Bubble case. (3) Burn
+  immunity is wired at the burn status-set site in `CanSetNonVolatileStatus` (`src/battle_util.c`), mirroring the
+  Limber / Pastel Veil precedents: the innate blocks the burn and overwrites the ability pop-up to Water Bubble
+  (since `CreateAbilityPopUp` reads the primary slot) only when the chosen ability differs, leaving the real Water
+  Veil / Water Bubble path byte-for-byte. Routing through `CanSetNonVolatileStatus` makes `CanBeBurned` and its AI
+  callers innate-aware for free. (The burn-*cure*-on-ability-gain site is left unwired: an innate is permanent, so
+  a Water Bubble holder can never be burned in the first place, leaving nothing to cure.)
+
+Species selection is canon users (every species whose ability data carries the ability in any slot, so the
+signature survives whichever slot a build picks), plus a tight flavor extension where it completes an evolution
+line or theme: Heatproof adds the rest of Rolycoly's coal/lava line (Carkol, Coalossal, Coalossal-Gmax), and
+Friend Guard adds the support fairies that complete the Clefairy / Jigglypuff / Chansey lines (Clefable,
+Wigglytuff, Chansey, Blissey) alongside the canon pre-evos. The potent reducers (Multiscale, Solid Rock, Fur
+Coat, Ice Scales, Water Bubble) stay canon-only. Several species already carry other innates, so they take a
+combined `INNATES(...)` list. Frontier roster sets that hardcoded these are freed (Step 3.5) to a complementary
+REAL slot where one exists (Dragonite's Multiscale → chosen Inner Focus; Camerupt's Solid Rock → Magma Armor;
+Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhyperior's Solid Rock → Lightning Rod;
+Araquanid's Water Bubble → Water Absorb); the all-real-abilities-innate / dead-weight-slot cases take a fork-owned
+chosen-ability override (`species_ability_overrides.c`): Lugia → Storm Drain, Carracosta → Water Absorb, Maushold →
+No Guard, Bronzong → Soundproof, Sinistcha → Flash Fire — each a stable `:x:` pick.
