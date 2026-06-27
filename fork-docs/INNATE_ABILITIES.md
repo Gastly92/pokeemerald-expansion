@@ -1104,3 +1104,52 @@ Roserade → Poison Point, Ambipom → Skill Link, Maushold → Friend Guard, Fe
 three species whose every real ability is now innate take a fork-owned chosen-ability override
 (`species_ability_overrides.c`): Marshadow (sole Technician) → Illusion, Kricketune (Swarm + Technician) →
 Sheer Force, Grapploct (Limber + Technician) → Water Absorb.
+
+### ABILITY_IRON_FIST / ABILITY_RECKLESS / ABILITY_STRONG_JAW / ABILITY_TOUGH_CLAWS / ABILITY_SHARPNESS / ABILITY_MEGA_LAUNCHER / ABILITY_STEELWORKER / ABILITY_STEELY_SPIRIT / ABILITY_ROCKY_PAYLOAD / ABILITY_SAND_FORCE / ABILITY_ANALYTIC / ABILITY_ADAPTABILITY / ABILITY_PUNK_ROCK / ABILITY_STAKEOUT
+
+The Batch A **offensive move-power boosters**: each gives the holder a conditional damage multiplier on
+its own moves (Iron Fist +20% punching, Reckless +20% recoil/crash, Strong Jaw +50% biting, Tough Claws
++30% contact, Sharpness +50% slicing, Mega Launcher +50% pulse, Steelworker / Steely Spirit +50% Steel,
+Rocky Payload +50% Rock, Sand Force +30% Ground/Rock/Steel in sandstorm, Analytic +30% when moving last,
+Adaptability STAB ×2 instead of ×1.5, Punk Rock +30% sound, Stakeout ×2 vs a just-switched-in target).
+All are **clean upsides** (a conditional power boost never hurts the holder), so each innate is a plain
+**1:1 copy** — NO pure-boon divergence. Handled beside the matching chosen-ability case at the shared
+damage sites in `src/battle_util.c`: most in `CalcMoveBasePowerAfterModifiers` (Iron Fist, Reckless,
+Strong Jaw, Tough Claws, Sharpness, Mega Launcher, Steelworker, Steely Spirit, Punk Rock, Sand Force,
+Analytic), with Stakeout / Rocky Payload in `CalcAttackStat` and Adaptability in
+`GetSameTypeAttackBonusModifier`. Each innate clause is gated `chosen != ABILITY_X && IsInnateActive(...)`
+so a holder running the real ability never double-applies. **Steely Spirit also boosts an ALLY's** Steel
+moves: the partner-abilities block in `CalcMoveBasePowerAfterModifiers` gets an innate-aware clause too, so
+an innate-Steely-Spirit partner powers the attacker's Steel moves like the real ability. **Mega Launcher**
+additionally boosts Heal Pulse's healing (`Cmd_healpartystatus`-adjacent Heal Pulse handler in
+`src/battle_script_commands.c`, switched to `BattlerHasAbility`). **Adaptability** is also credited at the
+Terastal STAB calc (`GetTeraMultiplier`, `src/battle_terastal.c`). Suppression parity holds via
+`IsInnateActive()`: none of the fourteen is breakable, so Mold Breaker never touches them (same as the real
+ability) — Gastro Acid / Neutralizing Gas / not-on-field are the relevant suppressors.
+
+**Sand Force is the one with a side benefit beyond raw power**: like Sand Rush / Sand Veil it also makes the
+holder **immune to sandstorm chip damage**, mirrored at the end-turn damage site (`src/battle_end_turn.c`)
+and the AI's sandstorm-damage predictors (`DoesBattlerTakeSandstormDamage` in `src/battle_ai_util.c`,
+`GetSwitchinWeatherImpact` in `src/battle_ai_switch.c`); the AI's weather-setting heuristic
+(`DoesInnateBenefitFromWeather` in `src/battle_ai_field_statuses.c`) also credits it so the AI sets sandstorm
+to enable the boost. (In practice every Sand Force user is Rock/Ground/Steel-typed and thus already
+type-immune to sandstorm, so the immunity is belt-and-suspenders, but it is wired for parity.)
+
+**AI is correct for FREE** for the damage itself: every boost lives in the shared damage calc the AI runs
+keyed off the real battler (like Technician / Filter, unlike Sturdy's dedicated helpers). The few dedicated
+`== ABILITY_X` AI *effect* reads are made innate-aware: the Stakeout / Analytic "prefer a damaging move over
+a status one" nudge and the Adaptability "Conversion is more valuable" nudge (both `src/battle_ai_main.c`),
+plus the Sand Force sandstorm sites above.
+
+**Canon-only (no flavor picks)** — a flat conditional power boost is potent, so like the pinch / weather
+abilities the set stays to species whose ability data carries the booster in any slot (every form is listed
+where its own data carries it, and a Mega whose base creature has the innate mirrors it as a pure boon —
+e.g. Gallade-Mega keeps Sharpness, Starmie-Mega keeps Analytic, Excadrill-Mega keeps Sand Force, even where
+the Mega's own ability differs). Many users already carry other innates, so they take a combined
+`INNATES(...)` list with the booster added. Frontier roster sets that hardcoded a Batch A ability are freed
+(Step 3.5) to a complementary REAL slot where one exists (e.g. Gigalith's Sand Force → chosen Sand Stream,
+Kleavor's Sharpness → chosen Sheer Force, Dracovish's Strong Jaw → chosen Water Absorb, Hitmonchan's Iron
+Fist → chosen Inner Focus); sets whose only complementary slots are themselves already innate are left as-is
+(still correct — the chosen Batch A ability provides the boost). Three sole-real-ability species take a
+fork-owned chosen-ability override (`species_ability_overrides.c`): Clawitzer (sole Mega Launcher) → Water
+Absorb, Melmetal (sole Iron Fist) → Filter, Lycanroc-Dusk (sole Tough Claws) → Sand Rush.

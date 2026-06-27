@@ -154,6 +154,7 @@ static bool32 HandleEndTurnWeatherDamage(enum BattlerId battler)
          && ability != ABILITY_SAND_RUSH
          && !IsInnateActive(battler, ABILITY_SAND_RUSH) // FORK: an innate Sand Rush also shrugs off sandstorm (pure boon)
          && !IsInnateActive(battler, ABILITY_SAND_VEIL) // FORK: an innate Sand Veil also shrugs off sandstorm (pure boon)
+         && !IsInnateActive(battler, ABILITY_SAND_FORCE) // FORK: an innate Sand Force also shrugs off sandstorm (pure boon)
          && ability != ABILITY_OVERCOAT
          && !IS_BATTLER_ANY_TYPE(battler, TYPE_ROCK, TYPE_GROUND, TYPE_STEEL)
          && gBattleMons[battler].volatiles.semiInvulnerable != STATE_UNDERGROUND

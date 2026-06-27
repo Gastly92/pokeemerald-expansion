@@ -11856,7 +11856,8 @@ void BS_TryHealPulse(void)
     else
     {
         s32 healAmount = 0;
-        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MEGA_LAUNCHER && IsPulseMove(gCurrentMove))
+        // FORK: an innate Mega Launcher boosts Heal Pulse's healing like the real ability (Batch A, FEATURE_INNATE_ABILITIES).
+        if (BattlerHasAbility(gBattlerAttacker, ABILITY_MEGA_LAUNCHER) && IsPulseMove(gCurrentMove))
             healAmount = GetNonDynamaxMaxHP(gBattlerTarget) * 75 / 100;
         else if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN && GetMoveEffectArg_MoveProperty(gCurrentMove) == MOVE_EFFECT_FLORAL_HEALING)
             healAmount = GetNonDynamaxMaxHP(gBattlerTarget) * 2 / 3;

@@ -293,9 +293,25 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SLURPUFF, 1,
         ABILITY_UNAWARE
     },
+    { // 0693
+        // Clawitzer's only real ability (Mega Launcher) is now innate, so its empty slot 1 takes a
+        // flavorful chosen ability. Water Absorb is :x: (never an innate -> stable) and on-theme for the
+        // howitzer shrimp: it shrugs off Water moves and heals from them, a clean boon alongside its
+        // innate Mega Launcher pulse boost.
+        SPECIES_CLAWITZER, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0738
         SPECIES_VIKAVOLT, 1,
         ABILITY_MOTOR_DRIVE
+    },
+    { // 0745
+        // Lycanroc-Dusk's only real ability (Tough Claws) is now innate, so its empty slot 1 takes a
+        // flavorful chosen ability. Sand Rush is an already-implemented :white_check_mark: innate (stable,
+        // like Carnivine/Tornadus-Therian) and on-theme — it is the signature ability of Lycanroc's other
+        // forms, doubling this wolf's Speed in the sand.
+        SPECIES_LYCANROC_DUSK, 1,
+        ABILITY_SAND_RUSH
     },
     { // 0776
         SPECIES_TURTONATOR, 1,
@@ -307,6 +323,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // the Gloomdweller lurks in shadows and mimics, so it enters disguised as the party's last mon.
         SPECIES_MARSHADOW, 1,
         ABILITY_ILLUSION
+    },
+    { // 0809
+        // Melmetal's only real ability (Iron Fist) is now innate, so its empty slot 1 takes a flavorful
+        // chosen ability. Filter is an already-implemented :white_check_mark: innate (stable, like
+        // Slurpuff's Unaware) and a clean defensive boon for the colossal steel titan: it blunts the
+        // supereffective Fire/Fighting/Ground hits its bulky Iron Fist sets otherwise fear.
+        SPECIES_MELMETAL, 1,
+        ABILITY_FILTER
     },
     { // 0853
         // Grapploct's only real abilities (Limber, Technician) are BOTH now innate, so its empty slot 1

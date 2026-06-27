@@ -15,7 +15,10 @@
 // every turn — the first active, scripted end-turn innate), and the accuracy abilities
 // COMPOUND_EYES / KEEN_EYE / ILLUMINATE (which all ignore the target's evasion — under
 // DETERMINISTIC_ACCURACY_EVASION a PP-economy boon — and, for KEEN_EYE/ILLUMINATE, keep
-// the holder's accuracy from being lowered); see src/innate_abilities.c.
+// the holder's accuracy from being lowered); plus the Batch A offensive move-power boosters
+// (IRON_FIST / RECKLESS / STRONG_JAW / TOUGH_CLAWS / SHARPNESS / MEGA_LAUNCHER / STEELWORKER /
+// STEELY_SPIRIT / ROCKY_PAYLOAD / SAND_FORCE / ANALYTIC / ADAPTABILITY / PUNK_ROCK / STAKEOUT);
+// see src/innate_abilities.c.
 
 // Flavor-floater coverage: a species with no native Levitate that floats by design
 // (Magnemite hovers magnetically; primary is Magnet Pull/Sturdy/Analytic, and it's
@@ -3052,6 +3055,325 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pastel Veil cures its own p
     }
 }
 
+// ===== Batch A — offensive move-power boosters =====
+// All wired beside their chosen-ability case in CalcMoveBasePowerAfterModifiers / CalcAttackStat
+// (src/battle_util.c), Adaptability in GetSameTypeAttackBonusModifier. Each is a 1:1 clean-upside
+// copy: a parametrized off/on run shows the multiplier appears only with the feature on, on a holder
+// whose CHOSEN ability is something else (so the boost can only be the innate).
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Iron Fist boosts a punching move 1.2x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HITMONCHAN, ABILITY_IRON_FIST));
+        ASSUME(gSpeciesInfo[SPECIES_HITMONCHAN].abilities[0] != ABILITY_IRON_FIST);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_HITMONCHAN) { Moves(MOVE_THUNDER_PUNCH); } // chosen Keen Eye
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_THUNDER_PUNCH); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.2), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Reckless boosts a recoil move 1.2x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HITMONLEE, ABILITY_RECKLESS));
+        ASSUME(gSpeciesInfo[SPECIES_HITMONLEE].abilities[0] != ABILITY_RECKLESS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_HITMONLEE) { Moves(MOVE_DOUBLE_EDGE); } // chosen Limber
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_DOUBLE_EDGE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.2), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Strong Jaw boosts a biting move 1.5x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BRUXISH, ABILITY_STRONG_JAW));
+        ASSUME(gSpeciesInfo[SPECIES_BRUXISH].abilities[0] != ABILITY_STRONG_JAW);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BRUXISH) { Moves(MOVE_CRUNCH); } // chosen Dazzling
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CRUNCH); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+// Perrserker carries innate Tough Claws AND innate Steely Spirit, so a NON-Steel contact move
+// isolates Tough Claws (Steely Spirit would only touch Steel moves).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Tough Claws boosts a contact move 1.3x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PERRSERKER, ABILITY_TOUGH_CLAWS));
+        ASSUME(gSpeciesInfo[SPECIES_PERRSERKER].abilities[0] != ABILITY_TOUGH_CLAWS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_PERRSERKER) { Moves(MOVE_X_SCISSOR); } // chosen Battle Armor; Bug move, not Steel
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_X_SCISSOR); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.3), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sharpness boosts a slicing move 1.5x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KLEAVOR, ABILITY_SHARPNESS));
+        ASSUME(gSpeciesInfo[SPECIES_KLEAVOR].abilities[0] != ABILITY_SHARPNESS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KLEAVOR) { Moves(MOVE_NIGHT_SLASH); } // chosen Swarm (inert at full HP)
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_NIGHT_SLASH); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+// Clawitzer's only real ability is Mega Launcher, so its chosen ability is forced to an inert one;
+// the pulse boost can then only be the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mega Launcher boosts a pulse move 1.5x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLAWITZER, ABILITY_MEGA_LAUNCHER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CLAWITZER) { Ability(ABILITY_DAMP); Moves(MOVE_WATER_PULSE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_WATER_PULSE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Steelworker boosts a Steel move 1.5x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DHELMISE, ABILITY_STEELWORKER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_DHELMISE) { Ability(ABILITY_DAMP); Moves(MOVE_IRON_HEAD); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_IRON_HEAD); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+// An innate Steely Spirit on the PARTNER boosts the attacker's Steel move (doubles, partner site).
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an ally's innate Steely Spirit boosts a Steel move 1.5x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PERRSERKER, ABILITY_STEELY_SPIRIT));
+        ASSUME(gSpeciesInfo[SPECIES_PERRSERKER].abilities[0] != ABILITY_STEELY_SPIRIT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_IRON_HEAD); }
+        PLAYER(SPECIES_PERRSERKER); // chosen Battle Armor; innate Steely Spirit
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_IRON_HEAD, target: opponentLeft); }
+    } SCENE {
+        HP_BAR(opponentLeft, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rocky Payload boosts a Rock move 1.5x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BOMBIRDIER, ABILITY_ROCKY_PAYLOAD));
+        ASSUME(gSpeciesInfo[SPECIES_BOMBIRDIER].abilities[0] != ABILITY_ROCKY_PAYLOAD);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BOMBIRDIER) { Moves(MOVE_ROCK_SLIDE); } // chosen Big Pecks
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_ROCK_SLIDE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+// Sand Force boosts Ground/Rock/Steel moves 1.3x while a sandstorm rages.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sand Force boosts a Ground move 1.3x in sand", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_EXCADRILL, ABILITY_SAND_FORCE));
+        ASSUME(gSpeciesInfo[SPECIES_EXCADRILL].abilities[0] != ABILITY_SAND_FORCE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_EXCADRILL) { Moves(MOVE_SANDSTORM, MOVE_EARTHQUAKE); } // chosen Sand Rush
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_SAFETY_GOGGLES); } // no sandstorm chip, so HP_BAR is the Earthquake
+    } WHEN {
+        TURN { MOVE(player, MOVE_SANDSTORM); }
+        TURN { MOVE(player, MOVE_EARTHQUAKE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.3), results[1].damage);
+    }
+}
+
+// Analytic boosts power 1.3x when the holder is the last to move that turn.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Analytic boosts power 1.3x when moving last", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ELGYEM, ABILITY_ANALYTIC));
+        ASSUME(gSpeciesInfo[SPECIES_ELGYEM].abilities[0] != ABILITY_ANALYTIC);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ELGYEM) { Moves(MOVE_PSYCHIC); Speed(1); } // chosen Telepathy
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); Speed(255); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_PSYCHIC); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.3), results[1].damage);
+    }
+}
+
+// Adaptability raises STAB from 1.5x to 2.0x (ratio 4/3) in GetSameTypeAttackBonusModifier.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Adaptability raises STAB to 2x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CRAWDAUNT, ABILITY_ADAPTABILITY));
+        ASSUME(gSpeciesInfo[SPECIES_CRAWDAUNT].abilities[0] != ABILITY_ADAPTABILITY);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRAWDAUNT) { Moves(MOVE_AQUA_TAIL); } // Water STAB; chosen Hyper Cutter
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_AQUA_TAIL); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.3333), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Punk Rock boosts a sound move 1.3x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TOXTRICITY, ABILITY_PUNK_ROCK));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_TOXTRICITY) { Ability(ABILITY_DAMP); Moves(MOVE_HYPER_VOICE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_HYPER_VOICE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.3), results[1].damage);
+    }
+}
+
+// Stakeout deals double damage to a target that just switched in.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Stakeout doubles damage to a just-switched-in target", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SPIDOPS, ABILITY_STAKEOUT));
+        ASSUME(gSpeciesInfo[SPECIES_SPIDOPS].abilities[0] != ABILITY_STAKEOUT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SPIDOPS) { Moves(MOVE_BODY_SLAM); } // chosen Insomnia
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(opponent, 1); MOVE(player, MOVE_BODY_SLAM); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(2.0), results[1].damage);
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Iron Fist (none of Batch A is breakable, so
+// Mold Breaker can't pierce them — Gastro Acid is the relevant suppressor, same as the real ability).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Iron Fist", s16 damage)
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(!gAbilitiesInfo[ABILITY_IRON_FIST].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_HITMONCHAN, ABILITY_IRON_FIST));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HITMONCHAN) { Moves(MOVE_THUNDER_PUNCH); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_THUNDER_PUNCH); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.2), results[0].damage); // suppressed: base; active: 1.2x
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -3074,6 +3396,10 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_SNOW_CLOAK, ABILITY_COMPOUND_EYES, ABILITY_KEEN_EYE, ABILITY_ILLUMINATE,
         ABILITY_INSOMNIA, ABILITY_VITAL_SPIRIT, ABILITY_SWEET_VEIL, ABILITY_EARLY_BIRD,
         ABILITY_IMMUNITY, ABILITY_PASTEL_VEIL, ABILITY_THICK_FAT, ABILITY_TECHNICIAN,
+        ABILITY_IRON_FIST, ABILITY_RECKLESS, ABILITY_STRONG_JAW, ABILITY_TOUGH_CLAWS,
+        ABILITY_SHARPNESS, ABILITY_MEGA_LAUNCHER, ABILITY_STEELWORKER, ABILITY_STEELY_SPIRIT,
+        ABILITY_ROCKY_PAYLOAD, ABILITY_SAND_FORCE, ABILITY_ANALYTIC, ABILITY_ADAPTABILITY,
+        ABILITY_PUNK_ROCK, ABILITY_STAKEOUT,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

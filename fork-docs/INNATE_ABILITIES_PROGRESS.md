@@ -95,9 +95,9 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Simple | Doubles the Pokémon's stat changes. |
 | :x: | Dry Skin | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. However, the Pokémon takes 25% more damage from Fire-type moves. The Pokémon has 1/8 of its max HP restored at the end of every turn in rain, but it loses 1/8 of its max HP at the end of every turn in harsh sunlight. |
 | :white_large_square: | Download | The Pokémon compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat — whichever will be more effective. |
-| :white_large_square: | Iron Fist | Boosts the power of the Pokémon's punching moves by 20%. |
+| :white_check_mark: | Iron Fist | Boosts the power of the Pokémon's punching moves by 20%. |
 | :white_large_square: | Poison Heal | If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP. |
-| :white_large_square: | Adaptability | Boosts the power of moves of the same type as the Pokémon by 100% instead of 50%. |
+| :white_check_mark: | Adaptability | Boosts the power of moves of the same type as the Pokémon by 100% instead of 50%. |
 | :white_large_square: | Skill Link | The Pokémon's multistrike moves always hit the maximum number of times. |
 | :white_large_square: | Hydration | Cures the Pokémon's status conditions at the end of every turn in rain. |
 | :x: | Solar Power | In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn. |
@@ -126,7 +126,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Snow Warning | Summons snow for 5 turns when the Pokémon enters a battle. |
 | :x: | Honey Gather | The Pokémon may gather Honey after a battle. |
 | :white_large_square: | Frisk | When the Pokémon enters a battle, it identifies opponents' held items. |
-| :white_large_square: | Reckless | Boosts the power of the Pokémon's moves by 20% if they have recoil or crash damage. |
+| :white_check_mark: | Reckless | Boosts the power of the Pokémon's moves by 20% if they have recoil or crash damage. |
 | :x: | Multitype | Changes the Pokémon's type to match the plate it holds. |
 | :white_large_square: | Flower Gift | Boosts the Attack and Sp. Def stats of the Pokémon and its allies in harsh sunlight. |
 | :white_large_square: | Bad Dreams | Damages opposing Pokémon that are asleep. |
@@ -154,7 +154,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Big Pecks | The Pokémon's Defense stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Sand Rush | Doubles the Pokémon's Speed stat in a sandstorm. |
 | :white_large_square: | Wonder Skin | Makes status moves more likely to miss the Pokémon. |
-| :white_large_square: | Analytic | Boosts the power of the Pokémon's moves by 30% when the Pokémon is the last to move that turn. |
+| :white_check_mark: | Analytic | Boosts the power of the Pokémon's moves by 30% when the Pokémon is the last to move that turn. |
 | :x: | Illusion | The Pokémon enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move. |
 | :x: | Imposter | The Pokémon transforms into the Pokémon in front of it. It also copies all of that Pokémon's stats apart from its HP. |
 | :white_large_square: | Infiltrator | When using its moves, the Pokémon ignores the effects of targets' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes. |
@@ -165,7 +165,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Magic Bounce | Instead of being affected by other Pokémon's status moves, the Pokémon bounces them back at the user. |
 | :x: | Sap Sipper | Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage. |
 | :white_check_mark: | Prankster | Increases the priority of the Pokémon's status moves by 1 stage. |
-| :white_large_square: | Sand Force | Boosts the power of the Pokémon's Rock-, Ground-, and Steel-type moves by 30% in a sandstorm. |
+| :white_check_mark: | Sand Force | Boosts the power of the Pokémon's Rock-, Ground-, and Steel-type moves by 30% in a sandstorm. |
 | :white_large_square: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
 | :x: | Zen Mode | Changes the Pokémon's shape when its HP drops to half or less. |
 | :x: | Victory Star | Boosts the accuracy of the Pokémon and its allies. |
@@ -179,15 +179,15 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Magician | If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves. |
 | :x: | Bulletproof | The Pokémon is immune to ball and bomb moves. |
 | :white_large_square: | Competitive | When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages. |
-| :white_large_square: | Strong Jaw | Boosts the power of the Pokémon's biting moves by 50%. |
+| :white_check_mark: | Strong Jaw | Boosts the power of the Pokémon's biting moves by 50%. |
 | :x: | Refrigerate | The Pokémon's Normal-type moves become Ice-type moves and their power is boosted by 20%. |
 | :white_check_mark: | Sweet Veil | The Pokémon and its allies cannot become drowsy or be put to sleep. |
 | :x: | Stance Change | The Pokémon changes into its Blade Forme when it attacks and changes into its Shield Forme when it uses the move King's Shield. |
 | :white_large_square: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
-| :white_large_square: | Mega Launcher | Boosts the power of the Pokémon's pulse moves by 50%. |
+| :white_check_mark: | Mega Launcher | Boosts the power of the Pokémon's pulse moves by 50%. |
 | :white_large_square: | Grass Pelt | Boosts the Pokémon's Defense stat on Grassy Terrain. |
 | :x: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
-| :white_large_square: | Tough Claws | Boosts the power of the Pokémon's contact moves by 30%. |
+| :white_check_mark: | Tough Claws | Boosts the power of the Pokémon's contact moves by 30%. |
 | :x: | Pixilate | The Pokémon's Normal-type moves become Fairy-type moves and their power is boosted by 20%. |
 | :white_large_square: | Gooey | When the Pokémon is hit by a contact move, the attacker's Speed stat is lowered by 1 stage. |
 | :x: | Aerilate | The Pokémon's Normal-type moves become Flying-type moves and their power is boosted by 20%. |
@@ -204,9 +204,9 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Water Compaction | Boosts the Defense stat sharply when the Pokémon is hit by a Water-type move. |
 | :white_large_square: | Merciless | The Pokémon's attacks become critical hits if the target is poisoned or badly poisoned. |
 | :x: | Shields Down | When its HP drops to half or less, the Pokémon's shell breaks and it becomes aggressive. |
-| :white_large_square: | Stakeout | Doubles the damage dealt to a target that has just switched into battle. |
+| :white_check_mark: | Stakeout | Doubles the damage dealt to a target that has just switched into battle. |
 | :white_large_square: | Water Bubble | Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned. |
-| :white_large_square: | Steelworker | Powers up Steel-type moves. |
+| :white_check_mark: | Steelworker | Powers up Steel-type moves. |
 | :white_large_square: | Berserk | Boosts the Pokémon's Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max. |
 | :white_check_mark: | Slush Rush | Doubles the Pokémon's Speed stat in snow. |
 | :white_large_square: | Long Reach | None of the moves used by the Pokémon are considered contact moves. |
@@ -250,7 +250,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Gulp Missile | When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack. |
 | :white_large_square: | Stalwart | The Pokémon ignores the effects of Abilities and moves that draw in moves. |
 | :white_large_square: | Steam Engine | Boosts the Speed stat drastically when the Pokémon is hit by a Fire- or Water-type move. |
-| :white_large_square: | Punk Rock | Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves. |
+| :white_check_mark: | Punk Rock | Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves. |
 | :x: | Sand Spit | Summons a sandstorm for 5 turns when the Pokémon takes damage from moves. |
 | :white_large_square: | Ice Scales | The Pokémon is protected by ice scales, which halve the damage taken from special moves. |
 | :white_large_square: | Ripen | Doubles the effects of Berries eaten by the Pokémon. |
@@ -258,7 +258,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Power Spot | Just being next to the Pokémon powers up moves. |
 | :x: | Mimicry | The Pokémon's type changes depending on the terrain. |
 | :x: | Screen Cleaner | When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses. |
-| :white_large_square: | Steely Spirit | Powers up the Steel-type moves of the Pokémon and its allies. |
+| :white_check_mark: | Steely Spirit | Powers up the Steel-type moves of the Pokémon and its allies. |
 | :x: | Perish Body | When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle. |
 | :x: | Wandering Spirit | When the Pokémon is hit by a contact move, it swaps Abilities with the attacker. |
 | :x: | Gorilla Tactics | Boosts the Pokémon's Attack stat, but only allows the use of the first selected move. |
@@ -282,7 +282,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
 | :x: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
 | :white_large_square: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
-| :white_large_square: | Rocky Payload | Powers up Rock-type moves. |
+| :white_check_mark: | Rocky Payload | Powers up Rock-type moves. |
 | :white_large_square: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
 | :x: | Zero to Hero | The Pokémon changes into its Hero Form when it switches out of battle. |
 | :x: | Commander | When the Pokémon enters a battle, it goes inside the mouth of an ally Dondozo if one is on the field. The Pokémon then issues commands from there. |
@@ -298,7 +298,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Hadron Engine | Turns the ground into Electric Terrain when the Pokémon enters a battle. The futuristic engine within the Pokémon also boosts its Sp. Atk stat on Electric Terrain. |
 | :white_large_square: | Opportunist | When an opponent's stats are boosted, the Pokémon boosts its own stats in the exact same way. |
 | :white_large_square: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
-| :white_large_square: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
+| :white_check_mark: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
 | :x: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
 | :x: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |
 | :x: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |

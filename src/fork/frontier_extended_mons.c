@@ -83,6 +83,9 @@
 // Early Bird (wakes from sleep twice as fast),
 // Immunity / Pastel Veil (poison immunity), Thick Fat (halves Fire/Ice damage),
 // Technician (+50% to moves of base power 60 or less),
+// an offensive move-power booster (Iron Fist / Reckless / Strong Jaw / Tough Claws / Sharpness /
+// Mega Launcher / Steelworker / Steely Spirit / Rocky Payload / Sand Force / Analytic / Adaptability /
+// Punk Rock / Stakeout — Sand Force also shrugs off sandstorm chip),
 // or a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
@@ -122,6 +125,11 @@
 // Technician adds three more all-real-abilities-innate cases: Marshadow (sole Technician) gets a chosen Illusion,
 // while Kricketune (Swarm + Technician) and Grapploct (Limber + Technician) get a chosen Sheer Force / Water Absorb
 // respectively — each a stable :x: pick.
+// The offensive move-power boosters add three more sole-real-ability cases: Clawitzer (sole Mega Launcher) gets a
+// chosen Water Absorb (:x:), Melmetal (sole Iron Fist) gets a chosen Filter and Lycanroc-Dusk (sole Tough Claws) gets
+// a chosen Sand Rush — the latter two already-implemented :white_check_mark: innates (stable, like Slurpuff's Unaware).
+// Most booster sets instead free their slot to a complementary REAL ability (e.g. Gigalith's Sand Force -> chosen Sand
+// Stream; Kleavor's Sharpness -> chosen Sheer Force; Dracovish's Strong Jaw -> chosen Water Absorb).
 // (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
 // Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
@@ -1219,7 +1227,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_AERIAL_ACE
         },
-        .ability = ABILITY_SAND_FORCE,
+        .ability = ABILITY_ARENA_TRAP, // Sand Veil & Sand Force now innate; chosen Arena Trap traps foes
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1241,7 +1249,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SAND_FORCE,
+        .ability = ABILITY_TANGLING_HAIR, // Sand Veil & Sand Force now innate; chosen Tangling Hair drops attacker Speed
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2732,7 +2740,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_BLAZE_KICK
         },
-        .ability = ABILITY_RECKLESS,
+        .ability = ABILITY_UNBURDEN, // Limber & Reckless now innate; chosen Unburden
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2754,7 +2762,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_PUNCH,
             MOVE_MACH_PUNCH
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_INNER_FOCUS, // Keen Eye & Iron Fist now innate; chosen Inner Focus prevents flinch
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2774,7 +2782,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_MACH_PUNCH
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_INNER_FOCUS, // Keen Eye & Iron Fist now innate; chosen Inner Focus prevents flinch
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8573,7 +8581,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_ADAPTABILITY,
+        .ability = ABILITY_HYPER_CUTTER, // Shell Armor & Adaptability now innate; chosen Hyper Cutter guards Attack
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8593,7 +8601,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_ADAPTABILITY,
+        .ability = ABILITY_HYPER_CUTTER, // Shell Armor & Adaptability now innate; chosen Hyper Cutter guards Attack
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8613,7 +8621,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_ADAPTABILITY,
+        .ability = ABILITY_HYPER_CUTTER, // Shell Armor & Adaptability now innate; chosen Hyper Cutter guards Attack
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9969,7 +9977,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_RECKLESS,
+        .ability = ABILITY_INTIMIDATE, // Reckless now innate; chosen Intimidate
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9989,7 +9997,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUICK_ATTACK,
             MOVE_DOUBLE_EDGE
         },
-        .ability = ABILITY_RECKLESS,
+        .ability = ABILITY_INTIMIDATE, // Reckless now innate; chosen Intimidate
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11116,7 +11124,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_ANALYTIC,
+        .ability = ABILITY_MAGNET_PULL, // Levitate/Sturdy/Analytic now innate; chosen Magnet Pull traps Steel
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11587,7 +11595,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_ADAPTABILITY,
+        .ability = ABILITY_DOWNLOAD, // Adaptability & Analytic now innate; chosen Download
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11649,7 +11657,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_CUT,
             MOVE_LEAF_BLADE
         },
-        .ability = ABILITY_SHARPNESS,
+        .ability = ABILITY_JUSTIFIED, // Sharpness now innate; chosen Justified
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12959,7 +12967,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_SAND_FORCE,
+        .ability = ABILITY_SAND_STREAM, // Sturdy & Sand Force now innate; chosen Sand Stream sets the sand they thrive in
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13003,7 +13011,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_SAND_FORCE, // Sand Rush now innate; chosen Sand Force (sand power)
+        .ability = ABILITY_MOLD_BREAKER, // Sand Rush & Sand Force now innate; chosen Mold Breaker
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14465,7 +14473,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_ANALYTIC,
+        .ability = ABILITY_SYNCHRONIZE, // Analytic now innate; chosen Synchronize
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14745,7 +14753,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_RECKLESS,
+        .ability = ABILITY_INNER_FOCUS, // Regenerator & Reckless now innate; chosen Inner Focus
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14765,7 +14773,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_U_TURN
         },
-        .ability = ABILITY_RECKLESS,
+        .ability = ABILITY_INNER_FOCUS, // Regenerator & Reckless now innate; chosen Inner Focus
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14849,7 +14857,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POLTERGEIST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_NO_GUARD, // Iron Fist now innate; chosen No Guard
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14871,7 +14879,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_ZEN_HEADBUTT
         },
-        .ability = ABILITY_RECKLESS,
+        .ability = ABILITY_SAP_SIPPER, // Reckless now innate; chosen Sap Sipper
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16241,7 +16249,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_SCRAPPY, // Iron Fist now innate; chosen Scrappy
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16536,7 +16544,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_CROSS_CHOP
         },
-        .ability = ABILITY_TOUGH_CLAWS,
+        .ability = ABILITY_SNIPER, // Tough Claws now innate; chosen Sniper
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16556,7 +16564,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_CLAW
         },
-        .ability = ABILITY_TOUGH_CLAWS,
+        .ability = ABILITY_SNIPER, // Tough Claws now innate; chosen Sniper
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16578,7 +16586,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_ADAPTABILITY,
+        .ability = ABILITY_POISON_TOUCH, // Adaptability now innate; chosen Poison Touch
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16620,7 +16628,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_DRAGON_PULSE
         },
-        .ability = ABILITY_MEGA_LAUNCHER,
+        .ability = ABILITY_WATER_ABSORB, // Mega Launcher now innate; chosen Water Absorb (override)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16640,7 +16648,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_AURA_SPHERE
         },
-        .ability = ABILITY_MEGA_LAUNCHER,
+        .ability = ABILITY_WATER_ABSORB, // Mega Launcher now innate; chosen Water Absorb (override)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16744,7 +16752,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_STRONG_JAW,
+        .ability = ABILITY_ROCK_HEAD, // Strong Jaw now innate; chosen Rock Head negates Head Smash recoil
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17252,7 +17260,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_STRONG_JAW,
+        .ability = ABILITY_ICE_BODY, // Sturdy & Strong Jaw now innate; chosen Ice Body
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17272,7 +17280,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_STRONG_JAW,
+        .ability = ABILITY_ICE_BODY, // Sturdy & Strong Jaw now innate; chosen Ice Body
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17990,7 +17998,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_HAMMER
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_HYPER_CUTTER, // Iron Fist now innate; chosen Hyper Cutter guards Attack
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18011,7 +18019,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_HYPER_CUTTER, // Iron Fist now innate; chosen Hyper Cutter guards Attack
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18137,7 +18145,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ACCELEROCK,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_TOUGH_CLAWS,
+        .ability = ABILITY_SAND_RUSH, // Tough Claws now innate; chosen Sand Rush (override)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19063,7 +19071,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_STRONG_JAW,
+        .ability = ABILITY_DAZZLING, // Strong Jaw now innate; chosen Dazzling blocks priority
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19083,7 +19091,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_STRONG_JAW,
+        .ability = ABILITY_DAZZLING, // Strong Jaw now innate; chosen Dazzling blocks priority
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20194,7 +20202,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_FILTER, // Iron Fist now innate; chosen Filter (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20214,7 +20222,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_FILTER, // Iron Fist now innate; chosen Filter (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20554,7 +20562,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_FOUL_PLAY
         },
-        .ability = ABILITY_STAKEOUT,
+        .ability = ABILITY_UNBURDEN, // Stakeout now innate; chosen Unburden
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -20663,7 +20671,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_STRONG_JAW,
+        .ability = ABILITY_COMPETITIVE, // Strong Jaw now innate; chosen Competitive
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21847,7 +21855,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_STRONG_JAW,
+        .ability = ABILITY_WATER_ABSORB, // Sand Rush & Strong Jaw now innate; chosen Water Absorb
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21867,7 +21875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_STRONG_JAW, // Sand Rush now innate; chosen Strong Jaw
+        .ability = ABILITY_WATER_ABSORB, // Sand Rush & Strong Jaw now innate; chosen Water Absorb
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22583,7 +22591,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHARPNESS,
+        .ability = ABILITY_SHEER_FORCE, // Swarm & Sharpness now innate; chosen Sheer Force
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22603,7 +22611,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_DEFOG
         },
-        .ability = ABILITY_SHARPNESS,
+        .ability = ABILITY_SHEER_FORCE, // Swarm & Sharpness now innate; chosen Sheer Force
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22690,7 +22698,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_ADAPTABILITY,
+        .ability = ABILITY_MOLD_BREAKER, // Swift Swim & Adaptability now innate; chosen Mold Breaker
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22710,7 +22718,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_ADAPTABILITY,
+        .ability = ABILITY_MOLD_BREAKER, // Swift Swim & Adaptability now innate; chosen Mold Breaker
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23112,7 +23120,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_NUZZLE
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_VOLT_ABSORB, // Natural Cure & Iron Fist now innate; chosen Volt Absorb
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23132,7 +23140,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NUZZLE,
             MOVE_MACH_PUNCH
         },
-        .ability = ABILITY_IRON_FIST, // Natural Cure now innate; chosen Iron Fist (real slot 2) boosts Mach Punch
+        .ability = ABILITY_VOLT_ABSORB, // Natural Cure & Iron Fist now innate; chosen Volt Absorb
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24162,7 +24170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHT_SLASH,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SHARPNESS,
+        .ability = ABILITY_MOLD_BREAKER, // Sharpness now innate; chosen Mold Breaker
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24183,7 +24191,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_CUT,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SHARPNESS,
+        .ability = ABILITY_MOLD_BREAKER, // Sharpness now innate; chosen Mold Breaker
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,

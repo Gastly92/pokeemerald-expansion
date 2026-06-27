@@ -6981,6 +6981,45 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
      && IsInnateActive(battlerAtk, ABILITY_TECHNICIAN))
         modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
 
+    // FORK: innate offensive move-power boosters (Batch A, FEATURE_INNATE_ABILITIES). Each mirrors the
+    // chosen-ability case in the switch above, applied beside (not inside) it: the `!= ABILITY_X` guard
+    // skips the case the switch already handled, so a mon running the real ability never double-applies.
+    // All are clean upsides (a flat conditional power boost never hurts the holder), so each innate is a
+    // 1:1 copy — no pure-boon divergence. IsInnateActive() supplies the same suppression gates as the
+    // chosen-ability path (none of these are breakable, so Mold Breaker never touches them, same as the
+    // real ability). Identity is untouched (not recorded via RecordAbilityBattle); on-field AI damage
+    // prediction is correct for free because it runs this shared calc keyed off the real battler.
+    // The whole block is gated by one cheap feature check (not one per ability) so that with the
+    // feature off it costs a single branch in this hot, AI-run calc rather than ~11 IsInnateActive calls.
+    if (GetConfig(FEATURE_INNATE_ABILITIES))
+    {
+        enum Ability atkAbility = ctx->abilities[battlerAtk];
+        if (IsPunchingMove(move) && atkAbility != ABILITY_IRON_FIST && IsInnateActive(battlerAtk, ABILITY_IRON_FIST))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
+        if ((moveEffect == EFFECT_RECOIL || moveEffect == EFFECT_RECOIL_IF_MISS) && atkAbility != ABILITY_RECKLESS && IsInnateActive(battlerAtk, ABILITY_RECKLESS))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
+        if (IsBitingMove(move) && atkAbility != ABILITY_STRONG_JAW && IsInnateActive(battlerAtk, ABILITY_STRONG_JAW))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        if (IsMoveMakingContact(battlerAtk, battlerDef, atkAbility, ctx->holdEffects[battlerAtk], ctx->move) && atkAbility != ABILITY_TOUGH_CLAWS && IsInnateActive(battlerAtk, ABILITY_TOUGH_CLAWS))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        if (IsSlicingMove(move) && atkAbility != ABILITY_SHARPNESS && IsInnateActive(battlerAtk, ABILITY_SHARPNESS))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        if (IsPulseMove(move) && atkAbility != ABILITY_MEGA_LAUNCHER && IsInnateActive(battlerAtk, ABILITY_MEGA_LAUNCHER))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        if (moveType == TYPE_STEEL && atkAbility != ABILITY_STEELWORKER && IsInnateActive(battlerAtk, ABILITY_STEELWORKER))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        if (moveType == TYPE_STEEL && atkAbility != ABILITY_STEELY_SPIRIT && IsInnateActive(battlerAtk, ABILITY_STEELY_SPIRIT))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        if (IsSoundMove(move) && atkAbility != ABILITY_PUNK_ROCK && IsInnateActive(battlerAtk, ABILITY_PUNK_ROCK))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        if ((moveType == TYPE_STEEL || moveType == TYPE_ROCK || moveType == TYPE_GROUND) && (ctx->weather & B_WEATHER_SANDSTORM)
+         && atkAbility != ABILITY_SAND_FORCE && IsInnateActive(battlerAtk, ABILITY_SAND_FORCE))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        if (moveEffect != EFFECT_FUTURE_SIGHT && atkAbility != ABILITY_ANALYTIC && IsInnateActive(battlerAtk, ABILITY_ANALYTIC)
+         && (ctx->aiCalc ? Ai_AttackerMovesLast(battlerAtk) : IsLastMonToMove(battlerAtk)))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+    }
+
     // field abilities
     if ((IsAbilityOnField(ABILITY_DARK_AURA) && moveType == TYPE_DARK)
      || (IsAbilityOnField(ABILITY_FAIRY_AURA) && moveType == TYPE_FAIRY))
@@ -7010,6 +7049,14 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         default:
             break;
         }
+        // FORK: an innate Steely Spirit on the partner boosts the attacker's Steel moves like the real
+        // ability (Batch A, FEATURE_INNATE_ABILITIES). Guard against the chosen-ability case the switch
+        // above already handled so it never double-applies. moveType gate is checked first so the
+        // IsInnateActive call only runs for Steel moves.
+        if (moveType == TYPE_STEEL
+         && GetBattlerAbility(BATTLE_PARTNER(battlerAtk)) != ABILITY_STEELY_SPIRIT
+         && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_STEELY_SPIRIT))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
     }
 
     // target's abilities
@@ -7359,6 +7406,22 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
     }
 
+    // FORK: innate Stakeout / Rocky Payload (Batch A, FEATURE_INNATE_ABILITIES). Both mirror their
+    // chosen-ability case in the attack-stat switch above, applied beside it; the `!= ABILITY_X` guard
+    // skips the case already handled so a mon running the real ability never double-applies. Both are
+    // clean upsides (a conditional damage boost never hurts the holder), so each innate is a 1:1 copy.
+    // IsInnateActive() supplies the same suppression gates (neither is breakable). On-field AI damage
+    // prediction is correct for free (shared calc keyed off the real battler). Gated by one cheap
+    // feature check so the off-path costs a single branch in this hot, AI-run calc.
+    if (GetConfig(FEATURE_INNATE_ABILITIES))
+    {
+        enum Ability atkAbility = ctx->abilities[battlerAtk];
+        if (BattlerJustSwitchedIn(battlerDef) && atkAbility != ABILITY_STAKEOUT && IsInnateActive(battlerAtk, ABILITY_STAKEOUT))
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
+        if (moveType == TYPE_ROCK && atkAbility != ABILITY_ROCKY_PAYLOAD && IsInnateActive(battlerAtk, ABILITY_ROCKY_PAYLOAD))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+    }
+
     // target's abilities
     switch (ctx->abilities[ctx->battlerDef])
     {
@@ -7687,11 +7750,15 @@ static inline uq4_12_t GetSameTypeAttackBonusModifier(struct DamageContext *ctx)
 {
     if (ctx->moveType == TYPE_MYSTERY)
         return UQ_4_12(1.0);
+    // FORK: an innate Adaptability boosts STAB to 2x like the real ability (Batch A,
+    // FEATURE_INNATE_ABILITIES). Adaptability is a clean upside, so the innate is a 1:1 copy; the
+    // IsInnateActive() check sits beside the chosen-ability read (it never double-counts — STAB is a
+    // single multiplier choice, not an accumulating one). AI is correct for free (shared calc).
     else if (gBattleStruct->pledgeState == PLEDGE_COMBO_ATTACK && IS_BATTLER_OF_TYPE(BATTLE_PARTNER(ctx->battlerAtk), ctx->moveType))
-        return (ctx->abilities[ctx->battlerAtk] == ABILITY_ADAPTABILITY) ? UQ_4_12(2.0) : UQ_4_12(1.5);
+        return (ctx->abilities[ctx->battlerAtk] == ABILITY_ADAPTABILITY || (GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(ctx->battlerAtk, ABILITY_ADAPTABILITY))) ? UQ_4_12(2.0) : UQ_4_12(1.5);
     else if (!IS_BATTLER_OF_TYPE(ctx->battlerAtk, ctx->moveType) || ctx->move == MOVE_STRUGGLE || ctx->move == MOVE_NONE)
         return UQ_4_12(1.0);
-    return (ctx->abilities[ctx->battlerAtk] == ABILITY_ADAPTABILITY) ? UQ_4_12(2.0) : UQ_4_12(1.5);
+    return (ctx->abilities[ctx->battlerAtk] == ABILITY_ADAPTABILITY || (GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(ctx->battlerAtk, ABILITY_ADAPTABILITY))) ? UQ_4_12(2.0) : UQ_4_12(1.5);
 }
 
 // Utility Umbrella holders take normal damage from what would be rain- and sun-weakened attacks.

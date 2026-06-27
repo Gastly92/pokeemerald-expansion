@@ -154,6 +154,7 @@ static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather)
         || ((weather & B_WEATHER_SUN)       && IsInnateActive(battler, ABILITY_CHLOROPHYLL))
         || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_RUSH))
         || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_VEIL))
+        || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_FORCE))
         || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SLUSH_RUSH))
         || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SNOW_CLOAK));
 }

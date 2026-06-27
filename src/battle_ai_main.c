@@ -4452,7 +4452,8 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
         if (!IS_BATTLER_OF_TYPE(battlerAtk, GetMoveType(gBattleMons[battlerAtk].moves[0])))
         {
             ADJUST_SCORE(WEAK_EFFECT);
-            if (aiData->abilities[battlerAtk] == ABILITY_ADAPTABILITY)
+            // FORK: credit an innate Adaptability too (Batch A, FEATURE_INNATE_ABILITIES).
+            if (aiData->abilities[battlerAtk] == ABILITY_ADAPTABILITY || BattlerHasAbility(battlerAtk, ABILITY_ADAPTABILITY))
                 ADJUST_SCORE(WEAK_EFFECT);
             if (IsConsideringZMove(battlerAtk, battlerDef, move))
                 ADJUST_SCORE(BEST_EFFECT);
@@ -6610,7 +6611,11 @@ static s32 AI_PredictSwitch(enum BattlerId battlerAtk, enum BattlerId battlerDef
     }
 
     // Take advantage of ability damage bonus
-    if ((ability == ABILITY_STAKEOUT || ability == ABILITY_ANALYTIC) && IsBattleMoveStatus(move))
+    // FORK: credit an innate Stakeout / Analytic too (Batch A, FEATURE_INNATE_ABILITIES) so the AI
+    // still prefers a damaging move over a status one for an innate-only holder.
+    if ((ability == ABILITY_STAKEOUT || ability == ABILITY_ANALYTIC
+      || BattlerHasAbility(battlerAtk, ABILITY_STAKEOUT) || BattlerHasAbility(battlerAtk, ABILITY_ANALYTIC))
+     && IsBattleMoveStatus(move))
         ADJUST_SCORE(BAD_EFFECT);
 
     // This must be last or the player can gauge whether the AI is predicting based on how long it thinks
