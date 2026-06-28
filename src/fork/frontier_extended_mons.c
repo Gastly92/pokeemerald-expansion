@@ -12441,7 +12441,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_EFFECT_SPORE, // Serene Grace now innate; chosen Effect Spore (override, real slot empty)
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
