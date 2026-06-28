@@ -8423,7 +8423,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_TOXIC_BOOST,
+        .ability = ABILITY_SHEER_FORCE, // Toxic Boost now innate; chosen Sheer Force (override) powers its coverage
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8443,7 +8443,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TOXIC_BOOST,
+        .ability = ABILITY_SHEER_FORCE, // Toxic Boost now innate; chosen Sheer Force (override) skips Life Orb recoil
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

@@ -2908,8 +2908,9 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Early Bird wakes from sleep
 }
 
 // ----- Immunity (poison immunity) -----
-// A canon Immunity user (Zangoose: Immunity/none/Toxic Boost) whose *chosen* ability is Toxic Boost
-// still carries Immunity as an innate, so Toxic still cannot poison it, and the pop-up shows Immunity.
+// A canon Immunity user (Snorlax: Immunity/Thick Fat/Gluttony) whose *chosen* ability is Gluttony still
+// carries Immunity as an innate, so Toxic cannot poison it, and the pop-up shows Immunity. (Zangoose, the
+// other canon Immunity user, instead carries innate Toxic Boost — Immunity would contradict it.)
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Immunity prevents poison")
 {
     bool32 enabled;
@@ -2918,16 +2919,16 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Immunity prevents poison")
     GIVEN {
         ASSUME(GetMoveEffect(MOVE_TOXIC) == EFFECT_NON_VOLATILE_STATUS);
         ASSUME(GetMoveNonVolatileStatus(MOVE_TOXIC) == MOVE_EFFECT_TOXIC);
-        ASSUME(SpeciesHasInnate(SPECIES_ZANGOOSE, ABILITY_IMMUNITY));
+        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_IMMUNITY));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_TOXIC_BOOST); } // chosen ability differs from the innate
+        PLAYER(SPECIES_SNORLAX) { Ability(ABILITY_GLUTTONY); } // chosen ability differs from the innate
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
         TURN { MOVE(opponent, MOVE_TOXIC); }
     } SCENE {
         if (enabled) {
-            ABILITY_POPUP(player, ABILITY_IMMUNITY); // pop-up shows Immunity, not the chosen Toxic Boost
-            MESSAGE("It doesn't affect Zangoose…");
+            ABILITY_POPUP(player, ABILITY_IMMUNITY); // pop-up shows Immunity, not the chosen Gluttony
+            MESSAGE("It doesn't affect Snorlax…");
             NONE_OF { STATUS_ICON(player, badPoison: TRUE); }
         } else {
             STATUS_ICON(player, badPoison: TRUE); // no innate -> Toxic poisons
@@ -2942,7 +2943,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Imm
     GIVEN {
         ASSUME(gAbilitiesInfo[ABILITY_IMMUNITY].breakable);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_TOXIC_BOOST); } // innate Immunity
+        PLAYER(SPECIES_SNORLAX) { Ability(ABILITY_GLUTTONY); } // innate Immunity
         OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_TOXIC); }
@@ -2956,13 +2957,13 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate I
 {
     GIVEN {
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_TOXIC_BOOST); Moves(MOVE_CELEBRATE); } // innate Immunity
+        PLAYER(SPECIES_SNORLAX) { Ability(ABILITY_GLUTTONY); Moves(MOVE_CELEBRATE); } // innate Immunity
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_TOXIC); }
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses the innate
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TOXIC); }
     } SCENE {
-        MESSAGE("Zangoose's Ability was suppressed!");
+        MESSAGE("Snorlax's Ability was suppressed!");
         STATUS_ICON(player, badPoison: TRUE); // suppressed -> Toxic poisons
     }
 }
@@ -2974,17 +2975,17 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Immunity cures pre-existing
 {
     GIVEN {
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_TOXIC_BOOST); Moves(MOVE_CELEBRATE); } // innate Immunity
+        PLAYER(SPECIES_SNORLAX) { Ability(ABILITY_GLUTTONY); Moves(MOVE_CELEBRATE); } // innate Immunity
         PLAYER(SPECIES_WOBBUFFET);
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_TOXIC, MOVE_CELEBRATE); }
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppress the innate
-        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TOXIC); }       // Zangoose poisoned
-        TURN { SWITCH(player, 1); MOVE(opponent, MOVE_CELEBRATE); }             // Zangoose out -> Gastro clears
-        TURN { SWITCH(player, 0); MOVE(opponent, MOVE_CELEBRATE); }             // Zangoose back in -> innate cures
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TOXIC); }       // Snorlax poisoned
+        TURN { SWITCH(player, 1); MOVE(opponent, MOVE_CELEBRATE); }             // Snorlax out -> Gastro clears
+        TURN { SWITCH(player, 0); MOVE(opponent, MOVE_CELEBRATE); }             // Snorlax back in -> innate cures
     } SCENE {
         ABILITY_POPUP(player, ABILITY_IMMUNITY);
-        MESSAGE("Zangoose was cured of its poisoning!");
+        MESSAGE("Snorlax was cured of its poisoning!");
     } THEN {
         EXPECT_EQ(player->status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON), 0);
     }
@@ -3745,9 +3746,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Water Bubble blocks burn")
     }
 }
 
-// ===== Batch N: status-conditional stat boosts (Guts / Marvel Scale / Quick Feet / Flare Boost) =====
-// Toxic Boost is wired but has no innate user (its only canon user Zangoose carries innate Immunity,
-// which makes it inert; every other toxic mon is a poison-immune Poison-type), so it has no test here.
+// ===== Batch N: status-conditional stat boosts (Guts / Marvel Scale / Quick Feet / Toxic Boost / Flare Boost) =====
 
 // Guts: +50% physical Attack while statused. Hariyama's slot-0 ability is Thick Fat, so the off-run never
 // touches the attack calc. Poison (not burn) isolates the Attack boost — it has no physical-damage cut.
@@ -3865,6 +3864,29 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Flare Boost boosts a specia
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
         TURN { MOVE(player, MOVE_SHADOW_BALL); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+// Toxic Boost: +50% physical power while poisoned. Zangoose carries innate Toxic Boost; its chosen ability
+// is forced to Sheer Force (its frontier override slot — not Immunity, which would block the poison) so the
+// boost can only be the innate, and Double-Edge has no secondary for Sheer Force to touch. Poison doesn't
+// cut physical damage, so the only difference is the +50%.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Toxic Boost boosts a physical move 1.5x while poisoned", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ZANGOOSE, ABILITY_TOXIC_BOOST));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ZANGOOSE) { Ability(ABILITY_SHEER_FORCE); Status1(STATUS1_POISON); Moves(MOVE_DOUBLE_EDGE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_DOUBLE_EDGE); }
     } SCENE {
         HP_BAR(opponent, captureDamage: &results[i].damage);
     } FINALLY {

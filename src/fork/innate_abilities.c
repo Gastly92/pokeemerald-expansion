@@ -38,10 +38,9 @@
 //   (and negates burn's physical cut), Marvel Scale +50% Def while statused, Quick Feet
 //   +50% Speed while statused (and ignores the paralysis Speed/PP/priority penalty), Toxic
 //   Boost +50% physical while poisoned, Flare Boost +50% special while burned).
-//   NOTE: TOXIC_BOOST is wired but has NO innate user — its only canon user Zangoose carries
-//   innate Immunity (poison immunity, by design — see its tests), which makes Toxic Boost inert,
-//   and every other toxic-themed species is a Poison-type immune to the poison it needs. It
-//   stays allowlisted so a future poisonable, non-Immunity user works with no extra wiring.
+//   NOTE: Zangoose carries innate TOXIC_BOOST, not innate Immunity — the two are contradictory
+//   (Immunity blocks the poison Toxic Boost needs), so its canon-Toxic-Boost frontier identity wins;
+//   innate Immunity still lives on Gligar / Snorlax.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -2400,7 +2399,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0335
         SPECIES_ZANGOOSE,
         INNATES(
-            ABILITY_IMMUNITY
+            ABILITY_TOXIC_BOOST
         )
     },
     { // 0336

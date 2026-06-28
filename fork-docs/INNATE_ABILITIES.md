@@ -1041,8 +1041,10 @@ would need a brand-new generic "active switch-in ability with a script" driver, 
 precedent exists yet (only an end-turn equivalent, Speed Boost's `TryActivateInnateEndTurnEffects`);
 an innate Pastel Veil still cures and blocks the holder's OWN poison via the chokepoints above, just
 not its ally's pre-existing poison on switch-in. CANON-ONLY (no flavor picks): Immunity goes to
-Gligar (combined with its innate Sand Veil), Snorlax/Snorlax-Gmax (combined with innate Unaware),
-and Zangoose, each whose real ability data carries Immunity in some slot; Pastel Veil goes to
+Gligar (combined with its innate Sand Veil) and Snorlax/Snorlax-Gmax (combined with innate Unaware),
+each whose real ability data carries Immunity in some slot. (Zangoose also has slot-0 Immunity in its
+data, but is given innate Toxic Boost instead — see the Batch N reference: the two are contradictory and
+Toxic Boost is Zangoose's actual frontier identity.) Pastel Veil goes to
 Galarian Ponyta/Rapidash, the only species whose real ability data carries it. Frontier roster sets
 that hardcoded Pastel Veil are freed (Step 3.5): Rapidash-Galar → Anticipation (its real Hidden
 Ability slot).
@@ -1285,17 +1287,21 @@ the Drifloon line. Many already carry other innates, so they take a combined `IN
 added (Heracross + Swarm, the Makuhita/Hariyama + Thick Fat, Larvitar + Sand Veil, Ursaring + Quick Feet, the
 Timburr line + Iron Fist, Obstagoon + Reckless, Milotic + Cute Charm + Serene Grace).
 
-**TOXIC_BOOST has NO innate user — a deliberate exclusion, not an oversight.** Its only canon user is Zangoose,
-which carries innate Immunity by established design (its frontier sets run a chosen Toxic Boost while the innate
-Immunity dominates so it can't be poisoned — see the Immunity tests). Giving Zangoose innate Toxic Boost would be
-contradictory and permanently inert (Immunity blocks the poison Toxic Boost needs). Every other toxic-themed
-species is a Poison-type, type-immune to poison, so it can't host Toxic Boost either. The effect is wired and
-allowlisted so a future poisonable, non-Immunity user works with no extra engineering.
+**TOXIC_BOOST's user is Zangoose, which carries innate Toxic Boost INSTEAD of innate Immunity.** Zangoose's real
+ability data is Immunity (slot 0) / Toxic Boost (HA), and a prior batch gave it innate Immunity — but the two are
+**contradictory** (Immunity blocks the poison Toxic Boost needs), so a Zangoose can't usefully carry both as
+always-on innates. Toxic Boost is Zangoose's actual competitive/frontier identity (its sets run Toxic Orb + Facade),
+which innate Immunity silently neuters, so this batch **reassigns** Zangoose's innate from Immunity → Toxic Boost.
+Innate Immunity still lives on its other canon users, Gligar and Snorlax (the Immunity tests were repointed to
+Snorlax). This is the one place where a species' canon slot-0 ability is *not* its innate — the general rule when a
+species has two contradictory candidate innates (a status-immunity vs a same-status-requiring boost) is to keep the
+one that matches how the species is actually used; Zangoose is currently the only such case (every other
+toxic-themed species is a Poison-type, type-immune to poison, so none competes for Toxic Boost).
 
 **Step 3.5 (frontier roster):** sets that hardcoded a Batch N ability are freed to a complementary REAL slot
 (Hariyama/Conkeldurr → Sheer Force; Flareon → Flash Fire; Machamp → No Guard; Heracross/Mightyena → Moxie;
 Ursaring → Unnerve; Milotic → Competitive; Obstagoon → Defiant; Luxray/Squawkabilly → Intimidate; Throh →
 Inner Focus; Ursaluna → Bulletproof; Swellow → Scrappy; Linoone → Gluttony; Drifblim → Unburden; Raticate →
-Run Away). No Batch N set needed a `species_ability_overrides.c` row (every freed species had a real complementary
-slot). The two Zangoose Toxic Boost sets are left untouched — Toxic Boost is not an innate, so their chosen slot
-is the real ability (its inertness under innate Immunity is the pre-existing, intended Immunity-batch design).
+Run Away). Only **Zangoose** needed a `species_ability_overrides.c` row: its two Toxic Boost (Toxic Orb) sets are
+freed to a chosen **Sheer Force** in its empty slot 1 — not Immunity, which would block the poison its innate Toxic
+Boost needs (a stable `:x:` pick that also skips Life Orb recoil on the SD set).
