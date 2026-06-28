@@ -270,7 +270,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0492
         SPECIES_SHAYMIN_SKY, 1,
-        ABILITY_EFFECT_SPORE
+        ABILITY_WIND_RIDER
     },
     { // 0503
         SPECIES_SAMUROTT, 1,
