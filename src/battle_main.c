@@ -4686,7 +4686,12 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
         speed *= 2;
 
     // other abilities
-    if (ability == ABILITY_QUICK_FEET && gBattleMons[battler].status1 & STATUS1_ANY)
+    // FORK: Quick Feet is also supported as an innate (FEATURE_INNATE_ABILITIES); crediting
+    // IsInnateActive() here gives an innate holder the +50% Speed while statused and (since the AI's
+    // turn-order prediction runs this same function) makes the AI threat/respect it innate-aware.
+    // Innates are species-derived (public knowledge), so this never leaks a hidden chosen ability.
+    // Pure 1:1 boon (no downside to drop). See src/fork/innate_abilities.c.
+    if ((ability == ABILITY_QUICK_FEET || IsInnateActive(battler, ABILITY_QUICK_FEET)) && gBattleMons[battler].status1 & STATUS1_ANY)
         speed = (speed * 150) / 100;
     else if (ability == ABILITY_SURGE_SURFER && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
         speed *= 2;
@@ -4725,6 +4730,7 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
     // FORK: DETERMINISTIC_PARALYSIS removes the Speed cut entirely; paralysis taxes
     // priority and PP instead (see GetBattleMovePriority / CancelerPPDeduction).
     if (gBattleMons[battler].status1 & STATUS1_PARALYSIS && ability != ABILITY_QUICK_FEET
+        && !IsInnateActive(battler, ABILITY_QUICK_FEET) // FORK: innate Quick Feet also ignores the paralysis Speed drop
         && !GetConfig(DETERMINISTIC_PARALYSIS))
         speed /= GetConfig(B_PARALYSIS_SPEED) >= GEN_7 ? 2 : 4;
 
@@ -4804,6 +4810,7 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
     // priority bracket. Quick Feet (which already ignores the paralysis Speed drop)
     // is exempt.
     if (gBattleMons[battler].status1 & STATUS1_PARALYSIS && ability != ABILITY_QUICK_FEET
+        && !IsInnateActive(battler, ABILITY_QUICK_FEET) // FORK: innate Quick Feet is exempt from the para priority tax, like the real ability
         && GetConfig(DETERMINISTIC_PARALYSIS))
         priority -= DETERMINISTIC_PARALYSIS_PRIORITY_TAX;
 

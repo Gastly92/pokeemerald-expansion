@@ -348,7 +348,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | :-: | :-- | :-- | :-: |
 | 1 | Batch A — Offensive move-power boosters | calc, no driver | done |
 | 2 | Batch B — Defensive damage reducers | calc, no driver | done |
-| 3 | Batch N — Status-conditional stat boosts | calc, no driver | open |
+| 3 | Batch N — Status-conditional stat boosts | calc, no driver | done |
 | 4 | Batch O — Crit-rate / crit-damage modifiers | calc, no driver | open |
 | 5 | Batch P — Accuracy / type-eff / effect-chance | calc, no driver | open |
 | 6 | Batch Q — Priority granters | calc, no driver | open |
@@ -404,7 +404,7 @@ row is `done`.
 | :-- | :-- | :-: | :-: |
 | A — Offensive move-power boosters | calc, AI-free | 14 | done |
 | B — Defensive damage reducers | calc, AI-free | 7 | done |
-| N — Status-conditional stat boosts | calc, AI-free | 5 | open |
+| N — Status-conditional stat boosts | calc, AI-free | 5 | done |
 | O — Crit-rate / crit-damage modifiers | calc, AI-free | 3 | open |
 | P — Accuracy / type-eff / effect-chance | calc, AI-free | 6 | open |
 | Q — Priority granters | calc, AI-free | 2 | open |

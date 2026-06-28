@@ -89,7 +89,10 @@
 // Serene Grace (doubles the chance of the holder's moves' additional effects),
 // a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush),
 // or a defensive damage reducer (Multiscale / Solid Rock / Fur Coat / Ice Scales / Heatproof / Friend Guard /
-// Water Bubble — Heatproof also halves burn damage; Water Bubble also doubles the holder's Water moves and blocks burn)
+// Water Bubble — Heatproof also halves burn damage; Water Bubble also doubles the holder's Water moves and blocks burn),
+// or a status-conditional stat boost (Guts +50% physical Atk while statused & negates burn's physical cut /
+// Marvel Scale +50% Def while statused / Quick Feet +50% Speed while statused & ignores the paralysis penalty /
+// Toxic Boost +50% physical while poisoned / Flare Boost +50% special while burned)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -526,7 +529,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_RUN_AWAY, // Guts now innate; Run Away is its only stable non-drawback slot
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1656,7 +1659,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_BULLET_PUNCH
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_NO_GUARD, // Guts now innate; No Guard lands its STABs reliably
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3571,7 +3574,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_FLASH_FIRE, // Guts now innate; Flash Fire adds a Fire immunity
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5647,7 +5650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BULLET_SEED,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_MOXIE, // Guts now innate; Moxie snowballs on KOs (Megas to Skill Link)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5667,7 +5670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_MOXIE, // Guts now innate; Moxie snowballs on KOs
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5687,7 +5690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MEGAHORN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_MOXIE, // Guts now innate; Moxie snowballs on KOs
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5709,7 +5712,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_UNNERVE, // Guts + Quick Feet now innate; Unnerve denies foe Berries
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5729,7 +5732,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_UNNERVE, // Guts + Quick Feet now innate; Unnerve denies foe Berries
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6984,7 +6987,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_QUICK_FEET,
+        .ability = ABILITY_MOXIE, // Quick Feet now innate; Moxie snowballs on KOs
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7046,7 +7049,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SEED_BOMB
         },
-        .ability = ABILITY_QUICK_FEET,
+        .ability = ABILITY_GLUTTONY, // Quick Feet now innate; Gluttony (situational) frees the slot
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7236,7 +7239,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_SCRAPPY, // Guts now innate; Scrappy lets Facade hit Ghosts
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7256,7 +7259,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STEEL_WING
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_SCRAPPY, // Guts now innate; Scrappy lets it hit Ghosts
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7634,7 +7637,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_FAKE_OUT
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_SHEER_FORCE, // Guts + Thick Fat now innate; Sheer Force powers its moves
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8420,7 +8423,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_TOXIC_BOOST,
+        .ability = ABILITY_SHEER_FORCE, // Toxic Boost now innate; chosen Sheer Force (override) powers its coverage
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8440,7 +8443,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TOXIC_BOOST,
+        .ability = ABILITY_SHEER_FORCE, // Toxic Boost now innate; chosen Sheer Force (override) skips Life Orb recoil
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8740,7 +8743,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_HAZE
         },
-        .ability = ABILITY_MARVEL_SCALE,
+        .ability = ABILITY_COMPETITIVE, // Marvel Scale + Cute Charm now innate; Competitive punishes stat drops
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -8760,7 +8763,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_MARVEL_SCALE,
+        .ability = ABILITY_COMPETITIVE, // Marvel Scale + Cute Charm now innate; Competitive punishes stat drops
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -10096,7 +10099,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_INTIMIDATE, // Guts now innate; Intimidate adds switch-in utility
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10414,7 +10417,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEX,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_FLARE_BOOST,
+        .ability = ABILITY_UNBURDEN, // Flare Boost now innate; Unburden (situational) frees the slot
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13106,7 +13109,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_SHEER_FORCE, // Guts + Iron Fist now innate; Sheer Force powers its moves
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13190,7 +13193,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_REST
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_INNER_FOCUS, // Guts now innate; Inner Focus prevents flinch on the bulk-up tank
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21252,7 +21255,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_DEFIANT, // Guts + Reckless now innate; Defiant punishes stat drops
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21272,7 +21275,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_DEFIANT, // Guts + Reckless now innate; Defiant punishes stat drops
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22644,7 +22647,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_BULLETPROOF, // Guts now innate; Bulletproof blocks ball/bomb moves
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22665,7 +22668,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_PROTECT
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_BULLETPROOF, // Guts now innate; Bulletproof blocks ball/bomb moves
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23260,7 +23263,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_DOUBLE_EDGE
         },
-        .ability = ABILITY_GUTS,
+        .ability = ABILITY_INTIMIDATE, // Guts now innate; Intimidate adds switch-in utility
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

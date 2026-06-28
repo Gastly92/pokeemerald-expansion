@@ -124,6 +124,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_FLYGON, 1, 
         ABILITY_SAND_STREAM
     },
+    { // 0335
+        // Zangoose carries innate Toxic Boost (its frontier identity), so its slot-2 real Toxic Boost is
+        // now redundant and its slot-0 Immunity would CONTRADICT it (Immunity blocks the poison Toxic
+        // Boost needs). Its empty slot 1 therefore takes a chosen Sheer Force — :x: (never an innate ->
+        // stable) and a clean offensive boon for the Cat Ferret's physical sets: coverage moves drop their
+        // secondaries for +30% power (and a Life Orb set skips the recoil), stacking with innate Toxic Boost.
+        SPECIES_ZANGOOSE, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0337
         SPECIES_LUNATONE, 1,
         ABILITY_CLOUD_NINE

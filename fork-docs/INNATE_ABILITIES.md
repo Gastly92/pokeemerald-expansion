@@ -1041,8 +1041,10 @@ would need a brand-new generic "active switch-in ability with a script" driver, 
 precedent exists yet (only an end-turn equivalent, Speed Boost's `TryActivateInnateEndTurnEffects`);
 an innate Pastel Veil still cures and blocks the holder's OWN poison via the chokepoints above, just
 not its ally's pre-existing poison on switch-in. CANON-ONLY (no flavor picks): Immunity goes to
-Gligar (combined with its innate Sand Veil), Snorlax/Snorlax-Gmax (combined with innate Unaware),
-and Zangoose, each whose real ability data carries Immunity in some slot; Pastel Veil goes to
+Gligar (combined with its innate Sand Veil) and Snorlax/Snorlax-Gmax (combined with innate Unaware),
+each whose real ability data carries Immunity in some slot. (Zangoose also has slot-0 Immunity in its
+data, but is given innate Toxic Boost instead — see the Batch N reference: the two are contradictory and
+Toxic Boost is Zangoose's actual frontier identity.) Pastel Veil goes to
 Galarian Ponyta/Rapidash, the only species whose real ability data carries it. Frontier roster sets
 that hardcoded Pastel Veil are freed (Step 3.5): Rapidash-Galar → Anticipation (its real Hidden
 Ability slot).
@@ -1237,3 +1239,69 @@ Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhy
 Araquanid's Water Bubble → Water Absorb); the all-real-abilities-innate / dead-weight-slot cases take a fork-owned
 chosen-ability override (`species_ability_overrides.c`): Lugia → Storm Drain, Carracosta → Water Absorb, Maushold →
 No Guard, Bronzong → Soundproof, Sinistcha → Flash Fire — each a stable `:x:` pick.
+
+### ABILITY_GUTS / ABILITY_MARVEL_SCALE / ABILITY_QUICK_FEET / ABILITY_TOXIC_BOOST / ABILITY_FLARE_BOOST
+
+The "status-conditional stat boosts" (Batch N): each grants the holder a stat/damage boost while it carries a
+status condition (Guts +50% physical Attack while statused, Marvel Scale +50% Defense while statused, Quick Feet
++50% Speed while statused, Toxic Boost +50% physical power while poisoned, Flare Boost +50% special power while
+burned). All five are **clean upsides** — the boost only ever helps the holder, and even the burn/paralysis
+*penalty* clauses (Guts negates burn's physical-damage cut, Quick Feet ignores the paralysis Speed/PP/priority
+penalty) are part of the real ability's upside — so each innate is a plain **1:1 copy**, no pure-boon divergence.
+Suppression parity holds via `IsInnateActive()` / `BattlerHasAbility()`: none of the five is breakable, so Mold
+Breaker never touches them (Gastro Acid / Neutralizing Gas / not-on-field are the relevant suppressors). The
+innate is NOT recorded as identity (no pop-up — these have none even as real abilities). Per-ability sites:
+- **Guts** — the attack-stat boost rides the `ctx->innatesEnabled` block of `CalcAttackStat` (`src/battle_util.c`),
+  beside the chosen-ability Guts case (`gBattleMons[atk].status1 & STATUS1_ANY && physical move`, guarded
+  `!= ABILITY_GUTS`). The burn-physical-cut negation is a second clause in `GetBurnOrFrostBiteModifier`
+  (same file): the `0.5x` burn cut is skipped for an innate Guts holder too.
+- **Marvel Scale** — a clause beside the innate Fur Coat one in the defense-stat modifier path
+  (`CalcAttackStat`, `src/battle_util.c`): `+50% Defense` while statused, gated on `usesDefStat` (a physical hit),
+  guarded `!= ABILITY_MARVEL_SCALE`.
+- **Quick Feet** — the `+50%` Speed read in `GetBattlerTotalSpeedStat` (`src/battle_main.c`) gains an
+  `|| IsInnateActive(battler, ABILITY_QUICK_FEET)` clause (statused holder). Its paralysis-penalty exemptions are
+  mirrored at all three fork paralysis sites: the (non-deterministic) Speed-drop in `GetBattlerTotalSpeedStat`,
+  the `DETERMINISTIC_PARALYSIS` priority tax in `GetBattleMovePriority` (`src/battle_main.c`), and the
+  `DETERMINISTIC_PARALYSIS` PP tax in both `CancelerPPDeduction` (`src/battle_move_resolution.c`) and its AI mirror
+  (`src/battle_util.c`) — each now treats an innate Quick Feet holder as exempt, like the real ability.
+- **Toxic Boost / Flare Boost** — clauses in the `ctx->innatesEnabled` offensive block of
+  `CalcMoveBasePowerAfterModifiers` (`src/battle_util.c`), beside the chosen-ability cases (Toxic Boost +50% to a
+  physical move while poisoned, Flare Boost +50% to a special move while burned), each guarded `!= ABILITY_X`.
+
+**AI** is correct for FREE for everything in the shared damage/turn-order calcs (the attack/defense/speed/power
+reads run keyed off the real battler, so the AI both threatens and respects an innate holder). The dedicated AI
+*effect* reads — all about whether the AI should inflict a status on a battler that would *benefit* from it — are
+made innate-aware in `src/battle_ai_util.c`: `DoesBattlerBenefitFromAllVolatileStatus` (Marvel Scale / Quick Feet /
+Guts), `ShouldPoison` and the poison-harmlessness check (Toxic Boost), and `ShouldBurn` and the burn-harmlessness
+check (Flare Boost) each credit an innate holder via `BattlerHasAbility()` so the AI won't, e.g., poison an innate
+Toxic Boost foe. The ability-transfer scoring (`BattlerBenefitsFromAbilityScore`, the Guts case) is left alone
+since innates are never transferable.
+
+**Species selection is canon-only (no flavor picks)** — a status-fueled stat boost is potent, so like the pinch /
+weather abilities the set stays to species whose ability data carries the booster in any slot, so the signature
+survives whichever slot a build picks. Guts: the Rattata, Machop, Taillow, Shinx, Timburr lines, Flareon,
+Heracross (+ Mega, mirrored as a pure boon), the Larvitar/Makuhita/Tyrogue/Ursaring/Ursaluna lines, Throh,
+Squawkabilly (Green/Blue), Conkeldurr, Obstagoon, … . Quick Feet: Jolteon, Granbull, the Teddiursa/Ursaring,
+Poochyena, Zigzagoon (Hoenn + Galar), Shroomish lines. Marvel Scale: the Dratini line and Milotic. Flare Boost:
+the Drifloon line. Many already carry other innates, so they take a combined `INNATES(...)` list with the booster
+added (Heracross + Swarm, the Makuhita/Hariyama + Thick Fat, Larvitar + Sand Veil, Ursaring + Quick Feet, the
+Timburr line + Iron Fist, Obstagoon + Reckless, Milotic + Cute Charm + Serene Grace).
+
+**TOXIC_BOOST's user is Zangoose, which carries innate Toxic Boost INSTEAD of innate Immunity.** Zangoose's real
+ability data is Immunity (slot 0) / Toxic Boost (HA), and a prior batch gave it innate Immunity — but the two are
+**contradictory** (Immunity blocks the poison Toxic Boost needs), so a Zangoose can't usefully carry both as
+always-on innates. Toxic Boost is Zangoose's actual competitive/frontier identity (its sets run Toxic Orb + Facade),
+which innate Immunity silently neuters, so this batch **reassigns** Zangoose's innate from Immunity → Toxic Boost.
+Innate Immunity still lives on its other canon users, Gligar and Snorlax (the Immunity tests were repointed to
+Snorlax). This is the one place where a species' canon slot-0 ability is *not* its innate — the general rule when a
+species has two contradictory candidate innates (a status-immunity vs a same-status-requiring boost) is to keep the
+one that matches how the species is actually used; Zangoose is currently the only such case (every other
+toxic-themed species is a Poison-type, type-immune to poison, so none competes for Toxic Boost).
+
+**Step 3.5 (frontier roster):** sets that hardcoded a Batch N ability are freed to a complementary REAL slot
+(Hariyama/Conkeldurr → Sheer Force; Flareon → Flash Fire; Machamp → No Guard; Heracross/Mightyena → Moxie;
+Ursaring → Unnerve; Milotic → Competitive; Obstagoon → Defiant; Luxray/Squawkabilly → Intimidate; Throh →
+Inner Focus; Ursaluna → Bulletproof; Swellow → Scrappy; Linoone → Gluttony; Drifblim → Unburden; Raticate →
+Run Away). Only **Zangoose** needed a `species_ability_overrides.c` row: its two Toxic Boost (Toxic Orb) sets are
+freed to a chosen **Sheer Force** in its empty slot 1 — not Immunity, which would block the poison its innate Toxic
+Boost needs (a stable `:x:` pick that also skips Life Orb recoil on the SD set).

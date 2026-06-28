@@ -28,7 +28,9 @@
 //   ADAPTABILITY / PUNK_ROCK / STAKEOUT (offensive move-power boosters, Batch A),
 //   SERENE_GRACE (doubles the holder's moves' additional-effect chances),
 //   MULTISCALE / SOLID_ROCK / FUR_COAT / ICE_SCALES / HEATPROOF / FRIEND_GUARD /
-//   WATER_BUBBLE (defensive damage reducers, Batch B).
+//   WATER_BUBBLE (defensive damage reducers, Batch B),
+//   GUTS / MARVEL_SCALE / QUICK_FEET / TOXIC_BOOST / FLARE_BOOST (status-conditional
+//   stat boosts, Batch N).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
