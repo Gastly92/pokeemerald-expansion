@@ -143,7 +143,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Heavy Metal | Doubles the Pokémon's weight. |
 | :white_large_square: | Light Metal | Halves the Pokémon's weight. |
 | :white_check_mark: | Multiscale | Halves the damage the Pokémon takes while its HP is full. |
-| :white_check_mark: | Toxic Boost | Powers up physical moves when the Pokémon is poisoned. (Zangoose carries this innate instead of Immunity — the two are contradictory; see INNATE_ABILITIES.md.) |
+| :white_check_mark: | Toxic Boost | Powers up physical moves when the Pokémon is poisoned. |
 | :white_check_mark: | Flare Boost | Powers up special moves when the Pokémon is burned. |
 | :white_large_square: | Harvest | If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry. |
 | :white_large_square: | Telepathy | The Pokémon dodges attacks from its allies. |
