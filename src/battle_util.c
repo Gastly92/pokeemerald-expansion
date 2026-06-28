@@ -7036,6 +7036,17 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         // Water Bubble the switch above already doubled so it never stacks.
         if (moveType == TYPE_WATER && atkAbility != ABILITY_WATER_BUBBLE && IsInnateActive(battlerAtk, ABILITY_WATER_BUBBLE))
             modifier = uq4_12_multiply(modifier, UQ_4_12(2.0));
+        // FORK: innate Flare Boost / Toxic Boost (Batch N, FEATURE_INNATE_ABILITIES). Each mirrors its
+        // chosen-ability case in the switch above (Flare Boost +50% to special moves while burned, Toxic
+        // Boost +50% to physical moves while poisoned); the `!= ABILITY_X` guard skips the case the switch
+        // already handled so a holder running the real ability never double-applies. Both are clean upsides
+        // (the boost only ever helps the holder), so each innate is a 1:1 copy.
+        if ((gBattleMons[battlerAtk].status1 & STATUS1_BURN) && IsBattleMoveSpecial(move)
+         && atkAbility != ABILITY_FLARE_BOOST && IsInnateActive(battlerAtk, ABILITY_FLARE_BOOST))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        if ((gBattleMons[battlerAtk].status1 & STATUS1_PSN_ANY) && IsBattleMovePhysical(move)
+         && atkAbility != ABILITY_TOXIC_BOOST && IsInnateActive(battlerAtk, ABILITY_TOXIC_BOOST))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
     }
 
     // field abilities
@@ -7452,6 +7463,14 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
         if (moveType == TYPE_ROCK && atkAbility != ABILITY_ROCKY_PAYLOAD && IsInnateActive(battlerAtk, ABILITY_ROCKY_PAYLOAD))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        // FORK: innate Guts (Batch N, FEATURE_INNATE_ABILITIES) boosts the holder's physical Attack by 50%
+        // while it has any status condition, mirroring the chosen-ability case in the attack-stat switch
+        // above; the burn-physical-cut negation is handled in GetBurnOrFrostBiteModifier. Guts is a clean
+        // upside (it never hurts its holder), so the innate is a 1:1 copy. The `!= ABILITY_GUTS` guard skips
+        // the case the switch already handled so a holder running the real ability never double-applies.
+        if ((gBattleMons[battlerAtk].status1 & STATUS1_ANY) && IsBattleMovePhysical(move)
+         && atkAbility != ABILITY_GUTS && IsInnateActive(battlerAtk, ABILITY_GUTS))
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
     }
 
     // target's abilities
@@ -7689,6 +7708,16 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
      && ctx->innatesEnabled && IsInnateActive(battlerDef, ABILITY_FUR_COAT))
         modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
 
+    // FORK: an innate Marvel Scale (Batch N, FEATURE_INNATE_ABILITIES) boosts the holder's Defense by 50%
+    // while it has any status condition, exactly like the real ability. A clean upside (1:1 copy); the
+    // switch above already applied a chosen Marvel Scale, so guard against it to avoid double-applying.
+    // usesDefStat gates it to physical hits, the same gate the real ability uses. On-field AI damage
+    // prediction is correct for free (shared calc keyed off the real battler); identity is untouched.
+    if (usesDefStat && (gBattleMons[battlerDef].status1 & STATUS1_ANY)
+     && ctx->abilities[battlerDef] != ABILITY_MARVEL_SCALE
+     && ctx->innatesEnabled && IsInnateActive(battlerDef, ABILITY_MARVEL_SCALE))
+        modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+
     // ally's abilities
     if (IsBattlerAlive(BATTLE_PARTNER(battlerDef)))
     {
@@ -7838,7 +7867,8 @@ static inline uq4_12_t GetBurnOrFrostBiteModifier(struct DamageContext *ctx)
     if (gBattleMons[ctx->battlerAtk].status1 & STATUS1_BURN
         && IsBattleMovePhysical(ctx->move)
         && (GetConfig(B_BURN_FACADE_DMG) < GEN_6 || moveEffect != EFFECT_FACADE)
-        && ctx->abilities[ctx->battlerAtk] != ABILITY_GUTS)
+        && ctx->abilities[ctx->battlerAtk] != ABILITY_GUTS
+        && !(ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_GUTS))) // FORK: innate Guts also negates burn's physical-damage cut
         return UQ_4_12(0.5);
     if (gBattleMons[ctx->battlerAtk].status1 & STATUS1_FROSTBITE
         && IsBattleMoveSpecial(ctx->move)
@@ -11375,6 +11405,7 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
 
     if (gBattleMons[battlerAtk].status1 & STATUS1_PARALYSIS
         && atkAbility != ABILITY_QUICK_FEET
+        && !BattlerHasAbility(battlerAtk, ABILITY_QUICK_FEET) // FORK: innate Quick Feet is exempt from the para PP tax, like the real ability
         && GetConfig(DETERMINISTIC_PARALYSIS))
         ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
 

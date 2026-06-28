@@ -68,8 +68,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Forecast | The Pokémon transforms with the weather to change its type to Water, Fire, or Ice. |
 | :white_large_square: | Sticky Hold | The Pokémon's held item cannot be stolen or removed by other Pokémon. |
 | :white_large_square: | Shed Skin | The Pokémon has a 30% chance of curing its own status conditions at the end of every turn. |
-| :white_large_square: | Guts | When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon's physical moves. |
-| :white_large_square: | Marvel Scale | When the Pokémon has a status condition, its Defense stat is boosted by 50%. |
+| :white_check_mark: | Guts | When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon's physical moves. |
+| :white_check_mark: | Marvel Scale | When the Pokémon has a status condition, its Defense stat is boosted by 50%. |
 | :white_large_square: | Liquid Ooze | The strong stench of the Pokémon's oozed liquid damages attackers that use HP-draining moves. |
 | :white_check_mark: | Overgrow | Boosts the power of the Pokémon's Grass-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_check_mark: | Blaze | Boosts the power of the Pokémon's Fire-type moves by 50% when its HP drops to 1/3 or less of its max. |
@@ -101,7 +101,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Skill Link | The Pokémon's multistrike moves always hit the maximum number of times. |
 | :white_large_square: | Hydration | Cures the Pokémon's status conditions at the end of every turn in rain. |
 | :x: | Solar Power | In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn. |
-| :white_large_square: | Quick Feet | When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon's Speed stat. |
+| :white_check_mark: | Quick Feet | When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon's Speed stat. |
 | :x: | Normalize | All the Pokémon's moves become Normal type. The power of those moves is boosted a little. |
 | :white_large_square: | Sniper | Boosts the power of the Pokémon's critical hits by 125% instead of 50%. |
 | :white_large_square: | Magic Guard | The Pokémon takes damage only from attacks. |
@@ -143,8 +143,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Heavy Metal | Doubles the Pokémon's weight. |
 | :white_large_square: | Light Metal | Halves the Pokémon's weight. |
 | :white_check_mark: | Multiscale | Halves the damage the Pokémon takes while its HP is full. |
-| :white_large_square: | Toxic Boost | Powers up physical moves when the Pokémon is poisoned. |
-| :white_large_square: | Flare Boost | Powers up special moves when the Pokémon is burned. |
+| :white_check_mark: | Toxic Boost | Powers up physical moves when the Pokémon is poisoned. (Effect wired; no innate user — see note in INNATE_ABILITIES.md: its only canon user Zangoose carries innate Immunity, and other toxic mons are poison-immune Poison-types.) |
+| :white_check_mark: | Flare Boost | Powers up special moves when the Pokémon is burned. |
 | :white_large_square: | Harvest | If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry. |
 | :white_large_square: | Telepathy | The Pokémon dodges attacks from its allies. |
 | :x: | Moody | At the end of every turn, one of the Pokémon's stats will be boosted by 2 stages, but another will be lowered by 1 stage. |

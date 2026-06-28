@@ -1090,6 +1090,7 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
     // is exempt.
     if (gBattleMons[cv->battlerAtk].status1 & STATUS1_PARALYSIS
         && cv->abilities[cv->battlerAtk] != ABILITY_QUICK_FEET
+        && !BattlerHasAbility(cv->battlerAtk, ABILITY_QUICK_FEET) // FORK: innate Quick Feet is exempt from the para PP tax, like the real ability
         && GetConfig(DETERMINISTIC_PARALYSIS))
         ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
 

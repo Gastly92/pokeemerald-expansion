@@ -3745,6 +3745,155 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Water Bubble blocks burn")
     }
 }
 
+// ===== Batch N: status-conditional stat boosts (Guts / Marvel Scale / Quick Feet / Flare Boost) =====
+// Toxic Boost is wired but has no innate user (its only canon user Zangoose carries innate Immunity,
+// which makes it inert; every other toxic mon is a poison-immune Poison-type), so it has no test here.
+
+// Guts: +50% physical Attack while statused. Hariyama's slot-0 ability is Thick Fat, so the off-run never
+// touches the attack calc. Poison (not burn) isolates the Attack boost — it has no physical-damage cut.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Guts boosts a physical move 1.5x while statused", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HARIYAMA, ABILITY_GUTS));
+        ASSUME(gSpeciesInfo[SPECIES_HARIYAMA].abilities[0] != ABILITY_GUTS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_HARIYAMA) { Ability(ABILITY_THICK_FAT); Status1(STATUS1_POISON); Moves(MOVE_BRICK_BREAK); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_BRICK_BREAK); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+// Guts also negates burn's physical-damage cut. Both runs carry the innate (so both get the +50% Attack);
+// the only difference is the status, so if Guts ignores the burn cut the burned run deals identical damage.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Guts ignores burn's physical-damage cut", s16 damage)
+{
+    u32 status;
+    PARAMETRIZE { status = STATUS1_POISON; }
+    PARAMETRIZE { status = STATUS1_BURN; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HARIYAMA, ABILITY_GUTS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HARIYAMA) { Ability(ABILITY_THICK_FAT); Status1(status); Moves(MOVE_BRICK_BREAK); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_BRICK_BREAK); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_EQ(results[0].damage, results[1].damage); // burn does not reduce a Guts holder's physical damage
+    }
+}
+
+// Marvel Scale: +50% Defense while statused. Milotic's slot-0 ability IS Marvel Scale, so the test forces a
+// different chosen ability (Competitive) and the boost can then only be the innate. Earthquake is a
+// non-contact physical hit, so Milotic's innate Cute Charm never interferes.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Marvel Scale boosts Defense 1.5x while statused", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MILOTIC, ABILITY_MARVEL_SCALE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MILOTIC) { Ability(ABILITY_COMPETITIVE); Status1(STATUS1_POISON); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_EARTHQUAKE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_EARTHQUAKE); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.5), results[0].damage); // +50% Defense -> ~0.67x damage
+    }
+}
+
+// Quick Feet: +50% Speed while statused. Mightyena's slot-0 ability is Intimidate, so the boost is the
+// innate. Poison (not paralysis) isolates the Speed boost from the paralysis-penalty handling. Boosted
+// 70 -> 105 outspeeds the opponent's 90; without the innate, 70 would move second.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Quick Feet boosts Speed 1.5x while statused")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MIGHTYENA, ABILITY_QUICK_FEET));
+        ASSUME(gSpeciesInfo[SPECIES_MIGHTYENA].abilities[0] != ABILITY_QUICK_FEET);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MIGHTYENA) { Ability(ABILITY_INTIMIDATE); Status1(STATUS1_POISON); Speed(70); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(90); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Mightyena used Celebrate!");
+        MESSAGE("The opposing Wobbuffet used Celebrate!");
+    }
+}
+
+// Quick Feet also shrugs off the DETERMINISTIC_PARALYSIS PP tax (the fork's paralysis model), exactly like
+// the real ability: a paralyzed innate Quick Feet holder's move costs the normal 1 PP (35 - 1 = 34), not 2.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Quick Feet is exempt from the deterministic paralysis PP tax")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MIGHTYENA, ABILITY_QUICK_FEET));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_PARALYSIS, TRUE);
+        PLAYER(SPECIES_MIGHTYENA) { Ability(ABILITY_INTIMIDATE); Status1(STATUS1_PARALYSIS); Moves(MOVE_POUND); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_POUND); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], 34);
+    }
+}
+
+// Flare Boost: +50% special-move power while burned. Drifblim's slot-0 ability is Aftermath, so the boost
+// is the innate. Drifblim is Ghost/Flying, so Shadow Ball is a neutral special hit on Wobbuffet.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Flare Boost boosts a special move 1.5x while burned", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DRIFBLIM, ABILITY_FLARE_BOOST));
+        ASSUME(gSpeciesInfo[SPECIES_DRIFBLIM].abilities[0] != ABILITY_FLARE_BOOST);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_DRIFBLIM) { Ability(ABILITY_AFTERMATH); Status1(STATUS1_BURN); Moves(MOVE_SHADOW_BALL); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SHADOW_BALL); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+// Suppression parity: Guts is not breakable, so Mold Breaker never touches it, but Gastro Acid suppresses an
+// innate Guts exactly like the real ability — the Attack boost vanishes.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Guts", s16 damage)
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HARIYAMA, ABILITY_GUTS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HARIYAMA) { Ability(ABILITY_THICK_FAT); Status1(STATUS1_POISON); Moves(MOVE_BRICK_BREAK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_BRICK_BREAK); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.5), results[0].damage); // suppressed: base; active: 1.5x
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -3773,6 +3922,8 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_PUNK_ROCK, ABILITY_STAKEOUT, ABILITY_SERENE_GRACE,
         ABILITY_MULTISCALE, ABILITY_SOLID_ROCK, ABILITY_FUR_COAT, ABILITY_ICE_SCALES,
         ABILITY_HEATPROOF, ABILITY_FRIEND_GUARD, ABILITY_WATER_BUBBLE,
+        ABILITY_GUTS, ABILITY_MARVEL_SCALE, ABILITY_QUICK_FEET, ABILITY_TOXIC_BOOST,
+        ABILITY_FLARE_BOOST,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

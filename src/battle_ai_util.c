@@ -3713,6 +3713,13 @@ static inline bool32 DoesBattlerBenefitFromAllVolatileStatus(enum BattlerId batt
      || HasMoveWithEffect(battler, EFFECT_FACADE)
      || HasMoveWithEffect(battler, EFFECT_PSYCHO_SHIFT))
         return TRUE;
+    // FORK: an innate Marvel Scale / Quick Feet / Guts (Batch N, FEATURE_INNATE_ABILITIES) benefits from a
+    // status condition exactly like the real ability, so the AI shouldn't status such a foe.
+    if (GetConfig(FEATURE_INNATE_ABILITIES)
+     && (BattlerHasAbility(battler, ABILITY_MARVEL_SCALE)
+      || BattlerHasAbility(battler, ABILITY_QUICK_FEET)
+      || (BattlerHasAbility(battler, ABILITY_GUTS) && HasMoveWithCategory(battler, DAMAGE_CATEGORY_PHYSICAL))))
+        return TRUE;
     return FALSE;
 }
 
@@ -3723,7 +3730,8 @@ bool32 ShouldPoison(enum BattlerId battlerAtk, enum BattlerId battlerDef)
     if (CanBePoisoned(battlerAtk, battlerDef, gAiLogicData->abilities[battlerAtk], abilityDef) && (
         DoesBattlerBenefitFromAllVolatileStatus(battlerDef, abilityDef)
         || abilityDef == ABILITY_POISON_HEAL
-        || (abilityDef == ABILITY_TOXIC_BOOST && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_PHYSICAL))))
+        || (abilityDef == ABILITY_TOXIC_BOOST && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_PHYSICAL))
+        || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_TOXIC_BOOST) && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_PHYSICAL)))) // FORK: innate Toxic Boost also wants poison
     {
         if (battlerAtk == battlerDef) // Targeting self
             return TRUE;
@@ -3743,7 +3751,8 @@ bool32 ShouldBurn(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Abi
         DoesBattlerBenefitFromAllVolatileStatus(battlerDef, abilityDef)
         || abilityDef == ABILITY_HEATPROOF
         || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_HEATPROOF)) // FORK: innate Heatproof also softens burn
-        || (abilityDef == ABILITY_FLARE_BOOST && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_SPECIAL))))
+        || (abilityDef == ABILITY_FLARE_BOOST && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_SPECIAL))
+        || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_FLARE_BOOST) && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_SPECIAL)))) // FORK: innate Flare Boost also wants burn
     {
         if (battlerAtk == battlerDef) // Targeting self
             return TRUE;
@@ -4274,7 +4283,9 @@ static bool32 ShouldCureStatusInternal(enum BattlerId battlerAtk, enum BattlerId
         if (aiData->abilities[battlerDef] == ABILITY_POISON_HEAL)
             isHarmless = TRUE;
 
-        if (aiData->abilities[battlerDef] == ABILITY_TOXIC_BOOST && !isHarmless)
+        // FORK: credit an innate Toxic Boost too (FEATURE_INNATE_ABILITIES).
+        if ((aiData->abilities[battlerDef] == ABILITY_TOXIC_BOOST
+             || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_TOXIC_BOOST))) && !isHarmless)
         {
             if (HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_PHYSICAL))
                 isHarmless = TRUE;
@@ -4288,7 +4299,9 @@ static bool32 ShouldCureStatusInternal(enum BattlerId battlerAtk, enum BattlerId
         if (aiData->holdEffects[battlerDef] == HOLD_EFFECT_FLAME_ORB)
             return FALSE;
 
-        if (aiData->abilities[battlerDef] == ABILITY_FLARE_BOOST && !isHarmless)
+        // FORK: credit an innate Flare Boost too (FEATURE_INNATE_ABILITIES).
+        if ((aiData->abilities[battlerDef] == ABILITY_FLARE_BOOST
+             || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_FLARE_BOOST))) && !isHarmless)
         {
             if (HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_SPECIAL))
                 isHarmless = TRUE;

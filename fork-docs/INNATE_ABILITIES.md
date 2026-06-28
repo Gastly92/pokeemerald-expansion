@@ -1237,3 +1237,65 @@ Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhy
 Araquanid's Water Bubble → Water Absorb); the all-real-abilities-innate / dead-weight-slot cases take a fork-owned
 chosen-ability override (`species_ability_overrides.c`): Lugia → Storm Drain, Carracosta → Water Absorb, Maushold →
 No Guard, Bronzong → Soundproof, Sinistcha → Flash Fire — each a stable `:x:` pick.
+
+### ABILITY_GUTS / ABILITY_MARVEL_SCALE / ABILITY_QUICK_FEET / ABILITY_TOXIC_BOOST / ABILITY_FLARE_BOOST
+
+The "status-conditional stat boosts" (Batch N): each grants the holder a stat/damage boost while it carries a
+status condition (Guts +50% physical Attack while statused, Marvel Scale +50% Defense while statused, Quick Feet
++50% Speed while statused, Toxic Boost +50% physical power while poisoned, Flare Boost +50% special power while
+burned). All five are **clean upsides** — the boost only ever helps the holder, and even the burn/paralysis
+*penalty* clauses (Guts negates burn's physical-damage cut, Quick Feet ignores the paralysis Speed/PP/priority
+penalty) are part of the real ability's upside — so each innate is a plain **1:1 copy**, no pure-boon divergence.
+Suppression parity holds via `IsInnateActive()` / `BattlerHasAbility()`: none of the five is breakable, so Mold
+Breaker never touches them (Gastro Acid / Neutralizing Gas / not-on-field are the relevant suppressors). The
+innate is NOT recorded as identity (no pop-up — these have none even as real abilities). Per-ability sites:
+- **Guts** — the attack-stat boost rides the `ctx->innatesEnabled` block of `CalcAttackStat` (`src/battle_util.c`),
+  beside the chosen-ability Guts case (`gBattleMons[atk].status1 & STATUS1_ANY && physical move`, guarded
+  `!= ABILITY_GUTS`). The burn-physical-cut negation is a second clause in `GetBurnOrFrostBiteModifier`
+  (same file): the `0.5x` burn cut is skipped for an innate Guts holder too.
+- **Marvel Scale** — a clause beside the innate Fur Coat one in the defense-stat modifier path
+  (`CalcAttackStat`, `src/battle_util.c`): `+50% Defense` while statused, gated on `usesDefStat` (a physical hit),
+  guarded `!= ABILITY_MARVEL_SCALE`.
+- **Quick Feet** — the `+50%` Speed read in `GetBattlerTotalSpeedStat` (`src/battle_main.c`) gains an
+  `|| IsInnateActive(battler, ABILITY_QUICK_FEET)` clause (statused holder). Its paralysis-penalty exemptions are
+  mirrored at all three fork paralysis sites: the (non-deterministic) Speed-drop in `GetBattlerTotalSpeedStat`,
+  the `DETERMINISTIC_PARALYSIS` priority tax in `GetBattleMovePriority` (`src/battle_main.c`), and the
+  `DETERMINISTIC_PARALYSIS` PP tax in both `CancelerPPDeduction` (`src/battle_move_resolution.c`) and its AI mirror
+  (`src/battle_util.c`) — each now treats an innate Quick Feet holder as exempt, like the real ability.
+- **Toxic Boost / Flare Boost** — clauses in the `ctx->innatesEnabled` offensive block of
+  `CalcMoveBasePowerAfterModifiers` (`src/battle_util.c`), beside the chosen-ability cases (Toxic Boost +50% to a
+  physical move while poisoned, Flare Boost +50% to a special move while burned), each guarded `!= ABILITY_X`.
+
+**AI** is correct for FREE for everything in the shared damage/turn-order calcs (the attack/defense/speed/power
+reads run keyed off the real battler, so the AI both threatens and respects an innate holder). The dedicated AI
+*effect* reads — all about whether the AI should inflict a status on a battler that would *benefit* from it — are
+made innate-aware in `src/battle_ai_util.c`: `DoesBattlerBenefitFromAllVolatileStatus` (Marvel Scale / Quick Feet /
+Guts), `ShouldPoison` and the poison-harmlessness check (Toxic Boost), and `ShouldBurn` and the burn-harmlessness
+check (Flare Boost) each credit an innate holder via `BattlerHasAbility()` so the AI won't, e.g., poison an innate
+Toxic Boost foe. The ability-transfer scoring (`BattlerBenefitsFromAbilityScore`, the Guts case) is left alone
+since innates are never transferable.
+
+**Species selection is canon-only (no flavor picks)** — a status-fueled stat boost is potent, so like the pinch /
+weather abilities the set stays to species whose ability data carries the booster in any slot, so the signature
+survives whichever slot a build picks. Guts: the Rattata, Machop, Taillow, Shinx, Timburr lines, Flareon,
+Heracross (+ Mega, mirrored as a pure boon), the Larvitar/Makuhita/Tyrogue/Ursaring/Ursaluna lines, Throh,
+Squawkabilly (Green/Blue), Conkeldurr, Obstagoon, … . Quick Feet: Jolteon, Granbull, the Teddiursa/Ursaring,
+Poochyena, Zigzagoon (Hoenn + Galar), Shroomish lines. Marvel Scale: the Dratini line and Milotic. Flare Boost:
+the Drifloon line. Many already carry other innates, so they take a combined `INNATES(...)` list with the booster
+added (Heracross + Swarm, the Makuhita/Hariyama + Thick Fat, Larvitar + Sand Veil, Ursaring + Quick Feet, the
+Timburr line + Iron Fist, Obstagoon + Reckless, Milotic + Cute Charm + Serene Grace).
+
+**TOXIC_BOOST has NO innate user — a deliberate exclusion, not an oversight.** Its only canon user is Zangoose,
+which carries innate Immunity by established design (its frontier sets run a chosen Toxic Boost while the innate
+Immunity dominates so it can't be poisoned — see the Immunity tests). Giving Zangoose innate Toxic Boost would be
+contradictory and permanently inert (Immunity blocks the poison Toxic Boost needs). Every other toxic-themed
+species is a Poison-type, type-immune to poison, so it can't host Toxic Boost either. The effect is wired and
+allowlisted so a future poisonable, non-Immunity user works with no extra engineering.
+
+**Step 3.5 (frontier roster):** sets that hardcoded a Batch N ability are freed to a complementary REAL slot
+(Hariyama/Conkeldurr → Sheer Force; Flareon → Flash Fire; Machamp → No Guard; Heracross/Mightyena → Moxie;
+Ursaring → Unnerve; Milotic → Competitive; Obstagoon → Defiant; Luxray/Squawkabilly → Intimidate; Throh →
+Inner Focus; Ursaluna → Bulletproof; Swellow → Scrappy; Linoone → Gluttony; Drifblim → Unburden; Raticate →
+Run Away). No Batch N set needed a `species_ability_overrides.c` row (every freed species had a real complementary
+slot). The two Zangoose Toxic Boost sets are left untouched — Toxic Boost is not an innate, so their chosen slot
+is the real ability (its inertness under innate Immunity is the pre-existing, intended Immunity-batch design).
