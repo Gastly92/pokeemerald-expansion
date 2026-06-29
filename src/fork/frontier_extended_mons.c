@@ -186,7 +186,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_SLUDGE,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -835,7 +835,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIDOQUEEN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // bulky hazards
+        .heldItem = ITEM_LEFTOVERS, // bulky hazards
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -1191,7 +1191,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENOMOTH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_SLUDGE,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -1735,7 +1735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TENTACRUEL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // bulky spinner / hazards
+        .heldItem = ITEM_LEFTOVERS, // bulky spinner / hazards
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -2029,7 +2029,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWBRO_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_SLUDGE, // bulky pivot
+        .heldItem = ITEM_LEFTOVERS, // bulky pivot
         .moves =
         {
             MOVE_SHELL_SIDE_ARM,
@@ -2852,7 +2852,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WEEZING_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_SLUDGE, // defensive wall
+        .heldItem = ITEM_LEFTOVERS, // defensive wall
         .moves =
         {
             MOVE_STRANGE_STEAM,
@@ -4636,7 +4636,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CROBAT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // defensive defogger / status
+        .heldItem = ITEM_LEFTOVERS, // defensive defogger / status
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -5516,7 +5516,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_QWILFISH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Intimidate hazard setter
+        .heldItem = ITEM_LEFTOVERS, // Intimidate hazard setter
         .moves =
         {
             MOVE_SPIKES,
@@ -10133,7 +10133,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROSERADE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Technician status spreader
+        .heldItem = ITEM_LEFTOVERS, // Technician status spreader
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -10875,7 +10875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAPION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_SLUDGE, // Sniper / Knock Off pivot
+        .heldItem = ITEM_LEFTOVERS, // Sniper / Knock Off pivot
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -10895,7 +10895,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAPION,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Swords Dance sweeper
+        .heldItem = ITEM_LEFTOVERS, // Swords Dance sweeper
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -13311,7 +13311,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Tailwind support (Speed Boost now innate)
+        .heldItem = ITEM_LEFTOVERS, // Tailwind support (Speed Boost now innate)
         .moves =
         {
             MOVE_TAILWIND,
@@ -14243,7 +14243,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMOONGUSS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Regenerator status wall
+        .heldItem = ITEM_LEFTOVERS, // Regenerator status wall
         .moves =
         {
             MOVE_SPORE,
@@ -22788,7 +22788,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OVERQWIL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Intimidate Toxic Spikes pivot
+        .heldItem = ITEM_LEFTOVERS, // Intimidate Toxic Spikes pivot
         .moves =
         {
             MOVE_BARB_BARRAGE,
@@ -24326,7 +24326,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLODSIRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Unaware special wall / status spreader
+        .heldItem = ITEM_LEFTOVERS, // Unaware special wall / status spreader
         .moves =
         {
             MOVE_TOXIC,
@@ -24346,7 +24346,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLODSIRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Water Absorb stall pivot
+        .heldItem = ITEM_LEFTOVERS, // Water Absorb stall pivot
         .moves =
         {
             MOVE_RECOVER,
@@ -25526,7 +25526,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OKIDOGI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Guard Dog Bulk Up wall breaker
+        .heldItem = ITEM_LEFTOVERS, // Guard Dog Bulk Up wall breaker
         .moves =
         {
             MOVE_BULK_UP,
@@ -25568,7 +25568,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUNKIDORI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Toxic Chain defensive pivot
+        .heldItem = ITEM_LEFTOVERS, // Toxic Chain defensive pivot
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -25590,7 +25590,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FEZANDIPITI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Toxic Chain utility pivot
+        .heldItem = ITEM_LEFTOVERS, // Toxic Chain utility pivot
         .moves =
         {
             MOVE_ROOST,
@@ -26036,7 +26036,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PECHARUNT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_SLUDGE, // Malignant Chain status tank (innate Levitate)
+        .heldItem = ITEM_LEFTOVERS, // Malignant Chain status tank (innate Levitate)
         .moves =
         {
             MOVE_MALIGNANT_CHAIN,
