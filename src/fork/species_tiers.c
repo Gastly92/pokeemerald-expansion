@@ -57,7 +57,6 @@ static const u16 sLegendarySpecies[] =
     SPECIES_SHAYMIN_SKY,           // 0492
     SPECIES_KYUREM_BLACK,          // 0646
     SPECIES_KYUREM_WHITE,          // 0646
-    SPECIES_HOOPA_UNBOUND,         // 0720
     SPECIES_URSHIFU,               // 0892
     SPECIES_URSHIFU_RAPID_STRIKE,  // 0892
     SPECIES_SPECTRIER,             // 0897
@@ -104,6 +103,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_ZYGARDE_10_POWER_CONSTRUCT, // 0718
     SPECIES_DIANCIE,             // 0719
     SPECIES_HOOPA,               // 0720
+    SPECIES_HOOPA_UNBOUND,       // 0720
     SPECIES_VOLCANION,           // 0721
     SPECIES_KOMMO_O,             // 0784
     SPECIES_TAPU_KOKO,           // 0785
