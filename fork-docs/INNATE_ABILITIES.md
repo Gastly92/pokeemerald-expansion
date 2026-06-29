@@ -1343,8 +1343,16 @@ new ability is merged into the existing innate row where a species already carri
 Insomnia/Swarm, Kingdra keeps Swift Swim, Toxapex keeps Limber/Regenerator, Togekiss keeps Serene Grace).
 
 **Frontier (Step 3.5):** these abilities were previously *pending* (`:white_large_square:`), so many frontier
-sets had used them as a "stable" chosen pick beside an already-innate slot — that bet is now churn, so every
-such set is re-pointed. Sets on a species with a complementary **real** `:x:` slot free to it directly
-(Octillery → Moody, Kingdra → Damp); the rest take a fork-owned `species_ability_overrides.c` row handing out a
-stable `:x:` ability in an innate-redundant or empty slot (Beedrill/Inteleon/Ariados/Absol/Honchkrow/Drapion/
-Unfezant → Sheer Force, Fearow → No Guard, Togekiss → Victory Star, Barbaracle/Toxapex → Water Absorb).
+sets had used them as a chosen pick beside an already-innate slot. Only the sets whose species has a
+complementary **real** `:x:` slot are re-pointed, needing no override — **Octillery → Moody** and
+**Kingdra → Damp** (each runs the new ability *plus* its innate). The remaining canon sets are deliberately
+**left on their now-innate-redundant real ability** (Sniper / Super Luck / Merciless) rather than freed.
+Freeing those would require `species_ability_overrides.c` rows, and that table is consulted unconditionally by
+`GetSpeciesAbility` (it is *not* feature-gated), which makes the override approach unsafe here for two reasons:
+(1) it removes the real ability **globally** even with the feature off, breaking upstream tests that explicitly
+select it (e.g. `crit_chance.c` / `deterministic_critical_hits.c` do `PLAYER(SPECIES_TOGEKISS) {
+Ability(ABILITY_SUPER_LUCK); }`); and (2) every added row lengthens the linear override scan that runs on
+*every* ability lookup, which tips the tight `ai_thinking_time.c` doubles budget over its ceiling. A set left
+on its real Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simply equals the innate
+(redundant but harmless; the effect sites guard against double-applying), so only the second-ability *upgrade*
+is forgone. Revisit if the override lookup is made non-linear or feature-gated.
