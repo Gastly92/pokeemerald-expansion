@@ -1305,3 +1305,46 @@ Inner Focus; Ursaluna → Bulletproof; Swellow → Scrappy; Linoone → Gluttony
 Run Away). Only **Zangoose** needed a `species_ability_overrides.c` row: its two Toxic Boost (Toxic Orb) sets are
 freed to a chosen **Sheer Force** in its empty slot 1 — not Immunity, which would block the poison its innate Toxic
 Boost needs (a stable `:x:` pick that also skips Life Orb recoil on the SD set).
+
+### ABILITY_SUPER_LUCK / ABILITY_SNIPER / ABILITY_MERCILESS
+
+The "crit-rate / crit-damage modifiers" (Batch O): all three live in the critical-hit calc in
+`src/battle_util.c`. **Super Luck** adds +1 to the holder's crit stage; **Merciless** auto-crits a target
+that is poisoned or badly poisoned; **Sniper** boosts critical-hit *damage* (the crit multiplier becomes
+×2.25 instead of ×1.5). All three are **clean upsides** that never hurt the holder, so each innate is a plain
+**1:1 copy** — no pure-boon divergence. Wiring:
+
+- **Super Luck** — the `+1` crit-stage read in both `CalcCritChanceStage` and the Gen-1 `CalcCritChanceStageGen1`
+  gains an `|| (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK))` clause beside the
+  cached chosen-ability test.
+- **Merciless** — the auto-crit-vs-poisoned read in the same two functions gains the same innate clause
+  (`ctx->innatesEnabled && IsInnateActive(...)`) beside the cached chosen-ability test.
+- **Sniper** — `GetAttackerAbilitiesModifier` returns the crit-damage ×1.5 from a `switch (abilityAtk)`; an
+  innate-Sniper clause is added *after* the switch, gated `isCrit && abilityAtk != ABILITY_SNIPER &&
+  GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(...)`, so it only runs on a crit (off the non-crit
+  hot path) and never double-applies with the chosen-ability path. (This function takes no `DamageContext`,
+  so it reads `GetConfig()` directly rather than the cached `ctx->innatesEnabled`.)
+
+Suppression parity holds via `IsInnateActive()`: none of the three is breakable, so Mold Breaker never touches
+them (Gastro Acid / Neutralizing Gas / not-on-field are the relevant suppressors), exactly like the real
+abilities. **AI:** on-field crit prediction is correct for free — the modifiers live in the shared crit calc,
+which the AI runs (`AI_CalcDamage`) keyed off the real battler via `IsInnateActive()`. The AI's *dedicated*
+crit-related effect reads are made innate-aware too, via `BattlerHasAbility()`: the Focus Energy / Laser Focus
+setup score and the Dire-Hit-item heuristic (Super Luck / Sniper, `src/battle_ai_main.c` / `src/battle_ai_items.c`)
+and the "poison the target" score (Merciless, `src/battle_ai_util.c`).
+
+**Species (canon-only, no flavor picks** — crit boosts are potent and hard to justify thematically): every
+species whose ability data carries the ability in any slot, in dex order, so the signature survives whichever
+slot a build picks. Sniper: the Beedrill, Spearow/Fearow, Horsea/Seadra/Kingdra, Spinarak/Ariados,
+Remoraid/Octillery, Skorupi/Drapion, Binacle/Barbaracle and Sobble/Drizzile/Inteleon lines (Mega Beedrill /
+Mega Barbaracle / Inteleon-Gmax mirror the base per the Mega convention). Super Luck: the Togepi line, the
+Murkrow/Honchkrow line, Absol (+ its Megas), and the Pidove line. Merciless: the Mareanie/Toxapex line. Each
+new ability is merged into the existing innate row where a species already carries one (e.g. Ariados keeps
+Insomnia/Swarm, Kingdra keeps Swift Swim, Toxapex keeps Limber/Regenerator, Togekiss keeps Serene Grace).
+
+**Frontier (Step 3.5):** these abilities were previously *pending* (`:white_large_square:`), so many frontier
+sets had used them as a "stable" chosen pick beside an already-innate slot — that bet is now churn, so every
+such set is re-pointed. Sets on a species with a complementary **real** `:x:` slot free to it directly
+(Octillery → Moody, Kingdra → Damp); the rest take a fork-owned `species_ability_overrides.c` row handing out a
+stable `:x:` ability in an innate-redundant or empty slot (Beedrill/Inteleon/Ariados/Absol/Honchkrow/Drapion/
+Unfezant → Sheer Force, Fearow → No Guard, Togekiss → Victory Star, Barbaracle/Toxapex → Water Absorb).

@@ -38,6 +38,9 @@
 //   (and negates burn's physical cut), Marvel Scale +50% Def while statused, Quick Feet
 //   +50% Speed while statused (and ignores the paralysis Speed/PP/priority penalty), Toxic
 //   Boost +50% physical while poisoned, Flare Boost +50% special while burned).
+//   SUPER_LUCK / SNIPER / MERCILESS (crit-rate / crit-damage modifiers, Batch O — all 1:1 clean-upside
+//   copies, canon-only (no flavor picks): Super Luck +1 crit stage, Sniper crits deal x2.25 instead of
+//   x1.5, Merciless auto-crits a poisoned target).
 //   NOTE: Zangoose carries innate TOXIC_BOOST, not innate Immunity — the two are contradictory
 //   (Immunity blocks the poison Toxic Boost needs), so its canon-Toxic-Boost frontier identity wins;
 //   innate Immunity still lives on Gligar / Snorlax.
@@ -218,6 +221,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0015
         SPECIES_BEEDRILL,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_SWARM
         )
     },
@@ -225,6 +229,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BEEDRILL_MEGA,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_SNIPER,
             ABILITY_SWARM
         )
     },
@@ -279,13 +284,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0021
         SPECIES_SPEAROW,
         INNATES(
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_SNIPER
         )
     },
     { // 0022
         SPECIES_FEAROW,
         INNATES(
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_SNIPER
         )
     },
     { // 0023
@@ -882,7 +889,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0116
         SPECIES_HORSEA,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0117
+        SPECIES_SEADRA,
+        INNATES(
+            ABILITY_SNIPER
         )
     },
     { // 0118
@@ -1258,6 +1272,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SPINARAK,
         INNATES(
             ABILITY_INSOMNIA,
+            ABILITY_SNIPER,
             ABILITY_SWARM
         )
     },
@@ -1265,6 +1280,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARIADOS,
         INNATES(
             ABILITY_INSOMNIA,
+            ABILITY_SNIPER,
             ABILITY_SWARM
         )
     },
@@ -1297,13 +1313,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0175
         SPECIES_TOGEPI,
         INNATES(
-            ABILITY_SERENE_GRACE
+            ABILITY_SERENE_GRACE,
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0176
         SPECIES_TOGETIC,
         INNATES(
-            ABILITY_SERENE_GRACE
+            ABILITY_SERENE_GRACE,
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0177
@@ -1413,7 +1431,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MURKROW,
         INNATES(
             ABILITY_INSOMNIA,
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0199
@@ -1747,6 +1766,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0223
+        SPECIES_REMORAID,
+        INNATES(
+            ABILITY_SNIPER
+        )
+    },
+    { // 0224
+        SPECIES_OCTILLERY,
+        INNATES(
+            ABILITY_SNIPER
+        )
+    },
     { // 0225
         SPECIES_DELIBIRD,
         INNATES(
@@ -1794,6 +1825,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0230
         SPECIES_KINGDRA,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -2567,19 +2599,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0359
         SPECIES_ABSOL,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0359
         SPECIES_ABSOL_MEGA,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0359
         SPECIES_ABSOL_MEGA_Z,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0362
@@ -2962,7 +2997,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0430
         SPECIES_HONCHKROW,
         INNATES(
-            ABILITY_INSOMNIA
+            ABILITY_INSOMNIA,
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0431
@@ -3110,13 +3146,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0451
         SPECIES_SKORUPI,
         INNATES(
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_SNIPER
         )
     },
     { // 0452
         SPECIES_DRAPION,
         INNATES(
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_SNIPER
         )
     },
     { // 0455
@@ -3192,7 +3230,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0468
         SPECIES_TOGEKISS,
         INNATES(
-            ABILITY_SERENE_GRACE
+            ABILITY_SERENE_GRACE,
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0469
@@ -3569,6 +3608,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MUSHARNA,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0519
+        SPECIES_PIDOVE,
+        INNATES(
+            ABILITY_SUPER_LUCK
+        )
+    },
+    { // 0520
+        SPECIES_TRANQUILL,
+        INNATES(
+            ABILITY_SUPER_LUCK
+        )
+    },
+    { // 0521
+        SPECIES_UNFEZANT,
+        INNATES(
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0524
@@ -4522,18 +4579,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0688
         SPECIES_BINACLE,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_TOUGH_CLAWS
         )
     },
     { // 0689
         SPECIES_BARBARACLE,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_TOUGH_CLAWS
         )
     },
     { // 0689
         SPECIES_BARBARACLE_MEGA,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_TOUGH_CLAWS
         )
     },
@@ -4954,6 +5014,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MAREANIE,
         INNATES(
             ABILITY_LIMBER,
+            ABILITY_MERCILESS,
             ABILITY_REGENERATOR
         )
     },
@@ -4961,6 +5022,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TOXAPEX,
         INNATES(
             ABILITY_LIMBER,
+            ABILITY_MERCILESS,
             ABILITY_REGENERATOR
         )
     },
@@ -5273,24 +5335,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0816
         SPECIES_SOBBLE,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_TORRENT
         )
     },
     { // 0817
         SPECIES_DRIZZILE,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_TORRENT
         )
     },
     { // 0818
         SPECIES_INTELEON,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_TORRENT
         )
     },
     { // 0818
         SPECIES_INTELEON_GMAX,
         INNATES(
+            ABILITY_SNIPER,
             ABILITY_TORRENT
         )
     },

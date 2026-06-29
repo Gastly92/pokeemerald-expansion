@@ -47,6 +47,20 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VENUSAUR, 1,
         ABILITY_GRASSY_SURGE
     },
+    { // 0015
+        // Beedrill's only real abilities (Swarm, Sniper) are BOTH now innate, so its empty slot 1 takes a
+        // chosen Sheer Force - :x: (never an innate -> stable) and a clean offensive boon for the glass-cannon
+        // bee: Poison Jab / X-Scissor drop their secondaries for +30% (stacking with innate Swarm/Sniper).
+        SPECIES_BEEDRILL, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0022
+        // Fearow's only real abilities (Keen Eye, Sniper) are BOTH now innate, so its empty slot 1 takes a
+        // chosen No Guard - :x: (never an innate -> stable) and a clean offensive boon: its Drill Run / Drill
+        // Peck and any Sky Attack never miss (and land guaranteed crits with its innate Sniper damage).
+        SPECIES_FEAROW, 1,
+        ABILITY_NO_GUARD
+    },
     { // 0028
         // Sandslash's only real abilities (Sand Veil, Sand Rush) are BOTH now innate, so its empty
         // slot 1 takes a flavorful chosen ability. Sand Stream is :x: (never an innate -> stable) and
@@ -69,6 +83,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // bird heralds the blizzard), setting the snow that turns on its own innate Snow Cloak evasion.
         SPECIES_ARTICUNO, 1,
         ABILITY_SNOW_WARNING
+    },
+    { // 0168
+        // Ariados's three real abilities (Swarm, Insomnia, Sniper) are ALL now innate, so its slot-2 Sniper -
+        // now innate-redundant - takes Sheer Force. Sheer Force is :x: (never an innate -> stable) and a boon
+        // for the web-setter's offense: Poison Jab / Megahorn gain +30% and drop their secondaries.
+        SPECIES_ARIADOS, 2,
+        ABILITY_SHEER_FORCE
     },
     { // 0227
         // Skarmory's only non-drawback real abilities (Keen Eye, Sturdy) are BOTH now innate (Weak Armor,
@@ -153,6 +174,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CHIMECHO, 1,
         ABILITY_SOUNDPROOF
     },
+    { // 0359
+        // Absol's Pressure and Super Luck are now innate; only its Hidden Ability Justified is left, and it is
+        // still PENDING, so the now-innate-redundant slot-1 (Super Luck) is repurposed to a stable Sheer Force -
+        // :x: (never an innate -> stable) - powering the Disaster Pokemon's Swords Dance / Choice Band sweeps.
+        SPECIES_ABSOL, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0380
         SPECIES_LATIAS, 1,
         ABILITY_ILLUSION
@@ -205,6 +233,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MISMAGIUS, 1,
         ABILITY_WANDERING_SPIRIT
     },
+    { // 0430
+        // Honchkrow's Insomnia and Super Luck are now innate; its slot-2 Moxie is still PENDING, so the now-
+        // innate-redundant slot-1 (Super Luck) is repurposed to a stable Sheer Force - :x: (never an innate ->
+        // stable) - a clean boon for the Big Boss's Choice Band sets (it still crits via innate Super Luck).
+        SPECIES_HONCHKROW, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0437
         // Bronzong's Levitate and Heatproof are now innate, freeing its frontier slot; its remaining slot-2
         // Heavy Metal is dead weight (it sets no weight moves and only worsens Low Kick / Grass Knot), so the
@@ -213,6 +248,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BRONZONG, 2,
         ABILITY_SOUNDPROOF
     },
+    { // 0452
+        // Drapion's three real abilities (Battle Armor, Sniper, Keen Eye) are ALL now innate, so its slot-1
+        // Sniper - now innate-redundant - takes Sheer Force. Sheer Force is :x: (never an innate -> stable)
+        // and a boon for its Knock Off / Poison Jab / Cross Poison pivot: +30% with the secondaries dropped.
+        SPECIES_DRAPION, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0455
         SPECIES_CARNIVINE, 1, 
         ABILITY_CHLOROPHYLL
@@ -220,6 +262,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0465
         SPECIES_TANGROWTH, 2,
         ABILITY_SAP_SIPPER
+    },
+    { // 0468
+        // Togekiss's Serene Grace and Super Luck are now innate and its slot-0 Hustle is a drawback (-accuracy),
+        // so the now-innate-redundant slot-2 (Super Luck) is repurposed to Victory Star - :x: (never an innate ->
+        // stable) and flavorful for the Jubilee Pokemon: it boosts the accuracy of itself and its doubles allies.
+        SPECIES_TOGEKISS, 2,
+        ABILITY_VICTORY_STAR
     },
     { // 0473
         // Mamoswine's three real abilities (Oblivious, Snow Cloak, Thick Fat) are ALL now innate, so
@@ -285,6 +334,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SAMUROTT, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0521
+        // Unfezant's Super Luck is now innate; its slot-0 Big Pecks is still PENDING and its slot-2 Rivalry has
+        // a downside, so the now-innate-redundant slot-1 (Super Luck) is repurposed to a stable Sheer Force -
+        // :x: (never an innate -> stable) - a clean boon for the proud bird's fast physical attacker sets.
+        SPECIES_UNFEZANT, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0531
         SPECIES_AUDINO, 1,
         ABILITY_CUTE_CHARM
@@ -344,6 +400,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SLURPUFF, 1,
         ABILITY_UNAWARE
     },
+    { // 0689
+        // Barbaracle's Tough Claws and Sniper are now innate; its slot-2 Pickpocket is still PENDING, so the now-
+        // innate-redundant slot-1 (Sniper) is repurposed to Water Absorb - :x: (never an innate -> stable) and
+        // flavorful for the barnacle: the Shell Smash sweeper heals on the Water hits it invites. (Like Carracosta.)
+        SPECIES_BARBARACLE, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0693
         // Clawitzer's only real ability (Mega Launcher) is now innate, so its empty slot 1 takes a
         // flavorful chosen ability. Water Absorb is :x: (never an innate -> stable) and on-theme for the
@@ -364,6 +427,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LYCANROC_DUSK, 1,
         ABILITY_SAND_RUSH
     },
+    { // 0748
+        // Toxapex's three real abilities (Merciless, Limber, Regenerator) are ALL now innate, so its slot-0
+        // Merciless - now innate-redundant - takes Water Absorb. Water Absorb is :x: (never an innate -> stable)
+        // and a clean defensive boon for the Poison/Water wall: it shrugs off Water moves and heals from them.
+        SPECIES_TOXAPEX, 0,
+        ABILITY_WATER_ABSORB
+    },
     { // 0776
         SPECIES_TURTONATOR, 1,
         ABILITY_FLAME_BODY
@@ -382,6 +452,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // supereffective Fire/Fighting/Ground hits its bulky Iron Fist sets otherwise fear.
         SPECIES_MELMETAL, 1,
         ABILITY_FILTER
+    },
+    { // 0818
+        // Inteleon's only real abilities (Torrent, Sniper) are BOTH now innate, so its empty slot 1 takes a
+        // chosen Sheer Force - :x: (never an innate -> stable) and a boon for the sniper lizard's special sets:
+        // Ice Beam / Dark Pulse gain +30% and drop their secondaries (it still crits via its innate Sniper).
+        SPECIES_INTELEON, 1,
+        ABILITY_SHEER_FORCE
     },
     { // 0853
         // Grapploct's only real abilities (Limber, Technician) are BOTH now innate, so its empty slot 1

@@ -92,7 +92,8 @@
 // Water Bubble — Heatproof also halves burn damage; Water Bubble also doubles the holder's Water moves and blocks burn),
 // or a status-conditional stat boost (Guts +50% physical Atk while statused & negates burn's physical cut /
 // Marvel Scale +50% Def while statused / Quick Feet +50% Speed while statused & ignores the paralysis penalty /
-// Toxic Boost +50% physical while poisoned / Flare Boost +50% special while burned)
+// Toxic Boost +50% physical while poisoned / Flare Boost +50% special while burned),
+// or a crit-rate / crit-damage modifier (Super Luck +1 crit stage / Sniper crits deal x2.25 / Merciless auto-crits a poisoned target)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -107,12 +108,12 @@
 // ABILITY_SAND_FORCE yet still doubles in sand via its innate Sand Rush; a Revavroom set lists
 // ABILITY_OVERCOAT yet still shaves supereffective hits via its innate Filter; an Aerodactyl lists
 // ABILITY_ROCK_HEAD yet still taxes the foe's PP via its innate Pressure; a Drapion lists
-// ABILITY_SNIPER yet still shrugs off crits via its innate Battle Armor; a Ninjask lists
+// ABILITY_SHEER_FORCE yet still shrugs off crits via its innate Battle Armor; a Ninjask lists
 // ABILITY_INFILTRATOR yet still snowballs +1 Speed each turn via its innate Speed Boost; a Toxapex wall
-// lists ABILITY_MERCILESS yet still cannot be paralyzed via its innate Limber; a Whiscash lists
+// lists ABILITY_WATER_ABSORB yet still cannot be paralyzed via its innate Limber; a Whiscash lists
 // ABILITY_HYDRATION yet still shrugs off Taunt/Intimidate/infatuation via its innate Oblivious. Role comments
 // that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/"Limber"/
-// "Cute Charm"/"Oblivious"/"Sand Veil"/"Snow Cloak"/"Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
+// "Cute Charm"/"Oblivious"/"Sand Veil"/"Snow Cloak"/"Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/"Super Luck"/"Sniper"/"Merciless"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
 // its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
 // it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
 // (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
@@ -144,6 +145,13 @@
 // their slot to a complementary REAL ability (Dragonite's Multiscale -> chosen Inner Focus; Camerupt's Solid Rock ->
 // chosen Magma Armor; Frosmoth's Ice Scales -> chosen Shield Dust; Persian-Alola's Fur Coat -> chosen Rattled;
 // Rhyperior's Solid Rock -> chosen Lightning Rod; Araquanid's Water Bubble -> chosen Water Absorb).
+// The crit modifiers (Batch O) add more override cases: Beedrill, Fearow and Inteleon are all-real-abilities-innate
+// (Swarm+Sniper / Keen Eye+Sniper / Torrent+Sniper) and take a chosen Sheer Force / No Guard / Sheer Force in an empty slot;
+// Ariados (Swarm+Insomnia+Sniper), Drapion (Battle Armor+Sniper+Keen Eye) and Toxapex (Merciless+Limber+Regenerator) have no
+// empty slot, so an innate-redundant slot is repurposed to Sheer Force / Sheer Force / Water Absorb. Absol, Honchkrow, Togekiss,
+// Unfezant and Barbaracle have only a PENDING ability beside their now-innate slots, so each repurposes its innate-redundant
+// Super Luck / Sniper slot to a stable :x: pick (Sheer Force, except Togekiss's flavorful Victory Star and Barbaracle's Water
+// Absorb). Octillery (chosen Moody) and Kingdra (chosen Damp) instead free their slot to a complementary REAL :x: ability, no override.
 // (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
 // Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
@@ -402,7 +410,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRILL_RUN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SNIPER, // Swarm now innate (latched); chosen Sniper
+        .ability = ABILITY_SHEER_FORCE, // Swarm & Sniper now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -422,7 +430,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SNIPER, // Swarm now innate (latched); chosen Sniper
+        .ability = ABILITY_SHEER_FORCE, // Swarm & Sniper now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -571,7 +579,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_AGILITY
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_NO_GUARD, // Keen Eye & Sniper now innate; chosen No Guard (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -591,7 +599,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SNIPER, // Keen Eye now innate; chosen Sniper powers up this sweeper's critical hits
+        .ability = ABILITY_NO_GUARD, // Keen Eye & Sniper now innate; chosen No Guard (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4542,7 +4550,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SNIPER, // Swarm & Insomnia now innate; chosen Sniper
+        .ability = ABILITY_SHEER_FORCE, // Swarm/Insomnia/Sniper now innate; chosen Sheer Force (override slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4562,7 +4570,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_LEECH_LIFE
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_SHEER_FORCE, // Swarm/Insomnia/Sniper now innate; chosen Sheer Force (override slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5798,7 +5806,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_MOODY, // Sniper now innate; chosen Moody (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5818,7 +5826,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_MOODY, // Sniper now innate; chosen Moody (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6008,7 +6016,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_SNIPER, // Swift Swim now innate; chosen Sniper
+        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6028,7 +6036,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6048,7 +6056,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -8897,7 +8905,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_SHEER_FORCE, // Pressure & Super Luck now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8917,7 +8925,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_PSYCHO_CUT
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_SHEER_FORCE, // Pressure & Super Luck now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8937,7 +8945,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_SHEER_FORCE, // Pressure & Super Luck now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10503,7 +10511,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHT_SLASH,
             MOVE_PSYCHO_CUT
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_SHEER_FORCE, // Insomnia & Super Luck now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10843,7 +10851,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TAUNT
         },
-        .ability = ABILITY_SNIPER, // Battle Armor now innate; chosen Sniper sharpens its own crits
+        .ability = ABILITY_SHEER_FORCE, // Battle Armor/Sniper/Keen Eye now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10863,7 +10871,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_AQUA_TAIL
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_SHEER_FORCE, // Battle Armor/Sniper/Keen Eye now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11331,7 +11339,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_SUPER_LUCK, // Serene Grace now innate; chosen Super Luck (real slot 2)
+        .ability = ABILITY_VICTORY_STAR, // Serene Grace & Super Luck now innate; chosen Victory Star (override slot 2)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11351,7 +11359,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_VICTORY_STAR, // Serene Grace & Super Luck now innate; chosen Victory Star (override slot 2)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12877,7 +12885,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_ROOST
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_SHEER_FORCE, // Super Luck now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16518,7 +16526,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_CROSS_CHOP
         },
-        .ability = ABILITY_SNIPER, // Tough Claws now innate; chosen Sniper
+        .ability = ABILITY_WATER_ABSORB, // Tough Claws & Sniper now innate; chosen Water Absorb (override slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16538,7 +16546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_CLAW
         },
-        .ability = ABILITY_SNIPER, // Tough Claws now innate; chosen Sniper
+        .ability = ABILITY_WATER_ABSORB, // Tough Claws & Sniper now innate; chosen Water Absorb (override slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18203,7 +18211,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_HAZE
         },
-        .ability = ABILITY_MERCILESS, // Limber + Regenerator now innate; chosen Merciless crits its Toxic'd foes
+        .ability = ABILITY_WATER_ABSORB, // Limber/Regenerator/Merciless now innate; chosen Water Absorb (override slot 0)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18223,7 +18231,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_CHILLING_WATER
         },
-        .ability = ABILITY_MERCILESS, // Limber + Regenerator now innate; chosen Merciless crits its Toxic-Spikes'd foes
+        .ability = ABILITY_WATER_ABSORB, // Limber/Regenerator/Merciless now innate; chosen Water Absorb (override slot 0)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18243,7 +18251,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_HAZE
         },
-        .ability = ABILITY_MERCILESS,
+        .ability = ABILITY_WATER_ABSORB, // Limber/Regenerator/Merciless now innate; chosen Water Absorb (override slot 0)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20346,7 +20354,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SNIPER, // Torrent now innate (latched); chosen Sniper
+        .ability = ABILITY_SHEER_FORCE, // Torrent & Sniper now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20366,7 +20374,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_SHEER_FORCE, // Torrent & Sniper now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20386,7 +20394,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_DARK_PULSE
         },
-        .ability = ABILITY_SNIPER, // Torrent now innate (latched); chosen Sniper
+        .ability = ABILITY_SHEER_FORCE, // Torrent & Sniper now innate; chosen Sheer Force (override slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

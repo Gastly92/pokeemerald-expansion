@@ -4555,6 +4555,8 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
             break;
         if (aiData->abilities[battlerAtk] == ABILITY_SUPER_LUCK
          || aiData->abilities[battlerAtk] == ABILITY_SNIPER
+         || BattlerHasAbility(battlerAtk, ABILITY_SUPER_LUCK) // FORK: innate-aware (an innate crit-booster also values crit setup)
+         || BattlerHasAbility(battlerAtk, ABILITY_SNIPER)     // FORK: innate-aware
          || aiData->holdEffects[battlerAtk] == HOLD_EFFECT_SCOPE_LENS
          || HasMoveWithFlag(battlerAtk, GetMoveCriticalHitStage))
             ADJUST_SCORE(GOOD_EFFECT);

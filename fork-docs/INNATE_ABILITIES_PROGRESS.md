@@ -103,7 +103,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Solar Power | In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn. |
 | :white_check_mark: | Quick Feet | When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon's Speed stat. |
 | :x: | Normalize | All the Pokémon's moves become Normal type. The power of those moves is boosted a little. |
-| :white_large_square: | Sniper | Boosts the power of the Pokémon's critical hits by 125% instead of 50%. |
+| :white_check_mark: | Sniper | Boosts the power of the Pokémon's critical hits by 125% instead of 50%. |
 | :white_large_square: | Magic Guard | The Pokémon takes damage only from attacks. |
 | :x: | No Guard | The accuracy of moves used both by and against the Pokémon becomes 100%. |
 | :x: | Stall | The Pokémon's moves go last among moves of the same priority. |
@@ -111,7 +111,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Leaf Guard | The Pokémon is immune to status conditions in harsh sunlight. |
 | :x: | Klutz | Items do not work when held by the Pokémon. |
 | :white_large_square: | Mold Breaker | The Pokémon's moves are unaffected by the Ability of the target (with certain exceptions). |
-| :white_large_square: | Super Luck | The Pokémon has a 1-stage Critical-Hit Ratio Boost. |
+| :white_check_mark: | Super Luck | The Pokémon has a 1-stage Critical-Hit Ratio Boost. |
 | :white_large_square: | Aftermath | Attackers that knock out the Pokémon with a contact move take damage equal to 1/4 of their max HP. |
 | :white_large_square: | Anticipation | When the Pokémon enters a battle, it senses whether the opponents know any one-hit KO moves or moves that are super effective against it. |
 | :white_large_square: | Forewarn | When it enters a battle, the Pokémon can tell one of the moves an opposing Pokémon has. |
@@ -202,7 +202,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Wimp Out | The Pokémon cowardly switches out when its HP drops to half or less. |
 | :x: | Emergency Exit | The Pokémon, sensing danger, switches out when its HP drops to half or less. |
 | :white_large_square: | Water Compaction | Boosts the Defense stat sharply when the Pokémon is hit by a Water-type move. |
-| :white_large_square: | Merciless | The Pokémon's attacks become critical hits if the target is poisoned or badly poisoned. |
+| :white_check_mark: | Merciless | The Pokémon's attacks become critical hits if the target is poisoned or badly poisoned. |
 | :x: | Shields Down | When its HP drops to half or less, the Pokémon's shell breaks and it becomes aggressive. |
 | :white_check_mark: | Stakeout | Doubles the damage dealt to a target that has just switched into battle. |
 | :white_check_mark: | Water Bubble | Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned. |
