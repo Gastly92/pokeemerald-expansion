@@ -4770,6 +4770,14 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
     {
         priority = -8;
     }
+    // Damaging Max Moves are always priority 0: they neither inherit the base move's
+    // priority (e.g. a Dynamaxed Sucker Punch becomes Max Darkness, losing the +1) nor
+    // gain priority from abilities like Prankster/Gale Wings/Triage/Grassy Glide. Status
+    // moves are handled above as Max Guard (+4).
+    else if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX)
+    {
+        priority = 0;
+    }
     else if (ability == ABILITY_GALE_WINGS
           && (GetConfig(B_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
           && GetMoveType(move) == TYPE_FLYING)
