@@ -3692,7 +3692,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AERODACTYL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HARD_STONE, // Mega Aerodactyl (Tough Claws); Rock STAB boost
+        .heldItem = ITEM_KINGS_ROCK,
         .moves =
         {
             MOVE_ROCK_SLIDE,
@@ -3705,46 +3705,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 4,
             .atk = 252,
-            .spe = 252
-        ),
-        .teraType = TYPE_ROCK,
-    },
-    {
-        .species = SPECIES_AERODACTYL,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // suicide lead
-        .moves =
-        {
-            MOVE_STEALTH_ROCK,
-            MOVE_TAUNT,
-            MOVE_ROCK_SLIDE,
-            MOVE_EARTHQUAKE
-        },
-        .ability = ABILITY_UNNERVE,
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_ROCK,
-    },
-    {
-        .species = SPECIES_AERODACTYL,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_KINGS_ROCK, // fast lead, no flinching move in the set: King's Rock supplies the turn-1 flinch
-        .moves =
-        {
-            MOVE_STONE_EDGE,
-            MOVE_EARTHQUAKE,
-            MOVE_DUAL_WINGBEAT,
-            MOVE_AQUA_TAIL
-        },
-        .ability = ABILITY_ROCK_HEAD, // Pressure now innate; chosen Rock Head spares the physical attacker recoil
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
