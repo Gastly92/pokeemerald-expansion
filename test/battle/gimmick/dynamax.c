@@ -2,6 +2,24 @@
 #include "test/battle.h"
 
 // ============= DYNAMAX AND MAX MOVE INTERACTIONS ===================
+SINGLE_BATTLE_TEST("Dynamax: Max Moves do not retain the base move's priority")
+{
+    GIVEN {
+        WITH_CONFIG(B_MEGA_EVO_TURN_ORDER, GEN_7); // gimmick activation can recompute turn order
+        ASSUME(GetMovePriority(MOVE_QUICK_ATTACK) == 1);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(1); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(2); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_QUICK_ATTACK, gimmick: GIMMICK_DYNAMAX);
+               MOVE(opponent, MOVE_SCRATCH); }
+    } SCENE {
+        // Quick Attack becomes Max Strike (priority 0), so the faster opponent moves first.
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_DYNAMAX_GROWTH, player);
+        MESSAGE("The opposing Wobbuffet used Scratch!");
+        MESSAGE("Wobbuffet used Max Strike!");
+    }
+}
+
 SINGLE_BATTLE_TEST("Dynamax: Dynamax increases HP and max HP by 1.5x", u16 hp)
 {
     u32 dynamax;
