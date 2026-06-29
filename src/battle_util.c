@@ -8389,6 +8389,10 @@ static inline s32 DoMoveDamageCalc(struct DamageContext *ctx)
     if (dmg != INT32_MAX)
         return dmg;
 
+    // FORK: cache the innate-abilities flag before the crit roll so CalcCritChanceStage's innate gates read
+    // the cheap cached field rather than calling the non-inline GetConfig() per AI crit prediction (keeps AI
+    // thinking time in budget). DoMoveDamageCalcVars re-sets it for the modifier passes below.
+    ctx->innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES);
     ctx->isCrit = IsCriticalHit(ctx);
     return DoMoveDamageCalcVars(ctx);
 }
@@ -8414,6 +8418,7 @@ static inline s32 DoFutureSightAttackDamageCalc(struct DamageContext *ctx)
     ctx->abilities[ctx->battlerAtk] = ABILITY_NONE;
     ctx->holdEffects[ctx->battlerAtk] = HOLD_EFFECT_NONE;
     ctx->typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(ctx);
+    ctx->innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES); // FORK: set before the crit roll (see DoMoveDamageCalc)
     ctx->isCrit = IsCriticalHit(ctx);
 
     if (ctx->typeEffectivenessModifier == UQ_4_12(0.0))
@@ -8502,9 +8507,6 @@ static inline u32 GetHoldEffectCritChanceIncrease(enum BattlerId battler, enum H
 s32 CalcCritChanceStage(struct DamageContext *ctx)
 {
     s32 critChance = 0;
-    // FORK: read the feature flag once (the AI runs this calc per move/target in doubles, so three
-    // separate GetConfig() calls here measurably inflate AI thinking time); reused for all innate gates below.
-    bool32 innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES);
 
     if (gSideStatuses[GetBattlerSide(ctx->battlerDef)] & SIDE_STATUS_LUCKY_CHANT)
     {
@@ -8512,13 +8514,15 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
     }
     // FORK: an innate Merciless (FEATURE_INNATE_ABILITIES) auto-crits a poisoned target exactly like the
     // real ability — a clean upside, so a 1:1 copy with no pure-boon divergence. The innate clause sits
-    // beside the cached chosen-ability read; the GetConfig() gate short-circuits IsInnateActive() when the
-    // feature is off (same idiom as the innate Battle/Shell Armor block below, since the crit-stage calc is
-    // also entered via contexts that don't cache ctx->innatesEnabled). On-field AI is correct for free.
+    // beside the cached chosen-ability read and is gated on the cached ctx->innatesEnabled bitfield (set
+    // before every crit roll: DoMoveDamageCalc / DoFutureSightAttackDamageCalc / the AI's ShouldCalcCritDamage
+    // ctx), so when the feature is off this costs one field load and skips IsInnateActive() — the AI runs this
+    // calc per move/target in doubles, so a per-call GetConfig() here would inflate AI thinking time. On-field
+    // AI is correct for free.
     else if (gBattleMons[ctx->battlerAtk].volatiles.laserFocus
           || MoveAlwaysCrits(ctx->move)
           || ((ctx->abilities[ctx->battlerAtk] == ABILITY_MERCILESS
-            || (innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_MERCILESS)))
+            || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_MERCILESS)))
               && gBattleMons[ctx->battlerDef].status1 & STATUS1_PSN_ANY))
     {
         critChance = CRITICAL_HIT_ALWAYS;
@@ -8531,9 +8535,9 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
                     + GetHoldEffectCritChanceIncrease(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk])
                     + ((B_AFFECTION_MECHANICS == TRUE && GetBattlerAffectionHearts(ctx->battlerAtk) == AFFECTION_FIVE_HEARTS) ? 2 : 0)
                     // FORK: an innate Super Luck (FEATURE_INNATE_ABILITIES) adds +1 crit stage like the real
-                    // ability (1:1 clean upside); the GetConfig() gate skips the lookup when the feature is off.
+                    // ability (1:1 clean upside); the cached ctx->innatesEnabled gate skips the lookup when off.
                     + ((ctx->abilities[ctx->battlerAtk] == ABILITY_SUPER_LUCK
-                     || (innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK))) ? 1 : 0)
+                     || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK))) ? 1 : 0)
                     + gBattleMons[ctx->battlerAtk].volatiles.bonusCritStages;
 
         if (critChance >= ARRAY_COUNT(sCriticalHitOdds))
@@ -8550,7 +8554,7 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
     // is off they're skipped entirely, keeping the AI's hot-path cost flat.
     bool32 defChosenArmor = (ctx->abilities[ctx->battlerDef] == ABILITY_BATTLE_ARMOR || ctx->abilities[ctx->battlerDef] == ABILITY_SHELL_ARMOR);
     bool32 defArmor = defChosenArmor;
-    if (!defArmor && innatesEnabled)
+    if (!defArmor && ctx->innatesEnabled)
         defArmor = IsInnateActive(ctx->battlerDef, ABILITY_BATTLE_ARMOR) || IsInnateActive(ctx->battlerDef, ABILITY_SHELL_ARMOR);
     if (critChance != CRITICAL_HIT_BLOCKED && defArmor)
     {
@@ -8576,7 +8580,6 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
 s32 CalcCritChanceStageGen1(struct DamageContext *ctx)
 {
     s32 critChance = 0;
-    bool32 innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES); // FORK: read once (see CalcCritChanceStage)
     s32 moveCritStage = GetMoveCriticalHitStage(ctx->move);
     s32 bonusCritStage = gBattleMons[ctx->battlerAtk].volatiles.bonusCritStages; // G-Max Chi Strike
     u32 holdEffectCritStage = GetHoldEffectCritChanceIncrease(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]);
@@ -8600,7 +8603,7 @@ s32 CalcCritChanceStageGen1(struct DamageContext *ctx)
         critChance *= 4 * holdEffectCritStage;
 
     if (ctx->abilities[ctx->battlerAtk] == ABILITY_SUPER_LUCK
-     || (innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK))) // FORK: innate Super Luck (see CalcCritChanceStage)
+     || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK))) // FORK: innate Super Luck (see CalcCritChanceStage)
         critChance *= 4;
 
     if (critChance > 255)
@@ -8614,8 +8617,8 @@ s32 CalcCritChanceStageGen1(struct DamageContext *ctx)
     }
     // FORK: innate Battle/Shell Armor blocks crits in the Gen-1 crit formula too (see CalcCritChanceStage).
     // Kept as a separate silent else-if so the chosen-ability path above stays byte-for-byte unchanged; the
-    // GetConfig() gate short-circuits the IsInnateActive() lookups when the feature is off (AI hot path).
-    else if (innatesEnabled
+    // cached ctx->innatesEnabled gate short-circuits the IsInnateActive() lookups when the feature is off.
+    else if (ctx->innatesEnabled
           && (IsInnateActive(ctx->battlerDef, ABILITY_BATTLE_ARMOR) || IsInnateActive(ctx->battlerDef, ABILITY_SHELL_ARMOR)))
     {
         critChance = CRITICAL_HIT_BLOCKED;
@@ -8623,7 +8626,7 @@ s32 CalcCritChanceStageGen1(struct DamageContext *ctx)
     else if (gBattleMons[ctx->battlerAtk].volatiles.laserFocus
           || MoveAlwaysCrits(ctx->move)
           || ((ctx->abilities[ctx->battlerAtk] == ABILITY_MERCILESS
-            || (innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_MERCILESS))) // FORK: innate Merciless (see CalcCritChanceStage)
+            || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_MERCILESS))) // FORK: innate Merciless (see CalcCritChanceStage)
               && gBattleMons[ctx->battlerDef].status1 & STATUS1_PSN_ANY))
     {
         critChance = CRITICAL_HIT_ALWAYS;
