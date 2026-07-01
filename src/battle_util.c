@@ -8513,12 +8513,13 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
         critChance = CRITICAL_HIT_BLOCKED;
     }
     // FORK: an innate Merciless (FEATURE_INNATE_ABILITIES) auto-crits a poisoned target exactly like the
-    // real ability — a clean upside, so a 1:1 copy with no pure-boon divergence. The innate clause sits
-    // beside the cached chosen-ability read and is gated on the cached ctx->innatesEnabled bitfield (set
-    // before every crit roll: DoMoveDamageCalc / DoFutureSightAttackDamageCalc / the AI's ShouldCalcCritDamage
-    // ctx), so when the feature is off this costs one field load and skips IsInnateActive() — the AI runs this
-    // calc per move/target in doubles, so a per-call GetConfig() here would inflate AI thinking time. On-field
-    // AI is correct for free.
+    // real ability — a clean upside, so a 1:1 copy with no pure-boon divergence. The innate clause is gated on
+    // the cached ctx->innatesEnabled bitfield (set before the REAL crit roll by DoMoveDamageCalc / DoFutureSight-
+    // AttackDamageCalc), so it costs one field load and skips IsInnateActive() when off. The AI's per-eval
+    // crit-chance prediction (ShouldCalcCritDamage) deliberately leaves ctx->innatesEnabled = 0, so these innate
+    // reads are skipped there entirely — this calc runs per move/target in doubles and crediting innate crits
+    // would blow the AI thinking-time ceiling for a negligible gain (the AI's damage modifiers still see innates
+    // via DoMoveDamageCalcVars; only crit-chance prediction is approximated).
     else if (gBattleMons[ctx->battlerAtk].volatiles.laserFocus
           || MoveAlwaysCrits(ctx->move)
           || ((ctx->abilities[ctx->battlerAtk] == ABILITY_MERCILESS

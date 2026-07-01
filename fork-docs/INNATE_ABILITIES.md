@@ -1327,11 +1327,28 @@ that is poisoned or badly poisoned; **Sniper** boosts critical-hit *damage* (the
 
 Suppression parity holds via `IsInnateActive()`: none of the three is breakable, so Mold Breaker never touches
 them (Gastro Acid / Neutralizing Gas / not-on-field are the relevant suppressors), exactly like the real
-abilities. **AI:** on-field crit prediction is correct for free — the modifiers live in the shared crit calc,
-which the AI runs (`AI_CalcDamage`) keyed off the real battler via `IsInnateActive()`. The AI's *dedicated*
-crit-related effect reads are made innate-aware too, via `BattlerHasAbility()`: the Focus Energy / Laser Focus
-setup score and the Dire-Hit-item heuristic (Super Luck / Sniper, `src/battle_ai_main.c` / `src/battle_ai_items.c`)
-and the "poison the target" score (Merciless, `src/battle_ai_util.c`).
+abilities.
+
+**AI.** The crit calc (`CalcCritChanceStage`) runs in the AI's *per-move × target* damage prediction every turn,
+so it is a genuine hot path — in doubles it is the exact code `ai_thinking_time.c` caps with a tight frame
+ceiling. Gating the innate crit reads on the cached `ctx->innatesEnabled` field is cheap, **but only if the flag
+is populated**, and the AI's crit-chance predictor (`ShouldCalcCritDamage`) deliberately leaves it `0` (from the
+`{0}` init). So the AI's per-eval crit-chance prediction *does not* credit an innate Super Luck / Merciless /
+Battle Armor — a deliberate approximation: crediting them cost enough per eval to blow the ceiling for a
+negligible accuracy gain. This only affects the AI's fine-grained damage prediction; it is not a correctness
+issue. What the AI *does* keep:
+- **Real battle is unaffected** — the actual crit roll (`DoMoveDamageCalc` / `DoFutureSightAttackDamageCalc`)
+  sets `ctx->innatesEnabled` before `IsCriticalHit`, so innate crits fire exactly as designed.
+- **Crit *damage* modifiers still see innates** — the AI's `CalculateMoveDamageVars` → `DoMoveDamageCalcVars`
+  sets the flag before the modifier passes, so an innate Sniper's crit-damage boost is predicted (when a crit is
+  predicted by non-innate means).
+- **Strategic crit heuristics are innate-aware** via `BattlerHasAbility()` (these are *not* in the crit hot
+  loop): the Focus Energy / Laser Focus setup score and the Dire-Hit-item heuristic (Super Luck / Sniper,
+  `src/battle_ai_main.c` / `src/battle_ai_items.c`) and the "poison the target" score (Merciless,
+  `src/battle_ai_util.c`).
+
+(Lesson for the next crit-touching batch: the crit-chance calc is AI-hot and budget-bound — keep it
+`ctx->innatesEnabled`-gated and do **not** set that flag on the AI's `ShouldCalcCritDamage` context.)
 
 **Species (canon-only, no flavor picks** — crit boosts are potent and hard to justify thematically): every
 species whose ability data carries the ability in any slot, in dex order, so the signature survives whichever
