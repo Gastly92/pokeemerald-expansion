@@ -3916,6 +3916,112 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate G
     }
 }
 
+// ===== Batch O: crit-rate / crit-damage modifiers (Super Luck / Sniper / Merciless) =====
+// All three are crit-calc modifiers in src/battle_util.c (CalcCritChanceStage / the Gen-1 formula /
+// GetAttackerAbilitiesModifier), 1:1 clean-upside copies (no pure-boon divergence). No script / pop-up /
+// driver; on-field AI is correct for free (the shared crit calc keys off the real battler).
+
+// Merciless guarantees a crit against a poisoned target. Toxapex is a canon Merciless user whose chosen
+// ability here is Limber (not Merciless), so the auto-crit can only come from its innate. With the feature
+// off the innate is inert and the test harness's default RNG yields no crit.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Merciless auto-crits a poisoned target")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TOXAPEX, ABILITY_MERCILESS));
+        ASSUME(gSpeciesInfo[SPECIES_TOXAPEX].abilities[0] != ABILITY_LIMBER);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_TOXAPEX) { Ability(ABILITY_LIMBER); Moves(MOVE_POISON_JAB); }
+        OPPONENT(SPECIES_WOBBUFFET) { Status1(STATUS1_POISON); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_POISON_JAB); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_POISON_JAB, player);
+        if (enabled)
+            MESSAGE("A critical hit!");
+        else
+            NOT MESSAGE("A critical hit!");
+    }
+}
+
+// Mold Breaker does NOT touch Merciless (it isn't breakable) — but suppression parity still holds via
+// Gastro Acid, which neutralises the innate so the poisoned target no longer eats a guaranteed crit.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Merciless")
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(!gAbilitiesInfo[ABILITY_MERCILESS].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_TOXAPEX, ABILITY_MERCILESS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TOXAPEX) { Ability(ABILITY_LIMBER); Moves(MOVE_POISON_JAB); }
+        OPPONENT(SPECIES_WOBBUFFET) { Status1(STATUS1_POISON); Moves(MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_POISON_JAB); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_POISON_JAB, player);
+        if (gastro)
+            NOT MESSAGE("A critical hit!");
+        else
+            MESSAGE("A critical hit!");
+    }
+}
+
+// Super Luck adds +1 crit stage. Focus Energy (+2) puts the attacker at stage 2 (1/2, not guaranteed);
+// the innate's +1 pushes it to stage 3, which always crits. Absol is a canon Super Luck user whose chosen
+// ability here is Pressure, so the extra stage is solely the innate's. Feature off: stage 2, no crit under
+// the harness's default RNG; feature on: stage 3, guaranteed crit.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Super Luck adds the crit stage that guarantees a crit")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ABSOL, ABILITY_SUPER_LUCK));
+        ASSUME(gSpeciesInfo[SPECIES_ABSOL].abilities[0] != ABILITY_SUPER_LUCK);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ABSOL) { Ability(ABILITY_PRESSURE); Moves(MOVE_SCRATCH, MOVE_FOCUS_ENERGY); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_FOCUS_ENERGY); }
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+        if (enabled)
+            MESSAGE("A critical hit!");
+        else
+            NOT MESSAGE("A critical hit!");
+    }
+}
+
+// Sniper boosts critical-hit DAMAGE (the crit multiplier becomes x2.25 instead of x1.5, i.e. an extra
+// x1.5 on a crit). Frost Breath always crits, so the only variable is the Sniper boost. Kingdra is a canon
+// Sniper user whose chosen ability here is Swift Swim (it never touches damage), so the boost is solely the
+// innate's. Off: the plain crit; on: 1.5x that crit.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sniper boosts critical-hit damage by 1.5x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KINGDRA, ABILITY_SNIPER));
+        ASSUME(MoveAlwaysCrits(MOVE_FROST_BREATH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KINGDRA) { Ability(ABILITY_SWIFT_SWIM); Moves(MOVE_FROST_BREATH); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_FROST_BREATH); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage); // off: plain crit; on: 1.5x
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -3946,6 +4052,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_HEATPROOF, ABILITY_FRIEND_GUARD, ABILITY_WATER_BUBBLE,
         ABILITY_GUTS, ABILITY_MARVEL_SCALE, ABILITY_QUICK_FEET, ABILITY_TOXIC_BOOST,
         ABILITY_FLARE_BOOST,
+        ABILITY_SUPER_LUCK, ABILITY_SNIPER, ABILITY_MERCILESS,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

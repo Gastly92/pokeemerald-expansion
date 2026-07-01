@@ -92,7 +92,8 @@
 // Water Bubble — Heatproof also halves burn damage; Water Bubble also doubles the holder's Water moves and blocks burn),
 // or a status-conditional stat boost (Guts +50% physical Atk while statused & negates burn's physical cut /
 // Marvel Scale +50% Def while statused / Quick Feet +50% Speed while statused & ignores the paralysis penalty /
-// Toxic Boost +50% physical while poisoned / Flare Boost +50% special while burned)
+// Toxic Boost +50% physical while poisoned / Flare Boost +50% special while burned),
+// or a crit-rate / crit-damage modifier (Super Luck +1 crit stage / Sniper crits deal x2.25 / Merciless auto-crits a poisoned target)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -5798,7 +5799,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_MOODY, // Sniper now innate; chosen Moody (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5818,7 +5819,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_MOODY, // Sniper now innate; chosen Moody (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6008,7 +6009,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_SNIPER, // Swift Swim now innate; chosen Sniper
+        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6028,7 +6029,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6048,7 +6049,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

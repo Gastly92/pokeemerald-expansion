@@ -995,6 +995,12 @@ struct SimulatedDamage AI_CalcDamage(enum Move move, enum BattlerId battlerAtk, 
     ctx.abilities[battlerAtkPartner] = aiData->abilities[battlerAtkPartner];
     ctx.abilities[ctx.battlerDef] = AI_GetMoldBreakerSanitizedAbility(battlerAtk, ctx.abilities[ctx.battlerAtk], aiData->abilities[battlerDef], ctx.holdEffects[ctx.battlerDef], move);
     ctx.abilities[battlerDefPartner] = AI_GetMoldBreakerSanitizedAbility(battlerAtk, ctx.abilities[ctx.battlerAtk], aiData->abilities[battlerDefPartner], ctx.holdEffects[battlerDefPartner], move);
+    // FORK: ctx.innatesEnabled is deliberately left 0 (from the {0} init) for this AI crit-chance prediction, so
+    // CalcCritChanceStage skips the innate Super Luck / Merciless / Battle Armor reads here. This runs per move x
+    // target every AI turn in doubles — crediting innate crits would push AI thinking time over its test ceiling
+    // for a negligible prediction gain. Innate crits still fire for real (DoMoveDamageCalc / DoFutureSightAttack-
+    // DamageCalc set the flag before their crit roll), and the AI's damage *modifiers* still see innates because
+    // CalculateMoveDamageVars -> DoMoveDamageCalcVars sets ctx.innatesEnabled before the modifier passes below.
     ctx.isCrit = ShouldCalcCritDamage(&ctx);
     ctx.typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(&ctx);
 
@@ -5117,7 +5123,8 @@ void IncreasePoisonScore(enum BattlerId battlerAtk, enum BattlerId battlerDef, e
 
         if (IsPowerBasedOnStatus(battlerAtk, EFFECT_DOUBLE_POWER_ON_ARG_STATUS, STATUS1_PSN_ANY)
          || HasMoveWithEffect(battlerAtk, EFFECT_STAT_CHANGE_ON_STATUS)
-         || gAiLogicData->abilities[battlerAtk] == ABILITY_MERCILESS)
+         || gAiLogicData->abilities[battlerAtk] == ABILITY_MERCILESS
+         || BattlerHasAbility(battlerAtk, ABILITY_MERCILESS)) // FORK: innate-aware (an innate Merciless also values poisoning the target)
             ADJUST_SCORE_PTR(DECENT_EFFECT);
         else
             ADJUST_SCORE_PTR(WEAK_EFFECT);

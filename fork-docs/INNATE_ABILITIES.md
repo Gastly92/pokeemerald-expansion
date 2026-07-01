@@ -1305,3 +1305,71 @@ Inner Focus; Ursaluna → Bulletproof; Swellow → Scrappy; Linoone → Gluttony
 Run Away). Only **Zangoose** needed a `species_ability_overrides.c` row: its two Toxic Boost (Toxic Orb) sets are
 freed to a chosen **Sheer Force** in its empty slot 1 — not Immunity, which would block the poison its innate Toxic
 Boost needs (a stable `:x:` pick that also skips Life Orb recoil on the SD set).
+
+### ABILITY_SUPER_LUCK / ABILITY_SNIPER / ABILITY_MERCILESS
+
+The "crit-rate / crit-damage modifiers" (Batch O): all three live in the critical-hit calc in
+`src/battle_util.c`. **Super Luck** adds +1 to the holder's crit stage; **Merciless** auto-crits a target
+that is poisoned or badly poisoned; **Sniper** boosts critical-hit *damage* (the crit multiplier becomes
+×2.25 instead of ×1.5). All three are **clean upsides** that never hurt the holder, so each innate is a plain
+**1:1 copy** — no pure-boon divergence. Wiring:
+
+- **Super Luck** — the `+1` crit-stage read in both `CalcCritChanceStage` and the Gen-1 `CalcCritChanceStageGen1`
+  gains an `|| (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK))` clause beside the
+  cached chosen-ability test.
+- **Merciless** — the auto-crit-vs-poisoned read in the same two functions gains the same innate clause
+  (`ctx->innatesEnabled && IsInnateActive(...)`) beside the cached chosen-ability test.
+- **Sniper** — `GetAttackerAbilitiesModifier` returns the crit-damage ×1.5 from a `switch (abilityAtk)`; an
+  innate-Sniper clause is added *after* the switch, gated `isCrit && abilityAtk != ABILITY_SNIPER &&
+  GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(...)`, so it only runs on a crit (off the non-crit
+  hot path) and never double-applies with the chosen-ability path. (This function takes no `DamageContext`,
+  so it reads `GetConfig()` directly rather than the cached `ctx->innatesEnabled`.)
+
+Suppression parity holds via `IsInnateActive()`: none of the three is breakable, so Mold Breaker never touches
+them (Gastro Acid / Neutralizing Gas / not-on-field are the relevant suppressors), exactly like the real
+abilities.
+
+**AI.** The crit calc (`CalcCritChanceStage`) runs in the AI's *per-move × target* damage prediction every turn,
+so it is a genuine hot path — in doubles it is the exact code `ai_thinking_time.c` caps with a tight frame
+ceiling. Gating the innate crit reads on the cached `ctx->innatesEnabled` field is cheap, **but only if the flag
+is populated**, and the AI's crit-chance predictor (`ShouldCalcCritDamage`) deliberately leaves it `0` (from the
+`{0}` init). So the AI's per-eval crit-chance prediction *does not* credit an innate Super Luck / Merciless /
+Battle Armor — a deliberate approximation: crediting them cost enough per eval to blow the ceiling for a
+negligible accuracy gain. This only affects the AI's fine-grained damage prediction; it is not a correctness
+issue. What the AI *does* keep:
+- **Real battle is unaffected** — the actual crit roll (`DoMoveDamageCalc` / `DoFutureSightAttackDamageCalc`)
+  sets `ctx->innatesEnabled` before `IsCriticalHit`, so innate crits fire exactly as designed.
+- **Crit *damage* modifiers still see innates** — the AI's `CalculateMoveDamageVars` → `DoMoveDamageCalcVars`
+  sets the flag before the modifier passes, so an innate Sniper's crit-damage boost is predicted (when a crit is
+  predicted by non-innate means).
+- **Strategic crit heuristics are innate-aware** via `BattlerHasAbility()` (these are *not* in the crit hot
+  loop): the Focus Energy / Laser Focus setup score and the Dire-Hit-item heuristic (Super Luck / Sniper,
+  `src/battle_ai_main.c` / `src/battle_ai_items.c`) and the "poison the target" score (Merciless,
+  `src/battle_ai_util.c`).
+
+(Lesson for the next crit-touching batch: the crit-chance calc is AI-hot and budget-bound — keep it
+`ctx->innatesEnabled`-gated and do **not** set that flag on the AI's `ShouldCalcCritDamage` context.)
+
+**Species (canon-only, no flavor picks** — crit boosts are potent and hard to justify thematically): every
+species whose ability data carries the ability in any slot, in dex order, so the signature survives whichever
+slot a build picks. Sniper: the Beedrill, Spearow/Fearow, Horsea/Seadra/Kingdra, Spinarak/Ariados,
+Remoraid/Octillery, Skorupi/Drapion, Binacle/Barbaracle and Sobble/Drizzile/Inteleon lines (Mega Beedrill /
+Mega Barbaracle / Inteleon-Gmax mirror the base per the Mega convention). Super Luck: the Togepi line, the
+Murkrow/Honchkrow line, Absol (+ its Megas), and the Pidove line. Merciless: the Mareanie/Toxapex line. Each
+new ability is merged into the existing innate row where a species already carries one (e.g. Ariados keeps
+Insomnia/Swarm, Kingdra keeps Swift Swim, Toxapex keeps Limber/Regenerator, Togekiss keeps Serene Grace).
+
+**Frontier (Step 3.5):** these abilities were previously *pending* (`:white_large_square:`), so many frontier
+sets had used them as a chosen pick beside an already-innate slot. Only the sets whose species has a
+complementary **real** `:x:` slot are re-pointed, needing no override — **Octillery → Moody** and
+**Kingdra → Damp** (each runs the new ability *plus* its innate). The remaining canon sets are deliberately
+**left on their now-innate-redundant real ability** (Sniper / Super Luck / Merciless) rather than freed.
+Freeing those would require `species_ability_overrides.c` rows, and that table is consulted unconditionally by
+`GetSpeciesAbility` (it is *not* feature-gated), which makes the override approach unsafe here for two reasons:
+(1) it removes the real ability **globally** even with the feature off, breaking upstream tests that explicitly
+select it (e.g. `crit_chance.c` / `deterministic_critical_hits.c` do `PLAYER(SPECIES_TOGEKISS) {
+Ability(ABILITY_SUPER_LUCK); }`); and (2) every added row lengthens the linear override scan that runs on
+*every* ability lookup, which tips the tight `ai_thinking_time.c` doubles budget over its ceiling. A set left
+on its real Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simply equals the innate
+(redundant but harmless; the effect sites guard against double-applying), so only the second-ability *upgrade*
+is forgone. Revisit if the override lookup is made non-linear or feature-gated.
