@@ -4180,7 +4180,10 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Wo
 }
 
 // Under DETERMINISTIC_ACCURACY_EVASION the Wonder Skin accuracy cap manifests as a +1 PP tax on
-// incoming STATUS moves (GetDeterministicMoveTargetPPTax), exactly like a real Wonder Skin.
+// incoming STATUS moves (GetDeterministicMoveTargetPPTax), exactly like a real Wonder Skin. Confuse
+// Ray is used because its 100% accuracy keeps it out of the economy's OTHER lever — a sub-100-acc
+// move's max PP is accuracy-scaled by CalculatePPWithBonus (Toxic at 90 already pays there) — so the
+// innate's flat +1 is the only variable.
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_ACCURACY_EVASION an innate Wonder Skin taxes status-move PP")
 {
     bool32 enabled;
@@ -4188,13 +4191,15 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_ACCURACY_EVASI
     PARAMETRIZE { enabled = TRUE; }  // innate Wonder Skin -> +1 PP on the status move
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_SIGILYPH, ABILITY_WONDER_SKIN));
-        ASSUME(GetMovePP(MOVE_TOXIC) == 10);
+        ASSUME(GetMovePP(MOVE_CONFUSE_RAY) == 10);
+        ASSUME(GetMoveAccuracy(MOVE_CONFUSE_RAY) == 100);
+        ASSUME(IsBattleMoveStatus(MOVE_CONFUSE_RAY));
         WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TOXIC); }
-        OPPONENT(SPECIES_SIGILYPH) { Ability(ABILITY_MAGIC_GUARD); }
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CONFUSE_RAY); }
+        OPPONENT(SPECIES_SIGILYPH) { Ability(ABILITY_MAGIC_GUARD); } // chosen Magic Guard, NOT Wonder Skin
     } WHEN {
-        TURN { MOVE(player, MOVE_TOXIC); }
+        TURN { MOVE(player, MOVE_CONFUSE_RAY); }
     } THEN {
         EXPECT_EQ(player->pp[0], enabled ? 8 : 9); // 10 - 1 base [- 1 innate Wonder Skin tax]
     }
