@@ -1440,15 +1440,17 @@ HEAD) still measures 22; only reverting *everything* returns 21. I.e. the tip is
 plus ROM-layout shift from ~1.2 KB of new species data — every future batch that adds species rows
 would hit it regardless of how optimal its code is. `AI_FRAME_CEILING_DOUBLES_NO_FLAGS` was therefore
 re-baselined 21 → 22 (the Technician batch's `SINGLES_SMART_TRAINER` 8 → 9 precedent). The hunt still
-produced two real improvements, kept: (1) the AI's six off-field `SpeciesHasInnate` reads (Batches
+produced three real improvements, kept: (1) the AI's six off-field `SpeciesHasInnate` reads (Batches
 Levitate/Sturdy/Immunity) were **not config-gated**, so they walked the whole innate table even with
 the feature off — and, worse, credited innates that don't function (a feature-off misprediction bug);
 all six now check `GetConfig(FEATURE_INNATE_ABILITIES)` first. (2) the innate Sniper / Tinted Lens
 clauses in `GetAttackerAbilitiesModifier` now take the cached `ctx->innatesEnabled` instead of calling
-`GetConfig()` per evaluation (the Batch O caching discipline). A durable follow-up if the budget keeps
-pinching: make `SpeciesHasInnate` sublinear (sorted index / binary search) — with the feature ON in
-shipped play, every `IsInnateActive` walks the ~490-row table linearly today, a cost CI never measures
-because tests force the feature off.
+`GetConfig()` per evaluation (the Batch O caching discipline). (3) `SpeciesHasInnate` is now
+**sublinear**: `GetSpeciesInnateList` binary-searches a lazily built species-sorted row index (~1 KB
+EWRAM bss) instead of walking the ~500-row table linearly — with the feature ON in shipped play, every
+`IsInnateActive` paid that walk on the AI-hot calcs, a cost CI never measures because tests force the
+feature off. The source table stays dex-sorted for humans; the "species-keyed lookup matches the raw
+table" integrity test guards the index.
 
 **Species (canon-only, no flavor picks):** every species whose ability data carries the ability in any
 slot, in dex order, merged into existing rows where the species already carries an innate. Shield Dust:

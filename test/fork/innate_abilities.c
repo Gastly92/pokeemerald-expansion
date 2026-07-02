@@ -4383,3 +4383,36 @@ TEST("Innate abilities: no species lists the same innate twice")
 
     EXPECT_EQ(dups, 0);
 }
+
+// (4) The species-keyed lookups must agree with a raw linear walk of the table for every
+// row. GetSpeciesInnateList binary-searches a lazily built species-sorted row index
+// (src/fork/innate_abilities.c); a bug there (index unsorted, off-by-one bounds, stale
+// build flag) would silently drop or misroute innates, so this cross-checks every row's
+// full list through SpeciesHasInnate/GetSpeciesInnate, plus a no-row miss.
+TEST("Innate abilities: species-keyed lookup matches the raw table for every row")
+{
+    u32 row, i, count = GetSpeciesInnatesEntryCount();
+    u32 mismatches = 0;
+
+    for (row = 0; row < count; row++)
+    {
+        u16 species;
+        const enum Ability *list = GetSpeciesInnatesEntry(row, &species);
+
+        for (i = 0; list[i] != ABILITY_NONE; i++)
+        {
+            if (!SpeciesHasInnate(species, list[i]) || GetSpeciesInnate(species, i) != list[i])
+            {
+                mismatches++;
+                Test_MgbaPrintf("%S: keyed lookup disagrees with raw row for %S",
+                                gSpeciesInfo[species].speciesName, gAbilitiesInfo[list[i]].name);
+            }
+        }
+        if (GetSpeciesInnate(species, i) != ABILITY_NONE) // list must end exactly where the raw row ends
+            mismatches++;
+    }
+
+    EXPECT_EQ(mismatches, 0);
+    EXPECT(!SpeciesHasInnate(SPECIES_NONE, ABILITY_LEVITATE)); // no-row species misses cleanly
+    EXPECT_EQ(GetSpeciesInnate(SPECIES_NONE, 0), ABILITY_NONE);
+}

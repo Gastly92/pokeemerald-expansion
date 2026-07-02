@@ -6320,14 +6320,57 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
 };
 
-static const enum Ability *GetSpeciesInnateList(u16 species)
+// FORK: sublinear species->row lookup. The source table above stays sorted by National
+// Dex number for humans (forms sit beside their base), which is NOT species-id order
+// (form constants live at high ids), so it can't be binary-searched directly. Instead a
+// row-index permutation sorted by species id is built lazily on first lookup (EWRAM bss,
+// ~1 KB) and binary-searched thereafter. This lookup backs every SpeciesHasInnate /
+// IsInnateActive call in the AI-hot battle calcs when the feature is ON, where the old
+// linear walk of the whole table (~500 rows) was a real per-eval cost that CI never
+// measures (tests force the feature off). Insertion sort is near-O(n) here because dex
+// order is nearly species order — only form rows travel. Binary-search "any match" equals
+// the documented "first match" because the "no species appears more than once" integrity
+// test (test/fork/innate_abilities.c) forbids duplicate rows; the "species-keyed lookup
+// matches the raw table" test guards this index against the raw rows.
+static u16 sRowIndexSortedBySpecies[ARRAY_COUNT(sSpeciesInnates)];
+static bool8 sRowIndexBuilt = FALSE;
+
+static void BuildRowIndexSortedBySpecies(void)
 {
-    u32 i;
+    u32 i, j;
 
     for (i = 0; i < ARRAY_COUNT(sSpeciesInnates); i++)
     {
-        if (sSpeciesInnates[i].species == species)
-            return sSpeciesInnates[i].innates;
+        u16 species = sSpeciesInnates[i].species;
+
+        for (j = i; j > 0 && sSpeciesInnates[sRowIndexSortedBySpecies[j - 1]].species > species; j--)
+            sRowIndexSortedBySpecies[j] = sRowIndexSortedBySpecies[j - 1];
+        sRowIndexSortedBySpecies[j] = i;
+    }
+
+    sRowIndexBuilt = TRUE;
+}
+
+static const enum Ability *GetSpeciesInnateList(u16 species)
+{
+    u32 lo, hi;
+
+    if (!sRowIndexBuilt)
+        BuildRowIndexSortedBySpecies();
+
+    lo = 0;
+    hi = ARRAY_COUNT(sSpeciesInnates);
+    while (lo < hi)
+    {
+        u32 mid = (lo + hi) / 2;
+        const struct SpeciesInnates *row = &sSpeciesInnates[sRowIndexSortedBySpecies[mid]];
+
+        if (row->species == species)
+            return row->innates;
+        if (row->species < species)
+            lo = mid + 1;
+        else
+            hi = mid;
     }
 
     return NULL;
