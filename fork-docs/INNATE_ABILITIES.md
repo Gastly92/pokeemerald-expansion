@@ -1515,3 +1515,50 @@ Batch O note's other concern — the linear override scan costing AI budget — 
 ability reads use the cached `gBattleMons[].ability`, not `GetSpeciesAbility` (~37 call sites, mostly
 creation/form-change/AI party reads); the real sensitivity was the frame-boundary baseline, addressed
 by the ceiling re-baseline above.
+
+### ABILITY_GALE_WINGS / ABILITY_TRIAGE
+
+The "priority granters" (Batch Q): both raise the priority of a class of the holder's moves. Both are
+**clean upsides** that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon
+divergence. Wired at the single effect site `GetBattleMovePriority` (`src/battle_main.c`) — **the exact
+function Prankster was wired into**, so each mirrors the Prankster `IsInnateActive()` clause:
+
+- **Gale Wings** (+1 priority to the holder's Flying-type moves, only at full HP under
+  `B_GALE_WINGS >= GEN_7`) — the chosen-ability branch's `ability == ABILITY_GALE_WINGS` test becomes
+  `(ability == ABILITY_GALE_WINGS || IsInnateActive(battler, ABILITY_GALE_WINGS))`, leaving the full-HP
+  and Flying-type guards shared. The full-HP gate is a restriction on the *ability*, not a cost to the
+  holder, so the innate honors it identically (a below-full-HP innate grants no priority) — that's the
+  1:1 copy, not a divergence.
+- **Triage** (+3 priority to the holder's healing moves, `healingMove`-flagged) — same shape:
+  `(ability == ABILITY_TRIAGE || IsInnateActive(battler, ABILITY_TRIAGE)) && IsHealingMove(move)`.
+
+Both `IsInnateActive` reads are feature-gated and species-based, so with the feature off each is a
+strict no-op and the real-ability path stays byte-for-byte unchanged. No script / pop-up / driver —
+priority is a pure turn-order calc.
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); neither
+ability is breakable, so Mold Breaker never touches them, same as the real abilities.
+
+**AI.** Both are FREE: the AI's turn-order prediction (`AI_WhoStrikesFirst` → `GetBattleMovePriority`)
+runs the same calc keyed off the real battler (every AI caller passes the real `battler`/`battlerAtk`
+and its chosen ability, so the innate clause reads the actual battler), so the AI both threatens and
+respects an innate Gale Wings / Triage. The one dedicated AI *effect* read is the doubles Psychic-Terrain
+heuristic in `src/battle_ai_field_statuses.c` (Psychic Terrain blanks priority moves regardless of
+source) — already innate-aware for Prankster; the fork helper `AI_IsInnateOnSide()` now sits beside the
+chosen-only `AI_IsAbilityOnSide()` reads for Gale Wings and Triage too (both the foe-harass and
+self-avoid branches), so the AI values/avoids the terrain for an innate-priority side.
+
+**Species (canon-only, no flavor picks — a priority boost is potent, the same reasoning that kept
+Prankster's flavor set tight):** Gale Wings → the Fletchling line (Fletchling, Fletchinder, Talonflame —
+its canon Hidden-Ability users; no Mega/regional forms to mirror). Triage → Comfey (its only canon user),
+merged into Comfey's existing `INNATES(LEVITATE, NATURAL_CURE)` row.
+
+**Frontier (Step 3.5):** four hardcoded sets were freed. Both Talonflame Gale-Wings sets take a
+complementary REAL slot — chosen **Flame Body** (`:x:` in the progress doc → stable), burning contact
+attackers. Comfey is the ability-constrained case: its Triage (now innate) and Natural Cure (already
+innate) are both redundant, and its only other real ability, Flower Veil, is still pending
+(`:white_large_square:` → future churn). Its slot-1 Triage is pinned by upstream tests
+(`upper_hand.c`, `ai_doubles.c`) so it can't be repurposed; instead the innate-redundant, test-unpinned
+slot-2 Natural Cure is repurposed (`species_ability_overrides.c`) to chosen **Sweet Veil** — an
+already-implemented `:white_check_mark:` innate (stable, like Slurpuff's Unaware) that Comfey lacks
+natively and that is thematic (its soothing aroma keeps the doubles team awake).

@@ -33,7 +33,8 @@
 //   stat boosts, Batch N),
 //   SUPER_LUCK / SNIPER / MERCILESS (crit-rate / crit-damage modifiers, Batch O),
 //   SHIELD_DUST / TINTED_LENS / SCRAPPY / WONDER_SKIN / TANGLED_FEET (accuracy /
-//   type-effectiveness / effect-chance modifiers, Batch P).
+//   type-effectiveness / effect-chance modifiers, Batch P),
+//   GALE_WINGS / TRIAGE (priority granters, Batch Q).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

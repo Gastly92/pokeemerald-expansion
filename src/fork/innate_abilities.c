@@ -48,6 +48,11 @@
 //   Intimidate (GEN_8+), Wonder Skin caps incoming status moves at 50% accuracy, Tangled Feet doubles
 //   evasion while confused. Mega Lopunny is omitted from the Scrappy rows as redundant: its only —
 //   and therefore always chosen — ability IS Scrappy, so an innate could never be observed.)
+//   GALE_WINGS / TRIAGE (priority granters, Batch Q — both 1:1 clean-upside copies wired at
+//   GetBattleMovePriority beside Prankster, canon-only (no flavor picks — a priority boost is potent,
+//   same reasoning that kept Prankster's flavor set tight): Gale Wings gives the holder's Flying moves
+//   +1 priority (only at full HP under B_GALE_WINGS >= GEN_7), Triage gives its healing moves +3
+//   priority. The AI's turn-order prediction runs the same calc, so it threatens/respects both for free.)
 //   NOTE: Zangoose carries innate TOXIC_BOOST, not innate Immunity — the two are contradictory
 //   (Immunity blocks the poison Toxic Boost needs), so its canon-Toxic-Boost frontier identity wins;
 //   innate Immunity still lives on Gligar / Snorlax.
@@ -4514,6 +4519,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0661
+        SPECIES_FLETCHLING,
+        INNATES(
+            ABILITY_GALE_WINGS
+        )
+    },
+    { // 0662
+        SPECIES_FLETCHINDER,
+        INNATES(
+            ABILITY_GALE_WINGS
+        )
+    },
+    { // 0663
+        SPECIES_TALONFLAME,
+        INNATES(
+            ABILITY_GALE_WINGS
+        )
+    },
     { // 0664
         SPECIES_SCATTERBUG,
         INNATES(
@@ -5182,7 +5205,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_COMFEY,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_NATURAL_CURE
+            ABILITY_NATURAL_CURE,
+            ABILITY_TRIAGE
         )
     },
     { // 0769

@@ -351,7 +351,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 3 | Batch N — Status-conditional stat boosts | calc, no driver | done |
 | 4 | Batch O — Crit-rate / crit-damage modifiers | calc, no driver | done |
 | 5 | Batch P — Accuracy / type-eff / effect-chance | calc, no driver | done |
-| 6 | Batch Q — Priority granters | calc, no driver | open |
+| 6 | Batch Q — Priority granters | calc, no driver | done |
 | 7 | Batch R — Terrain modifiers | calc, no driver | open |
 | 8 | Batch C — Double physical Attack | clone, no driver | open |
 | 9 | Batch D+E — Stat-drop protection (fold E into D) | trait, no driver | open |
@@ -409,7 +409,7 @@ row is `done`.
 | N — Status-conditional stat boosts | calc, AI-free | 5 | done |
 | O — Crit-rate / crit-damage modifiers | calc, AI-free | 3 | done |
 | P — Accuracy / type-eff / effect-chance | calc, AI-free | 6 | done |
-| Q — Priority granters | calc, AI-free | 2 | open |
+| Q — Priority granters | calc, AI-free | 2 | done |
 | R — Terrain modifiers | calc, AI-free | 2 | open |
 | C — Double physical Attack | clone | 2 | open |
 | D — Full stat-drop protection | trait (+AI) | 2 | open |

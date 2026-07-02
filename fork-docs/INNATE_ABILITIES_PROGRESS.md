@@ -183,7 +183,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Refrigerate | The Pokémon's Normal-type moves become Ice-type moves and their power is boosted by 20%. |
 | :white_check_mark: | Sweet Veil | The Pokémon and its allies cannot become drowsy or be put to sleep. |
 | :x: | Stance Change | The Pokémon changes into its Blade Forme when it attacks and changes into its Shield Forme when it uses the move King's Shield. |
-| :white_large_square: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
+| :white_check_mark: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
 | :white_check_mark: | Mega Launcher | Boosts the power of the Pokémon's pulse moves by 50%. |
 | :white_large_square: | Grass Pelt | Boosts the Pokémon's Defense stat on Grassy Terrain. |
 | :x: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
@@ -211,7 +211,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Slush Rush | Doubles the Pokémon's Speed stat in snow. |
 | :white_large_square: | Long Reach | None of the moves used by the Pokémon are considered contact moves. |
 | :x: | Liquid Voice | The Pokémon's sound-based moves become Water-type moves. |
-| :white_large_square: | Triage | Gives priority to the Pokémon's healing moves. |
+| :white_check_mark: | Triage | Gives priority to the Pokémon's healing moves. |
 | :x: | Galvanize | Normal-type moves become Electric-type moves. The power of those moves is boosted a little. |
 | :white_large_square: | Surge Surfer | Doubles the Pokémon's Speed stat on Electric Terrain. |
 | :x: | Schooling | When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low. |
