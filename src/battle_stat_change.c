@@ -666,29 +666,36 @@ static bool32 IsIntimidateBlocked(struct BattleCalcValues *cv, struct StatChange
     if (!st->intimidate)
         return FALSE;
 
-    // FORK: an innate Oblivious (the chosen ability differs, so the switch below would miss it) is unaffected
-    // by Intimidate exactly like the real ability (GEN_8+). Mirror the OBLIVIOUS case and overwrite the
-    // pop-up/record to Oblivious (CreateAbilityPopUp reads the primary slot). Only fires when the chosen
-    // ability isn't itself an Intimidate-immune one (those are handled by the switch). IsInnateActive
-    // supplies suppression parity. Inner Focus/Scrappy/Own Tempo/Guard Dog are never innates.
+    // FORK: an innate Oblivious or Scrappy (the chosen ability differs, so the switch below would miss it)
+    // is unaffected by Intimidate exactly like the real ability (GEN_8+). Mirror the switch cases and
+    // overwrite the pop-up/record to the innate (CreateAbilityPopUp reads the primary slot). Only fires
+    // when the chosen ability isn't itself an Intimidate-immune one (those are handled by the switch).
+    // IsInnateActive supplies suppression parity. Inner Focus/Own Tempo/Guard Dog are never innates.
     if (cv->abilities[cv->battlerDef] != ABILITY_OBLIVIOUS
      && cv->abilities[cv->battlerDef] != ABILITY_INNER_FOCUS
      && cv->abilities[cv->battlerDef] != ABILITY_SCRAPPY
      && cv->abilities[cv->battlerDef] != ABILITY_OWN_TEMPO
-     && cv->abilities[cv->battlerDef] != ABILITY_GUARD_DOG
-     && IsInnateActive(cv->battlerDef, ABILITY_OBLIVIOUS))
+     && cv->abilities[cv->battlerDef] != ABILITY_GUARD_DOG)
     {
-        if (GetConfig(B_UPDATED_INTIMIDATE) < GEN_8)
-            return FALSE;
-        PREPARE_STAT_BUFFER(gBattleTextBuff1, st->stat);
-        st->script = BattleScript_AbilityNoSpecificStatLoss;
-        gLastUsedAbility = ABILITY_OBLIVIOUS;
-        gBattlerAbility = cv->battlerDef;
-        gBattleScripting.battler = cv->battlerDef;
-        gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
-        MarkStatsAsDone(st, st->stat);
-        RecordAbilityBattle(cv->battlerDef, ABILITY_OBLIVIOUS);
-        return TRUE;
+        enum Ability innateImmunity = ABILITY_NONE;
+        if (IsInnateActive(cv->battlerDef, ABILITY_OBLIVIOUS))
+            innateImmunity = ABILITY_OBLIVIOUS;
+        else if (IsInnateActive(cv->battlerDef, ABILITY_SCRAPPY))
+            innateImmunity = ABILITY_SCRAPPY;
+        if (innateImmunity != ABILITY_NONE)
+        {
+            if (GetConfig(B_UPDATED_INTIMIDATE) < GEN_8)
+                return FALSE;
+            PREPARE_STAT_BUFFER(gBattleTextBuff1, st->stat);
+            st->script = BattleScript_AbilityNoSpecificStatLoss;
+            gLastUsedAbility = innateImmunity;
+            gBattlerAbility = cv->battlerDef;
+            gBattleScripting.battler = cv->battlerDef;
+            gBattleScripting.abilityPopupOverwrite = innateImmunity;
+            MarkStatsAsDone(st, st->stat);
+            RecordAbilityBattle(cv->battlerDef, innateImmunity);
+            return TRUE;
+        }
     }
 
     switch (cv->abilities[cv->battlerDef])

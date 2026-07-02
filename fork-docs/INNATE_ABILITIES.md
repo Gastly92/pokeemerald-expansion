@@ -160,6 +160,22 @@ damage calc ×2 + `GetTotalAccuracy` + `GetAccEvasionStageDelta`). Skip the pure
 single-valued `gAiLogicData->abilities[b]` *as the mon's displayed ability*) — those
 stay the chosen-slot identity. Only the *effect* sites get the innate clause.
 
+**Sweep the `DETERMINISTIC_*` config surfaces too** (`include/config/deterministic.h` — this fork's
+flagship battle changes). The deterministic configs REROUTE mechanics through fork-owned sites that a
+vanilla-only `grep ABILITY_X` misses: accuracy/evasion becomes a PP economy
+(`GetDeterministicMoveTargetPPTax` / `GetAccEvasionStageDelta`, plus `CalculatePPWithBonus`'s
+accuracy-scaled max PP — which also skews naive PP expectations in tests, see the Wonder Skin
+Confuse-Ray-not-Toxic note), additional effects gate on SE/STAB instead of rolling
+(`DETERMINISTIC_ADDITIONAL_EFFECTS`), held-item procs fire once and get consumed only when their
+effect would actually land (`DETERMINISTIC_HOLD_EFFECTS`'s would-it-land mirrors in
+`battle_hold_effects.c`), and ability/status chances fire deterministically. If the ability touches
+accuracy, evasion, secondary effects, flinches, crits, status chances or held-item procs, grep
+`DETERMINISTIC` around each effect site and wire + test the innate under the relevant config. Worked
+examples: the Sand Veil / Snow Cloak / Wonder Skin / Tangled Feet PP taxes; Quick Feet's paralysis-tax
+exemption; Serene Grace under `DETERMINISTIC_ADDITIONAL_EFFECTS`; Shield Dust's King's-Rock consume
+mirror under `DETERMINISTIC_HOLD_EFFECTS` and its gated-in-effect block under
+`DETERMINISTIC_ADDITIONAL_EFFECTS`.
+
 **Don't skip the AI's *effect* reads, though — and `grep src/battle_ai_*.c` for them
 specifically.** This is the subtle one the early Unaware framing got wrong. The AI's
 *damage/type* prediction runs through the **shared** `DamageContext` calc, so any
@@ -371,7 +387,11 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
    > premise. A row may even repurpose a *real, non-empty* slot whose ability is dead weight on the
    > roster's sets (Sceptile's HA Unburden does nothing on its non-consumable-item sets, so with
    > Overgrow innately latched the slot is freed to `LIGHTNING_ROD`), so long as that freeing innate
-   > (Overgrow) is implemented and the new chosen ability is itself stable (`:x:`).
+   > (Overgrow) is implemented and the new chosen ability is itself stable (`:x:`). **But audit a
+   > real-slot repurpose first**: the override table is consulted unconditionally by `GetSpeciesAbility`
+   > (not feature-gated), so the row deletes that real ability from the species game-wide — grep
+   > `test/battle/` for `Ability(ABILITY_X)` on that species before repurposing (empty-`ABILITY_NONE`
+   > slots need no audit; nothing observes them). See the Batch P block's refined rule.
 6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it
@@ -379,9 +399,12 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
 Add a case to `test/fork/innate_abilities.c`. Opt into the feature with
 `WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE)` (the test baseline forces all
 `FEATURE_*` flags off, so the inherited suite keeps exercising stock behavior).
-Cover: the innate's effect fires; it does **not** fire with the feature off; and,
-for trait/immunity abilities, that suppression (Gastro Acid / Mold Breaker) and
-Trace/identity still behave like the real ability. Run:
+Cover: the innate's effect fires; it does **not** fire with the feature off; for
+trait/immunity abilities, that suppression (Gastro Acid / Mold Breaker) and
+Trace/identity still behave like the real ability; and **one test per
+`DETERMINISTIC_*` surface the ability touches** (Step 3's deterministic sweep) —
+the shipping default runs with those configs ON, so an innate that only works
+under stock RNG is broken in the real game. Run:
 
 ```bash
 make -j$(nproc) check TESTS="FEATURE_INNATE_ABILITIES"
@@ -419,9 +442,9 @@ the two things easiest to skip:
 
 - [ ] **Step 1** — species rows added (merged into existing rows where the species already has an innate).
 - [ ] **Step 2** — allowlist comment in `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h` updated.
-- [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
+- [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`) **and the `DETERMINISTIC_*` reroutes** (PP-economy taxes, would-it-land consume mirrors, gated additional effects — grep `DETERMINISTIC` around each effect site); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
 - [ ] **Step 3.5 — ran `grep -n ABILITY_X src/fork/frontier_extended_mons.c`** and freed every hardcoded set (override-table rows for ability-locked / all-abilities-innate species). *This is the step that gets forgotten.*
-- [ ] **Step 4** — tests added; `make check TESTS="FEATURE_INNATE_ABILITIES"` green; **full `make check` green** if a shared battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.
+- [ ] **Step 4** — tests added, **including the `DETERMINISTIC_*` interactions the ability touches** (the shipping default); `make check TESTS="FEATURE_INNATE_ABILITIES"` green; **full `make check` green** if a shared battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.
 - [ ] **Step 5** — `FORK.md` (status parenthetical, allowlist sentence, known-limitations, wiring note **and** the frontier-freeing note) + `INNATE_ABILITIES_PROGRESS.md` flipped to `:white_check_mark:`.
 
 ## Per-ability wiring reference
@@ -1364,12 +1387,131 @@ sets had used them as a chosen pick beside an already-innate slot. Only the sets
 complementary **real** `:x:` slot are re-pointed, needing no override — **Octillery → Moody** and
 **Kingdra → Damp** (each runs the new ability *plus* its innate). The remaining canon sets are deliberately
 **left on their now-innate-redundant real ability** (Sniper / Super Luck / Merciless) rather than freed.
-Freeing those would require `species_ability_overrides.c` rows, and that table is consulted unconditionally by
-`GetSpeciesAbility` (it is *not* feature-gated), which makes the override approach unsafe here for two reasons:
-(1) it removes the real ability **globally** even with the feature off, breaking upstream tests that explicitly
-select it (e.g. `crit_chance.c` / `deterministic_critical_hits.c` do `PLAYER(SPECIES_TOGEKISS) {
-Ability(ABILITY_SUPER_LUCK); }`); and (2) every added row lengthens the linear override scan that runs on
-*every* ability lookup, which tips the tight `ai_thinking_time.c` doubles budget over its ceiling. A set left
-on its real Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simply equals the innate
-(redundant but harmless; the effect sites guard against double-applying), so only the second-ability *upgrade*
-is forgone. Revisit if the override lookup is made non-linear or feature-gated.
+Freeing those would require `species_ability_overrides.c` rows **repurposing real slots** (none of these
+species has an empty slot to fill), and that table is consulted unconditionally by `GetSpeciesAbility`
+(it is *not* feature-gated) — so the row removes the real ability **globally** even with the feature off,
+breaking upstream tests that explicitly select it (e.g. `crit_chance.c` / `deterministic_critical_hits.c`
+do `PLAYER(SPECIES_TOGEKISS) { Ability(ABILITY_SUPER_LUCK); }`). A set left on its real
+Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simply equals the innate
+(redundant but harmless; the effect sites guard against double-applying), so only the second-ability
+*upgrade* is forgone. (An earlier version of this note also blamed the override table's linear scan for
+the `ai_thinking_time.c` budget — overstated: in-battle reads use the cached `gBattleMons[].ability`, not
+`GetSpeciesAbility`. **Empty-slot** override rows remain fine — see the Batch P refined rule.)
+
+### ABILITY_SHIELD_DUST / ABILITY_TINTED_LENS / ABILITY_SCRAPPY / ABILITY_WONDER_SKIN / ABILITY_TANGLED_FEET
+
+The "accuracy / type-effectiveness / effect-chance modifiers" (Batch P). All five are **clean upsides**
+that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon divergence. (Tangled
+Feet's trigger — being confused — is a bad state, but the *ability's own effect* only ever helps; the
+innate doesn't cause the confusion.) Wiring:
+
+- **Shield Dust** (blocks the additional effects of moves used *against* the holder) — one engine
+  chokepoint: `IsMoveEffectBlockedByTarget` (`src/battle_util.c`) gains an
+  `IsInnateActive(gBattlerTarget, ABILITY_SHIELD_DUST)` else-branch after the chosen-ability /
+  Covert Cloak branches (which stay byte-for-byte untouched); identity bookkeeping
+  (`RecordAbilityBattle`) is skipped for the innate. Every blocked source funnels through this
+  predicate — move secondaries (`SetMoveEffect`), ability riders (Poison Touch / Toxic Chain), Fling,
+  the Sparkling-Aria spread carve-out, and King's Rock-style item flinches — so one clause covers all.
+  Two `DETERMINISTIC_*` reroutes needed their own wiring: under `DETERMINISTIC_HOLD_EFFECTS` the
+  King's-Rock would-it-land consume mirror (`battle_hold_effects.c`) now treats a Shield Dust target
+  (real or innate — and a Covert Cloak holder) as a non-landing flinch, so the rock isn't consumed for
+  a flinch the chokepoint then blocks; and under `DETERMINISTIC_ADDITIONAL_EFFECTS` a gated-in
+  (SE/STAB-guaranteed) secondary is still blocked — both covered by dedicated tests.
+- **Tinted Lens** (2x damage on not-very-effective moves) — `GetAttackerAbilitiesModifier`
+  (`src/battle_util.c`), an innate clause after the chosen-ability switch, gated
+  `typeEffectivenessModifier <= 0.5 && abilityAtk != ABILITY_TINTED_LENS &&
+  GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(...)` — the NVE guard keeps the lookups off
+  the neutral/SE hot path, mirroring the innate-Sniper clause above it.
+- **Scrappy, Ghost-hit half** (Normal/Fighting hit Ghost-types) — `MulByTypeEffectiveness`
+  (`src/battle_util.c`), an else-if beside the chosen Scrappy/Mind's Eye branch that lifts the 0x
+  immunity for an innate Scrappy (no `RecordAbilityBattle` — not the displayed ability).
+- **Scrappy, Intimidate-immunity half (GEN_8+)** — `IsIntimidateBlocked`
+  (`src/battle_stat_change.c`): the existing innate-Oblivious block is generalized to a small
+  `innateImmunity` pick (Oblivious first, then Scrappy), mirroring the switch cases and overwriting
+  the pop-up/record to the innate (the Levitate/Sturdy `abilityPopupOverwrite` precedent). This half
+  did NOT need the Batch L switch-in driver — that driver is only for *casting* Intimidate as an
+  innate; *defending* against a real Intimidate is a passive trait at this site.
+- **Wonder Skin** (incoming status moves capped at 50% accuracy) — `GetTotalAccuracy`
+  (`src/battle_util.c`), an innate clause beside the `defAbility` test (reordered so the
+  status-move/`moveAcc > 50` guards run first), plus the `GetDeterministicMoveTargetPPTax` status
+  branch (+1 PP on status moves under `DETERMINISTIC_ACCURACY_EVASION`, like the Sand Veil precedent).
+- **Tangled Feet** (evasion doubled while confused) — `GetTotalAccuracy`, a guarded block after the
+  defender-ability switch (`defAbility != ABILITY_TANGLED_FEET && confused && IsInnateActive(...)`,
+  the exact Sand Veil / Snow Cloak pattern), plus the offensive branch of
+  `GetDeterministicMoveTargetPPTax` (+1 PP while confused).
+
+Suppression parity holds via `IsInnateActive()`: Shield Dust, Scrappy, Wonder Skin and Tangled Feet are
+breakable, so an attacker's Mold Breaker pierces them exactly like the real abilities (Tinted Lens is
+attacker-side, so only Gastro Acid / Neutralizing Gas / not-on-field apply).
+
+**AI.** Tinted Lens and the Scrappy Ghost-hit live in the shared damage/type calc, so the AI's damage
+and effectiveness prediction credits them for FREE (keyed off the real battler). Wonder Skin / Tangled
+Feet accuracy flows through the shared `GetTotalAccuracy` the AI's accuracy table uses — also free.
+The dedicated AI *effect* reads were wired by hand (`grep src/battle_ai_*.c`):
+- Shield Dust (the AI as attacker discounting its own secondaries): `IsAdditionalEffectBlocked`,
+  the flinch-scoring reads in `ShouldTryToFlinch` + the Dynamax flinch checker, the stat-drop
+  secondary in `CanLowerStat`, and the damaging-hazard-move gate in `AI_ShouldSetUpHazards`
+  (all `src/battle_ai_util.c`), each crediting an innate Shield Dust beside the chosen-ability read
+  (under the same explicit Mold-Breaker guard where one exists).
+- Scrappy: the Foresight-is-pointless score (`src/battle_ai_main.c`) and the Intimidate-benefit
+  switch check (`src/battle_ai_switch.c`, extending the innate-Oblivious clause).
+
+**AI frame budget (bisected before re-baselining):** the doubles/no-flags thinking-time baseline sat
+*exactly at* its ceiling (21/21 — zero fractional headroom), and with this batch it measures 22. A full
+bisection showed the +1 is NOT algorithmic: reverting *all* of the batch's engine code (battle_util /
+battle_stat_change / battle_ai_*) still measures 22; reverting only the species-table rows (engine at
+HEAD) still measures 22; only reverting *everything* returns 21. I.e. the tip is frame quantization
+plus ROM-layout shift from ~1.2 KB of new species data — every future batch that adds species rows
+would hit it regardless of how optimal its code is. `AI_FRAME_CEILING_DOUBLES_NO_FLAGS` was therefore
+re-baselined 21 → 22 (the Technician batch's `SINGLES_SMART_TRAINER` 8 → 9 precedent). The hunt still
+produced three real improvements, kept: (1) the AI's six off-field `SpeciesHasInnate` reads (Batches
+Levitate/Sturdy/Immunity) were **not config-gated**, so they walked the whole innate table even with
+the feature off — and, worse, credited innates that don't function (a feature-off misprediction bug);
+all six now check `GetConfig(FEATURE_INNATE_ABILITIES)` first. (2) the innate Sniper / Tinted Lens
+clauses in `GetAttackerAbilitiesModifier` now take the cached `ctx->innatesEnabled` instead of calling
+`GetConfig()` per evaluation (the Batch O caching discipline). (3) `SpeciesHasInnate` is now
+**sublinear**: `GetSpeciesInnateList` binary-searches a lazily built species-sorted row index (~1 KB
+EWRAM bss) instead of walking the ~500-row table linearly — with the feature ON in shipped play, every
+`IsInnateActive` paid that walk on the AI-hot calcs, a cost CI never measures because tests force the
+feature off. The source table stays dex-sorted for humans; the "species-keyed lookup matches the raw
+table" integrity test guards the index.
+
+**Species (canon-only, no flavor picks):** every species whose ability data carries the ability in any
+slot, in dex order, merged into existing rows where the species already carries an innate. Shield Dust:
+Caterpie, Weedle, Wurmple + Dustox, Scatterbug + Vivillon, Cutiefly/Ribombee, Snom/Frosmoth and
+Venomoth (Spewpa is deliberately excluded — its own data is Shed Skin/Friend Guard, not Shield Dust,
+and the accuracy-abilities integrity test pins that exclusion).
+Tinted Lens: Butterfree(+Gmax), Venonat/Venomoth, Hoothoot/Noctowl, Illumise, Yanmega, Sigilyph,
+Braviary-Hisui, Nymble/Lokix. Scrappy: Kangaskhan(+Mega, mirroring the base), Farfetch'd-Galar/
+Sirfetch'd, Miltank, Taillow/Swellow, Loudred/Exploud, Herdier/Stoutland, Pancham/Pangoro,
+Decidueye-Hisui, Flamigo. **Mega Lopunny is deliberately omitted**: its only — and therefore always
+chosen — ability IS Scrappy, so an innate could never be observed (the sole-ability-redundant rule).
+Wonder Skin: Skitty/Delcatty, Venomoth, Sigilyph, Bruxish. Tangled Feet: the Pidgey line (+Mega
+Pidgeot, mirroring the base), Doduo/Dodrio, Spinda, Chatot, Mr. Rime, Flamigo.
+
+**Frontier (Step 3.5):** these abilities were pending, so many sets had spent their `.ability` slot on
+them. Every set was freed, three ways (this batch also *refined* the Batch O override rule — see below):
+- **Complementary real slot** (no override needed): Kangaskhan → Inner Focus, Miltank → Sap Sipper,
+  Exploud → Soundproof, Sigilyph → Magic Guard, Braviary-Hisui → Sheer Force, Pangoro → Mold Breaker,
+  Flamigo → Costar. (Inner Focus / Magic Guard / Mold Breaker are still pending, so those re-points get
+  revisited when their batches land — real-slot picks are allowed to be pending; the alternatives were
+  dead slots.)
+- **Empty-slot override rows** (`species_ability_overrides.c`, the established Venusaur/Blaziken shape —
+  filling an `ABILITY_NONE` slot deletes nothing and no upstream test can select an empty slot):
+  Butterfree → Effect Spore, Dustox → Poison Point, Swellow → Quick Feet, Decidueye-Hisui → Sniper,
+  Sirfetch'd → Super Luck, Frosmoth → Snow Warning, Lokix → Tough Claws.
+- **Left on the now-innate-redundant real ability** (harmless — the effect sites guard against
+  double-applying): Venomoth, Dodrio, Noctowl, Illumise, Yanmega, Ribombee — species with **no empty
+  slot**, where an override would have to repurpose a *real* slot.
+
+**The refined override rule** (supersedes the blanket "no new rows" reading of the Batch O note): the
+override table is consulted **unconditionally** by `GetSpeciesAbility` (`src/pokemon.c`) — it is NOT
+gated by `FEATURE_INNATE_ABILITIES` — so a row **replaces that slot game-wide even with innates off**.
+Filling an **empty** slot is therefore always safe; repurposing a **real** slot deletes that ability
+from the species everywhere and breaks any upstream test that selects it (`Ability(ABILITY_X)` —
+e.g. `scrappy.c` pins Kangaskhan's Scrappy, `fling.c`/`stench.c` pin Vivillon's Shield Dust), so it
+needs a per-slot audit (the Sceptile/Bronzong-style dead-weight repurposes were each audited). The
+Batch O note's other concern — the linear override scan costing AI budget — was overstated: in-battle
+ability reads use the cached `gBattleMons[].ability`, not `GetSpeciesAbility` (~37 call sites, mostly
+creation/form-change/AI party reads); the real sensitivity was the frame-boundary baseline, addressed
+by the ceiling re-baseline above.

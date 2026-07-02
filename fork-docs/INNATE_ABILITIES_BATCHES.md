@@ -350,7 +350,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 2 | Batch B — Defensive damage reducers | calc, no driver | done |
 | 3 | Batch N — Status-conditional stat boosts | calc, no driver | done |
 | 4 | Batch O — Crit-rate / crit-damage modifiers | calc, no driver | done |
-| 5 | Batch P — Accuracy / type-eff / effect-chance | calc, no driver | open |
+| 5 | Batch P — Accuracy / type-eff / effect-chance | calc, no driver | done |
 | 6 | Batch Q — Priority granters | calc, no driver | open |
 | 7 | Batch R — Terrain modifiers | calc, no driver | open |
 | 8 | Batch C — Double physical Attack | clone, no driver | open |
@@ -381,8 +381,10 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 - [ ] **Step 2** — add each ability to the allowlist comment in
   `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h`.
 - [ ] **Step 3** — wire the effect at *every* site (`grep -n ABILITY_X src/`),
-  **including AI effect reads** (`grep src/battle_ai_*.c`); confirm pure-boon-vs-1:1
-  and note any divergence.
+  **including AI effect reads** (`grep src/battle_ai_*.c`) **and the
+  `DETERMINISTIC_*` reroutes** (PP-economy taxes, consume mirrors, gated
+  additional effects — grep `DETERMINISTIC` around each effect site); confirm
+  pure-boon-vs-1:1 and note any divergence.
 - [ ] **Step 3.5** — `grep -n ABILITY_X src/fork/frontier_extended_mons.c` and free
   every hardcoded set (override-table rows for ability-locked species).
 - [ ] **Step 4** — tests in `test/fork/innate_abilities.c`;
@@ -406,7 +408,7 @@ row is `done`.
 | B — Defensive damage reducers | calc, AI-free | 7 | done |
 | N — Status-conditional stat boosts | calc, AI-free | 5 | done |
 | O — Crit-rate / crit-damage modifiers | calc, AI-free | 3 | done |
-| P — Accuracy / type-eff / effect-chance | calc, AI-free | 6 | open |
+| P — Accuracy / type-eff / effect-chance | calc, AI-free | 6 | done |
 | Q — Priority granters | calc, AI-free | 2 | open |
 | R — Terrain modifiers | calc, AI-free | 2 | open |
 | C — Double physical Attack | clone | 2 | open |

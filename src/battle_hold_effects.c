@@ -236,7 +236,15 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
         bool32 flinchWouldLand = !HasBattlerActedThisTurn(battlerDef)
                               && !gBattleMons[battlerDef].volatiles.flinched
                               && GetBattlerAbility(battlerDef) != ABILITY_INNER_FOCUS
-                              && GetActiveGimmick(battlerDef) != GIMMICK_DYNAMAX;
+                              && GetActiveGimmick(battlerDef) != GIMMICK_DYNAMAX
+                              // FORK: Shield Dust (real or innate) and Covert Cloak block the flinch at
+                              // SetMoveEffect's IsMoveEffectBlockedByTarget chokepoint, so without these
+                              // mirror lines the rock would be consumed for nothing. GetBattlerAbility /
+                              // IsInnateActive both already read as pierced under an attacker's Mold
+                              // Breaker (Shield Dust is breakable), matching the chokepoint exactly.
+                              && GetBattlerAbility(battlerDef) != ABILITY_SHIELD_DUST
+                              && !IsInnateActive(battlerDef, ABILITY_SHIELD_DUST)
+                              && GetBattlerHoldEffect(battlerDef) != HOLD_EFFECT_COVERT_CLOAK;
         // FORK: innate-aware (FEATURE_INNATE_ABILITIES) — a Stench holder pre-empts its own
         // flinch item so the rock isn't redundantly consumed; BattlerHasAbility credits an
         // innate Stench too, so it behaves exactly like a chosen Stench here.

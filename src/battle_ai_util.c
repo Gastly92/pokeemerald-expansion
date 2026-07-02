@@ -728,7 +728,8 @@ bool32 IsAdditionalEffectBlocked(enum BattlerId battlerAtk, u32 abilityAtk, enum
     if (gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_COVERT_CLOAK)
         return TRUE;
 
-    if (abilityDef == ABILITY_SHIELD_DUST && !IsMoldBreakerTypeAbility(battlerAtk, abilityAtk))
+    if ((abilityDef == ABILITY_SHIELD_DUST || IsInnateActive(battlerDef, ABILITY_SHIELD_DUST)) // FORK: innate Shield Dust blocks additional effects too
+     && !IsMoldBreakerTypeAbility(battlerAtk, abilityAtk))
         return TRUE;
 
     return FALSE;
@@ -2505,6 +2506,12 @@ bool32 CanLowerStat(enum BattlerId battlerAtk, enum BattlerId battlerDef, struct
           || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerDef, ABILITY_ILLUMINATE))))
             return FALSE;
 
+        // FORK: innate-aware Shield Dust — a damaging move's stat-lowering additional effect is blocked
+        // (the chosen-ability case below handles a real Shield Dust).
+        if (!IsBattleMoveStatus(move) && GetActiveGimmick(battlerAtk) != GIMMICK_DYNAMAX
+         && IsInnateActive(battlerDef, ABILITY_SHIELD_DUST))
+            return FALSE;
+
         switch (aiData->abilities[battlerDef])
         {
         case ABILITY_SPEED_BOOST:
@@ -3910,7 +3917,9 @@ bool32 AI_CanBeInfatuated(enum BattlerId battlerAtk, enum BattlerId battlerDef, 
 bool32 ShouldTryToFlinch(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability atkAbility, enum Ability defAbility, enum Move move)
 {
     enum Move predictedMove = GetPredictedMove(battlerAtk, battlerDef, gAiLogicData);
-    if (((!IsMoldBreakerTypeAbility(battlerAtk, gAiLogicData->abilities[battlerAtk]) && (defAbility == ABILITY_SHIELD_DUST || defAbility == ABILITY_INNER_FOCUS))
+    if (((!IsMoldBreakerTypeAbility(battlerAtk, gAiLogicData->abilities[battlerAtk])
+       && (defAbility == ABILITY_SHIELD_DUST || defAbility == ABILITY_INNER_FOCUS
+        || IsInnateActive(battlerDef, ABILITY_SHIELD_DUST))) // FORK: innate Shield Dust blocks the flinch too
       || gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_COVERT_CLOAK
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
       || AI_IsSlower(battlerAtk, battlerDef, move, predictedMove, CONSIDER_PRIORITY))) // Opponent goes first
@@ -4019,7 +4028,8 @@ bool32 IsFlinchGuaranteed(enum BattlerId battlerAtk, enum BattlerId battlerDef, 
             if (gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_COVERT_CLOAK
             || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
             || (!IsMoldBreakerTypeAbility(battlerAtk, gAiLogicData->abilities[battlerAtk])
-            && (gAiLogicData->abilities[battlerDef] == ABILITY_SHIELD_DUST || gAiLogicData->abilities[battlerDef] == ABILITY_INNER_FOCUS)))
+            && (gAiLogicData->abilities[battlerDef] == ABILITY_SHIELD_DUST || gAiLogicData->abilities[battlerDef] == ABILITY_INNER_FOCUS
+             || IsInnateActive(battlerDef, ABILITY_SHIELD_DUST)))) // FORK: innate Shield Dust blocks the flinch too
                 return FALSE;
             else
                 return TRUE;
@@ -5892,7 +5902,8 @@ bool32 AI_ShouldSetUpHazards(enum BattlerId battlerAtk, enum BattlerId battlerDe
     {
         if (DoesBattlerIgnoreAbilityChecks(battlerAtk, aiData->abilities[battlerAtk], move))
             return TRUE;
-        if (aiData->abilities[battlerDef] == ABILITY_SHIELD_DUST)
+        if (aiData->abilities[battlerDef] == ABILITY_SHIELD_DUST
+         || IsInnateActive(battlerDef, ABILITY_SHIELD_DUST)) // FORK: innate Shield Dust blocks the hazard-setting rider too
             return FALSE;
     }
     return TRUE;
