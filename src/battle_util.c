@@ -11221,12 +11221,14 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     if ((attackerWeather & B_WEATHER_SUN) && MoveHas50AccuracyInSun(move))
         moveAcc = 50;
     // Check Wonder Skin.
+    if (defAbility == ABILITY_WONDER_SKIN && IsBattleMoveStatus(move) && moveAcc > 50)
+        moveAcc = 50;
     // FORK: an innate Wonder Skin (FEATURE_INNATE_ABILITIES) caps incoming status moves at 50% accuracy
-    // exactly like the real ability (1:1 clean upside). The status-move/50% guards run first so the
-    // IsInnateActive lookup stays off the common damaging-move path; the assignment is idempotent, so no
-    // double-application guard is needed. IsInnateActive supplies suppression parity (breakable).
-    if (IsBattleMoveStatus(move) && moveAcc > 50
-     && (defAbility == ABILITY_WONDER_SKIN || IsInnateActive(battlerDef, ABILITY_WONDER_SKIN)))
+    // exactly like the real ability (1:1 clean upside). Kept as a separate clause so the upstream path
+    // stays byte-for-byte untouched; the cheap register/category guards run before the IsInnateActive
+    // lookup (this is the AI-hot accuracy calc). IsInnateActive supplies suppression parity (breakable).
+    else if (moveAcc > 50 && IsBattleMoveStatus(move)
+     && IsInnateActive(battlerDef, ABILITY_WONDER_SKIN))
         moveAcc = 50;
 
     calc = gAccuracyStageRatios[buff].dividend * moveAcc;

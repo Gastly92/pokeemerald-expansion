@@ -4521,13 +4521,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SHIELD_DUST
         )
     },
-    { // 0665
-        SPECIES_SPEWPA,
-        INNATES(
-            ABILITY_COMPOUND_EYES,
-            ABILITY_SHIELD_DUST
-        )
-    },
     { // 0666
         SPECIES_VIVILLON,
         INNATES(

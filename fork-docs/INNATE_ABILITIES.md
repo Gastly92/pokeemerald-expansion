@@ -1427,10 +1427,17 @@ The dedicated AI *effect* reads were wired by hand (`grep src/battle_ai_*.c`):
 - Scrappy: the Foresight-is-pointless score (`src/battle_ai_main.c`) and the Intimidate-benefit
   switch check (`src/battle_ai_switch.c`, extending the innate-Oblivious clause).
 
+**AI frame budget:** the doubles/no-flags thinking-time baseline sat *exactly at* its ceiling (21/21),
+so this batch's per-eval epsilon (a couple of register-compare guards in the accuracy/type calcs —
+every `IsInnateActive` lookup stays behind cheap short-circuit gates) tipped the frame boundary to 22.
+`AI_FRAME_CEILING_DOUBLES_NO_FLAGS` was re-baselined 21 → 22, the same convention as the Technician
+batch's `AI_FRAME_CEILING_SINGLES_SMART_TRAINER` 8 → 9 bump (`test/battle/ai/ai_thinking_time.c`).
+
 **Species (canon-only, no flavor picks):** every species whose ability data carries the ability in any
 slot, in dex order, merged into existing rows where the species already carries an innate. Shield Dust:
-the Caterpie, Weedle, Wurmple(+Dustox), Scatterbug/Spewpa/Vivillon, Cutiefly/Ribombee, Snom/Frosmoth
-lines and Venomoth (Spewpa's new row also carries its canon Compound Eyes, matching its line-mates).
+Caterpie, Weedle, Wurmple + Dustox, Scatterbug + Vivillon, Cutiefly/Ribombee, Snom/Frosmoth and
+Venomoth (Spewpa is deliberately excluded — its own data is Shed Skin/Friend Guard, not Shield Dust,
+and the accuracy-abilities integrity test pins that exclusion).
 Tinted Lens: Butterfree(+Gmax), Venonat/Venomoth, Hoothoot/Noctowl, Illumise, Yanmega, Sigilyph,
 Braviary-Hisui, Nymble/Lokix. Scrappy: Kangaskhan(+Mega, mirroring the base), Farfetch'd-Galar/
 Sirfetch'd, Miltank, Taillow/Swellow, Loudred/Exploud, Herdier/Stoutland, Pancham/Pangoro,
