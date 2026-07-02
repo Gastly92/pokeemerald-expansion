@@ -7961,7 +7961,7 @@ static inline uq4_12_t GetCollisionCourseElectroDriftModifier(enum Move move, uq
     return UQ_4_12(1.0);
 }
 
-static inline uq4_12_t GetAttackerAbilitiesModifier(enum BattlerId battlerAtk, uq4_12_t typeEffectivenessModifier, bool32 isCrit, enum Ability abilityAtk)
+static inline uq4_12_t GetAttackerAbilitiesModifier(enum BattlerId battlerAtk, uq4_12_t typeEffectivenessModifier, bool32 isCrit, enum Ability abilityAtk, bool32 innatesEnabled)
 {
     switch (abilityAtk)
     {
@@ -7987,7 +7987,7 @@ static inline uq4_12_t GetAttackerAbilitiesModifier(enum BattlerId battlerAtk, u
     // prediction is correct for free (this modifier lives in the shared damage calc, keyed off the real
     // battler via IsInnateActive).
     if (isCrit && abilityAtk != ABILITY_SNIPER
-     && GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(battlerAtk, ABILITY_SNIPER))
+     && innatesEnabled && IsInnateActive(battlerAtk, ABILITY_SNIPER))
         return UQ_4_12(1.5);
     // FORK: an innate Tinted Lens (FEATURE_INNATE_ABILITIES) doubles the holder's resisted-move damage
     // exactly like the real ability — a clean upside, so a 1:1 copy with no pure-boon divergence. The
@@ -7995,7 +7995,7 @@ static inline uq4_12_t GetAttackerAbilitiesModifier(enum BattlerId battlerAtk, u
     // the chosen-ability switch above is untouched and abilityAtk != ABILITY_TINTED_LENS guards against
     // double-applying. On-field AI damage prediction is correct for free (shared damage calc).
     if (typeEffectivenessModifier <= UQ_4_12(0.5) && abilityAtk != ABILITY_TINTED_LENS
-     && GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(battlerAtk, ABILITY_TINTED_LENS))
+     && innatesEnabled && IsInnateActive(battlerAtk, ABILITY_TINTED_LENS))
         return UQ_4_12(2.0);
     return UQ_4_12(1.0);
 }
@@ -8196,7 +8196,7 @@ static inline uq4_12_t GetOtherModifiers(struct DamageContext *ctx)
 
     if (unmodifiedAttackerSpeed >= unmodifiedDefenderSpeed)
     {
-        DAMAGE_MULTIPLY_MODIFIER(GetAttackerAbilitiesModifier(ctx->battlerAtk, ctx->typeEffectivenessModifier, ctx->isCrit, ctx->abilities[ctx->battlerAtk]));
+        DAMAGE_MULTIPLY_MODIFIER(GetAttackerAbilitiesModifier(ctx->battlerAtk, ctx->typeEffectivenessModifier, ctx->isCrit, ctx->abilities[ctx->battlerAtk], ctx->innatesEnabled));
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderAbilitiesModifier(ctx));
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderPartnerAbilitiesModifier(ctx));
         DAMAGE_MULTIPLY_MODIFIER(GetAttackerItemsModifier(ctx->battlerAtk, ctx->typeEffectivenessModifier, ctx->holdEffects[ctx->battlerAtk]));
@@ -8206,7 +8206,7 @@ static inline uq4_12_t GetOtherModifiers(struct DamageContext *ctx)
     {
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderAbilitiesModifier(ctx));
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderPartnerAbilitiesModifier(ctx));
-        DAMAGE_MULTIPLY_MODIFIER(GetAttackerAbilitiesModifier(ctx->battlerAtk, ctx->typeEffectivenessModifier, ctx->isCrit, ctx->abilities[ctx->battlerAtk]));
+        DAMAGE_MULTIPLY_MODIFIER(GetAttackerAbilitiesModifier(ctx->battlerAtk, ctx->typeEffectivenessModifier, ctx->isCrit, ctx->abilities[ctx->battlerAtk], ctx->innatesEnabled));
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderItemsModifier(ctx));
         DAMAGE_MULTIPLY_MODIFIER(GetAttackerItemsModifier(ctx->battlerAtk, ctx->typeEffectivenessModifier, ctx->holdEffects[ctx->battlerAtk]));
     }
@@ -9051,7 +9051,8 @@ uq4_12_t CalcPartyMonTypeEffectivenessMultiplier(enum Move move, enum Species sp
         if (GetSpeciesType(speciesDef, 1) != GetSpeciesType(speciesDef, 0))
             MulByTypeEffectiveness(&ctx, &modifier, GetSpeciesType(speciesDef, 1));
 
-        if (ctx.moveType == TYPE_GROUND && (abilityDef == ABILITY_LEVITATE || SpeciesHasInnate(speciesDef, ABILITY_LEVITATE)) && !(gFieldStatuses & STATUS_FIELD_GRAVITY)) // FORK: innate-aware (species-level prediction, no battle state)
+        if (ctx.moveType == TYPE_GROUND && !(gFieldStatuses & STATUS_FIELD_GRAVITY) // FORK: innate-aware (species-level prediction, no battle state; config-gated so feature off neither credits nor scans)
+         && (abilityDef == ABILITY_LEVITATE || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(speciesDef, ABILITY_LEVITATE))))
             modifier = UQ_4_12(0.0);
         if (abilityDef == ABILITY_WONDER_GUARD && modifier <= UQ_4_12(1.0) && GetMovePower(move) != 0)
             modifier = UQ_4_12(0.0);
@@ -10472,7 +10473,7 @@ bool32 CanMonParticipateInSkyBattle(struct Pokemon *mon)
     u32 monAbilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM);
 
     bool32 hasLevitateAbility = GetSpeciesAbility(species, monAbilityNum) == ABILITY_LEVITATE
-                             || SpeciesHasInnate(species, ABILITY_LEVITATE); // FORK: innate-aware Levitate (allowlist)
+                             || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(species, ABILITY_LEVITATE)); // FORK: innate-aware Levitate (allowlist), config-gated
     bool32 isFlyingType = GetSpeciesType(species, 0) == TYPE_FLYING || GetSpeciesType(species, 1) == TYPE_FLYING;
     bool32 monIsValidAndNotEgg = GetMonData(mon, MON_DATA_SANITY_HAS_SPECIES) && !GetMonData(mon, MON_DATA_IS_EGG);
 

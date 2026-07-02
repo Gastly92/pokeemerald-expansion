@@ -1432,11 +1432,23 @@ The dedicated AI *effect* reads were wired by hand (`grep src/battle_ai_*.c`):
 - Scrappy: the Foresight-is-pointless score (`src/battle_ai_main.c`) and the Intimidate-benefit
   switch check (`src/battle_ai_switch.c`, extending the innate-Oblivious clause).
 
-**AI frame budget:** the doubles/no-flags thinking-time baseline sat *exactly at* its ceiling (21/21),
-so this batch's per-eval epsilon (a couple of register-compare guards in the accuracy/type calcs —
-every `IsInnateActive` lookup stays behind cheap short-circuit gates) tipped the frame boundary to 22.
-`AI_FRAME_CEILING_DOUBLES_NO_FLAGS` was re-baselined 21 → 22, the same convention as the Technician
-batch's `AI_FRAME_CEILING_SINGLES_SMART_TRAINER` 8 → 9 bump (`test/battle/ai/ai_thinking_time.c`).
+**AI frame budget (bisected before re-baselining):** the doubles/no-flags thinking-time baseline sat
+*exactly at* its ceiling (21/21 — zero fractional headroom), and with this batch it measures 22. A full
+bisection showed the +1 is NOT algorithmic: reverting *all* of the batch's engine code (battle_util /
+battle_stat_change / battle_ai_*) still measures 22; reverting only the species-table rows (engine at
+HEAD) still measures 22; only reverting *everything* returns 21. I.e. the tip is frame quantization
+plus ROM-layout shift from ~1.2 KB of new species data — every future batch that adds species rows
+would hit it regardless of how optimal its code is. `AI_FRAME_CEILING_DOUBLES_NO_FLAGS` was therefore
+re-baselined 21 → 22 (the Technician batch's `SINGLES_SMART_TRAINER` 8 → 9 precedent). The hunt still
+produced two real improvements, kept: (1) the AI's six off-field `SpeciesHasInnate` reads (Batches
+Levitate/Sturdy/Immunity) were **not config-gated**, so they walked the whole innate table even with
+the feature off — and, worse, credited innates that don't function (a feature-off misprediction bug);
+all six now check `GetConfig(FEATURE_INNATE_ABILITIES)` first. (2) the innate Sniper / Tinted Lens
+clauses in `GetAttackerAbilitiesModifier` now take the cached `ctx->innatesEnabled` instead of calling
+`GetConfig()` per evaluation (the Batch O caching discipline). A durable follow-up if the budget keeps
+pinching: make `SpeciesHasInnate` sublinear (sorted index / binary search) — with the feature ON in
+shipped play, every `IsInnateActive` walks the ~490-row table linearly today, a cost CI never measures
+because tests force the feature off.
 
 **Species (canon-only, no flavor picks):** every species whose ability data carries the ability in any
 slot, in dex order, merged into existing rows where the species already carries an innate. Shield Dust:

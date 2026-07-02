@@ -280,7 +280,8 @@ bool32 IsSwitchinTSpikesAffected(enum BattlerId battler)
         return FALSE;
     if (IS_BATTLER_ANY_TYPE(battler, TYPE_POISON, TYPE_STEEL))
         return FALSE;
-    if (ability == ABILITY_IMMUNITY || SpeciesHasInnate(gBattleMons[battler].species, ABILITY_IMMUNITY) // FORK: innate-aware
+    if (ability == ABILITY_IMMUNITY // FORK: innate-aware (config-gated: feature off must not credit — or scan for — innates)
+     || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_IMMUNITY))
      || AI_IsAbilityOnSide(battler, ABILITY_PASTEL_VEIL) || AI_IsInnateOnSide(battler, ABILITY_PASTEL_VEIL)) // FORK: innate-aware
         return FALSE;
     if ((heldItemEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS || heldItemEffect == HOLD_EFFECT_CURE_PSN || heldItemEffect == HOLD_EFFECT_CURE_STATUS) && !ignoreItem)
@@ -661,6 +662,7 @@ static bool32 FindMonThatAbsorbsOpponentsMove(struct SwitchAiContext *switchCont
             // too. Off the field there's no battler index, so key off the species data.
             bool32 monHasAbsorbingAbility = (absorbingAbility == partyMonAbility)
                 || (absorbingAbility == ABILITY_LEVITATE
+                 && GetConfig(FEATURE_INNATE_ABILITIES) // feature off must not credit — or scan for — innates
                  && SpeciesHasInnate(GetMonData(&switchContext->party[monIndex], MON_DATA_SPECIES), ABILITY_LEVITATE));
             // Found a mon
             if (monHasAbsorbingAbility && RandomPercentage(RNG_AI_SWITCH_ABSORBING, GetSwitchChance(SHOULD_SWITCH_ABSORBS_MOVE)))
@@ -1699,7 +1701,8 @@ static u32 GetSwitchinHazardsDamage(enum BattlerId battler)
         }
 
         if (IsHazardOnSide(side, HAZARDS_TOXIC_SPIKES) && (!IS_BATTLER_ANY_TYPE(battler, TYPE_POISON, TYPE_STEEL)
-            && ability != ABILITY_IMMUNITY && !SpeciesHasInnate(gBattleMons[battler].species, ABILITY_IMMUNITY) // FORK: innate-aware
+            && ability != ABILITY_IMMUNITY // FORK: innate-aware (config-gated: feature off must not credit — or scan for — innates)
+            && !(GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_IMMUNITY))
             && ability != ABILITY_POISON_HEAL && ability != ABILITY_COMATOSE
             && status == 0
             && !(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
@@ -1981,7 +1984,7 @@ static u32 GetSwitchinHitsToKO(s32 damageTaken, enum BattlerId battler, const st
         currentHP = currentHP - damageTaken;
 
         // One shot prevention effects
-        if (damageTaken >= maxHP && startingHP == maxHP && (heldItemEffect == HOLD_EFFECT_FOCUS_SASH || (!opponentCanBreakMold && GetConfig(B_STURDY) >= GEN_5 && (ability == ABILITY_STURDY || SpeciesHasInnate(gBattleMons[battler].species, ABILITY_STURDY)))) && hitsToKO < 1) // FORK: innate-aware (mirrors the innate-Levitate switch handling above)
+        if (damageTaken >= maxHP && startingHP == maxHP && (heldItemEffect == HOLD_EFFECT_FOCUS_SASH || (!opponentCanBreakMold && GetConfig(B_STURDY) >= GEN_5 && (ability == ABILITY_STURDY || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_STURDY))))) && hitsToKO < 1) // FORK: innate-aware, config-gated (feature off must not credit — or scan for — innates)
             currentHP = 1;
 
         // If mon is still alive, apply weather impact first, as it might KO the mon before it can heal with its item (order is weather -> item -> status)
