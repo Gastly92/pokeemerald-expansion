@@ -4205,6 +4205,59 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_ACCURACY_EVASI
     }
 }
 
+// Shield Dust x DETERMINISTIC_ADDITIONAL_EFFECTS: the config gates secondaries IN on a
+// super-effective/STAB hit (Fire Punch is 4x into Ice/Bug Frosmoth, so its burn is guaranteed) —
+// and the innate Shield Dust still blocks the gated-in effect at the same chokepoint.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Shield Dust blocks a gated-in effect under DETERMINISTIC_ADDITIONAL_EFFECTS")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; } // no innate -> the gated-in burn lands
+    PARAMETRIZE { enabled = TRUE; }  // innate Shield Dust -> blocked
+    GIVEN {
+        ASSUME(MoveHasAdditionalEffect(MOVE_FIRE_PUNCH, MOVE_EFFECT_BURN));
+        ASSUME(SpeciesHasInnate(SPECIES_FROSMOTH, ABILITY_SHIELD_DUST));
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_FIRE_PUNCH); }
+        OPPONENT(SPECIES_FROSMOTH) { Ability(ABILITY_ICE_SCALES); MaxHP(600); HP(600); Defense(255); } // chosen Ice Scales, NOT Shield Dust
+    } WHEN {
+        TURN { MOVE(player, MOVE_FIRE_PUNCH); }
+    } THEN {
+        if (enabled)
+            EXPECT(!(opponent->status1 & STATUS1_BURN));
+        else
+            EXPECT(opponent->status1 & STATUS1_BURN);
+    }
+}
+
+// Shield Dust x DETERMINISTIC_HOLD_EFFECTS: King's Rock guarantees its flinch on the first
+// qualifying hit and is consumed when it fires — but Shield Dust blocks the flinch at the
+// SetMoveEffect chokepoint, so the deterministic would-it-land mirror (battle_hold_effects.c)
+// must treat a Shield Dust (real or innate) target as a non-landing flinch and spare the rock.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_HOLD_EFFECTS an innate Shield Dust target spares the King's Rock")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; } // no innate -> the guaranteed flinch fires and the rock is consumed
+    PARAMETRIZE { enabled = TRUE; }  // innate Shield Dust -> no flinch, rock kept
+    GIVEN {
+        ASSUME(gItemsInfo[ITEM_KINGS_ROCK].holdEffect == HOLD_EFFECT_FLINCH);
+        ASSUME(SpeciesHasInnate(SPECIES_FROSMOTH, ABILITY_SHIELD_DUST));
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_FROSMOTH) { Speed(50); Ability(ABILITY_ICE_SCALES); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        if (enabled)
+            NONE_OF { MESSAGE("The opposing Frosmoth flinched and couldn't move!"); }
+        else
+            MESSAGE("The opposing Frosmoth flinched and couldn't move!");
+    } THEN {
+        EXPECT_EQ(player->item, enabled ? ITEM_KINGS_ROCK : ITEM_NONE);
+    }
+}
+
 // Tangled Feet doubles the holder's evasion while it is confused (GetTotalAccuracy). Spinda's chosen
 // ability here is Contrary (its real slot 2 — Own Tempo, slot 0, would block the confusion the innate
 // needs). The WITH_RNG(RNG_CONFUSION, FALSE) keeps the confused holder from hitting itself so the

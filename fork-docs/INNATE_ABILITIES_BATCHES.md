@@ -381,8 +381,10 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 - [ ] **Step 2** — add each ability to the allowlist comment in
   `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h`.
 - [ ] **Step 3** — wire the effect at *every* site (`grep -n ABILITY_X src/`),
-  **including AI effect reads** (`grep src/battle_ai_*.c`); confirm pure-boon-vs-1:1
-  and note any divergence.
+  **including AI effect reads** (`grep src/battle_ai_*.c`) **and the
+  `DETERMINISTIC_*` reroutes** (PP-economy taxes, consume mirrors, gated
+  additional effects — grep `DETERMINISTIC` around each effect site); confirm
+  pure-boon-vs-1:1 and note any divergence.
 - [ ] **Step 3.5** — `grep -n ABILITY_X src/fork/frontier_extended_mons.c` and free
   every hardcoded set (override-table rows for ability-locked species).
 - [ ] **Step 4** — tests in `test/fork/innate_abilities.c`;

@@ -160,6 +160,22 @@ damage calc ×2 + `GetTotalAccuracy` + `GetAccEvasionStageDelta`). Skip the pure
 single-valued `gAiLogicData->abilities[b]` *as the mon's displayed ability*) — those
 stay the chosen-slot identity. Only the *effect* sites get the innate clause.
 
+**Sweep the `DETERMINISTIC_*` config surfaces too** (`include/config/deterministic.h` — this fork's
+flagship battle changes). The deterministic configs REROUTE mechanics through fork-owned sites that a
+vanilla-only `grep ABILITY_X` misses: accuracy/evasion becomes a PP economy
+(`GetDeterministicMoveTargetPPTax` / `GetAccEvasionStageDelta`, plus `CalculatePPWithBonus`'s
+accuracy-scaled max PP — which also skews naive PP expectations in tests, see the Wonder Skin
+Confuse-Ray-not-Toxic note), additional effects gate on SE/STAB instead of rolling
+(`DETERMINISTIC_ADDITIONAL_EFFECTS`), held-item procs fire once and get consumed only when their
+effect would actually land (`DETERMINISTIC_HOLD_EFFECTS`'s would-it-land mirrors in
+`battle_hold_effects.c`), and ability/status chances fire deterministically. If the ability touches
+accuracy, evasion, secondary effects, flinches, crits, status chances or held-item procs, grep
+`DETERMINISTIC` around each effect site and wire + test the innate under the relevant config. Worked
+examples: the Sand Veil / Snow Cloak / Wonder Skin / Tangled Feet PP taxes; Quick Feet's paralysis-tax
+exemption; Serene Grace under `DETERMINISTIC_ADDITIONAL_EFFECTS`; Shield Dust's King's-Rock consume
+mirror under `DETERMINISTIC_HOLD_EFFECTS` and its gated-in-effect block under
+`DETERMINISTIC_ADDITIONAL_EFFECTS`.
+
 **Don't skip the AI's *effect* reads, though — and `grep src/battle_ai_*.c` for them
 specifically.** This is the subtle one the early Unaware framing got wrong. The AI's
 *damage/type* prediction runs through the **shared** `DamageContext` calc, so any
@@ -383,9 +399,12 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
 Add a case to `test/fork/innate_abilities.c`. Opt into the feature with
 `WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE)` (the test baseline forces all
 `FEATURE_*` flags off, so the inherited suite keeps exercising stock behavior).
-Cover: the innate's effect fires; it does **not** fire with the feature off; and,
-for trait/immunity abilities, that suppression (Gastro Acid / Mold Breaker) and
-Trace/identity still behave like the real ability. Run:
+Cover: the innate's effect fires; it does **not** fire with the feature off; for
+trait/immunity abilities, that suppression (Gastro Acid / Mold Breaker) and
+Trace/identity still behave like the real ability; and **one test per
+`DETERMINISTIC_*` surface the ability touches** (Step 3's deterministic sweep) —
+the shipping default runs with those configs ON, so an innate that only works
+under stock RNG is broken in the real game. Run:
 
 ```bash
 make -j$(nproc) check TESTS="FEATURE_INNATE_ABILITIES"
@@ -423,9 +442,9 @@ the two things easiest to skip:
 
 - [ ] **Step 1** — species rows added (merged into existing rows where the species already has an innate).
 - [ ] **Step 2** — allowlist comment in `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h` updated.
-- [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
+- [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`) **and the `DETERMINISTIC_*` reroutes** (PP-economy taxes, would-it-land consume mirrors, gated additional effects — grep `DETERMINISTIC` around each effect site); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
 - [ ] **Step 3.5 — ran `grep -n ABILITY_X src/fork/frontier_extended_mons.c`** and freed every hardcoded set (override-table rows for ability-locked / all-abilities-innate species). *This is the step that gets forgotten.*
-- [ ] **Step 4** — tests added; `make check TESTS="FEATURE_INNATE_ABILITIES"` green; **full `make check` green** if a shared battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.
+- [ ] **Step 4** — tests added, **including the `DETERMINISTIC_*` interactions the ability touches** (the shipping default); `make check TESTS="FEATURE_INNATE_ABILITIES"` green; **full `make check` green** if a shared battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.
 - [ ] **Step 5** — `FORK.md` (status parenthetical, allowlist sentence, known-limitations, wiring note **and** the frontier-freeing note) + `INNATE_ABILITIES_PROGRESS.md` flipped to `:white_check_mark:`.
 
 ## Per-ability wiring reference
@@ -1393,6 +1412,11 @@ innate doesn't cause the confusion.) Wiring:
   (`RecordAbilityBattle`) is skipped for the innate. Every blocked source funnels through this
   predicate — move secondaries (`SetMoveEffect`), ability riders (Poison Touch / Toxic Chain), Fling,
   the Sparkling-Aria spread carve-out, and King's Rock-style item flinches — so one clause covers all.
+  Two `DETERMINISTIC_*` reroutes needed their own wiring: under `DETERMINISTIC_HOLD_EFFECTS` the
+  King's-Rock would-it-land consume mirror (`battle_hold_effects.c`) now treats a Shield Dust target
+  (real or innate — and a Covert Cloak holder) as a non-landing flinch, so the rock isn't consumed for
+  a flinch the chokepoint then blocks; and under `DETERMINISTIC_ADDITIONAL_EFFECTS` a gated-in
+  (SE/STAB-guaranteed) secondary is still blocked — both covered by dedicated tests.
 - **Tinted Lens** (2x damage on not-very-effective moves) — `GetAttackerAbilitiesModifier`
   (`src/battle_util.c`), an innate clause after the chosen-ability switch, gated
   `typeEffectivenessModifier <= 0.5 && abilityAtk != ABILITY_TINTED_LENS &&
