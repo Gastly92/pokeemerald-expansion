@@ -365,7 +365,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as are Compound Eyes); left redundant — no complementary real slot (Batch O override-table rule)
+        .ability = ABILITY_EFFECT_SPORE, // Compound Eyes & Tinted Lens now innate; chosen Effect Spore (empty-slot override) may status contact attackers
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -385,7 +385,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_TAILWIND
         },
-        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no complementary real slot
+        .ability = ABILITY_EFFECT_SPORE, // Compound Eyes & Tinted Lens now innate; chosen Effect Spore (empty-slot override)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -1184,7 +1184,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as are Shield Dust & Wonder Skin); left redundant — no complementary real slot
+        .ability = ABILITY_TINTED_LENS, // now innate (as are Shield Dust & Wonder Skin); left redundant — all three slots are real abilities, and a real-slot override deletes one game-wide
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1204,7 +1204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUIVER_DANCE,
             MOVE_ROOST
         },
-        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no complementary real slot
+        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no empty slot to override
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2086,7 +2086,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_TANGLED_FEET, // now innate (as is Early Bird); left redundant — its only other real slot is Run Away
+        .ability = ABILITY_TANGLED_FEET, // now innate (as is Early Bird); left redundant — no empty slot (Run Away is dead weight, but a real-slot override deletes it game-wide)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2106,7 +2106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DOUBLE_EDGE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TANGLED_FEET, // now innate; left redundant — its only other real slot is Run Away
+        .ability = ABILITY_TANGLED_FEET, // now innate; left redundant — no empty slot to override
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4483,7 +4483,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as are Insomnia & Keen Eye); left redundant — no complementary real slot
+        .ability = ABILITY_TINTED_LENS, // now innate (as are Insomnia & Keen Eye); left redundant — all three slots are real abilities
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4503,7 +4503,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no complementary real slot
+        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no empty slot to override
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7058,7 +7058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SHIELD_DUST, // now innate (as is Compound Eyes); left redundant — no complementary real slot
+        .ability = ABILITY_POISON_POINT, // Shield Dust & Compound Eyes now innate; chosen Poison Point (empty-slot override) poisons the contact Rocky Helmet punishes
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7204,7 +7204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_SCRAPPY, // now innate (as is Guts); left redundant — no complementary real slot
+        .ability = ABILITY_QUICK_FEET, // Guts & Scrappy now innate; chosen Quick Feet (empty-slot override) — the Toxic Orb also buys +50% Speed
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7224,7 +7224,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STEEL_WING
         },
-        .ability = ABILITY_SCRAPPY, // now innate; left redundant — no complementary real slot
+        .ability = ABILITY_QUICK_FEET, // Guts & Scrappy now innate; chosen Quick Feet (empty-slot override)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7963,7 +7963,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_BUG_BUZZ
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as are Oblivious & Prankster); left redundant — no complementary real slot
+        .ability = ABILITY_TINTED_LENS, // now innate (as are Oblivious & Prankster); left redundant — all three slots are real abilities
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -11378,7 +11378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_PROTECT
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as is Speed Boost); left redundant — its only other real slot is Frisk
+        .ability = ABILITY_TINTED_LENS, // now innate (as is Speed Boost); left redundant — no empty slot (Frisk is near-dead but real)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11398,7 +11398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ANCIENT_POWER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — its only other real slot is Frisk
+        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no empty slot to override
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17704,7 +17704,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SCRAPPY, // now innate (as is latched Overgrow); left redundant — no complementary real slot
+        .ability = ABILITY_SNIPER, // Overgrow (latched) & Scrappy now innate; chosen Sniper (empty-slot override) pays off Triple Arrows' high crit rate
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17724,7 +17724,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_ROOST
         },
-        .ability = ABILITY_SCRAPPY, // now innate; left redundant — no complementary real slot
+        .ability = ABILITY_SNIPER, // Overgrow (latched) & Scrappy now innate; chosen Sniper (empty-slot override)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -18062,7 +18062,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_STUN_SPORE
         },
-        .ability = ABILITY_SHIELD_DUST, // now innate (as is Sweet Veil); left redundant — its only other real slot is Honey Gather
+        .ability = ABILITY_SHIELD_DUST, // now innate (as is Sweet Veil); left redundant — no empty slot (Honey Gather is dead but real)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18082,7 +18082,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_POLLEN_PUFF
         },
-        .ability = ABILITY_SHIELD_DUST, // now innate; left redundant — its only other real slot is Honey Gather
+        .ability = ABILITY_SHIELD_DUST, // now innate; left redundant — no empty slot to override
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21346,7 +21346,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_FIRST_IMPRESSION
         },
-        .ability = ABILITY_SCRAPPY, // now innate; left redundant — its only other real slot is the weak pending Steadfast
+        .ability = ABILITY_SUPER_LUCK, // Scrappy now innate; chosen Super Luck (empty-slot override) stacks with the Leek for guaranteed crits
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21366,7 +21366,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_BRAVE_BIRD
         },
-        .ability = ABILITY_SCRAPPY, // now innate; left redundant — its only other real slot is the weak pending Steadfast
+        .ability = ABILITY_SUPER_LUCK, // Scrappy now innate; chosen Super Luck (empty-slot override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21538,7 +21538,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SHIELD_DUST, // now innate (as is Ice Scales); left redundant — no complementary real slot
+        .ability = ABILITY_SNOW_WARNING, // Shield Dust & Ice Scales now innate; chosen Snow Warning (empty-slot override) — the frost moth heralds snow (Ice-type Def boost)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21558,7 +21558,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_SHIELD_DUST, // now innate; left redundant — no complementary real slot
+        .ability = ABILITY_SNOW_WARNING, // Shield Dust & Ice Scales now innate; chosen Snow Warning (empty-slot override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23057,7 +23057,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_LIFE,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as is Swarm); left redundant — no complementary real slot
+        .ability = ABILITY_TOUGH_CLAWS, // Swarm & Tinted Lens now innate; chosen Tough Claws (empty-slot override) boosts its all-contact kit
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23077,7 +23077,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no complementary real slot
+        .ability = ABILITY_TOUGH_CLAWS, // Swarm & Tinted Lens now innate; chosen Tough Claws (empty-slot override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

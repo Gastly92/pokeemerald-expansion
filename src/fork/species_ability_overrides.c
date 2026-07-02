@@ -39,13 +39,29 @@ struct SpeciesAbilityOverride
 // LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
 // *implemented* :white_check_mark: innate — that's the row's whole premise; noted in each comment.)
 // The table below was audited on this rule: every row hands out a :x: (never-an-innate) ability,
-// except CARNIVINE and TORNADUS_THERIAN, whose picks (Chlorophyll, Prankster) are already
-// *implemented* :white_check_mark: innates and so are likewise stable.
+// or an already-*implemented* :white_check_mark: innate the species does NOT itself carry (Carnivine's
+// Chlorophyll, Tornadus-Therian's Prankster, Swellow's Quick Feet, ...), which is likewise stable.
+//
+// SLOT CHOICE MATTERS — this table is consulted UNCONDITIONALLY by GetSpeciesAbility (it is NOT gated
+// by FEATURE_INNATE_ABILITIES), so a row REPLACES that slot's ability game-wide even with innates off.
+// Filling an EMPTY slot (ABILITY_NONE) is always safe: nothing is deleted and no upstream test can
+// select an empty slot. Repurposing a REAL slot deletes that ability from the species everywhere —
+// only do it when nothing observes the slot (audit `Ability(ABILITY_X)` uses in test/battle/ first;
+// e.g. Kangaskhan's Scrappy and Vivillon's Shield Dust slots are pinned by upstream tests and must
+// stay). The rows above that repurpose real slots (Sceptile, Lopunny, Bronzong, Mamoswine, Beartic,
+// Carracosta, Scovillain, Sinistcha, Volbeat, Zangoose) were each audited this way.
 static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 {
     { // 0003
         SPECIES_VENUSAUR, 1,
         ABILITY_GRASSY_SURGE
+    },
+    { // 0012
+        // Butterfree's only real abilities (Compound Eyes, Tinted Lens) are BOTH now innate, so its EMPTY
+        // slot 1 takes Effect Spore — :x: (never an innate -> stable) and flavorful: the powder-scattering
+        // butterfly may poison/sleep/paralyze contact attackers, guarding its Quiver Dance setup.
+        SPECIES_BUTTERFREE, 1,
+        ABILITY_EFFECT_SPORE
     },
     { // 0028
         // Sandslash's only real abilities (Sand Veil, Sand Rush) are BOTH now innate, so its empty
@@ -111,6 +127,21 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // (Close Combat / Blaze Kick / Thunder Punch all gain the +30% and drop their secondaries).
         SPECIES_BLAZIKEN, 1,
         ABILITY_SHEER_FORCE
+    },
+    { // 0269
+        // Dustox's only real abilities (Shield Dust, Compound Eyes) are BOTH now innate, so its EMPTY slot 1
+        // takes Poison Point — :x: (never an innate -> stable) and flavorful: the toxic-dust moth poisons the
+        // contact its Rocky Helmet wall set already punishes.
+        SPECIES_DUSTOX, 1,
+        ABILITY_POISON_POINT
+    },
+    { // 0277
+        // Swellow's only real abilities (Guts, Scrappy) are BOTH now innate, so its EMPTY slot 1 takes Quick
+        // Feet — an already-implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) that Swellow
+        // does not carry innately: its Toxic Orb Facade set also gains +50% Speed (and ignores paralysis) once
+        // statused, stacking with the innate Guts.
+        SPECIES_SWELLOW, 1,
+        ABILITY_QUICK_FEET
     },
     { // 0313
         // Volbeat's three real abilities (Illuminate, Swarm, Prankster) are ALL now innate, so its slot-1
@@ -352,6 +383,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CLAWITZER, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0724
+        // Decidueye-Hisui's only real abilities (Overgrow, Scrappy) are BOTH now innate, so its EMPTY slot 1
+        // takes Sniper, an already-implemented :white_check_mark: innate (stable) that it does not carry innately:
+        // the archer's precision pays off Triple Arrows' boosted crit rate on both roster sets.
+        SPECIES_DECIDUEYE_HISUI, 1,
+        ABILITY_SNIPER
+    },
     { // 0738
         SPECIES_VIKAVOLT, 1,
         ABILITY_MOTOR_DRIVE
@@ -391,6 +429,20 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GRAPPLOCT, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0865
+        // Sirfetch'd's Scrappy is now innate and its remaining slot-0 Steadfast is weak (and pending), so its
+        // EMPTY slot 1 takes Super Luck, an already-implemented :white_check_mark: innate (stable) that it does
+        // not carry innately: the duelist's precision stacks with the Leek for guaranteed crits.
+        SPECIES_SIRFETCHD, 1,
+        ABILITY_SUPER_LUCK
+    },
+    { // 0873
+        // Frosmoth's only real abilities (Shield Dust, Ice Scales) are BOTH now innate, so its EMPTY slot 1
+        // takes Snow Warning — :x: (never an innate -> stable) and flavorful: the frost moth heralds the snow
+        // (Ice-type Def boost). Same pick as Articuno/Beartic/Cryogonal/Kyurem.
+        SPECIES_FROSMOTH, 1,
+        ABILITY_SNOW_WARNING
+    },
     { // 0890
         SPECIES_ETERNATUS, 1,
         ABILITY_POISON_TOUCH
@@ -398,6 +450,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0911
         SPECIES_SKELEDIRGE, 1,
         ABILITY_MUMMY
+    },
+    { // 0920
+        // Lokix's only real abilities (Swarm, Tinted Lens) are BOTH now innate, so its EMPTY slot 1 takes
+        // Tough Claws, an already-implemented :white_check_mark: innate (stable) that it does not carry innately:
+        // the kickboxing grasshopper's kit (First Impression / Sucker Punch / Leech Life / Throat Chop) is
+        // all contact.
+        SPECIES_LOKIX, 1,
+        ABILITY_TOUGH_CLAWS
     },
     { // 0925
         // Maushold's only real abilities (Friend Guard, Technician) are BOTH now innate, so its empty slot 1

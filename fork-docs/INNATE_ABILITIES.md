@@ -371,7 +371,11 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
    > premise. A row may even repurpose a *real, non-empty* slot whose ability is dead weight on the
    > roster's sets (Sceptile's HA Unburden does nothing on its non-consumable-item sets, so with
    > Overgrow innately latched the slot is freed to `LIGHTNING_ROD`), so long as that freeing innate
-   > (Overgrow) is implemented and the new chosen ability is itself stable (`:x:`).
+   > (Overgrow) is implemented and the new chosen ability is itself stable (`:x:`). **But audit a
+   > real-slot repurpose first**: the override table is consulted unconditionally by `GetSpeciesAbility`
+   > (not feature-gated), so the row deletes that real ability from the species game-wide — grep
+   > `test/battle/` for `Ability(ABILITY_X)` on that species before repurposing (empty-`ABILITY_NONE`
+   > slots need no audit; nothing observes them). See the Batch P block's refined rule.
 6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it
@@ -1364,15 +1368,16 @@ sets had used them as a chosen pick beside an already-innate slot. Only the sets
 complementary **real** `:x:` slot are re-pointed, needing no override — **Octillery → Moody** and
 **Kingdra → Damp** (each runs the new ability *plus* its innate). The remaining canon sets are deliberately
 **left on their now-innate-redundant real ability** (Sniper / Super Luck / Merciless) rather than freed.
-Freeing those would require `species_ability_overrides.c` rows, and that table is consulted unconditionally by
-`GetSpeciesAbility` (it is *not* feature-gated), which makes the override approach unsafe here for two reasons:
-(1) it removes the real ability **globally** even with the feature off, breaking upstream tests that explicitly
-select it (e.g. `crit_chance.c` / `deterministic_critical_hits.c` do `PLAYER(SPECIES_TOGEKISS) {
-Ability(ABILITY_SUPER_LUCK); }`); and (2) every added row lengthens the linear override scan that runs on
-*every* ability lookup, which tips the tight `ai_thinking_time.c` doubles budget over its ceiling. A set left
-on its real Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simply equals the innate
-(redundant but harmless; the effect sites guard against double-applying), so only the second-ability *upgrade*
-is forgone. Revisit if the override lookup is made non-linear or feature-gated.
+Freeing those would require `species_ability_overrides.c` rows **repurposing real slots** (none of these
+species has an empty slot to fill), and that table is consulted unconditionally by `GetSpeciesAbility`
+(it is *not* feature-gated) — so the row removes the real ability **globally** even with the feature off,
+breaking upstream tests that explicitly select it (e.g. `crit_chance.c` / `deterministic_critical_hits.c`
+do `PLAYER(SPECIES_TOGEKISS) { Ability(ABILITY_SUPER_LUCK); }`). A set left on its real
+Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simply equals the innate
+(redundant but harmless; the effect sites guard against double-applying), so only the second-ability
+*upgrade* is forgone. (An earlier version of this note also blamed the override table's linear scan for
+the `ai_thinking_time.c` budget — overstated: in-battle reads use the cached `gBattleMons[].ability`, not
+`GetSpeciesAbility`. **Empty-slot** override rows remain fine — see the Batch P refined rule.)
 
 ### ABILITY_SHIELD_DUST / ABILITY_TINTED_LENS / ABILITY_SCRAPPY / ABILITY_WONDER_SKIN / ABILITY_TANGLED_FEET
 
@@ -1447,14 +1452,28 @@ Wonder Skin: Skitty/Delcatty, Venomoth, Sigilyph, Bruxish. Tangled Feet: the Pid
 Pidgeot, mirroring the base), Doduo/Dodrio, Spinda, Chatot, Mr. Rime, Flamigo.
 
 **Frontier (Step 3.5):** these abilities were pending, so many sets had spent their `.ability` slot on
-them. Per the Batch O override-table rule (`species_ability_overrides.c` is scanned unconditionally on
-every ability lookup and is not feature-gated — new rows cost AI-budget time and break upstream tests
-that select the replaced real ability), **no override rows were added**: only sets whose species has a
-complementary **real** slot are re-pointed — Kangaskhan → Inner Focus, Miltank → Sap Sipper,
-Exploud → Soundproof, Sigilyph → Magic Guard, Braviary-Hisui → Sheer Force, Pangoro → Mold Breaker,
-Flamigo → Costar — and the rest (Butterfree, Venomoth, Dodrio, Noctowl, Dustox, Swellow, Illumise,
-Yanmega, Decidueye-Hisui, Ribombee, Sirfetch'd, Frosmoth, Lokix) stay on their now-innate-redundant
-real ability, which keeps working unchanged (the effect sites guard against double-applying).
-Inner Focus / Magic Guard / Mold Breaker are still `:white_large_square:` pending, so those three
-re-points get revisited when their batches land (real-slot picks, unlike override rows, are allowed
-to be pending — the alternatives were dead slots).
+them. Every set was freed, three ways (this batch also *refined* the Batch O override rule — see below):
+- **Complementary real slot** (no override needed): Kangaskhan → Inner Focus, Miltank → Sap Sipper,
+  Exploud → Soundproof, Sigilyph → Magic Guard, Braviary-Hisui → Sheer Force, Pangoro → Mold Breaker,
+  Flamigo → Costar. (Inner Focus / Magic Guard / Mold Breaker are still pending, so those re-points get
+  revisited when their batches land — real-slot picks are allowed to be pending; the alternatives were
+  dead slots.)
+- **Empty-slot override rows** (`species_ability_overrides.c`, the established Venusaur/Blaziken shape —
+  filling an `ABILITY_NONE` slot deletes nothing and no upstream test can select an empty slot):
+  Butterfree → Effect Spore, Dustox → Poison Point, Swellow → Quick Feet, Decidueye-Hisui → Sniper,
+  Sirfetch'd → Super Luck, Frosmoth → Snow Warning, Lokix → Tough Claws.
+- **Left on the now-innate-redundant real ability** (harmless — the effect sites guard against
+  double-applying): Venomoth, Dodrio, Noctowl, Illumise, Yanmega, Ribombee — species with **no empty
+  slot**, where an override would have to repurpose a *real* slot.
+
+**The refined override rule** (supersedes the blanket "no new rows" reading of the Batch O note): the
+override table is consulted **unconditionally** by `GetSpeciesAbility` (`src/pokemon.c`) — it is NOT
+gated by `FEATURE_INNATE_ABILITIES` — so a row **replaces that slot game-wide even with innates off**.
+Filling an **empty** slot is therefore always safe; repurposing a **real** slot deletes that ability
+from the species everywhere and breaks any upstream test that selects it (`Ability(ABILITY_X)` —
+e.g. `scrappy.c` pins Kangaskhan's Scrappy, `fling.c`/`stench.c` pin Vivillon's Shield Dust), so it
+needs a per-slot audit (the Sceptile/Bronzong-style dead-weight repurposes were each audited). The
+Batch O note's other concern — the linear override scan costing AI budget — was overstated: in-battle
+ability reads use the cached `gBattleMons[].ability`, not `GetSpeciesAbility` (~37 call sites, mostly
+creation/form-change/AI party reads); the real sensitivity was the frame-boundary baseline, addressed
+by the ceiling re-baseline above.
