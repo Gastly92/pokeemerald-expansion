@@ -6332,8 +6332,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
 // the documented "first match" because the "no species appears more than once" integrity
 // test (test/fork/innate_abilities.c) forbids duplicate rows; the "species-keyed lookup
 // matches the raw table" test guards this index against the raw rows.
-static u16 sRowIndexSortedBySpecies[ARRAY_COUNT(sSpeciesInnates)];
-static bool8 sRowIndexBuilt = FALSE;
+// EWRAM_DATA is load-bearing: plain C statics' .bss lands in IWRAM (ld_script_modern.ld),
+// where ~1 KB collides with the stack and corrupts memory (heap-magic asserts in malloc.c).
+static EWRAM_DATA u16 sRowIndexSortedBySpecies[ARRAY_COUNT(sSpeciesInnates)] = {0};
+static EWRAM_DATA bool8 sRowIndexBuilt = FALSE;
 
 static void BuildRowIndexSortedBySpecies(void)
 {
