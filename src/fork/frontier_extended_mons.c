@@ -98,6 +98,7 @@
 // Tinted Lens doubles resisted-move damage / Scrappy hits Ghosts with Normal & Fighting and shrugs off Intimidate /
 // Wonder Skin caps incoming status moves at 50% accuracy — a PP tax under DETERMINISTIC_ACCURACY_EVASION /
 // Tangled Feet doubles evasion while confused)
+// or a priority granter (Gale Wings gives Flying moves +1 priority at full HP / Triage gives healing moves +3 priority)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -149,6 +150,10 @@
 // their slot to a complementary REAL ability (Dragonite's Multiscale -> chosen Inner Focus; Camerupt's Solid Rock ->
 // chosen Magma Armor; Frosmoth's Ice Scales -> chosen Shield Dust; Persian-Alola's Fur Coat -> chosen Rattled;
 // Rhyperior's Solid Rock -> chosen Lightning Rod; Araquanid's Water Bubble -> chosen Water Absorb).
+// The priority granters (Batch Q) free two sets: Talonflame's Gale Wings sets take a complementary REAL slot
+// (chosen Flame Body, a :x: pick), and Comfey (whose Triage and Natural Cure are both now innate) repurposes its
+// innate-redundant slot-2 Natural Cure to a chosen Sweet Veil — an already-implemented :white_check_mark: innate
+// (stable) it lacks natively, keeping its doubles team awake.
 // (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
 // Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
@@ -16040,7 +16045,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_GALE_WINGS,
+        .ability = ABILITY_FLAME_BODY, // Gale Wings now innate; chosen Flame Body burns contact attackers
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16080,7 +16085,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLARE_BLITZ,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_GALE_WINGS,
+        .ability = ABILITY_FLAME_BODY, // Gale Wings now innate; chosen Flame Body burns contact attackers
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18533,7 +18538,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0764 (innate Levitate)
+    // 0764 (innate Levitate + Triage)
     {
         .species = SPECIES_COMFEY,
         .tags = FORMAT_DOUBLES,
@@ -18545,7 +18550,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_TRIAGE,
+        .ability = ABILITY_SWEET_VEIL, // Triage now innate; chosen Sweet Veil keeps the doubles team awake
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18565,7 +18570,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_TRIAGE,
+        .ability = ABILITY_SWEET_VEIL, // Triage now innate; chosen Sweet Veil keeps the doubles team awake
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

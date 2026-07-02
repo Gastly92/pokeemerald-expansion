@@ -945,6 +945,143 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor Prankster (Aipom) gets in
     }
 }
 
+// ─── Innate Gale Wings (Flying moves get +1 priority at full HP) ─────────────────
+// Talonflame carries Gale Wings as its Hidden Ability, so a build can pick a different
+// chosen ability (Flame Body) and only the innate supplies Gale Wings — that's what makes
+// the innate observable. Gale Wings is a clean upside, so the innate is a 1:1 copy.
+
+// The signature effect: a slower holder at full HP moves first with a Flying move. The
+// feature-off leg proves the priority comes only from the innate (stock: faster mon first).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Gale Wings gives the holder's Flying moves +1 priority")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TALONFLAME, ABILITY_GALE_WINGS));
+        ASSUME(GetMoveType(MOVE_AERIAL_ACE) == TYPE_FLYING);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_TALONFLAME) { Speed(5); Ability(ABILITY_FLAME_BODY); } // chosen Flame Body; Gale Wings only as innate
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_AERIAL_ACE); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        if (enabled) {
+            // innate Gale Wings elevates Aerial Ace: the slower Talonflame moves first
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_AERIAL_ACE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        } else {
+            // feature off: no innate, the faster Wobbuffet moves first
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_AERIAL_ACE, opponent);
+        }
+    }
+}
+
+// 1:1 semantics: Gale Wings is a clean upside, so the innate copies the real ability's
+// full-HP gate (B_GALE_WINGS >= GEN_7) exactly — below full HP it grants no priority.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Gale Wings honors the full-HP gate like the real ability")
+{
+    u32 hp;
+    PARAMETRIZE { hp = 100; } // full HP: innate grants priority
+    PARAMETRIZE { hp = 99;  } // below full HP (Gen 7+): no priority
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TALONFLAME, ABILITY_GALE_WINGS));
+        ASSUME(GetMoveType(MOVE_AERIAL_ACE) == TYPE_FLYING);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_GALE_WINGS, GEN_7);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_TALONFLAME) { Speed(5); Ability(ABILITY_FLAME_BODY); HP(hp); MaxHP(100); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_AERIAL_ACE); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        if (hp == 100) {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_AERIAL_ACE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        } else {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_AERIAL_ACE, opponent);
+        }
+    }
+}
+
+// Suppression parity: Gastro Acid disables the innate exactly like a real ability, so the
+// priority boost is gone and the faster mon moves first again.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Gale Wings' priority")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TALONFLAME, ABILITY_GALE_WINGS));
+        ASSUME(GetMoveType(MOVE_AERIAL_ACE) == TYPE_FLYING);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_TALONFLAME) { Speed(5); Ability(ABILITY_FLAME_BODY); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); } // suppresses Talonflame's abilities, the innate Gale Wings included
+        TURN { MOVE(opponent, MOVE_AERIAL_ACE); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Gastro Acid!");
+        // turn 2: with the innate suppressed, Aerial Ace is no longer elevated, so the
+        // faster Wobbuffet moves first
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_AERIAL_ACE, opponent);
+    }
+}
+
+// ─── Innate Triage (healing moves get +3 priority) ──────────────────────────────
+// Comfey carries Triage as a normal ability, so a build can pick a different chosen
+// ability (Flower Veil) and only the innate supplies Triage. Triage is a clean upside,
+// so the innate is a 1:1 copy.
+
+// The signature effect: a slower holder moves first with a healing move. The feature-off
+// leg proves the priority comes only from the innate (stock: faster mon first).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Triage gives the holder's healing moves +3 priority")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_COMFEY, ABILITY_TRIAGE));
+        ASSUME(IsHealingMove(MOVE_SYNTHESIS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_COMFEY) { Speed(5); Ability(ABILITY_FLOWER_VEIL); HP(50); MaxHP(100); } // chosen Flower Veil; Triage only as innate
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SYNTHESIS); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        if (enabled) {
+            // innate Triage elevates Synthesis: the slower Comfey moves first
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_SYNTHESIS, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        } else {
+            // feature off: no innate, the faster Wobbuffet moves first
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_SYNTHESIS, opponent);
+        }
+    }
+}
+
+// Suppression parity: Gastro Acid disables the innate exactly like a real ability, so the
+// priority boost is gone and the faster mon moves first again.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Triage's priority")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_COMFEY, ABILITY_TRIAGE));
+        ASSUME(IsHealingMove(MOVE_SYNTHESIS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        OPPONENT(SPECIES_COMFEY) { Speed(5); Ability(ABILITY_FLOWER_VEIL); HP(50); MaxHP(100); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); } // suppresses Comfey's abilities, the innate Triage included
+        TURN { MOVE(opponent, MOVE_SYNTHESIS); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Gastro Acid!");
+        // turn 2: with the innate suppressed, Synthesis is no longer elevated, so the
+        // faster Wobbuffet moves first
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SYNTHESIS, opponent);
+    }
+}
+
 // ─── AI awareness of an innate Unaware (off-field setup heuristic) ──────────────
 // Companion to the chosen-Unaware test "AI won't boost stats against opponent with Unaware"
 // (test/battle/ai/ai.c): the AI shouldn't waste a Swords Dance against a foe whose Unaware
@@ -4350,6 +4487,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_SUPER_LUCK, ABILITY_SNIPER, ABILITY_MERCILESS,
         ABILITY_SHIELD_DUST, ABILITY_TINTED_LENS, ABILITY_SCRAPPY, ABILITY_WONDER_SKIN,
         ABILITY_TANGLED_FEET,
+        ABILITY_GALE_WINGS, ABILITY_TRIAGE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

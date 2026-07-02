@@ -402,6 +402,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LYCANROC_DUSK, 1,
         ABILITY_SAND_RUSH
     },
+    { // 0764
+        // Comfey's Triage is now innate (and its Natural Cure was already innate), so its slot-2 Natural
+        // Cure — now innate-redundant and unpinned by any test — takes Sweet Veil, an already-implemented
+        // :white_check_mark: innate (stable, like Slurpuff's Unaware) that Comfey does not carry innately and
+        // is thematic for the flower-lei Pokemon: its soothing aroma keeps the doubles team from being put
+        // to sleep. (Slot 1 Triage stays intact — upstream upper_hand/ai_doubles tests pin it.)
+        SPECIES_COMFEY, 2,
+        ABILITY_SWEET_VEIL
+    },
     { // 0776
         SPECIES_TURTONATOR, 1,
         ABILITY_FLAME_BODY

@@ -4778,7 +4778,12 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
     {
         priority = 0;
     }
-    else if (ability == ABILITY_GALE_WINGS
+    // FORK: innate-aware Gale Wings (FEATURE_INNATE_ABILITIES). IsInnateActive is
+    // feature-gated and species-based, so with the feature off this is a strict no-op.
+    // Gale Wings is a clean upside (the full-HP gate is a restriction on the ability, not
+    // a cost to the holder), so the innate is a 1:1 copy. The AI's turn-order prediction
+    // runs this same calc keyed off the real battler, so it's innate-aware for free.
+    else if ((ability == ABILITY_GALE_WINGS || IsInnateActive(battler, ABILITY_GALE_WINGS))
           && (GetConfig(B_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
           && GetMoveType(move) == TYPE_FLYING)
     {
@@ -4808,7 +4813,9 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
     {
         priority++;
     }
-    else if (ability == ABILITY_TRIAGE && IsHealingMove(move))
+    // FORK: innate-aware Triage (FEATURE_INNATE_ABILITIES) — 1:1 clean-upside copy, same
+    // reasoning as Gale Wings above (no-op with the feature off; AI turn-order is free).
+    else if ((ability == ABILITY_TRIAGE || IsInnateActive(battler, ABILITY_TRIAGE)) && IsHealingMove(move))
     {
         priority += 3;
     }
