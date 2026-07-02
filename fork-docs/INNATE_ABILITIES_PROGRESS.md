@@ -25,7 +25,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Color Change | The Pokémon's type becomes the type of the move used on it. |
 | :white_check_mark: | Immunity | The Pokémon cannot be poisoned or badly poisoned. |
 | :x: | Flash Fire | Fire-type moves do not work on the Pokémon. Instead, they give the Pokémon the Flash Fire status. |
-| :white_large_square: | Shield Dust | The Pokémon is immune to additional effects from attacks. |
+| :white_check_mark: | Shield Dust | The Pokémon is immune to additional effects from attacks. |
 | :white_large_square: | Own Tempo | The Pokémon cannot become confused and is unaffected by Intimidate. |
 | :white_large_square: | Suction Cups | The Pokémon is unaffected by the moves and held items of other Pokémon that would force it to switch out of battle. |
 | :white_large_square: | Intimidate | When the Pokémon enters a battle, it lowers the Attack stats of opponents by 1 stage. |
@@ -83,7 +83,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Pure Power | Doubles the power of the Pokémon's physical moves. |
 | :white_check_mark: | Shell Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :x: | Air Lock | Eliminates the effects of weather. |
-| :white_large_square: | Tangled Feet | Doubles the Pokémon's evasiveness if it is confused. |
+| :white_check_mark: | Tangled Feet | Doubles the Pokémon's evasiveness if it is confused. |
 | :x: | Motor Drive | Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage. |
 | :x: | Rivalry | Boosts the power of the Pokémon's moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon's gender is unknown. |
 | :white_large_square: | Steadfast | When the Pokémon flinches, its Speed stat is boosted by 1 stage. |
@@ -116,10 +116,10 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Anticipation | When the Pokémon enters a battle, it senses whether the opponents know any one-hit KO moves or moves that are super effective against it. |
 | :white_large_square: | Forewarn | When it enters a battle, the Pokémon can tell one of the moves an opposing Pokémon has. |
 | :white_check_mark: | Unaware | The Pokémon ignores the target's stat changes when attacking, and ignores the attacker's stat changes when being attacked. It cannot ignore changes to the Speed stat, however. |
-| :white_large_square: | Tinted Lens | The Pokémon can use "not very effective" moves to deal regular damage. |
+| :white_check_mark: | Tinted Lens | The Pokémon can use "not very effective" moves to deal regular damage. |
 | :white_check_mark: | Filter | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :x: | Slow Start | For five turns, the Pokémon's Attack and Speed stats are halved. |
-| :white_large_square: | Scrappy | The Pokémon can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate. |
+| :white_check_mark: | Scrappy | The Pokémon can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate. |
 | :x: | Storm Drain | The Pokémon draws in all Water-type moves. Instead of taking damage from them, its Sp. Atk stat is boosted. |
 | :white_large_square: | Ice Body | The Pokémon has 1/16 of its max HP restored at the end of every turn in snow. |
 | :white_check_mark: | Solid Rock | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
@@ -153,7 +153,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Regenerator | The Pokémon has 1/3 of its max HP restored when it switches out of battle. |
 | :white_large_square: | Big Pecks | The Pokémon's Defense stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Sand Rush | Doubles the Pokémon's Speed stat in a sandstorm. |
-| :white_large_square: | Wonder Skin | Makes status moves more likely to miss the Pokémon. |
+| :white_check_mark: | Wonder Skin | Makes status moves more likely to miss the Pokémon. |
 | :white_check_mark: | Analytic | Boosts the power of the Pokémon's moves by 30% when the Pokémon is the last to move that turn. |
 | :x: | Illusion | The Pokémon enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move. |
 | :x: | Imposter | The Pokémon transforms into the Pokémon in front of it. It also copies all of that Pokémon's stats apart from its HP. |

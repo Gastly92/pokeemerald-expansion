@@ -7989,6 +7989,14 @@ static inline uq4_12_t GetAttackerAbilitiesModifier(enum BattlerId battlerAtk, u
     if (isCrit && abilityAtk != ABILITY_SNIPER
      && GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(battlerAtk, ABILITY_SNIPER))
         return UQ_4_12(1.5);
+    // FORK: an innate Tinted Lens (FEATURE_INNATE_ABILITIES) doubles the holder's resisted-move damage
+    // exactly like the real ability — a clean upside, so a 1:1 copy with no pure-boon divergence. The
+    // not-very-effective guard keeps the GetConfig()/IsInnateActive() lookups off the neutral/SE hot path;
+    // the chosen-ability switch above is untouched and abilityAtk != ABILITY_TINTED_LENS guards against
+    // double-applying. On-field AI damage prediction is correct for free (shared damage calc).
+    if (typeEffectivenessModifier <= UQ_4_12(0.5) && abilityAtk != ABILITY_TINTED_LENS
+     && GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(battlerAtk, ABILITY_TINTED_LENS))
+        return UQ_4_12(2.0);
     return UQ_4_12(1.0);
 }
 
@@ -8829,6 +8837,17 @@ static inline void MulByTypeEffectiveness(struct DamageContext *ctx, uq4_12_t *m
         mod = UQ_4_12(1.0);
         if (ctx->updateFlags)
             RecordAbilityBattle(ctx->battlerAtk, ctx->abilities[ctx->battlerAtk]);
+    }
+    // FORK: an innate Scrappy (FEATURE_INNATE_ABILITIES) lets the holder's Normal/Fighting moves hit
+    // Ghost-types exactly like the real ability — a clean upside, so a 1:1 copy. Reached only when the
+    // chosen-ability branch above didn't already lift the immunity, so a real Scrappy/Mind's Eye path is
+    // byte-for-byte untouched; identity bookkeeping (RecordAbilityBattle) is skipped — the innate is not
+    // the mon's displayed ability. On-field AI type prediction is correct for free (shared calc).
+    else if ((ctx->moveType == TYPE_FIGHTING || ctx->moveType == TYPE_NORMAL) && defType == TYPE_GHOST
+        && mod == UQ_4_12(0.0)
+        && IsInnateActive(ctx->battlerAtk, ABILITY_SCRAPPY))
+    {
+        mod = UQ_4_12(1.0);
     }
 
     if (ctx->moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gBattleMons[ctx->battlerDef].volatiles.miracleEye && mod == UQ_4_12(0.0))
@@ -10725,6 +10744,16 @@ bool32 IsMoveEffectBlockedByTarget(enum Ability ability)
         RecordItemEffectBattle(gBattlerTarget, HOLD_EFFECT_COVERT_CLOAK);
         return TRUE;
     }
+    // FORK: an innate Shield Dust (FEATURE_INNATE_ABILITIES) blocks the additional effects of moves used
+    // against the holder exactly like the real ability — a clean upside, so a 1:1 copy. The chosen-ability
+    // branch above already returned for a real Shield Dust, so that path is untouched; identity bookkeeping
+    // (RecordAbilityBattle) is skipped — the innate is not the mon's displayed ability. IsInnateActive
+    // supplies suppression parity (Shield Dust is breakable, so an attacker's Mold Breaker pierces it, same
+    // as the callers' GetBattlerAbility() path). Uses gBattlerTarget just like the upstream branches above.
+    else if (IsInnateActive(gBattlerTarget, ABILITY_SHIELD_DUST))
+    {
+        return TRUE;
+    }
 
     return FALSE;
 }
@@ -11192,7 +11221,12 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     if ((attackerWeather & B_WEATHER_SUN) && MoveHas50AccuracyInSun(move))
         moveAcc = 50;
     // Check Wonder Skin.
-    if (defAbility == ABILITY_WONDER_SKIN && IsBattleMoveStatus(move) && moveAcc > 50)
+    // FORK: an innate Wonder Skin (FEATURE_INNATE_ABILITIES) caps incoming status moves at 50% accuracy
+    // exactly like the real ability (1:1 clean upside). The status-move/50% guards run first so the
+    // IsInnateActive lookup stays off the common damaging-move path; the assignment is idempotent, so no
+    // double-application guard is needed. IsInnateActive supplies suppression parity (breakable).
+    if (IsBattleMoveStatus(move) && moveAcc > 50
+     && (defAbility == ABILITY_WONDER_SKIN || IsInnateActive(battlerDef, ABILITY_WONDER_SKIN)))
         moveAcc = 50;
 
     calc = gAccuracyStageRatios[buff].dividend * moveAcc;
@@ -11244,6 +11278,13 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     if (defAbility != ABILITY_SNOW_CLOAK && (attackerWeather & B_WEATHER_ICY_ANY)
      && IsInnateActive(battlerDef, ABILITY_SNOW_CLOAK))
         calc = (calc * 80) / 100;
+    // FORK: an innate Tangled Feet doubles the holder's evasion while confused exactly like the real
+    // ability (1:1 clean upside — the boost only ever helps; confusion itself isn't the ability's doing).
+    // Same guard pattern as Sand Veil/Snow Cloak above: a real Tangled Feet (defAbility case) never
+    // applies twice, and IsInnateActive supplies suppression parity (breakable).
+    if (defAbility != ABILITY_TANGLED_FEET && gBattleMons[battlerDef].volatiles.confusionTurns
+     && IsInnateActive(battlerDef, ABILITY_TANGLED_FEET))
+        calc = (calc * 50) / 100;
 
     // Attacker's ally's ability
     enum BattlerId atkAlly = BATTLE_PARTNER(battlerAtk);
@@ -11371,7 +11412,7 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
 
     if (IsBattleMoveStatus(move))
     {
-        if (defAbility == ABILITY_WONDER_SKIN)
+        if (defAbility == ABILITY_WONDER_SKIN || IsInnateActive(battlerDef, ABILITY_WONDER_SKIN)) // FORK: credit an innate Wonder Skin too
             tax++;
     }
     else
@@ -11385,7 +11426,8 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
         if ((weather & B_WEATHER_ICY_ANY) // FORK: credit an innate Snow Cloak too
          && (defAbility == ABILITY_SNOW_CLOAK || IsInnateActive(battlerDef, ABILITY_SNOW_CLOAK)))
             tax++;
-        if (defAbility == ABILITY_TANGLED_FEET && gBattleMons[battlerDef].volatiles.confusionTurns)
+        if ((defAbility == ABILITY_TANGLED_FEET || IsInnateActive(battlerDef, ABILITY_TANGLED_FEET)) // FORK: credit an innate Tangled Feet too
+         && gBattleMons[battlerDef].volatiles.confusionTurns)
             tax++;
     }
     return tax;

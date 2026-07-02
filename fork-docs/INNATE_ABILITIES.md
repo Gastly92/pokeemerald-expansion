@@ -1373,3 +1373,81 @@ Ability(ABILITY_SUPER_LUCK); }`); and (2) every added row lengthens the linear o
 on its real Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simply equals the innate
 (redundant but harmless; the effect sites guard against double-applying), so only the second-ability *upgrade*
 is forgone. Revisit if the override lookup is made non-linear or feature-gated.
+
+### ABILITY_SHIELD_DUST / ABILITY_TINTED_LENS / ABILITY_SCRAPPY / ABILITY_WONDER_SKIN / ABILITY_TANGLED_FEET
+
+The "accuracy / type-effectiveness / effect-chance modifiers" (Batch P). All five are **clean upsides**
+that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon divergence. (Tangled
+Feet's trigger — being confused — is a bad state, but the *ability's own effect* only ever helps; the
+innate doesn't cause the confusion.) Wiring:
+
+- **Shield Dust** (blocks the additional effects of moves used *against* the holder) — one engine
+  chokepoint: `IsMoveEffectBlockedByTarget` (`src/battle_util.c`) gains an
+  `IsInnateActive(gBattlerTarget, ABILITY_SHIELD_DUST)` else-branch after the chosen-ability /
+  Covert Cloak branches (which stay byte-for-byte untouched); identity bookkeeping
+  (`RecordAbilityBattle`) is skipped for the innate. Every blocked source funnels through this
+  predicate — move secondaries (`SetMoveEffect`), ability riders (Poison Touch / Toxic Chain), Fling,
+  the Sparkling-Aria spread carve-out, and King's Rock-style item flinches — so one clause covers all.
+- **Tinted Lens** (2x damage on not-very-effective moves) — `GetAttackerAbilitiesModifier`
+  (`src/battle_util.c`), an innate clause after the chosen-ability switch, gated
+  `typeEffectivenessModifier <= 0.5 && abilityAtk != ABILITY_TINTED_LENS &&
+  GetConfig(FEATURE_INNATE_ABILITIES) && IsInnateActive(...)` — the NVE guard keeps the lookups off
+  the neutral/SE hot path, mirroring the innate-Sniper clause above it.
+- **Scrappy, Ghost-hit half** (Normal/Fighting hit Ghost-types) — `MulByTypeEffectiveness`
+  (`src/battle_util.c`), an else-if beside the chosen Scrappy/Mind's Eye branch that lifts the 0x
+  immunity for an innate Scrappy (no `RecordAbilityBattle` — not the displayed ability).
+- **Scrappy, Intimidate-immunity half (GEN_8+)** — `IsIntimidateBlocked`
+  (`src/battle_stat_change.c`): the existing innate-Oblivious block is generalized to a small
+  `innateImmunity` pick (Oblivious first, then Scrappy), mirroring the switch cases and overwriting
+  the pop-up/record to the innate (the Levitate/Sturdy `abilityPopupOverwrite` precedent). This half
+  did NOT need the Batch L switch-in driver — that driver is only for *casting* Intimidate as an
+  innate; *defending* against a real Intimidate is a passive trait at this site.
+- **Wonder Skin** (incoming status moves capped at 50% accuracy) — `GetTotalAccuracy`
+  (`src/battle_util.c`), an innate clause beside the `defAbility` test (reordered so the
+  status-move/`moveAcc > 50` guards run first), plus the `GetDeterministicMoveTargetPPTax` status
+  branch (+1 PP on status moves under `DETERMINISTIC_ACCURACY_EVASION`, like the Sand Veil precedent).
+- **Tangled Feet** (evasion doubled while confused) — `GetTotalAccuracy`, a guarded block after the
+  defender-ability switch (`defAbility != ABILITY_TANGLED_FEET && confused && IsInnateActive(...)`,
+  the exact Sand Veil / Snow Cloak pattern), plus the offensive branch of
+  `GetDeterministicMoveTargetPPTax` (+1 PP while confused).
+
+Suppression parity holds via `IsInnateActive()`: Shield Dust, Scrappy, Wonder Skin and Tangled Feet are
+breakable, so an attacker's Mold Breaker pierces them exactly like the real abilities (Tinted Lens is
+attacker-side, so only Gastro Acid / Neutralizing Gas / not-on-field apply).
+
+**AI.** Tinted Lens and the Scrappy Ghost-hit live in the shared damage/type calc, so the AI's damage
+and effectiveness prediction credits them for FREE (keyed off the real battler). Wonder Skin / Tangled
+Feet accuracy flows through the shared `GetTotalAccuracy` the AI's accuracy table uses — also free.
+The dedicated AI *effect* reads were wired by hand (`grep src/battle_ai_*.c`):
+- Shield Dust (the AI as attacker discounting its own secondaries): `IsAdditionalEffectBlocked`,
+  the flinch-scoring reads in `ShouldTryToFlinch` + the Dynamax flinch checker, the stat-drop
+  secondary in `CanLowerStat`, and the damaging-hazard-move gate in `AI_ShouldSetUpHazards`
+  (all `src/battle_ai_util.c`), each crediting an innate Shield Dust beside the chosen-ability read
+  (under the same explicit Mold-Breaker guard where one exists).
+- Scrappy: the Foresight-is-pointless score (`src/battle_ai_main.c`) and the Intimidate-benefit
+  switch check (`src/battle_ai_switch.c`, extending the innate-Oblivious clause).
+
+**Species (canon-only, no flavor picks):** every species whose ability data carries the ability in any
+slot, in dex order, merged into existing rows where the species already carries an innate. Shield Dust:
+the Caterpie, Weedle, Wurmple(+Dustox), Scatterbug/Spewpa/Vivillon, Cutiefly/Ribombee, Snom/Frosmoth
+lines and Venomoth (Spewpa's new row also carries its canon Compound Eyes, matching its line-mates).
+Tinted Lens: Butterfree(+Gmax), Venonat/Venomoth, Hoothoot/Noctowl, Illumise, Yanmega, Sigilyph,
+Braviary-Hisui, Nymble/Lokix. Scrappy: Kangaskhan(+Mega, mirroring the base), Farfetch'd-Galar/
+Sirfetch'd, Miltank, Taillow/Swellow, Loudred/Exploud, Herdier/Stoutland, Pancham/Pangoro,
+Decidueye-Hisui, Flamigo. **Mega Lopunny is deliberately omitted**: its only — and therefore always
+chosen — ability IS Scrappy, so an innate could never be observed (the sole-ability-redundant rule).
+Wonder Skin: Skitty/Delcatty, Venomoth, Sigilyph, Bruxish. Tangled Feet: the Pidgey line (+Mega
+Pidgeot, mirroring the base), Doduo/Dodrio, Spinda, Chatot, Mr. Rime, Flamigo.
+
+**Frontier (Step 3.5):** these abilities were pending, so many sets had spent their `.ability` slot on
+them. Per the Batch O override-table rule (`species_ability_overrides.c` is scanned unconditionally on
+every ability lookup and is not feature-gated — new rows cost AI-budget time and break upstream tests
+that select the replaced real ability), **no override rows were added**: only sets whose species has a
+complementary **real** slot are re-pointed — Kangaskhan → Inner Focus, Miltank → Sap Sipper,
+Exploud → Soundproof, Sigilyph → Magic Guard, Braviary-Hisui → Sheer Force, Pangoro → Mold Breaker,
+Flamigo → Costar — and the rest (Butterfree, Venomoth, Dodrio, Noctowl, Dustox, Swellow, Illumise,
+Yanmega, Decidueye-Hisui, Ribombee, Sirfetch'd, Frosmoth, Lokix) stay on their now-innate-redundant
+real ability, which keeps working unchanged (the effect sites guard against double-applying).
+Inner Focus / Magic Guard / Mold Breaker are still `:white_large_square:` pending, so those three
+re-points get revisited when their batches land (real-slot picks, unlike override rows, are allowed
+to be pending — the alternatives were dead slots).

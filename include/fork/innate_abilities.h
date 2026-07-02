@@ -31,7 +31,9 @@
 //   WATER_BUBBLE (defensive damage reducers, Batch B),
 //   GUTS / MARVEL_SCALE / QUICK_FEET / TOXIC_BOOST / FLARE_BOOST (status-conditional
 //   stat boosts, Batch N),
-//   SUPER_LUCK / SNIPER / MERCILESS (crit-rate / crit-damage modifiers, Batch O).
+//   SUPER_LUCK / SNIPER / MERCILESS (crit-rate / crit-damage modifiers, Batch O),
+//   SHIELD_DUST / TINTED_LENS / SCRAPPY / WONDER_SKIN / TANGLED_FEET (accuracy /
+//   type-effectiveness / effect-chance modifiers, Batch P).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

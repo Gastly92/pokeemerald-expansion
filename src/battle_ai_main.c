@@ -4771,7 +4771,8 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
         }
         break;
     case EFFECT_FORESIGHT:
-        if (aiData->abilities[battlerAtk] == ABILITY_SCRAPPY || aiData->abilities[battlerAtk] == ABILITY_MINDS_EYE)
+        if (aiData->abilities[battlerAtk] == ABILITY_SCRAPPY || aiData->abilities[battlerAtk] == ABILITY_MINDS_EYE
+         || IsInnateActive(battlerAtk, ABILITY_SCRAPPY)) // FORK: an innate Scrappy already hits Ghosts, so Foresight is pointless
             break;
         else if (gBattleMons[battlerDef].statStages[STAT_EVASION] > DEFAULT_STAT_STAGE
          || (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST)

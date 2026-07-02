@@ -93,7 +93,11 @@
 // or a status-conditional stat boost (Guts +50% physical Atk while statused & negates burn's physical cut /
 // Marvel Scale +50% Def while statused / Quick Feet +50% Speed while statused & ignores the paralysis penalty /
 // Toxic Boost +50% physical while poisoned / Flare Boost +50% special while burned),
-// or a crit-rate / crit-damage modifier (Super Luck +1 crit stage / Sniper crits deal x2.25 / Merciless auto-crits a poisoned target)
+// or a crit-rate / crit-damage modifier (Super Luck +1 crit stage / Sniper crits deal x2.25 / Merciless auto-crits a poisoned target),
+// or an accuracy / type-effectiveness / effect-chance modifier (Shield Dust blocks incoming moves' added effects /
+// Tinted Lens doubles resisted-move damage / Scrappy hits Ghosts with Normal & Fighting and shrugs off Intimidate /
+// Wonder Skin caps incoming status moves at 50% accuracy — a PP tax under DETERMINISTIC_ACCURACY_EVASION /
+// Tangled Feet doubles evasion while confused)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -361,7 +365,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_TINTED_LENS, // Compound Eyes now innate; chosen Tinted Lens makes resisted coverage hit for neutral
+        .ability = ABILITY_TINTED_LENS, // now innate (as are Compound Eyes); left redundant — no complementary real slot (Batch O override-table rule)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -381,7 +385,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_TAILWIND
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no complementary real slot
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -1180,7 +1184,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_TINTED_LENS, // now innate (as are Shield Dust & Wonder Skin); left redundant — no complementary real slot
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1200,7 +1204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUIVER_DANCE,
             MOVE_ROOST
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no complementary real slot
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2082,7 +2086,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_TANGLED_FEET, // Early Bird now innate; chosen Tangled Feet
+        .ability = ABILITY_TANGLED_FEET, // now innate (as is Early Bird); left redundant — its only other real slot is Run Away
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2102,7 +2106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DOUBLE_EDGE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TANGLED_FEET, // Early Bird now innate; chosen Tangled Feet
+        .ability = ABILITY_TANGLED_FEET, // now innate; left redundant — its only other real slot is Run Away
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2945,7 +2949,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_POWER_UP_PUNCH
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_INNER_FOCUS, // Early Bird & Scrappy now innate; chosen Inner Focus (its real slot 2) blocks flinches
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2965,7 +2969,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_INNER_FOCUS, // Early Bird & Scrappy now innate; chosen Inner Focus
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4479,7 +4483,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_TINTED_LENS, // now innate (as are Insomnia & Keen Eye); left redundant — no complementary real slot
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4499,7 +4503,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_TINTED_LENS, // Insomnia & Keen Eye now innate; chosen Tinted Lens
+        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no complementary real slot
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6280,7 +6284,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_SAP_SIPPER, // Thick Fat & Scrappy now innate; chosen Sap Sipper (its real HA) turns Grass hits into Attack boosts
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7054,7 +7058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SHIELD_DUST,
+        .ability = ABILITY_SHIELD_DUST, // now innate (as is Compound Eyes); left redundant — no complementary real slot
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7200,7 +7204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_SCRAPPY, // Guts now innate; Scrappy lets Facade hit Ghosts
+        .ability = ABILITY_SCRAPPY, // now innate (as is Guts); left redundant — no complementary real slot
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7220,7 +7224,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STEEL_WING
         },
-        .ability = ABILITY_SCRAPPY, // Guts now innate; Scrappy lets it hit Ghosts
+        .ability = ABILITY_SCRAPPY, // now innate; left redundant — no complementary real slot
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7556,7 +7560,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_SOUNDPROOF, // Scrappy now innate; chosen Soundproof (its real slot 0) blocks opposing sound moves
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7576,7 +7580,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SURF,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_SOUNDPROOF, // Scrappy now innate; chosen Soundproof
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7959,7 +7963,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_BUG_BUZZ
         },
-        .ability = ABILITY_TINTED_LENS, // Prankster now innate; chosen Tinted Lens powers up its Bug Buzz
+        .ability = ABILITY_TINTED_LENS, // now innate (as are Oblivious & Prankster); left redundant — no complementary real slot
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -11374,7 +11378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_PROTECT
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_TINTED_LENS, // now innate (as is Speed Boost); left redundant — its only other real slot is Frisk
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11394,7 +11398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ANCIENT_POWER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_TINTED_LENS, // Speed Boost now innate; chosen Tinted Lens boosts resisted hits
+        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — its only other real slot is Frisk
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -13680,7 +13684,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_ROOST
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_MAGIC_GUARD, // Wonder Skin & Tinted Lens now innate; chosen Magic Guard (its real slot 1) blocks Toxic/hazard chip
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14918,7 +14922,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_SHEER_FORCE, // Keen Eye & Tinted Lens now innate; chosen Sheer Force powers up Hurricane / Psychic / Heat Wave
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14938,7 +14942,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_SHEER_FORCE, // Keen Eye & Tinted Lens now innate; chosen Sheer Force (also skips Life Orb recoil on boosted moves)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16224,7 +16228,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SCRAPPY, // Iron Fist now innate; chosen Scrappy
+        .ability = ABILITY_MOLD_BREAKER, // Iron Fist & Scrappy now innate; chosen Mold Breaker (its real slot 1) punches through abilities
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16244,7 +16248,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_MOLD_BREAKER, // Iron Fist & Scrappy now innate; chosen Mold Breaker
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17700,7 +17704,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_SCRAPPY, // now innate (as is latched Overgrow); left redundant — no complementary real slot
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17720,7 +17724,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_ROOST
         },
-        .ability = ABILITY_SCRAPPY, // Overgrow now innate (latched); chosen Scrappy
+        .ability = ABILITY_SCRAPPY, // now innate; left redundant — no complementary real slot
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -18058,7 +18062,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_STUN_SPORE
         },
-        .ability = ABILITY_SHIELD_DUST, // Sweet Veil now innate; chosen Shield Dust
+        .ability = ABILITY_SHIELD_DUST, // now innate (as is Sweet Veil); left redundant — its only other real slot is Honey Gather
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18078,7 +18082,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_POLLEN_PUFF
         },
-        .ability = ABILITY_SHIELD_DUST,
+        .ability = ABILITY_SHIELD_DUST, // now innate; left redundant — its only other real slot is Honey Gather
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21342,7 +21346,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_FIRST_IMPRESSION
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_SCRAPPY, // now innate; left redundant — its only other real slot is the weak pending Steadfast
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21362,7 +21366,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_BRAVE_BIRD
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_SCRAPPY, // now innate; left redundant — its only other real slot is the weak pending Steadfast
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21534,7 +21538,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SHIELD_DUST, // Ice Scales now innate; chosen Shield Dust spares the sweeper from added effects
+        .ability = ABILITY_SHIELD_DUST, // now innate (as is Ice Scales); left redundant — no complementary real slot
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21554,7 +21558,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_SHIELD_DUST,
+        .ability = ABILITY_SHIELD_DUST, // now innate; left redundant — no complementary real slot
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23053,7 +23057,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_LIFE,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_TINTED_LENS, // now innate (as is Swarm); left redundant — no complementary real slot
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23073,7 +23077,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_TINTED_LENS,
+        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no complementary real slot
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24058,7 +24062,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THROAT_CHOP,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_COSTAR, // Scrappy & Tangled Feet now innate; chosen Costar (its real HA) copies the ally's stat changes in doubles
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24078,7 +24082,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_SCRAPPY,
+        .ability = ABILITY_COSTAR, // Scrappy & Tangled Feet now innate; chosen Costar
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,

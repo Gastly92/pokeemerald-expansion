@@ -4022,6 +4022,243 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sniper boosts critical-hit 
     }
 }
 
+// ---- Batch P: accuracy / type-effectiveness / effect-chance modifiers ----
+// Shield Dust / Tinted Lens / Scrappy / Wonder Skin / Tangled Feet — all 1:1 clean-upside copies wired
+// as calc clauses (src/battle_util.c; Scrappy's Intimidate-immunity half in src/battle_stat_change.c).
+// Each test runs the holder on a chosen ability that is NOT the tested one, so the effect is
+// attributable solely to the innate.
+
+// Shield Dust blocks the additional effects of moves used against the holder, at the
+// IsMoveEffectBlockedByTarget chokepoint. Frosmoth's chosen ability here is Ice Scales (its real
+// slot 2), so the block is solely the innate's.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Shield Dust blocks a move's additional effect")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FROSMOTH, ABILITY_SHIELD_DUST));
+        ASSUME(MoveHasAdditionalEffectWithChance(MOVE_NUZZLE, MOVE_EFFECT_PARALYSIS, 100) == TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_NUZZLE); }
+        OPPONENT(SPECIES_FROSMOTH) { Ability(ABILITY_ICE_SCALES); } // chosen Ice Scales, NOT Shield Dust
+    } WHEN {
+        TURN { MOVE(player, MOVE_NUZZLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NUZZLE, player);
+        HP_BAR(opponent);
+        if (enabled)
+            NONE_OF { MESSAGE("The opposing Frosmoth is paralyzed, so it may be unable to move!"); }
+        else
+            MESSAGE("The opposing Frosmoth is paralyzed, so it may be unable to move!");
+    }
+}
+
+// Suppression parity: Shield Dust is breakable, so an attacker's Mold Breaker pierces an innate
+// Shield Dust exactly as it would the real ability — the secondary lands.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Shield Dust")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_SHIELD_DUST].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_FROSMOTH, ABILITY_SHIELD_DUST));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_NUZZLE); }
+        OPPONENT(SPECIES_FROSMOTH) { Ability(ABILITY_ICE_SCALES); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_NUZZLE); }
+    } SCENE {
+        MESSAGE("The opposing Frosmoth is paralyzed, so it may be unable to move!");
+    }
+}
+
+// Tinted Lens doubles the holder's not-very-effective damage (GetAttackerAbilitiesModifier).
+// Yanmega's chosen ability here is Speed Boost (its real slot 0, damage-neutral), so the doubling is
+// solely the innate's. Bug Buzz into the pure-Fire Entei is resisted (0.5x) -> the innate restores 1x.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Tinted Lens doubles resisted-move damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_YANMEGA, ABILITY_TINTED_LENS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_YANMEGA) { Ability(ABILITY_SPEED_BOOST); Moves(MOVE_BUG_BUZZ); } // chosen Speed Boost, NOT Tinted Lens
+        OPPONENT(SPECIES_ENTEI);
+    } WHEN {
+        TURN { MOVE(player, MOVE_BUG_BUZZ); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(2.0), results[1].damage);
+    }
+}
+
+// Scrappy lifts the Ghost immunity to Normal/Fighting moves (MulByTypeEffectiveness). Kangaskhan's
+// chosen ability here is Inner Focus (its real slot 2), so the Ghost hit is solely the innate's.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Scrappy lets a Normal move hit a Ghost")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KANGASKHAN, ABILITY_SCRAPPY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KANGASKHAN) { Ability(ABILITY_INNER_FOCUS); Moves(MOVE_SCRATCH); } // chosen Inner Focus, NOT Scrappy
+        OPPONENT(SPECIES_GENGAR);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled)
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+            HP_BAR(opponent);
+        }
+        else
+        {
+            MESSAGE("It doesn't affect the opposing Gengar…");
+        }
+    }
+}
+
+// Scrappy's second half: the holder is unaffected by Intimidate (Gen 8+), mirrored for the innate at
+// IsIntimidateBlocked (src/battle_stat_change.c) with the pop-up overwritten to Scrappy. Miltank's
+// chosen ability here is Thick Fat (its real slot 0, not Intimidate-immune).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Scrappy prevents Intimidate (Gen8+)")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MILTANK, ABILITY_SCRAPPY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_UPDATED_INTIMIDATE, GEN_8);
+        PLAYER(SPECIES_MILTANK) { Ability(ABILITY_THICK_FAT); } // chosen Thick Fat, NOT Scrappy
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_EKANS) { Ability(ABILITY_INTIMIDATE); }
+    } WHEN {
+        TURN { SWITCH(opponent, 1); }
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_INTIMIDATE);
+        ABILITY_POPUP(player, ABILITY_SCRAPPY);
+        NONE_OF { ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); }
+        MESSAGE("Miltank's Attack was not lowered!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Wonder Skin caps incoming status moves at 50% accuracy (GetTotalAccuracy). Sigilyph's chosen
+// ability here is Magic Guard (its real slot 1 — it blocks the poison CHIP, not the status), so the
+// accuracy cap is solely the innate's.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Wonder Skin drops a status move to 50% accuracy")
+{
+    PASSES_RANDOMLY(1, 2, RNG_ACCURACY); // Toxic 90 acc -> 50 with the innate
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SIGILYPH, ABILITY_WONDER_SKIN));
+        ASSUME(GetMoveAccuracy(MOVE_TOXIC) == 90);
+        ASSUME(IsBattleMoveStatus(MOVE_TOXIC));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TOXIC); }
+        OPPONENT(SPECIES_SIGILYPH) { Ability(ABILITY_MAGIC_GUARD); } // chosen Magic Guard, NOT Wonder Skin
+    } WHEN {
+        TURN { MOVE(player, MOVE_TOXIC); }
+    } SCENE {
+        STATUS_ICON(opponent, badPoison: TRUE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Wonder Skin accuracy cap (stock behavior)")
+{
+    PASSES_RANDOMLY(9, 10, RNG_ACCURACY); // no innate -> Toxic stays at its native 90
+    GIVEN {
+        ASSUME(GetMoveAccuracy(MOVE_TOXIC) == 90);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TOXIC); }
+        OPPONENT(SPECIES_SIGILYPH) { Ability(ABILITY_MAGIC_GUARD); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TOXIC); }
+    } SCENE {
+        STATUS_ICON(opponent, badPoison: TRUE);
+    }
+}
+
+// Under DETERMINISTIC_ACCURACY_EVASION the Wonder Skin accuracy cap manifests as a +1 PP tax on
+// incoming STATUS moves (GetDeterministicMoveTargetPPTax), exactly like a real Wonder Skin.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_ACCURACY_EVASION an innate Wonder Skin taxes status-move PP")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; } // no innate -> base 1 PP only
+    PARAMETRIZE { enabled = TRUE; }  // innate Wonder Skin -> +1 PP on the status move
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SIGILYPH, ABILITY_WONDER_SKIN));
+        ASSUME(GetMovePP(MOVE_TOXIC) == 10);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TOXIC); }
+        OPPONENT(SPECIES_SIGILYPH) { Ability(ABILITY_MAGIC_GUARD); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TOXIC); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], enabled ? 8 : 9); // 10 - 1 base [- 1 innate Wonder Skin tax]
+    }
+}
+
+// Tangled Feet doubles the holder's evasion while it is confused (GetTotalAccuracy). Spinda's chosen
+// ability here is Contrary (its real slot 2 — Own Tempo, slot 0, would block the confusion the innate
+// needs). The WITH_RNG(RNG_CONFUSION, FALSE) keeps the confused holder from hitting itself so the
+// scripted turns stay deterministic.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Tangled Feet doubles evasion while confused")
+{
+    PASSES_RANDOMLY(1, 2, RNG_ACCURACY); // Pound 100 acc -> 50 vs the confused innate holder
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SPINDA, ABILITY_TANGLED_FEET));
+        ASSUME(GetMoveAccuracy(MOVE_POUND) == 100);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_POUND, MOVE_CONFUSE_RAY); }
+        OPPONENT(SPECIES_SPINDA) { Speed(50); Ability(ABILITY_CONTRARY); Moves(MOVE_CELEBRATE); } // chosen Contrary, NOT Tangled Feet
+    } WHEN {
+        TURN { MOVE(player, MOVE_CONFUSE_RAY); MOVE(opponent, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+    } SCENE {
+        HP_BAR(opponent);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Tangled Feet evasion (stock behavior)")
+{
+    PASSES_RANDOMLY(2, 2, RNG_ACCURACY); // no innate -> Pound always hits the confused target
+    GIVEN {
+        ASSUME(GetMoveAccuracy(MOVE_POUND) == 100);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_POUND, MOVE_CONFUSE_RAY); }
+        OPPONENT(SPECIES_SPINDA) { Speed(50); Ability(ABILITY_CONTRARY); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CONFUSE_RAY); MOVE(opponent, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+    } SCENE {
+        HP_BAR(opponent);
+    }
+}
+
+// Under DETERMINISTIC_ACCURACY_EVASION the Tangled Feet evasion manifests as a +1 PP tax on incoming
+// offensive moves while the holder is confused (GetDeterministicMoveTargetPPTax).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_ACCURACY_EVASION an innate Tangled Feet taxes the attacker's PP")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; } // no innate -> base 1 PP only
+    PARAMETRIZE { enabled = TRUE; }  // innate Tangled Feet while confused -> +1 PP
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SPINDA, ABILITY_TANGLED_FEET));
+        ASSUME(GetMovePP(MOVE_POUND) == 35);
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_POUND, MOVE_CONFUSE_RAY); }
+        OPPONENT(SPECIES_SPINDA) { Speed(50); Ability(ABILITY_CONTRARY); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CONFUSE_RAY); MOVE(opponent, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE, WITH_RNG(RNG_CONFUSION, FALSE)); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], enabled ? 33 : 34); // 35 - 1 base [- 1 innate Tangled Feet tax]
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -4053,6 +4290,8 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_GUTS, ABILITY_MARVEL_SCALE, ABILITY_QUICK_FEET, ABILITY_TOXIC_BOOST,
         ABILITY_FLARE_BOOST,
         ABILITY_SUPER_LUCK, ABILITY_SNIPER, ABILITY_MERCILESS,
+        ABILITY_SHIELD_DUST, ABILITY_TINTED_LENS, ABILITY_SCRAPPY, ABILITY_WONDER_SKIN,
+        ABILITY_TANGLED_FEET,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
