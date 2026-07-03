@@ -49,7 +49,8 @@ struct SpeciesAbilityOverride
 // only do it when nothing observes the slot (audit `Ability(ABILITY_X)` uses in test/battle/ first;
 // e.g. Kangaskhan's Scrappy and Vivillon's Shield Dust slots are pinned by upstream tests and must
 // stay). The rows above that repurpose real slots (Sceptile, Lopunny, Bronzong, Mamoswine, Beartic,
-// Carracosta, Scovillain, Sinistcha, Volbeat, Zangoose) were each audited this way.
+// Carracosta, Scovillain, Sinistcha, Volbeat, Zangoose, Pidgeot, Chatot, Crawdaunt, Klinklang,
+// Bombirdier) were each audited this way.
 static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 {
     { // 0003
@@ -62,6 +63,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // butterfly may poison/sleep/paralyze contact attackers, guarding its Quiver Dance setup.
         SPECIES_BUTTERFREE, 1,
         ABILITY_EFFECT_SPORE
+    },
+    { // 0018
+        // Pidgeot's three real abilities (Keen Eye, Tangled Feet, Big Pecks) are ALL now innate, so its innate-
+        // redundant slot-1 Tangled Feet -- unpinned by any test (audited) -- takes a chosen No Guard, :x: (never an
+        // innate -> stable) and its Mega's signature: Hurricane / Focus Blast never miss.
+        SPECIES_PIDGEOT, 1,
+        ABILITY_NO_GUARD
     },
     { // 0026
         // Raichu-Alola's only real ability (Surge Surfer) is now innate, so its empty slot 1 takes a
@@ -189,6 +197,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SOLROCK, 1,
         ABILITY_DROUGHT
     },
+    { // 0342
+        // Crawdaunt's three real abilities (Hyper Cutter, Shell Armor, Adaptability) are ALL now innate; its slot-2
+        // Adaptability is pinned by adaptability.c, so its unpinned innate-redundant slot-1 Shell Armor (audited)
+        // takes Sniper, an already-implemented :white_check_mark: innate (stable, like Decidueye-Hisui) that pays off
+        // the Rogue Pokemon's high-crit Crabhammer.
+        SPECIES_CRAWDAUNT, 1,
+        ABILITY_SNIPER
+    },
     { // 0344
         SPECIES_CLAYDOL, 1, 
         ABILITY_SAND_STREAM
@@ -200,6 +216,34 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0358
         SPECIES_CHIMECHO, 1,
         ABILITY_SOUNDPROOF
+    },
+    { // 0376
+        // Metagross's only real abilities are Clear Body (slot 0, now innate) and Light Metal (slot 2, pending), so
+        // its EMPTY slot 1 takes Tough Claws, an already-implemented :white_check_mark: innate (stable) and its Mega's
+        // ability: it powers up its contact STAB (Meteor Mash / Bullet Punch / Zen Headbutt).
+        SPECIES_METAGROSS, 1,
+        ABILITY_TOUGH_CLAWS
+    },
+    { // 0377
+        // Regirock's only real abilities (Clear Body, Sturdy) are BOTH now innate, so its EMPTY slot 1 takes Solid
+        // Rock, an already-implemented :white_check_mark: innate (stable) and thematic for the rock golem: it blunts
+        // the supereffective Water/Grass/Ground/Steel/Fighting hits its defensive sets fear.
+        SPECIES_REGIROCK, 1,
+        ABILITY_SOLID_ROCK
+    },
+    { // 0378
+        // Regice's only real abilities are Clear Body (slot 0, now innate) and Ice Body (slot 2, pending), so its
+        // EMPTY slot 1 takes Ice Scales, an already-implemented :white_check_mark: innate (stable) that halves the
+        // special damage its Assault Vest special wall already invites.
+        SPECIES_REGICE, 1,
+        ABILITY_ICE_SCALES
+    },
+    { // 0379
+        // Registeel's only real abilities are Clear Body (slot 0, now innate) and Light Metal (slot 2, pending), so
+        // its EMPTY slot 1 takes Bulletproof, :x: (never an innate -> stable) and thematic for the iron golem: it
+        // deflects Focus Blast / Flash Cannon and the other ball/bomb moves. Same pick as Skarmory.
+        SPECIES_REGISTEEL, 1,
+        ABILITY_BULLETPROOF
     },
     { // 0380
         SPECIES_LATIAS, 1,
@@ -260,6 +304,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // bell shrugs off Hyper Voice / Boomburst and other sound moves. (Sceptile-style dead-weight repurpose.)
         SPECIES_BRONZONG, 2,
         ABILITY_SOUNDPROOF
+    },
+    { // 0441
+        // Chatot's three real abilities (Keen Eye, Tangled Feet, Big Pecks) are ALL now innate, so its innate-
+        // redundant slot-1 Tangled Feet -- unpinned by any test (audited) -- takes Punk Rock, an already-implemented
+        // :white_check_mark: innate (stable, like Meloetta) that powers the Music Note Pokemon's sound STAB (Boomburst
+        // / Hyper Voice / Chatter).
+        SPECIES_CHATOT, 1,
+        ABILITY_PUNK_ROCK
     },
     { // 0455
         SPECIES_CARNIVINE, 1, 
@@ -348,6 +400,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ALOMOMOLA, 2, 
         ABILITY_WATER_ABSORB
     },
+    { // 0601
+        // Klinklang's slot-2 Clear Body is now innate and its slots 0/1 are Plus/Minus (dead in singles); slot-0 Plus
+        // is pinned by upstream doubles/anim tests, so its unpinned slot-1 Minus (audited) is repurposed to a chosen
+        // Motor Drive, :x: (never an innate -> stable) and thematic for the gear Pokemon: an Electric immunity + Speed
+        // boost that snowballs its Shift Gear sweeper.
+        SPECIES_KLINKLANG, 1,
+        ABILITY_MOTOR_DRIVE
+    },
     { // 0604
         SPECIES_EELEKTROSS, 1,
         ABILITY_LIGHTNING_ROD
@@ -409,6 +469,20 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // innate Mega Launcher pulse boost.
         SPECIES_CLAWITZER, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0703
+        // Carbink's only real abilities (Clear Body, Sturdy) are BOTH now innate, so its EMPTY slot 1 takes Solid
+        // Rock, an already-implemented :white_check_mark: innate (stable) and thematic for the jewel: it blunts the
+        // many supereffective hits its dual-screens wall fears.
+        SPECIES_CARBINK, 1,
+        ABILITY_SOLID_ROCK
+    },
+    { // 0719
+        // Diancie's only real ability (Clear Body) is now innate, so its EMPTY slot 1 takes Solid Rock, an already-
+        // implemented :white_check_mark: innate (stable) and thematic for the Jewel Pokemon: it blunts the
+        // supereffective Steel/Ground/Water/Grass hits its Life Orb / Leftovers sets fear.
+        SPECIES_DIANCIE, 1,
+        ABILITY_SOLID_ROCK
     },
     { // 0724
         // Decidueye-Hisui's only real abilities (Overgrow, Scrappy) are BOTH now innate, so its EMPTY slot 1
@@ -509,6 +583,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Flamethrower / Earth Power gain +30% and drop their secondaries (and skip Life Orb recoil too).
         SPECIES_SCOVILLAIN, 2,
         ABILITY_SHEER_FORCE
+    },
+    { // 0962
+        // Bombirdier's three real abilities (Big Pecks, Keen Eye, Rocky Payload) are ALL now innate, so its innate-
+        // redundant slot-1 Keen Eye -- unpinned by any test (audited) -- takes Reckless, an already-implemented
+        // :white_check_mark: innate (stable, like Medicham) that powers the vulture's Brave Bird recoil dive.
+        SPECIES_BOMBIRDIER, 1,
+        ABILITY_RECKLESS
     },
     { // 1013
         // Sinistcha's Heatproof is now innate, freeing its frontier slot; its slot-0 Hospitality is dead in

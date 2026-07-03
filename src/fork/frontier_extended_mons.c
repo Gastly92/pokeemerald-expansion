@@ -101,6 +101,8 @@
 // or a priority granter (Gale Wings gives Flying moves +1 priority at full HP / Triage gives healing moves +3 priority)
 // or a terrain modifier (Surge Surfer doubles the holder's Speed on Electric Terrain / Grass Pelt boosts its Defense 1.5x on Grassy Terrain)
 // or a physical-Attack doubler (Huge Power / Pure Power double the holder's physical Attack)
+// or a stat-drop protector (Clear Body / White Smoke keep ANY of the holder's stats from being lowered by
+// another mon; Hyper Cutter protects Attack, Big Pecks Defense)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -170,6 +172,16 @@
 // repurposes that slot for its Mega's Lightning Rod. Each override hands out a deliberately STABLE
 // ability — one marked :x: in INNATE_ABILITIES_PROGRESS.md (never an innate), so it won't need
 // re-pointing once more abilities join the innate allowlist; see that table's header.)
+// The stat-drop protectors (Batch D+E) free 28 sets. Most take a complementary REAL slot: Kingler's Hyper
+// Cutter -> chosen Sheer Force; Pinsir's -> chosen Moxie (HA); Crabominable's -> chosen Anger Point;
+// Torkoal's White Smoke -> chosen Drought; Centiskorch's -> chosen Flash Fire; Dragapult's Clear Body ->
+// chosen Infiltrator. The all-real-abilities-innate mons take a fork-owned override: Pidgeot / Chatot
+// (Keen Eye + Tangled Feet + Big Pecks all innate) get a chosen No Guard / Punk Rock, Crawdaunt (Hyper
+// Cutter + Shell Armor + Adaptability) a chosen Sniper, Bombirdier (Big Pecks + Keen Eye + Rocky Payload)
+// a chosen Reckless, Klinklang (Clear Body innate; Plus/Minus dead in singles) a chosen Motor Drive,
+// Metagross / Regirock / Regice / Registeel / Carbink / Diancie (Clear Body [+ Sturdy] innate, empty
+// slot 1) a chosen Tough Claws / Solid Rock / Ice Scales / Bulletproof / Solid Rock / Solid Rock — each a
+// stable :x: or already-implemented :white_check_mark: pick.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -464,7 +476,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_ROOST
         },
-        .ability = ABILITY_BIG_PECKS, // Keen Eye now innate; Mega -> No Guard anyway, Big Pecks is the pre-Mega filler
+        .ability = ABILITY_NO_GUARD, // Big Pecks now innate (Keen Eye/Tangled Feet too); chosen No Guard via override lands Hurricane
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -484,7 +496,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_BIG_PECKS, // Keen Eye now innate; chosen Big Pecks keeps this Specs attacker's Defense undroppable
+        .ability = ABILITY_NO_GUARD, // Big Pecks now innate (Keen Eye/Tangled Feet too); chosen No Guard via override lands Hurricane
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2476,7 +2488,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_HYPER_CUTTER,
+        .ability = ABILITY_SHEER_FORCE, // Hyper Cutter now innate (Shell Armor too); chosen Sheer Force powers its coverage
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3194,7 +3206,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_HYPER_CUTTER,
+        .ability = ABILITY_MOXIE, // Hyper Cutter now innate; chosen Moxie (HA) snowballs Attack on KO
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8170,7 +8182,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_YAWN
         },
-        .ability = ABILITY_WHITE_SMOKE,
+        .ability = ABILITY_DROUGHT, // White Smoke now innate (Shell Armor too); chosen Drought sets the sun
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8575,7 +8587,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_HYPER_CUTTER, // Shell Armor & Adaptability now innate; chosen Hyper Cutter guards Attack
+        .ability = ABILITY_SNIPER, // Hyper Cutter now innate (Shell Armor/Adaptability too); chosen Sniper via override pays off Crabhammer crits
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8595,7 +8607,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_HYPER_CUTTER, // Shell Armor & Adaptability now innate; chosen Hyper Cutter guards Attack
+        .ability = ABILITY_SNIPER, // Hyper Cutter now innate (Shell Armor/Adaptability too); chosen Sniper via override pays off Crabhammer crits
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8615,7 +8627,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_HYPER_CUTTER, // Shell Armor & Adaptability now innate; chosen Hyper Cutter guards Attack
+        .ability = ABILITY_SNIPER, // Hyper Cutter now innate (Shell Armor/Adaptability too); chosen Sniper via override pays off Crabhammer crits
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9236,7 +9248,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_TOUGH_CLAWS, // Clear Body now innate; chosen Tough Claws via override powers its contact STAB
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9256,7 +9268,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_TOUGH_CLAWS, // Clear Body now innate; chosen Tough Claws via override powers its contact STAB
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9276,7 +9288,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_TOUGH_CLAWS, // Clear Body now innate; chosen Tough Claws via override powers its contact STAB
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9298,7 +9310,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_SOLID_ROCK, // Clear Body now innate (Sturdy too); chosen Solid Rock via override blunts SE hits
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9318,7 +9330,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_HAMMER_ARM
         },
-        .ability = ABILITY_CLEAR_BODY, // Sturdy now innate; chosen Clear Body protects the Rock Polish setup
+        .ability = ABILITY_SOLID_ROCK, // Clear Body now innate (Sturdy too); chosen Solid Rock via override blunts SE hits
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9340,7 +9352,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_REST
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_ICE_SCALES, // Clear Body now innate; chosen Ice Scales via override halves special damage
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9360,7 +9372,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_FLASH_CANNON
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_ICE_SCALES, // Clear Body now innate; chosen Ice Scales via override halves special damage
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9382,7 +9394,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_REST
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_BULLETPROOF, // Clear Body now innate; chosen Bulletproof via override deflects ball/bomb moves
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9402,7 +9414,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_BULLETPROOF, // Clear Body now innate; chosen Bulletproof via override deflects ball/bomb moves
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10633,7 +10645,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_BIG_PECKS,
+        .ability = ABILITY_PUNK_ROCK, // Big Pecks now innate (Keen Eye/Tangled Feet too); chosen Punk Rock via override powers Boomburst
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -14403,7 +14415,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUBSTITUTE,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_MOTOR_DRIVE, // Clear Body now innate; chosen Motor Drive via override (Electric immunity + Speed)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16936,7 +16948,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REFLECT,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_CLEAR_BODY, // Sturdy now innate; chosen Clear Body keeps this screens wall's stats intact
+        .ability = ABILITY_SOLID_ROCK, // Clear Body now innate (Sturdy too); chosen Solid Rock via override blunts SE hits
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16956,7 +16968,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REFLECT,
             MOVE_MOONBLAST
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_SOLID_ROCK, // Clear Body now innate (Sturdy too); chosen Solid Rock via override blunts SE hits
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17484,7 +17496,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_PROTECT
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_SOLID_ROCK, // Clear Body now innate; chosen Solid Rock via override blunts SE hits
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 4,
@@ -17504,7 +17516,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_REFLECT
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_SOLID_ROCK, // Clear Body now innate; chosen Solid Rock via override blunts SE hits
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17992,7 +18004,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_HAMMER
         },
-        .ability = ABILITY_HYPER_CUTTER, // Iron Fist now innate; chosen Hyper Cutter guards Attack
+        .ability = ABILITY_ANGER_POINT, // Hyper Cutter now innate (Iron Fist too); chosen Anger Point maxes Attack on a crit
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18013,7 +18025,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_HYPER_CUTTER, // Iron Fist now innate; chosen Hyper Cutter guards Attack
+        .ability = ABILITY_ANGER_POINT, // Hyper Cutter now innate (Iron Fist too); chosen Anger Point maxes Attack on a crit
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21004,7 +21016,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_WHITE_SMOKE,
+        .ability = ABILITY_FLASH_FIRE, // White Smoke now innate; chosen Flash Fire powers its Fire STAB
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21953,7 +21965,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_CLEAR_BODY,
+        .ability = ABILITY_INFILTRATOR, // Clear Body now innate; chosen Infiltrator ignores screens/substitute
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23820,7 +23832,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BRAVE_BIRD,
             MOVE_ROOST
         },
-        .ability = ABILITY_BIG_PECKS,
+        .ability = ABILITY_RECKLESS, // Big Pecks now innate (Keen Eye/Rocky Payload too); chosen Reckless via override powers Brave Bird
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

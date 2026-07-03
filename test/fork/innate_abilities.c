@@ -4623,6 +4623,135 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate H
     }
 }
 
+// ===== Batch D+E: stat-drop protection (Clear Body / White Smoke / Hyper Cutter / Big Pecks) =====
+
+// Clear Body / White Smoke block ANY stat drop from another mon; Hyper Cutter protects Attack, Big Pecks
+// Defense. Each test uses a canon user whose CHOSEN ability differs, so the effect is purely the innate.
+// The pop-up/message show the innate, not the chosen ability (the Keen Eye / Sturdy overwrite precedent).
+
+// Clear Body: an incoming Growl (Attack -1) is fully blocked; the pop-up shows Clear Body, not the
+// chosen Liquid Ooze. With the feature off it does nothing and the Attack drops (stock behavior).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Clear Body blocks a stat drop")
+{
+    u32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TENTACRUEL, ABILITY_CLEAR_BODY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_TENTACRUEL) { Ability(ABILITY_LIQUID_OOZE); } // chosen Liquid Ooze, NOT Clear Body
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GROWL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_CLEAR_BODY);
+            MESSAGE("Tentacruel's stats were not lowered!");
+        }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE : DEFAULT_STAT_STAGE - 1);
+    }
+}
+
+// White Smoke behaves identically to Clear Body (full protection). Heatmor's chosen ability is Flash
+// Fire (a real slot), so the block is purely the innate White Smoke.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate White Smoke blocks a stat drop")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HEATMOR, ABILITY_WHITE_SMOKE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HEATMOR) { Ability(ABILITY_FLASH_FIRE); } // chosen Flash Fire, NOT White Smoke
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GROWL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_WHITE_SMOKE);
+        MESSAGE("Heatmor's stats were not lowered!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Hyper Cutter protects ONLY Attack: an Attack drop is blocked (pop-up Hyper Cutter), but a Defense drop
+// (Tail Whip) still lands. Pinsir's chosen ability is Moxie (a real slot), so the block is the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Hyper Cutter blocks only Attack drops")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PINSIR, ABILITY_HYPER_CUTTER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_PINSIR) { Ability(ABILITY_MOXIE); } // chosen Moxie, NOT Hyper Cutter
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GROWL, MOVE_TAIL_WHIP); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); }     // Attack -1: blocked
+        TURN { MOVE(opponent, MOVE_TAIL_WHIP); } // Defense -1: lands
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_HYPER_CUTTER);
+        MESSAGE("Pinsir's Attack was not lowered!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);     // Attack protected
+        EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE - 1); // Defense not
+    }
+}
+
+// Big Pecks protects ONLY Defense: a Defense drop (Tail Whip) is blocked (pop-up Big Pecks), but an
+// Attack drop (Growl) still lands. Mandibuzz's chosen ability is Overcoat (a real slot).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Big Pecks blocks only Defense drops")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MANDIBUZZ, ABILITY_BIG_PECKS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MANDIBUZZ) { Ability(ABILITY_OVERCOAT); } // chosen Overcoat, NOT Big Pecks
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GROWL, MOVE_TAIL_WHIP); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TAIL_WHIP); } // Defense -1: blocked
+        TURN { MOVE(opponent, MOVE_GROWL); }     // Attack -1: lands
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_BIG_PECKS);
+        MESSAGE("Mandibuzz's Defense was not lowered!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE);     // Defense protected
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // Attack not
+    }
+}
+
+// Suppression parity: Clear Body is breakable, so an attacker's Mold Breaker pierces the innate exactly
+// as it would the real ability (the stat drop lands, no pop-up).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Clear Body")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_CLEAR_BODY].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_TENTACRUEL, ABILITY_CLEAR_BODY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TENTACRUEL) { Ability(ABILITY_LIQUID_OOZE); } // innate Clear Body
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_GROWL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_CLEAR_BODY); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // pierced -> Attack drops
+    }
+}
+
+// Suppression parity: Gastro Acid suppresses an innate Hyper Cutter (Gastro-Acid / Neutralizing-Gas
+// parity), so the Attack drop lands.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Hyper Cutter")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PINSIR, ABILITY_HYPER_CUTTER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_PINSIR) { Ability(ABILITY_MOXIE); } // innate Hyper Cutter
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_GROWL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); }
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        MESSAGE("Pinsir's Attack fell!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // suppressed -> Attack drops
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -4659,6 +4788,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_GALE_WINGS, ABILITY_TRIAGE,
         ABILITY_SURGE_SURFER, ABILITY_GRASS_PELT,
         ABILITY_HUGE_POWER, ABILITY_PURE_POWER,
+        ABILITY_CLEAR_BODY, ABILITY_WHITE_SMOKE, ABILITY_HYPER_CUTTER, ABILITY_BIG_PECKS,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

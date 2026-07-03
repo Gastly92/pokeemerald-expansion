@@ -2506,6 +2506,16 @@ bool32 CanLowerStat(enum BattlerId battlerAtk, enum BattlerId battlerDef, struct
           || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerDef, ABILITY_ILLUMINATE))))
             return FALSE;
 
+        // FORK: innate-aware Clear Body / White Smoke — the holder's stats can't be lowered by another
+        // mon's move at all (the chosen-ability cases below handle the real abilities).
+        if (IsInnateActive(battlerDef, ABILITY_CLEAR_BODY) || IsInnateActive(battlerDef, ABILITY_WHITE_SMOKE))
+            return FALSE;
+
+        // FORK: innate-aware Hyper Cutter (Atk) / Big Pecks (Def) — don't bother lowering the protected stat.
+        if ((stat == STAT_ATK && IsInnateActive(battlerDef, ABILITY_HYPER_CUTTER))
+         || (stat == STAT_DEF && IsInnateActive(battlerDef, ABILITY_BIG_PECKS)))
+            return FALSE;
+
         // FORK: innate-aware Shield Dust — a damaging move's stat-lowering additional effect is blocked
         // (the chosen-ability case below handles a real Shield Dust).
         if (!IsBattleMoveStatus(move) && GetActiveGimmick(battlerAtk) != GIMMICK_DYNAMAX

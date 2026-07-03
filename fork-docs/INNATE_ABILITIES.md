@@ -1660,3 +1660,65 @@ Kick STAB. Diggersby's *other* two real abilities (Pickup, Cheek Pouch) are both
 rather than bake in churn its now-redundant slot-2 Huge Power is repurposed via override to a chosen
 **Scrappy** (implemented `:white_check_mark:`, stable; audited — no test pins Diggersby's Huge Power) so its
 Normal STAB (Return / Quick Attack) hits Ghosts.
+
+### ABILITY_CLEAR_BODY / ABILITY_WHITE_SMOKE / ABILITY_HYPER_CUTTER / ABILITY_BIG_PECKS
+
+The "stat-drop protectors" (Batch D+E, folding the single-stat Batch E into the full-protection Batch D):
+**Clear Body** and **White Smoke** keep *any* of the holder's stats from being lowered by another mon's
+move or ability; **Hyper Cutter** protects **Attack**, **Big Pecks** protects **Defense**. All four are
+**clean upsides** that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon
+divergence.
+
+**Effect site — one shared block in `IsAbilityBlocked` (`src/battle_stat_change.c`).** The prior Keen Eye /
+Illuminate accuracy block (an innate whose accuracy-drop immunity landed here in Batch P) is **generalized**:
+a new helper `GetInnateStatDropProtector(battler, stat, &fullProtection)` returns the innate ability that
+would block a drop of `stat` on `battler` — Clear Body / White Smoke for any stat (setting `*fullProtection`),
+Hyper Cutter for Attack, Big Pecks for Defense, Keen Eye / Illuminate for accuracy — or `ABILITY_NONE`. The
+block runs only when the **chosen** ability doesn't already block the drop (the existing
+`!CanAbilityPreventStatLoss && !AbilityPreventsSpecificStatDrop` guard), so the real-ability path is
+untouched. On a hit, a **full** protector uses `MarkStatsAsDone(NUM_BATTLE_STATS)` +
+`BattleScript_AbilityNoStatLoss` ("…'s stats were not lowered!"); a **single-stat** protector uses
+`MarkStatsAsDone(st->stat)` + `BattleScript_AbilityNoSpecificStatLoss` ("…'s <stat> was not lowered!").
+Because `CreateAbilityPopUp` reads the *primary* slot, the block sets
+`gBattleScripting.abilityPopupOverwrite = innate` (and `gLastUsedAbility` / `RecordAbilityBattle` to the
+innate) so the pop-up/reveal show the innate, not the chosen ability — the Keen Eye / Sturdy / Levitate
+overwrite precedent. No driver is needed (the scripts/messages already exist upstream). **No
+`DETERMINISTIC_*` surface is touched** — stat drops from *primary* status moves and from *secondary*
+additional effects both route through this same `IsAbilityBlocked`, so the deterministic
+additional-effects/hold-effect reroutes need no separate mirror.
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / Ability Shield /
+not-on-field); all four are **breakable**, so an attacker's Mold Breaker pierces an innate one exactly as it
+would the real ability.
+
+**AI.** Stat-drop reasoning lives in **dedicated AI helpers**, not the shared damage calc, so two effect
+reads were made innate-aware (mirroring the Keen Eye / Speed Boost precedent already in these functions):
+`CanLowerStat` (`src/battle_ai_util.c`) — the AI won't waste a stat-lowering move on an innate Clear Body /
+White Smoke holder (any stat), an innate Hyper Cutter holder's Attack, or an innate Big Pecks holder's
+Defense; and `CanIntimidateLowerOpponentAtk` (`src/battle_ai_switch.c`) — the AI won't switch an Intimidator
+in expecting to lower the Attack of an innate Clear Body / White Smoke / Hyper Cutter opponent. The
+`BattlerBenefitsFromAbilityScore` read at `case ABILITY_CLEAR_BODY: case ABILITY_WHITE_SMOKE:`
+(`src/battle_ai_util.c`) is an ability-*value* rating for Trace/Skill-Swap-style decisions (keyed off the
+hypothetical ability, not the battler's real one), NOT an effect read, so it is correctly left untouched.
+
+**Species (canon-only, no flavor picks):** every species carrying one of the four in its real ability data,
+in any slot, plus the Mega/Gigantamax mirrors (the FORMS pure-boon convention) — e.g. Clear Body on the
+Tentacool, Metagross (+ Mega), Regi trio, Klink, Carbink, Diancie (+ Mega), Dreepy and Nacli lines; White
+Smoke on Torkoal, Heatmor and the Sizzlipede line (+ Gmax); Hyper Cutter on the Krabby (+ Gmax), Pinsir
+(+ Mega), Gligar, Mawile (+ Mega), Trapinch, Corphish and Crabrawler lines; Big Pecks on the Pidgey (+ Mega),
+Pidove, Ducklett, Vullaby, Fletchling and Rookidee lines, Chatot and Bombirdier. A species already carrying
+another innate is *merged* into its existing row.
+
+**Frontier (Step 3.5):** 28 hardcoded sets were freed. Most take a **complementary REAL slot** with no
+override: Kingler's Hyper Cutter → chosen **Sheer Force** (`:x:`), Pinsir's → chosen **Moxie** (HA),
+Crabominable's → chosen **Anger Point**, Torkoal's White Smoke → chosen **Drought** (`:x:`), Centiskorch's →
+chosen **Flash Fire** (`:x:`), Dragapult's Clear Body → chosen **Infiltrator**. The
+*all-real-abilities-innate* mons take a fork-owned override (`species_ability_overrides.c`): **Pidgeot** /
+**Chatot** (Keen Eye + Tangled Feet + Big Pecks all innate) → a chosen **No Guard** (`:x:`) / **Punk Rock**
+(`:white_check_mark:`), **Crawdaunt** (Hyper Cutter + Shell Armor + Adaptability) → chosen **Sniper**
+(`:white_check_mark:`; its slot-2 Adaptability is pinned by `adaptability.c`, so the unpinned slot-1 Shell
+Armor is repurposed), **Bombirdier** (Big Pecks + Keen Eye + Rocky Payload) → chosen **Reckless**
+(`:white_check_mark:`), **Klinklang** (Clear Body innate; Plus/Minus dead in singles, slot-0 Plus pinned by
+doubles/anim tests) → chosen **Motor Drive** (`:x:`) in its unpinned slot-1 Minus, and **Metagross /
+Regirock / Regice / Registeel / Carbink / Diancie** (Clear Body [+ Sturdy] innate, EMPTY slot 1) → chosen
+**Tough Claws / Solid Rock / Ice Scales / Bulletproof / Solid Rock / Solid Rock** — each stable and thematic.

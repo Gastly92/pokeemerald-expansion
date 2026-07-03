@@ -35,7 +35,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Levitate | The Pokémon floats off the ground, making it immune to Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses. |
 | :x: | Effect Spore | Contact with the Pokémon may inflict poison, sleep, or paralysis on the attacker. |
 | :x: | Synchronize | If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon's move or Ability, that Pokémon will also be inflicted with the same status condition. |
-| :white_large_square: | Clear Body | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
+| :white_check_mark: | Clear Body | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Natural Cure | The Pokémon's status conditions are cured when it switches out of battle. |
 | :x: | Lightning Rod | The Pokémon draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage. |
 | :white_check_mark: | Serene Grace | Raises the likelihood of additional effects occurring when the Pokémon uses its moves. |
@@ -58,7 +58,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Flame Body | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned. |
 | :x: | Run Away | Enables a sure getaway from wild Pokémon. |
 | :white_check_mark: | Keen Eye | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
-| :white_large_square: | Hyper Cutter | The Pokémon's Attack stat cannot be lowered by other Pokémon's moves or Abilities. |
+| :white_check_mark: | Hyper Cutter | The Pokémon's Attack stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_large_square: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
 | :x: | Truant | Each time the Pokémon uses a move, it spends the next turn loafing around. |
 | :x: | Hustle | When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%. |
@@ -79,7 +79,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Drought | Summons harsh sunlight for 5 turns when the Pokémon enters a battle. |
 | :white_large_square: | Arena Trap | Prevents opposing Pokémon from fleeing from battle. |
 | :white_check_mark: | Vital Spirit | The Pokémon cannot become drowsy or be put to sleep. |
-| :white_large_square: | White Smoke | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
+| :white_check_mark: | White Smoke | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Pure Power | Doubles the power of the Pokémon's physical moves. |
 | :white_check_mark: | Shell Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :x: | Air Lock | Eliminates the effects of weather. |
@@ -151,7 +151,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Overcoat | The Pokémon takes no damage from sandstorms and is immune to moves and Abilities involving powder. |
 | :x: | Poison Touch | When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned. |
 | :white_check_mark: | Regenerator | The Pokémon has 1/3 of its max HP restored when it switches out of battle. |
-| :white_large_square: | Big Pecks | The Pokémon's Defense stat cannot be lowered by other Pokémon's moves or Abilities. |
+| :white_check_mark: | Big Pecks | The Pokémon's Defense stat cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Sand Rush | Doubles the Pokémon's Speed stat in a sandstorm. |
 | :white_check_mark: | Wonder Skin | Makes status moves more likely to miss the Pokémon. |
 | :white_check_mark: | Analytic | Boosts the power of the Pokémon's moves by 30% when the Pokémon is the last to move that turn. |
