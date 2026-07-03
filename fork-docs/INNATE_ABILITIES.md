@@ -1610,3 +1610,53 @@ override (`species_ability_overrides.c`; `:x:` in the progress doc → stable, o
 mouse: draws in Electric moves for immunity + a Sp. Atk boost), the same trick as Cornerstone Ogerpon.
 Gogoat's Grass-Pelt set instead frees its slot to its complementary REAL **Sap Sipper** (slot 0; Grass
 immunity + Attack boost), which stacks with the innate Grass Pelt Defense boost.
+
+### ABILITY_HUGE_POWER / ABILITY_PURE_POWER
+
+The "physical-Attack doublers" (Batch C): each doubles the holder's physical Attack. Both are **clean
+upsides** that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon divergence.
+Upstream handles the two identically in **one shared `case ABILITY_HUGE_POWER: case ABILITY_PURE_POWER:`**
+of the attack-stat `switch (ctx->abilities[battlerAtk])` in `CalcAttackStat` (`src/battle_util.c`), so the
+innate is a single additive clause *after* the switch (same shape as Batch A's Stakeout / Rocky Payload /
+Guts, in the `if (ctx->innatesEnabled)` block):
+
+```c
+if (IsBattleMovePhysical(move)
+ && atkAbility != ABILITY_HUGE_POWER && atkAbility != ABILITY_PURE_POWER
+ && (IsInnateActive(battlerAtk, ABILITY_HUGE_POWER) || IsInnateActive(battlerAtk, ABILITY_PURE_POWER)))
+    modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
+```
+
+Because the two share one effect (×2 physical), the guard skips whenever the **chosen** ability is
+*either* one — the switch already applied the ×2 — so a mon running the real Huge Power *or* Pure Power
+never double-applies (a holder with chosen Huge Power + innate Pure Power still doubles only once, correctly).
+`IsInnateActive` is feature-gated and species-based, so with the feature off the clause is a strict no-op
+and the real-ability path stays byte-for-byte unchanged. No script / pop-up / driver, and no
+`DETERMINISTIC_*` surface is touched (a pure attack-stat calc — no accuracy / secondary effects / crits /
+held items).
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); neither
+ability is breakable, so Mold Breaker never touches them, same as the real abilities.
+
+**AI.** On-field damage prediction is FREE: the ×2 lives in the shared `CalcAttackStat` the AI runs keyed
+off the real battler. The `BattlerBenefitsFromAbilityScore` read at `case ABILITY_HUGE_POWER: case
+ABILITY_PURE_POWER:` (`src/battle_ai_util.c`) is an ability-*value* rating for Trace/Skill-Swap-style
+decisions (keyed off the hypothetical ability, not the battler's real one), NOT an effect read, so it is
+correctly left untouched — same call the other calc-modifier batches leave alone.
+
+**Species (canon-only, no flavor picks):** Huge Power → the Marill line (Azurill, Marill, Azumarill — each
+merged with its existing innate Thick Fat) and the Diggersby line (Bunnelby, Diggersby). Pure Power → the
+Meditite line (Meditite, Medicham). Mega Mawile / Mega Starmie carry Huge Power as their *only, always-chosen*
+ability, so the innate could never be observed — omitted as redundant (their non-Mega bases are NOT Huge
+Power users, so there is no base-creature trait to persist through the Mega). Mega Medicham is likewise
+sole-Pure-Power and not in the roster, so it is omitted for the same reason.
+
+**Frontier (Step 3.5):** seven hardcoded sets were freed. The three Azumarill sets frees their slot to its
+complementary REAL **Sap Sipper** (slot 2 HA; `:x:` → stable; Grass immunity + Attack boost). Medicham
+(chosen Pure Power now innate; its only other real ability, Telepathy, is dead in singles) takes a chosen
+**Reckless** via a fork-owned override on its EMPTY slot 1 (`species_ability_overrides.c`) — an
+implemented `:white_check_mark:` innate it lacks, stable like Slurpuff's Unaware, powering up its High Jump
+Kick STAB. Diggersby's *other* two real abilities (Pickup, Cheek Pouch) are both still *pending* innates, so
+rather than bake in churn its now-redundant slot-2 Huge Power is repurposed via override to a chosen
+**Scrappy** (implemented `:white_check_mark:`, stable; audited — no test pins Diggersby's Huge Power) so its
+Normal STAB (Return / Quick Attack) hits Ghosts.

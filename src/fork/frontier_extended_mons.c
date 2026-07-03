@@ -100,6 +100,7 @@
 // Tangled Feet doubles evasion while confused)
 // or a priority granter (Gale Wings gives Flying moves +1 priority at full HP / Triage gives healing moves +3 priority)
 // or a terrain modifier (Surge Surfer doubles the holder's Speed on Electric Terrain / Grass Pelt boosts its Defense 1.5x on Grassy Terrain)
+// or a physical-Attack doubler (Huge Power / Pure Power double the holder's physical Attack)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -158,6 +159,11 @@
 // The terrain modifiers (Batch R) free two sets: Raichu-Alola (sole Surge Surfer, now innate) gets a fork-owned chosen
 // Lightning Rod override (:x:, stable) so its slot isn't wasted, and Gogoat's Grass-Pelt set frees its slot to its
 // complementary REAL Sap Sipper (Grass immunity + Attack boost), stacking with the innate Grass Pelt Defense boost.
+// The physical-Attack doublers (Batch C) free seven sets: the Azumarill sets frees their slot to its complementary REAL
+// Sap Sipper (Grass immunity + Attack boost), Medicham (Pure Power now innate; Telepathy is dead in singles) takes a
+// chosen Reckless via an override on its empty slot 1 to power up its High Jump Kick STAB, and Diggersby (both its other
+// real abilities still pending) repurposes its now-redundant slot-2 Huge Power to a chosen Scrappy override so its Normal
+// STAB hits Ghosts — Reckless and Scrappy both already-implemented :white_check_mark: innates (stable), like Slurpuff's Unaware.
 // (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
 // Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
@@ -4848,7 +4854,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_HUGE_POWER,
+        .ability = ABILITY_SAP_SIPPER, // Huge Power now innate; chosen Sap Sipper adds a Grass immunity + Atk boost
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 92,
@@ -4868,7 +4874,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_LIQUIDATION
         },
-        .ability = ABILITY_HUGE_POWER,
+        .ability = ABILITY_SAP_SIPPER, // Huge Power now innate; chosen Sap Sipper adds a Grass immunity + Atk boost
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 92,
@@ -4888,7 +4894,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_LIQUIDATION
         },
-        .ability = ABILITY_HUGE_POWER,
+        .ability = ABILITY_SAP_SIPPER, // Huge Power now innate; chosen Sap Sipper adds a Grass immunity + Atk boost
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7822,7 +7828,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_FAKE_OUT
         },
-        .ability = ABILITY_PURE_POWER,
+        .ability = ABILITY_RECKLESS, // Pure Power now innate; chosen Reckless (override slot 1) boosts High Jump Kick
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7842,7 +7848,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_TRICK
         },
-        .ability = ABILITY_PURE_POWER,
+        .ability = ABILITY_RECKLESS, // Pure Power now innate; chosen Reckless (override slot 1) boosts High Jump Kick
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16007,7 +16013,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUICK_ATTACK,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_HUGE_POWER,
+        .ability = ABILITY_SCRAPPY, // Huge Power now innate; chosen Scrappy (override slot 2) lets Return/Quick Attack hit Ghosts
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16027,7 +16033,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RETURN,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_HUGE_POWER,
+        .ability = ABILITY_SCRAPPY, // Huge Power now innate; chosen Scrappy (override slot 2) lets Return/Quick Attack hit Ghosts
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

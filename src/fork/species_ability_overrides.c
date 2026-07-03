@@ -151,6 +151,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SWELLOW, 1,
         ABILITY_QUICK_FEET
     },
+    { // 0308
+        // Medicham's only real abilities are Pure Power (slot 0, now innate) and Telepathy (slot 2, dead in
+        // frontier singles), so its EMPTY slot 1 takes Reckless — an already-implemented :white_check_mark:
+        // innate (stable, like Slurpuff's Unaware) that Medicham does not carry innately and is a pure boon
+        // for the martial artist: it powers up its High Jump Kick STAB (crash move) by 20%, stacking with the
+        // innate Pure Power. (Slot 2 Telepathy is left intact for any future doubles set.)
+        SPECIES_MEDICHAM, 1,
+        ABILITY_RECKLESS
+    },
     { // 0313
         // Volbeat's three real abilities (Illuminate, Swarm, Prankster) are ALL now innate, so its slot-1
         // Swarm — now innate-redundant — takes Victory Star. Victory Star is :x: (never an innate -> stable)
@@ -373,6 +382,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // (and softens incoming sound moves).
         SPECIES_MELOETTA, 1,
         ABILITY_PUNK_ROCK
+    },
+    { // 0660
+        // Diggersby's only non-innate real abilities (Pickup, Cheek Pouch) are both still PENDING innates, so
+        // rather than hand out a pending pick (future churn) its slot-2 Huge Power — now innate-redundant and
+        // unpinned by any test (audited: no Ability(ABILITY_HUGE_POWER) on Diggersby in test/battle) — is
+        // repurposed to Scrappy, an already-implemented :white_check_mark: innate (stable, like Lokix's Tough
+        // Claws) it does not carry innately: its Normal STAB (Return / Quick Attack) then hits Ghosts, a clean
+        // coverage boon alongside the innate Huge Power. (Dead-weight real-slot repurpose, Sceptile-style.)
+        SPECIES_DIGGERSBY, 2,
+        ABILITY_SCRAPPY
     },
     { // 0685
         // Slurpuff's only real abilities are Sweet Veil (slot 0, now innate) and Unburden (slot 2, dead

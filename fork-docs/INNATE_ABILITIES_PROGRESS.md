@@ -43,7 +43,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Chlorophyll | Doubles the Pokémon's Speed stat in harsh sunlight. |
 | :white_check_mark: | Illuminate | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :x: | Trace | When the Pokémon enters a battle, it changes its Ability to match that of an opponent. |
-| :white_large_square: | Huge Power | Doubles the power of the Pokémon's physical moves. |
+| :white_check_mark: | Huge Power | Doubles the power of the Pokémon's physical moves. |
 | :x: | Poison Point | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned. |
 | :white_large_square: | Inner Focus | The Pokémon never flinches when attacked and is unaffected by Intimidate. |
 | :white_large_square: | Magma Armor | The Pokémon cannot be frozen. |
@@ -80,7 +80,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Arena Trap | Prevents opposing Pokémon from fleeing from battle. |
 | :white_check_mark: | Vital Spirit | The Pokémon cannot become drowsy or be put to sleep. |
 | :white_large_square: | White Smoke | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
-| :white_large_square: | Pure Power | Doubles the power of the Pokémon's physical moves. |
+| :white_check_mark: | Pure Power | Doubles the power of the Pokémon's physical moves. |
 | :white_check_mark: | Shell Armor | Attacks landed on the Pokémon will never be critical hits. |
 | :x: | Air Lock | Eliminates the effects of weather. |
 | :white_check_mark: | Tangled Feet | Doubles the Pokémon's evasiveness if it is confused. |
