@@ -189,6 +189,10 @@
 // complementary REAL HA Sap Sipper (:x:, Grass immunity + Attack boost), and Bruxish (Dazzling + Strong Jaw +
 // Wonder Skin ALL now innate) repurposes its innate-redundant slot-1 Strong Jaw to a chosen Sheer Force
 // override (:x:, powers up its biting kit) — its slot-0 Dazzling stays a real ability (pinned by tests).
+// The redirection-ignore abilities (Batch G — Propeller Tail / Stalwart, the holder's moves ignore
+// Follow Me / Lightning Rod / Storm Drain redirection) free the two Barraskewda sets: both its real
+// abilities (Swift Swim + Propeller Tail) are now innate, so a fork-owned override on its empty slot 1
+// gives it a chosen Water Absorb (:x:, heals off Water) so the slot isn't wasted.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -20899,7 +20903,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_PROPELLER_TAIL, // Swift Swim now innate; chosen Propeller Tail
+        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Propeller Tail now innate; chosen Water Absorb (override) heals off Water
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20919,7 +20923,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_PROPELLER_TAIL,
+        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Propeller Tail now innate; chosen Water Absorb (override) heals off Water
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

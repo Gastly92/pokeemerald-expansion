@@ -888,7 +888,11 @@ bool32 IsAffectedByFollowMe(enum BattlerId battlerAtk, enum BattleSide defSide, 
         || effect == EFFECT_SNIPE_SHOT
         || effect == EFFECT_SKY_DROP
         || IsAbilityAndRecord(battlerAtk, ability, ABILITY_PROPELLER_TAIL)
-        || IsAbilityAndRecord(battlerAtk, ability, ABILITY_STALWART))
+        || IsAbilityAndRecord(battlerAtk, ability, ABILITY_STALWART)
+        // FORK: innate-aware Propeller Tail / Stalwart (FEATURE_INNATE_ABILITIES). IsInnateActive
+        // adds an active innate; feature-gated no-op otherwise, and it never records the chosen slot.
+        || IsInnateActive(battlerAtk, ABILITY_PROPELLER_TAIL)
+        || IsInnateActive(battlerAtk, ABILITY_STALWART))
         return FALSE;
 
     if (effect == EFFECT_PURSUIT && IsPursuitTargetSet())
@@ -951,7 +955,10 @@ static bool32 HandleMoveTargetRedirection(struct BattleCalcValues *cv, enum Move
                  || (ability == ABILITY_STORM_DRAIN && moveType == TYPE_WATER))
                 && GetBattlerTurnOrderNum(battler) < redirectorOrderNum
                 && !IsAbilityAndRecord(cv->battlerAtk, abilityAtk, ABILITY_PROPELLER_TAIL)
-                && !IsAbilityAndRecord(cv->battlerAtk, abilityAtk, ABILITY_STALWART))
+                && !IsAbilityAndRecord(cv->battlerAtk, abilityAtk, ABILITY_STALWART)
+                // FORK: innate-aware Propeller Tail / Stalwart (FEATURE_INNATE_ABILITIES)
+                && !IsInnateActive(cv->battlerAtk, ABILITY_PROPELLER_TAIL)
+                && !IsInnateActive(cv->battlerAtk, ABILITY_STALWART))
             {
                 redirectorOrderNum = GetBattlerTurnOrderNum(battler);
             }

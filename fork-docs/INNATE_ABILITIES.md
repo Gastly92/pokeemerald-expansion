@@ -1764,3 +1764,50 @@ is the *all-real-abilities-innate* case — Dazzling **and** Strong Jaw (Batch A
 are all now innate — so it takes a fork-owned override (`species_ability_overrides.c`) repurposing its
 innate-redundant, test-unpinned slot-1 Strong Jaw to a chosen **Sheer Force** (`:x:`, powers up its biting
 kit); its slot-0 Dazzling stays a real ability because `dazzling.c` / `bide.c` / `last_resort.c` pin it.
+
+### ABILITY_PROPELLER_TAIL / ABILITY_STALWART
+
+The "redirection-ignore" abilities (Batch G): the holder's moves ignore every form of move redirection and
+hit the originally-selected target. Both abilities have the **identical** effect and are **clean upsides**
+that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon divergence.
+
+**Effect sites — the shared redirection points, all in `src/battle_move_resolution.c` plus one in
+`src/battle_anim_effects_1.c`:**
+- **`IsAffectedByFollowMe`** — the Follow Me / Rage Powder redirect gate. Beside the existing chosen-ability
+  `IsAbilityAndRecord(battlerAtk, ability, ABILITY_PROPELLER_TAIL/STALWART)` tests, an
+  `IsInnateActive(battlerAtk, …)` clause makes an innate holder immune to the redirect too.
+- **The Lightning Rod / Storm Drain redirect loop in `HandleMoveTargetRedirection`** — the loop that scans for
+  an ability-redirector is skipped when the attacker ignores redirection; the two `!IsAbilityAndRecord(...)`
+  guards each gained a matching `!IsInnateActive(cv->battlerAtk, …)` clause.
+- **The Ally Switch retarget in `AnimTask_...` (`src/battle_anim_effects_1.c`)** — after an Ally Switch swaps
+  the two allies' positions, a move aimed at one of them normally follows the swap; Snipe Shot / Stalwart /
+  Propeller Tail keep the original target. The `ability == ABILITY_PROPELLER_TAIL/STALWART` reads there gained
+  `|| IsInnateActive(i, …)` so an innate holder keeps its target through the switch as well.
+
+`IsInnateActive` is feature-gated and species-based, so with the feature off every clause is a strict no-op;
+none of them record or leak the chosen slot (the chosen-ability path keeps its `IsAbilityAndRecord`).
+**No `DETERMINISTIC_*` surface is touched** — redirection is a pure targeting decision, not an accuracy /
+secondary / crit / status / held-item effect. No script/pop-up is needed (redirection is silent).
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / Ability Shield /
+not-on-field); neither ability is breakable, so Mold Breaker never touches them, same as the real abilities.
+
+**AI.** Move-redirection prediction lives in a **dedicated helper** (`IsMoveRedirectionPrevented`,
+`src/battle_ai_util.c`), NOT the shared damage calc, so it had to be made innate-aware: beside its
+`atkAbility == ABILITY_PROPELLER_TAIL/STALWART` reads, an `IsInnateActive(battlerAtk, …)` clause (the
+attacker is always on-field here) lets the AI correctly predict its own redirection-ignore from an innate
+when picking a spread/redirect-sensitive target.
+
+**Species (canon-only, no flavor picks — redirection-ignore is an abstract, doubles-oriented mechanic that is
+hard to justify thematically and potent in the format, so the set stays the canon carriers):**
+**Propeller Tail** on the Arrokuda / Barraskewda line (merged into their existing Swift Swim rows),
+**Stalwart** on Duraludon / Duraludon-Gmax / Archaludon (merged into Archaludon's existing Sturdy row) and
+**Skarmory-Mega** (a fork form whose ability data is all-Stalwart; merged into its existing Sturdy row).
+
+**Frontier (Step 3.5):** both hardcoded sets were freed. They are the two **Barraskewda** sets, whose
+`.ability` slot was already spent on Propeller Tail (Swift Swim was innate first). Barraskewda is the
+*all-real-abilities-innate* case — its only real abilities (Swift Swim, Propeller Tail) are now both innate —
+so it takes a fork-owned override (`species_ability_overrides.c`) filling its EMPTY slot 1 with a chosen
+**Water Absorb** (`:x:`, a Water immunity + heal, the same pick used for the other water mons in that table),
+so both sets now run Water Absorb **and** the innate Swift Swim / Propeller Tail. Duraludon / Archaludon have
+no frontier set, so no roster change was needed there.

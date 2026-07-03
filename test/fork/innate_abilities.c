@@ -4854,6 +4854,86 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate H
     }
 }
 
+// FORK: Batch G — redirection-ignore innates (Propeller Tail / Stalwart). The holder's moves ignore
+// Follow Me / Rage Powder and Lightning Rod / Storm Drain redirection, hitting the originally-selected
+// target. Wired at the shared redirection sites in src/battle_move_resolution.c (IsAffectedByFollowMe +
+// the Lightning-Rod/Storm-Drain redirect loop) beside the chosen-ability tests. Both are 1:1 clean-upside
+// copies (redirection-ignore never hurts the holder).
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Stalwart ignores Follow Me redirection")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ARCHALUDON, ABILITY_STALWART));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ARCHALUDON) { Ability(ABILITY_STAMINA); } // chosen Stamina, NOT Stalwart
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_FOLLOW_ME); MOVE(playerLeft, MOVE_DRACO_METEOR, target: opponentRight); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_FOLLOW_ME, opponentLeft);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_DRACO_METEOR, playerLeft);
+        if (enabled) {
+            HP_BAR(opponentRight); // innate Stalwart -> the move ignores Follow Me and hits the selected target
+            NOT HP_BAR(opponentLeft);
+        } else {
+            HP_BAR(opponentLeft); // no innate -> Follow Me redirects the move
+            NOT HP_BAR(opponentRight);
+        }
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Propeller Tail ignores Lightning Rod redirection")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BARRASKEWDA, ABILITY_PROPELLER_TAIL));
+        ASSUME(GetMoveType(MOVE_SPARK) == TYPE_ELECTRIC);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        WITH_CONFIG(B_REDIRECT_ABILITY_IMMUNITY, GEN_5);
+        PLAYER(SPECIES_BARRASKEWDA) { Ability(ABILITY_SWIFT_SWIM); Moves(MOVE_SPARK); } // chosen Swift Swim, NOT Propeller Tail
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_RAICHU) { Ability(ABILITY_LIGHTNING_ROD); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_SPARK, target: opponentRight); }
+    } SCENE {
+        if (enabled) {
+            HP_BAR(opponentRight); // innate Propeller Tail -> Spark ignores Lightning Rod and hits the selected target
+            NONE_OF { ABILITY_POPUP(opponentLeft, ABILITY_LIGHTNING_ROD); }
+        } else {
+            ABILITY_POPUP(opponentLeft, ABILITY_LIGHTNING_ROD); // no innate -> redirected and absorbed
+            NOT HP_BAR(opponentRight);
+        }
+    }
+}
+
+// Suppression parity: an innate Stalwart honors Gastro Acid exactly like the real ability, so a
+// suppressed holder's moves are redirected again.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Stalwart")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ARCHALUDON, ABILITY_STALWART));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ARCHALUDON) { Ability(ABILITY_STAMINA); } // chosen Stamina, NOT Stalwart
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_FOLLOW_ME); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_GASTRO_ACID, target: playerLeft); }
+        TURN { MOVE(opponentLeft, MOVE_FOLLOW_ME); MOVE(playerLeft, MOVE_DRACO_METEOR, target: opponentRight); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet used Gastro Acid!");
+        HP_BAR(opponentLeft);      // innate suppressed -> Follow Me redirects the move
+        NOT HP_BAR(opponentRight);
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -4892,6 +4972,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_HUGE_POWER, ABILITY_PURE_POWER,
         ABILITY_CLEAR_BODY, ABILITY_WHITE_SMOKE, ABILITY_HYPER_CUTTER, ABILITY_BIG_PECKS,
         ABILITY_DAZZLING, ABILITY_QUEENLY_MAJESTY, ABILITY_ARMOR_TAIL,
+        ABILITY_PROPELLER_TAIL, ABILITY_STALWART,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

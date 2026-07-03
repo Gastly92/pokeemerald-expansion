@@ -76,6 +76,13 @@
 //   GetBattlerDazzlingAbility, which credits the innate beside the chosen IsDazzlingAbility test; the AI's
 //   Ai_IsPriorityBlocked (a dedicated helper, not the shared calc) is made innate-aware the same way. The
 //   pop-up/record overwrite shows the innate, not the chosen ability.)
+//   PROPELLER_TAIL / STALWART (redirection-ignore, Batch G — both 1:1 clean-upside copies, canon-only (no
+//   flavor picks): the holder's moves ignore redirection — Follow Me / Rage Powder, Lightning Rod / Storm
+//   Drain, and the Ally Switch target-swap — hitting the originally-selected target regardless. Identical
+//   effect, wired at the shared redirection sites in src/battle_move_resolution.c (IsAffectedByFollowMe +
+//   the Lightning-Rod/Storm-Drain redirect loop) and the Ally-Switch retarget in src/battle_anim_effects_1.c,
+//   each crediting the innate beside the chosen IsAbilityAndRecord/== test; the AI's dedicated
+//   IsMoveRedirectionPrevented helper is made innate-aware the same way. No pop-up (redirection is silent).)
 //   NOTE: Zangoose carries innate TOXIC_BOOST, not innate Immunity — the two are contradictory
 //   (Immunity blocks the poison Toxic Boost needs), so its canon-Toxic-Boost frontier identity wins;
 //   innate Immunity still lives on Gligar / Snorlax.
@@ -1915,6 +1922,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0227
         SPECIES_SKARMORY_MEGA,
         INNATES(
+            ABILITY_STALWART,
             ABILITY_STURDY
         )
     },
@@ -5833,12 +5841,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0846
         SPECIES_ARROKUDA,
         INNATES(
+            ABILITY_PROPELLER_TAIL,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0847
         SPECIES_BARRASKEWDA,
         INNATES(
+            ABILITY_PROPELLER_TAIL,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -6038,6 +6048,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARCTOVISH,
         INNATES(
             ABILITY_SLUSH_RUSH
+        )
+    },
+    { // 0884
+        SPECIES_DURALUDON,
+        INNATES(
+            ABILITY_STALWART
+        )
+    },
+    { // 0884
+        SPECIES_DURALUDON_GMAX,
+        INNATES(
+            ABILITY_STALWART
         )
     },
     { // 0885
@@ -6549,6 +6571,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1018
         SPECIES_ARCHALUDON,
         INNATES(
+            ABILITY_STALWART,
             ABILITY_STURDY
         )
     },

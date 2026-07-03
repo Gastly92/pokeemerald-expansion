@@ -2305,7 +2305,11 @@ bool32 IsMoveRedirectionPrevented(enum BattlerId battlerAtk, enum Move move, enu
     if (effect == EFFECT_SKY_DROP
       || effect == EFFECT_SNIPE_SHOT
       || atkAbility == ABILITY_PROPELLER_TAIL
-      || atkAbility == ABILITY_STALWART)
+      || atkAbility == ABILITY_STALWART
+      // FORK: innate-aware Propeller Tail / Stalwart (FEATURE_INNATE_ABILITIES). battlerAtk is
+      // on-field here, so the AI predicts its own redirection-ignore from an innate too.
+      || IsInnateActive(battlerAtk, ABILITY_PROPELLER_TAIL)
+      || IsInnateActive(battlerAtk, ABILITY_STALWART))
         return TRUE;
     return FALSE;
 }
