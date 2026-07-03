@@ -4698,7 +4698,9 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
     // Electric Terrain and (since the AI's turn-order prediction runs this same function) makes the AI
     // threat/respect it innate-aware. Innates are species-derived (public knowledge), so this never leaks
     // a hidden chosen ability. Pure 1:1 boon (no downside to drop). See src/fork/innate_abilities.c.
-    else if ((ability == ABILITY_SURGE_SURFER || IsInnateActive(battler, ABILITY_SURGE_SURFER)) && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+    // The Electric-Terrain field check is deliberately FIRST so the IsInnateActive() call is short-circuited
+    // away in the common (no-terrain) case — this is a hot AI turn-order path (see test/battle/ai/ai_thinking_time.c).
+    else if ((gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) && (ability == ABILITY_SURGE_SURFER || IsInnateActive(battler, ABILITY_SURGE_SURFER)))
         speed *= 2;
     else if (ability == ABILITY_SLOW_START && gBattleMons[battler].volatiles.slowStartTimer != 0)
         speed /= 2;
