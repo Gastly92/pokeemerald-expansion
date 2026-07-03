@@ -541,6 +541,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MELMETAL, 1,
         ABILITY_FILTER
     },
+    { // 0847
+        // Barraskewda's only real abilities (Swift Swim, Propeller Tail) are BOTH now innate, so its EMPTY
+        // slot 1 takes Water Absorb — :x: (never an innate -> stable) and on-theme for the skewer fish: it
+        // shrugs off Water moves and heals from them, a clean switch-in boon for its Choice attacker sets
+        // alongside the innate Swift Swim (Speed) and Propeller Tail (redirection-proof). Same pick as the
+        // other water mons in this table (Clawitzer / Grapploct / Carracosta).
+        SPECIES_BARRASKEWDA, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0853
         // Grapploct's only real abilities (Limber, Technician) are BOTH now innate, so its empty slot 1
         // takes a flavorful chosen ability for the frontier sets. Water Absorb is :x: (never an innate ->
