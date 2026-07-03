@@ -69,6 +69,13 @@
 //   Defense. Wired in battle_stat_change.c beside the chosen-ability paths (generalizing the Keen Eye /
 //   Illuminate accuracy block), with the AI's CanLowerStat and the Intimidate switch-in heuristic made
 //   innate-aware. The pop-up/record overwrite shows the innate, not the chosen ability.)
+//   DAZZLING / QUEENLY_MAJESTY / ARMOR_TAIL (priority-move block, Batch F — all 1:1 clean-upside copies,
+//   canon-only (no flavor picks — blocking every priority move against the holder AND its allies is a
+//   potent, hard-to-justify-broadly effect, so the set stays the three canon users Bruxish / Tsareena /
+//   Farigiraf). Wired at the shared CancelerPriorityBlock effect site (src/battle_move_resolution.c) via
+//   GetBattlerDazzlingAbility, which credits the innate beside the chosen IsDazzlingAbility test; the AI's
+//   Ai_IsPriorityBlocked (a dedicated helper, not the shared calc) is made innate-aware the same way. The
+//   pop-up/record overwrite shows the innate, not the chosen ability.)
 //   NOTE: Zangoose carries innate TOXIC_BOOST, not innate Immunity — the two are contradictory
 //   (Immunity blocks the poison Toxic Boost needs), so its canon-Toxic-Boost frontier identity wins;
 //   innate Immunity still lives on Gligar / Snorlax.
@@ -5378,7 +5385,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0763
         SPECIES_TSAREENA,
         INNATES(
-            ABILITY_SWEET_VEIL
+            ABILITY_SWEET_VEIL,
+            ABILITY_QUEENLY_MAJESTY
         )
     },
     { // 0764
@@ -5435,7 +5443,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BRUXISH,
         INNATES(
             ABILITY_STRONG_JAW,
-            ABILITY_WONDER_SKIN
+            ABILITY_WONDER_SKIN,
+            ABILITY_DAZZLING
         )
     },
     { // 0781
@@ -6447,6 +6456,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
+        )
+    },
+    { // 0981
+        SPECIES_FARIGIRAF,
+        INNATES(
+            ABILITY_ARMOR_TAIL
         )
     },
     { // 0982

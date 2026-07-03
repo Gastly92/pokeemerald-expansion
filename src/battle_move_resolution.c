@@ -1671,6 +1671,27 @@ bool32 IsDazzlingAbility(enum Ability ability)
     return FALSE;
 }
 
+// FORK: innate-aware priority-block resolver (FEATURE_INNATE_ABILITIES). Returns the
+// priority-blocking ability (Dazzling / Queenly Majesty / Armor Tail) active on `battler`
+// as either its already-resolved chosen ability (`chosenAbility`, cached by the caller) or
+// an active innate, else ABILITY_NONE. The chosen half is the plain IsDazzlingAbility test,
+// so a real ability's path is byte-for-byte unchanged; the innate half is queried innate-only
+// via IsInnateActive (which returns FALSE with the feature off, so this collapses to the
+// chosen check in stock play). Priority-block is a clean upside — it never hurts its holder —
+// so the innate is a 1:1 copy with no pure-boon divergence.
+enum Ability GetBattlerDazzlingAbility(enum BattlerId battler, enum Ability chosenAbility)
+{
+    if (IsDazzlingAbility(chosenAbility))
+        return chosenAbility;
+    if (IsInnateActive(battler, ABILITY_DAZZLING))
+        return ABILITY_DAZZLING;
+    if (IsInnateActive(battler, ABILITY_QUEENLY_MAJESTY))
+        return ABILITY_QUEENLY_MAJESTY;
+    if (IsInnateActive(battler, ABILITY_ARMOR_TAIL))
+        return ABILITY_ARMOR_TAIL;
+    return ABILITY_NONE;
+}
+
 static enum CancelerResult CancelerPriorityBlock(struct BattleCalcValues *cv)
 {
     bool32 effect = FALSE;
@@ -1690,8 +1711,9 @@ static enum CancelerResult CancelerPriorityBlock(struct BattleCalcValues *cv)
          && (!IsDoubleBattle() || ShouldSkipFailureCheckOnBattler(cv->battlerAtk, BATTLE_PARTNER(battler), TRUE))) // either battler or partner is affected
             continue;
 
-        ability = cv->abilities[battler];
-        if (IsDazzlingAbility(ability))
+        // FORK: innate-aware — an innate Dazzling / Queenly Majesty / Armor Tail blocks priority too.
+        ability = GetBattlerDazzlingAbility(battler, cv->abilities[battler]);
+        if (ability != ABILITY_NONE)
         {
             effect = TRUE;
             break;
@@ -1703,6 +1725,10 @@ static enum CancelerResult CancelerPriorityBlock(struct BattleCalcValues *cv)
         gLastUsedAbility = ability;
         RecordAbilityBattle(battler, ability);
         gBattlerAbility = battler;
+        // FORK: an innate blocker's chosen ability differs, so force the pop-up to show the innate
+        // (CreateAbilityPopUp reads the primary slot otherwise). No-op for a real blocking ability.
+        if (GetBattlerAbility(battler) != ability)
+            gBattleScripting.abilityPopupOverwrite = ability;
         gBattlescriptCurrInstr = BattleScript_PokemonCannotUseMove;
         return CANCELER_RESULT_FAILURE;
     }

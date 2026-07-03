@@ -516,6 +516,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TURTONATOR, 1,
         ABILITY_FLAME_BODY
     },
+    { // 0779
+        // Bruxish's three real abilities (Dazzling, Strong Jaw, Wonder Skin) are ALL now innate, so its
+        // innate-redundant slot-1 Strong Jaw -- unpinned by any test (audited: only slot-0 Dazzling is
+        // pinned, by dazzling.c / bide.c / last_resort.c) -- takes a chosen Sheer Force. Sheer Force is :x:
+        // (never an innate -> stable) and a strong boon for the Gnash Teeth Pokemon's biting attacker sets:
+        // Psychic Fangs / Crunch / Liquidation / Ice Fang all gain +30% and drop their secondaries (and a
+        // Life Orb set skips its recoil), stacking with the innate Strong Jaw fang boost and Dazzling block.
+        SPECIES_BRUXISH, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0802
         // Marshadow's only real ability (Technician) is now innate, so its empty slot 1 takes a flavorful
         // chosen ability for the frontier sets. Illusion is :x: (never an innate -> stable) and on-theme:

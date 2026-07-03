@@ -103,6 +103,8 @@
 // or a physical-Attack doubler (Huge Power / Pure Power double the holder's physical Attack)
 // or a stat-drop protector (Clear Body / White Smoke keep ANY of the holder's stats from being lowered by
 // another mon; Hyper Cutter protects Attack, Big Pecks Defense)
+// or a priority-move blocker (Dazzling / Queenly Majesty / Armor Tail stop opponents using priority moves
+// against the holder or its allies)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -182,6 +184,11 @@
 // Metagross / Regirock / Regice / Registeel / Carbink / Diancie (Clear Body [+ Sturdy] innate, empty
 // slot 1) a chosen Tough Claws / Solid Rock / Ice Scales / Bulletproof / Solid Rock / Solid Rock — each a
 // stable :x: or already-implemented :white_check_mark: pick.
+// The priority-move blockers (Batch F) free six sets: the Tsareena sets take their complementary REAL slot-0
+// Leaf Guard (sun status-immunity; Sweet Veil is already Tsareena's innate), the Farigiraf sets take their
+// complementary REAL HA Sap Sipper (:x:, Grass immunity + Attack boost), and Bruxish (Dazzling + Strong Jaw +
+// Wonder Skin ALL now innate) repurposes its innate-redundant slot-1 Strong Jaw to a chosen Sheer Force
+// override (:x:, powers up its biting kit) — its slot-0 Dazzling stays a real ability (pinned by tests).
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -18530,7 +18537,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_QUEENLY_MAJESTY,
+        .ability = ABILITY_LEAF_GUARD, // Queenly Majesty now innate; chosen Leaf Guard (real slot) adds sun status-immunity
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18550,7 +18557,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SYNTHESIS,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_QUEENLY_MAJESTY,
+        .ability = ABILITY_LEAF_GUARD, // Queenly Majesty now innate; chosen Leaf Guard (real slot) adds sun status-immunity
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19077,7 +19084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_DAZZLING, // Strong Jaw now innate; chosen Dazzling blocks priority
+        .ability = ABILITY_SHEER_FORCE, // Strong Jaw + Dazzling now innate; chosen Sheer Force (slot-1 override) powers up the fangs
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19097,7 +19104,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_DAZZLING, // Strong Jaw now innate; chosen Dazzling blocks priority
+        .ability = ABILITY_SHEER_FORCE, // Strong Jaw + Dazzling now innate; chosen Sheer Force (slot-1 override) powers up the fangs
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24368,7 +24375,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_REST
         },
-        .ability = ABILITY_ARMOR_TAIL,
+        .ability = ABILITY_SAP_SIPPER, // Armor Tail now innate; chosen Sap Sipper (real HA) adds a Grass immunity + Attack boost
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24388,7 +24395,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_ARMOR_TAIL,
+        .ability = ABILITY_SAP_SIPPER, // Armor Tail now innate; chosen Sap Sipper (real HA) adds a Grass immunity + Attack boost
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,

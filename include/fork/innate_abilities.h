@@ -37,7 +37,8 @@
 //   GALE_WINGS / TRIAGE (priority granters, Batch Q),
 //   SURGE_SURFER / GRASS_PELT (terrain modifiers, Batch R),
 //   HUGE_POWER / PURE_POWER (double physical Attack, Batch C),
-//   CLEAR_BODY / WHITE_SMOKE / HYPER_CUTTER / BIG_PECKS (stat-drop protection, Batch D+E).
+//   CLEAR_BODY / WHITE_SMOKE / HYPER_CUTTER / BIG_PECKS (stat-drop protection, Batch D+E),
+//   DAZZLING / QUEENLY_MAJESTY / ARMOR_TAIL (priority-move block, Batch F).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

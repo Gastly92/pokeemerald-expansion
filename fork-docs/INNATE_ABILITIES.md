@@ -1722,3 +1722,45 @@ Armor is repurposed), **Bombirdier** (Big Pecks + Keen Eye + Rocky Payload) → 
 doubles/anim tests) → chosen **Motor Drive** (`:x:`) in its unpinned slot-1 Minus, and **Metagross /
 Regirock / Regice / Registeel / Carbink / Diancie** (Clear Body [+ Sturdy] innate, EMPTY slot 1) → chosen
 **Tough Claws / Solid Rock / Ice Scales / Bulletproof / Solid Rock / Solid Rock** — each stable and thematic.
+
+### ABILITY_DAZZLING / ABILITY_QUEENLY_MAJESTY / ABILITY_ARMOR_TAIL
+
+The "priority-move blockers" (Batch F): opponents cannot use increased-priority moves against the holder
+**or its allies**. All three are **clean upsides** that never hurt the holder, so each innate is a plain
+**1:1 copy** — no pure-boon divergence.
+
+**Effect site — one shared block in `CancelerPriorityBlock` (`src/battle_move_resolution.c`).** The canceler
+loops over the opposing battlers and asks whether any of them blocks the incoming priority move. That read
+was routed through a new helper `GetBattlerDazzlingAbility(battler, chosenAbility)`, which returns the
+blocking ability the battler carries as either its already-cached **chosen** ability (the plain
+`IsDazzlingAbility` test, unchanged) or an active **innate** (`IsInnateActive`, innate-only so it can't leak
+the chosen slot), else `ABILITY_NONE`. Because `CreateAbilityPopUp` reads the *primary* slot, the block sets
+`gBattleScripting.abilityPopupOverwrite = ability` **only when the chosen ability differs**, so the pop-up
+shows the innate while the real-ability path stays byte-for-byte unchanged (`gLastUsedAbility` /
+`RecordAbilityBattle` / `BattleScript_PokemonCannotUseMove` all reused). No driver is needed. **No
+`DETERMINISTIC_*` surface is touched** — a priority block is a turn-order gate, not an accuracy / secondary /
+crit / held-item effect.
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / Ability Shield /
+not-on-field); all three are **breakable**, so an attacker's Mold Breaker / Teravolt pierces an innate one
+exactly as it would the real ability.
+
+**AI.** The priority-block reasoning lives in a **dedicated helper** (`Ai_IsPriorityBlocked`,
+`src/battle_ai_util.c`), NOT the shared damage calc, so it had to be made innate-aware: its two
+`IsDazzlingAbility(aiData->abilities[...])` reads (the defender and, in doubles, its partner) now go through
+the same `GetBattlerDazzlingAbility` helper, so the AI won't waste a priority move (First Impression, Quick
+Attack, …) into an innate blocker. On-field only, so `IsInnateActive` covers it.
+
+**Species (canon-only, no flavor picks — blocking every priority move against a mon *and its allies* is a
+potent, hard-to-justify-broadly effect, so the set stays the three canon carriers):** **Dazzling** on
+Bruxish, **Queenly Majesty** on Tsareena (merged into its existing Sweet Veil row), **Armor Tail** on
+Farigiraf. (Tsareena's pre-evolutions and Girafarig don't carry the ability in their real data, so they're
+correctly omitted.)
+
+**Frontier (Step 3.5):** all six hardcoded sets were freed. The **Tsareena** sets take their complementary
+REAL slot-0 **Leaf Guard** (Sweet Veil is already Tsareena's innate, so it can't be reused), the **Farigiraf**
+sets take their complementary REAL HA **Sap Sipper** (`:x:`, a Grass immunity + Attack boost). **Bruxish**
+is the *all-real-abilities-innate* case — Dazzling **and** Strong Jaw (Batch A) **and** Wonder Skin (Batch P)
+are all now innate — so it takes a fork-owned override (`species_ability_overrides.c`) repurposing its
+innate-redundant, test-unpinned slot-1 Strong Jaw to a chosen **Sheer Force** (`:x:`, powers up its biting
+kit); its slot-0 Dazzling stays a real ability because `dazzling.c` / `bide.c` / `last_resort.c` pin it.

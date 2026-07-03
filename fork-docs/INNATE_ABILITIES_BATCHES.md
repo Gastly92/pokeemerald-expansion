@@ -355,7 +355,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 7 | Batch R — Terrain modifiers | calc, no driver | done |
 | 8 | Batch C — Double physical Attack | clone, no driver | done |
 | 9 | Batch D+E — Stat-drop protection (fold E into D) | trait, no driver | done |
-| 10 | Batch F — Priority-move block | clone, no driver | open |
+| 10 | Batch F — Priority-move block | clone, no driver | done |
 | 11 | Batch G — Redirection-ignore | clone, no driver | open |
 | 12 | Batch H — Trapping | trait, no driver | open |
 | 13 | Batch I — Status-condition immunities | trait, no driver | open |
@@ -414,7 +414,7 @@ row is `done`.
 | C — Double physical Attack | clone | 2 | done |
 | D — Full stat-drop protection | trait (+AI) | 2 | done |
 | E — Single-stat-drop protection | trait (fold into D) | 2 | done |
-| F — Priority-move block | clone | 3 | open |
+| F — Priority-move block | clone | 3 | done |
 | G — Redirection-ignore | clone | 2 | open |
 | H — Trapping | trait (+AI) | 3 | open |
 | I — Status-condition immunities | trait | 6 | open |

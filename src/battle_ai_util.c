@@ -516,10 +516,13 @@ bool32 Ai_IsPriorityBlocked(enum BattlerId battlerAtk, enum BattlerId battlerDef
     if (IsMoldBreakerTypeAbility(battlerAtk, aiData->abilities[battlerAtk]) || MoveIgnoresTargetAbility(move))
         return FALSE;
 
-    if (IsDazzlingAbility(aiData->abilities[battlerDef]))
+    // FORK: innate-aware — the AI respects an innate Dazzling / Queenly Majesty / Armor Tail
+    // blocker too (this is a dedicated helper, not the shared damage calc, so it needs wiring).
+    if (GetBattlerDazzlingAbility(battlerDef, aiData->abilities[battlerDef]) != ABILITY_NONE)
         return TRUE;
 
-    if (IsDoubleBattle() && IsDazzlingAbility(aiData->abilities[BATTLE_PARTNER(battlerDef)]))
+    if (IsDoubleBattle()
+     && GetBattlerDazzlingAbility(BATTLE_PARTNER(battlerDef), aiData->abilities[BATTLE_PARTNER(battlerDef)]) != ABILITY_NONE)
         return TRUE;
 
     return FALSE;
