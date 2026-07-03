@@ -99,6 +99,7 @@
 // Wonder Skin caps incoming status moves at 50% accuracy — a PP tax under DETERMINISTIC_ACCURACY_EVASION /
 // Tangled Feet doubles evasion while confused)
 // or a priority granter (Gale Wings gives Flying moves +1 priority at full HP / Triage gives healing moves +3 priority)
+// or a terrain modifier (Surge Surfer doubles the holder's Speed on Electric Terrain / Grass Pelt boosts its Defense 1.5x on Grassy Terrain)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -154,6 +155,9 @@
 // (chosen Flame Body, a :x: pick), and Comfey (whose Triage and Natural Cure are both now innate) repurposes its
 // innate-redundant slot-2 Natural Cure to a chosen Sweet Veil — an already-implemented :white_check_mark: innate
 // (stable) it lacks natively, keeping its doubles team awake.
+// The terrain modifiers (Batch R) free two sets: Raichu-Alola (sole Surge Surfer, now innate) gets a fork-owned chosen
+// Lightning Rod override (:x:, stable) so its slot isn't wasted, and Gogoat's Grass-Pelt set frees its slot to its
+// complementary REAL Sap Sipper (Grass immunity + Attack boost), stacking with the innate Grass Pelt Defense boost.
 // (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
 // Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
 // innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
@@ -707,7 +711,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NASTY_PLOT,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_SURGE_SURFER,
+        .ability = ABILITY_LIGHTNING_ROD, // Surge Surfer now innate; chosen Lightning Rod (override) draws Electric moves + boosts Sp. Atk
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -727,7 +731,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_SURGE_SURFER,
+        .ability = ABILITY_LIGHTNING_ROD, // Surge Surfer now innate; chosen Lightning Rod (override) draws Electric moves + boosts Sp. Atk
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16211,7 +16215,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_BULK_UP
         },
-        .ability = ABILITY_GRASS_PELT,
+        .ability = ABILITY_SAP_SIPPER, // Grass Pelt now innate; chosen Sap Sipper (real slot 0) grants Grass immunity + Atk boost
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

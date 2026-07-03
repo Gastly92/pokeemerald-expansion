@@ -25,6 +25,7 @@
 static bool32 DoesAbilityBenefitFromWeather(enum Ability ability, u32 weather);
 static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather); // FORK: FEATURE_INNATE_ABILITIES
 static bool32 DoesAbilityBenefitFromFieldStatus(enum Ability ability, u32 fieldStatus);
+static bool32 DoesInnateBenefitFromFieldStatus(enum BattlerId battler, u32 fieldStatus); // FORK: FEATURE_INNATE_ABILITIES
 // A move is light sensitive if it is boosted by Sunny Day and weakened by low light weathers.
 static bool32 IsLightSensitiveMove(enum Move move);
 static bool32 HasLightSensitiveMove(enum BattlerId battler);
@@ -217,6 +218,18 @@ static bool32 DoesAbilityBenefitFromFieldStatus(enum Ability ability, u32 fieldS
     return FALSE;
 }
 
+// FORK: FEATURE_INNATE_ABILITIES — innate-aware companion to DoesAbilityBenefitFromFieldStatus (which
+// stays upstream-pristine). TRUE if the battler has an *active innate* terrain-keyed ability (Surge Surfer
+// on Electric Terrain, Grass Pelt on Grassy Terrain) that benefits from `fieldStatus`, so the AI's
+// terrain-setting heuristics value setting it. ORed in at each DoesAbilityBenefitFromFieldStatus call
+// site (kept additive so the upstream function/signature never diverge), mirroring this file's
+// DoesInnateBenefitFromWeather pattern. No-op when the feature is off.
+static bool32 DoesInnateBenefitFromFieldStatus(enum BattlerId battler, u32 fieldStatus)
+{
+    return ((fieldStatus & STATUS_FIELD_ELECTRIC_TERRAIN) && IsInnateActive(battler, ABILITY_SURGE_SURFER))
+        || ((fieldStatus & STATUS_FIELD_GRASSY_TERRAIN)   && IsInnateActive(battler, ABILITY_GRASS_PELT));
+}
+
 static bool32 IsLightSensitiveMove(enum Move move)
 {
     switch (GetMoveEffect(move))
@@ -345,7 +358,8 @@ static enum FieldEffectOutcome BenefitsFromRain(enum BattlerId battler)
 //TODO: when is electric terrain bad?
 static enum FieldEffectOutcome BenefitsFromElectricTerrain(enum BattlerId battler)
 {
-    if (DoesAbilityBenefitFromFieldStatus(gAiLogicData->abilities[battler], STATUS_FIELD_ELECTRIC_TERRAIN))
+    if (DoesAbilityBenefitFromFieldStatus(gAiLogicData->abilities[battler], STATUS_FIELD_ELECTRIC_TERRAIN)
+     || DoesInnateBenefitFromFieldStatus(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) // FORK: innate-aware
         return FIELD_EFFECT_POSITIVE;
 
     if (HasBattlerTerrainBoostMove(battler, STATUS_FIELD_ELECTRIC_TERRAIN))
@@ -374,7 +388,8 @@ static enum FieldEffectOutcome BenefitsFromElectricTerrain(enum BattlerId battle
 //TODO: when is grassy terrain bad?
 static enum FieldEffectOutcome BenefitsFromGrassyTerrain(enum BattlerId battler)
 {
-    if (DoesAbilityBenefitFromFieldStatus(gAiLogicData->abilities[battler], STATUS_FIELD_GRASSY_TERRAIN))
+    if (DoesAbilityBenefitFromFieldStatus(gAiLogicData->abilities[battler], STATUS_FIELD_GRASSY_TERRAIN)
+     || DoesInnateBenefitFromFieldStatus(battler, STATUS_FIELD_GRASSY_TERRAIN)) // FORK: innate-aware
         return FIELD_EFFECT_POSITIVE;
 
     if (HasBattlerSideMoveWithEffect(battler, EFFECT_GRASSY_GLIDE))

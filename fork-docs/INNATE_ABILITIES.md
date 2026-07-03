@@ -1562,3 +1562,51 @@ innate) are both redundant, and its only other real ability, Flower Veil, is sti
 slot-2 Natural Cure is repurposed (`species_ability_overrides.c`) to chosen **Sweet Veil** — an
 already-implemented `:white_check_mark:` innate (stable, like Slurpuff's Unaware) that Comfey lacks
 natively and that is thematic (its soothing aroma keeps the doubles team awake).
+
+### ABILITY_SURGE_SURFER / ABILITY_GRASS_PELT
+
+The "terrain modifiers" (Batch R): each is a stat calc keyed off a field terrain — the terrain edition of
+the weather speed-doublers / defensive boosters. Both are **clean upsides** that never hurt the holder, so
+each innate is a plain **1:1 copy** — no pure-boon divergence. Each is wired at a single shared-calc site:
+
+- **Surge Surfer** (Speed ×2 on Electric Terrain) — wired in `GetBattlerTotalSpeedStat`
+  (`src/battle_main.c`), beside the four weather speed-doublers: the chosen-ability branch's
+  `ability == ABILITY_SURGE_SURFER` test becomes
+  `(ability == ABILITY_SURGE_SURFER || IsInnateActive(battler, ABILITY_SURGE_SURFER))`, leaving the
+  `gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN` guard shared. It sits in the same `else if` chain as
+  Quick Feet (a statused Quick Feet holder wins the chain), exactly like the real ability.
+- **Grass Pelt** (Defense ×1.5 on Grassy Terrain) — the upstream effect lives in a
+  `switch (ctx->abilities[battlerDef])` in `CalcDefenseStat` (`src/battle_util.c`) that dispatches on the
+  *chosen* ability, so (like the Batch B / N reducers Fur Coat and Marvel Scale beside it) the innate
+  clause is an additive `if` *after* the switch: `usesDefStat && (fieldStatuses & GRASSY_TERRAIN) &&
+  ctx->abilities[battlerDef] != ABILITY_GRASS_PELT && ctx->innatesEnabled &&
+  IsInnateActive(battlerDef, ABILITY_GRASS_PELT)`. The `!= ABILITY_GRASS_PELT` guard stops a chosen
+  Grass Pelt from double-applying; `usesDefStat` gates it to physical hits, the same gate the real
+  ability uses.
+
+Both `IsInnateActive` reads are feature-gated and species-based, so with the feature off each is a strict
+no-op and the real-ability path stays byte-for-byte unchanged. No script / pop-up / driver — these are
+pure stat calcs, so no `DETERMINISTIC_*` surface is touched (neither reads accuracy / secondary effects /
+crits / held items).
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); neither
+ability is breakable, so Mold Breaker never touches them, same as the real abilities.
+
+**AI.** On-field prediction is FREE: both effects live in shared calcs the AI runs keyed off the real
+battler — `GetBattlerTotalSpeedStat` (turn-order) for Surge Surfer, `CalcDefenseStat` (damage) for Grass
+Pelt — so the AI threatens/respects both automatically. The one dedicated AI *effect* read is the
+terrain-*setting* heuristic in `src/battle_ai_field_statuses.c` ("should I set this terrain?"): a new fork
+companion `DoesInnateBenefitFromFieldStatus(battler, fieldStatus)` — mirroring the existing
+`DoesInnateBenefitFromWeather` — is ORed in beside the chosen-only
+`DoesAbilityBenefitFromFieldStatus(...)` reads at the Electric- and Grassy-Terrain call sites, so the AI
+values setting the terrain for an innate-Surge-Surfer / innate-Grass-Pelt side too.
+
+**Species (canon-only, no flavor picks):** Surge Surfer → Raichu-Alola (its only canon user). Grass Pelt →
+the Skiddo line (Skiddo, Gogoat — its canon Hidden-Ability users).
+
+**Frontier (Step 3.5):** three hardcoded sets were freed. Raichu-Alola is the ability-locked case — its
+*only* real ability was Surge Surfer, now innate — so it takes a fork-owned chosen **Lightning Rod**
+override (`species_ability_overrides.c`; `:x:` in the progress doc → stable, on-theme for the Electric
+mouse: draws in Electric moves for immunity + a Sp. Atk boost), the same trick as Cornerstone Ogerpon.
+Gogoat's Grass-Pelt set instead frees its slot to its complementary REAL **Sap Sipper** (slot 0; Grass
+immunity + Attack boost), which stacks with the innate Grass Pelt Defense boost.

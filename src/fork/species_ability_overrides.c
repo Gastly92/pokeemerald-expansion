@@ -63,6 +63,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BUTTERFREE, 1,
         ABILITY_EFFECT_SPORE
     },
+    { // 0026
+        // Raichu-Alola's only real ability (Surge Surfer) is now innate, so its empty slot 1 takes a
+        // flavorful chosen ability for the frontier sets. Lightning Rod is :x: (never an innate -> stable)
+        // and on-theme for the Electric mouse: it draws in Electric moves for immunity + a Sp. Atk boost,
+        // a clean offensive boon for its special-attacker sets alongside the innate Surge Surfer speed.
+        SPECIES_RAICHU_ALOLA, 1,
+        ABILITY_LIGHTNING_ROD
+    },
     { // 0028
         // Sandslash's only real abilities (Sand Veil, Sand Rush) are BOTH now innate, so its empty
         // slot 1 takes a flavorful chosen ability. Sand Stream is :x: (never an innate -> stable) and

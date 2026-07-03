@@ -53,6 +53,12 @@
 //   same reasoning that kept Prankster's flavor set tight): Gale Wings gives the holder's Flying moves
 //   +1 priority (only at full HP under B_GALE_WINGS >= GEN_7), Triage gives its healing moves +3
 //   priority. The AI's turn-order prediction runs the same calc, so it threatens/respects both for free.)
+//   SURGE_SURFER / GRASS_PELT (terrain modifiers, Batch R — both 1:1 clean-upside copies, canon-only (no
+//   flavor picks): Surge Surfer doubles the holder's Speed on Electric Terrain (the terrain edition of the
+//   weather speed-doublers, wired at GetBattlerTotalSpeedStat), Grass Pelt boosts its Defense by 50% on
+//   Grassy Terrain (wired in CalcDefenseStat beside Marvel Scale). Both live in shared calcs the AI runs,
+//   so on-field damage/turn-order prediction is innate-aware for free; the AI's terrain-setting heuristic
+//   credits them via DoesInnateBenefitFromFieldStatus (src/battle_ai_field_statuses.c).)
 //   NOTE: Zangoose carries innate TOXIC_BOOST, not innate Immunity — the two are contradictory
 //   (Immunity blocks the poison Toxic Boost needs), so its canon-Toxic-Boost frontier identity wins;
 //   innate Immunity still lives on Gligar / Snorlax.
@@ -335,6 +341,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARBOK,
         INNATES(
             ABILITY_LIMBER
+        )
+    },
+    { // 0026
+        SPECIES_RAICHU_ALOLA,
+        INNATES(
+            ABILITY_SURGE_SURFER
         )
     },
     { // 0027
@@ -4549,6 +4561,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPOUND_EYES,
             ABILITY_SHIELD_DUST
+        )
+    },
+    { // 0672
+        SPECIES_SKIDDO,
+        INNATES(
+            ABILITY_GRASS_PELT
+        )
+    },
+    { // 0673
+        SPECIES_GOGOAT,
+        INNATES(
+            ABILITY_GRASS_PELT
         )
     },
     { // 0674
