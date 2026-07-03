@@ -432,6 +432,7 @@ void RemoveAbilityFlags(enum BattlerId battler);
 void RemoveRuinAbilityFlags(enum BattlerId battler);
 void CheckSetUnburden(enum BattlerId battler);
 bool32 IsDazzlingAbility(enum Ability ability);
+enum Ability GetBattlerDazzlingAbility(enum BattlerId battler, enum Ability chosenAbility); // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
 bool32 IsAllowedToUseBag(void);
 bool32 IsAnyTargetTurnDamaged(enum BattlerId battlerAtk, enum SubCheck subCheck);
 bool32 IsAnyTargetAffected(void);

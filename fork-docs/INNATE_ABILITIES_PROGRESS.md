@@ -220,12 +220,12 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Power Construct | Cells gather to aid the Pokémon when its HP drops to half or less, causing it to change into its Complete Forme. |
 | :white_large_square: | Corrosion | The Pokémon can poison or badly poison targets even if they're Steel or Poison types. |
 | :white_large_square: | Comatose | The Pokémon is always drowsing and will never wake up. It can attack while in its sleeping state. |
-| :white_large_square: | Queenly Majesty | Opponents are unable to use priority moves against the Pokémon or its allies. |
+| :white_check_mark: | Queenly Majesty | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :white_large_square: | Innards Out | When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker. |
 | :white_large_square: | Dancer | Whenever a dance move is used in battle, the Pokémon will copy the user to immediately perform that dance move itself. |
 | :white_large_square: | Battery | Powers up ally Pokémon's special moves. |
 | :x: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |
-| :white_large_square: | Dazzling | The Pokémon dazzles its opponents, making them unable to use priority moves against the Pokémon or its allies. |
+| :white_check_mark: | Dazzling | The Pokémon dazzles its opponents, making them unable to use priority moves against the Pokémon or its allies. |
 | :white_large_square: | Soul-Heart | Boosts the Pokémon's Sp. Atk stat every time another Pokémon faints. |
 | :white_large_square: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
 | :x: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
@@ -302,7 +302,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
 | :x: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |
 | :x: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |
-| :white_large_square: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |
+| :white_check_mark: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :x: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :x: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
 | :white_large_square: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |

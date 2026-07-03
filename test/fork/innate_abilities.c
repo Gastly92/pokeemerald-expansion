@@ -1082,6 +1082,108 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate T
     }
 }
 
+// ─── Innate Dazzling / Queenly Majesty / Armor Tail (block priority moves) ───────
+// These three abilities stop opponents from using increased-priority moves against the holder
+// or its allies. They are a clean upside (never hurt the holder), so the innate is a 1:1 copy,
+// wired at the shared CancelerPriorityBlock effect site (src/battle_move_resolution.c) via
+// GetBattlerDazzlingAbility. Each canon carrier keeps a different chosen ability here so the block
+// comes solely from the innate, and the pop-up must show the innate, not the chosen ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Dazzling/Queenly Majesty/Armor Tail blocks priority moves against the holder")
+{
+    u32 species;
+    enum Ability chosen, innate;
+    bool32 enabled;
+    PARAMETRIZE { species = SPECIES_BRUXISH;   chosen = ABILITY_WONDER_SKIN; innate = ABILITY_DAZZLING;        enabled = TRUE;  }
+    PARAMETRIZE { species = SPECIES_TSAREENA;  chosen = ABILITY_LEAF_GUARD;  innate = ABILITY_QUEENLY_MAJESTY; enabled = TRUE;  }
+    PARAMETRIZE { species = SPECIES_FARIGIRAF; chosen = ABILITY_SAP_SIPPER;  innate = ABILITY_ARMOR_TAIL;      enabled = TRUE;  }
+    PARAMETRIZE { species = SPECIES_BRUXISH;   chosen = ABILITY_WONDER_SKIN; innate = ABILITY_DAZZLING;        enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMovePriority(MOVE_QUICK_ATTACK) > 0);
+        ASSUME(SpeciesHasInnate(species, innate));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(species) { Ability(chosen); } // chosen ability differs from the innate blocker
+    } WHEN {
+        TURN { MOVE(player, MOVE_QUICK_ATTACK); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(opponent, innate); // pop-up shows the INNATE, not the chosen ability
+            MESSAGE("Wobbuffet cannot use Quick Attack!");
+        } else {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_QUICK_ATTACK, player); // feature off: no innate, the move lands
+        }
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate priority blocker also protects its ally")
+{
+    GIVEN {
+        ASSUME(GetMovePriority(MOVE_QUICK_ATTACK) > 0);
+        ASSUME(SpeciesHasInnate(SPECIES_TSAREENA, ABILITY_QUEENLY_MAJESTY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_TSAREENA) { Ability(ABILITY_LEAF_GUARD); } // innate Queenly Majesty; chosen Leaf Guard
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_QUICK_ATTACK, target: opponentRight); } // priority move at the ally
+    } SCENE {
+        ABILITY_POPUP(opponentLeft, ABILITY_QUEENLY_MAJESTY);
+        MESSAGE("Wobbuffet cannot use Quick Attack!");
+    }
+}
+
+// Suppression parity: Gastro Acid disables the innate exactly like a real ability, so the
+// priority block is gone and the move goes through on the following turn.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate priority blocker")
+{
+    GIVEN {
+        ASSUME(GetMovePriority(MOVE_QUICK_ATTACK) > 0);
+        ASSUME(SpeciesHasInnate(SPECIES_TSAREENA, ABILITY_QUEENLY_MAJESTY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_TSAREENA) { Ability(ABILITY_LEAF_GUARD); } // innate Queenly Majesty
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }   // suppresses Tsareena's abilities, the innate included
+        TURN { MOVE(player, MOVE_QUICK_ATTACK); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Gastro Acid!");
+        // turn 2: with the innate suppressed, the priority move is no longer blocked
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_QUICK_ATTACK, player);
+    }
+}
+
+// AI innate-awareness: the priority-block reasoning lives in a dedicated helper (Ai_IsPriorityBlocked),
+// not the shared damage calc, so it had to be made innate-aware. Mirrors the chosen-ability upstream test
+// "First Impression is not chosen if it's blocked by certain abilities" (test/battle/ai/ai.c) but with the
+// block supplied only by the innate. The feature-off leg proves the AI *does* pick the priority move here
+// when no block is in play, so the feature-on restraint can only come from the innate.
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI won't use a priority move an innate blocker would stop")
+{
+    u32 species;
+    enum Ability chosen, innate;
+    bool32 enabled;
+    PARAMETRIZE { species = SPECIES_BRUXISH;   chosen = ABILITY_WONDER_SKIN; innate = ABILITY_DAZZLING;        enabled = TRUE;  }
+    PARAMETRIZE { species = SPECIES_TSAREENA;  chosen = ABILITY_LEAF_GUARD;  innate = ABILITY_QUEENLY_MAJESTY; enabled = TRUE;  }
+    PARAMETRIZE { species = SPECIES_FARIGIRAF; chosen = ABILITY_SAP_SIPPER;  innate = ABILITY_ARMOR_TAIL;      enabled = TRUE;  }
+    PARAMETRIZE { species = SPECIES_BRUXISH;   chosen = ABILITY_WONDER_SKIN; innate = ABILITY_DAZZLING;        enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_FIRST_IMPRESSION) == EFFECT_FIRST_TURN_ONLY);
+        ASSUME(GetMovePower(MOVE_FIRST_IMPRESSION) == 90);
+        ASSUME(GetMovePower(MOVE_LUNGE) == 80);
+        ASSUME(SpeciesHasInnate(species, innate));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        PLAYER(species) { Ability(chosen); } // innate blocker; chosen ability differs
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_FIRST_IMPRESSION, MOVE_LUNGE); }
+    } WHEN {
+        if (enabled)
+            TURN { EXPECT_MOVE(opponent, MOVE_LUNGE); }           // innate blocks First Impression (priority) -> AI picks Lunge
+        else
+            TURN { EXPECT_MOVE(opponent, MOVE_FIRST_IMPRESSION); } // no innate -> the stronger priority move is fine
+    }
+}
+
 // ─── AI awareness of an innate Unaware (off-field setup heuristic) ──────────────
 // Companion to the chosen-Unaware test "AI won't boost stats against opponent with Unaware"
 // (test/battle/ai/ai.c): the AI shouldn't waste a Swords Dance against a foe whose Unaware
@@ -4789,6 +4891,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_SURGE_SURFER, ABILITY_GRASS_PELT,
         ABILITY_HUGE_POWER, ABILITY_PURE_POWER,
         ABILITY_CLEAR_BODY, ABILITY_WHITE_SMOKE, ABILITY_HYPER_CUTTER, ABILITY_BIG_PECKS,
+        ABILITY_DAZZLING, ABILITY_QUEENLY_MAJESTY, ABILITY_ARMOR_TAIL,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
