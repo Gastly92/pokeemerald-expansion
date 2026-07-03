@@ -7718,6 +7718,16 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
      && ctx->innatesEnabled && IsInnateActive(battlerDef, ABILITY_MARVEL_SCALE))
         modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
 
+    // FORK: an innate Grass Pelt (Batch R, FEATURE_INNATE_ABILITIES) boosts the holder's Defense by 50%
+    // while Grassy Terrain is up, exactly like the real ability. A clean upside (1:1 copy); the switch
+    // above already applied a chosen Grass Pelt, so guard against it to avoid double-applying. usesDefStat
+    // gates it to physical hits, the same gate the real ability uses. On-field AI damage prediction is
+    // correct for free (shared calc keyed off the real battler); identity is untouched.
+    if (usesDefStat && (ctx->fieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
+     && ctx->abilities[battlerDef] != ABILITY_GRASS_PELT
+     && ctx->innatesEnabled && IsInnateActive(battlerDef, ABILITY_GRASS_PELT))
+        modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+
     // ally's abilities
     if (IsBattlerAlive(BATTLE_PARTNER(battlerDef)))
     {

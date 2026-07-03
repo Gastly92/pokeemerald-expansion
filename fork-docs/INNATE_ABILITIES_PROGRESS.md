@@ -185,7 +185,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Stance Change | The Pokémon changes into its Blade Forme when it attacks and changes into its Shield Forme when it uses the move King's Shield. |
 | :white_check_mark: | Gale Wings | Increases the priority of the Pokémon's Flying-type moves by 1 stage while its HP is full. |
 | :white_check_mark: | Mega Launcher | Boosts the power of the Pokémon's pulse moves by 50%. |
-| :white_large_square: | Grass Pelt | Boosts the Pokémon's Defense stat on Grassy Terrain. |
+| :white_check_mark: | Grass Pelt | Boosts the Pokémon's Defense stat on Grassy Terrain. |
 | :x: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
 | :white_check_mark: | Tough Claws | Boosts the power of the Pokémon's contact moves by 30%. |
 | :x: | Pixilate | The Pokémon's Normal-type moves become Fairy-type moves and their power is boosted by 20%. |
@@ -213,7 +213,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Liquid Voice | The Pokémon's sound-based moves become Water-type moves. |
 | :white_check_mark: | Triage | Gives priority to the Pokémon's healing moves. |
 | :x: | Galvanize | Normal-type moves become Electric-type moves. The power of those moves is boosted a little. |
-| :white_large_square: | Surge Surfer | Doubles the Pokémon's Speed stat on Electric Terrain. |
+| :white_check_mark: | Surge Surfer | Doubles the Pokémon's Speed stat on Electric Terrain. |
 | :x: | Schooling | When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low. |
 | :x: | Disguise | When the Pokémon is in its Disguised Form and would take damage from a move, it loses 1/8 of its max HP instead of taking the damage, then changes into its Busted Form. |
 | :x: | Battle Bond | When the Pokémon knocks out a target, its bond with its Trainer is strengthened, and its Attack, Sp. Atk, and Speed stats are boosted. |

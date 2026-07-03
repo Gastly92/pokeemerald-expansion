@@ -4693,7 +4693,12 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
     // Pure 1:1 boon (no downside to drop). See src/fork/innate_abilities.c.
     if ((ability == ABILITY_QUICK_FEET || IsInnateActive(battler, ABILITY_QUICK_FEET)) && gBattleMons[battler].status1 & STATUS1_ANY)
         speed = (speed * 150) / 100;
-    else if (ability == ABILITY_SURGE_SURFER && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+    // FORK: Surge Surfer is also supported as an innate (FEATURE_INNATE_ABILITIES, Batch R — the terrain
+    // edition of the weather speed-doublers above); crediting IsInnateActive() here doubles Speed on
+    // Electric Terrain and (since the AI's turn-order prediction runs this same function) makes the AI
+    // threat/respect it innate-aware. Innates are species-derived (public knowledge), so this never leaks
+    // a hidden chosen ability. Pure 1:1 boon (no downside to drop). See src/fork/innate_abilities.c.
+    else if ((ability == ABILITY_SURGE_SURFER || IsInnateActive(battler, ABILITY_SURGE_SURFER)) && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
         speed *= 2;
     else if (ability == ABILITY_SLOW_START && gBattleMons[battler].volatiles.slowStartTimer != 0)
         speed /= 2;

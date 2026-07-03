@@ -1304,6 +1304,87 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Slush Rush doubles Speed in
     }
 }
 
+// ---- Surge Surfer / Grass Pelt (Batch R — terrain modifiers) ----
+// The terrain edition of the weather speed-doublers / defensive boosters: both live in shared calcs
+// the AI runs, so on-field prediction is innate-aware for free; each is a clean upside (1:1 copy).
+
+// Surge Surfer doubles the holder's Speed on Electric Terrain (GetBattlerTotalSpeedStat, beside the
+// weather doublers). Raichu-Alola carries it innately but here runs a different chosen ability, so the
+// doubling is attributable solely to the innate. Feature-off leg proves stock behavior (faster foe first).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Surge Surfer doubles Speed on Electric Terrain")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_RAICHU_ALOLA, ABILITY_SURGE_SURFER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_RAICHU_ALOLA) { Ability(ABILITY_LIGHTNING_ROD); Speed(100); } // chosen ability, NOT Surge Surfer
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(199); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_ELECTRIC_TERRAIN); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_ELECTRIC_TERRAIN, player);
+        if (enabled)
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        }
+        else
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        }
+    }
+}
+
+// Suppression parity: Gastro Acid nulls the innate Surge Surfer, so the holder no longer outspeeds under
+// Electric Terrain (exactly like the real ability, which is not breakable but is suppressible).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Surge Surfer's Speed boost")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_RAICHU_ALOLA, ABILITY_SURGE_SURFER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(150); }
+        OPPONENT(SPECIES_RAICHU_ALOLA) { Ability(ABILITY_LIGHTNING_ROD); Speed(100); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_ELECTRIC_TERRAIN); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_GASTRO_ACID); MOVE(opponent, MOVE_CELEBRATE); } // suppresses the innate
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Gastro Acid!");
+        // turn 3: with the innate suppressed, doubled Speed is gone, so the faster Wobbuffet moves first
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+    }
+}
+
+// Grass Pelt boosts the holder's Defense by 50% while Grassy Terrain is up (CalcDefenseStat, beside
+// Marvel Scale). Gogoat carries it innately but runs a different chosen ability here, so the reduction is
+// attributable solely to the innate. Strength (no secondary, not Ground) isolates the Defense boost —
+// Grassy Terrain would otherwise halve Ground moves and does not touch Strength.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Grass Pelt boosts Defense 1.5x on Grassy Terrain", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GOGOAT, ABILITY_GRASS_PELT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_GOGOAT) { Ability(ABILITY_SAP_SIPPER); } // chosen Sap Sipper, NOT Grass Pelt
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_STRENGTH, MOVE_GRASSY_TERRAIN); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GRASSY_TERRAIN); MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(opponent, MOVE_STRENGTH); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.5), results[0].damage); // +50% Defense -> ~0.67x damage
+    }
+}
+
 // Sand Rush's second effect: like the real ability, an innate Sand Rush also shrugs off the
 // end-of-turn sandstorm chip damage (a pure boon). Houndstone is Ghost-type, so it is NOT
 // naturally exempt by type — the immunity here comes purely from the innate.
@@ -4488,6 +4569,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_SHIELD_DUST, ABILITY_TINTED_LENS, ABILITY_SCRAPPY, ABILITY_WONDER_SKIN,
         ABILITY_TANGLED_FEET,
         ABILITY_GALE_WINGS, ABILITY_TRIAGE,
+        ABILITY_SURGE_SURFER, ABILITY_GRASS_PELT,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
