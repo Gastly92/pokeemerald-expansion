@@ -30,6 +30,7 @@ static bool32 IsMirrorArmorReflected(struct BattleCalcValues *cv, struct StatCha
 static void AdjustStatStage(struct BattleCalcValues *cv, struct StatChange *st);
 static bool32 CanAbilityPreventStatLoss(enum Ability ability);
 static bool32 AbilityPreventsSpecificStatDrop(u32 ability, u32 stat);
+static enum Ability GetInnateStatDropProtector(enum BattlerId battler, u32 stat, bool32 *fullProtection); // FORK: innate-aware stat-drop protection
 static u32 GetNumPositiveStats(struct StatChange *st);
 static u32 GetNumNegativeStats(struct StatChange *st);
 static void SetAdditionalEffectsOnStatChange(struct BattleCalcValues *cv, struct StatChange *st);
@@ -742,34 +743,40 @@ static bool32 IsAbilityBlocked(struct BattleCalcValues *cv, struct StatChange *s
     if (st->certain)
         return FALSE;
 
-    // FORK: an innate Keen Eye / Illuminate prevents the holder's accuracy from being lowered exactly
-    // like the real ability (pure boon, 1:1 copy). The chosen-ability paths below miss it when the
-    // chosen ability differs, so handle it here when the chosen ability doesn't already block the drop,
-    // overwriting the pop-up/record to the innate (CreateAbilityPopUp reads the primary slot; the
-    // overwrite also stops the reveal leaking the chosen ability). IsInnateActive supplies suppression
-    // parity (both are breakable, so an attacker's Mold Breaker pierces them). Illuminate only does this
-    // in Gen 9+. Mirrors the innate-Oblivious block in IsIntimidateBlocked.
-    if (st->stat == STAT_ACC
-     && !CanAbilityPreventStatLoss(cv->abilities[cv->battlerDef])
+    // FORK: an innate Clear Body / White Smoke (any stat), Hyper Cutter (Atk), Big Pecks (Def),
+    // Keen Eye / Illuminate (Acc) prevents the holder's stat from being lowered exactly like the real
+    // ability (pure boon, 1:1 copy). The chosen-ability paths below miss it when the chosen ability
+    // differs, so handle it here when the chosen ability doesn't already block the drop, overwriting the
+    // pop-up/record to the innate (CreateAbilityPopUp reads the primary slot; the overwrite also stops
+    // the reveal leaking the chosen ability). IsInnateActive supplies suppression parity (all are
+    // breakable, so an attacker's Mold Breaker pierces them). Full protectors (Clear Body / White Smoke)
+    // use the whole-stat script; single-stat protectors the specific one. Mirrors the innate-Oblivious
+    // block in IsIntimidateBlocked.
+    if (!CanAbilityPreventStatLoss(cv->abilities[cv->battlerDef])
      && !AbilityPreventsSpecificStatDrop(cv->abilities[cv->battlerDef], st->stat))
     {
-        enum Ability innate = ABILITY_NONE;
-        if (IsInnateActive(cv->battlerDef, ABILITY_KEEN_EYE))
-            innate = ABILITY_KEEN_EYE;
-        else if (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(cv->battlerDef, ABILITY_ILLUMINATE))
-            innate = ABILITY_ILLUMINATE;
+        bool32 fullProtection = FALSE;
+        enum Ability innate = GetInnateStatDropProtector(cv->battlerDef, st->stat, &fullProtection);
 
         if (innate != ABILITY_NONE)
         {
             if (!st->onlyChecking)
             {
-                PREPARE_STAT_BUFFER(gBattleTextBuff1, st->stat);
-                st->script = BattleScript_AbilityNoSpecificStatLoss;
+                if (fullProtection)
+                {
+                    MarkStatsAsDone(st, NUM_BATTLE_STATS);
+                    st->script = BattleScript_AbilityNoStatLoss;
+                }
+                else
+                {
+                    PREPARE_STAT_BUFFER(gBattleTextBuff1, st->stat);
+                    MarkStatsAsDone(st, st->stat);
+                    st->script = BattleScript_AbilityNoSpecificStatLoss;
+                }
                 gLastUsedAbility = innate;
                 gBattlerAbility = cv->battlerDef;
                 gBattleScripting.battler = cv->battlerDef;
                 gBattleScripting.abilityPopupOverwrite = innate;
-                MarkStatsAsDone(st, st->stat);
                 RecordAbilityBattle(cv->battlerDef, innate);
             }
             return TRUE;
@@ -920,6 +927,36 @@ static bool32 AbilityPreventsSpecificStatDrop(u32 ability, u32 stat)
     default:
         return FALSE;
     }
+}
+
+// FORK: returns the innate stat-drop-protecting ability active on `battler` for a drop of `stat`
+// (Clear Body / White Smoke block any stat, Hyper Cutter Atk, Big Pecks Def, Keen Eye / Illuminate
+// Acc), or ABILITY_NONE if none. Sets *fullProtection TRUE for the whole-stat protectors so the
+// caller can pick the right message/script. Suppression parity via IsInnateActive (all are breakable,
+// so an attacker's Mold Breaker pierces them). Illuminate only protects accuracy in Gen 9+. See
+// IsAbilityBlocked for how this is applied when the chosen ability doesn't already block the drop.
+static enum Ability GetInnateStatDropProtector(enum BattlerId battler, u32 stat, bool32 *fullProtection)
+{
+    *fullProtection = FALSE;
+    if (IsInnateActive(battler, ABILITY_CLEAR_BODY))
+    {
+        *fullProtection = TRUE;
+        return ABILITY_CLEAR_BODY;
+    }
+    if (IsInnateActive(battler, ABILITY_WHITE_SMOKE))
+    {
+        *fullProtection = TRUE;
+        return ABILITY_WHITE_SMOKE;
+    }
+    if (stat == STAT_ATK && IsInnateActive(battler, ABILITY_HYPER_CUTTER))
+        return ABILITY_HYPER_CUTTER;
+    if (stat == STAT_DEF && IsInnateActive(battler, ABILITY_BIG_PECKS))
+        return ABILITY_BIG_PECKS;
+    if (stat == STAT_ACC && IsInnateActive(battler, ABILITY_KEEN_EYE))
+        return ABILITY_KEEN_EYE;
+    if (stat == STAT_ACC && GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battler, ABILITY_ILLUMINATE))
+        return ABILITY_ILLUMINATE;
+    return ABILITY_NONE;
 }
 
 u32 GetStatStage(u32 stat, const struct AdditionalEffect *additionalEffect)

@@ -948,6 +948,13 @@ static bool32 CanIntimidateLowerOpponentAtk(enum BattlerId battler, enum Battler
         break;
     }
 
+    // FORK: an innate Clear Body / White Smoke / Hyper Cutter (chosen ability differs) protects the
+    // opponent's Attack from Intimidate too, so don't switch in an Intimidator expecting to lower it.
+    if (IsInnateActive(opposingBattler, ABILITY_CLEAR_BODY)
+     || IsInnateActive(opposingBattler, ABILITY_WHITE_SMOKE)
+     || IsInnateActive(opposingBattler, ABILITY_HYPER_CUTTER))
+        return FALSE;
+
     if (GetConfig(B_UPDATED_INTIMIDATE) >= GEN_8)
     {
         switch (abilityDef)
