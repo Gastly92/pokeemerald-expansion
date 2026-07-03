@@ -4535,6 +4535,94 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_ACCURACY_EVASI
     }
 }
 
+// ===== Batch C: physical-Attack doublers (Huge Power / Pure Power) =====
+
+// Huge Power doubles the holder's physical Attack. Azumarill's chosen ability is Thick Fat, so the
+// x2 here is purely the innate Huge Power.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Huge Power doubles physical damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_AZUMARILL, ABILITY_HUGE_POWER));
+        ASSUME(gSpeciesInfo[SPECIES_AZUMARILL].abilities[0] != ABILITY_HUGE_POWER);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_AZUMARILL) { Moves(MOVE_TACKLE); } // chosen Thick Fat
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(2.0), results[1].damage);
+    }
+}
+
+// Huge Power is physical-only: it must NOT touch a special move's damage.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Huge Power leaves special damage unchanged", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_AZUMARILL, ABILITY_HUGE_POWER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_AZUMARILL) { Moves(MOVE_SWIFT); } // Normal special; chosen Thick Fat
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWIFT); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_EQ(results[0].damage, results[1].damage); // special damage identical with or without the innate
+    }
+}
+
+// Pure Power doubles the holder's physical Attack, identically to Huge Power. Medicham's chosen ability
+// here is Telepathy (a real slot), so the x2 is purely the innate Pure Power.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pure Power doubles physical damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MEDICHAM, ABILITY_PURE_POWER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MEDICHAM) { Ability(ABILITY_TELEPATHY); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(2.0), results[1].damage);
+    }
+}
+
+// Suppression parity: Huge Power is NOT breakable, so Mold Breaker can't pierce it — Gastro Acid is the
+// relevant suppressor, same as the real ability. With the innate nullified, the x2 is gone.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Huge Power", s16 damage)
+{
+    bool32 gastro;
+    PARAMETRIZE { gastro = FALSE; }
+    PARAMETRIZE { gastro = TRUE; }
+    GIVEN {
+        ASSUME(!gAbilitiesInfo[ABILITY_HUGE_POWER].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_AZUMARILL, ABILITY_HUGE_POWER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_AZUMARILL) { Moves(MOVE_TACKLE); } // chosen Thick Fat
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(2.0), results[0].damage); // suppressed: base; active: x2
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
@@ -4570,6 +4658,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_TANGLED_FEET,
         ABILITY_GALE_WINGS, ABILITY_TRIAGE,
         ABILITY_SURGE_SURFER, ABILITY_GRASS_PELT,
+        ABILITY_HUGE_POWER, ABILITY_PURE_POWER,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

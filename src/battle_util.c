@@ -7471,6 +7471,17 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
         if ((gBattleMons[battlerAtk].status1 & STATUS1_ANY) && IsBattleMovePhysical(move)
          && atkAbility != ABILITY_GUTS && IsInnateActive(battlerAtk, ABILITY_GUTS))
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+        // FORK: innate Huge Power / Pure Power (Batch C, FEATURE_INNATE_ABILITIES) double the holder's
+        // physical Attack, mirroring the shared HUGE_POWER/PURE_POWER case in the attack-stat switch above.
+        // Both are clean upsides (doubling physical damage never hurts the holder), so each innate is a 1:1
+        // copy. The two share one effect, so the guard skips whenever the CHOSEN ability is EITHER (the switch
+        // already applied the x2), so a mon running the real ability never double-applies. IsInnateActive()
+        // supplies the suppression gates (neither is breakable). On-field AI damage prediction is correct for
+        // free (shared calc keyed off the real battler).
+        if (IsBattleMovePhysical(move)
+         && atkAbility != ABILITY_HUGE_POWER && atkAbility != ABILITY_PURE_POWER
+         && (IsInnateActive(battlerAtk, ABILITY_HUGE_POWER) || IsInnateActive(battlerAtk, ABILITY_PURE_POWER)))
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
     }
 
     // target's abilities

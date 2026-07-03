@@ -59,6 +59,10 @@
 //   Grassy Terrain (wired in CalcDefenseStat beside Marvel Scale). Both live in shared calcs the AI runs,
 //   so on-field damage/turn-order prediction is innate-aware for free; the AI's terrain-setting heuristic
 //   credits them via DoesInnateBenefitFromFieldStatus (src/battle_ai_field_statuses.c).)
+//   HUGE_POWER / PURE_POWER (double physical Attack, Batch C — both 1:1 clean-upside copies wired in
+//   CalcAttackStat beside their shared chosen-ability case, canon-only (no flavor picks): each doubles the
+//   holder's physical Attack. They share one effect, so the innate is guarded off when the CHOSEN ability is
+//   EITHER, and lives in the shared damage calc, so on-field AI prediction is innate-aware for free.)
 //   NOTE: Zangoose carries innate TOXIC_BOOST, not innate Immunity — the two are contradictory
 //   (Immunity blocks the poison Toxic Boost needs), so its canon-Toxic-Boost frontier identity wins;
 //   innate Immunity still lives on Gligar / Snorlax.
@@ -1409,12 +1413,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0183
         SPECIES_MARILL,
         INNATES(
+            ABILITY_HUGE_POWER,
             ABILITY_THICK_FAT
         )
     },
     { // 0184
         SPECIES_AZUMARILL,
         INNATES(
+            ABILITY_HUGE_POWER,
             ABILITY_THICK_FAT
         )
     },
@@ -2303,6 +2309,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0298
         SPECIES_AZURILL,
         INNATES(
+            ABILITY_HUGE_POWER,
             ABILITY_THICK_FAT
         )
     },
@@ -2364,6 +2371,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FILTER,
             ABILITY_STURDY
+        )
+    },
+    { // 0307
+        SPECIES_MEDITITE,
+        INNATES(
+            ABILITY_PURE_POWER
+        )
+    },
+    { // 0308
+        SPECIES_MEDICHAM,
+        INNATES(
+            ABILITY_PURE_POWER
         )
     },
     { // 0313
@@ -4529,6 +4548,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GRENINJA_MEGA,
         INNATES(
             ABILITY_TORRENT
+        )
+    },
+    { // 0659
+        SPECIES_BUNNELBY,
+        INNATES(
+            ABILITY_HUGE_POWER
+        )
+    },
+    { // 0660
+        SPECIES_DIGGERSBY,
+        INNATES(
+            ABILITY_HUGE_POWER
         )
     },
     { // 0661

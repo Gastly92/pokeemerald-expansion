@@ -35,7 +35,8 @@
 //   SHIELD_DUST / TINTED_LENS / SCRAPPY / WONDER_SKIN / TANGLED_FEET (accuracy /
 //   type-effectiveness / effect-chance modifiers, Batch P),
 //   GALE_WINGS / TRIAGE (priority granters, Batch Q),
-//   SURGE_SURFER / GRASS_PELT (terrain modifiers, Batch R).
+//   SURGE_SURFER / GRASS_PELT (terrain modifiers, Batch R),
+//   HUGE_POWER / PURE_POWER (double physical Attack, Batch C).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
