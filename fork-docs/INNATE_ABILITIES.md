@@ -1811,3 +1811,73 @@ so it takes a fork-owned override (`species_ability_overrides.c`) filling its EM
 **Water Absorb** (`:x:`, a Water immunity + heal, the same pick used for the other water mons in that table),
 so both sets now run Water Absorb **and** the innate Swift Swim / Propeller Tail. Duraludon / Archaludon have
 no frontier set, so no roster change was needed there.
+
+### ABILITY_SHADOW_TAG / ABILITY_ARENA_TRAP / ABILITY_MAGNET_PULL
+
+The "trapping" abilities (Batch H): the holder keeps opposing mons from switching out or fleeing.
+**Shadow Tag** traps any foe (except one that itself carries Shadow Tag, chosen or innate, under
+`B_SHADOW_TAG_ESCAPE >= GEN_4`); **Arena Trap** traps grounded foes; **Magnet Pull** traps Steel-types
+(regardless of grounding). All three are **clean upsides** that never hurt the holder, so each innate is a
+plain **1:1 copy** — no pure-boon divergence.
+
+**Effect site — one shared chokepoint, `IsAbilityPreventingEscape` (`src/battle_util.c`).** The three
+per-battler `ability == ABILITY_X` reads were factored into a new helper
+`GetBattlerEscapePreventionAbility(battler, trapper)` that returns the *specific* trapping ability (or
+`ABILITY_NONE`), each read swapped to the chosen-or-innate predicate `BattlerHasAbility()` — including the
+Shadow-Tag self-exemption (`!BattlerHasAbility(battler, ABILITY_SHADOW_TAG)`), so a mon's *own* innate Shadow
+Tag frees it just like the real ability. `IsAbilityPreventingEscape` now loops calling the helper. Because
+`IsInnateActive` (inside `BattlerHasAbility`) is feature-gated and species-based, the whole thing is a strict
+no-op with the feature off and never leaks the chosen slot. **No `DETERMINISTIC_*` surface is touched** —
+trapping is a pure switch-legality decision, not an accuracy / secondary / crit / status / held-item effect.
+
+**Display.** The escape/switch UI names the trapping ability, and for an innate trapper the naive read shows
+the holder's *unrelated chosen* ability. Returning the ability from the helper lets the **can't-switch party
+menu** ("… is preventing switching out with its {ability}!", via the `PARTY_ACTION_ABILITY_PREVENTS` emit in
+`src/battle_main.c`) name the real trapper; the RUN-button `gLastUsedAbility` is set from it too. In the
+vanilla real-ability case the helper returns the same ability shown before, so display is byte-for-byte
+unchanged. **Known minor limitation:** the RUN-button `STRINGID_PREVENTSESCAPE` text and the wild-Teleport
+"made it ineffective" ability pop-up read the battler's *primary* slot deep in the message system
+(`sBattlerAbilities` / `showabilitypopup`), so those two surfaces still name the chosen ability for an innate
+trapper. The trap itself always works; only that flavor text is imperfect, and only in wild battles.
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / Ability Shield /
+not-on-field); none of the three is breakable, so Mold Breaker never touches them, same as the real abilities.
+
+**AI.** Trapping reasoning lives in **dedicated helpers**, NOT the shared damage calc, so each was made
+innate-aware:
+- **`IsBattlerTrapped`** (`src/battle_ai_util.c`) — beside its `AI_IsAbilityOnSide(battlerAtk, ABILITY_X)`
+  reads (which side has the trapping ability), an `AI_IsInnateOnSide(battlerAtk, ABILITY_X)` clause credits an
+  innate trapper, and the Shadow-Tag self-exemption gained `&& !IsInnateActive(battlerDef, ABILITY_SHADOW_TAG)`
+  so an innate holder is correctly treated as free to leave.
+- **`AI_CanSwitchinAbilityTrapOpponent`** (`src/battle_ai_switch.c`, the "switch in my trapper" heuristic) —
+  the trapper is usually a *benched* candidate with no battler index, so the function gained a `trapperSpecies`
+  parameter and checks `SpeciesHasInnate(trapperSpecies, ABILITY_X)` (config-gated) off-field, mirroring
+  Levitate's benched-mon absorb wiring; the on-field opposing-battler Shadow-Tag mutual check gained
+  `|| IsInnateActive(opposingBattler, ABILITY_SHADOW_TAG)`. Callers pass the candidate's species (and
+  `SPECIES_NONE` for the Trace branch, which copies only the chosen ability).
+
+The `AI_DecideKnownAbilityForTurn` "treat a trapping ability as always known" read stays chosen-only — it is
+identity bookkeeping about the mon's *displayed* ability, not an effect read (innates are never the chosen
+identity). The overworld wild-encounter lures (Magnet Pull / Arena Trap in `src/wild_encounter.c`) likewise
+stay keyed to the lead's chosen ability — innates are a battle-only feature.
+
+**Species (canon-only, no flavor picks — preventing the foe from switching is a potent utility effect, so the
+set stays the canon carriers).** **Shadow Tag:** Wobbuffet, Wynaut, the Gothita line, and the Litwick line
+(merged into its existing Levitate rows). Mega Gengar is *omitted* as redundant (its only ability IS Shadow
+Tag, so an innate could never be observed). **Arena Trap:** Diglett / Dugtrio (Kantonian only — the Alolan
+forms lack it) and Trapinch (merged into its Hyper Cutter row). **Magnet Pull:** Magnemite / Magneton /
+Magnezone, the Alolan Geodude line, and Nosepass / Probopass (all merged into existing rows). Meltan is
+*omitted* as redundant (sole-ability, not a frontier set).
+
+**Frontier (Step 3.5):** eight hardcoded sets were freed. **Golem-Alola** simply repoints to its real
+`:x:` Galvanize slot (Magnet Pull & Sturdy now innate). The rest take fork-owned overrides
+(`species_ability_overrides.c`): **Dugtrio** (all three abilities innate) → chosen **Sand Stream** (repurposing
+its innate-redundant Sand Force slot; self-synergistic with innate Sand Veil / Sand Force); **Magnezone** and
+**Probopass** (all abilities innate) → chosen **Lightning Rod** (`:x:`, draws Electric for immunity + Sp. Atk);
+**Gothitelle** → chosen **Unaware** repurposing its innate-redundant Shadow Tag slot (its real Frisk / Competitive
+slots are kept intact for those future innates). Each repurposed slot was audited against `test/battle/`
+`Ability(ABILITY_X)` pins (Dugtrio's Arena Trap, Magnezone's Magnet Pull / Sturdy are pinned and were left alone).
+**Wobbuffet's set was deliberately *not* freed**: its only complementary slot is the empty slot 1, and filling it
+via an override would change Wobbuffet's game-wide ability data — but Wobbuffet is a ubiquitous test mon whose empty
+slot is exercised by `Ability(ABILITY_NONE)` (e.g. `test/battle/ai/gimmick_z_move.c`), so the set keeps its chosen
+Shadow Tag (redundant with the now-innate one, but harmless) rather than risk those tests.

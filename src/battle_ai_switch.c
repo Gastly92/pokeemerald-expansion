@@ -38,7 +38,7 @@ static bool32 CanUseSuperEffectiveMoveAgainstOpponents(enum BattlerId battler, e
 static bool32 CanUseSuperEffectiveMoveAgainstOpponent(enum BattlerId battler, enum BattlerId opposingBattler);
 static u32 GetSwitchinHazardsDamage(enum BattlerId battler);
 static u32 GetSwitchinSingleUseItemHealing(enum BattlerId battler, enum BattlerId opposingBattler, s32 currentHP);
-static bool32 AI_CanSwitchinAbilityTrapOpponent(enum Ability ability, enum BattlerId opposingBattler);
+static bool32 AI_CanSwitchinAbilityTrapOpponent(enum Ability ability, u16 trapperSpecies, enum BattlerId opposingBattler);
 static uq4_12_t GetTypeMatchupAgainstTypes(enum BattlerId opposingBattler, enum Type defType1, enum Type defType2);
 static enum Ability GetPartyMonAbilityForSwitchCalc(enum BattlerId battler, u32 monIndex, struct Pokemon *mon);
 static uq4_12_t GetBattlerTypeMatchup(enum BattlerId opposingBattler, enum BattlerId battler);
@@ -718,7 +718,7 @@ static bool32 ShouldSwitchIfTrapperInParty(struct SwitchAiContext *switchContext
 
         partyMonAbility = GetPartyMonAbilityForSwitchCalc(switchContext->battler, monIndex, &switchContext->party[monIndex]);
 
-        if (AI_CanSwitchinAbilityTrapOpponent(partyMonAbility, switchContext->opposingBattler) || (AI_CanSwitchinAbilityTrapOpponent(gAiLogicData->abilities[switchContext->opposingBattler], switchContext->opposingBattler) && partyMonAbility == ABILITY_TRACE))
+        if (AI_CanSwitchinAbilityTrapOpponent(partyMonAbility, GetMonData(&switchContext->party[monIndex], MON_DATA_SPECIES), switchContext->opposingBattler) || (AI_CanSwitchinAbilityTrapOpponent(gAiLogicData->abilities[switchContext->opposingBattler], SPECIES_NONE, switchContext->opposingBattler) && partyMonAbility == ABILITY_TRACE))
         {
             // If mon in slot i is the most suitable switchin candidate, then it's a trapper than wins 1v1
             if (monIndex == gAiLogicData->mostSuitableMonId[switchContext->battler] && RandomPercentage(RNG_AI_SWITCH_TRAPPER, GetSwitchChance(SHOULD_SWITCH_TRAPPER)))
@@ -2186,22 +2186,34 @@ static s32 GetMaxPriorityDamagePlayerCouldDealToSwitchin(enum BattlerId battler,
     return maxDamageTaken;
 }
 
-static bool32 AI_CanSwitchinAbilityTrapOpponent(enum Ability ability, enum BattlerId opposingBattler)
+static bool32 AI_CanSwitchinAbilityTrapOpponent(enum Ability ability, u16 trapperSpecies, enum BattlerId opposingBattler)
 {
+    // FORK: innate-aware (FEATURE_INNATE_ABILITIES). The trapper is (usually) a benched candidate, so
+    // there's no battler index for its innate — key off its species data. SpeciesHasInnate isn't
+    // feature-gated, so the config check keeps a feature-off build from crediting (or scanning for) innates.
+    // Computed after the early returns (and the non-inline GetConfig() cached once) to stay cheap in this AI path.
+    bool32 innatesOn, hasShadowTag, hasArenaTrap, hasMagnetPull;
+
     if (AI_CanBattlerEscape(opposingBattler))
         return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && CountUsablePartyMons(opposingBattler) == 0)
         return FALSE;
-    else if (ability == ABILITY_SHADOW_TAG)
+
+    innatesOn = GetConfig(FEATURE_INNATE_ABILITIES);
+    hasShadowTag = ability == ABILITY_SHADOW_TAG || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_SHADOW_TAG));
+    hasArenaTrap = ability == ABILITY_ARENA_TRAP || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_ARENA_TRAP));
+    hasMagnetPull = ability == ABILITY_MAGNET_PULL || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_MAGNET_PULL));
+
+    if (hasShadowTag)
     {
-        if (B_SHADOW_TAG_ESCAPE >= GEN_4 && gAiLogicData->abilities[opposingBattler] == ABILITY_SHADOW_TAG)
+        if (B_SHADOW_TAG_ESCAPE >= GEN_4 && (gAiLogicData->abilities[opposingBattler] == ABILITY_SHADOW_TAG || IsInnateActive(opposingBattler, ABILITY_SHADOW_TAG)))
             return FALSE;
         else
             return TRUE;
     }
-    else if (ability == ABILITY_ARENA_TRAP && IsBattlerGrounded(opposingBattler, gAiLogicData->abilities[opposingBattler], gAiLogicData->holdEffects[opposingBattler]))
+    else if (hasArenaTrap && IsBattlerGrounded(opposingBattler, gAiLogicData->abilities[opposingBattler], gAiLogicData->holdEffects[opposingBattler]))
         return TRUE;
-    else if (ability == ABILITY_MAGNET_PULL && IS_BATTLER_OF_TYPE(opposingBattler, TYPE_STEEL))
+    else if (hasMagnetPull && IS_BATTLER_OF_TYPE(opposingBattler, TYPE_STEEL))
         return TRUE;
     else
         return FALSE;
@@ -2448,8 +2460,8 @@ static u32 GetBestMonIntegrated(struct Pokemon *party, int lastId, enum BattlerI
                 }
 
                 // If mon can trap
-                if ((AI_CanSwitchinAbilityTrapOpponent(gAiLogicData->abilities[battler], opposingBattler)
-                    || (AI_CanSwitchinAbilityTrapOpponent(gAiLogicData->abilities[opposingBattler], opposingBattler) && gAiLogicData->abilities[battler] == ABILITY_TRACE))
+                if ((AI_CanSwitchinAbilityTrapOpponent(gAiLogicData->abilities[battler], gBattleMons[battler].species, opposingBattler)
+                    || (AI_CanSwitchinAbilityTrapOpponent(gAiLogicData->abilities[opposingBattler], SPECIES_NONE, opposingBattler) && gAiLogicData->abilities[battler] == ABILITY_TRACE))
                     && canSwitchinWin1v1)
                     trapperIds |= (1u << monIndex);
             }

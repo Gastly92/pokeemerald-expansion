@@ -83,6 +83,15 @@
 //   the Lightning-Rod/Storm-Drain redirect loop) and the Ally-Switch retarget in src/battle_anim_effects_1.c,
 //   each crediting the innate beside the chosen IsAbilityAndRecord/== test; the AI's dedicated
 //   IsMoveRedirectionPrevented helper is made innate-aware the same way. No pop-up (redirection is silent).)
+//   SHADOW_TAG / ARENA_TRAP / MAGNET_PULL (trapping, Batch H — all 1:1 clean-upside copies, canon-only
+//   (no flavor picks — preventing the foe from switching is a potent utility effect): the holder keeps
+//   opposing mons from fleeing/switching. Shadow Tag traps everything (except a foe that itself has
+//   Shadow Tag, chosen or innate), Arena Trap traps grounded foes, Magnet Pull traps Steel-types. Wired
+//   at the single trait chokepoint IsAbilityPreventingEscape (src/battle_util.c) via BattlerHasAbility;
+//   the AI's dedicated trapping reads — IsBattlerTrapped (src/battle_ai_util.c) and the switch-in trapper
+//   heuristic AI_CanSwitchinAbilityTrapOpponent (src/battle_ai_switch.c) — are made innate-aware too, the
+//   latter crediting a benched candidate's innate off-field via SpeciesHasInnate. No pop-up (trapping is
+//   silent). Overworld wild-encounter lures (Magnet Pull/Arena Trap) stay keyed to the chosen ability.)
 //   NOTE: Zangoose carries innate TOXIC_BOOST, not innate Immunity — the two are contradictory
 //   (Immunity blocks the poison Toxic Boost needs), so its canon-Toxic-Boost frontier identity wins;
 //   innate Immunity still lives on Gligar / Snorlax.
@@ -491,6 +500,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0050
         SPECIES_DIGLETT,
         INNATES(
+            ABILITY_ARENA_TRAP,
             ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL
         )
@@ -505,6 +515,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0051
         SPECIES_DUGTRIO,
         INNATES(
+            ABILITY_ARENA_TRAP,
             ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL
         )
@@ -668,6 +679,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0074
         SPECIES_GEODUDE_ALOLA,
         INNATES(
+            ABILITY_MAGNET_PULL,
             ABILITY_STURDY
         )
     },
@@ -681,6 +693,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0075
         SPECIES_GRAVELER_ALOLA,
         INNATES(
+            ABILITY_MAGNET_PULL,
             ABILITY_STURDY
         )
     },
@@ -694,6 +707,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0076
         SPECIES_GOLEM_ALOLA,
         INNATES(
+            ABILITY_MAGNET_PULL,
             ABILITY_STURDY
         )
     },
@@ -747,6 +761,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANALYTIC,
             ABILITY_LEVITATE,
+            ABILITY_MAGNET_PULL,
             ABILITY_STURDY
         )
     },
@@ -755,6 +770,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANALYTIC,
             ABILITY_LEVITATE,
+            ABILITY_MAGNET_PULL,
             ABILITY_STURDY
         )
     },
@@ -1742,6 +1758,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0202
+        SPECIES_WOBBUFFET,
+        INNATES(
+            ABILITY_SHADOW_TAG
+        )
+    },
     { // 0203
         SPECIES_GIRAFARIG,
         INNATES(
@@ -2369,6 +2391,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0299
         SPECIES_NOSEPASS,
         INNATES(
+            ABILITY_MAGNET_PULL,
             ABILITY_SAND_FORCE,
             ABILITY_STURDY
         )
@@ -2568,6 +2591,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0328
         SPECIES_TRAPINCH,
         INNATES(
+            ABILITY_ARENA_TRAP,
             ABILITY_HYPER_CUTTER
         )
     },
@@ -2802,6 +2826,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_PRESSURE,
             ABILITY_SUPER_LUCK
+        )
+    },
+    { // 0360
+        SPECIES_WYNAUT,
+        INNATES(
+            ABILITY_SHADOW_TAG
         )
     },
     { // 0362
@@ -3413,6 +3443,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANALYTIC,
             ABILITY_LEVITATE,
+            ABILITY_MAGNET_PULL,
             ABILITY_STURDY
         )
     },
@@ -3512,6 +3543,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0476
         SPECIES_PROBOPASS,
         INNATES(
+            ABILITY_MAGNET_PULL,
             ABILITY_SAND_FORCE,
             ABILITY_STURDY
         )
@@ -4178,6 +4210,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TECHNICIAN
         )
     },
+    { // 0574
+        SPECIES_GOTHITA,
+        INNATES(
+            ABILITY_SHADOW_TAG
+        )
+    },
+    { // 0575
+        SPECIES_GOTHORITA,
+        INNATES(
+            ABILITY_SHADOW_TAG
+        )
+    },
+    { // 0576
+        SPECIES_GOTHITELLE,
+        INNATES(
+            ABILITY_SHADOW_TAG
+        )
+    },
     { // 0577
         SPECIES_SOLOSIS,
         INNATES(
@@ -4408,19 +4458,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0607
         SPECIES_LITWICK,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SHADOW_TAG
         )
     },
     { // 0608
         SPECIES_LAMPENT,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SHADOW_TAG
         )
     },
     { // 0609
         SPECIES_CHANDELURE,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SHADOW_TAG
         )
     },
     { // 0609
