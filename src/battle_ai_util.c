@@ -464,13 +464,13 @@ bool32 IsBattlerTrapped(enum BattlerId battlerAtk, enum BattlerId battlerDef)
         return TRUE;
     if (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK)
         return TRUE;
-    if (AI_IsAbilityOnSide(battlerAtk, ABILITY_SHADOW_TAG)
-        && (B_SHADOW_TAG_ESCAPE >= GEN_4 && gAiLogicData->abilities[battlerDef] != ABILITY_SHADOW_TAG))
+    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_SHADOW_TAG) || AI_IsInnateOnSide(battlerAtk, ABILITY_SHADOW_TAG)) // FORK: innate-aware
+        && (B_SHADOW_TAG_ESCAPE >= GEN_4 && gAiLogicData->abilities[battlerDef] != ABILITY_SHADOW_TAG && !IsInnateActive(battlerDef, ABILITY_SHADOW_TAG)))
         return TRUE;
-    if (AI_IsAbilityOnSide(battlerAtk, ABILITY_ARENA_TRAP)
+    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_ARENA_TRAP) || AI_IsInnateOnSide(battlerAtk, ABILITY_ARENA_TRAP)) // FORK: innate-aware
         && AI_IsBattlerGrounded(battlerDef))
         return TRUE;
-    if (AI_IsAbilityOnSide(battlerAtk, ABILITY_MAGNET_PULL)
+    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_MAGNET_PULL) || AI_IsInnateOnSide(battlerAtk, ABILITY_MAGNET_PULL)) // FORK: innate-aware
         && IS_BATTLER_OF_TYPE(battlerDef, TYPE_STEEL))
         return TRUE;
 

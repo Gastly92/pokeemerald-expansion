@@ -5263,26 +5263,39 @@ u32 IsAbilityOnFieldExcept(enum BattlerId battler, enum Ability ability)
     return 0;
 }
 
+// FORK: innate-aware (FEATURE_INNATE_ABILITIES). Returns the specific trapping ability `trapper` is
+// holding `battler` with — Shadow Tag / Arena Trap / Magnet Pull — or ABILITY_NONE if none. An innate
+// trapping ability traps exactly like the real one (BattlerHasAbility() is chosen-or-innate), and a
+// mon's own (chosen or innate) Shadow Tag exempts it from an enemy Shadow Tag. Returning the ability
+// (not just a bool) lets the "prevents escape" message and the can't-switch party menu name the real
+// trapper even when an innate holder's chosen ability differs — otherwise they'd show that mon's
+// unrelated chosen ability. In the vanilla (real-ability) case this returns the same ability that was
+// shown before, so display is byte-for-byte unchanged.
+enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum BattlerId trapper)
+{
+    bool32 isBattlerGrounded = IsBattlerGrounded(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
+
+    if (BattlerHasAbility(trapper, ABILITY_SHADOW_TAG) && (B_SHADOW_TAG_ESCAPE <= GEN_3 || !BattlerHasAbility(battler, ABILITY_SHADOW_TAG)))
+        return ABILITY_SHADOW_TAG;
+    if (BattlerHasAbility(trapper, ABILITY_ARENA_TRAP) && isBattlerGrounded)
+        return ABILITY_ARENA_TRAP;
+    if (BattlerHasAbility(trapper, ABILITY_MAGNET_PULL) && IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
+        return ABILITY_MAGNET_PULL;
+
+    return ABILITY_NONE;
+}
+
 u32 IsAbilityPreventingEscape(enum BattlerId battler)
 {
     if (GetConfig(B_GHOSTS_ESCAPE) >= GEN_6 && IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))
         return 0;
 
-    bool32 isBattlerGrounded = IsBattlerGrounded(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
     for (enum BattlerId battlerDef = 0; battlerDef < gBattlersCount; battlerDef++)
     {
         if (battler == battlerDef || IsBattlerAlly(battler, battlerDef))
             continue;
 
-        enum Ability ability = GetBattlerAbility(battlerDef);
-
-        if (ability == ABILITY_SHADOW_TAG && (B_SHADOW_TAG_ESCAPE <= GEN_3 || GetBattlerAbility(battler) != ABILITY_SHADOW_TAG))
-            return battlerDef + 1;
-
-        if (ability == ABILITY_ARENA_TRAP && isBattlerGrounded)
-            return battlerDef + 1;
-
-        if (ability == ABILITY_MAGNET_PULL && IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
+        if (GetBattlerEscapePreventionAbility(battler, battlerDef) != ABILITY_NONE)
             return battlerDef + 1;
     }
 

@@ -105,6 +105,8 @@
 // another mon; Hyper Cutter protects Attack, Big Pecks Defense)
 // or a priority-move blocker (Dazzling / Queenly Majesty / Armor Tail stop opponents using priority moves
 // against the holder or its allies)
+// or a redirection-ignore (Propeller Tail / Stalwart make the holder's moves ignore Follow Me / Lightning Rod / Storm Drain redirection)
+// or a trapping ability (Shadow Tag traps any foe / Arena Trap traps grounded foes / Magnet Pull traps Steel-types, keeping them from switching out)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -1264,7 +1266,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_ARENA_TRAP,
+        .ability = ABILITY_SAND_STREAM, // Arena Trap/Sand Veil/Sand Force now innate; chosen Sand Stream (override) sets the sand that powers them
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1284,7 +1286,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_AERIAL_ACE
         },
-        .ability = ABILITY_ARENA_TRAP, // Sand Veil & Sand Force now innate; chosen Arena Trap traps foes
+        .ability = ABILITY_SAND_STREAM, // Arena Trap/Sand Veil/Sand Force now innate; chosen Sand Stream (override) sets the sand that powers them
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1890,7 +1892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_CURSE
         },
-        .ability = ABILITY_MAGNET_PULL, // Sturdy now innate; chosen Magnet Pull traps Steel-types for this slow tank
+        .ability = ABILITY_GALVANIZE, // Magnet Pull & Sturdy now innate; chosen Galvanize (real slot) makes its Normal moves Electric for this slow tank
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5357,7 +5359,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENCORE,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_SHADOW_TAG,
+        .ability = ABILITY_UNAWARE, // Shadow Tag now innate; chosen Unaware (override, empty slot) lets this Counter/Mirror Coat wall ignore the foe's stat boosts
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11119,7 +11121,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_MAGNET_PULL,
+        .ability = ABILITY_LIGHTNING_ROD, // Magnet Pull/Levitate/Sturdy/Analytic now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11141,7 +11143,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_MAGNET_PULL, // Levitate/Sturdy/Analytic now innate; chosen Magnet Pull traps Steel
+        .ability = ABILITY_LIGHTNING_ROD, // Magnet Pull/Levitate/Sturdy/Analytic now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11696,7 +11698,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_MAGNET_PULL,
+        .ability = ABILITY_LIGHTNING_ROD, // Magnet Pull/Sturdy/Sand Force now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk on this special wall
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14019,7 +14021,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_REST
         },
-        .ability = ABILITY_SHADOW_TAG,
+        .ability = ABILITY_UNAWARE, // Shadow Tag now innate; chosen Unaware (override) lets this Calm Mind sweeper ignore the foe's stat boosts (real Frisk/Competitive slots kept for future innates)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

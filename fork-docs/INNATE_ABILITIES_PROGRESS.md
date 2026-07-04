@@ -29,7 +29,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Own Tempo | The Pokémon cannot become confused and is unaffected by Intimidate. |
 | :white_large_square: | Suction Cups | The Pokémon is unaffected by the moves and held items of other Pokémon that would force it to switch out of battle. |
 | :white_large_square: | Intimidate | When the Pokémon enters a battle, it lowers the Attack stats of opponents by 1 stage. |
-| :white_large_square: | Shadow Tag | Opponents cannot be switched out of battle. |
+| :white_check_mark: | Shadow Tag | Opponents cannot be switched out of battle. |
 | :white_large_square: | Rough Skin | When the Pokémon is hit by a contact move, the attacker takes damage equal to 1/8 of its max HP. |
 | :x: | Wonder Guard | Its mysterious power only lets supereffective moves hit the Pokémon. |
 | :white_check_mark: | Levitate | The Pokémon floats off the ground, making it immune to Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses. |
@@ -48,7 +48,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Inner Focus | The Pokémon never flinches when attacked and is unaffected by Intimidate. |
 | :white_large_square: | Magma Armor | The Pokémon cannot be frozen. |
 | :white_large_square: | Water Veil | The Pokémon's water veil prevents it from being burned. |
-| :white_large_square: | Magnet Pull | Prevents Steel-type Pokémon from fleeing by pulling them in with magnetism. |
+| :white_check_mark: | Magnet Pull | Prevents Steel-type Pokémon from fleeing by pulling them in with magnetism. |
 | :x: | Soundproof | The Pokémon is immune to sound-based moves. |
 | :white_large_square: | Rain Dish | The Pokémon has 1/16 of its max HP restored at the end of every turn in rain. |
 | :x: | Sand Stream | Summons a sandstorm for 5 turns when the Pokémon enters a battle. |
@@ -77,7 +77,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Swarm | Boosts the power of the Pokémon's Bug-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_large_square: | Rock Head | The Pokémon will not lose HP due to recoil damage from its moves. |
 | :x: | Drought | Summons harsh sunlight for 5 turns when the Pokémon enters a battle. |
-| :white_large_square: | Arena Trap | Prevents opposing Pokémon from fleeing from battle. |
+| :white_check_mark: | Arena Trap | Prevents opposing Pokémon from fleeing from battle. |
 | :white_check_mark: | Vital Spirit | The Pokémon cannot become drowsy or be put to sleep. |
 | :white_check_mark: | White Smoke | The Pokémon's stats cannot be lowered by other Pokémon's moves or Abilities. |
 | :white_check_mark: | Pure Power | Doubles the power of the Pokémon's physical moves. |

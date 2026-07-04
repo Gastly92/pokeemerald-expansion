@@ -4934,6 +4934,115 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate S
     }
 }
 
+// ==========================================================================================
+// Batch H — trapping (Shadow Tag / Arena Trap / Magnet Pull). Each keeps opposing mons from
+// switching out, wired at the single chokepoint IsAbilityPreventingEscape (src/battle_util.c)
+// via BattlerHasAbility. The tests assert the mechanic directly (like the upstream trapping
+// tests) so they don't depend on the escape/switch message text.
+// ==========================================================================================
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Shadow Tag prevents the opponent from escaping")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_WOBBUFFET, ABILITY_SHADOW_TAG));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ZIGZAGOON); // ordinary grounded mon, no Shadow Tag of its own
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_TELEPATHY); } // chosen Telepathy, NOT Shadow Tag
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        enum BattlerId battler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+        enum BattlerId trapper = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+        if (enabled)
+            EXPECT_EQ(IsAbilityPreventingEscape(battler), trapper + 1); // innate Shadow Tag traps
+        else
+            EXPECT_EQ(IsAbilityPreventingEscape(battler), 0); // feature off -> no trap
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Arena Trap traps grounded foes but not airborne ones")
+{
+    u32 species;
+    bool32 grounded;
+    PARAMETRIZE { species = SPECIES_ZIGZAGOON; grounded = TRUE; }
+    PARAMETRIZE { species = SPECIES_PIDGEY; grounded = FALSE; } // Flying -> ungrounded
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DIGLETT, ABILITY_ARENA_TRAP));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(species);
+        OPPONENT(SPECIES_DIGLETT) { Ability(ABILITY_SAND_VEIL); } // chosen Sand Veil, NOT Arena Trap
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        enum BattlerId battler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+        enum BattlerId trapper = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+        if (grounded)
+            EXPECT_EQ(IsAbilityPreventingEscape(battler), trapper + 1); // grounded -> trapped
+        else
+            EXPECT_EQ(IsAbilityPreventingEscape(battler), 0); // airborne -> Arena Trap can't hold it
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magnet Pull traps Steel-types but not others")
+{
+    u32 species;
+    bool32 steel;
+    PARAMETRIZE { species = SPECIES_SKARMORY; steel = TRUE; } // Steel (and Flying: Magnet Pull ignores grounding)
+    PARAMETRIZE { species = SPECIES_ZIGZAGOON; steel = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAGNEMITE, ABILITY_MAGNET_PULL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(species);
+        OPPONENT(SPECIES_MAGNEMITE) { Ability(ABILITY_STURDY); } // chosen Sturdy, NOT Magnet Pull
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        enum BattlerId battler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+        enum BattlerId trapper = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+        if (steel)
+            EXPECT_EQ(IsAbilityPreventingEscape(battler), trapper + 1); // Steel-type -> trapped
+        else
+            EXPECT_EQ(IsAbilityPreventingEscape(battler), 0); // non-Steel -> free to leave
+    }
+}
+
+// Mutual-exemption is innate-aware too: a mon carrying its OWN innate Shadow Tag is not trapped by
+// an enemy Shadow Tag (B_SHADOW_TAG_ESCAPE >= GEN_4), exactly like the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Shadow Tag holder is exempt from enemy Shadow Tag")
+{
+    GIVEN {
+        ASSUME(B_SHADOW_TAG_ESCAPE >= GEN_4);
+        ASSUME(SpeciesHasInnate(SPECIES_WOBBUFFET, ABILITY_SHADOW_TAG));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_TELEPATHY); }   // chosen Telepathy + innate Shadow Tag
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_TELEPATHY); } // chosen Telepathy + innate Shadow Tag
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        enum BattlerId battler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+        EXPECT_EQ(IsAbilityPreventingEscape(battler), 0); // its own innate Shadow Tag lets it leave
+    }
+}
+
+// Suppression parity: an innate trapper honors Gastro Acid exactly like the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Shadow Tag")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_WOBBUFFET, ABILITY_SHADOW_TAG));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ZIGZAGOON) { Moves(MOVE_GASTRO_ACID); }
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_TELEPATHY); } // chosen Telepathy + innate Shadow Tag
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }
+    } THEN {
+        enum BattlerId battler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+        EXPECT_EQ(IsAbilityPreventingEscape(battler), 0); // innate suppressed -> no trap
+    }
+}
+
 // FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.

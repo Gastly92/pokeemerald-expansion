@@ -4000,7 +4000,7 @@ u8 IsRunningFromBattleImpossible(enum BattlerId battler)
     if ((i = IsAbilityPreventingEscape(battler)))
     {
         gBattleScripting.battler = i - 1;
-        gLastUsedAbility = gBattleMons[i - 1].ability;
+        gLastUsedAbility = GetBattlerEscapePreventionAbility(battler, i - 1); // FORK: name the actual trapping ability (chosen or innate)
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PREVENTS_ESCAPE;
         return BATTLE_RUN_FAILURE;
     }
@@ -4245,7 +4245,7 @@ static void HandleTurnActionSelectionState(void)
                     else if (GetItemHoldEffect(gBattleMons[battler].item) != HOLD_EFFECT_SHED_SHELL
                       && (i = IsAbilityPreventingEscape(battler)))   // must be last to keep i value integrity
                     {
-                        BtlController_EmitChoosePokemon(battler, B_COMM_TO_CONTROLLER, PARTY_ACTION_ABILITY_PREVENTS, PARTY_SIZE, gBattleMons[i - 1].ability, i - 1, gBattleStruct->battlerPartyOrders[battler]);
+                        BtlController_EmitChoosePokemon(battler, B_COMM_TO_CONTROLLER, PARTY_ACTION_ABILITY_PREVENTS, PARTY_SIZE, GetBattlerEscapePreventionAbility(battler, i - 1), i - 1, gBattleStruct->battlerPartyOrders[battler]); // FORK: name the actual trapping ability (chosen or innate)
                     }
                     else
                     {

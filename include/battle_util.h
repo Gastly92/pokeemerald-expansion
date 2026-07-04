@@ -250,6 +250,7 @@ u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability); // FORK: FEATU
 u32 IsAbilityOnField(enum Ability ability);
 u32 IsAbilityOnFieldExcept(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityPreventingEscape(enum BattlerId battler);
+enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum BattlerId trapper); // FORK: FEATURE_INNATE_ABILITIES — the trapping ability (chosen or innate) shown in the escape/switch message
 bool32 IsBattlerProtected(struct BattleCalcValues *cv);
 enum ProtectType GetProtectType(enum ProtectMethod method);
 bool32 CanBattlerEscape(enum BattlerId battler); // no ability check

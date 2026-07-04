@@ -95,12 +95,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SANDSLASH_ALOLA, 1,
         ABILITY_SNOW_WARNING
     },
+    { // 0051
+        // Dugtrio's three real abilities (Sand Veil, Arena Trap, Sand Force) are ALL now innate. Slot-1 Arena
+        // Trap is pinned by tests, so its innate-redundant slot-2 Sand Force (audited: no Ability(ABILITY_SAND_FORCE)
+        // on Dugtrio) takes Sand Stream — :x: (never an innate -> stable) and self-synergistic: the sandstorm it
+        // kicks up turns on its own innate Sand Veil (evasion) and Sand Force (Rock/Ground/Steel power + sandstorm
+        // immunity). Same pick as Sandslash/Donphan/Flygon.
+        SPECIES_DUGTRIO, 2,
+        ABILITY_SAND_STREAM
+    },
     { // 0144
         // Articuno's only real abilities (Pressure, Snow Cloak) are BOTH now innate, so its empty
         // slot 1 takes Snow Warning — :x: (never an innate -> stable) and flavorful (the legendary ice
         // bird heralds the blizzard), setting the snow that turns on its own innate Snow Cloak evasion.
         SPECIES_ARTICUNO, 1,
         ABILITY_SNOW_WARNING
+    },
+    { // 0202
+        // Wobbuffet's only real abilities are Shadow Tag (slot 0, now innate) and Telepathy (slot 2, pending), so its
+        // EMPTY slot 1 takes Unaware — an already-implemented :white_check_mark: innate (stable, like Slurpuff's) that
+        // it does not carry innately: its Counter / Mirror Coat / Encore / Destiny Bond wall ignores the foe's stat
+        // boosts, alongside the innate Shadow Tag. (Slot 0 Shadow Tag is left intact — it is the default ability pinned
+        // by many tests.)
+        SPECIES_WOBBUFFET, 1,
+        ABILITY_UNAWARE
     },
     { // 0227
         // Skarmory's only non-drawback real abilities (Keen Eye, Sturdy) are BOTH now innate (Weak Armor,
@@ -314,8 +332,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PUNK_ROCK
     },
     { // 0455
-        SPECIES_CARNIVINE, 1, 
+        SPECIES_CARNIVINE, 1,
         ABILITY_CHLOROPHYLL
+    },
+    { // 0462
+        // Magnezone's three real abilities (Magnet Pull, Sturdy, Analytic) are ALL now innate; slot-0 Magnet Pull and
+        // slot-1 Sturdy are pinned by tests, so its innate-redundant slot-2 Analytic (audited: no Ability(ABILITY_ANALYTIC)
+        // on Magnezone) takes Lightning Rod — :x: (never an innate -> stable) and thematic for the magnet UFO: it draws in
+        // Electric moves for immunity + a Sp. Atk boost. Same pick as Rotom/Eelektross.
+        SPECIES_MAGNEZONE, 2,
+        ABILITY_LIGHTNING_ROD
     },
     { // 0465
         SPECIES_TANGROWTH, 2,
@@ -328,6 +354,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // turns on its own innate Snow Cloak evasion. Same pick as Beartic/Articuno above.
         SPECIES_MAMOSWINE, 2,
         ABILITY_SNOW_WARNING
+    },
+    { // 0476
+        // Probopass's three real abilities (Sturdy, Magnet Pull, Sand Force) are ALL now innate, so its innate-redundant
+        // slot-1 Magnet Pull (audited: no Ability(ABILITY_MAGNET_PULL) on Probopass) takes Lightning Rod — :x: (never an
+        // innate -> stable) and thematic for the compass magnet: an Electric immunity + Sp. Atk boost for its special wall.
+        SPECIES_PROBOPASS, 1,
+        ABILITY_LIGHTNING_ROD
     },
     { // 0479
         SPECIES_ROTOM, 1,
@@ -395,6 +428,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // and flavorful: the prehistoric shell turtle heals on the Water hits a Shell Smash sweeper invites.
         SPECIES_CARRACOSTA, 2,
         ABILITY_WATER_ABSORB
+    },
+    { // 0576
+        // Gothitelle's slot-2 Shadow Tag is now innate; slots 0/1 (Frisk, Competitive) are both still PENDING innates, so
+        // rather than hand out a pending pick (future churn) its innate-redundant slot-2 Shadow Tag (audited: no
+        // Ability(ABILITY_SHADOW_TAG) on Gothitelle) takes Unaware — an already-implemented :white_check_mark: innate
+        // (stable, like Slurpuff's) that pays off its Calm Mind sweeper by ignoring the foe's boosts. (Slots 0/1 kept
+        // intact for the future Frisk/Competitive innates.)
+        SPECIES_GOTHITELLE, 2,
+        ABILITY_UNAWARE
     },
     { // 0594
         SPECIES_ALOMOMOLA, 2, 
