@@ -111,15 +111,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ARTICUNO, 1,
         ABILITY_SNOW_WARNING
     },
-    { // 0202
-        // Wobbuffet's only real abilities are Shadow Tag (slot 0, now innate) and Telepathy (slot 2, pending), so its
-        // EMPTY slot 1 takes Unaware — an already-implemented :white_check_mark: innate (stable, like Slurpuff's) that
-        // it does not carry innately: its Counter / Mirror Coat / Encore / Destiny Bond wall ignores the foe's stat
-        // boosts, alongside the innate Shadow Tag. (Slot 0 Shadow Tag is left intact — it is the default ability pinned
-        // by many tests.)
-        SPECIES_WOBBUFFET, 1,
-        ABILITY_UNAWARE
-    },
     { // 0227
         // Skarmory's only non-drawback real abilities (Keen Eye, Sturdy) are BOTH now innate (Weak Armor,
         // slot 2, is a drawback on a wall), so its slot-1 Sturdy — now innate-redundant — takes Bulletproof.

@@ -1874,8 +1874,10 @@ Magnezone, the Alolan Geodude line, and Nosepass / Probopass (all merged into ex
 (`species_ability_overrides.c`): **Dugtrio** (all three abilities innate) → chosen **Sand Stream** (repurposing
 its innate-redundant Sand Force slot; self-synergistic with innate Sand Veil / Sand Force); **Magnezone** and
 **Probopass** (all abilities innate) → chosen **Lightning Rod** (`:x:`, draws Electric for immunity + Sp. Atk);
-**Wobbuffet** → chosen **Unaware** in its empty slot (an implemented innate, boon for its Counter / Mirror Coat
-wall); **Gothitelle** → chosen **Unaware** repurposing its innate-redundant Shadow Tag slot (its real
-Frisk / Competitive slots are kept intact for those future innates). Each repurposed slot was audited against
-`test/battle/` `Ability(ABILITY_X)` pins (Dugtrio's Arena Trap, Magnezone's Magnet Pull / Sturdy are pinned and
-were left alone).
+**Gothitelle** → chosen **Unaware** repurposing its innate-redundant Shadow Tag slot (its real Frisk / Competitive
+slots are kept intact for those future innates). Each repurposed slot was audited against `test/battle/`
+`Ability(ABILITY_X)` pins (Dugtrio's Arena Trap, Magnezone's Magnet Pull / Sturdy are pinned and were left alone).
+**Wobbuffet's set was deliberately *not* freed**: its only complementary slot is the empty slot 1, and filling it
+via an override would change Wobbuffet's game-wide ability data — but Wobbuffet is a ubiquitous test mon whose empty
+slot is exercised by `Ability(ABILITY_NONE)` (e.g. `test/battle/ai/gimmick_z_move.c`), so the set keeps its chosen
+Shadow Tag (redundant with the now-innate one, but harmless) rather than risk those tests.

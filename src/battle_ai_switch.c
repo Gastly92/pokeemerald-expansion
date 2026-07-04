@@ -2191,16 +2191,20 @@ static bool32 AI_CanSwitchinAbilityTrapOpponent(enum Ability ability, u16 trappe
     // FORK: innate-aware (FEATURE_INNATE_ABILITIES). The trapper is (usually) a benched candidate, so
     // there's no battler index for its innate — key off its species data. SpeciesHasInnate isn't
     // feature-gated, so the config check keeps a feature-off build from crediting (or scanning for) innates.
-    bool32 innatesOn = GetConfig(FEATURE_INNATE_ABILITIES);
-    bool32 hasShadowTag = ability == ABILITY_SHADOW_TAG || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_SHADOW_TAG));
-    bool32 hasArenaTrap = ability == ABILITY_ARENA_TRAP || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_ARENA_TRAP));
-    bool32 hasMagnetPull = ability == ABILITY_MAGNET_PULL || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_MAGNET_PULL));
+    // Computed after the early returns (and the non-inline GetConfig() cached once) to stay cheap in this AI path.
+    bool32 innatesOn, hasShadowTag, hasArenaTrap, hasMagnetPull;
 
     if (AI_CanBattlerEscape(opposingBattler))
         return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && CountUsablePartyMons(opposingBattler) == 0)
         return FALSE;
-    else if (hasShadowTag)
+
+    innatesOn = GetConfig(FEATURE_INNATE_ABILITIES);
+    hasShadowTag = ability == ABILITY_SHADOW_TAG || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_SHADOW_TAG));
+    hasArenaTrap = ability == ABILITY_ARENA_TRAP || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_ARENA_TRAP));
+    hasMagnetPull = ability == ABILITY_MAGNET_PULL || (innatesOn && SpeciesHasInnate(trapperSpecies, ABILITY_MAGNET_PULL));
+
+    if (hasShadowTag)
     {
         if (B_SHADOW_TAG_ESCAPE >= GEN_4 && (gAiLogicData->abilities[opposingBattler] == ABILITY_SHADOW_TAG || IsInnateActive(opposingBattler, ABILITY_SHADOW_TAG)))
             return FALSE;

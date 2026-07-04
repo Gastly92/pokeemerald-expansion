@@ -5359,7 +5359,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENCORE,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_UNAWARE, // Shadow Tag now innate; chosen Unaware (override, empty slot) lets this Counter/Mirror Coat wall ignore the foe's stat boosts
+        .ability = ABILITY_SHADOW_TAG, // now also innate; kept as the chosen ability too (its empty 2nd slot can't take a complementary one without changing Wobbuffet's game-wide ability data, which many tests depend on)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

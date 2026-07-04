@@ -5290,12 +5290,25 @@ u32 IsAbilityPreventingEscape(enum BattlerId battler)
     if (GetConfig(B_GHOSTS_ESCAPE) >= GEN_6 && IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))
         return 0;
 
+    // FORK: innate-aware, kept cheap for this AI-run hot path (mirrors GetBattlerEscapePreventionAbility,
+    // used at the cold display sites — keep the two in sync). The grounding, the feature flag, and the
+    // holder's own Shadow Tag are computed ONCE; per opposing battler the chosen ability is read once and
+    // each innate clause short-circuits (no non-inline GetConfig / IsInnateActive) when the feature is off,
+    // so a feature-off build costs the same as the original chosen-only loop.
+    bool32 innatesOn = GetConfig(FEATURE_INNATE_ABILITIES);
+    bool32 isBattlerGrounded = IsBattlerGrounded(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
+    bool32 selfHasShadowTag = GetBattlerAbility(battler) == ABILITY_SHADOW_TAG || (innatesOn && IsInnateActive(battler, ABILITY_SHADOW_TAG));
     for (enum BattlerId battlerDef = 0; battlerDef < gBattlersCount; battlerDef++)
     {
         if (battler == battlerDef || IsBattlerAlly(battler, battlerDef))
             continue;
 
-        if (GetBattlerEscapePreventionAbility(battler, battlerDef) != ABILITY_NONE)
+        enum Ability ability = GetBattlerAbility(battlerDef);
+        if ((ability == ABILITY_SHADOW_TAG || (innatesOn && IsInnateActive(battlerDef, ABILITY_SHADOW_TAG))) && (B_SHADOW_TAG_ESCAPE <= GEN_3 || !selfHasShadowTag))
+            return battlerDef + 1;
+        if ((ability == ABILITY_ARENA_TRAP || (innatesOn && IsInnateActive(battlerDef, ABILITY_ARENA_TRAP))) && isBattlerGrounded)
+            return battlerDef + 1;
+        if ((ability == ABILITY_MAGNET_PULL || (innatesOn && IsInnateActive(battlerDef, ABILITY_MAGNET_PULL))) && IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
             return battlerDef + 1;
     }
 

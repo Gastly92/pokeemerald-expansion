@@ -464,13 +464,16 @@ bool32 IsBattlerTrapped(enum BattlerId battlerAtk, enum BattlerId battlerDef)
         return TRUE;
     if (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK)
         return TRUE;
-    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_SHADOW_TAG) || AI_IsInnateOnSide(battlerAtk, ABILITY_SHADOW_TAG)) // FORK: innate-aware
-        && (B_SHADOW_TAG_ESCAPE >= GEN_4 && gAiLogicData->abilities[battlerDef] != ABILITY_SHADOW_TAG && !IsInnateActive(battlerDef, ABILITY_SHADOW_TAG)))
+    // FORK: cache the innate-abilities flag once — the non-inline GetConfig() inside AI_IsInnateOnSide /
+    // IsInnateActive is costly in this AI-run hot path, so the innate clauses short-circuit for free when off.
+    bool32 innatesOn = GetConfig(FEATURE_INNATE_ABILITIES);
+    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_SHADOW_TAG) || (innatesOn && AI_IsInnateOnSide(battlerAtk, ABILITY_SHADOW_TAG))) // FORK: innate-aware
+        && (B_SHADOW_TAG_ESCAPE >= GEN_4 && gAiLogicData->abilities[battlerDef] != ABILITY_SHADOW_TAG && !(innatesOn && IsInnateActive(battlerDef, ABILITY_SHADOW_TAG))))
         return TRUE;
-    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_ARENA_TRAP) || AI_IsInnateOnSide(battlerAtk, ABILITY_ARENA_TRAP)) // FORK: innate-aware
+    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_ARENA_TRAP) || (innatesOn && AI_IsInnateOnSide(battlerAtk, ABILITY_ARENA_TRAP))) // FORK: innate-aware
         && AI_IsBattlerGrounded(battlerDef))
         return TRUE;
-    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_MAGNET_PULL) || AI_IsInnateOnSide(battlerAtk, ABILITY_MAGNET_PULL)) // FORK: innate-aware
+    if ((AI_IsAbilityOnSide(battlerAtk, ABILITY_MAGNET_PULL) || (innatesOn && AI_IsInnateOnSide(battlerAtk, ABILITY_MAGNET_PULL))) // FORK: innate-aware
         && IS_BATTLER_OF_TYPE(battlerDef, TYPE_STEEL))
         return TRUE;
 
