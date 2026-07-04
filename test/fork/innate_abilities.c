@@ -5083,6 +5083,8 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_DAZZLING, ABILITY_QUEENLY_MAJESTY, ABILITY_ARMOR_TAIL,
         ABILITY_PROPELLER_TAIL, ABILITY_STALWART,
         ABILITY_SHADOW_TAG, ABILITY_ARENA_TRAP, ABILITY_MAGNET_PULL,
+        ABILITY_MAGMA_ARMOR, ABILITY_WATER_VEIL, ABILITY_OWN_TEMPO, ABILITY_INNER_FOCUS,
+        ABILITY_LEAF_GUARD, ABILITY_OVERCOAT,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
