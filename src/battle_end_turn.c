@@ -156,6 +156,7 @@ static bool32 HandleEndTurnWeatherDamage(enum BattlerId battler)
          && !IsInnateActive(battler, ABILITY_SAND_VEIL) // FORK: an innate Sand Veil also shrugs off sandstorm (pure boon)
          && !IsInnateActive(battler, ABILITY_SAND_FORCE) // FORK: an innate Sand Force also shrugs off sandstorm (pure boon)
          && ability != ABILITY_OVERCOAT
+         && !IsInnateActive(battler, ABILITY_OVERCOAT) // FORK: an innate Overcoat also shrugs off sandstorm (pure boon)
          && !IS_BATTLER_ANY_TYPE(battler, TYPE_ROCK, TYPE_GROUND, TYPE_STEEL)
          && gBattleMons[battler].volatiles.semiInvulnerable != STATE_UNDERGROUND
          && gBattleMons[battler].volatiles.semiInvulnerable != STATE_UNDERWATER
@@ -180,6 +181,7 @@ static bool32 HandleEndTurnWeatherDamage(enum BattlerId battler)
             if (ability != ABILITY_SNOW_CLOAK
              && !IsInnateActive(battler, ABILITY_SNOW_CLOAK) // FORK: an innate Snow Cloak also shrugs off hail (pure boon)
              && ability != ABILITY_OVERCOAT
+             && !IsInnateActive(battler, ABILITY_OVERCOAT) // FORK: an innate Overcoat also shrugs off hail (pure boon)
              && !IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
              && gBattleMons[battler].volatiles.semiInvulnerable != STATE_UNDERGROUND
              && gBattleMons[battler].volatiles.semiInvulnerable != STATE_UNDERWATER

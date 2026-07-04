@@ -1881,3 +1881,69 @@ slots are kept intact for those future innates). Each repurposed slot was audite
 via an override would change Wobbuffet's game-wide ability data — but Wobbuffet is a ubiquitous test mon whose empty
 slot is exercised by `Ability(ABILITY_NONE)` (e.g. `test/battle/ai/gimmick_z_move.c`), so the set keeps its chosen
 Shadow Tag (redundant with the now-innate one, but harmless) rather than risk those tests.
+
+### ABILITY_MAGMA_ARMOR / ABILITY_WATER_VEIL / ABILITY_OWN_TEMPO / ABILITY_INNER_FOCUS / ABILITY_LEAF_GUARD / ABILITY_OVERCOAT
+
+The **status-condition immunities** (Batch I): each blocks a specific status/effect on its
+holder — Magma Armor (freeze/frostbite), Water Veil (burn), Own Tempo (confusion), Inner Focus
+(flinching), Leaf Guard (all non-volatile status *while the holder is in harsh sunlight*), Overcoat
+(powder moves + sandstorm/hail chip damage). All are **1:1 clean-upside copies** — the same class as
+the already-done Limber / Immunity / Insomnia — so no pure-boon divergence.
+
+**Effect sites (all `src/battle_util.c` unless noted):**
+- **Magma Armor / Water Veil** — the freeze and burn cases of `CanSetNonVolatileStatus` gain an
+  `IsInnateActive()` clause beside the cached chosen-ability test (Water Veil rides the existing
+  Water Bubble branch). Because `CanBeBurned`/`CanBeFrozen` (and the AI's status-move scoring
+  through them) route through `CanSetNonVolatileStatus`, those are innate-aware for free.
+- **Own Tempo** — `CanBeConfused` (blocks confusion; a silent pure-boon immunity, no pop-up — the
+  confuse move's `jumpifability` reads only the chosen slot, matching the Levitate silent-immunity
+  precedent) plus the AI's `AI_CanBeConfused` (`src/battle_ai_util.c`).
+- **Inner Focus** — the `MOVE_EFFECT_FLINCH` case of `SetMoveEffect` (`src/battle_script_commands.c`)
+  and the `DETERMINISTIC_HOLD_EFFECTS` King's-Rock would-it-land mirror (`src/battle_hold_effects.c`);
+  the AI's flinch-move scoring (`ShouldTryToFlinch` + the reliable-effect flinch check,
+  `src/battle_ai_util.c`).
+- **Leaf Guard** — made innate-aware at its single helper `IsLeafGuardProtected`
+  (`src/battle_script_commands.c`), which covers the battle effect (`CanSetNonVolatileStatus`), the
+  Rest-prevention gate, the end-turn status site, and the AI switch read in one edit. Sun-gated: no
+  sun ⇒ no immunity.
+- **Overcoat** — `IsAffectedByPowderMove` (powder immunity) and the sandstorm/hail end-turn block
+  (`src/battle_end_turn.c`); the AI's sand/hail damage predictors + switch-in weather impact +
+  powder-absorb switch heuristic (`src/battle_ai_util.c` / `src/battle_ai_switch.c`).
+
+**Intimidate immunity (Inner Focus + Own Tempo).** Both are also unaffected by Intimidate (GEN_8+),
+wired beside the Oblivious/Scrappy innate detection in `IsIntimidateBlocked`
+(`src/battle_stat_change.c`) and the Intimidate switch-in heuristic (`src/battle_ai_switch.c`).
+
+**Switch-in status cure.** Each status-immunity innate also self-cures its status on switch-in
+(`TryImmunityAbilityHealStatus`), exactly like the real ability: Water Veil/Water Bubble cure burn,
+Magma Armor cures freeze/frostbite, Own Tempo cures confusion (reachable only when a Mold Breaker
+move pierced the innate first — confusion is a volatile cleared on switch-out otherwise). The pop-up/
+record overwrite shows the innate, not the chosen ability.
+
+**Suppression parity** holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field);
+Magma Armor / Water Veil / Own Tempo / Inner Focus / Leaf Guard / Overcoat are all breakable, so an
+attacker's Mold Breaker pierces the innate exactly as it would the real ability.
+
+**Species selection — canon-only, with two contradiction carve-outs and one flavor set.** Every canon
+user (any ability slot, forms + Mega parity per the FORMS/Mega rules) carries the innate. Magma Armor
+adds a tight molten/burning-body flavor set that can't freeze (Torkoal, the Coalossal line). Two
+contradiction carve-outs (like Zangoose's Immunity/Toxic Boost): **Spinda keeps innate Tangled Feet,
+not Own Tempo** (Own Tempo would block the confusion Tangled Feet needs). **Sole-ability species are
+omitted as redundant** (their sole chosen ability already grants the effect) *unless* they are a
+frontier set — **Zarude** (sole Leaf Guard) and **Enamorus-Therian** (sole Overcoat) instead take the
+innate + a fork-owned chosen override (Tough Claws / Sheer Force), like Ogerpon-Cornerstone.
+
+**Frontier slot freeing (Step 3.5) is partial for this batch.** These status-immunity species are
+unusually innate-dense — many already carry several innates — so most frontier sets that hardcoded one
+of these six abilities are on species whose *remaining* real slots are all likewise innate (or a
+drawback, or a still-pending innate). The cleanly-tractable sets were freed: 11 species took an
+**empty-slot override** to a stable pick (Dragonite→Reckless, Meganium→Grassy Surge, Forretress→Filter,
+Raikou→Lightning Rod, Entei→Flame Body, Suicune→Water Absorb, Huntail/Floatzel→Water Absorb,
+Revavroom→Sheer Force, plus Zarude→Tough Claws, Enamorus-Therian→Sheer Force), and 5 were repointed to
+an existing stable real slot (Kommo-o→Bulletproof, Lurantis→Contrary, Slowking-Galar→Curious Medicine,
+Lickilicky→Cloud Nine, Oranguru→Symbiosis). The remaining ~24 all-innate species (Slowbro/Slowking,
+Hitmonchan, Kangaskhan, the Slow/Lilligant/Tsareena/etc. lines) keep `.ability` on the now-innate
+ability — functional and CI-safe (it still resolves to a real slot), just redundant — because freeing
+them would require overrides that *delete* a real ability game-wide (the override table is not
+feature-gated), each needing a per-species `test/battle` audit; that broad sweep is deferred to a
+focused follow-up rather than risked here.

@@ -26,7 +26,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Immunity | The Pokémon cannot be poisoned or badly poisoned. |
 | :x: | Flash Fire | Fire-type moves do not work on the Pokémon. Instead, they give the Pokémon the Flash Fire status. |
 | :white_check_mark: | Shield Dust | The Pokémon is immune to additional effects from attacks. |
-| :white_large_square: | Own Tempo | The Pokémon cannot become confused and is unaffected by Intimidate. |
+| :white_check_mark: | Own Tempo | The Pokémon cannot become confused and is unaffected by Intimidate. |
 | :white_large_square: | Suction Cups | The Pokémon is unaffected by the moves and held items of other Pokémon that would force it to switch out of battle. |
 | :white_large_square: | Intimidate | When the Pokémon enters a battle, it lowers the Attack stats of opponents by 1 stage. |
 | :white_check_mark: | Shadow Tag | Opponents cannot be switched out of battle. |
@@ -45,9 +45,9 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Trace | When the Pokémon enters a battle, it changes its Ability to match that of an opponent. |
 | :white_check_mark: | Huge Power | Doubles the power of the Pokémon's physical moves. |
 | :x: | Poison Point | When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned. |
-| :white_large_square: | Inner Focus | The Pokémon never flinches when attacked and is unaffected by Intimidate. |
-| :white_large_square: | Magma Armor | The Pokémon cannot be frozen. |
-| :white_large_square: | Water Veil | The Pokémon's water veil prevents it from being burned. |
+| :white_check_mark: | Inner Focus | The Pokémon never flinches when attacked and is unaffected by Intimidate. |
+| :white_check_mark: | Magma Armor | The Pokémon cannot be frozen. |
+| :white_check_mark: | Water Veil | The Pokémon's water veil prevents it from being burned. |
 | :white_check_mark: | Magnet Pull | Prevents Steel-type Pokémon from fleeing by pulling them in with magnetism. |
 | :x: | Soundproof | The Pokémon is immune to sound-based moves. |
 | :white_large_square: | Rain Dish | The Pokémon has 1/16 of its max HP restored at the end of every turn in rain. |
@@ -108,7 +108,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | No Guard | The accuracy of moves used both by and against the Pokémon becomes 100%. |
 | :x: | Stall | The Pokémon's moves go last among moves of the same priority. |
 | :white_check_mark: | Technician | Boosts the power of the Pokémon's moves by 50% if their power is 60 or less. |
-| :white_large_square: | Leaf Guard | The Pokémon is immune to status conditions in harsh sunlight. |
+| :white_check_mark: | Leaf Guard | The Pokémon is immune to status conditions in harsh sunlight. |
 | :x: | Klutz | Items do not work when held by the Pokémon. |
 | :white_large_square: | Mold Breaker | The Pokémon's moves are unaffected by the Ability of the target (with certain exceptions). |
 | :white_check_mark: | Super Luck | The Pokémon has a 1-stage Critical-Hit Ratio Boost. |
@@ -148,7 +148,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Harvest | If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry. |
 | :white_large_square: | Telepathy | The Pokémon dodges attacks from its allies. |
 | :x: | Moody | At the end of every turn, one of the Pokémon's stats will be boosted by 2 stages, but another will be lowered by 1 stage. |
-| :white_large_square: | Overcoat | The Pokémon takes no damage from sandstorms and is immune to moves and Abilities involving powder. |
+| :white_check_mark: | Overcoat | The Pokémon takes no damage from sandstorms and is immune to moves and Abilities involving powder. |
 | :x: | Poison Touch | When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned. |
 | :white_check_mark: | Regenerator | The Pokémon has 1/3 of its max HP restored when it switches out of battle. |
 | :white_check_mark: | Big Pecks | The Pokémon's Defense stat cannot be lowered by other Pokémon's moves or Abilities. |

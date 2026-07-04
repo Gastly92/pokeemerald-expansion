@@ -236,6 +236,7 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
         bool32 flinchWouldLand = !HasBattlerActedThisTurn(battlerDef)
                               && !gBattleMons[battlerDef].volatiles.flinched
                               && GetBattlerAbility(battlerDef) != ABILITY_INNER_FOCUS
+                              && !IsInnateActive(battlerDef, ABILITY_INNER_FOCUS) // FORK: innate Inner Focus blocks the flinch too
                               && GetActiveGimmick(battlerDef) != GIMMICK_DYNAMAX
                               // FORK: Shield Dust (real or innate) and Covert Cloak block the flinch at
                               // SetMoveEffect's IsMoveEffectBlockedByTarget chokepoint, so without these

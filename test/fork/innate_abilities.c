@@ -5202,3 +5202,286 @@ TEST("Innate abilities: species-keyed lookup matches the raw table for every row
     EXPECT(!SpeciesHasInnate(SPECIES_NONE, ABILITY_LEVITATE)); // no-row species misses cleanly
     EXPECT_EQ(GetSpeciesInnate(SPECIES_NONE, 0), ABILITY_NONE);
 }
+
+// ===== Batch I — status-condition immunities (Magma Armor / Water Veil / Own Tempo /
+// Inner Focus / Leaf Guard / Overcoat) =====
+// All 1:1 clean-upside copies of the real ability, wired at the shared trait chokepoints
+// (CanSetNonVolatileStatus / CanBeConfused / IsLeafGuardProtected / IsAffectedByPowderMove /
+// the sandstorm-hail end-turn block). Each vehicle carries the ability innately but picks a
+// DIFFERENT chosen ability so only the innate can be responsible for the effect.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magma Armor prevents freeze/frostbite")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(MoveHasAdditionalEffect(MOVE_POWDER_SNOW, MOVE_EFFECT_FREEZE_OR_FROSTBITE));
+        ASSUME(SpeciesHasInnate(SPECIES_CAMERUPT, ABILITY_MAGMA_ARMOR));
+        ASSUME(gSpeciesInfo[SPECIES_CAMERUPT].abilities[0] != ABILITY_SOLID_ROCK);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CAMERUPT) { Ability(ABILITY_SOLID_ROCK); } // chosen differs from the innate Magma Armor
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_POWDER_SNOW); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_POWDER_SNOW); }
+    } THEN {
+        if (enabled)
+            EXPECT(!(player->status1 & STATUS1_ICY_ANY)); // innate Magma Armor -> never frozen/frostbitten
+        else
+            EXPECT(player->status1 & STATUS1_ICY_ANY);     // no innate -> the forced freeze/frostbite lands
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Water Veil prevents burn")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveNonVolatileStatus(MOVE_WILL_O_WISP) == MOVE_EFFECT_BURN);
+        ASSUME(SpeciesHasInnate(SPECIES_WAILORD, ABILITY_WATER_VEIL));
+        ASSUME(gSpeciesInfo[SPECIES_WAILORD].abilities[0] != ABILITY_OBLIVIOUS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WAILORD) { Ability(ABILITY_OBLIVIOUS); } // chosen differs from the innate Water Veil
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_WILL_O_WISP); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WILL_O_WISP); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_WATER_VEIL); // pop-up shows Water Veil, not the chosen Oblivious
+            NONE_OF { STATUS_ICON(player, burn: TRUE); }
+        } else {
+            STATUS_ICON(player, burn: TRUE);
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->status1 & STATUS1_BURN, 0);
+    }
+}
+
+// Suppression parity: Water Veil is breakable, so Mold Breaker pierces an innate Water Veil.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Water Veil")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_WATER_VEIL].breakable);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WAILORD) { Ability(ABILITY_OBLIVIOUS); } // innate Water Veil
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_WILL_O_WISP); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WILL_O_WISP); }
+    } SCENE {
+        STATUS_ICON(player, burn: TRUE); // Mold Breaker ignores the innate -> burned
+        NONE_OF { ABILITY_POPUP(player, ABILITY_WATER_VEIL); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo prevents confusion")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_CONFUSE_RAY) == EFFECT_CONFUSE);
+        ASSUME(SpeciesHasInnate(SPECIES_SLOWBRO, ABILITY_OWN_TEMPO));
+        ASSUME(gSpeciesInfo[SPECIES_SLOWBRO].abilities[0] != ABILITY_REGENERATOR);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SLOWBRO) { Ability(ABILITY_REGENERATOR); } // chosen differs from the innate Own Tempo
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CONFUSE_RAY); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); }
+    } THEN {
+        if (enabled)
+            EXPECT(player->volatiles.confusionTurns == 0);
+        else
+            EXPECT(player->volatiles.confusionTurns > 0);
+    }
+}
+
+// The switch-in cure site fires for an innate Own Tempo too: if a Mold Breaker Confuse Ray pierces the
+// innate and confuses the holder, the confusion is cured the moment the immunity hook next runs (Mold
+// Breaker is no longer active), exactly like a real Own Tempo. Grumpig is the vehicle (no innate Oblivious).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo cures confusion inflicted through Mold Breaker")
+{
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_CONFUSE_RAY) == EFFECT_CONFUSE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_PINSIR) { Ability(ABILITY_MOLD_BREAKER); }
+        OPPONENT(SPECIES_GRUMPIG) { Ability(ABILITY_GLUTTONY); } // innate Own Tempo
+    } WHEN {
+        TURN { MOVE(player, MOVE_CONFUSE_RAY); }
+    } SCENE {
+        MESSAGE("The opposing Grumpig became confused!"); // Mold Breaker pierced the innate
+        ABILITY_POPUP(opponent, ABILITY_OWN_TEMPO);
+        MESSAGE("The opposing Grumpig snapped out of its confusion!"); // innate cures right after
+    } THEN {
+        EXPECT(opponent->volatiles.confusionTurns == 0);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Inner Focus prevents flinching")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(MoveHasAdditionalEffect(MOVE_FAKE_OUT, MOVE_EFFECT_FLINCH));
+        ASSUME(SpeciesHasInnate(SPECIES_LUCARIO, ABILITY_INNER_FOCUS));
+        ASSUME(gSpeciesInfo[SPECIES_LUCARIO].abilities[0] != ABILITY_JUSTIFIED);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_LUCARIO) { Ability(ABILITY_JUSTIFIED); Speed(50); Moves(MOVE_TACKLE); } // innate Inner Focus
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_FAKE_OUT); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FAKE_OUT); MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        if (enabled)
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player); // not flinched -> Tackle executes
+        else
+            NONE_OF { ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player); } // flinched
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Inner Focus is unaffected by Intimidate (Gen8+)")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_UPDATED_INTIMIDATE, GEN_8);
+        PLAYER(SPECIES_LUCARIO) { Ability(ABILITY_JUSTIFIED); } // innate Inner Focus
+        OPPONENT(SPECIES_EKANS) { Ability(ABILITY_INTIMIDATE); }
+    } WHEN {
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_INTIMIDATE);
+        ABILITY_POPUP(player, ABILITY_INNER_FOCUS); // pop-up shows the innate Inner Focus
+        MESSAGE("Lucario's Attack was not lowered!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Grumpig (not Slowbro) is the vehicle: Slowbro also carries innate Oblivious, which the Intimidate-
+// immunity block credits first, so its pop-up would read Oblivious. Grumpig has innate Own Tempo without
+// Oblivious, so the immunity is unambiguously Own Tempo's.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo is unaffected by Intimidate (Gen8+)")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GRUMPIG, ABILITY_OWN_TEMPO));
+        ASSUME(!SpeciesHasInnate(SPECIES_GRUMPIG, ABILITY_OBLIVIOUS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_UPDATED_INTIMIDATE, GEN_8);
+        PLAYER(SPECIES_GRUMPIG) { Ability(ABILITY_GLUTTONY); } // chosen Gluttony, innate Own Tempo
+        OPPONENT(SPECIES_EKANS) { Ability(ABILITY_INTIMIDATE); }
+    } WHEN {
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_INTIMIDATE);
+        ABILITY_POPUP(player, ABILITY_OWN_TEMPO);
+        MESSAGE("Grumpig's Attack was not lowered!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Leaf Guard blocks status in sun")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveNonVolatileStatus(MOVE_THUNDER_WAVE) == MOVE_EFFECT_PARALYSIS);
+        ASSUME(SpeciesHasInnate(SPECIES_MEGANIUM, ABILITY_LEAF_GUARD));
+        ASSUME(gSpeciesInfo[SPECIES_MEGANIUM].abilities[0] != ABILITY_LEAF_GUARD);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); } // chosen differs from the innate Leaf Guard
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SUNNY_DAY, MOVE_THUNDER_WAVE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SUNNY_DAY); }
+        TURN { MOVE(opponent, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_LEAF_GUARD);
+            NONE_OF { STATUS_ICON(player, paralysis: TRUE); }
+        } else {
+            STATUS_ICON(player, paralysis: TRUE);
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->status1 & STATUS1_PARALYSIS, 0);
+    }
+}
+
+// Leaf Guard is sun-gated: with no sun the innate does nothing and the status lands.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Leaf Guard does nothing outside sun")
+{
+    GIVEN {
+        ASSUME(GetMoveNonVolatileStatus(MOVE_THUNDER_WAVE) == MOVE_EFFECT_PARALYSIS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); } // innate Leaf Guard, but no sun
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_THUNDER_WAVE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        STATUS_ICON(player, paralysis: TRUE);
+        NONE_OF { ABILITY_POPUP(player, ABILITY_LEAF_GUARD); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Overcoat blocks powder moves")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(IsPowderMove(MOVE_SPORE));
+        ASSUME(SpeciesHasInnate(SPECIES_KOMMO_O, ABILITY_OVERCOAT));
+        ASSUME(gSpeciesInfo[SPECIES_KOMMO_O].abilities[0] != ABILITY_OVERCOAT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KOMMO_O) { Ability(ABILITY_BULLETPROOF); } // chosen differs from the innate Overcoat
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SPORE); }
+    } SCENE {
+        if (enabled)
+            NONE_OF { STATUS_ICON(player, sleep: TRUE); }
+        else
+            STATUS_ICON(player, sleep: TRUE);
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->status1 & STATUS1_SLEEP, 0);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Overcoat ignores sandstorm chip damage")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        // Kommo-o is Dragon/Fighting, so it normally takes sandstorm chip (not Rock/Ground/Steel).
+        ASSUME(SpeciesHasInnate(SPECIES_KOMMO_O, ABILITY_OVERCOAT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KOMMO_O) { Ability(ABILITY_BULLETPROOF); MaxHP(240); HP(240); Moves(MOVE_CELEBRATE); } // innate Overcoat
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SANDSTORM); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_SANDSTORM); }
+    } SCENE {
+        if (enabled)
+            NONE_OF { HP_BAR(player); } // Overcoat -> no sandstorm chip
+        else
+            HP_BAR(player); // no innate -> loses 1/16 to sandstorm
+    }
+}
+
+// Identity stays the chosen slot: Trace copies Meganium's chosen Overgrow, never its innate Leaf Guard.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies the chosen ability, never an innate Leaf Guard")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GARDEVOIR) { Ability(ABILITY_TRACE); }
+        OPPONENT(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); } // innate Leaf Guard, chosen Overgrow
+    } WHEN {
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_TRACE);
+        MESSAGE("It traced the opposing Meganium's Overgrow!"); // chosen Overgrow, never the innate Leaf Guard
+    }
+}

@@ -667,11 +667,11 @@ static bool32 IsIntimidateBlocked(struct BattleCalcValues *cv, struct StatChange
     if (!st->intimidate)
         return FALSE;
 
-    // FORK: an innate Oblivious or Scrappy (the chosen ability differs, so the switch below would miss it)
-    // is unaffected by Intimidate exactly like the real ability (GEN_8+). Mirror the switch cases and
-    // overwrite the pop-up/record to the innate (CreateAbilityPopUp reads the primary slot). Only fires
+    // FORK: an innate Oblivious / Scrappy / Inner Focus / Own Tempo (the chosen ability differs, so the switch
+    // below would miss it) is unaffected by Intimidate exactly like the real ability (GEN_8+). Mirror the switch
+    // cases and overwrite the pop-up/record to the innate (CreateAbilityPopUp reads the primary slot). Only fires
     // when the chosen ability isn't itself an Intimidate-immune one (those are handled by the switch).
-    // IsInnateActive supplies suppression parity. Inner Focus/Own Tempo/Guard Dog are never innates.
+    // IsInnateActive supplies suppression parity. Guard Dog is not an innate yet (Batch S).
     if (cv->abilities[cv->battlerDef] != ABILITY_OBLIVIOUS
      && cv->abilities[cv->battlerDef] != ABILITY_INNER_FOCUS
      && cv->abilities[cv->battlerDef] != ABILITY_SCRAPPY
@@ -683,6 +683,10 @@ static bool32 IsIntimidateBlocked(struct BattleCalcValues *cv, struct StatChange
             innateImmunity = ABILITY_OBLIVIOUS;
         else if (IsInnateActive(cv->battlerDef, ABILITY_SCRAPPY))
             innateImmunity = ABILITY_SCRAPPY;
+        else if (IsInnateActive(cv->battlerDef, ABILITY_INNER_FOCUS))
+            innateImmunity = ABILITY_INNER_FOCUS;
+        else if (IsInnateActive(cv->battlerDef, ABILITY_OWN_TEMPO))
+            innateImmunity = ABILITY_OWN_TEMPO;
         if (innateImmunity != ABILITY_NONE)
         {
             if (GetConfig(B_UPDATED_INTIMIDATE) < GEN_8)

@@ -2371,12 +2371,17 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
         }
         break;
     case MOVE_EFFECT_FLINCH:
-        if (abilities[effectBattler] == ABILITY_INNER_FOCUS)
+        // FORK: an innate Inner Focus (chosen ability differs) prevents flinching like the real ability.
+        if (abilities[effectBattler] == ABILITY_INNER_FOCUS || IsInnateActive(effectBattler, ABILITY_INNER_FOCUS))
         {
             if (primary || certain)
             {
                 gLastUsedAbility = ABILITY_INNER_FOCUS;
                 gBattlerAbility = effectBattler;
+                // FORK: overwrite the pop-up to Inner Focus for an innate holder (CreateAbilityPopUp reads
+                // the primary slot); the real-Inner-Focus path is left byte-for-byte.
+                if (abilities[effectBattler] != ABILITY_INNER_FOCUS)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_INNER_FOCUS;
                 RecordAbilityBattle(effectBattler, ABILITY_INNER_FOCUS);
                 gBattlescriptCurrInstr = battleScript;
             }
@@ -6900,7 +6905,7 @@ u32 IsFlowerVeilProtected(enum BattlerId battler)
 u32 IsLeafGuardProtected(enum BattlerId battler, enum Ability ability)
 {
     if (IsBattlerWeatherAffected(GetBattlerHoldEffect(battler), GetWeather(), B_WEATHER_SUN))
-        return ability == ABILITY_LEAF_GUARD;
+        return ability == ABILITY_LEAF_GUARD || IsInnateActive(battler, ABILITY_LEAF_GUARD); // FORK: innate Leaf Guard grants sun status-immunity like the real ability
     else
         return 0;
 }

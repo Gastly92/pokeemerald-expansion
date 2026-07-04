@@ -3496,7 +3496,8 @@ static bool32 DoesBattlerTakeSandstormDamage(enum BattlerId battlerId, enum Abil
       && !IsInnateActive(battlerId, ABILITY_SAND_VEIL) // FORK: AI knows an innate Sand Veil ignores sandstorm too
       && !IsInnateActive(battlerId, ABILITY_SAND_FORCE) // FORK: AI knows an innate Sand Force ignores sandstorm too
       && ability != ABILITY_MAGIC_GUARD
-      && ability != ABILITY_OVERCOAT)
+      && ability != ABILITY_OVERCOAT
+      && !IsInnateActive(battlerId, ABILITY_OVERCOAT)) // FORK: AI knows an innate Overcoat ignores sandstorm too
         return TRUE;
     return FALSE;
 }
@@ -3511,7 +3512,8 @@ static bool32 DoesBattlerTakeHailDamage(enum BattlerId battlerId, enum Ability a
       && !IsInnateActive(battlerId, ABILITY_SNOW_CLOAK) // FORK: AI knows an innate Snow Cloak ignores hail too
       && ability != ABILITY_ICE_BODY
       && ability != ABILITY_MAGIC_GUARD
-      && ability != ABILITY_OVERCOAT)
+      && ability != ABILITY_OVERCOAT
+      && !IsInnateActive(battlerId, ABILITY_OVERCOAT)) // FORK: AI knows an innate Overcoat ignores hail too
         return TRUE;
     return FALSE;
 }
@@ -3874,7 +3876,8 @@ bool32 AI_CanParalyze(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
 bool32 AI_CanBeConfused(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability abilityDef)
 {
     if (gBattleMons[battlerDef].volatiles.confusionTurns > 0
-     || (abilityDef == ABILITY_OWN_TEMPO && !DoesBattlerIgnoreAbilityChecks(battlerAtk, gAiLogicData->abilities[battlerAtk], move))
+     || ((abilityDef == ABILITY_OWN_TEMPO || IsInnateActive(battlerDef, ABILITY_OWN_TEMPO)) // FORK: innate Own Tempo blocks confusion too
+         && !DoesBattlerIgnoreAbilityChecks(battlerAtk, gAiLogicData->abilities[battlerAtk], move))
      || IsMistyTerrainAffected(battlerDef, abilityDef, gAiLogicData->holdEffects[battlerDef], gFieldStatuses)
      || IsSafeguardProtected(battlerAtk, battlerDef, gAiLogicData->abilities[battlerAtk])
      || DoesSubstituteBlockMove(battlerAtk, battlerDef, move))
@@ -3939,7 +3942,8 @@ bool32 ShouldTryToFlinch(enum BattlerId battlerAtk, enum BattlerId battlerDef, e
     enum Move predictedMove = GetPredictedMove(battlerAtk, battlerDef, gAiLogicData);
     if (((!IsMoldBreakerTypeAbility(battlerAtk, gAiLogicData->abilities[battlerAtk])
        && (defAbility == ABILITY_SHIELD_DUST || defAbility == ABILITY_INNER_FOCUS
-        || IsInnateActive(battlerDef, ABILITY_SHIELD_DUST))) // FORK: innate Shield Dust blocks the flinch too
+        || IsInnateActive(battlerDef, ABILITY_SHIELD_DUST)
+        || IsInnateActive(battlerDef, ABILITY_INNER_FOCUS))) // FORK: innate Shield Dust / Inner Focus blocks the flinch too
       || gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_COVERT_CLOAK
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
       || AI_IsSlower(battlerAtk, battlerDef, move, predictedMove, CONSIDER_PRIORITY))) // Opponent goes first
@@ -4049,7 +4053,8 @@ bool32 IsFlinchGuaranteed(enum BattlerId battlerAtk, enum BattlerId battlerDef, 
             || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
             || (!IsMoldBreakerTypeAbility(battlerAtk, gAiLogicData->abilities[battlerAtk])
             && (gAiLogicData->abilities[battlerDef] == ABILITY_SHIELD_DUST || gAiLogicData->abilities[battlerDef] == ABILITY_INNER_FOCUS
-             || IsInnateActive(battlerDef, ABILITY_SHIELD_DUST)))) // FORK: innate Shield Dust blocks the flinch too
+             || IsInnateActive(battlerDef, ABILITY_SHIELD_DUST)
+             || IsInnateActive(battlerDef, ABILITY_INNER_FOCUS)))) // FORK: innate Shield Dust / Inner Focus blocks the flinch too
                 return FALSE;
             else
                 return TRUE;

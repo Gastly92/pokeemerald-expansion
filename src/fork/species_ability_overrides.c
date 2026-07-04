@@ -111,6 +111,27 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ARTICUNO, 1,
         ABILITY_SNOW_WARNING
     },
+    { // 0149
+        // Dragonite's only real abilities (Inner Focus, Multiscale) are BOTH now innate, so its EMPTY slot 1
+        // takes Reckless, an already-implemented :white_check_mark: innate (stable) it does not carry innately:
+        // its recoil STAB (Brave Bird / Double-Edge) is powered up, stacking with the innate Multiscale bulk.
+        SPECIES_DRAGONITE, 1,
+        ABILITY_RECKLESS
+    },
+    { // 0154
+        // Meganium's only real abilities (Overgrow, Leaf Guard) are BOTH now innate, so its EMPTY slot 1 takes
+        // Grassy Surge -- :x: (never an innate -> stable) and thematic for the Herb Pokemon: the terrain it
+        // sets powers its Grass STAB and passively heals its bulky sets. Same pick as Venusaur/Celebi.
+        SPECIES_MEGANIUM, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    { // 0205
+        // Forretress's only real abilities (Sturdy, Overcoat) are BOTH now innate, so its EMPTY slot 1 takes
+        // Filter, an already-implemented :white_check_mark: innate (stable) it does not carry innately: it blunts
+        // the supereffective Fire hit its Spikes/Rapid Spin wall most fears.
+        SPECIES_FORRETRESS, 1,
+        ABILITY_FILTER
+    },
     { // 0227
         // Skarmory's only non-drawback real abilities (Keen Eye, Sturdy) are BOTH now innate (Weak Armor,
         // slot 2, is a drawback on a wall), so its slot-1 Sturdy — now innate-redundant — takes Bulletproof.
@@ -125,6 +146,27 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // sets turns on its own innate Sand Veil evasion. Same pick as base Sandslash above.
         SPECIES_DONPHAN, 1,
         ABILITY_SAND_STREAM
+    },
+    { // 0243
+        // Raikou's only real abilities (Pressure, Inner Focus) are BOTH now innate, so its EMPTY slot 1 takes
+        // Lightning Rod -- :x: (never an innate -> stable) and thematic for the thunder beast: an Electric
+        // immunity + Sp. Atk boost for its special attacker sets.
+        SPECIES_RAIKOU, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0244
+        // Entei's only real abilities (Pressure, Inner Focus) are BOTH now innate, so its EMPTY slot 1 takes
+        // Flame Body -- :x: (never an innate -> stable) and thematic for the volcano beast: contact attackers
+        // risk a burn. Same pick as Ho-Oh/Turtonator.
+        SPECIES_ENTEI, 1,
+        ABILITY_FLAME_BODY
+    },
+    { // 0245
+        // Suicune's only real abilities (Pressure, Inner Focus) are BOTH now innate, so its EMPTY slot 1 takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the north wind beast: it shrugs off
+        // Water moves and heals from them, a clean boon for its bulky Calm Mind sets.
+        SPECIES_SUICUNE, 1,
+        ABILITY_WATER_ABSORB
     },
     { // 0249
         // Lugia's only real abilities (Pressure, Multiscale) are BOTH now innate, so its empty slot 1 takes
@@ -226,6 +268,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CHIMECHO, 1,
         ABILITY_SOUNDPROOF
     },
+    { // 0367
+        // Huntail's only real abilities (Swift Swim, Water Veil) are BOTH now innate, so its EMPTY slot 1 takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the deep-sea fish: it heals on the
+        // Water hits its Shell Smash sweeper invites.
+        SPECIES_HUNTAIL, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0376
         // Metagross's only real abilities are Clear Body (slot 0, now innate) and Light Metal (slot 2, pending), so
         // its EMPTY slot 1 takes Tough Claws, an already-implemented :white_check_mark: innate (stable) and its Mega's
@@ -285,6 +334,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0389
         SPECIES_TORTERRA, 1,
         ABILITY_SAND_STREAM
+    },
+    { // 0419
+        // Floatzel's only real abilities (Swift Swim, Water Veil) are BOTH now innate, so its EMPTY slot 1 takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the sea weasel: it heals on the Water
+        // moves its bulky-water switch-ins invite, alongside the innate Swift Swim speed.
+        SPECIES_FLOATZEL, 1,
+        ABILITY_WATER_ABSORB
     },
     { // 0428
         // Lopunny's only real non-drawback abilities (Cute Charm, Limber) are BOTH now innate
@@ -609,6 +665,20 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ETERNATUS, 1,
         ABILITY_POISON_TOUCH
     },
+    { // 0893
+        // Zarude's only real ability is Leaf Guard (now innate), so -- like Ogerpon-Cornerstone -- its EMPTY slot 1
+        // takes Tough Claws, an already-implemented :white_check_mark: innate (stable) it does not carry innately:
+        // the Rogue Monkey's kit (Power Whip / Darkest Lariat / Knock Off / U-turn) is all contact.
+        SPECIES_ZARUDE, 1,
+        ABILITY_TOUGH_CLAWS
+    },
+    { // 0905
+        // Enamorus-Therian's only real ability is Overcoat (now innate), so its EMPTY slot 1 takes Sheer Force --
+        // :x: (never an innate -> stable) and a strong boon for the Choice Band physical breaker: Play Rough /
+        // Springtide Storm gain +30% and drop their secondaries.
+        SPECIES_ENAMORUS_THERIAN, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0911
         SPECIES_SKELEDIRGE, 1,
         ABILITY_MUMMY
@@ -642,6 +712,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // :white_check_mark: innate (stable, like Medicham) that powers the vulture's Brave Bird recoil dive.
         SPECIES_BOMBIRDIER, 1,
         ABILITY_RECKLESS
+    },
+    { // 0966
+        // Revavroom's only real abilities (Overcoat, Filter) are BOTH now innate, so its EMPTY slot 1 takes Sheer
+        // Force -- :x: (never an innate -> stable) and a strong boon for the Poison/Steel hot rod: Gunk Shot /
+        // Iron Head gain +30% and drop their secondaries.
+        SPECIES_REVAVROOM, 1,
+        ABILITY_SHEER_FORCE
     },
     { // 1013
         // Sinistcha's Heatproof is now innate, freeing its frontier slot; its slot-0 Hospitality is dead in

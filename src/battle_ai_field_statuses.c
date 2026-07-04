@@ -157,7 +157,9 @@ static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather)
         || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_VEIL))
         || ((weather & B_WEATHER_SANDSTORM) && IsInnateActive(battler, ABILITY_SAND_FORCE))
         || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SLUSH_RUSH))
-        || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SNOW_CLOAK));
+        || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SNOW_CLOAK))
+        || ((weather & B_WEATHER_SUN)          && IsInnateActive(battler, ABILITY_LEAF_GUARD))  // FORK: innate Leaf Guard values sun (status-immune)
+        || ((weather & B_WEATHER_DAMAGING_ANY) && IsInnateActive(battler, ABILITY_OVERCOAT));    // FORK: innate Overcoat values damaging weather (ignores chip)
 }
 
 static bool32 DoesAbilityBenefitFromWeather(enum Ability ability, u32 weather)
