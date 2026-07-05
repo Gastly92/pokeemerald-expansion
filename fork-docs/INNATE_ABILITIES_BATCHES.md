@@ -359,7 +359,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 11 | Batch G — Redirection-ignore | clone, no driver | done |
 | 12 | Batch H — Trapping | trait, no driver | done |
 | 13 | Batch I — Status-condition immunities | trait, no driver | done |
-| 14 | Batch S — Misc single-site traits | trait, no driver | open |
+| 14 | Batch S — Misc single-site traits | trait, no driver | done |
 | 15 | Batch J — End-of-turn effects | active, **existing** driver | open |
 | 16 | Batch T — Berry/item synergy | active/trait | open |
 | 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | open |
@@ -418,7 +418,7 @@ row is `done`.
 | G — Redirection-ignore | clone | 2 | done |
 | H — Trapping | trait (+AI) | 3 | done |
 | I — Status-condition immunities | trait | 6 | done |
-| S — Misc single-site traits | trait | 12 | open |
+| S — Misc single-site traits | trait | 12 | done |
 | J — End-of-turn effects | active (existing driver) | 10 | open |
 | K — On-contact/on-hit/on-faint | active (new driver) | 13 | open |
 | L — Switch-in actives | active (new driver) | 8 | open |

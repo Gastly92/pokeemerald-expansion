@@ -4686,7 +4686,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                     if (!(magicianTargets & 1u << targetBattler))
                         continue;
 
-                    if (GetBattlerAbility(targetBattler) == ABILITY_STICKY_HOLD && IsBattlerAlive(targetBattler))
+                    if (BattlerHasAbility(targetBattler, ABILITY_STICKY_HOLD) && IsBattlerAlive(targetBattler)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
                     {
                         effect = FALSE;
                         break;
@@ -5603,7 +5603,7 @@ bool32 IsSafeguardProtected(enum BattlerId battlerAtk, enum BattlerId battlerDef
         return FALSE;
     if (IsBattlerAlly(battlerAtk, battlerDef))
         return TRUE;
-    if (abilityAtk == ABILITY_INFILTRATOR)
+    if (abilityAtk == ABILITY_INFILTRATOR || IsInnateActive(battlerAtk, ABILITY_INFILTRATOR)) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
         return FALSE;
     return TRUE;
 }
@@ -5623,7 +5623,8 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         {
             battleScript = BattleScript_AlreadyPoisoned;
         }
-        else if (abilityAtk != ABILITY_CORROSION && IS_BATTLER_ANY_TYPE(battlerDef, TYPE_POISON, TYPE_STEEL))
+        else if (abilityAtk != ABILITY_CORROSION && !IsInnateActive(battlerAtk, ABILITY_CORROSION) // FORK: innate-aware Corrosion poisons Poison/Steel types (FEATURE_INNATE_ABILITIES)
+              && IS_BATTLER_ANY_TYPE(battlerDef, TYPE_POISON, TYPE_STEEL))
         {
             battleScript = BattleScript_NotAffected;
         }
@@ -6186,6 +6187,8 @@ bool32 IsMoveMakingContact(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         RecordAbilityBattle(battlerAtk, ABILITY_LONG_REACH);
         return FALSE;
     }
+    else if (IsInnateActive(battlerAtk, ABILITY_LONG_REACH)) // FORK: innate Long Reach makes moves non-contact (FEATURE_INNATE_ABILITIES); no record — the chosen slot stays identity
+        return FALSE;
     return TRUE;
 }
 
@@ -6228,7 +6231,9 @@ bool32 IsBattlerProtected(struct BattleCalcValues *cv)
     {
         if (IsZMove(cv->move) || IsMaxMove(cv->move))
             return FALSE; // Z-Moves and Max Moves bypass protection (except Max Guard).
-        if ((cv->abilities[cv->battlerAtk] == ABILITY_UNSEEN_FIST || cv->abilities[cv->battlerAtk] == ABILITY_PIERCING_DRILL)
+        // FORK: innate-aware Unseen Fist / Piercing Drill hit through Protect (FEATURE_INNATE_ABILITIES)
+        if ((cv->abilities[cv->battlerAtk] == ABILITY_UNSEEN_FIST || cv->abilities[cv->battlerAtk] == ABILITY_PIERCING_DRILL
+          || IsInnateActive(cv->battlerAtk, ABILITY_UNSEEN_FIST) || IsInnateActive(cv->battlerAtk, ABILITY_PIERCING_DRILL))
          && IsMoveMakingContact(cv->battlerAtk, cv->battlerDef, cv->abilities[cv->battlerAtk], cv->holdEffects[cv->battlerAtk], cv->move))
             return FALSE;
     }
@@ -6377,9 +6382,10 @@ u32 GetBattlerWeight(enum BattlerId battler)
         }
     }
 
-    if (ability == ABILITY_HEAVY_METAL)
+    // FORK: innate-aware Heavy Metal / Light Metal (FEATURE_INNATE_ABILITIES)
+    if (ability == ABILITY_HEAVY_METAL || IsInnateActive(battler, ABILITY_HEAVY_METAL))
         weight *= 2;
-    else if (ability == ABILITY_LIGHT_METAL)
+    else if (ability == ABILITY_LIGHT_METAL || IsInnateActive(battler, ABILITY_LIGHT_METAL))
         weight /= 2;
 
     if (holdEffect == HOLD_EFFECT_FLOAT_STONE)
@@ -8008,9 +8014,10 @@ static inline uq4_12_t GetScreensModifier(struct DamageContext *ctx)
     {
         return UQ_4_12(1.0);
     }
-    if (ctx->abilities[ctx->battlerAtk] == ABILITY_INFILTRATOR && !IsBattlerAlly(ctx->battlerAtk, ctx->battlerDef))
+    // FORK: innate-aware Infiltrator ignores the foe's screens (FEATURE_INNATE_ABILITIES)
+    if ((ctx->abilities[ctx->battlerAtk] == ABILITY_INFILTRATOR || IsInnateActive(ctx->battlerAtk, ABILITY_INFILTRATOR)) && !IsBattlerAlly(ctx->battlerAtk, ctx->battlerDef))
     {
-        if (ctx->updateFlags)
+        if (ctx->updateFlags && ctx->abilities[ctx->battlerAtk] == ABILITY_INFILTRATOR)
             RecordAbilityBattle(ctx->battlerAtk, ctx->abilities[ctx->battlerAtk]);
         return UQ_4_12(1.0);
     }

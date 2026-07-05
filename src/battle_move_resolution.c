@@ -2355,7 +2355,7 @@ static bool32 ShouldSkipAccuracyCalcPastFirstHit(enum BattlerId battlerAtk, enum
     if (!gSpecialStatuses[battlerAtk].multiHitOn)
         return FALSE;
 
-    if (abilityAtk == ABILITY_SKILL_LINK || holdEffectAtk == HOLD_EFFECT_LOADED_DICE)
+    if (abilityAtk == ABILITY_SKILL_LINK || IsInnateActive(battlerAtk, ABILITY_SKILL_LINK) || holdEffectAtk == HOLD_EFFECT_LOADED_DICE) // FORK: innate-aware Skill Link (FEATURE_INNATE_ABILITIES)
         return TRUE;
 
     if (moveEffect == EFFECT_TRIPLE_KICK || moveEffect == EFFECT_POPULATION_BOMB)
@@ -2553,7 +2553,7 @@ static enum CancelerResult CancelerMultihitMoves(struct BattleCalcValues *cv)
         {
             gMultiHitCounter = GetMoveSpeciesPowerOverride_NumOfHits(cv->move);
         }
-        else if (cv->abilities[cv->battlerAtk] == ABILITY_SKILL_LINK)
+        else if (cv->abilities[cv->battlerAtk] == ABILITY_SKILL_LINK || IsInnateActive(cv->battlerAtk, ABILITY_SKILL_LINK)) // FORK: innate-aware Skill Link (FEATURE_INNATE_ABILITIES)
         {
             // FORK: DETERMINISTIC_MOVE_RESULTS raises Skill Link's guaranteed hit count.
             gMultiHitCounter = GetConfig(DETERMINISTIC_MOVE_RESULTS) ? DETERMINISTIC_MULTI_HIT_MAX_COUNT : 5;
@@ -2568,7 +2568,8 @@ static enum CancelerResult CancelerMultihitMoves(struct BattleCalcValues *cv)
     else if (GetMoveStrikeCount(cv->move) > 1)
     {
         bool32 guaranteedMaxStrikes = cv->holdEffects[cv->battlerAtk] == HOLD_EFFECT_LOADED_DICE
-                                   || cv->abilities[cv->battlerAtk] == ABILITY_SKILL_LINK;
+                                   || cv->abilities[cv->battlerAtk] == ABILITY_SKILL_LINK
+                                   || IsInnateActive(cv->battlerAtk, ABILITY_SKILL_LINK); // FORK: innate-aware Skill Link (FEATURE_INNATE_ABILITIES)
 
         if (GetMoveEffect(cv->move) == EFFECT_POPULATION_BOMB && GetConfig(DETERMINISTIC_MOVE_RESULTS))
         {
@@ -2582,7 +2583,8 @@ static enum CancelerResult CancelerMultihitMoves(struct BattleCalcValues *cv)
         }
         else if (GetMoveEffect(cv->move) == EFFECT_POPULATION_BOMB
          && cv->holdEffects[cv->battlerAtk] == HOLD_EFFECT_LOADED_DICE
-         && cv->abilities[cv->battlerAtk] != ABILITY_SKILL_LINK)
+         && cv->abilities[cv->battlerAtk] != ABILITY_SKILL_LINK
+         && !IsInnateActive(cv->battlerAtk, ABILITY_SKILL_LINK)) // FORK: innate-aware Skill Link (FEATURE_INNATE_ABILITIES)
         {
             gMultiHitCounter = RandomUniform(RNG_LOADED_DICE, 4, 10);
         }
@@ -2746,8 +2748,10 @@ static enum MoveEndResult MoveEndProtectLikeEffect(struct BattleCalcValues *cv)
         return result;
     }
 
+    // FORK: innate-aware Unseen Fist / Piercing Drill hit through Protect (FEATURE_INNATE_ABILITIES)
     if (method != PROTECT_MAX_GUARD
-     && (cv->abilities[cv->battlerAtk] == ABILITY_UNSEEN_FIST || cv->abilities[cv->battlerAtk] == ABILITY_PIERCING_DRILL)
+     && (cv->abilities[cv->battlerAtk] == ABILITY_UNSEEN_FIST || cv->abilities[cv->battlerAtk] == ABILITY_PIERCING_DRILL
+      || IsInnateActive(cv->battlerAtk, ABILITY_UNSEEN_FIST) || IsInnateActive(cv->battlerAtk, ABILITY_PIERCING_DRILL))
      && IsMoveMakingContact(cv->battlerAtk, cv->battlerDef, cv->abilities[cv->battlerAtk], cv->holdEffects[cv->battlerAtk], cv->move))
     {
         gBattleScripting.moveendState++;
@@ -3618,7 +3622,8 @@ static enum MoveEndResult MoveEndMoveBlockRecoil(struct BattleCalcValues *cv)
         if (IsBattlerTurnDamaged(cv->battlerDef, INCLUDING_SUBSTITUTES) && IsBattlerAlive(cv->battlerAtk))
         {
             if (IsAbilityAndRecord(cv->battlerAtk, cv->abilities[cv->battlerAtk], ABILITY_ROCK_HEAD)
-             || IsAbilityAndRecord(cv->battlerAtk, cv->abilities[cv->battlerAtk], ABILITY_MAGIC_GUARD))
+             || IsAbilityAndRecord(cv->battlerAtk, cv->abilities[cv->battlerAtk], ABILITY_MAGIC_GUARD)
+             || IsInnateActive(cv->battlerAtk, ABILITY_ROCK_HEAD)) // FORK: innate Rock Head negates recoil (FEATURE_INNATE_ABILITIES); no record — chosen slot stays identity
                 break;
 
             if (cv->moveEffect == EFFECT_CHLOROBLAST)
@@ -3692,9 +3697,11 @@ static enum MoveEndResult MoveEndMoveBlock(struct BattleCalcValues *cv)
         {
             enum BattleSide side = GetBattlerSide(cv->battlerDef);
 
-            if (cv->abilities[cv->battlerDef] == ABILITY_STICKY_HOLD)
+            if (cv->abilities[cv->battlerDef] == ABILITY_STICKY_HOLD || IsInnateActive(cv->battlerDef, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
             {
                 gBattlerAbility = cv->battlerDef;
+                if (cv->abilities[cv->battlerDef] != ABILITY_STICKY_HOLD)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_STICKY_HOLD;
                 BattleScriptCall(BattleScript_StickyHoldActivatesRet);
                 result = MOVEEND_RESULT_RUN_SCRIPT;
                 break;
@@ -3737,8 +3744,10 @@ static enum MoveEndResult MoveEndMoveBlock(struct BattleCalcValues *cv)
         {
             result = MOVEEND_RESULT_CONTINUE;
         }
-        else if (cv->abilities[cv->battlerDef] == ABILITY_STICKY_HOLD)
+        else if (cv->abilities[cv->battlerDef] == ABILITY_STICKY_HOLD || IsInnateActive(cv->battlerDef, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
         {
+            if (cv->abilities[cv->battlerDef] != ABILITY_STICKY_HOLD)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_STICKY_HOLD;
             BattleScriptCall(BattleScript_StickyHoldActivatesRet);
             gBattlerAbility = cv->battlerDef;
             gLastUsedAbility = gBattleMons[cv->battlerDef].ability;
@@ -3765,11 +3774,15 @@ static enum MoveEndResult MoveEndMoveBlock(struct BattleCalcValues *cv)
          && IsBattlerAlive(cv->battlerAtk)
          && gBattleStruct->battlerState[cv->battlerDef].commanderSpecies == SPECIES_NONE)
         {
-            if (cv->abilities[cv->battlerDef] == ABILITY_GUARD_DOG)
+            // FORK: innate-aware Guard Dog / Suction Cups block forced switch-out (FEATURE_INNATE_ABILITIES)
+            if (cv->abilities[cv->battlerDef] == ABILITY_GUARD_DOG || IsInnateActive(cv->battlerDef, ABILITY_GUARD_DOG))
                 break;
 
-            if (cv->abilities[cv->battlerDef] == ABILITY_SUCTION_CUPS)
+            if (cv->abilities[cv->battlerDef] == ABILITY_SUCTION_CUPS || IsInnateActive(cv->battlerDef, ABILITY_SUCTION_CUPS))
             {
+                // Show the innate in the pop-up when the chosen ability differs (CreateAbilityPopUp reads the primary slot).
+                if (cv->abilities[cv->battlerDef] != ABILITY_SUCTION_CUPS)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_SUCTION_CUPS;
                 BattleScriptCall(BattleScript_AbilityPreventsPhasingOutRet);
             }
             else if (gBattleMons[cv->battlerDef].volatiles.root)
@@ -3989,7 +4002,10 @@ static bool32 TryRedCard(enum BattlerId battlerAtk, enum BattlerId redCardBattle
     gBattleScripting.battler = gBattlerTarget = redCardBattler;
     gEffectBattler = battlerAtk;
     if (gBattleStruct->battlerState[battlerAtk].commanderSpecies != SPECIES_NONE
-     || GetBattlerAbility(battlerAtk) == ABILITY_GUARD_DOG
+     || BattlerHasAbility(battlerAtk, ABILITY_GUARD_DOG) // FORK: innate-aware Guard Dog (FEATURE_INNATE_ABILITIES)
+     // FORK: an innate-only Suction Cups resists the Red Card switch too (chosen Suction Cups keeps its
+     // own message via BattleScript_RedCardActivates -> BattleScript_RedCardSuctionCups). (FEATURE_INNATE_ABILITIES)
+     || (GetBattlerAbility(battlerAtk) != ABILITY_SUCTION_CUPS && IsInnateActive(battlerAtk, ABILITY_SUCTION_CUPS))
      || GetActiveGimmick(battlerAtk) == GIMMICK_DYNAMAX)
         BattleScriptCall(BattleScript_RedCardActivationNoSwitch);
     else

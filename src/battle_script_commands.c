@@ -2654,7 +2654,8 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
     case MOVE_EFFECT_INCINERATE:
         if ((gItemsInfo[gBattleMons[effectBattler].item].pocket == POCKET_BERRIES
           || (B_INCINERATE_GEMS >= GEN_6 && GetItemHoldEffect(gBattleMons[effectBattler].item) == HOLD_EFFECT_GEMS))
-         && abilities[effectBattler] != ABILITY_STICKY_HOLD)
+         && abilities[effectBattler] != ABILITY_STICKY_HOLD
+         && !IsInnateActive(effectBattler, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
         {
             gLastUsedItem = gBattleMons[effectBattler].item;
             gBattleMons[effectBattler].item = ITEM_NONE;
@@ -2673,7 +2674,8 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
             gBattlescriptCurrInstr = battleScript;
         }
         else if (GetItemPocket(gBattleMons[effectBattler].item) == POCKET_BERRIES
-            && abilities[effectBattler] != ABILITY_STICKY_HOLD)
+            && abilities[effectBattler] != ABILITY_STICKY_HOLD
+            && !IsInnateActive(effectBattler, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
         {
             // target loses their berry
             gLastUsedItem = gBattleMons[effectBattler].item;
@@ -9034,11 +9036,13 @@ static void Cmd_tryswapitems(void)
             gBattlescriptCurrInstr = cmd->failInstr;
         }
         // check if ability prevents swapping
-        else if (GetBattlerAbility(gBattlerTarget) == ABILITY_STICKY_HOLD)
+        else if (BattlerHasAbility(gBattlerTarget, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
         {
             gBattlescriptCurrInstr = BattleScript_StickyHoldActivates;
             gBattlerAbility = gBattlerTarget;
             gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
+            if (gLastUsedAbility != ABILITY_STICKY_HOLD)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_STICKY_HOLD; // pop-up shows the innate
             RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
         }
         // took a while, but all checks passed and items can be safely swapped
@@ -9693,6 +9697,8 @@ bool32 IsSubstituteProtected(enum BattlerId battlerAtk, enum BattlerId battlerDe
     else if (GetMoveEffect(move) == EFFECT_TRANSFORM || GetMoveEffect(move) == EFFECT_SKY_DROP)
         return TRUE;
     else if (IsAbilityAndRecord(battlerAtk, abilityAtk, ABILITY_INFILTRATOR))
+        return FALSE;
+    else if (IsInnateActive(battlerAtk, ABILITY_INFILTRATOR)) // FORK: innate Infiltrator ignores Substitute (FEATURE_INNATE_ABILITIES); no record — chosen slot stays identity
         return FALSE;
     else
         return TRUE;
@@ -12664,6 +12670,19 @@ void BS_JumpIfRoarFails(void)
         gBattlescriptCurrInstr = cmd->jumpInstr;
     else if (FlagGet(WE_FLAG_NO_RUNNING))
         gBattlescriptCurrInstr = cmd->jumpInstr;
+    // FORK: innate-aware Guard Dog / Suction Cups block Roar/Whirlwind (FEATURE_INNATE_ABILITIES).
+    // BattleScript_EffectRoar's own jumpifability lines only see the chosen slot, so credit an
+    // innate here (only when the chosen ability differs, so chosen holders keep the script's path).
+    // Guard Dog fails Roar plainly (cmd->jumpInstr == BattleScript_ButItFailed); Suction Cups shows
+    // its anchor pop-up, overwriting to the innate since CreateAbilityPopUp reads the primary slot.
+    else if (GetBattlerAbility(gBattlerTarget) != ABILITY_GUARD_DOG && IsInnateActive(gBattlerTarget, ABILITY_GUARD_DOG))
+        gBattlescriptCurrInstr = cmd->jumpInstr;
+    else if (GetBattlerAbility(gBattlerTarget) != ABILITY_SUCTION_CUPS && IsInnateActive(gBattlerTarget, ABILITY_SUCTION_CUPS))
+    {
+        gBattlerAbility = gBattlerTarget;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_SUCTION_CUPS;
+        gBattlescriptCurrInstr = BattleScript_AbilityPreventsPhasingOut;
+    }
     else
         gBattlescriptCurrInstr = cmd->nextInstr;
 }

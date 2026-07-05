@@ -42,7 +42,10 @@
 //   PROPELLER_TAIL / STALWART (redirection-ignore, Batch G),
 //   SHADOW_TAG / ARENA_TRAP / MAGNET_PULL (trapping, Batch H),
 //   MAGMA_ARMOR / WATER_VEIL / OWN_TEMPO / INNER_FOCUS / LEAF_GUARD / OVERCOAT
-//   (status-condition immunities, Batch I).
+//   (status-condition immunities, Batch I),
+//   SUCTION_CUPS / GUARD_DOG / ROCK_HEAD / LONG_REACH / SKILL_LINK / INFILTRATOR /
+//   CORROSION / STICKY_HOLD / UNSEEN_FIST / PIERCING_DRILL / HEAVY_METAL / LIGHT_METAL
+//   (miscellaneous single-site traits, Batch S).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

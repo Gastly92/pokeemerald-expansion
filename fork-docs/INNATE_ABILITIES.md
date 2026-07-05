@@ -1947,3 +1947,104 @@ ability — functional and CI-safe (it still resolves to a real slot), just redu
 them would require overrides that *delete* a real ability game-wide (the override table is not
 feature-gated), each needing a per-species `test/battle` audit; that broad sweep is deferred to a
 focused follow-up rather than risked here.
+
+### ABILITY_SUCTION_CUPS / ABILITY_GUARD_DOG
+
+Both resist being forced out of battle (Batch S). Wired at the two C forced-switch sites in
+`src/battle_move_resolution.c`: the Dragon Tail / Circle Throw hit-switch (`EFFECT_HIT_SWITCH_TARGET`,
+Guard Dog silently breaks, Suction Cups shows its anchor pop-up) and the Red Card activation
+(`TryRedCardActivation`). Roar / Whirlwind (`EFFECT_ROAR`) resolve through a *battle script* whose
+`jumpifability` reads only the chosen slot, so `BS_JumpIfRoarFails` (`src/battle_script_commands.c`) is
+made innate-aware there: an innate Guard Dog fails the phaze plainly, an innate Suction Cups jumps to
+`BattleScript_AbilityPreventsPhasingOut` with the pop-up overwritten to Suction Cups. Both are 1:1
+clean-upside copies (no downside). **DELIBERATE PARTIAL WIRING (Guard Dog):** only the forced-switch
+block is wired; Guard Dog's Intimidate-immunity + Attack-boost half waits on Batch L (the Intimidate
+switch-in driver), so an innate Guard Dog is deliberately omitted from the Intimidate-immunity list in
+`battle_stat_change.c`. AI: the Roar-scoring reads in `src/battle_ai_main.c` (`EFFECT_ROAR` +
+Suction Cups, both the score-penalty and the doubles no-op) credit an innate Suction Cups. Canon-only
+(no flavor picks). Guard Dog's canon users (Mabosstiff, Okidogi) are frontier sets whose slot is freed
+via a fork-owned override (Strong Jaw / Toxic Chain).
+
+### ABILITY_ROCK_HEAD
+
+Negates recoil damage from the holder's own moves (Batch S), 1:1 clean-upside copy. Wired at the single
+recoil site in `src/battle_move_resolution.c` (`EFFECT_RECOIL` / `EFFECT_CHLOROBLAST`) beside the chosen
+`IsAbilityAndRecord(...ABILITY_ROCK_HEAD)` test — an `IsInnateActive` clause that does NOT record (the
+chosen slot stays identity, mirroring the Batch G Propeller Tail/Stalwart pattern). No pop-up (silent).
+AI is innate-aware: `AI_IsDamagedByRecoil` (`src/battle_ai_util.c`) credits an innate Rock Head so the AI
+doesn't over-fear its own recoil. Canon-only. Many canon Rock Head users are frontier sets; those whose
+every real ability is now innate take a fork-owned override.
+
+### ABILITY_LONG_REACH
+
+Makes all of the holder's moves non-contact (Batch S), 1:1 clean-upside copy. Wired at the single contact
+chokepoint `IsMoveMakingContact` (`src/battle_util.c`) — an `IsInnateActive` clause after the chosen
+`abilityAtk == ABILITY_LONG_REACH` test (no record). Because every contact-triggered effect (Rocky
+Helmet, Rough Skin/Iron Barbs, Static/Flame Body, Pickpocket, King's Rock-on-contact, …) flows through
+this one predicate, the innate is covered everywhere for free. AI is innate-aware: the Rocky
+Helmet/Iron Barbs move-comparison in `AI_CompareDamagingMoves` and `AI_MoveMakesContact`
+(`src/battle_ai_util.c`) credit an innate Long Reach. Canon-only (the Rowlet line).
+
+### ABILITY_SKILL_LINK
+
+Multistrike moves always hit the maximum number of times (Batch S), 1:1 clean-upside copy. Wired at the
+multi-hit-count sites in `src/battle_move_resolution.c` (`CancelerMultihitMoves` +
+`ShouldSkipAccuracyCalcPastFirstHit`) beside the chosen reads, including the `DETERMINISTIC_MOVE_RESULTS`
+reroute (Skill Link forces `DETERMINISTIC_MULTI_HIT_MAX_COUNT` instead of `..._COUNT`, and guarantees
+Population Bomb's loaded-dice count). AI hit-count prediction (`src/battle_ai_util.c`, three sites incl.
+the deterministic-Population-Bomb and deterministic-multihit branches) is innate-aware, so the AI values
+an innate Skill Link's guaranteed damage. No pop-up. Canon-only.
+
+### ABILITY_INFILTRATOR
+
+Ignores the foe's Light Screen / Reflect / Aurora Veil, Safeguard, Mist and Substitute (Batch S), 1:1
+clean-upside copy. Wired at each foe-barrier site: `GetDefenderAbilitiesModifier`'s screen check
+(`src/battle_util.c`), `IsSafeguardProtected` (`src/battle_util.c`), `IsMistProtected`
+(`src/battle_stat_change.c`) and the Substitute-block resolver in `src/battle_script_commands.c` (the
+`IsAbilityAndRecord` site gets an `IsInnateActive` clause, no record). The overworld
+`OW_INFILTRATOR` wild-encounter lure stays keyed to the chosen ability (not a battle effect). AI is
+innate-aware: the Mist-ignore check (`src/battle_ai_util.c`) and the Substitute/Shed-Tail scoring
+(`src/battle_ai_main.c`) credit an innate Infiltrator. No pop-up. Canon-only.
+
+### ABILITY_CORROSION
+
+Lets the holder poison / badly-poison Poison- and Steel-type targets (Batch S), 1:1 clean-upside copy.
+Wired at the single type-immunity gate in `CanSetNonVolatileStatus` (`src/battle_util.c`) — the innate
+clause sits beside the chosen `abilityAtk != ABILITY_CORROSION` test, so a move-based poison from an
+innate Corrosion holder lands on a Steel/Poison foe exactly as the real ability does (Corrosion only
+ever applies to the holder's own poisoning, so this one site is the whole effect). No pop-up. Canon-only.
+
+### ABILITY_STICKY_HOLD
+
+Keeps the holder's item from being stolen or removed (Batch S), 1:1 clean-upside copy. Wired at the
+common removal sites: Knock Off and Thief/Covet steal (`src/battle_move_resolution.c`, pop-up overwritten
+to Sticky Hold), Trick/Switcheroo (`src/battle_script_commands.c`, pop-up overwrite), Incinerate and Bug
+Bite (`src/battle_script_commands.c`, silent), and Magician (`src/battle_util.c`, silent). AI is
+innate-aware: the Knock Off/Corrosive Gas/Thief scoring and the item-swap heuristics
+(`src/battle_ai_main.c`, `src/battle_ai_util.c`) credit an innate Sticky Hold. **KNOWN LIMITATION:** an
+innate Sticky Hold does NOT block a chosen Pickpocket's on-contact steal, nor Corrosive Gas — both route
+through a battle script's `jumpifability` (chosen-slot-only), a cross-cutting change deferred out of
+scope. Canon-only.
+
+### ABILITY_UNSEEN_FIST / ABILITY_PIERCING_DRILL
+
+Contact moves hit through the target's Protect (Batch S), an identical pair, both 1:1 clean-upside
+copies. Wired at the two shared Protect sites in `src/battle_util.c` (`IsBattlerProtected`) and
+`src/battle_move_resolution.c` (`CancelerPriorityBlock`-style protect resolver) — both already read both
+abilities, so the innate clause adds `IsInnateActive` for each beside the chosen reads. AI is
+innate-aware: `AI_CanContactBypassProtect` (`src/battle_ai_util.c`) credits both innates. No pop-up.
+Canon-only. NOTE: Excadrill-Mega (the sole Piercing Drill user) is ability-locked to Piercing Drill in
+all three slots, so its innate can't be observed distinctly from its chosen ability — the test asserts
+membership only, since the effect site is identical to Unseen Fist's (which is fully exercised).
+
+### ABILITY_HEAVY_METAL / ABILITY_LIGHT_METAL
+
+Double / halve the holder's weight (Batch S), 1:1 clean-upside copies. Wired at the single weight calc
+`GetBattlerWeight` (`src/battle_util.c`) beside the chosen `ability == ABILITY_HEAVY_METAL` /
+`... LIGHT_METAL` tests, so every weight-based interaction (Low Kick / Grass Knot power against the
+holder, its own Heavy Slam / Heat Crash, Sky Drop, Heavy Ball) reflects the innate. AI weight reads run
+through the same calc, so they are innate-aware for free. No pop-up. Canon-only. NOTE: Duraludon (and its
+Gigantamax) carry innate LIGHT_METAL only — although its real ability data lists BOTH Heavy and Light
+Metal, they are contradictory as simultaneous innates (weight x2 vs /2), so the defensively useful
+slot-0 Light Metal is chosen and Heavy Metal dropped; innate Heavy Metal still lives on the Aggron and
+Copperajah lines.
