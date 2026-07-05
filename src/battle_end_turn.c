@@ -608,7 +608,7 @@ static bool32 HandleEndTurnPoison(enum BattlerId battler)
             if (isToxicPoison && (gBattleMons[battler].status1 & STATUS1_TOXIC_COUNTER) != STATUS1_TOXIC_TURN(15)) // not 16 turns
                 gBattleMons[battler].status1 += STATUS1_TOXIC_TURN(1);
         }
-        else if (ability == ABILITY_POISON_HEAL)
+        else if (BattlerHasAbility(battler, ABILITY_POISON_HEAL)) // FORK: innate-aware (1:1 clean-upside copy)
         {
             if (isToxicPoison && (gBattleMons[battler].status1 & STATUS1_TOXIC_COUNTER) != STATUS1_TOXIC_TURN(15)) // not 16 turns
                 gBattleMons[battler].status1 += STATUS1_TOXIC_TURN(1);
@@ -616,6 +616,9 @@ static bool32 HandleEndTurnPoison(enum BattlerId battler)
             if (!IsBattlerAtMaxHp(battler) && !gBattleMons[battler].volatiles.healBlock)
             {
                 SetHealAmount(battler, GetNonDynamaxMaxHP(battler) / 8);
+                // FORK: innate Poison Heal — pop-up shows Poison Heal, not the chosen ability.
+                if (ability != ABILITY_POISON_HEAL)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_POISON_HEAL;
                 BattleScriptCall(BattleScript_PoisonHealActivates);
                 effect = TRUE;
             }

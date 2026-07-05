@@ -766,6 +766,7 @@ static bool32 ShouldSwitchIfBadlyStatused(struct SwitchAiContext *switchContext)
             if ((monAbility == ABILITY_NATURAL_CURE
                 || BattlerHasAbility(switchContext->battler, ABILITY_NATURAL_CURE) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
                 || monAbility == ABILITY_SHED_SKIN
+                || BattlerHasAbility(switchContext->battler, ABILITY_SHED_SKIN) // FORK: innate-aware
                 || monAbility == ABILITY_EARLY_BIRD
                 || BattlerHasAbility(switchContext->battler, ABILITY_EARLY_BIRD)) // FORK: innate-aware
                 || holdEffect == (HOLD_EFFECT_CURE_SLP | HOLD_EFFECT_CURE_STATUS)
@@ -1714,6 +1715,7 @@ static u32 GetSwitchinHazardsDamage(enum BattlerId battler)
             && ability != ABILITY_IMMUNITY // FORK: innate-aware (config-gated: feature off must not credit — or scan for — innates)
             && !(GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_IMMUNITY))
             && ability != ABILITY_POISON_HEAL && ability != ABILITY_COMATOSE
+            && !(GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_POISON_HEAL)) // FORK: innate-aware
             && status == 0
             && !(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
             && !IsAbilityOnSide(battler, ABILITY_PASTEL_VEIL) && !AI_IsInnateOnSide(battler, ABILITY_PASTEL_VEIL) // FORK: innate-aware
@@ -1756,7 +1758,8 @@ static s32 GetSwitchinWeatherImpact(enum BattlerId battler)
         if ((weather  & B_WEATHER_HAIL)
          && !IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
          && ability != ABILITY_SNOW_CLOAK && ability != ABILITY_ICE_BODY
-         && !IsInnateActive(battler, ABILITY_SNOW_CLOAK)) // FORK: innate Snow Cloak ignores hail too
+         && !IsInnateActive(battler, ABILITY_SNOW_CLOAK) // FORK: innate Snow Cloak ignores hail too
+         && !IsInnateActive(battler, ABILITY_ICE_BODY)) // FORK: innate Ice Body ignores hail too
         {
             weatherImpact = maxHP / 16;
             if (weatherImpact == 0)
@@ -1791,14 +1794,14 @@ static s32 GetSwitchinWeatherImpact(enum BattlerId battler)
             if (weatherImpact == 0)
                 weatherImpact = -1;
         }
-        else if (ability == ABILITY_RAIN_DISH)
+        else if (ability == ABILITY_RAIN_DISH || IsInnateActive(battler, ABILITY_RAIN_DISH)) // FORK: innate-aware
         {
             weatherImpact = -(maxHP / 16);
             if (weatherImpact == 0)
                 weatherImpact = -1;
         }
     }
-    if ((weather & (B_WEATHER_HAIL | B_WEATHER_SNOW)) && ability == ABILITY_ICE_BODY)
+    if ((weather & (B_WEATHER_HAIL | B_WEATHER_SNOW)) && (ability == ABILITY_ICE_BODY || IsInnateActive(battler, ABILITY_ICE_BODY))) // FORK: innate-aware
     {
         weatherImpact = -(maxHP / 16);
         if (weatherImpact == 0)
@@ -1833,7 +1836,9 @@ static u32 GetSwitchinRecurringHealing(enum BattlerId battler)
     } // Intentionally omitting Shell Bell for its inconsistency
 
     // Abilities
-    if (ability == ABILITY_POISON_HEAL && (gBattleMons[battler].status1 & STATUS1_POISON))
+    if ((ability == ABILITY_POISON_HEAL
+      || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_POISON_HEAL))) // FORK: innate-aware
+     && (gBattleMons[battler].status1 & STATUS1_POISON))
     {
         u32 healing = maxHP / 8;
         if (healing == 0)
@@ -1883,6 +1888,8 @@ static u32 GetSwitchinStatusDamage(enum BattlerId battler)
     enum Ability ability = gAiLogicData->abilities[battler];
     u32 maxHP = gBattleMons[battler].maxHP;
     u32 statusDamage = 0;
+    bool32 poisonHeal = ability == ABILITY_POISON_HEAL
+                     || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_POISON_HEAL)); // FORK: innate-aware
 
     // Status condition damage
     if ((status != 0) && ability != ABILITY_MAGIC_GUARD)
@@ -1908,13 +1915,13 @@ static u32 GetSwitchinStatusDamage(enum BattlerId battler)
             if (statusDamage == 0)
                 statusDamage = 1;
         }
-        else if ((status & STATUS1_POISON) && ability != ABILITY_POISON_HEAL)
+        else if ((status & STATUS1_POISON) && !poisonHeal)
         {
             statusDamage = maxHP / 8;
             if (statusDamage == 0)
                 statusDamage = 1;
         }
-        else if ((status & STATUS1_TOXIC_POISON) && ability != ABILITY_POISON_HEAL)
+        else if ((status & STATUS1_TOXIC_POISON) && !poisonHeal)
         {
             if ((status & STATUS1_TOXIC_COUNTER) != STATUS1_TOXIC_TURN(15)) // not 16 turns
                 gBattleMons[battler].status1 += STATUS1_TOXIC_TURN(1);

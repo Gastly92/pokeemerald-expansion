@@ -5088,6 +5088,9 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_SUCTION_CUPS, ABILITY_GUARD_DOG, ABILITY_ROCK_HEAD, ABILITY_LONG_REACH,
         ABILITY_SKILL_LINK, ABILITY_INFILTRATOR, ABILITY_CORROSION, ABILITY_STICKY_HOLD,
         ABILITY_UNSEEN_FIST, ABILITY_PIERCING_DRILL, ABILITY_HEAVY_METAL, ABILITY_LIGHT_METAL,
+        ABILITY_RAIN_DISH, ABILITY_ICE_BODY, ABILITY_SHED_SKIN, ABILITY_HYDRATION,
+        ABILITY_HEALER, ABILITY_HARVEST, ABILITY_CUD_CHEW, ABILITY_PICKUP,
+        ABILITY_BAD_DREAMS, ABILITY_POISON_HEAL,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -5768,5 +5771,311 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate R
     } SCENE {
         HP_BAR(opponent);
         HP_BAR(player); // innate Rock Head suppressed -> recoil applies
+    }
+}
+
+// ===== Batch J — end-of-turn effects (Rain Dish / Ice Body / Shed Skin / Hydration /
+// Healer / Harvest / Cud Chew / Pickup / Bad Dreams / Poison Heal) =====
+// The first nine are active, scripted end-turn innates that reuse the Speed Boost driver
+// (TryActivateInnateEndTurnEffects -> IsActiveEndTurnInnate) to delegate to the upstream
+// ABILITYEFFECT_ENDTURN case, so the heal / cure / item recovery / chip damage / script /
+// pop-up match the real ability; each effect site forces the pop-up to the innate when the
+// chosen ability differs. Poison Heal is NOT a driver innate — it REPLACES the poison-damage
+// step, wired at HandleEndTurnPoison (src/battle_end_turn.c). Every vehicle carries the innate
+// but a DIFFERENT chosen ability, so only the innate can be responsible for the effect. The
+// RNG-gated members (Shed Skin / Healer / Harvest / Pickup) are tested under
+// DETERMINISTIC_ABILITIES (the shipping default), where they fire deterministically.
+
+// ----- Rain Dish (heals 1/16 max HP in rain) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rain Dish heals 1/16 max HP in rain")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BLASTOISE, ABILITY_RAIN_DISH));
+        ASSUME(GetMoveWeatherType(MOVE_RAIN_DANCE) == BATTLE_WEATHER_RAIN);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BLASTOISE) { Ability(ABILITY_TORRENT); HP(1); MaxHP(160); } // chosen differs from innate Rain Dish
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_RAIN_DANCE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_RAIN_DISH); // pop-up shows the innate, not Torrent
+            HP_BAR(player, damage: -(160 / 16));
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_RAIN_DISH); HP_BAR(player); }
+        }
+    }
+}
+
+// ----- Ice Body (heals 1/16 max HP in snow) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Ice Body heals 1/16 max HP in snow")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_WALREIN, ABILITY_ICE_BODY));
+        ASSUME(GetMoveWeatherType(MOVE_SNOWSCAPE) == BATTLE_WEATHER_SNOW);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WALREIN) { Ability(ABILITY_THICK_FAT); HP(1); MaxHP(160); } // chosen differs from innate Ice Body
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SNOWSCAPE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_ICE_BODY);
+            HP_BAR(player, damage: -(160 / 16));
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_ICE_BODY); HP_BAR(player); }
+        }
+    }
+}
+
+// ----- Shed Skin (cures a status at end of turn; always under DETERMINISTIC_ABILITIES) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Shed Skin cures status")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SEVIPER, ABILITY_SHED_SKIN));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_SEVIPER) { Ability(ABILITY_INFILTRATOR); Status1(STATUS1_POISON); } // chosen differs from innate Shed Skin
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_SHED_SKIN);
+            MESSAGE("Seviper was cured of its poisoning!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_SHED_SKIN); }
+        }
+    } THEN {
+        if (!enabled)
+            EXPECT(player->status1 & STATUS1_POISON); // no innate -> stays poisoned
+    }
+}
+
+// ----- Hydration (cures status in rain) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Hydration cures status in rain")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VAPOREON, ABILITY_HYDRATION));
+        ASSUME(GetMoveWeatherType(MOVE_RAIN_DANCE) == BATTLE_WEATHER_RAIN);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_VAPOREON) { Ability(ABILITY_WATER_ABSORB); Status1(STATUS1_BURN); } // chosen differs from innate Hydration
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_RAIN_DANCE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_HYDRATION);
+            MESSAGE("Vaporeon's burn was cured!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_HYDRATION); }
+        }
+    } THEN {
+        if (!enabled)
+            EXPECT(player->status1 & STATUS1_BURN);
+    }
+}
+
+// ----- Healer (cures an adjacent ally's status; always under DETERMINISTIC_ABILITIES) -----
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Healer cures ally status")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BLISSEY, ABILITY_HEALER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_BLISSEY) { Ability(ABILITY_NATURAL_CURE); } // chosen differs from innate Healer
+        PLAYER(SPECIES_WOBBUFFET) { Status1(STATUS1_BURN); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(playerLeft, ABILITY_HEALER);
+            MESSAGE("Wobbuffet's burn was cured!");
+        } else {
+            NONE_OF { ABILITY_POPUP(playerLeft, ABILITY_HEALER); }
+        }
+    } THEN {
+        if (!enabled)
+            EXPECT(playerRight->status1 & STATUS1_BURN);
+    }
+}
+
+// ----- Harvest (recovers a used Berry; always under DETERMINISTIC_ABILITIES) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Harvest restores a used Berry")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TROPIUS, ABILITY_HARVEST));
+        ASSUME(gItemsInfo[ITEM_SITRUS_BERRY].holdEffect == HOLD_EFFECT_RESTORE_PCT_HP);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_TROPIUS) { Ability(ABILITY_CHLOROPHYLL); MaxHP(500); HP(251); Item(ITEM_SITRUS_BERRY); } // chosen differs from innate Harvest
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SCRATCH); } // drops Tropius below half -> Sitrus eaten
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_HARVEST);
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_HARVEST); }
+    } THEN {
+        EXPECT_EQ(player->item, enabled ? ITEM_SITRUS_BERRY : ITEM_NONE); // innate restores the Berry
+    }
+}
+
+// ----- Cud Chew (re-eats a Berry the turn after eating it) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cud Chew re-eats a Berry the next turn")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TAUROS_PALDEA_COMBAT, ABILITY_CUD_CHEW));
+        ASSUME(gItemsInfo[ITEM_ORAN_BERRY].holdEffect == HOLD_EFFECT_RESTORE_HP);
+        ASSUME(GetMoveFixedHPDamage(MOVE_DRAGON_RAGE) == 40);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_TAUROS_PALDEA_COMBAT) { Ability(ABILITY_INTIMIDATE); MaxHP(60); HP(60); Item(ITEM_ORAN_BERRY); } // chosen differs from innate Cud Chew
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_DRAGON_RAGE); } // HP 60 -> 20, Oran eaten
+        TURN { MOVE(player, MOVE_CELEBRATE); }     // Cud Chew re-eats the Oran here
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_CUD_CHEW);
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, player);
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_CUD_CHEW); }
+        }
+    }
+}
+
+// ----- Pickup (grabs an item consumed this turn) -----
+// Run under DETERMINISTIC_ABILITIES (the shipping default), which selects the pickup target by a
+// fixed preference order rather than at random; in singles the sole valid target is the foe either way.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Pickup grabs a consumed item")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ZIGZAGOON, ABILITY_PICKUP));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_ZIGZAGOON) { Ability(ABILITY_GLUTTONY); } // no item; chosen differs from innate Pickup
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(100); HP(51); Item(ITEM_SITRUS_BERRY); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); } // foe drops below half -> eats Sitrus
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_PICKUP);
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_PICKUP); }
+    } THEN {
+        EXPECT_EQ(player->item, enabled ? ITEM_SITRUS_BERRY : ITEM_NONE); // innate picks up the consumed Berry
+    }
+}
+
+// ----- Bad Dreams (chips sleeping foes 1/8 max HP) -----
+// Munna/Musharna are the dream-eater flavor vehicles (their canon abilities are all non-Bad-Dreams).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Bad Dreams chips a sleeping foe")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUSHARNA, ABILITY_BAD_DREAMS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MUSHARNA) { Ability(ABILITY_SYNCHRONIZE); } // chosen differs from innate Bad Dreams
+        OPPONENT(SPECIES_WOBBUFFET) { Status1(STATUS1_SLEEP); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_BAD_DREAMS);
+            HP_BAR(opponent);
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_BAD_DREAMS); HP_BAR(opponent); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(opponent->hp, opponent->maxHP - opponent->maxHP / 8);
+    }
+}
+
+// A non-sleeping foe takes no Bad Dreams damage and shows no pop-up (also guards the overwrite
+// against leaking: the innate overwrite is only set when a valid sleeping target exists).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Bad Dreams spares an awake foe")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUSHARNA, ABILITY_BAD_DREAMS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MUSHARNA) { Ability(ABILITY_SYNCHRONIZE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_BAD_DREAMS); HP_BAR(opponent); }
+    }
+}
+
+// ----- Poison Heal (heals 1/8 max HP instead of losing HP while poisoned) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Poison Heal heals instead of taking poison damage")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GLISCOR, ABILITY_POISON_HEAL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_GLISCOR) { Ability(ABILITY_SAND_VEIL); Status1(STATUS1_POISON); HP(200); MaxHP(400); } // chosen differs from innate Poison Heal
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_POISON_HEAL);
+            HP_BAR(player, damage: -(400 / 8)); // heals 1/8 instead of taking damage
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_POISON_HEAL); }
+        }
+    } THEN {
+        EXPECT_EQ(player->hp, enabled ? 200 + 400 / 8 : 200 - 400 / 8); // innate heals; else poison damage
+    }
+}
+
+// Suppression parity: Gastro Acid blanks an innate Poison Heal, so the holder takes poison damage.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Poison Heal")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GLISCOR, ABILITY_POISON_HEAL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GLISCOR) { Ability(ABILITY_SAND_VEIL); Status1(STATUS1_POISON); MaxHP(400); HP(400); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Gliscor's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(player, ABILITY_POISON_HEAL); }
+    } THEN {
+        EXPECT_LT(player->hp, player->maxHP); // suppressed -> takes poison damage instead of healing
     }
 }

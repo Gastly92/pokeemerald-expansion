@@ -50,7 +50,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Water Veil | The Pokémon's water veil prevents it from being burned. |
 | :white_check_mark: | Magnet Pull | Prevents Steel-type Pokémon from fleeing by pulling them in with magnetism. |
 | :x: | Soundproof | The Pokémon is immune to sound-based moves. |
-| :white_large_square: | Rain Dish | The Pokémon has 1/16 of its max HP restored at the end of every turn in rain. |
+| :white_check_mark: | Rain Dish | The Pokémon has 1/16 of its max HP restored at the end of every turn in rain. |
 | :x: | Sand Stream | Summons a sandstorm for 5 turns when the Pokémon enters a battle. |
 | :white_check_mark: | Pressure | Causes opponents to expend 1 more PP when using moves against the Pokémon. |
 | :white_check_mark: | Thick Fat | Halves the damage the Pokémon takes from Fire- and Ice-type moves. |
@@ -59,7 +59,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Run Away | Enables a sure getaway from wild Pokémon. |
 | :white_check_mark: | Keen Eye | The Pokémon ignores changes to targets' evasiveness and its accuracy cannot be lowered. |
 | :white_check_mark: | Hyper Cutter | The Pokémon's Attack stat cannot be lowered by other Pokémon's moves or Abilities. |
-| :white_large_square: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
+| :white_check_mark: | Pickup | If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon. |
 | :x: | Truant | Each time the Pokémon uses a move, it spends the next turn loafing around. |
 | :x: | Hustle | When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%. |
 | :white_check_mark: | Cute Charm | When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if the attacker and the Pokémon are of opposite genders. |
@@ -67,7 +67,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Minus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :x: | Forecast | The Pokémon transforms with the weather to change its type to Water, Fire, or Ice. |
 | :white_check_mark: | Sticky Hold | The Pokémon's held item cannot be stolen or removed by other Pokémon. |
-| :white_large_square: | Shed Skin | The Pokémon has a 30% chance of curing its own status conditions at the end of every turn. |
+| :white_check_mark: | Shed Skin | The Pokémon has a 30% chance of curing its own status conditions at the end of every turn. |
 | :white_check_mark: | Guts | When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon's physical moves. |
 | :white_check_mark: | Marvel Scale | When the Pokémon has a status condition, its Defense stat is boosted by 50%. |
 | :white_large_square: | Liquid Ooze | The strong stench of the Pokémon's oozed liquid damages attackers that use HP-draining moves. |
@@ -96,10 +96,10 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Dry Skin | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. However, the Pokémon takes 25% more damage from Fire-type moves. The Pokémon has 1/8 of its max HP restored at the end of every turn in rain, but it loses 1/8 of its max HP at the end of every turn in harsh sunlight. |
 | :white_large_square: | Download | The Pokémon compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat — whichever will be more effective. |
 | :white_check_mark: | Iron Fist | Boosts the power of the Pokémon's punching moves by 20%. |
-| :white_large_square: | Poison Heal | If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP. |
+| :white_check_mark: | Poison Heal | If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP. |
 | :white_check_mark: | Adaptability | Boosts the power of moves of the same type as the Pokémon by 100% instead of 50%. |
 | :white_check_mark: | Skill Link | The Pokémon's multistrike moves always hit the maximum number of times. |
-| :white_large_square: | Hydration | Cures the Pokémon's status conditions at the end of every turn in rain. |
+| :white_check_mark: | Hydration | Cures the Pokémon's status conditions at the end of every turn in rain. |
 | :x: | Solar Power | In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn. |
 | :white_check_mark: | Quick Feet | When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon's Speed stat. |
 | :x: | Normalize | All the Pokémon's moves become Normal type. The power of those moves is boosted a little. |
@@ -121,7 +121,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Slow Start | For five turns, the Pokémon's Attack and Speed stats are halved. |
 | :white_check_mark: | Scrappy | The Pokémon can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate. |
 | :x: | Storm Drain | The Pokémon draws in all Water-type moves. Instead of taking damage from them, its Sp. Atk stat is boosted. |
-| :white_large_square: | Ice Body | The Pokémon has 1/16 of its max HP restored at the end of every turn in snow. |
+| :white_check_mark: | Ice Body | The Pokémon has 1/16 of its max HP restored at the end of every turn in snow. |
 | :white_check_mark: | Solid Rock | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :x: | Snow Warning | Summons snow for 5 turns when the Pokémon enters a battle. |
 | :x: | Honey Gather | The Pokémon may gather Honey after a battle. |
@@ -129,7 +129,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Reckless | Boosts the power of the Pokémon's moves by 20% if they have recoil or crash damage. |
 | :x: | Multitype | Changes the Pokémon's type to match the plate it holds. |
 | :white_large_square: | Flower Gift | Boosts the Attack and Sp. Def stats of the Pokémon and its allies in harsh sunlight. |
-| :white_large_square: | Bad Dreams | Damages opposing Pokémon that are asleep. |
+| :white_check_mark: | Bad Dreams | Damages opposing Pokémon that are asleep. |
 | :white_large_square: | Pickpocket | When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item. |
 | :x: | Sheer Force | The Pokémon's moves lose their additional effects, but the power of those moves will be boosted by 30%. |
 | :x: | Contrary | Reverses any stat changes affecting the Pokémon so that attempts to boost its stats instead lower them—and attempts to lower its stats will boost them. |
@@ -137,7 +137,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Defiant | When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages. |
 | :x: | Defeatist | Halves the Pokémon's Attack and Sp. Atk stats when its HP drops to half or less. |
 | :white_large_square: | Cursed Body | When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns. |
-| :white_large_square: | Healer | The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn. |
+| :white_check_mark: | Healer | The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn. |
 | :white_check_mark: | Friend Guard | Reduces the damage allies take by 25%. |
 | :x: | Weak Armor | When the Pokémon takes damage from a physical move, its Defense stat is lowered by 1 stage, but its Speed stat is boosted by 2 stages. |
 | :white_check_mark: | Heavy Metal | Doubles the Pokémon's weight. |
@@ -145,7 +145,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Multiscale | Halves the damage the Pokémon takes while its HP is full. |
 | :white_check_mark: | Toxic Boost | Powers up physical moves when the Pokémon is poisoned. |
 | :white_check_mark: | Flare Boost | Powers up special moves when the Pokémon is burned. |
-| :white_large_square: | Harvest | If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry. |
+| :white_check_mark: | Harvest | If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry. |
 | :white_large_square: | Telepathy | The Pokémon dodges attacks from its allies. |
 | :x: | Moody | At the end of every turn, one of the Pokémon's stats will be boosted by 2 stages, but another will be lowered by 1 stage. |
 | :white_check_mark: | Overcoat | The Pokémon takes no damage from sandstorms and is immune to moves and Abilities involving powder. |
@@ -297,7 +297,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Orichalcum Pulse | Turns the sunlight harsh when the Pokémon enters a battle. The ancient pulse thrumming through the Pokémon also boosts its Attack stat in harsh sunlight. |
 | :x: | Hadron Engine | Turns the ground into Electric Terrain when the Pokémon enters a battle. The futuristic engine within the Pokémon also boosts its Sp. Atk stat on Electric Terrain. |
 | :white_large_square: | Opportunist | When an opponent's stats are boosted, the Pokémon boosts its own stats in the exact same way. |
-| :white_large_square: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
+| :white_check_mark: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
 | :white_check_mark: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
 | :x: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
 | :x: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |

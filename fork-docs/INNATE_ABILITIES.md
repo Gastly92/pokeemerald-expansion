@@ -2048,3 +2048,54 @@ Gigantamax) carry innate LIGHT_METAL only — although its real ability data lis
 Metal, they are contradictory as simultaneous innates (weight x2 vs /2), so the defensively useful
 slot-0 Light Metal is chosen and Heavy Metal dropped; innate Heavy Metal still lives on the Aggron and
 Copperajah lines.
+
+### ABILITY_RAIN_DISH / ABILITY_ICE_BODY / ABILITY_SHED_SKIN / ABILITY_HYDRATION / ABILITY_HEALER / ABILITY_HARVEST / ABILITY_CUD_CHEW / ABILITY_PICKUP / ABILITY_BAD_DREAMS
+
+The **end-of-turn effects** (Batch J), all 1:1 clean-upside copies. These nine are *active, scripted
+end-turn* innates: they reuse the **existing Speed Boost driver** — added to `IsActiveEndTurnInnate`
+(`src/fork/innate_abilities.c`), which `TryActivateInnateEndTurnEffects` dispatches from the
+`THIRD_EVENT_BLOCK_ABILITIES_INNATE` end-turn step by delegating to the upstream
+`AbilityBattleEffects(ABILITYEFFECT_ENDTURN, battler, innate, …)` case. Reusing the upstream case means the
+heal / status-cure / item recovery / chip damage / script are identical to the real ability for free. The
+only per-site edits in `src/battle_util.c` are forcing `gBattleScripting.abilityPopupOverwrite` to the
+innate (via `gLastUsedAbility`) when the chosen ability differs — the Speed Boost pop-up precedent — so the
+real-ability path stays byte-for-byte unchanged. Effects: **Rain Dish** heals 1/16 max HP in rain;
+**Ice Body** heals 1/16 in snow/hail; **Shed Skin** self-cures a status (30%, always under
+`DETERMINISTIC_ABILITIES`); **Hydration** cures status in rain; **Healer** cures an adjacent ally's status
+(30%, always under `DETERMINISTIC_ABILITIES`); **Harvest** recovers a used Berry; **Cud Chew** re-eats a
+Berry the turn after eating it; **Pickup** grabs an item consumed this turn; **Bad Dreams** chips
+sleeping/Comatose foes 1/8 max HP each turn. Two extra fixes were needed: (1) the end-turn **Pickup**
+recycle read the *chosen* ability to decide whether to grab the target's item — `Cmd_tryrecycleitem`
+(`src/battle_script_commands.c`) now uses `BattlerHasAbility(gBattlerAttacker, ABILITY_PICKUP)` so an innate
+Pickup grabs the foe's consumed item instead of failing on its own empty slot; (2) **Bad Dreams**' script
+only shows (and clears) its pop-up when it damages a valid target, so the innate pop-up overwrite is gated
+on a `BadDreamsHasValidTarget` check to avoid leaking the overwrite to the next pop-up when no foe is
+asleep. Also the driver pins `gBattlerAbility = battler` before delegating, since the upstream cases show
+the pop-up on `gBattlerAbility` but don't all set it (a foe eating a Berry earlier in the turn can leave it
+stale). AI is innate-aware where the effect lives outside the shared calc: the weather-heal / status-cure
+switch-in predictions (`GetSwitchinWeatherImpact`, `GetSwitchinStatusDamage`,
+`GetSwitchinRecurringHealing`, the Rest-worthiness reads in `battle_ai_main.c`, the sleep-switch check and
+hail-damage predictor) credit an innate Rain Dish / Ice Body / Shed Skin / Hydration. Canon-only for all
+nine EXCEPT **Bad Dreams**, whose sole canon user (Darkrai) always has it chosen and so can't *observe* an
+innate Bad Dreams — a tight dream-eater flavor pair (the Munna line, whose real abilities are all
+non-Bad-Dreams) carries an observable innate Bad Dreams. Sole-ability species whose only ability is a
+Batch J ability are omitted as redundant (Cascoon/Silcoon/Kakuna/Metapod/Pupitar/Audino-Mega/Darkrai-Mega)
+unless they are a frontier set (Manaphy/Phione keep their rows).
+
+### ABILITY_POISON_HEAL
+
+Heals 1/8 max HP at the end of every turn while poisoned/badly-poisoned instead of losing HP (Batch J),
+a 1:1 clean-upside copy. **NOT** a driver innate — it *replaces* the poison-damage step rather than adding
+an end-turn effect, so it is wired at the poison-damage site `HandleEndTurnPoison` (`src/battle_end_turn.c`)
+by swapping the chosen-only `ability == ABILITY_POISON_HEAL` for `BattlerHasAbility(battler,
+ABILITY_POISON_HEAL)`, with the pop-up overwritten to the innate when the chosen ability differs. The AI's
+poison-harm heuristics — `GetPoisonDamage`, `ShouldPoison`, the "poison is harmless to this foe" score
+(`src/battle_ai_util.c`), and the switch-in toxic-spikes / recurring-heal / status-damage sims
+(`src/battle_ai_switch.c`) — all credit an innate Poison Heal (mirroring the existing Toxic Boost / Immunity
+fork pattern: `BattlerHasAbility` for an on-field battler, `SpeciesHasInnate` in the off-field switch sim).
+The `BattlerBenefitsFromAbilityScore` Trace/transfer-scoring case is intentionally left chosen-only (innates
+are never traced/swapped), as is the overworld poison-damage check (`event_object_movement.c`, keyed to the
+chosen ability like other overworld reads). Canon-only (Gliscor, the Shroomish line). Its frontier sets
+(Breloom, Gliscor) keep their now-innate `.ability` for now except Breloom, freed to a stable chosen Effect
+Spore (its Toxic Orb still procs the innate heal); the rest of the Batch J frontier freeing is a deferred
+follow-up (see `INNATE_ABILITIES_BATCHES.md`).

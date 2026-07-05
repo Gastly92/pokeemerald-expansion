@@ -3465,7 +3465,8 @@ static u32 GetPoisonDamage(enum BattlerId battlerId)
 {
     u32 damage = 0;
 
-    if (gAiLogicData->abilities[battlerId] == ABILITY_POISON_HEAL)
+    if (gAiLogicData->abilities[battlerId] == ABILITY_POISON_HEAL
+     || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerId, ABILITY_POISON_HEAL))) // FORK: innate-aware
         return damage;
 
     if (gBattleMons[battlerId].status1 & STATUS1_POISON)
@@ -3515,6 +3516,7 @@ static bool32 DoesBattlerTakeHailDamage(enum BattlerId battlerId, enum Ability a
       && ability != ABILITY_SNOW_CLOAK
       && !IsInnateActive(battlerId, ABILITY_SNOW_CLOAK) // FORK: AI knows an innate Snow Cloak ignores hail too
       && ability != ABILITY_ICE_BODY
+      && !IsInnateActive(battlerId, ABILITY_ICE_BODY) // FORK: AI knows an innate Ice Body ignores hail too
       && ability != ABILITY_MAGIC_GUARD
       && ability != ABILITY_OVERCOAT
       && !IsInnateActive(battlerId, ABILITY_OVERCOAT)) // FORK: AI knows an innate Overcoat ignores hail too
@@ -3543,7 +3545,7 @@ static u32 GetWeatherDamage(enum BattlerId battlerId)
                 damage = 1;
         }
     }
-    if ((weather & B_WEATHER_HAIL) && ability != ABILITY_ICE_BODY)
+    if ((weather & B_WEATHER_HAIL) && ability != ABILITY_ICE_BODY && !IsInnateActive(battlerId, ABILITY_ICE_BODY)) // FORK: innate-aware
     {
         if (DoesBattlerTakeHailDamage(battlerId, ability)
           && gBattleMons[battlerId].volatiles.semiInvulnerable != STATE_UNDERGROUND
@@ -3769,6 +3771,7 @@ bool32 ShouldPoison(enum BattlerId battlerAtk, enum BattlerId battlerDef)
     if (CanBePoisoned(battlerAtk, battlerDef, gAiLogicData->abilities[battlerAtk], abilityDef) && (
         DoesBattlerBenefitFromAllVolatileStatus(battlerDef, abilityDef)
         || abilityDef == ABILITY_POISON_HEAL
+        || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_POISON_HEAL)) // FORK: innate Poison Heal also wants poison
         || (abilityDef == ABILITY_TOXIC_BOOST && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_PHYSICAL))
         || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_TOXIC_BOOST) && HasMoveWithCategory(battlerDef, DAMAGE_CATEGORY_PHYSICAL)))) // FORK: innate Toxic Boost also wants poison
     {
@@ -4325,7 +4328,8 @@ static bool32 ShouldCureStatusInternal(enum BattlerId battlerAtk, enum BattlerId
         if (aiData->holdEffects[battlerDef] == HOLD_EFFECT_TOXIC_ORB)
             return FALSE;
 
-        if (aiData->abilities[battlerDef] == ABILITY_POISON_HEAL)
+        if (aiData->abilities[battlerDef] == ABILITY_POISON_HEAL
+         || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battlerDef, ABILITY_POISON_HEAL))) // FORK: innate-aware
             isHarmless = TRUE;
 
         // FORK: credit an innate Toxic Boost too (FEATURE_INNATE_ABILITIES).
