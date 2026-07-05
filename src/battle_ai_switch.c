@@ -641,9 +641,10 @@ static bool32 FindMonThatAbsorbsOpponentsMove(struct SwitchAiContext *switchCont
     for (u32 absorbingAbilityIndex = 0; absorbingAbilityIndex < numAbsorbingAbilities; absorbingAbilityIndex++)
     {
         enum Ability absorbingAbility = absorbingTypeAbilities[absorbingAbilityIndex];
-        // FORK: innate-aware — the active mon's innate Levitate (allowlist) absorbs Ground too.
+        // FORK: innate-aware — the active mon's innate Levitate (Ground) / Overcoat (powder) absorbs too.
         if (gAiLogicData->abilities[switchContext->battler] == absorbingAbility
-         || (absorbingAbility == ABILITY_LEVITATE && BattlerHasAbility(switchContext->battler, ABILITY_LEVITATE)))
+         || (absorbingAbility == ABILITY_LEVITATE && BattlerHasAbility(switchContext->battler, ABILITY_LEVITATE))
+         || (absorbingAbility == ABILITY_OVERCOAT && BattlerHasAbility(switchContext->battler, ABILITY_OVERCOAT)))
             return FALSE;
     }
 
@@ -658,12 +659,13 @@ static bool32 FindMonThatAbsorbsOpponentsMove(struct SwitchAiContext *switchCont
         for (u32 absorbingAbilityIndex = 0; absorbingAbilityIndex < numAbsorbingAbilities; absorbingAbilityIndex++)
         {
             enum Ability absorbingAbility = absorbingTypeAbilities[absorbingAbilityIndex];
-            // FORK: innate-aware — a benched mon's innate Levitate (allowlist) absorbs Ground
+            // FORK: innate-aware — a benched mon's innate Levitate (Ground) / Overcoat (powder) absorbs
             // too. Off the field there's no battler index, so key off the species data.
+            u32 partyMonSpecies = GetMonData(&switchContext->party[monIndex], MON_DATA_SPECIES);
             bool32 monHasAbsorbingAbility = (absorbingAbility == partyMonAbility)
-                || (absorbingAbility == ABILITY_LEVITATE
-                 && GetConfig(FEATURE_INNATE_ABILITIES) // feature off must not credit — or scan for — innates
-                 && SpeciesHasInnate(GetMonData(&switchContext->party[monIndex], MON_DATA_SPECIES), ABILITY_LEVITATE));
+                || (GetConfig(FEATURE_INNATE_ABILITIES) // feature off must not credit — or scan for — innates
+                 && ((absorbingAbility == ABILITY_LEVITATE && SpeciesHasInnate(partyMonSpecies, ABILITY_LEVITATE))
+                  || (absorbingAbility == ABILITY_OVERCOAT && SpeciesHasInnate(partyMonSpecies, ABILITY_OVERCOAT))));
             // Found a mon
             if (monHasAbsorbingAbility && RandomPercentage(RNG_AI_SWITCH_ABSORBING, GetSwitchChance(SHOULD_SWITCH_ABSORBS_MOVE)))
                 return SetSwitchinAndSwitch(switchContext->battler, monIndex);
@@ -968,11 +970,12 @@ static bool32 CanIntimidateLowerOpponentAtk(enum BattlerId battler, enum Battler
             break;
         }
 
-        // FORK: an innate Oblivious or Scrappy (chosen ability differs) on the opponent is Intimidate-immune
-        // too (GEN_8+), so don't switch in an Intimidator expecting to lower its Attack. Inner Focus/Own Tempo
-        // are never innates.
+        // FORK: an innate Oblivious / Scrappy / Inner Focus / Own Tempo (chosen ability differs) on the opponent
+        // is Intimidate-immune too (GEN_8+), so don't switch in an Intimidator expecting to lower its Attack.
         if (IsInnateActive(opposingBattler, ABILITY_OBLIVIOUS)
-         || IsInnateActive(opposingBattler, ABILITY_SCRAPPY))
+         || IsInnateActive(opposingBattler, ABILITY_SCRAPPY)
+         || IsInnateActive(opposingBattler, ABILITY_INNER_FOCUS)
+         || IsInnateActive(opposingBattler, ABILITY_OWN_TEMPO))
             return FALSE;
     }
 
@@ -1747,7 +1750,8 @@ static s32 GetSwitchinWeatherImpact(enum BattlerId battler)
     u32 weather = AI_GetSwitchinWeather(battler);
 
     // Damage
-    if (holdEffect != HOLD_EFFECT_SAFETY_GOGGLES && ability != ABILITY_MAGIC_GUARD && ability != ABILITY_OVERCOAT)
+    if (holdEffect != HOLD_EFFECT_SAFETY_GOGGLES && ability != ABILITY_MAGIC_GUARD && ability != ABILITY_OVERCOAT
+     && !IsInnateActive(battler, ABILITY_OVERCOAT)) // FORK: innate Overcoat ignores sandstorm/hail chip too
     {
         if ((weather  & B_WEATHER_HAIL)
          && !IS_BATTLER_OF_TYPE(battler, TYPE_ICE)

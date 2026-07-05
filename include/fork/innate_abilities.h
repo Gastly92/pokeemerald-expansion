@@ -39,7 +39,10 @@
 //   HUGE_POWER / PURE_POWER (double physical Attack, Batch C),
 //   CLEAR_BODY / WHITE_SMOKE / HYPER_CUTTER / BIG_PECKS (stat-drop protection, Batch D+E),
 //   DAZZLING / QUEENLY_MAJESTY / ARMOR_TAIL (priority-move block, Batch F),
-//   PROPELLER_TAIL / STALWART (redirection-ignore, Batch G).
+//   PROPELLER_TAIL / STALWART (redirection-ignore, Batch G),
+//   SHADOW_TAG / ARENA_TRAP / MAGNET_PULL (trapping, Batch H),
+//   MAGMA_ARMOR / WATER_VEIL / OWN_TEMPO / INNER_FOCUS / LEAF_GUARD / OVERCOAT
+//   (status-condition immunities, Batch I).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

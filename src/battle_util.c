@@ -5685,20 +5685,22 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
             battleScript = BattleScript_NotAffected;
         }
         else if (abilityDef == ABILITY_WATER_VEIL || abilityDef == ABILITY_WATER_BUBBLE
-              || IsInnateActive(battlerDef, ABILITY_WATER_BUBBLE)) // FORK: innate Water Bubble blocks burn like the real ability
+              || IsInnateActive(battlerDef, ABILITY_WATER_BUBBLE)  // FORK: innate Water Bubble blocks burn like the real ability
+              || IsInnateActive(battlerDef, ABILITY_WATER_VEIL))   // FORK: innate Water Veil blocks burn like the real ability
         {
             abilityAffected = TRUE;
             battleScript = BattleScript_ImmunityProtected;
-            // FORK: when an innate Water Bubble (the chosen ability differs) blocks the burn, show/record
-            // Water Bubble: reassign abilityDef so IsNonVolatileStatusBlocked records it, and overwrite the
-            // pop-up since CreateAbilityPopUp reads the primary slot. The real Water Veil / Water Bubble path
-            // is left byte-for-byte (mirrors the Limber / Pastel Veil precedents above). Routing through
-            // CanSetNonVolatileStatus also makes CanBeBurned (and its AI callers) innate-aware for free.
+            // FORK: when an innate Water Bubble / Water Veil (the chosen ability differs) blocks the burn,
+            // show/record that ability: reassign abilityDef so IsNonVolatileStatusBlocked records it, and
+            // overwrite the pop-up since CreateAbilityPopUp reads the primary slot. The real Water Veil /
+            // Water Bubble path is left byte-for-byte (mirrors the Limber / Pastel Veil precedents above).
+            // Routing through CanSetNonVolatileStatus also makes CanBeBurned (and its AI callers) innate-aware.
             if (abilityDef != ABILITY_WATER_VEIL && abilityDef != ABILITY_WATER_BUBBLE)
             {
+                enum Ability innate = IsInnateActive(battlerDef, ABILITY_WATER_BUBBLE) ? ABILITY_WATER_BUBBLE : ABILITY_WATER_VEIL;
                 if (option == RUN_SCRIPT)
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_WATER_BUBBLE;
-                abilityDef = ABILITY_WATER_BUBBLE;
+                    gBattleScripting.abilityPopupOverwrite = innate;
+                abilityDef = innate;
             }
         }
         else if (abilityDef == ABILITY_THERMAL_EXCHANGE)
@@ -5767,10 +5769,18 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         {
             battleScript = BattleScript_NotAffected;
         }
-        else if (abilityDef == ABILITY_MAGMA_ARMOR)
+        else if (abilityDef == ABILITY_MAGMA_ARMOR || IsInnateActive(battlerDef, ABILITY_MAGMA_ARMOR)) // FORK: innate Magma Armor blocks freeze/frostbite like the real ability
         {
             abilityAffected = TRUE;
             battleScript = BattleScript_NotAffected;
+            // FORK: when an innate Magma Armor (chosen ability differs) blocks it, reassign abilityDef so
+            // IsNonVolatileStatusBlocked records Magma Armor, and overwrite the pop-up (Limber precedent).
+            if (abilityDef != ABILITY_MAGMA_ARMOR)
+            {
+                if (option == RUN_SCRIPT)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_MAGMA_ARMOR;
+                abilityDef = ABILITY_MAGMA_ARMOR;
+            }
         }
         break;
     default:
@@ -5795,6 +5805,15 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
     {
         abilityAffected = TRUE;
         battleScript = BattleScript_AbilityProtectsDoesntAffect;
+        // FORK: IsLeafGuardProtected is innate-aware, so when an innate Leaf Guard (chosen ability differs)
+        // blocks the status, reassign abilityDef so it's recorded as Leaf Guard and overwrite the pop-up
+        // (CreateAbilityPopUp reads the primary slot). The real Leaf Guard path is left byte-for-byte.
+        if (abilityDef != ABILITY_LEAF_GUARD)
+        {
+            if (option == RUN_SCRIPT)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_LEAF_GUARD;
+            abilityDef = ABILITY_LEAF_GUARD;
+        }
     }
     else if (IsShieldsDownProtected(battlerDef, abilityDef))
     {
@@ -5875,7 +5894,8 @@ bool32 CanBeConfused(enum BattlerId battlerAtk, enum BattlerId effectBattler)
     if (gBattleMons[effectBattler].volatiles.confusionTurns > 0
      || IsSafeguardProtected(battlerAtk, effectBattler, GetBattlerAbility(battlerAtk))
      || IsMistyTerrainAffected(effectBattler, effectAbility, GetBattlerHoldEffect(effectBattler), gFieldStatuses)
-     || IsAbilityAndRecord(effectBattler, effectAbility, ABILITY_OWN_TEMPO))
+     || IsAbilityAndRecord(effectBattler, effectAbility, ABILITY_OWN_TEMPO)
+     || IsInnateActive(effectBattler, ABILITY_OWN_TEMPO)) // FORK: innate Own Tempo blocks confusion like the real ability
         return FALSE;
 
     return TRUE;
@@ -9855,6 +9875,42 @@ enum ImmunityHealStatusOutcome TryImmunityAbilityHealStatus(enum BattlerId battl
         }
     }
 
+    // FORK: an innate Own Tempo (chosen ability differs, so the switch above missed it) clears pre-existing
+    // confusion on switch-in exactly like the real ability. Overwrite the pop-up to Own Tempo (primary-slot
+    // precedent). IsInnateActive() supplies suppression parity.
+    if (outcome == IMMUNITY_NO_EFFECT
+     && gBattleMons[battler].volatiles.confusionTurns > 0
+     && IsInnateActive(battler, ABILITY_OWN_TEMPO))
+    {
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_CONFUSION;
+        outcome = IMMUNITY_CONFUSION_CLEARED;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_OWN_TEMPO;
+    }
+
+    // FORK: an innate Water Veil / Water Bubble (chosen ability differs, so the switch above missed it) cures
+    // pre-existing burn on switch-in exactly like the real ability (the Limber precedent). Water Bubble's burn
+    // immunity was wired as an innate in Batch B; this completes it with the matching switch-in cure. Overwrite
+    // the pop-up to the present innate (primary-slot precedent).
+    if (outcome == IMMUNITY_NO_EFFECT
+     && (gBattleMons[battler].status1 & STATUS1_BURN)
+     && (IsInnateActive(battler, ABILITY_WATER_VEIL) || IsInnateActive(battler, ABILITY_WATER_BUBBLE)))
+    {
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_BURN;
+        outcome = IMMUNITY_STATUS_CLEARED;
+        gBattleScripting.abilityPopupOverwrite = IsInnateActive(battler, ABILITY_WATER_VEIL) ? ABILITY_WATER_VEIL : ABILITY_WATER_BUBBLE;
+    }
+
+    // FORK: an innate Magma Armor (chosen ability differs, so the switch above missed it) cures pre-existing
+    // freeze / frostbite on switch-in exactly like the real ability. Overwrite the pop-up to Magma Armor.
+    if (outcome == IMMUNITY_NO_EFFECT
+     && (gBattleMons[battler].status1 & (STATUS1_FREEZE | STATUS1_FROSTBITE))
+     && IsInnateActive(battler, ABILITY_MAGMA_ARMOR))
+    {
+        gBattleCommunication[MULTISTRING_CHOOSER] = (gBattleMons[battler].status1 & STATUS1_FREEZE) ? B_MSG_CURED_FREEZE : B_MSG_CURED_FROSTBITE;
+        outcome = IMMUNITY_STATUS_CLEARED;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_MAGMA_ARMOR;
+    }
+
     switch (outcome)
     {
     case IMMUNITY_STATUS_CLEARED:
@@ -11751,7 +11807,7 @@ static bool32 IsOpposingSideEmpty(enum BattlerId battler)
 
 bool32 IsAffectedByPowderMove(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect)
 {
-    if (GetConfig(B_POWDER_OVERCOAT) >= GEN_6 && ability == ABILITY_OVERCOAT)
+    if (GetConfig(B_POWDER_OVERCOAT) >= GEN_6 && (ability == ABILITY_OVERCOAT || IsInnateActive(battler, ABILITY_OVERCOAT))) // FORK: innate Overcoat blocks powder moves like the real ability
         return FALSE;
     if (GetConfig(B_POWDER_GRASS) >= GEN_6 && IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))
         return FALSE;
