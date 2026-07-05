@@ -27,7 +27,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Flash Fire | Fire-type moves do not work on the Pokémon. Instead, they give the Pokémon the Flash Fire status. |
 | :white_check_mark: | Shield Dust | The Pokémon is immune to additional effects from attacks. |
 | :white_check_mark: | Own Tempo | The Pokémon cannot become confused and is unaffected by Intimidate. |
-| :white_large_square: | Suction Cups | The Pokémon is unaffected by the moves and held items of other Pokémon that would force it to switch out of battle. |
+| :white_check_mark: | Suction Cups | The Pokémon is unaffected by the moves and held items of other Pokémon that would force it to switch out of battle. |
 | :white_large_square: | Intimidate | When the Pokémon enters a battle, it lowers the Attack stats of opponents by 1 stage. |
 | :white_check_mark: | Shadow Tag | Opponents cannot be switched out of battle. |
 | :white_large_square: | Rough Skin | When the Pokémon is hit by a contact move, the attacker takes damage equal to 1/8 of its max HP. |
@@ -66,7 +66,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Plus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :x: | Minus | Boosts the Pokémon's Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle. |
 | :x: | Forecast | The Pokémon transforms with the weather to change its type to Water, Fire, or Ice. |
-| :white_large_square: | Sticky Hold | The Pokémon's held item cannot be stolen or removed by other Pokémon. |
+| :white_check_mark: | Sticky Hold | The Pokémon's held item cannot be stolen or removed by other Pokémon. |
 | :white_large_square: | Shed Skin | The Pokémon has a 30% chance of curing its own status conditions at the end of every turn. |
 | :white_check_mark: | Guts | When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon's physical moves. |
 | :white_check_mark: | Marvel Scale | When the Pokémon has a status condition, its Defense stat is boosted by 50%. |
@@ -75,7 +75,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Blaze | Boosts the power of the Pokémon's Fire-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_check_mark: | Torrent | Boosts the power of the Pokémon's Water-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_check_mark: | Swarm | Boosts the power of the Pokémon's Bug-type moves by 50% when its HP drops to 1/3 or less of its max. |
-| :white_large_square: | Rock Head | The Pokémon will not lose HP due to recoil damage from its moves. |
+| :white_check_mark: | Rock Head | The Pokémon will not lose HP due to recoil damage from its moves. |
 | :x: | Drought | Summons harsh sunlight for 5 turns when the Pokémon enters a battle. |
 | :white_check_mark: | Arena Trap | Prevents opposing Pokémon from fleeing from battle. |
 | :white_check_mark: | Vital Spirit | The Pokémon cannot become drowsy or be put to sleep. |
@@ -98,7 +98,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Iron Fist | Boosts the power of the Pokémon's punching moves by 20%. |
 | :white_large_square: | Poison Heal | If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP. |
 | :white_check_mark: | Adaptability | Boosts the power of moves of the same type as the Pokémon by 100% instead of 50%. |
-| :white_large_square: | Skill Link | The Pokémon's multistrike moves always hit the maximum number of times. |
+| :white_check_mark: | Skill Link | The Pokémon's multistrike moves always hit the maximum number of times. |
 | :white_large_square: | Hydration | Cures the Pokémon's status conditions at the end of every turn in rain. |
 | :x: | Solar Power | In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn. |
 | :white_check_mark: | Quick Feet | When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon's Speed stat. |
@@ -140,8 +140,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Healer | The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn. |
 | :white_check_mark: | Friend Guard | Reduces the damage allies take by 25%. |
 | :x: | Weak Armor | When the Pokémon takes damage from a physical move, its Defense stat is lowered by 1 stage, but its Speed stat is boosted by 2 stages. |
-| :white_large_square: | Heavy Metal | Doubles the Pokémon's weight. |
-| :white_large_square: | Light Metal | Halves the Pokémon's weight. |
+| :white_check_mark: | Heavy Metal | Doubles the Pokémon's weight. |
+| :white_check_mark: | Light Metal | Halves the Pokémon's weight. |
 | :white_check_mark: | Multiscale | Halves the damage the Pokémon takes while its HP is full. |
 | :white_check_mark: | Toxic Boost | Powers up physical moves when the Pokémon is poisoned. |
 | :white_check_mark: | Flare Boost | Powers up special moves when the Pokémon is burned. |
@@ -157,7 +157,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Analytic | Boosts the power of the Pokémon's moves by 30% when the Pokémon is the last to move that turn. |
 | :x: | Illusion | The Pokémon enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move. |
 | :x: | Imposter | The Pokémon transforms into the Pokémon in front of it. It also copies all of that Pokémon's stats apart from its HP. |
-| :white_large_square: | Infiltrator | When using its moves, the Pokémon ignores the effects of targets' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes. |
+| :white_check_mark: | Infiltrator | When using its moves, the Pokémon ignores the effects of targets' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes. |
 | :x: | Mummy | When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy. |
 | :white_large_square: | Moxie | When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage. |
 | :white_large_square: | Justified | When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage. |
@@ -209,7 +209,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Steelworker | Powers up Steel-type moves. |
 | :white_large_square: | Berserk | Boosts the Pokémon's Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max. |
 | :white_check_mark: | Slush Rush | Doubles the Pokémon's Speed stat in snow. |
-| :white_large_square: | Long Reach | None of the moves used by the Pokémon are considered contact moves. |
+| :white_check_mark: | Long Reach | None of the moves used by the Pokémon are considered contact moves. |
 | :x: | Liquid Voice | The Pokémon's sound-based moves become Water-type moves. |
 | :white_check_mark: | Triage | Gives priority to the Pokémon's healing moves. |
 | :x: | Galvanize | Normal-type moves become Electric-type moves. The power of those moves is boosted a little. |
@@ -218,7 +218,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Disguise | When the Pokémon is in its Disguised Form and would take damage from a move, it loses 1/8 of its max HP instead of taking the damage, then changes into its Busted Form. |
 | :x: | Battle Bond | When the Pokémon knocks out a target, its bond with its Trainer is strengthened, and its Attack, Sp. Atk, and Speed stats are boosted. |
 | :x: | Power Construct | Cells gather to aid the Pokémon when its HP drops to half or less, causing it to change into its Complete Forme. |
-| :white_large_square: | Corrosion | The Pokémon can poison or badly poison targets even if they're Steel or Poison types. |
+| :white_check_mark: | Corrosion | The Pokémon can poison or badly poison targets even if they're Steel or Poison types. |
 | :white_large_square: | Comatose | The Pokémon is always drowsing and will never wake up. It can attack while in its sleeping state. |
 | :white_check_mark: | Queenly Majesty | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :white_large_square: | Innards Out | When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker. |
@@ -266,7 +266,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Pastel Veil | Prevents the Pokémon and its allies from being poisoned. |
 | :x: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
 | :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
-| :white_large_square: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
+| :white_check_mark: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :x: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
 | :x: | Transistor | Powers up Electric-type moves. |
 | :x: | Dragon's Maw | Powers up Dragon-type moves. |
@@ -281,7 +281,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
 | :x: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
 | :x: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
-| :white_large_square: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
+| :white_check_mark: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
 | :white_check_mark: | Rocky Payload | Powers up Rock-type moves. |
 | :white_large_square: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
 | :x: | Zero to Hero | The Pokémon changes into its Hero Form when it switches out of battle. |
@@ -317,7 +317,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Tera Shell | The Pokémon's shell contains the powers of each type. All damage-dealing moves that hit the Pokémon when its HP is full will not be very effective. |
 | :x: | Teraform Zero | When Terapagos changes into its Stellar Form, it uses its hidden powers to eliminate all effects of weather and terrain, reducing them to zero. |
 | :x: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
-| :white_large_square: | Piercing Drill | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
+| :white_check_mark: | Piercing Drill | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :x: | Dragonize | The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%. |
 | :white_large_square: | Mega Sol | Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight. |
 | :x: | Spicy Spray | When the Pokémon takes damage from a move, it burns the attacker. |

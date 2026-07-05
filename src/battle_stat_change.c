@@ -590,7 +590,9 @@ static bool32 IsMistProtected(struct BattleCalcValues *cv, struct StatChange *st
     if (st->certain)
         return FALSE;
 
-    if (!IsBattlerAlly(cv->battlerDef, cv->battlerAtk) && cv->abilities[cv->battlerAtk] == ABILITY_INFILTRATOR)
+    // FORK: innate-aware Infiltrator ignores the foe's Mist (FEATURE_INNATE_ABILITIES)
+    if (!IsBattlerAlly(cv->battlerDef, cv->battlerAtk)
+     && (cv->abilities[cv->battlerAtk] == ABILITY_INFILTRATOR || IsInnateActive(cv->battlerAtk, ABILITY_INFILTRATOR)))
         return FALSE;
 
     if (!st->onlyChecking)
@@ -671,7 +673,10 @@ static bool32 IsIntimidateBlocked(struct BattleCalcValues *cv, struct StatChange
     // below would miss it) is unaffected by Intimidate exactly like the real ability (GEN_8+). Mirror the switch
     // cases and overwrite the pop-up/record to the innate (CreateAbilityPopUp reads the primary slot). Only fires
     // when the chosen ability isn't itself an Intimidate-immune one (those are handled by the switch).
-    // IsInnateActive supplies suppression parity. Guard Dog is not an innate yet (Batch S).
+    // IsInnateActive supplies suppression parity. Guard Dog IS an innate (Batch S) but only its
+    // forced-switch-out block is wired; its Intimidate-immunity/Attack-boost half is deferred to
+    // Batch L (the Intimidate driver), so an innate Guard Dog is intentionally omitted from the
+    // list below and its chosen-only case (the switch) keeps the != guard.
     if (cv->abilities[cv->battlerDef] != ABILITY_OBLIVIOUS
      && cv->abilities[cv->battlerDef] != ABILITY_INNER_FOCUS
      && cv->abilities[cv->battlerDef] != ABILITY_SCRAPPY

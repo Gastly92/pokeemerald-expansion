@@ -1737,7 +1737,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     case EFFECT_ROAR:
         if (CountUsablePartyMons(battlerDef) == 0)
             ADJUST_SCORE(-10);
-        else if (aiData->abilities[battlerDef] == ABILITY_SUCTION_CUPS)
+        else if (aiData->abilities[battlerDef] == ABILITY_SUCTION_CUPS || IsInnateActive(battlerDef, ABILITY_SUCTION_CUPS)) // FORK: innate-aware Suction Cups (FEATURE_INNATE_ABILITIES)
             ADJUST_SCORE(-10);
         else if (GetActiveGimmick(battlerDef) == GIMMICK_DYNAMAX)
             ADJUST_SCORE(-10);
@@ -1784,7 +1784,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             ADJUST_SCORE(-10);
         break;
     case EFFECT_SUBSTITUTE:
-        if (gBattleMons[battlerAtk].volatiles.substitute || aiData->abilities[battlerDef] == ABILITY_INFILTRATOR)
+        if (gBattleMons[battlerAtk].volatiles.substitute || aiData->abilities[battlerDef] == ABILITY_INFILTRATOR || IsInnateActive(battlerDef, ABILITY_INFILTRATOR)) // FORK: innate-aware Infiltrator (FEATURE_INNATE_ABILITIES)
             ADJUST_SCORE(-8);
         else if (aiData->hpPercents[battlerAtk] <= 25)
             ADJUST_SCORE(-10);
@@ -1794,7 +1794,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     case EFFECT_SHED_TAIL:
         if (CountUsablePartyMons(battlerAtk) == 0)
             ADJUST_SCORE(-10);
-        if (gBattleMons[battlerAtk].volatiles.substitute || aiData->abilities[battlerDef] == ABILITY_INFILTRATOR)
+        if (gBattleMons[battlerAtk].volatiles.substitute || aiData->abilities[battlerDef] == ABILITY_INFILTRATOR || IsInnateActive(battlerDef, ABILITY_INFILTRATOR)) // FORK: innate-aware Infiltrator (FEATURE_INNATE_ABILITIES)
             ADJUST_SCORE(-8);
         else if (aiData->hpPercents[battlerAtk] <= 50)
             ADJUST_SCORE(-10);
@@ -2085,7 +2085,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             ADJUST_SCORE(-10);
     case EFFECT_KNOCK_OFF:
     case EFFECT_CORROSIVE_GAS:
-        if (aiData->abilities[battlerDef] == ABILITY_STICKY_HOLD)
+        if (aiData->abilities[battlerDef] == ABILITY_STICKY_HOLD || IsInnateActive(battlerDef, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
             ADJUST_SCORE(-10);
         break;
     case EFFECT_INGRAIN:
@@ -4443,7 +4443,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
         break;
     case EFFECT_ROAR:
         if ((IsSoundMove(move) && aiData->abilities[battlerDef] == ABILITY_SOUNDPROOF)
-          || aiData->abilities[battlerDef] == ABILITY_SUCTION_CUPS)
+          || aiData->abilities[battlerDef] == ABILITY_SUCTION_CUPS || IsInnateActive(battlerDef, ABILITY_SUCTION_CUPS)) // FORK: innate-aware Suction Cups (FEATURE_INNATE_ABILITIES)
             break;
         else if (GetActiveGimmick(battlerDef) == GIMMICK_DYNAMAX)
             break;
@@ -5584,7 +5584,8 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
              && CanBattlerGetOrLoseItem(battlerDef, battlerAtk, aiData->items[battlerDef])
              && CanBattlerGetOrLoseItem(battlerAtk, battlerDef, aiData->items[battlerDef])
              && !HasMoveWithEffect(battlerAtk, EFFECT_ACROBATICS)
-             && aiData->abilities[battlerDef] != ABILITY_STICKY_HOLD)
+             && aiData->abilities[battlerDef] != ABILITY_STICKY_HOLD
+             && !IsInnateActive(battlerDef, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
             {
                 switch (aiData->holdEffects[battlerDef])
                 {
@@ -5771,13 +5772,13 @@ static s32 AI_CalcAdditionalEffectScore(enum BattlerId battlerAtk, enum BattlerI
                 break;
             }
             case MOVE_EFFECT_BUG_BITE:   // And pluck
-                if (gBattleMons[battlerDef].volatiles.substitute || aiData->abilities[battlerDef] == ABILITY_STICKY_HOLD)
+                if (gBattleMons[battlerDef].volatiles.substitute || aiData->abilities[battlerDef] == ABILITY_STICKY_HOLD || IsInnateActive(battlerDef, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
                     break;
                 else if (GetItemPocket(aiData->items[battlerDef]) == POCKET_BERRIES)
                     ADJUST_SCORE(DECENT_EFFECT);
                 break;
             case MOVE_EFFECT_INCINERATE:
-                if (gBattleMons[battlerDef].volatiles.substitute || aiData->abilities[battlerDef] == ABILITY_STICKY_HOLD)
+                if (gBattleMons[battlerDef].volatiles.substitute || aiData->abilities[battlerDef] == ABILITY_STICKY_HOLD || IsInnateActive(battlerDef, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
                     break;
                 else if (GetItemPocket(aiData->items[battlerDef]) == POCKET_BERRIES || aiData->holdEffects[battlerDef] == HOLD_EFFECT_GEMS)
                     ADJUST_SCORE(DECENT_EFFECT);

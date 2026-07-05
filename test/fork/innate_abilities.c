@@ -5085,6 +5085,9 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_SHADOW_TAG, ABILITY_ARENA_TRAP, ABILITY_MAGNET_PULL,
         ABILITY_MAGMA_ARMOR, ABILITY_WATER_VEIL, ABILITY_OWN_TEMPO, ABILITY_INNER_FOCUS,
         ABILITY_LEAF_GUARD, ABILITY_OVERCOAT,
+        ABILITY_SUCTION_CUPS, ABILITY_GUARD_DOG, ABILITY_ROCK_HEAD, ABILITY_LONG_REACH,
+        ABILITY_SKILL_LINK, ABILITY_INFILTRATOR, ABILITY_CORROSION, ABILITY_STICKY_HOLD,
+        ABILITY_UNSEEN_FIST, ABILITY_PIERCING_DRILL, ABILITY_HEAVY_METAL, ABILITY_LIGHT_METAL,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -5485,5 +5488,285 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies the chosen ability, n
     } SCENE {
         ABILITY_POPUP(player, ABILITY_TRACE);
         MESSAGE("It traced the opposing Meganium's Overgrow!"); // chosen Overgrow, never the innate Leaf Guard
+    }
+}
+
+// ============================================================================
+// Batch S — miscellaneous single-site traits: Suction Cups / Guard Dog /
+// Rock Head / Long Reach / Skill Link / Infiltrator / Corrosion / Sticky Hold /
+// Unseen Fist / Piercing Drill / Heavy Metal / Light Metal.
+// ============================================================================
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Suction Cups blocks Whirlwind's forced switch")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CRADILY, ABILITY_SUCTION_CUPS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRADILY) { Ability(ABILITY_STORM_DRAIN); } // chosen differs from the innate Suction Cups
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_WHIRLWIND); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WHIRLWIND); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_SUCTION_CUPS);
+            MESSAGE("Cradily is anchored in place with its suction cups!"); // switch blocked
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_SUCTION_CUPS); } // no block -> Cradily is phazed out
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Guard Dog blocks Dragon Tail's forced switch")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_OKIDOGI, ABILITY_GUARD_DOG));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_OKIDOGI) { Ability(ABILITY_TOXIC_CHAIN); MaxHP(300); HP(300); } // chosen differs from the innate Guard Dog
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_WHIRLWIND); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WHIRLWIND); }
+    } SCENE {
+        if (enabled)
+            MESSAGE("But it failed!"); // Guard Dog makes the forced switch fail
+        else
+            NONE_OF { MESSAGE("But it failed!"); } // no block -> Okidogi is phazed out
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rock Head negates recoil")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAROWAK, ABILITY_ROCK_HEAD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MAROWAK) { Ability(ABILITY_LIGHTNING_ROD); Moves(MOVE_DOUBLE_EDGE); } // chosen differs from the innate Rock Head
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(300); HP(300); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_DOUBLE_EDGE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_DOUBLE_EDGE, player);
+        HP_BAR(opponent);
+        if (enabled)
+            NONE_OF { HP_BAR(player); } // no recoil
+        else
+            HP_BAR(player); // takes recoil
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Long Reach makes moves non-contact (no Rocky Helmet chip)")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(MoveMakesContact(MOVE_LEAF_BLADE));
+        ASSUME(SpeciesHasInnate(SPECIES_DECIDUEYE, ABILITY_LONG_REACH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_DECIDUEYE) { Ability(ABILITY_OVERGROW); Moves(MOVE_LEAF_BLADE); } // chosen differs from the innate Long Reach
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_ROCKY_HELMET); MaxHP(300); HP(300); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_LEAF_BLADE); }
+    } SCENE {
+        HP_BAR(opponent);
+        if (enabled)
+            NONE_OF { HP_BAR(player); } // Long Reach -> no contact -> no Rocky Helmet chip
+        else
+            HP_BAR(player); // contact -> Rocky Helmet chips the attacker
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Skill Link maxes multistrike hits (deterministic reroute)")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(IsMultiHitMove(MOVE_ICICLE_SPEAR));
+        ASSUME(SpeciesHasInnate(SPECIES_CLOYSTER, ABILITY_SKILL_LINK));
+        ASSUME(gSpeciesInfo[SPECIES_CLOYSTER].abilities[0] != ABILITY_SKILL_LINK);
+        WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE); // shipping default; Skill Link -> max, else DETERMINISTIC_MULTI_HIT_COUNT (3)
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CLOYSTER) { Ability(ABILITY_SHELL_ARMOR); Moves(MOVE_ICICLE_SPEAR); } // chosen differs from the innate Skill Link
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(500); HP(500); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_ICICLE_SPEAR); }
+    } SCENE {
+        if (enabled)
+            MESSAGE("The Pokémon was hit 5 time(s)!");
+        else
+            MESSAGE("The Pokémon was hit 3 time(s)!");
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Infiltrator ignores the foe's Substitute")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CROBAT, ABILITY_INFILTRATOR));
+        ASSUME(gSpeciesInfo[SPECIES_CROBAT].abilities[0] != ABILITY_INFILTRATOR);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CROBAT) { Ability(ABILITY_INNER_FOCUS); Moves(MOVE_AIR_SLASH); } // chosen differs from the innate Infiltrator
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SUBSTITUTE); MaxHP(300); HP(300); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SUBSTITUTE); MOVE(player, MOVE_AIR_SLASH); }
+    } THEN {
+        // Substitute costs 1/4 max HP (300 -> 225). Infiltrator then hits the mon behind it.
+        if (enabled)
+            EXPECT_LT(opponent->hp, 225); // hit through the Substitute
+        else
+            EXPECT_EQ(opponent->hp, 225); // Substitute absorbed the hit
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Corrosion poisons a Steel type")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SALAZZLE, ABILITY_CORROSION));
+        ASSUME(gSpeciesInfo[SPECIES_SALAZZLE].abilities[0] != ABILITY_CORROSION || gSpeciesInfo[SPECIES_SALAZZLE].abilities[2] != ABILITY_CORROSION);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SALAZZLE) { Ability(ABILITY_OBLIVIOUS); Moves(MOVE_TOXIC); } // chosen differs from the innate Corrosion
+        OPPONENT(SPECIES_STEELIX);
+    } WHEN {
+        TURN { MOVE(player, MOVE_TOXIC); }
+    } THEN {
+        if (enabled)
+            EXPECT_NE(opponent->status1 & STATUS1_TOXIC_POISON, 0);
+        else
+            EXPECT_EQ(opponent->status1 & STATUS1_TOXIC_POISON, 0);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sticky Hold keeps the held item from Knock Off")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUK, ABILITY_STICKY_HOLD));
+        ASSUME(gSpeciesInfo[SPECIES_MUK].abilities[0] != ABILITY_STICKY_HOLD);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_POISON_TOUCH); Item(ITEM_LEFTOVERS); MaxHP(400); HP(400); } // chosen differs from the innate Sticky Hold
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_KNOCK_OFF); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_KNOCK_OFF); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_STICKY_HOLD);
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->item, ITEM_LEFTOVERS); // item survives
+        else
+            EXPECT_EQ(player->item, ITEM_NONE); // item knocked off
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unseen Fist hits through Protect")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(MoveMakesContact(MOVE_CLOSE_COMBAT));
+        ASSUME(SpeciesHasInnate(SPECIES_URSHIFU, ABILITY_UNSEEN_FIST));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_URSHIFU) { Ability(ABILITY_SNIPER); Moves(MOVE_CLOSE_COMBAT); } // chosen differs from the innate Unseen Fist
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_PROTECT); MaxHP(400); HP(400); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_PROTECT); MOVE(player, MOVE_CLOSE_COMBAT); }
+    } SCENE {
+        if (enabled)
+            HP_BAR(opponent); // Unseen Fist bypasses Protect with a contact move
+        else
+            NONE_OF { HP_BAR(opponent); } // Protect blocks the hit
+    }
+}
+
+// Piercing Drill shares Unseen Fist's exact effect site (the same `||` clause everywhere), so the
+// Protect-bypass mechanism is proven by the Unseen Fist test above. Excadrill-Mega is ability-locked
+// to Piercing Drill (all three slots), so an innate-vs-chosen distinction can't be shown; assert only
+// that it carries the innate so the allowlist/table membership is covered.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Excadrill-Mega carries innate Piercing Drill")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_EXCADRILL_MEGA, ABILITY_PIERCING_DRILL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_EXCADRILL_MEGA) { Moves(MOVE_HIGH_HORSEPOWER); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_PROTECT); MaxHP(400); HP(400); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_PROTECT); MOVE(player, MOVE_HIGH_HORSEPOWER); }
+    } SCENE {
+        HP_BAR(opponent); // Piercing Drill bypasses Protect with a contact move
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Heavy Metal doubles the holder's weight for Low Kick", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetSpeciesWeight(SPECIES_ARON) == 600); // 60.0 kg (80 power) -> Heavy Metal 120.0 kg (100 power)
+        ASSUME(SpeciesHasInnate(SPECIES_ARON, ABILITY_HEAVY_METAL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_LOW_KICK); }
+        OPPONENT(SPECIES_ARON) { Ability(ABILITY_STURDY); MaxHP(400); HP(400); } // chosen differs from the innate Heavy Metal
+    } WHEN {
+        TURN { MOVE(player, MOVE_LOW_KICK); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_LOW_KICK, player);
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.25), results[0].damage); // enabled(100 power) == disabled(80 power) * 1.25
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Light Metal halves the holder's weight for Low Kick", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetSpeciesWeight(SPECIES_BELDUM) == 952); // 95.2 kg (80 power) -> Light Metal 47.6 kg (60 power)
+        ASSUME(SpeciesHasInnate(SPECIES_BELDUM, ABILITY_LIGHT_METAL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_LOW_KICK); }
+        OPPONENT(SPECIES_BELDUM) { Ability(ABILITY_CLEAR_BODY); MaxHP(400); HP(400); } // chosen differs from the innate Light Metal
+    } WHEN {
+        TURN { MOVE(player, MOVE_LOW_KICK); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_LOW_KICK, player);
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.75), results[0].damage); // enabled(60 power) == disabled(80 power) * 0.75
+    }
+}
+
+// Suppression parity: Gastro Acid removes an innate Rock Head, so recoil applies again.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Rock Head")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MAROWAK) { Ability(ABILITY_LIGHTNING_ROD); Moves(MOVE_DOUBLE_EDGE); } // innate Rock Head
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID); MaxHP(300); HP(300); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); MOVE(player, MOVE_DOUBLE_EDGE); }
+    } SCENE {
+        HP_BAR(opponent);
+        HP_BAR(player); // innate Rock Head suppressed -> recoil applies
     }
 }

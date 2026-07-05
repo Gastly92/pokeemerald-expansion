@@ -798,7 +798,8 @@ static inline void CalcDynamicMoveDamage(struct DamageContext *ctx, u16 *medianD
         if (effect == EFFECT_POPULATION_BOMB && GetConfig(DETERMINISTIC_MOVE_RESULTS))
         {
             strikeCount = (ctx->holdEffects[ctx->battlerAtk] == HOLD_EFFECT_LOADED_DICE
-                        || ctx->abilities[ctx->battlerAtk] == ABILITY_SKILL_LINK)
+                        || ctx->abilities[ctx->battlerAtk] == ABILITY_SKILL_LINK
+                        || IsInnateActive(ctx->battlerAtk, ABILITY_SKILL_LINK)) // FORK: innate-aware Skill Link (FEATURE_INNATE_ABILITIES)
                         ? DETERMINISTIC_POPULATION_BOMB_LOADED_DICE_COUNT
                         : DETERMINISTIC_POPULATION_BOMB_COUNT;
         }
@@ -820,6 +821,7 @@ static inline void CalcDynamicMoveDamage(struct DamageContext *ctx, u16 *medianD
         {
             // FORK: the hit count is fixed (Skill Link / Loaded Dice guarantee the max).
             u32 hits = (ctx->abilities[ctx->battlerAtk] == ABILITY_SKILL_LINK
+                     || IsInnateActive(ctx->battlerAtk, ABILITY_SKILL_LINK) // FORK: innate-aware Skill Link (FEATURE_INNATE_ABILITIES)
                      || ctx->holdEffects[ctx->battlerAtk] == HOLD_EFFECT_LOADED_DICE)
                      ? DETERMINISTIC_MULTI_HIT_MAX_COUNT
                      : DETERMINISTIC_MULTI_HIT_COUNT;
@@ -828,7 +830,7 @@ static inline void CalcDynamicMoveDamage(struct DamageContext *ctx, u16 *medianD
             maximum *= hits;
             random *= hits;
         }
-        else if (ctx->abilities[ctx->battlerAtk] == ABILITY_SKILL_LINK)
+        else if (ctx->abilities[ctx->battlerAtk] == ABILITY_SKILL_LINK || IsInnateActive(ctx->battlerAtk, ABILITY_SKILL_LINK)) // FORK: innate-aware Skill Link (FEATURE_INNATE_ABILITIES)
         {
             median *= 5;
             minimum *= 5;
@@ -1093,7 +1095,7 @@ struct SimulatedDamage AI_CalcDamage(enum Move move, enum BattlerId battlerAtk, 
 bool32 AI_IsDamagedByRecoil(enum BattlerId battler)
 {
     enum Ability ability = gAiLogicData->abilities[battler];
-    if (ability == ABILITY_MAGIC_GUARD || ability == ABILITY_ROCK_HEAD)
+    if (ability == ABILITY_MAGIC_GUARD || ability == ABILITY_ROCK_HEAD || IsInnateActive(battler, ABILITY_ROCK_HEAD)) // FORK: innate-aware Rock Head (FEATURE_INNATE_ABILITIES)
         return FALSE;
     return TRUE;
 }
@@ -1433,6 +1435,7 @@ enum MoveComparisonResult CompareMoveEffects(enum Move move1, enum Move move2, e
 
     // Check if physical moves hurt.
     if (gAiLogicData->holdEffects[battlerAtk] != HOLD_EFFECT_PROTECTIVE_PADS && atkAbility != ABILITY_LONG_REACH
+        && !IsInnateActive(battlerAtk, ABILITY_LONG_REACH) // FORK: innate-aware Long Reach (FEATURE_INNATE_ABILITIES)
         && (gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_ROCKY_HELMET
         || defAbility == ABILITY_IRON_BARBS || defAbility == ABILITY_ROUGH_SKIN))
     {
@@ -2496,7 +2499,8 @@ bool32 CanLowerStat(enum BattlerId battlerAtk, enum BattlerId battlerDef, struct
     enum Move move = gAiThinkingStruct->moveConsidered;
     enum Ability abilityAtk = aiData->abilities[battlerAtk];
 
-    if (gSideStatuses[GetBattlerSide(battlerDef)] & SIDE_STATUS_MIST && abilityAtk != ABILITY_INFILTRATOR)
+    if (gSideStatuses[GetBattlerSide(battlerDef)] & SIDE_STATUS_MIST && abilityAtk != ABILITY_INFILTRATOR
+     && !IsInnateActive(battlerAtk, ABILITY_INFILTRATOR)) // FORK: innate-aware Infiltrator (FEATURE_INNATE_ABILITIES)
         return FALSE;
 
     if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, abilityAtk, move))
@@ -3676,7 +3680,7 @@ bool32 CanKnockOffItem(enum BattlerId fromBattler, enum BattlerId battler, enum 
     if (!(gBattleTypeFlags & BATTLE_TYPE_CANT_KNOCK_OFF) && IsOnPlayerSide(fromBattler))
         return FALSE;
 
-    if (gAiLogicData->abilities[fromBattler] == ABILITY_STICKY_HOLD)
+    if (gAiLogicData->abilities[fromBattler] == ABILITY_STICKY_HOLD || IsInnateActive(fromBattler, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
         return FALSE;
 
     if (!CanBattlerGetOrLoseItem(fromBattler, battler, item))
@@ -5350,7 +5354,7 @@ bool32 AI_MoveMakesContact(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         return FALSE;
     }
 
-    if (ability == ABILITY_LONG_REACH)
+    if (ability == ABILITY_LONG_REACH || IsInnateActive(battlerAtk, ABILITY_LONG_REACH)) // FORK: innate-aware Long Reach (FEATURE_INNATE_ABILITIES)
         return FALSE;
     if (holdEffect == HOLD_EFFECT_PROTECTIVE_PADS)
         return FALSE;
@@ -5363,7 +5367,9 @@ bool32 AI_CanContactBypassProtect(enum BattlerId battlerAtk, enum BattlerId batt
 {
     if (move == MOVE_NONE || move == MOVE_UNAVAILABLE)
         return FALSE;
-    if (gAiLogicData->abilities[battlerAtk] != ABILITY_UNSEEN_FIST && gAiLogicData->abilities[battlerAtk] != ABILITY_PIERCING_DRILL)
+    // FORK: innate-aware Unseen Fist / Piercing Drill (FEATURE_INNATE_ABILITIES)
+    if (gAiLogicData->abilities[battlerAtk] != ABILITY_UNSEEN_FIST && gAiLogicData->abilities[battlerAtk] != ABILITY_PIERCING_DRILL
+     && !IsInnateActive(battlerAtk, ABILITY_UNSEEN_FIST) && !IsInnateActive(battlerAtk, ABILITY_PIERCING_DRILL))
         return FALSE;
     if (GetMoveEffect(move) == EFFECT_SHELL_SIDE_ARM)
     {
