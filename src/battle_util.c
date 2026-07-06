@@ -3021,6 +3021,24 @@ static bool32 TryCuteCharmInfatuate(enum Move move)
     return FALSE;
 }
 
+// FORK: mirrors BattleScript_BadDreamsActivates' target scan — TRUE if any opposing
+// battler will actually take Bad Dreams damage (asleep or Comatose, and not Magic Guard).
+// Used to gate the innate pop-up overwrite so it isn't left set when the script shows no
+// pop-up (no valid target) and thus never runs the sethword that clears it.
+static bool32 BadDreamsHasValidTarget(enum BattlerId battler)
+{
+    for (enum BattlerId i = 0; i < gBattlersCount; i++)
+    {
+        if (GetBattlerSide(i) == GetBattlerSide(battler) || !IsBattlerAlive(i))
+            continue;
+        if (GetBattlerAbility(i) == ABILITY_MAGIC_GUARD)
+            continue;
+        if (GetBattlerAbility(i) == ABILITY_COMATOSE || (gBattleMons[i].status1 & STATUS1_SLEEP))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum Ability ability, enum Move move, bool32 shouldAbilityTrigger)
 {
     u32 effect = 0;
@@ -3660,6 +3678,12 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                         gBattlerTarget = RandomUniformExcept(RNG_PICKUP, 0, gBattlersCount - 1, CantPickupItem);
                     }
                     gLastUsedItem = GetBattlerPartyState(gBattlerTarget)->usedHeldItem;
+                    // FORK: innate end-turn ability — show the innate on the pop-up, not the
+                    // chosen ability (CreateAbilityPopUp reads the primary slot). gLastUsedAbility
+                    // is the ability being processed here; only override when the chosen ability
+                    // differs, so a real ability's pop-up stays byte-for-byte unchanged.
+                    if (GetBattlerAbility(battler) != gLastUsedAbility)
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     BattleScriptCall(BattleScript_PickupActivates);
                     effect++;
                 }
@@ -3675,6 +3699,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                  && GetItemPocket(GetBattlerPartyState(battler)->usedHeldItem) == POCKET_BERRIES)
                 {
                     gLastUsedItem = GetBattlerPartyState(battler)->usedHeldItem;
+                    if (GetBattlerAbility(battler) != gLastUsedAbility) // FORK: innate Harvest — pop-up shows the innate
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     if (GetConfig(DETERMINISTIC_ABILITIES) && inSun && !IsBattlerAtMaxHp(battler) && !gBattleMons[battler].volatiles.healBlock)
                     {
                         SetHealAmount(battler, GetNonDynamaxMaxHP(battler) / 16);
@@ -3695,6 +3721,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                  && gBattleMons[battler].volatiles.semiInvulnerable != STATE_UNDERWATER
                  && !gBattleMons[battler].volatiles.healBlock)
                 {
+                    if (GetBattlerAbility(battler) != gLastUsedAbility) // FORK: innate Ice Body — pop-up shows the innate
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     BattleScriptCall(BattleScript_IceBodyHeal);
                     SetHealAmount(battler, GetNonDynamaxMaxHP(battler) / 16);
                     effect++;
@@ -3711,6 +3739,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 {
                     s32 healAmount = gLastUsedAbility == ABILITY_RAIN_DISH ? 16 : 8;
                     SetHealAmount(battler, GetNonDynamaxMaxHP(battler) / healAmount);
+                    if (GetBattlerAbility(battler) != gLastUsedAbility) // FORK: innate Rain Dish — pop-up shows the innate
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     BattleScriptCall(BattleScript_AbilityHpHeal);
                     effect++;
                 }
@@ -3747,6 +3777,9 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                     gBattleMons[battler].status1 = 0;
                     gBattleMons[battler].volatiles.nightmare = FALSE;
                     gBattleScripting.battler = battler;
+                    // FORK: innate Shed Skin / Hydration — pop-up shows the innate (gLastUsedAbility)
+                    if (GetBattlerAbility(battler) != gLastUsedAbility)
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     BattleScriptCall(BattleScript_ShedSkinActivates);
                     BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
                     MarkBattlerForControllerExec(battler);
@@ -3867,6 +3900,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 }
                 break;
             case ABILITY_BAD_DREAMS:
+                // FORK: innate Bad Dreams — pop-up shows the innate, but only set the overwrite
+                // when a valid target exists, else the script shows no pop-up and never clears it.
+                if (GetBattlerAbility(battler) != gLastUsedAbility && BadDreamsHasValidTarget(battler))
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 BattleScriptCall(BattleScript_BadDreamsActivates);
                 effect++;
                 break;
@@ -3885,6 +3922,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                  && gBattleMons[gBattleScripting.battler].status1 & STATUS1_ANY
                  && (GetConfig(DETERMINISTIC_ABILITIES) || RandomPercentage(RNG_HEALER, 30))) // FORK: Healer always cures ally
                 {
+                    if (GetBattlerAbility(battler) != gLastUsedAbility) // FORK: innate Healer — pop-up shows the innate
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     BattleScriptCall(BattleScript_HealerActivates);
                     effect++;
                 }
@@ -3912,6 +3951,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                     gBattleMons[battler].volatiles.cudChew = FALSE;
                     gLastUsedItem = GetBattlerPartyState(battler)->usedHeldItem;
                     GetBattlerPartyState(battler)->usedHeldItem = ITEM_NONE;
+                    if (GetBattlerAbility(battler) != gLastUsedAbility) // FORK: innate Cud Chew — pop-up shows the innate
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     BattleScriptCall(BattleScript_CudChewActivates);
                     effect++;
                 }

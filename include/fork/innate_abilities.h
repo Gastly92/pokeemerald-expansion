@@ -45,7 +45,10 @@
 //   (status-condition immunities, Batch I),
 //   SUCTION_CUPS / GUARD_DOG / ROCK_HEAD / LONG_REACH / SKILL_LINK / INFILTRATOR /
 //   CORROSION / STICKY_HOLD / UNSEEN_FIST / PIERCING_DRILL / HEAVY_METAL / LIGHT_METAL
-//   (miscellaneous single-site traits, Batch S).
+//   (miscellaneous single-site traits, Batch S),
+//   RAIN_DISH / ICE_BODY / SHED_SKIN / HYDRATION / HEALER / HARVEST / CUD_CHEW / PICKUP /
+//   BAD_DREAMS / POISON_HEAL (end-of-turn effects, Batch J — first nine reuse the Speed
+//   Boost end-turn driver; Poison Heal replaces the poison-damage step).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

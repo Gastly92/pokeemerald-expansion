@@ -212,6 +212,17 @@
 // with a stable :x: or already-implemented :white_check_mark: pick (Sand Stream / Sniper / Tough Claws / Filter /
 // Solid Rock / Prankster / Sweet Veil / Own Tempo / Water Absorb / Reckless / Unaware / Flame Body / Poison Point /
 // Dragon's Maw / Grassy Surge / Tinted Lens / Strong Jaw / Punk Rock).
+// The end-of-turn effects (Batch J — Rain Dish / Ice Body / Shed Skin / Hydration / Healer / Harvest / Cud Chew /
+// Pickup / Bad Dreams / Poison Heal) free five sets to a complementary REAL slot with a stable :x: pick: Breloom
+// (Poison Heal now innate; Toxic Orb still procs the heal) -> chosen Effect Spore; Goodra (Hydration) -> Sap Sipper;
+// Mr. Rime (Ice Body) -> Screen Cleaner; Arctovish (Slush Rush + Ice Body) -> Water Absorb; Sandaconda (Shed Skin) ->
+// Sand Spit. DEFERRED (tracked follow-up, see fork-docs/INNATE_ABILITIES_BATCHES.md): the remaining ~40 Batch J
+// sets are left on their now-innate chosen ability — functionally correct (the chosen ability still runs; the innate
+// is redundant on that specific set, so the driver skips it), just not upgraded. Most affected species (Blastoise,
+// Dewgong, Chansey, Blissey, Ludicolo, Manaphy, Phione, Darkrai, the Avalugg / Exeggutor / Bellossom / Walrein /
+// Luvdisc / Gorebyss / Whiscash / Tropius / Glaceon / Gliscor lines, ...) have ALL their real abilities now innate,
+// so freeing them needs a game-wide fork override each (with a per-species test/battle audit) — a batch-sized job
+// left to a focused follow-up rather than bundled here.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -7449,7 +7460,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_PUNCH,
             MOVE_SEED_BOMB
         },
-        .ability = ABILITY_POISON_HEAL,
+        .ability = ABILITY_EFFECT_SPORE, // Poison Heal now innate (Toxic Orb still procs the heal); chosen Effect Spore punishes contact
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 236,
@@ -17061,7 +17072,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_HYDRATION,
+        .ability = ABILITY_SAP_SIPPER, // Hydration now innate (rain-cures); chosen Sap Sipper adds a Grass immunity
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20857,7 +20868,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_GLARE
         },
-        .ability = ABILITY_SHED_SKIN,
+        .ability = ABILITY_SAND_SPIT, // Shed Skin now innate (30% self-cure); chosen Sand Spit summons sand (feeds innate Sand Veil)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21465,7 +21476,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_ICE_BODY,
+        .ability = ABILITY_SCREEN_CLEANER, // Ice Body now innate (snow heal); chosen Screen Cleaner wipes foe screens on entry
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21933,7 +21944,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_ICE_BODY, // Slush Rush now innate; chosen Ice Body (snow heal)
+        .ability = ABILITY_WATER_ABSORB, // Slush Rush & Ice Body now innate; chosen Water Absorb heals off Water moves
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

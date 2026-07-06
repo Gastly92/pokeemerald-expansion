@@ -4521,7 +4521,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
         {
             if (aiData->holdEffects[battlerAtk] == HOLD_EFFECT_CURE_SLP
              || aiData->holdEffects[battlerAtk] == HOLD_EFFECT_CURE_STATUS
-             || (AI_GetWeather() & B_WEATHER_RAIN && gBattleStruct->weatherDuration != 1 && aiData->abilities[battlerAtk] == ABILITY_HYDRATION && aiData->holdEffects[battlerAtk] != HOLD_EFFECT_UTILITY_UMBRELLA))
+             || (AI_GetWeather() & B_WEATHER_RAIN && gBattleStruct->weatherDuration != 1 && (aiData->abilities[battlerAtk] == ABILITY_HYDRATION || IsInnateActive(battlerAtk, ABILITY_HYDRATION)) && aiData->holdEffects[battlerAtk] != HOLD_EFFECT_UTILITY_UMBRELLA)) // FORK: innate-aware
             {
                 ADJUST_SCORE(BEST_EFFECT);
             }
@@ -4530,6 +4530,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
                 ADJUST_SCORE(GOOD_EFFECT);
             }
             else if (aiData->abilities[battlerAtk] == ABILITY_SHED_SKIN
+                  || IsInnateActive(battlerAtk, ABILITY_SHED_SKIN) // FORK: innate-aware
                   || aiData->abilities[battlerAtk] == ABILITY_EARLY_BIRD
                   || IsInnateActive(battlerAtk, ABILITY_EARLY_BIRD)) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
             {

@@ -255,6 +255,18 @@ instead of poison damage).
   `AbilityBattleEffects(ABILITYEFFECT_ENDTURN, …)` case (script + pop-up free).
 - **Watch:** Poison Heal isn't strictly end-turn-add — it *replaces* the
   status-damage step; wire at the poison-damage site, not the heal driver.
+- **Step 3.5 partially deferred (tracked follow-up).** The grep fired on ~46
+  frontier sets. Five were freed to a stable `:x:` chosen ability (Breloom→Effect
+  Spore, Goodra→Sap Sipper, Mr. Rime→Screen Cleaner, Arctovish→Water Absorb,
+  Sandaconda→Sand Spit). The rest are left on their now-innate chosen ability —
+  **still correct** (the chosen ability runs; the innate is redundant-but-skipped
+  on that set), just not upgraded — because ~20 of the affected species now have
+  **all** their real abilities innate (Blastoise, Dewgong, Chansey, Blissey,
+  Ludicolo, Manaphy, Phione, Darkrai, the Avalugg/Exeggutor/Bellossom/Walrein/
+  Luvdisc/Gorebyss/Whiscash/Tropius/Glaceon/Gliscor lines, …), so each needs a
+  game-wide fork override + a per-species `test/battle/` audit — a focused
+  follow-up, not bundled into this PR. See the INNATE ABILITIES note in
+  `src/fork/frontier_extended_mons.c`.
 
 ### Batch K — On-contact / on-hit / on-faint reactions (need a NEW driver)
 **13**
@@ -360,7 +372,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 12 | Batch H — Trapping | trait, no driver | done |
 | 13 | Batch I — Status-condition immunities | trait, no driver | done |
 | 14 | Batch S — Misc single-site traits | trait, no driver | done |
-| 15 | Batch J — End-of-turn effects | active, **existing** driver | open |
+| 15 | Batch J — End-of-turn effects | active, **existing** driver | done |
 | 16 | Batch T — Berry/item synergy | active/trait | open |
 | 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | open |
 | 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | open |
@@ -419,7 +431,7 @@ row is `done`.
 | H — Trapping | trait (+AI) | 3 | done |
 | I — Status-condition immunities | trait | 6 | done |
 | S — Misc single-site traits | trait | 12 | done |
-| J — End-of-turn effects | active (existing driver) | 10 | open |
+| J — End-of-turn effects | active (existing driver) | 10 | done |
 | K — On-contact/on-hit/on-faint | active (new driver) | 13 | open |
 | L — Switch-in actives | active (new driver) | 8 | open |
 | M — On-KO/on-hit stat boosts | active | 11 | open |
