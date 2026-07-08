@@ -5085,7 +5085,8 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
             ADJUST_SCORE(WEAK_EFFECT);
         if (IsRecycleEncouragedItem(GetBattlerPartyState(battlerAtk)->usedHeldItem))
             ADJUST_SCORE(WEAK_EFFECT);
-        if (aiData->abilities[battlerAtk] == ABILITY_RIPEN)
+        // FORK: credit an innate Ripen too (FEATURE_INNATE_ABILITIES, Batch T) when scoring Recycle.
+        if (aiData->abilities[battlerAtk] == ABILITY_RIPEN || IsInnateActive(battlerAtk, ABILITY_RIPEN))
         {
             enum Item item = GetBattlerPartyState(battlerAtk)->usedHeldItem;
             u32 toHeal = (GetItemHoldEffectParam(item) == 10) ? 10 : gBattleMons[battlerAtk].maxHP / GetItemHoldEffectParam(item);

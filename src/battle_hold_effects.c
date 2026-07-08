@@ -395,7 +395,8 @@ static enum ItemEffect TryJabocaBerry(enum BattlerId battlerDef, enum BattlerId 
      && !IsAbilityAndRecord(battlerAtk, GetBattlerAbility(battlerAtk), ABILITY_MAGIC_GUARD))
     {
         s32 jabocaDamage = GetNonDynamaxMaxHP(battlerAtk) / 8;
-        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Berry's effect like the real ability (FEATURE_INNATE_ABILITIES, Batch T).
+        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN))
             jabocaDamage *= 2;
         SetPassiveDamageAmount(battlerAtk, jabocaDamage);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_HURT_BY_ITEM;
@@ -418,7 +419,8 @@ static enum ItemEffect TryRowapBerry(enum BattlerId battlerDef, enum BattlerId b
      && !IsAbilityAndRecord(battlerAtk, GetBattlerAbility(battlerAtk), ABILITY_MAGIC_GUARD))
     {
         s32 rowapDamage = GetNonDynamaxMaxHP(battlerAtk) / 8;
-        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Berry's effect (FEATURE_INNATE_ABILITIES, Batch T).
+        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN))
             rowapDamage *= 2;
         SetPassiveDamageAmount(battlerAtk, rowapDamage);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_HURT_BY_ITEM;
@@ -440,7 +442,8 @@ static enum ItemEffect TrySetEnigmaBerry(enum BattlerId battlerDef, enum Battler
      && !(B_HEAL_BLOCKING >= GEN_5 && gBattleMons[battlerDef].volatiles.healBlock))
     {
         s32 healAmount = gBattleMons[battlerDef].maxHP * 25 / 100;
-        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Berry's effect (FEATURE_INNATE_ABILITIES, Batch T).
+        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN))
             healAmount *= 2;
         SetHealAmount(battlerDef, healAmount);
         BattleScriptCall(BattleScript_ItemHealHP_RemoveBerry);
@@ -561,7 +564,8 @@ static enum ItemEffect DamagedStatBoostBerryEffect(enum BattlerId battlerDef, en
          && GetBattleMoveCategory(gCurrentMove) == category
          && IsBattlerTurnDamaged(battlerDef, EXCLUDING_SUBSTITUTES)))
     {
-        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Berry's stat raise (FEATURE_INNATE_ABILITIES, Batch T).
+        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN))
         {
             SetStatChange(battlerDef, statId, 2);
             BattleScriptCall(BattleScript_ConsumableBerryStatRaiseRipen);
@@ -899,7 +903,8 @@ static u32 ItemHealHp(enum BattlerId battler, enum Item itemId, enum HealAmount 
         else
             healAmount = GetItemHoldEffectParam(itemId);
 
-        if (ability == ABILITY_RIPEN && GetItemPocket(itemId) == POCKET_BERRIES)
+        // FORK: innate Ripen doubles the Berry's effect (FEATURE_INNATE_ABILITIES, Batch T).
+        if ((ability == ABILITY_RIPEN || IsInnateActive(battler, ABILITY_RIPEN)) && GetItemPocket(itemId) == POCKET_BERRIES)
             healAmount *= 2;
 
         SetHealAmount(battler, healAmount);
@@ -955,7 +960,8 @@ static u32 ItemRestorePp(enum BattlerId battler, enum Item itemId)
         u32 maxPP = CalculatePPWithBonus(move, ppBonuses, restoreMove);
         u32 ppRestored = GetItemHoldEffectParam(itemId);
 
-        if (ability == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Berry's PP restore (FEATURE_INNATE_ABILITIES, Batch T).
+        if (ability == ABILITY_RIPEN || IsInnateActive(battler, ABILITY_RIPEN))
         {
             ppRestored *= 2;
             gBattlerAbility = battler;
@@ -988,7 +994,8 @@ static enum ItemEffect HealConfuseBerry(enum BattlerId battler, enum Item itemId
      && !(B_HEAL_BLOCKING >= GEN_5 && gBattleMons[battler].volatiles.healBlock))
     {
         s32 healAmount = GetNonDynamaxMaxHP(battler) / GetItemHoldEffectParam(itemId);
-        if (ability == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Berry's effect (FEATURE_INNATE_ABILITIES, Batch T).
+        if (ability == ABILITY_RIPEN || IsInnateActive(battler, ABILITY_RIPEN))
             healAmount *= 2;
         SetHealAmount(battler, healAmount);
         if (GetFlavorRelationByPersonality(gBattleMons[battler].personality, flavorId) < 0)
@@ -1010,7 +1017,8 @@ static enum ItemEffect StatRaiseBerry(enum BattlerId battler, enum Item itemId, 
      && HasEnoughHpToEatBerry(battler, ability, GetItemHoldEffectParam(itemId), itemId))
     {
         gEffectBattler = gBattleScripting.battler = battler;
-        if (ability == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Berry's stat raise (FEATURE_INNATE_ABILITIES, Batch T).
+        if (ability == ABILITY_RIPEN || IsInnateActive(battler, ABILITY_RIPEN))
         {
             SetStatChange(battler, statId, 2);
             BattleScriptCall(BattleScript_ConsumableBerryStatRaiseRipen);
@@ -1102,7 +1110,8 @@ static enum ItemEffect RandomStatRaiseBerry(enum BattlerId battler, enum Item it
         }
         gBattlerAttacker = savedAttacker;
 
-        if (ability == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Berry's stat raise (FEATURE_INNATE_ABILITIES, Batch T).
+        if (ability == ABILITY_RIPEN || IsInnateActive(battler, ABILITY_RIPEN))
         {
             BattleScriptCall(BattleScript_ConsumableBerryStatRaiseRipen);
             SetStatChange(battler, stat, 4);

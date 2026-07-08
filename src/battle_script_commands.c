@@ -6234,13 +6234,19 @@ static void Cmd_setgravity(void)
 
 static bool32 TryCheekPouch(enum BattlerId battler, enum Item itemId, const u8 *nextInstr)
 {
+    // FORK: innate Cheek Pouch heals 1/3 max HP on eating a Berry like the real ability
+    // (FEATURE_INNATE_ABILITIES, Batch T). Pure 1:1 boon.
     if (GetItemPocket(itemId) == POCKET_BERRIES
-        && GetBattlerAbility(battler) == ABILITY_CHEEK_POUCH
+        && (GetBattlerAbility(battler) == ABILITY_CHEEK_POUCH || IsInnateActive(battler, ABILITY_CHEEK_POUCH))
         && !gBattleMons[battler].volatiles.healBlock
         && GetBattlerPartyState(battler)->ateBerry
         && !IsBattlerAtMaxHp(battler))
     {
         gBattlerAbility = battler;
+        // The heal script shows an ability pop-up reading the primary slot; overwrite it to Cheek Pouch
+        // when the chosen ability differs, so the real-ability path stays byte-for-byte unchanged.
+        if (GetBattlerAbility(battler) != ABILITY_CHEEK_POUCH)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_CHEEK_POUCH;
         SetHealAmount(battler, GetNonDynamaxMaxHP(battler) / 3);
         BattleScriptPush(nextInstr);
         gBattlescriptCurrInstr = BattleScript_CheekPouchActivates;

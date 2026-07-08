@@ -88,9 +88,9 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Rivalry | Boosts the power of the Pokémon's moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon's gender is unknown. |
 | :white_large_square: | Steadfast | When the Pokémon flinches, its Speed stat is boosted by 1 stage. |
 | :white_check_mark: | Snow Cloak | Boosts the Pokémon's evasiveness by 25% in snow. |
-| :white_large_square: | Gluttony | If the Pokémon is holding a Berry to be eaten when its HP drops to 1/4 or less of its max, it will instead eat the Berry when its HP drops to 1/2 or less of its max. |
+| :white_check_mark: | Gluttony | If the Pokémon is holding a Berry to be eaten when its HP drops to 1/4 or less of its max, it will instead eat the Berry when its HP drops to 1/2 or less of its max. |
 | :white_large_square: | Anger Point | Boosts the Pokémon's Attack stat to its sixth stage when the Pokémon takes a critical hit. |
-| :white_large_square: | Unburden | Doubles the Pokémon's Speed stat when its held item is consumed or lost. |
+| :white_check_mark: | Unburden | Doubles the Pokémon's Speed stat when its held item is consumed or lost. |
 | :white_check_mark: | Heatproof | Halves the damage the Pokémon takes from Fire-type moves and from being burned. |
 | :x: | Simple | Doubles the Pokémon's stat changes. |
 | :x: | Dry Skin | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. However, the Pokémon takes 25% more damage from Fire-type moves. The Pokémon has 1/8 of its max HP restored at the end of every turn in rain, but it loses 1/8 of its max HP at the end of every turn in harsh sunlight. |
@@ -173,7 +173,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Teravolt | The Pokémon's moves are unimpeded by the Ability of the target. |
 | :white_large_square: | Aroma Veil | The Pokémon and its allies cannot gain the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, or Encore statuses. |
 | :white_large_square: | Flower Veil | Grass-type allies are immune to status conditions and cannot have their stats lowered. |
-| :white_large_square: | Cheek Pouch | The Pokémon has 1/3 of its max HP restored when it eats a Berry, in addition to the Berry's usual effect. |
+| :white_check_mark: | Cheek Pouch | The Pokémon has 1/3 of its max HP restored when it eats a Berry, in addition to the Berry's usual effect. |
 | :x: | Protean | Changes the Pokémon's type to the type of the move it's about to use. This works only once per time the Pokémon enters battle. |
 | :white_check_mark: | Fur Coat | Halves the damage the Pokémon takes from physical moves. |
 | :white_large_square: | Magician | If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves. |
@@ -253,7 +253,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Punk Rock | Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves. |
 | :x: | Sand Spit | Summons a sandstorm for 5 turns when the Pokémon takes damage from moves. |
 | :white_check_mark: | Ice Scales | The Pokémon is protected by ice scales, which halve the damage taken from special moves. |
-| :white_large_square: | Ripen | Doubles the effects of Berries eaten by the Pokémon. |
+| :white_check_mark: | Ripen | Doubles the effects of Berries eaten by the Pokémon. |
 | :x: | Ice Face | The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it snows. |
 | :white_large_square: | Power Spot | Just being next to the Pokémon powers up moves. |
 | :x: | Mimicry | The Pokémon's type changes depending on the terrain. |

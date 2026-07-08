@@ -113,6 +113,8 @@
 // Long Reach makes moves non-contact / Skill Link maxes multistrike hits / Infiltrator ignores screens/Safeguard/Mist/Substitute /
 // Corrosion poisons Poison/Steel types / Sticky Hold keeps the held item / Unseen Fist + Piercing Drill hit through Protect /
 // Heavy Metal / Light Metal double/halve weight)
+// or a berry/item synergy (Gluttony eats a pinch Berry at 1/2 HP / Ripen doubles every Berry effect /
+// Cheek Pouch heals 1/3 max HP on eating a Berry / Unburden doubles the holder's Speed once its item is consumed or lost)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -223,6 +225,17 @@
 // Luvdisc / Gorebyss / Whiscash / Tropius / Glaceon / Gliscor lines, ...) have ALL their real abilities now innate,
 // so freeing them needs a game-wide fork override each (with a per-species test/battle audit) — a batch-sized job
 // left to a focused follow-up rather than bundled here.
+//
+// The berry/item synergy abilities (Batch T — Gluttony / Ripen / Cheek Pouch / Unburden) free eleven sets:
+// Raticate-Alola (Gluttony) -> chosen Hustle, Drifblim x2 (Unburden) -> Aftermath, Hawlucha (Unburden) ->
+// Mold Breaker, Sneasler (Unburden) -> Poison Touch (all complementary REAL slots); Accelgor (Unburden) and
+// Slurpuff (Unburden, still doubling Speed on the innate once its Sitrus is eaten) repoint to their existing
+// Tinted Lens / Unaware overrides; Simisage / Simisear / Simipour (Gluttony), Victreebel (Gluttony) and
+// Greedent (Cheek Pouch) take a new empty-slot override (Chlorophyll / Flash Fire / Water Absorb / Effect Spore /
+// Pickup). DEFERRED (tracked follow-up, like Batch J): Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne and
+// Appletun have ALL their useful real abilities now innate with no free complementary slot, so their sets are left
+// on the now-innate chosen ability — still correct (the chosen runs; the innate is redundant-but-skipped there) —
+// rather than a game-wide override sweep.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -579,8 +592,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SUPER_FANG
         },
-        // Thick Fat now innate; chosen Gluttony eats the Sitrus Berry early (at 1/2 HP).
-        .ability = ABILITY_GLUTTONY,
+        // Thick Fat + Gluttony now innate (Gluttony still eats the Sitrus Berry early, at 1/2 HP);
+        // chosen Hustle (its only free real slot) boosts Attack for the physical set.
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1774,7 +1788,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_GLUTTONY, // Chlorophyll now innate; chosen Gluttony
+        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Gluttony now innate; chosen Effect Spore (override, empty slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1794,7 +1808,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_GLUTTONY, // Chlorophyll now innate; chosen Gluttony
+        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Gluttony now innate; chosen Effect Spore (override, empty slot 1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10430,7 +10444,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_UNBURDEN,
+        .ability = ABILITY_AFTERMATH, // Unburden now innate; chosen Aftermath (only free real slot)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10450,7 +10464,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEX,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_UNBURDEN, // Flare Boost now innate; Unburden (situational) frees the slot
+        .ability = ABILITY_AFTERMATH, // Flare Boost + Unburden now innate; chosen Aftermath (only free real slot)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12841,7 +12855,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_GLUTTONY, // Overgrow now innate (latched); chosen Gluttony (only non-pinch slot)
+        .ability = ABILITY_CHLOROPHYLL, // Overgrow + Gluttony now innate; chosen Chlorophyll (override, empty slot 1)
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .def = 4,
@@ -12863,7 +12877,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_GLUTTONY, // Blaze now innate (latched); chosen Gluttony (only non-pinch slot)
+        .ability = ABILITY_FLASH_FIRE, // Blaze + Gluttony now innate; chosen Flash Fire (override, empty slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -12885,7 +12899,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_GLUTTONY, // Torrent now innate (latched); chosen Gluttony (only non-pinch slot)
+        .ability = ABILITY_WATER_ABSORB, // Torrent + Gluttony now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -14692,7 +14706,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_SPIKES
         },
-        .ability = ABILITY_UNBURDEN,
+        .ability = ABILITY_TINTED_LENS, // Hydration/Sticky Hold/Unburden now all innate; chosen Tinted Lens (override, slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16507,7 +16521,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_FACADE
         },
-        .ability = ABILITY_UNBURDEN,
+        .ability = ABILITY_UNAWARE, // Sweet Veil/Unburden now innate (Unburden still doubles Speed once Sitrus is eaten); chosen Unaware (override, slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16925,7 +16939,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_UNBURDEN,
+        .ability = ABILITY_MOLD_BREAKER, // Limber + Unburden now innate; chosen Mold Breaker (only free real slot)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20481,7 +20495,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_BULLET_SEED
         },
-        .ability = ABILITY_CHEEK_POUCH,
+        .ability = ABILITY_PICKUP, // Cheek Pouch + Gluttony now innate (Cheek Pouch still runs the heal loop); chosen Pickup (override, empty slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22807,7 +22821,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DIRE_CLAW,
             MOVE_ACROBATICS
         },
-        .ability = ABILITY_UNBURDEN,
+        .ability = ABILITY_POISON_TOUCH, // Pressure + Unburden now innate; chosen Poison Touch (only free real slot)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

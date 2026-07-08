@@ -373,7 +373,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 13 | Batch I — Status-condition immunities | trait, no driver | done |
 | 14 | Batch S — Misc single-site traits | trait, no driver | done |
 | 15 | Batch J — End-of-turn effects | active, **existing** driver | done |
-| 16 | Batch T — Berry/item synergy | active/trait | open |
+| 16 | Batch T — Berry/item synergy | active/trait | done |
 | 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | open |
 | 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | open |
 | 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | open |
@@ -435,7 +435,7 @@ row is `done`.
 | K — On-contact/on-hit/on-faint | active (new driver) | 13 | open |
 | L — Switch-in actives | active (new driver) | 8 | open |
 | M — On-KO/on-hit stat boosts | active | 11 | open |
-| T — Berry/item synergy | active/trait | 4 | open |
+| T — Berry/item synergy | active/trait | 4 | done |
 | U — Ally-support (doubles) | calc/trait | 5 | open |
 | Tier 5 — Bespoke/deferred | one-off | 11 | open |
 | **Total** | | **133** | |
