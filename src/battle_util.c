@@ -5955,7 +5955,10 @@ bool32 HasEnoughHpToEatBerry(enum BattlerId battler, enum Ability ability, u32 h
 
     if (hpFraction <= 4 && GetItemPocket(itemId) == POCKET_BERRIES
          && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2
-         && IsAbilityAndRecord(battler, GetBattlerAbility(battler), ABILITY_GLUTTONY))
+         // FORK: innate Gluttony eats the Berry at 1/2 HP like the real ability (FEATURE_INNATE_ABILITIES,
+         // Batch T). Pure 1:1 boon; the AI reaches the same threshold since it calls this helper.
+         && (IsAbilityAndRecord(battler, GetBattlerAbility(battler), ABILITY_GLUTTONY)
+             || IsInnateActive(battler, ABILITY_GLUTTONY)))
         return TRUE;
 
     return FALSE;
@@ -8276,7 +8279,11 @@ static inline uq4_12_t GetDefenderItemsModifier(struct DamageContext *ctx)
                 gSpecialStatuses[ctx->battlerDef].berryReduced = TRUE;
             if (ctx->aiCalc && AI_DAMAGES_THROUGH_BERRIES)
                 ctx->aiCheckBerryModifier = TRUE;
-            return (ctx->abilities[ctx->battlerDef] == ABILITY_RIPEN) ? UQ_4_12(0.25) : UQ_4_12(0.5);
+            // FORK: innate Ripen doubles the resist Berry's damage reduction like the real ability
+            // (FEATURE_INNATE_ABILITIES, Batch T). This lives in the shared damage calc, so the AI's
+            // prediction is innate-aware for free (keyed off the real battler).
+            return (ctx->abilities[ctx->battlerDef] == ABILITY_RIPEN
+                 || (ctx->innatesEnabled && IsInnateActive(ctx->battlerDef, ABILITY_RIPEN))) ? UQ_4_12(0.25) : UQ_4_12(0.5);
         }
         break;
     default:
@@ -11482,7 +11489,8 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     if (gBattleStruct->battlerState[battlerAtk].usedMicleBerry)
     {
         // TODO: Is this true?
-        if (atkAbility == ABILITY_RIPEN)
+        // FORK: innate Ripen doubles the Micle Berry's accuracy boost (FEATURE_INNATE_ABILITIES, Batch T).
+        if (atkAbility == ABILITY_RIPEN || IsInnateActive(battlerAtk, ABILITY_RIPEN))
             calc = (calc * 140) / 100;  // ripen gives 40% acc boost
         else
             calc = (calc * 120) / 100;  // 20% acc boost
@@ -11916,7 +11924,11 @@ void CheckSetUnburden(enum BattlerId battler)
 {
     if (!(gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
         && !gBattleMons[battler].volatiles.embargo
-        && IsAbilityAndRecord(battler, GetBattlerAbility(battler), ABILITY_UNBURDEN))
+        // FORK: an innate Unburden arms the Speed-doubling flag on item loss like the real ability
+        // (FEATURE_INNATE_ABILITIES, Batch T). Pure 1:1 boon; the doubling itself is credited in
+        // GetBattlerTotalSpeedStat (src/battle_main.c), which the AI runs for turn-order prediction.
+        && (IsAbilityAndRecord(battler, GetBattlerAbility(battler), ABILITY_UNBURDEN)
+            || IsInnateActive(battler, ABILITY_UNBURDEN)))
     {
         gBattleMons[battler].volatiles.unburdenActive = TRUE;
     }

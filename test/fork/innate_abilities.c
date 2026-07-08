@@ -5091,6 +5091,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_RAIN_DISH, ABILITY_ICE_BODY, ABILITY_SHED_SKIN, ABILITY_HYDRATION,
         ABILITY_HEALER, ABILITY_HARVEST, ABILITY_CUD_CHEW, ABILITY_PICKUP,
         ABILITY_BAD_DREAMS, ABILITY_POISON_HEAL,
+        ABILITY_GLUTTONY, ABILITY_RIPEN, ABILITY_CHEEK_POUCH, ABILITY_UNBURDEN,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -6077,5 +6078,134 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate P
         NONE_OF { ABILITY_POPUP(player, ABILITY_POISON_HEAL); }
     } THEN {
         EXPECT_LT(player->hp, player->maxHP); // suppressed -> takes poison damage instead of healing
+    }
+}
+
+// ───────────────────────── Berry / item synergy (Batch T) ─────────────────────────
+// Gluttony (eat a pinch Berry at 1/2 HP), Ripen (double every Berry effect), Cheek Pouch
+// (heal 1/3 max HP on eating a Berry), Unburden (double Speed once the held item is lost).
+// All 1:1 clean-upside boons. See src/fork/innate_abilities.c and the wiring reference.
+
+// ----- Gluttony (eats a pinch Berry at 1/2 HP instead of 1/4) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Gluttony eats a pinch Berry at 1/2 HP")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUNCHLAX, ABILITY_GLUTTONY));
+        ASSUME(gItemsInfo[ITEM_LIECHI_BERRY].holdEffect == HOLD_EFFECT_ATTACK_UP);
+        ASSUME(GetMoveFixedHPDamage(MOVE_DRAGON_RAGE) == 40);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MUNCHLAX) { Ability(ABILITY_THICK_FAT); MaxHP(60); HP(60); Item(ITEM_LIECHI_BERRY); } // chosen differs from innate Gluttony
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_DRAGON_RAGE); MOVE(player, MOVE_CELEBRATE); } // HP 60 -> 20 (between 1/4 and 1/2)
+    } THEN {
+        // With Gluttony the Liechi is eaten at 1/2 HP (Atk +1); without, 20 HP is above the 1/4 pinch threshold.
+        EXPECT_EQ(player->item, enabled ? ITEM_NONE : ITEM_LIECHI_BERRY);
+        EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+// ----- Ripen (doubles a Berry's effect) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Ripen doubles a Berry's heal")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FLAPPLE, ABILITY_RIPEN));
+        ASSUME(gItemsInfo[ITEM_SITRUS_BERRY].holdEffect == HOLD_EFFECT_RESTORE_PCT_HP);
+        ASSUME(GetMoveFixedHPDamage(MOVE_DRAGON_RAGE) == 40);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_FLAPPLE) { Ability(ABILITY_HUSTLE); MaxHP(100); HP(60); Item(ITEM_SITRUS_BERRY); } // chosen differs from innate Ripen
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_DRAGON_RAGE); MOVE(player, MOVE_CELEBRATE); } // HP 60 -> 20, eats Sitrus (heals 25% of maxHP)
+    } THEN {
+        // Sitrus heals 25 normally; Ripen doubles it to 50.
+        EXPECT_EQ(player->hp, enabled ? 20 + 50 : 20 + 25);
+    }
+}
+
+// ----- Cheek Pouch (heals 1/3 max HP on eating a Berry, with a pop-up) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cheek Pouch heals 1/3 max HP on eating a Berry")
+{
+    bool32 enabled;
+    s16 cheekPouchHeal;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GREEDENT, ABILITY_CHEEK_POUCH));
+        ASSUME(GetMoveEffect(MOVE_SUPER_FANG) == EFFECT_FIXED_PERCENT_DAMAGE);
+        ASSUME(gItemsInfo[ITEM_ORAN_BERRY].holdEffect == HOLD_EFFECT_RESTORE_HP);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_GREEDENT) { Ability(ABILITY_GLUTTONY); MaxHP(60); HP(31); Item(ITEM_ORAN_BERRY); } // chosen differs from innate Cheek Pouch
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SUPER_FANG); } // HP 31 -> 15, eats Oran (below 1/2)
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, player);
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_CHEEK_POUCH); // pop-up overwrites to the innate
+            HP_BAR(player, captureDamage: &cheekPouchHeal);
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_CHEEK_POUCH); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(cheekPouchHeal, -(player->maxHP / 3)); // extra 1/3 max HP from the innate
+    }
+}
+
+// ----- Unburden (doubles Speed once the held item is consumed/lost) -----
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unburden doubles Speed after its item is consumed")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HAWLUCHA, ABILITY_UNBURDEN));
+        ASSUME(GetMoveFixedHPDamage(MOVE_DRAGON_RAGE) == 40);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_HAWLUCHA) { Ability(ABILITY_MOLD_BREAKER); Speed(100); MaxHP(60); HP(60); Item(ITEM_SITRUS_BERRY); } // chosen differs from innate Unburden
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(150); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_DRAGON_RAGE); MOVE(player, MOVE_CELEBRATE); } // HP 60 -> 20, eats Sitrus -> item lost -> Unburden armed
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_DRAGON_RAGE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        if (enabled) // Unburden -> 200 Speed -> player outspeeds 150
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        }
+        else // no innate -> 100 Speed -> opponent still faster
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        }
+    }
+}
+
+// Suppression parity: Gastro Acid blanks an innate Unburden, so the item-loss Speed boost never arms.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Unburden")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HAWLUCHA, ABILITY_UNBURDEN));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HAWLUCHA) { Ability(ABILITY_MOLD_BREAKER); Speed(100); Item(ITEM_SITRUS_BERRY); Moves(MOVE_CELEBRATE, MOVE_BELLY_DRUM); MaxHP(60); HP(60); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(150); Moves(MOVE_GASTRO_ACID, MOVE_DRAGON_RAGE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(opponent, MOVE_DRAGON_RAGE); MOVE(player, MOVE_CELEBRATE); } // HP -> 20, eats Sitrus, but Unburden is suppressed
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Hawlucha's Ability was suppressed!");
+        // Suppressed Unburden never arms -> player (100) stays slower than the foe (150) on the last turn.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
     }
 }

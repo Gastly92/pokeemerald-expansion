@@ -4708,7 +4708,11 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
         speed = (GetParadoxBoostedStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
     else if (ability == ABILITY_QUARK_DRIVE && !(gBattleMons[battler].volatiles.transformed) && (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN || gBattleMons[battler].volatiles.boosterEnergyActivated))
         speed = (GetParadoxBoostedStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
-    else if (ability == ABILITY_UNBURDEN && gBattleMons[battler].volatiles.unburdenActive)
+    // FORK: Unburden is also supported as an innate (FEATURE_INNATE_ABILITIES, Batch T); crediting
+    // IsInnateActive() here doubles Speed once the holder's item is consumed/lost (the unburdenActive
+    // flag is armed innate-aware in CheckSetUnburden) and, since the AI's turn-order prediction runs
+    // this same function, makes the AI threat/respect it. Pure 1:1 boon. See src/fork/innate_abilities.c.
+    else if ((ability == ABILITY_UNBURDEN || IsInnateActive(battler, ABILITY_UNBURDEN)) && gBattleMons[battler].volatiles.unburdenActive)
         speed *= 2;
 
     // player's badge boost

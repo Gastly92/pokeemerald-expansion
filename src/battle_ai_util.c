@@ -919,7 +919,10 @@ static s32 HandleKOThroughBerryReduction(struct DamageContext *ctx, s32 dmg)
             gAiLogicData->resistBerryAffected[ctx->battlerAtk][ctx->battlerDef][GetMoveIndex(ctx->battlerAtk, ctx->move)] = TRUE;
 
         // Ignore resist berry if appropriate
-        u32 berryModifier = gAiLogicData->abilities[ctx->battlerDef] == ABILITY_RIPEN ? 4 : 2;
+        // FORK: credit an innate Ripen too (FEATURE_INNATE_ABILITIES, Batch T) so the AI's berry-KO
+        // reasoning matches the doubled resist-berry reduction the defender actually gets.
+        u32 berryModifier = (gAiLogicData->abilities[ctx->battlerDef] == ABILITY_RIPEN
+                          || IsInnateActive(ctx->battlerDef, ABILITY_RIPEN)) ? 4 : 2;
         u32 unmitigatedDamage = dmg * berryModifier;
         u32 totalDamage = dmg;
 

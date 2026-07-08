@@ -48,7 +48,10 @@
 //   (miscellaneous single-site traits, Batch S),
 //   RAIN_DISH / ICE_BODY / SHED_SKIN / HYDRATION / HEALER / HARVEST / CUD_CHEW / PICKUP /
 //   BAD_DREAMS / POISON_HEAL (end-of-turn effects, Batch J — first nine reuse the Speed
-//   Boost end-turn driver; Poison Heal replaces the poison-damage step).
+//   Boost end-turn driver; Poison Heal replaces the poison-damage step),
+//   GLUTTONY / RIPEN / CHEEK_POUCH / UNBURDEN (berry/item synergy, Batch T — Gluttony's
+//   1/2-HP pinch-Berry threshold, Ripen's doubled Berry effects, Cheek Pouch's heal on
+//   Berry eat, Unburden's doubled Speed after item loss).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

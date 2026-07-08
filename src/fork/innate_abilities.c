@@ -171,6 +171,21 @@
 //   omitted as redundant (Cascoon/Silcoon/Kakuna/Metapod/Pupitar/Audino-Mega/Darkrai-Mega) unless they
 //   are a frontier set: Manaphy / Phione (sole Hydration) and Darkrai (already innate Levitate) keep their
 //   rows, and the frontier sets that hardcoded these abilities are freed to a complementary chosen ability.
+//   GLUTTONY / RIPEN / CHEEK_POUCH / UNBURDEN (berry/item synergy, Batch T — all 1:1 clean-upside copies,
+//   canon-only (no flavor picks — the effects are berry/item-conditional and hard to justify thematically
+//   off-roster)): Gluttony eats a pinch Berry at 1/2 HP instead of 1/4 (HasEnoughHpToEatBerry, battle_util.c);
+//   Ripen doubles every Berry effect — heal / PP / stat raise / Jaboca-Rowap-Enigma chip / resist-berry
+//   damage cut / Micle accuracy (the ~11 battle_hold_effects.c + battle_util.c sites, plus the AI's berry-KO
+//   and Recycle reads); Cheek Pouch heals 1/3 max HP whenever the holder eats a Berry (TryCheekPouch,
+//   battle_script_commands.c — its heal script shows a pop-up, so the innate overwrites it when the chosen
+//   ability differs); Unburden doubles the holder's Speed once its item is consumed/lost (the unburdenActive
+//   flag is armed innate-aware in CheckSetUnburden, doubled in GetBattlerTotalSpeedStat / battle_main.c, which
+//   the AI runs for turn-order prediction). Gluttony/Ripen's berry-KO/Recycle AI reads are the only dedicated
+//   AI heuristics; the rest live in shared calcs (Ripen resist-berry, Unburden speed) and are innate-aware for
+//   free. Sole-canon lines get their rows; several species whose real abilities are now ALL innate with no
+//   free complementary slot (Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne, Appletun) keep their
+//   now-redundant chosen frontier ability — still correct (the innate runs; the chosen is redundant-but-skipped)
+//   — deferred as a focused follow-up like Batch J's, rather than a game-wide override sweep.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -407,6 +422,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0019
         SPECIES_RATTATA_ALOLA,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_THICK_FAT
         )
     },
@@ -419,6 +435,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0020
         SPECIES_RATICATE_ALOLA,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_THICK_FAT
         )
     },
@@ -758,19 +775,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0069
         SPECIES_BELLSPROUT,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_GLUTTONY
         )
     },
     { // 0070
         SPECIES_WEEPINBELL,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_GLUTTONY
         )
     },
     { // 0071
         SPECIES_VICTREEBEL,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_GLUTTONY
         )
     },
     { // 0071
@@ -861,6 +881,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0079
         SPECIES_SLOWPOKE_GALAR,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_OWN_TEMPO,
             ABILITY_REGENERATOR
         )
@@ -956,11 +977,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STICKY_HOLD
         )
     },
+    { // 0088
+        SPECIES_GRIMER_ALOLA,
+        INNATES(
+            ABILITY_GLUTTONY
+        )
+    },
     { // 0089
         SPECIES_MUK,
         INNATES(
             ABILITY_STENCH,
             ABILITY_STICKY_HOLD
+        )
+    },
+    { // 0089
+        SPECIES_MUK_ALOLA,
+        INNATES(
+            ABILITY_GLUTTONY
         )
     },
     { // 0090
@@ -1097,7 +1130,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HITMONLEE,
         INNATES(
             ABILITY_LIMBER,
-            ABILITY_RECKLESS
+            ABILITY_RECKLESS,
+            ABILITY_UNBURDEN
         )
     },
     { // 0107
@@ -1407,6 +1441,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0143
         SPECIES_SNORLAX,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_IMMUNITY,
             ABILITY_THICK_FAT,
             ABILITY_UNAWARE
@@ -1415,6 +1450,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0143
         SPECIES_SNORLAX_GMAX,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_IMMUNITY,
             ABILITY_THICK_FAT,
             ABILITY_UNAWARE
@@ -1885,6 +1921,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0702
         SPECIES_DEDENNE,
         INNATES(
+            ABILITY_CHEEK_POUCH,
             ABILITY_PICKUP
         )
     },
@@ -2251,6 +2288,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0213
         SPECIES_SHUCKLE,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_STURDY
         )
     },
@@ -2527,25 +2565,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0252
         SPECIES_TREECKO,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_UNBURDEN
         )
     },
     { // 0253
         SPECIES_GROVYLE,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_UNBURDEN
         )
     },
     { // 0254
         SPECIES_SCEPTILE,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_UNBURDEN
         )
     },
     { // 0254
         SPECIES_SCEPTILE_MEGA,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_UNBURDEN
         )
     },
     { // 0255
@@ -2614,6 +2656,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0263
         SPECIES_ZIGZAGOON,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_PICKUP,
             ABILITY_QUICK_FEET
         )
@@ -2621,6 +2664,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0263
         SPECIES_ZIGZAGOON_GALAR,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_PICKUP,
             ABILITY_QUICK_FEET
         )
@@ -2628,6 +2672,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0264
         SPECIES_LINOONE,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_PICKUP,
             ABILITY_QUICK_FEET
         )
@@ -2635,6 +2680,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0264
         SPECIES_LINOONE_GALAR,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_PICKUP,
             ABILITY_QUICK_FEET
         )
@@ -2954,6 +3000,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0316
         SPECIES_GULPIN,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_STENCH,
             ABILITY_STICKY_HOLD
         )
@@ -2961,6 +3008,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0317
         SPECIES_SWALOT,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_STENCH,
             ABILITY_STICKY_HOLD
         )
@@ -3037,6 +3085,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0325
         SPECIES_SPOINK,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_OWN_TEMPO,
             ABILITY_THICK_FAT
         )
@@ -3044,6 +3093,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0326
         SPECIES_GRUMPIG,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_OWN_TEMPO,
             ABILITY_THICK_FAT
         )
@@ -3773,13 +3823,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0425
         SPECIES_DRIFLOON,
         INNATES(
-            ABILITY_FLARE_BOOST
+            ABILITY_FLARE_BOOST,
+            ABILITY_UNBURDEN
         )
     },
     { // 0426
         SPECIES_DRIFBLIM,
         INNATES(
-            ABILITY_FLARE_BOOST
+            ABILITY_FLARE_BOOST,
+            ABILITY_UNBURDEN
         )
     },
     { // 0427
@@ -3937,6 +3989,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0446
         SPECIES_MUNCHLAX,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_PICKUP,
             ABILITY_THICK_FAT,
             ABILITY_UNAWARE
@@ -4403,49 +4456,57 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PURRLOIN,
         INNATES(
             ABILITY_LIMBER,
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_UNBURDEN
         )
     },
     { // 0510
         SPECIES_LIEPARD,
         INNATES(
             ABILITY_LIMBER,
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_UNBURDEN
         )
     },
     { // 0511
         SPECIES_PANSAGE,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_OVERGROW
         )
     },
     { // 0512
         SPECIES_SIMISAGE,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_OVERGROW
         )
     },
     { // 0513
         SPECIES_PANSEAR,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_GLUTTONY
         )
     },
     { // 0514
         SPECIES_SIMISEAR,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_GLUTTONY
         )
     },
     { // 0515
         SPECIES_PANPOUR,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_TORRENT
         )
     },
     { // 0516
         SPECIES_SIMIPOUR,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_TORRENT
         )
     },
@@ -5160,7 +5221,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ACCELGOR,
         INNATES(
             ABILITY_HYDRATION,
-            ABILITY_STICKY_HOLD
+            ABILITY_STICKY_HOLD,
+            ABILITY_UNBURDEN
         )
     },
     { // 0618
@@ -5261,6 +5323,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0631
         SPECIES_HEATMOR,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_WHITE_SMOKE
         )
     },
@@ -5399,6 +5462,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0659
         SPECIES_BUNNELBY,
         INNATES(
+            ABILITY_CHEEK_POUCH,
             ABILITY_HUGE_POWER,
             ABILITY_PICKUP
         )
@@ -5406,6 +5470,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0660
         SPECIES_DIGGERSBY,
         INNATES(
+            ABILITY_CHEEK_POUCH,
             ABILITY_HUGE_POWER,
             ABILITY_PICKUP
         )
@@ -5585,13 +5650,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0684
         SPECIES_SWIRLIX,
         INNATES(
-            ABILITY_SWEET_VEIL
+            ABILITY_SWEET_VEIL,
+            ABILITY_UNBURDEN
         )
     },
     { // 0685
         SPECIES_SLURPUFF,
         INNATES(
-            ABILITY_SWEET_VEIL
+            ABILITY_SWEET_VEIL,
+            ABILITY_UNBURDEN
         )
     },
     { // 0686
@@ -5695,7 +5762,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0701
         SPECIES_HAWLUCHA,
         INNATES(
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_UNBURDEN
         )
     },
     { // 0701
@@ -6498,6 +6566,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0819
+        SPECIES_SKWOVET,
+        INNATES(
+            ABILITY_CHEEK_POUCH,
+            ABILITY_GLUTTONY
+        )
+    },
+    { // 0820
+        SPECIES_GREEDENT,
+        INNATES(
+            ABILITY_CHEEK_POUCH,
+            ABILITY_GLUTTONY
+        )
+    },
     { // 0821
         SPECIES_ROOKIDEE,
         INNATES(
@@ -6553,13 +6635,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0827
         SPECIES_NICKIT,
         INNATES(
-            ABILITY_STAKEOUT
+            ABILITY_STAKEOUT,
+            ABILITY_UNBURDEN
         )
     },
     { // 0828
         SPECIES_THIEVUL,
         INNATES(
-            ABILITY_STAKEOUT
+            ABILITY_STAKEOUT,
+            ABILITY_UNBURDEN
         )
     },
     { // 0829
@@ -6632,15 +6716,40 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_MAGMA_ARMOR
         )
     },
+    { // 0840
+        SPECIES_APPLIN,
+        INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_RIPEN
+        )
+    },
+    { // 0841
+        SPECIES_FLAPPLE,
+        INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_RIPEN
+        )
+    },
+    { // 0841
+        SPECIES_FLAPPLE_GMAX,
+        INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_RIPEN
+        )
+    },
     { // 0842
         SPECIES_APPLETUN,
         INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_RIPEN,
             ABILITY_THICK_FAT
         )
     },
     { // 0842
         SPECIES_APPLETUN_GMAX,
         INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_RIPEN,
             ABILITY_THICK_FAT
         )
     },
@@ -7013,7 +7122,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0903
         SPECIES_SNEASLER,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_UNBURDEN
         )
     },
     { // 0904
@@ -7094,18 +7204,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0915
         SPECIES_LECHONK,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_THICK_FAT
         )
     },
     { // 0916
         SPECIES_OINKOLOGNE_M,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_THICK_FAT
         )
     },
     { // 0916
         SPECIES_OINKOLOGNE_F,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_THICK_FAT
         )
     },
@@ -7165,9 +7278,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PICKUP
         )
     },
-    { // 0925
+    { // 0925 (SPECIES_MAUSHOLD aliases SPECIES_MAUSHOLD_THREE — the default three-member form)
         SPECIES_MAUSHOLD,
         INNATES(
+            ABILITY_CHEEK_POUCH,
             ABILITY_FRIEND_GUARD,
             ABILITY_TECHNICIAN
         )
@@ -7175,6 +7289,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0925
         SPECIES_MAUSHOLD_FOUR,
         INNATES(
+            ABILITY_CHEEK_POUCH,
             ABILITY_FRIEND_GUARD,
             ABILITY_TECHNICIAN
         )
@@ -7240,13 +7355,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0944
         SPECIES_SHROODLE,
         INNATES(
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_UNBURDEN
         )
     },
     { // 0945
         SPECIES_GRAFAIAI,
         INNATES(
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_UNBURDEN
         )
     },
     { // 0946
@@ -7496,6 +7613,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1011
         SPECIES_DIPPLIN,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_STICKY_HOLD
         )
     },

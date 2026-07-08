@@ -2099,3 +2099,42 @@ chosen ability like other overworld reads). Canon-only (Gliscor, the Shroomish l
 (Breloom, Gliscor) keep their now-innate `.ability` for now except Breloom, freed to a stable chosen Effect
 Spore (its Toxic Orb still procs the innate heal); the rest of the Batch J frontier freeing is a deferred
 follow-up (see `INNATE_ABILITIES_BATCHES.md`).
+
+### ABILITY_GLUTTONY / ABILITY_RIPEN / ABILITY_CHEEK_POUCH / ABILITY_UNBURDEN
+
+The berry/item-synergy set (Batch T), all **1:1 clean-upside copies** (none of the real abilities ever
+hurts its holder). Each is wired beside its chosen-ability read with an `IsInnateActive()` clause; the four
+are `canon-only` (no flavor picks — the effects are berry/item-conditional and hard to justify off-roster).
+
+- **Gluttony** — eats a pinch Berry at 1/2 HP instead of 1/4. One site: `HasEnoughHpToEatBerry`
+  (`src/battle_util.c`), where the 1/2-HP branch gains `|| IsInnateActive(battler, ABILITY_GLUTTONY)`.
+  No dedicated AI read (the AI reaches the same threshold through this shared helper), no pop-up (a
+  passive threshold; the Berry's own animation still shows).
+- **Ripen** — doubles every Berry effect. ~11 sites: the Jaboca/Rowap/Enigma chip and the stat-raise
+  berries (`GetBattlerAbility(battlerDef) == ABILITY_RIPEN` reads) and the cached-`ability` heal / PP /
+  confuse-heal / Starf-style raises in `src/battle_hold_effects.c`; plus the resist-Berry damage cut
+  (`src/battle_util.c`, in the shared damage calc via `ctx->innatesEnabled && IsInnateActive(...)`, so the
+  AI's prediction is innate-aware for free) and the Micle-Berry accuracy boost. The two dedicated AI reads
+  — the berry-KO ignore modifier (`src/battle_ai_util.c`) and the Recycle score (`src/battle_ai_main.c`) —
+  each credit an innate Ripen so the AI reasons about the doubled berry. No pop-up.
+- **Cheek Pouch** — heals 1/3 max HP whenever the holder eats a Berry. One site: `TryCheekPouch`
+  (`src/battle_script_commands.c`), gaining `|| IsInnateActive(battler, ABILITY_CHEEK_POUCH)`. It runs a
+  heal **script** with a pop-up (`BattleScript_CheekPouchActivates` -> `BattleScript_AbilityPopUp`), so the
+  innate overwrites the pop-up (`gBattleScripting.abilityPopupOverwrite = ABILITY_CHEEK_POUCH`) only when the
+  chosen ability differs — the real-ability path stays byte-for-byte unchanged (the Speed Boost / Sturdy
+  precedent).
+- **Unburden** — doubles Speed once the holder's held item is consumed or lost. Two sites: the flag is
+  armed in `CheckSetUnburden` (`src/battle_util.c`, gaining the innate clause) at every item-loss point, and
+  the doubling itself sits in `GetBattlerTotalSpeedStat` (`src/battle_main.c`) beside the chosen read. Since
+  the AI's turn-order prediction runs that same speed function keyed off the real battler, the AI threatens
+  and respects an innate Unburden's boost for free.
+
+Suppression parity holds for all four via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field);
+none is `breakable`, so Mold Breaker never touches them, same as the real abilities. **Species:** the canon
+users of each ability get their rows (Sceptile and its Mega mirror an innate Unburden even though the fork
+override repurposed the selectable slot — a pure-boon persistence, like the Mega convention). Several species
+whose real abilities are now **all** innate with no free complementary slot (Snorlax, Linoone, Hitmonlee,
+Liepard, Thievul, Dedenne, Appletun) keep their now-redundant chosen frontier ability rather than a game-wide
+override sweep — a deferred follow-up, mirroring Batch J. The frontier sets whose species can free the slot do
+(Raticate-Alola -> Hustle, the Drifblim/Hawlucha/Sneasler Unburden sets -> a real complementary slot, and the
+Simi trio / Victreebel / Greedent -> a new empty-slot override in `src/fork/species_ability_overrides.c`).

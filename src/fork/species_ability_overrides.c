@@ -104,6 +104,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DUGTRIO, 2,
         ABILITY_SAND_STREAM
     },
+    { // 0071
+        // Victreebel's only real abilities (Chlorophyll, Gluttony) are BOTH now innate, so its EMPTY slot 1
+        // takes Effect Spore -- :x: (never an innate -> stable) and flavorful for the carnivorous pitcher
+        // plant: contact attackers risk poison/sleep/paralysis, punishing the hits its Sleep Powder set invites.
+        SPECIES_VICTREEBEL, 1,
+        ABILITY_EFFECT_SPORE
+    },
     { // 0076
         // Rock Head, Sturdy and Sand Veil are ALL now innate, so its innate-redundant slot-2 Sand Veil
         // (audited: unpinned) takes Sand Stream -- :x: (never an innate -> stable) and self-synergistic: the
@@ -555,6 +562,27 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SAMUROTT, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0512
+        // Simisage's only real abilities (Gluttony, Overgrow) are BOTH now innate, so its EMPTY slot 1 takes
+        // Chlorophyll -- an already-implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) it
+        // does not carry innately -- doubling the grass monkey's Speed in sun for its offensive sets.
+        SPECIES_SIMISAGE, 1,
+        ABILITY_CHLOROPHYLL
+    },
+    { // 0514
+        // Simisear's only real abilities (Gluttony, Blaze) are BOTH now innate, so its EMPTY slot 1 takes
+        // Flash Fire -- :x: (never an innate -> stable) and thematic for the fire monkey: it shrugs off Fire
+        // moves for an immunity + a Fire-power boost on its Nasty Plot sets.
+        SPECIES_SIMISEAR, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0516
+        // Simipour's only real abilities (Gluttony, Torrent) are BOTH now innate, so its EMPTY slot 1 takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the water monkey: it heals on the
+        // Water hits its bulky switch-ins invite.
+        SPECIES_SIMIPOUR, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0531
         SPECIES_AUDINO, 1,
         ABILITY_CUTE_CHARM
@@ -618,9 +646,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0617
-        // Sticky Hold now innate, so its innate-redundant slot-1 Sticky Hold (audited: unpinned; slot-2 Unburden
-        // is kept — a separate roster set still runs it) takes Tinted Lens, an implemented :white_check_mark:
-        // innate (stable) that lets the glass-cannon ninja's Bug Buzz / Focus Blast hit resists for full.
+        // Hydration, Sticky Hold and Unburden are ALL now innate, so its innate-redundant slot-1 Sticky Hold
+        // (audited: unpinned) takes Tinted Lens, an implemented :white_check_mark: innate (stable) that lets the
+        // glass-cannon ninja's Bug Buzz / Focus Blast hit resists for full. (Its former Unburden roster set now
+        // rides the innate Unburden and also selects this Tinted Lens slot.)
         SPECIES_ACCELGOR, 1,
         ABILITY_TINTED_LENS
     },
@@ -644,12 +673,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PUNK_ROCK
     },
     { // 0660
-        // Diggersby's only non-innate real abilities (Pickup, Cheek Pouch) are both still PENDING innates, so
-        // rather than hand out a pending pick (future churn) its slot-2 Huge Power — now innate-redundant and
-        // unpinned by any test (audited: no Ability(ABILITY_HUGE_POWER) on Diggersby in test/battle) — is
-        // repurposed to Scrappy, an already-implemented :white_check_mark: innate (stable, like Lokix's Tough
-        // Claws) it does not carry innately: its Normal STAB (Return / Quick Attack) then hits Ghosts, a clean
-        // coverage boon alongside the innate Huge Power. (Dead-weight real-slot repurpose, Sceptile-style.)
+        // Diggersby's three real abilities (Pickup, Cheek Pouch, Huge Power) are ALL now innate, so its slot-2
+        // Huge Power — now innate-redundant and unpinned by any test (audited: no Ability(ABILITY_HUGE_POWER)
+        // on Diggersby in test/battle) — is repurposed to Scrappy, an already-implemented :white_check_mark:
+        // innate (stable, like Lokix's Tough Claws) it does not carry innately: its Normal STAB (Return / Quick
+        // Attack) then hits Ghosts, a clean coverage boon alongside the innate Huge Power. (Dead-weight real-slot
+        // repurpose, Sceptile-style.)
         SPECIES_DIGGERSBY, 2,
         ABILITY_SCRAPPY
     },
@@ -661,11 +690,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_OWN_TEMPO
     },
     { // 0685
-        // Slurpuff's only real abilities are Sweet Veil (slot 0, now innate) and Unburden (slot 2, dead
-        // weight on its non-consumable Leftovers wall set), so its empty slot 1 takes Unaware — an
-        // already-implemented :white_check_mark: innate (stable, like Carnivine/Tornadus-Therian) and a pure
-        // boon for its Calm Mind wall: it ignores the foe's stat boosts. (Slot 2 Unburden is left intact for
-        // any future consumable-item set.)
+        // Slurpuff's only real abilities (Sweet Veil, Unburden) are BOTH now innate, so its empty slot 1 takes
+        // Unaware — an already-implemented :white_check_mark: innate (stable, like Carnivine/Tornadus-Therian)
+        // and a pure boon for its Calm Mind wall: it ignores the foe's stat boosts. (Its Belly Drum sweeper set
+        // now rides the innate Unburden — still doubling Speed once the Sitrus is eaten — and selects this Unaware slot.)
         SPECIES_SLURPUFF, 1,
         ABILITY_UNAWARE
     },
@@ -775,6 +803,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // supereffective Fire/Fighting/Ground hits its bulky Iron Fist sets otherwise fear.
         SPECIES_MELMETAL, 1,
         ABILITY_FILTER
+    },
+    { // 0820
+        // Greedent's only real abilities (Cheek Pouch, Gluttony) are BOTH now innate, so its EMPTY slot 1 takes
+        // Pickup -- an already-implemented :white_check_mark: innate (stable) it does not carry innately and
+        // flavorful for the hoarding squirrel: at end of turn it grabs an item consumed on the field, on top of
+        // the innate Cheek Pouch heal loop.
+        SPECIES_GREEDENT, 1,
+        ABILITY_PICKUP
     },
     { // 0847
         // Barraskewda's only real abilities (Swift Swim, Propeller Tail) are BOTH now innate, so its EMPTY
