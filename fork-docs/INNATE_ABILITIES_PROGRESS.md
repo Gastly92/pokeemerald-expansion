@@ -112,7 +112,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Klutz | Items do not work when held by the Pokémon. |
 | :white_large_square: | Mold Breaker | The Pokémon's moves are unaffected by the Ability of the target (with certain exceptions). |
 | :white_check_mark: | Super Luck | The Pokémon has a 1-stage Critical-Hit Ratio Boost. |
-| :white_large_square: | Aftermath | Attackers that knock out the Pokémon with a contact move take damage equal to 1/4 of their max HP. |
+| :white_check_mark: | Aftermath | Attackers that knock out the Pokémon with a contact move take damage equal to 1/4 of their max HP. |
 | :white_large_square: | Anticipation | When the Pokémon enters a battle, it senses whether the opponents know any one-hit KO moves or moves that are super effective against it. |
 | :white_large_square: | Forewarn | When it enters a battle, the Pokémon can tell one of the moves an opposing Pokémon has. |
 | :white_check_mark: | Unaware | The Pokémon ignores the target's stat changes when attacking, and ignores the attacker's stat changes when being attacked. It cannot ignore changes to the Speed stat, however. |
@@ -221,7 +221,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Corrosion | The Pokémon can poison or badly poison targets even if they're Steel or Poison types. |
 | :white_large_square: | Comatose | The Pokémon is always drowsing and will never wake up. It can attack while in its sleeping state. |
 | :white_check_mark: | Queenly Majesty | Opponents are unable to use priority moves against the Pokémon or its allies. |
-| :white_large_square: | Innards Out | When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker. |
+| :white_check_mark: | Innards Out | When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker. |
 | :white_large_square: | Dancer | Whenever a dance move is used in battle, the Pokémon will copy the user to immediately perform that dance move itself. |
 | :white_large_square: | Battery | Powers up ally Pokémon's special moves. |
 | :x: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |

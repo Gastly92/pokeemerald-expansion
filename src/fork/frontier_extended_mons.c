@@ -250,6 +250,14 @@
 // :white_check_mark: pick. DEFERRED: the two Dugtrio-Alola sets keep their chosen Tangling Hair — all three of its
 // real abilities are now innate, but Tangling Hair is a test-pinned real slot (test/battle/move_effect/pursuit.c), so
 // it stays a real ability and the set is redundant-but-correct (the innate still fires).
+// The on-faint retaliation reactions (Batch K second sub-group — Aftermath chips a contact attacker 1/4 max HP when it
+// KOs the holder, Innards Out deals the attacker the holder's lost HP on any KO) free five sets, all to a fork-owned
+// override (src/species_ability_overrides.c) since every affected species now has its useful real abilities innate:
+// Drifblim x2 (Aftermath + Unburden + Flare Boost all innate) repurpose their unpinned slot-0 Aftermath to a chosen
+// Unaware; Skuntank (Aftermath + Stench + Keen Eye all innate) its slot-1 Aftermath to a chosen Poison Touch; Garbodor
+// (Aftermath innate, slot-1 Weak Armor a wall drawback) its slot-2 Aftermath to a chosen Poison Touch; and Pyukumuku
+// (Innards Out + Unaware innate) its empty slot 1 to a chosen Water Absorb — each a stable :x: or already-implemented
+// :white_check_mark: pick (Innards Out itself stays a real, test-pinned slot 0 on Pyukumuku).
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -10458,7 +10466,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_AFTERMATH, // Unburden now innate; chosen Aftermath (only free real slot)
+        .ability = ABILITY_UNAWARE, // Aftermath/Unburden/Flare Boost all now innate; chosen Unaware (slot-0 override) walls the Calm Mind set
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10478,7 +10486,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEX,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_AFTERMATH, // Flare Boost + Unburden now innate; chosen Aftermath (only free real slot)
+        .ability = ABILITY_UNAWARE, // Aftermath/Flare Boost/Unburden all now innate; chosen Unaware (slot-0 override) ignores the foe's boosts
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10649,7 +10657,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_PURSUIT
         },
-        .ability = ABILITY_AFTERMATH,
+        .ability = ABILITY_POISON_TOUCH, // Aftermath/Stench/Keen Eye all now innate; chosen Poison Touch (slot-1 override) poisons via Gunk Shot
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13909,7 +13917,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_PAIN_SPLIT
         },
-        .ability = ABILITY_AFTERMATH,
+        .ability = ABILITY_POISON_TOUCH, // Aftermath now innate (Weak Armor is a wall drawback); chosen Poison Touch (slot-2 override) poisons via Gunk Shot
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18852,7 +18860,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_SOAK
         },
-        .ability = ABILITY_INNARDS_OUT, // Unaware now innate; chosen Innards Out punishes the KO on this Counter staller
+        .ability = ABILITY_WATER_ABSORB, // Innards Out/Unaware both now innate; chosen Water Absorb (slot-1 override) heals the Counter staller off Water hits
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

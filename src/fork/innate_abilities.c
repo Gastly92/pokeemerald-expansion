@@ -186,7 +186,8 @@
 //   free complementary slot (Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne, Appletun) keep their
 //   now-redundant chosen frontier ability — still correct (the innate runs; the chosen is redundant-but-skipped)
 //   — deferred as a focused follow-up like Batch J's, rather than a game-wide override sweep.
-//   ROUGH_SKIN / IRON_BARBS / GOOEY / TANGLING_HAIR (on-hit contact reactions, Batch K first sub-group — all 1:1
+//   ROUGH_SKIN / IRON_BARBS / GOOEY / TANGLING_HAIR (on-hit contact reactions) + AFTERMATH / INNARDS_OUT
+//   (on-faint retaliation) (Batch K — all 1:1
 //   clean-upside copies, canon-only (no flavor picks)): when the holder is hit by a contact move, Rough Skin and
 //   Iron Barbs chip the attacker 1/8 max HP (BattleScript_RoughSkinActivates) and Gooey / Tangling Hair lower the
 //   attacker's Speed by 1 (BattleScript_AbilityStatChange). They are the FIRST active, scripted ON-HIT innates and
@@ -200,8 +201,18 @@
 //   battle_ai_util.c credit an innate via BattlerHasAbility (Gooey / Tangling Hair have no dedicated AI read).
 //   Canon-only; Sharpedo / Garchomp (Rough Skin) and Ferrothorn (Iron Barbs) and Wugtrio (Gooey) had frontier sets
 //   freed to a fork-owned complementary chosen ability, and Dugtrio-Alola's Tangling Hair set is kept (test-pinned
-//   real slot). The remaining Batch K abilities (Aftermath / Innards Out / Cursed Body / Steam Engine / Thermal
-//   Exchange / Wind Power / Pickpocket / Magician / Liquid Ooze) are NOT yet wired — later sub-PRs reuse this driver.
+//   real slot). AFTERMATH / INNARDS_OUT (on-faint retaliation, Batch K second sub-group) join the same on-hit driver
+//   (a one-line IsActiveOnHitInnate addition each): they fire from the SAME ABILITYEFFECT_MOVE_END step once a move
+//   KOs the holder (the fainted-but-still-on-field holder is credited because notOnField is not yet set), delegating
+//   to the upstream case so the retaliation damage / script / pop-up match the real ability. Aftermath chips the
+//   attacker 1/4 max HP only when a CONTACT move lands the KO (Damp still blocks it); Innards Out deals the attacker
+//   the exact HP the holder lost, from ANY move. Both use BattleScript_AftermathDmg; each effect site forces the
+//   pop-up to the innate when the chosen ability differs. Neither has a dedicated AI read (no battle_ai_*.c site), so
+//   no AI wiring is needed. Canon-only: Aftermath goes to the Voltorb / Drifloon / Stunky / Trubbish lines (every
+//   species carrying it in any real slot); Innards Out to Pyukumuku and the fork's Mega Victreebel. Frontier sets that
+//   hardcoded these (Drifblim x2, Skuntank, Garbodor, Pyukumuku) were freed to a fork-owned complementary chosen
+//   ability. The remaining Batch K abilities (Cursed Body / Steam Engine / Thermal Exchange / Wind Power / Pickpocket /
+//   Magician / Liquid Ooze) are NOT yet wired — later sub-PRs reuse this driver.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -814,7 +825,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0071
         SPECIES_VICTREEBEL_MEGA,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_INNARDS_OUT
         )
     },
     { // 0072
@@ -1096,6 +1108,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HYPER_CUTTER,
             ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 0100
+        SPECIES_VOLTORB,
+        INNATES(
+            ABILITY_AFTERMATH
+        )
+    },
+    { // 0100
+        SPECIES_VOLTORB_HISUI,
+        INNATES(
+            ABILITY_AFTERMATH
+        )
+    },
+    { // 0101
+        SPECIES_ELECTRODE,
+        INNATES(
+            ABILITY_AFTERMATH
+        )
+    },
+    { // 0101
+        SPECIES_ELECTRODE_HISUI,
+        INNATES(
+            ABILITY_AFTERMATH
         )
     },
     { // 0102
@@ -3847,6 +3883,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0425
         SPECIES_DRIFLOON,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_FLARE_BOOST,
             ABILITY_UNBURDEN
         )
@@ -3854,6 +3891,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0426
         SPECIES_DRIFBLIM,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_FLARE_BOOST,
             ABILITY_UNBURDEN
         )
@@ -3915,6 +3953,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0434
         SPECIES_STUNKY,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_KEEN_EYE,
             ABILITY_STENCH
         )
@@ -3922,6 +3961,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0435
         SPECIES_SKUNTANK,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_KEEN_EYE,
             ABILITY_STENCH
         )
@@ -4885,6 +4925,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0568
         SPECIES_TRUBBISH,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_STENCH,
             ABILITY_STICKY_HOLD
         )
@@ -4892,12 +4933,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0569
         SPECIES_GARBODOR,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_STENCH
         )
     },
     { // 0569
         SPECIES_GARBODOR_GMAX,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_STENCH
         )
     },
@@ -6341,6 +6384,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0771
         SPECIES_PYUKUMUKU,
         INNATES(
+            ABILITY_INNARDS_OUT,
             ABILITY_UNAWARE
         )
     },
@@ -7929,13 +7973,15 @@ bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index)
 
 // Active, scripted innate abilities that react when the HOLDER is hit by a move — the
 // on-hit / on-contact class (contact-damage: Rough Skin / Iron Barbs; contact-Speed-drop:
-// Gooey / Tangling Hair). The driver (TryActivateInnateOnHitEffects) is re-entrant, so a
-// battler may carry more than one and each fires in turn. Each delegates to the existing
-// upstream ABILITYEFFECT_MOVE_END case, so the recoil damage / stat drop / script / pop-up
-// matches the real ability for free (the effect site in src/battle_util.c forces the pop-up
-// to the innate when the chosen ability differs, the Speed Boost precedent). Cute Charm is
-// deliberately NOT here: it predates this driver and keeps its own inline precheck at the top
-// of ABILITYEFFECT_MOVE_END, so listing it would fire it twice.
+// Gooey / Tangling Hair; on-faint retaliation: Aftermath / Innards Out, which fire from the
+// same ABILITYEFFECT_MOVE_END step after the holder faints). The driver
+// (TryActivateInnateOnHitEffects) is re-entrant, so a battler may carry more than one and each
+// fires in turn. Each delegates to the existing upstream ABILITYEFFECT_MOVE_END case, so the
+// recoil / retaliation damage / stat drop / script / pop-up matches the real ability for free
+// (the effect site in src/battle_util.c forces the pop-up to the innate when the chosen ability
+// differs, the Speed Boost precedent). Cute Charm is deliberately NOT here: it predates this
+// driver and keeps its own inline precheck at the top of ABILITYEFFECT_MOVE_END, so listing it
+// would fire it twice.
 static bool32 IsActiveOnHitInnate(enum Ability ability)
 {
     switch (ability)
@@ -7944,6 +7990,8 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_IRON_BARBS:    // chips a contact attacker 1/8 max HP
     case ABILITY_GOOEY:         // lowers a contact attacker's Speed by 1
     case ABILITY_TANGLING_HAIR: // lowers a contact attacker's Speed by 1
+    case ABILITY_AFTERMATH:     // chips the attacker 1/4 max HP when a contact move KOs the holder
+    case ABILITY_INNARDS_OUT:   // deals the attacker the holder's lost HP when a move KOs the holder
         return TRUE;
     default:
         return FALSE;
