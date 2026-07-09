@@ -5092,6 +5092,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_HEALER, ABILITY_HARVEST, ABILITY_CUD_CHEW, ABILITY_PICKUP,
         ABILITY_BAD_DREAMS, ABILITY_POISON_HEAL,
         ABILITY_GLUTTONY, ABILITY_RIPEN, ABILITY_CHEEK_POUCH, ABILITY_UNBURDEN,
+        ABILITY_ROUGH_SKIN, ABILITY_IRON_BARBS, ABILITY_GOOEY, ABILITY_TANGLING_HAIR,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -6207,5 +6208,130 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate U
         // Suppressed Unburden never arms -> player (100) stays slower than the foe (150) on the last turn.
         ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
         ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+    }
+}
+
+// ===== Batch K (on-hit contact reactions) =====
+// The first active, scripted ON-HIT innates, fired through the new re-entrant on-hit driver
+// (TryActivateInnateOnHitEffects -> IsActiveOnHitInnate), hooked from the MOVEEND_ABILITIES_INNATE
+// step and delegating to the upstream ABILITYEFFECT_MOVE_END case. Rough Skin / Iron Barbs chip a
+// contact attacker 1/8 max HP; Gooey / Tangling Hair drop a contact attacker's Speed by 1. Each is a
+// 1:1 clean-upside copy (a contact reaction only ever hurts the attacker), with the pop-up overwritten
+// to the innate when the chosen ability differs.
+
+// Rough Skin / Iron Barbs chip a contact attacker even when they are the holder's INNATE (chosen
+// ability differs). Garchomp carries innate Rough Skin (chosen Sand Veil); Ferrothorn carries innate
+// Iron Barbs (chosen Anticipation). Feature-off leg proves the chip comes only from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rough Skin / Iron Barbs chip a contact attacker")
+{
+    u32 species;
+    enum Ability chosen, innate;
+    bool32 enabled;
+    PARAMETRIZE { species = SPECIES_GARCHOMP;   chosen = ABILITY_SAND_VEIL;    innate = ABILITY_ROUGH_SKIN; enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_GARCHOMP;   chosen = ABILITY_SAND_VEIL;    innate = ABILITY_ROUGH_SKIN; enabled = FALSE; }
+    PARAMETRIZE { species = SPECIES_FERROTHORN; chosen = ABILITY_ANTICIPATION; innate = ABILITY_IRON_BARBS;  enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_FERROTHORN; chosen = ABILITY_ANTICIPATION; innate = ABILITY_IRON_BARBS;  enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(species, innate));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(species) { Ability(chosen); } // chosen ability is NOT the innate
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(opponent, innate); // pop-up shows the innate, not the chosen ability
+            MESSAGE("Wobbuffet was hurt!");
+        } else {
+            NONE_OF { ABILITY_POPUP(opponent, innate); HP_BAR(player); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->hp, player->maxHP - player->maxHP / 8);
+    }
+}
+
+// A REAL Rough Skin still chips exactly once with the feature on — the driver skips an innate equal to
+// the chosen ability, so it never double-fires beside the chosen-ability contact block.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a chosen Rough Skin chips once, not twice, with innates on")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GARCHOMP, ABILITY_ROUGH_SKIN));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_GARCHOMP) { Ability(ABILITY_ROUGH_SKIN); } // chosen == innate
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN);
+        MESSAGE("Wobbuffet was hurt!");
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP - player->maxHP / 8); // one chip, not two
+    }
+}
+
+// Parity: a non-contact move never triggers the innate chip (routes through CanBattlerAvoidContactEffects).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rough Skin does not chip a non-contact attacker")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GARCHOMP, ABILITY_ROUGH_SKIN));
+        ASSUME(!MoveMakesContact(MOVE_SWIFT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_GARCHOMP) { Ability(ABILITY_SAND_VEIL); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWIFT); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN); HP_BAR(player); }
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Rough Skin exactly like a real ability, so the
+// contact attacker takes no chip.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Rough Skin")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GARCHOMP, ABILITY_ROUGH_SKIN));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_GASTRO_ACID, MOVE_SCRATCH); }
+        OPPONENT(SPECIES_GARCHOMP) { Ability(ABILITY_SAND_VEIL); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("The opposing Garchomp's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN); }
+    }
+}
+
+// Gooey / Tangling Hair drop a contact attacker's Speed even when they are the holder's INNATE.
+// Goodra carries innate Gooey (chosen Sap Sipper); Dugtrio-Alola carries innate Tangling Hair
+// (chosen Sand Veil). Feature-off leg proves the drop comes only from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Gooey / Tangling Hair drop a contact attacker's Speed")
+{
+    u32 species;
+    enum Ability chosen, innate;
+    bool32 enabled;
+    PARAMETRIZE { species = SPECIES_GOODRA;         chosen = ABILITY_SAP_SIPPER; innate = ABILITY_GOOEY;         enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_GOODRA;         chosen = ABILITY_SAP_SIPPER; innate = ABILITY_GOOEY;         enabled = FALSE; }
+    PARAMETRIZE { species = SPECIES_DUGTRIO_ALOLA;  chosen = ABILITY_SAND_VEIL;  innate = ABILITY_TANGLING_HAIR; enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_DUGTRIO_ALOLA;  chosen = ABILITY_SAND_VEIL;  innate = ABILITY_TANGLING_HAIR; enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(species, innate));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(species) { Ability(chosen); } // chosen ability is NOT the innate
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(opponent, innate); // pop-up shows the innate, not the chosen ability
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player);
+            MESSAGE("Wobbuffet's Speed fell!");
+        } else {
+            NONE_OF { ABILITY_POPUP(opponent, innate); MESSAGE("Wobbuffet's Speed fell!"); }
+        }
     }
 }

@@ -115,6 +115,8 @@
 // Heavy Metal / Light Metal double/halve weight)
 // or a berry/item synergy (Gluttony eats a pinch Berry at 1/2 HP / Ripen doubles every Berry effect /
 // Cheek Pouch heals 1/3 max HP on eating a Berry / Unburden doubles the holder's Speed once its item is consumed or lost)
+// or an on-hit contact reaction (Rough Skin / Iron Barbs chip a contact attacker 1/8 max HP /
+// Gooey / Tangling Hair drop a contact attacker's Speed by 1)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -236,6 +238,18 @@
 // Appletun have ALL their useful real abilities now innate with no free complementary slot, so their sets are left
 // on the now-innate chosen ability — still correct (the chosen runs; the innate is redundant-but-skipped there) —
 // rather than a game-wide override sweep.
+//
+// The on-hit contact reactions (Batch K first sub-group — Rough Skin / Iron Barbs / Gooey / Tangling Hair) free
+// twelve sets. Three take a complementary REAL slot with a stable :x: pick: Druddigon (Rough Skin) -> chosen Sheer
+// Force, Togedemaru (Iron Barbs) -> chosen Lightning Rod, Goodra (Gooey; its Hydration set already repointed to
+// Sap Sipper in Batch J) -> chosen Sap Sipper. Four take a fork-owned override (src/species_ability_overrides.c):
+// the all-real-abilities-innate mons Sharpedo (Rough Skin + Speed Boost) and Garchomp (Rough Skin + Sand Veil) fill
+// their empty slot 1 with a chosen Strong Jaw / Sand Stream; Ferrothorn (Iron Barbs innate, Anticipation still
+// pending) fills its empty slot 1 with a chosen Filter; and Wugtrio (Gooey + Sand Veil innate, Rattled pending)
+// repurposes its innate-redundant slot-0 Gooey to a chosen Water Absorb — each a stable :x: or already-implemented
+// :white_check_mark: pick. DEFERRED: the two Dugtrio-Alola sets keep their chosen Tangling Hair — all three of its
+// real abilities are now innate, but Tangling Hair is a test-pinned real slot (test/battle/move_effect/pursuit.c), so
+// it stays a real ability and the set is redundant-but-correct (the innate still fires).
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -1350,7 +1364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_TANGLING_HAIR, // Sand Veil & Sand Force now innate; chosen Tangling Hair drops attacker Speed
+        .ability = ABILITY_TANGLING_HAIR, // all three real abilities (Sand Veil / Sand Force / Tangling Hair) now innate; chosen Tangling Hair kept (test-pinned real slot, so redundant-but-correct — the innate still fires)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1370,7 +1384,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_TANGLING_HAIR,
+        .ability = ABILITY_TANGLING_HAIR, // all three real abilities now innate; chosen Tangling Hair kept (test-pinned real slot, redundant-but-correct)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8089,7 +8103,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATERFALL,
             MOVE_PSYCHIC_FANGS
         },
-        .ability = ABILITY_ROUGH_SKIN, // Speed Boost now innate; chosen Rough Skin chips contact attackers
+        .ability = ABILITY_STRONG_JAW, // Rough Skin & Speed Boost now innate; chosen Strong Jaw (slot-1 override) powers the biting STAB
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8109,7 +8123,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_ROUGH_SKIN, // Speed Boost now innate; chosen Rough Skin chips contact attackers
+        .ability = ABILITY_STRONG_JAW, // Rough Skin & Speed Boost now innate; chosen Strong Jaw (slot-1 override) powers the biting STAB
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8129,7 +8143,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_ROUGH_SKIN,
+        .ability = ABILITY_STRONG_JAW, // Rough Skin & Speed Boost now innate; chosen Strong Jaw (slot-1 override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10764,7 +10778,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_ROUGH_SKIN,
+        .ability = ABILITY_SAND_STREAM, // Rough Skin & Sand Veil now innate; chosen Sand Stream (slot-1 override) turns on innate Sand Veil
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10784,7 +10798,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_ROUGH_SKIN,
+        .ability = ABILITY_SAND_STREAM, // Rough Skin & Sand Veil now innate; chosen Sand Stream (slot-1 override) turns on innate Sand Veil
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10804,7 +10818,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_TAIL,
             MOVE_SPIKES
         },
-        .ability = ABILITY_ROUGH_SKIN,
+        .ability = ABILITY_SAND_STREAM, // Rough Skin & Sand Veil now innate; chosen Sand Stream (slot-1 override) turns on innate Sand Veil
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14426,7 +14440,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_POWER_WHIP
         },
-        .ability = ABILITY_IRON_BARBS,
+        .ability = ABILITY_FILTER, // Iron Barbs now innate; chosen Filter (slot-1 override) blunts the supereffective Fire hit
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14447,7 +14461,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_IRON_BARBS,
+        .ability = ABILITY_FILTER, // Iron Barbs now innate; chosen Filter (slot-1 override) blunts the supereffective Fire hit
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14856,7 +14870,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GLARE,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_ROUGH_SKIN,
+        .ability = ABILITY_SHEER_FORCE, // Rough Skin now innate; chosen Sheer Force (real slot 1, :x: stable) powers Fire Punch / Dragon Claw
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17066,7 +17080,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_REST
         },
-        .ability = ABILITY_GOOEY,
+        .ability = ABILITY_SAP_SIPPER, // Gooey now innate; chosen Sap Sipper (real slot 0, :x: stable) grants a Grass immunity + Attack boost
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19028,7 +19042,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_NUZZLE
         },
-        .ability = ABILITY_IRON_BARBS,
+        .ability = ABILITY_LIGHTNING_ROD, // Iron Barbs now innate; chosen Lightning Rod (real slot 1, :x: stable) draws in Electric moves
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23864,7 +23878,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_GOOEY, // Sand Veil now innate; chosen Gooey (real slot 0) drops attacker Speed on contact
+        .ability = ABILITY_WATER_ABSORB, // Gooey & Sand Veil now innate; chosen Water Absorb (slot-0 override, :x: stable) heals on Water hits
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,

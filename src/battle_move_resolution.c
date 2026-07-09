@@ -5,6 +5,7 @@
 #include "battle_ai_record.h"
 #include "battle_util.h"
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
+#include "fork/innate_abilities.h" // FORK: on-hit innate driver (TryActivateInnateOnHitEffects)
 #include "battle_move_resolution.h"
 #include "battle_script_commands.h"
 #include "battle_stat_change.h"
@@ -2731,6 +2732,7 @@ static enum MoveEndResult MoveEndSetValues(struct BattleCalcValues *cv)
     gBattleScripting.savedDmg += gBattleStruct->moveDamage[cv->battlerDef];
     gBattleStruct->eventState.moveEndBattler = 0;
     gBattleStruct->eventState.moveEndBlock = 0;
+    gBattleStruct->eventState.moveEndInnateIndex = 0; // FORK: fresh on-hit innate cursor per strike (MOVEEND_ABILITIES_INNATE)
     gBattleScripting.moveendState++;
     return MOVEEND_RESULT_CONTINUE;
 }
@@ -2942,6 +2944,30 @@ static enum MoveEndResult MoveEndAbilities(struct BattleCalcValues *cv)
         result = MOVEEND_RESULT_RUN_SCRIPT;
 
     gBattleScripting.moveendState++;
+    return result;
+}
+
+// FORK: fire the target's active on-hit innates (contact reactions: Rough Skin / Iron Barbs /
+// Gooey / Tangling Hair) right after the chosen-ability contact block. Re-entrant, mirroring the
+// end-turn innate hook (HandleEndTurnThirdEventBlock): fire one innate per pass, resuming from a
+// per-battler cursor; hold this state (keeping the cursor) while effects keep firing, and only
+// advance once the list is exhausted, then reset the cursor.
+static enum MoveEndResult MoveEndAbilitiesInnate(struct BattleCalcValues *cv)
+{
+    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
+    u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
+
+    if (TryActivateInnateOnHitEffects(cv->battlerDef, &innateIndex, cv->move))
+    {
+        gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
+        result = MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance moveendState)
+    }
+    else
+    {
+        gBattleStruct->eventState.moveEndInnateIndex = 0;
+        gBattleScripting.moveendState++;
+    }
+
     return result;
 }
 
@@ -4675,6 +4701,7 @@ static enum MoveEndResult (*const sMoveEndHandlers[])(struct BattleCalcValues *c
     [MOVEEND_ABSORB] = MoveEndAbsorb,
     [MOVEEND_RAGE] = MoveEndRage,
     [MOVEEND_ABILITIES] = MoveEndAbilities,
+    [MOVEEND_ABILITIES_INNATE] = MoveEndAbilitiesInnate, // FORK: on-hit innates
     [MOVEEND_FORM_CHANGE_ON_HIT] = MoveEndFormChangeOnHit,
     [MOVEEND_ABILITIES_ATTACKER] = MoveEndAbilitiesAttacker,
     [MOVEEND_QUEUE_DANCER] = MoveEndQueueDancer,

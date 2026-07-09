@@ -30,7 +30,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Suction Cups | The Pokémon is unaffected by the moves and held items of other Pokémon that would force it to switch out of battle. |
 | :white_large_square: | Intimidate | When the Pokémon enters a battle, it lowers the Attack stats of opponents by 1 stage. |
 | :white_check_mark: | Shadow Tag | Opponents cannot be switched out of battle. |
-| :white_large_square: | Rough Skin | When the Pokémon is hit by a contact move, the attacker takes damage equal to 1/8 of its max HP. |
+| :white_check_mark: | Rough Skin | When the Pokémon is hit by a contact move, the attacker takes damage equal to 1/8 of its max HP. |
 | :x: | Wonder Guard | Its mysterious power only lets supereffective moves hit the Pokémon. |
 | :white_check_mark: | Levitate | The Pokémon floats off the ground, making it immune to Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses. |
 | :x: | Effect Spore | Contact with the Pokémon may inflict poison, sleep, or paralysis on the attacker. |
@@ -166,7 +166,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Sap Sipper | Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage. |
 | :white_check_mark: | Prankster | Increases the priority of the Pokémon's status moves by 1 stage. |
 | :white_check_mark: | Sand Force | Boosts the power of the Pokémon's Rock-, Ground-, and Steel-type moves by 30% in a sandstorm. |
-| :white_large_square: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
+| :white_check_mark: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
 | :x: | Zen Mode | Changes the Pokémon's shape when its HP drops to half or less. |
 | :x: | Victory Star | Boosts the accuracy of the Pokémon and its allies. |
 | :x: | Turboblaze | The Pokémon's moves are unimpeded by the Ability of the target. |
@@ -189,7 +189,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Symbiosis | When an ally consumes an item, the Pokémon gives its own held item to that ally. |
 | :white_check_mark: | Tough Claws | Boosts the power of the Pokémon's contact moves by 30%. |
 | :x: | Pixilate | The Pokémon's Normal-type moves become Fairy-type moves and their power is boosted by 20%. |
-| :white_large_square: | Gooey | When the Pokémon is hit by a contact move, the attacker's Speed stat is lowered by 1 stage. |
+| :white_check_mark: | Gooey | When the Pokémon is hit by a contact move, the attacker's Speed stat is lowered by 1 stage. |
 | :x: | Aerilate | The Pokémon's Normal-type moves become Flying-type moves and their power is boosted by 20%. |
 | :x: | Parental Bond | The parent and child attack one after the other. The power of the child's attacks is 1/4 of those of the parent. |
 | :x: | Dark Aura | Powers up the Dark-type moves of all Pokémon on the field. |
@@ -227,7 +227,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |
 | :white_check_mark: | Dazzling | The Pokémon dazzles its opponents, making them unable to use priority moves against the Pokémon or its allies. |
 | :white_large_square: | Soul-Heart | Boosts the Pokémon's Sp. Atk stat every time another Pokémon faints. |
-| :white_large_square: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
+| :white_check_mark: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
 | :x: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
 | :x: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |
 | :x: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |

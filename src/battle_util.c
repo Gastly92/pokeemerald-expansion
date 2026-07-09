@@ -4220,6 +4220,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 if (TryStatChange(&cv, &st) == STAT_CHANGE_WORKED || cv.abilities[gBattlerAttacker] == ABILITY_MIRROR_ARMOR)
                 {
                     gEffectBattler = gBattlerAbility = gBattlerTarget;
+                    // FORK: innate Gooey / Tangling Hair — show the innate in the pop-up, not the
+                    // chosen ability, only when they differ (Speed Boost precedent). `ability` is
+                    // the one being processed (GOOEY / TANGLING_HAIR).
+                    if (GetBattlerAbility(gBattlerTarget) != ability)
+                        gBattleScripting.abilityPopupOverwrite = ability;
                     SetStatChange(gBattlerAttacker, STAT_SPEED, -1);
                     BattleScriptCall(BattleScript_AbilityStatChange);
                     effect++;
@@ -4233,6 +4238,12 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)
              && !CanBattlerAvoidContactEffects(gBattlerAttacker, gBattlerTarget, GetBattlerAbility(gBattlerAttacker), GetBattlerHoldEffect(gBattlerAttacker), move))
             {
+                // FORK: innate Rough Skin / Iron Barbs — make the pop-up show the innate, not the
+                // chosen ability. CreateAbilityPopUp() reads the primary slot; only override when
+                // the chosen ability differs, so a real Rough Skin / Iron Barbs stays byte-for-byte
+                // unchanged (Speed Boost precedent). gLastUsedAbility is the ability being processed.
+                if (GetBattlerAbility(gBattlerTarget) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 if (!IsAbilityAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_MAGIC_GUARD))
                 {
                     PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);

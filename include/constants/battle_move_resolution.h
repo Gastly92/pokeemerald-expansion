@@ -100,6 +100,7 @@ enum MoveEndState
     MOVEEND_ABSORB,
     MOVEEND_RAGE,
     MOVEEND_ABILITIES,
+    MOVEEND_ABILITIES_INNATE, // FORK: active on-hit innates (Rough Skin / Iron Barbs / Gooey / Tangling Hair), see TryActivateInnateOnHitEffects
     MOVEEND_FORM_CHANGE_ON_HIT, // Disguise / Gulp Missile
     MOVEEND_ABILITIES_ATTACKER,
     MOVEEND_QUEUE_DANCER,

@@ -1326,7 +1326,9 @@ static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId b
     {
         if (AI_MoveMakesContact(battlerAtk, battlerDef, abilityAtk, gAiLogicData->holdEffects[battlerAtk], move)
          && abilityAtk != ABILITY_MAGIC_GUARD
-         && (gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_ROCKY_HELMET || abilityDef == ABILITY_IRON_BARBS))
+         && (gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_ROCKY_HELMET
+          || abilityDef == ABILITY_IRON_BARBS
+          || BattlerHasAbility(battlerDef, ABILITY_IRON_BARBS))) // FORK: innate-aware Iron Barbs (FEATURE_INNATE_ABILITIES)
         {
             return TRUE;
         }
@@ -1440,7 +1442,9 @@ enum MoveComparisonResult CompareMoveEffects(enum Move move1, enum Move move2, e
     if (gAiLogicData->holdEffects[battlerAtk] != HOLD_EFFECT_PROTECTIVE_PADS && atkAbility != ABILITY_LONG_REACH
         && !IsInnateActive(battlerAtk, ABILITY_LONG_REACH) // FORK: innate-aware Long Reach (FEATURE_INNATE_ABILITIES)
         && (gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_ROCKY_HELMET
-        || defAbility == ABILITY_IRON_BARBS || defAbility == ABILITY_ROUGH_SKIN))
+        || defAbility == ABILITY_IRON_BARBS || defAbility == ABILITY_ROUGH_SKIN
+        || BattlerHasAbility(battlerDef, ABILITY_IRON_BARBS) // FORK: innate-aware Iron Barbs / Rough Skin (FEATURE_INNATE_ABILITIES)
+        || BattlerHasAbility(battlerDef, ABILITY_ROUGH_SKIN)))
     {
         bool32 moveContact1 = MoveMakesContact(move1);
         bool32 moveContact2 = MoveMakesContact(move2);

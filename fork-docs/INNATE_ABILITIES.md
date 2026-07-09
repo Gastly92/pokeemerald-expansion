@@ -322,10 +322,18 @@ How much is needed depends on the ability class:
     the cursor past it, so a battler carrying **several** active end-turn innates fires
     each across successive passes of the loop. So adding a second end-turn active is just
     a one-line addition to `IsActiveEndTurnInnate` — no driver change needed.
-  - **switch-in / on-contact actives** (Intimidate, Static, Rough Skin, …) still
-    need their own event hooks; model them on the end-turn driver above (a per-event
-    `TryActivateInnate…` that delegates to the matching `AbilityBattleEffects` case),
-    not on the older `TryActivateInnateEffects` machinery that was removed from history.
+  - **on-contact / on-hit actives** (Rough Skin, Iron Barbs, Gooey, Tangling Hair, …)
+    now have their driver: **`TryActivateInnateOnHitEffects`** (`src/fork/innate_abilities.c`),
+    the on-hit analogue of the end-turn driver — re-entrant, hooked from the new
+    `MOVEEND_ABILITIES_INNATE` step (`src/battle_move_resolution.c`), delegating to the
+    upstream `ABILITYEFFECT_MOVE_END` case. Adding a further on-hit active (Aftermath,
+    Cursed Body, Steam Engine, …) is a one-line addition to `IsActiveOnHitInnate`. See the
+    `### ABILITY_ROUGH_SKIN / …` wiring block below. (Cute Charm / Stench predate the driver
+    and keep their own inline prechecks, so they are not in `IsActiveOnHitInnate`.)
+  - **switch-in actives** (Intimidate, …) still need their own event hook; model it on the
+    end-turn / on-hit drivers above (a per-event `TryActivateInnate…` that delegates to the
+    matching `AbilityBattleEffects` case), not on the older `TryActivateInnateEffects`
+    machinery that was removed from history.
 
 ### Step 3.5 — free the frontier roster slots (NOT optional — run the grep first)
 
@@ -2138,3 +2146,47 @@ Liepard, Thievul, Dedenne, Appletun) keep their now-redundant chosen frontier ab
 override sweep — a deferred follow-up, mirroring Batch J. The frontier sets whose species can free the slot do
 (Raticate-Alola -> Hustle, the Drifblim/Hawlucha/Sneasler Unburden sets -> a real complementary slot, and the
 Simi trio / Victreebel / Greedent -> a new empty-slot override in `src/fork/species_ability_overrides.c`).
+
+### ABILITY_ROUGH_SKIN / ABILITY_IRON_BARBS / ABILITY_GOOEY / ABILITY_TANGLING_HAIR
+
+The first sub-group of the on-hit / on-contact set (Batch K), all **1:1 clean-upside copies** — a contact
+reaction only ever hurts the *attacker*, never the holder. Rough Skin / Iron Barbs chip a contact attacker
+1/8 max HP; Gooey / Tangling Hair lower a contact attacker's Speed by 1. All four are `canon-only` (no flavor
+picks). They are the **first active, scripted ON-HIT innates**, and they introduce a **new on-hit driver**
+that later Batch K sub-PRs reuse — the on-hit analogue of the Speed Boost end-turn driver.
+
+- **The driver — `TryActivateInnateOnHitEffects(battler, *index, move)`** (`src/fork/innate_abilities.c`).
+  Re-entrant, modeled byte-for-byte on `TryActivateInnateEndTurnEffects`: it scans the holder's innate list
+  from a per-battler cursor and, for the first *active on-hit* innate (`IsActiveOnHitInnate`) that is active
+  (`IsInnateActive`) and not the chosen ability, delegates to the **existing** upstream contact handler with
+  the innate passed explicitly — `AbilityBattleEffects(ABILITYEFFECT_MOVE_END, battler, innate, move, TRUE)`.
+  Reusing the upstream case means the recoil damage / stat drop / script / pop-up are identical to the real
+  ability for free. `battler` is the holder that was hit (`gBattlerTarget`); the case bodies read
+  `gBattlerAttacker` as the contact-maker.
+- **The hook — a new `MOVEEND_ABILITIES_INNATE` step** (`include/constants/battle_move_resolution.h`) inserted
+  right after `MOVEEND_ABILITIES` (the chosen-ability contact block), dispatched by `MoveEndAbilitiesInnate`
+  (`src/battle_move_resolution.c`). Re-entrancy mirrors the end-turn hook: the handler **holds** the moveend
+  state (returns `MOVEEND_RESULT_RUN_SCRIPT` without advancing) while the driver returns TRUE, keeping the
+  cursor (`gBattleStruct->eventState.moveEndInnateIndex`); once the list is exhausted it resets the cursor and
+  advances. `MoveEndSetValues` also zeroes the cursor per strike. So adding a second on-hit active is a one-line
+  addition to `IsActiveOnHitInnate` — no driver change needed.
+- **The pop-up.** The Rough Skin / Iron Barbs and Gooey / Tangling Hair effect sites (`src/battle_util.c`) set
+  `gBattleScripting.abilityPopupOverwrite` to the innate **only when the chosen ability differs**, so a real
+  ability stays byte-for-byte unchanged (the Speed Boost / Sturdy precedent).
+- **Coexistence with Cute Charm / Stench.** Those two predate this driver and keep their own inline prechecks at
+  the top of `ABILITYEFFECT_MOVE_END` / `ABILITYEFFECT_MOVE_END_ATTACKER`, so they are deliberately **not** listed
+  in `IsActiveOnHitInnate` (listing them would fire them twice).
+- **AI.** The contact-move-avoidance reads in `src/battle_ai_util.c` (`AI_IsMoveEffectInMinus` and
+  `CompareMoveEffects`) credit an innate Iron Barbs / Rough Skin via `BattlerHasAbility`, so the AI still shies
+  a contact move away from a mon whose chip ability is innate-only. Gooey / Tangling Hair have no dedicated AI
+  read (the generic contact-move logic already covers the Speed drop).
+
+Suppression parity holds for all four via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field);
+none is `breakable`, so Mold Breaker never touches them. **Species:** the canon users of each ability get their
+rows (merged into existing rows where the species already carried an innate) — Rough Skin (Carvanha / Sharpedo
++ Mega, the Gible line + both Garchomp Megas, Druddigon), Iron Barbs (Ferroseed / Ferrothorn, Togedemaru),
+Gooey (the Goomy line + both Hisui forms, Wiglett / Wugtrio), Tangling Hair (Diglett-Alola / Dugtrio-Alola).
+The Megas mirror the base creature's contact reaction (pure-boon persistence, like the Mega convention). Step
+3.5 freed twelve frontier sets: Druddigon -> Sheer Force, Togedemaru -> Lightning Rod, Goodra -> Sap Sipper
+(complementary REAL slots); Sharpedo -> Strong Jaw, Garchomp -> Sand Stream, Ferrothorn -> Filter, Wugtrio ->
+Water Absorb (fork-owned overrides); Dugtrio-Alola's Tangling Hair set is kept because that slot is test-pinned.

@@ -555,6 +555,7 @@ struct EventStates
     u32 endTurnBlock:8; // FirstEventBlock, SecondEventBlock, ThirdEventBlock
     enum BattlerId endTurnBattler:4;
     u32 endTurnInnateIndex:5; // FORK: re-entrancy cursor into a battler's innate list for THIRD_EVENT_BLOCK_ABILITIES_INNATE (see TryActivateInnateEndTurnEffects)
+    u32 moveEndInnateIndex:5; // FORK: re-entrancy cursor into a battler's innate list for MOVEEND_ABILITIES_INNATE (see TryActivateInnateOnHitEffects)
     u32 leechSeedDrainProcessed:4; // FORK: BUFF_LEECH_SEED - seeders already drained this end-turn step (re-entrancy across the per-seeder loop).
     u32 arenaTurn:8;
     enum BattleSide battlerSide:4;
