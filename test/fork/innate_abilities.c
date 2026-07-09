@@ -5094,6 +5094,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_GLUTTONY, ABILITY_RIPEN, ABILITY_CHEEK_POUCH, ABILITY_UNBURDEN,
         ABILITY_ROUGH_SKIN, ABILITY_IRON_BARBS, ABILITY_GOOEY, ABILITY_TANGLING_HAIR,
         ABILITY_AFTERMATH, ABILITY_INNARDS_OUT,
+        ABILITY_STEAM_ENGINE, ABILITY_THERMAL_EXCHANGE, ABILITY_WIND_POWER,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -6457,5 +6458,219 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Innards Out deals the attac
         } else {
             NONE_OF { ABILITY_POPUP(opponent, ABILITY_INNARDS_OUT); }
         }
+    }
+}
+
+// On-hit stat/charge (Batch K third sub-group): Steam Engine (Speed +6 on a Fire/Water hit), Thermal
+// Exchange (Attack +1 on a Fire hit + burn immunity), Wind Power (charge the next Electric move on a wind
+// hit) all reuse the same re-entrant on-hit driver — a one-line IsActiveOnHitInnate addition each,
+// delegating to the upstream ABILITYEFFECT_MOVE_END case so the stat change / charge / script / pop-up
+// match the real ability. All three are 1:1 clean-upside copies (they only ever help the holder), with the
+// pop-up overwritten to the innate when the chosen ability differs.
+
+// Steam Engine raises Speed +6 when the holder is hit by a Fire/Water move, even as an INNATE. Coalossal
+// carries innate Steam Engine (chosen Flame Body). Feature-off leg proves the boost comes only from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Steam Engine raises Speed when hit by a Fire move")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_COALOSSAL, ABILITY_STEAM_ENGINE));
+        ASSUME(GetMoveType(MOVE_EMBER) == TYPE_FIRE);
+        ASSUME(gSpeciesInfo[SPECIES_COALOSSAL].abilities[0] != ABILITY_FLAME_BODY);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_COALOSSAL) { Ability(ABILITY_FLAME_BODY); } // chosen ability is NOT Steam Engine
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_EMBER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_EMBER); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_STEAM_ENGINE); // pop-up shows the innate, not the chosen Flame Body
+            MESSAGE("Coalossal's Speed rose drastically!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_STEAM_ENGINE); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 6);
+        else
+            EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Steam Engine exactly like a real ability, so the
+// on-hit driver skips it and no Speed boost fires.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Steam Engine")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_COALOSSAL, ABILITY_STEAM_ENGINE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_GASTRO_ACID, MOVE_EMBER); }
+        OPPONENT(SPECIES_COALOSSAL) { Ability(ABILITY_FLAME_BODY); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_EMBER); }
+    } SCENE {
+        MESSAGE("The opposing Coalossal's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_STEAM_ENGINE); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_SPEED], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Thermal Exchange raises Attack +1 when the holder is hit by a Fire move, even as an INNATE. Baxcalibur
+// carries innate Thermal Exchange (chosen Ice Body). Feature-off leg proves the boost comes only from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Thermal Exchange raises Attack when hit by a Fire move")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BAXCALIBUR, ABILITY_THERMAL_EXCHANGE));
+        ASSUME(GetMoveType(MOVE_EMBER) == TYPE_FIRE);
+        ASSUME(gSpeciesInfo[SPECIES_BAXCALIBUR].abilities[0] != ABILITY_ICE_BODY);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BAXCALIBUR) { Ability(ABILITY_ICE_BODY); } // chosen ability is NOT Thermal Exchange
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_EMBER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_EMBER); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_THERMAL_EXCHANGE); // pop-up shows the innate, not the chosen Ice Body
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_THERMAL_EXCHANGE); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1);
+        else
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Thermal Exchange grants burn immunity, even as an INNATE (wired at CanSetNonVolatileStatus beside Water Veil).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Thermal Exchange prevents burn")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveNonVolatileStatus(MOVE_WILL_O_WISP) == MOVE_EFFECT_BURN);
+        ASSUME(SpeciesHasInnate(SPECIES_BAXCALIBUR, ABILITY_THERMAL_EXCHANGE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BAXCALIBUR) { Ability(ABILITY_ICE_BODY); } // chosen differs from the innate Thermal Exchange
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_WILL_O_WISP); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WILL_O_WISP); }
+    } SCENE {
+        if (enabled) {
+            NONE_OF { STATUS_ICON(player, burn: TRUE); }
+        } else {
+            STATUS_ICON(player, burn: TRUE);
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->status1 & STATUS1_BURN, 0);
+    }
+}
+
+// Suppression parity + switch-in cure: Thermal Exchange is breakable, so a Mold Breaker Will-O-Wisp burns an
+// innate holder. Like every innate immunity cure (Limber / Own Tempo / Water Veil), the cure routes through
+// IsInnateActive (which respects Mold Breaker), so it fires on the next Mold-Breaker-free move-end rather than
+// the WoW move's own — here the holder's own Celebrate that same turn (the Own Tempo Mold-Breaker-cure precedent).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker burns an innate Thermal Exchange holder, then it is cured")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_THERMAL_EXCHANGE].breakable);
+        ASSUME(GetMoveNonVolatileStatus(MOVE_WILL_O_WISP) == MOVE_EFFECT_BURN);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_BAXCALIBUR) { Ability(ABILITY_ICE_BODY); Speed(1); Moves(MOVE_CELEBRATE); } // innate Thermal Exchange, acts second
+        OPPONENT(SPECIES_RAMPARDOS) { Ability(ABILITY_MOLD_BREAKER); Speed(200); Moves(MOVE_WILL_O_WISP); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WILL_O_WISP); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        STATUS_ICON(player, burn: TRUE); // Mold Breaker pierces the innate -> burned
+        ABILITY_POPUP(player, ABILITY_THERMAL_EXCHANGE); // innate cure fires on the holder's own move-end (Mold Breaker gone)
+        STATUS_ICON(player, burn: FALSE);
+    } THEN {
+        EXPECT_EQ(player->status1 & STATUS1_BURN, 0);
+    }
+}
+
+// Wind Power charges the next Electric move when the holder is hit by a wind move, even as an INNATE.
+// Kilowattrel carries innate Wind Power (chosen Volt Absorb). The Charge doubles the holder's next Electric
+// move; the feature-off leg proves the charge comes only from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Wind Power charges when hit by a wind move")
+{
+    bool32 enabled;
+    s16 dmgBefore, dmgAfter;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KILOWATTREL, ABILITY_WIND_POWER));
+        ASSUME(IsWindMove(MOVE_AIR_CUTTER));
+        ASSUME(GetMoveType(MOVE_NUZZLE) == TYPE_ELECTRIC);
+        ASSUME(gSpeciesInfo[SPECIES_KILOWATTREL].abilities[0] != ABILITY_VOLT_ABSORB);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KILOWATTREL) { Ability(ABILITY_VOLT_ABSORB); Speed(10); Moves(MOVE_NUZZLE); } // chosen is NOT Wind Power
+        OPPONENT(SPECIES_PERSIAN) { Ability(ABILITY_LIMBER); Speed(5); Moves(MOVE_AIR_CUTTER); } // Limber: never paralyzed by Nuzzle
+    } WHEN {
+        TURN { MOVE(player, MOVE_NUZZLE); MOVE(opponent, MOVE_AIR_CUTTER); }
+        TURN { MOVE(player, MOVE_NUZZLE); MOVE(opponent, MOVE_AIR_CUTTER); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NUZZLE, player);
+        HP_BAR(opponent, captureDamage: &dmgBefore);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_AIR_CUTTER, opponent);
+        HP_BAR(player);
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_WIND_POWER); // pop-up shows the innate, not the chosen Volt Absorb
+            MESSAGE("Being hit by Air Cutter charged Kilowattrel with power!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_WIND_POWER); }
+        }
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NUZZLE, player);
+        HP_BAR(opponent, captureDamage: &dmgAfter);
+    } THEN {
+        if (enabled)
+            EXPECT_MUL_EQ(dmgBefore, Q_4_12(2.0), dmgAfter); // Charge doubled the second Electric move
+        else
+            EXPECT_EQ(dmgAfter, dmgBefore);
+    }
+}
+
+// Wind Power also charges when Tailwind takes effect (the ally hook BS_TryWindRiderPower, innate-aware), even
+// as an INNATE. Kilowattrel using Tailwind charges itself, doubling its next Electric move.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Wind Power charges when Tailwind takes effect")
+{
+    bool32 enabled;
+    s16 dmgBefore, dmgAfter;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KILOWATTREL, ABILITY_WIND_POWER));
+        ASSUME(GetMoveEffect(MOVE_TAILWIND) == EFFECT_TAILWIND);
+        ASSUME(GetMoveType(MOVE_NUZZLE) == TYPE_ELECTRIC);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KILOWATTREL) { Ability(ABILITY_VOLT_ABSORB); Moves(MOVE_NUZZLE, MOVE_TAILWIND); } // chosen is NOT Wind Power
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_NUZZLE); }
+        TURN { MOVE(player, MOVE_TAILWIND); }
+        TURN { MOVE(player, MOVE_NUZZLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NUZZLE, player);
+        HP_BAR(opponent, captureDamage: &dmgBefore);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TAILWIND, player);
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_WIND_POWER); // pop-up shows the innate on the Tailwind trigger
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_WIND_POWER); }
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NUZZLE, player);
+        HP_BAR(opponent, captureDamage: &dmgAfter);
+    } THEN {
+        if (enabled)
+            EXPECT_MUL_EQ(dmgBefore, Q_4_12(2.0), dmgAfter);
+        else
+            EXPECT_EQ(dmgAfter, dmgBefore);
     }
 }

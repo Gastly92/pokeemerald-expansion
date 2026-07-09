@@ -12123,6 +12123,16 @@ void BS_TryWindRiderPower(void)
             BattleScriptCall(BattleScript_WindPowerActivates);
             break;
         default:
+            // FORK: innate Wind Power charges when Tailwind takes effect, like the real ability
+            // (FEATURE_INNATE_ABILITIES). Reached only when the chosen ability isn't Wind Power /
+            // Wind Rider, so it can't double-fire; overwrite the pop-up to Wind Power since
+            // CreateAbilityPopUp reads the primary slot. IsInnateActive() supplies suppression parity.
+            if (IsInnateActive(battler, ABILITY_WIND_POWER))
+            {
+                gBattlerAbility = battler;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_WIND_POWER;
+                BattleScriptCall(BattleScript_WindPowerActivates);
+            }
             break;
         }
     }

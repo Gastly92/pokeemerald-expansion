@@ -258,6 +258,13 @@
 // (Aftermath innate, slot-1 Weak Armor a wall drawback) its slot-2 Aftermath to a chosen Poison Touch; and Pyukumuku
 // (Innards Out + Unaware innate) its empty slot 1 to a chosen Water Absorb — each a stable :x: or already-implemented
 // :white_check_mark: pick (Innards Out itself stays a real, test-pinned slot 0 on Pyukumuku).
+// The on-hit stat/charge reactions (Batch K third sub-group — Steam Engine raises Speed +6 on a Fire/Water hit, Thermal
+// Exchange raises Attack +1 on a Fire hit + grants burn immunity, Wind Power charges the next Electric move on a wind
+// hit) free three sets: Coalossal (Steam Engine now innate) takes its complementary REAL slot-2 Flash Fire (:x: stable —
+// Fire immunity + boost); and both Baxcalibur sets (Thermal Exchange + Ice Body both now innate, so all its real
+// abilities are innate) take a fork-owned override (src/species_ability_overrides.c) filling their empty slot 1 with a
+// chosen Snow Warning (:x: stable) whose snow turns on the innate Ice Body heal. (Wattrel/Kilowattrel's Wind Power has
+// no frontier set to free.)
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -20796,7 +20803,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_HEAT_CRASH
         },
-        .ability = ABILITY_STEAM_ENGINE,
+        .ability = ABILITY_FLASH_FIRE, // Steam Engine now innate; chosen Flash Fire adds Fire immunity + a Fire-power boost
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25036,7 +25043,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GLAIVE_RUSH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_THERMAL_EXCHANGE,
+        .ability = ABILITY_SNOW_WARNING, // Thermal Exchange (+ Ice Body) now innate; chosen Snow Warning (fork override, empty slot 1) sets snow -> innate Ice Body heals
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -25056,7 +25063,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GLAIVE_RUSH,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_THERMAL_EXCHANGE,
+        .ability = ABILITY_SNOW_WARNING, // Thermal Exchange (+ Ice Body) now innate; chosen Snow Warning (fork override, empty slot 1) sets snow -> innate Ice Body heals
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

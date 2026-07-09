@@ -995,6 +995,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_REVAVROOM, 1,
         ABILITY_SHEER_FORCE
     },
+    { // 0998
+        // Baxcalibur's only real abilities are Thermal Exchange (slot 0, now innate) and Ice Body (slot 2, now
+        // innate), so its EMPTY slot 1 takes Snow Warning -- :x: (never an innate -> stable) and self-synergistic
+        // for the glacial dragon: the snow it heralds turns on its own innate Ice Body end-turn heal (and boosts
+        // Ice-type Def). Same pick as the other Ice legends/mons (Kyurem / Articuno / Beartic / Frosmoth).
+        SPECIES_BAXCALIBUR, 1,
+        ABILITY_SNOW_WARNING
+    },
     { // 1013
         // Sinistcha's Heatproof is now innate, freeing its frontier slot; its slot-0 Hospitality is dead in
         // singles (it heals an ally), so the innate-redundant slot-2 (Heatproof) is repurposed to a chosen
