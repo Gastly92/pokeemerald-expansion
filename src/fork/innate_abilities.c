@@ -211,8 +211,21 @@
 //   no AI wiring is needed. Canon-only: Aftermath goes to the Voltorb / Drifloon / Stunky / Trubbish lines (every
 //   species carrying it in any real slot); Innards Out to Pyukumuku and the fork's Mega Victreebel. Frontier sets that
 //   hardcoded these (Drifblim x2, Skuntank, Garbodor, Pyukumuku) were freed to a fork-owned complementary chosen
-//   ability. The remaining Batch K abilities (Cursed Body / Steam Engine / Thermal Exchange / Wind Power / Pickpocket /
-//   Magician / Liquid Ooze) are NOT yet wired — later sub-PRs reuse this driver.
+//   ability. STEAM_ENGINE / THERMAL_EXCHANGE / WIND_POWER (on-hit stat/charge, Batch K third sub-group) join the
+//   same on-hit driver (a one-line IsActiveOnHitInnate addition each): when the holder is hit, Steam Engine raises
+//   Speed +6 on a Fire/Water hit, Thermal Exchange raises Attack +1 on a Fire hit, and Wind Power charges the next
+//   Electric move on a wind-move hit — each delegating to the upstream ABILITYEFFECT_MOVE_END case so the stat
+//   change / charge / script / pop-up match the real ability (the effect site forces the pop-up to the innate when
+//   the chosen ability differs). Thermal Exchange also grants burn immunity (wired at CanSetNonVolatileStatus +
+//   the switch-in burn cure in TryImmunityAbilityHealStatus, beside Water Veil), and Wind Power also charges when
+//   Tailwind takes effect (the ally hook BS_TryWindRiderPower, innate-aware). AI effect reads are innate-aware:
+//   Wind Power's self-charge score (GetWindAbilityScore) + switch-in Tailwind sim, and the doubles partner-fire
+//   heuristics for Steam Engine / Thermal Exchange (the scoringPartnerAbility promotion in battle_ai_main.c);
+//   Thermal Exchange's burn-immunity AI comes free through CanBeBurned. Canon-only: Steam Engine to the Rolycoly
+//   line, Thermal Exchange to the Frigibax line, Wind Power to the Wattrel line; the frontier sets that hardcoded
+//   these (Coalossal x1, Baxcalibur x2) were freed to a fork-owned complementary chosen ability. The remaining
+//   Batch K abilities (Cursed Body / Pickpocket / Magician / Liquid Ooze) are NOT yet wired — later sub-PRs reuse
+//   this driver.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -2063,25 +2076,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0996
         SPECIES_FRIGIBAX,
         INNATES(
-            ABILITY_ICE_BODY
+            ABILITY_ICE_BODY,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0997
         SPECIES_ARCTIBAX,
         INNATES(
-            ABILITY_ICE_BODY
+            ABILITY_ICE_BODY,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0998
         SPECIES_BAXCALIBUR,
         INNATES(
-            ABILITY_ICE_BODY
+            ABILITY_ICE_BODY,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0998
         SPECIES_BAXCALIBUR_MEGA,
         INNATES(
-            ABILITY_ICE_BODY
+            ABILITY_ICE_BODY,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0201
@@ -6786,28 +6803,32 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ROLYCOLY,
         INNATES(
             ABILITY_HEATPROOF,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_STEAM_ENGINE
         )
     },
     { // 0838
         SPECIES_CARKOL,
         INNATES(
             ABILITY_HEATPROOF,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_STEAM_ENGINE
         )
     },
     { // 0839
         SPECIES_COALOSSAL,
         INNATES(
             ABILITY_HEATPROOF,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_STEAM_ENGINE
         )
     },
     { // 0839
         SPECIES_COALOSSAL_GMAX,
         INNATES(
             ABILITY_HEATPROOF,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_STEAM_ENGINE
         )
     },
     { // 0840
@@ -7433,6 +7454,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_OWN_TEMPO
         )
     },
+    { // 0940
+        SPECIES_WATTREL,
+        INNATES(
+            ABILITY_WIND_POWER
+        )
+    },
+    { // 0941
+        SPECIES_KILOWATTREL,
+        INNATES(
+            ABILITY_WIND_POWER
+        )
+    },
     { // 0942
         SPECIES_MASCHIFF,
         INNATES(
@@ -7992,6 +8025,9 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_TANGLING_HAIR: // lowers a contact attacker's Speed by 1
     case ABILITY_AFTERMATH:     // chips the attacker 1/4 max HP when a contact move KOs the holder
     case ABILITY_INNARDS_OUT:   // deals the attacker the holder's lost HP when a move KOs the holder
+    case ABILITY_STEAM_ENGINE:  // raises Speed +6 when hit by a Fire/Water move
+    case ABILITY_THERMAL_EXCHANGE: // raises Attack +1 when hit by a Fire move
+    case ABILITY_WIND_POWER:    // charges the next Electric move when hit by a wind move
         return TRUE;
     default:
         return FALSE;

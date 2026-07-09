@@ -3363,6 +3363,19 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
              && scoringPartnerAbility != ABILITY_LEVITATE && scoringPartnerAbility != ABILITY_EARTH_EATER
              && BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_LEVITATE))
                 scoringPartnerAbility = ABILITY_LEVITATE;
+            // FORK: promote an innate Steam Engine / Thermal Exchange the same way (FEATURE_INNATE_ABILITIES), so
+            // the on-hit-boost partner-fire scoring below (and ShouldTriggerAbility) treats the ally's innate
+            // like the real ability — the AI values hitting an innate-only holder to trigger its boost. Steam
+            // Engine keys on Fire/Water, Thermal Exchange on Fire; a mon can't carry both innates, so ordering
+            // is moot. Skipped when the chosen ability already IS that (the switch handles it).
+            else if ((moveType == TYPE_FIRE || moveType == TYPE_WATER)
+                  && scoringPartnerAbility != ABILITY_STEAM_ENGINE
+                  && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_STEAM_ENGINE))
+                scoringPartnerAbility = ABILITY_STEAM_ENGINE;
+            else if (moveType == TYPE_FIRE
+                  && scoringPartnerAbility != ABILITY_THERMAL_EXCHANGE
+                  && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_THERMAL_EXCHANGE))
+                scoringPartnerAbility = ABILITY_THERMAL_EXCHANGE;
             switch (scoringPartnerAbility)
             {
             case ABILITY_ANGER_POINT:
@@ -3481,7 +3494,7 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
                 break;
             case ABILITY_STEAM_ENGINE:
                 if (isFriendlyFireOK && (moveType == TYPE_WATER || moveType == TYPE_FIRE)
-                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, atkPartnerAbility))
+                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, scoringPartnerAbility)) // FORK: innate-aware (promoted above)
                 {
                     if (moveTarget == TARGET_FOES_AND_ALLY)
                     {
@@ -3497,7 +3510,7 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             case ABILITY_THERMAL_EXCHANGE:
                 if (moveType == TYPE_FIRE && isFriendlyFireOK
                     && !IsBattleMoveStatus(move)
-                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, atkPartnerAbility))
+                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, scoringPartnerAbility)) // FORK: innate-aware (promoted above)
                 {
                     if (moveTarget == TARGET_FOES_AND_ALLY)
                     {
@@ -3876,7 +3889,8 @@ static u32 GetWindAbilityScore(enum BattlerId battlerAtk, enum BattlerId battler
     {
         score = IncreaseStatUpScore(battlerAtk, battlerDef, STAT_ATK, 1);
     }
-    else if (aiData->abilities[battlerAtk] == ABILITY_WIND_POWER)
+    else if (aiData->abilities[battlerAtk] == ABILITY_WIND_POWER
+          || IsInnateActive(battlerAtk, ABILITY_WIND_POWER)) // FORK: innate-aware Wind Power (FEATURE_INNATE_ABILITIES)
     {
         if (gBattleMons[battlerAtk].volatiles.chargeTimer == 0
          && HasDamagingMoveOfType(battlerAtk, TYPE_ELECTRIC))

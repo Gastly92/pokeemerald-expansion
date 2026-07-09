@@ -2222,3 +2222,47 @@ Unaware (unpinned slot-0 repurpose), Skuntank (Aftermath/Stench/Keen Eye all inn
 Garbodor (Aftermath innate; slot-1 Weak Armor a wall drawback) -> chosen Poison Touch, Pyukumuku (Innards
 Out/Unaware innate) -> chosen Water Absorb (empty slot 1; its slot-0 Innards Out stays a real, test-pinned
 ability).
+
+### ABILITY_STEAM_ENGINE / ABILITY_THERMAL_EXCHANGE / ABILITY_WIND_POWER
+
+The third sub-group of Batch K (the on-hit set), all **1:1 clean-upside copies** — each only ever helps the
+holder. **Steam Engine** raises Speed +6 when the holder is hit by a **Fire- or Water-type** move; **Thermal
+Exchange** raises Attack +1 when hit by a **Fire-type** move *and* grants **burn immunity**; **Wind Power**
+charges the holder's next Electric move (Charge volatile) when hit by a **wind** move *or* when **Tailwind**
+takes effect on its side. All three `canon-only` (no flavor picks).
+
+- **Reuses the existing on-hit driver** — no new infra for the on-hit boost/charge. All three fire from the
+  **same** upstream `ABILITYEFFECT_MOVE_END` case as the contact reactions, so each is a **one-line addition to
+  `IsActiveOnHitInnate`** (`src/fork/innate_abilities.c`), delegating to the upstream case so the stat change /
+  charge / script / pop-up match the real ability. Effect sites are in `src/battle_util.c` (Steam Engine's
+  `BattleScript_AbilityStatChange` Speed +6, Thermal Exchange's Attack +1, Wind Power's `BattleScript_WindPowerActivates`).
+  These trigger at 100% on the right hit — **no RNG / `DETERMINISTIC_*` surface** (unlike Effect Spore's roll).
+- **The pop-up.** Each effect site sets `gBattleScripting.abilityPopupOverwrite` to the innate **only when the
+  chosen ability differs** (the Speed Boost / Rough Skin precedent), so a real ability stays byte-for-byte
+  unchanged. Wind Power's shared `case` with Electromorphosis is guarded by `GetBattlerAbility != gLastUsedAbility`,
+  which neither a chosen Electromorphosis nor a same-slot Wind Power ever trips.
+- **Thermal Exchange's burn immunity** is a second, non-driver effect: an `IsInnateActive()` clause beside the
+  chosen-ability test in `CanSetNonVolatileStatus` (`src/battle_util.c`, beside Water Veil/Immunity — records/shows
+  the innate when the chosen ability differs), plus the matching **switch-in burn cure** folded into the Water
+  Veil/Water Bubble block in `TryImmunityAbilityHealStatus`. The burn-immunity AI (`CanBeBurned` and its callers)
+  is innate-aware for free through `CanSetNonVolatileStatus`. Thermal Exchange is `breakable`, so Mold Breaker
+  pierces the innate exactly like the real ability (then the cure runs once Mold Breaker is no longer active).
+- **Wind Power's Tailwind trigger** is a second effect site (`BS_TryWindRiderPower`, `src/battle_script_commands.c`):
+  the `default` case credits an innate Wind Power via `IsInnateActive()` (placed in `default` so it can't
+  double-fire beside the chosen Wind Power / Wind Rider cases), reusing `BattleScript_WindPowerActivates`.
+- **AI.** On-hit boost/charge lives outside the shared damage calc, so the dedicated AI reads are made
+  innate-aware: Wind Power's self-charge score (`GetWindAbilityScore`) and switch-in Tailwind sim
+  (`SetBattlerVolatilesForSwitchin`, `src/battle_ai_switch.c`) each credit an innate via `IsInnateActive()`, and the
+  doubles partner-fire heuristics for Steam Engine / Thermal Exchange are handled by extending the existing
+  `scoringPartnerAbility` promotion in `src/battle_ai_main.c` (an ally's innate is promoted like the real ability
+  so the AI values hitting an innate-only holder to trigger its boost, passing the promoted value into
+  `ShouldTriggerAbility`). Thermal Exchange's burn-immunity AI is free (above).
+
+Suppression parity holds via `IsInnateActive()` for all three (Gastro Acid / Neutralizing Gas / not-on-field);
+only Thermal Exchange is `breakable`. **Species (canon-only):** Steam Engine -> the Rolycoly line (Rolycoly /
+Carkol / Coalossal + Coalossal-Gmax), Thermal Exchange -> the Frigibax line (Frigibax / Arctibax / Baxcalibur +
+the fork's Mega), Wind Power -> the Wattrel line (Wattrel / Kilowattrel) — each merged into the species' existing
+innate row. Step 3.5 freed three frontier sets: Coalossal (Steam Engine now innate) -> its complementary real
+slot-2 **Flash Fire**; both Baxcalibur sets (Thermal Exchange + Ice Body both innate = all real abilities innate)
+-> a fork-owned override filling empty slot 1 with **Snow Warning**, whose snow turns on the innate Ice Body heal.
+Wattrel/Kilowattrel have no frontier set to free.

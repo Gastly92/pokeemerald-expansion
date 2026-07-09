@@ -57,7 +57,9 @@
 //   re-entrant on-hit driver modeled on the Speed Boost end-turn driver: Rough Skin / Iron Barbs
 //   chip a contact attacker 1/8 max HP, Gooey / Tangling Hair lower a contact attacker's Speed,
 //   Aftermath chips a contact attacker 1/4 max HP when it KOs the holder, Innards Out deals the
-//   attacker the holder's lost HP when any move KOs it),
+//   attacker the holder's lost HP when any move KOs it; STEAM_ENGINE / THERMAL_EXCHANGE / WIND_POWER
+//   raise Speed / Attack / charge the next Electric move when the holder is hit by a Fire-or-Water /
+//   Fire / wind move, Thermal Exchange also granting burn immunity),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

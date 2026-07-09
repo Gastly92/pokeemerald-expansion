@@ -2996,4 +2996,11 @@ static void SetBattlerVolatilesForSwitchin(enum BattlerId battler, u32 weather, 
     default:
         break;
     }
+
+    // FORK: an innate Wind Power (chosen ability differs, so the switch above missed it) also charges when
+    // switching in under Tailwind, like the real ability, so the AI's switch-in sim reflects it.
+    if (gAiLogicData->abilities[battler] != ABILITY_WIND_POWER
+     && IsInnateActive(battler, ABILITY_WIND_POWER)
+     && (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND))
+        gBattleMons[battler].volatiles.chargeTimer = 2;
 }

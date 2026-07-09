@@ -4465,6 +4465,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && (moveType == TYPE_FIRE || moveType == TYPE_WATER))
             {
                 gEffectBattler = gBattlerAbility = gBattlerTarget;
+                // FORK: innate Steam Engine — show the innate in the pop-up, not the chosen ability,
+                // only when they differ (Speed Boost precedent). gLastUsedAbility is the ability being
+                // processed (STEAM_ENGINE for the innate path; a real Steam Engine stays byte-for-byte).
+                if (GetBattlerAbility(gBattlerTarget) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 SetStatChange(battler, STAT_SPEED, 6);
                 BattleScriptCall(BattleScript_AbilityStatChange);
                 effect++;
@@ -4518,6 +4523,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && moveType == TYPE_FIRE)
             {
                 gEffectBattler = gBattlerAbility = gBattlerTarget;
+                // FORK: innate Thermal Exchange — show the innate in the pop-up, not the chosen
+                // ability, only when they differ (Speed Boost precedent).
+                if (GetBattlerAbility(gBattlerTarget) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 SetStatChange(gBattlerTarget, STAT_ATK, 1);
                 BattleScriptCall(BattleScript_AbilityStatChange);
                 effect++;
@@ -4531,6 +4540,12 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             if (!gBattleStruct->unableToUseMove && IsBattlerTurnDamaged(battler, EXCLUDING_SUBSTITUTES))
             {
                 gBattlerAbility = battler;
+                // FORK: innate Wind Power — show the innate in the pop-up, not the chosen ability, only
+                // when they differ (Speed Boost precedent). gLastUsedAbility is the ability being
+                // processed; the guard leaves real Wind Power / Electromorphosis byte-for-byte (neither
+                // Electromorphosis nor a same-slot Wind Power ever trips it).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 BattleScriptCall(BattleScript_WindPowerActivates);
                 effect++;
             }
@@ -5764,10 +5779,17 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
                 abilityDef = innate;
             }
         }
-        else if (abilityDef == ABILITY_THERMAL_EXCHANGE)
+        // FORK: innate Thermal Exchange blocks burn like the real ability (FEATURE_INNATE_ABILITIES).
+        else if (abilityDef == ABILITY_THERMAL_EXCHANGE || IsInnateActive(battlerDef, ABILITY_THERMAL_EXCHANGE))
         {
             abilityAffected = TRUE;
             battleScript = BattleScript_AbilityProtectsDoesntAffect;
+            // When an innate Thermal Exchange (chosen ability differs) blocks the burn, record/show it:
+            // reassign abilityDef so IsNonVolatileStatusBlocked records it and overwrite the pop-up since
+            // CreateAbilityPopUp reads the primary slot. The real Thermal Exchange path is left byte-for-byte.
+            if (option == RUN_SCRIPT && abilityDef != ABILITY_THERMAL_EXCHANGE)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_THERMAL_EXCHANGE;
+            abilityDef = ABILITY_THERMAL_EXCHANGE;
         }
         break;
     case MOVE_EFFECT_SLEEP:
@@ -9961,17 +9983,20 @@ enum ImmunityHealStatusOutcome TryImmunityAbilityHealStatus(enum BattlerId battl
         gBattleScripting.abilityPopupOverwrite = ABILITY_OWN_TEMPO;
     }
 
-    // FORK: an innate Water Veil / Water Bubble (chosen ability differs, so the switch above missed it) cures
-    // pre-existing burn on switch-in exactly like the real ability (the Limber precedent). Water Bubble's burn
-    // immunity was wired as an innate in Batch B; this completes it with the matching switch-in cure. Overwrite
-    // the pop-up to the present innate (primary-slot precedent).
+    // FORK: an innate Water Veil / Water Bubble / Thermal Exchange (chosen ability differs, so the switch above
+    // missed it) cures pre-existing burn on switch-in exactly like the real ability (the Limber precedent).
+    // Water Bubble's burn immunity was wired as an innate in Batch B and Thermal Exchange's in Batch K; this
+    // completes them with the matching switch-in cure. Overwrite the pop-up to the present innate (primary-slot
+    // precedent).
     if (outcome == IMMUNITY_NO_EFFECT
      && (gBattleMons[battler].status1 & STATUS1_BURN)
-     && (IsInnateActive(battler, ABILITY_WATER_VEIL) || IsInnateActive(battler, ABILITY_WATER_BUBBLE)))
+     && (IsInnateActive(battler, ABILITY_WATER_VEIL) || IsInnateActive(battler, ABILITY_WATER_BUBBLE) || IsInnateActive(battler, ABILITY_THERMAL_EXCHANGE)))
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_BURN;
         outcome = IMMUNITY_STATUS_CLEARED;
-        gBattleScripting.abilityPopupOverwrite = IsInnateActive(battler, ABILITY_WATER_VEIL) ? ABILITY_WATER_VEIL : ABILITY_WATER_BUBBLE;
+        gBattleScripting.abilityPopupOverwrite = IsInnateActive(battler, ABILITY_WATER_VEIL) ? ABILITY_WATER_VEIL
+                                               : IsInnateActive(battler, ABILITY_WATER_BUBBLE) ? ABILITY_WATER_BUBBLE
+                                               : ABILITY_THERMAL_EXCHANGE;
     }
 
     // FORK: an innate Magma Armor (chosen ability differs, so the switch above missed it) cures pre-existing

@@ -249,7 +249,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Mirror Armor | Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them. |
 | :x: | Gulp Missile | When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack. |
 | :white_check_mark: | Stalwart | The Pokémon ignores the effects of Abilities and moves that draw in moves. |
-| :white_large_square: | Steam Engine | Boosts the Speed stat drastically when the Pokémon is hit by a Fire- or Water-type move. |
+| :white_check_mark: | Steam Engine | Boosts the Speed stat drastically when the Pokémon is hit by a Fire- or Water-type move. |
 | :white_check_mark: | Punk Rock | Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves. |
 | :x: | Sand Spit | Summons a sandstorm for 5 turns when the Pokémon takes damage from moves. |
 | :white_check_mark: | Ice Scales | The Pokémon is protected by ice scales, which halve the damage taken from special moves. |
@@ -276,14 +276,14 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability. |
 | :x: | Lingering Aroma | Contact with the Pokémon changes the attacker's Ability to Lingering Aroma. |
 | :x: | Seed Sower | Turns the ground into Grassy Terrain when the Pokémon is hit by an attack. |
-| :white_large_square: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
+| :white_check_mark: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
 | :x: | Anger Shell | When an attack causes its HP to drop to half or less, the Pokémon gets angry. This lowers its Defense and Sp. Def stats but boosts its Attack, Sp. Atk, and Speed stats. |
 | :x: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
 | :x: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
 | :x: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
 | :white_check_mark: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
 | :white_check_mark: | Rocky Payload | Powers up Rock-type moves. |
-| :white_large_square: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
+| :white_check_mark: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
 | :x: | Zero to Hero | The Pokémon changes into its Hero Form when it switches out of battle. |
 | :x: | Commander | When the Pokémon enters a battle, it goes inside the mouth of an ally Dondozo if one is on the field. The Pokémon then issues commands from there. |
 | :x: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
