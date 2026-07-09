@@ -448,6 +448,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_AMBIPOM, 1,
         ABILITY_TOUGH_CLAWS
     },
+    { // 0426
+        // Drifblim's three real abilities (Aftermath, Unburden, Flare Boost) are ALL now innate. Slots 1/2
+        // (Unburden, Flare Boost) are pinned by tests (unburden.c / flare_boost.c), so its unpinned slot-0
+        // Aftermath (audited: aftermath.c uses Voltorb, not Drifblim) takes Unaware — an already-implemented
+        // :white_check_mark: innate (stable, like Slurpuff's) that the balloon does not carry innately and pays
+        // off its bulky Calm Mind / Strength Sap staller by ignoring the foe's stat boosts.
+        SPECIES_DRIFBLIM, 0,
+        ABILITY_UNAWARE
+    },
     { // 0428
         // Lopunny's only real non-drawback abilities (Cute Charm, Limber) are BOTH now innate
         // (Klutz, slot 1, is a drawback), so its slot-2 Limber — now innate-redundant — takes a
@@ -459,6 +468,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0429
         SPECIES_MISMAGIUS, 1,
         ABILITY_WANDERING_SPIRIT
+    },
+    { // 0435
+        // Skuntank's three real abilities (Stench, Aftermath, Keen Eye) are ALL now innate, so its innate-
+        // redundant slot-1 Aftermath -- unpinned by any test (audited: aftermath.c uses Voltorb) -- takes
+        // Poison Touch. Poison Touch is :x: (never an innate -> stable) and a clean boon for the skunk's
+        // physical pivot: its Gunk Shot / Crunch contact can poison the target.
+        SPECIES_SKUNTANK, 1,
+        ABILITY_POISON_TOUCH
     },
     { // 0437
         // Bronzong's Levitate and Heatproof are now innate, freeing its frontier slot; its remaining slot-2
@@ -616,6 +633,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // and flavorful: the prehistoric shell turtle heals on the Water hits a Shell Smash sweeper invites.
         SPECIES_CARRACOSTA, 2,
         ABILITY_WATER_ABSORB
+    },
+    { // 0569
+        // Garbodor's slot-0 Stench and slot-2 Aftermath are now innate; its only non-innate real slot is slot-1
+        // Weak Armor, a drawback on a Rocky Helmet hazard wall. So its innate-redundant slot-2 Aftermath --
+        // unpinned by any test (audited: aftermath.c uses Voltorb) -- takes Poison Touch instead. Poison Touch
+        // is :x: (never an innate -> stable) and a clean boon for the trash heap: its Gunk Shot can poison.
+        SPECIES_GARBODOR, 2,
+        ABILITY_POISON_TOUCH
     },
     { // 0573
         // Cute Charm, Technician and Skill Link are ALL now innate, so its innate-redundant slot-1 Technician
@@ -798,6 +823,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // to sleep. (Slot 1 Triage stays intact — upstream upper_hand/ai_doubles tests pin it.)
         SPECIES_COMFEY, 2,
         ABILITY_SWEET_VEIL
+    },
+    { // 0771
+        // Pyukumuku's real abilities are Innards Out (slot 0, now innate AND pinned by innards_out.c) and Unaware
+        // (slot 2, now innate), so its EMPTY slot 1 takes Water Absorb -- :x: (never an innate -> stable) and
+        // thematic for the sea cucumber: it heals off the Water hits its Counter / Recover staller invites,
+        // stacking with its innate Unaware. (Slot 0 Innards Out stays a real ability -- test-pinned.)
+        SPECIES_PYUKUMUKU, 1,
+        ABILITY_WATER_ABSORB
     },
     { // 0776
         SPECIES_TURTONATOR, 1,

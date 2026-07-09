@@ -4273,6 +4273,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 else
                 {
                     gBattleScripting.battler = gBattlerTarget;
+                    // FORK: innate Aftermath — show the innate in the pop-up, not the chosen ability, only
+                    // when they differ (Speed Boost precedent). gLastUsedAbility is the ability being processed.
+                    if (GetBattlerAbility(gBattlerTarget) != gLastUsedAbility)
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     SetPassiveDamageAmount(gBattlerAttacker, GetNonDynamaxMaxHP(gBattlerAttacker) / 4);
                     BattleScriptCall(BattleScript_AftermathDmg);
                 }
@@ -4291,6 +4295,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                     damage = gBattleStruct->innardsOutHpLost[gBattlerTarget];
 
                 gBattleScripting.battler = gBattlerTarget;
+                // FORK: innate Innards Out — show the innate in the pop-up, not the chosen ability, only
+                // when they differ (Speed Boost precedent). gLastUsedAbility is the ability being processed.
+                if (GetBattlerAbility(gBattlerTarget) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 SetPassiveDamageAmount(gBattlerAttacker, damage);
                 BattleScriptCall(BattleScript_AftermathDmg);
                 effect++;

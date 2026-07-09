@@ -2190,3 +2190,35 @@ The Megas mirror the base creature's contact reaction (pure-boon persistence, li
 3.5 freed twelve frontier sets: Druddigon -> Sheer Force, Togedemaru -> Lightning Rod, Goodra -> Sap Sipper
 (complementary REAL slots); Sharpedo -> Strong Jaw, Garchomp -> Sand Stream, Ferrothorn -> Filter, Wugtrio ->
 Water Absorb (fork-owned overrides); Dugtrio-Alola's Tangling Hair set is kept because that slot is test-pinned.
+
+### ABILITY_AFTERMATH / ABILITY_INNARDS_OUT
+
+The second sub-group of Batch K (the on-hit set), both **1:1 clean-upside copies** — an on-faint retaliation
+only ever hurts the *attacker*. **Aftermath** chips the attacker 1/4 max HP when a **contact** move KOs the
+holder (Damp still blocks it); **Innards Out** deals the attacker the exact HP the holder lost, from **any**
+move. Both `canon-only` (no flavor picks).
+
+- **Reuses the existing on-hit driver** — no new infra. Both fire from the **same** upstream
+  `ABILITYEFFECT_MOVE_END` case as the contact reactions, so each is a **one-line addition to
+  `IsActiveOnHitInnate`** (`src/fork/innate_abilities.c`). The subtlety versus the contact reactions is
+  *timing*: these fire **after the holder has fainted**. That works because the moveend loop still reaches the
+  `MOVEEND_ABILITIES` / `MOVEEND_ABILITIES_INNATE` steps on a just-fainted target (vanilla Aftermath already
+  fires there), and `IsInnateActive()` still credits the holder — a fainted-but-not-yet-switched battler has
+  `notOnField` still FALSE during move-end, so the innate is active. Both effect sites (`src/battle_util.c`)
+  use `BattleScript_AftermathDmg`.
+- **The pop-up.** The Aftermath (the damage `else` branch, not the Damp branch) and Innards Out effect sites set
+  `gBattleScripting.abilityPopupOverwrite` to the innate **only when the chosen ability differs**, so a real
+  ability stays byte-for-byte unchanged (the Speed Boost / Rough Skin precedent).
+- **AI.** Neither has a dedicated AI *effect* read (`grep src/battle_ai_*.c` is empty for both), so **no AI
+  wiring is needed** — the AI does not currently reason about on-faint retaliation, chosen or innate.
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); neither is
+`breakable`, so Mold Breaker never touches them. **Species:** every canon carrier gets a row (merged into
+existing rows where the species already carried an innate) — Aftermath: the Voltorb line + both Hisui forms,
+the Drifloon line, the Stunky line, the Trubbish line (+ Garbodor-Gmax); Innards Out: Pyukumuku and the fork's
+Mega Victreebel. Step 3.5 freed five frontier sets, all via fork-owned overrides since every affected species
+now has its useful real abilities innate: Drifblim ×2 (Aftermath/Unburden/Flare Boost all innate) -> chosen
+Unaware (unpinned slot-0 repurpose), Skuntank (Aftermath/Stench/Keen Eye all innate) -> chosen Poison Touch,
+Garbodor (Aftermath innate; slot-1 Weak Armor a wall drawback) -> chosen Poison Touch, Pyukumuku (Innards
+Out/Unaware innate) -> chosen Water Absorb (empty slot 1; its slot-0 Innards Out stays a real, test-pinned
+ability).

@@ -5093,6 +5093,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_BAD_DREAMS, ABILITY_POISON_HEAL,
         ABILITY_GLUTTONY, ABILITY_RIPEN, ABILITY_CHEEK_POUCH, ABILITY_UNBURDEN,
         ABILITY_ROUGH_SKIN, ABILITY_IRON_BARBS, ABILITY_GOOEY, ABILITY_TANGLING_HAIR,
+        ABILITY_AFTERMATH, ABILITY_INNARDS_OUT,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -6332,6 +6333,129 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Gooey / Tangling Hair drop 
             MESSAGE("Wobbuffet's Speed fell!");
         } else {
             NONE_OF { ABILITY_POPUP(opponent, innate); MESSAGE("Wobbuffet's Speed fell!"); }
+        }
+    }
+}
+
+// On-faint retaliation (Batch K second sub-group): Aftermath / Innards Out fire from the SAME
+// ABILITYEFFECT_MOVE_END step once a move KOs the holder — the fainted-but-still-on-field holder is
+// credited because notOnField is not yet set. Aftermath chips the attacker 1/4 max HP only on a contact
+// KO (Damp still blocks it); Innards Out deals the attacker the holder's lost HP on any KO. Both are 1:1
+// clean-upside copies (they only ever hurt the attacker), with the pop-up overwritten to the innate.
+
+// Aftermath chips a contact attacker 1/4 max HP when it KOs the holder, even as the holder's INNATE.
+// Voltorb carries innate Aftermath (chosen Soundproof); Trubbish carries innate Aftermath (chosen
+// Sticky Hold). Feature-off leg proves the chip comes only from the innate. (Both are hit by the
+// Normal-type Scratch — a Ghost Aftermath user like Drifblim would need a Ghost-hitting contact move.)
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Aftermath chips a contact attacker that KOs the holder")
+{
+    u32 species;
+    enum Ability chosen;
+    bool32 enabled;
+    s16 aftermathDamage;
+    PARAMETRIZE { species = SPECIES_VOLTORB;  chosen = ABILITY_SOUNDPROOF;  enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_VOLTORB;  chosen = ABILITY_SOUNDPROOF;  enabled = FALSE; }
+    PARAMETRIZE { species = SPECIES_TRUBBISH; chosen = ABILITY_STICKY_HOLD; enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_TRUBBISH; chosen = ABILITY_STICKY_HOLD; enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(species, ABILITY_AFTERMATH));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(species) { HP(1); Ability(chosen); } // chosen ability is NOT Aftermath
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(opponent, ABILITY_AFTERMATH); // pop-up shows the innate, not the chosen ability
+            HP_BAR(player, captureDamage: &aftermathDamage);
+        } else {
+            NONE_OF { ABILITY_POPUP(opponent, ABILITY_AFTERMATH); HP_BAR(player); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(aftermathDamage, player->maxHP / 4);
+    }
+}
+
+// A REAL Aftermath still chips exactly once with the feature on — the driver skips an innate equal to the
+// chosen ability, so it never double-fires beside the chosen-ability faint block.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a chosen Aftermath chips once, not twice, with innates on")
+{
+    s16 aftermathDamage;
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VOLTORB, ABILITY_AFTERMATH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_VOLTORB) { HP(1); Ability(ABILITY_AFTERMATH); } // chosen == innate
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_AFTERMATH);
+        HP_BAR(player, captureDamage: &aftermathDamage);
+    } THEN {
+        EXPECT_EQ(aftermathDamage, player->maxHP / 4); // one chip, not two
+    }
+}
+
+// Parity: a non-contact KO never triggers the innate chip (routes through CanBattlerAvoidContactEffects).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Aftermath does not chip a non-contact attacker")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VOLTORB, ABILITY_AFTERMATH));
+        ASSUME(!MoveMakesContact(MOVE_SWIFT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_VOLTORB) { HP(1); Ability(ABILITY_SOUNDPROOF); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWIFT); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_AFTERMATH); HP_BAR(player); }
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Aftermath exactly like a real ability, so the
+// contact KO deals no retaliation chip.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Aftermath")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VOLTORB, ABILITY_AFTERMATH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_GASTRO_ACID, MOVE_SCRATCH); }
+        OPPONENT(SPECIES_VOLTORB) { HP(1); Ability(ABILITY_SOUNDPROOF); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("The opposing Voltorb's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_AFTERMATH); }
+    }
+}
+
+// Innards Out deals the attacker the exact HP the holder lost when a move KOs it, even as the holder's
+// INNATE and from a NON-contact move (unlike Aftermath). Pyukumuku carries innate Innards Out (chosen
+// Unaware). Feature-off leg proves the retaliation comes only from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Innards Out deals the attacker the holder's lost HP")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PYUKUMUKU, ABILITY_INNARDS_OUT));
+        ASSUME(GetMoveCategory(MOVE_SWIFT) != DAMAGE_CATEGORY_STATUS);
+        ASSUME(!MoveMakesContact(MOVE_SWIFT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(200); HP(200); SpAttack(1000); }
+        OPPONENT(SPECIES_PYUKUMUKU) { HP(30); Ability(ABILITY_UNAWARE); } // chosen ability is NOT Innards Out
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWIFT); }
+    } SCENE {
+        if (enabled) {
+            HP_BAR(opponent, hp: 0);
+            ABILITY_POPUP(opponent, ABILITY_INNARDS_OUT); // pop-up shows the innate, not the chosen ability
+            HP_BAR(player, hp: 200 - 30); // took the 30 HP Pyukumuku lost
+        } else {
+            NONE_OF { ABILITY_POPUP(opponent, ABILITY_INNARDS_OUT); }
         }
     }
 }
