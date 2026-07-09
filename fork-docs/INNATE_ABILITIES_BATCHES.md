@@ -278,10 +278,17 @@ Exchange (Atk on Fire hit + burn-immunity half), Wind Power (charge on wind hit)
 Pickpocket (steal on contact) + Magician (steal on damage), Liquid Ooze (damage
 HP-drainers).
 
-- The on-contact/on-hit driver is **not built yet** (recipe: "on-contact actives
-  still need their own event hooks"). Build it once (model on the end-turn
-  driver), then the identical pairs make this efficient. Split into sub-PRs
-  (contact-damage, contact-stat-drop, steal, on-faint).
+- The on-contact/on-hit driver is now **built**: `TryActivateInnateOnHitEffects`
+  (`src/fork/innate_abilities.c`), hooked from the new `MOVEEND_ABILITIES_INNATE`
+  step, delegates to the upstream `ABILITYEFFECT_MOVE_END` case (see the
+  `### ABILITY_ROUGH_SKIN / …` wiring block in `INNATE_ABILITIES.md`). The first
+  sub-PR shipped the **contact-reaction** pair-set — Rough Skin + Iron Barbs
+  (1/8 contact damage) and Gooey + Tangling Hair (Speed −1 on contact). Remaining
+  sub-PRs reuse the driver (a one-line `IsActiveOnHitInnate` addition each):
+  on-faint (Aftermath + Innards Out), disable (Cursed Body), on-hit stat/charge
+  (Steam Engine, Thermal Exchange, Wind Power), steal (Pickpocket + Magician —
+  Magician is attacker-side, `ABILITYEFFECT_MOVE_END_ATTACKER`, so it needs the
+  attacker-side hook too), and Liquid Ooze (damage HP-drainers).
 
 ### Batch L — Switch-in actives (need a NEW driver)
 **8**
@@ -374,8 +381,8 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 14 | Batch S — Misc single-site traits | trait, no driver | done |
 | 15 | Batch J — End-of-turn effects | active, **existing** driver | done |
 | 16 | Batch T — Berry/item synergy | active/trait | done |
-| 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | open |
-| 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | open |
+| 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | done |
+| 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | **in progress** (contact-reaction sub-group done: Rough Skin / Iron Barbs / Gooey / Tangling Hair; remaining: Aftermath / Innards Out / Cursed Body / Steam Engine / Thermal Exchange / Wind Power / Pickpocket / Magician / Liquid Ooze) |
 | 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | open |
 | 20 | Batch L — Switch-in actives | active, needs step 19 | open |
 | 21 | Batch M — On-KO/on-hit stat boosts | active | open |
@@ -432,7 +439,7 @@ row is `done`.
 | I — Status-condition immunities | trait | 6 | done |
 | S — Misc single-site traits | trait | 12 | done |
 | J — End-of-turn effects | active (existing driver) | 10 | done |
-| K — On-contact/on-hit/on-faint | active (new driver) | 13 | open |
+| K — On-contact/on-hit/on-faint | active (new driver) | 13 | in progress (4/13: driver built + Rough Skin / Iron Barbs / Gooey / Tangling Hair; 9 remaining) |
 | L — Switch-in actives | active (new driver) | 8 | open |
 | M — On-KO/on-hit stat boosts | active | 11 | open |
 | T — Berry/item synergy | active/trait | 4 | done |

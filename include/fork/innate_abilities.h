@@ -51,7 +51,11 @@
 //   Boost end-turn driver; Poison Heal replaces the poison-damage step),
 //   GLUTTONY / RIPEN / CHEEK_POUCH / UNBURDEN (berry/item synergy, Batch T — Gluttony's
 //   1/2-HP pinch-Berry threshold, Ripen's doubled Berry effects, Cheek Pouch's heal on
-//   Berry eat, Unburden's doubled Speed after item loss).
+//   Berry eat, Unburden's doubled Speed after item loss),
+//   ROUGH_SKIN / IRON_BARBS / GOOEY / TANGLING_HAIR (on-hit contact reactions, Batch K first
+//   sub-group — the first active ON-HIT innates, fired through a new re-entrant on-hit driver
+//   modeled on the Speed Boost end-turn driver: Rough Skin / Iron Barbs chip a contact attacker
+//   1/8 max HP, Gooey / Tangling Hair lower a contact attacker's Speed).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
@@ -103,5 +107,16 @@ const enum Ability *GetSpeciesInnatesEntry(u32 row, u16 *outSpecies);
 // list is exhausted, so a battler with several end-turn innates fires them across passes.
 // See the definition in src/fork/innate_abilities.c for the suppression/double-fire guards.
 bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index);
+
+// FORK: on-hit innate driver. Fires `battler`'s active, scripted on-hit innates — the
+// contact-reaction class: Rough Skin / Iron Barbs (chip a contact attacker) and Gooey /
+// Tangling Hair (drop a contact attacker's Speed). Hooked from MOVEEND_ABILITIES_INNATE in
+// the move-end loop (src/battle_move_resolution.c), right after the chosen-ability contact
+// block. `battler` is the holder that was hit (gBattlerTarget); `move` is the move that hit it.
+// Re-entrant: *index is the per-battler resume cursor into the innate list — fires one effect
+// per call (leaving *index past it) and returns TRUE, or returns FALSE once the list is
+// exhausted, so a battler with several on-hit innates fires them across passes. See the
+// definition in src/fork/innate_abilities.c for the suppression/double-fire guards.
+bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Move move);
 
 #endif // GUARD_INNATE_ABILITIES_H

@@ -186,6 +186,22 @@
 //   free complementary slot (Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne, Appletun) keep their
 //   now-redundant chosen frontier ability — still correct (the innate runs; the chosen is redundant-but-skipped)
 //   — deferred as a focused follow-up like Batch J's, rather than a game-wide override sweep.
+//   ROUGH_SKIN / IRON_BARBS / GOOEY / TANGLING_HAIR (on-hit contact reactions, Batch K first sub-group — all 1:1
+//   clean-upside copies, canon-only (no flavor picks)): when the holder is hit by a contact move, Rough Skin and
+//   Iron Barbs chip the attacker 1/8 max HP (BattleScript_RoughSkinActivates) and Gooey / Tangling Hair lower the
+//   attacker's Speed by 1 (BattleScript_AbilityStatChange). They are the FIRST active, scripted ON-HIT innates and
+//   introduce a new re-entrant on-hit driver (TryActivateInnateOnHitEffects -> IsActiveOnHitInnate), modeled on the
+//   Speed Boost end-turn driver: it delegates to the existing upstream ABILITYEFFECT_MOVE_END case (against
+//   gBattlerAttacker), so the recoil / stat drop / script matches the real ability for free. Hooked from the new
+//   MOVEEND_ABILITIES_INNATE step (src/battle_move_resolution.c) right after the chosen-ability contact block; each
+//   effect site in src/battle_util.c forces the pop-up to the innate when the chosen ability differs (Speed Boost
+//   precedent). Cute Charm / Stench predate this driver and keep their own inline prechecks, so they are NOT listed
+//   in IsActiveOnHitInnate. AI is innate-aware: the Rough Skin / Iron Barbs contact-move-avoidance reads in
+//   battle_ai_util.c credit an innate via BattlerHasAbility (Gooey / Tangling Hair have no dedicated AI read).
+//   Canon-only; Sharpedo / Garchomp (Rough Skin) and Ferrothorn (Iron Barbs) and Wugtrio (Gooey) had frontier sets
+//   freed to a fork-owned complementary chosen ability, and Dugtrio-Alola's Tangling Hair set is kept (test-pinned
+//   real slot). The remaining Batch K abilities (Aftermath / Innards Out / Cursed Body / Steam Engine / Thermal
+//   Exchange / Wind Power / Pickpocket / Magician / Liquid Ooze) are NOT yet wired — later sub-PRs reuse this driver.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -610,7 +626,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DIGLETT_ALOLA,
         INNATES(
             ABILITY_SAND_FORCE,
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_TANGLING_HAIR
         )
     },
     { // 0051
@@ -625,7 +642,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DUGTRIO_ALOLA,
         INNATES(
             ABILITY_SAND_FORCE,
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_TANGLING_HAIR
         )
     },
     { // 0052
@@ -1928,18 +1946,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0704
         SPECIES_GOOMY,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_HYDRATION
         )
     },
     { // 0705
         SPECIES_SLIGGOO,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_HYDRATION
         )
     },
     { // 0706
         SPECIES_GOODRA,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_HYDRATION
         )
     },
@@ -3016,18 +3037,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0318
         SPECIES_CARVANHA,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST
         )
     },
     { // 0319
         SPECIES_SHARPEDO,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST
         )
     },
     { // 0319
         SPECIES_SHARPEDO_MEGA,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST,
             ABILITY_STRONG_JAW
         )
@@ -3958,24 +3982,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0443
         SPECIES_GIBLE,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SAND_VEIL
         )
     },
     { // 0444
         SPECIES_GABITE,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SAND_VEIL
         )
     },
     { // 0445
         SPECIES_GARCHOMP,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SAND_VEIL
         )
     },
     { // 0445
         SPECIES_GARCHOMP_MEGA,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL
         )
@@ -3983,6 +4011,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0445
         SPECIES_GARCHOMP_MEGA_Z,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SAND_VEIL
         )
     },
@@ -5098,6 +5127,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWARM
         )
     },
+    { // 0597
+        SPECIES_FERROSEED,
+        INNATES(
+            ABILITY_IRON_BARBS
+        )
+    },
+    { // 0598
+        SPECIES_FERROTHORN,
+        INNATES(
+            ABILITY_IRON_BARBS
+        )
+    },
     { // 0599
         SPECIES_KLINK,
         INNATES(
@@ -5246,6 +5287,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS,
             ABILITY_RECKLESS,
             ABILITY_REGENERATOR
+        )
+    },
+    { // 0621
+        SPECIES_DRUDDIGON,
+        INNATES(
+            ABILITY_ROUGH_SKIN
         )
     },
     { // 0622
@@ -5783,12 +5830,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0705
         SPECIES_SLIGGOO_HISUI,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_SHELL_ARMOR
         )
     },
     { // 0706
         SPECIES_GOODRA_HISUI,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_SHELL_ARMOR
         )
     },
@@ -6316,6 +6365,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0777
         SPECIES_TOGEDEMARU,
         INNATES(
+            ABILITY_IRON_BARBS,
             ABILITY_STURDY
         )
     },
@@ -7446,12 +7496,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0960
         SPECIES_WIGLETT,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_SAND_VEIL
         )
     },
     { // 0961
         SPECIES_WUGTRIO,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_SAND_VEIL
         )
     },
@@ -7869,6 +7921,69 @@ bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index)
         // innate's owner here — harmless for the chosen path, which never goes through this driver.
         gBattlerAbility = battler;
         if (AbilityBattleEffects(ABILITYEFFECT_ENDTURN, battler, innate, MOVE_NONE, TRUE))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+// Active, scripted innate abilities that react when the HOLDER is hit by a move — the
+// on-hit / on-contact class (contact-damage: Rough Skin / Iron Barbs; contact-Speed-drop:
+// Gooey / Tangling Hair). The driver (TryActivateInnateOnHitEffects) is re-entrant, so a
+// battler may carry more than one and each fires in turn. Each delegates to the existing
+// upstream ABILITYEFFECT_MOVE_END case, so the recoil damage / stat drop / script / pop-up
+// matches the real ability for free (the effect site in src/battle_util.c forces the pop-up
+// to the innate when the chosen ability differs, the Speed Boost precedent). Cute Charm is
+// deliberately NOT here: it predates this driver and keeps its own inline precheck at the top
+// of ABILITYEFFECT_MOVE_END, so listing it would fire it twice.
+static bool32 IsActiveOnHitInnate(enum Ability ability)
+{
+    switch (ability)
+    {
+    case ABILITY_ROUGH_SKIN:    // chips a contact attacker 1/8 max HP
+    case ABILITY_IRON_BARBS:    // chips a contact attacker 1/8 max HP
+    case ABILITY_GOOEY:         // lowers a contact attacker's Speed by 1
+    case ABILITY_TANGLING_HAIR: // lowers a contact attacker's Speed by 1
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+// FORK: on-hit innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
+// on-hit innates (contact reactions), hooked from the MOVEEND_ABILITIES_INNATE step of the
+// move-end loop (src/battle_move_resolution.c) right after the chosen-ability contact block.
+//
+// RE-ENTRANT, exactly like the end-turn driver: a battle script fires one at a time, so this
+// resumes from a per-battler cursor. *index is the next innate-list slot to consider; the
+// move-end loop holds the MOVEEND_ABILITIES_INNATE step (keeping the cursor) while this returns
+// TRUE, and only advances once it returns FALSE (list exhausted), then resets the cursor. Each
+// fired effect leaves *index past it, so a battler with several on-hit innates fires them across
+// successive passes of the loop. Returns TRUE if an effect fired this call.
+//
+// The effect is delegated to the upstream contact-ability handler with the innate passed
+// explicitly: AbilityBattleEffects(ABILITYEFFECT_MOVE_END, battler, innate, move, TRUE) sets
+// gLastUsedAbility = innate and runs that ability's existing case (against gBattlerAttacker, the
+// contact-maker), so the damage / stat drop / script / pop-up match the real ability. `battler`
+// is the holder that was hit (gBattlerTarget). An innate equal to the chosen ability is skipped
+// so the chosen-ability contact block (which already ran it) never fires twice; IsInnateActive()
+// applies the usual suppression (feature flag, Gastro Acid, Neutralizing Gas, not-on-field). An
+// eligible innate that does nothing this hit (e.g. attacker used a non-contact move, or already
+// fainted) is stepped over without firing, so the scan continues to the next on-hit innate.
+bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Move move)
+{
+    enum Ability innate;
+
+    while ((innate = GetSpeciesInnate(gBattleMons[battler].species, *index)) != ABILITY_NONE)
+    {
+        (*index)++; // step past this slot now, so a fired effect resumes at the next one
+        if (!IsActiveOnHitInnate(innate))
+            continue;
+        if (GetBattlerAbility(battler) == innate) // chosen-ability contact block already ran it
+            continue;
+        if (!IsInnateActive(battler, innate))
+            continue;
+        if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END, battler, innate, move, TRUE))
             return TRUE;
     }
 

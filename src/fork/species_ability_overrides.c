@@ -297,8 +297,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VOLBEAT, 1,
         ABILITY_VICTORY_STAR
     },
+    { // 0319
+        // Sharpedo's only real abilities (Rough Skin, Speed Boost) are BOTH now innate, so its EMPTY slot 1
+        // takes Strong Jaw, an already-implemented :white_check_mark: innate (stable) and its Mega's ability:
+        // it powers the Brutal Pokemon's biting STAB (Crunch / Psychic Fangs / Ice Fang) alongside the innate
+        // Speed Boost and Rough Skin.
+        SPECIES_SHARPEDO, 1,
+        ABILITY_STRONG_JAW
+    },
     { // 0330
-        SPECIES_FLYGON, 1, 
+        SPECIES_FLYGON, 1,
         ABILITY_SAND_STREAM
     },
     { // 0335
@@ -475,6 +483,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SPIRITOMB, 1,
         ABILITY_UNAWARE
     },
+    { // 0445
+        // Garchomp's only real abilities (Sand Veil, Rough Skin) are BOTH now innate, so its EMPTY slot 1 takes
+        // Sand Stream — :x: (never an innate -> stable) and self-synergistic for the desert dragon: the sandstorm
+        // it kicks up turns on its own innate Sand Veil evasion (and chips non-Ground/Rock/Steel foes). Same pick
+        // as the other Ground sweepers (Dugtrio / Donphan / Flygon / Torterra).
+        SPECIES_GARCHOMP, 1,
+        ABILITY_SAND_STREAM
+    },
     { // 0455
         SPECIES_CARNIVINE, 1,
         ABILITY_CHLOROPHYLL
@@ -618,8 +634,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_UNAWARE
     },
     { // 0594
-        SPECIES_ALOMOMOLA, 2, 
+        SPECIES_ALOMOMOLA, 2,
         ABILITY_WATER_ABSORB
+    },
+    { // 0598
+        // Ferrothorn's only non-pending real abilities are Iron Barbs (slot 0, now innate) and Anticipation (slot 2,
+        // still :white_large_square: pending), so its EMPTY slot 1 takes Filter, an already-implemented
+        // :white_check_mark: innate (stable) it does not carry innately: the Barb Wire wall blunts the supereffective
+        // Fire hit its Spikes / Leech Seed sets most fear. Same pick as the Steel spiker Forretress.
+        SPECIES_FERROTHORN, 1,
+        ABILITY_FILTER
     },
     { // 0601
         // Klinklang's slot-2 Clear Body is now innate and its slots 0/1 are Plus/Minus (dead in singles); slot-0 Plus
@@ -914,6 +938,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Flamethrower / Earth Power gain +30% and drop their secondaries (and skip Life Orb recoil too).
         SPECIES_SCOVILLAIN, 2,
         ABILITY_SHEER_FORCE
+    },
+    { // 0961
+        // Wugtrio's real abilities are Gooey (slot 0, now innate), Rattled (slot 1, still :white_large_square:
+        // pending) and Sand Veil (slot 2, now innate). Its innate-redundant slot-0 Gooey -- unpinned by any test
+        // (audited: no Ability(ABILITY_GOOEY) on Wugtrio) -- takes Water Absorb, :x: (never an innate -> stable) and
+        // thematic for the Garden Eel: it heals on the Water moves its priority attacker set invites. (Dead-weight
+        // real-slot repurpose, Sceptile-style.)
+        SPECIES_WUGTRIO, 0,
+        ABILITY_WATER_ABSORB
     },
     { // 0962
         // Bombirdier's three real abilities (Big Pecks, Keen Eye, Rocky Payload) are ALL now innate, so its innate-
