@@ -5099,6 +5099,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_PICKPOCKET, ABILITY_MAGICIAN, ABILITY_LIQUID_OOZE,
         ABILITY_INTIMIDATE,
         ABILITY_ANTICIPATION, ABILITY_FOREWARN, ABILITY_FRISK,
+        ABILITY_DOWNLOAD, ABILITY_SUPERSWEET_SYRUP,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -7177,5 +7178,113 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
         TURN { SWITCH(player, 1); }
     } SCENE {
         NONE_OF { ABILITY_POPUP(player, ABILITY_FRISK); } // suppressed: no reveal
+    }
+}
+
+// ─── Innate Download / Supersweet Syrup (switch-in stat changes) ──────────────
+// Batch L's third sub-group: two switch-in stat-change innates that reuse the same driver as Intimidate
+// (a one-line IsActiveSwitchInInnate addition each), delegating to the upstream ABILITYEFFECT_ON_SWITCHIN
+// case so the stat change / script / pop-up match the real ability. Both are 1:1 clean-upside boons
+// (self-boost / foe-debuff); each effect site (src/battle_util.c) forces the pop-up to the innate when the
+// chosen ability differs. Vehicles chosen so the chosen ability != the innate, so the stat swing and the
+// pop-up are attributable solely to the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Download boosts the holder's Sp. Atk on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PORYGON_Z, ABILITY_DOWNLOAD));
+        ASSUME(gSpeciesInfo[SPECIES_PORYGON_Z].abilities[0] != ABILITY_DOWNLOAD); // chosen Adaptability; the boost is the innate's
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_PORYGON_Z) { Ability(ABILITY_ADAPTABILITY); }
+        OPPONENT(SPECIES_WOBBUFFET); // Def == Sp. Def, so Download picks Sp. Atk
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_DOWNLOAD); // pop-up shows the innate, not chosen Adaptability
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_DOWNLOAD); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a chosen Download boosts once, not twice, with innates on")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GENESECT, ABILITY_DOWNLOAD));
+        ASSUME(gSpeciesInfo[SPECIES_GENESECT].abilities[0] == ABILITY_DOWNLOAD); // chosen == innate
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_GENESECT);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } THEN {
+        // The driver skips an innate equal to the chosen ability, so the chosen Download fires alone: +1, not +2.
+        EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE + 1);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Download on switch-in")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PORYGON_Z, ABILITY_DOWNLOAD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_PORYGON_Z) { Ability(ABILITY_ADAPTABILITY); }
+        OPPONENT(SPECIES_WEEZING_GALAR) { Ability(ABILITY_NEUTRALIZING_GAS); }
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_DOWNLOAD); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE); // suppressed: no boost
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Supersweet Syrup lowers the foe's evasiveness on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HYDRAPPLE, ABILITY_SUPERSWEET_SYRUP));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_HYDRAPPLE) { Ability(ABILITY_REGENERATOR); } // chosen differs from the innate; the drop is the innate's
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_SUPERSWEET_SYRUP); // pop-up shows the innate, not chosen Regenerator
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_SUPERSWEET_SYRUP); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_EVASION], enabled ? DEFAULT_STAT_STAGE - 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Supersweet Syrup fires only once per battle")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HYDRAPPLE, ABILITY_SUPERSWEET_SYRUP));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_HYDRAPPLE) { Ability(ABILITY_REGENERATOR); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); } // Hydrapple in → fires (first entry)
+        TURN { SWITCH(player, 0); } // Wobbuffet in, Hydrapple out
+        TURN { SWITCH(player, 1); } // Hydrapple back in → must NOT re-fire
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_SUPERSWEET_SYRUP); // fires on the first entry
+        NONE_OF { ABILITY_POPUP(player, ABILITY_SUPERSWEET_SYRUP); } // once-per-battle: never again
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_EVASION], DEFAULT_STAT_STAGE - 1); // dropped once, not twice
     }
 }

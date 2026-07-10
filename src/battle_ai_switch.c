@@ -2255,8 +2255,8 @@ static inline bool32 IsFreeSwitch(enum SwitchType switchType, enum BattlerId bat
         {
             enum Ability opposingAbility = gAiLogicData->abilities[opposingBattler];
             // If faster, not a free switch; likely lowered own stats
-            // FORK: an innate Intimidate on the foe also triggers switches before the turn starts.
-            if (!movedSecond && opposingAbility != ABILITY_INTIMIDATE && !BattlerHasAbility(opposingBattler, ABILITY_INTIMIDATE) && opposingAbility != ABILITY_SUPERSWEET_SYRUP) // Intimidate triggers switches before turn starts
+            // FORK: an innate Intimidate / Supersweet Syrup on the foe also triggers switches before the turn starts.
+            if (!movedSecond && opposingAbility != ABILITY_INTIMIDATE && !BattlerHasAbility(opposingBattler, ABILITY_INTIMIDATE) && opposingAbility != ABILITY_SUPERSWEET_SYRUP && !BattlerHasAbility(opposingBattler, ABILITY_SUPERSWEET_SYRUP)) // Intimidate triggers switches before turn starts
                 return FALSE;
             // Otherwise, free switch
             return TRUE;
@@ -2922,6 +2922,35 @@ static void SetBattlerStatStagesForSwitchin(enum BattlerId battler, enum Battler
         {
             opponentStatDrop = TRUE;
             gBattleMons[opposingBattler].statStages[STAT_ATK] -= 1;
+            if (gAiLogicData->abilities[opposingBattler] == ABILITY_DEFIANT)
+                gBattleMons[opposingBattler].statStages[STAT_ATK] += 2;
+            if (gAiLogicData->abilities[opposingBattler] == ABILITY_COMPETITIVE)
+                gBattleMons[opposingBattler].statStages[STAT_SPATK] += 2;
+        }
+    }
+
+    // FORK: an innate Download raises the holder's own Attack/Sp. Atk on switch-in like a real one, so the
+    // AI values switching it in even when its chosen ability differs. Mirrors the ABILITY_DOWNLOAD case above.
+    if (aiAbility != ABILITY_DOWNLOAD
+     && GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_DOWNLOAD))
+    {
+        gBattleMons[battler].statStages[GetDownloadStat(battler)] += 1;
+    }
+
+    // FORK: an innate Supersweet Syrup drops every foe's evasiveness on switch-in like a real one, so the AI
+    // values switching it in even when its chosen ability differs. Mirrors the ABILITY_SUPERSWEET_SYRUP case above.
+    if (aiAbility != ABILITY_SUPERSWEET_SYRUP
+     && GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_SUPERSWEET_SYRUP)
+     && CanLowerStat(battler, opposingBattler, gAiLogicData, STAT_EVASION))
+    {
+        if (gAiLogicData->abilities[opposingBattler] == ABILITY_CONTRARY)
+        {
+            gBattleMons[opposingBattler].statStages[STAT_EVASION] += 1;
+        }
+        else
+        {
+            opponentStatDrop = TRUE;
+            gBattleMons[opposingBattler].statStages[STAT_EVASION] -= 1;
             if (gAiLogicData->abilities[opposingBattler] == ABILITY_DEFIANT)
                 gBattleMons[opposingBattler].statStages[STAT_ATK] += 2;
             if (gAiLogicData->abilities[opposingBattler] == ABILITY_COMPETITIVE)

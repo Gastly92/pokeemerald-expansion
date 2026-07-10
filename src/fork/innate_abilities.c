@@ -313,6 +313,25 @@
 //   now have it innately, so they keep their now-redundant chosen ability — still correct (the chosen runs it; the
 //   innate is redundant-but-skipped) — with the complementary-slot freeing deferred as a focused follow-up, like
 //   Batch J/T/K and the Intimidate sub-group.
+//   DOWNLOAD / SUPERSWEET_SYRUP (switch-in stat changes, Batch L third sub-group — both 1:1 clean-upside copies,
+//   canon-only (no flavor picks — a switch-in stat swing is potent, so like Intimidate the set stays the canon
+//   users)): when the holder switches in, DOWNLOAD compares each foe's Defense vs Sp. Def and raises the holder's
+//   Attack or Sp. Atk (whichever is more effective) by 1 stage, and SUPERSWEET_SYRUP lowers every opposing battler's
+//   evasiveness by 1 stage (once per battle, tracked per party mon). Both join the same re-entrant switch-in driver
+//   as Intimidate (a one-line IsActiveSwitchInInnate addition each), delegating to the upstream
+//   ABILITYEFFECT_ON_SWITCHIN case so the stat change / script / pop-up match the real ability for free (each effect
+//   site in src/battle_util.c forces the pop-up to the innate when the chosen ability differs, the Speed Boost
+//   precedent). Both only ever help the holder (self-boost / foe-debuff), so no pure-boon divergence. AI is
+//   innate-aware: the switch-in stat simulation (SetBattlerStatStagesForSwitchin, src/battle_ai_switch.c) mirrors
+//   each effect for an innate holder via SpeciesHasInnate (Download boosts the holder's own stat, Supersweet Syrup
+//   drops the foe's evasion), and the Eject-Pack free-switch timing read credits an innate Supersweet Syrup foe via
+//   BattlerHasAbility, mirroring Intimidate. Suppression parity holds via IsInnateActive() (feature flag, Gastro
+//   Acid, Neutralizing Gas, not-on-field); neither is breakable, so Mold Breaker never touches them. Canon-only:
+//   Download to the Porygon line (merged onto its existing Analytic/Levitate rows) and every Genesect form;
+//   Supersweet Syrup to the Dipplin / Hydrapple line (merged onto their existing rows). Step 3.5: Porygon2's Download
+//   frontier set is freed to a complementary chosen Trace; the all-real-abilities-innate Porygon-Z and sole-ability
+//   Genesect sets keep their now-redundant chosen Download — still correct (the chosen runs it; the innate is
+//   redundant-but-skipped) — deferred as a focused follow-up, like Batch J/T/K and the Intimidate sub-group.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -1594,6 +1613,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PORYGON,
         INNATES(
             ABILITY_ANALYTIC,
+            ABILITY_DOWNLOAD,
             ABILITY_LEVITATE
         )
     },
@@ -2690,6 +2710,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PORYGON2,
         INNATES(
             ABILITY_ANALYTIC,
+            ABILITY_DOWNLOAD,
             ABILITY_LEVITATE
         )
     },
@@ -4487,6 +4508,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ADAPTABILITY,
             ABILITY_ANALYTIC,
+            ABILITY_DOWNLOAD,
             ABILITY_LEVITATE
         )
     },
@@ -5758,6 +5780,36 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MELOETTA_PIROUETTE,
         INNATES(
             ABILITY_SERENE_GRACE
+        )
+    },
+    { // 0649
+        SPECIES_GENESECT,
+        INNATES(
+            ABILITY_DOWNLOAD
+        )
+    },
+    { // 0649
+        SPECIES_GENESECT_DOUSE,
+        INNATES(
+            ABILITY_DOWNLOAD
+        )
+    },
+    { // 0649
+        SPECIES_GENESECT_SHOCK,
+        INNATES(
+            ABILITY_DOWNLOAD
+        )
+    },
+    { // 0649
+        SPECIES_GENESECT_BURN,
+        INNATES(
+            ABILITY_DOWNLOAD
+        )
+    },
+    { // 0649
+        SPECIES_GENESECT_CHILL,
+        INNATES(
+            ABILITY_DOWNLOAD
         )
     },
     { // 0650
@@ -8083,7 +8135,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DIPPLIN,
         INNATES(
             ABILITY_GLUTTONY,
-            ABILITY_STICKY_HOLD
+            ABILITY_STICKY_HOLD,
+            ABILITY_SUPERSWEET_SYRUP
         )
     },
     { // 1012
@@ -8149,7 +8202,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HYDRAPPLE,
         INNATES(
             ABILITY_REGENERATOR,
-            ABILITY_STICKY_HOLD
+            ABILITY_STICKY_HOLD,
+            ABILITY_SUPERSWEET_SYRUP
         )
     },
     { // 1025
@@ -8476,9 +8530,11 @@ bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index,
 }
 
 // Active, scripted innate abilities that fire when the HOLDER switches in — Intimidate (lowers every
-// opposing battler's Attack by 1 stage) and the information-reveal trio Anticipation / Forewarn / Frisk
+// opposing battler's Attack by 1 stage), the information-reveal trio Anticipation / Forewarn / Frisk
 // (each shows a switch-in message; Frisk/Forewarn reveal a foe's item/move, Anticipation warns of a
-// super-effective or OHKO move). The driver (TryActivateInnateSwitchInEffects) is re-entrant, so a
+// super-effective or OHKO move), Download (raises the holder's Attack or Sp. Atk toward the foe's weaker
+// defense) and Supersweet Syrup (lowers every opposing battler's evasiveness by 1 stage, once per battle).
+// The driver (TryActivateInnateSwitchInEffects) is re-entrant, so a
 // battler may carry more than one and each fires in turn. Each delegates to the existing upstream
 // ABILITYEFFECT_ON_SWITCHIN case, so the stat change / message / script / pop-up matches the real
 // ability for free (the effect site in src/battle_util.c forces the pop-up to the innate when the
@@ -8487,10 +8543,12 @@ static bool32 IsActiveSwitchInInnate(enum Ability ability)
 {
     switch (ability)
     {
-    case ABILITY_INTIMIDATE:   // lowers opposing battlers' Attack by 1 stage on switch-in
-    case ABILITY_ANTICIPATION: // shows a warning message if a foe knows a super-effective / OHKO move
-    case ABILITY_FOREWARN:     // reveals one of a foe's strongest moves
-    case ABILITY_FRISK:        // reveals the foes' held items
+    case ABILITY_INTIMIDATE:       // lowers opposing battlers' Attack by 1 stage on switch-in
+    case ABILITY_ANTICIPATION:     // shows a warning message if a foe knows a super-effective / OHKO move
+    case ABILITY_FOREWARN:         // reveals one of a foe's strongest moves
+    case ABILITY_FRISK:            // reveals the foes' held items
+    case ABILITY_DOWNLOAD:         // raises the holder's Attack or Sp. Atk vs the foe's weaker defense
+    case ABILITY_SUPERSWEET_SYRUP: // lowers opposing battlers' evasiveness by 1 stage (once per battle)
         return TRUE;
     default:
         return FALSE;

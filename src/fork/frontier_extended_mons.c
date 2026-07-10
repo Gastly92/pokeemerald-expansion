@@ -119,7 +119,9 @@
 // Gooey / Tangling Hair drop a contact attacker's Speed by 1)
 // or an item-steal reaction (Pickpocket steals a contact attacker's held item / Magician steals a
 // held item off a target it damages) or Liquid Ooze (HP-draining moves damage the attacker instead of healing it)
-// or a switch-in effect (Intimidate lowers every opposing battler's Attack by 1 stage on switch-in)
+// or a switch-in effect (Intimidate lowers every opposing battler's Attack by 1 stage on switch-in /
+// Download raises the holder's Attack or Sp. Atk toward the foe's weaker defense / Supersweet Syrup lowers
+// every opposing battler's evasiveness once per battle)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -294,6 +296,13 @@
 // follow-up, like Batch J/T/K): the remaining ~40 sets that hardcoded Intimidate now have it innately, so they are left on
 // their now-redundant chosen Intimidate — still correct (the chosen runs it; the innate is redundant-but-skipped there) —
 // with the complementary-slot freeing left to a focused follow-up rather than a game-wide override sweep.
+// The switch-in stat changes (Batch L third sub-group — Download raises the holder's Attack or Sp. Atk toward the
+// foe's weaker defense, Supersweet Syrup lowers every foe's evasiveness once per battle) free the Porygon2 Download
+// set to its complementary REAL slot-0 Trace (:x: stable — copies a foe ability). DEFERRED (tracked follow-up, like
+// Batch J/T/K and the Intimidate sub-group): the two Porygon-Z sets (Adaptability + Analytic + Download all now
+// innate) and the two Genesect sets (sole Download, now innate) keep their now-redundant chosen Download — still
+// correct (the chosen runs it; the innate is redundant-but-skipped). (Supersweet Syrup has no other frontier set to
+// free — Dipplin is not on the roster, and Hydrapple already runs a fork-owned chosen Grassy Surge override.)
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -6289,7 +6298,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PORYGON2,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_EVIOLITE, // Download offensive Eviolite pivot
+        .heldItem = ITEM_EVIOLITE, // Download offensive Eviolite pivot (Download now innate)
         .moves =
         {
             MOVE_TRI_ATTACK,
@@ -6297,7 +6306,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_RECOVER
         },
-        .ability = ABILITY_DOWNLOAD,
+        .ability = ABILITY_TRACE, // Download & Analytic now innate; chosen Trace copies a foe ability
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11714,7 +11723,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_DOWNLOAD, // Adaptability & Analytic now innate; chosen Download
+        .ability = ABILITY_DOWNLOAD, // Adaptability, Analytic & Download all now innate; chosen Download redundant-but-correct (deferred)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11734,7 +11743,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_TRICK
         },
-        .ability = ABILITY_DOWNLOAD,
+        .ability = ABILITY_DOWNLOAD, // Adaptability, Analytic & Download all now innate; chosen Download redundant-but-correct (deferred)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15906,7 +15915,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_DOWNLOAD,
+        .ability = ABILITY_DOWNLOAD, // sole ability, now innate; chosen Download redundant-but-correct (deferred)
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 4,
@@ -15926,7 +15935,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_DOWNLOAD,
+        .ability = ABILITY_DOWNLOAD, // sole ability, now innate; chosen Download redundant-but-correct (deferred)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

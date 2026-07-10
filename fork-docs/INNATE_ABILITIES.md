@@ -2469,3 +2469,49 @@ species is sole-ability for any of the three, so there are no redundant omission
 the ~14 frontier sets that hardcoded chosen Frisk / Anticipation now carry it innately, so they keep their
 now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the
 complementary-slot freeing is **deferred** like Batch J/T/K and the Intimidate sub-group.
+
+### ABILITY_DOWNLOAD / ABILITY_SUPERSWEET_SYRUP
+
+**Batch L's third sub-group** — two **switch-in stat-change** innates, each a **1:1 clean-upside copy** (a
+self-boost / foe-debuff that only ever helps the holder, so no pure-boon divergence). On switch-in **Download**
+compares each foe's Defense vs Sp. Def and raises the holder's **Attack or Sp. Atk** (whichever hits the weaker
+defense, via `GetDownloadStat`) by 1 stage; **Supersweet Syrup** lowers **every opposing battler's evasiveness**
+by 1 stage, **once per battle** (tracked per party mon in `GetBattlerPartyState(battler)->supersweetSyrup`, so it
+survives switch-out and never re-fires).
+
+**Driver + hook (reused).** Both ride the **existing switch-in driver** `TryActivateInnateSwitchInEffects`
+(`src/fork/innate_abilities.c` -> `IsActiveSwitchInInnate`) that Intimidate introduced — adding each was a
+**one-line** `IsActiveSwitchInInnate` case, no driver/hook change. The driver delegates to the upstream
+`AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler, <innate>, …)` case, so the stat change / script /
+pop-up (Download via `BattleScript_AbilityStatChange`, Supersweet Syrup via `BattleScript_SupersweetSyrupActivates`)
+match the real ability for free.
+
+**Pop-up / identity.** Both scripts show the ability pop-up (which reads the primary slot), so each effect site
+(the two `ABILITYEFFECT_ON_SWITCHIN` cases in `src/battle_util.c`) forces
+`gBattleScripting.abilityPopupOverwrite = gLastUsedAbility` (the innate being processed) only when the chosen
+ability differs (the Speed Boost / Intimidate precedent). `recordability` still records the **chosen** ability,
+so identity stays deterministic.
+
+**Suppression parity** holds via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas, not-on-field);
+neither is `breakable`, so Mold Breaker never touches them.
+
+**AI.** Unlike the information-reveal trio, both change a stat the AI's switch-in simulation reasons about, so
+each has a **dedicated** effect read that had to be made innate-aware. `SetBattlerStatStagesForSwitchin`
+(`src/battle_ai_switch.c`) handles both keyed off `aiAbility` (the chosen ability); the fork adds a mirror block
+after the existing Intimidate mirror that applies the same swing when the mon carries the ability **innately**
+(`SpeciesHasInnate(species, X)`, gated on `FEATURE_INNATE_ABILITIES` so feature-off never scans innates) — Download
+boosts the holder's own `GetDownloadStat` stat, Supersweet Syrup drops the foe's evasion (respecting the target's
+Contrary / Defiant / Competitive exactly like the real case). The Eject-Pack free-switch **timing** read (a foe
+whose Intimidate / Supersweet Syrup triggers switches before the turn starts) also now credits an innate
+Supersweet Syrup foe via `BattlerHasAbility`, mirroring the Intimidate treatment on the same line.
+
+**Species (canon-only, no flavor picks** — a switch-in stat swing is potent, so like Intimidate the set stays the
+canon users). **Download** -> the Porygon / Porygon2 / Porygon-Z line (merged onto their existing Analytic /
+Levitate rows) and **every Genesect form** (base + Douse / Shock / Burn / Chill drives, keyed exactly per form).
+**Supersweet Syrup** -> the Dipplin / Hydrapple line (merged onto their existing Sticky Hold rows). No omissions:
+Genesect is sole-Download but **is** a frontier set, so it takes the innate (see Step 3.5) rather than being
+dropped as redundant. **Step 3.5**: the Porygon2 Download frontier set is freed to its complementary REAL slot-0
+**Trace** (`:x:` stable — copies a foe ability); the all-real-abilities-innate Porygon-Z sets and the sole-ability
+Genesect sets keep their now-redundant chosen Download (still correct: the chosen runs it, the innate is
+redundant-but-skipped) — **deferred** like Batch J/T/K and the Intimidate sub-group. Supersweet Syrup has no other
+frontier set to free (Dipplin is off-roster; Hydrapple already runs a fork-owned chosen Grassy Surge override).

@@ -94,7 +94,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Heatproof | Halves the damage the Pokémon takes from Fire-type moves and from being burned. |
 | :x: | Simple | Doubles the Pokémon's stat changes. |
 | :x: | Dry Skin | Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. However, the Pokémon takes 25% more damage from Fire-type moves. The Pokémon has 1/8 of its max HP restored at the end of every turn in rain, but it loses 1/8 of its max HP at the end of every turn in harsh sunlight. |
-| :white_large_square: | Download | The Pokémon compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat — whichever will be more effective. |
+| :white_check_mark: | Download | The Pokémon compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat — whichever will be more effective. |
 | :white_check_mark: | Iron Fist | Boosts the power of the Pokémon's punching moves by 20%. |
 | :white_check_mark: | Poison Heal | If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP. |
 | :white_check_mark: | Adaptability | Boosts the power of moves of the same type as the Pokémon by 100% instead of 50%. |
@@ -312,7 +312,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Wellspring Mask to shine and the Pokémon's Sp. Def stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Cornerstone Mask to shine and the Pokémon's Defense stat to be boosted. |
 | :x: | Toxic Chain | The power of the Pokémon's toxic chain may badly poison any target the Pokémon hits with a move. |
-| :white_large_square: | Supersweet Syrup | When the Pokémon enters a battle, opponents' evasiveness is lowered by 1 stage. This Ability is triggered only once per battle. |
+| :white_check_mark: | Supersweet Syrup | When the Pokémon enters a battle, opponents' evasiveness is lowered by 1 stage. This Ability is triggered only once per battle. |
 | :x: | Tera Shift | When the Pokémon enters a battle, it absorbs the energy around itself and transforms into its Terastal Form. |
 | :x: | Tera Shell | The Pokémon's shell contains the powers of each type. All damage-dealing moves that hit the Pokémon when its HP is full will not be very effective. |
 | :x: | Teraform Zero | When Terapagos changes into its Stellar Form, it uses its hidden powers to eliminate all effects of weather and terrain, reducing them to zero. |
