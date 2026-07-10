@@ -2266,3 +2266,40 @@ innate row. Step 3.5 freed three frontier sets: Coalossal (Steam Engine now inna
 slot-2 **Flash Fire**; both Baxcalibur sets (Thermal Exchange + Ice Body both innate = all real abilities innate)
 -> a fork-owned override filling empty slot 1 with **Snow Warning**, whose snow turns on the innate Ice Body heal.
 Wattrel/Kilowattrel have no frontier set to free.
+
+### ABILITY_CURSED_BODY
+
+The fourth sub-group of Batch K (the on-hit set), a **1:1 clean-upside copy** — it only ever hampers the FOE.
+When the holder takes damage from a move, **Cursed Body** has a 30% chance (always, under `DETERMINISTIC_ABILITIES`
+— the shipping default) to **disable the move the attacker just used**, exactly like the real ability.
+
+- **Reuses the existing on-hit driver** — no new infra. It fires from the **same** upstream `ABILITYEFFECT_MOVE_END`
+  case as the contact reactions, so it is a **one-line addition to `IsActiveOnHitInnate`**
+  (`src/fork/innate_abilities.c`), delegating to the upstream case (`ABILITY_CURSED_BODY`, `src/battle_util.c`) so
+  the disable / `BattleScript_CursedBodyActivates` script / pop-up match the real ability. Unlike the contact
+  reactions it does **not** require contact — any damaging hit that satisfies `IsBattlerTurnDamaged` can trigger it
+  (Aroma Veil on the attacker's side and Struggle are still exempt, from the upstream case).
+- **The `DETERMINISTIC_ABILITIES` surface.** The upstream case already gates the roll as
+  `GetConfig(DETERMINISTIC_ABILITIES) || RandomPercentage(RNG_CURSED_BODY, 30)` (a pre-existing `FORK:` change —
+  Cursed Body always disables under the deterministic config), so the innate inherits the always-disable behavior
+  for free; the shipping default (deterministic on) is exactly what the tests exercise.
+- **The pop-up.** The effect site sets `gBattleScripting.abilityPopupOverwrite` to the innate (`gLastUsedAbility`)
+  **only when the chosen ability differs** (the Speed Boost / Rough Skin precedent), so a real Cursed Body stays
+  byte-for-byte unchanged. The driver skips an innate equal to the chosen ability, so a real Cursed Body never
+  disables twice beside the chosen-ability block.
+- **AI.** None needed — Cursed Body has **no** dedicated `battle_ai_*.c` read (grep is empty), so there is nothing
+  to make innate-aware (the same as Aftermath / Innards Out).
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); Cursed Body is not
+`breakable`, so Mold Breaker never touches it, same as the real ability. **Species (canon-only):** every canon
+Cursed Body user in any real slot — the **Shuppet / Banette** line (incl. **Mega Banette** as a pure-boon mirror),
+**Froslass** (+ the fork's Mega), the **Frillish / Jellicent** line, the **Sinistea / Polteageist** forms, the
+**Dreepy / Dragapult** line, **Corsola-Galar**, and merged onto **Marowak-Alola**'s existing Rock Head row.
+**Gengar / Gengar-Gmax are omitted** as redundant: Cursed Body is their **sole** (therefore always-chosen) ability,
+so an innate could never be observed (the Mega Lopunny / Scrappy precedent) — they keep their innate Levitate rows.
+Step 3.5 freed two frontier sets to a complementary real slot with a stable `:x:` pick — **Jellicent** (Cursed Body
+now innate) -> chosen **Water Absorb**, **Polteageist** -> its only other real slot **Weak Armor**. The
+sole/all-abilities-innate sets keep their now-redundant chosen Cursed Body (still correct — the chosen runs it, the
+innate is redundant-but-skipped): **Froslass x2** (Snow Cloak + Cursed Body both innate) and **Banette x1** (only
+the still-pending Frisk left), deferred as a focused follow-up like Batch J/T. Gengar's four sets are untouched
+(Gengar isn't in the innate table, so its chosen Cursed Body is its real, observed ability).

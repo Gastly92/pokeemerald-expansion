@@ -386,7 +386,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 15 | Batch J — End-of-turn effects | active, **existing** driver | done |
 | 16 | Batch T — Berry/item synergy | active/trait | done |
 | 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | done |
-| 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | **in progress** (contact-reaction + on-faint + on-hit-stat/charge sub-groups done: Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power; remaining: Cursed Body / Pickpocket / Magician / Liquid Ooze) |
+| 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | **in progress** (contact-reaction + on-faint + on-hit-stat/charge + disable sub-groups done: Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body; remaining: Pickpocket / Magician / Liquid Ooze) |
 | 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | open |
 | 20 | Batch L — Switch-in actives | active, needs step 19 | open |
 | 21 | Batch M — On-KO/on-hit stat boosts | active | open |
@@ -443,7 +443,7 @@ row is `done`.
 | I — Status-condition immunities | trait | 6 | done |
 | S — Misc single-site traits | trait | 12 | done |
 | J — End-of-turn effects | active (existing driver) | 10 | done |
-| K — On-contact/on-hit/on-faint | active (new driver) | 13 | in progress (9/13: driver built + Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power; 4 remaining: Cursed Body / Pickpocket / Magician / Liquid Ooze) |
+| K — On-contact/on-hit/on-faint | active (new driver) | 13 | in progress (10/13: driver built + Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body; 3 remaining: Pickpocket / Magician / Liquid Ooze) |
 | L — Switch-in actives | active (new driver) | 8 | open |
 | M — On-KO/on-hit stat boosts | active | 11 | open |
 | T — Berry/item synergy | active/trait | 4 | done |

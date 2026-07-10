@@ -223,9 +223,23 @@
 //   heuristics for Steam Engine / Thermal Exchange (the scoringPartnerAbility promotion in battle_ai_main.c);
 //   Thermal Exchange's burn-immunity AI comes free through CanBeBurned. Canon-only: Steam Engine to the Rolycoly
 //   line, Thermal Exchange to the Frigibax line, Wind Power to the Wattrel line; the frontier sets that hardcoded
-//   these (Coalossal x1, Baxcalibur x2) were freed to a fork-owned complementary chosen ability. The remaining
-//   Batch K abilities (Cursed Body / Pickpocket / Magician / Liquid Ooze) are NOT yet wired — later sub-PRs reuse
-//   this driver.
+//   these (Coalossal x1, Baxcalibur x2) were freed to a fork-owned complementary chosen ability. CURSED_BODY
+//   (on-hit move-disable, Batch K fourth sub-group) joins the same on-hit driver (a one-line IsActiveOnHitInnate
+//   addition): when the holder is hit by a damaging move, it has a 30% chance (always, under
+//   DETERMINISTIC_ABILITIES) to disable the move the attacker just used, delegating to the upstream
+//   ABILITYEFFECT_MOVE_END case so the disable / script / pop-up match the real ability (the effect site forces
+//   the pop-up to the innate when the chosen ability differs). It is a 1:1 clean-upside copy (it only ever
+//   hampers the FOE) and has no dedicated AI read (no battle_ai_*.c site), so no AI wiring is needed. Canon-only:
+//   given to every canon Cursed Body user in any real slot (the Shuppet / Banette line incl. Mega Banette as a
+//   pure-boon mirror, Froslass, the Frillish / Jellicent line, the Sinistea / Polteageist forms, the Dreepy /
+//   Dragapult line, Corsola-Galar, and merged onto Marowak-Alola's existing Rock Head row). Gengar / Gengar-Gmax
+//   are OMITTED as redundant: Cursed Body is their SOLE (therefore always-chosen) ability, so an innate could
+//   never be observed (the Mega Lopunny / Scrappy precedent) — they keep their innate Levitate rows unchanged.
+//   Frontier sets that hardcoded Cursed Body were freed where a complementary real slot exists (Jellicent ->
+//   Water Absorb, Polteageist -> Weak Armor); the sole/all-abilities-innate sets (Gengar x4, Froslass x2,
+//   Banette x1) keep their now-redundant chosen Cursed Body — still correct (the chosen runs it; the innate is
+//   redundant-but-skipped) — deferred as a focused follow-up, like Batch J/T. The remaining Batch K abilities
+//   (Pickpocket / Magician / Liquid Ooze) are NOT yet wired — later sub-PRs reuse this driver.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -1184,6 +1198,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0105
         SPECIES_MAROWAK_ALOLA,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_ROCK_HEAD
         )
     },
@@ -2444,6 +2459,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR
         )
     },
+    { // 0222
+        SPECIES_CORSOLA_GALAR,
+        INNATES(
+            ABILITY_CURSED_BODY
+        )
+    },
     { // 0223
         SPECIES_REMORAID,
         INNATES(
@@ -3367,6 +3388,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0353
         SPECIES_SHUPPET,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
@@ -3374,6 +3396,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0354
         SPECIES_BANETTE,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
@@ -3381,6 +3404,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0354
         SPECIES_BANETTE_MEGA,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
@@ -4290,6 +4314,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0478
         SPECIES_FROSLASS,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE,
             ABILITY_SNOW_CLOAK
         )
@@ -4297,6 +4322,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0478
         SPECIES_FROSLASS_MEGA,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE,
             ABILITY_SNOW_CLOAK
         )
@@ -5156,12 +5182,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0592
         SPECIES_FRILLISH,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
     { // 0593
         SPECIES_JELLICENT,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
@@ -6966,24 +6994,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0854
         SPECIES_SINISTEA,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
     { // 0854
         SPECIES_SINISTEA_ANTIQUE,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
     { // 0855
         SPECIES_POLTEAGEIST,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
     { // 0855
         SPECIES_POLTEAGEIST_ANTIQUE,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
@@ -7151,6 +7183,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DREEPY,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
         )
@@ -7159,6 +7192,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DRAKLOAK,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
         )
@@ -7167,6 +7201,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DRAGAPULT,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
         )
@@ -8007,7 +8042,8 @@ bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index)
 // Active, scripted innate abilities that react when the HOLDER is hit by a move — the
 // on-hit / on-contact class (contact-damage: Rough Skin / Iron Barbs; contact-Speed-drop:
 // Gooey / Tangling Hair; on-faint retaliation: Aftermath / Innards Out, which fire from the
-// same ABILITYEFFECT_MOVE_END step after the holder faints). The driver
+// same ABILITYEFFECT_MOVE_END step after the holder faints; on-hit stat/charge: Steam Engine /
+// Thermal Exchange / Wind Power; move-disable: Cursed Body). The driver
 // (TryActivateInnateOnHitEffects) is re-entrant, so a battler may carry more than one and each
 // fires in turn. Each delegates to the existing upstream ABILITYEFFECT_MOVE_END case, so the
 // recoil / retaliation damage / stat drop / script / pop-up matches the real ability for free
@@ -8028,6 +8064,7 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_STEAM_ENGINE:  // raises Speed +6 when hit by a Fire/Water move
     case ABILITY_THERMAL_EXCHANGE: // raises Attack +1 when hit by a Fire move
     case ABILITY_WIND_POWER:    // charges the next Electric move when hit by a wind move
+    case ABILITY_CURSED_BODY:   // 30% (always under DETERMINISTIC_ABILITIES) to disable the move that hit the holder
         return TRUE;
     default:
         return FALSE;

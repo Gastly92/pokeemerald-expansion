@@ -4116,6 +4116,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 gBattleMons[gBattlerAttacker].volatiles.disabledMove = gChosenMove;
                 gBattleMons[gBattlerAttacker].volatiles.disableTimer = B_DISABLE_TIMER;
                 PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove);
+                // FORK: innate Cursed Body — show the innate in the pop-up, not the chosen ability, only
+                // when they differ (Speed Boost precedent). gLastUsedAbility is the ability being processed.
+                if (GetBattlerAbility(gBattlerTarget) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 BattleScriptCall(BattleScript_CursedBodyActivates);
                 effect++;
             }

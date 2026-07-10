@@ -136,7 +136,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Unnerve | Makes opponents unable to eat Berries. |
 | :white_large_square: | Defiant | When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages. |
 | :x: | Defeatist | Halves the Pokémon's Attack and Sp. Atk stats when its HP drops to half or less. |
-| :white_large_square: | Cursed Body | When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns. |
+| :white_check_mark: | Cursed Body | When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns. |
 | :white_check_mark: | Healer | The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn. |
 | :white_check_mark: | Friend Guard | Reduces the damage allies take by 25%. |
 | :x: | Weak Armor | When the Pokémon takes damage from a physical move, its Defense stat is lowered by 1 stage, but its Speed stat is boosted by 2 stages. |
