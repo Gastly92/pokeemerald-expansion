@@ -1370,11 +1370,12 @@ static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId b
         }
         break;
     case EFFECT_ABSORB:
-        if (abilityDef == ABILITY_LIQUID_OOZE)
+        if (abilityDef == ABILITY_LIQUID_OOZE || IsInnateActive(battlerDef, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
             return TRUE;
         break;
     case EFFECT_DREAM_EATER:
-        if (abilityDef == ABILITY_LIQUID_OOZE && GetConfig(B_DREAM_EATER_LIQUID_OOZE) >= GEN_5)
+        if ((abilityDef == ABILITY_LIQUID_OOZE || IsInnateActive(battlerDef, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
+         && GetConfig(B_DREAM_EATER_LIQUID_OOZE) >= GEN_5)
             return TRUE;
         break;
     default:
@@ -4230,7 +4231,7 @@ bool32 ShouldAbsorb(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum M
     if (gBattleMons[battlerAtk].volatiles.healBlock)
         healAmount = 0;
 
-    if (gAiLogicData->abilities[battlerDef] == ABILITY_LIQUID_OOZE)
+    if (gAiLogicData->abilities[battlerDef] == ABILITY_LIQUID_OOZE || IsInnateActive(battlerDef, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
         return FALSE;
     if (IsBattlerAtMaxHp(battlerAtk) && (aiIsFaster || GetMoveCategory(GetIncomingMove(battlerAtk, battlerDef, gAiLogicData)) == DAMAGE_CATEGORY_STATUS))
         return FALSE;

@@ -238,8 +238,33 @@
 //   Frontier sets that hardcoded Cursed Body were freed where a complementary real slot exists (Jellicent ->
 //   Water Absorb, Polteageist -> Weak Armor); the sole/all-abilities-innate sets (Gengar x4, Froslass x2,
 //   Banette x1) keep their now-redundant chosen Cursed Body — still correct (the chosen runs it; the innate is
-//   redundant-but-skipped) — deferred as a focused follow-up, like Batch J/T. The remaining Batch K abilities
-//   (Pickpocket / Magician / Liquid Ooze) are NOT yet wired — later sub-PRs reuse this driver.
+//   redundant-but-skipped) — deferred as a focused follow-up, like Batch J/T.
+//   PICKPOCKET / MAGICIAN / LIQUID_OOZE (item-steal reactions + drain punish, Batch K fifth/final sub-group — all 1:1
+//   clean-upside copies, canon-only (no flavor picks)): when the holder is hit by a CONTACT move, PICKPOCKET steals the
+//   attacker's held item if the holder has none (wired at the dedicated MoveEndPickpocket step, src/battle_move_resolution.c,
+//   made innate-aware beside its cached chosen-ability read — NOT the on-hit driver, since it has its own move-end step);
+//   MAGICIAN steals a held item off a target the holder DAMAGED if the holder has none — it is ATTACKER-side, so it needs a
+//   NEW attacker-side on-hit driver (TryActivateInnateOnHitAttackerEffects -> IsActiveOnHitAttackerInnate), the attacker-side
+//   analogue of the target-side on-hit driver, hooked from the new MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE step and
+//   delegating to the upstream ABILITYEFFECT_MOVE_END_FOES_FAINTED case so the item steal / script / pop-up match the real
+//   ability; LIQUID_OOZE is a passive calc modifier (no driver — like Filter/Unaware): an HP-draining move (Absorb/Giga
+//   Drain/Leech Seed/Dream Eater) DAMAGES the attacker for the drained amount instead of healing it, wired beside the cached
+//   chosen-ability reads at the drain sites (SetHealScript in src/battle_move_resolution.c, SetUpLeechSeedDrain in
+//   src/battle_util.c, the non-BUFF Leech Seed tick in src/battle_end_turn.c). Each effect site forces the pop-up to the innate
+//   when the chosen ability differs (Speed Boost precedent — Pickpocket/Magician/Liquid Ooze all show ability pop-ups). AI is
+//   innate-aware for Liquid Ooze (its dedicated drain-avoidance reads in battle_ai_util.c ShouldAbsorb / AI_IsMoveEffectInMinus
+//   and the Leech Seed scoring in battle_ai_main.c credit an innate via IsInnateActive); Pickpocket / Magician have no dedicated
+//   battle_ai_*.c effect read (the AI does not reason about the item steal), so no AI wiring is needed. Suppression parity holds
+//   via IsInnateActive() (Gastro Acid / Neutralizing Gas / not-on-field); none of the three is breakable, so Mold Breaker never
+//   touches them. Canon-only species: Pickpocket -> the Seedot / Sneasel(+Hisui) / Weavile / Binacle / Impidimp / Shroodle /
+//   Tinkatink lines; Magician -> the Fennekin line (+ fork Mega Delphox as a pure-boon mirror), Klefki, the Hoopa forms; Liquid
+//   Ooze -> the Tentacool and Gulpin lines (each merged into the species' existing innate row). KNOWN LIMITATION (Sticky Hold vs
+//   innate Pickpocket): as with a chosen Pickpocket, an innate Sticky Hold on the attacker does not block an innate Pickpocket's
+//   on-contact steal (the attacker-side Sticky-Hold precheck reads the cached chosen ability) — same cross-cutting jumpifability
+//   limitation already noted for Sticky Hold. Step 3.5: all sixteen frontier sets that hardcoded these abilities (Tentacruel /
+//   Swalot / Weavile x3 / Grimmsnarl x3 / Delphox x3 / Klefki x2 / Hoopa+Unbound x3) now have all their useful real abilities
+//   innate (or only the still-pending Frisk free), so they keep their now-redundant chosen ability — still correct (the chosen
+//   runs it; the innate is redundant-but-skipped) — deferred as a focused follow-up, like Batch J/T and the Cursed Body sub-group.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -860,6 +885,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TENTACOOL,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_LIQUID_OOZE,
             ABILITY_RAIN_DISH
         )
     },
@@ -867,6 +893,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TENTACRUEL,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_LIQUID_OOZE,
             ABILITY_RAIN_DISH
         )
     },
@@ -2400,14 +2427,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SNEASEL,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_PICKPOCKET
         )
     },
     { // 0215
         SPECIES_SNEASEL_HISUI,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_PICKPOCKET
         )
     },
     { // 0216
@@ -2827,21 +2856,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SEEDOT,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_PICKPOCKET
         )
     },
     { // 0274
         SPECIES_NUZLEAF,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_PICKPOCKET
         )
     },
     { // 0275
         SPECIES_SHIFTRY,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_PICKPOCKET
         )
     },
     { // 0276
@@ -3096,6 +3128,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GULPIN,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_LIQUID_OOZE,
             ABILITY_STENCH,
             ABILITY_STICKY_HOLD
         )
@@ -3104,6 +3137,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SWALOT,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_LIQUID_OOZE,
             ABILITY_STENCH,
             ABILITY_STICKY_HOLD
         )
@@ -4187,6 +4221,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0461
         SPECIES_WEAVILE,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRESSURE
         )
     },
@@ -5549,25 +5584,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0653
         SPECIES_FENNEKIN,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_MAGICIAN
         )
     },
     { // 0654
         SPECIES_BRAIXEN,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_MAGICIAN
         )
     },
     { // 0655
         SPECIES_DELPHOX,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_MAGICIAN
         )
     },
     { // 0655
         SPECIES_DELPHOX_MEGA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_MAGICIAN
         )
     },
     { // 0656
@@ -5814,6 +5853,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0688
         SPECIES_BINACLE,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_SNIPER,
             ABILITY_TOUGH_CLAWS
         )
@@ -5821,6 +5861,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0689
         SPECIES_BARBARACLE,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_SNIPER,
             ABILITY_TOUGH_CLAWS
         )
@@ -5933,6 +5974,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KLEFKI,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGICIAN,
             ABILITY_PRANKSTER
         )
     },
@@ -6092,6 +6134,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HOOPA,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGICIAN,
             ABILITY_PRANKSTER
         )
     },
@@ -6099,6 +6142,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HOOPA_UNBOUND,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGICIAN,
             ABILITY_PRANKSTER
         )
     },
@@ -7022,24 +7066,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0859
         SPECIES_IMPIDIMP,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
     },
     { // 0860
         SPECIES_MORGREM,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
     },
     { // 0861
         SPECIES_GRIMMSNARL,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
     },
     { // 0861
         SPECIES_GRIMMSNARL_GMAX,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
     },
@@ -7517,6 +7565,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0944
         SPECIES_SHROODLE,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
             ABILITY_UNBURDEN
         )
@@ -7590,19 +7639,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0957
         SPECIES_TINKATINK,
         INNATES(
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_PICKPOCKET
         )
     },
     { // 0958
         SPECIES_TINKATUFF,
         INNATES(
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_PICKPOCKET
         )
     },
     { // 0959
         SPECIES_TINKATON,
         INNATES(
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_PICKPOCKET
         )
     },
     { // 0960
@@ -8105,6 +8157,59 @@ bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Mo
         if (!IsInnateActive(battler, innate))
             continue;
         if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END, battler, innate, move, TRUE))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+// Active, scripted innate abilities that react on the ATTACKER's side when it hits/faints a foe —
+// today only Magician (steal a held item off a target the holder damaged). The driver
+// (TryActivateInnateOnHitAttackerEffects) is re-entrant, mirroring the target-side on-hit driver,
+// and delegates to the existing upstream ABILITYEFFECT_MOVE_END_FOES_FAINTED case, so the item
+// steal / script / pop-up match the real ability for free (the effect site in src/battle_util.c
+// forces the pop-up to the innate when the chosen ability differs, the Speed Boost precedent).
+static bool32 IsActiveOnHitAttackerInnate(enum Ability ability)
+{
+    switch (ability)
+    {
+    case ABILITY_MAGICIAN: // steals a held item off a target it damaged, if not already holding one
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+// FORK: attacker-side on-hit innate driver (FEATURE_INNATE_ABILITIES). Fires the attacker's active,
+// scripted attacker-side on-hit innates (today only Magician), hooked from the
+// MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE step of the move-end loop (src/battle_move_resolution.c)
+// right after the chosen-ability foes-fainted block.
+//
+// RE-ENTRANT, exactly like the target-side on-hit driver: *index is the next innate-list slot to
+// consider; the move-end loop holds the step (keeping the cursor) while this returns TRUE, and only
+// advances once it returns FALSE (list exhausted), then resets the cursor. `battler` is the attacker
+// (gBattlerAttacker); the delegated case reads it as the item thief.
+//
+// The effect is delegated to the upstream attacker-side handler with the innate passed explicitly:
+// AbilityBattleEffects(ABILITYEFFECT_MOVE_END_FOES_FAINTED, battler, innate, move, TRUE) sets
+// gLastUsedAbility = innate and runs that ability's existing case, so the item steal / script /
+// pop-up match the real ability. An innate equal to the chosen ability is skipped so the
+// chosen-ability foes-fainted block (which already ran it) never fires twice; IsInnateActive()
+// applies the usual suppression (feature flag, Gastro Acid, Neutralizing Gas, not-on-field).
+bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index, enum Move move)
+{
+    enum Ability innate;
+
+    while ((innate = GetSpeciesInnate(gBattleMons[battler].species, *index)) != ABILITY_NONE)
+    {
+        (*index)++; // step past this slot now, so a fired effect resumes at the next one
+        if (!IsActiveOnHitAttackerInnate(innate))
+            continue;
+        if (GetBattlerAbility(battler) == innate) // chosen-ability foes-fainted block already ran it
+            continue;
+        if (!IsInnateActive(battler, innate))
+            continue;
+        if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END_FOES_FAINTED, battler, innate, move, TRUE))
             return TRUE;
     }
 

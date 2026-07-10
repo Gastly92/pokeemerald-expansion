@@ -1814,7 +1814,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             if ((gBattleMons[battlerDef].volatiles.leechSeededBy & LEECH_SEED_BIT(battlerAtk))
                 && aiData->abilities[battlerDef] == ABILITY_MAGIC_GUARD)
                 ADJUST_SCORE(-10);
-            else if (aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE)
+            else if (aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE || IsInnateActive(battlerDef, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
                 ADJUST_SCORE(-3);
         }
         else if (gBattleMons[battlerDef].volatiles.leechSeed
@@ -1822,7 +1822,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         {
             ADJUST_SCORE(-10);
         }
-        else if (aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE)
+        else if (aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE || IsInnateActive(battlerDef, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
         {
             ADJUST_SCORE(-3);
         }
@@ -4599,6 +4599,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
           || (!GetConfig(BUFF_LEECH_SEED) && gBattleMons[battlerDef].volatiles.leechSeed)
           || HasMoveWithEffect(battlerDef, EFFECT_RAPID_SPIN)
           || aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE
+          || IsInnateActive(battlerDef, ABILITY_LIQUID_OOZE) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
           || aiData->abilities[battlerDef] == ABILITY_MAGIC_GUARD)
             break;
         ADJUST_SCORE(GOOD_EFFECT);

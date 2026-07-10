@@ -117,6 +117,8 @@
 // Cheek Pouch heals 1/3 max HP on eating a Berry / Unburden doubles the holder's Speed once its item is consumed or lost)
 // or an on-hit contact reaction (Rough Skin / Iron Barbs chip a contact attacker 1/8 max HP /
 // Gooey / Tangling Hair drop a contact attacker's Speed by 1)
+// or an item-steal reaction (Pickpocket steals a contact attacker's held item / Magician steals a
+// held item off a target it damages) or Liquid Ooze (HP-draining moves damage the attacker instead of healing it)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -273,6 +275,16 @@
 // pending) keep their now-redundant chosen Cursed Body — correct (the chosen runs it; the innate is redundant-but-
 // skipped). Gengar's four sets are UNTOUCHED: Cursed Body is its sole ability, so it is omitted from the innate table
 // (never redundant) and keeps chosen Cursed Body as its real, observed ability.
+// The item-steal reactions + Liquid Ooze (Batch K fifth/final sub-group — Pickpocket steals a contact attacker's held
+// item, Magician steals a held item off a target it damages, Liquid Ooze makes HP-draining moves damage the attacker
+// instead of healing it) touch sixteen sets, all DEFERRED (tracked follow-up, like Batch J/T and the Cursed Body sub-
+// group): every affected species now has all its useful real abilities innate (or its only free real slot is the still-
+// pending Frisk), so the sets are left on their now-innate chosen ability — still correct (the chosen runs it; the innate
+// is redundant-but-skipped there) rather than a game-wide override sweep. Tentacruel (Clear Body + Liquid Ooze + Rain Dish
+// all innate) and Swalot (Liquid Ooze + Sticky Hold + Gluttony all innate) keep chosen Liquid Ooze; the three Weavile sets
+// (Pressure + Pickpocket both innate) and three Grimmsnarl sets (Prankster + Pickpocket innate, Frisk still pending) keep
+// chosen Pickpocket; the three Delphox sets (Blaze + Magician innate), two Klefki sets (Prankster + Magician innate) and
+// three Hoopa / Hoopa-Unbound sets (sole Magician, now innate) keep chosen Magician. Each remains a real, roster-legal slot.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -11138,7 +11150,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_PICKPOCKET, // Pressure now innate; chosen Pickpocket steals on contact
+        .ability = ABILITY_PICKPOCKET, // Pressure + Pickpocket both now innate; chosen Pickpocket redundant-but-correct (deferred, see header)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11178,7 +11190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LOW_KICK,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_PICKPOCKET, // Pressure now innate; chosen Pickpocket steals on contact
+        .ability = ABILITY_PICKPOCKET, // Pressure + Pickpocket both now innate; chosen Pickpocket redundant-but-correct (deferred, see header)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15993,7 +16005,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_MAGICIAN, // Blaze now innate (latched); chosen Magician
+        .ability = ABILITY_MAGICIAN, // Blaze + Magician both now innate; chosen Magician redundant-but-correct (deferred, see header)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16033,7 +16045,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_PSYSHOCK
         },
-        .ability = ABILITY_MAGICIAN, // Blaze now innate (latched); chosen Magician
+        .ability = ABILITY_MAGICIAN, // Blaze + Magician both now innate; chosen Magician redundant-but-correct (deferred, see header)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17187,7 +17199,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_SPIKES
         },
-        .ability = ABILITY_MAGICIAN, // Prankster now innate; chosen Magician swipes a held item off whatever it hits
+        .ability = ABILITY_MAGICIAN, // Prankster + Magician both now innate; chosen Magician redundant-but-correct (deferred, see header)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17207,7 +17219,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_MAGICIAN, // Prankster now innate; chosen Magician swipes a held item off whatever it hits
+        .ability = ABILITY_MAGICIAN, // Prankster + Magician both now innate; chosen Magician redundant-but-correct (deferred, see header)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21277,7 +21289,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIRIT_BREAK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_PICKPOCKET, // Prankster now innate; chosen Pickpocket steals on contact (Spirit Break)
+        .ability = ABILITY_PICKPOCKET, // Prankster + Pickpocket both now innate; chosen Pickpocket redundant-but-correct, deferred (Spirit Break set)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21297,7 +21309,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_DRAIN_PUNCH
         },
-        .ability = ABILITY_PICKPOCKET, // Prankster now innate; chosen Pickpocket steals on contact (this set is a contact sweeper)
+        .ability = ABILITY_PICKPOCKET, // Prankster + Pickpocket both now innate; chosen Pickpocket redundant-but-correct, deferred (contact sweeper)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21317,7 +21329,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_PARTING_SHOT
         },
-        .ability = ABILITY_PICKPOCKET, // Prankster now innate; chosen Pickpocket steals on contact (Spirit Break)
+        .ability = ABILITY_PICKPOCKET, // Prankster + Pickpocket both now innate; chosen Pickpocket redundant-but-correct, deferred (Spirit Break set)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

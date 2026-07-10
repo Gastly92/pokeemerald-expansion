@@ -60,7 +60,12 @@
 //   attacker the holder's lost HP when any move KOs it; STEAM_ENGINE / THERMAL_EXCHANGE / WIND_POWER
 //   raise Speed / Attack / charge the next Electric move when the holder is hit by a Fire-or-Water /
 //   Fire / wind move, Thermal Exchange also granting burn immunity; CURSED_BODY disables the move
-//   that hit the holder, 30% / always under DETERMINISTIC_ABILITIES),
+//   that hit the holder, 30% / always under DETERMINISTIC_ABILITIES;
+//   PICKPOCKET / MAGICIAN / LIQUID_OOZE (Batch K fifth/final sub-group — Pickpocket steals a contact
+//   attacker's held item, wired at the dedicated MoveEndPickpocket step; Magician steals a held item off
+//   a target the holder damages, via a new ATTACKER-side on-hit driver hooked at
+//   MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE; Liquid Ooze is a passive calc modifier that makes
+//   HP-draining moves damage the attacker instead of healing it),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
@@ -123,5 +128,15 @@ bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index);
 // exhausted, so a battler with several on-hit innates fires them across passes. See the
 // definition in src/fork/innate_abilities.c for the suppression/double-fire guards.
 bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Move move);
+
+// FORK: attacker-side on-hit innate driver. Fires `battler`'s active, scripted attacker-side
+// on-hit innates — today only Magician (steal a held item off a target the holder damaged).
+// Hooked from MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE in the move-end loop
+// (src/battle_move_resolution.c), right after the chosen-ability foes-fainted block. `battler` is
+// the attacker (gBattlerAttacker); `move` is the move it used. Re-entrant exactly like
+// TryActivateInnateOnHitEffects: *index is the per-battler resume cursor, firing one effect per
+// call and returning TRUE, or FALSE once the list is exhausted. Delegates to the upstream
+// ABILITYEFFECT_MOVE_END_FOES_FAINTED case so the steal / script / pop-up match the real ability.
+bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index, enum Move move);
 
 #endif // GUARD_INNATE_ABILITIES_H

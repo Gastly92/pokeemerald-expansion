@@ -2831,9 +2831,12 @@ static enum MoveEndResult MoveEndProtectLikeEffect(struct BattleCalcValues *cv)
 static void SetHealScript(struct BattleCalcValues *cv, s32 healAmount)
 {
     healAmount = GetDrainedBigRootHp(cv->battlerAtk, healAmount);
-    if (cv->abilities[cv->battlerDef] == ABILITY_LIQUID_OOZE
+    if ((cv->abilities[cv->battlerDef] == ABILITY_LIQUID_OOZE || IsInnateActive(cv->battlerDef, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
      && (cv->moveEffect != EFFECT_DREAM_EATER || GetConfig(B_DREAM_EATER_LIQUID_OOZE) >= GEN_5))
     {
+        // FORK: show the innate in the target's pop-up when the chosen ability differs (Speed Boost precedent).
+        if (GetBattlerAbility(cv->battlerDef) != ABILITY_LIQUID_OOZE)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_LIQUID_OOZE;
         SetPassiveDamageAmount(cv->battlerAtk, healAmount);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ABSORB_OOZE;
         BattleScriptCall(BattleScript_EffectAbsorbLiquidOoze);
@@ -3943,6 +3946,30 @@ static enum MoveEndResult MoveEndAbilityEffectFoesFainted(struct BattleCalcValue
     return result;
 }
 
+// FORK: fire the attacker's active attacker-side on-hit innates (Magician steals a held item off a
+// target it damaged) right after the chosen-ability MOVEEND_ABILITY_EFFECT_FOES_FAINTED block. Re-entrant,
+// mirroring MoveEndAbilitiesInnate: fire one innate per pass, resuming from the per-battler cursor (which
+// the defender-side MOVEEND_ABILITIES_INNATE step, running earlier in this same move, already reset to 0);
+// hold this state while effects keep firing and only advance once the list is exhausted, then reset.
+static enum MoveEndResult MoveEndAbilityEffectFoesFaintedInnate(struct BattleCalcValues *cv)
+{
+    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
+    u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
+
+    if (TryActivateInnateOnHitAttackerEffects(cv->battlerAtk, &innateIndex, cv->move))
+    {
+        gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
+        result = MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance moveendState)
+    }
+    else
+    {
+        gBattleStruct->eventState.moveEndInnateIndex = 0;
+        gBattleScripting.moveendState++;
+    }
+
+    return result;
+}
+
 static enum MoveEndResult MoveEndShellTrap(struct BattleCalcValues *cv)
 {
     for (enum BattlerId battlerDef = 0; battlerDef < gBattlersCount; battlerDef++)
@@ -4244,7 +4271,7 @@ static enum MoveEndResult MoveEndPickpocket(struct BattleCalcValues *cv)
             if (battlerDef != cv->battlerAtk
               && !gBattleStruct->battlerState[battlerDef].notOnField
               && !IsBattlerUnaffectedByMove(battlerDef)
-              && cv->abilities[battlerDef] == ABILITY_PICKPOCKET
+              && (cv->abilities[battlerDef] == ABILITY_PICKPOCKET || IsInnateActive(battlerDef, ABILITY_PICKPOCKET)) // FORK: innate-aware Pickpocket (FEATURE_INNATE_ABILITIES)
               && IsMoveMakingContact(cv->battlerAtk, battlerDef, cv->abilities[cv->battlerAtk], cv->holdEffects[cv->battlerAtk], gCurrentMove)
               && IsBattlerTurnDamaged(battlerDef, EXCLUDING_SUBSTITUTES)
               && !DoesSubstituteBlockMove(cv->battlerAtk, battlerDef, gCurrentMove)
@@ -4253,6 +4280,10 @@ static enum MoveEndResult MoveEndPickpocket(struct BattleCalcValues *cv)
               && CanStealItem(battlerDef, cv->battlerAtk, gBattleMons[cv->battlerAtk].item))
             {
                 gBattlerTarget = gBattlerAbility = battlerDef;
+                // FORK: show the innate Pickpocket in the pop-up, not the chosen ability, only when
+                // they differ (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                if (GetBattlerAbility(battlerDef) != ABILITY_PICKPOCKET)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_PICKPOCKET;
                 // Battle scripting is super brittle so we shall do the item exchange now (if possible)
                 if (cv->abilities[cv->battlerAtk] != ABILITY_STICKY_HOLD)
                     StealTargetItem(battlerDef, cv->battlerAtk);  // Target takes attacker's item
@@ -4726,6 +4757,7 @@ static enum MoveEndResult (*const sMoveEndHandlers[])(struct BattleCalcValues *c
     [MOVEEND_MOVE_BLOCK] = MoveEndMoveBlock,
     [MOVEEND_ITEM_EFFECTS_ATTACKER_2] = MoveEndItemEffectsAttacker2,
     [MOVEEND_ABILITY_EFFECT_FOES_FAINTED] = MoveEndAbilityEffectFoesFainted,
+    [MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE] = MoveEndAbilityEffectFoesFaintedInnate, // FORK: attacker-side on-hit innates (Magician)
     [MOVEEND_SHELL_TRAP] = MoveEndShellTrap,
     [MOVEEND_COLOR_CHANGE] = MoveEndColorChange,
     [MOVEEND_KEE_MARANGA_HP_THRESHOLD_ITEM_TARGET] = MoveEndKeeMarangaHpThresholdItemTarget,
