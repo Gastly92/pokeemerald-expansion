@@ -73,6 +73,10 @@
 //   ANTICIPATION / FOREWARN / FRISK (switch-in information reveals, Batch L second sub-group — 1:1
 //   clean-upside copies that reuse the same switch-in driver; each shows a switch-in message and, for
 //   Frisk/Forewarn, reveals a foe's item/move — no AI wiring needed, no pure-boon divergence),
+//   DOWNLOAD / SUPERSWEET_SYRUP (switch-in stat changes, Batch L third sub-group — 1:1 clean-upside
+//   copies that reuse the same switch-in driver; Download raises the holder's Attack or Sp. Atk toward
+//   the foe's weaker defense, Supersweet Syrup lowers every foe's evasiveness once per battle, with the
+//   AI's switch-in stat simulation made innate-aware),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

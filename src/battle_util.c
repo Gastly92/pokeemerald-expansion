@@ -3302,6 +3302,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
 
                 if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility))
                 {
+                    // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                    // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                    if (GetBattlerAbility(battler) != gLastUsedAbility)
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     gEffectBattler = gBattlerAbility = battler;
                     SetStatChange(battler, statId, 1);
                     BattleScriptCall(BattleScript_AbilityStatChange);
@@ -3478,6 +3482,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && !GetBattlerPartyState(battler)->supersweetSyrup
              && !IsOpposingSideEmpty(battler))
             {
+                // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 gEffectBattler = battler;
                 GetBattlerPartyState(battler)->supersweetSyrup = TRUE;
                 for (enum BattlerId i = 0; i < gBattlersCount; i++)
