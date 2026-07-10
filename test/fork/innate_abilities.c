@@ -5098,6 +5098,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_CURSED_BODY,
         ABILITY_PICKPOCKET, ABILITY_MAGICIAN, ABILITY_LIQUID_OOZE,
         ABILITY_INTIMIDATE,
+        ABILITY_ANTICIPATION, ABILITY_FOREWARN, ABILITY_FRISK,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -7085,5 +7086,96 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Intimidate lowers both oppo
     } THEN {
         EXPECT_EQ(opponentLeft->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
         EXPECT_EQ(opponentRight->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
+    }
+}
+
+// ─── Innate Anticipation / Forewarn / Frisk (switch-in information reveals) ────
+// Batch L's second sub-group: three information-reveal switch-in innates that reuse the same driver as
+// Intimidate (a one-line IsActiveSwitchInInnate addition each), delegating to the upstream
+// ABILITYEFFECT_ON_SWITCHIN case so the message / reveal / script / pop-up match the real ability. All
+// three are pure 1:1 clean-upside boons; each effect site (src/battle_util.c) forces the pop-up to show
+// the innate when the chosen ability differs. Vehicles chosen so abilities[0] != the innate, so the
+// effect and the pop-up are attributable solely to the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Frisk reveals the foe's held item on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SHUPPET, ABILITY_FRISK));
+        ASSUME(gSpeciesInfo[SPECIES_SHUPPET].abilities[0] != ABILITY_FRISK); // chosen Insomnia; the reveal is the innate's
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_SHUPPET);
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_LEFTOVERS); }
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_FRISK); // pop-up shows the innate, not chosen Insomnia
+            MESSAGE("Shuppet frisked the opposing Wobbuffet and found its Leftovers!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_FRISK); }
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Forewarn reveals a foe's move on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HYPNO, ABILITY_FOREWARN));
+        ASSUME(gSpeciesInfo[SPECIES_HYPNO].abilities[0] != ABILITY_FOREWARN); // chosen Insomnia; the reveal is the innate's
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_HYPNO);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE); }
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_FOREWARN); // pop-up shows the innate, not chosen Insomnia
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_FOREWARN); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Anticipation warns of a foe's super-effective move")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FERROTHORN, ABILITY_ANTICIPATION));
+        ASSUME(gSpeciesInfo[SPECIES_FERROTHORN].abilities[0] != ABILITY_ANTICIPATION); // chosen Iron Barbs; the warning is the innate's
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_FERROTHORN);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_EMBER); } // Fire is super effective vs Grass/Steel
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_ANTICIPATION); // pop-up shows the innate, not chosen Iron Barbs
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_ANTICIPATION); }
+    }
+}
+
+// Suppression parity: an innate reveal honors Neutralizing Gas exactly like the real ability (IsInnateActive()).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Frisk on switch-in")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SHUPPET, ABILITY_FRISK));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_SHUPPET);
+        OPPONENT(SPECIES_WEEZING_GALAR) { Ability(ABILITY_NEUTRALIZING_GAS); Item(ITEM_LEFTOVERS); }
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_FRISK); } // suppressed: no reveal
     }
 }

@@ -113,8 +113,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Mold Breaker | The Pokémon's moves are unaffected by the Ability of the target (with certain exceptions). |
 | :white_check_mark: | Super Luck | The Pokémon has a 1-stage Critical-Hit Ratio Boost. |
 | :white_check_mark: | Aftermath | Attackers that knock out the Pokémon with a contact move take damage equal to 1/4 of their max HP. |
-| :white_large_square: | Anticipation | When the Pokémon enters a battle, it senses whether the opponents know any one-hit KO moves or moves that are super effective against it. |
-| :white_large_square: | Forewarn | When it enters a battle, the Pokémon can tell one of the moves an opposing Pokémon has. |
+| :white_check_mark: | Anticipation | When the Pokémon enters a battle, it senses whether the opponents know any one-hit KO moves or moves that are super effective against it. |
+| :white_check_mark: | Forewarn | When it enters a battle, the Pokémon can tell one of the moves an opposing Pokémon has. |
 | :white_check_mark: | Unaware | The Pokémon ignores the target's stat changes when attacking, and ignores the attacker's stat changes when being attacked. It cannot ignore changes to the Speed stat, however. |
 | :white_check_mark: | Tinted Lens | The Pokémon can use "not very effective" moves to deal regular damage. |
 | :white_check_mark: | Filter | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
@@ -125,7 +125,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Solid Rock | Reduces the damage the Pokémon takes from supereffective moves by 25%. |
 | :x: | Snow Warning | Summons snow for 5 turns when the Pokémon enters a battle. |
 | :x: | Honey Gather | The Pokémon may gather Honey after a battle. |
-| :white_large_square: | Frisk | When the Pokémon enters a battle, it identifies opponents' held items. |
+| :white_check_mark: | Frisk | When the Pokémon enters a battle, it identifies opponents' held items. |
 | :white_check_mark: | Reckless | Boosts the power of the Pokémon's moves by 20% if they have recoil or crash damage. |
 | :x: | Multitype | Changes the Pokémon's type to match the plate it holds. |
 | :white_large_square: | Flower Gift | Boosts the Attack and Sp. Def stats of the Pokémon and its allies in harsh sunlight. |
