@@ -1771,8 +1771,12 @@ enum LeechSeedDrainKind SetUpLeechSeedDrain(enum BattlerId victim, enum BattlerI
     s32 healAmount = GetDrainedBigRootHp(seeder, drainAmount);
 
     SetPassiveDamageAmount(victim, drainAmount);
-    if (GetBattlerAbility(victim) == ABILITY_LIQUID_OOZE)
+    if (BattlerHasAbility(victim, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
     {
+        // FORK: show the innate in the pop-up, not the chosen ability, only when they
+        // differ (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+        if (GetBattlerAbility(victim) != ABILITY_LIQUID_OOZE)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_LIQUID_OOZE;
         SetPassiveDamageAmount(seeder, healAmount); // seeder takes recoil instead of healing
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_OOZE;
         return LEECH_SEED_DRAIN_LIQUID_OOZE;
@@ -4773,6 +4777,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
 
                     StealTargetItem(battler, targetBattler);
                     gBattlerAbility = battler;
+                    // FORK: innate Magician — show the innate in the pop-up, not the chosen ability,
+                    // only when they differ (Speed Boost precedent — CreateAbilityPopUp reads the
+                    // primary slot). `ability` is the one being processed (MAGICIAN, chosen or innate).
+                    if (GetBattlerAbility(battler) != ability)
+                        gBattleScripting.abilityPopupOverwrite = ability;
                     gEffectBattler = targetBattler;
                     BattleScriptCall(BattleScript_MagicianActivates);
                     effect = TRUE;

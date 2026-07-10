@@ -70,7 +70,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Shed Skin | The Pokémon has a 30% chance of curing its own status conditions at the end of every turn. |
 | :white_check_mark: | Guts | When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage dealt by the Pokémon's physical moves. |
 | :white_check_mark: | Marvel Scale | When the Pokémon has a status condition, its Defense stat is boosted by 50%. |
-| :white_large_square: | Liquid Ooze | The strong stench of the Pokémon's oozed liquid damages attackers that use HP-draining moves. |
+| :white_check_mark: | Liquid Ooze | The strong stench of the Pokémon's oozed liquid damages attackers that use HP-draining moves. |
 | :white_check_mark: | Overgrow | Boosts the power of the Pokémon's Grass-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_check_mark: | Blaze | Boosts the power of the Pokémon's Fire-type moves by 50% when its HP drops to 1/3 or less of its max. |
 | :white_check_mark: | Torrent | Boosts the power of the Pokémon's Water-type moves by 50% when its HP drops to 1/3 or less of its max. |
@@ -130,7 +130,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Multitype | Changes the Pokémon's type to match the plate it holds. |
 | :white_large_square: | Flower Gift | Boosts the Attack and Sp. Def stats of the Pokémon and its allies in harsh sunlight. |
 | :white_check_mark: | Bad Dreams | Damages opposing Pokémon that are asleep. |
-| :white_large_square: | Pickpocket | When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item. |
+| :white_check_mark: | Pickpocket | When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item. |
 | :x: | Sheer Force | The Pokémon's moves lose their additional effects, but the power of those moves will be boosted by 30%. |
 | :x: | Contrary | Reverses any stat changes affecting the Pokémon so that attempts to boost its stats instead lower them—and attempts to lower its stats will boost them. |
 | :white_large_square: | Unnerve | Makes opponents unable to eat Berries. |
@@ -176,7 +176,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Cheek Pouch | The Pokémon has 1/3 of its max HP restored when it eats a Berry, in addition to the Berry's usual effect. |
 | :x: | Protean | Changes the Pokémon's type to the type of the move it's about to use. This works only once per time the Pokémon enters battle. |
 | :white_check_mark: | Fur Coat | Halves the damage the Pokémon takes from physical moves. |
-| :white_large_square: | Magician | If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves. |
+| :white_check_mark: | Magician | If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves. |
 | :x: | Bulletproof | The Pokémon is immune to ball and bomb moves. |
 | :white_large_square: | Competitive | When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages. |
 | :white_check_mark: | Strong Jaw | Boosts the power of the Pokémon's biting moves by 50%. |

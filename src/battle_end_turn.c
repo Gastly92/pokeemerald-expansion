@@ -528,8 +528,11 @@ static bool32 HandleEndTurnLeechSeed(enum BattlerId battler)
             gBattleScripting.animArg2 = gBattlerAttacker;
             s32 drainAmount = GetNonDynamaxMaxHP(gBattlerAttacker) / 8;
             s32 healAmount = GetDrainedBigRootHp(gBattlerTarget, drainAmount);
-            if (GetBattlerAbility(battler) == ABILITY_LIQUID_OOZE)
+            if (BattlerHasAbility(battler, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
             {
+                // FORK: show the innate in the pop-up when the chosen ability differs (Speed Boost precedent).
+                if (GetBattlerAbility(battler) != ABILITY_LIQUID_OOZE)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_LIQUID_OOZE;
                 SetPassiveDamageAmount(gBattlerAttacker, drainAmount);
                 SetPassiveDamageAmount(gBattlerTarget, healAmount);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LEECH_SEED_OOZE;

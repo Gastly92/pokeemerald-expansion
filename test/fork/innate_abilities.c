@@ -5096,6 +5096,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_AFTERMATH, ABILITY_INNARDS_OUT,
         ABILITY_STEAM_ENGINE, ABILITY_THERMAL_EXCHANGE, ABILITY_WIND_POWER,
         ABILITY_CURSED_BODY,
+        ABILITY_PICKPOCKET, ABILITY_MAGICIAN, ABILITY_LIQUID_OOZE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -6764,5 +6765,202 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: Gastro A
     } THEN {
         u32 disabledMove = player->volatiles.disabledMove; // bit-field — copy out before EXPECT_EQ
         EXPECT_EQ(disabledMove, MOVE_NONE);
+    }
+}
+
+// Batch K fifth/final sub-group: Pickpocket / Magician / Liquid Ooze (item-steal reactions + drain punish).
+// All 1:1 clean-upside copies. Pickpocket is a one-line swap at the dedicated MoveEndPickpocket step; Magician
+// is attacker-side, fired through the new attacker-side on-hit driver; Liquid Ooze is a passive calc modifier
+// (no driver) that damages a drainer instead of healing it. Each shows an ability pop-up, so an innate that
+// differs from the chosen ability overrides it to the innate.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Liquid Ooze damages a drain-move user instead of healing it")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_LIQUID_OOZE));
+        ASSUME(GetMoveEffect(MOVE_GIGA_DRAIN) == EFFECT_ABSORB);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(300); HP(150); Moves(MOVE_GIGA_DRAIN); }
+        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_STICKY_HOLD); } // chosen ability is NOT Liquid Ooze
+    } WHEN {
+        TURN { MOVE(player, MOVE_GIGA_DRAIN); }
+    } SCENE {
+        HP_BAR(opponent); // Giga Drain damage
+        if (enabled) {
+            ABILITY_POPUP(opponent, ABILITY_LIQUID_OOZE); // pop-up shows the innate, not the chosen Sticky Hold
+            HP_BAR(player); // recoil (drained amount) BEFORE the ooze message, per the script order
+            MESSAGE("Wobbuffet sucked up the liquid ooze!");
+        } else {
+            HP_BAR(player); // normal heal
+            NONE_OF { MESSAGE("Wobbuffet sucked up the liquid ooze!"); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_LT(player->hp, 150); // took recoil equal to the drained amount
+        else
+            EXPECT_GT(player->hp, 150); // healed off the drain
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Liquid Ooze damages a Leech Seed drainer instead of healing it")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_LIQUID_OOZE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WYNAUT) { MaxHP(300); HP(150); Moves(MOVE_LEECH_SEED); }
+        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_STICKY_HOLD); } // chosen ability is NOT Liquid Ooze
+    } WHEN {
+        TURN { MOVE(player, MOVE_LEECH_SEED); }
+    } THEN {
+        if (enabled)
+            EXPECT_LT(player->hp, 150); // seeder takes recoil off Liquid Ooze
+        else
+            EXPECT_GT(player->hp, 150); // seeder heals
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Liquid Ooze, so the drainer heals")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_LIQUID_OOZE));
+        ASSUME(GetMoveEffect(MOVE_GIGA_DRAIN) == EFFECT_ABSORB);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); MaxHP(300); HP(150); Moves(MOVE_GASTRO_ACID, MOVE_GIGA_DRAIN); }
+        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_STICKY_HOLD); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_GIGA_DRAIN); }
+    } SCENE {
+        MESSAGE("The opposing Gulpin's Ability was suppressed!");
+        NONE_OF {
+            ABILITY_POPUP(opponent, ABILITY_LIQUID_OOZE);
+            MESSAGE("Wobbuffet sucked up the liquid ooze!");
+        }
+    } THEN {
+        EXPECT_GT(player->hp, 150); // Liquid Ooze suppressed -> normal heal
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pickpocket steals a contact attacker's held item")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SNEASEL, ABILITY_PICKPOCKET));
+        ASSUME(MoveMakesContact(MOVE_TACKLE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_MAGOST_BERRY); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_SNEASEL) { Ability(ABILITY_INNER_FOCUS); } // chosen ability is NOT Pickpocket
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(opponent, ABILITY_PICKPOCKET); // pop-up shows the innate, not the chosen Inner Focus
+            MESSAGE("The opposing Sneasel stole Wobbuffet's Magost Berry!");
+        } else {
+            NONE_OF { ABILITY_POPUP(opponent, ABILITY_PICKPOCKET); }
+        }
+    } THEN {
+        if (enabled) {
+            EXPECT_EQ(opponent->item, ITEM_MAGOST_BERRY);
+            EXPECT_EQ(player->item, ITEM_NONE);
+        } else {
+            EXPECT_EQ(player->item, ITEM_MAGOST_BERRY);
+            EXPECT_EQ(opponent->item, ITEM_NONE);
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pickpocket does not steal from a non-contact attacker")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SNEASEL, ABILITY_PICKPOCKET));
+        ASSUME(!MoveMakesContact(MOVE_WATER_GUN));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_MAGOST_BERRY); Moves(MOVE_WATER_GUN); }
+        OPPONENT(SPECIES_SNEASEL) { Ability(ABILITY_INNER_FOCUS); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_WATER_GUN); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_PICKPOCKET); }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_MAGOST_BERRY);
+        EXPECT_EQ(opponent->item, ITEM_NONE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magician steals a held item off a target it damages")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DELPHOX, ABILITY_MAGICIAN));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_DELPHOX) { Ability(ABILITY_BLAZE); Moves(MOVE_SCRATCH); } // chosen ability is NOT Magician
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_MAGOST_BERRY); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_MAGICIAN); // pop-up shows the innate, not the chosen Blaze
+            MESSAGE("Delphox stole the opposing Wobbuffet's Magost Berry!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_MAGICIAN); }
+        }
+    } THEN {
+        if (enabled) {
+            EXPECT_EQ(player->item, ITEM_MAGOST_BERRY);
+            EXPECT_EQ(opponent->item, ITEM_NONE);
+        } else {
+            EXPECT_EQ(opponent->item, ITEM_MAGOST_BERRY);
+            EXPECT_EQ(player->item, ITEM_NONE);
+        }
+    }
+}
+
+// A REAL Magician still steals exactly once with the feature on — the attacker-side driver skips an innate equal
+// to the chosen ability, so it never fires twice beside the chosen-ability foes-fainted block.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a chosen Magician steals once, not twice, with innates on")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DELPHOX, ABILITY_MAGICIAN));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_DELPHOX) { Ability(ABILITY_MAGICIAN); Moves(MOVE_SCRATCH); } // chosen == innate
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_MAGOST_BERRY); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_MAGICIAN);
+        MESSAGE("Delphox stole the opposing Wobbuffet's Magost Berry!");
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_MAGOST_BERRY);
+        EXPECT_EQ(opponent->item, ITEM_NONE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Magician, so it steals nothing")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DELPHOX, ABILITY_MAGICIAN));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_DELPHOX) { Ability(ABILITY_BLAZE); Speed(50); Moves(MOVE_SCRATCH); }
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_MAGOST_BERRY); Speed(100); Moves(MOVE_GASTRO_ACID); }
+    } WHEN {
+        // Opponent (faster) suppresses the player's own innate Magician before the player attacks.
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("Delphox's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(player, ABILITY_MAGICIAN); }
+    } THEN {
+        EXPECT_EQ(opponent->item, ITEM_MAGOST_BERRY);
+        EXPECT_EQ(player->item, ITEM_NONE);
     }
 }

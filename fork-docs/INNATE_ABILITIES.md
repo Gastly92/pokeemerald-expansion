@@ -2303,3 +2303,58 @@ sole/all-abilities-innate sets keep their now-redundant chosen Cursed Body (stil
 innate is redundant-but-skipped): **Froslass x2** (Snow Cloak + Cursed Body both innate) and **Banette x1** (only
 the still-pending Frisk left), deferred as a focused follow-up like Batch J/T. Gengar's four sets are untouched
 (Gengar isn't in the innate table, so its chosen Cursed Body is its real, observed ability).
+
+### ABILITY_PICKPOCKET / ABILITY_MAGICIAN / ABILITY_LIQUID_OOZE
+
+The fifth and **final** sub-group of Batch K (the on-hit set), all **1:1 clean-upside copies** — each only ever
+hurts the FOE. **Pickpocket** steals a contact attacker's held item when the holder has none; **Magician** steals a
+held item off a target the holder *damaged* when the holder has none; **Liquid Ooze** makes an HP-draining move
+(Absorb / Giga Drain / Leech Seed / Dream Eater) *damage* the attacker for the drained amount instead of healing it.
+All three `canon-only` (no flavor picks). This sub-group completes Batch K, so **Batch K is done**.
+
+- **Pickpocket — a one-line innate-aware swap, NOT the on-hit driver.** Unlike the other Batch K abilities, Pickpocket
+  has its own dedicated move-end step (`MoveEndPickpocket`, `src/battle_move_resolution.c`) that already scans every
+  battler reading the cached chosen ability; wiring the driver would double-fire. So the effect site just gains an
+  `IsInnateActive(battlerDef, ABILITY_PICKPOCKET)` clause beside the `cv->abilities[battlerDef] == ABILITY_PICKPOCKET`
+  read. `BattleScript_Pickpocket` shows an ability pop-up, so the site sets `gBattleScripting.abilityPopupOverwrite =
+  ABILITY_PICKPOCKET` when the chosen ability differs (the Speed Boost precedent).
+- **Magician — a NEW attacker-side on-hit driver.** Magician is *attacker*-side (it fires from the upstream
+  `ABILITYEFFECT_MOVE_END_FOES_FAINTED` case, the same one that later serves Moxie/Beast Boost in Batch M), so the
+  target-side on-hit driver doesn't reach it. The fork adds `TryActivateInnateOnHitAttackerEffects` ->
+  `IsActiveOnHitAttackerInnate` (`src/fork/innate_abilities.c`), the attacker-side analogue of the target-side on-hit
+  driver — re-entrant, delegating to `AbilityBattleEffects(ABILITYEFFECT_MOVE_END_FOES_FAINTED, battler, innate, move,
+  TRUE)` so only the Magician case runs and the item steal / `BattleScript_MagicianActivates` / pop-up match the real
+  ability. It is hooked from a new `MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE` step
+  (`include/constants/battle_move_resolution.h`) inserted right after the chosen-ability foes-fainted block, dispatched
+  by `MoveEndAbilityEffectFoesFaintedInnate` (`src/battle_move_resolution.c`). It **reuses the target-side driver's
+  `moveEndInnateIndex` cursor**, which the earlier `MOVEEND_ABILITIES_INNATE` step (running earlier in the same move)
+  always resets to 0 before this step is reached, so no new state field is needed. The Magician effect site
+  (`src/battle_util.c`) sets `gBattleScripting.abilityPopupOverwrite` to the innate when the chosen ability differs.
+  Adding a *further* attacker-side on-hit active is now a one-line addition to `IsActiveOnHitAttackerInnate`.
+- **Liquid Ooze — a passive calc modifier (no driver), like Filter / Unaware.** The drain reversal lives in three
+  drain sites: `SetHealScript` (`src/battle_move_resolution.c`, damaging drain moves), `SetUpLeechSeedDrain`
+  (`src/battle_util.c`, the shared Leech Seed drain used by the end-turn tick and the re-seed re-drain), and the
+  non-`BUFF_LEECH_SEED` Leech Seed tick (`src/battle_end_turn.c`). Each gains a `BattlerHasAbility` /
+  `IsInnateActive` clause beside the cached chosen-ability read, and — because all three Liquid Ooze battle scripts
+  (`BattleScript_EffectAbsorbLiquidOoze`, `BattleScript_LeechSeedTurnDrainLiquidOoze` and its re-drain twin) show an
+  ability pop-up — sets `gBattleScripting.abilityPopupOverwrite = ABILITY_LIQUID_OOZE` when the chosen ability differs.
+- **AI.** Only Liquid Ooze has dedicated AI *effect* reads (the item steals are not modeled by the AI, chosen or
+  innate — `grep src/battle_ai_*.c` is empty for both). Liquid Ooze's drain-avoidance heuristics — `ShouldAbsorb` and
+  `AI_IsMoveEffectInMinus` (Absorb / Dream Eater) in `src/battle_ai_util.c`, plus the three Leech-Seed scoring reads in
+  `src/battle_ai_main.c` — each credit an innate via `IsInnateActive`, so the AI still avoids draining an innate-Liquid-
+  Ooze foe.
+
+Suppression parity holds for all three via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); none is
+`breakable`, so Mold Breaker never touches them. **Known limitation (Sticky Hold vs innate Pickpocket):** exactly as for
+a *chosen* Pickpocket, an innate Sticky Hold on the attacker does not block an innate Pickpocket's on-contact steal — the
+attacker-side Sticky-Hold precheck reads the cached chosen ability, the same cross-cutting `jumpifability` limitation
+already documented for Sticky Hold. **Species (canon-only):** Pickpocket -> the **Seedot / Nuzleaf / Shiftry**,
+**Sneasel (+ Hisui) / Weavile**, **Binacle / Barbaracle**, **Impidimp / Morgrem / Grimmsnarl (+ Gmax)**, **Shroodle**,
+and **Tinkatink / Tinkatuff / Tinkaton** lines; Magician -> the **Fennekin / Braixen / Delphox** line (+ the fork's
+**Mega Delphox** as a pure-boon mirror), **Klefki**, and both **Hoopa** forms; Liquid Ooze -> the **Tentacool /
+Tentacruel** and **Gulpin / Swalot** lines — each merged into the species' existing innate row. **Step 3.5** touched
+sixteen frontier sets, all **deferred** (like Batch J/T and the Cursed Body sub-group): every affected species now has
+all its useful real abilities innate (or only the still-pending Frisk free), so they keep their now-redundant chosen
+ability — still correct (the chosen runs it; the innate is redundant-but-skipped). **Tentacruel** / **Swalot** keep
+chosen Liquid Ooze; the three **Weavile** and three **Grimmsnarl** sets keep chosen Pickpocket; the three **Delphox**,
+two **Klefki** and three **Hoopa / Hoopa-Unbound** sets keep chosen Magician — each a real, roster-legal slot.
