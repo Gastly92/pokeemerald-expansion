@@ -265,6 +265,32 @@
 //   Swalot / Weavile x3 / Grimmsnarl x3 / Delphox x3 / Klefki x2 / Hoopa+Unbound x3) now have all their useful real abilities
 //   innate (or only the still-pending Frisk free), so they keep their now-redundant chosen ability — still correct (the chosen
 //   runs it; the innate is redundant-but-skipped) — deferred as a focused follow-up, like Batch J/T and the Cursed Body sub-group.
+//   INTIMIDATE (switch-in Attack drop, Batch L first sub-group — a 1:1 clean-upside copy, canon-only (no flavor picks —
+//   Intimidate is a strong, common ability with a 45-species canon set, so like Prankster the flavor set is deliberately
+//   omitted)): when the holder switches in, every opposing battler's Attack falls 1 stage. It is the FIRST active, scripted
+//   SWITCH-IN innate and introduces a new re-entrant switch-in driver (TryActivateInnateSwitchInEffects -> IsActiveSwitchInInnate),
+//   modeled on the Speed Boost end-turn driver: it delegates to the existing upstream ABILITYEFFECT_ON_SWITCHIN case (so the
+//   stat drop / script / pop-up — and every downstream reaction: the target's Defiant / Competitive / Rattled / Guard Dog /
+//   Adrenaline Orb, and the Own Tempo / Inner Focus / Oblivious / Clear Body Intimidate-immunity halves already made
+//   innate-aware in earlier batches — match the real ability for free). Hooked from the new
+//   FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE step (src/battle_switch_in.c) right after the chosen-ability switch-in block,
+//   inside the switchinevents state machine that drives every normal switch-in (battle intro, pivot moves, post-faint
+//   replacement, forced switch); the effect site in src/battle_util.c forces the pop-up to the innate when the chosen ability
+//   differs (Speed Boost precedent). The ability-swap / Tera / form-change `switchinabilities` sites are deliberately NOT hooked
+//   (an innate Intimidate is species-bound, so it must not re-fire when a foe Skill-Swaps or the holder Mega-evolves).
+//   AI is innate-aware: the switch-in Attack-drop simulation (SetBattlerStatStagesForSwitchin) and the Intimidate-cycling
+//   switch heuristic (ShouldSwitchIfAbilityBenefit -> ShouldSwitchIfIntimidateBenefit) and the foe-Intimidate free-switch
+//   timing read credit an innate Intimidate via SpeciesHasInnate / BattlerHasAbility (src/battle_ai_switch.c); the incoming-
+//   ability value scorer in battle_ai_util.c is left keyed to the chosen ability (a soft ability-swap-move heuristic, not a
+//   hard effect read). Canon-only, keyed exactly per form: the ~45 canon Intimidate users in any real slot get a row (merged
+//   into an existing innate row where present), plus base creatures' Megas as pure-boon mirrors (Gyarados / Salamence / Mawile
+//   Megas keep base Intimidate though their Mega ability differs). Sole-Intimidate Megas are OMITTED as redundant (Manectric-Mega,
+//   Scrafty-Mega — their sole, always-chosen ability IS Intimidate, so an innate could never be observed, the Mega Lopunny /
+//   Scrappy precedent). Landorus-Therian is sole-Intimidate but a frontier set, so it takes the innate AND a fork-owned chosen
+//   Sheer Force override (species_ability_overrides.c — Sheer Force is :x: (never an innate -> stable) and its Incarnate forme's
+//   signature), like Ogerpon-Cornerstone. Step 3.5: the ~40 frontier sets that hardcoded Intimidate now have it innately, so
+//   they keep their now-redundant chosen Intimidate — still correct (the chosen runs it; the innate is redundant-but-skipped) —
+//   with the complementary-slot freeing deferred as a focused follow-up, like Batch J/T/K.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -535,6 +561,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0023
         SPECIES_EKANS,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_LIMBER,
             ABILITY_SHED_SKIN
         )
@@ -542,6 +569,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0024
         SPECIES_ARBOK,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_LIMBER,
             ABILITY_SHED_SKIN
         )
@@ -776,14 +804,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0058
+        SPECIES_GROWLITHE,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
+    { // 0058
         SPECIES_GROWLITHE_HISUI,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_ROCK_HEAD
+        )
+    },
+    { // 0059
+        SPECIES_ARCANINE,
+        INNATES(
+            ABILITY_INTIMIDATE
         )
     },
     { // 0059
         SPECIES_ARCANINE_HISUI,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_ROCK_HEAD
         )
     },
@@ -1430,27 +1472,48 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0128
+        SPECIES_TAUROS,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
+    { // 0128
         SPECIES_TAUROS_PALDEA_COMBAT,
         INNATES(
-            ABILITY_CUD_CHEW
+            ABILITY_CUD_CHEW,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_BLAZE,
         INNATES(
-            ABILITY_CUD_CHEW
+            ABILITY_CUD_CHEW,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_AQUA,
         INNATES(
-            ABILITY_CUD_CHEW
+            ABILITY_CUD_CHEW,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0129
         SPECIES_MAGIKARP,
         INNATES(
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0130
+        SPECIES_GYARADOS,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
+    { // 0130
+        SPECIES_GYARADOS_MEGA,
+        INNATES(
+            ABILITY_INTIMIDATE
         )
     },
     { // 0131
@@ -2000,12 +2063,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0559
         SPECIES_SCRAGGY,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_SHED_SKIN
         )
     },
     { // 0560
         SPECIES_SCRAFTY,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_SHED_SKIN
         )
     },
@@ -2367,21 +2432,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0209
+        SPECIES_SNUBBULL,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
     { // 0210
         SPECIES_GRANBULL,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_QUICK_FEET
         )
     },
     { // 0211
         SPECIES_QWILFISH,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0211
         SPECIES_QWILFISH_HISUI,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -2581,6 +2655,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0234
+        SPECIES_STANTLER,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
     { // 0235
         SPECIES_SMEARGLE,
         INNATES(
@@ -2598,6 +2678,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0237
         SPECIES_HITMONTOP,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_TECHNICIAN
         )
     },
@@ -2774,6 +2855,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0262
         SPECIES_MIGHTYENA,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_QUICK_FEET
         )
     },
@@ -2936,6 +3018,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0284
+        SPECIES_MASQUERAIN,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
     { // 0285
         SPECIES_SHROOMISH,
         INNATES(
@@ -3047,13 +3135,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0303
         SPECIES_MAWILE,
         INNATES(
-            ABILITY_HYPER_CUTTER
+            ABILITY_HYPER_CUTTER,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0303
         SPECIES_MAWILE_MEGA,
         INNATES(
-            ABILITY_HYPER_CUTTER
+            ABILITY_HYPER_CUTTER,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0304
@@ -3596,6 +3686,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ROCK_HEAD
         )
     },
+    { // 0373
+        SPECIES_SALAMENCE,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
+    { // 0373
+        SPECIES_SALAMENCE_MEGA,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
     { // 0374
         SPECIES_BELDUM,
         INNATES(
@@ -3775,12 +3877,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0397
         SPECIES_STARAVIA,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_RECKLESS
         )
     },
     { // 0398
         SPECIES_STARAPTOR,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_RECKLESS
         )
     },
@@ -3812,19 +3916,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0403
         SPECIES_SHINX,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0404
         SPECIES_LUXIO,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0405
         SPECIES_LUXRAY,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0406
@@ -4588,6 +4695,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0507
         SPECIES_HERDIER,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_SAND_RUSH,
             ABILITY_SCRAPPY
         )
@@ -4595,6 +4703,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0508
         SPECIES_STOUTLAND,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_SAND_RUSH,
             ABILITY_SCRAPPY
         )
@@ -4925,6 +5034,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULIN_WHITE_STRIPED,
         INNATES(
             ABILITY_ADAPTABILITY
+        )
+    },
+    { // 0551
+        SPECIES_SANDILE,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
+    { // 0552
+        SPECIES_KROKOROK,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
+    { // 0553
+        SPECIES_KROOKODILE,
+        INNATES(
+            ABILITY_INTIMIDATE
         )
     },
     { // 0554
@@ -5537,6 +5664,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LANDORUS_INCARNATE,
         INNATES(
             ABILITY_SAND_FORCE
+        )
+    },
+    { // 0645
+        SPECIES_LANDORUS_THERIAN,
+        INNATES(
+            ABILITY_INTIMIDATE
         )
     },
     { // 0646
@@ -6177,19 +6310,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0725
         SPECIES_LITTEN,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0726
         SPECIES_TORRACAT,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0727
         SPECIES_INCINEROAR,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0728
@@ -7290,6 +7426,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0899
+        SPECIES_WYRDEER,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
     { // 0900
         SPECIES_KLEAVOR,
         INNATES(
@@ -7327,6 +7469,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0904
         SPECIES_OVERQWIL,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -7501,13 +7644,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0931
         SPECIES_SQUAWKABILLY,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0931
         SPECIES_SQUAWKABILLY_BLUE,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_INTIMIDATE
+        )
+    },
+    { // 0931
+        SPECIES_SQUAWKABILLY_YELLOW,
+        INNATES(
+            ABILITY_GUTS,
+            ABILITY_INTIMIDATE
+        )
+    },
+    { // 0931
+        SPECIES_SQUAWKABILLY_WHITE,
+        INNATES(
+            ABILITY_GUTS,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0932
@@ -7552,6 +7711,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0942
         SPECIES_MASCHIFF,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_STAKEOUT
         )
     },
@@ -7559,6 +7719,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MABOSSTIFF,
         INNATES(
             ABILITY_GUARD_DOG,
+            ABILITY_INTIMIDATE,
             ABILITY_STAKEOUT
         )
     },
@@ -8210,6 +8371,65 @@ bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index,
         if (!IsInnateActive(battler, innate))
             continue;
         if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END_FOES_FAINTED, battler, innate, move, TRUE))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+// Active, scripted innate abilities that fire when the HOLDER switches in — today only Intimidate
+// (lowers every opposing battler's Attack by 1 stage). The driver (TryActivateInnateSwitchInEffects)
+// is re-entrant, so a battler may carry more than one and each fires in turn. Each delegates to the
+// existing upstream ABILITYEFFECT_ON_SWITCHIN case, so the stat change / script / pop-up matches the
+// real ability for free (the effect site in src/battle_util.c forces the pop-up to the innate when the
+// chosen ability differs, the Speed Boost precedent).
+static bool32 IsActiveSwitchInInnate(enum Ability ability)
+{
+    switch (ability)
+    {
+    case ABILITY_INTIMIDATE: // lowers opposing battlers' Attack by 1 stage on switch-in
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+// FORK: switch-in innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
+// switch-in innates (today only Intimidate), hooked from the FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE
+// step of the switch-in loop (src/battle_switch_in.c) right after the chosen-ability switch-in block.
+//
+// RE-ENTRANT, exactly like the end-turn / on-hit drivers: a battle script fires one at a time, so this
+// resumes from a per-battler cursor. *index is the next innate-list slot to consider; the switch-in loop
+// holds the FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE step (keeping the cursor) while this returns TRUE,
+// and only advances once it returns FALSE (list exhausted), then resets the cursor. Each fired effect
+// leaves *index past it, so a battler with several switch-in innates fires them across successive passes
+// of the loop. Returns TRUE if an effect fired this call.
+//
+// `shouldTrigger` mirrors the chosen-ability switch-in call's gate
+// (gBattleStruct->battlerState[battler].switchIn), so an innate switch-in effect only fires on a genuine
+// switch-in exactly like the real ability. The effect is delegated to the upstream switch-in ability
+// handler with the innate passed explicitly: AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler,
+// innate, MOVE_NONE, shouldTrigger) sets gLastUsedAbility = innate and runs that ability's existing case,
+// so the stat change / script / pop-up match the real ability. An innate equal to the chosen ability is
+// skipped so the chosen-ability switch-in block (which already ran it) never fires twice; IsInnateActive()
+// applies the usual suppression (feature flag, Gastro Acid, Neutralizing Gas, not-on-field).
+bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool32 shouldTrigger)
+{
+    enum Ability innate;
+
+    while ((innate = GetSpeciesInnate(gBattleMons[battler].species, *index)) != ABILITY_NONE)
+    {
+        (*index)++; // step past this slot now, so a fired effect resumes at the next one
+        if (!IsActiveSwitchInInnate(innate))
+            continue;
+        if (GetBattlerAbility(battler) == innate) // chosen-ability switch-in block already ran it
+            continue;
+        if (!IsInnateActive(battler, innate))
+            continue;
+        // The switch-in ability pop-up reads gBattlerAbility; pin it to the innate's owner so the pop-up
+        // shows on the right battler (the chosen path never goes through this driver). End-turn precedent.
+        gBattlerAbility = battler;
+        if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler, innate, MOVE_NONE, shouldTrigger))
             return TRUE;
     }
 

@@ -66,6 +66,10 @@
 //   a target the holder damages, via a new ATTACKER-side on-hit driver hooked at
 //   MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE; Liquid Ooze is a passive calc modifier that makes
 //   HP-draining moves damage the attacker instead of healing it),
+//   INTIMIDATE (switch-in Attack drop, Batch L first sub-group — the FIRST active SWITCH-IN innate,
+//   fired through a new re-entrant switch-in driver (TryActivateInnateSwitchInEffects) hooked at the new
+//   FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE switch-in step, delegating to the upstream
+//   ABILITYEFFECT_ON_SWITCHIN case so the Attack drop / script / pop-up match the real ability),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
@@ -138,5 +142,15 @@ bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Mo
 // call and returning TRUE, or FALSE once the list is exhausted. Delegates to the upstream
 // ABILITYEFFECT_MOVE_END_FOES_FAINTED case so the steal / script / pop-up match the real ability.
 bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index, enum Move move);
+
+// FORK: switch-in innate driver. Fires `battler`'s active, scripted switch-in innates — today only
+// Intimidate (lowers every opposing battler's Attack by 1 stage). Hooked from
+// FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE in the switch-in loop (src/battle_switch_in.c), right after
+// the chosen-ability switch-in block. `shouldTrigger` mirrors the chosen-ability call's switch-in gate.
+// Re-entrant: *index is the per-battler resume cursor into the innate list — fires one effect per call
+// (leaving *index past it) and returns TRUE, or returns FALSE once the list is exhausted, so a battler
+// with several switch-in innates fires them across passes. Delegates to the upstream
+// ABILITYEFFECT_ON_SWITCHIN case so the stat change / script / pop-up match the real ability.
+bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool32 shouldTrigger);
 
 #endif // GUARD_INNATE_ABILITIES_H

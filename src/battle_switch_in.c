@@ -6,6 +6,7 @@
 #include "battle_scripts.h"
 #include "battle_switch_in.h"
 #include "battle_controllers.h"
+#include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — switch-in innate driver
 #include "config_changes.h"
 #include "constants/battle.h"
 #include "constants/moves.h"
@@ -78,6 +79,7 @@ bool32 DoSwitchInEvents(void)
             {
                 gBattleStruct->switchInBattlerCounter++;
                 gBattleStruct->eventState.battlerSwitchIn = 0;
+                gBattleStruct->eventState.switchInInnateIndex = 0; // FORK: don't carry a stale innate cursor to the next battler
                 continue;
             }
 
@@ -90,6 +92,7 @@ bool32 DoSwitchInEvents(void)
 
             gBattleStruct->switchInBattlerCounter++;
             gBattleStruct->eventState.battlerSwitchIn = 0;
+            gBattleStruct->eventState.switchInInnateIndex = 0; // FORK: reset the innate cursor for the next battler
         }
         gBattleStruct->switchInBattlerCounter = 0;
         gBattleStruct->eventState.switchIn++;
@@ -279,6 +282,24 @@ static bool32 FirstEventBlockEvents(struct BattleCalcValues *calcValues)
             effect = TRUE;
         gBattleStruct->eventState.battlerSwitchIn++;
         break;
+    case FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE:
+    {
+        // FORK: fire the battler's active switch-in innates (Intimidate) one at a time, resuming from a
+        // per-battler cursor. Hold this block (keeping the cursor) while effects keep firing; once the
+        // list is exhausted, reset the cursor and advance to the next block.
+        u32 innateIndex = gBattleStruct->eventState.switchInInnateIndex;
+        if (TryActivateInnateSwitchInEffects(battler, &innateIndex, gBattleStruct->battlerState[battler].switchIn))
+        {
+            gBattleStruct->eventState.switchInInnateIndex = innateIndex;
+            effect = TRUE;
+        }
+        else
+        {
+            gBattleStruct->eventState.switchInInnateIndex = 0;
+            gBattleStruct->eventState.battlerSwitchIn++;
+        }
+        break;
+    }
     case FIRST_EVENT_BLOCK_IMMUNITY_ABILITIES:
         if (AbilityBattleEffects(ABILITYEFFECT_IMMUNITY, battler, calcValues->abilities[battler], MOVE_NONE, TRUE))
             effect = TRUE;

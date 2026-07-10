@@ -3445,6 +3445,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         case ABILITY_INTIMIDATE:
             if (shouldAbilityTrigger && !IsOpposingSideEmpty(battler))
             {
+                // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                if (GetBattlerAbility(battler) != ABILITY_INTIMIDATE)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_INTIMIDATE;
                 gEffectBattler = battler;
                 gBattleStruct->intimidateActivated = TRUE;
                 for (enum BattlerId i = 0; i < gBattlersCount; i++)

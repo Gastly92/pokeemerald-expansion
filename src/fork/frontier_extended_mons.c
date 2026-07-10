@@ -119,6 +119,7 @@
 // Gooey / Tangling Hair drop a contact attacker's Speed by 1)
 // or an item-steal reaction (Pickpocket steals a contact attacker's held item / Magician steals a
 // held item off a target it damages) or Liquid Ooze (HP-draining moves damage the attacker instead of healing it)
+// or a switch-in effect (Intimidate lowers every opposing battler's Attack by 1 stage on switch-in)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -285,6 +286,14 @@
 // (Pressure + Pickpocket both innate) and three Grimmsnarl sets (Prankster + Pickpocket innate, Frisk still pending) keep
 // chosen Pickpocket; the three Delphox sets (Blaze + Magician innate), two Klefki sets (Prankster + Magician innate) and
 // three Hoopa / Hoopa-Unbound sets (sole Magician, now innate) keep chosen Magician. Each remains a real, roster-legal slot.
+//
+// The switch-in effect (Batch L first sub-group — Intimidate lowers every opposing battler's Attack by 1 stage on switch-in)
+// touches ~40 sets. Landorus-Therian (sole Intimidate, now innate) is the one freed here: like Ogerpon-Cornerstone it takes a
+// fork-owned override (src/species_ability_overrides.c) filling its empty slot 1 with a chosen Sheer Force (:x: stable, its
+// Incarnate forme's signature), so both its sets run Sheer Force offense on top of the innate Intimidate. DEFERRED (tracked
+// follow-up, like Batch J/T/K): the remaining ~40 sets that hardcoded Intimidate now have it innately, so they are left on
+// their now-redundant chosen Intimidate — still correct (the chosen runs it; the innate is redundant-but-skipped there) —
+// with the complementary-slot freeing left to a focused follow-up rather than a game-wide override sweep.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -15665,7 +15674,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate (fork override, Sheer Force slot 1); chosen Sheer Force powers Stone Edge/EQ
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15685,7 +15694,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_TOXIC
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate (fork override, Sheer Force slot 1); chosen Sheer Force is dead on this set but keeps the slot valid
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
