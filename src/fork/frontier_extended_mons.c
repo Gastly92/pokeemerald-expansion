@@ -265,6 +265,14 @@
 // abilities are innate) take a fork-owned override (src/species_ability_overrides.c) filling their empty slot 1 with a
 // chosen Snow Warning (:x: stable) whose snow turns on the innate Ice Body heal. (Wattrel/Kilowattrel's Wind Power has
 // no frontier set to free.)
+// The on-hit move-disable reaction (Batch K fourth sub-group — Cursed Body has a chance to disable the move that just
+// hit the holder) frees two sets to a complementary REAL slot with a stable :x: pick: Jellicent (Cursed Body now
+// innate) -> chosen Water Absorb (soaks Water hits + heals), and Polteageist -> chosen Weak Armor (its only other real
+// slot; adds Speed on a physical hit). DEFERRED (tracked follow-up, like Batch J/T): the Froslass x2 sets (Snow Cloak +
+// Cursed Body both innate, no free real slot) and the Banette set (Insomnia + Cursed Body innate; only Frisk left, still
+// pending) keep their now-redundant chosen Cursed Body — correct (the chosen runs it; the innate is redundant-but-
+// skipped). Gengar's four sets are UNTOUCHED: Cursed Body is its sole ability, so it is omitted from the innate table
+// (never redundant) and keeps chosen Cursed Body as its real, observed ability.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -14369,7 +14377,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_TAUNT
         },
-        .ability = ABILITY_CURSED_BODY,
+        .ability = ABILITY_WATER_ABSORB, // Cursed Body now innate; chosen Water Absorb soaks Water hits + heals
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21165,7 +21173,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_CURSED_BODY,
+        .ability = ABILITY_WEAK_ARMOR, // Cursed Body now innate; chosen Weak Armor adds Speed on a physical hit
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,

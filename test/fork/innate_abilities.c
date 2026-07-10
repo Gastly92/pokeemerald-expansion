@@ -5095,6 +5095,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_ROUGH_SKIN, ABILITY_IRON_BARBS, ABILITY_GOOEY, ABILITY_TANGLING_HAIR,
         ABILITY_AFTERMATH, ABILITY_INNARDS_OUT,
         ABILITY_STEAM_ENGINE, ABILITY_THERMAL_EXCHANGE, ABILITY_WIND_POWER,
+        ABILITY_CURSED_BODY,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -6672,5 +6673,96 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Wind Power charges when Tai
             EXPECT_MUL_EQ(dmgBefore, Q_4_12(2.0), dmgAfter);
         else
             EXPECT_EQ(dmgAfter, dmgBefore);
+    }
+}
+
+// On-hit move-disable (Batch K fourth sub-group): Cursed Body has a chance (30%, always under
+// DETERMINISTIC_ABILITIES — the shipping default) to disable the move that just damaged the holder. It reuses
+// the same re-entrant on-hit driver — a one-line IsActiveOnHitInnate addition — delegating to the upstream
+// ABILITYEFFECT_MOVE_END case so the disable / script / pop-up match the real ability. A 1:1 clean-upside copy
+// (it only ever hampers the FOE), with the pop-up overwritten to the innate when the chosen ability differs.
+// Tested under DETERMINISTIC_ABILITIES (like the RNG-gated Batch J members), where the disable is guaranteed.
+// NB: every canon Cursed Body user is a Ghost-type, so the attacking move must not be Normal/Fighting
+// (immune) — Water Gun damages both a Water/Ghost Frillish and a Dragon/Ghost Dragapult.
+
+// Innate Cursed Body disables the attacker's move when it damages the holder, even as an INNATE. Frillish
+// carries innate Cursed Body (chosen Damp); Dragapult carries it (chosen Clear Body). Feature-off leg
+// proves the disable comes only from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Cursed Body disables the move that damages the holder")
+{
+    u32 species;
+    enum Ability chosen;
+    bool32 enabled;
+    PARAMETRIZE { species = SPECIES_FRILLISH;  chosen = ABILITY_DAMP;         enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_FRILLISH;  chosen = ABILITY_DAMP;         enabled = FALSE; }
+    PARAMETRIZE { species = SPECIES_DRAGAPULT; chosen = ABILITY_CLEAR_BODY;   enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_DRAGAPULT; chosen = ABILITY_CLEAR_BODY;   enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(species, ABILITY_CURSED_BODY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_WATER_GUN); }
+        OPPONENT(species) { Ability(chosen); } // chosen ability is NOT Cursed Body
+    } WHEN {
+        TURN { MOVE(player, MOVE_WATER_GUN); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(opponent, ABILITY_CURSED_BODY); // pop-up shows the innate, not the chosen ability
+            MESSAGE("Wobbuffet's Water Gun was disabled!");
+        } else {
+            NONE_OF {
+                ABILITY_POPUP(opponent, ABILITY_CURSED_BODY);
+                MESSAGE("Wobbuffet's Water Gun was disabled!");
+            }
+        }
+    } THEN {
+        u32 disabledMove = player->volatiles.disabledMove; // bit-field — copy out before EXPECT_EQ
+        if (enabled)
+            EXPECT_EQ(disabledMove, MOVE_WATER_GUN);
+        else
+            EXPECT_EQ(disabledMove, MOVE_NONE);
+    }
+}
+
+// A REAL Cursed Body still disables exactly once with the feature on — the driver skips an innate equal to the
+// chosen ability, so it never fires twice beside the chosen-ability contact block.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: a chosen Cursed Body disables once, not twice, with innates on")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FRILLISH, ABILITY_CURSED_BODY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_WATER_GUN); }
+        OPPONENT(SPECIES_FRILLISH) { Ability(ABILITY_CURSED_BODY); } // chosen == innate
+    } WHEN {
+        TURN { MOVE(player, MOVE_WATER_GUN); }
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_CURSED_BODY);
+        MESSAGE("Wobbuffet's Water Gun was disabled!");
+    } THEN {
+        u32 disabledMove = player->volatiles.disabledMove; // bit-field — copy out before EXPECT_EQ
+        EXPECT_EQ(disabledMove, MOVE_WATER_GUN);
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Cursed Body exactly like a real ability, so the on-hit
+// driver skips it and the attacker's move is not disabled.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: Gastro Acid suppresses an innate Cursed Body")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FRILLISH, ABILITY_CURSED_BODY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_GASTRO_ACID, MOVE_WATER_GUN); }
+        OPPONENT(SPECIES_FRILLISH) { Ability(ABILITY_DAMP); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_WATER_GUN); }
+    } SCENE {
+        MESSAGE("The opposing Frillish's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_CURSED_BODY); }
+    } THEN {
+        u32 disabledMove = player->volatiles.disabledMove; // bit-field — copy out before EXPECT_EQ
+        EXPECT_EQ(disabledMove, MOVE_NONE);
     }
 }

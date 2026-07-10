@@ -59,7 +59,8 @@
 //   Aftermath chips a contact attacker 1/4 max HP when it KOs the holder, Innards Out deals the
 //   attacker the holder's lost HP when any move KOs it; STEAM_ENGINE / THERMAL_EXCHANGE / WIND_POWER
 //   raise Speed / Attack / charge the next Electric move when the holder is hit by a Fire-or-Water /
-//   Fire / wind move, Thermal Exchange also granting burn immunity),
+//   Fire / wind move, Thermal Exchange also granting burn immunity; CURSED_BODY disables the move
+//   that hit the holder, 30% / always under DETERMINISTIC_ABILITIES),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
