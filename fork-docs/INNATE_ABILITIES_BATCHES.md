@@ -300,10 +300,18 @@ HP-drainers).
 Intimidate, Download, Anticipation, Forewarn, Frisk, Unnerve, Supersweet Syrup,
 Hospitality.
 
-- Switch-in driver also **not built yet**. Intimidate is the marquee one and the
-  dependency for every Intimidate-immunity half flagged in Batches I/P/S/M
-  (Own Tempo, Inner Focus, Scrappy, Guard Dog, Oblivious-done). Build the driver,
-  then add members. Heaviest batch — split aggressively.
+- The switch-in driver is now **built**: `TryActivateInnateSwitchInEffects`
+  (`src/fork/innate_abilities.c`), hooked from the new
+  `FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE` step (`src/battle_switch_in.c`),
+  delegates to the upstream `ABILITYEFFECT_ON_SWITCHIN` case (see the
+  `### ABILITY_INTIMIDATE` wiring block in `INNATE_ABILITIES.md`). The first sub-PR
+  shipped **Intimidate** (−1 Attack on every foe at switch-in) — the marquee member
+  and the dependency for the Intimidate-immunity halves in Batches I/P/S (Own Tempo,
+  Inner Focus, Scrappy, Oblivious were already wired to shrug it off; Guard Dog's
+  boost-on-intimidate half is still a follow-up). Remaining members reuse the driver
+  (a one-line `IsActiveSwitchInInnate` addition each) plus their own effect wiring:
+  Download, Anticipation, Forewarn, Frisk, Unnerve, Supersweet Syrup, Hospitality.
+  Heaviest batch — split aggressively.
 
 ### Batch M — On-KO / on-hit stat boosts (script per ability)
 **11**
@@ -387,8 +395,8 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 16 | Batch T — Berry/item synergy | active/trait | done |
 | 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | done |
 | 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | done (all 13: Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body / Pickpocket / Magician / Liquid Ooze) |
-| 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | open |
-| 20 | Batch L — Switch-in actives | active, needs step 19 | open |
+| 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | done (shipped with Intimidate, the marquee consumer, like step 17 shipped with Rough Skin) |
+| 20 | Batch L — Switch-in actives | active, needs step 19 | open (1/8 done: Intimidate. Remaining: Download / Anticipation / Forewarn / Frisk / Unnerve / Supersweet Syrup / Hospitality) |
 | 21 | Batch M — On-KO/on-hit stat boosts | active | open |
 | 22 | Batch U — Ally-support (doubles) | calc/trait | open |
 | 23 | Tier 5 — Bespoke/deferred (one ability per session) | one-off | open |
@@ -444,7 +452,7 @@ row is `done`.
 | S — Misc single-site traits | trait | 12 | done |
 | J — End-of-turn effects | active (existing driver) | 10 | done |
 | K — On-contact/on-hit/on-faint | active (new driver) | 13 | done (Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body / Pickpocket / Magician / Liquid Ooze) |
-| L — Switch-in actives | active (new driver) | 8 | open |
+| L — Switch-in actives | active (new driver) | 8 | open (1/8 done: Intimidate — the switch-in driver was built with it; Download / Anticipation / Forewarn / Frisk / Unnerve / Supersweet Syrup / Hospitality remain) |
 | M — On-KO/on-hit stat boosts | active | 11 | open |
 | T — Berry/item synergy | active/trait | 4 | done |
 | U — Ally-support (doubles) | calc/trait | 5 | open |

@@ -5097,6 +5097,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_STEAM_ENGINE, ABILITY_THERMAL_EXCHANGE, ABILITY_WIND_POWER,
         ABILITY_CURSED_BODY,
         ABILITY_PICKPOCKET, ABILITY_MAGICIAN, ABILITY_LIQUID_OOZE,
+        ABILITY_INTIMIDATE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -6962,5 +6963,127 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate M
     } THEN {
         EXPECT_EQ(opponent->item, ITEM_MAGOST_BERRY);
         EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
+// ─── Innate Intimidate ───────────────────────────────────────────────────────
+// The FIRST active, scripted SWITCH-IN innate: on switch-in the holder lowers every opposing
+// battler's Attack by 1 stage. Fired through the new re-entrant switch-in driver
+// (TryActivateInnateSwitchInEffects, hooked at FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE in
+// src/battle_switch_in.c), which delegates to the upstream ABILITYEFFECT_ON_SWITCHIN case so the
+// stat drop / script / pop-up — and every downstream reaction (the target's Clear Body / Own Tempo
+// immunity, Defiant, etc.) — match the real ability. Mawile is the worked example: its abilities[0]
+// is Hyper Cutter, so the innate Intimidate is attributable solely to the innate (and the pop-up must
+// show Intimidate, not Hyper Cutter). Suppression parity holds via IsInnateActive().
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Intimidate lowers the foe's Attack on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAWILE, ABILITY_INTIMIDATE));
+        ASSUME(gSpeciesInfo[SPECIES_MAWILE].abilities[0] != ABILITY_INTIMIDATE); // chosen Hyper Cutter; the drop is the innate's
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_MAWILE);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_INTIMIDATE); // pop-up shows the innate, not chosen Hyper Cutter
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_INTIMIDATE); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE - 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a chosen Intimidate drops the foe once, not twice, with innates on")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GYARADOS, ABILITY_INTIMIDATE));
+        ASSUME(gSpeciesInfo[SPECIES_GYARADOS].abilities[0] == ABILITY_INTIMIDATE); // chosen == innate
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_GYARADOS);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } THEN {
+        // The driver skips an innate equal to the chosen ability, so the chosen Intimidate fires alone: -1, not -2.
+        EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Intimidate on switch-in")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAWILE, ABILITY_INTIMIDATE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_MAWILE);
+        OPPONENT(SPECIES_WEEZING_GALAR) { Ability(ABILITY_NEUTRALIZING_GAS); } // Neutralizing Gas is on the field
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_INTIMIDATE); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE); // suppressed: no drop
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: the foe's Clear Body blocks an innate Intimidate's Attack drop")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAWILE, ABILITY_INTIMIDATE));
+        ASSUME(gSpeciesInfo[SPECIES_METAGROSS].abilities[0] == ABILITY_CLEAR_BODY);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_MAWILE);
+        OPPONENT(SPECIES_METAGROSS);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } THEN {
+        // Delegation to the real Intimidate script preserves the target's Clear Body immunity.
+        EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies only the chosen ability, never an innate Intimidate")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAWILE, ABILITY_INTIMIDATE));
+        ASSUME(gSpeciesInfo[SPECIES_MAWILE].abilities[0] == ABILITY_HYPER_CUTTER);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MAWILE);
+        OPPONENT(SPECIES_GARDEVOIR) { Ability(ABILITY_TRACE); }
+    } WHEN {
+        TURN { }
+    } THEN {
+        // Trace reads the primary slot only, so it copies Hyper Cutter, not the innate Intimidate.
+        EXPECT_EQ(opponent->ability, ABILITY_HYPER_CUTTER);
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Intimidate lowers both opposing battlers' Attack")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAWILE, ABILITY_INTIMIDATE));
+        ASSUME(gSpeciesInfo[SPECIES_MAWILE].abilities[0] != ABILITY_INTIMIDATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_MAWILE);
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(playerLeft, 2); MOVE(playerRight, MOVE_CELEBRATE); \
+               MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(opponentRight, MOVE_CELEBRATE); }
+    } SCENE {
+        ABILITY_POPUP(playerLeft, ABILITY_INTIMIDATE);
+    } THEN {
+        EXPECT_EQ(opponentLeft->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
+        EXPECT_EQ(opponentRight->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
     }
 }

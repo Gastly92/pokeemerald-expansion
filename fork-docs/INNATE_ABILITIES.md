@@ -23,9 +23,14 @@ the foe's stat-stage changes), **`STURDY`** (a full-HP endure + OHKO-move
 immunity), **`NATURAL_CURE`** (a silent status cure on switch-out),
 **`PRANKSTER`** (a +1 priority boost on status moves), the pinch abilities, the
 weather speed-doublers, **`FILTER`**, **`PRESSURE`**, **`STENCH`**,
-**`BATTLE_ARMOR`**/**`SHELL_ARMOR`**, and **`SPEED_BOOST`** (a +1 Speed boost at
+**`BATTLE_ARMOR`**/**`SHELL_ARMOR`**, **`SPEED_BOOST`** (a +1 Speed boost at
 the end of every turn — the first *active, scripted* end-turn innate, fired
-through an end-turn driver; see the active-ability recipe below).
+through an end-turn driver; see the active-ability recipe below), the on-hit
+contact/faint reactions, and **`INTIMIDATE`** (a −1 Attack drop on every
+opposing battler at switch-in — the first *active, scripted* switch-in innate,
+fired through a switch-in driver; see the active-ability recipe below). The full
+current set is enumerated in `src/fork/innate_abilities.c` and the SCOPE list in
+`include/fork/innate_abilities.h`.
 
 So a future request like *"add ability X as an innate; species A/B/C should have
 it"* breaks into two parts:
@@ -330,10 +335,17 @@ How much is needed depends on the ability class:
     Cursed Body, Steam Engine, …) is a one-line addition to `IsActiveOnHitInnate`. See the
     `### ABILITY_ROUGH_SKIN / …` wiring block below. (Cute Charm / Stench predate the driver
     and keep their own inline prechecks, so they are not in `IsActiveOnHitInnate`.)
-  - **switch-in actives** (Intimidate, …) still need their own event hook; model it on the
-    end-turn / on-hit drivers above (a per-event `TryActivateInnate…` that delegates to the
-    matching `AbilityBattleEffects` case), not on the older `TryActivateInnateEffects`
-    machinery that was removed from history.
+  - **switch-in actives** (Intimidate, …) now have their driver: **`TryActivateInnateSwitchInEffects`**
+    (`src/fork/innate_abilities.c`), the switch-in analogue of the end-turn / on-hit drivers —
+    re-entrant, hooked from the new `FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE` step
+    (`include/constants/battle_switch_in.h`, dispatched in `FirstEventBlockEvents`,
+    `src/battle_switch_in.c`) right after the chosen-ability switch-in block, delegating to the
+    upstream `ABILITYEFFECT_ON_SWITCHIN` case. The hook lives inside the `switchinevents` state
+    machine that drives *every normal switch-in* (battle intro, pivot moves, post-faint replacement,
+    forced switch); the `switchinabilities` sites (ability-swap / Tera / form change) are deliberately
+    NOT hooked, so a species-bound innate never re-fires when a foe Skill-Swaps or the holder
+    Mega-evolves. Adding a further switch-in active (Download, Frisk, …) is a one-line addition to
+    `IsActiveSwitchInInnate`. See the `### ABILITY_INTIMIDATE` wiring block below.
 
 ### Step 3.5 — free the frontier roster slots (NOT optional — run the grep first)
 
@@ -2358,3 +2370,62 @@ all its useful real abilities innate (or only the still-pending Frisk free), so 
 ability — still correct (the chosen runs it; the innate is redundant-but-skipped). **Tentacruel** / **Swalot** keep
 chosen Liquid Ooze; the three **Weavile** and three **Grimmsnarl** sets keep chosen Pickpocket; the three **Delphox**,
 two **Klefki** and three **Hoopa / Hoopa-Unbound** sets keep chosen Magician — each a real, roster-legal slot.
+
+### ABILITY_INTIMIDATE
+
+The first sub-group of **Batch L** and the **first active, scripted SWITCH-IN innate** — a **1:1 clean-upside copy**
+(Intimidate only ever hurts the foe). On switch-in the holder lowers **every opposing battler's Attack by 1 stage**.
+
+**Driver + hook (the new infrastructure).** Intimidate introduces the **switch-in driver**
+`TryActivateInnateSwitchInEffects` (`src/fork/innate_abilities.c` -> `IsActiveSwitchInInnate`), the switch-in analogue
+of the Speed Boost end-turn driver and the on-hit driver. It is **re-entrant** via a per-battler cursor
+(`switchInInnateIndex` in `gBattleStruct->eventState`) and delegates to the **existing upstream**
+`AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler, ABILITY_INTIMIDATE, …)` case, so the Attack drop / script /
+pop-up — and **every downstream reaction** (the target's Clear Body / White Smoke / Hyper Cutter / Big Pecks stat-drop
+protection, the Own Tempo / Inner Focus / Oblivious / Scrappy / Guard Dog Intimidate-immunity halves already made
+innate-aware in Batches D-E/I/P/S, plus Defiant / Competitive / Rattled / Adrenaline Orb) — match the real ability for
+free. It is hooked from the new `FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE` step
+(`include/constants/battle_switch_in.h`, dispatched in `FirstEventBlockEvents`, `src/battle_switch_in.c`) right after the
+chosen-ability switch-in block, **inside the `switchinevents` state machine that drives every normal switch-in** (battle
+intro, pivot moves, post-faint replacement, forced switch). The re-entrant block holds
+`FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE` (keeping the cursor) while the driver returns TRUE and resets the cursor +
+advances once it returns FALSE; the outer per-battler loop also resets the cursor when it moves to the next battler.
+**The `switchinabilities` sites (ability-swap / Tera / form change) are deliberately NOT hooked** — an innate Intimidate
+is species-bound, so it must not re-fire when a foe Skill-Swaps or the holder Mega-evolves (the chosen path already
+handles those for a gained *chosen* ability). Adding a further switch-in active (Download, Frisk, …) is a **one-line**
+addition to `IsActiveSwitchInInnate`.
+
+**Pop-up / identity.** The switch-in pop-up reads the primary slot, so the effect site (the `ABILITY_INTIMIDATE`
+`ABILITYEFFECT_ON_SWITCHIN` case in `src/battle_util.c`) forces `gBattleScripting.abilityPopupOverwrite = ABILITY_INTIMIDATE`
+only when the chosen ability differs (the Speed Boost / Sturdy precedent); `BattleScript_AbilityPopUp` clears the overwrite
+after showing it, and `recordability` still records the **chosen** ability, so identity stays deterministic. The driver
+also pins `gBattlerAbility = battler` before delegating so the pop-up targets the holder.
+
+**Suppression parity** holds via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas, not-on-field); the driver
+also skips an innate equal to the chosen ability, so a mon whose chosen ability *is* Intimidate drops the foe **once, not
+twice**. Intimidate is not `breakable`, so Mold Breaker never touches it.
+
+**AI.** Intimidate's reasoning lives in **dedicated** `src/battle_ai_switch.c` helpers (not the shared calc), so it had to
+be wired: the switch-in Attack-drop **simulation** (`SetBattlerStatStagesForSwitchin`, so the AI values switching an
+innate-Intimidate mon in — off-field, keyed on `SpeciesHasInnate`, feature-gated), the **Intimidate-cycling** switch
+heuristic (`ShouldSwitchIfAbilityBenefit` gains a pre-check mirroring Regenerator / Natural Cure, crediting an innate via
+`BattlerHasAbility` even when the chosen ability differs, then routing through `ShouldSwitchIfIntimidateBenefit`), and the
+foe-Intimidate **free-switch timing** read (`BattlerHasAbility(opposingBattler, …)`). The incoming-ability *value* scorer
+in `battle_ai_util.c` (`case ABILITY_INTIMIDATE`) is left keyed to the chosen ability — a soft ability-swap-move heuristic,
+not a hard effect read, consistent with how Unaware left its softest heuristics.
+
+**Species (canon-only, no flavor picks** — Intimidate is a strong, common ability with a ~45-species canon set, so like
+Prankster the flavor set is deliberately omitted). Every canon Intimidate user in **any** real slot gets a row (merged into
+an existing innate row where present), keyed **exactly per form**: the Ekans / Growlithe (+ Hisui) / Arcanine (+ Hisui) /
+Tauros (+ Paldea forms) / Gyarados / Snubbull / Granbull / Qwilfish (+ Hisui) / Overqwil / Stantler / Wyrdeer / Mightyena /
+Masquerain / Mawile / Salamence / Staravia / Staraptor / Shinx / Luxio / Luxray / Herdier / Stoutland / Sandile / Krokorok /
+Krookodile / Scraggy / Scrafty / Litten / Torracat / Incineroar / Squawkabilly (all four plumages) / Maschiff / Mabosstiff
+/ Hitmontop lines, plus base creatures' **Megas as pure-boon mirrors** (Gyarados / Salamence / Mawile Megas keep base
+Intimidate though their Mega ability differs). **Sole-Intimidate Megas are OMITTED as redundant** (Manectric-Mega,
+Scrafty-Mega — their sole, always-chosen ability IS Intimidate, so an innate could never be observed, the Mega Lopunny /
+Scrappy precedent). **Landorus-Therian** is sole-Intimidate but a **frontier set**, so — like Ogerpon-Cornerstone — it takes
+the innate **and** a fork-owned chosen **Sheer Force** override (`src/fork/species_ability_overrides.c`; Sheer Force is `:x:`
+(never an innate -> stable) and its Incarnate forme's signature), and its two frontier sets now run Sheer Force on top of the
+innate Intimidate. **Step 3.5** touched ~40 frontier sets: Landorus-Therian is freed via the override above; the rest are
+**deferred** (like Batch J/T/K) — they keep their now-redundant chosen Intimidate (still correct: the chosen runs it, the
+innate is redundant-but-skipped) rather than a game-wide complementary-slot sweep.

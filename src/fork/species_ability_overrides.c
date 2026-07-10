@@ -706,8 +706,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HYDREIGON, 1, 
         ABILITY_SHEER_FORCE },
     { // 0641
-        SPECIES_TORNADUS_THERIAN, 1, 
+        SPECIES_TORNADUS_THERIAN, 1,
         ABILITY_PRANKSTER
+    },
+    { // 0645
+        // Landorus-Therian's only real ability (Intimidate) is now innate, and it's a frontier set, so like
+        // Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its empty slot 1. Sheer
+        // Force is :x: (never an innate -> stable) and flavorful: it's the signature of Landorus's Incarnate
+        // forme, so its frontier sets run Sheer Force offense on top of the innate Intimidate switch-in drop.
+        SPECIES_LANDORUS_THERIAN, 1,
+        ABILITY_SHEER_FORCE
     },
     { // 0646
         SPECIES_KYUREM, 1,

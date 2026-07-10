@@ -1073,6 +1073,16 @@ static bool32 ShouldSwitchIfAbilityBenefit(struct SwitchAiContext *switchContext
         && ShouldSwitchForNaturalCure(switchContext))
         return SetSwitchinAndSwitch(switchContext->battler, PARTY_SIZE);
 
+    // FORK: an innate Intimidate gets the same switch-to-re-trigger consideration as a real one even
+    // when the chosen ability differs (mirrors the ABILITY_INTIMIDATE case below). It only *adds* a
+    // switch reason — if it declines, fall through so the chosen ability's own benefit still gets a look.
+    if (gAiLogicData->abilities[switchContext->battler] != ABILITY_INTIMIDATE
+        && BattlerHasAbility(switchContext->battler, ABILITY_INTIMIDATE)
+        && ShouldSwitchIfIntimidateBenefit(switchContext)
+        && gAiLogicData->mostSuitableMonId[switchContext->battler] != PARTY_SIZE
+        && (switchContext->hasStatRaised ? RandomPercentage(RNG_AI_SWITCH_INTIMIDATE, GetSwitchChance(SHOULD_SWITCH_INTIMIDATE_STATS_RAISED)) : RandomPercentage(RNG_AI_SWITCH_INTIMIDATE, GetSwitchChance(SHOULD_SWITCH_INTIMIDATE))))
+        return SetSwitchinAndSwitch(switchContext->battler, PARTY_SIZE);
+
     switch (gAiLogicData->abilities[switchContext->battler])
     {
     case ABILITY_NATURAL_CURE:
@@ -2245,7 +2255,8 @@ static inline bool32 IsFreeSwitch(enum SwitchType switchType, enum BattlerId bat
         {
             enum Ability opposingAbility = gAiLogicData->abilities[opposingBattler];
             // If faster, not a free switch; likely lowered own stats
-            if (!movedSecond && opposingAbility != ABILITY_INTIMIDATE && opposingAbility != ABILITY_SUPERSWEET_SYRUP) // Intimidate triggers switches before turn starts
+            // FORK: an innate Intimidate on the foe also triggers switches before the turn starts.
+            if (!movedSecond && opposingAbility != ABILITY_INTIMIDATE && !BattlerHasAbility(opposingBattler, ABILITY_INTIMIDATE) && opposingAbility != ABILITY_SUPERSWEET_SYRUP) // Intimidate triggers switches before turn starts
                 return FALSE;
             // Otherwise, free switch
             return TRUE;
@@ -2894,6 +2905,28 @@ static void SetBattlerStatStagesForSwitchin(enum BattlerId battler, enum Battler
             gBattleMons[battler].statStages[STAT_SPEED] += 1;
     default:
         break;
+    }
+
+    // FORK: an innate Intimidate applies the same switch-in Attack drop the AI simulates for a real one,
+    // so the AI values switching an innate-Intimidate mon in even when its chosen ability differs
+    // (feature off must not credit — or scan for — innates). Mirrors the ABILITY_INTIMIDATE case above.
+    if (aiAbility != ABILITY_INTIMIDATE
+     && GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_INTIMIDATE)
+     && CanLowerStat(battler, opposingBattler, gAiLogicData, STAT_ATK))
+    {
+        if (gAiLogicData->abilities[opposingBattler] == ABILITY_CONTRARY)
+        {
+            gBattleMons[opposingBattler].statStages[STAT_ATK] += 1;
+        }
+        else
+        {
+            opponentStatDrop = TRUE;
+            gBattleMons[opposingBattler].statStages[STAT_ATK] -= 1;
+            if (gAiLogicData->abilities[opposingBattler] == ABILITY_DEFIANT)
+                gBattleMons[opposingBattler].statStages[STAT_ATK] += 2;
+            if (gAiLogicData->abilities[opposingBattler] == ABILITY_COMPETITIVE)
+                gBattleMons[opposingBattler].statStages[STAT_SPATK] += 2;
+        }
     }
 
     // Item stat changes

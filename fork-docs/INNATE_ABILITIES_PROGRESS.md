@@ -28,7 +28,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Shield Dust | The Pokémon is immune to additional effects from attacks. |
 | :white_check_mark: | Own Tempo | The Pokémon cannot become confused and is unaffected by Intimidate. |
 | :white_check_mark: | Suction Cups | The Pokémon is unaffected by the moves and held items of other Pokémon that would force it to switch out of battle. |
-| :white_large_square: | Intimidate | When the Pokémon enters a battle, it lowers the Attack stats of opponents by 1 stage. |
+| :white_check_mark: | Intimidate | When the Pokémon enters a battle, it lowers the Attack stats of opponents by 1 stage. |
 | :white_check_mark: | Shadow Tag | Opponents cannot be switched out of battle. |
 | :white_check_mark: | Rough Skin | When the Pokémon is hit by a contact move, the attacker takes damage equal to 1/8 of its max HP. |
 | :x: | Wonder Guard | Its mysterious power only lets supereffective moves hit the Pokémon. |
