@@ -344,7 +344,7 @@ How much is needed depends on the ability class:
     machine that drives *every normal switch-in* (battle intro, pivot moves, post-faint replacement,
     forced switch); the `switchinabilities` sites (ability-swap / Tera / form change) are deliberately
     NOT hooked, so a species-bound innate never re-fires when a foe Skill-Swaps or the holder
-    Mega-evolves. Adding a further switch-in active (Download, Frisk, …) is a one-line addition to
+    Mega-evolves. Adding a further switch-in active (Download, Unnerve, …) is a one-line addition to
     `IsActiveSwitchInInnate`. See the `### ABILITY_INTIMIDATE` wiring block below.
 
 ### Step 3.5 — free the frontier roster slots (NOT optional — run the grep first)
@@ -2392,7 +2392,7 @@ intro, pivot moves, post-faint replacement, forced switch). The re-entrant block
 advances once it returns FALSE; the outer per-battler loop also resets the cursor when it moves to the next battler.
 **The `switchinabilities` sites (ability-swap / Tera / form change) are deliberately NOT hooked** — an innate Intimidate
 is species-bound, so it must not re-fire when a foe Skill-Swaps or the holder Mega-evolves (the chosen path already
-handles those for a gained *chosen* ability). Adding a further switch-in active (Download, Frisk, …) is a **one-line**
+handles those for a gained *chosen* ability). Adding a further switch-in active (Download, Unnerve, …) is a **one-line**
 addition to `IsActiveSwitchInInnate`.
 
 **Pop-up / identity.** The switch-in pop-up reads the primary slot, so the effect site (the `ABILITY_INTIMIDATE`
@@ -2429,3 +2429,43 @@ the innate **and** a fork-owned chosen **Sheer Force** override (`src/fork/speci
 innate Intimidate. **Step 3.5** touched ~40 frontier sets: Landorus-Therian is freed via the override above; the rest are
 **deferred** (like Batch J/T/K) — they keep their now-redundant chosen Intimidate (still correct: the chosen runs it, the
 innate is redundant-but-skipped) rather than a game-wide complementary-slot sweep.
+
+### ABILITY_ANTICIPATION / ABILITY_FOREWARN / ABILITY_FRISK
+
+**Batch L's second sub-group** — three **switch-in information reveals**, each a **1:1 clean-upside copy**
+(pure information; none ever hurts the holder). On switch-in **Anticipation** shows a warning message if any
+foe knows a super-effective or OHKO move, **Forewarn** reveals one of a foe's strongest moves, and **Frisk**
+reveals the foes' held items.
+
+**Driver + hook (reused).** All three ride the **existing switch-in driver** `TryActivateInnateSwitchInEffects`
+(`src/fork/innate_abilities.c` -> `IsActiveSwitchInInnate`) that Intimidate introduced — adding each was a
+**one-line** `IsActiveSwitchInInnate` case, no driver/hook change. The driver delegates to the upstream
+`AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler, <innate>, …)` case, so the message / reveal / script /
+pop-up match the real ability for free.
+
+**Pop-up / identity.** Each switch-in message script (`BattleScript_SwitchInAbilityMsg` for Anticipation /
+Forewarn, `BattleScript_FriskActivates` for Frisk) calls `BattleScript_AbilityPopUp`, which reads the primary
+slot — so each effect site (the three `ABILITYEFFECT_ON_SWITCHIN` cases in `src/battle_util.c`) forces
+`gBattleScripting.abilityPopupOverwrite = gLastUsedAbility` (the innate being processed) only when the chosen
+ability differs (the Speed Boost / Rain Dish precedent), and `BattleScript_AbilityPopUp` clears it after
+showing it. `recordability` still records the **chosen** ability, so identity stays deterministic.
+
+**Suppression parity** holds via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas, not-on-field);
+none is `breakable`, so Mold Breaker never touches them.
+
+**AI.** None of the three has a **dedicated** `battle_ai_*.c` effect read (`grep` confirms zero), so **no AI
+wiring is needed**: they change no stat or state the switch-in sim reasons about, and the AI already benefits
+from the revealed move/item records through the shared move/item bookkeeping keyed off the real battler.
+
+**Species (canon-only, no flavor picks** — a switch-in reveal is pure information with no thematic hook
+off-roster). Every canon user in **any** real slot gets a row (merged into an existing innate row where
+present), keyed **exactly per form**: **Frisk** -> the Gothita / Shuppet (+ Banette, incl. **Mega Banette as a
+pure-boon mirror**) / Duskull / Flittle / Espathra / Munkidori / Wigglytuff / Exeggutor-Alola / Typhlosion-Hisui
+/ Sentret / Yanma / Stantler / Wyrdeer / Phantump / Pumpkaboo (all sizes) / Gourgeist (all sizes) / Noibat /
+Orbeetle (+ Gmax) / Impidimp lines; **Forewarn** -> the Munna / Drowzee / Smoochum lines; **Anticipation** ->
+Ferrothorn / the Barboach / Flittle / Ponyta-Galar / Eevee-Starter / Wormadam (all cloaks) / Croagunk /
+Hatenna (+ Gmax) lines. **Flittle carries both Frisk and Anticipation**, matching its real ability data. No
+species is sole-ability for any of the three, so there are no redundant omissions or override rows. **Step 3.5**:
+the ~14 frontier sets that hardcoded chosen Frisk / Anticipation now carry it innately, so they keep their
+now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the
+complementary-slot freeing is **deferred** like Batch J/T/K and the Intimidate sub-group.

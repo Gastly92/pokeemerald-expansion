@@ -3248,6 +3248,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
 
                 if (effect != 0)
                 {
+                    // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                    // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                    if (GetBattlerAbility(battler) != gLastUsedAbility)
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ANTICIPATION;
                     BattleScriptCall(BattleScript_SwitchInAbilityMsg);
                 }
@@ -3269,6 +3273,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 if (battlerDef == gBattlersCount)
                     break; // no item found
 
+                // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 gBattlerAbility = gEffectBattler = battler;
                 BattleScriptCall(BattleScript_FriskActivates);
                 effect++;
@@ -3277,6 +3285,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         case ABILITY_FOREWARN:
             if (shouldAbilityTrigger && !IsOpposingSideEmpty(battler))
             {
+                // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 ForewarnChooseMove(battler);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FOREWARN;
                 BattleScriptCall(BattleScript_SwitchInAbilityMsg);

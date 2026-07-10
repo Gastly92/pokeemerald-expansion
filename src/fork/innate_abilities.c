@@ -291,6 +291,28 @@
 //   signature), like Ogerpon-Cornerstone. Step 3.5: the ~40 frontier sets that hardcoded Intimidate now have it innately, so
 //   they keep their now-redundant chosen Intimidate — still correct (the chosen runs it; the innate is redundant-but-skipped) —
 //   with the complementary-slot freeing deferred as a focused follow-up, like Batch J/T/K.
+//   ANTICIPATION / FOREWARN / FRISK (switch-in information reveals, Batch L second sub-group — all 1:1 clean-upside
+//   copies, canon-only (no flavor picks — a switch-in reveal is pure information with no thematic hook off-roster)):
+//   when the holder switches in, ANTICIPATION shows a warning message if any foe knows a super-effective or OHKO move,
+//   FOREWARN reveals one of a foe's strongest moves, and FRISK reveals the foes' held items. They join the same
+//   re-entrant switch-in driver as Intimidate (a one-line IsActiveSwitchInInnate addition each), delegating to the
+//   upstream ABILITYEFFECT_ON_SWITCHIN case so the message / reveal / script / pop-up match the real ability for free
+//   (each effect site in src/battle_util.c forces the pop-up to the innate when the chosen ability differs, the
+//   Speed Boost precedent). All three are pure information effects that only ever help the holder, so no pure-boon
+//   divergence. None has a dedicated battle_ai_*.c effect read (the AI benefits from the revealed move/item records
+//   for free through the shared move/item bookkeeping, and none changes a stat or state the AI's switch-in sim
+//   reasons about), so no AI wiring is needed. Suppression parity holds via IsInnateActive() (feature flag,
+//   Gastro Acid, Neutralizing Gas, not-on-field); none is breakable, so Mold Breaker never touches them. Canon-only:
+//   every canon user in any real slot gets a row (merged into an existing innate row where present), keyed exactly per
+//   form — Frisk to the Gothita / Shuppet (+ Banette, incl. Mega Banette as a pure-boon mirror) / Duskull / Flittle /
+//   Espathra / Munkidori / Wigglytuff / Exeggutor-Alola / Typhlosion-Hisui / Sentret / Yanma / Stantler / Wyrdeer /
+//   Phantump / Pumpkaboo (all sizes) / Gourgeist (all sizes) / Noibat / Orbeetle (+ Gmax) / Impidimp lines; Forewarn to
+//   the Munna / Drowzee / Smoochum lines; Anticipation to Ferrothorn / the Barboach / Flittle / Ponyta-Galar /
+//   Eevee-Starter / Wormadam (all cloaks) / Croagunk / Hatenna (+ Gmax) lines. (Flittle carries both Frisk and
+//   Anticipation, matching its real ability data.) Step 3.5: the ~14 frontier sets that hardcoded Frisk / Anticipation
+//   now have it innately, so they keep their now-redundant chosen ability — still correct (the chosen runs it; the
+//   innate is redundant-but-skipped) — with the complementary-slot freeing deferred as a focused follow-up, like
+//   Batch J/T/K and the Intimidate sub-group.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -652,7 +674,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WIGGLYTUFF,
         INNATES(
             ABILITY_CUTE_CHARM,
-            ABILITY_FRIEND_GUARD
+            ABILITY_FRIEND_GUARD,
+            ABILITY_FRISK
         )
     },
     { // 0041
@@ -987,12 +1010,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0077
         SPECIES_PONYTA_GALAR,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_PASTEL_VEIL
         )
     },
     { // 0078
         SPECIES_RAPIDASH_GALAR,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_PASTEL_VEIL
         )
     },
@@ -1174,6 +1199,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0096
         SPECIES_DROWZEE,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
             ABILITY_INSOMNIA
         )
@@ -1181,6 +1207,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0097
         SPECIES_HYPNO,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
             ABILITY_INSOMNIA
         )
@@ -1247,6 +1274,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0103
         SPECIES_EXEGGUTOR_ALOLA,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_HARVEST
         )
     },
@@ -1444,6 +1472,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0124
         SPECIES_JYNX,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_OBLIVIOUS
         )
     },
@@ -1539,7 +1568,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0133
         SPECIES_EEVEE_STARTER,
         INNATES(
-            ABILITY_ADAPTABILITY
+            ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION
         )
     },
     { // 0134
@@ -1753,7 +1783,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0157
         SPECIES_TYPHLOSION_HISUI,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_FRISK
         )
     },
     { // 0158
@@ -1783,12 +1814,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0161
         SPECIES_SENTRET,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_KEEN_EYE
         )
     },
     { // 0162
         SPECIES_FURRET,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_KEEN_EYE
         )
     },
@@ -1977,6 +2010,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_YANMA,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_FRISK,
             ABILITY_SPEED_BOOST
         )
     },
@@ -2135,24 +2169,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0856
         SPECIES_HATENNA,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_HEALER
         )
     },
     { // 0857
         SPECIES_HATTREM,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_HEALER
         )
     },
     { // 0858
         SPECIES_HATTERENE,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_HEALER
         )
     },
     { // 0858
         SPECIES_HATTERENE_GMAX,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_HEALER
         )
     },
@@ -2658,6 +2696,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0234
         SPECIES_STANTLER,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INTIMIDATE
         )
     },
@@ -2685,6 +2724,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0238
         SPECIES_SMOOCHUM,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_HYDRATION,
             ABILITY_OBLIVIOUS
         )
@@ -3404,6 +3444,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0339
         SPECIES_BARBOACH,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_HYDRATION,
             ABILITY_OBLIVIOUS
         )
@@ -3411,6 +3452,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0340
         SPECIES_WHISCASH,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_HYDRATION,
             ABILITY_OBLIVIOUS
         )
@@ -3513,6 +3555,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHUPPET,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
@@ -3521,6 +3564,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BANETTE,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
@@ -3529,6 +3573,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BANETTE_MEGA,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE
         )
@@ -3536,12 +3581,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0355
         SPECIES_DUSKULL,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_LEVITATE
         )
     },
     { // 0356
         SPECIES_DUSCLOPS,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE
         )
@@ -3984,18 +4031,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0413
         SPECIES_WORMADAM_PLANT,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_OVERCOAT
         )
     },
     { // 0413
         SPECIES_WORMADAM_SANDY,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_OVERCOAT
         )
     },
     { // 0413
         SPECIES_WORMADAM_TRASH,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_OVERCOAT
         )
     },
@@ -4298,6 +4348,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SNIPER
         )
     },
+    { // 0453
+        SPECIES_CROAGUNK,
+        INNATES(
+            ABILITY_ANTICIPATION
+        )
+    },
+    { // 0454
+        SPECIES_TOXICROAK,
+        INNATES(
+            ABILITY_ANTICIPATION
+        )
+    },
     { // 0455
         SPECIES_CARNIVINE,
         INNATES(
@@ -4385,6 +4447,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0469
         SPECIES_YANMEGA,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_SPEED_BOOST,
             ABILITY_TINTED_LENS
         )
@@ -4450,6 +4513,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0477
         SPECIES_DUSKNOIR,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_PRESSURE
         )
     },
@@ -4770,6 +4834,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MUNNA,
         INNATES(
             ABILITY_BAD_DREAMS,
+            ABILITY_FOREWARN,
             ABILITY_LEVITATE
         )
     },
@@ -4777,6 +4842,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MUSHARNA,
         INNATES(
             ABILITY_BAD_DREAMS,
+            ABILITY_FOREWARN,
             ABILITY_LEVITATE
         )
     },
@@ -5180,18 +5246,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0574
         SPECIES_GOTHITA,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_SHADOW_TAG
         )
     },
     { // 0575
         SPECIES_GOTHORITA,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_SHADOW_TAG
         )
     },
     { // 0576
         SPECIES_GOTHITELLE,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_SHADOW_TAG
         )
     },
@@ -5386,6 +5455,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0598
         SPECIES_FERROTHORN,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_IRON_BARBS
         )
     },
@@ -6114,6 +6184,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0708
         SPECIES_PHANTUMP,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_HARVEST,
             ABILITY_NATURAL_CURE
         )
@@ -6121,6 +6192,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0709
         SPECIES_TREVENANT,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_HARVEST,
             ABILITY_NATURAL_CURE
         )
@@ -6128,6 +6200,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0710
         SPECIES_PUMPKABOO,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -6136,6 +6209,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0710
         SPECIES_PUMPKABOO_SMALL,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -6144,6 +6218,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0710
         SPECIES_PUMPKABOO_LARGE,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -6152,6 +6227,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0710
         SPECIES_PUMPKABOO_SUPER,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -6160,6 +6236,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0711
         SPECIES_GOURGEIST,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -6168,6 +6245,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0711
         SPECIES_GOURGEIST_SMALL,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -6176,6 +6254,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0711
         SPECIES_GOURGEIST_LARGE,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -6184,6 +6263,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0711
         SPECIES_GOURGEIST_SUPER,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -6216,12 +6296,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0714
         SPECIES_NOIBAT,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INFILTRATOR
         )
     },
     { // 0715
         SPECIES_NOIVERN,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INFILTRATOR
         )
     },
@@ -6942,12 +7024,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0826
         SPECIES_ORBEETLE,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_SWARM
         )
     },
     { // 0826
         SPECIES_ORBEETLE_GMAX,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_SWARM
         )
     },
@@ -7202,6 +7286,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0859
         SPECIES_IMPIDIMP,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
@@ -7209,6 +7294,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0860
         SPECIES_MORGREM,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
@@ -7216,6 +7302,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0861
         SPECIES_GRIMMSNARL,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
@@ -7223,6 +7310,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0861
         SPECIES_GRIMMSNARL_GMAX,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
@@ -7429,6 +7517,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0899
         SPECIES_WYRDEER,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_INTIMIDATE
         )
     },
@@ -7788,12 +7877,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0955
         SPECIES_FLITTLE,
         INNATES(
+            ABILITY_ANTICIPATION,
+            ABILITY_FRISK,
             ABILITY_SPEED_BOOST
         )
     },
     { // 0956
         SPECIES_ESPATHRA,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_SPEED_BOOST
         )
     },
@@ -8026,6 +8118,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OKIDOGI,
         INNATES(
             ABILITY_GUARD_DOG
+        )
+    },
+    { // 1015
+        SPECIES_MUNKIDORI,
+        INNATES(
+            ABILITY_FRISK
         )
     },
     { // 1016
@@ -8377,17 +8475,22 @@ bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index,
     return FALSE;
 }
 
-// Active, scripted innate abilities that fire when the HOLDER switches in — today only Intimidate
-// (lowers every opposing battler's Attack by 1 stage). The driver (TryActivateInnateSwitchInEffects)
-// is re-entrant, so a battler may carry more than one and each fires in turn. Each delegates to the
-// existing upstream ABILITYEFFECT_ON_SWITCHIN case, so the stat change / script / pop-up matches the
-// real ability for free (the effect site in src/battle_util.c forces the pop-up to the innate when the
+// Active, scripted innate abilities that fire when the HOLDER switches in — Intimidate (lowers every
+// opposing battler's Attack by 1 stage) and the information-reveal trio Anticipation / Forewarn / Frisk
+// (each shows a switch-in message; Frisk/Forewarn reveal a foe's item/move, Anticipation warns of a
+// super-effective or OHKO move). The driver (TryActivateInnateSwitchInEffects) is re-entrant, so a
+// battler may carry more than one and each fires in turn. Each delegates to the existing upstream
+// ABILITYEFFECT_ON_SWITCHIN case, so the stat change / message / script / pop-up matches the real
+// ability for free (the effect site in src/battle_util.c forces the pop-up to the innate when the
 // chosen ability differs, the Speed Boost precedent).
 static bool32 IsActiveSwitchInInnate(enum Ability ability)
 {
     switch (ability)
     {
-    case ABILITY_INTIMIDATE: // lowers opposing battlers' Attack by 1 stage on switch-in
+    case ABILITY_INTIMIDATE:   // lowers opposing battlers' Attack by 1 stage on switch-in
+    case ABILITY_ANTICIPATION: // shows a warning message if a foe knows a super-effective / OHKO move
+    case ABILITY_FOREWARN:     // reveals one of a foe's strongest moves
+    case ABILITY_FRISK:        // reveals the foes' held items
         return TRUE;
     default:
         return FALSE;
