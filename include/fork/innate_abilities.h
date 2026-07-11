@@ -96,6 +96,13 @@
 //   Water move, Anger Point maxes Attack on a critical hit — each delegating to the upstream
 //   ABILITYEFFECT_MOVE_END case, with the pop-up overwritten to the innate and the AI's partner-fire /
 //   avoid-boosting heuristics made innate-aware),
+//   RATTLED / STEADFAST (fear-response Speed boosts, Batch M third sub-group — both 1:1 clean-upside copies:
+//   the holder's Speed rises +1 when frightened. Rattled reacts to a Dark/Ghost/Bug hit (reusing the on-hit
+//   driver) and to Intimidate (credited at BS_TryDefiantRattled beside Defiant/Competitive, Gen8+ only);
+//   Steadfast reacts to flinching (made innate-aware at the CancelerFlinch site). Pop-up overwritten to the
+//   innate; the Rattled AI reads (avoid-a-Dark/Ghost/Bug-hit, doubles partner-fire, Intimidate-cycling switch)
+//   are innate-aware, Steadfast needs none. Dropped on the Riolu/Lucario line as a contradiction — their innate
+//   Inner Focus prevents flinching, so an innate Steadfast could never fire),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

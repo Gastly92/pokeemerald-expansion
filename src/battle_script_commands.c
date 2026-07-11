@@ -14137,18 +14137,22 @@ void BS_TryDefiantRattled(void)
     enum BattlerId battler = gBattleScripting.battler;
     enum Ability ability = GetBattlerAbility(battler);
 
-    // FORK: when the chosen ability isn't itself a reactive one, credit an innate Defiant / Competitive
-    // (FEATURE_INNATE_ABILITIES) so the holder's Attack / Sp. Atk rises on a foe-caused stat drop (a
-    // regular move, Intimidate, or Sticky Web) exactly like the real ability — a pure boon, 1:1 copy.
-    // Overwrite the pop-up to the innate since CreateAbilityPopUp reads the primary slot. The real-ability
-    // path (chosen Defiant / Competitive / Rattled) is byte-for-byte unchanged; innate Rattled is a later
-    // sub-batch, so it is deliberately not credited here.
+    // FORK: when the chosen ability isn't itself a reactive one, credit an innate Defiant / Competitive /
+    // Rattled (FEATURE_INNATE_ABILITIES) so the holder reacts to a foe-caused stat drop exactly like the
+    // real ability — a pure boon, 1:1 copy. Defiant / Competitive raise Attack / Sp. Atk +2 on ANY foe-caused
+    // stat drop (a regular move, Intimidate, or Sticky Web); Rattled raises Speed +1 but ONLY on Intimidate
+    // (its switch case below gates on gBattleStruct->intimidateActivated). Overwrite the pop-up to the innate
+    // since CreateAbilityPopUp reads the primary slot. The real-ability path (chosen Defiant / Competitive /
+    // Rattled) is byte-for-byte unchanged. (Rattled's other trigger — being hit by a Dark/Ghost/Bug move —
+    // is handled by the on-hit driver at the ABILITYEFFECT_MOVE_END site, not here.)
     if (ability != ABILITY_DEFIANT && ability != ABILITY_COMPETITIVE && ability != ABILITY_RATTLED)
     {
         if (IsInnateActive(battler, ABILITY_DEFIANT))
             gBattleScripting.abilityPopupOverwrite = ability = ABILITY_DEFIANT;
         else if (IsInnateActive(battler, ABILITY_COMPETITIVE))
             gBattleScripting.abilityPopupOverwrite = ability = ABILITY_COMPETITIVE;
+        else if (IsInnateActive(battler, ABILITY_RATTLED))
+            gBattleScripting.abilityPopupOverwrite = ability = ABILITY_RATTLED;
     }
 
     switch (ability)

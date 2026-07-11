@@ -419,6 +419,38 @@
 //   abilities already resolve to the species' real slot, so they keep their now-redundant chosen ability — still
 //   correct (the chosen runs it; the innate is redundant-but-skipped) — with the complementary-slot freeing deferred
 //   as a focused follow-up, like the Defiant / Competitive sub-group.
+//   RATTLED / STEADFAST (fear-response Speed boosts, Batch M third sub-group — both 1:1 clean-upside copies,
+//   canon-only (no flavor picks)): when the holder is frightened its Speed rises by 1 stage. RATTLED reacts to
+//   TWO triggers, so it spans the two Batch M sites already opened: hit by a Dark/Ghost/Bug move (fired from the
+//   upstream ABILITYEFFECT_MOVE_END case, a one-line addition to the existing on-hit driver IsActiveOnHitInnate,
+//   like Justified), and Intimidate (fired from the shared BS_TryDefiantRattled command, credited beside the
+//   innate Defiant / Competitive branch but gated on gBattleStruct->intimidateActivated — its only stat-drop
+//   trigger, unlike Defiant/Competitive which react to any foe-caused drop, and only under B_UPDATED_INTIMIDATE
+//   >= GEN_8). STEADFAST reacts to flinching (fired from the CancelerFlinch site in src/battle_move_resolution.c,
+//   made innate-aware beside the chosen-ability test). Each effect site forces the pop-up to the innate when the
+//   chosen ability differs (Speed Boost precedent). Both only ever help the holder, so no pure-boon divergence.
+//   AI is innate-aware for Rattled (its avoid-a-Dark/Ghost/Bug-hit read in AI_CheckBadMove, the doubles
+//   partner-fire scoringPartnerAbility promotion + ShouldTriggerAbility case in src/battle_ai_main.c, and the
+//   Intimidate-cycling switch heuristic ShouldSwitchIfIntimidateBenefit in src/battle_ai_switch.c all credit an
+//   innate Rattled — the last mirroring how DoesIntimidateRaiseStats already flags a chosen Rattled); Steadfast
+//   has no dedicated battle_ai_*.c read (upstream's AI doesn't avoid flinching a Steadfast holder), so no AI
+//   wiring is needed. Suppression parity holds via IsInnateActive() (feature flag, Gastro Acid, Neutralizing Gas,
+//   not-on-field); neither is breakable, so Mold Breaker never touches them. Canon-only, keyed exactly per form
+//   (merged into an existing innate row where present): RATTLED to the Meowth-Alola / Persian-Alola, Magikarp,
+//   Ledyba, Bonsly / Sudowoodo, Whismur, Snubbull / Granbull, Poochyena, Dunsparce / Dudunsparce (both segment
+//   forms), Clamperl, Basculin-White-Striped, Cubchoo, Yamper, Toxel, and Wiglett / Wugtrio lines; STEADFAST to
+//   the Machop / Machoke / Machamp (+ Gmax), Farfetch'd-Galar / Sirfetch'd, Tyrogue / Hitmontop, Scyther,
+//   Gallade (+ Mega), Rockruff / Lycanroc-Midday, and Dubwool lines. Sole-ability species are OMITTED as
+//   redundant (their sole chosen ability already grants it, so an innate could never be observed — the Mega
+//   Lopunny / Scrappy precedent): Gimmighoul-Chest (sole Rattled) and Mega Mewtwo X (sole Steadfast — its
+//   Pressure innate row stays). DELIBERATE CONTRADICTION OMISSION (Steadfast vs innate Inner Focus): the Riolu /
+//   Lucario line (incl. Mega / Mega-Z) carries innate INNER_FOCUS, which prevents flinching outright, so an
+//   innate Steadfast could never trigger on them (the same class of conflict as Spinda's Tangled-Feet-vs-Own-Tempo
+//   note) — Inner Focus (never flinch) is the stronger, already-wired boon, so Steadfast is dropped there.
+//   Step 3.5: the frontier sets that hardcoded chosen Rattled / Steadfast already resolve to the species' real
+//   slot, so they keep their now-redundant chosen ability — still correct (the chosen runs it; the innate is
+//   redundant-but-skipped) — with the complementary-slot freeing deferred as a focused follow-up, like the
+//   earlier Batch M sub-groups.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -881,6 +913,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MEOWTH_ALOLA,
         INNATES(
             ABILITY_PICKUP,
+            ABILITY_RATTLED,
             ABILITY_TECHNICIAN
         )
     },
@@ -911,6 +944,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PERSIAN_ALOLA,
         INNATES(
             ABILITY_FUR_COAT,
+            ABILITY_RATTLED,
             ABILITY_TECHNICIAN
         )
     },
@@ -1017,25 +1051,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0066
         SPECIES_MACHOP,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_STEADFAST
         )
     },
     { // 0067
         SPECIES_MACHOKE,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_STEADFAST
         )
     },
     { // 0068
         SPECIES_MACHAMP,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_STEADFAST
         )
     },
     { // 0068
         SPECIES_MACHAMP_GMAX,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_STEADFAST
         )
     },
     { // 0069
@@ -1209,7 +1247,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0083
         SPECIES_FARFETCHD_GALAR,
         INNATES(
-            ABILITY_SCRAPPY
+            ABILITY_SCRAPPY,
+            ABILITY_STEADFAST
         )
     },
     { // 0084
@@ -1586,6 +1625,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0123
         SPECIES_SCYTHER,
         INNATES(
+            ABILITY_STEADFAST,
             ABILITY_SWARM,
             ABILITY_TECHNICIAN
         )
@@ -1655,6 +1695,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0129
         SPECIES_MAGIKARP,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -1976,6 +2017,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LEDYBA,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_RATTLED,
             ABILITY_SWARM
         )
     },
@@ -2088,6 +2130,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0185
         SPECIES_SUDOWOODO,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
@@ -2576,6 +2619,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0206
         SPECIES_DUNSPARCE,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_SERENE_GRACE
         )
     },
@@ -2605,14 +2649,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0209
         SPECIES_SNUBBULL,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_RATTLED
         )
     },
     { // 0210
         SPECIES_GRANBULL,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_RATTLED
         )
     },
     { // 0211
@@ -2848,6 +2894,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TYROGUE,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_STEADFAST,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -2855,6 +2902,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HITMONTOP,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_STEADFAST,
             ABILITY_TECHNICIAN
         )
     },
@@ -3038,7 +3086,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0261
         SPECIES_POOCHYENA,
         INNATES(
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_RATTLED
         )
     },
     { // 0262
@@ -3251,6 +3300,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHEDINJA,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 0293
+        SPECIES_WHISMUR,
+        INNATES(
+            ABILITY_RATTLED
         )
     },
     { // 0294
@@ -3843,6 +3898,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0366
         SPECIES_CLAMPERL,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_SHELL_ARMOR
         )
     },
@@ -4377,6 +4433,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0438
         SPECIES_BONSLY,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
@@ -4658,14 +4715,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GALLADE,
         INNATES(
             ABILITY_JUSTIFIED,
-            ABILITY_SHARPNESS
+            ABILITY_SHARPNESS,
+            ABILITY_STEADFAST
         )
     },
     { // 0475
         SPECIES_GALLADE_MEGA,
         INNATES(
             ABILITY_JUSTIFIED,
-            ABILITY_SHARPNESS
+            ABILITY_SHARPNESS,
+            ABILITY_STEADFAST
         )
     },
     { // 0476
@@ -5265,7 +5324,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0550
         SPECIES_BASCULIN_WHITE_STRIPED,
         INNATES(
-            ABILITY_ADAPTABILITY
+            ABILITY_ADAPTABILITY,
+            ABILITY_RATTLED
         )
     },
     { // 0551
@@ -5744,6 +5804,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0613
         SPECIES_CUBCHOO,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK
         )
@@ -6771,6 +6832,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ROCKRUFF,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_STEADFAST,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -6778,7 +6840,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LYCANROC_MIDDAY,
         INNATES(
             ABILITY_KEEN_EYE,
-            ABILITY_SAND_RUSH
+            ABILITY_SAND_RUSH,
+            ABILITY_STEADFAST
         )
     },
     { // 0745
@@ -7347,6 +7410,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0832
+        SPECIES_DUBWOOL,
+        INNATES(
+            ABILITY_STEADFAST
+        )
+    },
+    { // 0835
+        SPECIES_YAMPER,
+        INNATES(
+            ABILITY_RATTLED
+        )
+    },
     { // 0836
         SPECIES_BOLTUND,
         INNATES(
@@ -7456,6 +7531,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_PROPELLER_TAIL,
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0848
+        SPECIES_TOXEL,
+        INNATES(
+            ABILITY_RATTLED
         )
     },
     { // 0849
@@ -7597,7 +7678,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0865
         SPECIES_SIRFETCHD,
         INNATES(
-            ABILITY_SCRAPPY
+            ABILITY_SCRAPPY,
+            ABILITY_STEADFAST
         )
     },
     { // 0866
@@ -8182,6 +8264,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WIGLETT,
         INNATES(
             ABILITY_GOOEY,
+            ABILITY_RATTLED,
             ABILITY_SAND_VEIL
         )
     },
@@ -8189,6 +8272,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WUGTRIO,
         INNATES(
             ABILITY_GOOEY,
+            ABILITY_RATTLED,
             ABILITY_SAND_VEIL
         )
     },
@@ -8313,8 +8397,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0982
+        SPECIES_DUDUNSPARCE_TWO_SEGMENT,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SERENE_GRACE
+        )
+    },
+    { // 0982
         SPECIES_DUDUNSPARCE_THREE_SEGMENT,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_SERENE_GRACE
         )
     },
@@ -8658,6 +8750,7 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_STAMINA:       // raises Defense +1 when hit by any move
     case ABILITY_WATER_COMPACTION: // raises Defense +2 when hit by a Water move
     case ABILITY_ANGER_POINT:   // maxes Attack when the holder takes a critical hit
+    case ABILITY_RATTLED:       // raises Speed +1 when hit by a Dark/Ghost/Bug move
         return TRUE;
     default:
         return FALSE;

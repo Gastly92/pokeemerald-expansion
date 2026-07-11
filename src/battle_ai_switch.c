@@ -997,11 +997,13 @@ static bool32 ShouldSwitchIfIntimidateBenefit(struct SwitchAiContext *switchCont
         enum Ability abilityDef = gAiLogicData->abilities[switchContext->opposingBattler];
         bool32 canLowerAtk = CanIntimidateLowerOpponentAtk(switchContext->battler, switchContext->opposingBattler);
 
-        // FORK: a foe's innate Defiant / Competitive turns our Intimidate into a +2 for it
-        // (FEATURE_INNATE_ABILITIES), so don't switch an Intimidator in expecting to weaken it.
+        // FORK: a foe's innate Defiant / Competitive / Rattled turns our Intimidate into a boon for it
+        // (FEATURE_INNATE_ABILITIES: +2 Atk / +2 Sp.Atk / +1 Speed), so don't switch an Intimidator in
+        // expecting to weaken it — mirroring how DoesIntimidateRaiseStats already flags a chosen Rattled.
         if (canLowerAtk && (DoesIntimidateRaiseStats(abilityDef) || abilityDef == ABILITY_MIRROR_ARMOR
          || IsInnateActive(switchContext->opposingBattler, ABILITY_DEFIANT)
-         || IsInnateActive(switchContext->opposingBattler, ABILITY_COMPETITIVE)))
+         || IsInnateActive(switchContext->opposingBattler, ABILITY_COMPETITIVE)
+         || (GetConfig(B_UPDATED_INTIMIDATE) >= GEN_8 && IsInnateActive(switchContext->opposingBattler, ABILITY_RATTLED))))
             return FALSE;
         if (canLowerAtk && IsOpponentPhysicalAttacker(switchContext->battler, switchContext->opposingBattler))
             hasValidTarget = TRUE;
@@ -1012,11 +1014,13 @@ static bool32 ShouldSwitchIfIntimidateBenefit(struct SwitchAiContext *switchCont
         enum Ability abilityDef = gAiLogicData->abilities[opposingPartner];
         bool32 canLowerAtk = CanIntimidateLowerOpponentAtk(switchContext->battler, opposingPartner);
 
-        // FORK: a foe's innate Defiant / Competitive turns our Intimidate into a +2 for it
-        // (FEATURE_INNATE_ABILITIES), so don't switch an Intimidator in expecting to weaken it.
+        // FORK: a foe's innate Defiant / Competitive / Rattled turns our Intimidate into a boon for it
+        // (FEATURE_INNATE_ABILITIES: +2 Atk / +2 Sp.Atk / +1 Speed), so don't switch an Intimidator in
+        // expecting to weaken it — mirroring how DoesIntimidateRaiseStats already flags a chosen Rattled.
         if (canLowerAtk && (DoesIntimidateRaiseStats(abilityDef) || abilityDef == ABILITY_MIRROR_ARMOR
          || IsInnateActive(opposingPartner, ABILITY_DEFIANT)
-         || IsInnateActive(opposingPartner, ABILITY_COMPETITIVE)))
+         || IsInnateActive(opposingPartner, ABILITY_COMPETITIVE)
+         || (GetConfig(B_UPDATED_INTIMIDATE) >= GEN_8 && IsInnateActive(opposingPartner, ABILITY_RATTLED))))
             return FALSE;
         if (canLowerAtk && IsOpponentPhysicalAttacker(switchContext->battler, opposingPartner))
             hasValidTarget = TRUE;

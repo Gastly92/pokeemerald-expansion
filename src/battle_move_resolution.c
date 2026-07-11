@@ -303,10 +303,15 @@ static enum CancelerResult CancelerFlinch(struct BattleCalcValues *cv)
     if (gBattleMons[cv->battlerAtk].volatiles.flinched)
     {
         CancelMultiTurnMoves(cv->battlerAtk);
-        if (cv->abilities[cv->battlerAtk] == ABILITY_STEADFAST)
+        // FORK: innate-aware Steadfast (FEATURE_INNATE_ABILITIES) — a flinch raises the holder's Speed +1
+        // exactly like the real ability (a 1:1 clean-upside copy). The chosen-ability path is byte-for-byte
+        // unchanged; an innate-only holder shows the innate in the pop-up (Speed Boost precedent).
+        if (cv->abilities[cv->battlerAtk] == ABILITY_STEADFAST || IsInnateActive(cv->battlerAtk, ABILITY_STEADFAST))
         {
             SetStatChange(cv->battlerAtk, STAT_SPEED, 1);
             gBattlerAbility = cv->battlerAtk;
+            if (cv->abilities[cv->battlerAtk] != ABILITY_STEADFAST)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_STEADFAST;
             gBattlescriptCurrInstr = BattleScript_MoveUsedFlinchedAndSteadfast;
         }
         else

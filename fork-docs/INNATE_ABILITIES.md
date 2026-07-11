@@ -2708,3 +2708,76 @@ runs all of them). A few of these slots were freed in an **earlier** batch to wh
 (Gallade's Sharpness sweep → chosen Justified; Crabominable's Hyper Cutter / Iron Fist sweep → chosen Anger Point);
 now that those become innate the chosen pick is redundant, but harmless — the complementary-slot re-pointing is
 **deferred** as a focused follow-up, like the Defiant / Competitive sub-group and Batch J/T/K/L.
+
+### ABILITY_RATTLED / ABILITY_STEADFAST
+
+**Batch M's third sub-group** — the **fear-response Speed pair**, both **1:1 clean-upside copies** (they react to
+being frightened, so only ever help the holder). When frightened, the holder's **Speed** rises by **1 stage**.
+**Rattled** reacts to **two** triggers; **Steadfast** to one.
+
+**Rattled spans the two Batch M sites already opened — no new infra:**
+- **Hit by a Dark / Ghost / Bug move** → fired from the upstream `ABILITYEFFECT_MOVE_END` case (`src/battle_util.c`),
+  so it is a **one-line addition to `IsActiveOnHitInnate`** (`src/fork/innate_abilities.c`), exactly like Justified.
+  The driver delegates to that case with the innate passed explicitly, so the stat change /
+  `BattleScript_AbilityStatChange` / pop-up match the real ability for free.
+- **A foe's Intimidate** → fired from the shared native command **`BS_TryDefiantRattled`**
+  (`src/battle_script_commands.c`), the same site as Defiant / Competitive. An innate Rattled is credited in the
+  same "chosen ability isn't reactive" block (after Defiant / Competitive), so its switch `case` runs. That case is
+  gated on `gBattleStruct->intimidateActivated` and `B_UPDATED_INTIMIDATE >= GEN_8`, so — **unlike** Defiant /
+  Competitive, which react to *any* foe-caused stat drop (a move, Intimidate, or Sticky Web) — innate Rattled reacts
+  **only to Intimidate**, matching the real ability.
+
+**Steadfast** reacts to **flinching**, at the `CancelerFlinch` site (`src/battle_move_resolution.c`): the
+chosen-ability test `cv->abilities[battlerAtk] == ABILITY_STEADFAST` gains `|| IsInnateActive(...)`, and the
+`BattleScript_MoveUsedFlinchedAndSteadfast` path already handles the Speed raise + pop-up.
+
+**The pop-up.** Each effect site sets `gBattleScripting.abilityPopupOverwrite` to the innate **only when the chosen
+ability differs** (the Speed Boost precedent), so a real Rattled / Steadfast stays byte-for-byte unchanged. (Rattled's
+`ABILITYEFFECT_MOVE_END` case previously lacked this overwrite — it was added, like Justified's.) The driver / credit
+skips an innate equal to the chosen ability, so a real ability never fires twice.
+
+**No `DETERMINISTIC_*` surface.** Both trigger at 100% on the right event (a Dark/Ghost/Bug hit, an Intimidate, a
+flinch), so there is nothing to gate under `DETERMINISTIC_ABILITIES`.
+
+**AI.** Rattled has dedicated *effect* reads (Steadfast has none — upstream's AI does not avoid flinching a Steadfast
+holder, so no wiring is needed):
+- **`AI_CheckBadMove`** (`src/battle_ai_main.c`) — a pre-`switch` clause credits an **innate Rattled** foe (a
+  Dark/Ghost/Bug damaging move boosts its Speed), mirroring the innate-Justified clause beside it.
+- **Doubles partner-fire scoring** (`src/battle_ai_main.c`) — the `scoringPartnerAbility` promotion block now also
+  promotes an **innate Rattled** on the ally (keyed on a Dark/Ghost/Bug move), and the Rattled `case` was switched to
+  read the promoted `scoringPartnerAbility` in its `ShouldTriggerAbility` call (the Justified / Steam Engine
+  precedent).
+- **Intimidate-cycling switch** (`ShouldSwitchIfIntimidateBenefit`, `src/battle_ai_switch.c`) — a foe's innate Rattled
+  turns our Intimidate into a +1 Speed for it (Gen8+), so the AI won't switch its Intimidator out to re-fire it —
+  added beside the innate Defiant / Competitive checks, gated on `B_UPDATED_INTIMIDATE >= GEN_8` to mirror how
+  upstream's `DoesIntimidateRaiseStats` already flags a *chosen* Rattled.
+
+The soft incoming-ability value scorer (`src/battle_ai_util.c`, the `ABILITY_INTIMIDATE` value case) is left keyed to
+the chosen ability, mirroring the Defiant / Competitive decision.
+
+**Suppression parity** holds via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas, not-on-field);
+neither is `breakable`, so Mold Breaker never touches them.
+
+**Species (canon-only, no flavor picks).** Every canon user in **any** real slot, keyed exactly per form (merged into
+an existing innate row where present):
+- **Rattled** → the **Meowth-Alola / Persian-Alola**, **Magikarp**, **Ledyba**, **Bonsly / Sudowoodo**, **Whismur**,
+  **Snubbull / Granbull**, **Poochyena**, **Dunsparce / Dudunsparce** (both segment forms), **Clamperl**,
+  **Basculin-White-Striped**, **Cubchoo**, **Yamper**, **Toxel**, and **Wiglett / Wugtrio** lines.
+- **Steadfast** → the **Machop / Machoke / Machamp** (+ Gmax), **Farfetch'd-Galar / Sirfetch'd**, **Tyrogue /
+  Hitmontop**, **Scyther**, **Gallade** (+ Mega, as a pure-boon mirror), **Rockruff / Lycanroc-Midday**, and
+  **Dubwool** lines.
+
+**Sole-ability species are OMITTED as redundant** (their sole chosen ability already grants it — the Mega Lopunny /
+Scrappy precedent): **Gimmighoul-Chest** (sole Rattled) and **Mega Mewtwo X** (sole Steadfast — its Pressure innate
+row is kept). Where a line splits, only the members that *actually* carry the ability get a row (e.g. Magikarp but
+not Gyarados, Cubchoo but not Beartic, Scyther but not Scizor/Kleavor, Lycanroc-Midday but not Midnight/Dusk).
+
+**Deliberate contradiction omission (Steadfast vs innate Inner Focus).** The **Riolu / Lucario** line (incl. Mega /
+Mega-Z) carries innate **Inner Focus**, which prevents flinching outright — so an innate Steadfast could **never**
+trigger on them (the same class of conflict as Spinda's Tangled-Feet-vs-Own-Tempo note). Inner Focus (never flinch)
+is the stronger, already-wired boon, so **Steadfast is dropped** on that line.
+
+**Step 3.5**: the frontier sets that hardcoded chosen Rattled (Persian-Alola, Dunsparce / Dudunsparce) and Steadfast
+(a Machamp-family set, Lycanroc-Midday) already resolve to the species' real slot, so they keep their now-redundant
+chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with the complementary-slot
+re-pointing **deferred** as a focused follow-up, like the earlier Batch M sub-groups and Batch J/T/K/L.
