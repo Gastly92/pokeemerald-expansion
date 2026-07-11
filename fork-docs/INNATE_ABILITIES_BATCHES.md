@@ -408,7 +408,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | done (all 13: Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body / Pickpocket / Magician / Liquid Ooze) |
 | 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | done (shipped with Intimidate, the marquee consumer, like step 17 shipped with Rough Skin) |
 | 20 | Batch L — Switch-in actives | active, needs step 19 | done (all 8: Intimidate / Anticipation / Forewarn / Frisk / Download / Supersweet Syrup / Unnerve / Hospitality) |
-| 21 | Batch M — On-KO/on-hit stat boosts | active | open (2/11 done: Defiant / Competitive — the stat-drop-reaction pair, wired at BS_TryDefiantRattled; remaining: Moxie / Justified / Rattled / Stamina / Water Compaction / Berserk / Anger Point / Soul-Heart / Steadfast) |
+| 21 | Batch M — On-KO/on-hit stat boosts | active | open (6/11 done: Defiant / Competitive — the stat-drop-reaction pair, wired at BS_TryDefiantRattled; Justified / Stamina / Water Compaction / Anger Point — the on-hit stat-boost sub-group, reusing the Batch K on-hit driver; remaining: Moxie / Rattled / Berserk / Soul-Heart / Steadfast) |
 | 22 | Batch U — Ally-support (doubles) | calc/trait | open |
 | 23 | Tier 5 — Bespoke/deferred (one ability per session) | one-off | open |
 
@@ -464,7 +464,7 @@ row is `done`.
 | J — End-of-turn effects | active (existing driver) | 10 | done |
 | K — On-contact/on-hit/on-faint | active (new driver) | 13 | done (Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body / Pickpocket / Magician / Liquid Ooze) |
 | L — Switch-in actives | active (new driver) | 8 | done (all 8: Intimidate — the switch-in driver was built with it — the Anticipation / Forewarn / Frisk information-reveal sub-group, the Download / Supersweet Syrup switch-in-stat-change sub-group, and the Unnerve / Hospitality sub-group, which extended the driver with a per-phase abilityEffect selector to reach the ABILITYEFFECT_UNNERVE and ABILITYEFFECT_DEPENDS_ON_ALLY cases) |
-| M — On-KO/on-hit stat boosts | active | 11 | open (2/11 done: Defiant / Competitive) |
+| M — On-KO/on-hit stat boosts | active | 11 | open (6/11 done: Defiant / Competitive; Justified / Stamina / Water Compaction / Anger Point) |
 | T — Berry/item synergy | active/trait | 4 | done |
 | U — Ally-support (doubles) | calc/trait | 5 | open |
 | Tier 5 — Bespoke/deferred | one-off | 11 | open |

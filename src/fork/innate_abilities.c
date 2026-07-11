@@ -389,6 +389,36 @@
 //   sets that hardcoded chosen Defiant / Competitive already resolve to the species' real slot, so they keep their
 //   now-redundant chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with
 //   the complementary-slot freeing deferred as a focused follow-up, like Batch J/T/K and the Batch L sub-groups.
+//   JUSTIFIED / STAMINA / WATER_COMPACTION / ANGER_POINT (on-hit stat boosts, Batch M second sub-group — all
+//   1:1 clean-upside copies, canon-only (no flavor picks — a reactive stat boost is potent and hard to justify
+//   thematically off-roster)): when the holder is hit, Justified raises Attack +1 on a Dark move, Stamina raises
+//   Defense +1 on any move, Water Compaction raises Defense +2 on a Water move, and Anger Point maxes Attack when
+//   the holder takes a critical hit. Each only ever helps the holder (it reacts to being hit), so no pure-boon
+//   divergence. All four fire from the upstream ABILITYEFFECT_MOVE_END case, so each is a one-line addition to the
+//   existing on-hit driver (IsActiveOnHitInnate -> TryActivateInnateOnHitEffects), delegating to that case so the
+//   stat change / BattleScript_AbilityStatChange / pop-up match the real ability for free (each effect site in
+//   src/battle_util.c forces the pop-up to the innate when the chosen ability differs, the Speed Boost precedent).
+//   These fire at 100% on the right hit (Anger Point on a guaranteed/rolled crit) — no RNG / DETERMINISTIC_* surface.
+//   AI is innate-aware: the "don't feed the on-hit boost" read in AI_CheckBadMove (src/battle_ai_main.c) credits an
+//   innate Justified via IsInnateActive (Stamina/Water Compaction/Anger Point have no such avoid-read — their trigger
+//   isn't a move-type the AI can dodge); the doubles partner-fire scoring promotes an innate Justified / Water
+//   Compaction / Anger Point in the scoringPartnerAbility block (src/battle_ai_main.c, the Steam Engine precedent) so
+//   the AI values hitting an innate-only ally to trigger its boost, and the always-crit self-Anger-Point read + the
+//   Justified partner-benefit util read (src/battle_ai_util.c) are innate-aware too. Suppression parity holds via
+//   IsInnateActive() (feature flag, Gastro Acid, Neutralizing Gas, not-on-field); none is breakable, so Mold Breaker
+//   never touches them. Canon-only, keyed exactly per form (merged into an existing innate row where present, plus
+//   base creatures' Megas as pure-boon mirrors): JUSTIFIED to the Growlithe / Arcanine (Kantonian), Absol (+ Mega),
+//   Gallade (+ Mega), and Lucario (+ Mega / the fork's Mega-Z) lines; STAMINA to the Mudbray / Mudsdale line and
+//   Archaludon; WATER_COMPACTION to the Sandygast / Palossand line; ANGER_POINT to the Mankey / Primeape, Tauros
+//   (+ all three Paldea forms), Camerupt (+ Mega), Sandile / Krokorok / Krookodile, and Crabrawler / Crabominable
+//   lines. Sole-ability species whose only real ability is now innate are OMITTED as redundant (their sole chosen
+//   ability already grants it, so an innate could never be observed — the Mega Lopunny / Scrappy precedent, matching
+//   Batch M's Defiant / Competitive sub-group): the Swords of Justice trio (Cobalion / Terrakion / Virizion) and
+//   Keldeo (both formes), all sole-Justified — their frontier sets keep chosen Justified, with the innate + a
+//   fork-owned chosen override deferred as a focused follow-up. Step 3.5: the frontier sets that hardcoded these
+//   abilities already resolve to the species' real slot, so they keep their now-redundant chosen ability — still
+//   correct (the chosen runs it; the innate is redundant-but-skipped) — with the complementary-slot freeing deferred
+//   as a focused follow-up, like the Defiant / Competitive sub-group.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -901,6 +931,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0056
         SPECIES_MANKEY,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_DEFIANT,
             ABILITY_VITAL_SPIRIT
         )
@@ -908,6 +939,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0057
         SPECIES_PRIMEAPE,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_DEFIANT,
             ABILITY_VITAL_SPIRIT
         )
@@ -915,7 +947,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0058
         SPECIES_GROWLITHE,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_JUSTIFIED
         )
     },
     { // 0058
@@ -928,7 +961,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0059
         SPECIES_ARCANINE,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_JUSTIFIED
         )
     },
     { // 0059
@@ -1590,12 +1624,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0128
         SPECIES_TAUROS,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_INTIMIDATE
         )
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_COMBAT,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_CUD_CHEW,
             ABILITY_INTIMIDATE
         )
@@ -1603,6 +1639,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0128
         SPECIES_TAUROS_PALDEA_BLAZE,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_CUD_CHEW,
             ABILITY_INTIMIDATE
         )
@@ -1610,6 +1647,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0128
         SPECIES_TAUROS_PALDEA_AQUA,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_CUD_CHEW,
             ABILITY_INTIMIDATE
         )
@@ -3435,6 +3473,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0323
         SPECIES_CAMERUPT,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_MAGMA_ARMOR,
             ABILITY_SOLID_ROCK,
             ABILITY_UNAWARE
@@ -3443,6 +3482,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0323
         SPECIES_CAMERUPT_MEGA,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_MAGMA_ARMOR,
             ABILITY_SOLID_ROCK,
             ABILITY_UNAWARE
@@ -3728,6 +3768,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0359
         SPECIES_ABSOL,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
             ABILITY_SUPER_LUCK
         )
@@ -3735,6 +3776,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0359
         SPECIES_ABSOL_MEGA,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
             ABILITY_SUPER_LUCK
         )
@@ -4425,19 +4467,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LUCARIO_MEGA,
         INNATES(
             ABILITY_ADAPTABILITY,
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_JUSTIFIED
         )
     },
     { // 0448
         SPECIES_LUCARIO,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_JUSTIFIED
         )
     },
     { // 0448
         SPECIES_LUCARIO_MEGA_Z,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_JUSTIFIED
         )
     },
     { // 0449
@@ -4612,12 +4657,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0475
         SPECIES_GALLADE,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_SHARPNESS
         )
     },
     { // 0475
         SPECIES_GALLADE_MEGA,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_SHARPNESS
         )
     },
@@ -5224,18 +5271,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0551
         SPECIES_SANDILE,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_INTIMIDATE
         )
     },
     { // 0552
         SPECIES_KROKOROK,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_INTIMIDATE
         )
     },
     { // 0553
         SPECIES_KROOKODILE,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_INTIMIDATE
         )
     },
@@ -6684,6 +6734,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0739
         SPECIES_CRABRAWLER,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_HYPER_CUTTER,
             ABILITY_IRON_FIST
         )
@@ -6691,6 +6742,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0740
         SPECIES_CRABOMINABLE,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_HYPER_CUTTER,
             ABILITY_IRON_FIST
         )
@@ -6762,14 +6814,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MUDBRAY,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_STAMINA
         )
     },
     { // 0750
         SPECIES_MUDSDALE,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_STAMINA
         )
     },
     { // 0751
@@ -6881,13 +6935,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0769
         SPECIES_SANDYGAST,
         INNATES(
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_WATER_COMPACTION
         )
     },
     { // 0770
         SPECIES_PALOSSAND,
         INNATES(
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_WATER_COMPACTION
         )
     },
     { // 0771
@@ -8361,6 +8417,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARCHALUDON,
         INNATES(
             ABILITY_STALWART,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
@@ -8574,7 +8631,8 @@ bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index)
 // on-hit / on-contact class (contact-damage: Rough Skin / Iron Barbs; contact-Speed-drop:
 // Gooey / Tangling Hair; on-faint retaliation: Aftermath / Innards Out, which fire from the
 // same ABILITYEFFECT_MOVE_END step after the holder faints; on-hit stat/charge: Steam Engine /
-// Thermal Exchange / Wind Power; move-disable: Cursed Body). The driver
+// Thermal Exchange / Wind Power; move-disable: Cursed Body; on-hit stat boosts: Justified /
+// Stamina / Water Compaction / Anger Point). The driver
 // (TryActivateInnateOnHitEffects) is re-entrant, so a battler may carry more than one and each
 // fires in turn. Each delegates to the existing upstream ABILITYEFFECT_MOVE_END case, so the
 // recoil / retaliation damage / stat drop / script / pop-up matches the real ability for free
@@ -8596,6 +8654,10 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_THERMAL_EXCHANGE: // raises Attack +1 when hit by a Fire move
     case ABILITY_WIND_POWER:    // charges the next Electric move when hit by a wind move
     case ABILITY_CURSED_BODY:   // 30% (always under DETERMINISTIC_ABILITIES) to disable the move that hit the holder
+    case ABILITY_JUSTIFIED:     // raises Attack +1 when hit by a Dark move
+    case ABILITY_STAMINA:       // raises Defense +1 when hit by any move
+    case ABILITY_WATER_COMPACTION: // raises Defense +2 when hit by a Water move
+    case ABILITY_ANGER_POINT:   // maxes Attack when the holder takes a critical hit
         return TRUE;
     default:
         return FALSE;
