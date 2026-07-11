@@ -321,7 +321,18 @@ Defiant, Competitive, Soul-Heart, Steadfast.
 
 - Each fires a stat-change script on its trigger (KO, taking a hit, a crit, a
   stat-drop). Related triggers, distinct hooks; **off-field AI setup heuristics**
-  read several. Lower priority than J/K.
+  read several. Lower priority than J/K. **Split aggressively** — the triggers
+  don't share one site, so do a coherent sub-group per PR.
+- **Done — the stat-drop-reaction pair (Defiant / Competitive).** Both fire from
+  the single native command `BS_TryDefiantRattled` (`src/battle_script_commands.c`)
+  when a foe lowers a stat (move, Intimidate, or Sticky Web). Made innate-aware by
+  crediting an innate when the chosen ability isn't reactive + overwriting the
+  pop-up; the anim suppression and the two dedicated AI reads (`IncreaseStatDownScore`,
+  `ShouldSwitchIfIntimidateBenefit`) are innate-aware too. Rattled *also* runs
+  through this command (Intimidate → Speed +1) but is left for a later sub-group.
+- **Remaining (9):** Moxie / Soul-Heart (on-KO), Justified / Stamina / Water
+  Compaction / Anger Point / Rattled (on-hit — several reuse the Batch K on-hit
+  driver), Berserk (HP-threshold), Steadfast (on-flinch).
 
 ### Batch T — Berry / item synergy
 **4**
@@ -397,7 +408,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | done (all 13: Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body / Pickpocket / Magician / Liquid Ooze) |
 | 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | done (shipped with Intimidate, the marquee consumer, like step 17 shipped with Rough Skin) |
 | 20 | Batch L — Switch-in actives | active, needs step 19 | done (all 8: Intimidate / Anticipation / Forewarn / Frisk / Download / Supersweet Syrup / Unnerve / Hospitality) |
-| 21 | Batch M — On-KO/on-hit stat boosts | active | open |
+| 21 | Batch M — On-KO/on-hit stat boosts | active | open (2/11 done: Defiant / Competitive — the stat-drop-reaction pair, wired at BS_TryDefiantRattled; remaining: Moxie / Justified / Rattled / Stamina / Water Compaction / Berserk / Anger Point / Soul-Heart / Steadfast) |
 | 22 | Batch U — Ally-support (doubles) | calc/trait | open |
 | 23 | Tier 5 — Bespoke/deferred (one ability per session) | one-off | open |
 
@@ -453,7 +464,7 @@ row is `done`.
 | J — End-of-turn effects | active (existing driver) | 10 | done |
 | K — On-contact/on-hit/on-faint | active (new driver) | 13 | done (Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body / Pickpocket / Magician / Liquid Ooze) |
 | L — Switch-in actives | active (new driver) | 8 | done (all 8: Intimidate — the switch-in driver was built with it — the Anticipation / Forewarn / Frisk information-reveal sub-group, the Download / Supersweet Syrup switch-in-stat-change sub-group, and the Unnerve / Hospitality sub-group, which extended the driver with a per-phase abilityEffect selector to reach the ABILITYEFFECT_UNNERVE and ABILITYEFFECT_DEPENDS_ON_ALLY cases) |
-| M — On-KO/on-hit stat boosts | active | 11 | open |
+| M — On-KO/on-hit stat boosts | active | 11 | open (2/11 done: Defiant / Competitive) |
 | T — Berry/item synergy | active/trait | 4 | done |
 | U — Ally-support (doubles) | calc/trait | 5 | open |
 | Tier 5 — Bespoke/deferred | one-off | 11 | open |

@@ -84,6 +84,12 @@
 //   battler its Berries (fired through the ABILITYEFFECT_UNNERVE phase, with the AI's Berry-heal read
 //   made innate-aware), Hospitality heals the ally 1/4 max HP in doubles (fired through the
 //   ABILITYEFFECT_DEPENDS_ON_ALLY phase — no AI wiring needed, no pure-boon divergence)),
+//   DEFIANT / COMPETITIVE (stat-drop reactions, Batch M first sub-group — 1:1 clean-upside copies wired
+//   at the single scripted reaction site BS_TryDefiantRattled: when a foe lowers one of the holder's stats
+//   (a move, Intimidate, or Sticky Web), Defiant raises its Attack and Competitive its Sp. Atk by 2 stages,
+//   with the pop-up overwritten to the innate and the AI's don't-lower-a-reactive-foe heuristics made
+//   innate-aware; innate Rattled, which also reacts through that site but only to Intimidate, is a later
+//   sub-group),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

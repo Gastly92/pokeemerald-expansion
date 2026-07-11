@@ -2605,7 +2605,11 @@ enum AIScore IncreaseStatDownScore(enum BattlerId battlerAtk, enum BattlerId bat
     if (GetBattlerSecondaryDamage(battlerDef) >= gBattleMons[battlerDef].hp)
         return NO_INCREASE;
 
-    if (DoesAbilityRaiseStatsWhenLowered(gAiLogicData->abilities[battlerDef]))
+    // FORK: a foe's innate Defiant / Competitive re-raises a lowered stat (FEATURE_INNATE_ABILITIES),
+    // so don't score lowering it, exactly like the chosen-ability check on the same line.
+    if (DoesAbilityRaiseStatsWhenLowered(gAiLogicData->abilities[battlerDef])
+     || IsInnateActive(battlerDef, ABILITY_DEFIANT)
+     || IsInnateActive(battlerDef, ABILITY_COMPETITIVE))
         return NO_INCREASE;
 
     // Don't increase score if AI can just KO

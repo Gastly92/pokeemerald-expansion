@@ -5101,6 +5101,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_ANTICIPATION, ABILITY_FOREWARN, ABILITY_FRISK,
         ABILITY_DOWNLOAD, ABILITY_SUPERSWEET_SYRUP,
         ABILITY_UNNERVE, ABILITY_HOSPITALITY,
+        ABILITY_DEFIANT, ABILITY_COMPETITIVE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -7383,5 +7384,120 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Hospitality does nothing ou
         TURN { SWITCH(player, 1); }
     } SCENE {
         NONE_OF { ABILITY_POPUP(player, ABILITY_HOSPITALITY); } // singles: no ally to heal
+    }
+}
+
+// ─── Innate Defiant / Competitive (Batch M, stat-drop reactions) ──────────────
+// When a FOE lowers one of the holder's stats (a move, Intimidate, or Sticky Web),
+// Defiant raises the holder's Attack and Competitive its Sp. Atk by 2 stages. Both are
+// 1:1 clean-upside copies wired at the single scripted reaction site BS_TryDefiantRattled
+// (src/battle_script_commands.c): an innate is credited when the chosen ability isn't
+// itself reactive, with the pop-up overwritten to the innate. Because the reaction funnels
+// through the shared stat-drop message, an innate also reacts to Intimidate for free.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Defiant sharply raises Attack when a foe lowers a stat")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BRAVIARY, ABILITY_DEFIANT));
+        ASSUME(gSpeciesInfo[SPECIES_BRAVIARY].abilities[0] != ABILITY_DEFIANT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BRAVIARY) { Ability(ABILITY_KEEN_EYE); } // chosen Keen Eye; Defiant only as innate
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Growl lowers Attack
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_DEFIANT); // pop-up shows the innate, not chosen Keen Eye
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Defiant re-raises it
+        }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE - 1);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Competitive sharply raises Sp. Atk when a foe lowers a stat")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BOLTUND, ABILITY_COMPETITIVE));
+        ASSUME(gSpeciesInfo[SPECIES_BOLTUND].abilities[0] != ABILITY_COMPETITIVE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BOLTUND) { Ability(ABILITY_STRONG_JAW); } // chosen Strong Jaw; Competitive only as innate
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); } // lowers Attack, but Competitive reacts by raising Sp. Atk
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Growl lowers Attack
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_COMPETITIVE);
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Competitive raises Sp. Atk
+        }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // the dropped stat stays dropped
+        EXPECT_EQ(player->statStages[STAT_SPATK], enabled ? DEFAULT_STAT_STAGE + 2 : DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Defiant reacts to a foe's Intimidate")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BRAVIARY, ABILITY_DEFIANT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_BRAVIARY) { Ability(ABILITY_KEEN_EYE); } // chosen Keen Eye; Defiant only as innate
+        OPPONENT(SPECIES_ARCANINE) { Ability(ABILITY_INTIMIDATE); }
+    } WHEN {
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_INTIMIDATE);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Intimidate lowers Attack
+        ABILITY_POPUP(player, ABILITY_DEFIANT);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Defiant re-raises it
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Defiant")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BRAVIARY, ABILITY_DEFIANT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_BRAVIARY) { Ability(ABILITY_KEEN_EYE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_GROWL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses Braviary's abilities, the innate Defiant included
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        MESSAGE("Braviary's Ability was suppressed!");
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Growl lowers Attack
+        NONE_OF { ABILITY_POPUP(player, ABILITY_DEFIANT); } // suppressed -> no reaction
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
+    }
+}
+
+// AI innate-awareness: the Intimidate-cycling switch heuristic (ShouldSwitchIfIntimidateBenefit,
+// src/battle_ai_switch.c) is a DEDICATED read, not the shared calc, so it had to be wired. The AI
+// won't switch out to re-fire Intimidate at a foe whose innate Defiant would just bank a +2 from it.
+// Mirrors the chosen-Defiant test in test/battle/ai/ai_switching.c, but Braviary carries Defiant
+// only as an innate here (chosen Keen Eye).
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI won't cycle Intimidate into an innate-Defiant foe")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BRAVIARY, ABILITY_DEFIANT));
+        ASSUME(gSpeciesInfo[SPECIES_BRAVIARY].abilities[0] != ABILITY_DEFIANT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_SMART_SWITCHING);
+        PLAYER(SPECIES_BRAVIARY) { Ability(ABILITY_KEEN_EYE); Moves(MOVE_TACKLE); } // innate-only Defiant
+        OPPONENT(SPECIES_ARCANINE) { Ability(ABILITY_INTIMIDATE); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_ZIGZAGOON) { Moves(MOVE_TACKLE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); EXPECT_MOVE(opponent, MOVE_TACKLE); } // sees innate Defiant -> stays in
     }
 }
