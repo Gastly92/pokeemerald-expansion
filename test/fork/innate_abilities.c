@@ -5104,6 +5104,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_DEFIANT, ABILITY_COMPETITIVE,
         ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION, ABILITY_ANGER_POINT,
         ABILITY_RATTLED, ABILITY_STEADFAST,
+        ABILITY_MOXIE, ABILITY_BERSERK, ABILITY_SOUL_HEART,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -7779,5 +7780,106 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Steadfast is dropped on the Lucari
         ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player); // Inner Focus: not flinched, Tackle executes
     } THEN {
         EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE); // no Steadfast boost
+    }
+}
+
+// ─── Innate KO / on-damage / on-faint stat boosts (Batch M: Moxie / Berserk / Soul-Heart) ───────────
+//
+// Batch M's fourth and final sub-group. Moxie raises Attack +1 for each foe the holder knocks out
+// (fired from the upstream ABILITYEFFECT_MOVE_END_FOES_FAINTED case, a one-line addition to the
+// attacker-side on-hit driver, beside Magician). Berserk raises Sp. Atk +1 when an attack drops the
+// holder's HP from above 1/2 to 1/2 or less (fired from the per-damaged-battler ABILITYEFFECT_COLOR_CHANGE
+// step, so it adds a small on-damage driver at the new MOVEEND_COLOR_CHANGE_INNATE step). Soul-Heart
+// raises Sp. Atk +1 whenever ANY Pokémon faints (made innate-aware at the BS_TryActivateSoulheart native
+// command). All are 1:1 clean-upside copies; the pop-up shows the innate, not the (different) chosen ability.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Moxie raises Attack when the holder knocks out a foe")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HERACROSS, ABILITY_MOXIE));
+        ASSUME(gSpeciesInfo[SPECIES_HERACROSS].abilities[0] != ABILITY_MOXIE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_HERACROSS) { Ability(ABILITY_GUTS); Moves(MOVE_TACKLE); } // chosen Guts; Moxie only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_ZIGZAGOON); // a second foe, so KOing the first doesn't end the battle
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); } // KOs the first foe; the second replaces it
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_MOXIE); // pop-up shows the innate, not the chosen Guts
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_MOXIE); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Berserk raises Sp. Atk when an attack drops the holder to half HP")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DRAMPA, ABILITY_BERSERK));
+        ASSUME(gSpeciesInfo[SPECIES_DRAMPA].abilities[0] == ABILITY_BERSERK);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_DRAMPA) { Ability(ABILITY_CLOUD_NINE); } // chosen Cloud Nine (HA); Berserk only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SUPER_FANG); } // halves HP: full -> exactly 1/2, crossing the threshold
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SUPER_FANG); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_BERSERK); // pop-up shows the innate, not the chosen Cloud Nine
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_BERSERK); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Soul-Heart raises Sp. Atk when a Pokémon faints")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SPIRITOMB, ABILITY_SOUL_HEART)); // flavor pick (Magearna is sole-Soul-Heart)
+        ASSUME(gSpeciesInfo[SPECIES_SPIRITOMB].abilities[0] != ABILITY_SOUL_HEART);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SPIRITOMB) { Ability(ABILITY_PRESSURE); Moves(MOVE_TACKLE); } // chosen Pressure; Soul-Heart only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_ZIGZAGOON); // a second foe, so the faint doesn't end the battle
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); } // KOs the first foe -> a Pokémon faints; the second replaces it
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_SOUL_HEART); // pop-up shows the innate, not the chosen Pressure
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_SOUL_HEART); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies the new on-damage innate driver (Berserk) exactly like a real
+// ability, so the driver skips it and no boost fires.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Berserk")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DRAMPA, ABILITY_BERSERK));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_GASTRO_ACID, MOVE_SUPER_FANG); }
+        OPPONENT(SPECIES_DRAMPA) { Ability(ABILITY_CLOUD_NINE); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); } // suppresses Drampa's abilities, the innate Berserk included
+        TURN { MOVE(player, MOVE_SUPER_FANG); } // drops Drampa to half HP
+    } SCENE {
+        MESSAGE("The opposing Drampa's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_BERSERK); } // suppressed -> no reaction
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_SPATK], DEFAULT_STAT_STAGE);
     }
 }

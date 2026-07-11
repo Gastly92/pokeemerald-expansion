@@ -4015,6 +4015,39 @@ static enum MoveEndResult MoveEndColorChange(struct BattleCalcValues *cv)
     return MOVEEND_RESULT_CONTINUE;
 }
 
+// FORK: fire each damaged holder's active on-damage innates (Berserk) right after the chosen-ability
+// MOVEEND_COLOR_CHANGE block. Mirrors MoveEndColorChange's per-battler iteration, with a nested
+// per-battler innate cursor: hold this state (keeping both cursors) while an effect fires for the
+// current battler; once that battler's innate list is exhausted, reset the cursor and advance to the
+// next battler; once all battlers are done, reset moveEndBattler and advance the move-end state.
+static enum MoveEndResult MoveEndColorChangeInnate(struct BattleCalcValues *cv)
+{
+    while (gBattleStruct->eventState.moveEndBattler < gBattlersCount)
+    {
+        enum BattlerId battler = gBattleStruct->eventState.moveEndBattler;
+
+        if (battler == cv->battlerAtk)
+        {
+            gBattleStruct->eventState.moveEndBattler++;
+            continue;
+        }
+
+        u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
+        if (TryActivateInnateOnDamageEffects(battler, &innateIndex))
+        {
+            gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
+            return MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance), resume same battler
+        }
+
+        gBattleStruct->eventState.moveEndInnateIndex = 0; // this battler's list exhausted; advance
+        gBattleStruct->eventState.moveEndBattler++;
+    }
+
+    gBattleStruct->eventState.moveEndBattler = 0;
+    gBattleScripting.moveendState++;
+    return MOVEEND_RESULT_CONTINUE;
+}
+
 static enum MoveEndResult MoveEndKeeMarangaHpThresholdItemTarget(struct BattleCalcValues *cv)
 {
     while (gBattleStruct->eventState.moveEndBattler < gBattlersCount)
@@ -4765,6 +4798,7 @@ static enum MoveEndResult (*const sMoveEndHandlers[])(struct BattleCalcValues *c
     [MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE] = MoveEndAbilityEffectFoesFaintedInnate, // FORK: attacker-side on-hit innates (Magician)
     [MOVEEND_SHELL_TRAP] = MoveEndShellTrap,
     [MOVEEND_COLOR_CHANGE] = MoveEndColorChange,
+    [MOVEEND_COLOR_CHANGE_INNATE] = MoveEndColorChangeInnate, // FORK: on-damage innates (Berserk)
     [MOVEEND_KEE_MARANGA_HP_THRESHOLD_ITEM_TARGET] = MoveEndKeeMarangaHpThresholdItemTarget,
     [MOVEEND_CARD_BUTTON] = MoveEndCardButton,
     [MOVEEND_FORM_CHANGE] = MoveEndFormChange,
