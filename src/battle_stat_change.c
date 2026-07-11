@@ -535,7 +535,11 @@ static void TryPlayStatChangeAnimation(struct BattleCalcValues *cv, struct StatC
 
         statAnimId += isStatChangeByTwo ? STAT_ANIM_MINUS2 : STAT_ANIM_MINUS1;
 
-        if (ShouldDefiantCompetitiveActivate(cv->battlerDef, cv->abilities[cv->battlerDef]))
+        // FORK: also suppress the down-arrow when an innate Defiant / Competitive will re-raise the stat
+        // (FEATURE_INNATE_ABILITIES), matching the chosen-ability behavior on the same line.
+        if (ShouldDefiantCompetitiveActivate(cv->battlerDef, cv->abilities[cv->battlerDef])
+         || (IsInnateActive(cv->battlerDef, ABILITY_DEFIANT) && ShouldDefiantCompetitiveActivate(cv->battlerDef, ABILITY_DEFIANT))
+         || (IsInnateActive(cv->battlerDef, ABILITY_COMPETITIVE) && ShouldDefiantCompetitiveActivate(cv->battlerDef, ABILITY_COMPETITIVE)))
             numNegativeStats = 0;
 
         if (numNegativeStats > 1) // more than one stat, so the color is gray

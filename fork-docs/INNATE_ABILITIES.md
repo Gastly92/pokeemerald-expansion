@@ -2584,3 +2584,58 @@ its real abilities, Hospitality and Heatproof, are now innate); the ~14 frontier
 now carry it innately, so they keep their now-redundant chosen Unnerve (still correct: the chosen runs it, the
 innate is redundant-but-skipped) — the complementary-slot freeing **deferred** like Batch J/T/K and the earlier
 Batch L sub-groups.
+
+### ABILITY_DEFIANT / ABILITY_COMPETITIVE
+
+**Batch M's first sub-group** — two **stat-drop reactions**, each a **1:1 clean-upside copy** (they react to a
+*foe's* debuff, so they only ever help the holder). When a foe lowers one of the holder's stats — a stat-lowering
+move, Intimidate, or an opposing Sticky Web — **Defiant** raises the holder's **Attack** by 2 stages and
+**Competitive** its **Sp. Atk** by 2 stages.
+
+**Single scripted reaction site.** Both fire from the native command **`BS_TryDefiantRattled`**
+(`src/battle_script_commands.c`), which the shared stat-drop message script (`BattleScript_DecreaseStatChangeMessage`,
+`data/battle_scripts_1.s`) runs after *any* stat drop. It read only `GetBattlerAbility(battler)`, so when the chosen
+ability isn't itself reactive (not Defiant / Competitive / Rattled) it now credits an innate Defiant / Competitive
+via `IsInnateActive()` and overwrites the pop-up to it (`gBattleScripting.abilityPopupOverwrite` — `CreateAbilityPopUp`
+reads the primary slot). The real-ability path (chosen Defiant / Competitive / Rattled) is **byte-for-byte unchanged**.
+Because the reaction funnels through the shared stat-drop message, an innate Defiant / Competitive reacts to
+**Intimidate** (chosen *or* innate) and **Sticky Web** for free — no extra wiring. The activation gate
+`ShouldDefiantCompetitiveActivate` (the `MAX_STAT_STAGE` / Gen-9 Sticky-Web check) is reused unchanged, passed the
+innate ability. The negative-stat-change **animation** suppression in `TryPlayStatChangeAnimation`
+(`src/battle_stat_change.c`) is also made innate-aware, so the holder doesn't flash a down-arrow before the innate
+re-raises the stat, matching the real ability.
+
+**No driver.** Unlike the switch-in / on-hit actives, Defiant / Competitive don't run through
+`AbilityBattleEffects` — the reaction has always been a dedicated native command, so the innate hooks that command
+directly rather than the innate drivers.
+
+**Suppression parity** holds via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas, not-on-field);
+neither is `breakable`, so Mold Breaker never touches them.
+
+**AI.** Two **dedicated** effect reads (the reaction isn't in the shared damage calc, so they aren't automatic):
+`IncreaseStatDownScore` (`src/battle_ai_util.c`) — the "don't bother lowering a foe's stat if it will just bounce
+back" check, which read `DoesAbilityRaiseStatsWhenLowered(chosen)` — and `ShouldSwitchIfIntimidateBenefit`
+(`src/battle_ai_switch.c`) — the "don't switch an Intimidator into a foe that *wants* to be Intimidated" check,
+which read `DoesIntimidateRaiseStats(chosen)`. Both now also credit an innate Defiant / Competitive foe via
+`IsInnateActive()`. The soft **incoming-ability value scorer** (`battle_ai_util.c`, `DoesIntimidateRaiseStats` from
+the ability-swap-move value path) is **left keyed to the chosen ability**, mirroring the Intimidate batch's decision
+(a soft heuristic about *acquiring* an ability, not a hard on-field effect read). The doubles partner-fire scoring
+(`ShouldTriggerAbility` / the `scoringPartnerAbility` switch in `battle_ai_main.c`) has **no** Defiant / Competitive
+case, so there's nothing to make innate-aware there.
+
+**Species (canon-only, no flavor picks — a +2 swing is potent and hard to justify thematically off-roster).**
+**Defiant** → every canon user in **any** real slot, keyed exactly per form (merged into an existing innate row where
+present): the Mankey / Primeape / Annihilape, Farfetchd (Kantonian), Pawniard / Bisharp / Kingambit, Braviary
+(Kantonian), Tornadus-Incarnate, Thundurus-Incarnate, Purugly, Passimian, Obstagoon, and Falinks (base) lines.
+**Competitive** → the Jigglypuff line (Igglybuff / Jigglypuff / Wigglytuff), Milotic, the Piplup / Prinplup / Empoleon
+line (Competitive is their Hidden Ability under the shipping `P_UPDATED_ABILITIES >= GEN_9`; the pre-Gen-9 `#else`
+gives them Defiant, which is compiled out, so they're Competitive-only here), Gothita / Gothorita / Gothitelle,
+Meowstic-F, Wattrel / Kilowattrel, and Boltund. **Sole-ability species are OMITTED as redundant** (their sole chosen
+ability already grants it, so an innate could never be observed — the Mega Lopunny / Scrappy precedent): **Zapdos-Galar**
+(sole Defiant), **Articuno-Galar** (sole Competitive), **Ogerpon / Ogerpon-Teal** (sole Defiant), and **Falinks-Mega**
+(sole Defiant — its existing `BATTLE_ARMOR` innate row stays, since *that* is observable while its chosen ability is
+Defiant). **Innate Rattled** — which also reacts through `BS_TryDefiantRattled`, but only to Intimidate (Speed +1) — is
+a **separate Batch M sub-group**, deliberately not credited here. **Step 3.5**: the ~30 frontier sets that hardcoded
+chosen Defiant / Competitive already resolve to the species' real slot (these are canon users), so they keep their
+now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the
+complementary-slot freeing **deferred** as a focused follow-up, like Batch J/T/K and the Batch L sub-groups.

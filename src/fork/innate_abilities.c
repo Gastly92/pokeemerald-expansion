@@ -360,6 +360,35 @@
 //   they keep their now-redundant chosen Unnerve — still correct (the chosen runs it; the innate is
 //   redundant-but-skipped) — with the complementary-slot freeing deferred as a focused follow-up, like Batch
 //   J/T/K and the earlier Batch L sub-groups.
+//   DEFIANT / COMPETITIVE (stat-drop reactions, Batch M first sub-group — both 1:1 clean-upside copies,
+//   canon-only (no flavor picks — a +2 swing is potent and hard to justify thematically off-roster)): when
+//   a FOE lowers one of the holder's stats (a stat-lowering move, Intimidate, or Sticky Web), Defiant raises
+//   the holder's Attack and Competitive its Sp. Atk by 2 stages. Both only ever help the holder (they react
+//   to a foe's debuff), so no pure-boon divergence. Wired at the single scripted reaction site BS_TryDefiantRattled
+//   (src/battle_script_commands.c): when the chosen ability isn't itself reactive, an innate Defiant/Competitive
+//   is credited and the pop-up overwritten to it (CreateAbilityPopUp reads the primary slot); the real-ability
+//   path (chosen Defiant/Competitive/Rattled) is byte-for-byte unchanged. Because the reaction funnels through the
+//   shared stat-drop message script, an innate reacts to Intimidate (chosen or innate) and Sticky Web for free.
+//   The negative-stat-change animation suppression (src/battle_stat_change.c) is made innate-aware too. AI is
+//   innate-aware: the "don't bother lowering a foe's stat" heuristic (IncreaseStatDownScore, src/battle_ai_util.c)
+//   and the "don't switch an Intimidator into a foe that benefits" heuristic (ShouldSwitchIfIntimidateBenefit,
+//   src/battle_ai_switch.c) both credit an innate Defiant/Competitive foe via IsInnateActive; the soft
+//   incoming-ability value scorer (battle_ai_util.c) is left keyed to the chosen ability, mirroring Intimidate.
+//   Suppression parity holds via IsInnateActive() (feature flag, Gastro Acid, Neutralizing Gas, not-on-field);
+//   neither is breakable, so Mold Breaker never touches them. Canon-only, keyed exactly per form: DEFIANT to the
+//   Mankey / Primeape / Annihilape, Farfetchd, Pawniard / Bisharp / Kingambit, Braviary, Tornadus-Incarnate,
+//   Thundurus-Incarnate, Purugly, Passimian, Obstagoon, and Falinks (base) lines (every canon Defiant user in any
+//   real slot, merged into an existing innate row where present); COMPETITIVE to the Jigglypuff (Igglybuff /
+//   Jigglypuff / Wigglytuff), Milotic, Piplup / Prinplup / Empoleon (their P_UPDATED_ABILITIES >= GEN_9 Hidden
+//   Ability), Gothita / Gothorita / Gothitelle, Meowstic-F, Wattrel / Kilowattrel, and Boltund lines. Sole-ability
+//   species are OMITTED as redundant (their sole chosen ability already grants it, so an innate could never be
+//   observed — the Mega Lopunny / Scrappy precedent): Zapdos-Galar (sole Defiant), Articuno-Galar (sole
+//   Competitive), Ogerpon / Ogerpon-Teal (sole Defiant), and Falinks-Mega (sole Defiant — its BATTLE_ARMOR innate
+//   row stays, since that IS observable). Innate Rattled — which also reacts through BS_TryDefiantRattled but only
+//   to Intimidate — is a separate Batch M sub-group, deliberately not credited here. Step 3.5: the ~30 frontier
+//   sets that hardcoded chosen Defiant / Competitive already resolve to the species' real slot, so they keep their
+//   now-redundant chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with
+//   the complementary-slot freeing deferred as a focused follow-up, like Batch J/T/K and the Batch L sub-groups.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -715,6 +744,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0039
         SPECIES_JIGGLYPUFF,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD
         )
@@ -722,6 +752,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0040
         SPECIES_WIGGLYTUFF,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
             ABILITY_FRISK
@@ -870,12 +901,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0056
         SPECIES_MANKEY,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_VITAL_SPIRIT
         )
     },
     { // 0057
         SPECIES_PRIMEAPE,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -1134,6 +1167,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0083
         SPECIES_FARFETCHD,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_INNER_FOCUS,
             ABILITY_KEEN_EYE
         )
@@ -1960,6 +1994,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0174
         SPECIES_IGGLYBUFF,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD
         )
@@ -3599,6 +3634,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0350
         SPECIES_MILOTIC,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_CUTE_CHARM,
             ABILITY_MARVEL_SCALE,
             ABILITY_SERENE_GRACE
@@ -3976,18 +4012,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0393
         SPECIES_PIPLUP,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_TORRENT
         )
     },
     { // 0394
         SPECIES_PRINPLUP,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_TORRENT
         )
     },
     { // 0395
         SPECIES_EMPOLEON,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_TORRENT
         )
     },
@@ -4250,6 +4289,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0432
         SPECIES_PURUGLY,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_OWN_TEMPO,
             ABILITY_THICK_FAT
         )
@@ -5325,6 +5365,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0574
         SPECIES_GOTHITA,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_FRISK,
             ABILITY_SHADOW_TAG
         )
@@ -5332,6 +5373,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0575
         SPECIES_GOTHORITA,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_FRISK,
             ABILITY_SHADOW_TAG
         )
@@ -5339,6 +5381,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0576
         SPECIES_GOTHITELLE,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_FRISK,
             ABILITY_SHADOW_TAG
         )
@@ -5736,6 +5779,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0624
         SPECIES_PAWNIARD,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_INNER_FOCUS,
             ABILITY_PRESSURE
         )
@@ -5743,6 +5787,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0625
         SPECIES_BISHARP,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_INNER_FOCUS,
             ABILITY_PRESSURE
         )
@@ -5762,6 +5807,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0628
         SPECIES_BRAVIARY,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_KEEN_EYE
         )
     },
@@ -5814,6 +5860,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0641
         SPECIES_TORNADUS_INCARNATE,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_PRANKSTER
         )
     },
@@ -5826,6 +5873,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0642
         SPECIES_THUNDURUS_INCARNATE,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_PRANKSTER
         )
     },
@@ -6137,6 +6185,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0678
         SPECIES_MEOWSTIC_F,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_INFILTRATOR,
             ABILITY_KEEN_EYE
         )
@@ -6823,6 +6872,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS
         )
     },
+    { // 0766
+        SPECIES_PASSIMIAN,
+        INNATES(
+            ABILITY_DEFIANT
+        )
+    },
     { // 0769
         SPECIES_SANDYGAST,
         INNATES(
@@ -7239,6 +7294,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0836
         SPECIES_BOLTUND,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_STRONG_JAW
         )
     },
@@ -7469,6 +7525,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0862
         SPECIES_OBSTAGOON,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_GUTS,
             ABILITY_RECKLESS
         )
@@ -7509,7 +7566,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0870
         SPECIES_FALINKS,
         INNATES(
-            ABILITY_BATTLE_ARMOR
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_DEFIANT
         )
     },
     { // 0870
@@ -7940,12 +7998,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0940
         SPECIES_WATTREL,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_WIND_POWER
         )
     },
     { // 0941
         SPECIES_KILOWATTREL,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_WIND_POWER
         )
     },
@@ -8172,6 +8232,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0979
         SPECIES_ANNIHILAPE,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_INNER_FOCUS
         )
     },
@@ -8204,6 +8265,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0983
         SPECIES_KINGAMBIT,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_PRESSURE
         )
     },

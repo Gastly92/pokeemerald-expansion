@@ -997,7 +997,11 @@ static bool32 ShouldSwitchIfIntimidateBenefit(struct SwitchAiContext *switchCont
         enum Ability abilityDef = gAiLogicData->abilities[switchContext->opposingBattler];
         bool32 canLowerAtk = CanIntimidateLowerOpponentAtk(switchContext->battler, switchContext->opposingBattler);
 
-        if (canLowerAtk && (DoesIntimidateRaiseStats(abilityDef) || abilityDef == ABILITY_MIRROR_ARMOR))
+        // FORK: a foe's innate Defiant / Competitive turns our Intimidate into a +2 for it
+        // (FEATURE_INNATE_ABILITIES), so don't switch an Intimidator in expecting to weaken it.
+        if (canLowerAtk && (DoesIntimidateRaiseStats(abilityDef) || abilityDef == ABILITY_MIRROR_ARMOR
+         || IsInnateActive(switchContext->opposingBattler, ABILITY_DEFIANT)
+         || IsInnateActive(switchContext->opposingBattler, ABILITY_COMPETITIVE)))
             return FALSE;
         if (canLowerAtk && IsOpponentPhysicalAttacker(switchContext->battler, switchContext->opposingBattler))
             hasValidTarget = TRUE;
@@ -1008,7 +1012,11 @@ static bool32 ShouldSwitchIfIntimidateBenefit(struct SwitchAiContext *switchCont
         enum Ability abilityDef = gAiLogicData->abilities[opposingPartner];
         bool32 canLowerAtk = CanIntimidateLowerOpponentAtk(switchContext->battler, opposingPartner);
 
-        if (canLowerAtk && (DoesIntimidateRaiseStats(abilityDef) || abilityDef == ABILITY_MIRROR_ARMOR))
+        // FORK: a foe's innate Defiant / Competitive turns our Intimidate into a +2 for it
+        // (FEATURE_INNATE_ABILITIES), so don't switch an Intimidator in expecting to weaken it.
+        if (canLowerAtk && (DoesIntimidateRaiseStats(abilityDef) || abilityDef == ABILITY_MIRROR_ARMOR
+         || IsInnateActive(opposingPartner, ABILITY_DEFIANT)
+         || IsInnateActive(opposingPartner, ABILITY_COMPETITIVE)))
             return FALSE;
         if (canLowerAtk && IsOpponentPhysicalAttacker(switchContext->battler, opposingPartner))
             hasValidTarget = TRUE;

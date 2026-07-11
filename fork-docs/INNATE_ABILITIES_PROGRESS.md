@@ -134,7 +134,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Sheer Force | The Pokémon's moves lose their additional effects, but the power of those moves will be boosted by 30%. |
 | :x: | Contrary | Reverses any stat changes affecting the Pokémon so that attempts to boost its stats instead lower them—and attempts to lower its stats will boost them. |
 | :white_check_mark: | Unnerve | Makes opponents unable to eat Berries. |
-| :white_large_square: | Defiant | When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages. |
+| :white_check_mark: | Defiant | When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages. |
 | :x: | Defeatist | Halves the Pokémon's Attack and Sp. Atk stats when its HP drops to half or less. |
 | :white_check_mark: | Cursed Body | When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns. |
 | :white_check_mark: | Healer | The Pokémon has a 50% chance of curing the status conditions of its allies at the end of every turn. |
@@ -178,7 +178,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Fur Coat | Halves the damage the Pokémon takes from physical moves. |
 | :white_check_mark: | Magician | If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves. |
 | :x: | Bulletproof | The Pokémon is immune to ball and bomb moves. |
-| :white_large_square: | Competitive | When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages. |
+| :white_check_mark: | Competitive | When the Pokémon has any of its stats lowered by an opponent, its Sp. Atk stat is boosted by 2 stages. |
 | :white_check_mark: | Strong Jaw | Boosts the power of the Pokémon's biting moves by 50%. |
 | :x: | Refrigerate | The Pokémon's Normal-type moves become Ice-type moves and their power is boosted by 20%. |
 | :white_check_mark: | Sweet Veil | The Pokémon and its allies cannot become drowsy or be put to sleep. |
