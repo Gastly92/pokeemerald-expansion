@@ -70,6 +70,20 @@ bool32 DoSwitchInEvents(void)
         gBattleStruct->switchInBattlerCounter = 0;
         gBattleStruct->eventState.switchIn++;
         break;
+    case SWITCH_IN_EVENTS_UNNERVE_INNATE:
+        // FORK: fire an innate Unnerve, mirroring SWITCH_IN_EVENTS_UNNERVE. A battler carries at most one
+        // Unnerve innate and the effect's own unnerveActivated guard prevents a re-fire, so a fresh cursor
+        // per battler with advance-immediately (matching the chosen-ability pass above) is sufficient.
+        while (gBattleStruct->switchInBattlerCounter < gBattlersCount)
+        {
+            u32 innateIndex = 0;
+            battler = gBattlersBySpeed[gBattleStruct->switchInBattlerCounter++];
+            if (TryActivateInnateSwitchInEffects(battler, &innateIndex, gBattleStruct->battlerState[battler].switchIn, ABILITYEFFECT_UNNERVE))
+                return TRUE;
+        }
+        gBattleStruct->switchInBattlerCounter = 0;
+        gBattleStruct->eventState.switchIn++;
+        break;
     case SWITCH_IN_EVENTS_FIRST_BLOCK:
         while (gBattleStruct->switchInBattlerCounter < gBattlersCount)
         {
@@ -288,7 +302,7 @@ static bool32 FirstEventBlockEvents(struct BattleCalcValues *calcValues)
         // per-battler cursor. Hold this block (keeping the cursor) while effects keep firing; once the
         // list is exhausted, reset the cursor and advance to the next block.
         u32 innateIndex = gBattleStruct->eventState.switchInInnateIndex;
-        if (TryActivateInnateSwitchInEffects(battler, &innateIndex, gBattleStruct->battlerState[battler].switchIn))
+        if (TryActivateInnateSwitchInEffects(battler, &innateIndex, gBattleStruct->battlerState[battler].switchIn, ABILITYEFFECT_ON_SWITCHIN))
         {
             gBattleStruct->eventState.switchInInnateIndex = innateIndex;
             effect = TRUE;
@@ -443,6 +457,17 @@ static bool32 SecondEventBlockEvents(struct BattleCalcValues *calcValues)
             effect = TRUE;
         gBattleStruct->eventState.battlerSwitchIn++;
         break;
+    case SECOND_EVENT_ABILITIES_INNATE:
+    {
+        // FORK: fire an innate that depends on the ally (Hospitality), right after the chosen-ability
+        // ABILITYEFFECT_DEPENDS_ON_ALLY call. A battler carries at most one such innate and always
+        // advancing the step (like SECOND_EVENT_ABILITIES) fires it once, so a fresh cursor suffices.
+        u32 innateIndex = 0;
+        if (TryActivateInnateSwitchInEffects(battler, &innateIndex, gBattleStruct->battlerState[battler].switchIn, ABILITYEFFECT_DEPENDS_ON_ALLY))
+            effect = TRUE;
+        gBattleStruct->eventState.battlerSwitchIn++;
+        break;
+    }
     case SECOND_EVENT_BOOSTER_ENERGY:
         if (ItemBattleEffects(battler, 0, calcValues->holdEffects[battler], IsBoosterEnergyActivation))
             effect = TRUE;

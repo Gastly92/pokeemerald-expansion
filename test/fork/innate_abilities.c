@@ -5100,6 +5100,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_INTIMIDATE,
         ABILITY_ANTICIPATION, ABILITY_FOREWARN, ABILITY_FRISK,
         ABILITY_DOWNLOAD, ABILITY_SUPERSWEET_SYRUP,
+        ABILITY_UNNERVE, ABILITY_HOSPITALITY,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -7286,5 +7287,101 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Supersweet Syrup fires o
         NONE_OF { ABILITY_POPUP(player, ABILITY_SUPERSWEET_SYRUP); } // once-per-battle: never again
     } THEN {
         EXPECT_EQ(opponent->statStages[STAT_EVASION], DEFAULT_STAT_STAGE - 1); // dropped once, not twice
+    }
+}
+
+// ─── Innate Unnerve / Hospitality (switch-in effects) ─────────────────────────
+// Batch L's fourth/final sub-group. Both reuse the same switch-in driver as Intimidate, but at their OWN
+// switch-in phases rather than through ABILITYEFFECT_ON_SWITCHIN: Unnerve delegates to the upstream
+// ABILITYEFFECT_UNNERVE case (hooked from the new SWITCH_IN_EVENTS_UNNERVE_INNATE event), Hospitality to
+// ABILITYEFFECT_DEPENDS_ON_ALLY (hooked from the new SECOND_EVENT_ABILITIES_INNATE step). Both are 1:1
+// clean-upside boons (foe Berry denial / ally heal); each effect site (src/battle_util.c) forces the
+// pop-up to the innate when the chosen ability differs. Vehicles carry a chosen ability != the innate, so
+// the effect and the pop-up are attributable solely to the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unnerve denies the foe its Berry")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_JOLTIK, ABILITY_UNNERVE));
+        ASSUME(gSpeciesInfo[SPECIES_JOLTIK].abilities[0] != ABILITY_UNNERVE); // chosen Compound Eyes; the denial is the innate's
+        ASSUME(gItemsInfo[ITEM_RAWST_BERRY].holdEffect == HOLD_EFFECT_CURE_BRN);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_JOLTIK) { Ability(ABILITY_COMPOUND_EYES); }
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_RAWST_BERRY); Status1(STATUS1_BURN); }
+    } WHEN {
+        TURN {}
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_UNNERVE); // pop-up shows the innate, not chosen Compound Eyes
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_UNNERVE); }
+    } THEN {
+        // With the innate active the foe can't eat its Rawst Berry, so it stays burned; with the feature
+        // off (no Unnerve) the Berry is eaten and cures the burn.
+        EXPECT_EQ(opponent->status1 & STATUS1_BURN, enabled ? STATUS1_BURN : 0);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Unnerve")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_JOLTIK, ABILITY_UNNERVE));
+        ASSUME(gItemsInfo[ITEM_RAWST_BERRY].holdEffect == HOLD_EFFECT_CURE_BRN);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_JOLTIK) { Ability(ABILITY_COMPOUND_EYES); }
+        OPPONENT(SPECIES_WEEZING_GALAR) { Ability(ABILITY_NEUTRALIZING_GAS); Item(ITEM_RAWST_BERRY); Status1(STATUS1_BURN); }
+    } WHEN {
+        TURN {}
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_UNNERVE); }
+    } THEN {
+        // Neutralizing Gas suppresses the innate Unnerve, so the foe eats its Rawst Berry and cures its burn.
+        EXPECT_EQ(opponent->status1 & STATUS1_BURN, 0);
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Hospitality heals the ally on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SINISTCHA, ABILITY_HOSPITALITY));
+        ASSUME(gSpeciesInfo[SPECIES_SINISTCHA].abilities[2] == ABILITY_HEATPROOF); // a real non-Hospitality slot
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_WOBBUFFET) { HP(75); MaxHP(100); }
+        PLAYER(SPECIES_SINISTCHA) { Ability(ABILITY_HEATPROOF); } // chosen differs; the heal is the innate's
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(playerLeft, 2); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(playerLeft, ABILITY_HOSPITALITY); // pop-up shows the innate, not chosen Heatproof
+            HP_BAR(playerRight, damage: -25); // ally restored 25% of its max HP
+        } else {
+            NONE_OF {
+                ABILITY_POPUP(playerLeft, ABILITY_HOSPITALITY);
+                HP_BAR(playerRight, damage: -25);
+            }
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Hospitality does nothing outside a double battle")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SINISTCHA, ABILITY_HOSPITALITY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_SINISTCHA) { Ability(ABILITY_HEATPROOF); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_HOSPITALITY); } // singles: no ally to heal
     }
 }
