@@ -5101,6 +5101,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_ANTICIPATION, ABILITY_FOREWARN, ABILITY_FRISK,
         ABILITY_DOWNLOAD, ABILITY_SUPERSWEET_SYRUP,
         ABILITY_UNNERVE, ABILITY_HOSPITALITY,
+        ABILITY_DEFIANT, ABILITY_COMPETITIVE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
