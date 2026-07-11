@@ -8391,13 +8391,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0982
-        SPECIES_DUDUNSPARCE,
-        INNATES(
-            ABILITY_SERENE_GRACE
-        )
-    },
-    { // 0982
-        SPECIES_DUDUNSPARCE_TWO_SEGMENT,
+        SPECIES_DUDUNSPARCE, // == SPECIES_DUDUNSPARCE_TWO_SEGMENT (the default form alias)
         INNATES(
             ABILITY_RATTLED,
             ABILITY_SERENE_GRACE
