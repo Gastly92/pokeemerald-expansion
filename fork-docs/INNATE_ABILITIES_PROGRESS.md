@@ -89,7 +89,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Steadfast | When the Pokémon flinches, its Speed stat is boosted by 1 stage. |
 | :white_check_mark: | Snow Cloak | Boosts the Pokémon's evasiveness by 25% in snow. |
 | :white_check_mark: | Gluttony | If the Pokémon is holding a Berry to be eaten when its HP drops to 1/4 or less of its max, it will instead eat the Berry when its HP drops to 1/2 or less of its max. |
-| :white_large_square: | Anger Point | Boosts the Pokémon's Attack stat to its sixth stage when the Pokémon takes a critical hit. |
+| :white_check_mark: | Anger Point | Boosts the Pokémon's Attack stat to its sixth stage when the Pokémon takes a critical hit. |
 | :white_check_mark: | Unburden | Doubles the Pokémon's Speed stat when its held item is consumed or lost. |
 | :white_check_mark: | Heatproof | Halves the damage the Pokémon takes from Fire-type moves and from being burned. |
 | :x: | Simple | Doubles the Pokémon's stat changes. |
@@ -160,7 +160,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Infiltrator | When using its moves, the Pokémon ignores the effects of targets' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes. |
 | :x: | Mummy | When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy. |
 | :white_large_square: | Moxie | When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage. |
-| :white_large_square: | Justified | When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage. |
+| :white_check_mark: | Justified | When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage. |
 | :white_large_square: | Rattled | The Pokémon gets scared when hit by a Dark-, Ghost-, or Bug-type attack or if intimidated, which boosts its Speed stat. |
 | :white_large_square: | Magic Bounce | Instead of being affected by other Pokémon's status moves, the Pokémon bounces them back at the user. |
 | :x: | Sap Sipper | Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage. |
@@ -198,10 +198,10 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Primordial Sea | The Pokémon changes the weather to nullify Fire-type attacks. |
 | :x: | Desolate Land | The Pokémon changes the weather to nullify Water-type attacks. |
 | :x: | Delta Stream | The Pokémon changes the weather so that no moves are supereffective against the Flying type. |
-| :white_large_square: | Stamina | When the Pokémon takes damage from a move, its Defense stat is boosted by 1 stage. |
+| :white_check_mark: | Stamina | When the Pokémon takes damage from a move, its Defense stat is boosted by 1 stage. |
 | :x: | Wimp Out | The Pokémon cowardly switches out when its HP drops to half or less. |
 | :x: | Emergency Exit | The Pokémon, sensing danger, switches out when its HP drops to half or less. |
-| :white_large_square: | Water Compaction | Boosts the Defense stat sharply when the Pokémon is hit by a Water-type move. |
+| :white_check_mark: | Water Compaction | Boosts the Defense stat sharply when the Pokémon is hit by a Water-type move. |
 | :white_check_mark: | Merciless | The Pokémon's attacks become critical hits if the target is poisoned or badly poisoned. |
 | :x: | Shields Down | When its HP drops to half or less, the Pokémon's shell breaks and it becomes aggressive. |
 | :white_check_mark: | Stakeout | Doubles the damage dealt to a target that has just switched into battle. |

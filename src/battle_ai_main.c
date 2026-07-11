@@ -1340,6 +1340,13 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         if (AI_CanMoveBeBlockedByTarget(&ctx))
             RETURN_SCORE_MINUS(20);
 
+        // FORK: innate Justified (FEATURE_INNATE_ABILITIES) — a Dark damaging move boosts an innate-only
+        // Justified foe's Attack just like the chosen-ability case below, so penalize it here too. Stamina /
+        // Water Compaction / Anger Point have no such avoid-read (their trigger isn't a move-type the AI dodges).
+        if (moveType == TYPE_DARK && !IsBattleMoveStatus(move) && !IsTargetingPartner(battlerAtk, battlerDef)
+         && abilityDef != ABILITY_JUSTIFIED && IsInnateActive(battlerDef, ABILITY_JUSTIFIED))
+            RETURN_SCORE_MINUS(10);
+
         switch (abilityDef)
         {
         case ABILITY_MAGIC_GUARD:
@@ -3129,7 +3136,10 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     } // check partner move effect
 
     // Adjust for always crit moves
-    if (MoveAlwaysCrits(aiData->partnerMove) && aiData->abilities[battlerAtk] == ABILITY_ANGER_POINT)
+    // FORK: credit an innate Anger Point (FEATURE_INNATE_ABILITIES) so the AI still knows a partner's
+    // always-crit move will max the holder's Attack even when Anger Point is innate-only.
+    if (MoveAlwaysCrits(aiData->partnerMove)
+     && (aiData->abilities[battlerAtk] == ABILITY_ANGER_POINT || IsInnateActive(battlerAtk, ABILITY_ANGER_POINT)))
     {
         if (AI_IsSlower(battlerAtk, battlerAtkPartner, move, predictedMove, CONSIDER_PRIORITY))   // Partner moving first
         {
@@ -3376,6 +3386,22 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
                   && scoringPartnerAbility != ABILITY_THERMAL_EXCHANGE
                   && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_THERMAL_EXCHANGE))
                 scoringPartnerAbility = ABILITY_THERMAL_EXCHANGE;
+            // FORK: promote an innate Justified / Water Compaction / Anger Point the same way
+            // (FEATURE_INNATE_ABILITIES), so the on-hit-boost partner-fire scoring below treats the ally's
+            // innate like the real ability. Justified keys on a Dark hit, Water Compaction on a Water hit,
+            // Anger Point on an always-crit move; a mon can't carry two of these, so ordering is moot.
+            else if (moveType == TYPE_DARK
+                  && scoringPartnerAbility != ABILITY_JUSTIFIED
+                  && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_JUSTIFIED))
+                scoringPartnerAbility = ABILITY_JUSTIFIED;
+            else if (moveType == TYPE_WATER
+                  && scoringPartnerAbility != ABILITY_WATER_COMPACTION
+                  && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_WATER_COMPACTION))
+                scoringPartnerAbility = ABILITY_WATER_COMPACTION;
+            else if (MoveAlwaysCrits(move)
+                  && scoringPartnerAbility != ABILITY_ANGER_POINT
+                  && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_ANGER_POINT))
+                scoringPartnerAbility = ABILITY_ANGER_POINT;
             switch (scoringPartnerAbility)
             {
             case ABILITY_ANGER_POINT:
@@ -3475,7 +3501,7 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
                 break;
             case ABILITY_WATER_COMPACTION:
                 if (moveType == TYPE_WATER && isFriendlyFireOK
-                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, atkPartnerAbility))
+                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, scoringPartnerAbility)) // FORK: innate-aware (promoted above)
                 {
                     if (moveTarget == TARGET_FOES_AND_ALLY)
                     {
@@ -3568,7 +3594,7 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             case ABILITY_JUSTIFIED:
                 if (moveType == TYPE_DARK && isFriendlyFireOK
                     && !IsBattleMoveStatus(move)
-                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, atkPartnerAbility))
+                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, scoringPartnerAbility)) // FORK: innate-aware (promoted above)
                 {
                     if (moveTarget == TARGET_FOES_AND_ALLY)
                     {

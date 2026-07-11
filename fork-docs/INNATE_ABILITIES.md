@@ -2639,3 +2639,72 @@ a **separate Batch M sub-group**, deliberately not credited here. **Step 3.5**: 
 chosen Defiant / Competitive already resolve to the species' real slot (these are canon users), so they keep their
 now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the
 complementary-slot freeing **deferred** as a focused follow-up, like Batch J/T/K and the Batch L sub-groups.
+
+### ABILITY_JUSTIFIED / ABILITY_STAMINA / ABILITY_WATER_COMPACTION / ABILITY_ANGER_POINT
+
+**Batch M's second sub-group** — four **on-hit stat reactions**, each a **1:1 clean-upside copy** (they react to
+*being hit*, so they only ever help the holder). When the holder is damaged by a move: **Justified** raises its
+**Attack** by 1 stage if the move is **Dark**-type; **Stamina** raises its **Defense** by 1 stage on **any** move;
+**Water Compaction** raises its **Defense** by 2 stages if the move is **Water**-type; **Anger Point** maxes its
+**Attack** (to +6 / `MAX_STAT_STAGE`) when the holder takes a **critical hit**.
+
+**Reuses the existing on-hit driver — no new infra.** All four fire from the **same** upstream
+`ABILITYEFFECT_MOVE_END` case (`src/battle_util.c`) as the Batch K contact reactions, so each is a **one-line
+addition to `IsActiveOnHitInnate`** (`src/fork/innate_abilities.c`). The driver delegates to that case with the innate
+passed explicitly, so the stat change / `BattleScript_AbilityStatChange` script / pop-up match the real ability for
+free. Here `battler` (the delegated case's parameter) is `gBattlerTarget`, the holder that was hit.
+
+**The pop-up.** Each of the four effect sites (`src/battle_util.c`) sets `gBattleScripting.abilityPopupOverwrite` to
+the innate (`gLastUsedAbility`) **only when the chosen ability differs**, so a real ability stays byte-for-byte
+unchanged (the Speed Boost / Rough Skin precedent). The driver skips an innate equal to the chosen ability, so a
+real Justified / Stamina / … never fires twice beside the chosen-ability block.
+
+**No `DETERMINISTIC_*` surface.** All four trigger at 100% on the right hit (Anger Point on a guaranteed/rolled
+crit — the crit itself is the RNG, not the ability), so there is nothing to gate under `DETERMINISTIC_ABILITIES`,
+unlike Cursed Body's disable roll.
+
+**AI.** The reactions live outside the shared damage calc, so the dedicated AI *effect* reads are made
+innate-aware:
+- **`AI_CheckBadMove`** (`src/battle_ai_main.c`) — the "don't feed the on-hit boost" penalty. Its `switch(abilityDef)`
+  reads the chosen ability, so a pre-switch clause credits an **innate Justified** foe (a Dark damaging move boosts
+  it) via `IsInnateActive`. Stamina / Water Compaction / Anger Point have **no** such avoid-read — their trigger
+  isn't a move-type the AI can dodge (any move / a Water hit it may still want / a crit it doesn't choose), matching
+  upstream, which only lists Justified (and Rattled) here.
+- **Doubles partner-fire scoring** (`src/battle_ai_main.c`) — the `scoringPartnerAbility` promotion block (the Steam
+  Engine precedent) now also promotes an **innate Justified / Water Compaction / Anger Point** on the ally (keyed on
+  a Dark / Water / always-crit move) so the AI values hitting an innate-only holder to trigger its boost; the
+  Justified and Water Compaction `case`s were switched to read the promoted `scoringPartnerAbility` in their
+  `ShouldTriggerAbility` calls (Anger Point's case needs no such call).
+- **Self always-crit + Beat Up** — the "my partner's always-crit move will max my Attack" read (`aiData->abilities[battlerAtk]
+  == ABILITY_ANGER_POINT`, `src/battle_ai_main.c`) and `ShouldBeatUpForJustified` (`src/battle_ai_util.c`) both credit
+  an innate holder via `IsInnateActive`.
+
+**Suppression parity** holds for all four via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas,
+not-on-field); none is `breakable`, so Mold Breaker never touches them.
+
+**Species (canon-only, no flavor picks — a reactive stat boost is potent and hard to justify thematically
+off-roster).** Every canon user in **any** real slot, keyed exactly per form (merged into an existing innate row
+where present), plus base creatures' **Megas** as pure-boon mirrors:
+- **Justified** → the **Growlithe / Arcanine** (Kantonian; Hisui carries Rock Head, not Justified), **Absol** (+ Mega),
+  **Gallade** (+ Mega), and **Lucario** (+ Mega, + the fork's **Mega-Z** which carries Justified in its own ability
+  data) lines.
+- **Stamina** → the **Mudbray / Mudsdale** line and **Archaludon**.
+- **Water Compaction** → the **Sandygast / Palossand** line.
+- **Anger Point** → the **Mankey / Primeape**, **Tauros** (+ all three Paldea forms — Combat / Blaze / Aqua),
+  **Camerupt** (+ Mega), **Sandile / Krokorok / Krookodile**, and **Crabrawler / Crabominable** lines.
+
+**Sole-ability species are OMITTED as redundant** (their sole chosen ability already grants it, so an innate could
+never be observed — the Mega Lopunny / Scrappy precedent, matching Batch M's Defiant / Competitive sub-group): the
+**Swords of Justice** trio (**Cobalion / Terrakion / Virizion**) and **Keldeo** (both formes), all sole-Justified.
+They *are* frontier sets, but their `.ability = ABILITY_JUSTIFIED` is their real (and only) slot, so it keeps working
+untouched; the innate + a fork-owned chosen override (the Landorus-Therian route) is **deferred** as a focused
+follow-up.
+
+**Step 3.5**: the frontier sets that hardcoded these abilities — chosen Justified (Absol, Gallade, Lucario),
+Stamina (Mudsdale, Archaludon), Water Compaction (Palossand), Anger Point (Crabominable) — already resolve to the
+species' real slot, so they keep their now-redundant chosen ability (still correct: the chosen runs it, the innate
+is redundant-but-skipped, and for the several sets whose *other* real abilities are also now innate the set simply
+runs all of them). A few of these slots were freed in an **earlier** batch to what was then a pending ability
+(Gallade's Sharpness sweep → chosen Justified; Crabominable's Hyper Cutter / Iron Fist sweep → chosen Anger Point);
+now that those become innate the chosen pick is redundant, but harmless — the complementary-slot re-pointing is
+**deferred** as a focused follow-up, like the Defiant / Competitive sub-group and Batch J/T/K/L.

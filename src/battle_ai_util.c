@@ -2789,6 +2789,11 @@ bool32 ShouldBeatUpForJustified(enum BattlerId battlerAtk, enum BattlerId battle
 {
     enum Ability atkPartnerAbility = aiData->abilities[battlerAtkPartner];
 
+    // FORK: credit an innate Justified partner (FEATURE_INNATE_ABILITIES) so the AI still values a Dark hit
+    // into an innate-only-Justified ally to trigger its Attack boost, exactly like a chosen Justified.
+    if (atkPartnerAbility != ABILITY_JUSTIFIED && IsInnateActive(battlerAtkPartner, ABILITY_JUSTIFIED))
+        atkPartnerAbility = ABILITY_JUSTIFIED;
+
     if (gBattleMons[battlerAtkPartner].volatiles.substitute)
         return FALSE;
 

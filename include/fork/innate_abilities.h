@@ -90,6 +90,12 @@
 //   with the pop-up overwritten to the innate and the AI's don't-lower-a-reactive-foe heuristics made
 //   innate-aware; innate Rattled, which also reacts through that site but only to Intimidate, is a later
 //   sub-group),
+//   JUSTIFIED / STAMINA / WATER_COMPACTION / ANGER_POINT (on-hit stat boosts, Batch M second sub-group —
+//   1:1 clean-upside copies that reuse the existing on-hit driver: when the holder is hit, Justified raises
+//   Attack +1 on a Dark move, Stamina raises Defense +1 on any move, Water Compaction raises Defense +2 on a
+//   Water move, Anger Point maxes Attack on a critical hit — each delegating to the upstream
+//   ABILITYEFFECT_MOVE_END case, with the pop-up overwritten to the innate and the AI's partner-fire /
+//   avoid-boosting heuristics made innate-aware),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

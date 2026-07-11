@@ -5102,6 +5102,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_DOWNLOAD, ABILITY_SUPERSWEET_SYRUP,
         ABILITY_UNNERVE, ABILITY_HOSPITALITY,
         ABILITY_DEFIANT, ABILITY_COMPETITIVE,
+        ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION, ABILITY_ANGER_POINT,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -7499,5 +7500,138 @@ AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI won't cycle Intimidate into 
         OPPONENT(SPECIES_ZIGZAGOON) { Moves(MOVE_TACKLE); }
     } WHEN {
         TURN { MOVE(player, MOVE_TACKLE); EXPECT_MOVE(opponent, MOVE_TACKLE); } // sees innate Defiant -> stays in
+    }
+}
+
+// ─── Innate on-hit stat boosts (Batch M: Justified / Stamina / Water Compaction / Anger Point) ─────
+//
+// Four on-hit reactions that fire from the upstream ABILITYEFFECT_MOVE_END case, so each reuses the
+// existing on-hit driver (IsActiveOnHitInnate) — a one-line addition each. When the holder is hit:
+// Justified raises Attack +1 on a Dark move, Stamina raises Defense +1 on any move, Water Compaction
+// raises Defense +2 on a Water move, and Anger Point maxes Attack on a critical hit. All are 1:1
+// clean-upside copies (they only ever help the holder). Each test's feature-off leg proves the boost
+// comes only from the innate; the pop-up shows the innate, not the (different) chosen ability.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Justified raises Attack when hit by a Dark move")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ABSOL, ABILITY_JUSTIFIED));
+        ASSUME(GetMoveType(MOVE_BITE) == TYPE_DARK);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ABSOL) { Ability(ABILITY_PRESSURE); } // chosen ability is NOT Justified
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_BITE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_BITE); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_JUSTIFIED); // pop-up shows the innate, not the chosen Pressure
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_JUSTIFIED); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1);
+        else
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Stamina raises Defense when hit")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUDSDALE, ABILITY_STAMINA));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MUDSDALE) { Ability(ABILITY_OWN_TEMPO); } // chosen ability is NOT Stamina
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_STAMINA); // pop-up shows the innate, not the chosen Own Tempo
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_STAMINA); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE + 1);
+        else
+            EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Water Compaction sharply raises Defense when hit by a Water move")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PALOSSAND, ABILITY_WATER_COMPACTION));
+        ASSUME(GetMoveType(MOVE_WATER_GUN) == TYPE_WATER);
+        ASSUME(gSpeciesInfo[SPECIES_PALOSSAND].abilities[0] == ABILITY_WATER_COMPACTION);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_PALOSSAND) { Ability(ABILITY_SAND_VEIL); } // chosen ability is NOT Water Compaction
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_WATER_GUN); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_WATER_GUN); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_WATER_COMPACTION); // pop-up shows the innate, not the chosen Sand Veil
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_WATER_COMPACTION); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE + 2);
+        else
+            EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Anger Point maxes Attack on a critical hit")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CRABOMINABLE, ABILITY_ANGER_POINT));
+        ASSUME(MoveAlwaysCrits(MOVE_FROST_BREATH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRABOMINABLE) { Ability(ABILITY_HYPER_CUTTER); } // chosen ability is NOT Anger Point
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_FROST_BREATH); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FROST_BREATH); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_ANGER_POINT); // pop-up shows the innate, not the chosen Hyper Cutter
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_ANGER_POINT); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_ATK], MAX_STAT_STAGE);
+        else
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate on-hit stat boost exactly like a real ability, so
+// the on-hit driver skips it and no boost fires (Justified is the representative of the sub-group's driver).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Justified")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ABSOL, ABILITY_JUSTIFIED));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_GASTRO_ACID, MOVE_BITE); }
+        OPPONENT(SPECIES_ABSOL) { Ability(ABILITY_PRESSURE); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_BITE); }
+    } SCENE {
+        MESSAGE("The opposing Absol's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_JUSTIFIED); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
     }
 }

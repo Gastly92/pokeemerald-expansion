@@ -4079,6 +4079,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             {
                 gEffectBattler = gBattlerAbility = battler;
                 SetStatChange(battler, STAT_ATK, 1);
+                // FORK: innate Justified — show the innate in the pop-up, not the chosen ability, only when
+                // they differ (Speed Boost precedent). gLastUsedAbility is the ability being processed.
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 BattleScriptCall(BattleScript_AbilityStatChange);
                 effect++;
             }
@@ -4103,6 +4107,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             {
                 gEffectBattler = gBattlerAbility = battler;
                 SetStatChange(battler, STAT_DEF, 2);
+                // FORK: innate Water Compaction — show the innate in the pop-up, not the chosen ability, only
+                // when they differ (Speed Boost precedent). gLastUsedAbility is the ability being processed.
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 BattleScriptCall(BattleScript_AbilityStatChange);
                 effect++;
             }
@@ -4115,6 +4123,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             {
                 gEffectBattler = gBattlerAbility = battler;
                 SetStatChange(battler, STAT_DEF, 1);
+                // FORK: innate Stamina — show the innate in the pop-up, not the chosen ability, only when
+                // they differ (Speed Boost precedent). gLastUsedAbility is the ability being processed.
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 BattleScriptCall(BattleScript_AbilityStatChange);
                 effect++;
             }
@@ -4216,6 +4228,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             {
                 gEffectBattler = gBattlerAbility = battler;
                 SetStatChange(battler, STAT_ATK, 12);
+                // FORK: innate Anger Point — show the innate in the pop-up, not the chosen ability, only when
+                // they differ (Speed Boost precedent). gLastUsedAbility is the ability being processed.
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 BattleScriptCall(BattleScript_AbilityStatChange);
                 effect++;
             }
