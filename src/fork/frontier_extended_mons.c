@@ -121,7 +121,8 @@
 // held item off a target it damages) or Liquid Ooze (HP-draining moves damage the attacker instead of healing it)
 // or a switch-in effect (Intimidate lowers every opposing battler's Attack by 1 stage on switch-in /
 // Download raises the holder's Attack or Sp. Atk toward the foe's weaker defense / Supersweet Syrup lowers
-// every opposing battler's evasiveness once per battle)
+// every opposing battler's evasiveness once per battle / Unnerve denies every opposing battler its Berries /
+// Hospitality heals the ally 1/4 max HP on switch-in in doubles)
 // always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
 // ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
 // pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
@@ -25597,7 +25598,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SINISTCHA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Hospitality support tank (innate Levitate)
+        .heldItem = ITEM_ASSAULT_VEST, // Hospitality support tank (innate Hospitality / Heatproof / Levitate)
         .moves =
         {
             MOVE_MATCHA_GOTCHA,
@@ -25605,7 +25606,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_TRICK_ROOM
         },
-        .ability = ABILITY_HOSPITALITY,
+        .ability = ABILITY_FLASH_FIRE, // Hospitality + Heatproof now innate; chosen Flash Fire (override) turns the hot tea's Fire weakness into an immunity
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,

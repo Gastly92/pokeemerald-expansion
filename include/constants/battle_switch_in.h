@@ -7,6 +7,7 @@ enum SwitchInEvents
     SWITCH_IN_EVENTS_TERA_SHIFT,
     SWITCH_IN_EVENTS_NEUTRALIZING_GAS,
     SWITCH_IN_EVENTS_UNNERVE,
+    SWITCH_IN_EVENTS_UNNERVE_INNATE, // FORK: active innate Unnerve, fires after the chosen-ability Unnerve pass
     SWITCH_IN_EVENTS_FIRST_BLOCK,
     SWITCH_IN_EVENTS_FORM_CHANGE,
     SWITCH_IN_EVENTS_SECOND_BLOCK,
@@ -32,6 +33,7 @@ enum SwitchInFirstEventBlock
 enum SwitchInSecondEventBlock
 {
     SECOND_EVENT_ABILITIES,
+    SECOND_EVENT_ABILITIES_INNATE, // FORK: active switch-in innates that depend on the ally (Hospitality)
     SECOND_EVENT_BOOSTER_ENERGY,
     SECOND_EVENT_BLOCK_COUNT,
 };

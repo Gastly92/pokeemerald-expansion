@@ -362,6 +362,10 @@ static bool32 IsUnnerveAbilityOnOpposingSide(enum BattlerId battler)
         default:
             break;
         }
+        // FORK: innate-aware Unnerve (FEATURE_INNATE_ABILITIES) — a mon carrying Unnerve as an innate
+        // (chosen ability differs) also denies the opposing side its Berries.
+        if (BattlerHasAbility(battlerDef, ABILITY_UNNERVE))
+            return TRUE;
     }
 
     return FALSE;
@@ -4952,6 +4956,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             if (shouldAbilityTrigger && !gBattleMons[battler].volatiles.unnerveActivated)
             {
                 gBattleScripting.battler = battler;
+                // FORK: innate Unnerve — show the innate in the pop-up, not the chosen ability, only
+                // when they differ (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                // gLastUsedAbility is the ability being processed (UNNERVE, chosen or innate).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 gEffectBattler = GetOppositeBattler(battler);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_UNNERVE;
                 gBattleMons[battler].volatiles.unnerveActivated = TRUE;
@@ -5013,6 +5022,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && gBattleMons[partner].hp < gBattleMons[partner].maxHP
              && IsBattlerAlive(partner))
             {
+                // FORK: innate Hospitality — show the innate in the pop-up, not the chosen ability, only
+                // when they differ (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                // gLastUsedAbility is the ability being processed (HOSPITALITY, chosen or innate).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 gEffectBattler = partner;
                 SetHealAmount(partner, GetNonDynamaxMaxHP(partner) / 4);
                 BattleScriptCall(BattleScript_HospitalityActivates);

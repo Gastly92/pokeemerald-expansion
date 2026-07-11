@@ -396,7 +396,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 17 | **Build the on-contact/on-hit driver** (model on the end-turn driver) | infra | done |
 | 18 | Batch K — On-contact/on-hit/on-faint | active, needs step 17 | done (all 13: Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body / Pickpocket / Magician / Liquid Ooze) |
 | 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | done (shipped with Intimidate, the marquee consumer, like step 17 shipped with Rough Skin) |
-| 20 | Batch L — Switch-in actives | active, needs step 19 | open (6/8 done: Intimidate / Anticipation / Forewarn / Frisk / Download / Supersweet Syrup. Remaining: Unnerve / Hospitality) |
+| 20 | Batch L — Switch-in actives | active, needs step 19 | done (all 8: Intimidate / Anticipation / Forewarn / Frisk / Download / Supersweet Syrup / Unnerve / Hospitality) |
 | 21 | Batch M — On-KO/on-hit stat boosts | active | open |
 | 22 | Batch U — Ally-support (doubles) | calc/trait | open |
 | 23 | Tier 5 — Bespoke/deferred (one ability per session) | one-off | open |
@@ -452,7 +452,7 @@ row is `done`.
 | S — Misc single-site traits | trait | 12 | done |
 | J — End-of-turn effects | active (existing driver) | 10 | done |
 | K — On-contact/on-hit/on-faint | active (new driver) | 13 | done (Rough Skin / Iron Barbs / Gooey / Tangling Hair / Aftermath / Innards Out / Steam Engine / Thermal Exchange / Wind Power / Cursed Body / Pickpocket / Magician / Liquid Ooze) |
-| L — Switch-in actives | active (new driver) | 8 | open (6/8 done: Intimidate — the switch-in driver was built with it — the Anticipation / Forewarn / Frisk information-reveal sub-group, and the Download / Supersweet Syrup switch-in-stat-change sub-group; Unnerve / Hospitality remain) |
+| L — Switch-in actives | active (new driver) | 8 | done (all 8: Intimidate — the switch-in driver was built with it — the Anticipation / Forewarn / Frisk information-reveal sub-group, the Download / Supersweet Syrup switch-in-stat-change sub-group, and the Unnerve / Hospitality sub-group, which extended the driver with a per-phase abilityEffect selector to reach the ABILITYEFFECT_UNNERVE and ABILITYEFFECT_DEPENDS_ON_ALLY cases) |
 | M — On-KO/on-hit stat boosts | active | 11 | open |
 | T — Berry/item synergy | active/trait | 4 | done |
 | U — Ally-support (doubles) | calc/trait | 5 | open |

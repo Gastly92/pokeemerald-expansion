@@ -1,6 +1,8 @@
 #ifndef GUARD_INNATE_ABILITIES_H
 #define GUARD_INNATE_ABILITIES_H
 
+#include "battle_util.h" // FORK: enum AbilityEffect (TryActivateInnateSwitchInEffects' phase selector)
+
 // FORK: innate abilities (FEATURE_INNATE_ABILITIES, config/feature.h).
 //
 // Some species carry one or more *innate* abilities that are always active in
@@ -77,6 +79,11 @@
 //   copies that reuse the same switch-in driver; Download raises the holder's Attack or Sp. Atk toward
 //   the foe's weaker defense, Supersweet Syrup lowers every foe's evasiveness once per battle, with the
 //   AI's switch-in stat simulation made innate-aware),
+//   UNNERVE / HOSPITALITY (switch-in effects, Batch L fourth/final sub-group — 1:1 clean-upside copies
+//   that reuse the same switch-in driver at their own switch-in phases; Unnerve denies every opposing
+//   battler its Berries (fired through the ABILITYEFFECT_UNNERVE phase, with the AI's Berry-heal read
+//   made innate-aware), Hospitality heals the ally 1/4 max HP in doubles (fired through the
+//   ABILITYEFFECT_DEPENDS_ON_ALLY phase — no AI wiring needed, no pure-boon divergence)),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
@@ -151,14 +158,16 @@ bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Mo
 bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index, enum Move move);
 
 // FORK: switch-in innate driver. Fires `battler`'s active, scripted switch-in innates — Intimidate
-// (lowers every opposing battler's Attack by 1 stage) and the Anticipation / Forewarn / Frisk
-// information reveals. Hooked from
-// FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE in the switch-in loop (src/battle_switch_in.c), right after
-// the chosen-ability switch-in block. `shouldTrigger` mirrors the chosen-ability call's switch-in gate.
-// Re-entrant: *index is the per-battler resume cursor into the innate list — fires one effect per call
-// (leaving *index past it) and returns TRUE, or returns FALSE once the list is exhausted, so a battler
-// with several switch-in innates fires them across passes. Delegates to the upstream
-// ABILITYEFFECT_ON_SWITCHIN case so the stat change / script / pop-up match the real ability.
-bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool32 shouldTrigger);
+// (lowers every opposing battler's Attack by 1 stage), the Anticipation / Forewarn / Frisk information
+// reveals, Download / Supersweet Syrup (switch-in stat changes), Unnerve (denies foes their Berries) and
+// Hospitality (heals the ally in doubles). Hooked from three switch-in phases (src/battle_switch_in.c),
+// each right after its chosen-ability counterpart; `abilityEffect` selects which phase this call handles,
+// so each innate fires at the same point the real ability would. `shouldTrigger` mirrors the
+// chosen-ability call's switch-in gate. Re-entrant: *index is the per-battler resume cursor into the
+// innate list — fires one effect per call (leaving *index past it) and returns TRUE, or returns FALSE once
+// the list is exhausted, so a battler with several switch-in innates for one phase fires them across
+// passes. Delegates to the upstream switch-in case for `abilityEffect` so the stat change / heal / script
+// / pop-up match the real ability.
+bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool32 shouldTrigger, enum AbilityEffect abilityEffect);
 
 #endif // GUARD_INNATE_ABILITIES_H

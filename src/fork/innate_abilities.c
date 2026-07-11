@@ -332,6 +332,34 @@
 //   frontier set is freed to a complementary chosen Trace; the all-real-abilities-innate Porygon-Z and sole-ability
 //   Genesect sets keep their now-redundant chosen Download — still correct (the chosen runs it; the innate is
 //   redundant-but-skipped) — deferred as a focused follow-up, like Batch J/T/K and the Intimidate sub-group.
+//   UNNERVE / HOSPITALITY (switch-in effects, Batch L fourth/final sub-group — both 1:1 clean-upside copies,
+//   canon-only (no flavor picks)): when the holder switches in, UNNERVE denies every opposing battler its Berries
+//   (sets the unnerveActivated volatile + shows a message) and HOSPITALITY restores 1/4 of the ally's max HP in a
+//   double battle. Both join the same re-entrant switch-in driver as Intimidate, but they run at their OWN
+//   switch-in phases rather than through ABILITYEFFECT_ON_SWITCHIN: Unnerve delegates to the upstream
+//   ABILITYEFFECT_UNNERVE case (hooked from the new SWITCH_IN_EVENTS_UNNERVE_INNATE event, right after the
+//   chosen-ability Unnerve pass), Hospitality to ABILITYEFFECT_DEPENDS_ON_ALLY (hooked from the new
+//   SECOND_EVENT_ABILITIES_INNATE step, right after the chosen-ability DEPENDS_ON_ALLY call). The driver now
+//   takes an abilityEffect selecting the phase; SwitchInInnateAbilityEffect maps each switch-in innate to its
+//   effect so it fires at the same point the real ability would. Each effect site in src/battle_util.c forces the
+//   pop-up to the innate when the chosen ability differs (the Speed Boost precedent). Both only ever help the
+//   holder (foe Berry denial / ally heal), so no pure-boon divergence. AI: Unnerve's dedicated read — the
+//   switch-in Berry-heal estimate in GetSwitchinSingleUseItemHealing (src/battle_ai_switch.c), which discounts a
+//   Berry when the foe has Unnerve — is made innate-aware via IsInnateActive; Hospitality changes no stat/state the
+//   AI's switch-in sim reasons about, so it needs no AI wiring. Suppression parity holds via IsInnateActive()
+//   (feature flag, Gastro Acid, Neutralizing Gas, not-on-field); neither is breakable, so Mold Breaker never
+//   touches them. Canon-only, keyed exactly per form: UNNERVE to the Ekans / Meowth (+ Galar / Gmax) / Persian /
+//   Aerodactyl (+ Mega) / Mewtwo (+ Mega X/Y) / Ursaring / Ursaluna / Houndour / Houndoom (+ Mega) / Tyranitar
+//   (+ Mega) / Masquerain / Vespiquen / Joltik / Galvantula / Axew / Fraxure / Haxorus / Litleo / Pyroar / Bewear /
+//   Rookidee / Corvisquire / Corviknight (+ Gmax) lines (every canon Unnerve user in any real slot, merged into an
+//   existing innate row where present, plus base creatures' Megas as pure-boon mirrors); sole-Unnerve Calyrex is
+//   OMITTED as redundant (not a frontier set, its sole chosen ability already grants it). HOSPITALITY to the
+//   Poltchageist / Sinistcha line (all four forms, merged onto their existing Heatproof / Levitate rows). Step 3.5:
+//   Sinistcha's Hospitality frontier set is freed to its complementary chosen Flash Fire override (the sibling
+//   Sinistcha set already uses it); the ~14 frontier sets that hardcoded chosen Unnerve now carry it innately, so
+//   they keep their now-redundant chosen Unnerve — still correct (the chosen runs it; the innate is
+//   redundant-but-skipped) — with the complementary-slot freeing deferred as a focused follow-up, like Batch
+//   J/T/K and the earlier Batch L sub-groups.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -604,7 +632,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_LIMBER,
-            ABILITY_SHED_SKIN
+            ABILITY_SHED_SKIN,
+            ABILITY_UNNERVE
         )
     },
     { // 0024
@@ -612,7 +641,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_LIMBER,
-            ABILITY_SHED_SKIN
+            ABILITY_SHED_SKIN,
+            ABILITY_UNNERVE
         )
     },
     { // 0026
@@ -782,7 +812,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0052
         SPECIES_MEOWTH,
         INNATES(
-            ABILITY_TECHNICIAN
+            ABILITY_TECHNICIAN,
+            ABILITY_UNNERVE
         )
     },
     { // 0052
@@ -796,20 +827,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MEOWTH_GALAR,
         INNATES(
             ABILITY_PICKUP,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_TOUGH_CLAWS,
+            ABILITY_UNNERVE
         )
     },
     { // 0052
         SPECIES_MEOWTH_GMAX,
         INNATES(
-            ABILITY_TECHNICIAN
+            ABILITY_TECHNICIAN,
+            ABILITY_UNNERVE
         )
     },
     { // 0053
         SPECIES_PERSIAN,
         INNATES(
             ABILITY_LIMBER,
-            ABILITY_TECHNICIAN
+            ABILITY_TECHNICIAN,
+            ABILITY_UNNERVE
         )
     },
     { // 0053
@@ -1649,7 +1683,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_AERODACTYL,
         INNATES(
             ABILITY_PRESSURE,
-            ABILITY_ROCK_HEAD
+            ABILITY_ROCK_HEAD,
+            ABILITY_UNNERVE
         )
     },
     { // 0142
@@ -1657,7 +1692,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_PRESSURE,
             ABILITY_ROCK_HEAD,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_TOUGH_CLAWS,
+            ABILITY_UNNERVE
         )
     },
     { // 0143
@@ -1729,19 +1765,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MEWTWO,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_UNNERVE
         )
     },
     { // 0150
         SPECIES_MEWTWO_MEGA_X,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_UNNERVE
         )
     },
     { // 0150
         SPECIES_MEWTWO_MEGA_Y,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_UNNERVE
         )
     },
     { // 0151
@@ -2582,7 +2621,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_URSARING,
         INNATES(
             ABILITY_GUTS,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_UNNERVE
         )
     },
     { // 0218
@@ -2670,19 +2710,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0228
         SPECIES_HOUNDOUR,
         INNATES(
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_UNNERVE
         )
     },
     { // 0229
         SPECIES_HOUNDOOM,
         INNATES(
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_UNNERVE
         )
     },
     { // 0229
         SPECIES_HOUNDOOM_MEGA,
         INNATES(
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_UNNERVE
         )
     },
     { // 0230
@@ -2804,6 +2847,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GUTS,
             ABILITY_SAND_VEIL
+        )
+    },
+    { // 0248
+        SPECIES_TYRANITAR,
+        INNATES(
+            ABILITY_UNNERVE
+        )
+    },
+    { // 0248
+        SPECIES_TYRANITAR_MEGA,
+        INNATES(
+            ABILITY_UNNERVE
         )
     },
     { // 0249
@@ -3082,7 +3137,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0284
         SPECIES_MASQUERAIN,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_UNNERVE
         )
     },
     { // 0285
@@ -4073,7 +4129,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0416
         SPECIES_VESPIQUEN,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_UNNERVE
         )
     },
     { // 0418
@@ -5458,14 +5515,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_JOLTIK,
         INNATES(
             ABILITY_COMPOUND_EYES,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_UNNERVE
         )
     },
     { // 0596
         SPECIES_GALVANTULA,
         INNATES(
             ABILITY_COMPOUND_EYES,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_UNNERVE
         )
     },
     { // 0597
@@ -5569,6 +5628,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
+        )
+    },
+    { // 0610
+        SPECIES_AXEW,
+        INNATES(
+            ABILITY_UNNERVE
+        )
+    },
+    { // 0611
+        SPECIES_FRAXURE,
+        INNATES(
+            ABILITY_UNNERVE
+        )
+    },
+    { // 0612
+        SPECIES_HAXORUS,
+        INNATES(
+            ABILITY_UNNERVE
         )
     },
     { // 0613
@@ -5935,6 +6012,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPOUND_EYES,
             ABILITY_SHIELD_DUST
+        )
+    },
+    { // 0667
+        SPECIES_LITLEO,
+        INNATES(
+            ABILITY_UNNERVE
+        )
+    },
+    { // 0668
+        SPECIES_PYROAR,
+        INNATES(
+            ABILITY_UNNERVE
         )
     },
     { // 0672
@@ -6690,6 +6779,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CUTE_CHARM
         )
     },
+    { // 0760
+        SPECIES_BEWEAR,
+        INNATES(
+            ABILITY_UNNERVE
+        )
+    },
     { // 0761
         SPECIES_BOUNSWEET,
         INNATES(
@@ -7037,26 +7132,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ROOKIDEE,
         INNATES(
             ABILITY_BIG_PECKS,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_UNNERVE
         )
     },
     { // 0822
         SPECIES_CORVISQUIRE,
         INNATES(
             ABILITY_BIG_PECKS,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_UNNERVE
         )
     },
     { // 0823
         SPECIES_CORVIKNIGHT,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_UNNERVE
         )
     },
     { // 0823
         SPECIES_CORVIKNIGHT_GMAX,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_UNNERVE
         )
     },
     { // 0824
@@ -7583,7 +7682,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0901
         SPECIES_URSALUNA,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_UNNERVE
         )
     },
     { // 0902
@@ -8143,6 +8243,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_POLTCHAGEIST,
         INNATES(
             ABILITY_HEATPROOF,
+            ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
         )
     },
@@ -8150,6 +8251,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_POLTCHAGEIST_ARTISAN,
         INNATES(
             ABILITY_HEATPROOF,
+            ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
         )
     },
@@ -8157,6 +8259,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SINISTCHA,
         INNATES(
             ABILITY_HEATPROOF,
+            ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
         )
     },
@@ -8164,6 +8267,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SINISTCHA_MASTERPIECE,
         INNATES(
             ABILITY_HEATPROOF,
+            ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
         )
     },
@@ -8533,13 +8637,21 @@ bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index,
 // opposing battler's Attack by 1 stage), the information-reveal trio Anticipation / Forewarn / Frisk
 // (each shows a switch-in message; Frisk/Forewarn reveal a foe's item/move, Anticipation warns of a
 // super-effective or OHKO move), Download (raises the holder's Attack or Sp. Atk toward the foe's weaker
-// defense) and Supersweet Syrup (lowers every opposing battler's evasiveness by 1 stage, once per battle).
-// The driver (TryActivateInnateSwitchInEffects) is re-entrant, so a
-// battler may carry more than one and each fires in turn. Each delegates to the existing upstream
-// ABILITYEFFECT_ON_SWITCHIN case, so the stat change / message / script / pop-up matches the real
-// ability for free (the effect site in src/battle_util.c forces the pop-up to the innate when the
-// chosen ability differs, the Speed Boost precedent).
-static bool32 IsActiveSwitchInInnate(enum Ability ability)
+// defense), Supersweet Syrup (lowers every opposing battler's evasiveness by 1 stage, once per battle),
+// Unnerve (denies opposing battlers their Berries) and Hospitality (heals the ally 1/4 max HP in doubles).
+// The driver (TryActivateInnateSwitchInEffects) is re-entrant, so a battler may carry more than one and
+// each fires in turn. Each delegates to the existing upstream switch-in case that runs the real ability,
+// so the stat change / message / heal / script / pop-up matches the real ability for free (the effect site
+// in src/battle_util.c forces the pop-up to the innate when the chosen ability differs, the Speed Boost
+// precedent).
+//
+// Most switch-in innates run through ABILITYEFFECT_ON_SWITCHIN, but Unnerve and Hospitality live in their
+// own upstream cases (ABILITYEFFECT_UNNERVE / ABILITYEFFECT_DEPENDS_ON_ALLY), dispatched at a different
+// point of the switch-in sequence. This maps each active switch-in innate to the ABILITYEFFECT_* that runs
+// it, so the driver — called once per native switch-in phase with that phase's abilityEffect — fires each
+// innate at the same point the real ability would. A non-switch-in innate returns ABILITYEFFECT_ENDTURN, a
+// value no switch-in phase ever passes, so it is skipped.
+static enum AbilityEffect SwitchInInnateAbilityEffect(enum Ability ability)
 {
     switch (ability)
     {
@@ -8549,39 +8661,49 @@ static bool32 IsActiveSwitchInInnate(enum Ability ability)
     case ABILITY_FRISK:            // reveals the foes' held items
     case ABILITY_DOWNLOAD:         // raises the holder's Attack or Sp. Atk vs the foe's weaker defense
     case ABILITY_SUPERSWEET_SYRUP: // lowers opposing battlers' evasiveness by 1 stage (once per battle)
-        return TRUE;
+        return ABILITYEFFECT_ON_SWITCHIN;
+    case ABILITY_UNNERVE:          // denies opposing battlers their Berries
+        return ABILITYEFFECT_UNNERVE;
+    case ABILITY_HOSPITALITY:      // heals the ally 1/4 max HP on switch-in (doubles only)
+        return ABILITYEFFECT_DEPENDS_ON_ALLY;
     default:
-        return FALSE;
+        return ABILITYEFFECT_ENDTURN; // not a switch-in innate — no switch-in phase passes this
     }
 }
 
 // FORK: switch-in innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
-// switch-in innates (today only Intimidate), hooked from the FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE
-// step of the switch-in loop (src/battle_switch_in.c) right after the chosen-ability switch-in block.
+// switch-in innates, hooked from three switch-in phases of the switch-in loop (src/battle_switch_in.c),
+// each right after its chosen-ability counterpart: the ABILITYEFFECT_ON_SWITCHIN block
+// (FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE, for Intimidate / Download / the reveal trio / Supersweet
+// Syrup), the ABILITYEFFECT_UNNERVE event (SWITCH_IN_EVENTS_UNNERVE_INNATE, for Unnerve), and the
+// ABILITYEFFECT_DEPENDS_ON_ALLY block (SECOND_EVENT_ABILITIES_INNATE, for Hospitality). `abilityEffect`
+// selects which phase this call handles; only innates whose native switch-in effect matches it fire here
+// (SwitchInInnateAbilityEffect), so each innate runs at the same point of the sequence the real ability
+// would.
 //
 // RE-ENTRANT, exactly like the end-turn / on-hit drivers: a battle script fires one at a time, so this
 // resumes from a per-battler cursor. *index is the next innate-list slot to consider; the switch-in loop
-// holds the FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE step (keeping the cursor) while this returns TRUE,
-// and only advances once it returns FALSE (list exhausted), then resets the cursor. Each fired effect
-// leaves *index past it, so a battler with several switch-in innates fires them across successive passes
-// of the loop. Returns TRUE if an effect fired this call.
+// holds the step (keeping the cursor) while this returns TRUE, and only advances once it returns FALSE
+// (list exhausted), then resets the cursor. Each fired effect leaves *index past it, so a battler with
+// several switch-in innates for one phase fires them across successive passes of the loop. Returns TRUE if
+// an effect fired this call.
 //
 // `shouldTrigger` mirrors the chosen-ability switch-in call's gate
 // (gBattleStruct->battlerState[battler].switchIn), so an innate switch-in effect only fires on a genuine
 // switch-in exactly like the real ability. The effect is delegated to the upstream switch-in ability
-// handler with the innate passed explicitly: AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler,
-// innate, MOVE_NONE, shouldTrigger) sets gLastUsedAbility = innate and runs that ability's existing case,
-// so the stat change / script / pop-up match the real ability. An innate equal to the chosen ability is
+// handler with the innate passed explicitly: AbilityBattleEffects(abilityEffect, battler, innate,
+// MOVE_NONE, shouldTrigger) sets gLastUsedAbility = innate and runs that ability's existing case, so the
+// stat change / heal / script / pop-up match the real ability. An innate equal to the chosen ability is
 // skipped so the chosen-ability switch-in block (which already ran it) never fires twice; IsInnateActive()
 // applies the usual suppression (feature flag, Gastro Acid, Neutralizing Gas, not-on-field).
-bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool32 shouldTrigger)
+bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool32 shouldTrigger, enum AbilityEffect abilityEffect)
 {
     enum Ability innate;
 
     while ((innate = GetSpeciesInnate(gBattleMons[battler].species, *index)) != ABILITY_NONE)
     {
         (*index)++; // step past this slot now, so a fired effect resumes at the next one
-        if (!IsActiveSwitchInInnate(innate))
+        if (SwitchInInnateAbilityEffect(innate) != abilityEffect) // not a switch-in innate for this phase
             continue;
         if (GetBattlerAbility(battler) == innate) // chosen-ability switch-in block already ran it
             continue;
@@ -8590,7 +8712,7 @@ bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool
         // The switch-in ability pop-up reads gBattlerAbility; pin it to the innate's owner so the pop-up
         // shows on the right battler (the chosen path never goes through this driver). End-turn precedent.
         gBattlerAbility = battler;
-        if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler, innate, MOVE_NONE, shouldTrigger))
+        if (AbilityBattleEffects(abilityEffect, battler, innate, MOVE_NONE, shouldTrigger))
             return TRUE;
     }
 

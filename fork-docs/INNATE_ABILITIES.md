@@ -344,8 +344,12 @@ How much is needed depends on the ability class:
     machine that drives *every normal switch-in* (battle intro, pivot moves, post-faint replacement,
     forced switch); the `switchinabilities` sites (ability-swap / Tera / form change) are deliberately
     NOT hooked, so a species-bound innate never re-fires when a foe Skill-Swaps or the holder
-    Mega-evolves. Adding a further switch-in active (Download, Unnerve, …) is a one-line addition to
-    `IsActiveSwitchInInnate`. See the `### ABILITY_INTIMIDATE` wiring block below.
+    Mega-evolves. Adding a further switch-in active that runs through `ABILITYEFFECT_ON_SWITCHIN`
+    (Download, …) is a one-line addition to `SwitchInInnateAbilityEffect` (the ability→effect map). An
+    active that runs through a *different* switch-in case at a *different* phase (Unnerve →
+    `ABILITYEFFECT_UNNERVE`, Hospitality → `ABILITYEFFECT_DEPENDS_ON_ALLY`) also adds a new hook at that
+    phase passing its `abilityEffect` to the driver. See the `### ABILITY_INTIMIDATE` and
+    `### ABILITY_UNNERVE / ABILITY_HOSPITALITY` wiring blocks below.
 
 ### Step 3.5 — free the frontier roster slots (NOT optional — run the grep first)
 
@@ -2515,3 +2519,68 @@ dropped as redundant. **Step 3.5**: the Porygon2 Download frontier set is freed 
 Genesect sets keep their now-redundant chosen Download (still correct: the chosen runs it, the innate is
 redundant-but-skipped) — **deferred** like Batch J/T/K and the Intimidate sub-group. Supersweet Syrup has no other
 frontier set to free (Dipplin is off-roster; Hydrapple already runs a fork-owned chosen Grassy Surge override).
+
+### ABILITY_UNNERVE / ABILITY_HOSPITALITY
+
+**Batch L's fourth/final sub-group** — two **switch-in effects**, each a **1:1 clean-upside copy** (foe Berry
+denial / ally heal, never a downside). On switch-in **Unnerve** denies every opposing battler its Berries (shows
+the "too nervous to eat Berries" message) and **Hospitality** restores **1/4 of the ally's max HP** in a double
+battle.
+
+**Driver + hook — the generalization these two forced.** Every earlier Batch L member runs through the upstream
+`ABILITYEFFECT_ON_SWITCHIN` case, so the driver `TryActivateInnateSwitchInEffects` delegated to *that* case only.
+Unnerve and Hospitality do **not**: their effects live in the separate upstream cases `ABILITYEFFECT_UNNERVE` and
+`ABILITYEFFECT_DEPENDS_ON_ALLY`, which upstream dispatches at **different points of the switch-in sequence** (the
+`SWITCH_IN_EVENTS_UNNERVE` event and the `SECOND_EVENT_ABILITIES` step, respectively — not the
+`FIRST_EVENT_BLOCK_GENERAL_ABILITIES` block the on-switch-in innates hook). So the driver gained an
+`abilityEffect` parameter selecting which switch-in phase a call handles, and a new
+`SwitchInInnateAbilityEffect(ability)` maps each switch-in innate to the `ABILITYEFFECT_*` that runs it
+(`src/fork/innate_abilities.c`). Each of the **three** phases now hooks the driver right after its chosen-ability
+counterpart, passing that phase's effect: the existing `FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE`
+(`ABILITYEFFECT_ON_SWITCHIN`), a new **`SWITCH_IN_EVENTS_UNNERVE_INNATE`** top-level event
+(`ABILITYEFFECT_UNNERVE`, mirroring the chosen-ability Unnerve pass), and a new **`SECOND_EVENT_ABILITIES_INNATE`**
+step (`ABILITYEFFECT_DEPENDS_ON_ALLY`) — both added to `include/constants/battle_switch_in.h` and dispatched in
+`src/battle_switch_in.c`. Each battler carries at most one Unnerve / Hospitality innate, so the two new hooks fire
+once per battler and always advance (like their upstream counterparts) rather than needing the re-entrant cursor
+the on-switch-in block uses for multi-innate mons. The driver still skips an innate equal to the chosen ability
+(so a chosen-Unnerve mon denies Berries once, not twice) and honors `IsInnateActive()` suppression.
+
+**Functional site vs. the switch-in message (Unnerve).** Unnerve's Berry block is **not** driven by the switch-in
+message — the message (and the `unnerveActivated` volatile it sets) is cosmetic. The actual gate is the passive
+`IsUnnerveAbilityOnOpposingSide` (`src/battle_util.c`, read from `IsUnnerveBlocked` at every Berry-eat site), which
+scanned only `GetBattlerAbility`. It is made **innate-aware** with a `BattlerHasAbility(battlerDef, ABILITY_UNNERVE)`
+check, so an innate Unnerve denies the opposing side its Berries exactly like the real ability; the switch-in driver
+adds only the matching message + pop-up for parity. Hospitality's heal, by contrast, lives entirely in its
+`ABILITYEFFECT_DEPENDS_ON_ALLY` case, so the driver alone carries it.
+
+**Pop-up / identity.** Both switch-in scripts (`BattleScript_SwitchInAbilityMsg` for Unnerve,
+`BattleScript_HospitalityActivates` for Hospitality) call `BattleScript_AbilityPopUp`, which reads the primary slot,
+so each effect site (`src/battle_util.c`) forces `gBattleScripting.abilityPopupOverwrite = gLastUsedAbility` (the
+innate being processed) only when the chosen ability differs (the Speed Boost / Intimidate precedent); the driver
+pins `gBattlerAbility = battler` so the pop-up targets the holder. `recordability` still records the **chosen**
+ability, so identity stays deterministic.
+
+**Suppression parity** holds via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas, not-on-field);
+neither is `breakable`, so Mold Breaker never touches them.
+
+**AI.** Unnerve has one **dedicated** effect read — `GetSwitchinSingleUseItemHealing` (`src/battle_ai_switch.c`),
+which discounts a Berry the AI would rely on when the opposing battler has Unnerve — made innate-aware with
+`IsInnateActive(opposingBattler, ABILITY_UNNERVE)` beside the chosen-ability read (the passive
+`IsUnnerveAbilityOnOpposingSide` block already covers the AI's shared damage/berry calcs for free). Hospitality
+changes no stat or state the AI's switch-in simulation reasons about (`SetBattlerStatStagesForSwitchin` handles
+stat stages, not the ally-heal), so it needs no AI wiring.
+
+**Species (canon-only, no flavor picks).** **Unnerve** → every canon user in **any** real slot, keyed exactly per
+form (merged into an existing innate row where present): the Ekans / Meowth (+ Galar / Gmax) / Persian / Aerodactyl
+(+ Mega) / Mewtwo (+ Mega X/Y) / Ursaring / Ursaluna / Houndour / Houndoom (+ Mega) / Tyranitar (+ Mega) / Masquerain
+/ Vespiquen / Joltik / Galvantula / Axew / Fraxure / Haxorus / Litleo / Pyroar / Bewear / Rookidee / Corvisquire /
+Corviknight (+ Gmax) lines, plus base creatures' **Megas as pure-boon mirrors** (Aerodactyl / Mewtwo X-Y / Houndoom /
+Tyranitar Megas keep base Unnerve though their Mega ability differs). **Sole-Unnerve Calyrex is OMITTED as
+redundant** (not a frontier set; its sole chosen ability already grants it — the Mega Lopunny / Scrappy precedent).
+**Hospitality** → the Poltchageist / Sinistcha line (all four forms — Counterfeit / Artisan / Unremarkable /
+Masterpiece — merged onto their existing Heatproof / Levitate rows). **Step 3.5**: Sinistcha's Hospitality frontier
+set is freed to its complementary chosen **Flash Fire** override (the sibling Sinistcha set already runs it — both
+its real abilities, Hospitality and Heatproof, are now innate); the ~14 frontier sets that hardcoded chosen Unnerve
+now carry it innately, so they keep their now-redundant chosen Unnerve (still correct: the chosen runs it, the
+innate is redundant-but-skipped) — the complementary-slot freeing **deferred** like Batch J/T/K and the earlier
+Batch L sub-groups.

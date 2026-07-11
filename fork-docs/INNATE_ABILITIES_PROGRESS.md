@@ -133,7 +133,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Pickpocket | When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item. |
 | :x: | Sheer Force | The Pokémon's moves lose their additional effects, but the power of those moves will be boosted by 30%. |
 | :x: | Contrary | Reverses any stat changes affecting the Pokémon so that attempts to boost its stats instead lower them—and attempts to lower its stats will boost them. |
-| :white_large_square: | Unnerve | Makes opponents unable to eat Berries. |
+| :white_check_mark: | Unnerve | Makes opponents unable to eat Berries. |
 | :white_large_square: | Defiant | When the Pokémon has any of its stats lowered by an opponent, its Attack stat is boosted by 2 stages. |
 | :x: | Defeatist | Halves the Pokémon's Attack and Sp. Atk stats when its HP drops to half or less. |
 | :white_check_mark: | Cursed Body | When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns. |
@@ -305,7 +305,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :x: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :x: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
-| :white_large_square: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |
+| :white_check_mark: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |
 | :x: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Teal Mask to shine and the Pokémon's Speed stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Hearthflame Mask to shine and the Pokémon's Attack stat to be boosted. |
