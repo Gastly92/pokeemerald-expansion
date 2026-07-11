@@ -5103,6 +5103,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_UNNERVE, ABILITY_HOSPITALITY,
         ABILITY_DEFIANT, ABILITY_COMPETITIVE,
         ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION, ABILITY_ANGER_POINT,
+        ABILITY_RATTLED, ABILITY_STEADFAST,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -7633,5 +7634,150 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate J
         NONE_OF { ABILITY_POPUP(opponent, ABILITY_JUSTIFIED); }
     } THEN {
         EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// ─── Innate fear-response Speed boosts (Batch M: Rattled / Steadfast) ───────────────────────────────
+//
+// Both raise the holder's Speed +1 when it is frightened. Rattled has TWO triggers, spanning the two
+// Batch M sites already opened: a Dark/Ghost/Bug hit (reuses the on-hit driver, like Justified) and a
+// foe's Intimidate (credited at BS_TryDefiantRattled beside Defiant/Competitive, Gen8+ only). Steadfast
+// reacts to flinching (made innate-aware at the CancelerFlinch site). Both are 1:1 clean-upside copies;
+// the pop-up shows the innate, not the (different) chosen ability.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rattled raises Speed when hit by a Dark move")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAGIKARP, ABILITY_RATTLED));
+        ASSUME(GetMoveType(MOVE_BITE) == TYPE_DARK);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MAGIKARP) { Ability(ABILITY_SWIFT_SWIM); } // chosen ability is NOT Rattled
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_BITE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_BITE); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_RATTLED); // pop-up shows the innate, not the chosen Swift Swim
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_RATTLED); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1);
+        else
+            EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rattled reacts to a foe's Intimidate (Gen8+)")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MEOWTH_ALOLA, ABILITY_RATTLED));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_UPDATED_INTIMIDATE, GEN_8);
+        PLAYER(SPECIES_MEOWTH_ALOLA) { Ability(ABILITY_TECHNICIAN); } // chosen Technician; Rattled only as innate
+        OPPONENT(SPECIES_ARCANINE) { Ability(ABILITY_INTIMIDATE); }
+    } WHEN {
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_INTIMIDATE);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Intimidate lowers Attack
+        ABILITY_POPUP(player, ABILITY_RATTLED);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // Rattled raises Speed
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1);
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Rattled exactly like a real ability, so the on-hit
+// driver skips it and no boost fires.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Rattled")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAGIKARP, ABILITY_RATTLED));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_GASTRO_ACID, MOVE_BITE); }
+        OPPONENT(SPECIES_MAGIKARP) { Ability(ABILITY_SWIFT_SWIM); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); }
+        TURN { MOVE(player, MOVE_BITE); }
+    } SCENE {
+        MESSAGE("The opposing Magikarp's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_RATTLED); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_SPEED], DEFAULT_STAT_STAGE);
+    }
+}
+
+// AI innate-awareness: the Intimidate-cycling switch heuristic (ShouldSwitchIfIntimidateBenefit,
+// src/battle_ai_switch.c) is a DEDICATED read, so it was wired for Rattled the same way as Defiant. Under
+// Gen8+ a foe's Rattled turns our Intimidate into a +1 Speed for it, so the AI won't cycle its Intimidator
+// out to re-fire it. Braviary-style test, but the foe carries Rattled only as an innate (chosen Swift Swim).
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI won't cycle Intimidate into an innate-Rattled foe (Gen8+)")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MAGIKARP, ABILITY_RATTLED));
+        ASSUME(gSpeciesInfo[SPECIES_MAGIKARP].abilities[0] != ABILITY_RATTLED);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_UPDATED_INTIMIDATE, GEN_8);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_SMART_SWITCHING);
+        PLAYER(SPECIES_MAGIKARP) { Ability(ABILITY_SWIFT_SWIM); Moves(MOVE_SPLASH); } // innate-only Rattled
+        OPPONENT(SPECIES_ARCANINE) { Ability(ABILITY_INTIMIDATE); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_ZIGZAGOON) { Moves(MOVE_TACKLE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SPLASH); EXPECT_MOVE(opponent, MOVE_TACKLE); } // sees innate Rattled -> stays in
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Steadfast raises Speed when the holder flinches")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MACHAMP, ABILITY_STEADFAST));
+        ASSUME(gSpeciesInfo[SPECIES_MACHAMP].abilities[0] != ABILITY_STEADFAST);
+        ASSUME(MoveHasAdditionalEffect(MOVE_FAKE_OUT, MOVE_EFFECT_FLINCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MACHAMP) { Ability(ABILITY_GUTS); Speed(50); Moves(MOVE_TACKLE); } // chosen ability is NOT Steadfast
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_FAKE_OUT); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FAKE_OUT); MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_STEADFAST); // pop-up shows the innate, not the chosen Guts
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_STEADFAST); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1);
+        else
+            EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Contradiction omission: Steadfast is deliberately NOT given to the Riolu/Lucario line, whose innate Inner
+// Focus prevents flinching outright — so an innate Steadfast could never fire (the Own-Tempo-vs-Tangled-Feet
+// class of conflict). Inner Focus (never flinch) is the stronger, already-wired boon, so Steadfast is dropped.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Steadfast is dropped on the Lucario line (innate Inner Focus wins)")
+{
+    GIVEN {
+        ASSUME(!SpeciesHasInnate(SPECIES_LUCARIO, ABILITY_STEADFAST));
+        ASSUME(!SpeciesHasInnate(SPECIES_RIOLU, ABILITY_STEADFAST));
+        ASSUME(SpeciesHasInnate(SPECIES_LUCARIO, ABILITY_INNER_FOCUS));
+        ASSUME(MoveHasAdditionalEffect(MOVE_FAKE_OUT, MOVE_EFFECT_FLINCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_LUCARIO) { Ability(ABILITY_JUSTIFIED); Speed(50); Moves(MOVE_TACKLE); } // innate Inner Focus
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_FAKE_OUT); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FAKE_OUT); MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_STEADFAST); } // never flinches -> Steadfast can't fire
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player); // Inner Focus: not flinched, Tackle executes
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE); // no Steadfast boost
     }
 }

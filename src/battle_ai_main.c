@@ -1347,6 +1347,12 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
          && abilityDef != ABILITY_JUSTIFIED && IsInnateActive(battlerDef, ABILITY_JUSTIFIED))
             RETURN_SCORE_MINUS(10);
 
+        // FORK: innate Rattled (FEATURE_INNATE_ABILITIES) — a Dark/Ghost/Bug damaging move raises an
+        // innate-only Rattled foe's Speed just like the chosen-ability case below, so penalize it here too.
+        if (!IsBattleMoveStatus(move) && (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG)
+         && abilityDef != ABILITY_RATTLED && IsInnateActive(battlerDef, ABILITY_RATTLED))
+            RETURN_SCORE_MINUS(10);
+
         switch (abilityDef)
         {
         case ABILITY_MAGIC_GUARD:
@@ -3402,6 +3408,13 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
                   && scoringPartnerAbility != ABILITY_ANGER_POINT
                   && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_ANGER_POINT))
                 scoringPartnerAbility = ABILITY_ANGER_POINT;
+            // FORK: promote an innate Rattled the same way (FEATURE_INNATE_ABILITIES), so the on-hit-boost
+            // partner-fire scoring below treats the ally's innate like the real ability — the AI values
+            // hitting an innate-only holder with a Dark/Ghost/Bug move to trigger its Speed boost.
+            else if ((moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG)
+                  && scoringPartnerAbility != ABILITY_RATTLED
+                  && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_RATTLED))
+                scoringPartnerAbility = ABILITY_RATTLED;
             switch (scoringPartnerAbility)
             {
             case ABILITY_ANGER_POINT:
@@ -3616,7 +3629,7 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             case ABILITY_RATTLED:
                 if (!IsBattleMoveStatus(move) && isFriendlyFireOK
                     && (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG)
-                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, atkPartnerAbility))
+                    && ShouldTriggerAbility(battlerAtk, battlerAtkPartner, scoringPartnerAbility)) // FORK: innate-aware (promoted above)
                 {
                     if (moveTarget == TARGET_FOES_AND_ALLY)
                     {

@@ -86,7 +86,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Tangled Feet | Doubles the Pokémon's evasiveness if it is confused. |
 | :x: | Motor Drive | Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage. |
 | :x: | Rivalry | Boosts the power of the Pokémon's moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender. The power remains the same as usual if either Pokémon's gender is unknown. |
-| :white_large_square: | Steadfast | When the Pokémon flinches, its Speed stat is boosted by 1 stage. |
+| :white_check_mark: | Steadfast | When the Pokémon flinches, its Speed stat is boosted by 1 stage. |
 | :white_check_mark: | Snow Cloak | Boosts the Pokémon's evasiveness by 25% in snow. |
 | :white_check_mark: | Gluttony | If the Pokémon is holding a Berry to be eaten when its HP drops to 1/4 or less of its max, it will instead eat the Berry when its HP drops to 1/2 or less of its max. |
 | :white_check_mark: | Anger Point | Boosts the Pokémon's Attack stat to its sixth stage when the Pokémon takes a critical hit. |
@@ -161,7 +161,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Mummy | When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy. |
 | :white_large_square: | Moxie | When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage. |
 | :white_check_mark: | Justified | When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage. |
-| :white_large_square: | Rattled | The Pokémon gets scared when hit by a Dark-, Ghost-, or Bug-type attack or if intimidated, which boosts its Speed stat. |
+| :white_check_mark: | Rattled | The Pokémon gets scared when hit by a Dark-, Ghost-, or Bug-type attack or if intimidated, which boosts its Speed stat. |
 | :white_large_square: | Magic Bounce | Instead of being affected by other Pokémon's status moves, the Pokémon bounces them back at the user. |
 | :x: | Sap Sipper | Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage. |
 | :white_check_mark: | Prankster | Increases the priority of the Pokémon's status moves by 1 stage. |
