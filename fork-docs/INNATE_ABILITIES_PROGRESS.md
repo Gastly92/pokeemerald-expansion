@@ -146,7 +146,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Toxic Boost | Powers up physical moves when the Pokémon is poisoned. |
 | :white_check_mark: | Flare Boost | Powers up special moves when the Pokémon is burned. |
 | :white_check_mark: | Harvest | If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. In harsh sunlight, the Pokémon will definitely create a Berry. |
-| :white_large_square: | Telepathy | The Pokémon dodges attacks from its allies. |
+| :white_check_mark: | Telepathy | The Pokémon dodges attacks from its allies. |
 | :x: | Moody | At the end of every turn, one of the Pokémon's stats will be boosted by 2 stages, but another will be lowered by 1 stage. |
 | :white_check_mark: | Overcoat | The Pokémon takes no damage from sandstorms and is immune to moves and Abilities involving powder. |
 | :x: | Poison Touch | When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned. |
@@ -171,8 +171,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Victory Star | Boosts the accuracy of the Pokémon and its allies. |
 | :x: | Turboblaze | The Pokémon's moves are unimpeded by the Ability of the target. |
 | :x: | Teravolt | The Pokémon's moves are unimpeded by the Ability of the target. |
-| :white_large_square: | Aroma Veil | The Pokémon and its allies cannot gain the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, or Encore statuses. |
-| :white_large_square: | Flower Veil | Grass-type allies are immune to status conditions and cannot have their stats lowered. |
+| :white_check_mark: | Aroma Veil | The Pokémon and its allies cannot gain the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, or Encore statuses. |
+| :white_check_mark: | Flower Veil | Grass-type allies are immune to status conditions and cannot have their stats lowered. |
 | :white_check_mark: | Cheek Pouch | The Pokémon has 1/3 of its max HP restored when it eats a Berry, in addition to the Berry's usual effect. |
 | :x: | Protean | Changes the Pokémon's type to the type of the move it's about to use. This works only once per time the Pokémon enters battle. |
 | :white_check_mark: | Fur Coat | Halves the damage the Pokémon takes from physical moves. |
@@ -223,7 +223,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Queenly Majesty | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :white_check_mark: | Innards Out | When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker. |
 | :white_large_square: | Dancer | Whenever a dance move is used in battle, the Pokémon will copy the user to immediately perform that dance move itself. |
-| :white_large_square: | Battery | Powers up ally Pokémon's special moves. |
+| :white_check_mark: | Battery | Powers up ally Pokémon's special moves. |
 | :x: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |
 | :white_check_mark: | Dazzling | The Pokémon dazzles its opponents, making them unable to use priority moves against the Pokémon or its allies. |
 | :white_check_mark: | Soul-Heart | Boosts the Pokémon's Sp. Atk stat every time another Pokémon faints. |
@@ -255,7 +255,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Ice Scales | The Pokémon is protected by ice scales, which halve the damage taken from special moves. |
 | :white_check_mark: | Ripen | Doubles the effects of Berries eaten by the Pokémon. |
 | :x: | Ice Face | The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it snows. |
-| :white_large_square: | Power Spot | Just being next to the Pokémon powers up moves. |
+| :white_check_mark: | Power Spot | Just being next to the Pokémon powers up moves. |
 | :x: | Mimicry | The Pokémon's type changes depending on the terrain. |
 | :x: | Screen Cleaner | When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses. |
 | :white_check_mark: | Steely Spirit | Powers up the Steel-type moves of the Pokémon and its allies. |

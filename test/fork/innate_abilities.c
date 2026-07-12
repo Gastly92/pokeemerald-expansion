@@ -5105,6 +5105,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION, ABILITY_ANGER_POINT,
         ABILITY_RATTLED, ABILITY_STEADFAST,
         ABILITY_MOXIE, ABILITY_BERSERK, ABILITY_SOUL_HEART,
+        ABILITY_BATTERY, ABILITY_POWER_SPOT, ABILITY_TELEPATHY, ABILITY_AROMA_VEIL, ABILITY_FLOWER_VEIL,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -7881,5 +7882,218 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate B
         NONE_OF { ABILITY_POPUP(opponent, ABILITY_BERSERK); } // suppressed -> no reaction
     } THEN {
         EXPECT_EQ(opponent->statStages[STAT_SPATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// Batch U — ally-support: Battery / Power Spot / Telepathy / Aroma Veil / Flower Veil
+// ───────────────────────────────────────────────────────────────────────────
+
+// Battery: an innate Battery on the partner boosts the attacker's SPECIAL moves x1.3. Charjabug is sole
+// Battery, so a forced chosen Sturdy isolates the innate; with the feature off there is no boost.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Battery boosts an ally's special move", s16 damage)
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CHARJABUG, ABILITY_BATTERY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_CHARJABUG) { Ability(ABILITY_STURDY); } // chosen Sturdy; Battery only via the innate
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_WATER_GUN); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerRight, MOVE_WATER_GUN, target: opponentLeft); }
+    } SCENE {
+        HP_BAR(opponentLeft, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.3), results[1].damage); // off: base; on: +30%
+    }
+}
+
+// Battery does NOT boost physical moves — an innate Battery leaves the ally's Tackle untouched.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Battery leaves an ally's physical move unboosted", s16 damage)
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_CHARJABUG) { Ability(ABILITY_STURDY); }
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerRight, MOVE_TACKLE, target: opponentLeft); }
+    } SCENE {
+        HP_BAR(opponentLeft, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_EQ(results[0].damage, results[1].damage); // Battery is special-only -> no change
+    }
+}
+
+// Power Spot: an innate Power Spot on the partner boosts ALL the attacker's moves x1.3 (here a physical
+// Tackle). Stonjourner is sole Power Spot, so a forced chosen Sturdy isolates the innate.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Power Spot boosts an ally's move", s16 damage)
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_STONJOURNER, ABILITY_POWER_SPOT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_STONJOURNER) { Ability(ABILITY_STURDY); } // chosen Sturdy; Power Spot only via the innate
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerRight, MOVE_TACKLE, target: opponentLeft); }
+    } SCENE {
+        HP_BAR(opponentLeft, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.3), results[1].damage); // off: base; on: +30%
+    }
+}
+
+// Telepathy: an innate Telepathy holder takes no damage from its own ally's spread move. Elgyem carries
+// Telepathy plus other real slots, so a chosen Synchronize keeps Telepathy on the innate only.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Telepathy dodges an ally's spread move")
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ELGYEM, ABILITY_TELEPATHY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_ELGYEM) { Ability(ABILITY_SYNCHRONIZE); } // chosen Synchronize; Telepathy via the innate
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_EARTHQUAKE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerRight, MOVE_EARTHQUAKE); }
+    } THEN {
+        if (feature)
+            EXPECT_EQ(playerLeft->hp, playerLeft->maxHP); // Telepathy dodged the ally Earthquake
+        else
+            EXPECT_LT(playerLeft->hp, playerLeft->maxHP); // no innate -> took the ally Earthquake
+    }
+}
+
+// Aroma Veil (script jumpifability path): an innate Aroma Veil shields the whole side from Taunt. This
+// exercises the central Cmd_jumpifability side-case fallback. Spritzee is Healer/Aroma Veil, so a chosen
+// Healer carries Aroma Veil on the innate only; the pop-up must name Aroma Veil, not the chosen ability.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Aroma Veil shields the side from Taunt")
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SPRITZEE, ABILITY_AROMA_VEIL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_SPRITZEE) { Ability(ABILITY_HEALER); } // chosen Healer; Aroma Veil via the innate
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TAUNT); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_TAUNT, target: playerRight); }
+    } SCENE {
+        if (feature)
+            ABILITY_POPUP(playerLeft, ABILITY_AROMA_VEIL); // Spritzee's innate shields its partner
+    } THEN {
+        if (feature)
+            EXPECT(playerRight->volatiles.tauntTimer == 0); // partner not taunted
+        else
+            EXPECT(playerRight->volatiles.tauntTimer != 0); // taunted
+    }
+}
+
+// Aroma Veil (C-guard path): an innate Aroma Veil also blocks Attract (Cmd_tryinfatuating / BS_TrySetInfatuation).
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Aroma Veil shields the side from Attract")
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_SPRITZEE) { Ability(ABILITY_HEALER); } // innate Aroma Veil
+        PLAYER(SPECIES_NIDORAN_F) { Gender(MON_FEMALE); }
+        OPPONENT(SPECIES_NIDORAN_M) { Gender(MON_MALE); Moves(MOVE_ATTRACT); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_ATTRACT, target: playerRight); }
+    } THEN {
+        if (feature)
+            EXPECT(playerRight->volatiles.infatuation == 0); // Aroma Veil blocked it for the partner
+        else
+            EXPECT(playerRight->volatiles.infatuation != 0); // infatuated
+    }
+}
+
+// Flower Veil: an innate Flower Veil shields a Grass ally from non-volatile status. Florges is Fairy, so it
+// protects its Grass partner (not itself). Chosen Symbiosis carries Flower Veil on the innate only.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Flower Veil shields a Grass ally from status")
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FLORGES, ABILITY_FLOWER_VEIL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_FLORGES) { Ability(ABILITY_SYMBIOSIS); } // chosen Symbiosis; Flower Veil via the innate
+        PLAYER(SPECIES_TANGELA); // Grass ally
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GLARE); } // non-powder status (Grass is immune to powder moves)
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_GLARE, target: playerRight); }
+    } SCENE {
+        if (feature)
+            ABILITY_POPUP(playerLeft, ABILITY_FLOWER_VEIL); // Florges shields its Grass partner
+    } THEN {
+        if (feature)
+            EXPECT_EQ(playerRight->status1 & STATUS1_PARALYSIS, 0); // ally not paralyzed
+        else
+            EXPECT_NE(playerRight->status1 & STATUS1_PARALYSIS, 0); // paralyzed
+    }
+}
+
+// Flower Veil also blocks stat drops on a Grass ally (single-target Confide -> Sp. Atk).
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Flower Veil shields a Grass ally from stat drops")
+{
+    u32 feature;
+    PARAMETRIZE { feature = FALSE; }
+    PARAMETRIZE { feature = TRUE; }
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, feature);
+        PLAYER(SPECIES_FLORGES) { Ability(ABILITY_SYMBIOSIS); } // innate Flower Veil
+        PLAYER(SPECIES_TANGELA); // Grass ally
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CONFIDE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_CONFIDE, target: playerRight); }
+    } THEN {
+        if (feature)
+            EXPECT_EQ(playerRight->statStages[STAT_SPATK], DEFAULT_STAT_STAGE); // drop blocked
+        else
+            EXPECT_LT(playerRight->statStages[STAT_SPATK], DEFAULT_STAT_STAGE); // lowered
+    }
+}
+
+// Suppression parity: Gastro Acid nullifies an innate Aroma Veil, so Taunt then lands on the partner.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Aroma Veil")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SPRITZEE) { Ability(ABILITY_HEALER); } // innate Aroma Veil
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_TAUNT); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_GASTRO_ACID, target: playerLeft); }
+        TURN { MOVE(opponentLeft, MOVE_TAUNT, target: playerRight); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(playerLeft, ABILITY_AROMA_VEIL); } // suppressed -> no shield
+    } THEN {
+        EXPECT(playerRight->volatiles.tauntTimer != 0); // partner taunted
     }
 }

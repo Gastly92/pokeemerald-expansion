@@ -305,6 +305,16 @@
 // correct (the chosen runs it; the innate is redundant-but-skipped). (Supersweet Syrup has no other frontier set to
 // free — Dipplin is not on the roster, and Hydrapple already runs a fork-owned chosen Grassy Surge override.)
 //
+// The ally-support abilities (Batch U — Battery / Power Spot boost an ally's moves, Telepathy dodges an ally's move,
+// Aroma Veil / Flower Veil shield the side from mental status / stat drops) free six sets. Four take a complementary
+// REAL slot with a stable :x: pick: Musharna and Rabsca (Telepathy now innate) -> chosen Synchronize; Oranguru and
+// Florges (Telepathy / Flower Veil now innate) -> chosen Symbiosis. Stonjourner (sole Power Spot, doubles-only, now
+// innate) is the one fork-owned override here: like Ogerpon-Cornerstone it fills its empty slot 1 with a chosen Solid
+// Rock (an already-implemented :white_check_mark: innate, stable) so its singles sets aren't stuck on a doubles-only
+// ability. DEFERRED (tracked follow-up, like Batch J/T/K/L): the seven Dialga / Palkia / Giratina / Orbeetle / Aromatisse
+// sets whose real abilities are ALL now innate keep their now-redundant chosen ability — still correct (the chosen runs
+// it; the innate is redundant-but-skipped there) — rather than a game-wide override sweep.
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
@@ -13009,7 +13019,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_HELPING_HAND
         },
-        .ability = ABILITY_TELEPATHY,
+        .ability = ABILITY_SYNCHRONIZE, // Telepathy now innate; chosen Synchronize (:x:, never an innate -> stable) shares status back
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16294,7 +16304,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SYNTHESIS,
             MOVE_AROMATHERAPY
         },
-        .ability = ABILITY_FLOWER_VEIL,
+        .ability = ABILITY_SYMBIOSIS, // Flower Veil now innate; chosen Symbiosis (:x:, never an innate -> stable) passes its item to the ally
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18758,7 +18768,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_TELEPATHY,
+        .ability = ABILITY_SYMBIOSIS, // Telepathy now innate; chosen Symbiosis (:x:, never an innate -> stable) passes its item to the ally
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21730,7 +21740,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_HEAVY_SLAM
         },
-        .ability = ABILITY_POWER_SPOT,
+        .ability = ABILITY_SOLID_ROCK, // Power Spot (doubles-only) now innate; chosen Solid Rock (fork override, species_ability_overrides.c) blunts its many weaknesses
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23825,7 +23835,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_TELEPATHY,
+        .ability = ABILITY_SYNCHRONIZE, // Telepathy now innate; chosen Synchronize (:x:, never an innate -> stable) shares status back
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,

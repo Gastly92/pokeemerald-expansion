@@ -3013,7 +3013,8 @@ static bool32 TryCuteCharmInfatuate(enum Move move)
      && !IsAbilityAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_OBLIVIOUS)
      && !IsInnateActive(gBattlerAttacker, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker also resists Cute Charm
      && !CanBattlerAvoidContactEffects(gBattlerAttacker, gBattlerTarget, GetBattlerAbility(gBattlerAttacker), GetBattlerHoldEffect(gBattlerAttacker), move)
-     && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL))
+     && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL)
+     && !IsInnateOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL)) // FORK: innate Aroma Veil on the attacker's side also blocks Cute Charm infatuation (Batch U)
     {
         gBattleMons[gBattlerAttacker].volatiles.infatuation = INFATUATED_WITH(gBattlerTarget);
         if (GetConfig(DETERMINISTIC_STATUS)) // FORK: fixed-duration infatuation
@@ -4162,6 +4163,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && IsBattlerAlive(gBattlerAttacker)
              && !gSpecialStatuses[gBattlerAttacker].attackerInParty
              && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL)
+             && !IsInnateOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL) // FORK: innate Aroma Veil on the attacker's side also blocks Cursed Body disable (Batch U)
              && gChosenMove != MOVE_STRUGGLE
              && (GetConfig(DETERMINISTIC_ABILITIES) || RandomPercentage(RNG_CURSED_BODY, 30))) // FORK: Cursed Body always disables
             {
@@ -5987,6 +5989,11 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
     {
         abilityAffected = TRUE;
         battlerDef = sideBattler - 1;
+        // FORK: IsFlowerVeilProtected is innate-aware; when an innate Flower Veil (the protector's chosen
+        // ability differs) blocks the status, overwrite the pop-up so it shows Flower Veil, not the chosen
+        // ability (CreateAbilityPopUp reads the primary slot). The real Flower Veil path is left untouched.
+        if (option == RUN_SCRIPT && GetBattlerAbility(battlerDef) != ABILITY_FLOWER_VEIL)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_FLOWER_VEIL;
         abilityDef = ABILITY_FLOWER_VEIL;
         battleScript = BattleScript_FlowerVeilProtects;
     }
@@ -7279,7 +7286,9 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
     // attacker partner's abilities
     if (IsBattlerAlive(BATTLE_PARTNER(battlerAtk)))
     {
-        switch (GetBattlerAbility(BATTLE_PARTNER(battlerAtk)))
+        enum BattlerId partner = BATTLE_PARTNER(battlerAtk);
+        enum Ability partnerAbility = GetBattlerAbility(partner); // cache — used by the switch AND the innate block
+        switch (partnerAbility)
         {
         case ABILITY_BATTERY:
             if (IsBattleMoveSpecial(move))
@@ -7295,14 +7304,23 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         default:
             break;
         }
-        // FORK: an innate Steely Spirit on the partner boosts the attacker's Steel moves like the real
-        // ability (Batch A, FEATURE_INNATE_ABILITIES). Guard against the chosen-ability case the switch
-        // above already handled so it never double-applies. moveType gate is checked first so the
-        // IsInnateActive call only runs for Steel moves.
-        if (moveType == TYPE_STEEL
-         && GetBattlerAbility(BATTLE_PARTNER(battlerAtk)) != ABILITY_STEELY_SPIRIT
-         && IsInnateActive(BATTLE_PARTNER(battlerAtk), ABILITY_STEELY_SPIRIT))
-            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        // FORK: innate Steely Spirit (Batch A) / Battery / Power Spot (Batch U) on the partner boost the
+        // attacker's moves like the real ability (FEATURE_INNATE_ABILITIES). The whole block is gated on the
+        // feature flag once so this AI-hot damage calc pays nothing when innates are off, and each clause
+        // guards against the chosen-ability case the switch above already handled so it never double-applies.
+        // Battery is special-only; Steely Spirit is Steel-only.
+        if (GetConfig(FEATURE_INNATE_ABILITIES))
+        {
+            if (moveType == TYPE_STEEL && partnerAbility != ABILITY_STEELY_SPIRIT
+             && IsInnateActive(partner, ABILITY_STEELY_SPIRIT))
+                modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+            if (IsBattleMoveSpecial(move) && partnerAbility != ABILITY_BATTERY
+             && IsInnateActive(partner, ABILITY_BATTERY))
+                modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+            if (partnerAbility != ABILITY_POWER_SPOT
+             && IsInnateActive(partner, ABILITY_POWER_SPOT))
+                modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        }
     }
 
     // target's abilities
@@ -9238,15 +9256,22 @@ static inline uq4_12_t CalcTypeEffectivenessMultiplierInternal(struct DamageCont
         modifier = UQ_4_12(1.0);
     }
 
+    // FORK: innate-aware Telepathy (Batch U, FEATURE_INNATE_ABILITIES) — an innate Telepathy holder
+    // dodges its ally's damaging move exactly like the real ability. Runs in the shared calc, so the AI's
+    // damage prediction is innate-aware for free (keyed off the real battler).
+    bool32 telepathyDodge = ctx->battlerDef == BATTLE_PARTNER(ctx->battlerAtk)
+        && (ctx->abilities[ctx->battlerDef] == ABILITY_TELEPATHY
+         || IsInnateActive(ctx->battlerDef, ABILITY_TELEPATHY));
     if (((ctx->abilities[ctx->battlerDef] == ABILITY_WONDER_GUARD && modifier <= UQ_4_12(1.0) && !isPresentHealing)
-        || (ctx->abilities[ctx->battlerDef] == ABILITY_TELEPATHY && ctx->battlerDef == BATTLE_PARTNER(ctx->battlerAtk)))
+        || telepathyDodge)
         && GetMovePower(ctx->move) != 0)
     {
         modifier = UQ_4_12(0.0);
         ctx->abilityBlocked = TRUE;
         if (ctx->updateFlags)
         {
-            gLastUsedAbility = ctx->abilities[ctx->battlerDef];
+            // FORK: name Telepathy (not the chosen ability) when the innate did the dodging.
+            gLastUsedAbility = telepathyDodge ? ABILITY_TELEPATHY : ctx->abilities[ctx->battlerDef];
             gBattleStruct->moveResultFlags[ctx->battlerDef] |= MOVE_RESULT_MISSED;
             RecordAbilityBattle(ctx->battlerDef, gBattleMons[ctx->battlerDef].ability);
         }

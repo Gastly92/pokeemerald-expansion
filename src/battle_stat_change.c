@@ -618,7 +618,8 @@ static enum BattlerId StatChange_IsFlowerVeilProtected(struct BattleCalcValues *
     {
         if (!IsBattlerAlly(cv->battlerDef, battler))
             continue;
-        if (cv->abilities[battler] == ABILITY_FLOWER_VEIL)
+        // FORK: an innate Flower Veil ally protects a Grass battler's stats like the real ability (Batch U).
+        if (cv->abilities[battler] == ABILITY_FLOWER_VEIL || IsInnateActive(battler, ABILITY_FLOWER_VEIL))
             return battler;
     }
 
@@ -641,6 +642,10 @@ static bool32 IsFlowerVeilBlocked(struct BattleCalcValues *cv, struct StatChange
         gBattleScripting.battler = cv->battlerDef;
         gBattlerAbility = flowerVeilBattler;
         gLastUsedAbility = ABILITY_FLOWER_VEIL;
+        // FORK: when an innate Flower Veil (the protector's chosen ability differs) blocks the drop,
+        // overwrite the pop-up so it shows Flower Veil, not the chosen ability (Batch U).
+        if (GetBattlerAbility(flowerVeilBattler) != ABILITY_FLOWER_VEIL)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_FLOWER_VEIL;
         MarkStatsAsDone(st, NUM_BATTLE_STATS);
         RecordAbilityBattle(gBattlerAbility, ABILITY_FLOWER_VEIL);
     }

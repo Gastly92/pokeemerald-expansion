@@ -1353,6 +1353,16 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
          && abilityDef != ABILITY_RATTLED && IsInnateActive(battlerDef, ABILITY_RATTLED))
             RETURN_SCORE_MINUS(10);
 
+        // FORK: innate Aroma Veil / Flower Veil (Batch U, FEATURE_INNATE_ABILITIES) are side-wide, so the
+        // chosen-ability switch cases below miss an innate holder (or an innate ally). Credit them here
+        // (guarded against the chosen-ability side match so it never double-penalizes).
+        if (IsAromaVeilProtectedEffect(moveEffect)
+         && !AI_IsAbilityOnSide(battlerDef, ABILITY_AROMA_VEIL) && AI_IsInnateOnSide(battlerDef, ABILITY_AROMA_VEIL))
+            RETURN_SCORE_MINUS(10);
+        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) && (IsNonVolatileStatusMove(move) || IsStatLoweringMove(move))
+         && !AI_IsAbilityOnSide(battlerDef, ABILITY_FLOWER_VEIL) && AI_IsInnateOnSide(battlerDef, ABILITY_FLOWER_VEIL))
+            RETURN_SCORE_MINUS(10);
+
         switch (abilityDef)
         {
         case ABILITY_MAGIC_GUARD:
@@ -4286,7 +4296,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
      && HasBattlerSideMoveWithEffect(battlerDef, EFFECT_ENCORE)
      && (B_MENTAL_HERB < GEN_5 || aiData->holdEffects[battlerAtk] != HOLD_EFFECT_MENTAL_HERB))
      {
-        if (!AI_IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL)
+        if ((!AI_IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL) && !AI_IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL)) // FORK: innate Aroma Veil protects the AI's side from Encore too (Batch U)
          || IsMoldBreakerTypeAbility(battlerDef, aiData->abilities[battlerDef])
          || aiData->abilities[battlerDef] == ABILITY_MYCELIUM_MIGHT
          || IsMoldBreakerTypeAbility(BATTLE_PARTNER(battlerDef), aiData->abilities[BATTLE_PARTNER(battlerDef)])
@@ -4772,7 +4782,8 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
             }
             else if (hasPartner && AI_GetBattlerMoveTargetType(BATTLE_PARTNER(battlerAtk), aiData->partnerMove) == TARGET_FOES_AND_ALLY)
             {
-                if (aiData->abilities[battlerAtk] != ABILITY_TELEPATHY)
+                if (aiData->abilities[battlerAtk] != ABILITY_TELEPATHY
+                 && !IsInnateActive(battlerAtk, ABILITY_TELEPATHY)) // FORK: innate Telepathy already dodges the ally spread move (Batch U)
                   ADJUST_SCORE(ProtectChecks(battlerAtk, battlerDef, move, incomingMove));
             }
             break;

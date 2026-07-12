@@ -409,7 +409,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 19 | **Build the switch-in driver** (unblocks Intimidate + its immunity halves) | infra | done (shipped with Intimidate, the marquee consumer, like step 17 shipped with Rough Skin) |
 | 20 | Batch L — Switch-in actives | active, needs step 19 | done (all 8: Intimidate / Anticipation / Forewarn / Frisk / Download / Supersweet Syrup / Unnerve / Hospitality) |
 | 21 | Batch M — On-KO/on-hit stat boosts | active | done (all 11: Defiant / Competitive — the stat-drop-reaction pair, wired at BS_TryDefiantRattled; Justified / Stamina / Water Compaction / Anger Point — the on-hit stat-boost sub-group, reusing the Batch K on-hit driver; Rattled / Steadfast — the fear-response Speed pair (Rattled spans the on-hit driver + BS_TryDefiantRattled, Steadfast the CancelerFlinch site); Moxie / Berserk / Soul-Heart — the KO / on-damage / on-faint sub-group (Moxie reuses the attacker-side on-hit driver via ABILITYEFFECT_MOVE_END_FOES_FAINTED, Berserk adds a small on-damage driver at the new MOVEEND_COLOR_CHANGE_INNATE step, Soul-Heart is credited at the BS_TryActivateSoulheart command)) |
-| 22 | Batch U — Ally-support (doubles) | calc/trait | open |
+| 22 | Batch U — Ally-support (doubles) | calc/trait | done (all 5: Battery / Power Spot — partner damage boosters in CalcAttackStat; Telepathy — dodge ally move; Aroma Veil — side mental-status shield via the new IsInnateOnSide() + Cmd_jumpifability side cases; Flower Veil — Grass-ally status + stat-drop shield) |
 | 23 | Tier 5 — Bespoke/deferred (one ability per session) | one-off | open |
 
 > Steps 9 folds Batch E into D (same code block). Step 23 is **not** one batch —
@@ -466,6 +466,6 @@ row is `done`.
 | L — Switch-in actives | active (new driver) | 8 | done (all 8: Intimidate — the switch-in driver was built with it — the Anticipation / Forewarn / Frisk information-reveal sub-group, the Download / Supersweet Syrup switch-in-stat-change sub-group, and the Unnerve / Hospitality sub-group, which extended the driver with a per-phase abilityEffect selector to reach the ABILITYEFFECT_UNNERVE and ABILITYEFFECT_DEPENDS_ON_ALLY cases) |
 | M — On-KO/on-hit stat boosts | active | 11 | done (Defiant / Competitive; Justified / Stamina / Water Compaction / Anger Point; Rattled / Steadfast; Moxie / Berserk / Soul-Heart) |
 | T — Berry/item synergy | active/trait | 4 | done |
-| U — Ally-support (doubles) | calc/trait | 5 | open |
+| U — Ally-support (doubles) | calc/trait | 5 | done (Battery / Power Spot / Telepathy / Aroma Veil / Flower Veil) |
 | Tier 5 — Bespoke/deferred | one-off | 11 | open |
 | **Total** | | **133** | |
