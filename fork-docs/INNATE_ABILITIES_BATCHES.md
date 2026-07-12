@@ -398,24 +398,25 @@ so they are **excluded from the 133** (they must not inflate the batch-index sum
 but still belong in the plan. Two of them were **blocked on a driver that Batch L
 has since built**, so they are now actionable.
 
-### Batch V — Complete the partial halves Batch L unblocked
+### Batch V — Complete the partial halves Batch L unblocked ✅ DONE
 **2 half-abilities · switch-in driver now exists · small, high-value finish**
 
 When these were wired, the switch-in driver didn't exist yet, so each shipped with
 a documented half missing. Batch L built `TryActivateInnateSwitchInEffects`
-(`src/fork/innate_abilities.c`), which clears both blockers:
+(`src/fork/innate_abilities.c`), which cleared both blockers — now both are wired:
 
-- **Guard Dog** (Batch S) — only the forced-switch-block half shipped; its
-  **Intimidate-immunity + Attack-boost-on-intimidate** half was explicitly left
-  "waits on Batch L" (see the `DELIBERATE PARTIAL WIRING (Guard Dog)` note in
-  `INNATE_ABILITIES.md` ~L1984). Now wireable: add innate Guard Dog to the
-  Intimidate-immunity list in `battle_stat_change.c` and fire its boost via the
-  switch-in/Intimidate-reaction path.
+- **Guard Dog** (Batch S) — the forced-switch-block half shipped in Batch S; its
+  **Intimidate-immunity + Attack-boost-on-intimidate** half is now wired at
+  `IsIntimidateBlocked` (`src/battle_stat_change.c`): an innate Guard Dog is immune
+  to Intimidate's Attack drop and boosts its own Attack +1, mirroring the chosen
+  `ABILITY_GUARD_DOG` case (pop-up/record overwritten to Guard Dog). The two
+  `ShouldSwitchIfIntimidateBenefit` AI reads (`battle_ai_switch.c`) credit the innate.
 - **Pastel Veil** (Batch I family) — its **switch-in ally-cure** half
-  (`BattleScript_PastelVeilActivates`, cure self+partner poison on switch-in) was
-  skipped for "no active switch-in-with-script driver exists" (see the
-  `KNOWN LIMITATION` at `INNATE_ABILITIES.md` ~L1084). That driver now exists;
-  replicate the ally-cure for an innate holder.
+  (`BattleScript_PastelVeilActivates`, cure self+partner poison on switch-in) now
+  rides the switch-in driver: `SwitchInInnateAbilityEffect` maps `ABILITY_PASTEL_VEIL`
+  to `ABILITYEFFECT_ON_SWITCHIN` and the effect site overwrites the pop-up when the
+  chosen ability differs. The `ABILITYEFFECT_IMMUNITY` self-cure (Batch I) remains as
+  a fallback for Immunity and non-switch-in re-checks.
 
 ### Batch W — Frontier-slot freeing sweep (Step 3.5 backlog)
 **data cleanup · multi-session · low-risk · deferred across J/T/K/L/M/U**
@@ -478,7 +479,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 20 | Batch L — Switch-in actives | active, needs step 19 | done (all 8: Intimidate / Anticipation / Forewarn / Frisk / Download / Supersweet Syrup / Unnerve / Hospitality) |
 | 21 | Batch M — On-KO/on-hit stat boosts | active | done (all 11: Defiant / Competitive — the stat-drop-reaction pair, wired at BS_TryDefiantRattled; Justified / Stamina / Water Compaction / Anger Point — the on-hit stat-boost sub-group, reusing the Batch K on-hit driver; Rattled / Steadfast — the fear-response Speed pair (Rattled spans the on-hit driver + BS_TryDefiantRattled, Steadfast the CancelerFlinch site); Moxie / Berserk / Soul-Heart — the KO / on-damage / on-faint sub-group (Moxie reuses the attacker-side on-hit driver via ABILITYEFFECT_MOVE_END_FOES_FAINTED, Berserk adds a small on-damage driver at the new MOVEEND_COLOR_CHANGE_INNATE step, Soul-Heart is credited at the BS_TryActivateSoulheart command)) |
 | 22 | Batch U — Ally-support (doubles) | calc/trait | done (all 5: Battery / Power Spot — partner damage boosters in CalcAttackStat; Telepathy — dodge ally move; Aroma Veil — side mental-status shield via the new IsInnateOnSide() + Cmd_jumpifability side cases; Flower Veil — Grass-ally status + stat-drop shield) |
-| 23 | Batch V — Complete Guard Dog + Pastel Veil partial halves (Batch L driver now exists) | active, driver exists | open |
+| 23 | Batch V — Complete Guard Dog + Pastel Veil partial halves (Batch L driver now exists) | active, driver exists | done (Guard Dog Intimidate-immunity + Attack-boost wired at IsIntimidateBlocked; Pastel Veil switch-in ally-cure wired via the switch-in driver) |
 | 23+ | Batch Y — Promoted-from-rejected clones (18, sub-groups Y1–Y8; Y1 cheapest, Y8 blocked on 5.5 Mold Breaker) | active/calc/trait, drivers exist | open (cheap; Y1 right after V, rest interleave with Tier 5) |
 | 24 | Tier 5.1 — Mega Sol | one-off | open |
 | 25 | Tier 5.2 — Quick Draw (determinism-sensitive) | one-off | open |
@@ -565,7 +566,7 @@ section for detail.
 
 | Follow-up | Kind | Scope | Status |
 | :-- | :-- | :-- | :-: |
-| V — Guard Dog + Pastel Veil partial halves | active (Batch L driver now exists) | 2 half-abilities | open (unblocked) |
+| V — Guard Dog + Pastel Veil partial halves | active (Batch L driver now exists) | 2 half-abilities | done |
 | W — Frontier-slot freeing sweep | data cleanup, multi-session | ~40 J-sets + T/K/L/M/U tails | open (parallel track) |
 | X — Script `jumpifability` innate-awareness | cross-cutting polish | Sticky Hold / Own Tempo cross-slot reads | open (do with Mold Breaker 5.5) |
 | Y — Promoted-from-rejected clones | active/calc/trait (drivers exist) | 18 (see sub-groups) | open (cheap; mostly reuse done sites) |

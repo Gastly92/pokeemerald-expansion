@@ -678,14 +678,43 @@ static bool32 IsIntimidateBlocked(struct BattleCalcValues *cv, struct StatChange
     if (!st->intimidate)
         return FALSE;
 
+    // FORK: an innate Guard Dog (the chosen ability differs, so the switch below would miss it) is immune
+    // to Intimidate's Attack drop and instead boosts its own Attack by 1 stage, exactly like the real
+    // ability (Batch V — the switch-in Intimidate driver Batch L built now lets the reaction fire on an
+    // innate holder, completing the half Batch S deferred). Mirrors the ABILITY_GUARD_DOG switch case
+    // (Flower Veil ordering, min-stage guard, DefiantActivates script) and overwrites the pop-up/record to
+    // the innate (CreateAbilityPopUp reads the primary slot). Only fires when the chosen ability isn't
+    // itself Guard Dog (that case is handled by the switch). IsInnateActive supplies suppression parity.
+    if (cv->abilities[cv->battlerDef] != ABILITY_GUARD_DOG
+     && IsInnateActive(cv->battlerDef, ABILITY_GUARD_DOG))
+    {
+        enum BattlerId flowerVeilBattler = StatChange_IsFlowerVeilProtected(cv);
+
+        if (flowerVeilBattler != MAX_BATTLERS_COUNT
+         && GetBattlerRawSpeedOrder(flowerVeilBattler) < GetBattlerRawSpeedOrder(cv->battlerDef))
+            return FALSE;
+
+        if (!CompareStat(cv->battlerDef, STAT_ATK, MIN_STAT_STAGE, CMP_GREATER_THAN, ABILITY_GUARD_DOG))
+            return FALSE;
+
+        SetStatChange2(cv->battlerDef, st->stat, -1 * st->stage);
+        st->script = BattleScript_DefiantActivates;
+        gEffectBattler = cv->battlerDef;
+        gLastUsedAbility = ABILITY_GUARD_DOG;
+        gBattlerAbility = cv->battlerDef;
+        gBattleScripting.battler = cv->battlerDef;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_GUARD_DOG;
+        MarkStatsAsDone(st, st->stat);
+        RecordAbilityBattle(cv->battlerDef, ABILITY_GUARD_DOG);
+        return TRUE;
+    }
+
     // FORK: an innate Oblivious / Scrappy / Inner Focus / Own Tempo (the chosen ability differs, so the switch
     // below would miss it) is unaffected by Intimidate exactly like the real ability (GEN_8+). Mirror the switch
     // cases and overwrite the pop-up/record to the innate (CreateAbilityPopUp reads the primary slot). Only fires
     // when the chosen ability isn't itself an Intimidate-immune one (those are handled by the switch).
-    // IsInnateActive supplies suppression parity. Guard Dog IS an innate (Batch S) but only its
-    // forced-switch-out block is wired; its Intimidate-immunity/Attack-boost half is deferred to
-    // Batch L (the Intimidate driver), so an innate Guard Dog is intentionally omitted from the
-    // list below and its chosen-only case (the switch) keeps the != guard.
+    // IsInnateActive supplies suppression parity. An innate Guard Dog is handled by the reactive block above,
+    // so it stays out of the pure-immunity list here (and keeps the != guard in its chosen-only switch case).
     if (cv->abilities[cv->battlerDef] != ABILITY_OBLIVIOUS
      && cv->abilities[cv->battlerDef] != ABILITY_INNER_FOCUS
      && cv->abilities[cv->battlerDef] != ABILITY_SCRAPPY

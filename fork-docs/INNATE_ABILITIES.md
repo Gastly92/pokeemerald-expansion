@@ -1139,13 +1139,19 @@ precedent in the same file) so the AI never predicts phantom Toxic Spikes poison
 innate-immune switch-in candidate. NO pure-boon divergence: poison immunity is a clean upside that
 never hurts its holder, so both innates are a 1:1 copy of the real ability. Suppression parity
 holds via `IsInnateActive()` / `AI_IsInnateOnSide()`: both are breakable, so an attacker's Mold Breaker
-pierces an innate Immunity/Pastel Veil exactly as it would the real ability. **KNOWN LIMITATION:** the
-real Pastel Veil's switch-in ALLY-cure (`BattleScript_PastelVeilActivates`, looping self+partner to
-cure pre-existing poison on the holder's switch-in) is NOT replicated for an innate holder — that
-would need a brand-new generic "active switch-in ability with a script" driver, for which no
-precedent exists yet (only an end-turn equivalent, Speed Boost's `TryActivateInnateEndTurnEffects`);
-an innate Pastel Veil still cures and blocks the holder's OWN poison via the chokepoints above, just
-not its ally's pre-existing poison on switch-in. CANON-ONLY (no flavor picks): Immunity goes to
+pierces an innate Immunity/Pastel Veil exactly as it would the real ability. **Switch-in ally-cure
+(Batch V, now wired):** the real Pastel Veil's switch-in ALLY-cure
+(`BattleScript_PastelVeilActivates`, looping self+partner to cure pre-existing poison on the holder's
+switch-in) — previously left unwired for want of a switch-in-with-script driver — now rides the switch-in
+driver Batch L built (`TryActivateInnateSwitchInEffects`): `SwitchInInnateAbilityEffect` maps
+`ABILITY_PASTEL_VEIL` to `ABILITYEFFECT_ON_SWITCHIN`, so the `FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE`
+hook runs the full script (holder + ally) with the pop-up overwritten to Pastel Veil when the chosen
+ability differs. That block runs BEFORE the `ABILITYEFFECT_IMMUNITY` self-cure chokepoint, so at a
+genuine switch-in the script clears the holder's own poison too and the self-cure above (still wired for
+Immunity and non-switch-in re-checks) no-ops. NOTE: an innate Pastel Veil matches the chosen ability 1:1,
+including the upstream quirk that a holder poisoned AT THE SAME TIME as its ally clears only its own
+poison (the pop-up clobbers the cure script's loop counter — reproducible with the chosen ability, so not
+a fork divergence). CANON-ONLY (no flavor picks): Immunity goes to
 Gligar (combined with its innate Sand Veil) and Snorlax/Snorlax-Gmax (combined with innate Unaware),
 each whose real ability data carries Immunity in some slot. (Zangoose also has slot-0 Immunity in its
 data, but is given innate Toxic Boost instead — see the Batch N reference: the two are contradictory and
@@ -2039,13 +2045,22 @@ Guard Dog silently breaks, Suction Cups shows its anchor pop-up) and the Red Car
 `jumpifability` reads only the chosen slot, so `BS_JumpIfRoarFails` (`src/battle_script_commands.c`) is
 made innate-aware there: an innate Guard Dog fails the phaze plainly, an innate Suction Cups jumps to
 `BattleScript_AbilityPreventsPhasingOut` with the pop-up overwritten to Suction Cups. Both are 1:1
-clean-upside copies (no downside). **DELIBERATE PARTIAL WIRING (Guard Dog):** only the forced-switch
-block is wired; Guard Dog's Intimidate-immunity + Attack-boost half waits on Batch L (the Intimidate
-switch-in driver), so an innate Guard Dog is deliberately omitted from the Intimidate-immunity list in
-`battle_stat_change.c`. AI: the Roar-scoring reads in `src/battle_ai_main.c` (`EFFECT_ROAR` +
-Suction Cups, both the score-penalty and the doubles no-op) credit an innate Suction Cups. Canon-only
-(no flavor picks). Guard Dog's canon users (Mabosstiff, Okidogi) are frontier sets whose slot is freed
-via a fork-owned override (Strong Jaw / Toxic Chain).
+clean-upside copies (no downside). **Guard Dog's Intimidate half (Batch V, now wired):** the forced-switch
+block shipped in Batch S; Guard Dog's **Intimidate-immunity + Attack-boost** half — deferred until the
+Intimidate switch-in driver existed — is now wired at the Intimidate-reaction site
+`IsIntimidateBlocked` (`src/battle_stat_change.c`). An innate Guard Dog (chosen ability differs, so the
+`ABILITY_GUARD_DOG` switch case misses it) is immune to Intimidate's Attack drop and instead boosts its
+own Attack by 1 stage, mirroring the chosen case (Flower Veil ordering, min-stage guard,
+`BattleScript_DefiantActivates` script) with the pop-up/record overwritten to Guard Dog. AI: the two
+`ShouldSwitchIfIntimidateBenefit` reads (`src/battle_ai_switch.c`) credit an innate Guard Dog beside
+Defiant / Competitive / Rattled, so the AI won't switch an Intimidator in expecting to weaken an
+innate-Guard-Dog foe; the soft incoming-ability *value* scorer in `battle_ai_util.c`
+(`case ABILITY_INTIMIDATE`, which reads a foe's chosen ability via `DoesIntimidateRaiseStats`) stays
+keyed to the chosen slot, consistent with how the Intimidate driver left its softest heuristics. AI: the
+Roar-scoring reads in `src/battle_ai_main.c` (`EFFECT_ROAR` + Suction Cups, both the score-penalty and
+the doubles no-op) credit an innate Suction Cups. Canon-only (no flavor picks). Guard Dog's canon users
+(Mabosstiff, Okidogi) are frontier sets whose slot is freed via a fork-owned override (Strong Jaw /
+Toxic Chain).
 
 ### ABILITY_ROCK_HEAD
 

@@ -3355,25 +3355,61 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Pas
     }
 }
 
-// Known limitation (documented in the ALLOWLIST note): an innate Pastel Veil still cures its OWN
-// pre-existing poison on switch-in via TryImmunityAbilityHealStatus, but does NOT cure an ally's
-// pre-existing poison the way the real ability's switch-in script does.
-DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pastel Veil cures its own pre-existing poison but not its partner's")
+// Batch V: an innate Pastel Veil now runs the real ability's full switch-in cure via the switch-in driver
+// (FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE -> BattleScript_PastelVeilActivates), so when the holder
+// switches in beside a poisoned ally it clears the ally's pre-existing poison under its pop-up, exactly
+// like the chosen ability ("Pastel Veil cures partner's poison on switch in"). This is the half Batch S/I
+// deferred until the switch-in driver existed. (The holder here is unpoisoned so the ally cure is
+// attributable solely to the new switch-in script, not the passive self-cure fallback below.)
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pastel Veil cures its partner's pre-existing poison on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_RAPIDASH_GALAR, ABILITY_PASTEL_VEIL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_WYNAUT) { Status1(STATUS1_POISON); }
+        PLAYER(SPECIES_RAPIDASH_GALAR) { Ability(ABILITY_RUN_AWAY); } // chosen ability differs from the innate
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(playerLeft, 2); } // bring the innate Pastel Veil holder in next to the poisoned Wynaut
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(playerLeft, ABILITY_PASTEL_VEIL);
+            MESSAGE("Wynaut was cured of its poisoning!"); // ally cure now replicated for an innate holder
+        } else {
+            NONE_OF { ABILITY_POPUP(playerLeft, ABILITY_PASTEL_VEIL); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(playerRight->status1 & STATUS1_POISON, 0); // Wynaut cured
+        else
+            EXPECT_NE(playerRight->status1 & STATUS1_POISON, 0); // no innate -> Wynaut stays poisoned
+    }
+}
+
+// An innate Pastel Veil still clears the HOLDER's own pre-existing poison on switch-in (via the switch-in
+// script now, with the immunity self-cure as a fallback), attributing the cure to the Pastel Veil pop-up.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pastel Veil cures its own pre-existing poison on switch-in")
 {
     GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_RAPIDASH_GALAR, ABILITY_PASTEL_VEIL));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_WYNAUT);
         PLAYER(SPECIES_RAPIDASH_GALAR) { Ability(ABILITY_RUN_AWAY); Status1(STATUS1_POISON); } // innate Pastel Veil
-        PLAYER(SPECIES_WYNAUT) { Status1(STATUS1_POISON); }
         OPPONENT(SPECIES_WOBBUFFET);
-        OPPONENT(SPECIES_WYNAUT);
+        OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
-        TURN {}
+        TURN { SWITCH(playerLeft, 2); }
     } SCENE {
         ABILITY_POPUP(playerLeft, ABILITY_PASTEL_VEIL);
         MESSAGE("Rapidash was cured of its poisoning!");
     } THEN {
         EXPECT_EQ(playerLeft->status1 & STATUS1_POISON, 0);
-        EXPECT_NE(playerRight->status1 & STATUS1_POISON, 0); // ally cure is NOT replicated for an innate
     }
 }
 
@@ -5556,6 +5592,37 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Guard Dog blocks Dragon Tai
             MESSAGE("But it failed!"); // Guard Dog makes the forced switch fail
         else
             NONE_OF { MESSAGE("But it failed!"); } // no block -> Okidogi is phazed out
+    }
+}
+
+// Batch V: an innate Guard Dog is immune to Intimidate's Attack drop and instead boosts its own Attack by
+// 1 stage, exactly like the real ability (mirrors the chosen ABILITY_GUARD_DOG case in IsIntimidateBlocked).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Guard Dog boosts Attack instead of losing it when intimidated")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_OKIDOGI, ABILITY_GUARD_DOG));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_OKIDOGI) { Ability(ABILITY_TOXIC_CHAIN); } // chosen differs from the innate Guard Dog
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_ARBOK) { Ability(ABILITY_INTIMIDATE); }
+    } WHEN {
+        TURN { SWITCH(opponent, 1); }
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_INTIMIDATE);
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_GUARD_DOG);
+            MESSAGE("Okidogi's Attack rose!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_GUARD_DOG); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1); // immune to the drop, boosted instead
+        else
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // no innate -> Intimidate drops Attack
     }
 }
 
