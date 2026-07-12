@@ -854,6 +854,39 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BRUXISH, 1,
         ABILITY_SHEER_FORCE
     },
+    { // 0792
+        // Lunala's only real ability (Shadow Shield) is now innate, and it's a frontier set, so like the
+        // Regi legends (Y2) it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
+        // Adaptability is an already-implemented :white_check_mark: innate (stable) the Moone Pokemon does
+        // not carry innately and is self-synergistic: its Moongeist Beam / Shadow Ball get 2x STAB on top of
+        // the innate Shadow Shield full-HP bulk (and innate Levitate), a devastating Calm Mind special sweeper.
+        SPECIES_LUNALA, 1,
+        ABILITY_ADAPTABILITY
+    },
+    { // 0800
+        // Necrozma's only real ability (Prism Armor) is now innate, and it's a frontier set, so like the
+        // Regi legends (Y2) it takes the innate AND a fork-owned chosen Adaptability in its EMPTY slot 1
+        // (stable :white_check_mark: innate it does not carry): 2x STAB on its Photon Geyser on top of the
+        // innate Prism Armor supereffective-damage cut (and innate Levitate).
+        SPECIES_NECROZMA, 1,
+        ABILITY_ADAPTABILITY
+    },
+    { // 0800
+        // Necrozma-Dusk-Mane's only real ability (Prism Armor) is now innate, and it's a frontier set, so
+        // like the Regi legends (Y2) its EMPTY slot 1 takes a chosen Adaptability (stable :white_check_mark:
+        // innate it does not carry): 2x STAB on Sunsteel Strike / Photon Geyser stacks with the innate Prism
+        // Armor supereffective cut, a fearsome Swords Dance physical sweeper.
+        SPECIES_NECROZMA_DUSK_MANE, 1,
+        ABILITY_ADAPTABILITY
+    },
+    { // 0800
+        // Necrozma-Dawn-Wings' only real ability (Prism Armor) is now innate, and it's a frontier set, so
+        // like the Regi legends (Y2) its EMPTY slot 1 takes a chosen Adaptability (stable :white_check_mark:
+        // innate it does not carry): 2x STAB on Moongeist Beam / Photon Geyser stacks with the innate Prism
+        // Armor supereffective cut, a strong Calm Mind special sweeper.
+        SPECIES_NECROZMA_DAWN_WINGS, 1,
+        ABILITY_ADAPTABILITY
+    },
     { // 0802
         // Marshadow's only real ability (Technician) is now innate, so its empty slot 1 takes a flavorful
         // chosen ability for the frontier sets. Illusion is :x: (never an innate -> stable) and on-theme:

@@ -237,9 +237,9 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
 | :x: | Grassy Surge | Turns the ground into Grassy Terrain when the Pokémon enters a battle. |
 | :white_large_square: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
-| :white_large_square: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
-| :white_large_square: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
-| :white_large_square: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
+| :white_check_mark: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
+| :white_check_mark: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
+| :white_check_mark: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
 | :white_large_square: | Intrepid Sword | Boosts the Pokémon's Attack stat the first time the Pokémon enters a battle. |
 | :white_large_square: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
 | :x: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
@@ -299,7 +299,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Opportunist | When an opponent's stats are boosted, the Pokémon boosts its own stats in the exact same way. |
 | :white_check_mark: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
 | :white_check_mark: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
-| :white_large_square: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
+| :white_check_mark: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
 | :x: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |
 | :x: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |
 | :white_check_mark: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |

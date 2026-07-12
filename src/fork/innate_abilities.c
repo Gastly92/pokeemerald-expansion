@@ -561,6 +561,34 @@
 //   Regidrago -> chosen Adaptability (an implemented :white_check_mark: innate it does not carry, stable;
 //   self-synergistic with innate Dragon's Maw for a devastating Choice Dragon breaker — 2x STAB on top of
 //   Dragon's Maw's 1.5x).
+//   PRISM_ARMOR / SHADOW_SHIELD / NEUROFORCE / SUPREME_OVERLORD (Batch Y3 — damage / power calc clones, all
+//   1:1 clean-upside copies, canon-only (no flavor picks)): PRISM_ARMOR (Necrozma / Dusk-Mane / Dawn-Wings)
+//   and SHADOW_SHIELD (Lunala) are the "unbreakable" cousins of Solid Rock / Multiscale — they RIDE the
+//   existing Batch B innate clauses in GetDefenderAbilitiesModifier (src/battle_util.c): Prism Armor -25% vs
+//   a supereffective hit (shares Filter / Solid Rock's clause), Shadow Shield halves damage at full HP
+//   (shares Multiscale's clause). NEUROFORCE (Necrozma-Ultra) is the offensive mirror of Tinted Lens — it
+//   powers up the holder's supereffective hits x1.25 in GetAttackerAbilitiesModifier, beside the innate
+//   Tinted Lens / Sniper clauses. All three are AI-free (they live in the shared damage calc the AI runs; the
+//   only dedicated read is AI_IsBattlerAtMaxHp's full-HP survival check in battle_ai_util.c, made innate-aware
+//   for Shadow Shield beside Multiscale). SUPREME_OVERLORD (Kingambit — merged onto its Defiant / Pressure
+//   row) boosts the holder's move power +10% per fallen teammate (max +50%) in CalcAttackStat: it is a calc
+//   modifier gated on a switch-in-latched counter, so it ALSO rides the Batch L switch-in driver (a one-line
+//   SwitchInInnateAbilityEffect -> ABILITYEFFECT_ON_SWITCHIN addition) which runs the real switch-in case for
+//   an innate holder, latching supremeOverlordCounter + showing the pop-up (overwritten to the innate when the
+//   chosen ability differs). The AI switch-in sim's SUPREME_OVERLORD case is a no-op (it sets no stat), so no
+//   AI wiring is needed there; damage prediction is correct for free. Suppression parity via IsInnateActive()
+//   (feature flag, Gastro Acid, Neutralizing Gas, not-on-field). Prism Armor / Shadow Shield are breakable
+//   (Mold Breaker pierces them, exactly like Solid Rock / Multiscale); Neuroforce / Supreme Overlord are not.
+//   Species: the sole-ability legends Necrozma (base / Dusk-Mane / Dawn-Wings, Prism Armor) and Lunala (Shadow
+//   Shield) are frontier sets, so like the Regi legends (Y2) they take the innate AND a fork-owned chosen
+//   Adaptability override in their empty slot 1 — stable (:white_check_mark: implemented, not carried
+//   innately), self-synergistic 2x STAB for their Photon Geyser / Moongeist-Beam sweeper sets — so the innate
+//   is OBSERVABLE and the frontier set is freed. Necrozma-Ultra (Neuroforce) is a transform-only Ultra Burst
+//   form and NOT a frontier set, so it takes the innate for effect + test coverage but no chosen override (its
+//   sole chosen Neuroforce already grants it; the innate is observed via a test's forced chosen ability).
+//   Kingambit already carries innate Defiant + Pressure, so adding innate Supreme Overlord makes all three of
+//   its real abilities innate; its two frontier sets are freed from the now-innate chosen Supreme Overlord to
+//   chosen Defiant (its slot-0 signature) so the innate Supreme Overlord is observable in play.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -7385,7 +7413,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0792
         SPECIES_LUNALA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SHADOW_SHIELD
         )
     },
     { // 0793
@@ -7409,25 +7438,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0800
         SPECIES_NECROZMA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRISM_ARMOR
         )
     },
     { // 0800
         SPECIES_NECROZMA_DUSK_MANE,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRISM_ARMOR
         )
     },
     { // 0800
         SPECIES_NECROZMA_DAWN_WINGS,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRISM_ARMOR
         )
     },
     { // 0800
         SPECIES_NECROZMA_ULTRA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_NEUROFORCE
         )
     },
     { // 0801
@@ -8745,7 +8778,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KINGAMBIT,
         INNATES(
             ABILITY_DEFIANT,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SUPREME_OVERLORD
         )
     },
     { // 0987
@@ -9267,6 +9301,7 @@ static enum AbilityEffect SwitchInInnateAbilityEffect(enum Ability ability)
     case ABILITY_DOWNLOAD:         // raises the holder's Attack or Sp. Atk vs the foe's weaker defense
     case ABILITY_SUPERSWEET_SYRUP: // lowers opposing battlers' evasiveness by 1 stage (once per battle)
     case ABILITY_PASTEL_VEIL:      // cures the holder's and its ally's pre-existing poison on switch-in
+    case ABILITY_SUPREME_OVERLORD: // latches a +10%/fallen-teammate move-power boost at switch-in (Batch Y3)
         return ABILITYEFFECT_ON_SWITCHIN;
     case ABILITY_UNNERVE:          // denies opposing battlers their Berries
         return ABILITYEFFECT_UNNERVE;

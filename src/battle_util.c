@@ -3626,6 +3626,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 gBattleStruct->supremeOverlordCounter[battler] = min(5, gBattleStruct->faintCounter[GetBattlerTrainer(battler)]);
                 if (gBattleStruct->supremeOverlordCounter[battler] > 0)
                 {
+                    // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                    // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot; Batch Y3).
+                    if (GetBattlerAbility(battler) != ABILITY_SUPREME_OVERLORD)
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_SUPREME_OVERLORD;
                     BattleScriptCall(BattleScript_SupremeOverlordActivates);
                     effect++;
                 }
@@ -7276,6 +7280,14 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         if ((gBattleMons[battlerAtk].status1 & STATUS1_PSN_ANY) && IsBattleMovePhysical(move)
          && atkAbility != ABILITY_TOXIC_BOOST && IsInnateActive(battlerAtk, ABILITY_TOXIC_BOOST))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        // FORK: an innate Supreme Overlord (Batch Y3) boosts the holder's move power by 10% per fallen
+        // teammate (max +50%) exactly like the real ability. The switch-in driver runs the real
+        // ABILITYEFFECT_ON_SWITCHIN case for an innate holder too, so supremeOverlordCounter[battlerAtk]
+        // is latched at switch-in the same way; GetSupremeOverlordModifier reads it (returning 1.0 when the
+        // counter is 0, so this is a safe no-op before any teammate faints). A clean upside (1:1 copy); the
+        // != ABILITY_SUPREME_OVERLORD guard skips the case the switch above already applied.
+        if (atkAbility != ABILITY_SUPREME_OVERLORD && IsInnateActive(battlerAtk, ABILITY_SUPREME_OVERLORD))
+            modifier = uq4_12_multiply(modifier, GetSupremeOverlordModifier(battlerAtk));
     }
 
     // field abilities
@@ -8272,6 +8284,15 @@ static inline uq4_12_t GetAttackerAbilitiesModifier(enum BattlerId battlerAtk, u
     if (typeEffectivenessModifier <= UQ_4_12(0.5) && abilityAtk != ABILITY_TINTED_LENS
      && innatesEnabled && IsInnateActive(battlerAtk, ABILITY_TINTED_LENS))
         return UQ_4_12(2.0);
+    // FORK: an innate Neuroforce (Batch Y3, FEATURE_INNATE_ABILITIES) powers up the holder's supereffective
+    // hits by 25% exactly like the real ability — the offensive mirror of Tinted Lens, a clean upside, so a
+    // 1:1 copy with no pure-boon divergence. The supereffective guard keeps the GetConfig()/IsInnateActive()
+    // lookups off the neutral/resisted hot path; the chosen-ability switch above is untouched and
+    // abilityAtk != ABILITY_NEUROFORCE guards against double-applying. On-field AI damage prediction is
+    // correct for free (shared damage calc).
+    if (typeEffectivenessModifier >= UQ_4_12(2.0) && abilityAtk != ABILITY_NEUROFORCE
+     && innatesEnabled && IsInnateActive(battlerAtk, ABILITY_NEUROFORCE))
+        return UQ_4_12(1.25);
     return UQ_4_12(1.0);
 }
 
@@ -8332,9 +8353,10 @@ static inline uq4_12_t GetDefenderAbilitiesModifier(struct DamageContext *ctx)
     if (recordAbility && ctx->updateFlags)
         RecordAbilityBattle(ctx->battlerDef, ctx->abilities[ctx->battlerDef]);
 
-    // FORK: innate defensive damage reducers (FEATURE_INNATE_ABILITIES) — Filter / Solid Rock (-25% vs a
-    // supereffective hit, sharing one 1:1 clause), Multiscale (halve at full HP) and Ice Scales (halve
-    // special damage), each a 1:1 clean-upside copy applied beside (not inside) the chosen-ability switch
+    // FORK: innate defensive damage reducers (FEATURE_INNATE_ABILITIES) — Filter / Solid Rock / Prism Armor
+    // (-25% vs a supereffective hit, sharing one 1:1 clause — Prism Armor added in Batch Y3), Multiscale /
+    // Shadow Shield (halve at full HP — Shadow Shield added in Batch Y3) and Ice Scales (halve special
+    // damage), each a 1:1 clean-upside copy applied beside (not inside) the chosen-ability switch
     // with a `chosen != ABILITY_X` guard so the real ability never double-applies; the multiplies stack
     // with any other defender modifier the switch set. IsInnateActive() supplies suppression parity (all
     // breakable -> Mold Breaker pierces them like the real ability); the innate is not RecordAbilityBattle'd,
@@ -8348,13 +8370,15 @@ static inline uq4_12_t GetDefenderAbilitiesModifier(struct DamageContext *ctx)
          && ctx->abilities[ctx->battlerDef] != ABILITY_FILTER
          && ctx->abilities[ctx->battlerDef] != ABILITY_SOLID_ROCK
          && ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR
-         && (IsInnateActive(ctx->battlerDef, ABILITY_FILTER) || IsInnateActive(ctx->battlerDef, ABILITY_SOLID_ROCK)))
+         && (IsInnateActive(ctx->battlerDef, ABILITY_FILTER) || IsInnateActive(ctx->battlerDef, ABILITY_SOLID_ROCK)
+          || IsInnateActive(ctx->battlerDef, ABILITY_PRISM_ARMOR))) // FORK: innate Prism Armor rides Filter's SE-reduction (Batch Y3)
             modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
 
         if (IsBattlerAtMaxHp(ctx->battlerDef)
          && ctx->abilities[ctx->battlerDef] != ABILITY_MULTISCALE
          && ctx->abilities[ctx->battlerDef] != ABILITY_SHADOW_SHIELD
-         && IsInnateActive(ctx->battlerDef, ABILITY_MULTISCALE))
+         && (IsInnateActive(ctx->battlerDef, ABILITY_MULTISCALE)
+          || IsInnateActive(ctx->battlerDef, ABILITY_SHADOW_SHIELD))) // FORK: innate Shadow Shield rides Multiscale's full-HP halving (Batch Y3)
             modifier = uq4_12_multiply(modifier, UQ_4_12(0.5));
 
         if (IsBattleMoveSpecial(ctx->move)

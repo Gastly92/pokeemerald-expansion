@@ -3091,3 +3091,85 @@ Choice Dragon breaker: 2x STAB on top of the 1.5x boost).
 **Step 3.5**: four frontier sets freed. Regieleki ×2 → chosen **Lightning Rod** and Regidrago ×2 → chosen
 **Adaptability** (both via the new override rows). Each now runs the chosen ability **and** the innate type-power
 boost. This is **Batch Y sub-group Y2**; the remaining Batch Y sub-groups (Y3–Y8) stay open.
+
+### ABILITY_PRISM_ARMOR / ABILITY_SHADOW_SHIELD / ABILITY_NEUROFORCE / ABILITY_SUPREME_OVERLORD
+
+**Batch Y's third sub-group (Y3)** — four **damage / power calc clones**, each a **1:1 clean-upside copy**.
+Three are the "unbreakable" cousins of already-wired Batch B / P defenders and attackers; the fourth is a
+party-faint-gated power boost that reuses the Batch L switch-in driver to latch its counter.
+
+**Prism Armor / Shadow Shield ride the existing Batch B innate clauses** in `GetDefenderAbilitiesModifier`
+(`src/battle_util.c`) — no new clause, just an added `IsInnateActive(...)` disjunct beside the ones already
+there:
+
+```c
+// -25% vs a supereffective hit (shares Filter / Solid Rock's clause)
+if (ctx->typeEffectivenessModifier >= UQ_4_12(2.0)
+ && ctx->abilities[ctx->battlerDef] != ABILITY_FILTER
+ && ctx->abilities[ctx->battlerDef] != ABILITY_SOLID_ROCK
+ && ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR
+ && (IsInnateActive(ctx->battlerDef, ABILITY_FILTER) || IsInnateActive(ctx->battlerDef, ABILITY_SOLID_ROCK)
+  || IsInnateActive(ctx->battlerDef, ABILITY_PRISM_ARMOR)))
+    modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+// halve at full HP (shares Multiscale's clause)
+if (IsBattlerAtMaxHp(ctx->battlerDef)
+ && ctx->abilities[ctx->battlerDef] != ABILITY_MULTISCALE
+ && ctx->abilities[ctx->battlerDef] != ABILITY_SHADOW_SHIELD
+ && (IsInnateActive(ctx->battlerDef, ABILITY_MULTISCALE) || IsInnateActive(ctx->battlerDef, ABILITY_SHADOW_SHIELD)))
+    modifier = uq4_12_multiply(modifier, UQ_4_12(0.5));
+```
+
+**Unbreakable, and that falls out for free.** Prism Armor and Shadow Shield have `.breakable = FALSE`
+(unlike Solid Rock / Multiscale), and `IsInnateActive` reads **each ability's own** `breakable` flag through
+`CanBreakThroughInnate`, so an attacker's **Mold Breaker cannot pierce** the innate Prism Armor / Shadow
+Shield while it **does** pierce the innate Solid Rock / Multiscale — exactly the canon split. (Contrast tests
+assert both halves.)
+
+**Neuroforce is the offensive mirror of Tinted Lens** — a `GetAttackerAbilitiesModifier` clause beside the
+innate Tinted Lens / Sniper ones, boosting the holder's **supereffective** hits x1.25:
+
+```c
+if (typeEffectivenessModifier >= UQ_4_12(2.0) && abilityAtk != ABILITY_NEUROFORCE
+ && innatesEnabled && IsInnateActive(battlerAtk, ABILITY_NEUROFORCE))
+    return UQ_4_12(1.25);
+```
+
+**Supreme Overlord is a `CalcAttackStat` modifier gated on a switch-in-latched counter.** The real ability
+sets `supremeOverlordCounter[battler] = min(5, faintCounter[trainer])` in its `ABILITYEFFECT_ON_SWITCHIN`
+case (showing a pop-up) and reads it back via `GetSupremeOverlordModifier` in `CalcAttackStat`. To match this
+for an innate holder, Supreme Overlord is added to **`SwitchInInnateAbilityEffect`** (mapping it to
+`ABILITYEFFECT_ON_SWITCHIN`, so the **Batch L switch-in driver** runs the real case — latching the counter and
+showing the pop-up, overwritten to the innate when the chosen ability differs), plus a one-line innate clause
+in `CalcAttackStat` beside the Batch A boosters:
+
+```c
+if (atkAbility != ABILITY_SUPREME_OVERLORD && IsInnateActive(battlerAtk, ABILITY_SUPREME_OVERLORD))
+    modifier = uq4_12_multiply(modifier, GetSupremeOverlordModifier(battlerAtk));
+```
+
+`GetSupremeOverlordModifier` returns 1.0 when the counter is 0, so the clause is a safe no-op before any
+teammate falls.
+
+**No `DETERMINISTIC_*` surface** (all pure calc / switch-in).
+
+**AI is nearly free.** All four live in the shared damage calc the AI runs keyed off the real battler, so
+on-field damage prediction is innate-aware automatically. The **only** dedicated read is
+`AI_IsBattlerAtMaxHp`'s full-HP-survival check (`battle_ai_util.c`), made innate-aware for **Shadow Shield**
+beside the existing Multiscale disjunct. The AI switch-in sim's `SUPREME_OVERLORD` case is a no-op (it sets no
+stat), so it needs no innate wiring. **Suppression parity** holds via `IsInnateActive()`.
+
+**Species (canon-only).** The sole-ability legends **Prism Armor → Necrozma / Necrozma-Dusk-Mane /
+Necrozma-Dawn-Wings** and **Shadow Shield → Lunala** (all frontier sets) take the innate **plus a fork-owned
+chosen `ADAPTABILITY` override** in their empty slot 1 (`src/fork/species_ability_overrides.c`) — an
+implemented `:white_check_mark:` innate they do not carry, self-synergistic 2x STAB for their Photon Geyser /
+Moongeist-Beam sweeper sets — so the innate is **observable** and the frontier set is freed. **Neuroforce →
+Necrozma-Ultra** is a transform-only Ultra Burst form and **not** a frontier set, so it takes the innate for
+effect + test coverage but **no override** (its sole chosen Neuroforce already grants it; the innate is
+observed via a test's forced chosen ability). **Supreme Overlord → Kingambit** joins its existing innate
+**Defiant / Pressure** (making all three of its real abilities innate); its two frontier sets are freed from
+the now-innate chosen Supreme Overlord to chosen **Defiant** (its slot-0 signature), keeping the innate
+Supreme Overlord observable via its switch-in pop-up.
+
+**Step 3.5**: seven frontier sets freed — Lunala ×2 + Necrozma-Dusk-Mane / Dawn-Wings / base → chosen
+**Adaptability** (via the new override rows), Kingambit ×2 → chosen **Defiant**. This is **Batch Y sub-group
+Y3**; the remaining Batch Y sub-groups (Y4–Y8) stay open.
