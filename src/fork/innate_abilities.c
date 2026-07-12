@@ -512,6 +512,38 @@
 //   sets freed (Musharna / Rabsca -> Synchronize, Oranguru / Florges -> Symbiosis, Stonjourner -> a Solid Rock
 //   override); the all-abilities-innate Dialga / Palkia / Giratina / Orbeetle / Aromatisse sets keep their
 //   now-redundant chosen ability, deferred like Batch J/T/K/L. This completes Batch U.
+//   CHILLING_NEIGH / GRIM_NEIGH / ELECTROMORPHOSIS (promoted-from-rejected clones, Batch Y first
+//   sub-group Y1 — all 1:1 clean-upside copies, canon-only (no flavor picks — the neighs are potent
+//   snowballing on-KO boosts like Moxie, the charge is signature-specific)): CHILLING_NEIGH raises the
+//   holder's Attack +1 and GRIM_NEIGH its Sp. Atk +1 for each foe it knocks out with a move — a clone
+//   of Moxie's on-KO boost, so each is a one-line addition to the attacker-side on-hit driver
+//   (IsActiveOnHitAttackerInnate -> TryActivateInnateOnHitAttackerEffects), delegating to the SAME
+//   upstream ABILITYEFFECT_MOVE_END_FOES_FAINTED case (the Moxie / Beast Boost / Chilling Neigh
+//   cluster) so the stat change / BattleScript_AbilityStatChange / pop-up match the real ability for
+//   free (the effect site already forces the pop-up to the innate when the chosen ability differs).
+//   ELECTROMORPHOSIS charges the holder's next Electric move (Charge volatile) when hit by ANY
+//   damaging move — a clone of Wind Power's charge-on-hit MINUS the wind-move gate, so it is a one-line
+//   addition to the target-side on-hit driver (IsActiveOnHitInnate -> TryActivateInnateOnHitEffects),
+//   delegating to the SAME upstream ABILITYEFFECT_MOVE_END case Wind Power uses (the two share a
+//   fall-through case, and Electromorphosis has no wind gate; the shared effect site already forces the
+//   pop-up to the innate when the chosen ability differs). These fire at 100% on the right event (a KO /
+//   a damaging hit) — no RNG / DETERMINISTIC_* surface. AI: the two Moxie-type effect reads in
+//   src/battle_ai_main.c (the Protect self-faint check and the sacrifice-the-ally spread scoring) credit
+//   an innate Chilling Neigh / Grim Neigh via IsMoxieTypeInnateActive() (the innate-aware companion to
+//   IsMoxieTypeAbility, beside the existing innate-Moxie clause); Electromorphosis has no dedicated
+//   battle_ai_*.c effect read (Wind Power's reads are wind/Tailwind-specific and do not apply), so no AI
+//   wiring is needed. Suppression parity holds via IsInnateActive() (feature flag, Gastro Acid,
+//   Neutralizing Gas, not-on-field); none is breakable, so Mold Breaker never touches them. Species,
+//   canon-only, keyed exactly per form: CHILLING_NEIGH -> Glastrier, GRIM_NEIGH -> Spectrier — both
+//   sole-ability genderless legends, so like Landorus-Therian / Ogerpon-Cornerstone they take the innate
+//   AND a fork-owned chosen override in their empty slot 1 (Glastrier -> Snow Warning, :x: and the
+//   ice-legend standard, self-thematic cold aura + Ice-type Def boost; Spectrier -> Infiltrator, an
+//   implemented :white_check_mark: innate, stable and thematic for a phasing phantom whose Sub sweeper
+//   ignores the foe's screens/Substitute) so the innate is OBSERVABLE. ELECTROMORPHOSIS -> Bellibolt,
+//   whose Static / Damp slots leave the innate observable, so its singles frontier set is freed from
+//   chosen Electromorphosis to a complementary chosen Static (its doubles set already runs Static). The
+//   As One combo abilities (Calyrex forms) are never innates (:x: identity abilities), so they are not
+//   in the Chilling/Grim Neigh set.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -8107,6 +8139,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0896
+        SPECIES_GLASTRIER,
+        INNATES(
+            ABILITY_CHILLING_NEIGH
+        )
+    },
+    { // 0897
+        SPECIES_SPECTRIER,
+        INNATES(
+            ABILITY_GRIM_NEIGH
+        )
+    },
     { // 0899
         SPECIES_WYRDEER,
         INNATES(
@@ -8388,6 +8432,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TADBULB,
         INNATES(
             ABILITY_OWN_TEMPO
+        )
+    },
+    { // 0939
+        SPECIES_BELLIBOLT,
+        INNATES(
+            ABILITY_ELECTROMORPHOSIS
         )
     },
     { // 0940
@@ -9002,6 +9052,7 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_STEAM_ENGINE:  // raises Speed +6 when hit by a Fire/Water move
     case ABILITY_THERMAL_EXCHANGE: // raises Attack +1 when hit by a Fire move
     case ABILITY_WIND_POWER:    // charges the next Electric move when hit by a wind move
+    case ABILITY_ELECTROMORPHOSIS: // charges the next Electric move when hit by any damaging move (Wind Power clone, no wind gate)
     case ABILITY_CURSED_BODY:   // 30% (always under DETERMINISTIC_ABILITIES) to disable the move that hit the holder
     case ABILITY_JUSTIFIED:     // raises Attack +1 when hit by a Dark move
     case ABILITY_STAMINA:       // raises Defense +1 when hit by any move
@@ -9066,6 +9117,8 @@ static bool32 IsActiveOnHitAttackerInnate(enum Ability ability)
     {
     case ABILITY_MAGICIAN: // steals a held item off a target it damaged, if not already holding one
     case ABILITY_MOXIE:    // raises Attack +1 for each foe the holder knocks out this move
+    case ABILITY_CHILLING_NEIGH: // raises Attack +1 for each foe the holder knocks out this move (Moxie clone)
+    case ABILITY_GRIM_NEIGH:     // raises Sp. Atk +1 for each foe the holder knocks out this move (Moxie clone)
         return TRUE;
     default:
         return FALSE;

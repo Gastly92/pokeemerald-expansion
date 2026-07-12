@@ -263,6 +263,7 @@ bool32 AI_IsBattlerAsleepOrComatose(enum BattlerId battlerId);
 
 // ability logic
 bool32 IsMoxieTypeAbility(enum Ability ability);
+bool32 IsMoxieTypeInnateActive(u32 battler); // FORK: innate-aware Moxie/Chilling Neigh/Grim Neigh (FEATURE_INNATE_ABILITIES)
 bool32 DoesAbilityRaiseStatsWhenLowered(enum Ability ability);
 bool32 DoesIntimidateRaiseStats(enum Ability ability);
 bool32 ShouldTriggerAbility(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability ability);

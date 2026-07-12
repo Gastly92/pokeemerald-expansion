@@ -118,6 +118,14 @@
 //   script jumpifability form, Aroma-Veil-only); Flower Veil shields Grass allies from non-volatile status AND stat
 //   drops (IsFlowerVeilProtected / StatChange_IsFlowerVeilProtected made innate-aware). Pop-up overwritten to the
 //   innate; the dedicated AI side reads are innate-aware via AI_IsInnateOnSide. Completes Batch U),
+//   CHILLING_NEIGH / GRIM_NEIGH / ELECTROMORPHOSIS (promoted-from-rejected clones, Batch Y sub-group Y1 — all
+//   1:1 clean-upside copies, canon-only: Chilling Neigh / Grim Neigh raise the holder's Attack / Sp. Atk +1 per
+//   foe it KOs — Moxie clones, one-line additions to the attacker-side on-hit driver reusing the shared
+//   ABILITYEFFECT_MOVE_END_FOES_FAINTED case; Electromorphosis charges the next Electric move when hit by any
+//   damaging move — a Wind Power clone minus the wind gate, a one-line addition to the target-side on-hit driver
+//   reusing the shared ABILITYEFFECT_MOVE_END case. Moxie-type AI reads credit an innate Chilling/Grim Neigh via
+//   IsMoxieTypeInnateActive(); Electromorphosis needs no AI wiring. Sole-ability legends Glastrier / Spectrier
+//   take the innate + a fork override; Bellibolt (Static/Damp) leaves it observable),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

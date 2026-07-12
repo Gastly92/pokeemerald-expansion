@@ -6097,6 +6097,17 @@ bool32 IsMoxieTypeAbility(enum Ability ability)
     }
 }
 
+// FORK: TRUE if the battler has any Moxie-type on-KO boost as an ACTIVE INNATE
+// (FEATURE_INNATE_ABILITIES). Only Moxie / Chilling Neigh / Grim Neigh of the Moxie-type
+// set are innate-able (Beast Boost / the As One combos are never innates), so this is the
+// innate-aware companion to IsMoxieTypeAbility used beside it at the AI's Moxie effect reads.
+bool32 IsMoxieTypeInnateActive(u32 battler)
+{
+    return IsInnateActive(battler, ABILITY_MOXIE)
+        || IsInnateActive(battler, ABILITY_CHILLING_NEIGH)
+        || IsInnateActive(battler, ABILITY_GRIM_NEIGH);
+}
+
 bool32 DoesAbilityRaiseStatsWhenLowered(enum Ability ability)
 {
     switch (ability)

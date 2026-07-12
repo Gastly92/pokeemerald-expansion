@@ -5142,6 +5142,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_RATTLED, ABILITY_STEADFAST,
         ABILITY_MOXIE, ABILITY_BERSERK, ABILITY_SOUL_HEART,
         ABILITY_BATTERY, ABILITY_POWER_SPOT, ABILITY_TELEPATHY, ABILITY_AROMA_VEIL, ABILITY_FLOWER_VEIL,
+        ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_ELECTROMORPHOSIS,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8162,5 +8163,121 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate A
         NONE_OF { ABILITY_POPUP(playerLeft, ABILITY_AROMA_VEIL); } // suppressed -> no shield
     } THEN {
         EXPECT(playerRight->volatiles.tauntTimer != 0); // partner taunted
+    }
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// Batch Y1 — promoted-from-rejected clones: Chilling Neigh / Grim Neigh / Electromorphosis
+// ───────────────────────────────────────────────────────────────────────────
+// Chilling Neigh / Grim Neigh are Moxie clones (raise the holder's Attack / Sp. Atk +1 per foe it KOs) and
+// reuse the attacker-side on-hit driver's shared ABILITYEFFECT_MOVE_END_FOES_FAINTED case. Electromorphosis is
+// a Wind Power clone minus the wind gate (charges the next Electric move when hit by ANY damaging move) and
+// reuses the target-side on-hit driver's shared ABILITYEFFECT_MOVE_END case. All 1:1 clean-upside copies; the
+// pop-up shows the innate, not the (different) chosen ability. Glastrier / Spectrier are sole-ability legends,
+// so a forced non-slot chosen ability isolates the innate; the feature-off leg proves the effect is innate-only.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GLASTRIER, ABILITY_CHILLING_NEIGH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_GLASTRIER) { Ability(ABILITY_PRESSURE); Moves(MOVE_TACKLE); } // forced Pressure; Chilling Neigh only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_ZIGZAGOON); // a second foe, so KOing the first doesn't end the battle
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); } // KOs the first foe; the second replaces it
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_CHILLING_NEIGH); // pop-up shows the innate, not the forced Pressure
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_CHILLING_NEIGH); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Grim Neigh raises Sp. Atk when the holder knocks out a foe")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SPECTRIER, ABILITY_GRIM_NEIGH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SPECTRIER) { Ability(ABILITY_PRESSURE); Moves(MOVE_TACKLE); } // forced Pressure; Grim Neigh only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_ZIGZAGOON); // a second foe, so KOing the first doesn't end the battle
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); } // KOs the first foe; the second replaces it
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_GRIM_NEIGH); // pop-up shows the innate, not the forced Pressure
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_GRIM_NEIGH); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+// Electromorphosis charges on ANY damaging hit (unlike Wind Power, which needs a wind move): the opponent hits
+// with a non-wind Tackle, and the innate still charges Bellibolt, doubling its next Electric move.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Electromorphosis charges when hit by any damaging move")
+{
+    bool32 enabled;
+    s16 dmgBefore, dmgAfter;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BELLIBOLT, ABILITY_ELECTROMORPHOSIS));
+        ASSUME(!IsWindMove(MOVE_TACKLE)); // proves the charge is NOT wind-gated (unlike Wind Power)
+        ASSUME(GetMoveType(MOVE_NUZZLE) == TYPE_ELECTRIC);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_BELLIBOLT) { Ability(ABILITY_DAMP); Speed(10); Moves(MOVE_NUZZLE); } // chosen Damp; Electromorphosis only as innate
+        OPPONENT(SPECIES_PERSIAN) { Ability(ABILITY_LIMBER); Speed(5); Moves(MOVE_TACKLE); } // Limber: never paralyzed by Nuzzle
+    } WHEN {
+        TURN { MOVE(player, MOVE_NUZZLE); MOVE(opponent, MOVE_TACKLE); }
+        TURN { MOVE(player, MOVE_NUZZLE); MOVE(opponent, MOVE_TACKLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NUZZLE, player);
+        HP_BAR(opponent, captureDamage: &dmgBefore);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
+        HP_BAR(player);
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_ELECTROMORPHOSIS); // pop-up shows the innate, not the chosen Damp
+            MESSAGE("Being hit by Tackle charged Bellibolt with power!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_ELECTROMORPHOSIS); }
+        }
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NUZZLE, player);
+        HP_BAR(opponent, captureDamage: &dmgAfter);
+    } THEN {
+        if (enabled)
+            EXPECT_MUL_EQ(dmgBefore, Q_4_12(2.0), dmgAfter); // Charge doubled the second Electric move
+        else
+            EXPECT_EQ(dmgAfter, dmgBefore);
+    }
+}
+
+// Suppression parity for the on-KO neighs is the same IsInnateActive() gate the on-hit driver already applies —
+// structurally identical to Moxie (which shares the attacker-side driver) and to Electromorphosis below, and it
+// is exercised by the many Gastro-Acid / Mold-Breaker suppression tests elsewhere in this file. Electromorphosis
+// (which triggers on any damaging hit, so a suppression case is trivial to script) carries the parity check for
+// this sub-group.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Electromorphosis")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_BELLIBOLT, ABILITY_ELECTROMORPHOSIS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_GASTRO_ACID, MOVE_TACKLE); }
+        OPPONENT(SPECIES_BELLIBOLT) { Ability(ABILITY_DAMP); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); } // suppresses Bellibolt's abilities, the innate Electromorphosis included
+        TURN { MOVE(player, MOVE_TACKLE); }      // a damaging hit that would otherwise charge Electromorphosis
+    } SCENE {
+        MESSAGE("The opposing Bellibolt's Ability was suppressed!");
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_ELECTROMORPHOSIS); } // suppressed -> no charge
     }
 }

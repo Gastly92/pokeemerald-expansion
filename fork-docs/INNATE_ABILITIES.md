@@ -2987,3 +2987,64 @@ slots), and **Stonjourner** (sole Power Spot, doubles-only) takes a fork-owned *
 Ogerpon-Cornerstone. The seven **Dialga / Palkia / Giratina / Orbeetle / Aromatisse** sets whose real abilities are
 **all** now innate keep their now-redundant chosen ability — still correct (the chosen runs it; the innate is
 redundant-but-skipped) — **deferred** as a focused follow-up, like Batch J/T/K/L. This completes Batch U.
+
+### ABILITY_CHILLING_NEIGH / ABILITY_GRIM_NEIGH / ABILITY_ELECTROMORPHOSIS
+
+**Batch Y's first sub-group (Y1)** — the promoted-from-rejected clones, each a **1:1 clean-upside copy** of an
+already-implemented ability whose driver already exists, so the wiring is near-free (reuse the existing site).
+**Chilling Neigh** raises the holder's **Attack** by 1 stage and **Grim Neigh** its **Sp. Atk** by 1 stage for
+each foe it knocks out with a move — the on-KO half of **Moxie**. **Electromorphosis** charges the holder's next
+Electric move (the Charge volatile) when it is hit by **any** damaging move — **Wind Power** minus the wind-move
+gate. Each was `:x:` only because Moxie's / Wind Power's driver hadn't shipped when triaged; both drivers now
+exist, so these are one-line additions.
+
+**Two shared effect sites, no new C at either:**
+- **Chilling Neigh / Grim Neigh** fire from the upstream **`ABILITYEFFECT_MOVE_END_FOES_FAINTED`** case
+  (`src/battle_util.c`, the Moxie / Beast Boost / Chilling Neigh / Grim Neigh cluster) — the exact case the
+  **attacker-side** on-hit driver (`TryActivateInnateOnHitAttackerEffects`, hooked from
+  `MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE`) already delegates to for Moxie / Magician. So each is a
+  **one-line addition to `IsActiveOnHitAttackerInnate`** (`src/fork/innate_abilities.c`). The case already
+  reads `stat = STAT_SPATK` for Grim Neigh and `STAT_ATK` otherwise, counts `NumFaintedBattlersByAttacker`,
+  and forces `gBattleScripting.abilityPopupOverwrite` to the innate when the chosen ability differs — all for
+  free, so no edit to the effect site itself.
+- **Electromorphosis** fires from the upstream **`ABILITYEFFECT_MOVE_END`** case (`src/battle_util.c`), which
+  Wind Power and Electromorphosis already **share as a fall-through** (`case ABILITY_WIND_POWER:` gates on
+  `IsWindMove` then falls through to `case ABILITY_ELECTROMORPHOSIS:`, which has no wind gate). So it is a
+  **one-line addition to `IsActiveOnHitInnate`** — the target-side on-hit driver
+  (`TryActivateInnateOnHitEffects`) delegates to that case, and the shared effect site already forces the
+  pop-up to the innate when the chosen ability differs. `BattleScript_WindPowerActivates` is reused verbatim.
+
+**No `DETERMINISTIC_*` surface.** All three trigger at 100% on the right event (a KO, a damaging hit), so there
+is nothing to gate under `DETERMINISTIC_ABILITIES`.
+
+**AI.** Only the neighs have dedicated *effect* reads. The two Moxie-type reads in `src/battle_ai_main.c` (the
+`AI_CheckBadMove` Protect self-faint check — "don't penalize Protect for fainting to secondary damage if the
+holder benefits from a KO" — and the sacrifice-the-ally spread scoring) read
+`IsMoxieTypeAbility(aiData->abilities[b])`. They were already innate-aware for Moxie via
+`IsInnateActive(b, ABILITY_MOXIE)`; that inline clause is replaced by the fork helper
+**`IsMoxieTypeInnateActive(b)`** (`src/battle_ai_util.c`, beside `IsMoxieTypeAbility`), which credits an innate
+Moxie **or** Chilling Neigh **or** Grim Neigh (the only Moxie-type set members that can be innates — Beast Boost
+and the As One combos never are). **Electromorphosis needs no AI wiring**: Wind Power's dedicated reads
+(`GetWindAbilityScore`, the switch-in Tailwind sim) are wind/Tailwind-specific and do not apply to a
+charge-on-any-hit clone, and the Charge volatile itself is not a state the AI dodges.
+
+**Suppression parity** holds via `IsInnateActive()` for all three (feature flag, Gastro Acid, Neutralizing Gas,
+not-on-field); none is `breakable`, so Mold Breaker never touches them.
+
+**Species (canon-only — the neighs are potent snowballing on-KO boosts like Moxie, the charge is
+signature-specific).**
+- **Chilling Neigh → Glastrier** and **Grim Neigh → Spectrier**, each the ability's **sole** canon user (the
+  As One combo abilities on the Calyrex forms are `:x:` identity abilities, never innates). Both are
+  **sole-ability genderless legends with a frontier set**, so — like **Landorus-Therian / Ogerpon-Cornerstone**
+  — each takes the innate **plus a fork-owned chosen override** in its empty slot 1
+  (`src/fork/species_ability_overrides.c`) so the innate is **observable**: **Glastrier → Snow Warning** (`:x:`,
+  the ice-legend standard — its snow boosts its own Ice-type Defense for the Body Press set), **Spectrier →
+  Infiltrator** (an implemented `:white_check_mark:` innate it does not carry — its Nasty Plot / Substitute
+  sweeper ignores the foe's screens and Substitute).
+- **Electromorphosis → Bellibolt** (canon slot 0); its **Static / Damp** slots leave the innate observable
+  without an override.
+
+**Step 3.5**: five frontier sets freed. Glastrier ×2 → chosen **Snow Warning** and Spectrier ×2 → chosen
+**Infiltrator** (both via the new override rows), and Bellibolt's singles set → its complementary real
+slot-1 **Static** (its doubles set already runs Static). Each now runs the chosen ability **and** the innate.
+This is **Batch Y sub-group Y1**; the remaining Batch Y sub-groups (Y2–Y8) stay open.
