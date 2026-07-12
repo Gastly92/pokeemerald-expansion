@@ -19687,7 +19687,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_SHADOW_SHIELD,
+        .ability = ABILITY_ADAPTABILITY, // Shadow Shield now innate; chosen Adaptability (override) doubles STAB on top of innate full-HP bulk
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19707,7 +19707,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYSHOCK,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_SHADOW_SHIELD,
+        .ability = ABILITY_ADAPTABILITY, // Shadow Shield now innate; chosen Adaptability (override) doubles STAB on top of innate full-HP bulk
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20023,7 +20023,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_PHOTON_GEYSER
         },
-        .ability = ABILITY_PRISM_ARMOR,
+        .ability = ABILITY_ADAPTABILITY, // Prism Armor now innate; chosen Adaptability (override) doubles STAB on top of innate SE-damage cut
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20043,7 +20043,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PHOTON_GEYSER,
             MOVE_AURA_SPHERE
         },
-        .ability = ABILITY_PRISM_ARMOR,
+        .ability = ABILITY_ADAPTABILITY, // Prism Armor now innate; chosen Adaptability (override) doubles STAB on top of innate SE-damage cut
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20063,7 +20063,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_PRISM_ARMOR,
+        .ability = ABILITY_ADAPTABILITY, // Prism Armor now innate; chosen Adaptability (override) doubles STAB on top of innate SE-damage cut
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -24604,7 +24604,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SUPREME_OVERLORD,
+        .ability = ABILITY_DEFIANT, // Supreme Overlord now innate (with Defiant/Pressure); chosen Defiant (slot 0) frees the now-innate Supreme Overlord + keeps it observable
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 112,
@@ -24644,7 +24644,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_SUPREME_OVERLORD,
+        .ability = ABILITY_DEFIANT, // Supreme Overlord now innate (with Defiant/Pressure); chosen Defiant (slot 0) frees the now-innate Supreme Overlord + keeps it observable
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

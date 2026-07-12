@@ -5144,6 +5144,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_BATTERY, ABILITY_POWER_SPOT, ABILITY_TELEPATHY, ABILITY_AROMA_VEIL, ABILITY_FLOWER_VEIL,
         ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_ELECTROMORPHOSIS,
         ABILITY_TRANSISTOR, ABILITY_DRAGONS_MAW,
+        ABILITY_PRISM_ARMOR, ABILITY_SHADOW_SHIELD, ABILITY_NEUROFORCE, ABILITY_SUPREME_OVERLORD,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8325,5 +8326,150 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Dragon's Maw boosts a Drago
         HP_BAR(opponent, captureDamage: &results[i].damage);
     } FINALLY {
         EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+// Batch Y3 — Prism Armor / Shadow Shield / Neuroforce / Supreme Overlord (damage / power calc clones).
+// Prism Armor rides Filter / Solid Rock's -25%-vs-supereffective clause and Shadow Shield rides
+// Multiscale's halve-at-full-HP clause (both in GetDefenderAbilitiesModifier); a forced chosen Damp keeps
+// the innate observable (chosen != the innate), like the Solid Rock / Multiscale tests. Unlike their
+// breakable Batch B cousins, Prism Armor / Shadow Shield are UNBREAKABLE, so an attacker's Mold Breaker
+// cannot pierce them (the distinguishing contrast tests below).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Prism Armor reduces supereffective damage by 0.75", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_NECROZMA, ABILITY_PRISM_ARMOR));
+        ASSUME(gTypeEffectivenessTable[TYPE_GHOST][TYPE_PSYCHIC] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_NECROZMA) { Ability(ABILITY_DAMP); } // chosen Damp; innate Prism Armor
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SHADOW_BALL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SHADOW_BALL); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+        MESSAGE("It's super effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.75), results[1].damage); // off: full; on: 0.75x
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker does NOT pierce an innate Prism Armor", s16 damage)
+{
+    enum Ability ability;
+    PARAMETRIZE { ability = ABILITY_PRESSURE; }     // innate Prism Armor applies -> reduced
+    PARAMETRIZE { ability = ABILITY_MOLD_BREAKER; } // Prism Armor is unbreakable -> STILL reduced
+    GIVEN {
+        ASSUME(!gAbilitiesInfo[ABILITY_PRISM_ARMOR].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_NECROZMA, ABILITY_PRISM_ARMOR));
+        ASSUME(gTypeEffectivenessTable[TYPE_GHOST][TYPE_PSYCHIC] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_NECROZMA) { Ability(ABILITY_DAMP); }
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ability); Moves(MOVE_SHADOW_BALL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SHADOW_BALL); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_EQ(results[0].damage, results[1].damage); // both reduced equally; Mold Breaker can't pierce
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Shadow Shield halves damage at full HP", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_LUNALA, ABILITY_SHADOW_SHIELD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_LUNALA) { Ability(ABILITY_DAMP); } // chosen Damp; innate Shadow Shield
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SURF); } // Water: neutral vs Psychic/Ghost
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SURF); } // lands while the holder is at full HP
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x at full HP
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker does NOT pierce an innate Shadow Shield", s16 damage)
+{
+    enum Ability ability;
+    PARAMETRIZE { ability = ABILITY_PRESSURE; }     // innate Shadow Shield applies -> halved
+    PARAMETRIZE { ability = ABILITY_MOLD_BREAKER; } // Shadow Shield is unbreakable -> STILL halved
+    GIVEN {
+        ASSUME(!gAbilitiesInfo[ABILITY_SHADOW_SHIELD].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_LUNALA, ABILITY_SHADOW_SHIELD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_LUNALA) { Ability(ABILITY_DAMP); }
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ability); Moves(MOVE_SURF); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SURF); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_EQ(results[0].damage, results[1].damage); // both halved equally; Mold Breaker can't pierce
+    }
+}
+
+// Neuroforce is the offensive mirror of Tinted Lens: +25% to the holder's supereffective hits, wired in
+// GetAttackerAbilitiesModifier. Its only canon user is the transform-only Necrozma-Ultra, so — like the
+// upstream Neuroforce test — the holder Ultra-Bursts from base Necrozma-Dusk-Mane (which gives the
+// end-of-battle form revert a valid target; spawning Necrozma-Ultra directly has none). A forced chosen
+// Damp persists through the burst, so the post-burst Necrozma-Ultra runs chosen Damp + innate Neuroforce,
+// keeping the innate observable.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Neuroforce boosts a supereffective hit 1.25x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_NECROZMA_ULTRA, ABILITY_NEUROFORCE));
+        ASSUME(GetMoveType(MOVE_SHADOW_BALL) == TYPE_GHOST);
+        ASSUME(gTypeEffectivenessTable[TYPE_GHOST][TYPE_PSYCHIC] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_NECROZMA_DUSK_MANE) { Ability(ABILITY_DAMP); Item(ITEM_ULTRANECROZIUM_Z); Moves(MOVE_CELEBRATE, MOVE_SHADOW_BALL); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE, gimmick: GIMMICK_ULTRA_BURST); } // -> Necrozma-Ultra
+        TURN { MOVE(player, MOVE_SHADOW_BALL); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+        MESSAGE("It's super effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.25), results[1].damage); // off: SE; on: 1.25x SE
+    }
+}
+
+// Supreme Overlord latches a +10%/fallen-teammate move-power boost at switch-in, so an innate holder
+// rides the Batch L switch-in driver (ABILITYEFFECT_ON_SWITCHIN) to set the counter + show the pop-up
+// (overwritten to the innate when the chosen ability differs) exactly like the real ability; the boost is
+// read back in CalcAttackStat. A forced chosen Damp keeps the innate observable. One teammate faints (via
+// Memento) before Kingambit switches in, so the counter latches at 1 -> +10%.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Supreme Overlord boosts power per fallen teammate", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KINGAMBIT, ABILITY_SUPREME_OVERLORD));
+        ASSUME(GetMoveEffect(MOVE_MEMENTO) == EFFECT_MEMENTO);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_PAWNIARD) { Moves(MOVE_MEMENTO); }
+        PLAYER(SPECIES_KINGAMBIT) { Ability(ABILITY_DAMP); Moves(MOVE_SCRATCH); } // chosen Damp; innate Supreme Overlord
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_MEMENTO, target: opponent); SEND_OUT(player, 1); } // Pawniard faints -> Kingambit in
+        TURN { MOVE(player, MOVE_SCRATCH, target: opponent); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_SUPREME_OVERLORD); // pop-up overwritten to the innate on switch-in
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.1), results[1].damage); // off: base; on: +10% for 1 fallen mon
     }
 }

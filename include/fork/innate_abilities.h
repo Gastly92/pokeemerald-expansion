@@ -132,6 +132,16 @@
 //   Maw its Dragon moves x1.5. AI-free (shared damage calc). Sole-ability Regi legends: Transistor -> Regieleki,
 //   Dragon's Maw -> Regidrago, each taking the innate + a fork chosen override (Lightning Rod / Adaptability) so
 //   the innate is observable and the frontier set is freed),
+//   PRISM_ARMOR / SHADOW_SHIELD / NEUROFORCE / SUPREME_OVERLORD (Batch Y3 — damage/power calc clones, all 1:1
+//   clean-upside copies, canon-only): Prism Armor (Necrozma / Dusk-Mane / Dawn-Wings) rides Filter / Solid
+//   Rock's -25%-vs-supereffective clause, Shadow Shield (Lunala) rides Multiscale's halve-at-full-HP clause
+//   (both in GetDefenderAbilitiesModifier), Neuroforce (Necrozma-Ultra) is the offensive mirror of Tinted Lens
+//   (+25% to supereffective hits in GetAttackerAbilitiesModifier), and Supreme Overlord (Kingambit) boosts move
+//   power +10% per fallen teammate (max +50%) in CalcAttackStat, riding the Batch L switch-in driver to latch
+//   its counter + pop-up. AI-free save the Shadow Shield full-HP-survival read (battle_ai_util.c). Prism Armor /
+//   Shadow Shield are breakable (Mold Breaker pierces, like Solid Rock / Multiscale). Sole-ability legends
+//   Necrozma forms / Lunala take the innate + a fork chosen Adaptability override (observable + frontier set
+//   freed); Kingambit's Supreme Overlord joins its Defiant / Pressure innates and its sets choose Defiant),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

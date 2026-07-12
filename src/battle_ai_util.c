@@ -3654,7 +3654,8 @@ bool32 BattlerHasMaxHPProtection(enum BattlerId battler)
     if (B_STURDY >= GEN_5 && BattlerHasAbility(battler, ABILITY_STURDY)) // FORK: innate-aware
         return TRUE;
     if (ability == ABILITY_MULTISCALE || ability == ABILITY_SHADOW_SHIELD
-     || (GetConfig(FEATURE_INNATE_ABILITIES) && BattlerHasAbility(battler, ABILITY_MULTISCALE))) // FORK: innate Multiscale is full-HP protection too
+     || (GetConfig(FEATURE_INNATE_ABILITIES) && (BattlerHasAbility(battler, ABILITY_MULTISCALE)
+      || BattlerHasAbility(battler, ABILITY_SHADOW_SHIELD)))) // FORK: innate Multiscale / Shadow Shield are full-HP protection too (Batch Y3)
         return TRUE;
     return FALSE;
 }
