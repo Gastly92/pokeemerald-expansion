@@ -169,8 +169,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Iron Barbs | The Pokémon's iron barbs damage the attacker if it makes direct contact. |
 | :x: | Zen Mode | Changes the Pokémon's shape when its HP drops to half or less. |
 | :x: | Victory Star | Boosts the accuracy of the Pokémon and its allies. |
-| :x: | Turboblaze | The Pokémon's moves are unimpeded by the Ability of the target. |
-| :x: | Teravolt | The Pokémon's moves are unimpeded by the Ability of the target. |
+| :white_large_square: | Turboblaze | The Pokémon's moves are unimpeded by the Ability of the target. |
+| :white_large_square: | Teravolt | The Pokémon's moves are unimpeded by the Ability of the target. |
 | :white_check_mark: | Aroma Veil | The Pokémon and its allies cannot gain the Infatuated, Taunted, Unable to Repeat, Move Disabled, Healing Prevented, or Encore statuses. |
 | :white_check_mark: | Flower Veil | Grass-type allies are immune to status conditions and cannot have their stats lowered. |
 | :white_check_mark: | Cheek Pouch | The Pokémon has 1/3 of its max HP restored when it eats a Berry, in addition to the Berry's usual effect. |
@@ -230,18 +230,18 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
 | :x: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
 | :x: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |
-| :x: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
+| :white_large_square: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
 | :x: | RKS System | Changes the Pokémon's type to match the memory disc it holds. |
 | :x: | Electric Surge | Turns the ground into Electric Terrain when the Pokémon enters a battle. |
 | :x: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |
 | :x: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
 | :x: | Grassy Surge | Turns the ground into Grassy Terrain when the Pokémon enters a battle. |
-| :x: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
-| :x: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
-| :x: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
-| :x: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
-| :x: | Intrepid Sword | Boosts the Pokémon's Attack stat the first time the Pokémon enters a battle. |
-| :x: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
+| :white_large_square: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
+| :white_large_square: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
+| :white_large_square: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
+| :white_large_square: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
+| :white_large_square: | Intrepid Sword | Boosts the Pokémon's Attack stat the first time the Pokémon enters a battle. |
+| :white_large_square: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
 | :x: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
 | :x: | Ball Fetch | If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle. |
 | :x: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |
@@ -268,17 +268,17 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
 | :white_check_mark: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :x: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
-| :x: | Transistor | Powers up Electric-type moves. |
-| :x: | Dragon's Maw | Powers up Dragon-type moves. |
-| :x: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
-| :x: | Grim Neigh | When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat. |
+| :white_large_square: | Transistor | Powers up Electric-type moves. |
+| :white_large_square: | Dragon's Maw | Powers up Dragon-type moves. |
+| :white_large_square: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
+| :white_large_square: | Grim Neigh | When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat. |
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability. |
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability. |
 | :x: | Lingering Aroma | Contact with the Pokémon changes the attacker's Ability to Lingering Aroma. |
 | :x: | Seed Sower | Turns the ground into Grassy Terrain when the Pokémon is hit by an attack. |
 | :white_check_mark: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
 | :x: | Anger Shell | When an attack causes its HP to drop to half or less, the Pokémon gets angry. This lowers its Defense and Sp. Def stats but boosts its Attack, Sp. Atk, and Speed stats. |
-| :x: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
+| :white_large_square: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
 | :x: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
 | :x: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
 | :white_check_mark: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
@@ -286,10 +286,10 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
 | :x: | Zero to Hero | The Pokémon changes into its Hero Form when it switches out of battle. |
 | :x: | Commander | When the Pokémon enters a battle, it goes inside the mouth of an ally Dondozo if one is on the field. The Pokémon then issues commands from there. |
-| :x: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
+| :white_large_square: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
 | :x: | Protosynthesis | Boosts the Pokémon's most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy. |
 | :x: | Quark Drive | Boosts the Pokémon's most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy. |
-| :x: | Good as Gold | A body of pure, solid gold gives the Pokémon full immunity to other Pokémon's status moves. |
+| :white_large_square: | Good as Gold | A body of pure, solid gold gives the Pokémon full immunity to other Pokémon's status moves. |
 | :x: | Vessel of Ruin | The power of the Pokémon's ruinous vessel lowers the Sp. Atk stats of all Pokémon except itself. |
 | :x: | Sword of Ruin | The power of the Pokémon's ruinous sword lowers the Defense stats of all Pokémon except itself. |
 | :x: | Tablets of Ruin | The power of the Pokémon's ruinous wooden tablets lowers the Attack stats of all Pokémon except itself. |
@@ -299,14 +299,14 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Opportunist | When an opponent's stats are boosted, the Pokémon boosts its own stats in the exact same way. |
 | :white_check_mark: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
 | :white_check_mark: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
-| :x: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
+| :white_large_square: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |
 | :x: | Costar | When the Pokémon enters a battle, it copies an ally's stat changes. |
 | :x: | Toxic Debris | When the Pokémon takes damage from a physical move, it gives the opponent's side the Toxic Spikes status. |
 | :white_check_mark: | Armor Tail | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :x: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :x: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
 | :white_check_mark: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |
-| :x: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
+| :white_large_square: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Teal Mask to shine and the Pokémon's Speed stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Hearthflame Mask to shine and the Pokémon's Attack stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Wellspring Mask to shine and the Pokémon's Sp. Def stat to be boosted. |
