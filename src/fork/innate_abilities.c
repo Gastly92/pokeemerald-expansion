@@ -9165,7 +9165,8 @@ bool32 TryActivateInnateOnDamageEffects(enum BattlerId battler, u32 *index)
 // (each shows a switch-in message; Frisk/Forewarn reveal a foe's item/move, Anticipation warns of a
 // super-effective or OHKO move), Download (raises the holder's Attack or Sp. Atk toward the foe's weaker
 // defense), Supersweet Syrup (lowers every opposing battler's evasiveness by 1 stage, once per battle),
-// Unnerve (denies opposing battlers their Berries) and Hospitality (heals the ally 1/4 max HP in doubles).
+// Unnerve (denies opposing battlers their Berries), Hospitality (heals the ally 1/4 max HP in doubles)
+// and Pastel Veil (cures the holder's and its ally's pre-existing poison on switch-in — Batch V).
 // The driver (TryActivateInnateSwitchInEffects) is re-entrant, so a battler may carry more than one and
 // each fires in turn. Each delegates to the existing upstream switch-in case that runs the real ability,
 // so the stat change / message / heal / script / pop-up matches the real ability for free (the effect site
@@ -9188,6 +9189,7 @@ static enum AbilityEffect SwitchInInnateAbilityEffect(enum Ability ability)
     case ABILITY_FRISK:            // reveals the foes' held items
     case ABILITY_DOWNLOAD:         // raises the holder's Attack or Sp. Atk vs the foe's weaker defense
     case ABILITY_SUPERSWEET_SYRUP: // lowers opposing battlers' evasiveness by 1 stage (once per battle)
+    case ABILITY_PASTEL_VEIL:      // cures the holder's and its ally's pre-existing poison on switch-in
         return ABILITYEFFECT_ON_SWITCHIN;
     case ABILITY_UNNERVE:          // denies opposing battlers their Berries
         return ABILITYEFFECT_UNNERVE;

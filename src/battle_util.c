@@ -3213,6 +3213,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         case ABILITY_PASTEL_VEIL:
             if (shouldAbilityTrigger)
             {
+                // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                // (Speed Boost / Download precedent — CreateAbilityPopUp reads the primary slot). Lets an
+                // innate Pastel Veil run its switch-in ally-cure via the switch-in driver (Batch V).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 SaveBattlerTarget(gBattlerTarget);
                 gBattlerTarget = battler;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PASTEL_VEIL;
@@ -10036,11 +10041,11 @@ enum ImmunityHealStatusOutcome TryImmunityAbilityHealStatus(enum BattlerId battl
 
     // FORK: an innate Immunity / Pastel Veil (chosen ability differs, so the switch above missed it) cures
     // the holder's own pre-existing poison on switch-in exactly like the real ability, the same Limber
-    // precedent. Note this only cures the HOLDER's poison: Pastel Veil's real switch-in script also cures
-    // an ally's pre-existing poison with its own pop-up/message (BattleScript_PastelVeilActivates), which
-    // is not replicated here for an innate holder — that ally-cure is an active scripted effect that would
-    // need its own switch-in driver (the doc's "active / on-event ability with a script" class), left
-    // unwired for now; only the passive block (above) and this self-cure are covered.
+    // precedent. This is now a FALLBACK for Pastel Veil: Batch V wired its full switch-in ally-cure through
+    // the switch-in driver (FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE runs BattleScript_PastelVeilActivates
+    // for the holder AND its ally BEFORE this ABILITYEFFECT_IMMUNITY block), so at a genuine switch-in the
+    // holder is already cured and this branch no-ops. It still covers Immunity (which has no switch-in
+    // script) and any non-switch-in immunity re-check where the driver doesn't run.
     if (outcome == IMMUNITY_NO_EFFECT
      && (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON | STATUS1_TOXIC_COUNTER))
      && (IsInnateActive(battler, ABILITY_IMMUNITY) || IsInnateActive(battler, ABILITY_PASTEL_VEIL)))
