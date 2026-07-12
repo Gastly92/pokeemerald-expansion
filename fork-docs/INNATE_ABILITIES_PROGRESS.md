@@ -268,8 +268,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
 | :white_check_mark: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :x: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
-| :white_large_square: | Transistor | Powers up Electric-type moves. |
-| :white_large_square: | Dragon's Maw | Powers up Dragon-type moves. |
+| :white_check_mark: | Transistor | Powers up Electric-type moves. |
+| :white_check_mark: | Dragon's Maw | Powers up Dragon-type moves. |
 | :white_check_mark: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
 | :white_check_mark: | Grim Neigh | When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat. |
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability. |

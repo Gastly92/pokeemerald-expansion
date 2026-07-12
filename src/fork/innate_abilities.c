@@ -544,6 +544,23 @@
 //   chosen Electromorphosis to a complementary chosen Static (its doubles set already runs Static). The
 //   As One combo abilities (Calyrex forms) are never innates (:x: identity abilities), so they are not
 //   in the Chilling/Grim Neigh set.
+//   TRANSISTOR / DRAGONS_MAW (promoted-from-rejected clones, Batch Y sub-group Y2 — both 1:1
+//   clean-upside copies, canon-only (no flavor picks — sole-ability signature legends)): flat type-
+//   power-booster clones of Steelworker / Rocky Payload (Batch A), wired as two lines in CalcAttackStat
+//   (src/battle_util.c) beside Rocky Payload. TRANSISTOR boosts the holder's Electric moves (x1.3 under
+//   B_TRANSISTOR_BOOST >= GEN_9, else x1.5 — the chosen-ability multiplier exactly) and DRAGONS_MAW its
+//   Dragon moves x1.5; the `!= ABILITY_X` guard skips a chosen holder so the boost never double-applies.
+//   AI-free (the boost lives in the shared damage calc the AI runs; no dedicated battle_ai_*.c read
+//   exists for either). Suppression parity via IsInnateActive() (feature flag, Gastro Acid, Neutralizing
+//   Gas, not-on-field); neither is breakable, so Mold Breaker never touches them. Species, canon-only:
+//   TRANSISTOR -> Regieleki (already an innate-Levitate holder), DRAGONS_MAW -> Regidrago — both sole-
+//   ability genderless Regi legends, so like Glastrier / Spectrier (Y1) they take the innate AND a fork-
+//   owned chosen override in their empty slot 1 so the innate is OBSERVABLE and the frontier set is freed
+//   from its now-innate chosen ability: Regieleki -> chosen Lightning Rod (:x: never-an-innate, stable;
+//   the Electron Pokemon draws in Electric moves for immunity + a Sp. Atk boost, mirroring Raichu-Alola),
+//   Regidrago -> chosen Adaptability (an implemented :white_check_mark: innate it does not carry, stable;
+//   self-synergistic with innate Dragon's Maw for a devastating Choice Dragon breaker — 2x STAB on top of
+//   Dragon's Maw's 1.5x).
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -8136,7 +8153,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0894
         SPECIES_REGIELEKI,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TRANSISTOR
+        )
+    },
+    { // 0895
+        SPECIES_REGIDRAGO,
+        INNATES(
+            ABILITY_DRAGONS_MAW
         )
     },
     { // 0896

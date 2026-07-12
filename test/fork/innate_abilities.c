@@ -5143,6 +5143,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_MOXIE, ABILITY_BERSERK, ABILITY_SOUL_HEART,
         ABILITY_BATTERY, ABILITY_POWER_SPOT, ABILITY_TELEPATHY, ABILITY_AROMA_VEIL, ABILITY_FLOWER_VEIL,
         ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_ELECTROMORPHOSIS,
+        ABILITY_TRANSISTOR, ABILITY_DRAGONS_MAW,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8279,5 +8280,50 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate E
     } SCENE {
         MESSAGE("The opposing Bellibolt's Ability was suppressed!");
         NONE_OF { ABILITY_POPUP(opponent, ABILITY_ELECTROMORPHOSIS); } // suppressed -> no charge
+    }
+}
+
+// Batch Y sub-group Y2 — Transistor / Dragon's Maw (flat type-power-booster clones of Steelworker /
+// Rocky Payload, wired in CalcAttackStat). A forced chosen Damp keeps the innate observable (chosen !=
+// the innate), mirroring the Steelworker / Rocky Payload tests; the boost lives in the shared damage
+// calc, so comparing feature-off vs feature-on isolates the innate's exact multiplier.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Transistor boosts an Electric move 1.3x (GEN_9+)", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_REGIELEKI, ABILITY_TRANSISTOR));
+        ASSUME(GetMoveType(MOVE_THUNDERBOLT) == TYPE_ELECTRIC);
+        WITH_CONFIG(B_TRANSISTOR_BOOST, GEN_9);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_REGIELEKI) { Ability(ABILITY_DAMP); Moves(MOVE_THUNDERBOLT); } // chosen Damp; innate Transistor
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_THUNDERBOLT); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.3), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Dragon's Maw boosts a Dragon move 1.5x", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_REGIDRAGO, ABILITY_DRAGONS_MAW));
+        ASSUME(GetMoveType(MOVE_DRAGON_CLAW) == TYPE_DRAGON);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_REGIDRAGO) { Ability(ABILITY_DAMP); Moves(MOVE_DRAGON_CLAW); } // chosen Damp; innate Dragon's Maw
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_DRAGON_CLAW); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
     }
 }
