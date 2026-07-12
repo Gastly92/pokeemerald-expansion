@@ -2855,3 +2855,62 @@ Berserk (Galarian Moltres, Drampa), and Soul-Heart (Magearna) already resolve to
 their now-redundant chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with the
 complementary-slot re-pointing **deferred** as a focused follow-up, like the earlier Batch M sub-groups and Batch
 J/T/K/L.
+
+### ABILITY_BATTERY / ABILITY_POWER_SPOT / ABILITY_TELEPATHY / ABILITY_AROMA_VEIL / ABILITY_FLOWER_VEIL
+
+The **ally-support batch (Batch U)** — team-oriented, mostly doubles-relevant effects. All five are **1:1
+clean-upside copies** (none ever hurts its holder) and **canon-only** (no flavor picks: these are
+partner/side-support effects with no thematic hook off their canon users). Each is suppression-safe via
+`IsInnateActive()` and none is `breakable`, so Mold Breaker never touches them.
+
+- **Battery / Power Spot (partner damage boosters).** Battery boosts the attacker's **special** moves ×1.3, Power
+  Spot boosts **all** the attacker's moves ×1.3. Wired in `CalcAttackStat` (`src/battle_util.c`) in the
+  **attacker-partner** block, right **beside the wired Steely Spirit innate clause** — an `IsInnateActive(partner, X)`
+  credit guarded against the chosen-ability `case` above so it never double-applies. Pure calc modifiers, so the AI's
+  damage prediction (which runs the same calc keyed off the real battler) is **innate-aware for free**; the
+  `AI_GetAbilityValue` Power Spot case is an ability-*value* scorer (Trace territory, not an effect read) and is left
+  keyed to the chosen ability. Canon-only: **Charjabug** (Battery), **Stonjourner** (Power Spot).
+
+- **Telepathy (dodge an ally's move).** An innate Telepathy holder nullifies its **partner's** damaging move exactly
+  like the real ability. Wired beside the cached chosen-ability read in the type-effectiveness / damage-modifier calc
+  (`src/battle_util.c`) via `IsInnateActive`; when the innate did the dodging, `gLastUsedAbility` is forced to
+  Telepathy so the message names it. Runs in the shared calc → AI damage prediction is innate-aware for free; the AI's
+  **Wide Guard** heuristic (`src/battle_ai_main.c`, "don't bother if my Telepathy ally dodges the spread move anyway")
+  is made innate-aware with a `BattlerHasAbility`-style check. Canon-only: the ~26 canon Telepathy users in any real
+  slot (the **Ralts / Meditite / Munna / Elgyem / Wobbuffet / Dialga / Palkia / Giratina-Altered / Tapu** quartet **/
+  Oranguru / Noibat / Blipbug / Rabsca** lines), plus **Gardevoir-Mega / Medicham-Mega** as pure-boon mirrors.
+
+- **Aroma Veil (side-wide mental-status shield).** Protects the whole side from infatuation, Taunt, Disable, Encore,
+  Torment and Heal Block. It is wired through the new **`IsInnateOnSide()`** companion to `IsAbilityOnSide()`
+  (`src/battle_util.c`) — the innate-aware, feature-gated, species-based side check. Two classes of site:
+  - **C guards** (`!IsAbilityOnSide(...)` → also `!IsInnateOnSide(...)`): the Cute Charm and Cursed Body blockers in
+    `src/battle_util.c`, and the Attract (`Cmd_tryinfatuating`, `BS_TrySetInfatuation`) and Torment (`BS_TrySetTorment`)
+    and Psychic-Noise-Heal-Block (`MOVE_EFFECT_PSYCHIC_NOISE`) sites in `src/battle_script_commands.c`.
+  - **The script chokepoint** — `Cmd_jumpifability`'s `BS_ATTACKER_SIDE` / `BS_TARGET_SIDE` cases
+    (`src/battle_script_commands.c`) fall back to `IsInnateOnSide` when the chosen-ability side check misses. This is
+    the **only** script `jumpifability` side form and is used **solely by Aroma Veil**, so this one central edit makes
+    an innate Aroma Veil block Taunt / Disable / Encore / Heal Block (which reach the block via script
+    `jumpifability`) like the real ability. Each pop-up site overwrites to Aroma Veil when the protector's chosen
+    ability differs (Speed Boost precedent). AI: `AI_CanBeInfatuated`, the `AI_CheckBadMove` Aroma-Veil switch cases
+    (via a side-wide pre-check before the switch), and the "don't bait into Encore" read all credit an innate via
+    `AI_IsInnateOnSide`. Canon-only: the **Spritzee / Milcery** (incl. the default **Alcremie** form + **Gmax**) **/
+    Lechonk** (Oinkologne-F) **/ Dachsbun** lines. (Alcremie's 63 decorative sub-forms are represented by the default
+    form only — the Vivillon-pattern precedent for cosmetic forms sharing one ability.)
+
+- **Flower Veil (Grass-ally status + stat-drop shield).** Protects Grass-type allies from non-volatile status **and**
+  from stat drops. Wired by making the two existing chokepoints innate-aware: `IsFlowerVeilProtected`
+  (`src/battle_script_commands.c`, the status path — used by `CanSetNonVolatileStatus` and the AI switch-in check, so
+  both become innate-aware at once) falls back to `IsInnateOnSide`, and `StatChange_IsFlowerVeilProtected`
+  (`src/battle_stat_change.c`, the stat-drop path) also credits `IsInnateActive`. Both callers overwrite the pop-up to
+  Flower Veil when the protector's chosen ability differs. AI: the Flower-Veil stat-drop-protect read
+  (`src/battle_ai_util.c`), the Yawn/status switch read (`src/battle_ai_switch.c`), and the `AI_CheckBadMove` pre-check
+  all credit an innate via `AI_IsInnateOnSide`. Canon-only: the **Flabébé / Floette / Florges** (all color forms) and
+  **Comfey** lines.
+
+**Step 3.5**: six frontier sets freed — **Musharna / Rabsca** (Telepathy now innate) → chosen **Synchronize**,
+**Oranguru / Florges** (Telepathy / Flower Veil) → chosen **Symbiosis** (both `:x:`, stable, complementary real
+slots), and **Stonjourner** (sole Power Spot, doubles-only) takes a fork-owned **Solid Rock** override
+(`species_ability_overrides.c`, an implemented `:white_check_mark:` innate, stable) on its empty slot 1, like
+Ogerpon-Cornerstone. The seven **Dialga / Palkia / Giratina / Orbeetle / Aromatisse** sets whose real abilities are
+**all** now innate keep their now-redundant chosen ability — still correct (the chosen runs it; the innate is
+redundant-but-skipped) — **deferred** as a focused follow-up, like Batch J/T/K/L. This completes Batch U.

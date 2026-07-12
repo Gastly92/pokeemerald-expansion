@@ -937,7 +937,8 @@ static bool32 CanIntimidateLowerOpponentAtk(enum BattlerId battler, enum Battler
     if (gSideStatuses[GetBattlerSide(opposingBattler)] & SIDE_STATUS_MIST)
         return FALSE;
 
-    if (IS_BATTLER_OF_TYPE(opposingBattler, TYPE_GRASS) && AI_IsAbilityOnSide(opposingBattler, ABILITY_FLOWER_VEIL))
+    if (IS_BATTLER_OF_TYPE(opposingBattler, TYPE_GRASS)
+     && (AI_IsAbilityOnSide(opposingBattler, ABILITY_FLOWER_VEIL) || AI_IsInnateOnSide(opposingBattler, ABILITY_FLOWER_VEIL))) // FORK: innate Flower Veil (Batch U)
         return FALSE;
 
     switch (abilityDef)

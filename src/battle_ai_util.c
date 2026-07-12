@@ -1298,7 +1298,8 @@ static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, 
         return !gBattleMons[battlerAtk].volatiles.infatuation
             && abilityAtk != ABILITY_OBLIVIOUS
             && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
-            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL);
+            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL)
+            && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // FORK: innate Aroma Veil on the attacker's side (Batch U)
     default:
         break;
     }
@@ -1312,7 +1313,8 @@ static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, 
         return !gBattleMons[battlerAtk].volatiles.infatuation
             && abilityAtk != ABILITY_OBLIVIOUS
             && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
-            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL);
+            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL)
+            && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // FORK: innate Aroma Veil on the attacker's side (Batch U)
 
     return FALSE;
 }
@@ -2513,7 +2515,8 @@ bool32 CanLowerStat(enum BattlerId battlerAtk, enum BattlerId battlerDef, struct
 
     if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, abilityAtk, move))
     {
-        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) && AI_IsAbilityOnSide(battlerDef, ABILITY_FLOWER_VEIL))
+        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)
+         && (AI_IsAbilityOnSide(battlerDef, ABILITY_FLOWER_VEIL) || AI_IsInnateOnSide(battlerDef, ABILITY_FLOWER_VEIL))) // FORK: innate Flower Veil (Batch U)
             return FALSE;
 
         // FORK: innate-aware Speed Boost — don't bother lowering an innate Speed Boost foe's Speed
@@ -3956,7 +3959,8 @@ bool32 AI_CanBeInfatuated(enum BattlerId battlerAtk, enum BattlerId battlerDef, 
       || defAbility == ABILITY_OBLIVIOUS
       || IsInnateActive(battlerDef, ABILITY_OBLIVIOUS) // FORK: innate Oblivious also blocks infatuation
       || !AreBattlersOfOppositeGender(battlerAtk, battlerDef)
-      || AI_IsAbilityOnSide(battlerDef, ABILITY_AROMA_VEIL))
+      || AI_IsAbilityOnSide(battlerDef, ABILITY_AROMA_VEIL)
+      || AI_IsInnateOnSide(battlerDef, ABILITY_AROMA_VEIL)) // FORK: innate Aroma Veil blocks infatuation (Batch U)
         return FALSE;
     return TRUE;
 }

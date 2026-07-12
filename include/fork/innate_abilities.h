@@ -110,6 +110,14 @@
 //   delegating to ABILITYEFFECT_COLOR_CHANGE); Soul-Heart raises Sp. Atk +1 whenever any Pokémon faints (made
 //   innate-aware at the BS_TryActivateSoulheart native command). Pop-up overwritten to the innate; Moxie's two
 //   AI reads are innate-aware, Berserk/Soul-Heart need none. Completes Batch M),
+//   BATTERY / POWER_SPOT / TELEPATHY / AROMA_VEIL / FLOWER_VEIL (ally-support, Batch U — all 1:1 clean-upside
+//   copies, canon-only: Battery / Power Spot boost an ally's (special / all) moves +30% (calc modifiers beside
+//   partner Steely Spirit, AI-free); Telepathy nullifies an ally's damaging move (type-eff calc); Aroma Veil
+//   shields the side from mental status — infatuation / Taunt / Disable / Encore / Torment / Heal Block — wired via
+//   the new IsInnateOnSide() companion at the C guards + centrally in Cmd_jumpifability's side cases (the only
+//   script jumpifability form, Aroma-Veil-only); Flower Veil shields Grass allies from non-volatile status AND stat
+//   drops (IsFlowerVeilProtected / StatChange_IsFlowerVeilProtected made innate-aware). Pop-up overwritten to the
+//   innate; the dedicated AI side reads are innate-aware via AI_IsInnateOnSide. Completes Batch U),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

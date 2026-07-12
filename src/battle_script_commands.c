@@ -2843,10 +2843,20 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
     case MOVE_EFFECT_PSYCHIC_NOISE:
     {
         enum BattlerId battler = IsAbilityOnSide(effectBattler, ABILITY_AROMA_VEIL);
+        // FORK: fall back to an innate Aroma Veil on the side, blocking Psychic Noise's Heal Block like the
+        // real ability (Batch U). Track it so the pop-up (which reads the primary slot) shows Aroma Veil.
+        bool32 aromaInnate = FALSE;
+        if (!battler && (battler = IsInnateOnSide(effectBattler, ABILITY_AROMA_VEIL)))
+            aromaInnate = TRUE;
 
         if (battler)
         {
             gBattlerAbility = battler - 1;
+            if (aromaInnate)
+            {
+                gLastUsedAbility = ABILITY_AROMA_VEIL;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_AROMA_VEIL;
+            }
             BattleScriptPush(battleScript);
             gBattlescriptCurrInstr = BattleScript_AromaVeilProtectsRet;
         }
@@ -3758,6 +3768,7 @@ static void Cmd_jumpifability(void)
 
     enum BattlerId battler;
     bool32 hasAbility = FALSE;
+    bool32 sideInnate = FALSE; // FORK: side match came from an innate, not the chosen ability (Batch U)
     enum Ability ability = cmd->ability;
 
     switch (cmd->battler)
@@ -3769,6 +3780,11 @@ static void Cmd_jumpifability(void)
         break;
     case BS_ATTACKER_SIDE:
         battler = IsAbilityOnSide(gBattlerAttacker, ability);
+        // FORK: fall back to an innate on the side (FEATURE_INNATE_ABILITIES). The side jumpifability
+        // form is used only by Aroma Veil, so this makes an innate Aroma Veil block Taunt / Disable /
+        // Encore / Heal Block like the real ability. IsInnateOnSide is a no-op when the feature is off.
+        if (!battler && (battler = IsInnateOnSide(gBattlerAttacker, ability)))
+            sideInnate = TRUE;
         if (battler)
         {
             battler--;
@@ -3777,6 +3793,8 @@ static void Cmd_jumpifability(void)
         break;
     case BS_TARGET_SIDE:
         battler = IsAbilityOnSide(gBattlerTarget, ability);
+        if (!battler && (battler = IsInnateOnSide(gBattlerTarget, ability))) // FORK: innate Aroma Veil side match (Batch U)
+            sideInnate = TRUE;
         if (battler)
         {
             battler--;
@@ -3791,6 +3809,11 @@ static void Cmd_jumpifability(void)
         gBattlescriptCurrInstr = cmd->jumpInstr;
         RecordAbilityBattle(battler, gLastUsedAbility);
         gBattlerAbility = battler;
+        // FORK: the pop-up reads the primary slot, so when an innate did the blocking, overwrite it to
+        // show the innate ability (Batch U). The jump target (e.g. BattleScript_AromaVeilProtects) runs
+        // the pop-up, which clears the overwrite afterwards.
+        if (sideInnate)
+            gBattleScripting.abilityPopupOverwrite = ability;
     }
     else
     {
@@ -6905,7 +6928,13 @@ bool32 TryTidyUpClear(bool32 clear)
 u32 IsFlowerVeilProtected(enum BattlerId battler)
 {
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))
-        return IsAbilityOnSide(battler, ABILITY_FLOWER_VEIL);
+    {
+        u32 sideBattler = IsAbilityOnSide(battler, ABILITY_FLOWER_VEIL);
+        // FORK: innate Flower Veil on the side protects a Grass ally like the real ability (Batch U).
+        if (!sideBattler)
+            sideBattler = IsInnateOnSide(battler, ABILITY_FLOWER_VEIL);
+        return sideBattler;
+    }
     else
         return 0;
 }
@@ -7736,6 +7765,10 @@ static void Cmd_tryinfatuating(void)
     enum BattlerId battler;
 
     battler = IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL);
+    // FORK: fall back to an innate Aroma Veil on the target's side, blocking Attract like the real ability (Batch U).
+    bool32 aromaInnate = FALSE;
+    if (!battler && (battler = IsInnateOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)))
+        aromaInnate = TRUE;
     if (battler)
     {
         gBattlerAbility = battler - 1;
@@ -7743,6 +7776,9 @@ static void Cmd_tryinfatuating(void)
         gBattlescriptCurrInstr = BattleScript_AromaVeilProtectsRet;
         gLastUsedAbility = ABILITY_AROMA_VEIL;
         RecordAbilityBattle(gBattlerAbility, ABILITY_AROMA_VEIL);
+        // FORK: the pop-up reads the primary slot, so show Aroma Veil when the innate blocked it (Batch U).
+        if (aromaInnate)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_AROMA_VEIL;
         return;
     }
 
@@ -12468,6 +12504,7 @@ void BS_TrySetInfatuation(void)
         && gBattleMons[gBattlerTarget].ability != ABILITY_OBLIVIOUS
         && !IsInnateActive(gBattlerTarget, ABILITY_OBLIVIOUS) // FORK: innate Oblivious also blocks infatuation
         && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
+        && !IsInnateOnSide(gBattlerTarget, ABILITY_AROMA_VEIL) // FORK: innate Aroma Veil on the side also blocks infatuation (Batch U)
         // FORK: DETERMINISTIC_STATUS drops the opposite-gender requirement.
         && (GetConfig(DETERMINISTIC_STATUS) || AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget)))
     {
@@ -12506,7 +12543,8 @@ void BS_TrySetTorment(void)
     NATIVE_ARGS(const u8 *failInstr);
 
     if (!(gBattleMons[gBattlerTarget].volatiles.torment == TRUE)
-     && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL))
+     && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
+     && !IsInnateOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)) // FORK: innate Aroma Veil on the side also blocks Torment (Batch U)
     {
         gBattleMons[gBattlerTarget].volatiles.torment = TRUE;
         gBattleMons[gBattlerTarget].volatiles.tormentTimer = B_TORMENT_TIMER;

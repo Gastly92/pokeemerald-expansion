@@ -908,6 +908,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_FROSMOTH, 1,
         ABILITY_SNOW_WARNING
     },
+    { // 0874
+        // Stonjourner's only real ability (Power Spot) is now innate, and it's a frontier set, so like
+        // Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
+        // Power Spot is doubles-only (it boosts allies), so a singles set needs a real ability: Solid Rock
+        // is an already-implemented :white_check_mark: innate (stable) and thematic for the giant megalith,
+        // blunting the supereffective Water/Grass/Fighting/Ground/Steel hits its bulk otherwise fears. Same
+        // pick as the other lone rocks (Regirock / Carbink / Diancie).
+        SPECIES_STONJOURNER, 1,
+        ABILITY_SOLID_ROCK
+    },
     { // 0887
         // Clear Body and Infiltrator now innate (slot-2 Cursed Body is pending), so its pending slot-2 Cursed
         // Body (audited: unpinned) takes Dragon's Maw -- :x: (never an innate -> stable) and thematic: the

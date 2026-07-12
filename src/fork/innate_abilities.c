@@ -484,6 +484,34 @@
 //   the species' real slot, so they keep their now-redundant chosen ability — still correct (the chosen runs it;
 //   the innate is redundant-but-skipped) — with the complementary-slot freeing deferred as a focused follow-up,
 //   like the earlier Batch M sub-groups. This completes Batch M.
+//   BATTERY / POWER_SPOT / TELEPATHY / AROMA_VEIL / FLOWER_VEIL (ally-support, Batch U — all 1:1 clean-upside
+//   copies, canon-only (no flavor picks — these are doubles-oriented team-support effects with no thematic hook
+//   off their canon users)): BATTERY boosts an ally's special moves +30%, POWER_SPOT boosts an ally's moves +30%
+//   (both wired beside the partner Steely Spirit clause in CalcAttackStat, src/battle_util.c — pure calc modifiers,
+//   so the AI's damage prediction is innate-aware for free); TELEPATHY nullifies an ally's damaging move (wired
+//   beside the chosen-ability read in the type-effectiveness calc, src/battle_util.c, naming Telepathy in the
+//   message when the innate dodged; the AI's Wide-Guard heuristic is innate-aware); AROMA_VEIL shields the whole
+//   side from mental status (infatuation / Taunt / Disable / Encore / Torment / Heal Block) and FLOWER_VEIL shields
+//   Grass allies from non-volatile status AND stat drops. Aroma Veil is wired at its many chokepoints via the new
+//   IsInnateOnSide() companion to IsAbilityOnSide() — the Cute Charm / Cursed Body / Attract / Torment C guards in
+//   src/battle_util.c + src/battle_script_commands.c, and centrally in Cmd_jumpifability's BS_ATTACKER_SIDE /
+//   BS_TARGET_SIDE cases (the only script-side jumpifability form, used solely by Aroma Veil, so an innate now
+//   blocks Taunt / Disable / Encore / Heal Block like the real ability); Flower Veil is wired by making
+//   IsFlowerVeilProtected (status) and StatChange_IsFlowerVeilProtected (stat drops) innate-aware. Each pop-up
+//   overwrites to the innate when the protector's chosen ability differs (Speed Boost precedent). The AI's
+//   dedicated side reads (AI_CanBeInfatuated, the AI_CheckBadMove Aroma/Flower Veil switch cases via a pre-check,
+//   the don't-bait-Encore read, the stat-drop-protect and Yawn-switch Flower Veil reads) all credit an innate via
+//   AI_IsInnateOnSide / IsInnateActive. Suppression parity holds via IsInnateActive() (Gastro Acid, Neutralizing
+//   Gas, not-on-field); none is breakable, so Mold Breaker never touches them. Canon-only: BATTERY -> Charjabug;
+//   POWER_SPOT -> Stonjourner; TELEPATHY -> its ~26 canon users in any real slot (the Ralts / Meditite / Munna /
+//   Elgyem / Wobbuffet / Dialga / Palkia / Giratina-Altered / Tapu quartet / Oranguru / Noibat / Blipbug / Rabsca
+//   lines, plus Gardevoir-Mega / Medicham-Mega as pure-boon mirrors); AROMA_VEIL -> the Spritzee / Milcery
+//   (incl. the default Alcremie form + Gmax) / Lechonk (Oinkologne-F) / Dachsbun lines; FLOWER_VEIL -> the Flabébé /
+//   Floette / Florges (all color forms) and Comfey lines. Alcremie's 63 decorative sub-forms are represented by the
+//   default form only (the Vivillon-pattern precedent — cosmetic forms sharing one ability). Step 3.5: six frontier
+//   sets freed (Musharna / Rabsca -> Synchronize, Oranguru / Florges -> Symbiosis, Stonjourner -> a Solid Rock
+//   override); the all-abilities-innate Dialga / Palkia / Giratina / Orbeetle / Aromatisse sets keep their
+//   now-redundant chosen ability, deferred like Batch J/T/K/L. This completes Batch U.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -2331,12 +2359,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0682
         SPECIES_SPRITZEE,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_HEALER
         )
     },
     { // 0683
         SPECIES_AROMATISSE,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_HEALER
         )
     },
@@ -2631,7 +2661,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0202
         SPECIES_WOBBUFFET,
         INNATES(
-            ABILITY_SHADOW_TAG
+            ABILITY_SHADOW_TAG,
+            ABILITY_TELEPATHY
         )
     },
     { // 0203
@@ -3270,25 +3301,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0280
         SPECIES_RALTS,
         INNATES(
-            ABILITY_SERENE_GRACE
+            ABILITY_SERENE_GRACE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0281
         SPECIES_KIRLIA,
         INNATES(
-            ABILITY_SERENE_GRACE
+            ABILITY_SERENE_GRACE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0282
         SPECIES_GARDEVOIR,
         INNATES(
-            ABILITY_SERENE_GRACE
+            ABILITY_SERENE_GRACE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0282
         SPECIES_GARDEVOIR_MEGA,
         INNATES(
-            ABILITY_SERENE_GRACE
+            ABILITY_SERENE_GRACE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0283
@@ -3469,13 +3504,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0307
         SPECIES_MEDITITE,
         INNATES(
-            ABILITY_PURE_POWER
+            ABILITY_PURE_POWER,
+            ABILITY_TELEPATHY
         )
     },
     { // 0308
         SPECIES_MEDICHAM,
         INNATES(
-            ABILITY_PURE_POWER
+            ABILITY_PURE_POWER,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0308
+        SPECIES_MEDICHAM_MEGA,
+        INNATES(
+            ABILITY_TELEPATHY
         )
     },
     { // 0313
@@ -3890,7 +3933,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0360
         SPECIES_WYNAUT,
         INNATES(
-            ABILITY_SHADOW_TAG
+            ABILITY_SHADOW_TAG,
+            ABILITY_TELEPATHY
         )
     },
     { // 0361
@@ -4864,32 +4908,37 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0483
         SPECIES_DIALGA,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0483
         SPECIES_DIALGA_ORIGIN,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0484
         SPECIES_PALKIA,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0484
         SPECIES_PALKIA_ORIGIN,
         INNATES(
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0487
         SPECIES_GIRATINA_ALTERED,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0487
@@ -5109,7 +5158,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BAD_DREAMS,
             ABILITY_FOREWARN,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0518
@@ -5117,7 +5167,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BAD_DREAMS,
             ABILITY_FOREWARN,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0519
@@ -5794,14 +5845,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ELGYEM,
         INNATES(
             ABILITY_ANALYTIC,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0606
         SPECIES_BEHEEYEM,
         INNATES(
             ABILITY_ANALYTIC,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0607
@@ -6239,6 +6292,102 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_UNNERVE
         )
     },
+    { // 0669
+        SPECIES_FLABEBE_RED,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0669
+        SPECIES_FLABEBE_YELLOW,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0669
+        SPECIES_FLABEBE_ORANGE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0669
+        SPECIES_FLABEBE_BLUE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0669
+        SPECIES_FLABEBE_WHITE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0670
+        SPECIES_FLOETTE_RED,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0670
+        SPECIES_FLOETTE_YELLOW,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0670
+        SPECIES_FLOETTE_ORANGE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0670
+        SPECIES_FLOETTE_BLUE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0670
+        SPECIES_FLOETTE_WHITE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0670
+        SPECIES_FLOETTE_ETERNAL,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0671
+        SPECIES_FLORGES_RED,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0671
+        SPECIES_FLORGES_YELLOW,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0671
+        SPECIES_FLORGES_ORANGE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0671
+        SPECIES_FLORGES_BLUE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
+    { // 0671
+        SPECIES_FLORGES_WHITE,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
     { // 0672
         SPECIES_SKIDDO,
         INNATES(
@@ -6652,14 +6801,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NOIBAT,
         INNATES(
             ABILITY_FRISK,
-            ABILITY_INFILTRATOR
+            ABILITY_INFILTRATOR,
+            ABILITY_TELEPATHY
         )
     },
     { // 0715
         SPECIES_NOIVERN,
         INNATES(
             ABILITY_FRISK,
-            ABILITY_INFILTRATOR
+            ABILITY_INFILTRATOR,
+            ABILITY_TELEPATHY
         )
     },
     { // 0718
@@ -6832,6 +6983,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GRUBBIN,
         INNATES(
             ABILITY_SWARM
+        )
+    },
+    { // 0737
+        SPECIES_CHARJABUG,
+        INNATES(
+            ABILITY_BATTERY
         )
     },
     { // 0738
@@ -7032,6 +7189,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0764
         SPECIES_COMFEY,
         INNATES(
+            ABILITY_FLOWER_VEIL,
             ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE,
             ABILITY_TRIAGE
@@ -7040,7 +7198,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0765
         SPECIES_ORANGURU,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_TELEPATHY
         )
     },
     { // 0766
@@ -7137,25 +7296,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0785
         SPECIES_TAPU_KOKO,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0786
         SPECIES_TAPU_LELE,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0787
         SPECIES_TAPU_BULU,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0788
         SPECIES_TAPU_FINI,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0789
@@ -7396,28 +7559,32 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BLIPBUG,
         INNATES(
             ABILITY_COMPOUND_EYES,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TELEPATHY
         )
     },
     { // 0825
         SPECIES_DOTTLER,
         INNATES(
             ABILITY_COMPOUND_EYES,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TELEPATHY
         )
     },
     { // 0826
         SPECIES_ORBEETLE,
         INNATES(
             ABILITY_FRISK,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TELEPATHY
         )
     },
     { // 0826
         SPECIES_ORBEETLE_GMAX,
         INNATES(
             ABILITY_FRISK,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TELEPATHY
         )
     },
     { // 0827
@@ -7758,7 +7925,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0868
         SPECIES_MILCERY,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_SWEET_VEIL
+        )
+    },
+    { // 0869
+        SPECIES_ALCREMIE_STRAWBERRY_VANILLA_CREAM,
+        INNATES(
+            ABILITY_AROMA_VEIL
+        )
+    },
+    { // 0869
+        SPECIES_ALCREMIE_GMAX,
+        INNATES(
+            ABILITY_AROMA_VEIL
         )
     },
     { // 0870
@@ -7786,6 +7966,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ICE_SCALES,
             ABILITY_SHIELD_DUST
+        )
+    },
+    { // 0874
+        SPECIES_STONJOURNER,
+        INNATES(
+            ABILITY_POWER_SPOT
         )
     },
     { // 0876
@@ -8045,6 +8231,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0915
         SPECIES_LECHONK,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_GLUTTONY,
             ABILITY_THICK_FAT
         )
@@ -8059,6 +8246,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0916
         SPECIES_OINKOLOGNE_F,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_GLUTTONY,
             ABILITY_THICK_FAT
         )
@@ -8139,6 +8327,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FIDOUGH,
         INNATES(
             ABILITY_OWN_TEMPO
+        )
+    },
+    { // 0927
+        SPECIES_DACHSBUN,
+        INNATES(
+            ABILITY_AROMA_VEIL
         )
     },
     { // 0931
@@ -8285,6 +8479,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPOUND_EYES,
             ABILITY_SHED_SKIN
+        )
+    },
+    { // 0954
+        SPECIES_RABSCA,
+        INNATES(
+            ABILITY_TELEPATHY
         )
     },
     { // 0955
