@@ -576,8 +576,10 @@ implemented (or, for Turboblaze/Teravolt, a pending) ability**, so the wiring is
 near-free — reuse the existing site. Flipped to `:white_large_square:` in the
 progress doc and counted here, **not** in the 133 (that tripwire is frozen to the
 original pending set). The full rejection rationale — including why the *remaining*
-`:x:` set stays rejected — now lives in
-[`INNATE_ABILITIES_PROGRESS.md` → "Why the `:x:` abilities are rejected"](INNATE_ABILITIES_PROGRESS.md#why-the-x-abilities-are-rejected).
+`:x:` set stays rejected — lives in the wiring reference
+[`INNATE_ABILITIES.md` → "Why some abilities are never wired"](INNATE_ABILITIES.md#why-some-abilities-are-never-wired-the-x-set)
+(a durable doc, unlike this batches doc and the progress tracker, which are both
+retired/deleted once the feature is complete).
 Take Batch Y one sub-group per PR, like any other batch:
 
 | Sub-group | Members | Clone of (site) | Notes |

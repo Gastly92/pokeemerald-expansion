@@ -68,6 +68,64 @@ like the real ability; only the *effect* diverges). Two worked examples:
 yes, wire the innate to skip that branch (and note the divergence in the allowlist
 comment + `FORK.md`). If no, a 1:1 copy is already pure-boon.
 
+## Why some abilities are never wired (the `:x:` set)
+
+`INNATE_ABILITIES_PROGRESS.md` marks abilities we will **not** wire as innates with
+`:x:`, but that tracker is a scratch record that gets deleted once the feature is
+complete — so the *reasons* live here, permanently. An ability is `:x:` when it fails
+a gate above: it's not a pure boon, or it can't be identity-neutral, AI-tractable, or
+determinism-safe. The buckets (each rejected ability sits in exactly one):
+
+- **Identity / form / type-transform** — breaks the identity-neutral invariant
+  (innates are never copied/swapped/displayed as identity; `-ate` abilities retype
+  moves). Trace, Color Change, Forecast, Imposter, Illusion, Zen Mode, Stance
+  Change, Schooling, Disguise, Power Construct, Multitype, RKS System, Protean,
+  Libero, Mimicry, Battle Bond, Ice Face, Hunger Switch, Zero to Hero, Commander, As
+  One (×2), Tera Shift/Shell/Teraform Zero, Embody Aspect (×4), Gulp Missile, Shields
+  Down, Refrigerate, Pixilate, Aerilate, Galvanize, Liquid Voice, Normalize,
+  Dragonize.
+- **Ability copy / swap / nullify** — same invariant, from the ability side. Mummy,
+  Wandering Spirit, Receiver, Power of Alchemy, Neutralizing Gas, Lingering Aroma,
+  Synchronize.
+- **Global-field / weather / terrain / auras** — change the field for *everyone*, so
+  not a personal boon (big AI + power swing). Drizzle, Sand Stream, Drought, Snow
+  Warning, Electric/Psychic/Misty/Grassy Surge, Primordial Sea, Desolate Land, Delta
+  Stream, Orichalcum Pulse, Hadron Engine, Cloud Nine, Air Lock, Dark Aura, Fairy
+  Aura, Vessel/Sword/Tablets/Beads of Ruin, Victory Star.
+- **Pure drawback (no boon to extract)** — strip the cost and nothing remains.
+  Truant, Slow Start, Defeatist, Stall, Klutz, Gorilla Tactics, Mycelium Might.
+- **Double-edged (upside welded to downside)** — Simple, Contrary, Moody, No Guard,
+  Fluffy, Anger Shell, Dry Skin, Rivalry.
+- **Non-volatile status-on-contact/hit** — auto-applies a *major* status, which is
+  mutually exclusive, so it can *block the holder's own* status move (an innate
+  Static paralyses a target you wanted to Toxic). Not a pure boon — unlike the
+  *volatile* Cute Charm (infatuation), which **is** wired. Static, Flame Body, Poison
+  Point, Effect Spore, Poison Touch, Toxic Chain, Poison Puppeteer, Spicy Spray.
+- **On-hit field / hazard setters** — reactive global-field effects. Sand Spit, Seed
+  Sower, Toxic Debris, Cotton Down, Screen Cleaner, Curious Medicine.
+- **Hidden type / move / immunity stacking** — a hidden immunity layered on the
+  chosen ability is opaque (a surprise the opponent can't read) and stacks messily;
+  several are also stable frontier-override picks. Volt Absorb, Water Absorb, Flash
+  Fire, Motor Drive, Lightning Rod, Storm Drain, Sap Sipper, Earth Eater, Well-Baked
+  Body, Wind Rider, Bulletproof, Soundproof, Damp, Wonder Guard.
+- **Forced self-switch / HP-threshold disruption** — forced, often bad. Wimp Out,
+  Emergency Exit.
+- **Overworld / economy** — innates deliberately never touch the overworld. Run
+  Away, Honey Gather, Ball Fetch.
+- **Doubles / ally-only niche** — narrow, partner-keyed. Plus, Minus, Symbiosis,
+  Costar.
+- **Bespoke / signature-complex** — no clean clause; own design pass, low ROI.
+  Parental Bond, Sheer Force, Solar Power, Protosynthesis, Quark Drive.
+
+**`:x:` is not always permanent.** An ability rejected only because its driver or its
+implemented *clone* didn't exist yet can be promoted to `:white_large_square:` once
+it does — that's how the clone-of-implemented set (Chilling Neigh = Moxie, Full Metal
+Body = Clear Body, Transistor = Steelworker, …) became **Batch Y** in
+`INNATE_ABILITIES_BATCHES.md`. Before promoting an `:x:`, confirm it isn't
+load-bearing as a stable frontier-override pick (`src/fork/frontier_extended_mons.c`);
+un-rejecting one forces the Step 3.5 sweep to re-point every override that hands it
+out.
+
 ## What the generic tooling already gives you (no per-ability work)
 
 - **The species → innate table** (`src/fork/innate_abilities.c`): a variable-length,
