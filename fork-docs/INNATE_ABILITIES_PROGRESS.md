@@ -270,8 +270,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
 | :x: | Transistor | Powers up Electric-type moves. |
 | :x: | Dragon's Maw | Powers up Dragon-type moves. |
-| :x: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
-| :x: | Grim Neigh | When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat. |
+| :white_large_square: | Chilling Neigh | When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat. |
+| :white_large_square: | Grim Neigh | When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat. |
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability. |
 | :x: | As One | This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability. |
 | :x: | Lingering Aroma | Contact with the Pokémon changes the attacker's Ability to Lingering Aroma. |
@@ -286,7 +286,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Wind Power | The Pokémon becomes charged when it is hit by a wind move, boosting the power of the next Electric-type move the Pokémon uses. |
 | :x: | Zero to Hero | The Pokémon changes into its Hero Form when it switches out of battle. |
 | :x: | Commander | When the Pokémon enters a battle, it goes inside the mouth of an ally Dondozo if one is on the field. The Pokémon then issues commands from there. |
-| :x: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
+| :white_large_square: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
 | :x: | Protosynthesis | Boosts the Pokémon's most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy. |
 | :x: | Quark Drive | Boosts the Pokémon's most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy. |
 | :x: | Good as Gold | A body of pure, solid gold gives the Pokémon full immunity to other Pokémon's status moves. |
