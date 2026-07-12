@@ -5,10 +5,15 @@
 When the maintainer says that (or anything like it), this is the whole job — no
 other context needed:
 
-1. **Find the next batch.** It is the **first row in the [Execution queue](#execution-queue)
-   whose status is still `open`.** That single rule decides "next" — don't
-   improvise the order. (The queue interleaves the two driver-build steps, so
-   "next" never lands on a batch that's blocked on a missing driver.)
+1. **Find the next batch.** It is the **first numbered row in the
+   [Execution queue](#execution-queue) whose status is still `open`.** That single
+   rule decides "next" — don't improvise the order. (The queue interleaves the two
+   driver-build steps, so "next" never lands on a batch that's blocked on a missing
+   driver.) Two caveats now that the tail is expanded: the `⟂`-marked **Batch W**
+   (frontier-slot freeing) is a **parallel track**, not a numbered gate — skip it
+   when picking "next" and do it in its own sessions whenever; and Tier 5 (steps
+   24–35) is still **one ability per PR**, so "the batch" there is that single
+   row's ability, not the whole tier.
 2. **Do it by the recipe.** Open [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) and
    run its 5-step Definition of Done for that batch. **Re-grep every site first**
    (`grep -n ABILITY_X src/` and `grep src/battle_ai_*.c`) — the line numbers in
@@ -359,22 +364,85 @@ attacks), Aroma Veil (self+allies immune to infatuation/Taunt/etc.), Flower Veil
 
 ## Tier 5 — Bespoke / deferred (one-off, multi-site, or dependency-blocked)
 
-Don't batch these — each needs its own design pass, and some depend on rejected
-abilities. Listed so they're not silently dropped.
+**Still one ability per session/PR** — these each need their own design pass, and
+some depend on rejected abilities. What's new below is an **order**: the 11 are no
+longer an unordered bucket but an execution sub-queue, easiest/most-contained and
+**unblocked first**, bespoke reactive machinery in the middle, dependency-blocked
+last. Take them top-down, exactly like the main queue. The intra-Tier-5 synergies
+are flagged (Opportunist/Mirror Armor share the stat-change site; Mirror
+Armor/Magic Bounce share "bounce-back" machinery) — adjacent so a session reuses
+context, but still one PR each.
 
-| Ability | Why it's bespoke |
-| :-- | :-- |
-| Magic Guard | Multi-site immunity to *all* indirect damage (sandstorm, poison/burn, recoil, hazards, Life Orb, …) — a Levitate-scale sweep across every chip-damage source. |
-| Mold Breaker | Cross-cutting: must make the holder's moves ignore the *target's* ability everywhere `IgnoresTargetAbility`-style checks run. Wide blast radius. |
-| Magic Bounce | Reflects status moves back — needs the move-redirection/bounce machinery, not a simple clause. |
-| Mirror Armor | Bounces stat-*drops* back at the source — reactive, ties into the stat-change site (Batch D family) but with its own redirect. |
-| Dancer | Copies dance moves reactively mid-turn — bespoke move-trigger hook. |
-| Opportunist | Copies a foe's stat *boosts* — reactive, needs a boost-watch hook. |
-| Comatose | Permanent pseudo-sleep + status immunity — interacts with sleep mechanics & display as a near-form. |
-| Quick Draw | 30% random "go first" — turn-order RNG; determinism-sensitive (cross-check `config/deterministic.h`). |
-| Aura Break | Reverses Dark/Fairy Aura — but **Dark Aura & Fairy Aura are `:x:`** (won't be innates), so this has no innate counterpart to oppose; likely stays pending indefinitely. |
-| Flower Gift | Sun-gated ally Atk/SpD boost **and** a form change — form machinery, not a clause. |
-| Mega Sol | Treats weather as harsh sun for the holder's moves — niche custom weather-view clause. |
+| # | Ability | Class | Why here / what it needs |
+| :-: | :-- | :-- | :-- |
+| 5.1 | **Mega Sol** | self-contained clause | Smallest: one weather-view clause so the holder's moves treat the weather as harsh sun (fork-custom ability). AI-free (shared move calc). Good opener to re-establish the recipe on a Tier-5 shape. |
+| 5.2 | **Quick Draw** | self-contained clause, determinism-sensitive | Single turn-order clause (30% "go first" among same-priority). One site, but **must route/gate through `config/deterministic.h`** — the fork's determinism layer owns RNG-driven turn order; cross-check before touching the roll. |
+| 5.3 | **Comatose** | trait (reuses Batch I) + asleep-read | Immune to all non-volatile status (the Batch I status-immunity pattern) **plus** a "counts as asleep" read at sleep-gated sites (Rest, Snore, Sleep Talk, Hex, sleep-move synergy). No new driver. **Divergence:** drop the form/display half — the innate is the pure-boon status-immunity + always-asleep, not a near-form. |
+| 5.4 | **Magic Guard** | cross-cutting sweep, no new machinery | Levitate-scale: guard *every* indirect-damage source (sandstorm/hail, poison/burn, recoil, crash, hazards, Leech Seed, Curse, Nightmare, Life Orb, …) with `BattlerHasAbility`. Wide but mechanical — one comparison swap per chip site. Highest-value defensive innate. |
+| 5.5 | **Mold Breaker** | cross-cutting sweep | Holder's moves ignore the *target's* ability at every `IgnoresTargetAbility`-style site. Wide blast radius; do **after** Magic Guard's sweep experience. **Pairs with Batch X below** (the `jumpifability` chosen-slot fix), which removes the same cross-slot blind spot Mold Breaker exposes. |
+| 5.6 | **Opportunist** | reactive, small new hook | Copy a foe's stat *boosts*. Needs a boost-watch hook at the stat-change apply site (Batch D family). |
+| 5.7 | **Mirror Armor** | reactive, redirect | Bounce stat *drops* back at the source. Same stat-change site as Opportunist **+** a redirect — do it right after 5.6 to reuse that context. |
+| 5.8 | **Magic Bounce** | reactive, bounce machinery | Reflect status moves back at the user. Needs the move-bounce machinery (shares the "bounce-back" idea with Mirror Armor, but for whole moves). Heaviest reactive member. |
+| 5.9 | **Dancer** | reactive, bespoke move-trigger | Copy a dance move mid-turn the instant any battler uses one. Bespoke mid-turn move-copy hook. |
+| 5.10 | **Flower Gift** | calc clause + dropped form | Sun-gated ally Atk/SpD boost **is** a doubles calc clause (doable). **Divergence:** drop the Cherrim form change — the innate ships the stat boost only. Late because it's still bespoke (doubles-keyed, sun-gated). |
+| 5.11 | **Aura Break** | **resolve, do not wire** | Its counterparts (Dark Aura / Fairy Aura) are `:x:` — there is **nothing to reverse**, so an innate clause would be dead code. Disposition step: mark it won't-wire (an effective `:x:` with a note) rather than ship a no-op. Left last so the decision is explicit, not silent. |
+
+---
+
+## Deferred cross-batch follow-ups (not pending-ability rows)
+
+Tier 5 is the last of the **133 pending abilities**, but it is *not* the last of
+the innate work. Three tracked follow-ups accrued while the earlier batches
+shipped — sub-work on abilities that are already `:white_check_mark:` (or `:x:`),
+so they are **excluded from the 133** (they must not inflate the batch-index sum)
+but still belong in the plan. Two of them were **blocked on a driver that Batch L
+has since built**, so they are now actionable.
+
+### Batch V — Complete the partial halves Batch L unblocked
+**2 half-abilities · switch-in driver now exists · small, high-value finish**
+
+When these were wired, the switch-in driver didn't exist yet, so each shipped with
+a documented half missing. Batch L built `TryActivateInnateSwitchInEffects`
+(`src/fork/innate_abilities.c`), which clears both blockers:
+
+- **Guard Dog** (Batch S) — only the forced-switch-block half shipped; its
+  **Intimidate-immunity + Attack-boost-on-intimidate** half was explicitly left
+  "waits on Batch L" (see the `DELIBERATE PARTIAL WIRING (Guard Dog)` note in
+  `INNATE_ABILITIES.md` ~L1984). Now wireable: add innate Guard Dog to the
+  Intimidate-immunity list in `battle_stat_change.c` and fire its boost via the
+  switch-in/Intimidate-reaction path.
+- **Pastel Veil** (Batch I family) — its **switch-in ally-cure** half
+  (`BattleScript_PastelVeilActivates`, cure self+partner poison on switch-in) was
+  skipped for "no active switch-in-with-script driver exists" (see the
+  `KNOWN LIMITATION` at `INNATE_ABILITIES.md` ~L1084). That driver now exists;
+  replicate the ally-cure for an innate holder.
+
+### Batch W — Frontier-slot freeing sweep (Step 3.5 backlog)
+**data cleanup · multi-session · low-risk · deferred across J/T/K/L/M/U**
+
+Every active batch (J, T, K, L, M, U) deferred the same Step-3.5 tail: species in
+`src/fork/frontier_extended_mons.c` whose real abilities are **all now innate**
+keep a now-redundant *chosen* ability instead of freeing that complementary slot
+to a stable `:x:` pick. This is **functionally correct today** (the chosen ability
+still runs; the innate is redundant-but-skipped there) — it's an *upgrade*, not a
+bug. Freeing each needs a game-wide fork override **plus a per-species
+`test/battle/` audit**, so it's a mechanical, low-risk track best done in its own
+focused sessions, in parallel with Tier 5. See the `INNATE ABILITIES` header note
+in `frontier_extended_mons.c` and the per-batch `DEFERRED` notes in
+`INNATE_ABILITIES.md` for the affected set (~40 Batch-J sets and the tails of T/K/
+L/M/U).
+
+### Batch X — Script `jumpifability` innate-awareness (cross-slot)
+**cross-cutting polish · companion to Mold Breaker (5.5)**
+
+A handful of effects route through a battle script's `jumpifability`, which reads
+**only the chosen ability slot**, so an *innate* holder is invisible to them.
+Documented instances: an innate **Sticky Hold** doesn't block a Pickpocket steal
+or Corrosive Gas (`INNATE_ABILITIES.md` ~L2048), and an innate **Own Tempo**'s
+confuse-move immunity relies on the same chosen-slot read (~L1922). Making the
+script `jumpifability` chokepoint innate-aware (as was already done centrally for
+the Aroma-Veil *side* form, `Cmd_jumpifability` ~L2889) closes these. Do it
+alongside **Mold Breaker (5.5)**, which pokes the same cross-slot machinery.
 
 ---
 
@@ -410,11 +478,28 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 20 | Batch L — Switch-in actives | active, needs step 19 | done (all 8: Intimidate / Anticipation / Forewarn / Frisk / Download / Supersweet Syrup / Unnerve / Hospitality) |
 | 21 | Batch M — On-KO/on-hit stat boosts | active | done (all 11: Defiant / Competitive — the stat-drop-reaction pair, wired at BS_TryDefiantRattled; Justified / Stamina / Water Compaction / Anger Point — the on-hit stat-boost sub-group, reusing the Batch K on-hit driver; Rattled / Steadfast — the fear-response Speed pair (Rattled spans the on-hit driver + BS_TryDefiantRattled, Steadfast the CancelerFlinch site); Moxie / Berserk / Soul-Heart — the KO / on-damage / on-faint sub-group (Moxie reuses the attacker-side on-hit driver via ABILITYEFFECT_MOVE_END_FOES_FAINTED, Berserk adds a small on-damage driver at the new MOVEEND_COLOR_CHANGE_INNATE step, Soul-Heart is credited at the BS_TryActivateSoulheart command)) |
 | 22 | Batch U — Ally-support (doubles) | calc/trait | done (all 5: Battery / Power Spot — partner damage boosters in CalcAttackStat; Telepathy — dodge ally move; Aroma Veil — side mental-status shield via the new IsInnateOnSide() + Cmd_jumpifability side cases; Flower Veil — Grass-ally status + stat-drop shield) |
-| 23 | Tier 5 — Bespoke/deferred (one ability per session) | one-off | open |
+| 23 | Batch V — Complete Guard Dog + Pastel Veil partial halves (Batch L driver now exists) | active, driver exists | open |
+| 24 | Tier 5.1 — Mega Sol | one-off | open |
+| 25 | Tier 5.2 — Quick Draw (determinism-sensitive) | one-off | open |
+| 26 | Tier 5.3 — Comatose | one-off | open |
+| 27 | Tier 5.4 — Magic Guard | one-off | open |
+| 28 | Batch X — Script `jumpifability` innate-awareness (companion to Mold Breaker) | cross-cutting polish | open |
+| 29 | Tier 5.5 — Mold Breaker | one-off | open |
+| 30 | Tier 5.6 — Opportunist | one-off | open |
+| 31 | Tier 5.7 — Mirror Armor | one-off | open |
+| 32 | Tier 5.8 — Magic Bounce | one-off | open |
+| 33 | Tier 5.9 — Dancer | one-off | open |
+| 34 | Tier 5.10 — Flower Gift | one-off | open |
+| 35 | Tier 5.11 — Aura Break (resolve as won't-wire, don't ship a dead clause) | disposition | open |
+| ⟂ | Batch W — Frontier-slot freeing sweep (Step 3.5 backlog, J/T/K/L/M/U) | data cleanup, multi-session | open (parallel track) |
 
-> Steps 9 folds Batch E into D (same code block). Step 23 is **not** one batch —
-> each Tier 5 ability is its own session; treat "next batch" there as the next
-> unticked Tier 5 row in the batch index.
+> Step 9 folds Batch E into D (same code block). Steps 24–35 are the **ordered**
+> Tier 5 one-offs (see the [Tier 5 sub-queue](#tier-5--bespoke--deferred-one-off-multi-site-or-dependency-blocked)) —
+> still **one ability per session/PR**, just no longer picked at random. Steps 23,
+> 28 and Batch W are the **deferred cross-batch follow-ups** (sub-work on already
+> `:white_check_mark:`/`:x:` abilities — see that section); they are **not** part of
+> the 133 count. Batch W is a `⟂` parallel track (do it in its own sessions
+> whenever, not a strict gate on Tier 5).
 
 ## Per-batch checklist (run the recipe's Definition of Done for each)
 
@@ -467,5 +552,18 @@ row is `done`.
 | M — On-KO/on-hit stat boosts | active | 11 | done (Defiant / Competitive; Justified / Stamina / Water Compaction / Anger Point; Rattled / Steadfast; Moxie / Berserk / Soul-Heart) |
 | T — Berry/item synergy | active/trait | 4 | done |
 | U — Ally-support (doubles) | calc/trait | 5 | done (Battery / Power Spot / Telepathy / Aroma Veil / Flower Veil) |
-| Tier 5 — Bespoke/deferred | one-off | 11 | open |
+| Tier 5 — Bespoke/deferred | one-off | 11 | open (ordered 5.1–5.11; take top-down) |
 | **Total** | | **133** | |
+
+### Deferred cross-batch follow-ups (excluded from the 133)
+
+Sub-work on abilities that are already `:white_check_mark:`/`:x:`, so **not**
+counted above (they must not perturb the 133 tripwire). Tracked here so the plan is
+complete; see the [Deferred cross-batch follow-ups](#deferred-cross-batch-follow-ups-not-pending-ability-rows)
+section for detail.
+
+| Follow-up | Kind | Scope | Status |
+| :-- | :-- | :-- | :-: |
+| V — Guard Dog + Pastel Veil partial halves | active (Batch L driver now exists) | 2 half-abilities | open (unblocked) |
+| W — Frontier-slot freeing sweep | data cleanup, multi-session | ~40 J-sets + T/K/L/M/U tails | open (parallel track) |
+| X — Script `jumpifability` innate-awareness | cross-cutting polish | Sticky Hold / Own Tempo cross-slot reads | open (do with Mold Breaker 5.5) |
