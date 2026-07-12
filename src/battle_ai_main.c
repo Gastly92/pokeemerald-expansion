@@ -2373,7 +2373,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
              && protectMethod != PROTECT_CRAFTY_SHIELD) //These moves have infinite usage
             {
                 if (GetBattlerSecondaryDamage(battlerAtk) >= gBattleMons[battlerAtk].hp
-                  && !(IsMoxieTypeAbility(aiData->abilities[battlerDef]) || IsInnateActive(battlerDef, ABILITY_MOXIE))) // FORK: innate-aware Moxie (FEATURE_INNATE_ABILITIES)
+                  && !(IsMoxieTypeAbility(aiData->abilities[battlerDef]) || IsMoxieTypeInnateActive(battlerDef))) // FORK: innate-aware Moxie / Chilling Neigh / Grim Neigh (FEATURE_INNATE_ABILITIES)
                 {
                     ADJUST_SCORE(-10); //Don't protect if you're going to faint after protecting
                 }
@@ -3312,7 +3312,7 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
                 }
 
                 // Alternatively, it benefits from the ally's death, and it will probably die anyway.
-                if (IsMoxieTypeAbility(aiData->abilities[battlerAtk]) || IsInnateActive(battlerAtk, ABILITY_MOXIE)) // FORK: innate-aware Moxie (FEATURE_INNATE_ABILITIES)
+                if (IsMoxieTypeAbility(aiData->abilities[battlerAtk]) || IsMoxieTypeInnateActive(battlerAtk)) // FORK: innate-aware Moxie / Chilling Neigh / Grim Neigh (FEATURE_INNATE_ABILITIES)
                 {
                     ADJUST_SCORE(GOOD_EFFECT);
                 }

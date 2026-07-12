@@ -949,6 +949,25 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ZARUDE, 1,
         ABILITY_TOUGH_CLAWS
     },
+    { // 0896
+        // Glastrier's only real ability is Chilling Neigh (now innate), and it's a frontier set, so like
+        // Landorus-Therian / Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its
+        // EMPTY slot 1. Snow Warning is :x: (never an innate -> stable) and the ice-legend standard (Articuno /
+        // Kyurem / Beartic / Frosmoth / Baxcalibur): the snow the Wild Horse heralds boosts its own Ice-type
+        // Defense (Body Press set) on top of the innate Chilling Neigh on-KO Attack snowball.
+        SPECIES_GLASTRIER, 1,
+        ABILITY_SNOW_WARNING
+    },
+    { // 0897
+        // Spectrier's only real ability is Grim Neigh (now innate), and it's a frontier set, so like
+        // Landorus-Therian / Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its
+        // EMPTY slot 1. Infiltrator is an already-implemented :white_check_mark: innate (stable, like
+        // Slurpuff's Unaware) that the Swift Horse does not carry innately and is thematic for a phasing
+        // phantom: its Nasty Plot / Substitute special sweeper ignores the foe's screens and Substitute,
+        // on top of the innate Grim Neigh on-KO Sp. Atk snowball.
+        SPECIES_SPECTRIER, 1,
+        ABILITY_INFILTRATOR
+    },
     { // 0905
         // Enamorus-Therian's only real ability is Overcoat (now innate), so its EMPTY slot 1 takes Sheer Force --
         // :x: (never an innate -> stable) and a strong boon for the Choice Band physical breaker: Play Rough /

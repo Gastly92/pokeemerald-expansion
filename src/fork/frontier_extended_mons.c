@@ -315,6 +315,17 @@
 // sets whose real abilities are ALL now innate keep their now-redundant chosen ability — still correct (the chosen runs
 // it; the innate is redundant-but-skipped there) — rather than a game-wide override sweep.
 //
+// The promoted-from-rejected clones (Batch Y sub-group Y1 — Chilling Neigh / Grim Neigh raise the holder's
+// Attack / Sp. Atk +1 per foe it KOs, Moxie clones; Electromorphosis charges the next Electric move on any
+// damaging hit, a Wind Power clone) free five sets. Glastrier (sole Chilling Neigh) and Spectrier (sole Grim
+// Neigh) are both sole-ability genderless legends, so like Landorus-Therian / Ogerpon-Cornerstone each takes a
+// fork-owned override (src/species_ability_overrides.c) filling its empty slot 1: Glastrier -> chosen Snow
+// Warning (:x: stable, the ice-legend standard — its snow boosts its own Ice-type Defense), Spectrier ->
+// chosen Infiltrator (an already-implemented :white_check_mark: innate, stable — its Sub sweeper ignores the
+// foe's screens/Substitute), so both run the override on top of the innate neigh. Bellibolt's singles set is
+// freed from chosen Electromorphosis to a complementary REAL slot-1 Static (contact paralysis) — its doubles
+// set already runs Static, and the innate Electromorphosis stays observable on both.
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
@@ -22476,7 +22487,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_HEAVY_SLAM
         },
-        .ability = ABILITY_CHILLING_NEIGH,
+        .ability = ABILITY_SNOW_WARNING, // Chilling Neigh now innate; chosen Snow Warning sets snow (Ice-type Def)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22496,7 +22507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_HORSEPOWER,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_CHILLING_NEIGH,
+        .ability = ABILITY_SNOW_WARNING, // Chilling Neigh now innate; chosen Snow Warning sets snow (Ice-type Def)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22518,7 +22529,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_DRAINING_KISS
         },
-        .ability = ABILITY_GRIM_NEIGH,
+        .ability = ABILITY_INFILTRATOR, // Grim Neigh now innate; chosen Infiltrator ignores screens/Substitute
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22538,7 +22549,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_GRIM_NEIGH,
+        .ability = ABILITY_INFILTRATOR, // Grim Neigh now innate; chosen Infiltrator ignores screens/Substitute
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23557,7 +23568,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_TOXIC
         },
-        .ability = ABILITY_ELECTROMORPHOSIS,
+        .ability = ABILITY_STATIC, // Electromorphosis now innate; chosen Static paralyzes contact attackers (its doubles set already runs Static)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

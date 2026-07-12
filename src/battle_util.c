@@ -4607,10 +4607,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             if (!gBattleStruct->unableToUseMove && IsBattlerTurnDamaged(battler, EXCLUDING_SUBSTITUTES))
             {
                 gBattlerAbility = battler;
-                // FORK: innate Wind Power — show the innate in the pop-up, not the chosen ability, only
-                // when they differ (Speed Boost precedent). gLastUsedAbility is the ability being
-                // processed; the guard leaves real Wind Power / Electromorphosis byte-for-byte (neither
-                // Electromorphosis nor a same-slot Wind Power ever trips it).
+                // FORK: innate Wind Power / Electromorphosis — show the innate in the pop-up, not the chosen
+                // ability, only when they differ (Speed Boost precedent). gLastUsedAbility is the ability being
+                // processed; the guard leaves a real Wind Power / a real same-slot Electromorphosis byte-for-byte
+                // (neither ever trips it), while an innate clone on a different chosen slot shows correctly.
                 if (GetBattlerAbility(battler) != gLastUsedAbility)
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 BattleScriptCall(BattleScript_WindPowerActivates);
@@ -4869,9 +4869,9 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 if (numMonsFainted && CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN, ability))
                 {
                     gLastUsedAbility = ability;
-                    // FORK: innate Moxie — show the innate in the pop-up, not the chosen ability, only when
-                    // they differ (Speed Boost precedent — CreateAbilityPopUp reads the primary slot). The As
-                    // One branches below (never innates) override this to their sub-ability as before.
+                    // FORK: innate Moxie / Chilling Neigh / Grim Neigh — show the innate in the pop-up, not the
+                    // chosen ability, only when they differ (Speed Boost precedent — CreateAbilityPopUp reads the
+                    // primary slot). The As One branches below (never innates) override this to their sub-ability as before.
                     if (GetBattlerAbility(battler) != ability)
                         gBattleScripting.abilityPopupOverwrite = ability;
                     if (ability == ABILITY_AS_ONE_ICE_RIDER)
