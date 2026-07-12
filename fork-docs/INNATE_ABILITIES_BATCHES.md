@@ -480,7 +480,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 21 | Batch M — On-KO/on-hit stat boosts | active | done (all 11: Defiant / Competitive — the stat-drop-reaction pair, wired at BS_TryDefiantRattled; Justified / Stamina / Water Compaction / Anger Point — the on-hit stat-boost sub-group, reusing the Batch K on-hit driver; Rattled / Steadfast — the fear-response Speed pair (Rattled spans the on-hit driver + BS_TryDefiantRattled, Steadfast the CancelerFlinch site); Moxie / Berserk / Soul-Heart — the KO / on-damage / on-faint sub-group (Moxie reuses the attacker-side on-hit driver via ABILITYEFFECT_MOVE_END_FOES_FAINTED, Berserk adds a small on-damage driver at the new MOVEEND_COLOR_CHANGE_INNATE step, Soul-Heart is credited at the BS_TryActivateSoulheart command)) |
 | 22 | Batch U — Ally-support (doubles) | calc/trait | done (all 5: Battery / Power Spot — partner damage boosters in CalcAttackStat; Telepathy — dodge ally move; Aroma Veil — side mental-status shield via the new IsInnateOnSide() + Cmd_jumpifability side cases; Flower Veil — Grass-ally status + stat-drop shield) |
 | 23 | Batch V — Complete Guard Dog + Pastel Veil partial halves (Batch L driver now exists) | active, driver exists | done (Guard Dog Intimidate-immunity + Attack-boost wired at IsIntimidateBlocked; Pastel Veil switch-in ally-cure wired via the switch-in driver) |
-| 23+ | Batch Y — Promoted-from-rejected clones (18, sub-groups Y1–Y8; Y1 cheapest, Y8 blocked on 5.5 Mold Breaker) | active/calc/trait, drivers exist | open (Y1 done: Chilling Neigh / Grim Neigh / Electromorphosis; Y2–Y8 open, interleave with Tier 5) |
+| 23+ | Batch Y — Promoted-from-rejected clones (18, sub-groups Y1–Y8; Y1 cheapest, Y8 blocked on 5.5 Mold Breaker) | active/calc/trait, drivers exist | open (Y1 done: Chilling Neigh / Grim Neigh / Electromorphosis; Y2 done: Transistor / Dragon's Maw; Y3–Y8 open, interleave with Tier 5) |
 | 24 | Tier 5.1 — Mega Sol | one-off | open |
 | 25 | Tier 5.2 — Quick Draw (determinism-sensitive) | one-off | open |
 | 26 | Tier 5.3 — Comatose | one-off | open |
@@ -569,7 +569,7 @@ section for detail.
 | V — Guard Dog + Pastel Veil partial halves | active (Batch L driver now exists) | 2 half-abilities | done |
 | W — Frontier-slot freeing sweep | data cleanup, multi-session | ~40 J-sets + T/K/L/M/U tails | open (parallel track) |
 | X — Script `jumpifability` innate-awareness | cross-cutting polish | Sticky Hold / Own Tempo cross-slot reads | open (do with Mold Breaker 5.5) |
-| Y — Promoted-from-rejected clones | active/calc/trait (drivers exist) | 18 (see sub-groups) | open (Y1 done; Y2–Y8 open) |
+| Y — Promoted-from-rejected clones | active/calc/trait (drivers exist) | 18 (see sub-groups) | open (Y1, Y2 done; Y3–Y8 open) |
 
 **Promoted from rejected (Batch Y — 18).** Each was `:x:` only because its
 driver/clone hadn't shipped when triaged; each is a clean pure-boon **clone of an
@@ -586,7 +586,7 @@ Take Batch Y one sub-group per PR, like any other batch:
 | Sub-group | Members | Clone of (site) | Notes |
 | :-- | :-- | :-- | :-- |
 | Y1 — On-KO / on-hit (Tier A, done first) ✅ DONE | Chilling Neigh, Grim Neigh, Electromorphosis | Moxie's Atk-on-KO / its Sp. Atk twin / Wind Power's charge-on-hit (minus wind gate) | Done: one-line additions to `IsActiveOnHitAttackerInnate` (neighs, shared `ABILITYEFFECT_MOVE_END_FOES_FAINTED`) + `IsActiveOnHitInnate` (Electromorphosis, shared `ABILITYEFFECT_MOVE_END`). Moxie-type AI reads credit an innate neigh via `IsMoxieTypeInnateActive`. Glastrier / Spectrier take fork overrides (Snow Warning / Infiltrator); Bellibolt freed to Static. |
-| Y2 — Type-power boosters | Transistor, Dragon's Maw | Steelworker / Rocky Payload (`CalcAttackStat`, Batch A) | Flat 1:1 calc clones (Electric / Dragon). AI-free. |
+| Y2 — Type-power boosters ✅ DONE | Transistor, Dragon's Maw | Steelworker / Rocky Payload (`CalcAttackStat`, Batch A) | Done: two 1:1 calc clones beside Rocky Payload — Transistor x1.3 (GEN_9+, else x1.5) Electric, Dragon's Maw x1.5 Dragon. AI-free (shared damage calc; no dedicated AI read). Sole-ability Regi legends take the innate + a fork chosen override so it's observable and the frontier set is freed: Regieleki -> Lightning Rod, Regidrago -> Adaptability. |
 | Y3 — Damage / crit calc | Prism Armor, Shadow Shield, Neuroforce, Supreme Overlord | Solid Rock / Multiscale / (SE-damage mirror of Tinted Lens) / flat power boost (Batch A/B/O) | Calc modifiers, AI-free. Supreme Overlord is party-faint-gated (needs a fainted-count read). |
 | Y4 — Stat-drop / accuracy / hit traits | Full Metal Body, Mind's Eye | Clear Body (Batch D) / Keen Eye + Scrappy (Batch P + S) | One-line trait swaps at sites already touched. |
 | Y5 — Status immunities | Purifying Salt, Good as Gold | status immunity (Batch I) + Ghost-resist (Batch B) / status-*move* immunity | **Good as Gold is very strong** (blocks Toxic, T-wave, etc.) — a deliberate balance divergence; wire it but call it out in the allowlist comment + `FORK.md`. |

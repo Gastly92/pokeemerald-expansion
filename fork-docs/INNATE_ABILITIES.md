@@ -3048,3 +3048,46 @@ signature-specific).**
 **Infiltrator** (both via the new override rows), and Bellibolt's singles set → its complementary real
 slot-1 **Static** (its doubles set already runs Static). Each now runs the chosen ability **and** the innate.
 This is **Batch Y sub-group Y1**; the remaining Batch Y sub-groups (Y2–Y8) stay open.
+
+### ABILITY_TRANSISTOR / ABILITY_DRAGONS_MAW
+
+**Batch Y's second sub-group (Y2)** — two **flat type-power-booster clones** of Batch A's Steelworker /
+Rocky Payload, each a **1:1 clean-upside copy** (a flat conditional power boost never hurts the holder).
+**Transistor** boosts the holder's **Electric** moves and **Dragon's Maw** its **Dragon** moves. Both were
+`:x:` only because they read as "just another type booster" at triage; they are now wired exactly like the
+Batch A boosters they clone.
+
+**One shared effect site, two lines.** Both are pure **`CalcAttackStat`** modifiers (`src/battle_util.c`),
+added to the `if (ctx->innatesEnabled)` innate block that already holds **Rocky Payload / Stakeout / Guts /
+Huge Power** (beside the Rocky Payload line):
+
+```c
+if (moveType == TYPE_ELECTRIC && atkAbility != ABILITY_TRANSISTOR && IsInnateActive(battlerAtk, ABILITY_TRANSISTOR))
+    modifier = uq4_12_multiply(modifier, UQ_4_12(GetConfig(B_TRANSISTOR_BOOST) >= GEN_9 ? 1.3 : 1.5));
+if (moveType == TYPE_DRAGON && atkAbility != ABILITY_DRAGONS_MAW && IsInnateActive(battlerAtk, ABILITY_DRAGONS_MAW))
+    modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+```
+
+Each mirrors its chosen-ability `case` in the attack-stat switch **exactly** — Transistor's multiplier follows
+`B_TRANSISTOR_BOOST` (x1.3 in GEN_9+, else x1.5), Dragon's Maw is a flat x1.5. The `!= ABILITY_X` guard skips
+the case the switch already applied so a holder running the real ability never double-applies.
+
+**No `DETERMINISTIC_*` surface** (pure calc, no RNG).
+
+**AI is free.** Neither has a dedicated `battle_ai_*.c` effect read (grep confirms only the ability-table
+entries in `src/data/abilities.h`), and the boost lives in the shared damage calc the AI runs keyed off the
+real battler, so on-field damage prediction is innate-aware automatically. **Suppression parity** holds via
+`IsInnateActive()`; neither is `breakable`, so Mold Breaker never touches them.
+
+**Species (canon-only — sole-ability signature legends).** **Transistor → Regieleki** (added beside its existing
+innate Levitate) and **Dragon's Maw → Regidrago**, each the ability's **sole** canon user. Both are
+**sole-ability genderless Regi legends with a frontier set**, so — like Glastrier / Spectrier (Y1) — each takes
+the innate **plus a fork-owned chosen override** in its empty slot 1 (`src/fork/species_ability_overrides.c`) so
+the innate is **observable**: **Regieleki → Lightning Rod** (`:x:`, the Raichu-Alola precedent — the Electron
+Pokémon draws in Electric moves for immunity + a Sp. Atk boost), **Regidrago → Adaptability** (an implemented
+`:white_check_mark:` innate it does not carry — self-synergistic with innate Dragon's Maw for a devastating
+Choice Dragon breaker: 2x STAB on top of the 1.5x boost).
+
+**Step 3.5**: four frontier sets freed. Regieleki ×2 → chosen **Lightning Rod** and Regidrago ×2 → chosen
+**Adaptability** (both via the new override rows). Each now runs the chosen ability **and** the innate type-power
+boost. This is **Batch Y sub-group Y2**; the remaining Batch Y sub-groups (Y3–Y8) stay open.

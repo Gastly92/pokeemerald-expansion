@@ -949,6 +949,25 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ZARUDE, 1,
         ABILITY_TOUGH_CLAWS
     },
+    { // 0894
+        // Regieleki's only real ability is Transistor (now innate), and it's a frontier set, so like
+        // Glastrier / Spectrier it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
+        // Lightning Rod is :x: (never an innate -> stable) and on-theme for the Electron Pokemon (the
+        // Raichu-Alola precedent): it draws in Electric moves for immunity + a Sp. Atk boost, a clean boon
+        // for its fast special sets on top of the innate Transistor Electric-power boost (and innate Levitate).
+        SPECIES_REGIELEKI, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0895
+        // Regidrago's only real ability is Dragon's Maw (now innate), and it's a frontier set, so like
+        // Glastrier / Spectrier it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
+        // Adaptability is an already-implemented :white_check_mark: innate (stable, like Spectrier's
+        // Infiltrator) the Dragon Orb Pokemon does not carry innately, and is self-synergistic: its Draco
+        // Meteor / Outrage / Dragon Claw get 2x STAB on top of the innate Dragon's Maw 1.5x, a devastating
+        // Choice Dragon breaker.
+        SPECIES_REGIDRAGO, 1,
+        ABILITY_ADAPTABILITY
+    },
     { // 0896
         // Glastrier's only real ability is Chilling Neigh (now innate), and it's a frontier set, so like
         // Landorus-Therian / Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its

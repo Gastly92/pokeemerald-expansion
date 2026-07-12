@@ -326,6 +326,13 @@
 // freed from chosen Electromorphosis to a complementary REAL slot-1 Static (contact paralysis) — its doubles
 // set already runs Static, and the innate Electromorphosis stays observable on both.
 //
+// Batch Y sub-group Y2 (Transistor / Dragon's Maw — flat type-power-booster clones of Steelworker / Rocky
+// Payload) frees the two adjacent Regi-legend sets the same way: Regieleki (sole Transistor) and Regidrago
+// (sole Dragon's Maw) each takes a fork-owned override filling its empty slot 1 — Regieleki -> chosen Lightning
+// Rod (:x: stable, the Raichu-Alola precedent — draws Electric for immunity + Sp. Atk), Regidrago -> chosen
+// Adaptability (an already-implemented :white_check_mark: innate, stable — 2x STAB stacks on the innate Dragon's
+// Maw 1.5x for a Choice breaker), so both run the override on top of the innate type-power boost.
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
@@ -22391,11 +22398,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DARK,
     },
 
-    // 0894 (innate Transistor / Levitate-tier speed)
+    // 0894 (innate Transistor + Levitate; chosen Lightning Rod override)
     {
         .species = SPECIES_REGIELEKI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Transistor electric nuke
+        .heldItem = ITEM_LIFE_ORB, // innate-Transistor electric nuke
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -22403,7 +22410,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RISING_VOLTAGE,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_TRANSISTOR,
+        .ability = ABILITY_LIGHTNING_ROD, // Transistor now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22423,7 +22430,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_TRANSISTOR,
+        .ability = ABILITY_LIGHTNING_ROD, // Transistor now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22433,11 +22440,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
 
-    // 0895
+    // 0895 (innate Dragon's Maw; chosen Adaptability override)
     {
         .species = SPECIES_REGIDRAGO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Dragon's Maw Dragon Energy breaker
+        .heldItem = ITEM_CHOICE_BAND, // innate-Dragon's-Maw + Adaptability Dragon Energy breaker
         .moves =
         {
             MOVE_DRAGON_CLAW,
@@ -22445,7 +22452,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_DRAGONS_MAW,
+        .ability = ABILITY_ADAPTABILITY, // Dragon's Maw now innate; chosen Adaptability (override) stacks 2x STAB on its 1.5x Dragon boost
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22465,7 +22472,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_DRAGONS_MAW,
+        .ability = ABILITY_ADAPTABILITY, // Dragon's Maw now innate; chosen Adaptability (override) stacks 2x STAB on its 1.5x Dragon boost
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

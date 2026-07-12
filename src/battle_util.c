@@ -7703,6 +7703,19 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
         if (moveType == TYPE_ROCK && atkAbility != ABILITY_ROCKY_PAYLOAD && IsInnateActive(battlerAtk, ABILITY_ROCKY_PAYLOAD))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        // FORK: innate Transistor / Dragon's Maw (Batch Y2, FEATURE_INNATE_ABILITIES). Flat type-power-booster
+        // clones of Steelworker / Rocky Payload: an innate Transistor boosts the holder's Electric moves
+        // (x1.3 under B_TRANSISTOR_BOOST >= GEN_9, else x1.5 — matching the chosen-ability case exactly) and an
+        // innate Dragon's Maw boosts its Dragon moves x1.5, each mirroring its chosen-ability case in the
+        // attack-stat switch above. Both are clean upsides (a flat type-power boost never hurts the holder), so
+        // each innate is a 1:1 copy; the `!= ABILITY_X` guard skips the case the switch already handled so a
+        // holder running the real ability never double-applies. IsInnateActive() supplies the suppression gates
+        // (neither is breakable). On-field AI damage prediction is correct for free (shared calc keyed off the
+        // real battler).
+        if (moveType == TYPE_ELECTRIC && atkAbility != ABILITY_TRANSISTOR && IsInnateActive(battlerAtk, ABILITY_TRANSISTOR))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(GetConfig(B_TRANSISTOR_BOOST) >= GEN_9 ? 1.3 : 1.5));
+        if (moveType == TYPE_DRAGON && atkAbility != ABILITY_DRAGONS_MAW && IsInnateActive(battlerAtk, ABILITY_DRAGONS_MAW))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
         // FORK: innate Guts (Batch N, FEATURE_INNATE_ABILITIES) boosts the holder's physical Attack by 50%
         // while it has any status condition, mirroring the chosen-ability case in the attack-stat switch
         // above; the burn-physical-cut negation is handled in GetBurnOrFrostBiteModifier. Guts is a clean

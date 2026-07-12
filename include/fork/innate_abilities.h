@@ -126,6 +126,12 @@
 //   reusing the shared ABILITYEFFECT_MOVE_END case. Moxie-type AI reads credit an innate Chilling/Grim Neigh via
 //   IsMoxieTypeInnateActive(); Electromorphosis needs no AI wiring. Sole-ability legends Glastrier / Spectrier
 //   take the innate + a fork override; Bellibolt (Static/Damp) leaves it observable),
+//   TRANSISTOR / DRAGONS_MAW (promoted-from-rejected clones, Batch Y sub-group Y2 — both 1:1 clean-upside
+//   copies, canon-only: flat type-power-booster clones of Steelworker / Rocky Payload (Batch A) wired as two
+//   lines in CalcAttackStat — Transistor boosts the holder's Electric moves (x1.3 GEN_9+, else x1.5), Dragon's
+//   Maw its Dragon moves x1.5. AI-free (shared damage calc). Sole-ability Regi legends: Transistor -> Regieleki,
+//   Dragon's Maw -> Regidrago, each taking the innate + a fork chosen override (Lightning Rod / Adaptability) so
+//   the innate is observable and the frontier set is freed),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
