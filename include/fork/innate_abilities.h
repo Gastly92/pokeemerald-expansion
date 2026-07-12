@@ -103,6 +103,13 @@
 //   innate; the Rattled AI reads (avoid-a-Dark/Ghost/Bug-hit, doubles partner-fire, Intimidate-cycling switch)
 //   are innate-aware, Steadfast needs none. Dropped on the Riolu/Lucario line as a contradiction — their innate
 //   Inner Focus prevents flinching, so an innate Steadfast could never fire),
+//   MOXIE / BERSERK / SOUL_HEART (KO / on-damage / on-faint stat boosts, Batch M fourth/final sub-group — all
+//   1:1 clean-upside copies: Moxie raises Attack +1 per foe it knocks out (a one-line addition to the
+//   attacker-side on-hit driver, ABILITYEFFECT_MOVE_END_FOES_FAINTED); Berserk raises Sp. Atk +1 when an attack
+//   drops the holder's HP to 1/2 or less (a small NEW on-damage driver hooked at MOVEEND_COLOR_CHANGE_INNATE,
+//   delegating to ABILITYEFFECT_COLOR_CHANGE); Soul-Heart raises Sp. Atk +1 whenever any Pokémon faints (made
+//   innate-aware at the BS_TryActivateSoulheart native command). Pop-up overwritten to the innate; Moxie's two
+//   AI reads are innate-aware, Berserk/Soul-Heart need none. Completes Batch M),
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
@@ -175,6 +182,15 @@ bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Mo
 // call and returning TRUE, or FALSE once the list is exhausted. Delegates to the upstream
 // ABILITYEFFECT_MOVE_END_FOES_FAINTED case so the steal / script / pop-up match the real ability.
 bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index, enum Move move);
+
+// FORK: on-damage innate driver. Fires `battler`'s active, scripted on-damage innates — today only
+// Berserk (raises Sp. Atk +1 when an attack drops the holder's HP to 1/2 or less). Hooked from
+// MOVEEND_COLOR_CHANGE_INNATE in the move-end loop (src/battle_move_resolution.c), right after the
+// chosen-ability color-change block, which the caller iterates over every damaged battler. Re-entrant
+// exactly like TryActivateInnateOnHitEffects: *index is the per-battler resume cursor, firing one
+// effect per call and returning TRUE, or FALSE once the list is exhausted. Delegates to the upstream
+// ABILITYEFFECT_COLOR_CHANGE case so the stat change / script / pop-up match the real ability.
+bool32 TryActivateInnateOnDamageEffects(enum BattlerId battler, u32 *index);
 
 // FORK: switch-in innate driver. Fires `battler`'s active, scripted switch-in innates — Intimidate
 // (lowers every opposing battler's Attack by 1 stage), the Anticipation / Forewarn / Frisk information

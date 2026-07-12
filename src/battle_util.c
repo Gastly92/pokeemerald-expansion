@@ -4021,6 +4021,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility))
             {
                 gEffectBattler = gBattlerAbility = battler;
+                // FORK: innate Berserk — show the innate in the pop-up when the chosen ability differs
+                // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 SetStatChange(battler, STAT_SPATK, 1);
                 BattleScriptCall(BattleScript_AbilityStatChange);
                 effect++;
@@ -4858,6 +4862,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 if (numMonsFainted && CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN, ability))
                 {
                     gLastUsedAbility = ability;
+                    // FORK: innate Moxie — show the innate in the pop-up, not the chosen ability, only when
+                    // they differ (Speed Boost precedent — CreateAbilityPopUp reads the primary slot). The As
+                    // One branches below (never innates) override this to their sub-ability as before.
+                    if (GetBattlerAbility(battler) != ability)
+                        gBattleScripting.abilityPopupOverwrite = ability;
                     if (ability == ABILITY_AS_ONE_ICE_RIDER)
                         gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_CHILLING_NEIGH;
                     else if (ability == ABILITY_AS_ONE_SHADOW_RIDER)

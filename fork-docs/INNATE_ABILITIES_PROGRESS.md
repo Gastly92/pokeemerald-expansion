@@ -159,7 +159,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Imposter | The Pokémon transforms into the Pokémon in front of it. It also copies all of that Pokémon's stats apart from its HP. |
 | :white_check_mark: | Infiltrator | When using its moves, the Pokémon ignores the effects of targets' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes. |
 | :x: | Mummy | When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy. |
-| :white_large_square: | Moxie | When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage. |
+| :white_check_mark: | Moxie | When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage. |
 | :white_check_mark: | Justified | When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage. |
 | :white_check_mark: | Rattled | The Pokémon gets scared when hit by a Dark-, Ghost-, or Bug-type attack or if intimidated, which boosts its Speed stat. |
 | :white_large_square: | Magic Bounce | Instead of being affected by other Pokémon's status moves, the Pokémon bounces them back at the user. |
@@ -207,7 +207,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Stakeout | Doubles the damage dealt to a target that has just switched into battle. |
 | :white_check_mark: | Water Bubble | Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned. |
 | :white_check_mark: | Steelworker | Powers up Steel-type moves. |
-| :white_large_square: | Berserk | Boosts the Pokémon's Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max. |
+| :white_check_mark: | Berserk | Boosts the Pokémon's Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max. |
 | :white_check_mark: | Slush Rush | Doubles the Pokémon's Speed stat in snow. |
 | :white_check_mark: | Long Reach | None of the moves used by the Pokémon are considered contact moves. |
 | :x: | Liquid Voice | The Pokémon's sound-based moves become Water-type moves. |
@@ -226,7 +226,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_large_square: | Battery | Powers up ally Pokémon's special moves. |
 | :x: | Fluffy | Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves. |
 | :white_check_mark: | Dazzling | The Pokémon dazzles its opponents, making them unable to use priority moves against the Pokémon or its allies. |
-| :white_large_square: | Soul-Heart | Boosts the Pokémon's Sp. Atk stat every time another Pokémon faints. |
+| :white_check_mark: | Soul-Heart | Boosts the Pokémon's Sp. Atk stat every time another Pokémon faints. |
 | :white_check_mark: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
 | :x: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
 | :x: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |

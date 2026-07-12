@@ -128,6 +128,7 @@ enum MoveEndState
     MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE, // FORK: active attacker-side on-hit innates (Magician), see TryActivateInnateOnHitAttackerEffects
     MOVEEND_SHELL_TRAP,
     MOVEEND_COLOR_CHANGE, // Color Change / Berserk / Anger Shell
+    MOVEEND_COLOR_CHANGE_INNATE, // FORK: active on-damage innates (Berserk), see TryActivateInnateOnDamageEffects
     MOVEEND_KEE_MARANGA_HP_THRESHOLD_ITEM_TARGET,
     MOVEEND_CARD_BUTTON, // Red Card / Eject Button
     MOVEEND_FORM_CHANGE,

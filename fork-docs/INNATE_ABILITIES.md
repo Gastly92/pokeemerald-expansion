@@ -2781,3 +2781,77 @@ is the stronger, already-wired boon, so **Steadfast is dropped** on that line.
 (a Machamp-family set, Lycanroc-Midday) already resolve to the species' real slot, so they keep their now-redundant
 chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with the complementary-slot
 re-pointing **deferred** as a focused follow-up, like the earlier Batch M sub-groups and Batch J/T/K/L.
+
+### ABILITY_MOXIE / ABILITY_BERSERK / ABILITY_SOUL_HEART
+
+**Batch M's fourth and final sub-group** — three **KO / on-damage / on-faint stat boosts**, each a **1:1 clean-upside
+copy** (they react to a KO, a big hit, or a faint, so they only ever help the holder). **Moxie** raises the holder's
+**Attack** by 1 stage for each foe it knocks out with a move; **Berserk** raises its **Sp. Atk** by 1 stage when an
+attack drops its HP from above 1/2 to 1/2 or less; **Soul-Heart** raises its **Sp. Atk** by 1 stage every time **any**
+Pokémon faints. This sub-group completes Batch M, so **Batch M is done**.
+
+**Three distinct scripted sites — two reuse existing infra, one adds a small driver:**
+- **Moxie** fires from the upstream **`ABILITYEFFECT_MOVE_END_FOES_FAINTED`** case (`src/battle_util.c`, the
+  Moxie / Beast Boost / Chilling Neigh cluster), the exact case the **attacker-side** on-hit driver
+  (`TryActivateInnateOnHitAttackerEffects`, hooked from `MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE`) already
+  delegates to for Magician — so it is a **one-line addition to `IsActiveOnHitAttackerInnate`**
+  (`src/fork/innate_abilities.c`). The driver delegates with the innate passed explicitly, so the stat change /
+  `BattleScript_AbilityStatChange` / pop-up match the real ability for free. `NumFaintedBattlersByAttacker(battler)`
+  counts the foes the holder KO'd this move, so a double KO still boosts twice, exactly like the real ability.
+- **Berserk** fires from the upstream **`ABILITYEFFECT_COLOR_CHANGE`** case (`src/battle_util.c`, the Color Change /
+  Berserk / Anger Shell cluster) — the **per-damaged-battler** move-end step (`MoveEndColorChange` iterates *every*
+  damaged battler, so a spread move can trigger the reaction on each holder), **not** `ABILITYEFFECT_MOVE_END`. So it
+  introduces a small **new on-damage driver `TryActivateInnateOnDamageEffects` -> `IsActiveOnDamageInnate`**
+  (`src/fork/innate_abilities.c`), the on-damage analogue of the on-hit driver, hooked from the new
+  **`MOVEEND_COLOR_CHANGE_INNATE`** step (`src/battle_move_resolution.c`) right after the chosen-ability
+  `MOVEEND_COLOR_CHANGE` block and **looped over every battler** like it (a nested per-battler innate cursor). It
+  delegates to the upstream `ABILITYEFFECT_COLOR_CHANGE` case, so the Sp. Atk raise / script / pop-up match the real
+  ability. `HadMoreThanHalfHpNowDoesnt(battler)` is the upstream HP-crossing gate, reused unchanged.
+- **Soul-Heart** fires from the native command **`BS_TryActivateSoulheart`** (`src/battle_script_commands.c`), run
+  unconditionally by `BattleScript_FaintBattler` on **every** faint and already looping over every battler. It read
+  only `GetBattlerAbility(b) == ABILITY_SOUL_HEART`, so it now also credits an innate Soul-Heart (chosen ability isn't
+  Soul-Heart) and overwrites the pop-up to it. **No driver** — like Defiant / Competitive, the reaction has always
+  been a dedicated command, so the innate hooks it directly.
+
+**The pop-up.** Each of the three effect sites sets `gBattleScripting.abilityPopupOverwrite` to the innate **only when
+the chosen ability differs**, so a real ability stays byte-for-byte unchanged (the Speed Boost / Rough Skin precedent).
+Moxie's As One branches (never innates) still override the pop-up to their sub-ability as before. Each driver / credit
+skips an innate equal to the chosen ability, so a real Moxie / Berserk / Soul-Heart never fires twice.
+
+**No `DETERMINISTIC_*` surface.** All three trigger at 100% on the right event (a KO, an HP-crossing hit, a faint), so
+there is nothing to gate under `DETERMINISTIC_ABILITIES`.
+
+**AI.** Only **Moxie** has dedicated *effect* reads (the reactions live outside the shared damage calc; Berserk and
+Soul-Heart have **no** `battle_ai_*.c` read, so no AI wiring is needed):
+- **`AI_CheckBadMove` Protect self-faint check** (`src/battle_ai_main.c`) — "don't penalize Protect for fainting to
+  secondary damage if the holder has a Moxie-type ability" — and the **sacrifice-the-ally spread scoring**
+  (`src/battle_ai_main.c`) — "it benefits from the ally's death" — both read `IsMoxieTypeAbility(aiData->abilities[b])`.
+  Beast Boost / Chilling Neigh / etc. are never innates, so only an **innate Moxie** needs crediting: each now also
+  checks `IsInnateActive(b, ABILITY_MOXIE)`. The `ShouldTriggerAbility` Moxie case and the `scoringPartnerAbility`
+  promotion are left as-is (Moxie isn't a react-to-being-hit ability, so it isn't in the on-hit partner-fire block).
+
+**Suppression parity** holds via `IsInnateActive()` for all three (feature flag, Gastro Acid, Neutralizing Gas,
+not-on-field); none is `breakable`, so Mold Breaker never touches them.
+
+**Species.**
+- **Moxie (canon-only, no flavor picks — a snowballing +1-per-KO is potent and hard to justify thematically
+  off-roster).** Every canon user in **any** real slot, keyed exactly per form (merged into an existing innate row
+  where present), plus base creatures' **Megas** as pure-boon mirrors: the **Pinsir** (+ Mega), **Gyarados** (+ Mega),
+  **Honchkrow**, **Heracross** (+ Mega), **Mightyena**, **Salamence** (+ Mega), **Sandile / Krokorok / Krookodile**,
+  **Scraggy / Scrafty**, **Litleo / Pyroar**, and **Quaxly / Quaxwell / Quaquaval** lines.
+- **Berserk (canon-only).** Only **Drampa** — its non-Berserk slots (Sap Sipper / Cloud Nine) leave the innate
+  **observable**. **Sole-Berserk species are OMITTED as redundant** (the Mega Lopunny / Scrappy precedent): **Galarian
+  Moltres** (a frontier set that keeps its now-redundant chosen Berserk) and **Drampa-Mega** (a sole-Berserk Mega, so
+  its pure-boon mirror could never be observed).
+- **Soul-Heart (flavor-only — the Bad Dreams / Darkrai precedent).** Its sole canon user **Magearna** (all four forms:
+  base / Original / the fork's two Megas) is **sole-Soul-Heart**, so an innate could never be observed on it — it is
+  **OMITTED as redundant** (its frontier sets keep the now-redundant chosen Soul-Heart). Instead a tight
+  soul-collector flavor set carries an **observable** innate Soul-Heart: the **Duskull / Dusclops / Dusknoir**
+  grim-reaper line (Dusknoir ferries spirits) and **Spiritomb** (its 108 bound souls), each merged onto the species'
+  existing innate row.
+
+**Step 3.5**: the frontier sets that hardcoded chosen Moxie (Pinsir, Gyarados, Salamence, Krookodile, Scrafty, …),
+Berserk (Galarian Moltres, Drampa), and Soul-Heart (Magearna) already resolve to the species' real slot, so they keep
+their now-redundant chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with the
+complementary-slot re-pointing **deferred** as a focused follow-up, like the earlier Batch M sub-groups and Batch
+J/T/K/L.

@@ -13221,11 +13221,17 @@ void BS_TryActivateSoulheart(void)
     {
         gEffectBattler = gBattlerAbility = gBattleStruct->soulheartBattlerId++;
         enum Ability ability = GetBattlerAbility(gBattlerAbility);
-        if (ability == ABILITY_SOUL_HEART
+        // FORK: innate-aware Soul-Heart (FEATURE_INNATE_ABILITIES) — credit an innate Soul-Heart when
+        // the chosen ability isn't Soul-Heart, and overwrite the pop-up to it (CreateAbilityPopUp reads
+        // the primary slot). The real-ability path (chosen Soul-Heart) is byte-for-byte unchanged.
+        bool32 innateSoulHeart = (ability != ABILITY_SOUL_HEART && IsInnateActive(gBattlerAbility, ABILITY_SOUL_HEART));
+        if ((ability == ABILITY_SOUL_HEART || innateSoulHeart)
             && IsBattlerAlive(gBattlerAbility)
             && !NoAliveMonsForEitherParty()
-            && CompareStat(gBattlerAbility, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN, ability))
+            && CompareStat(gBattlerAbility, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN, ABILITY_SOUL_HEART))
         {
+            if (innateSoulHeart)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_HEART;
             SetStatChange(gBattlerAbility, STAT_SPATK, 1);
             BattleScriptCall(BattleScript_AbilityStatChange);
             return;

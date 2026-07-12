@@ -451,6 +451,39 @@
 //   slot, so they keep their now-redundant chosen ability — still correct (the chosen runs it; the innate is
 //   redundant-but-skipped) — with the complementary-slot freeing deferred as a focused follow-up, like the
 //   earlier Batch M sub-groups.
+//   MOXIE / BERSERK / SOUL_HEART (KO / on-damage / on-faint Sp.Atk-or-Atk boosts, Batch M fourth/final
+//   sub-group — all 1:1 clean-upside copies, canon-only for Moxie/Berserk, flavor-only for Soul-Heart):
+//   MOXIE raises the holder's Attack +1 for each foe it knocks out with a move (fires from the upstream
+//   ABILITYEFFECT_MOVE_END_FOES_FAINTED case, so it is a one-line addition to the attacker-side on-hit driver
+//   IsActiveOnHitAttackerInnate -> TryActivateInnateOnHitAttackerEffects, beside Magician). BERSERK raises
+//   Sp. Atk +1 when an attack drops the holder's HP from above 1/2 to 1/2 or less (fires from the upstream
+//   ABILITYEFFECT_COLOR_CHANGE case — the per-damaged-battler step, not ABILITYEFFECT_MOVE_END — so it
+//   introduces a small NEW on-damage driver TryActivateInnateOnDamageEffects -> IsActiveOnDamageInnate, hooked
+//   from the new MOVEEND_COLOR_CHANGE_INNATE step right after the chosen-ability color-change block and looped
+//   over every damaged battler like it). SOUL_HEART raises Sp. Atk +1 every time ANY Pokémon faints (wired at
+//   the native command BS_TryActivateSoulheart, src/battle_script_commands.c, which already loops every battler
+//   on each faint — made innate-aware beside its cached chosen-ability read). Each only ever helps the holder,
+//   so no pure-boon divergence. Each effect site forces the pop-up to the innate when the chosen ability differs
+//   (Speed Boost precedent). These fire at 100% on the right event (a KO / an HP-crossing hit / a faint) — no
+//   RNG / DETERMINISTIC_* surface. AI: Moxie's two effect reads (the Protect self-faint check and the
+//   sacrifice-the-ally spread scoring in src/battle_ai_main.c, both via IsMoxieTypeAbility) credit an innate
+//   Moxie via IsInnateActive; Berserk and Soul-Heart have no dedicated battle_ai_*.c effect read, so no AI
+//   wiring is needed. Suppression parity holds via IsInnateActive() (feature flag, Gastro Acid, Neutralizing
+//   Gas, not-on-field); none is breakable, so Mold Breaker never touches them. Species: MOXIE canon-only,
+//   keyed exactly per form (merged into an existing innate row where present, plus base creatures' Megas as
+//   pure-boon mirrors) — the Pinsir (+ Mega), Gyarados (+ Mega), Honchkrow, Heracross (+ Mega), Mightyena,
+//   Salamence (+ Mega), Sandile / Krokorok / Krookodile, Scraggy / Scrafty, Litleo / Pyroar, and
+//   Quaxly / Quaxwell / Quaquaval lines. BERSERK canon-only — only Drampa, whose non-Berserk slots
+//   (Sap Sipper / Cloud Nine) leave the innate observable; sole-Berserk species are OMITTED as redundant
+//   (Moltres-Galar — a frontier set that keeps its now-redundant chosen Berserk — and Drampa-Mega, a sole-Berserk
+//   Mega). SOUL_HEART is flavor-only (Bad Dreams / Darkrai precedent): its sole canon user Magearna (all four
+//   forms) is sole-Soul-Heart, so an innate could never be observed on it and it is OMITTED as redundant (its
+//   frontier sets keep the now-redundant chosen Soul-Heart); instead a tight soul-collector flavor set carries
+//   an OBSERVABLE innate — the Duskull / Dusclops / Dusknoir grim-reaper line and Spiritomb (its 108 bound
+//   spirits). Step 3.5: the frontier sets that hardcoded chosen Moxie / Berserk / Soul-Heart already resolve to
+//   the species' real slot, so they keep their now-redundant chosen ability — still correct (the chosen runs it;
+//   the innate is redundant-but-skipped) — with the complementary-slot freeing deferred as a focused follow-up,
+//   like the earlier Batch M sub-groups. This completes Batch M.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -1652,13 +1685,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0127
         SPECIES_PINSIR,
         INNATES(
-            ABILITY_HYPER_CUTTER
+            ABILITY_HYPER_CUTTER,
+            ABILITY_MOXIE
         )
     },
     { // 0127
         SPECIES_PINSIR_MEGA,
         INNATES(
-            ABILITY_HYPER_CUTTER
+            ABILITY_HYPER_CUTTER,
+            ABILITY_MOXIE
         )
     },
     { // 0128
@@ -1702,13 +1737,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0130
         SPECIES_GYARADOS,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE
         )
     },
     { // 0130
         SPECIES_GYARADOS_MEGA,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE
         )
     },
     { // 0131
@@ -2273,6 +2310,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SCRAGGY,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_MOXIE,
             ABILITY_SHED_SKIN
         )
     },
@@ -2280,6 +2318,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SCRAFTY,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_MOXIE,
             ABILITY_SHED_SKIN
         )
     },
@@ -2702,6 +2741,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HERACROSS,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_MOXIE,
             ABILITY_SWARM
         )
     },
@@ -2709,6 +2749,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HERACROSS_MEGA,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_MOXIE,
             ABILITY_SKILL_LINK,
             ABILITY_SWARM
         )
@@ -3094,6 +3135,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MIGHTYENA,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_MOXIE,
             ABILITY_QUICK_FEET
         )
     },
@@ -3790,7 +3832,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DUSKULL,
         INNATES(
             ABILITY_FRISK,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SOUL_HEART
         )
     },
     { // 0356
@@ -3798,7 +3841,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FRISK,
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SOUL_HEART
         )
     },
     { // 0357
@@ -3947,13 +3991,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0373
         SPECIES_SALAMENCE,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE
         )
     },
     { // 0373
         SPECIES_SALAMENCE_MEGA,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE
         )
     },
     { // 0374
@@ -4373,6 +4419,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HONCHKROW,
         INNATES(
             ABILITY_INSOMNIA,
+            ABILITY_MOXIE,
             ABILITY_SUPER_LUCK
         )
     },
@@ -4465,7 +4512,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SPIRITOMB,
         INNATES(
             ABILITY_INFILTRATOR,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SOUL_HEART
         )
     },
     { // 0443
@@ -4739,7 +4787,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DUSKNOIR,
         INNATES(
             ABILITY_FRISK,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SOUL_HEART
         )
     },
     { // 0478
@@ -5332,21 +5381,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SANDILE,
         INNATES(
             ABILITY_ANGER_POINT,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE
         )
     },
     { // 0552
         SPECIES_KROKOROK,
         INNATES(
             ABILITY_ANGER_POINT,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE
         )
     },
     { // 0553
         SPECIES_KROOKODILE,
         INNATES(
             ABILITY_ANGER_POINT,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE
         )
     },
     { // 0554
@@ -6176,12 +6228,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0667
         SPECIES_LITLEO,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_UNNERVE
         )
     },
     { // 0668
         SPECIES_PYROAR,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_UNNERVE
         )
     },
@@ -7047,6 +7101,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_DAZZLING,
             ABILITY_STRONG_JAW,
             ABILITY_WONDER_SKIN
+        )
+    },
+    { // 0780
+        SPECIES_DRAMPA,
+        INNATES(
+            ABILITY_BERSERK
         )
     },
     { // 0781
@@ -7964,18 +8024,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0912
         SPECIES_QUAXLY,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_TORRENT
         )
     },
     { // 0913
         SPECIES_QUAXWELL,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_TORRENT
         )
     },
     { // 0914
         SPECIES_QUAQUAVAL,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_TORRENT
         )
     },
@@ -8802,6 +8865,7 @@ static bool32 IsActiveOnHitAttackerInnate(enum Ability ability)
     switch (ability)
     {
     case ABILITY_MAGICIAN: // steals a held item off a target it damaged, if not already holding one
+    case ABILITY_MOXIE:    // raises Attack +1 for each foe the holder knocks out this move
         return TRUE;
     default:
         return FALSE;
@@ -8838,6 +8902,58 @@ bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index,
         if (!IsInnateActive(battler, innate))
             continue;
         if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END_FOES_FAINTED, battler, innate, move, TRUE))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+// Active, scripted innate abilities that react when the HOLDER takes damage from a move — the
+// on-damage class, wired through the upstream ABILITYEFFECT_COLOR_CHANGE step rather than
+// ABILITYEFFECT_MOVE_END (that step iterates every damaged battler, so a spread move triggers the
+// reaction on each holder, matching the real ability). Today only Berserk (raises Sp. Atk +1 when an
+// attack drops the holder's HP from above 1/2 to 1/2 or less).
+static bool32 IsActiveOnDamageInnate(enum Ability ability)
+{
+    switch (ability)
+    {
+    case ABILITY_BERSERK: // raises Sp. Atk +1 when an attack drops the holder's HP to 1/2 or less
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+// FORK: on-damage innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
+// on-damage innates (today only Berserk), hooked from the MOVEEND_COLOR_CHANGE_INNATE step of the
+// move-end loop (src/battle_move_resolution.c) right after the chosen-ability MOVEEND_COLOR_CHANGE
+// block, which iterates every damaged battler. `battler` is one damaged holder; the caller loops it
+// over all battlers exactly like the chosen-ability color-change step.
+//
+// RE-ENTRANT, exactly like the target-side on-hit driver: *index is the next innate-list slot to
+// consider; the move-end loop holds the step (keeping the cursor) while this returns TRUE, and only
+// advances to the next battler (resetting the cursor) once it returns FALSE (this battler's list
+// exhausted). The effect is delegated to the upstream on-damage handler with the innate passed
+// explicitly: AbilityBattleEffects(ABILITYEFFECT_COLOR_CHANGE, battler, innate, MOVE_NONE, TRUE) sets
+// gLastUsedAbility = innate and runs that ability's existing case, so the stat change / script /
+// pop-up match the real ability (the effect site forces the pop-up to the innate when the chosen
+// ability differs). An innate equal to the chosen ability is skipped so the chosen-ability
+// color-change block (which already ran it) never fires twice; IsInnateActive() applies the usual
+// suppression (feature flag, Gastro Acid, Neutralizing Gas, not-on-field).
+bool32 TryActivateInnateOnDamageEffects(enum BattlerId battler, u32 *index)
+{
+    enum Ability innate;
+
+    while ((innate = GetSpeciesInnate(gBattleMons[battler].species, *index)) != ABILITY_NONE)
+    {
+        (*index)++; // step past this slot now, so a fired effect resumes at the next one
+        if (!IsActiveOnDamageInnate(innate))
+            continue;
+        if (GetBattlerAbility(battler) == innate) // chosen-ability color-change block already ran it
+            continue;
+        if (!IsInnateActive(battler, innate))
+            continue;
+        if (AbilityBattleEffects(ABILITYEFFECT_COLOR_CHANGE, battler, innate, MOVE_NONE, TRUE))
             return TRUE;
     }
 
