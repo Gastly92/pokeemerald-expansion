@@ -375,7 +375,7 @@ context, but still one PR each.
 
 | # | Ability | Class | Why here / what it needs |
 | :-: | :-- | :-- | :-- |
-| 5.1 | **Mega Sol** | self-contained clause | Smallest: one weather-view clause so the holder's moves treat the weather as harsh sun (fork-custom ability). AI-free (shared move calc). Good opener to re-establish the recipe on a Tier-5 shape. |
+| 5.1 | **Mega Sol** ✅ DONE | self-contained clause | Done: one weather-view clause at the single chokepoint `GetAttackerWeather(battler, ...)` (`src/battle_util.c`), made innate-aware via `IsInnateActive` (the function gained a leading `battler` param, threaded through all ~15 callers). Every attacker-weather read (Weather Ball → Fire, sun-boosted Fire damage, Solar Beam skip-charge, Growth +2, Thunder/Hurricane accuracy, …) is covered by that one clause; the off-field party-menu Weather Ball prediction credits it via `SpeciesHasInnate`. AI-free (shared move calc). Canon carrier Mega Meganium (its sole ability); base Meganium takes it as a tight observable flavor pick (chosen Overgrow). |
 | 5.2 | **Quick Draw** | self-contained clause, determinism-sensitive | Single turn-order clause (30% "go first" among same-priority). One site, but **must route/gate through `config/deterministic.h`** — the fork's determinism layer owns RNG-driven turn order; cross-check before touching the roll. |
 | 5.3 | **Comatose** | trait (reuses Batch I) + asleep-read | Immune to all non-volatile status (the Batch I status-immunity pattern) **plus** a "counts as asleep" read at sleep-gated sites (Rest, Snore, Sleep Talk, Hex, sleep-move synergy). No new driver. **Divergence:** drop the form/display half — the innate is the pure-boon status-immunity + always-asleep, not a near-form. |
 | 5.4 | **Magic Guard** | cross-cutting sweep, no new machinery | Levitate-scale: guard *every* indirect-damage source (sandstorm/hail, poison/burn, recoil, crash, hazards, Leech Seed, Curse, Nightmare, Life Orb, …) with `BattlerHasAbility`. Wide but mechanical — one comparison swap per chip site. Highest-value defensive innate. |
@@ -481,7 +481,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 22 | Batch U — Ally-support (doubles) | calc/trait | done (all 5: Battery / Power Spot — partner damage boosters in CalcAttackStat; Telepathy — dodge ally move; Aroma Veil — side mental-status shield via the new IsInnateOnSide() + Cmd_jumpifability side cases; Flower Veil — Grass-ally status + stat-drop shield) |
 | 23 | Batch V — Complete Guard Dog + Pastel Veil partial halves (Batch L driver now exists) | active, driver exists | done (Guard Dog Intimidate-immunity + Attack-boost wired at IsIntimidateBlocked; Pastel Veil switch-in ally-cure wired via the switch-in driver) |
 | 23+ | Batch Y — Promoted-from-rejected clones (18, sub-groups Y1–Y8; Y1 cheapest, Y8 blocked on 5.5 Mold Breaker) | active/calc/trait, drivers exist | open (Y1 done: Chilling Neigh / Grim Neigh / Electromorphosis; Y2 done: Transistor / Dragon's Maw; Y3 done: Prism Armor / Shadow Shield / Neuroforce / Supreme Overlord; Y4 done: Full Metal Body / Mind's Eye; Y5 done: Purifying Salt / Good as Gold; Y6 done: Intrepid Sword / Dauntless Shield; Y7 done: Beast Boost; Y8 open, interleave with Tier 5) |
-| 24 | Tier 5.1 — Mega Sol | one-off | open |
+| 24 | Tier 5.1 — Mega Sol | one-off | done |
 | 25 | Tier 5.2 — Quick Draw (determinism-sensitive) | one-off | open |
 | 26 | Tier 5.3 — Comatose | one-off | open |
 | 27 | Tier 5.4 — Magic Guard | one-off | open |
@@ -554,7 +554,7 @@ row is `done`.
 | M — On-KO/on-hit stat boosts | active | 11 | done (Defiant / Competitive; Justified / Stamina / Water Compaction / Anger Point; Rattled / Steadfast; Moxie / Berserk / Soul-Heart) |
 | T — Berry/item synergy | active/trait | 4 | done |
 | U — Ally-support (doubles) | calc/trait | 5 | done (Battery / Power Spot / Telepathy / Aroma Veil / Flower Veil) |
-| Tier 5 — Bespoke/deferred | one-off | 11 | open (ordered 5.1–5.11; take top-down) |
+| Tier 5 — Bespoke/deferred | one-off | 11 | open (ordered 5.1–5.11; take top-down — 5.1 Mega Sol done) |
 | **Total** | | **133** | |
 
 ### Deferred cross-batch follow-ups (excluded from the 133)

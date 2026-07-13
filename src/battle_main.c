@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle.h"
+#include "fork/innate_abilities.h" // SpeciesHasInnate (off-field innate lookup)
 #include "battle_anim.h"
 #include "battle_ai_main.h"
 #include "battle_ai_record.h"
@@ -5938,7 +5939,7 @@ enum Type GetDynamicMoveType(struct Pokemon *mon, enum Move move, enum BattlerId
     case EFFECT_WEATHER_BALL:
         if (state == MON_IN_BATTLE)
         {
-            u32 weather =  GetAttackerWeather(holdEffect, ability, GetWeather());
+            u32 weather =  GetAttackerWeather(battler, holdEffect, ability, GetWeather());
             if (weather & B_WEATHER_SUN)
                 return TYPE_FIRE;
             else if (weather & B_WEATHER_RAIN)
@@ -5952,7 +5953,8 @@ enum Type GetDynamicMoveType(struct Pokemon *mon, enum Move move, enum BattlerId
         }
         else
         {
-            if (ability == ABILITY_MEGA_SOL)
+            // FORK: off-field (party-menu) Weather Ball type prediction is innate-aware too
+            if (ability == ABILITY_MEGA_SOL || SpeciesHasInnate(species, ABILITY_MEGA_SOL))
                 return TYPE_FIRE;
             switch (gWeatherPtr->currWeather)
             {

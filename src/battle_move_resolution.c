@@ -1869,7 +1869,7 @@ static bool32 CanTwoTurnMoveFireThisTurn(struct BattleCalcValues *cv)
         return FALSE;
 
     u32 weather = GetWeather();
-    u32 attackerWeather = GetAttackerWeather(cv->holdEffects[cv->battlerAtk], cv->abilities[cv->battlerAtk], weather);
+    u32 attackerWeather = GetAttackerWeather(cv->battlerAtk, cv->holdEffects[cv->battlerAtk], cv->abilities[cv->battlerAtk], weather);
     u32 isMoveWeatherAffected = GetMoveTwoTurnAttackWeather(cv->move);
 
     return (attackerWeather & isMoveWeatherAffected) || (weather & isMoveWeatherAffected);

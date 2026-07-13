@@ -171,6 +171,11 @@
 //   Buzzwole -> Iron Fist, Pheromosa -> Tough Claws, Xurkitree -> Lightning Rod, Celesteela / Guzzlord -> Filter,
 //   Kartana -> Sharpness, Naganadel -> Sheer Force, Stakataka -> Solid Rock, Blacephalon -> Infiltrator) so the
 //   innate is observable + each frontier set freed; the non-frontier pre-evo Poipole is omitted as redundant,
+//   MEGA_SOL (Tier 5.1 — fork-custom ability, a 1:1 clean-upside copy): the holder's own moves treat the weather
+//   as harsh sun (Weather Ball -> Fire, sun-boosted Fire damage, Solar Beam skip-charge, Growth +2, ...). Wired at
+//   the single chokepoint GetAttackerWeather(battler, ...) via IsInnateActive, so every attacker-weather read is
+//   innate-aware with one clause; AI-free (the AI runs the same shared move calc). Canon carrier: Mega Meganium
+//   (its sole ability); base Meganium takes it as a tight, observable flavor pick,
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
