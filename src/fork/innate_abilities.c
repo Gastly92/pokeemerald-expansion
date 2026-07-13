@@ -664,6 +664,16 @@
 //   Levitate rows where present (Nihilego / Xurkitree / Kartana / Blacephalon float). The pre-evolution Poipole is
 //   OMITTED as redundant (sole Beast Boost, NOT a frontier set — its chosen ability already grants it, so an innate
 //   could never be observed — the Calyrex / Mega Lopunny precedent), keeping only its existing innate Levitate row.
+//   MEGA_SOL (fork-custom ability, Tier 5.1 — 1:1 clean-upside copy): the holder's own moves treat the weather as
+//   harsh sun. Wired at the single chokepoint GetAttackerWeather(battler, ...) in src/battle_util.c via IsInnateActive,
+//   so every attacker-weather read (Weather Ball -> Fire, sun-boosted Fire damage, Solar Beam skips its charge turn,
+//   Growth +2, Thunder/Hurricane 50% accuracy, ...) is innate-aware with one clause keyed off the real battler; the
+//   off-field party-menu Weather Ball type prediction (src/battle_main.c) credits it via SpeciesHasInnate. AI-free:
+//   the AI's shared move/damage calc runs the same chokepoint keyed off the real battler, so it threatens/respects it
+//   for free (no dedicated AI heuristic reads Mega Sol). Suppressible (Gastro Acid / Neutralizing Gas), not breakable.
+//   Species: the sole canon carrier is Mega Meganium (SPECIES_MEGANIUM_MEGA, its only ability), whose innate row
+//   documents the ability persisting as an innate; base Meganium takes it as a tight, observable flavor pick (the
+//   Solar Beam-cannon flower's base form, chosen Overgrow differs so the innate is visible), no wider flavor set.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -2140,7 +2150,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_MEGA_SOL // flavor: the Solar Beam-cannon flower's base form; observable (chosen Overgrow differs)
         )
     },
     { // 0154
@@ -2148,7 +2159,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_MEGA_SOL // canon: Mega Meganium's sole ability, persisted as an innate
         )
     },
     { // 0155

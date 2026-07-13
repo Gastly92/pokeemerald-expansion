@@ -5149,6 +5149,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_PURIFYING_SALT, ABILITY_GOOD_AS_GOLD,
         ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
         ABILITY_BEAST_BOOST,
+        ABILITY_MEGA_SOL,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8877,5 +8878,72 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Beast Boost raises the hold
             NONE_OF { ABILITY_POPUP(player, ABILITY_BEAST_BOOST); }
     } THEN {
         EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+// Tier 5.1 — Mega Sol (fork-custom ability): the holder's own moves treat the weather as harsh sun.
+// Wired at the single chokepoint GetAttackerWeather(battler, ...) via IsInnateActive, so every
+// attacker-weather read (Growth's +2, Solar Beam's skipped charge, Weather Ball, sun-boosted Fire
+// damage, ...) is innate-aware. Base Meganium carries it as an observable flavor pick (chosen Overgrow).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mega Sol makes the holder's Growth act as if under sun")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MEGANIUM, ABILITY_MEGA_SOL));
+        ASSUME(GetMoveEffect(MOVE_GROWTH) == EFFECT_GROWTH);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        WITH_CONFIG(B_GROWTH_STAT_RAISE, GEN_5); // +2 under sun
+        PLAYER(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); } // forced Overgrow; Mega Sol only as innate
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_GROWTH); }
+    } THEN {
+        // With Mega Sol active the holder sees sun, so Growth raises +2; otherwise the normal +1.
+        EXPECT_EQ(player->statStages[STAT_ATK],   enabled ? DEFAULT_STAT_STAGE + 2 : DEFAULT_STAT_STAGE + 1);
+        EXPECT_EQ(player->statStages[STAT_SPATK], enabled ? DEFAULT_STAT_STAGE + 2 : DEFAULT_STAT_STAGE + 1);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mega Sol lets the holder's Solar Beam skip its charge turn")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MEGANIUM, ABILITY_MEGA_SOL));
+        ASSUME(GetMoveTwoTurnAttackWeather(MOVE_SOLAR_BEAM) == B_WEATHER_SUN);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); } // forced Overgrow; Mega Sol only as innate
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SOLAR_BEAM); }
+        if (!enabled)
+            TURN { SKIP_TURN(player); } // without Mega Sol, Solar Beam charges turn 1 and fires turn 2
+    } SCENE {
+        if (!enabled) {
+            MESSAGE("Meganium used Solar Beam!");
+            MESSAGE("Meganium absorbed light!"); // the charge turn
+        }
+        MESSAGE("Meganium used Solar Beam!");
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SOLAR_BEAM, player); // the actual beam
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Mega Sol")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MEGANIUM, ABILITY_MEGA_SOL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(B_GROWTH_STAT_RAISE, GEN_5);
+        PLAYER(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); }
+        OPPONENT(SPECIES_WEEZING_GALAR) { Ability(ABILITY_NEUTRALIZING_GAS); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_GROWTH); }
+    } THEN {
+        // Mega Sol suppressed -> the holder no longer sees sun, so Growth is the normal +1, not +2.
+        EXPECT_EQ(player->statStages[STAT_ATK],   DEFAULT_STAT_STAGE + 1);
+        EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE + 1);
     }
 }

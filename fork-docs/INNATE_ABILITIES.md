@@ -3370,3 +3370,48 @@ precedent) — keeping only its existing innate Levitate row.
 **Step 3.5**: all twenty frontier sets (two per UB) freed → their chosen override via the `.ability` change in
 `src/fork/frontier_extended_mons.c`. This is **Batch Y sub-group Y7**; only **Y8** (Turboblaze / Teravolt, blocked on
 Tier 5.5 Mold Breaker) remains open in Batch Y.
+
+### ABILITY_MEGA_SOL
+
+**Tier 5.1** — the first of the Tier-5 one-offs, and the smallest: a **self-contained weather-view clause** for a
+**fork-custom ability**. The holder's *own* moves treat the battle weather as **harsh sun**, regardless of the actual
+weather. A **1:1 clean-upside copy** (no downside to drop).
+
+**One chokepoint, one clause.** Every "what weather does the attacker see?" read in the engine funnels through the
+fork helper **`GetAttackerWeather(...)`** (`src/battle_util.c`), which already had the chosen-ability check
+`if (ability == ABILITY_MEGA_SOL) return B_WEATHER_SUN;`. Making it innate-aware is a single added disjunct —
+`|| IsInnateActive(battler, ABILITY_MEGA_SOL)` — so **all** downstream effects are covered at once with no per-site
+work: Weather Ball becomes Fire (`GetMoveType`, `src/battle_main.c`), Fire moves get the sun 1.5× and Water moves the
+0.5× (`CalcAttackStat`), Solar Beam / Solar Blade skip their charge turn (`BS_JumpIfWeatherAffected`,
+`src/battle_script_commands.c`), Growth raises +2 (`AdjustStatStage`, `src/battle_stat_change.c`), Thunder / Hurricane
+drop to 50% accuracy (`GetTotalAccuracy`), and the AI's shared move/damage calc reads the same chokepoint
+(`src/battle_ai_util.c`).
+
+**The one structural edit: `GetAttackerWeather` gained a leading `enum BattlerId battler` parameter.** The function
+took `(holdEffect, ability, weather)` and so had no way to consult the innate; the battler is threaded in from all
+~15 callers (each already had the attacker's battler in hand — `ctx->battlerAtk`, `gBattlerAttacker`,
+`gBattleAnimAttacker`, etc.). This is a fork-authored helper (added in fork PR #269, and it references the fork
+ability `ABILITY_MEGA_SOL`), so the signature change and its call sites are all on fork-owned lines — low sync risk.
+The **one genuinely off-field caller** — the party-menu Weather Ball type prediction's `else` branch in
+`src/battle_main.c` (no live battler) — keeps its own `== ABILITY_MEGA_SOL` check and gains a `SpeciesHasInnate`
+disjunct beside it.
+
+**AI-free.** No dedicated AI heuristic reads Mega Sol; the AI reasons about weather purely through the shared move /
+damage calc, which runs the same `GetAttackerWeather` chokepoint keyed off the real battler — so threats and
+responses are innate-aware for free (the batch's litmus: "if this were innate-only, would the AI still do the right
+thing?" — yes).
+
+**Suppression.** Suppressible by Gastro Acid / Neutralizing Gas and **not** breakable by Mold Breaker (the ability
+uses default flags), all handled by `IsInnateActive`.
+
+**Species.** The **sole canon carrier** is **Mega Meganium** (`SPECIES_MEGANIUM_MEGA`), whose only ability *is* Mega
+Sol — its innate row (already present for the base creature's Leaf Guard / Natural Cure / Overgrow, per the Mega
+pure-boon convention) gains Mega Sol so the trait is documented as an innate. Because that innate is redundant with
+Mega Meganium's chosen ability, the **observable** carrier is **base Meganium**, which takes Mega Sol as a **tight
+flavor pick** (the Solar Beam-cannon flower's base form; its chosen Overgrow differs, so the innate is visible and
+testable). No wider flavor set.
+
+**Step 3.5**: no-op — no frontier set hardcoded `ABILITY_MEGA_SOL` (the base-Meganium sets already run a Grassy
+Surge chosen override for the now-innate Leaf Guard, and simply gain innate Mega Sol on top). **Not** in the
+progress-doc 133 count (Mega Sol is a fork-custom ability, never a canon row). This is **Tier 5.1**; Tier 5.2
+(Quick Draw) is next.
