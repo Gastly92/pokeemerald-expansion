@@ -4,7 +4,7 @@
 #define AI_FRAME_CEILING_SINGLES_NO_FLAGS                       3
 #define AI_FRAME_CEILING_SINGLES_SMART_TRAINER                  10
 #define AI_FRAME_CEILING_DOUBLES_NO_FLAGS                       23 // +1: Batch Y6 innate switch-in stat sims (Intrepid Sword/Dauntless Shield) in SetBattlerStatStagesForSwitchin
-#define AI_FRAME_CEILING_DOUBLES_SMART_TRAINER                  38
+#define AI_FRAME_CEILING_DOUBLES_SMART_TRAINER                  39 // +1: Tier 5.1 innate Mega Sol adds an IsInnateActive check to GetAttackerWeather, which the AI's shared damage calc runs
 #define AI_FRAME_CEILING_STEVEN_MULTI                           27
 #define AI_FRAME_CEILING_STEVEN_MULTI_SMART_TRAINER             32 // +1: Batch S innate AI reads (Infiltrator/Skill Link/etc.); +1: Batch U side-wide AI reads (Aroma Veil/Flower Veil/Telepathy)
 #define AI_FRAME_CEILING_CHECK                                  FALSE // If TRUE, forces all thinking time tests to fail. Useful for printing all actual frame times to console by running the tests
