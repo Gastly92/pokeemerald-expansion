@@ -5146,6 +5146,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_TRANSISTOR, ABILITY_DRAGONS_MAW,
         ABILITY_PRISM_ARMOR, ABILITY_SHADOW_SHIELD, ABILITY_NEUROFORCE, ABILITY_SUPREME_OVERLORD,
         ABILITY_FULL_METAL_BODY, ABILITY_MINDS_EYE,
+        ABILITY_PURIFYING_SALT, ABILITY_GOOD_AS_GOLD,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
