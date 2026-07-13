@@ -952,10 +952,12 @@ static bool32 CanIntimidateLowerOpponentAtk(enum BattlerId battler, enum Battler
         break;
     }
 
-    // FORK: an innate Clear Body / White Smoke / Hyper Cutter (chosen ability differs) protects the
-    // opponent's Attack from Intimidate too, so don't switch in an Intimidator expecting to lower it.
+    // FORK: an innate Clear Body / White Smoke / Full Metal Body / Hyper Cutter (chosen ability differs)
+    // protects the opponent's Attack from Intimidate too, so don't switch in an Intimidator expecting to
+    // lower it. (Mind's Eye has no Intimidate immunity — unlike Scrappy — so it is not listed here.)
     if (IsInnateActive(opposingBattler, ABILITY_CLEAR_BODY)
      || IsInnateActive(opposingBattler, ABILITY_WHITE_SMOKE)
+     || IsInnateActive(opposingBattler, ABILITY_FULL_METAL_BODY)
      || IsInnateActive(opposingBattler, ABILITY_HYPER_CUTTER))
         return FALSE;
 

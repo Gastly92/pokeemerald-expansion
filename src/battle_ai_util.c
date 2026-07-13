@@ -2524,16 +2524,18 @@ bool32 CanLowerStat(enum BattlerId battlerAtk, enum BattlerId battlerDef, struct
         if (stat == STAT_SPEED && IsInnateActive(battlerDef, ABILITY_SPEED_BOOST))
             return FALSE;
 
-        // FORK: innate-aware Keen Eye / Illuminate — don't bother lowering an innate holder's accuracy
-        // (it can't be lowered). The chosen-ability cases below handle the real abilities. Gen 9+ for Illuminate.
+        // FORK: innate-aware Keen Eye / Illuminate / Mind's Eye — don't bother lowering an innate holder's
+        // accuracy (it can't be lowered). The chosen-ability cases below handle the real abilities. Gen 9+ for Illuminate.
         if (stat == STAT_ACC
          && (IsInnateActive(battlerDef, ABILITY_KEEN_EYE)
+          || IsInnateActive(battlerDef, ABILITY_MINDS_EYE)
           || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerDef, ABILITY_ILLUMINATE))))
             return FALSE;
 
-        // FORK: innate-aware Clear Body / White Smoke — the holder's stats can't be lowered by another
-        // mon's move at all (the chosen-ability cases below handle the real abilities).
-        if (IsInnateActive(battlerDef, ABILITY_CLEAR_BODY) || IsInnateActive(battlerDef, ABILITY_WHITE_SMOKE))
+        // FORK: innate-aware Clear Body / White Smoke / Full Metal Body — the holder's stats can't be
+        // lowered by another mon's move at all (the chosen-ability cases below handle the real abilities).
+        if (IsInnateActive(battlerDef, ABILITY_CLEAR_BODY) || IsInnateActive(battlerDef, ABILITY_WHITE_SMOKE)
+         || IsInnateActive(battlerDef, ABILITY_FULL_METAL_BODY))
             return FALSE;
 
         // FORK: innate-aware Hyper Cutter (Atk) / Big Pecks (Def) — don't bother lowering the protected stat.

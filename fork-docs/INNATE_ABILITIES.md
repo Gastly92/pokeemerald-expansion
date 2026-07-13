@@ -3173,3 +3173,53 @@ Supreme Overlord observable via its switch-in pop-up.
 **Step 3.5**: seven frontier sets freed — Lunala ×2 + Necrozma-Dusk-Mane / Dawn-Wings / base → chosen
 **Adaptability** (via the new override rows), Kingambit ×2 → chosen **Defiant**. This is **Batch Y sub-group
 Y3**; the remaining Batch Y sub-groups (Y4–Y8) stay open.
+
+### ABILITY_FULL_METAL_BODY / ABILITY_MINDS_EYE
+
+**Batch Y's fourth sub-group (Y4)** — two **stat-drop / accuracy / hit-trait clones**, each a **1:1 clean-upside
+copy**. Full Metal Body is the *unbreakable* cousin of Clear Body; Mind's Eye is Keen Eye + Scrappy combined.
+
+**Full Metal Body rides the existing Batch D+E stat-drop-protection path** in `GetInnateStatDropProtector` /
+`IsAbilityBlocked` (`src/battle_stat_change.c`) — a new full-protection clause beside Clear Body / White Smoke
+that keeps **any** of the holder's stats from being lowered by another mon's move or ability, using the same
+`MarkStatsAsDone(NUM_BATTLE_STATS)` + `BattleScript_AbilityNoStatLoss` script and the pop-up/record overwrite to
+the innate. The two dedicated AI reads were made innate-aware beside their Clear Body disjuncts: `CanLowerStat`
+(`src/battle_ai_util.c`) and `CanIntimidateLowerOpponentAtk` (`src/battle_ai_switch.c`).
+
+**Unbreakable, and that falls out for free.** Full Metal Body has `.breakable = FALSE` (unlike Clear Body /
+White Smoke), and `IsInnateActive` reads each ability's own `breakable` through `CanBreakThroughInnate`, so an
+attacker's **Mold Breaker cannot pierce** the innate Full Metal Body while it **does** pierce the innate Clear
+Body — exactly the canon split (contrast test asserts both). Its only canon user is **Solgaleo**.
+
+**Mind's Eye is Keen Eye + Scrappy in one ability.** It clones three effects, each at the site its model already
+touches — no new clause shape:
+- **Evasion-ignore** (the Keen Eye half) — `GetTotalAccuracy` and the deterministic PP-economy delta
+  `GetAccEvasionStageDelta` (`src/battle_util.c`), an `IsInnateActive(battlerAtk, ABILITY_MINDS_EYE)` disjunct beside
+  the Compound Eyes / Keen Eye ones. PURE BOON: boost-only (`evasionStage > default`), like the Keen Eye clause.
+- **Own accuracy can't be lowered** (the Keen Eye half) — a `stat == STAT_ACC` clause in
+  `GetInnateStatDropProtector` (`src/battle_stat_change.c`) beside Keen Eye, pop-up overwritten to Mind's Eye.
+- **Normal/Fighting hit Ghosts** (the Scrappy half) — the innate else-if in `MulByTypeEffectiveness`
+  (`src/battle_util.c`) now also fires for an innate Mind's Eye (no `RecordAbilityBattle` — not the displayed ability).
+
+Mind's Eye has **no Intimidate immunity** (unlike Scrappy), so it is deliberately *not* added to the
+`IsIntimidateBlocked` / `CanIntimidateLowerOpponentAtk` Intimidate paths. **AI:** the evasion-ignore and Ghost-hit
+live in shared calcs the AI runs keyed off the real battler (free); the two dedicated reads made innate-aware are the
+accuracy branch of `CanLowerStat` (`src/battle_ai_util.c`) and the `EFFECT_FORESIGHT` "Foresight is pointless" score
+(`src/battle_ai_main.c`). Mind's Eye is **breakable**, so Mold Breaker pierces the innate exactly like Keen Eye /
+Scrappy (contrast test asserts it). Its only canon user is **Ursaluna-Bloodmoon**.
+
+**No `DETERMINISTIC_*` surface beyond the one already covered** — the evasion-ignore is tested under
+`DETERMINISTIC_ACCURACY_EVASION` (the PP-tax mirror), like Keen Eye; the stat-drop protection routes through the
+same `IsAbilityBlocked` that needs no additional-effects/hold-effect mirror (the Batch D note).
+
+**Species (canon-only, no flavor picks).** Both are sole-ability legends **and** frontier sets, so — like the Y2/Y3
+legends — each takes the innate **plus a fork-owned chosen override** in its empty slot 1
+(`src/fork/species_ability_overrides.c`): **Solgaleo → Tough Claws** (an implemented `:white_check_mark:` innate it
+does not carry, powering its Sunsteel Strike / Close Combat / Flare Blitz contact STAB on top of the innate stat-drop
+lock — the Metagross precedent), **Ursaluna-Bloodmoon → Unaware** (an implemented `:white_check_mark:` innate,
+stable — ignoring the foe's boosts on its Calm Mind special tank, alongside the innate evasion-ignore + Ghost
+coverage). So the innate is **observable** and the frontier set is freed.
+
+**Step 3.5**: three frontier sets freed — Solgaleo ×2 → chosen **Tough Claws**, Ursaluna-Bloodmoon → chosen
+**Unaware** (via the new override rows). This is **Batch Y sub-group Y4**; the remaining Batch Y sub-groups
+(Y5–Y8) stay open.

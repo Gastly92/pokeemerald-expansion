@@ -333,6 +333,20 @@
 // Adaptability (an already-implemented :white_check_mark: innate, stable — 2x STAB stacks on the innate Dragon's
 // Maw 1.5x for a Choice breaker), so both run the override on top of the innate type-power boost.
 //
+// Batch Y sub-group Y3 (Prism Armor / Shadow Shield / Neuroforce / Supreme Overlord — damage/power calc clones)
+// frees seven sets: the sole-ability legends Necrozma (base / Dusk-Mane / Dawn-Wings, Prism Armor) and Lunala
+// (Shadow Shield) each take a fork-owned chosen Adaptability override in their empty slot 1 (2x STAB stacking
+// on the innate defensive cut), and Kingambit's two sets — Supreme Overlord now joining its innate Defiant /
+// Pressure — repoint from the now-innate chosen Supreme Overlord to chosen Defiant (its slot-0 signature).
+//
+// Batch Y sub-group Y4 (Full Metal Body / Mind's Eye — stat-drop / accuracy / hit-trait clones of Clear Body /
+// Keen Eye + Scrappy) frees three sets, both species being sole-ability frontier legends that take the innate
+// AND a fork-owned override in their empty slot 1: Solgaleo x2 (sole Full Metal Body) -> chosen Tough Claws
+// (an already-implemented :white_check_mark: innate, stable — powers its Sunsteel Strike / Close Combat / Flare
+// Blitz contact STAB on top of the innate stat-drop lock), Ursaluna-Bloodmoon (sole Mind's Eye) -> chosen
+// Unaware (:white_check_mark: stable — ignores the foe's boosts on its Calm Mind special tank, alongside the
+// innate evasion-ignore + Ghost coverage).
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
@@ -19645,7 +19659,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_FLARE_BLITZ
         },
-        .ability = ABILITY_FULL_METAL_BODY,
+        .ability = ABILITY_TOUGH_CLAWS, // Full Metal Body now innate; chosen Tough Claws powers its contact STAB
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19665,7 +19679,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_FULL_METAL_BODY,
+        .ability = ABILITY_TOUGH_CLAWS, // Full Metal Body now innate; chosen Tough Claws powers its Sunsteel Strike contact STAB
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22833,7 +22847,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_MINDS_EYE,
+        .ability = ABILITY_UNAWARE, // Mind's Eye now innate; chosen Unaware ignores foe boosts on its Calm Mind tank
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
