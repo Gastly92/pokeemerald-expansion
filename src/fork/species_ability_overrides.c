@@ -904,6 +904,90 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MARSHADOW, 1,
         ABILITY_ILLUSION
     },
+    { // 0793
+        // Nihilego's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so like
+        // the Regi legends (Y2) / Necrozma / the Zacian line (Y6) it takes the innate AND a fork-owned chosen
+        // ability in its EMPTY slot 1. Merciless is an already-implemented :white_check_mark: innate (stable) the
+        // Parasite Pokemon does not carry innately and is self-synergistic: its Toxic Spikes / Sludge Wave poison
+        // the foe, then Merciless auto-crits the poisoned target, on top of the innate Beast Boost snowball (and
+        // innate Levitate).
+        SPECIES_NIHILEGO, 1,
+        ABILITY_MERCILESS
+    },
+    { // 0794
+        // Buzzwole's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Iron Fist, an already-implemented :white_check_mark: innate (stable) the Swollen
+        // Pokemon does not carry innately and powers its all-punch kit (Ice Punch / Thunder Punch / Drain Punch),
+        // stacking with the innate Beast Boost on-KO snowball.
+        SPECIES_BUZZWOLE, 1,
+        ABILITY_IRON_FIST
+    },
+    { // 0795
+        // Pheromosa's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Tough Claws, an already-implemented :white_check_mark: innate (stable) the Lissome
+        // Pokemon does not carry innately and powers its contact STAB (Close Combat / Triple Axel / U-turn / Rapid
+        // Spin), stacking with the innate Beast Boost snowball.
+        SPECIES_PHEROMOSA, 1,
+        ABILITY_TOUGH_CLAWS
+    },
+    { // 0796
+        // Xurkitree's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Lightning Rod -- :x: (never an innate -> stable) and thematic for the living power
+        // line (the Raichu-Alola / Regieleki precedent): it draws in Electric moves for immunity + a Sp. Atk boost
+        // for its Tail Glow special sets, on top of the innate Beast Boost snowball (and innate Levitate).
+        SPECIES_XURKITREE, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0797
+        // Celesteela's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Filter, an already-implemented :white_check_mark: innate (stable, like Melmetal /
+        // Zamazenta) the Launch Pokemon does not carry innately: it blunts the supereffective Fire / Electric hits
+        // its bulky Leech Seed / Autotomize sets otherwise fear, stacking with the innate Beast Boost snowball.
+        SPECIES_CELESTEELA, 1,
+        ABILITY_FILTER
+    },
+    { // 0798
+        // Kartana's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Sharpness, an already-implemented :white_check_mark: innate (stable) the Drawn Sword
+        // Pokemon does not carry innately and is perfectly thematic: the origami blade's slicing STAB (Leaf Blade /
+        // Sacred Sword) gets +50%, stacking with the innate Beast Boost on-KO snowball (and innate Levitate).
+        SPECIES_KARTANA, 1,
+        ABILITY_SHARPNESS
+    },
+    { // 0799
+        // Guzzlord's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Filter, an already-implemented :white_check_mark: innate (stable, like Celesteela)
+        // the Junkivore Pokemon does not carry innately: it blunts the supereffective hits (notably its 4x Fairy
+        // weakness) its enormous-HP mixed tank sets fear, stacking with the innate Beast Boost snowball.
+        SPECIES_GUZZLORD, 1,
+        ABILITY_FILTER
+    },
+    { // 0804
+        // Naganadel's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Sheer Force -- :x: (never an innate -> stable) and a strong boon for the Poison Pin
+        // Pokemon's Nasty Plot special sweeper: Sludge Wave / Fire Blast / Draco Meteor gain +30% and drop their
+        // secondaries, stacking with the innate Beast Boost snowball.
+        SPECIES_NAGANADEL, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0805
+        // Stakataka's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Solid Rock, an already-implemented :white_check_mark: innate (stable, like Regirock /
+        // Carbink / Stonjourner) the Rampart Pokemon does not carry innately: it blunts the supereffective Fighting
+        // / Ground / Water / Steel / Grass hits its Trick Room wall otherwise fears, stacking with the innate Beast
+        // Boost snowball.
+        SPECIES_STAKATAKA, 1,
+        ABILITY_SOLID_ROCK
+    },
+    { // 0806
+        // Blacephalon's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // EMPTY slot 1 takes Infiltrator, an already-implemented :white_check_mark: innate (stable, like Spectrier)
+        // the Fireworks Pokemon does not carry innately and is thematic for a ghostly clown: its Shadow Ball /
+        // Fire Blast / Focus Blast special sweeper ignores the foe's screens and Substitute, on top of the innate
+        // Beast Boost snowball (and innate Levitate).
+        SPECIES_BLACEPHALON, 1,
+        ABILITY_INFILTRATOR
+    },
     { // 0809
         // Melmetal's only real ability (Iron Fist) is now innate, so its empty slot 1 takes a flavorful
         // chosen ability. Filter is an already-implemented :white_check_mark: innate (stable, like

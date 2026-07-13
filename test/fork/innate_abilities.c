@@ -5148,6 +5148,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_FULL_METAL_BODY, ABILITY_MINDS_EYE,
         ABILITY_PURIFYING_SALT, ABILITY_GOOD_AS_GOLD,
         ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
+        ABILITY_BEAST_BOOST,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8845,5 +8846,36 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Dauntless Shield raises the
             NONE_OF { ABILITY_POPUP(player, ABILITY_DAUNTLESS_SHIELD); }
     } THEN {
         EXPECT_EQ(player->statStages[STAT_DEF], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+// ─── Innate Beast Boost (on-KO best-stat boost, Batch Y7) ───────────────────────────────────────────────────
+// Beast Boost is Moxie's best-stat edition: on a KO the holder's HIGHEST stat rises +1. It rides the same
+// attacker-side on-hit driver as Moxie / Chilling Neigh / Grim Neigh (the upstream
+// ABILITYEFFECT_MOVE_END_FOES_FAINTED case already reads GetHighestStatId for it), so the stat pick / stat
+// change / pop-up come for free. Kartana's Attack (181) is by far its highest stat, so the innate raises
+// Attack; a forced non-slot chosen Pressure isolates the innate (chosen != the innate) and the feature-off
+// leg proves the effect is innate-only.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Beast Boost raises the holder's highest stat on a KO")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KARTANA, ABILITY_BEAST_BOOST));
+        ASSUME(gSpeciesInfo[SPECIES_KARTANA].baseAttack > gSpeciesInfo[SPECIES_KARTANA].baseDefense); // Attack is the highest stat
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KARTANA) { Ability(ABILITY_PRESSURE); Moves(MOVE_TACKLE); } // forced Pressure; Beast Boost only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_ZIGZAGOON); // a second foe, so KOing the first doesn't end the battle
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); } // KOs the first foe; the second replaces it
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_BEAST_BOOST); // pop-up shows the innate, not the forced Pressure
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_BEAST_BOOST); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
     }
 }

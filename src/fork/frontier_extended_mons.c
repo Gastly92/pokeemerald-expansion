@@ -19731,7 +19731,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
     },
 
-    // 0793 (innate Levitate)
+    // 0793 (innate Beast Boost + Levitate)
     {
         .species = SPECIES_NIHILEGO,
         .tags = FORMAT_BOTH,
@@ -19743,7 +19743,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_MERCILESS, // Beast Boost now innate (Y7); chosen Merciless (override) auto-crits its poisoned targets
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19763,7 +19763,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_MERCILESS, // Beast Boost now innate (Y7); chosen Merciless (override) auto-crits its Toxic Spikes targets
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19773,7 +19773,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_POISON,
     },
 
-    // 0794
+    // 0794 (innate Beast Boost)
     {
         .species = SPECIES_BUZZWOLE,
         .tags = FORMAT_BOTH,
@@ -19785,7 +19785,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_IRON_FIST, // Beast Boost now innate (Y7); chosen Iron Fist (override) powers its punch kit
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19805,7 +19805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_LIFE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_IRON_FIST, // Beast Boost now innate (Y7); chosen Iron Fist (override) powers Drain/Ice Punch
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19815,7 +19815,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FIGHTING,
     },
 
-    // 0795
+    // 0795 (innate Beast Boost)
     {
         .species = SPECIES_PHEROMOSA,
         .tags = FORMAT_BOTH,
@@ -19827,7 +19827,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_U_TURN
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_TOUGH_CLAWS, // Beast Boost now innate (Y7); chosen Tough Claws (override) powers its contact STAB
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19847,7 +19847,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_TOUGH_CLAWS, // Beast Boost now innate (Y7); chosen Tough Claws (override) powers Close Combat/Rapid Spin
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19857,7 +19857,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ICE,
     },
 
-    // 0796 (innate Levitate)
+    // 0796 (innate Beast Boost + Levitate)
     {
         .species = SPECIES_XURKITREE,
         .tags = FORMAT_BOTH,
@@ -19869,7 +19869,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_LIGHTNING_ROD, // Beast Boost now innate (Y7); chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19889,7 +19889,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_LIGHTNING_ROD, // Beast Boost now innate (Y7); chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19899,7 +19899,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
 
-    // 0797
+    // 0797 (innate Beast Boost)
     {
         .species = SPECIES_CELESTEELA,
         .tags = FORMAT_SINGLES,
@@ -19911,7 +19911,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_HEAVY_SLAM
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_FILTER, // Beast Boost now innate (Y7); chosen Filter (override) blunts supereffective Fire/Electric
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19931,7 +19931,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_FILTER, // Beast Boost now innate (Y7); chosen Filter (override) blunts supereffective Fire/Electric
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19941,7 +19941,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0798 (innate Levitate)
+    // 0798 (innate Beast Boost + Levitate)
     {
         .species = SPECIES_KARTANA,
         .tags = FORMAT_BOTH,
@@ -19953,7 +19953,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SMART_STRIKE
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_SHARPNESS, // Beast Boost now innate (Y7); chosen Sharpness (override) boosts Leaf Blade/Sacred Sword
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19973,7 +19973,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SACRED_SWORD,
             MOVE_SMART_STRIKE
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_SHARPNESS, // Beast Boost now innate (Y7); chosen Sharpness (override) boosts Leaf Blade/Sacred Sword
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19983,7 +19983,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GRASS,
     },
 
-    // 0799
+    // 0799 (innate Beast Boost)
     {
         .species = SPECIES_GUZZLORD,
         .tags = FORMAT_SINGLES,
@@ -19995,7 +19995,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_REST
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_FILTER, // Beast Boost now innate (Y7); chosen Filter (override) blunts its 4x Fairy weakness
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20015,7 +20015,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_FILTER, // Beast Boost now innate (Y7); chosen Filter (override) blunts its 4x Fairy weakness
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20192,7 +20192,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FIGHTING,
     },
 
-    // 0804 (innate Levitate)
+    // 0804 (innate Beast Boost)
     {
         .species = SPECIES_NAGANADEL,
         .tags = FORMAT_BOTH,
@@ -20204,7 +20204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_DRACO_METEOR
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_SHEER_FORCE, // Beast Boost now innate (Y7); chosen Sheer Force (override) powers its Nasty Plot sweeper
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20224,7 +20224,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_SHEER_FORCE, // Beast Boost now innate (Y7); chosen Sheer Force (override) powers Sludge Wave/Fire Blast/Draco Meteor
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20234,7 +20234,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DRAGON,
     },
 
-    // 0805
+    // 0805 (innate Beast Boost)
     {
         .species = SPECIES_STAKATAKA,
         .tags = FORMAT_DOUBLES,
@@ -20247,7 +20247,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TRICK_ROOM
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_SOLID_ROCK, // Beast Boost now innate (Y7); chosen Solid Rock (override) blunts supereffective hits
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20267,7 +20267,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_TRICK_ROOM
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_SOLID_ROCK, // Beast Boost now innate (Y7); chosen Solid Rock (override) blunts supereffective hits
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20277,7 +20277,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0806 (innate Levitate)
+    // 0806 (innate Beast Boost + Levitate)
     {
         .species = SPECIES_BLACEPHALON,
         .tags = FORMAT_BOTH,
@@ -20289,7 +20289,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_TRICK
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_INFILTRATOR, // Beast Boost now innate (Y7); chosen Infiltrator (override) ignores screens/Substitute
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20309,7 +20309,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_BEAST_BOOST,
+        .ability = ABILITY_INFILTRATOR, // Beast Boost now innate (Y7); chosen Infiltrator (override) ignores screens/Substitute
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
