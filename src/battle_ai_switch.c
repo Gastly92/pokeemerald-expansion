@@ -2979,6 +2979,22 @@ static void SetBattlerStatStagesForSwitchin(enum BattlerId battler, enum Battler
         }
     }
 
+    // FORK: an innate Intrepid Sword / Dauntless Shield raises the holder's own Attack / Defense on switch-in like
+    // a real one, so the AI values switching it in even when its chosen ability differs. Mirrors the
+    // ABILITY_INTREPID_SWORD / ABILITY_DAUNTLESS_SHIELD cases above (like the real cases, the AI does not model the
+    // once-per-battle latch — it estimates the boost).
+    if (aiAbility != ABILITY_INTREPID_SWORD
+     && GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_INTREPID_SWORD))
+    {
+        gBattleMons[battler].statStages[STAT_ATK] += 1;
+    }
+
+    if (aiAbility != ABILITY_DAUNTLESS_SHIELD
+     && GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_DAUNTLESS_SHIELD))
+    {
+        gBattleMons[battler].statStages[STAT_DEF] += 1;
+    }
+
     // Item stat changes
     switch(GetItemHoldEffect(aiItem))
     {

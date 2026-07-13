@@ -5147,6 +5147,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_PRISM_ARMOR, ABILITY_SHADOW_SHIELD, ABILITY_NEUROFORCE, ABILITY_SUPREME_OVERLORD,
         ABILITY_FULL_METAL_BODY, ABILITY_MINDS_EYE,
         ABILITY_PURIFYING_SALT, ABILITY_GOOD_AS_GOLD,
+        ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8751,5 +8752,98 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Goo
     } SCENE {
         STATUS_ICON(player, paralysis: TRUE); // Mold Breaker ignores the innate -> paralyzed
         NONE_OF { ABILITY_POPUP(player, ABILITY_GOOD_AS_GOLD); }
+    }
+}
+
+// ─── Innate Intrepid Sword / Dauntless Shield (switch-in stat boosts, Batch Y6) ────────────────────────────
+// Both reuse the same switch-in driver as Intimidate (a SwitchInInnateAbilityEffect -> ABILITYEFFECT_ON_SWITCHIN
+// addition), so the +1 Attack / +1 Defense, the once-per-battle latch (party-state boost flag, active under
+// B_* >= GEN_9), and the pop-up match the real ability. Each vehicle carries a chosen ability != the innate
+// (Zacian / Zamazenta are sole-ability, so a forced neutral Damp isolates the innate), so both the effect and
+// the pop-up are attributable solely to the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Intrepid Sword raises the holder's Attack on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ZACIAN, ABILITY_INTREPID_SWORD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_ZACIAN) { Ability(ABILITY_DAMP); } // chosen Damp; the boost is the innate's
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_INTREPID_SWORD); // pop-up shows the innate, not chosen Damp
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_INTREPID_SWORD); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Intrepid Sword fires only once per battle (Gen9+)")
+{
+    GIVEN {
+        ASSUME(B_INTREPID_SWORD >= GEN_9); // the once-per-battle latch only applies from Gen 9
+        ASSUME(SpeciesHasInnate(SPECIES_ZACIAN, ABILITY_INTREPID_SWORD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_ZACIAN) { Ability(ABILITY_DAMP); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); } // Zacian in → fires (first entry)
+        TURN { SWITCH(player, 0); } // Wobbuffet in, Zacian out (its +1 Attack resets on switch-out)
+        TURN { SWITCH(player, 1); } // Zacian back in → the latch must stop it re-firing
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_INTREPID_SWORD); // fires on the first entry
+        NONE_OF { ABILITY_POPUP(player, ABILITY_INTREPID_SWORD); } // once-per-battle: never again
+    } THEN {
+        // The boost from the first entry was wiped by the switch-out; because the latch blocks a second
+        // trigger, the re-entered Zacian is back at the default stage (not re-boosted to +1). Combined with
+        // the pop-up firing exactly once above, this proves the once-per-battle latch holds for the innate.
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Intrepid Sword on switch-in")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ZACIAN, ABILITY_INTREPID_SWORD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_ZACIAN) { Ability(ABILITY_DAMP); }
+        OPPONENT(SPECIES_WEEZING_GALAR) { Ability(ABILITY_NEUTRALIZING_GAS); }
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_INTREPID_SWORD); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE); // suppressed: no boost
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Dauntless Shield raises the holder's Defense on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ZAMAZENTA, ABILITY_DAUNTLESS_SHIELD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_ZAMAZENTA) { Ability(ABILITY_DAMP); } // chosen Damp; the boost is the innate's
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_DAUNTLESS_SHIELD); // pop-up shows the innate, not chosen Damp
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_DAUNTLESS_SHIELD); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_DEF], enabled ? DEFAULT_STAT_STAGE + 1 : DEFAULT_STAT_STAGE);
     }
 }

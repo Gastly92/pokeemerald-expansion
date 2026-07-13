@@ -22172,7 +22172,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_INTREPID_SWORD,
+        .ability = ABILITY_TOUGH_CLAWS, // FORK: innate Intrepid Sword (Batch Y6); chosen slot freed to Tough Claws
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22192,7 +22192,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_INTREPID_SWORD,
+        .ability = ABILITY_TOUGH_CLAWS, // FORK: innate Intrepid Sword (Batch Y6); chosen slot freed to Tough Claws
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22214,7 +22214,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_DEFENSE,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_DAUNTLESS_SHIELD,
+        .ability = ABILITY_FILTER, // FORK: innate Dauntless Shield (Batch Y6); chosen slot freed to Filter
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22234,7 +22234,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_DAUNTLESS_SHIELD,
+        .ability = ABILITY_FILTER, // FORK: innate Dauntless Shield (Batch Y6); chosen slot freed to Filter
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
