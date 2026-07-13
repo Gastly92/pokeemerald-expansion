@@ -5147,6 +5147,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_PRISM_ARMOR, ABILITY_SHADOW_SHIELD, ABILITY_NEUROFORCE, ABILITY_SUPREME_OVERLORD,
         ABILITY_FULL_METAL_BODY, ABILITY_MINDS_EYE,
         ABILITY_PURIFYING_SALT, ABILITY_GOOD_AS_GOLD,
+        ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
