@@ -3223,3 +3223,63 @@ coverage). So the innate is **observable** and the frontier set is freed.
 **Step 3.5**: three frontier sets freed — Solgaleo ×2 → chosen **Tough Claws**, Ursaluna-Bloodmoon → chosen
 **Unaware** (via the new override rows). This is **Batch Y sub-group Y4**; the remaining Batch Y sub-groups
 (Y5–Y8) stay open.
+
+### ABILITY_PURIFYING_SALT / ABILITY_GOOD_AS_GOLD
+
+**Batch Y's fifth sub-group (Y5)** — two **status-immunity clones**, each a **1:1 clean-upside copy**. Purifying
+Salt is a whole-status immunity + a Ghost-damage cut (Batch I + Batch B); Good as Gold is a blanket status-*move*
+immunity.
+
+**Purifying Salt is wired at two sites in `src/battle_util.c`:**
+- **Status immunity** — the **catch-all Comatose/Purifying-Salt block** in `CanSetNonVolatileStatus` (the block
+  that runs after `IsNonVolatileStatusBlocked` returns FALSE) gets an `|| IsInnateActive(battlerDef,
+  ABILITY_PURIFYING_SALT)` disjunct, so the holder is immune to **every** non-volatile status (burn, poison,
+  paralysis, sleep, freeze/frostbite). Because the per-status `CanBe*` wrappers (`CanBeParalyzed`,
+  `CanBePoisoned`, …) call `CanSetNonVolatileStatus`, their **AI callers are innate-aware for free** — the AI
+  won't throw a status move at an innate holder. When the chosen ability differs, `abilityDef` is reassigned to
+  Purifying Salt (so it's recorded) and the pop-up is overwritten (the Magma Armor / Limber precedent); the
+  message is `BattleScript_AbilityProtectsDoesntAffect` ("It doesn't affect …").
+- **Ghost-damage cut** — a 1:1 clause in the target's-abilities block of `CalcAttackStat` **beside the innate
+  Thick Fat** (the same site the real Purifying Salt's Ghost case lives): an innate Purifying Salt halves incoming
+  Ghost damage. Silent calc modifier (no `RecordAbilityBattle`), so on-field AI damage prediction is correct for
+  free (shared calc keyed off the real battler).
+
+**PURE-BOON DIVERGENCE (Purifying Salt).** A real Purifying Salt **blocks the holder's own Rest** (it can't
+sleep) — a cost. The innate deliberately does **not**: the `EFFECT_REST` gate in `src/battle_move_resolution.c`
+stays **chosen-ability-only** (no `BattlerHasAbility`), exactly the Insomnia / Vital Spirit precedent, so an
+innate holder still Rests to full HP and sleeps from its own move. (Rest's self-sleep runs through `trysetrest`
+/ the script's chosen-slot `jumpifability`, not `CanSetNonVolatileStatus`, so the status-immunity wiring never
+touches it.) It is **breakable**, so Mold Breaker pierces the innate exactly like the real ability (contrast +
+Rest tests assert both).
+
+**Good as Gold is wired in `CanAbilityAbsorbMove` (`src/battle_util.c`):** an innate holder blocks an incoming
+status move (the same `TARGET_OPPONENTS_FIELD` / `TARGET_ALL_BATTLERS` exclusions as the real ability, so field
+moves like Stealth Rock still land). A local `absorbAbility` carries the credited ability so the pop-up/record
+show Good as Gold when the chosen ability differs. **AI:** the AI's own move scoring calls `CanAbilityAbsorbMove`,
+so on-field prediction of the block is innate-aware for free; the four **dedicated** reads that check
+`== ABILITY_GOOD_AS_GOLD` directly were made innate-aware with `BattlerHasAbility` — `AI_CanStatChangeBePrevented`
+and `AI_ShouldSpicyExtract` (`src/battle_ai_util.c`) and the two `EFFECT_HELPING_HAND` partner reads
+(`src/battle_ai_main.c`). Good as Gold is **breakable**, so Mold Breaker pierces it.
+
+**BALANCE NOTE (Good as Gold).** This is a **very strong** innate — a blanket immunity to Thunder Wave, Toxic,
+Will-O-Wisp, Spore, Leech Seed, and every stat-lowering status move. Wiring it as an innate is a **deliberate
+power divergence**, kept **canon-only (Gholdengo alone)** to contain the blast radius, and called out in the
+allowlist comment + `FORK.md`.
+
+**No `DETERMINISTIC_*` surface** — a full status immunity / status-move immunity is checked before any chance
+roll, so neither ability touches the accuracy/effect-chance/hold-effect reroutes.
+
+**Species (canon-only, no flavor picks).** Purifying Salt → the **Nacli / Naclstack / Garganacl** salt line
+(merged onto their existing Clear Body / Sturdy rows). Good as Gold → **Gholdengo** (its sole ability). Gholdengo
+is a sole-ability frontier set, so — like the Y2/Y3/Y4 legends — it takes the innate **plus a fork-owned chosen
+override** in its empty slot 1 (`src/fork/species_ability_overrides.c`): **Gholdengo → Sticky Hold** (an
+implemented `:white_check_mark:` innate it does not itself carry, stable like Carnivine's Chlorophyll; thematic +
+low-impact — the coin hoard won't be robbed), so the innate Good as Gold is **observable** and its three frontier
+sets are freed (chosen Good as Gold → chosen Sticky Hold; the innate still blocks status moves).
+
+**Step 3.5**: Gholdengo's three frontier sets freed → chosen **Sticky Hold** (via the new override row). The
+**salt line is a Batch W deferral**: all three of Garganacl's real abilities (Purifying Salt / Sturdy / Clear
+Body) are now innate with no free complementary slot, so its frontier sets keep their now-redundant chosen
+Purifying Salt — still correct (the chosen ability runs; the innate is redundant-but-skipped there), matching the
+Batch J/T all-abilities-innate deferrals. This is **Batch Y sub-group Y5**; the remaining Batch Y sub-groups
+(Y6–Y8) stay open.
