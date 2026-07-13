@@ -5145,6 +5145,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_ELECTROMORPHOSIS,
         ABILITY_TRANSISTOR, ABILITY_DRAGONS_MAW,
         ABILITY_PRISM_ARMOR, ABILITY_SHADOW_SHIELD, ABILITY_NEUROFORCE, ABILITY_SUPREME_OVERLORD,
+        ABILITY_FULL_METAL_BODY, ABILITY_MINDS_EYE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8471,5 +8472,143 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Supreme Overlord boosts pow
         HP_BAR(opponent, captureDamage: &results[i].damage);
     } FINALLY {
         EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.1), results[1].damage); // off: base; on: +10% for 1 fallen mon
+    }
+}
+
+// Batch Y4 — Full Metal Body / Mind's Eye (stat-drop / accuracy / hit-trait clones).
+// Full Metal Body is the UNBREAKABLE clone of Clear Body: it blocks ANY stat drop exactly like Clear Body
+// (GetInnateStatDropProtector / IsAbilityBlocked, pop-up overwritten to the innate), but because its
+// .breakable = FALSE an attacker's Mold Breaker cannot pierce it — the distinguishing contrast test below.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Full Metal Body blocks a stat drop")
+{
+    u32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SOLGALEO, ABILITY_FULL_METAL_BODY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SOLGALEO) { Ability(ABILITY_DAMP); } // chosen Damp; innate Full Metal Body
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GROWL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_FULL_METAL_BODY);
+            MESSAGE("Solgaleo's stats were not lowered!");
+        }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], enabled ? DEFAULT_STAT_STAGE : DEFAULT_STAT_STAGE - 1);
+    }
+}
+
+// Suppression contrast: unlike its breakable Clear Body cousin, Full Metal Body is UNBREAKABLE, so an
+// attacker's Mold Breaker cannot pierce the innate — the stat drop is still blocked (IsInnateActive reads
+// its own .breakable = FALSE, for free).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker does NOT pierce an innate Full Metal Body")
+{
+    enum Ability ability;
+    PARAMETRIZE { ability = ABILITY_PRESSURE; }     // innate Full Metal Body applies -> blocked
+    PARAMETRIZE { ability = ABILITY_MOLD_BREAKER; } // unbreakable -> STILL blocked
+    GIVEN {
+        ASSUME(!gAbilitiesInfo[ABILITY_FULL_METAL_BODY].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_SOLGALEO, ABILITY_FULL_METAL_BODY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SOLGALEO) { Ability(ABILITY_DAMP); } // innate Full Metal Body
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ability); Moves(MOVE_GROWL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE); // blocked either way
+    }
+}
+
+// Mind's Eye, Scrappy half: it lifts the Ghost immunity to Normal/Fighting moves (MulByTypeEffectiveness).
+// Ursaluna-Bloodmoon's chosen ability here is a forced Damp, so the Ghost hit is solely the innate's.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mind's Eye lets a Normal move hit a Ghost")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_URSALUNA_BLOODMOON, ABILITY_MINDS_EYE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_URSALUNA_BLOODMOON) { Ability(ABILITY_DAMP); Moves(MOVE_SCRATCH); } // chosen Damp; innate Mind's Eye
+        OPPONENT(SPECIES_GENGAR);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled)
+        {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+            HP_BAR(opponent);
+        }
+        else
+        {
+            MESSAGE("It doesn't affect the opposing Gengar…");
+        }
+    }
+}
+
+// Mind's Eye, Keen Eye half (evasion-ignore): under DETERMINISTIC_ACCURACY_EVASION a foe's evasion boost
+// is a PP economy, and an innate Mind's Eye holder ignores it, so its move is not taxed the extra PP.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mind's Eye ignores the target's evasion (no PP tax)")
+{
+    u32 enabled, expectedPP;
+    PARAMETRIZE { enabled = TRUE;  expectedPP = 34; }
+    PARAMETRIZE { enabled = FALSE; expectedPP = 33; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_URSALUNA_BLOODMOON, ABILITY_MINDS_EYE));
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_URSALUNA_BLOODMOON) { Ability(ABILITY_DAMP); Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); } // chosen Damp; innate Mind's Eye
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // opponent +1 evasion
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], expectedPP);
+    }
+}
+
+// Mind's Eye, Keen Eye half (accuracy can't be lowered): the pop-up/message show Mind's Eye even though
+// the chosen ability is a forced Damp (the Keen Eye / Limber / Oblivious pop-up precedent).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mind's Eye keeps the holder's accuracy from being lowered")
+{
+    u32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_URSALUNA_BLOODMOON, ABILITY_MINDS_EYE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_URSALUNA_BLOODMOON) { Ability(ABILITY_DAMP); } // chosen Damp; innate Mind's Eye
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SAND_ATTACK); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SAND_ATTACK); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_MINDS_EYE);
+            MESSAGE("Ursaluna's accuracy was not lowered!");
+        }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], enabled ? DEFAULT_STAT_STAGE : DEFAULT_STAT_STAGE - 1);
+    }
+}
+
+// Suppression parity: Mind's Eye is breakable (unlike Full Metal Body), so an attacker's Mold Breaker
+// pierces the innate accuracy-drop immunity exactly as it would the real ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Mind's Eye's accuracy-drop immunity")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_MINDS_EYE].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_URSALUNA_BLOODMOON, ABILITY_MINDS_EYE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_URSALUNA_BLOODMOON) { Ability(ABILITY_DAMP); } // innate Mind's Eye
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_SAND_ATTACK); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SAND_ATTACK); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_MINDS_EYE); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], DEFAULT_STAT_STAGE - 1); // pierced -> accuracy drops
     }
 }

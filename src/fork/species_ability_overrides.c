@@ -854,6 +854,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BRUXISH, 1,
         ABILITY_SHEER_FORCE
     },
+    { // 0791
+        // Solgaleo's only real ability (Full Metal Body) is now innate, and it's a frontier set, so like the
+        // Regi legends (Y2) / Necrozma / Lunala (Y3) it takes the innate AND a fork-owned chosen ability in its
+        // EMPTY slot 1. Tough Claws is an already-implemented :white_check_mark: innate (stable) the Sunne
+        // Pokemon does not carry innately and powers its contact STAB (Sunsteel Strike / Close Combat / Flare
+        // Blitz) on both physical sets, stacking with the innate Full Metal Body stat-drop lock. Same pick as
+        // its fellow Steel bruiser Metagross.
+        SPECIES_SOLGALEO, 1,
+        ABILITY_TOUGH_CLAWS
+    },
     { // 0792
         // Lunala's only real ability (Shadow Shield) is now innate, and it's a frontier set, so like the
         // Regi legends (Y2) it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
@@ -1019,6 +1029,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // on top of the innate Grim Neigh on-KO Sp. Atk snowball.
         SPECIES_SPECTRIER, 1,
         ABILITY_INFILTRATOR
+    },
+    { // 0901
+        // Ursaluna-Bloodmoon's only real ability is Mind's Eye (now innate), and it's a frontier set, so like
+        // Landorus-Therian / Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its
+        // EMPTY slot 1. Unaware is an already-implemented :white_check_mark: innate (stable, like Slurpuff /
+        // Spiritomb / Gothitelle) the Peat Pokemon does not carry innately and is a pure boon for its bulky
+        // Calm Mind special tank set: it ignores the foe's stat boosts, stacking with the innate Mind's Eye
+        // evasion-ignore + Ghost coverage on Hyper Voice.
+        SPECIES_URSALUNA_BLOODMOON, 1,
+        ABILITY_UNAWARE
     },
     { // 0905
         // Enamorus-Therian's only real ability is Overcoat (now innate), so its EMPTY slot 1 takes Sheer Force --

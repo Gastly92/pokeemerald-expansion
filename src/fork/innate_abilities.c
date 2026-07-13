@@ -589,6 +589,21 @@
 //   Kingambit already carries innate Defiant + Pressure, so adding innate Supreme Overlord makes all three of
 //   its real abilities innate; its two frontier sets are freed from the now-innate chosen Supreme Overlord to
 //   chosen Defiant (its slot-0 signature) so the innate Supreme Overlord is observable in play.
+//   FULL_METAL_BODY / MINDS_EYE (Batch Y4 — stat-drop / accuracy / hit-trait clones, both 1:1 clean-upside
+//   copies, canon-only (no flavor picks)): FULL_METAL_BODY (Solgaleo) is the UNBREAKABLE clone of Clear Body —
+//   it rides the same GetInnateStatDropProtector / IsAbilityBlocked full-protection path (src/battle_stat_change.c)
+//   keeping ANY of the holder's stats from being lowered by another mon's move/ability, plus the AI's CanLowerStat
+//   and Intimidate switch-in heuristic. IsInnateActive reads its own .breakable = FALSE, so unlike Clear Body an
+//   attacker's Mold Breaker cannot pierce it — the canon split, for free. MINDS_EYE (Ursaluna-Bloodmoon) combines
+//   Keen Eye + Scrappy: it ignores the target's evasion (GetTotalAccuracy / GetAccEvasionStageDelta, the Keen Eye
+//   evasion-ignore, pure-boon boost-only), keeps its own accuracy from being lowered (GetInnateStatDropProtector,
+//   Acc), and lets its Normal/Fighting moves hit Ghosts (MulByTypeEffectiveness, the Scrappy Ghost-hit) — but has
+//   NO Intimidate immunity (unlike Scrappy). AI: CanLowerStat (accuracy) + the EFFECT_FORESIGHT "Foresight is
+//   pointless" score (src/battle_ai_main.c) are innate-aware; the evasion-ignore / Ghost-hit live in shared calcs
+//   so the AI credits them for free. Mind's Eye is breakable (Mold Breaker pierces it, like Keen Eye / Scrappy).
+//   Both Solgaleo and Ursaluna-Bloodmoon are sole-ability frontier sets, so like the Y2/Y3 legends they take the
+//   innate AND a fork-owned chosen override in their empty slot 1 (Solgaleo -> Tough Claws, Ursaluna-Bloodmoon ->
+//   Unaware) so the innate is OBSERVABLE and the frontier set is freed.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -7410,6 +7425,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0791
+        SPECIES_SOLGALEO,
+        INNATES(
+            ABILITY_FULL_METAL_BODY
+        )
+    },
     { // 0792
         SPECIES_LUNALA,
         INNATES(
@@ -8227,6 +8248,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GUTS,
             ABILITY_UNNERVE
+        )
+    },
+    { // 0901
+        SPECIES_URSALUNA_BLOODMOON,
+        INNATES(
+            ABILITY_MINDS_EYE
         )
     },
     { // 0902

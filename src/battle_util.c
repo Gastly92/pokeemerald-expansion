@@ -9141,14 +9141,14 @@ static inline void MulByTypeEffectiveness(struct DamageContext *ctx, uq4_12_t *m
         if (ctx->updateFlags)
             RecordAbilityBattle(ctx->battlerAtk, ctx->abilities[ctx->battlerAtk]);
     }
-    // FORK: an innate Scrappy (FEATURE_INNATE_ABILITIES) lets the holder's Normal/Fighting moves hit
-    // Ghost-types exactly like the real ability — a clean upside, so a 1:1 copy. Reached only when the
-    // chosen-ability branch above didn't already lift the immunity, so a real Scrappy/Mind's Eye path is
+    // FORK: an innate Scrappy / Mind's Eye (FEATURE_INNATE_ABILITIES) lets the holder's Normal/Fighting
+    // moves hit Ghost-types exactly like the real ability — a clean upside, so a 1:1 copy. Reached only when
+    // the chosen-ability branch above didn't already lift the immunity, so a real Scrappy/Mind's Eye path is
     // byte-for-byte untouched; identity bookkeeping (RecordAbilityBattle) is skipped — the innate is not
     // the mon's displayed ability. On-field AI type prediction is correct for free (shared calc).
     else if ((ctx->moveType == TYPE_FIGHTING || ctx->moveType == TYPE_NORMAL) && defType == TYPE_GHOST
         && mod == UQ_4_12(0.0)
-        && IsInnateActive(ctx->battlerAtk, ABILITY_SCRAPPY))
+        && (IsInnateActive(ctx->battlerAtk, ABILITY_SCRAPPY) || IsInnateActive(ctx->battlerAtk, ABILITY_MINDS_EYE)))
     {
         mod = UQ_4_12(1.0);
     }
@@ -11543,6 +11543,7 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
     else if (evasionStage > DEFAULT_STAT_STAGE
             && (IsInnateActive(battlerAtk, ABILITY_COMPOUND_EYES)
              || IsInnateActive(battlerAtk, ABILITY_KEEN_EYE)
+             || IsInnateActive(battlerAtk, ABILITY_MINDS_EYE) // FORK: Mind's Eye ignores the target's evasion (Keen Eye clone, Batch Y4)
              || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerAtk, ABILITY_ILLUMINATE))))
         evasionStage = DEFAULT_STAT_STAGE;
     else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
@@ -11726,6 +11727,7 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
     else if (evasionStage > DEFAULT_STAT_STAGE
             && (IsInnateActive(battlerAtk, ABILITY_COMPOUND_EYES)
              || IsInnateActive(battlerAtk, ABILITY_KEEN_EYE)
+             || IsInnateActive(battlerAtk, ABILITY_MINDS_EYE) // FORK: Mind's Eye ignores the target's evasion (Keen Eye clone, Batch Y4)
              || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerAtk, ABILITY_ILLUMINATE))))
         evasionStage = DEFAULT_STAT_STAGE;
     else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)

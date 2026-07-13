@@ -790,15 +790,15 @@ static bool32 IsAbilityBlocked(struct BattleCalcValues *cv, struct StatChange *s
     if (st->certain)
         return FALSE;
 
-    // FORK: an innate Clear Body / White Smoke (any stat), Hyper Cutter (Atk), Big Pecks (Def),
-    // Keen Eye / Illuminate (Acc) prevents the holder's stat from being lowered exactly like the real
-    // ability (pure boon, 1:1 copy). The chosen-ability paths below miss it when the chosen ability
-    // differs, so handle it here when the chosen ability doesn't already block the drop, overwriting the
-    // pop-up/record to the innate (CreateAbilityPopUp reads the primary slot; the overwrite also stops
-    // the reveal leaking the chosen ability). IsInnateActive supplies suppression parity (all are
-    // breakable, so an attacker's Mold Breaker pierces them). Full protectors (Clear Body / White Smoke)
-    // use the whole-stat script; single-stat protectors the specific one. Mirrors the innate-Oblivious
-    // block in IsIntimidateBlocked.
+    // FORK: an innate Clear Body / White Smoke / Full Metal Body (any stat), Hyper Cutter (Atk), Big Pecks
+    // (Def), Keen Eye / Illuminate / Mind's Eye (Acc) prevents the holder's stat from being lowered exactly
+    // like the real ability (pure boon, 1:1 copy). The chosen-ability paths below miss it when the chosen
+    // ability differs, so handle it here when the chosen ability doesn't already block the drop, overwriting
+    // the pop-up/record to the innate (CreateAbilityPopUp reads the primary slot; the overwrite also stops
+    // the reveal leaking the chosen ability). IsInnateActive supplies suppression parity (all are breakable,
+    // so an attacker's Mold Breaker pierces them — except Full Metal Body, .breakable = FALSE, immune for
+    // free). Full protectors (Clear Body / White Smoke / Full Metal Body) use the whole-stat script;
+    // single-stat protectors the specific one. Mirrors the innate-Oblivious block in IsIntimidateBlocked.
     if (!CanAbilityPreventStatLoss(cv->abilities[cv->battlerDef])
      && !AbilityPreventsSpecificStatDrop(cv->abilities[cv->battlerDef], st->stat))
     {
@@ -977,11 +977,12 @@ static bool32 AbilityPreventsSpecificStatDrop(u32 ability, u32 stat)
 }
 
 // FORK: returns the innate stat-drop-protecting ability active on `battler` for a drop of `stat`
-// (Clear Body / White Smoke block any stat, Hyper Cutter Atk, Big Pecks Def, Keen Eye / Illuminate
-// Acc), or ABILITY_NONE if none. Sets *fullProtection TRUE for the whole-stat protectors so the
-// caller can pick the right message/script. Suppression parity via IsInnateActive (all are breakable,
-// so an attacker's Mold Breaker pierces them). Illuminate only protects accuracy in Gen 9+. See
-// IsAbilityBlocked for how this is applied when the chosen ability doesn't already block the drop.
+// (Clear Body / White Smoke / Full Metal Body block any stat, Hyper Cutter Atk, Big Pecks Def,
+// Keen Eye / Illuminate / Mind's Eye Acc), or ABILITY_NONE if none. Sets *fullProtection TRUE for the
+// whole-stat protectors so the caller can pick the right message/script. Suppression parity via
+// IsInnateActive (all are breakable EXCEPT Full Metal Body, whose .breakable = FALSE makes it immune to
+// Mold Breaker for free). Illuminate only protects accuracy in Gen 9+. See IsAbilityBlocked for how this
+// is applied when the chosen ability doesn't already block the drop.
 static enum Ability GetInnateStatDropProtector(enum BattlerId battler, u32 stat, bool32 *fullProtection)
 {
     *fullProtection = FALSE;
@@ -989,6 +990,14 @@ static enum Ability GetInnateStatDropProtector(enum BattlerId battler, u32 stat,
     {
         *fullProtection = TRUE;
         return ABILITY_CLEAR_BODY;
+    }
+    // FORK: Full Metal Body is the unbreakable clone of Clear Body (Batch Y4). It protects any stat
+    // exactly like Clear Body; IsInnateActive reads its own .breakable = FALSE, so unlike Clear Body /
+    // White Smoke an attacker's Mold Breaker cannot pierce it — the canon split, for free.
+    if (IsInnateActive(battler, ABILITY_FULL_METAL_BODY))
+    {
+        *fullProtection = TRUE;
+        return ABILITY_FULL_METAL_BODY;
     }
     if (IsInnateActive(battler, ABILITY_WHITE_SMOKE))
     {
@@ -1001,6 +1010,8 @@ static enum Ability GetInnateStatDropProtector(enum BattlerId battler, u32 stat,
         return ABILITY_BIG_PECKS;
     if (stat == STAT_ACC && IsInnateActive(battler, ABILITY_KEEN_EYE))
         return ABILITY_KEEN_EYE;
+    if (stat == STAT_ACC && IsInnateActive(battler, ABILITY_MINDS_EYE)) // FORK: Mind's Eye keeps accuracy from being lowered (Keen Eye clone, Batch Y4)
+        return ABILITY_MINDS_EYE;
     if (stat == STAT_ACC && GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battler, ABILITY_ILLUMINATE))
         return ABILITY_ILLUMINATE;
     return ABILITY_NONE;

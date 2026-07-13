@@ -142,6 +142,14 @@
 //   Shadow Shield are breakable (Mold Breaker pierces, like Solid Rock / Multiscale). Sole-ability legends
 //   Necrozma forms / Lunala take the innate + a fork chosen Adaptability override (observable + frontier set
 //   freed); Kingambit's Supreme Overlord joins its Defiant / Pressure innates and its sets choose Defiant),
+//   FULL_METAL_BODY / MINDS_EYE (Batch Y4 — stat-drop / accuracy / hit-trait clones, both 1:1 clean-upside
+//   copies, canon-only): Full Metal Body (Solgaleo) is the UNBREAKABLE clone of Clear Body — same full
+//   stat-drop protection (GetInnateStatDropProtector / IsAbilityBlocked + the AI reads), but its
+//   .breakable = FALSE means Mold Breaker can't pierce it (for free via IsInnateActive). Mind's Eye
+//   (Ursaluna-Bloodmoon) combines Keen Eye (ignore the target's evasion + own accuracy can't be lowered)
+//   and Scrappy (Normal/Fighting hit Ghosts), with no Intimidate immunity. Both are sole-ability frontier
+//   sets, so they take the innate + a fork chosen override (Solgaleo -> Tough Claws, Ursaluna-Bloodmoon ->
+//   Unaware) so the innate is observable + the frontier set freed,
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

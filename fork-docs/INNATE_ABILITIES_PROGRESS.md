@@ -236,7 +236,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |
 | :x: | Misty Surge | Turns the ground into Misty Terrain when the Pokémon enters a battle. |
 | :x: | Grassy Surge | Turns the ground into Grassy Terrain when the Pokémon enters a battle. |
-| :white_large_square: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
+| :white_check_mark: | Full Metal Body | Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats. |
 | :white_check_mark: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
 | :white_check_mark: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
 | :white_check_mark: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
@@ -306,7 +306,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Earth Eater | Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP. |
 | :x: | Mycelium Might | The Pokémon will always act more slowly when using status moves, but these moves will be unimpeded by the Ability of the target. |
 | :white_check_mark: | Hospitality | When the Pokémon enters a battle, it restores 1/4 of its ally's max HP. |
-| :white_large_square: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
+| :white_check_mark: | Mind's Eye | The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Teal Mask to shine and the Pokémon's Speed stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Hearthflame Mask to shine and the Pokémon's Attack stat to be boosted. |
 | :x: | Embody Aspect | The Pokémon's heart fills with memories, causing the Wellspring Mask to shine and the Pokémon's Sp. Def stat to be boosted. |
