@@ -625,6 +625,23 @@
 //   Garganacl's real abilities (Purifying Salt / Sturdy / Clear Body) are now innate with no free complementary
 //   slot, so it is deferred to the Batch W override sweep — still correct (the chosen ability runs; the innate is
 //   redundant-but-skipped there), matching the Batch J/T all-abilities-innate deferrals.
+//   INTREPID_SWORD / DAUNTLESS_SHIELD (Batch Y6 — switch-in stat boosts, both 1:1 clean-upside copies, canon-only
+//   (no flavor picks)): the first time the holder enters battle, INTREPID_SWORD (Zacian / Zacian-Crowned) raises its
+//   Attack and DAUNTLESS_SHIELD (Zamazenta / Zamazenta-Crowned) raises its Defense by 1 stage. Both join the same
+//   re-entrant switch-in driver as Intimidate (a one-line SwitchInInnateAbilityEffect -> ABILITYEFFECT_ON_SWITCHIN
+//   addition each), delegating to the upstream ABILITYEFFECT_ON_SWITCHIN case so the stat change / script / pop-up —
+//   and the once-per-battle latch (the intrepidSwordBoost / dauntlessShieldBoost party-state flag, so under B_*
+//   >= GEN_9 the boost fires only on the FIRST switch-in) — match the real ability for free (each effect site in
+//   src/battle_util.c forces the pop-up to the innate when the chosen ability differs, the Speed Boost precedent).
+//   Both only ever help the holder (a self stat boost), so no pure-boon divergence. AI is innate-aware: the switch-in
+//   stat simulation (SetBattlerStatStagesForSwitchin, src/battle_ai_switch.c) mirrors each self-boost for an innate
+//   holder via SpeciesHasInnate (like the real cases, it does not model the once-per-battle latch — it estimates
+//   the boost). Suppression parity holds via IsInnateActive() (feature flag, Gastro Acid, Neutralizing Gas,
+//   not-on-field); neither is breakable, so Mold Breaker never touches them. Species: all four canon carriers
+//   (Zacian / Zacian-Crowned, Zamazenta / Zamazenta-Crowned) are SOLE-ability frontier sets, so like the Y2-Y5
+//   legends they take the innate AND a fork-owned chosen override in their empty slot 1 (Zacian -> Tough Claws for
+//   its all-contact kit, Zamazenta -> Filter for its Body Press wall — the same chosen ability on both formes so it
+//   is consistent across the Hero <-> Crowned form change) so the innate is OBSERVABLE and the frontier set is freed.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -8195,6 +8212,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0888
+        SPECIES_ZACIAN,
+        INNATES(
+            ABILITY_INTREPID_SWORD
+        )
+    },
+    { // 0888
+        SPECIES_ZACIAN_CROWNED,
+        INNATES(
+            ABILITY_INTREPID_SWORD
+        )
+    },
+    { // 0889
+        SPECIES_ZAMAZENTA,
+        INNATES(
+            ABILITY_DAUNTLESS_SHIELD
+        )
+    },
+    { // 0889
+        SPECIES_ZAMAZENTA_CROWNED,
+        INNATES(
+            ABILITY_DAUNTLESS_SHIELD
+        )
+    },
     { // 0890
         SPECIES_ETERNATUS,
         INNATES(
@@ -9359,6 +9400,8 @@ static enum AbilityEffect SwitchInInnateAbilityEffect(enum Ability ability)
     case ABILITY_SUPERSWEET_SYRUP: // lowers opposing battlers' evasiveness by 1 stage (once per battle)
     case ABILITY_PASTEL_VEIL:      // cures the holder's and its ally's pre-existing poison on switch-in
     case ABILITY_SUPREME_OVERLORD: // latches a +10%/fallen-teammate move-power boost at switch-in (Batch Y3)
+    case ABILITY_INTREPID_SWORD:   // raises the holder's Attack by 1 stage the first time it enters battle (Batch Y6)
+    case ABILITY_DAUNTLESS_SHIELD: // raises the holder's Defense by 1 stage the first time it enters battle (Batch Y6)
         return ABILITYEFFECT_ON_SWITCHIN;
     case ABILITY_UNNERVE:          // denies opposing battlers their Berries
         return ABILITYEFFECT_UNNERVE;

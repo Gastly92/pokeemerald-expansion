@@ -240,8 +240,8 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Shadow Shield | Reduces the amount of damage the Pokémon takes while its HP is full. |
 | :white_check_mark: | Prism Armor | Reduces the power of supereffective attacks that hit the Pokémon. |
 | :white_check_mark: | Neuroforce | Powers up the Pokémon's supereffective attacks even further. |
-| :white_large_square: | Intrepid Sword | Boosts the Pokémon's Attack stat the first time the Pokémon enters a battle. |
-| :white_large_square: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
+| :white_check_mark: | Intrepid Sword | Boosts the Pokémon's Attack stat the first time the Pokémon enters a battle. |
+| :white_check_mark: | Dauntless Shield | Boosts the Pokémon's Defense stat the first time the Pokémon enters a battle. |
 | :x: | Libero | Changes the Pokémon's type to the type of the move it's about to use. This works only once each time the Pokémon enters battle. |
 | :x: | Ball Fetch | If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle. |
 | :x: | Cotton Down | When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stats of all Pokémon except itself. |

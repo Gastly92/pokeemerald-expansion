@@ -3546,6 +3546,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
 
                 if (CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility))
                 {
+                    // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                    // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                    if (GetBattlerAbility(battler) != gLastUsedAbility)
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     gEffectBattler = gBattlerAbility = battler;
                     SetStatChange(battler, STAT_ATK, 1);
                     BattleScriptCall(BattleScript_AbilityStatChange);
@@ -3561,6 +3565,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
 
                 if (CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility))
                 {
+                    // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                    // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                    if (GetBattlerAbility(battler) != gLastUsedAbility)
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     gEffectBattler = gBattlerAbility = battler;
                     SetStatChange(battler, STAT_DEF, 1);
                     BattleScriptCall(BattleScript_AbilityStatChange);

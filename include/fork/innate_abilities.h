@@ -156,6 +156,12 @@
 //   moves. Both breakable (Mold Breaker pierces, for free via IsInnateActive). Good as Gold is VERY strong (blanket
 //   status-move immunity) — a deliberate power divergence kept canon-only. Gholdengo takes the innate + a fork
 //   chosen Sticky Hold override so the innate is observable + the frontier set freed,
+//   INTREPID_SWORD / DAUNTLESS_SHIELD (Batch Y6 — switch-in stat boosts, both 1:1 clean-upside copies, canon-only):
+//   the first time the holder enters battle, Intrepid Sword (Zacian / Zacian-Crowned) raises its Attack and
+//   Dauntless Shield (Zamazenta / Zamazenta-Crowned) raises its Defense by 1 stage (the real once-per-battle latch
+//   matched via the party-state boost flag). Both ride the Batch L switch-in driver and neither is breakable. All
+//   four are sole-ability frontier sets, so each takes the innate + a fork chosen override (Zacian -> Tough Claws,
+//   Zamazenta -> Filter) so the innate is observable + the frontier set freed,
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

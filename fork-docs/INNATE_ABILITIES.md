@@ -3283,3 +3283,48 @@ Body) are now innate with no free complementary slot, so its frontier sets keep 
 Purifying Salt — still correct (the chosen ability runs; the innate is redundant-but-skipped there), matching the
 Batch J/T all-abilities-innate deferrals. This is **Batch Y sub-group Y5**; the remaining Batch Y sub-groups
 (Y6–Y8) stay open.
+
+### ABILITY_INTREPID_SWORD / ABILITY_DAUNTLESS_SHIELD
+
+**Batch Y's sixth sub-group (Y6)** — two **switch-in stat-boost clones**, each a **1:1 clean-upside copy**. The
+first time the holder enters battle, Intrepid Sword raises its Attack and Dauntless Shield its Defense by 1 stage.
+
+**Both ride the Batch L switch-in driver** (`TryActivateInnateSwitchInEffects`, `src/fork/innate_abilities.c`) —
+a **one-line `SwitchInInnateAbilityEffect` case each** returning `ABILITYEFFECT_ON_SWITCHIN`, exactly like
+Intimidate / Download / Supreme Overlord. The driver delegates to the upstream `ABILITYEFFECT_ON_SWITCHIN` case
+(`src/battle_util.c`) with the innate passed explicitly, so the +1 stat change, the `BattleScript_AbilityStatChange`
+script, and — crucially — the **once-per-battle latch** all match the real ability for free. The latch is the
+per-party-mon `GetBattlerPartyState(battler)->intrepidSwordBoost` / `dauntlessShieldBoost` flag: under
+`B_INTREPID_SWORD` / `B_DAUNTLESS_SHIELD` `>= GEN_9` (the default), the flag is set on the first trigger so the
+boost fires only **once per battle**; under earlier gens it re-fires every switch-in. The flag is party-state, not
+ability-keyed, so it works identically whether the holder runs Intrepid Sword as its chosen ability or as an
+innate. Each effect site forces the pop-up to the innate when the chosen ability differs
+(`if (GetBattlerAbility(battler) != gLastUsedAbility) gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;` —
+the Speed Boost / Download precedent).
+
+**No pure-boon divergence** — both are self-only stat boosts with no cost. Neither is **breakable**, so Mold
+Breaker never touches them (matching the real abilities). **No `DETERMINISTIC_*` surface** — an unconditional
+switch-in boost has no chance roll.
+
+**AI.** The switch-in stat simulation `SetBattlerStatStagesForSwitchin` (`src/battle_ai_switch.c`) — which lets
+the AI value switching a boosting mon in — mirrors each self-boost for an **innate** holder via `SpeciesHasInnate`
+(guarded on `aiAbility != ABILITY_INTREPID_SWORD` / `!= ABILITY_DAUNTLESS_SHIELD` so a chosen holder isn't
+double-counted), right beside the existing innate Intimidate / Download / Supersweet Syrup mirrors. Like the
+real-ability `case`s in the same function, it does **not** model the once-per-battle latch — it estimates the
+boost.
+
+**Species (canon-only, no flavor picks).** Intrepid Sword → **Zacian / Zacian-Crowned**; Dauntless Shield →
+**Zamazenta / Zamazenta-Crowned**. All four are **sole-ability frontier sets**, so — like the Y2/Y3/Y4/Y5 legends
+— each takes the innate **plus a fork-owned chosen override** in its empty slot 1
+(`src/fork/species_ability_overrides.c`): **Zacian → Tough Claws** (an implemented `:white_check_mark:` innate it
+does not itself carry, stable; powers its entirely-contact kit — Behemoth Blade / Play Rough / Close Combat /
+Crunch / Wild Charge — like Solgaleo / Zarude) and **Zamazenta → Filter** (implemented `:white_check_mark:`,
+stable, thematic for the "Shield" defender — blunts the supereffective hits its Body Press / Iron Defense wall
+fears, like Melmetal / Stonjourner). The **same** chosen ability is given to both formes of each so the ability
+stays consistent across the in-battle Hero ↔ Crowned form change. This makes the innate **observable** and frees
+the frontier slot (chosen Intrepid Sword / Dauntless Shield → chosen Tough Claws / Filter; the innate still fires
+at switch-in).
+
+**Step 3.5**: all four frontier sets freed → chosen **Tough Claws** (Zacian ×2) / **Filter** (Zamazenta ×2) via
+the new override rows + the `.ability` change in `src/fork/frontier_extended_mons.c`. This is **Batch Y sub-group
+Y6**; the remaining Batch Y sub-groups (Y7–Y8) stay open (Y8 is blocked on Tier 5.5 Mold Breaker).

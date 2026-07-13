@@ -968,6 +968,41 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DRAGAPULT, 2,
         ABILITY_DRAGONS_MAW
     },
+    { // 0888
+        // Zacian's only real ability (Intrepid Sword) is now innate, and it's a frontier set, so like the
+        // Regi legends (Y2) / Necrozma / Lunala (Y3) it takes the innate AND a fork-owned chosen ability in its
+        // EMPTY slot 1. Tough Claws is an already-implemented :white_check_mark: innate (stable) the Warrior
+        // Pokemon does not carry innately and powers its entirely-contact kit (Behemoth Blade / Play Rough /
+        // Close Combat / Crunch / Wild Charge), stacking with the innate Intrepid Sword switch-in Attack boost.
+        // Same pick as its fellow physical contact bruisers Solgaleo / Zarude.
+        SPECIES_ZACIAN, 1,
+        ABILITY_TOUGH_CLAWS
+    },
+    { // 0888
+        // Zacian-Crowned shares base Zacian's sole Intrepid Sword (now innate); its EMPTY slot 1 takes the same
+        // chosen Tough Claws so the ability is consistent across the Hero <-> Crowned form change and powers its
+        // contact STAB (Behemoth Blade / Play Rough / Close Combat), stacking with the innate Intrepid Sword.
+        SPECIES_ZACIAN_CROWNED, 1,
+        ABILITY_TOUGH_CLAWS
+    },
+    { // 0889
+        // Zamazenta's only real ability (Dauntless Shield) is now innate, and it's a frontier set, so like the
+        // Regi legends (Y2) it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1. Filter is an
+        // already-implemented :white_check_mark: innate (stable, like Melmetal / Stonjourner) the Warrior Pokemon
+        // does not carry innately and is thematic for the "Shield" defender: it blunts the supereffective hits its
+        // Body Press / Iron Defense wall otherwise fears, stacking with the innate Dauntless Shield switch-in Defense
+        // boost.
+        SPECIES_ZAMAZENTA, 1,
+        ABILITY_FILTER
+    },
+    { // 0889
+        // Zamazenta-Crowned shares base Zamazenta's sole Dauntless Shield (now innate); its EMPTY slot 1 takes the
+        // same chosen Filter so the ability is consistent across the Hero <-> Crowned form change and blunts the
+        // supereffective Fire / Fighting / Ground hits its Fighting/Steel Body Press wall fears, on top of the innate
+        // Dauntless Shield.
+        SPECIES_ZAMAZENTA_CROWNED, 1,
+        ABILITY_FILTER
+    },
     { // 0890
         SPECIES_ETERNATUS, 1,
         ABILITY_POISON_TOUCH
