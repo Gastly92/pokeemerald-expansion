@@ -3023,8 +3023,8 @@ holder benefits from a KO" — and the sacrifice-the-ally spread scoring) read
 `IsMoxieTypeAbility(aiData->abilities[b])`. They were already innate-aware for Moxie via
 `IsInnateActive(b, ABILITY_MOXIE)`; that inline clause is replaced by the fork helper
 **`IsMoxieTypeInnateActive(b)`** (`src/battle_ai_util.c`, beside `IsMoxieTypeAbility`), which credits an innate
-Moxie **or** Chilling Neigh **or** Grim Neigh (the only Moxie-type set members that can be innates — Beast Boost
-and the As One combos never are). **Electromorphosis needs no AI wiring**: Wind Power's dedicated reads
+Moxie **or** Beast Boost **or** Chilling Neigh **or** Grim Neigh (the Moxie-type set members that can be innates —
+the As One combos never are; Beast Boost joined this helper in Batch Y7). **Electromorphosis needs no AI wiring**: Wind Power's dedicated reads
 (`GetWindAbilityScore`, the switch-in Tailwind sim) are wind/Tailwind-specific and do not apply to a
 charge-on-any-hit clone, and the Charge volatile itself is not a state the AI dodges.
 
@@ -3328,3 +3328,45 @@ at switch-in).
 **Step 3.5**: all four frontier sets freed → chosen **Tough Claws** (Zacian ×2) / **Filter** (Zamazenta ×2) via
 the new override rows + the `.ability` change in `src/fork/frontier_extended_mons.c`. This is **Batch Y sub-group
 Y6**; the remaining Batch Y sub-groups (Y7–Y8) stay open (Y8 is blocked on Tier 5.5 Mold Breaker).
+
+### ABILITY_BEAST_BOOST
+
+**Batch Y's seventh sub-group (Y7)** — a single **on-KO best-stat clone**, a **1:1 clean-upside copy**. When the
+holder knocks out a foe with a move, its **highest** stat rises by 1 stage — **Moxie**, best-stat edition. It was
+`:x:` only because it's a clone that couldn't be observed on any of its (all sole-ability) canon users until the
+frontier-override pattern existed; that pattern (Y2–Y6) is now routine.
+
+**One shared effect site, no new C.** Beast Boost fires from the upstream **`ABILITYEFFECT_MOVE_END_FOES_FAINTED`**
+case (`src/battle_util.c`) — the exact Moxie / Beast Boost / Chilling Neigh / Grim Neigh cluster the **attacker-side**
+on-hit driver (`TryActivateInnateOnHitAttackerEffects`, hooked from `MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE`)
+already delegates to. So it is a **one-line addition to `IsActiveOnHitAttackerInnate`**
+(`src/fork/innate_abilities.c`) beside Moxie / the neighs. The case already special-cases Beast Boost with
+`stat = GetHighestStatId(battler)`, counts `NumFaintedBattlersByAttacker`, and forces
+`gBattleScripting.abilityPopupOverwrite` to the innate when the chosen ability differs — all for free, so no edit to
+the effect site itself.
+
+**No pure-boon divergence** — a self-only stat boost with no cost. **No `DETERMINISTIC_*` surface** — it triggers at
+100% on a KO. Not **breakable**, so Mold Breaker never touches it (matching the real ability).
+
+**AI.** Beast Boost is a Moxie-type on-KO ability, so the two Moxie-type reads in `src/battle_ai_main.c` (the Protect
+self-faint check and the sacrifice-the-ally spread scoring) that pair `IsMoxieTypeAbility(chosen)` with
+`IsMoxieTypeInnateActive(b)` already reach it — Beast Boost was **added to `IsMoxieTypeInnateActive`**
+(`src/battle_ai_util.c`) so an innate holder is credited. No other AI site reads Beast Boost.
+
+**Species (canon-only, no flavor picks).** Every canon Beast Boost user is an **Ultra Beast whose sole ability is
+Beast Boost**, so the ten evolved/frontier UBs take the innate **plus a fork-owned chosen override** in their empty
+slot 1 (`src/fork/species_ability_overrides.c`), each a stable `:x:` never-an-innate pick or an implemented
+`:white_check_mark:` innate the species does not itself carry: **Nihilego → Merciless** (auto-crits its poisoned
+targets), **Buzzwole → Iron Fist** (its punch kit), **Pheromosa → Tough Claws** (contact STAB), **Xurkitree →
+Lightning Rod** (Electric immunity + Sp. Atk, the Regieleki precedent), **Celesteela / Guzzlord → Filter** (blunts
+supereffective — Guzzlord's 4× Fairy), **Kartana → Sharpness** (its slicing Leaf Blade / Sacred Sword), **Naganadel
+→ Sheer Force** (its Nasty Plot sweeper), **Stakataka → Solid Rock** (blunts supereffective on its Trick Room wall),
+**Blacephalon → Infiltrator** (ignores screens / Substitute). This makes the innate **observable** and frees the
+frontier slot. Merged into the existing innate **Levitate** rows where present (Nihilego / Xurkitree / Kartana /
+Blacephalon float). The pre-evolution **Poipole** is **omitted as redundant** — sole Beast Boost, **not** a frontier
+set, so its chosen ability already grants it and an innate could never be observed (the Calyrex / Mega Lopunny
+precedent) — keeping only its existing innate Levitate row.
+
+**Step 3.5**: all twenty frontier sets (two per UB) freed → their chosen override via the `.ability` change in
+`src/fork/frontier_extended_mons.c`. This is **Batch Y sub-group Y7**; only **Y8** (Turboblaze / Teravolt, blocked on
+Tier 5.5 Mold Breaker) remains open in Batch Y.

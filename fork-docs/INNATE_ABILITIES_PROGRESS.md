@@ -230,7 +230,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Tangling Hair | Contact with the Pokémon lowers the attacker's Speed stat. |
 | :x: | Receiver | The Pokémon changes its Ability to match that of a defeated ally. |
 | :x: | Power of Alchemy | The Pokémon copies the Ability of a defeated ally. |
-| :white_large_square: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
+| :white_check_mark: | Beast Boost | Boosts the Pokémon's most proficient stat every time it knocks out a target. |
 | :x: | RKS System | Changes the Pokémon's type to match the memory disc it holds. |
 | :x: | Electric Surge | Turns the ground into Electric Terrain when the Pokémon enters a battle. |
 | :x: | Psychic Surge | Turns the ground into Psychic Terrain when the Pokémon enters a battle. |

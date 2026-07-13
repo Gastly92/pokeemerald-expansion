@@ -162,6 +162,15 @@
 //   matched via the party-state boost flag). Both ride the Batch L switch-in driver and neither is breakable. All
 //   four are sole-ability frontier sets, so each takes the innate + a fork chosen override (Zacian -> Tough Claws,
 //   Zamazenta -> Filter) so the innate is observable + the frontier set freed,
+//   BEAST_BOOST (Batch Y7 — on-KO best-stat boost, a 1:1 clean-upside copy of Moxie's best-stat edition,
+//   canon-only): when the holder KOs a foe, its HIGHEST stat rises +1 stage. It rides the same attacker-side on-hit
+//   driver as Moxie / Chilling Neigh / Grim Neigh (the upstream ABILITYEFFECT_MOVE_END_FOES_FAINTED case already
+//   reads GetHighestStatId for it) and is one of the Moxie-type abilities the AI reasons about (innate credited via
+//   IsMoxieTypeInnateActive). Not breakable. Every canon user is a sole-Beast-Boost Ultra Beast, so the ten
+//   evolved/frontier UBs take the innate + a fork chosen override in their empty slot 1 (Nihilego -> Merciless,
+//   Buzzwole -> Iron Fist, Pheromosa -> Tough Claws, Xurkitree -> Lightning Rod, Celesteela / Guzzlord -> Filter,
+//   Kartana -> Sharpness, Naganadel -> Sheer Force, Stakataka -> Solid Rock, Blacephalon -> Infiltrator) so the
+//   innate is observable + each frontier set freed; the non-frontier pre-evo Poipole is omitted as redundant,
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

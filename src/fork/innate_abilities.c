@@ -642,6 +642,28 @@
 //   legends they take the innate AND a fork-owned chosen override in their empty slot 1 (Zacian -> Tough Claws for
 //   its all-contact kit, Zamazenta -> Filter for its Body Press wall — the same chosen ability on both formes so it
 //   is consistent across the Hero <-> Crowned form change) so the innate is OBSERVABLE and the frontier set is freed.
+//   BEAST_BOOST (Batch Y7 — on-KO best-stat boost, a 1:1 clean-upside copy, canon-only (no flavor picks)): when
+//   the holder knocks out a foe, its HIGHEST stat rises +1 stage (Moxie, best-stat edition). It joins the same
+//   attacker-side on-hit driver as Moxie / Chilling Neigh / Grim Neigh (a one-line IsActiveOnHitAttackerInnate
+//   addition), delegating to the upstream ABILITYEFFECT_MOVE_END_FOES_FAINTED case, which already reads
+//   GetHighestStatId(battler) for Beast Boost, so the stat pick / stat change / script / pop-up match the real
+//   ability for free (the effect site in src/battle_util.c forces the pop-up to the innate when the chosen ability
+//   differs, the Speed Boost precedent). It only ever helps the holder (a self stat boost), so no pure-boon
+//   divergence. AI is innate-aware: Beast Boost is one of the Moxie-type on-KO abilities, so the two AI reads that
+//   pair IsMoxieTypeAbility with IsMoxieTypeInnateActive (battle_ai_main.c — "does the foe snowball on a KO" and
+//   "does my own KO snowball") credit an innate Beast Boost, which was added to IsMoxieTypeInnateActive
+//   (src/battle_ai_util.c). Suppression parity holds via IsInnateActive() (feature flag, Gastro Acid, Neutralizing
+//   Gas, not-on-field); Beast Boost is not breakable, so Mold Breaker never touches it. Species: every canon
+//   Beast Boost user is an Ultra Beast whose SOLE ability is Beast Boost, so the ten evolved/frontier UBs (Nihilego,
+//   Buzzwole, Pheromosa, Xurkitree, Celesteela, Kartana, Guzzlord, Naganadel, Stakataka, Blacephalon) take the
+//   innate AND a fork-owned chosen override in their empty slot 1 (Nihilego -> Merciless, Buzzwole -> Iron Fist,
+//   Pheromosa -> Tough Claws, Xurkitree -> Lightning Rod, Celesteela -> Filter, Kartana -> Sharpness, Guzzlord ->
+//   Filter, Naganadel -> Sheer Force, Stakataka -> Solid Rock, Blacephalon -> Infiltrator — each a stable :x:
+//   never-an-innate pick or an already-implemented :white_check_mark: innate the species does not itself carry) so
+//   the innate is OBSERVABLE and each frontier set is freed to that chosen override. Merged into the existing innate
+//   Levitate rows where present (Nihilego / Xurkitree / Kartana / Blacephalon float). The pre-evolution Poipole is
+//   OMITTED as redundant (sole Beast Boost, NOT a frontier set — its chosen ability already grants it, so an innate
+//   could never be observed — the Calyrex / Mega Lopunny precedent), keeping only its existing innate Levitate row.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -7479,19 +7501,46 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0793
         SPECIES_NIHILEGO,
         INNATES(
+            ABILITY_BEAST_BOOST,
             ABILITY_LEVITATE
+        )
+    },
+    { // 0794
+        SPECIES_BUZZWOLE,
+        INNATES(
+            ABILITY_BEAST_BOOST
+        )
+    },
+    { // 0795
+        SPECIES_PHEROMOSA,
+        INNATES(
+            ABILITY_BEAST_BOOST
         )
     },
     { // 0796
         SPECIES_XURKITREE,
         INNATES(
+            ABILITY_BEAST_BOOST,
             ABILITY_LEVITATE
+        )
+    },
+    { // 0797
+        SPECIES_CELESTEELA,
+        INNATES(
+            ABILITY_BEAST_BOOST
         )
     },
     { // 0798
         SPECIES_KARTANA,
         INNATES(
+            ABILITY_BEAST_BOOST,
             ABILITY_LEVITATE
+        )
+    },
+    { // 0799
+        SPECIES_GUZZLORD,
+        INNATES(
+            ABILITY_BEAST_BOOST
         )
     },
     { // 0800
@@ -7558,9 +7607,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0804
+        SPECIES_NAGANADEL,
+        INNATES(
+            ABILITY_BEAST_BOOST
+        )
+    },
+    { // 0805
+        SPECIES_STAKATAKA,
+        INNATES(
+            ABILITY_BEAST_BOOST
+        )
+    },
     { // 0806
         SPECIES_BLACEPHALON,
         INNATES(
+            ABILITY_BEAST_BOOST,
             ABILITY_LEVITATE
         )
     },
@@ -9275,6 +9337,7 @@ static bool32 IsActiveOnHitAttackerInnate(enum Ability ability)
     case ABILITY_MOXIE:    // raises Attack +1 for each foe the holder knocks out this move
     case ABILITY_CHILLING_NEIGH: // raises Attack +1 for each foe the holder knocks out this move (Moxie clone)
     case ABILITY_GRIM_NEIGH:     // raises Sp. Atk +1 for each foe the holder knocks out this move (Moxie clone)
+    case ABILITY_BEAST_BOOST:    // raises the holder's HIGHEST stat +1 for each foe it knocks out this move (Moxie, best-stat edition)
         return TRUE;
     default:
         return FALSE;
