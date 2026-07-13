@@ -2292,6 +2292,7 @@ bool32 IsPowderMoveBlocked(struct DamageContext *ctx)
 bool32 CanAbilityAbsorbMove(struct DamageContext *ctx)
 {
     const u8 *battleScript = NULL;
+    enum Ability absorbAbility = ctx->abilities[ctx->battlerDef]; // FORK: ability credited for the block (an innate may override it)
 
     switch (ctx->abilities[ctx->battlerDef])
     {
@@ -2356,12 +2357,33 @@ bool32 CanAbilityAbsorbMove(struct DamageContext *ctx)
         break;
     }
 
+    // FORK: an innate Good as Gold (FEATURE_INNATE_ABILITIES) blocks incoming status moves exactly like the real
+    // ability (a very strong but clean upside, so the innate is a 1:1 copy — see the balance note in the allowlist
+    // comment). Guard against a chosen Good as Gold (already handled by the switch) so it never double-fires, and
+    // credit the innate for the pop-up/record. This site is called by the AI's own move scoring (battle_ai_util.c),
+    // so on-field AI prediction of the block is innate-aware for free; the dedicated stat-change / Helping-Hand
+    // reads are made innate-aware separately. Good as Gold is breakable, so IsInnateActive() lets Mold Breaker pierce.
+    if (battleScript == NULL
+     && ctx->abilities[ctx->battlerDef] != ABILITY_GOOD_AS_GOLD
+     && IsBattleMoveStatus(ctx->move)
+     && IsInnateActive(ctx->battlerDef, ABILITY_GOOD_AS_GOLD))
+    {
+        enum MoveTarget target = GetBattlerMoveTargetType(ctx->battlerAtk, ctx->move);
+        if (target != TARGET_OPPONENTS_FIELD && target != TARGET_ALL_BATTLERS)
+        {
+            battleScript = BattleScript_AbilityProtectedTarget;
+            absorbAbility = ABILITY_GOOD_AS_GOLD;
+            if (ctx->runScript)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_GOOD_AS_GOLD;
+        }
+    }
+
     if (battleScript == NULL)
         return FALSE;
 
     if (ctx->runScript)
     {
-        gLastUsedAbility = ctx->abilities[ctx->battlerDef];
+        gLastUsedAbility = absorbAbility; // FORK: was ctx->abilities[ctx->battlerDef]; credits an innate absorber (Good as Gold)
         gBattleScripting.battler = gBattlerAbility = ctx->battlerDef;
         BattleScriptCall(battleScript);
     }
@@ -5966,10 +5988,20 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
 
     // Checks that apply to all non volatile statuses
     if (abilityDef == ABILITY_COMATOSE
-     || abilityDef == ABILITY_PURIFYING_SALT)
+     || abilityDef == ABILITY_PURIFYING_SALT
+     || IsInnateActive(battlerDef, ABILITY_PURIFYING_SALT)) // FORK: innate Purifying Salt blocks every non-volatile status like the real ability
     {
         abilityAffected = TRUE;
         battleScript = BattleScript_AbilityProtectsDoesntAffect;
+        // FORK: when an innate Purifying Salt (chosen ability differs) blocks the status, reassign abilityDef so
+        // IsNonVolatileStatusBlocked records Purifying Salt, and overwrite the pop-up (Magma Armor/Limber precedent).
+        // Routing through CanSetNonVolatileStatus also makes the CanBe* status checks (and their AI callers) innate-aware.
+        if (abilityDef != ABILITY_COMATOSE && abilityDef != ABILITY_PURIFYING_SALT)
+        {
+            if (option == RUN_SCRIPT)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_PURIFYING_SALT;
+            abilityDef = ABILITY_PURIFYING_SALT;
+        }
     }
     else if (IsMistyTerrainAffected(battlerDef, abilityDef, GetBattlerHoldEffect(battlerDef), gFieldStatuses))
     {
@@ -7783,6 +7815,17 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
     if ((moveType == TYPE_FIRE || moveType == TYPE_ICE)
      && ctx->abilities[battlerDef] != ABILITY_THICK_FAT
      && IsInnateActive(battlerDef, ABILITY_THICK_FAT))
+        modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(0.5));
+
+    // FORK: an innate Purifying Salt (FEATURE_INNATE_ABILITIES) halves incoming Ghost damage exactly like the
+    // real ability (a clean upside, so the innate is a 1:1 copy). The switch above already applied a chosen
+    // Purifying Salt, so guard against it to avoid double-applying. IsInnateActive() supplies the same
+    // suppression gates (Purifying Salt is breakable, so an attacker's Mold Breaker pierces the innate just like
+    // the chosen ability). Identity is untouched (no RecordAbilityBattle), matching the silent Thick Fat/Filter
+    // calc modifiers; on-field AI damage prediction is correct for free (this shared calc keys off the real battler).
+    if (moveType == TYPE_GHOST
+     && ctx->abilities[battlerDef] != ABILITY_PURIFYING_SALT
+     && IsInnateActive(battlerDef, ABILITY_PURIFYING_SALT))
         modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(0.5));
 
     // ally's abilities

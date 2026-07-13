@@ -604,6 +604,27 @@
 //   Both Solgaleo and Ursaluna-Bloodmoon are sole-ability frontier sets, so like the Y2/Y3 legends they take the
 //   innate AND a fork-owned chosen override in their empty slot 1 (Solgaleo -> Tough Claws, Ursaluna-Bloodmoon ->
 //   Unaware) so the innate is OBSERVABLE and the frontier set is freed.
+//   PURIFYING_SALT / GOOD_AS_GOLD (Batch Y5 — status immunities, both 1:1 clean-upside copies, canon-only (no
+//   flavor picks)): PURIFYING_SALT (the Nacli / Naclstack / Garganacl salt line — merged onto their existing
+//   Clear Body / Sturdy rows) makes the holder immune to EVERY non-volatile status (wired into the catch-all
+//   Comatose/Purifying-Salt block of CanSetNonVolatileStatus, src/battle_util.c, so every CanBe* status check and
+//   its AI callers are innate-aware for free; pop-up/record overwritten to Purifying Salt) AND halves incoming
+//   Ghost damage (a 1:1 clause beside the innate Thick Fat in the target's-abilities block of CalcAttackStat — a
+//   silent calc modifier, so on-field AI damage prediction is correct for free). The holder's OWN Rest is deliberately NOT
+//   blocked (the EFFECT_REST gate stays chosen-ability-only, the Insomnia/Vital Spirit pure-boon precedent). It is
+//   breakable, so Mold Breaker pierces the innate exactly like the real ability. GOOD_AS_GOLD (Gholdengo) blocks
+//   incoming status moves (wired into CanAbilityAbsorbMove, src/battle_util.c, which the AI's own move scoring
+//   runs, so on-field AI prediction is innate-aware for free; the dedicated stat-change/Helping-Hand/Spicy-Extract
+//   reads in battle_ai_util.c / battle_ai_main.c credit an innate via BattlerHasAbility); pop-up/record overwritten
+//   to Good as Gold, and it is breakable so Mold Breaker pierces it. BALANCE NOTE: Good as Gold is VERY strong
+//   (a blanket immunity to Thunder Wave, Toxic, Will-O-Wisp, Leech Seed, Spore, stat-lowering status moves, ...) —
+//   wiring it as an innate is a deliberate power divergence, kept canon-only (Gholdengo alone) to contain it.
+//   Gholdengo is a sole-ability frontier set, so like the Y2/Y3/Y4 legends it takes the innate AND a fork-owned
+//   chosen override in its empty slot 1 (Gholdengo -> Sticky Hold) so the innate is OBSERVABLE and its frontier
+//   sets are freed. The salt line's frontier sets keep their now-redundant chosen Purifying Salt: all three of
+//   Garganacl's real abilities (Purifying Salt / Sturdy / Clear Body) are now innate with no free complementary
+//   slot, so it is deferred to the Batch W override sweep — still correct (the chosen ability runs; the innate is
+//   redundant-but-skipped there), matching the Batch J/T all-abilities-innate deferrals.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -8495,21 +8516,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NACLI,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_PURIFYING_SALT
         )
     },
     { // 0933
         SPECIES_NACLSTACK,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_PURIFYING_SALT
         )
     },
     { // 0934
         SPECIES_GARGANACL,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_PURIFYING_SALT
         )
     },
     { // 0938
@@ -8825,6 +8849,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GIMMIGHOUL_ROAMING,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 1000
+        SPECIES_GHOLDENGO,
+        INNATES(
+            ABILITY_GOOD_AS_GOLD
         )
     },
     { // 1008

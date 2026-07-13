@@ -1112,6 +1112,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BAXCALIBUR, 1,
         ABILITY_SNOW_WARNING
     },
+    { // 1000
+        // Gholdengo's ONLY real ability (Good as Gold) is now innate, so its EMPTY slot 1 takes a chosen ability
+        // for the frontier sets. Sticky Hold is an already-implemented :white_check_mark: innate Gholdengo does
+        // NOT itself carry (stable, like Carnivine's Chlorophyll) and thematic + low-impact: the hoard of 1000
+        // coins won't let its treasure be stolen. The innate Good as Gold (still blocking status moves) stays
+        // observable behind the different chosen ability.
+        SPECIES_GHOLDENGO, 1,
+        ABILITY_STICKY_HOLD
+    },
     { // 1013
         // Sinistcha's Heatproof is now innate, freeing its frontier slot; its slot-0 Hospitality is dead in
         // singles (it heals an ally), so the innate-redundant slot-2 (Heatproof) is repurposed to a chosen

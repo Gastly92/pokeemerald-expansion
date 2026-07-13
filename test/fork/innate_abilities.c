@@ -5146,6 +5146,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_TRANSISTOR, ABILITY_DRAGONS_MAW,
         ABILITY_PRISM_ARMOR, ABILITY_SHADOW_SHIELD, ABILITY_NEUROFORCE, ABILITY_SUPREME_OVERLORD,
         ABILITY_FULL_METAL_BODY, ABILITY_MINDS_EYE,
+        ABILITY_PURIFYING_SALT, ABILITY_GOOD_AS_GOLD,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8610,5 +8611,145 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Min
         NONE_OF { ABILITY_POPUP(player, ABILITY_MINDS_EYE); }
     } THEN {
         EXPECT_EQ(player->statStages[STAT_ACC], DEFAULT_STAT_STAGE - 1); // pierced -> accuracy drops
+    }
+}
+
+// Batch Y5 — Purifying Salt / Good as Gold (status immunities).
+// Purifying Salt makes the holder immune to EVERY non-volatile status and halves incoming Ghost damage;
+// Good as Gold blocks incoming status moves. Both 1:1 clean-upside copies (Purifying Salt's only real cost —
+// blocking the holder's OWN Rest — is dropped for the innate, the Insomnia/Vital Spirit pure-boon precedent).
+// The salt line (Nacli/Naclstack/Garganacl) carries innate Purifying Salt; Gholdengo carries innate Good as Gold.
+
+// Purifying Salt, status-immunity half: an innate holder (chosen ability differs) is immune to a non-volatile
+// status, with the pop-up/message showing Purifying Salt (the catch-all Comatose/Purifying-Salt block).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Purifying Salt blocks a non-volatile status")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TOXIC) == EFFECT_NON_VOLATILE_STATUS);
+        ASSUME(GetMoveNonVolatileStatus(MOVE_TOXIC) == MOVE_EFFECT_TOXIC);
+        ASSUME(SpeciesHasInnate(SPECIES_GARGANACL, ABILITY_PURIFYING_SALT));
+        ASSUME(gSpeciesInfo[SPECIES_GARGANACL].abilities[0] != ABILITY_DAMP);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_GARGANACL) { Ability(ABILITY_DAMP); } // chosen Damp; innate Purifying Salt
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TOXIC); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TOXIC); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_PURIFYING_SALT); // pop-up shows Purifying Salt, not the chosen Damp
+            MESSAGE("It doesn't affect Garganacl…");
+            NONE_OF { STATUS_ICON(player, badPoison: TRUE); }
+        } else {
+            STATUS_ICON(player, badPoison: TRUE); // no innate -> Toxic poisons
+        }
+    }
+}
+
+// Suppression parity: Purifying Salt is breakable, so an attacker's Mold Breaker pierces the innate exactly
+// as it would the real ability — the status lands and no Purifying Salt pop-up shows.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Purifying Salt")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_PURIFYING_SALT].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_GARGANACL, ABILITY_PURIFYING_SALT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GARGANACL) { Ability(ABILITY_DAMP); } // innate Purifying Salt
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_TOXIC); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TOXIC); }
+    } SCENE {
+        STATUS_ICON(player, badPoison: TRUE); // Mold Breaker ignores the innate -> poisoned
+        NONE_OF { ABILITY_POPUP(player, ABILITY_PURIFYING_SALT); }
+    }
+}
+
+// Purifying Salt, Ghost-resist half: it halves incoming Ghost damage (a silent calc modifier beside innate
+// Thick Fat). The chosen ability is a forced Damp, so the reduction is solely the innate's.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Purifying Salt halves Ghost damage", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(GetMoveType(MOVE_SHADOW_BALL) == TYPE_GHOST);
+        ASSUME(SpeciesHasInnate(SPECIES_GARGANACL, ABILITY_PURIFYING_SALT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_GARGANACL) { Ability(ABILITY_DAMP); } // chosen Damp; innate Purifying Salt
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SHADOW_BALL); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SHADOW_BALL); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x
+    }
+}
+
+// PURE-BOON DIVERGENCE: a real Purifying Salt BLOCKS the holder's own Rest (a cost). The innate intentionally
+// does NOT block Rest, so an innate-Purifying-Salt mon may still Rest to full HP (and sleeps from its own move).
+// The chosen-ability Rest gate is left untouched, so this only diverges for the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Purifying Salt does NOT block the holder's own Rest (pure boon)")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GARGANACL) { Ability(ABILITY_DAMP); MaxHP(200); HP(100); Moves(MOVE_REST); } // innate Purifying Salt
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_REST); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Garganacl slept and restored its HP!");
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP);           // Rest healed to full
+        EXPECT_NE(player->status1 & STATUS1_SLEEP, 0);  // and slept (not blocked by the innate)
+    }
+}
+
+// Good as Gold: an innate holder (chosen ability differs) blocks an incoming status move, with the pop-up/
+// message showing Good as Gold (CanAbilityAbsorbMove, pop-up overwritten to the innate).
+// (Thunder Wave, not a poison move — Gholdengo is Steel and can't be poisoned regardless of the block.)
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Good as Gold blocks a status move")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveCategory(MOVE_THUNDER_WAVE) == DAMAGE_CATEGORY_STATUS);
+        ASSUME(SpeciesHasInnate(SPECIES_GHOLDENGO, ABILITY_GOOD_AS_GOLD));
+        ASSUME(gSpeciesInfo[SPECIES_GHOLDENGO].abilities[0] != ABILITY_DAMP);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_GHOLDENGO) { Ability(ABILITY_DAMP); } // chosen Damp; innate Good as Gold
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_THUNDER_WAVE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        if (enabled) {
+            NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_THUNDER_WAVE, opponent);
+            ABILITY_POPUP(player, ABILITY_GOOD_AS_GOLD); // pop-up shows Good as Gold, not the chosen Damp
+            MESSAGE("It doesn't affect Gholdengo…");
+            NONE_OF { STATUS_ICON(player, paralysis: TRUE); }
+        } else {
+            STATUS_ICON(player, paralysis: TRUE); // no innate -> Thunder Wave paralyzes
+        }
+    }
+}
+
+// Suppression parity: Good as Gold is breakable, so an attacker's Mold Breaker pierces the innate exactly as
+// it would the real ability — the status move lands and no Good as Gold pop-up shows.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Good as Gold")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_GOOD_AS_GOLD].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_GHOLDENGO, ABILITY_GOOD_AS_GOLD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_GHOLDENGO) { Ability(ABILITY_DAMP); } // innate Good as Gold
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_THUNDER_WAVE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        STATUS_ICON(player, paralysis: TRUE); // Mold Breaker ignores the innate -> paralyzed
+        NONE_OF { ABILITY_POPUP(player, ABILITY_GOOD_AS_GOLD); }
     }
 }

@@ -2093,7 +2093,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     case EFFECT_HELPING_HAND:
         if (!hasPartner
           || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, aiData->partnerMove)
-          || aiData->abilities[BATTLE_PARTNER(battlerAtk)] == ABILITY_GOOD_AS_GOLD
+          || BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_GOOD_AS_GOLD) // FORK: an innate Good as Gold partner blocks Helping Hand too
           || (aiData->partnerMove != MOVE_NONE && IsBattleMoveStatus(aiData->partnerMove))
           || gBattleStruct->monToSwitchIntoId[BATTLE_PARTNER(battlerAtk)] != PARTY_SIZE) //Partner is switching out.
             ADJUST_SCORE(-20);
@@ -3174,7 +3174,7 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     case EFFECT_HELPING_HAND:
         if (!hasPartner
          || !HasDamagingMove(battlerAtkPartner)
-         || aiData->abilities[battlerAtkPartner] == ABILITY_GOOD_AS_GOLD
+         || BattlerHasAbility(battlerAtkPartner, ABILITY_GOOD_AS_GOLD) // FORK: an innate Good as Gold partner blocks Helping Hand too
          || (aiData->partnerMove != MOVE_NONE && IsBattleMoveStatus(aiData->partnerMove)))
         {
             ADJUST_SCORE(WORST_EFFECT);

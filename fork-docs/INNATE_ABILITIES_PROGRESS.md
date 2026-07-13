@@ -278,7 +278,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Seed Sower | Turns the ground into Grassy Terrain when the Pokémon is hit by an attack. |
 | :white_check_mark: | Thermal Exchange | Boosts the Attack stat when the Pokémon is hit by a Fire-type move. The Pokémon also cannot be burned. |
 | :x: | Anger Shell | When an attack causes its HP to drop to half or less, the Pokémon gets angry. This lowers its Defense and Sp. Def stats but boosts its Attack, Sp. Atk, and Speed stats. |
-| :white_large_square: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
+| :white_check_mark: | Purifying Salt | Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions. |
 | :x: | Well-Baked Body | The Pokémon takes no damage when hit by Fire-type moves. Instead, its Defense stat is sharply boosted. |
 | :x: | Wind Rider | Boosts the Pokémon's Attack stat if Tailwind takes effect or if the Pokémon is hit by a wind move. The Pokémon also takes no damage from wind moves. |
 | :white_check_mark: | Guard Dog | Boosts the Pokémon's Attack stat if intimidated. Moves and items that would force the Pokémon to switch out also fail to work. |
@@ -289,7 +289,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Electromorphosis | When the Pokémon takes damage from a move, it gains the Electric Boost status. |
 | :x: | Protosynthesis | Boosts the Pokémon's most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy. |
 | :x: | Quark Drive | Boosts the Pokémon's most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy. |
-| :white_large_square: | Good as Gold | A body of pure, solid gold gives the Pokémon full immunity to other Pokémon's status moves. |
+| :white_check_mark: | Good as Gold | A body of pure, solid gold gives the Pokémon full immunity to other Pokémon's status moves. |
 | :x: | Vessel of Ruin | The power of the Pokémon's ruinous vessel lowers the Sp. Atk stats of all Pokémon except itself. |
 | :x: | Sword of Ruin | The power of the Pokémon's ruinous sword lowers the Defense stats of all Pokémon except itself. |
 | :x: | Tablets of Ruin | The power of the Pokémon's ruinous wooden tablets lowers the Attack stats of all Pokémon except itself. |

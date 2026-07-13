@@ -150,6 +150,12 @@
 //   and Scrappy (Normal/Fighting hit Ghosts), with no Intimidate immunity. Both are sole-ability frontier
 //   sets, so they take the innate + a fork chosen override (Solgaleo -> Tough Claws, Ursaluna-Bloodmoon ->
 //   Unaware) so the innate is observable + the frontier set freed,
+//   PURIFYING_SALT / GOOD_AS_GOLD (Batch Y5 — status immunities, both 1:1 clean-upside copies, canon-only):
+//   Purifying Salt (the Nacli / Naclstack / Garganacl line) makes the holder immune to every non-volatile status
+//   (its own Rest still works) and halves incoming Ghost damage; Good as Gold (Gholdengo) blocks incoming status
+//   moves. Both breakable (Mold Breaker pierces, for free via IsInnateActive). Good as Gold is VERY strong (blanket
+//   status-move immunity) — a deliberate power divergence kept canon-only. Gholdengo takes the innate + a fork
+//   chosen Sticky Hold override so the innate is observable + the frontier set freed,
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

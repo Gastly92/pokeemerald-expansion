@@ -5996,6 +5996,7 @@ bool32 AI_ShouldSpicyExtract(enum BattlerId battlerAtk, enum BattlerId battlerAt
     if (gBattleMons[battlerAtkPartner].statStages[STAT_ATK] == MAX_STAT_STAGE
      || partnerAbility == ABILITY_CONTRARY
      || partnerAbility == ABILITY_GOOD_AS_GOLD
+     || BattlerHasAbility(battlerAtkPartner, ABILITY_GOOD_AS_GOLD) // FORK: an innate Good as Gold partner blocks the status move too
      || HasBattlerSideMoveWithEffect(LEFT_FOE(battlerAtk), EFFECT_FOUL_PLAY))
         return FALSE;
 
@@ -6925,7 +6926,7 @@ static bool32 AI_CanStatChangeBePrevented(enum BattlerId battlerAtk, enum Battle
             return FALSE;
     default:
         if (IsSubstituteProtected(battlerAtk, battlerDef, gAiLogicData->abilities[battlerAtk], move)
-         || gAiLogicData->abilities[battlerDef] == ABILITY_GOOD_AS_GOLD)
+         || BattlerHasAbility(battlerDef, ABILITY_GOOD_AS_GOLD)) // FORK: credit an innate Good as Gold (blocks the stat-lowering status move)
             return TRUE;
     }
 

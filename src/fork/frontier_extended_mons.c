@@ -25166,7 +25166,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_RECOVER
         },
-        .ability = ABILITY_GOOD_AS_GOLD,
+        .ability = ABILITY_STICKY_HOLD, // Good as Gold now innate (still blocks status moves); chosen Sticky Hold (override) keeps its coin hoard
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25186,7 +25186,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_GOOD_AS_GOLD,
+        .ability = ABILITY_STICKY_HOLD, // Good as Gold now innate (still blocks status moves); chosen Sticky Hold (override) keeps its coin hoard
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25206,7 +25206,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_TRICK
         },
-        .ability = ABILITY_GOOD_AS_GOLD,
+        .ability = ABILITY_STICKY_HOLD, // Good as Gold now innate (still blocks status moves); chosen Sticky Hold (override) keeps its coin hoard
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
