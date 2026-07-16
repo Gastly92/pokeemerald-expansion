@@ -9376,3 +9376,52 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo shows its pop-up 
         EXPECT(player->volatiles.confusionTurns == 0); // still immune
     }
 }
+
+// ===== Tier 5.5 — Mold Breaker =============================================================
+// An innate Mold Breaker makes the HOLDER's moves ignore the target's breakable ability. The whole
+// effect flows through the single gBattleStruct->moldBreakerActive flag set from
+// IsMoldBreakerTypeAbility, which now credits an innate via IsInnateActive — so every effect site and
+// AI read is covered. Isolate the INNATE (not the chosen slot): Excadrill's chosen ability is set to
+// Sand Rush, so any ability-piercing can only come from its innate Mold Breaker. Levitate is the clean
+// binary observable: normally the target is immune to Ground; through Mold Breaker the hit connects.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mold Breaker pierces the target's Levitate")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
+        ASSUME(SpeciesHasInnate(SPECIES_EXCADRILL, ABILITY_MOLD_BREAKER));
+        ASSUME(gSpeciesInfo[SPECIES_EXCADRILL].abilities[0] != ABILITY_MOLD_BREAKER);
+        ASSUME(gSpeciesInfo[SPECIES_GASTLY].abilities[0] == ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_EXCADRILL) { Ability(ABILITY_SAND_RUSH); Moves(MOVE_MUD_SLAP); } // chosen differs from the innate Mold Breaker
+        OPPONENT(SPECIES_GASTLY); // real Levitate blocks Ground
+    } WHEN {
+        TURN { MOVE(player, MOVE_MUD_SLAP); }
+    } SCENE {
+        if (enabled)
+            HP_BAR(opponent); // innate Mold Breaker ignores Levitate -> the Ground hit connects
+        else
+            MESSAGE("It doesn't affect the opposing Gastly…"); // no innate -> Levitate holds
+    }
+}
+
+// Suppression parity: Mold Breaker is itself never self-broken, but an innate honors general
+// suppression via IsInnateActive. Gastro Acid on the holder turns the innate off, so the target's
+// Levitate blocks the Ground move again (IsMoldBreakerTypeAbility bails on the holder's Gastro Acid).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Mold Breaker")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_EXCADRILL, ABILITY_MOLD_BREAKER));
+        ASSUME(gSpeciesInfo[SPECIES_GASTLY].abilities[0] == ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_EXCADRILL) { Ability(ABILITY_SAND_RUSH); Moves(MOVE_MUD_SLAP); } // innate Mold Breaker
+        OPPONENT(SPECIES_GASTLY) { Moves(MOVE_GASTRO_ACID); } // real Levitate + Gastro Acid
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); } // suppress the holder's abilities (incl. the innate Mold Breaker)
+        TURN { MOVE(player, MOVE_MUD_SLAP); }
+    } SCENE {
+        MESSAGE("It doesn't affect the opposing Gastly…"); // innate suppressed -> Levitate blocks the Ground hit again
+    }
+}

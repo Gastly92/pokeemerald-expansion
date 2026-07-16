@@ -357,6 +357,16 @@
 // redundant chosen Magic Guard — still correct (the chosen runs it; the innate is redundant-but-
 // skipped there) — rather than a game-wide override sweep.
 //
+// Tier 5.5 (Mold Breaker — the holder's moves ignore the target's breakable ability) frees one set:
+// Rampardos (Mold Breaker / -- / Sheer Force) repoints from the now-redundant chosen Mold Breaker to
+// its real, non-innate Sheer Force HA (:x: stable), so a chosen ability stays observable on top of the
+// innate Mold Breaker. DEFERRED (tracked follow-up, like Batch J/T/K/L/U/Y5): the Excadrill (x3), Sawk
+// (x2), Haxorus (x2), Pangoro (x2), Hawlucha (x2), Basculegion (x2), Tinkaton (x2), Veluza (x2) and
+// Ogerpon-Hearthflame sets are all on species whose only complementary real slots are themselves now
+// innate (or a drawback / empty slot needing a game-wide override), so they keep their now-redundant
+// chosen Mold Breaker — still correct (the chosen runs it; the innate is redundant-but-skipped there) —
+// deferred to the Batch W override sweep.
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
@@ -10330,7 +10340,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_ZEN_HEADBUTT
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_SHEER_FORCE, // Mold Breaker now innate; chosen Sheer Force (its real HA, :x: stable) powers this glass cannon's coverage
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
