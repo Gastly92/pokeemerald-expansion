@@ -265,7 +265,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Neutralizing Gas | While the Pokémon is in the battle, the effects of all other Pokémon's Abilities will be nullified or will not be triggered. |
 | :white_check_mark: | Pastel Veil | Prevents the Pokémon and its allies from being poisoned. |
 | :x: | Hunger Switch | The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode at the end of every turn. |
-| :white_large_square: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
+| :white_check_mark: | Quick Draw | The Pokémon's moves have a 30% chance of going first among moves of the same priority. |
 | :white_check_mark: | Unseen Fist | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :x: | Curious Medicine | When the Pokémon enters a battle, it removes all stat changes from its allies. |
 | :white_check_mark: | Transistor | Powers up Electric-type moves. |

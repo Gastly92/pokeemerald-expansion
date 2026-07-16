@@ -674,6 +674,17 @@
 //   Species: the sole canon carrier is Mega Meganium (SPECIES_MEGANIUM_MEGA, its only ability), whose innate row
 //   documents the ability persisting as an innate; base Meganium takes it as a tight, observable flavor pick (the
 //   Solar Beam-cannon flower's base form, chosen Overgrow differs so the innate is visible), no wider flavor set.
+//   QUICK_DRAW (Tier 5.2 — 1:1 clean-upside copy): the holder's moves have a 30% chance of going first within their
+//   priority bracket (under DETERMINISTIC_ABILITIES — the shipping default — it instead always fires on the holder's
+//   entry turn, mirroring Quick Claw). Wired at the two effect sites in TryChangingTurnOrderEffects (src/battle_main.c)
+//   via BattlerHasAbility, and the activation pop-up / "can act faster" message are overwritten to Quick Draw when the
+//   chosen ability differs (Cute Charm precedent); the DETERMINISTIC_ABILITIES turn-order override in the AI's
+//   AI_WhoStrikesFirst (src/battle_ai_util.c) is innate-aware via BattlerHasAbility (the non-deterministic 30% roll is
+//   unpredictable, so the AI models it only under the deterministic config, matching stock). Suppressible (Gastro Acid /
+//   Neutralizing Gas), not breakable. Species: the sole canon carrier is Galarian Slowbro (SPECIES_SLOWBRO_GALAR, its
+//   primary ability), whose innate row documents it persisting; the Galarian Farfetch'd -> Sirfetch'd leek-lance
+//   duelist line takes it as a tight, observable flavor pick (quick to draw its weapon in a duel, chosen Steadfast /
+//   Scrappy differ so the innate is visible).
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -1438,6 +1449,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SLOWBRO_GALAR,
         INNATES(
             ABILITY_OWN_TEMPO,
+            ABILITY_QUICK_DRAW,
             ABILITY_REGENERATOR
         )
     },
@@ -1470,6 +1482,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0083
         SPECIES_FARFETCHD_GALAR,
         INNATES(
+            ABILITY_QUICK_DRAW,
             ABILITY_SCRAPPY,
             ABILITY_STEADFAST
         )
@@ -8120,6 +8133,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0865
         SPECIES_SIRFETCHD,
         INNATES(
+            ABILITY_QUICK_DRAW,
             ABILITY_SCRAPPY,
             ABILITY_STEADFAST
         )

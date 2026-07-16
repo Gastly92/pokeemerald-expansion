@@ -5311,7 +5311,7 @@ static void TryChangingTurnOrderEffects(struct BattleCalcValues *calcValues, u32
 
     // Battler 1
     // Quick Draw
-    if (ability1 == ABILITY_QUICK_DRAW && !IsBattleMoveStatus(gChosenMoveByBattler[battler1]) && quickDrawRandom[battler1])
+    if (BattlerHasAbility(battler1, ABILITY_QUICK_DRAW) && !IsBattleMoveStatus(gChosenMoveByBattler[battler1]) && quickDrawRandom[battler1]) // FORK: innate-aware Quick Draw (FEATURE_INNATE_ABILITIES)
         gProtectStructs[battler1].quickDraw = TRUE;
     // Quick Claw and Custap Berry
     if (!gProtectStructs[battler1].quickDraw
@@ -5321,7 +5321,7 @@ static void TryChangingTurnOrderEffects(struct BattleCalcValues *calcValues, u32
 
     // Battler 2
     // Quick Draw
-    if (ability2 == ABILITY_QUICK_DRAW && !IsBattleMoveStatus(gChosenMoveByBattler[battler2]) && quickDrawRandom[battler2])
+    if (BattlerHasAbility(battler2, ABILITY_QUICK_DRAW) && !IsBattleMoveStatus(gChosenMoveByBattler[battler2]) && quickDrawRandom[battler2]) // FORK: innate-aware Quick Draw (FEATURE_INNATE_ABILITIES)
         gProtectStructs[battler2].quickDraw = TRUE;
     // Quick Claw and Custap Berry
     if (!gProtectStructs[battler2].quickDraw
@@ -5366,6 +5366,16 @@ static void CheckChangingTurnOrderEffects(void)
                 {
                     gBattlerAbility = battler;
                     gLastUsedAbility = gBattleMons[battler].ability;
+                    // FORK: innate-aware Quick Draw — when the effect fired from an innate rather than
+                    // the chosen ability, show Quick Draw in the pop-up and the "can act faster" message
+                    // (both read gLastUsedAbility / abilityPopupOverwrite). Only overwrite when the chosen
+                    // ability differs, so a real Quick Draw holder stays byte-for-byte unchanged (Cute Charm
+                    // precedent — CreateAbilityPopUp reads the primary slot).
+                    if (gLastUsedAbility != ABILITY_QUICK_DRAW && IsInnateActive(battler, ABILITY_QUICK_DRAW))
+                    {
+                        gLastUsedAbility = ABILITY_QUICK_DRAW;
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_QUICK_DRAW;
+                    }
                     PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
                     RecordAbilityBattle(battler, gLastUsedAbility);
                     BattleScriptExecute(BattleScript_QuickDrawActivation);

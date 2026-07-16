@@ -176,6 +176,14 @@
 //   the single chokepoint GetAttackerWeather(battler, ...) via IsInnateActive, so every attacker-weather read is
 //   innate-aware with one clause; AI-free (the AI runs the same shared move calc). Canon carrier: Mega Meganium
 //   (its sole ability); base Meganium takes it as a tight, observable flavor pick,
+//   QUICK_DRAW (Tier 5.2 — a 1:1 clean-upside copy): the holder's moves have a 30% chance of going first within their
+//   priority bracket (under DETERMINISTIC_ABILITIES, the shipping default, it instead always fires on the holder's
+//   entry turn like Quick Claw). Wired at the two effect sites in TryChangingTurnOrderEffects (src/battle_main.c) via
+//   BattlerHasAbility, with the activation pop-up / message overwritten to Quick Draw when the chosen ability differs,
+//   and the deterministic turn-order prediction in AI_WhoStrikesFirst made innate-aware (the random 30% roll is
+//   unpredictable, so the AI models it only under the deterministic config, as in stock). Canon carrier: Galarian
+//   Slowbro (its primary ability); the Galarian Farfetch'd -> Sirfetch'd duelist line takes it as a tight, observable
+//   flavor pick,
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

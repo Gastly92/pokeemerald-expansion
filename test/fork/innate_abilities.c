@@ -5150,6 +5150,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
         ABILITY_BEAST_BOOST,
         ABILITY_MEGA_SOL,
+        ABILITY_QUICK_DRAW,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -8945,5 +8946,94 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
         // Mega Sol suppressed -> the holder no longer sees sun, so Growth is the normal +1, not +2.
         EXPECT_EQ(player->statStages[STAT_ATK],   DEFAULT_STAT_STAGE + 1);
         EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE + 1);
+    }
+}
+
+// Tier 5.2 — Quick Draw: the holder's moves have a 30% chance of going first within their priority
+// bracket; under DETERMINISTIC_ABILITIES (the shipping default) it instead always fires on the holder's
+// entry turn, like Quick Claw. Wired at the two effect sites in TryChangingTurnOrderEffects
+// (src/battle_main.c) via BattlerHasAbility, with the activation pop-up / message overwritten to Quick
+// Draw when the chosen ability differs. Galarian Slowbro carries it canonically; the Galarian Farfetch'd
+// -> Sirfetch'd duelist line takes it as an observable flavor pick (chosen Steadfast / Scrappy differ).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Quick Draw lets the slower holder move first on its entry turn")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SLOWBRO_GALAR, ABILITY_QUICK_DRAW));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE); // always fires on the entry turn
+        PLAYER(SPECIES_SLOWBRO_GALAR) { Ability(ABILITY_OWN_TEMPO); Speed(1); } // chosen Own Tempo; Quick Draw only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled) {
+            // The pop-up shows Quick Draw (the innate), not the chosen Own Tempo, and the slower holder moves first.
+            ABILITY_POPUP(player, ABILITY_QUICK_DRAW);
+            MESSAGE("Slowbro used Scratch!");
+            MESSAGE("The opposing Wobbuffet used Celebrate!");
+        } else {
+            // Feature off: no innate Quick Draw, so the slow holder moves last (stock behavior).
+            NOT ABILITY_POPUP(player, ABILITY_QUICK_DRAW);
+            MESSAGE("The opposing Wobbuffet used Celebrate!");
+            MESSAGE("Slowbro used Scratch!");
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor duelist's innate Quick Draw fires on its 30% roll (non-deterministic)")
+{
+    PASSES_RANDOMLY(3, 10, RNG_QUICK_DRAW);
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SIRFETCHD, ABILITY_QUICK_DRAW));
+        ASSUME(gSpeciesInfo[SPECIES_SIRFETCHD].abilities[0] != ABILITY_QUICK_DRAW);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        // DETERMINISTIC_ABILITIES is off in the test baseline, so Quick Draw uses its stock 30% roll.
+        PLAYER(SPECIES_SIRFETCHD) { Ability(ABILITY_STEADFAST); Speed(1); } // chosen Steadfast; Quick Draw only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        // On the 30% branch the pop-up shows Quick Draw even though the chosen ability is Steadfast.
+        ABILITY_POPUP(player, ABILITY_QUICK_DRAW);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Quick Draw")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SLOWBRO_GALAR, ABILITY_QUICK_DRAW));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_SLOWBRO_GALAR) { Ability(ABILITY_OWN_TEMPO); Speed(1); }
+        OPPONENT(SPECIES_WEEZING_GALAR) { Ability(ABILITY_NEUTRALIZING_GAS); Speed(100); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        // Quick Draw suppressed -> no pop-up and the slow holder moves last.
+        NOT ABILITY_POPUP(player, ABILITY_QUICK_DRAW);
+        MESSAGE("The opposing Weezing used Celebrate!");
+        MESSAGE("Slowbro used Scratch!");
+    }
+}
+
+AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI knows an innate Quick Draw lets it move first on its entry turn")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SLOWBRO_GALAR, ABILITY_QUICK_DRAW));
+        ASSUME(GetMoveEffect(MOVE_DESTINY_BOND) == EFFECT_DESTINY_BOND);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        // Chosen Own Tempo, Quick Draw only as an innate: the AI is far slower by raw speed, but its innate
+        // Quick Draw guarantees it moves first on its entry turn. Since the foe can then KO it, the AI should
+        // value Destiny Bond (scored up only when it predicts going first), proving the deterministic
+        // turn-order override in AI_WhoStrikesFirst is innate-aware.
+        PLAYER(SPECIES_WOBBUFFET) { Speed(200); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_SLOWBRO_GALAR) { Ability(ABILITY_OWN_TEMPO); Speed(1); HP(1); MaxHP(200); Moves(MOVE_DESTINY_BOND, MOVE_SCRATCH); }
+    } WHEN {
+        TURN { SCORE_GT(opponent, MOVE_DESTINY_BOND, MOVE_SCRATCH); }
     }
 }
