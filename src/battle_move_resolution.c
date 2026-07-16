@@ -4324,7 +4324,11 @@ static enum MoveEndResult MoveEndPickpocket(struct BattleCalcValues *cv)
                 if (GetBattlerAbility(battlerDef) != ABILITY_PICKPOCKET)
                     gBattleScripting.abilityPopupOverwrite = ABILITY_PICKPOCKET;
                 // Battle scripting is super brittle so we shall do the item exchange now (if possible)
-                if (cv->abilities[cv->battlerAtk] != ABILITY_STICKY_HOLD)
+                // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES, Batch X) — an innate Sticky
+                // Hold on the victim keeps its item too. BattleScript_Pickpocket's jumpifability is
+                // innate-aware to match, so it prints the "cannot be removed" pop-up rather than a steal.
+                if (cv->abilities[cv->battlerAtk] != ABILITY_STICKY_HOLD
+                 && !IsInnateActive(cv->battlerAtk, ABILITY_STICKY_HOLD))
                     StealTargetItem(battlerDef, cv->battlerAtk);  // Target takes attacker's item
 
                 gEffectBattler = cv->battlerAtk;

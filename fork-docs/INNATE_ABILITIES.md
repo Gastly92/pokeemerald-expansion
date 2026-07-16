@@ -1983,9 +1983,11 @@ the already-done Limber / Immunity / Insomnia — so no pure-boon divergence.
   `IsInnateActive()` clause beside the cached chosen-ability test (Water Veil rides the existing
   Water Bubble branch). Because `CanBeBurned`/`CanBeFrozen` (and the AI's status-move scoring
   through them) route through `CanSetNonVolatileStatus`, those are innate-aware for free.
-- **Own Tempo** — `CanBeConfused` (blocks confusion; a silent pure-boon immunity, no pop-up — the
-  confuse move's `jumpifability` reads only the chosen slot, matching the Levitate silent-immunity
-  precedent) plus the AI's `AI_CanBeConfused` (`src/battle_ai_util.c`).
+- **Own Tempo** — `CanBeConfused` (blocks confusion) plus the AI's `AI_CanBeConfused`
+  (`src/battle_ai_util.c`). The confuse *move* path (`BattleScript_EffectConfuse`) additionally shows the
+  Own Tempo pop-up now that the per-battler `Cmd_jumpifability` is innate-aware
+  ([Batch X](#batch-x--script-jumpifability-innate-awareness)); before Batch X this immunity was silent
+  (the `jumpifability` read only the chosen slot), the immunity itself always coming from `CanBeConfused`.
 - **Inner Focus** — the `MOVE_EFFECT_FLINCH` case of `SetMoveEffect` (`src/battle_script_commands.c`)
   and the `DETERMINISTIC_HOLD_EFFECTS` King's-Rock would-it-land mirror (`src/battle_hold_effects.c`);
   the AI's flinch-move scoring (`ShouldTryToFlinch` + the reliable-effect flinch check,
@@ -2118,10 +2120,12 @@ common removal sites: Knock Off and Thief/Covet steal (`src/battle_move_resoluti
 to Sticky Hold), Trick/Switcheroo (`src/battle_script_commands.c`, pop-up overwrite), Incinerate and Bug
 Bite (`src/battle_script_commands.c`, silent), and Magician (`src/battle_util.c`, silent). AI is
 innate-aware: the Knock Off/Corrosive Gas/Thief scoring and the item-swap heuristics
-(`src/battle_ai_main.c`, `src/battle_ai_util.c`) credit an innate Sticky Hold. **KNOWN LIMITATION:** an
-innate Sticky Hold does NOT block a chosen Pickpocket's on-contact steal, nor Corrosive Gas — both route
-through a battle script's `jumpifability` (chosen-slot-only), a cross-cutting change deferred out of
-scope. Canon-only.
+(`src/battle_ai_main.c`, `src/battle_ai_util.c`) credit an innate Sticky Hold. **The two script-driven
+sites are now covered (Batch X):** an innate Sticky Hold blocks a Pickpocket's on-contact steal (its
+`BattleScript_Pickpocket` `jumpifability` is innate-aware, plus the C-side steal gate in
+`src/battle_move_resolution.c` now reads `IsInnateActive` beside the cached chosen ability) and Corrosive
+Gas (`BattleScript_EffectCorrosiveGas`'s `jumpifability`), both via the innate-aware per-battler
+`Cmd_jumpifability` — see the [Batch X block](#batch-x--script-jumpifability-innate-awareness). Canon-only.
 
 ### ABILITY_UNSEEN_FIST / ABILITY_PIERCING_DRILL
 
@@ -3505,8 +3509,10 @@ deliberately **not** treated as asleep where the always-asleep trait would *hurt
 - **Bad Dreams** — the damage script's `jumpifability BS_TARGET, ABILITY_COMATOSE`
   (`data/battle_scripts_1.s`) reads only the **chosen** slot, and the fork's `BadDreamsHasValidTarget`
   (`src/battle_util.c`) checks chosen Comatose / real sleep, so an innate Comatose opposing a Bad Dreams holder is
-  **not** chipped — the cost stays dropped for free (the same cross-slot `jumpifability` blind spot Batch X tracks,
-  here working in the holder's favor).
+  **not** chipped — the cost stays dropped, here working in the holder's favor. **Batch X preserves this:** it made
+  the per-battler `Cmd_jumpifability` innate-aware only for an explicit boon allowlist (Sticky Hold / Own Tempo) and
+  deliberately **excludes Comatose**, precisely so its cost sites (Nightmare / Bad Dreams / own Rest, all driven by
+  this command) stay chosen-slot-only.
 - **Own Rest** — the `EFFECT_REST` "already asleep, Rest fails" gate (`src/battle_move_resolution.c`) stays
   chosen-only, so an innate Comatose holder may still Rest to full HP and sleep from its own move (the Insomnia /
   Vital Spirit / Purifying Salt Rest precedent). Rest's self-sleep runs through `trysetrest`, not
@@ -3624,3 +3630,42 @@ Cute Charm / Magic Guard / Unaware; Sigilyph: Wonder Skin / Magic Guard / Tinted
 Guard / Regenerator), so — like the Batch J/T/K/L/U all-innate tails — they keep their now-redundant chosen Magic
 Guard (still correct: the chosen runs it; the innate is redundant-but-skipped there) and are **deferred to Batch
 W** rather than a game-wide override sweep. This is **Tier 5.4**; Tier 5.5 (Mold Breaker) is next.
+
+### Batch X — script `jumpifability` innate-awareness
+
+A **cross-cutting polish** follow-up (not one of the 133 pending abilities): a handful of ability blocks live
+in a **battle script** rather than in C, checked with the script command `jumpifability`, whose per-battler form
+read **only the chosen ability slot** — so an *innate* holder was invisible to them. Two documented instances
+were left as known limitations by earlier batches:
+
+- **Sticky Hold** (Batch S) — an innate Sticky Hold did **not** block a Pickpocket's on-contact steal
+  (`BattleScript_Pickpocket`) or Corrosive Gas (`BattleScript_EffectCorrosiveGas`), both `jumpifability`-driven.
+- **Own Tempo** (Batch I) — an innate Own Tempo's confuse-move immunity worked (via `CanBeConfused` in C) but
+  was **silent**, because `BattleScript_EffectConfuse`'s `jumpifability` never saw the innate to show the pop-up.
+
+**The fix — one central chokepoint edit.** `Cmd_jumpifability`'s per-battler `default` case
+(`src/battle_script_commands.c`) now credits an innate beside the chosen-ability read, but **only for an explicit
+boon allowlist** — currently `ABILITY_STICKY_HOLD` and `ABILITY_OWN_TEMPO` — via `IsInnateActive` (a no-op with
+the feature off). When an innate did the matching, the ability pop-up is overwritten to it (the same
+`abilityPopupOverwrite` mechanism the Batch U side form uses; the shared `matchedInnate` flag now covers both the
+side and per-battler cases). One companion C edit: the Pickpocket steal gate in `src/battle_move_resolution.c`
+(which does the item move before the script runs) now reads `IsInnateActive(...ABILITY_STICKY_HOLD)` beside the
+cached chosen ability, so the item is retained and the script prints the "cannot be removed" pop-up.
+
+**Why an allowlist, not a blanket change.** The same per-battler `jumpifability` command also drives **Comatose's
+COST sites** — Nightmare, Bad Dreams, and the "already asleep" own-Rest gate — which the Comatose wiring
+deliberately leaves **chosen-slot-only** (its pure-boon divergence: an innate Comatose is never treated as asleep
+where that would *hurt* its holder). A blanket "credit any innate here" would silently re-enable those costs, so
+the allowlist keeps Batch X to the abilities whose scripted check is unambiguously a boon. Every other ability
+that uses this command is either already boon-only-and-innate (Magic Guard, Insomnia, Overcoat, Ripen, …, whose
+immunity already lands in C so the script line is a redundant pop-up path) or a never-innate `:x:` ability
+(Multitype, RKS System, Disguise), so leaving them chosen-only changes nothing; abilities can be added to the
+allowlist as future batches need them.
+
+**AI.** No new AI work — the Sticky Hold item-removal scoring (Knock Off / Corrosive Gas / Thief) and the Own
+Tempo confuse scoring were already made innate-aware in Batches S / I (the AI uses its own C heuristics, not
+script execution). Batch X only closes the in-battle script-execution gap.
+
+**Companion (Batch X's sibling).** The redirection / side-form `jumpifability` cases were already innate-aware
+(Batch U's Aroma Veil `IsInnateOnSide`). The remaining cross-slot script read of interest belongs to
+**Mold Breaker (Tier 5.5)**, which pokes the same machinery from the *attacker* side and is done next.

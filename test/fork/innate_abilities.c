@@ -9290,3 +9290,89 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
         EXPECT_LT(player->hp, player->maxHP); // innate suppressed -> poison chip lands
     }
 }
+
+// ===== Batch X — script jumpifability innate-awareness =====================================
+// The per-battler jumpifability form used to read only the chosen ability slot, so an innate holder
+// was invisible to the two ability blocks that live in a battle script rather than in C: Sticky Hold
+// vs Corrosive Gas / a Pickpocket steal, and Own Tempo's confuse-move pop-up. Cmd_jumpifability now
+// credits an innate for these two (allowlisted) abilities. Comatose's COST sites (Nightmare / Bad
+// Dreams / own Rest) route through the same command and are deliberately left chosen-slot-only — the
+// Comatose tests above (own Rest still works, no phantom chip) guard that pure-boon divergence.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sticky Hold keeps the held item from Corrosive Gas")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_CORROSIVE_GAS) == EFFECT_CORROSIVE_GAS);
+        ASSUME(SpeciesHasInnate(SPECIES_MUK, ABILITY_STICKY_HOLD));
+        ASSUME(gSpeciesInfo[SPECIES_MUK].abilities[0] != ABILITY_STICKY_HOLD);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_POISON_TOUCH); Item(ITEM_LEFTOVERS); } // chosen differs from the innate Sticky Hold
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CORROSIVE_GAS); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CORROSIVE_GAS); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_STICKY_HOLD); // pop-up shows the innate, not the chosen Poison Touch
+        else
+            NONE_OF { ABILITY_POPUP(player, ABILITY_STICKY_HOLD); }
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(player->item, ITEM_LEFTOVERS); // item survives the corrosive gas
+        else
+            EXPECT_EQ(player->item, ITEM_NONE); // item melted
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sticky Hold blocks a Pickpocket steal")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUK, ABILITY_STICKY_HOLD));
+        ASSUME(gSpeciesInfo[SPECIES_MUK].abilities[0] != ABILITY_STICKY_HOLD);
+        ASSUME(MoveMakesContact(MOVE_TACKLE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_POISON_TOUCH); Item(ITEM_LEFTOVERS); Moves(MOVE_TACKLE); } // chosen differs from the innate Sticky Hold
+        OPPONENT(SPECIES_SNEASEL) { Ability(ABILITY_PICKPOCKET); } // no item -> tries to pickpocket the attacker
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(opponent, ABILITY_PICKPOCKET);
+            ABILITY_POPUP(player, ABILITY_STICKY_HOLD); // pop-up shows the innate, not the chosen Poison Touch
+        }
+    } THEN {
+        if (enabled) {
+            EXPECT_EQ(player->item, ITEM_LEFTOVERS); // Sticky Hold keeps the item
+            EXPECT_EQ(opponent->item, ITEM_NONE);
+        } else {
+            EXPECT_EQ(player->item, ITEM_NONE); // pickpocketed away
+            EXPECT_EQ(opponent->item, ITEM_LEFTOVERS);
+        }
+    }
+}
+
+// Batch X also upgrades the innate Own Tempo confuse block from a silent immunity (handled by
+// CanBeConfused) to one that shows the Own Tempo pop-up, because BattleScript_EffectConfuse's own
+// jumpifability now sees the innate. The immunity itself is already covered above; this pins the pop-up.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo shows its pop-up when blocking a confuse move")
+{
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_CONFUSE_RAY) == EFFECT_CONFUSE);
+        ASSUME(SpeciesHasInnate(SPECIES_SLOWBRO, ABILITY_OWN_TEMPO));
+        ASSUME(gSpeciesInfo[SPECIES_SLOWBRO].abilities[0] != ABILITY_REGENERATOR);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SLOWBRO) { Ability(ABILITY_REGENERATOR); } // chosen differs from the innate Own Tempo
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CONFUSE_RAY); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CONFUSE_RAY); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_OWN_TEMPO); // pop-up shows the innate, not the chosen Regenerator
+    } THEN {
+        EXPECT(player->volatiles.confusionTurns == 0); // still immune
+    }
+}
