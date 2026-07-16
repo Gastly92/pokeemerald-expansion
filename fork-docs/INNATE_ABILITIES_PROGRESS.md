@@ -219,7 +219,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Battle Bond | When the Pokémon knocks out a target, its bond with its Trainer is strengthened, and its Attack, Sp. Atk, and Speed stats are boosted. |
 | :x: | Power Construct | Cells gather to aid the Pokémon when its HP drops to half or less, causing it to change into its Complete Forme. |
 | :white_check_mark: | Corrosion | The Pokémon can poison or badly poison targets even if they're Steel or Poison types. |
-| :white_large_square: | Comatose | The Pokémon is always drowsing and will never wake up. It can attack while in its sleeping state. |
+| :white_check_mark: | Comatose | The Pokémon is always drowsing and will never wake up. It can attack while in its sleeping state. |
 | :white_check_mark: | Queenly Majesty | Opponents are unable to use priority moves against the Pokémon or its allies. |
 | :white_check_mark: | Innards Out | When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker. |
 | :white_large_square: | Dancer | Whenever a dance move is used in battle, the Pokémon will copy the user to immediately perform that dance move itself. |

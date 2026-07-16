@@ -1445,7 +1445,8 @@ static enum CancelerResult CancelerMoveFailure(struct BattleCalcValues *cv)
         break;
     case EFFECT_SNORE:
         if (!(gBattleMons[cv->battlerAtk].status1 & STATUS1_SLEEP)
-         && cv->abilities[cv->battlerAtk] != ABILITY_COMATOSE)
+         && cv->abilities[cv->battlerAtk] != ABILITY_COMATOSE
+         && !IsInnateActive(cv->battlerAtk, ABILITY_COMATOSE)) // FORK: an innate Comatose counts as asleep for its own Snore (pure-boon self-synergy)
             battleScript = BattleScript_ButItFailed;
         break;
     case EFFECT_STEEL_ROLLER:
@@ -5517,7 +5518,7 @@ static enum Move GetSleepTalkMove(void)
 
     u32 i, unusableMovesBits = 0, movePosition;
 
-    if (GetBattlerAbility(gBattlerAttacker) != ABILITY_COMATOSE
+    if (!BattlerHasAbility(gBattlerAttacker, ABILITY_COMATOSE) // FORK: innate-aware — an innate Comatose counts as asleep for its own Sleep Talk
      && !(gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP))
         return move;
 

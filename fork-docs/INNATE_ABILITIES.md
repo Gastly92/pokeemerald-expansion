@@ -3465,3 +3465,78 @@ testable). Grep of `src/data/pokemon/species_info/` confirms G-Slowbro is the on
 **Step 3.5**: no-op — no frontier set hardcoded `ABILITY_QUICK_DRAW`. The two G-Slowbro frontier sets (chosen Own
 Tempo) and the Sirfetch'd sets (chosen Scrappy/Steadfast) simply **gain** innate Quick Draw on top, which is the
 observable win. This is **Tier 5.2**; Tier 5.3 (Comatose) is next.
+
+### ABILITY_COMATOSE
+
+**Tier 5.3** — a **status-immunity trait** (reusing the Batch I / Purifying Salt pattern) **plus** a narrow
+sleep-move self-synergy. **NOT a 1:1 copy — a deliberate PURE-BOON divergence** (bigger than most): the real
+Comatose's "always asleep" trait is *double-edged* (own Snore / Sleep Talk = boon; enemy Hex / Dream Eater /
+Nightmare / Bad Dreams exploitation + own Rest block = cost), so the innate keeps only the boon halves and drops
+every cost, following the same reasoning as the innate Insomnia's dropped Rest-block.
+
+**Status immunity (the core boon), one site.** The holder is immune to **every** non-volatile status (burn,
+poison, paralysis, sleep, freeze/frostbite), wired at the **catch-all Comatose/Purifying-Salt block** in
+`CanSetNonVolatileStatus` (`src/battle_util.c`, the block that runs after `IsNonVolatileStatusBlocked` returns
+FALSE): it gained an `|| IsInnateActive(battlerDef, ABILITY_COMATOSE)` disjunct beside the existing Purifying Salt
+one, and the pop-up/record credit is computed as `IsInnateActive(...PURIFYING_SALT) ? PURIFYING_SALT : COMATOSE`
+so an innate Comatose shows the Comatose pop-up + "It doesn't affect …" message (the Magma Armor / Purifying Salt
+precedent). Because the per-status `CanBe*` wrappers (`CanBeSlept`, `CanBeParalyzed`, …) call
+`CanSetNonVolatileStatus`, their **AI callers are innate-aware for free** (the AI won't throw a status move at an
+innate Comatose holder). The redundant belt-and-suspenders `case ABILITY_COMATOSE` in `AI_CheckBadMove`'s
+status-move switch (`src/battle_ai_main.c`) is left chosen-only, exactly like Purifying Salt (which has no such
+case at all) — the general `CanBe*` path already covers the innate.
+
+**Sleep-move self-synergy (the narrow boon), two sites.** An innate Comatose counts as asleep for the holder's
+**own** Snore / Sleep Talk: the `EFFECT_SNORE` usability gate (`src/battle_move_resolution.c`) gains an
+`|| !IsInnateActive(cv->battlerAtk, ABILITY_COMATOSE)` clause, and `GetSleepTalkMove`'s attacker gate swaps
+`GetBattlerAbility(...) != ABILITY_COMATOSE` for `!BattlerHasAbility(...)`. Their two AI heuristics
+(`EFFECT_SNORE` / `EFFECT_SLEEP_TALK` in `src/battle_ai_main.c`) gain a matching
+`BattlerHasAbility(battlerAtk, ABILITY_COMATOSE)` clause so the AI values Snore / Sleep Talk on an innate holder.
+
+**PURE-BOON divergence — the dropped cost sites (all left chosen-ability-only).** An innate Comatose is
+deliberately **not** treated as asleep where the always-asleep trait would *hurt* the holder:
+- **Hex / Barb Barrage / Venoshock** (`EFFECT_DOUBLE_POWER_ON_ARG_STATUS`, `src/battle_util.c`) — the
+  `ctx->abilities[battlerDef] == ABILITY_COMATOSE` "treat as asleep for double power" read stays chosen-only, so an
+  innate Comatose target takes **normal** (not doubled) damage. AI is correct for free (shared damage calc).
+- **Nightmare** (end-turn damage in `src/battle_end_turn.c` + the AI's `GetNightmareDamage` /
+  `EFFECT_NIGHTMARE` reads) and **Dream Eater** (the AI's `AI_IsBattlerAsleepOrComatose`-gated `EFFECT_DREAM_EATER`
+  read) — left chosen-only. Moot in practice too: an innate holder is never actually asleep, and Nightmare / Dream
+  Eater require real sleep to apply/land, so they simply fail against it.
+- **Bad Dreams** — the damage script's `jumpifability BS_TARGET, ABILITY_COMATOSE`
+  (`data/battle_scripts_1.s`) reads only the **chosen** slot, and the fork's `BadDreamsHasValidTarget`
+  (`src/battle_util.c`) checks chosen Comatose / real sleep, so an innate Comatose opposing a Bad Dreams holder is
+  **not** chipped — the cost stays dropped for free (the same cross-slot `jumpifability` blind spot Batch X tracks,
+  here working in the holder's favor).
+- **Own Rest** — the `EFFECT_REST` "already asleep, Rest fails" gate (`src/battle_move_resolution.c`) stays
+  chosen-only, so an innate Comatose holder may still Rest to full HP and sleep from its own move (the Insomnia /
+  Vital Spirit / Purifying Salt Rest precedent). Rest's self-sleep runs through `trysetrest`, not
+  `CanSetNonVolatileStatus`, so the status-immunity wiring never blocks it.
+
+**AI switch prediction.** The Toxic-Spikes switch-in poison prediction (`GetSwitchinHazardsDamage`,
+`src/battle_ai_switch.c`) credits the innate via `SpeciesHasInnate(species, ABILITY_COMATOSE)` beside the
+chosen-ability check (the Immunity precedent in the same file), so the AI never predicts phantom Toxic-Spikes
+damage for an innate Comatose switch-in candidate. (Upstream's `IsSwitchinTSpikesAffected` doesn't special-case
+Comatose even for the chosen ability, so the innate is left unhandled there too — matching the chosen ability at
+each site.)
+
+**Dropped display half.** The real Comatose's switch-in **"… is drowsing!"** message (the `ABILITY_COMATOSE` case
+of `ABILITYEFFECT_ON_SWITCHIN`) is deliberately **not** wired for the innate — it's pure display flavor and would
+need a switch-in driver; the batch plan's "drop the form/display half" note. So an innate Comatose is silent on
+switch-in. The overworld Dream-Ball catch modifier (`src/battle_script_commands.c`) and Battle Pike sleep room
+(`src/battle_pike.c`) are likewise left chosen-only (innates are battle-only / never touch economy or the
+overworld).
+
+**Suppression.** Comatose is `cantBeSuppressed` (and not `breakable`), so — like the real ability — **Gastro Acid /
+Neutralizing Gas / Mold Breaker never touch the innate** either: `IsInnateActive` returns TRUE for a
+`cantBeSuppressed` ability regardless of Mold Breaker / Gastro Acid / Neutralizing Gas. This is the distinctive
+contrast with the breakable Purifying Salt (Mold Breaker pierces *that* innate). Tests assert both.
+
+**Species (canon-only, no flavor picks — full status immunity is a strong defensive boon, matching the Y5
+Purifying Salt / Good as Gold decision).** The sole carrier is **Komala** (`SPECIES_KOMALA`), whose only real
+ability is Comatose. Its existing innate row (flavor Unaware) gains Comatose, and — as a sole-ability frontier set,
+like the Y-batch legends / Gholdengo — it takes a **fork-owned chosen Sticky Hold override**
+(`src/fork/species_ability_overrides.c`, its empty slot 1): thematic (the Drowsing Pokémon clings to its log and
+never lets go) and a stable already-implemented `:white_check_mark:` innate it does not itself carry (the same pick
+as Gholdengo). **Step 3.5**: Komala's one frontier set (was chosen Comatose) is freed to **chosen Sticky Hold**, so
+both innates (Comatose + Unaware) are observable and the set keeps its Choice Band un-Knock-Off-able. This is
+**Tier 5.3**; Tier 5.4 (Magic Guard) is next.

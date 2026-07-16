@@ -685,6 +685,24 @@
 //   primary ability), whose innate row documents it persisting; the Galarian Farfetch'd -> Sirfetch'd leek-lance
 //   duelist line takes it as a tight, observable flavor pick (quick to draw its weapon in a duel, chosen Steadfast /
 //   Scrappy differ so the innate is visible).
+//   COMATOSE (Tier 5.3 — PURE-BOON divergence, NOT a 1:1 copy): the holder is immune to EVERY non-volatile status
+//   (burn, poison, paralysis, sleep, freeze/frostbite) and counts as asleep for its OWN sleep-locked moves (Snore /
+//   Sleep Talk). Status immunity rides the catch-all Comatose/Purifying-Salt block in CanSetNonVolatileStatus
+//   (src/battle_util.c) via IsInnateActive, so the per-status CanBe* wrappers — and their AI callers — are innate-aware
+//   for free; the pop-up/record show Comatose when the chosen ability differs (Purifying Salt precedent). Snore / Sleep
+//   Talk usability (src/battle_move_resolution.c) and their AI heuristics (src/battle_ai_main.c) gain an innate-aware
+//   clause. DELIBERATE PURE-BOON DIVERGENCE: the real Comatose's "always asleep" also HURTS the holder — enemy Hex /
+//   Dream Eater / Nightmare / Bad Dreams exploit the sleep, and it blocks the holder's own Rest — so the innate is NOT
+//   treated as asleep at those COST sites (each left chosen-ability-only): an innate Comatose is never double-hit by
+//   Hex, drained by Dream Eater, chipped by Nightmare / Bad Dreams, and can still Rest to full HP (Insomnia / Purifying
+//   Salt Rest precedent). The AI's Toxic-Spikes switch-in poison prediction (src/battle_ai_switch.c) credits the innate
+//   (SpeciesHasInnate). cantBeSuppressed (like the real ability), so Gastro Acid / Neutralizing Gas / Mold Breaker never
+//   touch the innate either — suppression parity for free via IsInnateActive. Dropped the real ability's form/display
+//   half (no switch-in "drowsing" pop-up — no switch-in driver needed). CANON-ONLY (no flavor picks — full status
+//   immunity is a strong defensive boon, matching the Y5 Purifying Salt / Good as Gold decision): the sole carrier is
+//   Komala (SPECIES_KOMALA, its only real ability), which combines it with its existing innate Unaware and takes a
+//   fork-owned chosen Sticky Hold override (it clings to its log) so both innates are observable and its frontier set is
+//   freed.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -7415,7 +7433,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0775
         SPECIES_KOMALA,
         INNATES(
-            ABILITY_UNAWARE
+            ABILITY_UNAWARE,
+            ABILITY_COMATOSE // canon: Komala's sole ability, persisted as an innate (status immunity + sleep-move synergy)
         )
     },
     { // 0776

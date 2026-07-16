@@ -5151,6 +5151,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_BEAST_BOOST,
         ABILITY_MEGA_SOL,
         ABILITY_QUICK_DRAW,
+        ABILITY_COMATOSE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -9035,5 +9036,123 @@ AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI knows an innate Quick Draw l
         OPPONENT(SPECIES_SLOWBRO_GALAR) { Ability(ABILITY_OWN_TEMPO); Speed(1); HP(1); MaxHP(200); Moves(MOVE_DESTINY_BOND, MOVE_SCRATCH); }
     } WHEN {
         TURN { SCORE_GT(opponent, MOVE_DESTINY_BOND, MOVE_SCRATCH); }
+    }
+}
+
+// Tier 5.3 — Comatose (status immunity + sleep-move synergy).
+// A PURE-BOON divergence: the holder is immune to EVERY non-volatile status and counts as asleep for its OWN
+// Snore / Sleep Talk, but — unlike the real ability — is NOT treated as asleep at the COST sites (enemy Hex /
+// Dream Eater / Nightmare / Bad Dreams, and its own Rest block), so its always-asleep trait only ever helps it.
+// Komala carries innate Comatose (beside its innate Unaware) with a chosen Sticky Hold override; the tests set
+// a differing chosen ability so the innate is observable. cantBeSuppressed, so Mold Breaker can't pierce it.
+
+// Status-immunity half: an innate holder (chosen ability differs) is immune to every non-volatile status
+// (sleep, burn, paralysis, poison), with the pop-up/message showing Comatose (the catch-all status block).
+// Unlike the chosen ability there is no switch-in "drowsing" message (the display half is deliberately dropped).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose blocks every non-volatile status")
+{
+    enum Move move;
+    PARAMETRIZE { move = MOVE_SPORE; }
+    PARAMETRIZE { move = MOVE_WILL_O_WISP; }
+    PARAMETRIZE { move = MOVE_THUNDER_WAVE; }
+    PARAMETRIZE { move = MOVE_TOXIC; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KOMALA, ABILITY_COMATOSE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); } // chosen Sticky Hold; innate Comatose
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(move); }
+    } WHEN {
+        TURN { MOVE(opponent, move); }
+    } SCENE {
+        // No switch-in "Komala is drowsing!" message fires: the innate deliberately drops the display half
+        // (no switch-in driver), and the chosen Sticky Hold isn't Comatose, so the flavor pop-up never shows.
+        NOT ANIMATION(ANIM_TYPE_MOVE, move, opponent);
+        ABILITY_POPUP(player, ABILITY_COMATOSE); // pop-up shows Comatose, not the chosen Sticky Hold
+        MESSAGE("It doesn't affect Komala…");
+        NONE_OF {
+            STATUS_ICON(player, sleep: TRUE);
+            STATUS_ICON(player, burn: TRUE);
+            STATUS_ICON(player, paralysis: TRUE);
+            STATUS_ICON(player, badPoison: TRUE);
+        }
+    }
+}
+
+// Feature gate: with FEATURE_INNATE_ABILITIES off, Komala's innate Comatose is inert, so a chosen Sticky Hold
+// holder is put to sleep normally (stock behavior).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Comatose (stock behavior)")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SPORE); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_COMATOSE); }
+        STATUS_ICON(player, sleep: TRUE); // no innate -> Spore puts it to sleep
+    }
+}
+
+// Suppression parity: Comatose is cantBeSuppressed (NOT breakable), so — unlike the breakable Purifying Salt —
+// an attacker's Mold Breaker does NOT pierce the innate: the status is still blocked and the Comatose pop-up shows.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker does NOT pierce an innate Comatose (cantBeSuppressed)")
+{
+    GIVEN {
+        ASSUME(gAbilitiesInfo[ABILITY_COMATOSE].cantBeSuppressed);
+        ASSUME(!gAbilitiesInfo[ABILITY_COMATOSE].breakable);
+        ASSUME(SpeciesHasInnate(SPECIES_KOMALA, ABILITY_COMATOSE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); } // innate Comatose
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_SPORE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SPORE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_COMATOSE); // Mold Breaker can't pierce -> still blocked
+        NONE_OF { STATUS_ICON(player, sleep: TRUE); }
+    }
+}
+
+// PURE-BOON DIVERGENCE: the real Comatose is "always asleep", which blocks the holder's own Rest. The innate
+// intentionally does NOT (the EFFECT_REST gate is left chosen-only, the Insomnia / Purifying Salt precedent),
+// so an innate-Comatose mon may still Rest to full HP and sleep from its own move.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose does NOT block the holder's own Rest (pure boon)")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); MaxHP(200); HP(100); Moves(MOVE_REST); } // innate Comatose
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_REST); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("Komala slept and restored its HP!");
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP);           // Rest healed to full
+        EXPECT_NE(player->status1 & STATUS1_SLEEP, 0);  // and slept (not blocked by the innate)
+    }
+}
+
+// Sleep-move synergy (boon half): an innate Comatose counts as asleep for its OWN Snore, so the holder may use
+// it while awake (like the real ability) — feature off, the awake holder's Snore fails.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose lets the holder use Snore while awake")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_SNORE) == EFFECT_SNORE);
+        ASSUME(SpeciesHasInnate(SPECIES_KOMALA, ABILITY_COMATOSE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); Moves(MOVE_SNORE); } // innate Comatose, but not actually asleep
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SNORE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        if (enabled) {
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_SNORE, player); // innate Comatose -> Snore lands
+            NOT MESSAGE("But it failed!");
+        } else {
+            MESSAGE("But it failed!"); // no innate, awake -> Snore fails
+        }
     }
 }

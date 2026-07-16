@@ -1896,7 +1896,9 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         break;
     case EFFECT_SNORE:
     case EFFECT_SLEEP_TALK:
-        if (IsWakeupTurn(battlerAtk) || !AI_IsBattlerAsleepOrComatose(battlerAtk))
+        // FORK: an innate Comatose (chosen ability differs) counts as asleep for its own Snore / Sleep Talk.
+        if (IsWakeupTurn(battlerAtk)
+         || (!AI_IsBattlerAsleepOrComatose(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_COMATOSE)))
             ADJUST_SCORE(-10);    // if mon will wake up, is not asleep, or is not comatose
         break;
     case EFFECT_MEAN_LOOK:
@@ -4729,7 +4731,9 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
     }
     case EFFECT_SNORE:
     case EFFECT_SLEEP_TALK:
-        if (!IsWakeupTurn(battlerAtk) && AI_IsBattlerAsleepOrComatose(battlerAtk))
+        // FORK: an innate Comatose (chosen ability differs) counts as asleep for its own Snore / Sleep Talk.
+        if (!IsWakeupTurn(battlerAtk)
+         && (AI_IsBattlerAsleepOrComatose(battlerAtk) || BattlerHasAbility(battlerAtk, ABILITY_COMATOSE)))
             ADJUST_SCORE(BEST_EFFECT);
         break;
     case EFFECT_LOCK_ON:

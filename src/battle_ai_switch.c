@@ -1747,6 +1747,7 @@ static u32 GetSwitchinHazardsDamage(enum BattlerId battler)
             && !(GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_IMMUNITY))
             && ability != ABILITY_POISON_HEAL && ability != ABILITY_COMATOSE
             && !(GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_POISON_HEAL)) // FORK: innate-aware
+            && !(GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_COMATOSE)) // FORK: innate Comatose is status-immune, so no Toxic Spikes poison
             && status == 0
             && !(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
             && !IsAbilityOnSide(battler, ABILITY_PASTEL_VEIL) && !AI_IsInnateOnSide(battler, ABILITY_PASTEL_VEIL) // FORK: innate-aware

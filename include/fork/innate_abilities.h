@@ -184,6 +184,13 @@
 //   unpredictable, so the AI models it only under the deterministic config, as in stock). Canon carrier: Galarian
 //   Slowbro (its primary ability); the Galarian Farfetch'd -> Sirfetch'd duelist line takes it as a tight, observable
 //   flavor pick,
+//   COMATOSE (Tier 5.3 — a PURE-BOON divergence, canon-only): the holder is immune to every non-volatile status and
+//   counts as asleep for its own Snore / Sleep Talk, but — unlike the real ability — is NOT treated as asleep at the
+//   COST sites (enemy Hex / Dream Eater / Nightmare / Bad Dreams, and its own Rest block are all left chosen-only), so
+//   the always-asleep trait only ever helps it. Status immunity rides the catch-all status block in
+//   CanSetNonVolatileStatus (so the AI's CanBe* status reads are innate-aware for free); cantBeSuppressed, so Gastro
+//   Acid / Neutralizing Gas / Mold Breaker never touch it. Canon-only: Komala takes it beside its innate Unaware, plus a
+//   fork chosen Sticky Hold override so both innates are observable and the frontier set is freed,
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
