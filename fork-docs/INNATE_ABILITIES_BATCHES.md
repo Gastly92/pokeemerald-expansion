@@ -433,17 +433,27 @@ in `frontier_extended_mons.c` and the per-batch `DEFERRED` notes in
 `INNATE_ABILITIES.md` for the affected set (~40 Batch-J sets and the tails of T/K/
 L/M/U).
 
-### Batch X — Script `jumpifability` innate-awareness (cross-slot)
+### Batch X — Script `jumpifability` innate-awareness (cross-slot) ✅ DONE
 **cross-cutting polish · companion to Mold Breaker (5.5)**
 
 A handful of effects route through a battle script's `jumpifability`, which reads
 **only the chosen ability slot**, so an *innate* holder is invisible to them.
-Documented instances: an innate **Sticky Hold** doesn't block a Pickpocket steal
-or Corrosive Gas (`INNATE_ABILITIES.md` ~L2048), and an innate **Own Tempo**'s
-confuse-move immunity relies on the same chosen-slot read (~L1922). Making the
-script `jumpifability` chokepoint innate-aware (as was already done centrally for
-the Aroma-Veil *side* form, `Cmd_jumpifability` ~L2889) closes these. Do it
-alongside **Mold Breaker (5.5)**, which pokes the same cross-slot machinery.
+Documented instances: an innate **Sticky Hold** didn't block a Pickpocket steal
+or Corrosive Gas, and an innate **Own Tempo**'s confuse-move immunity was silent
+(the immunity itself came from `CanBeConfused`; only the pop-up relied on the
+chosen-slot read). **Done:** `Cmd_jumpifability`'s per-battler `default` case
+(`src/battle_script_commands.c`) now credits an innate beside the chosen-ability
+read — but only for a **boon allowlist** (`ABILITY_STICKY_HOLD`, `ABILITY_OWN_TEMPO`),
+with the pop-up overwritten to the innate via the shared `matchedInnate` flag (the
+Batch U side-form mechanism, generalized). The Pickpocket steal gate in
+`src/battle_move_resolution.c` gained a matching `IsInnateActive` clause so the item
+is retained and the script prints the "cannot be removed" pop-up. The allowlist is
+deliberate: the **same command drives Comatose's cost sites** (Nightmare / Bad
+Dreams / own Rest), which the Comatose pure-boon divergence keeps chosen-slot-only —
+a blanket change would silently re-enable them. AI needed no new work (Sticky Hold /
+Own Tempo AI reads were already innate-aware in Batches S / I). See the
+[Batch X wiring block](INNATE_ABILITIES.md#batch-x--script-jumpifability-innate-awareness).
+Its sibling **Mold Breaker (5.5)** — the attacker-side cross-slot read — is done next.
 
 ---
 
@@ -485,7 +495,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 25 | Tier 5.2 — Quick Draw (determinism-sensitive) | one-off | done |
 | 26 | Tier 5.3 — Comatose | one-off | done |
 | 27 | Tier 5.4 — Magic Guard | one-off | done |
-| 28 | Batch X — Script `jumpifability` innate-awareness (companion to Mold Breaker) | cross-cutting polish | open |
+| 28 | Batch X — Script `jumpifability` innate-awareness (companion to Mold Breaker) | cross-cutting polish | done |
 | 29 | Tier 5.5 — Mold Breaker | one-off | open |
 | 30 | Tier 5.6 — Opportunist | one-off | open |
 | 31 | Tier 5.7 — Mirror Armor | one-off | open |
@@ -568,7 +578,7 @@ section for detail.
 | :-- | :-- | :-- | :-: |
 | V — Guard Dog + Pastel Veil partial halves | active (Batch L driver now exists) | 2 half-abilities | done |
 | W — Frontier-slot freeing sweep | data cleanup, multi-session | ~40 J-sets + T/K/L/M/U + Tier 5.4 tails | open (parallel track) |
-| X — Script `jumpifability` innate-awareness | cross-cutting polish | Sticky Hold / Own Tempo cross-slot reads | open (do with Mold Breaker 5.5) |
+| X — Script `jumpifability` innate-awareness | cross-cutting polish | Sticky Hold / Own Tempo cross-slot reads | done |
 | Y — Promoted-from-rejected clones | active/calc/trait (drivers exist) | 18 (see sub-groups) | open (Y1, Y2, Y3, Y4, Y5, Y6, Y7 done; Y8 open) |
 
 **Promoted from rejected (Batch Y — 18).** Each was `:x:` only because its

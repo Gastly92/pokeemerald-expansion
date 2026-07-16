@@ -3768,7 +3768,7 @@ static void Cmd_jumpifability(void)
 
     enum BattlerId battler;
     bool32 hasAbility = FALSE;
-    bool32 sideInnate = FALSE; // FORK: side match came from an innate, not the chosen ability (Batch U)
+    bool32 matchedInnate = FALSE; // FORK: the match came from an innate, not the chosen ability (Batches U + X)
     enum Ability ability = cmd->ability;
 
     switch (cmd->battler)
@@ -3776,7 +3776,21 @@ static void Cmd_jumpifability(void)
     default:
         battler = GetBattlerForBattleScript(cmd->battler);
         if (GetBattlerAbility(battler) == ability)
+        {
             hasAbility = TRUE;
+        }
+        // FORK: credit an innate for the per-battler jumpifability form too (FEATURE_INNATE_ABILITIES, Batch X),
+        // but only for abilities whose scripted check is a pure BOON to the holder: an innate Sticky Hold blocks
+        // Corrosive Gas / a Pickpocket steal, and an innate Own Tempo's confuse-block shows its pop-up. Restricted
+        // to this allowlist because the same command also drives Comatose's COST sites (Nightmare / Bad Dreams /
+        // own Rest), which must stay chosen-slot-only (its deliberate pure-boon divergence). IsInnateActive is a
+        // no-op with the feature off.
+        else if ((ability == ABILITY_STICKY_HOLD || ability == ABILITY_OWN_TEMPO)
+              && IsInnateActive(battler, ability))
+        {
+            hasAbility = TRUE;
+            matchedInnate = TRUE;
+        }
         break;
     case BS_ATTACKER_SIDE:
         battler = IsAbilityOnSide(gBattlerAttacker, ability);
@@ -3784,7 +3798,7 @@ static void Cmd_jumpifability(void)
         // form is used only by Aroma Veil, so this makes an innate Aroma Veil block Taunt / Disable /
         // Encore / Heal Block like the real ability. IsInnateOnSide is a no-op when the feature is off.
         if (!battler && (battler = IsInnateOnSide(gBattlerAttacker, ability)))
-            sideInnate = TRUE;
+            matchedInnate = TRUE;
         if (battler)
         {
             battler--;
@@ -3794,7 +3808,7 @@ static void Cmd_jumpifability(void)
     case BS_TARGET_SIDE:
         battler = IsAbilityOnSide(gBattlerTarget, ability);
         if (!battler && (battler = IsInnateOnSide(gBattlerTarget, ability))) // FORK: innate Aroma Veil side match (Batch U)
-            sideInnate = TRUE;
+            matchedInnate = TRUE;
         if (battler)
         {
             battler--;
@@ -3810,9 +3824,9 @@ static void Cmd_jumpifability(void)
         RecordAbilityBattle(battler, gLastUsedAbility);
         gBattlerAbility = battler;
         // FORK: the pop-up reads the primary slot, so when an innate did the blocking, overwrite it to
-        // show the innate ability (Batch U). The jump target (e.g. BattleScript_AromaVeilProtects) runs
-        // the pop-up, which clears the overwrite afterwards.
-        if (sideInnate)
+        // show the innate ability (Batches U + X). The jump target (e.g. BattleScript_AromaVeilProtects,
+        // BattleScript_StickyHoldActivates) runs the pop-up, which clears the overwrite afterwards.
+        if (matchedInnate)
             gBattleScripting.abilityPopupOverwrite = ability;
     }
     else
