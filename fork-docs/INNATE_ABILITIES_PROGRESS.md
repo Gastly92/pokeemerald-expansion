@@ -104,7 +104,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Quick Feet | When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon's Speed stat. |
 | :x: | Normalize | All the Pokémon's moves become Normal type. The power of those moves is boosted a little. |
 | :white_check_mark: | Sniper | Boosts the power of the Pokémon's critical hits by 125% instead of 50%. |
-| :white_large_square: | Magic Guard | The Pokémon takes damage only from attacks. |
+| :white_check_mark: | Magic Guard | The Pokémon takes damage only from attacks. |
 | :x: | No Guard | The accuracy of moves used both by and against the Pokémon becomes 100%. |
 | :x: | Stall | The Pokémon's moves go last among moves of the same priority. |
 | :white_check_mark: | Technician | Boosts the power of the Pokémon's moves by 50% if their power is 60 or less. |

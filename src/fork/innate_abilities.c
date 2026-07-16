@@ -703,6 +703,20 @@
 //   Komala (SPECIES_KOMALA, its only real ability), which combines it with its existing innate Unaware and takes a
 //   fork-owned chosen Sticky Hold override (it clings to its log) so both innates are observable and its frontier set is
 //   freed.
+//   MAGIC_GUARD (Tier 5.4 — a 1:1 clean-upside copy): the holder takes damage ONLY from direct attacks — it is spared
+//   every source of indirect/chip damage (sandstorm & hail, poison/burn/toxic, Leech Seed, Curse, Nightmare, binding
+//   moves, entry hazards Spikes/Stealth Rock/Steelsurge, Flame Burst splash, recoil & crash & Chloroblast, Life Orb, the
+//   Sticky-Barb/Black-Sludge-vs-non-Poison item chip, and Rough Skin/Iron Barbs/Rocky-Helmet contact recoil). A
+//   cross-cutting sweep (no new machinery): every chip site was made innate-aware, most via the new IsAbilityOrInnateAndRecord
+//   drop-in for IsAbilityAndRecord (battle_end_turn.c / battle_hold_effects.c / battle_move_resolution.c / battle_switch_in.c
+//   / battle_util.c), the rest via BattlerHasAbility. Magic Guard's real ability has no downside, so it's a plain 1:1 copy;
+//   it is breakable (Mold Breaker pierces, for free via IsInnateActive). The AI's indirect-damage predictors and status /
+//   hazard / recoil / weather heuristics are innate-aware (battle_ai_util.c / battle_ai_main.c / battle_ai_switch.c /
+//   battle_ai_field_statuses.c). CANON-ONLY (no flavor picks — total indirect-damage immunity is a strong defensive boon,
+//   matching the Y5 Purifying Salt / Good as Gold and Comatose decisions): the carriers are every canon Magic Guard user —
+//   the Clefairy line (Cleffa / Clefairy / Clefable, + fork Mega Clefable), the Abra line (Abra / Kadabra / Alakazam, +
+//   Mega Alakazam), Sigilyph, and the Solosis line (Solosis / Duosion / Reuniclus) — each merged into its existing innate
+//   row.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -1026,7 +1040,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFAIRY,
         INNATES(
             ABILITY_CUTE_CHARM,
-            ABILITY_FRIEND_GUARD
+            ABILITY_FRIEND_GUARD,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0036
@@ -1034,13 +1049,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
-            ABILITY_UNAWARE
+            ABILITY_UNAWARE,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0036
         SPECIES_CLEFABLE_MEGA,
         INNATES(
-            ABILITY_UNAWARE
+            ABILITY_UNAWARE,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0037
@@ -1279,25 +1296,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0063
         SPECIES_ABRA,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0064
         SPECIES_KADABRA,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0065
         SPECIES_ALAKAZAM,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0065
         SPECIES_ALAKAZAM_MEGA,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0066
@@ -2328,7 +2349,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFFA,
         INNATES(
             ABILITY_CUTE_CHARM,
-            ABILITY_FRIEND_GUARD
+            ABILITY_FRIEND_GUARD,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0174
@@ -5683,7 +5705,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SIGILYPH,
         INNATES(
             ABILITY_TINTED_LENS,
-            ABILITY_WONDER_SKIN
+            ABILITY_WONDER_SKIN,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0562
@@ -5799,7 +5822,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LEVITATE,
             ABILITY_OVERCOAT,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0578
@@ -5807,7 +5831,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LEVITATE,
             ABILITY_OVERCOAT,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0579
@@ -5815,7 +5840,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LEVITATE,
             ABILITY_OVERCOAT,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0580

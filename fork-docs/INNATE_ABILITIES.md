@@ -3540,3 +3540,87 @@ never lets go) and a stable already-implemented `:white_check_mark:` innate it d
 as Gholdengo). **Step 3.5**: Komala's one frontier set (was chosen Comatose) is freed to **chosen Sticky Hold**, so
 both innates (Comatose + Unaware) are observable and the set keeps its Choice Band un-Knock-Off-able. This is
 **Tier 5.3**; Tier 5.4 (Magic Guard) is next.
+
+### ABILITY_MAGIC_GUARD
+
+**Tier 5.4** — a **cross-cutting passive sweep** in the Levitate class: the holder takes damage **only from
+direct attacks**, so it is spared **every** indirect / chip-damage source. The real ability has no downside, so
+this is a plain **1:1 clean-upside copy** — the work is entirely in *breadth* (one comparison swap per chip site,
+~40 of them), not in any divergence.
+
+**The reusable helper: `IsAbilityOrInnateAndRecord`.** Almost every chip site upstream reads
+`IsAbilityAndRecord(battler, ability, ABILITY_MAGIC_GUARD)` (TRUE if the chosen ability is Magic Guard, recording
+it). Rather than inline `|| IsInnateActive(...)` at ~30 sites (the Rock-Head-recoil precedent, fine for 1–2 sites
+but noisy at scale), the fork adds a **drop-in** in `src/battle_util.c` (declared in `include/battle_util.h`):
+
+```c
+bool32 IsAbilityOrInnateAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck)
+{
+    if (IsAbilityAndRecord(battler, battlerAbility, abilityToCheck))
+        return TRUE;                       // chosen slot matches -> recorded, exactly as upstream
+    return IsInnateActive(battler, abilityToCheck); // innate matches -> NOT recorded (chosen slot stays identity)
+}
+```
+
+Each site becomes a pure function-name swap (`IsAbilityAndRecord(...)` → `IsAbilityOrInnateAndRecord(...)`). It
+collapses to `IsAbilityAndRecord` when the feature is off (`IsInnateActive` → FALSE), and the innate is not
+recorded (chosen slot stays the mon's identity, the Rock-Head recoil rule). Though named generically (reusable for
+future indirect-damage sweeps), every current call passes `ABILITY_MAGIC_GUARD`, so `grep MAGIC_GUARD` still finds
+them all.
+
+**Effect sites (all made innate-aware).**
+- **End-turn chip** (`src/battle_end_turn.c`, 13 sites via the helper): burn / poison / toxic damage, weather
+  (sandstorm & hail) chip, Leech Seed, Curse, Nightmare, binding/Wrap damage, Salt Cure, etc.
+- **Held-item chip** (`src/battle_hold_effects.c`, 6 sites via the helper): Life Orb recoil, the Sticky Barb /
+  Black Sludge-vs-non-Poison item chip, etc.
+- **Move-end recoil / crash** (`src/battle_move_resolution.c`, 5 sites via the helper): recoil moves,
+  Chloroblast, high-jump-kick crash, and the shared Rock-Head/Magic-Guard recoil gate (Rock Head's own innate
+  clause sits beside it). Includes the Gen-4-only paralysis-immobilization quirk (`B_MAGIC_GUARD == GEN_4`).
+- **Entry hazards** (`src/battle_switch_in.c`): Spikes (helper), Stealth Rock and Steelsurge
+  (`!BattlerHasAbility(battler, ABILITY_MAGIC_GUARD)`).
+- **Rough Skin / Iron Barbs / Rocky-Helmet contact recoil to the attacker** and the Flame-Burst partner splash
+  (`src/battle_util.c` helper sites + `src/battle_script_commands.c` `!BattlerHasAbility(...)`), plus the fork
+  BUFF_LEECH_SEED re-drain (`battle_script_commands.c`) and the Bad-Dreams valid-target scan (`battle_util.c`).
+
+**AI (the subtle half — chip prevention lives outside the shared damage calc, so the AI reasons about it in
+dedicated helpers that must be made innate-aware).**
+- **Indirect-damage predictors** (`src/battle_ai_util.c`): `GetBattlerSecondaryDamage` (short-circuits all
+  secondary damage), `AI_IsDamagedByRecoil`, the sandstorm/hail `DoesBattlerTake*Damage` gates, the Rocky-Helmet
+  / Iron-Barbs contact-avoidance read, `DoesBattlerBenefitFromAllVolatileStatus` (don't status a Magic Guard
+  foe), and `ShouldInstructPartner` (Mind-Blown-recoil partner).
+- **Scoring** (`src/battle_ai_main.c`): the Leech Seed / Curse / status-chip discouragement — the chosen-ability
+  `case ABILITY_MAGIC_GUARD` in `AI_CheckBadMove`'s `switch (abilityDef)` is mirrored by a **pre-switch innate
+  clause** (gated `abilityDef != ABILITY_MAGIC_GUARD` so it only fires for an innate-only holder, no double
+  count — the Aroma-Veil / Flower-Veil precedent above the switch) — plus the Leech Seed / Recoil-If-Miss /
+  Black Sludge reads.
+- **Switch simulation** (`src/battle_ai_switch.c`): the hazard / weather / recurring-item / status-damage
+  switch-in predictors and the "Secondary Damage" stay-in read — each on an on-field `battler`, so
+  `BattlerHasAbility` / `IsInnateActive`.
+- **Weather-benefit** (`src/battle_ai_field_statuses.c`): Magic Guard added to the innate companion
+  `DoesInnateBenefitFromWeather` (the AI values damaging weather it ignores), mirroring the chosen-ability
+  `case ABILITY_MAGIC_GUARD` in `DoesAbilityBenefitFromWeather`.
+
+The only bare `ABILITY_MAGIC_GUARD` reads left chosen-only are pure **identity**: `BattlerBenefitsFromAbilityScore`
+(Trace/Skill-Swap acquisition scoring — innates are never copied) and the chosen-ability `case` in
+`DoesAbilityBenefitFromWeather` (whose innate companion covers the innate).
+
+**Suppression.** Magic Guard is `breakable`, so an attacker's Mold Breaker drops both the chosen-ability path
+(`GetBattlerAbility` → NONE) and the innate (`IsInnateActive` → `CanBreakThroughInnate`) — but note most chip
+damage (end-turn poison, hazards) happens with no attacker move in play, where Mold Breaker never applies. Gastro
+Acid / Neutralizing Gas suppress the innate generally (tested via Neutralizing Gas restoring poison chip).
+
+**Species (canon-only — total indirect-damage immunity is a strong defensive boon, matching the Y5 Purifying
+Salt / Good as Gold and Comatose decisions).** Every canon Magic Guard user, each **merged into its existing
+innate row** (so `GetSpeciesInnateList` still returns one row): the **Clefairy line** (Cleffa / Clefairy /
+Clefable, + the fork Mega Clefable, mirroring the base creature's boon), the **Abra line** (Abra / Kadabra /
+Alakazam, + Mega Alakazam), **Sigilyph**, and the **Solosis line** (Solosis / Duosion / Reuniclus). No flavor
+picks.
+
+**Step 3.5.** The 4 species hold 10 hardcoded frontier sets (`src/fork/frontier_extended_mons.c`). The **3
+Alakazam** sets are freed: with Magic Guard now innate, they repoint from the now-redundant chosen Magic Guard to
+Alakazam's real, **non-innate Synchronize** (`:x:` stable), so a chosen ability stays observable on top of the
+innate. The **3 Clefable / 2 Sigilyph / 2 Reuniclus** sets have **all** their real abilities now innate (Clefable:
+Cute Charm / Magic Guard / Unaware; Sigilyph: Wonder Skin / Magic Guard / Tinted Lens; Reuniclus: Overcoat / Magic
+Guard / Regenerator), so — like the Batch J/T/K/L/U all-innate tails — they keep their now-redundant chosen Magic
+Guard (still correct: the chosen runs it; the innate is redundant-but-skipped there) and are **deferred to Batch
+W** rather than a game-wide override sweep. This is **Tier 5.4**; Tier 5.5 (Mold Breaker) is next.

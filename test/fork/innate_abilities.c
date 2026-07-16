@@ -5152,6 +5152,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_MEGA_SOL,
         ABILITY_QUICK_DRAW,
         ABILITY_COMATOSE,
+        ABILITY_MAGIC_GUARD,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -9154,5 +9155,138 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose lets the holder us
         } else {
             MESSAGE("But it failed!"); // no innate, awake -> Snore fails
         }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tier 5.4 — Magic Guard (a 1:1 clean-upside copy): the holder takes damage ONLY from
+// direct attacks, so it is spared every indirect / chip-damage source (recoil, status
+// damage, weather chip, Leech Seed, entry hazards, Life Orb, contact recoil, ...). Wired
+// as a cross-cutting sweep, mostly via the IsAbilityOrInnateAndRecord drop-in for
+// IsAbilityAndRecord. Canon-only carriers (Clefairy / Abra / Solosis lines, Sigilyph);
+// tests use Clefable with a chosen ability that is NOT Magic Guard, so the innate is what
+// provides the protection.
+// ─────────────────────────────────────────────────────────────────────────────
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents recoil damage to the holder")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveRecoil(MOVE_DOUBLE_EDGE) == 33);
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); Moves(MOVE_DOUBLE_EDGE); } // chosen Cute Charm; innate Magic Guard
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_DOUBLE_EDGE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_DOUBLE_EDGE, player);
+        HP_BAR(opponent);
+        if (enabled)
+            NOT HP_BAR(player); // innate Magic Guard -> no recoil
+        else
+            HP_BAR(player);     // no innate -> Double-Edge recoils normally
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents poison/burn end-of-turn chip")
+{
+    u32 status;
+    PARAMETRIZE { status = STATUS1_POISON; }
+    PARAMETRIZE { status = STATUS1_TOXIC_POISON; }
+    PARAMETRIZE { status = STATUS1_BURN; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); Status1(status); MaxHP(300); HP(300); } // innate Magic Guard
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN {}
+        TURN {}
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP); // no status chip taken
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents sandstorm chip")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); MaxHP(300); HP(300); } // Fairy-type, not sandstorm-immune by type
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SANDSTORM); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SANDSTORM); }
+        TURN {}
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP); // sandstorm deals no chip to the innate holder
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents Leech Seed drain")
+{
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_LEECH_SEED) == EFFECT_LEECH_SEED);
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); MaxHP(300); HP(300); } // innate Magic Guard
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_LEECH_SEED); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_LEECH_SEED); }
+        TURN {}
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP); // seeded, but no HP drained
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents Life Orb recoil")
+{
+    GIVEN {
+        ASSUME(gItemsInfo[ITEM_LIFE_ORB].holdEffect == HOLD_EFFECT_LIFE_ORB);
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); Item(ITEM_LIFE_ORB); Moves(MOVE_MOONBLAST); } // innate Magic Guard
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(500); HP(500); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_MOONBLAST); }
+    } SCENE {
+        HP_BAR(opponent);
+        NOT HP_BAR(player); // Life Orb boosts the hit but deals no recoil to the innate holder
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents Stealth Rock switch-in damage")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); } // innate Magic Guard
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_STEALTH_ROCK); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_STEALTH_ROCK); }
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        NOT HP_BAR(player); // Clefable switches into Stealth Rock but takes no damage
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP);
+    }
+}
+
+// Suppression parity: Magic Guard is breakable, and an innate honors general suppression via IsInnateActive.
+// Neutralizing Gas on the field turns the innate off, so the holder takes poison chip again.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Magic Guard")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); Status1(STATUS1_POISON); MaxHP(300); HP(300); } // innate Magic Guard
+        OPPONENT(SPECIES_WEEZING) { Ability(ABILITY_NEUTRALIZING_GAS); }
+    } WHEN {
+        TURN {}
+    } THEN {
+        EXPECT_LT(player->hp, player->maxHP); // innate suppressed -> poison chip lands
     }
 }

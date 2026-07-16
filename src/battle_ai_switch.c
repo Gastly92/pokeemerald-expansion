@@ -793,7 +793,7 @@ static bool32 ShouldSwitchIfBadlyStatused(struct SwitchAiContext *switchContext)
         }
 
         // Secondary Damage
-        if (monAbility != ABILITY_MAGIC_GUARD
+        if (!BattlerHasAbility(switchContext->battler, ABILITY_MAGIC_GUARD) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
             && !AiExpectsToFaintPlayer(switchContext->battler)
             && gAiLogicData->mostSuitableMonId[switchContext->battler] != PARTY_SIZE)
         {
@@ -1724,7 +1724,8 @@ static u32 GetSwitchinHazardsDamage(enum BattlerId battler)
     enum BattleSide side = GetBattlerSide(battler);
 
     // Check ways mon might avoid all hazards
-    if (ability != ABILITY_MAGIC_GUARD || (heldItemEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS &&
+    // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES) — BattlerHasAbility folds in an innate holder.
+    if (!BattlerHasAbility(battler, ABILITY_MAGIC_GUARD) || (heldItemEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS &&
         !((gFieldStatuses & STATUS_FIELD_MAGIC_ROOM) || ability == ABILITY_KLUTZ)))
     {
         // Stealth Rock
@@ -1785,7 +1786,8 @@ static s32 GetSwitchinWeatherImpact(enum BattlerId battler)
 
     // Damage
     if (holdEffect != HOLD_EFFECT_SAFETY_GOGGLES && ability != ABILITY_MAGIC_GUARD && ability != ABILITY_OVERCOAT
-     && !IsInnateActive(battler, ABILITY_OVERCOAT)) // FORK: innate Overcoat ignores sandstorm/hail chip too
+     && !IsInnateActive(battler, ABILITY_OVERCOAT) // FORK: innate Overcoat ignores sandstorm/hail chip too
+     && !IsInnateActive(battler, ABILITY_MAGIC_GUARD)) // FORK: innate Magic Guard ignores sandstorm/hail chip too
     {
         if ((weather  & B_WEATHER_HAIL)
          && !IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
@@ -1888,7 +1890,7 @@ static u32 GetSwitchinRecurringDamage(enum BattlerId battler)
     enum HoldEffect holdEffect = gAiLogicData->holdEffects[battler];
 
     // Items
-    if (ability != ABILITY_MAGIC_GUARD && ability != ABILITY_KLUTZ)
+    if (!BattlerHasAbility(battler, ABILITY_MAGIC_GUARD) && ability != ABILITY_KLUTZ) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
     {
         if (holdEffect == HOLD_EFFECT_BLACK_SLUDGE && !IS_BATTLER_OF_TYPE(battler, TYPE_POISON))
         {
@@ -1924,7 +1926,7 @@ static u32 GetSwitchinStatusDamage(enum BattlerId battler)
                      || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_POISON_HEAL)); // FORK: innate-aware
 
     // Status condition damage
-    if ((status != 0) && ability != ABILITY_MAGIC_GUARD)
+    if ((status != 0) && !BattlerHasAbility(battler, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
     {
         if (status & STATUS1_BURN)
         {

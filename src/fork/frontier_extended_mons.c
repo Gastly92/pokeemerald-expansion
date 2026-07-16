@@ -347,6 +347,16 @@
 // Unaware (:white_check_mark: stable — ignores the foe's boosts on its Calm Mind special tank, alongside the
 // innate evasion-ignore + Ghost coverage).
 //
+// Tier 5.4 (Magic Guard — the holder takes damage only from direct attacks, sparing it every
+// indirect/chip source) frees the three Alakazam sets: with Magic Guard now innate, they repoint
+// from the now-redundant chosen Magic Guard to Alakazam's real, non-innate Synchronize (:x: stable),
+// so a chosen ability stays observable on top of the innate Magic Guard. DEFERRED (tracked follow-up,
+// like Batch J/T/K/L/U): the three Clefable, two Sigilyph and two Reuniclus sets have ALL their real
+// abilities now innate (Clefable: Cute Charm / Magic Guard / Unaware; Sigilyph: Wonder Skin / Magic
+// Guard / Tinted Lens; Reuniclus: Overcoat / Magic Guard / Regenerator), so they keep their now-
+// redundant chosen Magic Guard — still correct (the chosen runs it; the innate is redundant-but-
+// skipped there) — rather than a game-wide override sweep.
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
@@ -1144,7 +1154,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_MAGIC_GUARD, // Unaware now innate; chosen Magic Guard shrugs off hazard/status chip
+        .ability = ABILITY_MAGIC_GUARD, // Cute Charm/Unaware/Magic Guard all innate now (Tier 5.4); chosen Magic Guard redundant-but-correct (Batch W deferral)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1774,7 +1784,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_MAGIC_GUARD,
+        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1794,7 +1804,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_MAGIC_GUARD,
+        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1814,7 +1824,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_ENCORE
         },
-        .ability = ABILITY_MAGIC_GUARD,
+        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -13876,7 +13886,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_ROOST
         },
-        .ability = ABILITY_MAGIC_GUARD, // Wonder Skin & Tinted Lens now innate; chosen Magic Guard (its real slot 1) blocks Toxic/hazard chip
+        .ability = ABILITY_MAGIC_GUARD, // Wonder Skin/Tinted Lens/Magic Guard all innate now (Tier 5.4); chosen Magic Guard redundant-but-correct (Batch W deferral)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

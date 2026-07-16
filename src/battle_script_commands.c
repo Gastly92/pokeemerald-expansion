@@ -2600,7 +2600,7 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
     case MOVE_EFFECT_FLAME_BURST:
         if (IsBattlerAlive(BATTLE_PARTNER(effectBattler))
          && !IsSemiInvulnerable(BATTLE_PARTNER(effectBattler), CHECK_ALL)
-         && GetBattlerAbility(BATTLE_PARTNER(effectBattler)) != ABILITY_MAGIC_GUARD)
+         && !BattlerHasAbility(BATTLE_PARTNER(effectBattler), ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
         {
             enum BattlerId partnerTarget = BATTLE_PARTNER(effectBattler);
             gEffectBattler = partnerTarget;
@@ -7178,7 +7178,7 @@ static void Cmd_setseeded(void)
         // FORK: BUFF_LEECH_SEED - re-seeding a foe this battler already seeds drains
         // it immediately instead of wasting the turn. If no drain is possible (victim
         // absent or has Magic Guard) fall back to the vanilla "missed" result.
-        if (IsBattlerPresent(victim) && GetBattlerAbility(victim) != ABILITY_MAGIC_GUARD)
+        if (IsBattlerPresent(victim) && !BattlerHasAbility(victim, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
         {
             gBattleScripting.animArg1 = seeder;
             gBattleScripting.animArg2 = victim;

@@ -1807,6 +1807,18 @@ bool32 IsAbilityAndRecord(enum BattlerId battler, enum Ability battlerAbility, e
     return TRUE;
 }
 
+// FORK: FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord above: TRUE if the
+// chosen ability matches (recorded, as upstream) OR an active innate matches (no record — the chosen
+// slot stays identity, exactly like Rock Head's innate recoil clause). Used at indirect-damage chip
+// gates so an innate holder is spared like the real ability. Collapses to IsAbilityAndRecord when the
+// feature is off (IsInnateActive returns FALSE).
+bool32 IsAbilityOrInnateAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck)
+{
+    if (IsAbilityAndRecord(battler, battlerAbility, abilityToCheck))
+        return TRUE;
+    return IsInnateActive(battler, abilityToCheck);
+}
+
 bool32 HandleFaintedMonActions(void)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
@@ -3062,7 +3074,7 @@ static bool32 BadDreamsHasValidTarget(enum BattlerId battler)
     {
         if (GetBattlerSide(i) == GetBattlerSide(battler) || !IsBattlerAlive(i))
             continue;
-        if (GetBattlerAbility(i) == ABILITY_MAGIC_GUARD)
+        if (BattlerHasAbility(i, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
             continue;
         if (GetBattlerAbility(i) == ABILITY_COMATOSE || (gBattleMons[i].status1 & STATUS1_SLEEP))
             return TRUE;
@@ -4345,7 +4357,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 // unchanged (Speed Boost precedent). gLastUsedAbility is the ability being processed.
                 if (GetBattlerAbility(gBattlerTarget) != gLastUsedAbility)
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
-                if (!IsAbilityAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_MAGIC_GUARD))
+                if (!IsAbilityOrInnateAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_MAGIC_GUARD))
                 {
                     PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
                     SetPassiveDamageAmount(gBattlerAttacker, GetNonDynamaxMaxHP(gBattlerAttacker) / (B_ROUGH_SKIN_DMG >= GEN_4 ? 8 : 16));
@@ -4772,7 +4784,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             if (!IsBattlerAlive(gBattlerAttacker))
                 break;
 
-            if (!IsAbilityAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_MAGIC_GUARD))
+            if (!IsAbilityOrInnateAndRecord(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker), ABILITY_MAGIC_GUARD))
                 SetPassiveDamageAmount(gBattlerAttacker, GetNonDynamaxMaxHP(gBattlerAttacker) / 4);
 
             switch (speciesForm)

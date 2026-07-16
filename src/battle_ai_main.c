@@ -1363,6 +1363,27 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
          && !AI_IsAbilityOnSide(battlerDef, ABILITY_FLOWER_VEIL) && AI_IsInnateOnSide(battlerDef, ABILITY_FLOWER_VEIL))
             RETURN_SCORE_MINUS(10);
 
+        // FORK: an innate Magic Guard foe (FEATURE_INNATE_ABILITIES) takes no chip damage exactly like the
+        // chosen-ability case below, so discourage the same Leech Seed / same-type Curse / status-chip moves.
+        // Gated on abilityDef != ABILITY_MAGIC_GUARD so it only fires for an innate-only holder (no double count).
+        if (GetConfig(FEATURE_INNATE_ABILITIES) && abilityDef != ABILITY_MAGIC_GUARD && IsInnateActive(battlerDef, ABILITY_MAGIC_GUARD))
+        {
+            if (moveEffect == EFFECT_LEECH_SEED)
+                ADJUST_SCORE(-5);
+            else if (moveEffect == EFFECT_CURSE && IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST))
+                ADJUST_SCORE(-5);
+            switch (nonVolatileStatus)
+            {
+            case MOVE_EFFECT_POISON:
+            case MOVE_EFFECT_TOXIC:
+            case MOVE_EFFECT_BURN:
+                ADJUST_SCORE(-5);
+                break;
+            default:
+                break;
+            }
+        }
+
         switch (abilityDef)
         {
         case ABILITY_MAGIC_GUARD:
@@ -1835,7 +1856,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             // seeding a foe another battler seeded stacks, so Leech Seed is only wasted
             // when it truly does nothing (we already seed a Magic Guard foe) or hurts us.
             if ((gBattleMons[battlerDef].volatiles.leechSeededBy & LEECH_SEED_BIT(battlerAtk))
-                && aiData->abilities[battlerDef] == ABILITY_MAGIC_GUARD)
+                && BattlerHasAbility(battlerDef, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
                 ADJUST_SCORE(-10);
             else if (aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE || IsInnateActive(battlerDef, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
                 ADJUST_SCORE(-3);
@@ -2244,7 +2265,7 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
         }
         break;
     case EFFECT_RECOIL_IF_MISS:
-        if (aiData->abilities[battlerAtk] != ABILITY_MAGIC_GUARD && gAiLogicData->moveAccuracy[battlerAtk][battlerDef][gAiThinkingStruct->movesetIndex] < 75
+        if (!BattlerHasAbility(battlerAtk, ABILITY_MAGIC_GUARD) && gAiLogicData->moveAccuracy[battlerAtk][battlerDef][gAiThinkingStruct->movesetIndex] < 75 // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
         && !(gAiThinkingStruct->aiFlags[battlerAtk] & AI_FLAG_RISKY))
             ADJUST_SCORE(-6);
         break;
@@ -4651,7 +4672,8 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
           || HasMoveWithEffect(battlerDef, EFFECT_RAPID_SPIN)
           || aiData->abilities[battlerDef] == ABILITY_LIQUID_OOZE
           || IsInnateActive(battlerDef, ABILITY_LIQUID_OOZE) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
-          || aiData->abilities[battlerDef] == ABILITY_MAGIC_GUARD)
+          || aiData->abilities[battlerDef] == ABILITY_MAGIC_GUARD
+          || IsInnateActive(battlerDef, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
             break;
         ADJUST_SCORE(GOOD_EFFECT);
         if (!HasDamagingMove(battlerDef)
@@ -5058,7 +5080,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
             }
             break;
         case HOLD_EFFECT_BLACK_SLUDGE:
-            if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_POISON) && aiData->abilities[battlerDef] != ABILITY_MAGIC_GUARD)
+            if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_POISON) && !BattlerHasAbility(battlerDef, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
                 ADJUST_SCORE(DECENT_EFFECT);
             break;
         case HOLD_EFFECT_IRON_BALL:
@@ -5100,7 +5122,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
                         ADJUST_SCORE(DECENT_EFFECT);
                     break;
                 case HOLD_EFFECT_BLACK_SLUDGE:
-                    if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON) || aiData->abilities[battlerAtk] == ABILITY_MAGIC_GUARD)
+                    if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON) || BattlerHasAbility(battlerAtk, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
                         ADJUST_SCORE(DECENT_EFFECT);
                     break;
                 case HOLD_EFFECT_IRON_BALL:
