@@ -840,6 +840,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_PYUKUMUKU, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0775
+        // Komala's only real ability (Comatose) is now innate, and it's a frontier set, so like the Y-batch
+        // sole-ability legends / Gholdengo it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
+        // Sticky Hold is an already-implemented :white_check_mark: innate (stable, the same pick as Gholdengo) that
+        // the Drowsing Pokemon does not carry innately and is perfectly thematic: Komala clings to its log and never
+        // lets go, so its held item can't be knocked off or stolen -- a clean boon on top of its innate Comatose
+        // (full status immunity) and innate Unaware.
+        SPECIES_KOMALA, 1,
+        ABILITY_STICKY_HOLD
+    },
     { // 0776
         SPECIES_TURTONATOR, 1,
         ABILITY_FLAME_BODY

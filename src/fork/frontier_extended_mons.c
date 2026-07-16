@@ -19066,7 +19066,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KOMALA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Comatose status-immune attacker
+        .heldItem = ITEM_CHOICE_BAND, // innate Comatose keeps it status-immune; chosen Sticky Hold keeps its Choice Band
         .moves =
         {
             MOVE_RETURN,
@@ -19074,7 +19074,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_COMATOSE,
+        .ability = ABILITY_STICKY_HOLD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

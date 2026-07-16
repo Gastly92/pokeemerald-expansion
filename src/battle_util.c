@@ -5997,18 +5997,20 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
     // Checks that apply to all non volatile statuses
     if (abilityDef == ABILITY_COMATOSE
      || abilityDef == ABILITY_PURIFYING_SALT
-     || IsInnateActive(battlerDef, ABILITY_PURIFYING_SALT)) // FORK: innate Purifying Salt blocks every non-volatile status like the real ability
+     || IsInnateActive(battlerDef, ABILITY_PURIFYING_SALT) // FORK: innate Purifying Salt blocks every non-volatile status like the real ability
+     || IsInnateActive(battlerDef, ABILITY_COMATOSE)) // FORK: innate Comatose is likewise immune to every non-volatile status
     {
         abilityAffected = TRUE;
         battleScript = BattleScript_AbilityProtectsDoesntAffect;
-        // FORK: when an innate Purifying Salt (chosen ability differs) blocks the status, reassign abilityDef so
-        // IsNonVolatileStatusBlocked records Purifying Salt, and overwrite the pop-up (Magma Armor/Limber precedent).
+        // FORK: when an innate Comatose / Purifying Salt (chosen ability differs) blocks the status, reassign abilityDef so
+        // IsNonVolatileStatusBlocked records the credited ability, and overwrite the pop-up (Magma Armor/Limber precedent).
         // Routing through CanSetNonVolatileStatus also makes the CanBe* status checks (and their AI callers) innate-aware.
         if (abilityDef != ABILITY_COMATOSE && abilityDef != ABILITY_PURIFYING_SALT)
         {
+            enum Ability credited = IsInnateActive(battlerDef, ABILITY_PURIFYING_SALT) ? ABILITY_PURIFYING_SALT : ABILITY_COMATOSE;
             if (option == RUN_SCRIPT)
-                gBattleScripting.abilityPopupOverwrite = ABILITY_PURIFYING_SALT;
-            abilityDef = ABILITY_PURIFYING_SALT;
+                gBattleScripting.abilityPopupOverwrite = credited;
+            abilityDef = credited;
         }
     }
     else if (IsMistyTerrainAffected(battlerDef, abilityDef, GetBattlerHoldEffect(battlerDef), gFieldStatuses))
