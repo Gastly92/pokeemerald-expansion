@@ -191,6 +191,14 @@
 //   CanSetNonVolatileStatus (so the AI's CanBe* status reads are innate-aware for free); cantBeSuppressed, so Gastro
 //   Acid / Neutralizing Gas / Mold Breaker never touch it. Canon-only: Komala takes it beside its innate Unaware, plus a
 //   fork chosen Sticky Hold override so both innates are observable and the frontier set is freed,
+//   MAGIC_GUARD (Tier 5.4 — a 1:1 clean-upside copy, canon-only): the holder takes damage only from direct attacks,
+//   sparing it every indirect/chip source (sandstorm & hail, poison/burn, Leech Seed, Curse, Nightmare, binding moves,
+//   entry hazards, recoil/crash, Life Orb, the Sticky-Barb/Black-Sludge item chip, Rough Skin/Iron Barbs/Rocky-Helmet
+//   contact recoil). A cross-cutting sweep with no new machinery: every chip site was made innate-aware, most via the new
+//   IsAbilityOrInnateAndRecord drop-in for IsAbilityAndRecord, the rest via BattlerHasAbility; the AI's indirect-damage
+//   predictors and status/hazard/recoil/weather heuristics are innate-aware too. Breakable (Mold Breaker pierces). Canon
+//   carriers only (a strong defensive boon, like Y5 / Comatose): the Clefairy, Abra and Solosis lines (+ Mega Clefable /
+//   Mega Alakazam) and Sigilyph, each merged into its existing innate row,
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

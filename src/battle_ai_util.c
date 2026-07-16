@@ -1098,7 +1098,7 @@ struct SimulatedDamage AI_CalcDamage(enum Move move, enum BattlerId battlerAtk, 
 bool32 AI_IsDamagedByRecoil(enum BattlerId battler)
 {
     enum Ability ability = gAiLogicData->abilities[battler];
-    if (ability == ABILITY_MAGIC_GUARD || ability == ABILITY_ROCK_HEAD || IsInnateActive(battler, ABILITY_ROCK_HEAD)) // FORK: innate-aware Rock Head (FEATURE_INNATE_ABILITIES)
+    if (ability == ABILITY_MAGIC_GUARD || ability == ABILITY_ROCK_HEAD || IsInnateActive(battler, ABILITY_ROCK_HEAD) || IsInnateActive(battler, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Rock Head / Magic Guard (FEATURE_INNATE_ABILITIES)
         return FALSE;
     return TRUE;
 }
@@ -1327,7 +1327,7 @@ static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId b
     if (GetMoveStrikeCount(move) > 1 || IsMultiHitMove(move))
     {
         if (AI_MoveMakesContact(battlerAtk, battlerDef, abilityAtk, gAiLogicData->holdEffects[battlerAtk], move)
-         && abilityAtk != ABILITY_MAGIC_GUARD
+         && !BattlerHasAbility(battlerAtk, ABILITY_MAGIC_GUARD) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
          && (gAiLogicData->holdEffects[battlerDef] == HOLD_EFFECT_ROCKY_HELMET
           || abilityDef == ABILITY_IRON_BARBS
           || BattlerHasAbility(battlerDef, ABILITY_IRON_BARBS))) // FORK: innate-aware Iron Barbs (FEATURE_INNATE_ABILITIES)
@@ -3524,6 +3524,7 @@ static bool32 DoesBattlerTakeSandstormDamage(enum BattlerId battlerId, enum Abil
       && !IsInnateActive(battlerId, ABILITY_SAND_VEIL) // FORK: AI knows an innate Sand Veil ignores sandstorm too
       && !IsInnateActive(battlerId, ABILITY_SAND_FORCE) // FORK: AI knows an innate Sand Force ignores sandstorm too
       && ability != ABILITY_MAGIC_GUARD
+      && !IsInnateActive(battlerId, ABILITY_MAGIC_GUARD) // FORK: AI knows an innate Magic Guard ignores sandstorm too
       && ability != ABILITY_OVERCOAT
       && !IsInnateActive(battlerId, ABILITY_OVERCOAT)) // FORK: AI knows an innate Overcoat ignores sandstorm too
         return TRUE;
@@ -3541,6 +3542,7 @@ static bool32 DoesBattlerTakeHailDamage(enum BattlerId battlerId, enum Ability a
       && ability != ABILITY_ICE_BODY
       && !IsInnateActive(battlerId, ABILITY_ICE_BODY) // FORK: AI knows an innate Ice Body ignores hail too
       && ability != ABILITY_MAGIC_GUARD
+      && !IsInnateActive(battlerId, ABILITY_MAGIC_GUARD) // FORK: AI knows an innate Magic Guard ignores hail too
       && ability != ABILITY_OVERCOAT
       && !IsInnateActive(battlerId, ABILITY_OVERCOAT)) // FORK: AI knows an innate Overcoat ignores hail too
         return TRUE;
@@ -3587,7 +3589,7 @@ u32 GetBattlerSecondaryDamage(enum BattlerId battlerId)
 {
     u32 secondaryDamage;
 
-    if (gAiLogicData->abilities[battlerId] == ABILITY_MAGIC_GUARD)
+    if (gAiLogicData->abilities[battlerId] == ABILITY_MAGIC_GUARD || IsInnateActive(battlerId, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
         return FALSE;
 
     secondaryDamage = GetLeechSeedDamage(battlerId)
@@ -3783,6 +3785,7 @@ static inline bool32 DoesBattlerBenefitFromAllVolatileStatus(enum BattlerId batt
     if (GetConfig(FEATURE_INNATE_ABILITIES)
      && (BattlerHasAbility(battler, ABILITY_MARVEL_SCALE)
       || BattlerHasAbility(battler, ABILITY_QUICK_FEET)
+      || BattlerHasAbility(battler, ABILITY_MAGIC_GUARD) // FORK: innate Magic Guard takes no status damage, so the AI shouldn't status it
       || (BattlerHasAbility(battler, ABILITY_GUTS) && HasMoveWithCategory(battler, DAMAGE_CATEGORY_PHYSICAL))))
         return TRUE;
     return FALSE;
@@ -6602,7 +6605,7 @@ s32 GetAILastPartyIndex(enum BattlerId battler)
 
 bool32 ShouldInstructPartner(enum BattlerId partner, enum Move move)
 {
-    if (GetMoveEffect(move) == EFFECT_MAX_HP_50_RECOIL && gAiLogicData->abilities[partner] != ABILITY_MAGIC_GUARD)
+    if (GetMoveEffect(move) == EFFECT_MAX_HP_50_RECOIL && !BattlerHasAbility(partner, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
         return FALSE;
 
     enum MoveTarget type = AI_GetBattlerMoveTargetType(partner, move);

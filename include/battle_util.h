@@ -216,6 +216,11 @@ enum LeechSeedDrainKind
 };
 enum LeechSeedDrainKind SetUpLeechSeedDrain(enum BattlerId victim, enum BattlerId seeder);
 bool32 IsAbilityAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck);
+// FORK: FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord: TRUE if the chosen
+// ability matches (recorded, exactly as upstream) OR an active innate matches (NOT recorded — the
+// chosen slot stays the mon's identity). Used at chip-damage / indirect-damage gates so an innate
+// holder is spared like the real ability (e.g. Magic Guard's many end-turn/hazard/recoil sites).
+bool32 IsAbilityOrInnateAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck);
 bool32 HandleFaintedMonActions(void);
 bool32 HasNoMonsToSwitch(enum BattlerId battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2);
 bool32 TryChangeBattleWeather(enum BattlerId battler, u32 battleWeatherId, enum Ability ability);
