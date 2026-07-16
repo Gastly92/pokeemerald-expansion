@@ -5150,6 +5150,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
         ABILITY_BEAST_BOOST,
         ABILITY_MEGA_SOL,
+        ABILITY_QUICK_DRAW,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
