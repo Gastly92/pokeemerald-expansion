@@ -1607,8 +1607,9 @@ s32 AI_WhoStrikesFirst(enum BattlerId battlerAI, enum BattlerId battler, enum Mo
     // AI's turn-order prediction matches what will actually happen.
     if (GetConfig(DETERMINISTIC_ABILITIES))
     {
-        bool32 aiQuickDraw = abilityAI == ABILITY_QUICK_DRAW && IsBattlersFirstTurn(battlerAI);
-        bool32 playerQuickDraw = abilityPlayer == ABILITY_QUICK_DRAW && IsBattlersFirstTurn(battler);
+        // FORK: innate-aware Quick Draw (FEATURE_INNATE_ABILITIES) — credit an active innate too.
+        bool32 aiQuickDraw = BattlerHasAbility(battlerAI, ABILITY_QUICK_DRAW) && IsBattlersFirstTurn(battlerAI);
+        bool32 playerQuickDraw = BattlerHasAbility(battler, ABILITY_QUICK_DRAW) && IsBattlersFirstTurn(battler);
         if (aiQuickDraw && !playerQuickDraw)
             return AI_IS_FASTER;
         if (playerQuickDraw && !aiQuickDraw)

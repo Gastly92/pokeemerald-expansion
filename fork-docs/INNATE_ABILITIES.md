@@ -3414,4 +3414,54 @@ testable). No wider flavor set.
 **Step 3.5**: no-op — no frontier set hardcoded `ABILITY_MEGA_SOL` (the base-Meganium sets already run a Grassy
 Surge chosen override for the now-innate Leaf Guard, and simply gain innate Mega Sol on top). **Not** in the
 progress-doc 133 count (Mega Sol is a fork-custom ability, never a canon row). This is **Tier 5.1**; Tier 5.2
-(Quick Draw) is next.
+(Quick Draw) is done — see the next block.
+
+### ABILITY_QUICK_DRAW
+
+**Tier 5.2** — a **self-contained turn-order clause**, and the first *determinism-sensitive* one-off. The holder's
+moves have a **30% chance of going first** within their priority bracket; under `DETERMINISTIC_ABILITIES` (the
+shipping default) they instead **always go first on the holder's entry turn**, mirroring Quick Claw. A **1:1
+clean-upside copy** (Quick Draw has no downside to drop).
+
+**Two effect sites, one predicate.** The turn-order effect is applied in `TryChangingTurnOrderEffects`
+(`src/battle_main.c`): for each battler it reads `ability == ABILITY_QUICK_DRAW && !status-move && quickDrawRandom[b]`
+and sets `gProtectStructs[b].quickDraw`. Both reads become `BattlerHasAbility(b, ABILITY_QUICK_DRAW)` — that's the
+whole effect wiring, because everything downstream (the actual turn-order swap in `SetActionsAndBattlersTurnOrder`,
+the reset in the entry loop, and the `CheckChangingTurnOrderEffects` activation script) keys off the
+`gProtectStructs[b].quickDraw` flag those two sites set.
+
+**The determinism layer is untouched — deliberately.** The per-battler roll is precomputed for **every** battler
+regardless of ability: `quickDrawRandom[b] = GetConfig(DETERMINISTIC_ABILITIES) ? IsBattlersFirstTurn(b) :
+RandomPercentage(RNG_QUICK_DRAW, 30)`. Because the roll doesn't gate on the ability, wiring only the ability *read*
+is sufficient — an innate holder consults the same precomputed roll as a real one. No `config/deterministic.h`
+change was needed (the concern flagged in the batch plan); the determinism reroute already lives at the roll, not
+the ability check.
+
+**Pop-up / message overwrite.** The activation site (`CheckChangingTurnOrderEffects`) sets
+`gLastUsedAbility = gBattleMons[b].ability` and feeds it to both the ability pop-up and the "can act faster"
+message buffer. For an innate holder whose chosen ability differs, that would name the wrong ability, so — only
+when `gLastUsedAbility != ABILITY_QUICK_DRAW && IsInnateActive(b, ABILITY_QUICK_DRAW)` — it's overwritten to
+`ABILITY_QUICK_DRAW` (both `gLastUsedAbility` for the message/`RecordAbilityBattle` and
+`gBattleScripting.abilityPopupOverwrite` for the pop-up). A real Quick Draw holder stays byte-for-byte unchanged
+(the Cute Charm / Speed Boost precedent — `CreateAbilityPopUp` reads the primary slot).
+
+**AI.** One dedicated read, in `AI_WhoStrikesFirst` (`src/battle_ai_util.c`): under `DETERMINISTIC_ABILITIES` the AI
+models the guaranteed entry-turn override, reading `abilityAI/abilityPlayer == ABILITY_QUICK_DRAW`. Both become
+`BattlerHasAbility(...)` so the AI's turn-order prediction is innate-aware. The **non-deterministic 30% roll is
+unpredictable**, so — exactly as in stock — the AI models Quick Draw *only* under the deterministic config; nothing
+else to wire (the rest of turn order rides the shared speed calc keyed off the real battler).
+
+**Suppression.** Default flags: suppressible by Gastro Acid / Neutralizing Gas, **not** breakable by Mold Breaker
+(turn order is computed before any attacker's move resolves, so Mold Breaker never applies) — all handled by
+`IsInnateActive`.
+
+**Species.** The **sole canon carrier** is **Galarian Slowbro** (`SPECIES_SLOWBRO_GALAR`), whose primary ability
+*is* Quick Draw; its existing innate row (Own Tempo / Regenerator) gains it so the trait persists no matter which
+slot a build picks. Because that innate is redundant with G-Slowbro's default ability, the **observable** carriers
+are the **Galarian Farfetch'd → Sirfetch'd** duelist line, which takes Quick Draw as a **tight flavor pick** (knights
+quick to draw their leek-lance in a duel; their chosen Steadfast / Scrappy differ, so the innate is visible and
+testable). Grep of `src/data/pokemon/species_info/` confirms G-Slowbro is the only species carrying `ABILITY_QUICK_DRAW`.
+
+**Step 3.5**: no-op — no frontier set hardcoded `ABILITY_QUICK_DRAW`. The two G-Slowbro frontier sets (chosen Own
+Tempo) and the Sirfetch'd sets (chosen Scrappy/Steadfast) simply **gain** innate Quick Draw on top, which is the
+observable win. This is **Tier 5.2**; Tier 5.3 (Comatose) is next.
