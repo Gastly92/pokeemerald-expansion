@@ -212,6 +212,15 @@
 //   canon carrier is a sole-ability frontier legend, so each takes the innate + a fork chosen override so the innate
 //   is observable + the frontier set freed: Turboblaze -> Reshiram + Kyurem-White (chosen Flash Fire), Teravolt ->
 //   Zekrom + Kyurem-Black (chosen Motor Drive).
+//   OPPORTUNIST (Tier 5.6 — a 1:1 clean-upside copy, canon-only): whenever an opposing battler's stat is boosted, the
+//   holder copies that exact boost onto itself (the ability twin of the Mirror Herb item). Wired at the two sites the
+//   real ability uses — the watch hook in ChangeStatBuffs (src/battle_stat_change.c) and the ABILITYEFFECT_OPPORTUNIST
+//   effect site (src/battle_util.c), the latter made innate-aware because its three callers pass the chosen slot — with
+//   the pop-up overwritten to Opportunist when the chosen ability differs. Only copies a foe's gains (never drops), so a
+//   plain 1:1 copy; the AI's don't-boost-into-Opportunist reads are innate-aware via AI_IsInnateOnSide. Sole carrier:
+//   Espathra (its primary ability), joining its innate Frisk / Speed Boost; Opportunist stays observable as its natural
+//   chosen slot (no override needed). Step 3.5: all three of its abilities are now innate with no free slot, so both
+//   frontier sets keep the now-redundant chosen Opportunist and freeing is deferred to Batch W (Mold Breaker precedent).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

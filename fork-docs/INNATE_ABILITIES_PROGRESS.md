@@ -296,7 +296,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Beads of Ruin | The power of the Pokémon's ruinous beads lowers the Sp. Def stats of all Pokémon except itself. |
 | :x: | Orichalcum Pulse | Turns the sunlight harsh when the Pokémon enters a battle. The ancient pulse thrumming through the Pokémon also boosts its Attack stat in harsh sunlight. |
 | :x: | Hadron Engine | Turns the ground into Electric Terrain when the Pokémon enters a battle. The futuristic engine within the Pokémon also boosts its Sp. Atk stat on Electric Terrain. |
-| :white_large_square: | Opportunist | When an opponent's stats are boosted, the Pokémon boosts its own stats in the exact same way. |
+| :white_check_mark: | Opportunist | When an opponent's stats are boosted, the Pokémon boosts its own stats in the exact same way. |
 | :white_check_mark: | Cud Chew | If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn. |
 | :white_check_mark: | Sharpness | Boosts the power of the Pokémon's slicing moves by 50%. |
 | :white_check_mark: | Supreme Overlord | When the Pokémon enters a battle, the power of its moves is boosted by 10% for each Pokémon in its party that has been defeated in the battle already. The maximum boost is 50%. |

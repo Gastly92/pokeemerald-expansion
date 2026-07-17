@@ -3733,6 +3733,74 @@ Haxorus ×2 — its only non-innate slot Rivalry is a drawback — Pangoro ×2, 
 chosen runs it; the innate is redundant-but-skipped there) and are **deferred to Batch W** — the same
 all-abilities-innate deferral as Batch J/T/K/L/U/Y5.
 
+### ABILITY_OPPORTUNIST
+
+**Tier 5.6 — a 1:1 clean-upside copy.** Whenever an **opposing** battler's stat is boosted, the holder copies that
+exact boost onto itself — a foe's Swords Dance mirrors as Attack +2, an Intimidate-immune foe's Contrary-flipped
+Attack rise is copied, and so on. It is the ability twin of the **Mirror Herb** item, and the two already share
+the engine's stat-mirror plumbing, so wiring the innate needed **no new hook** — only crediting the innate at the
+two sites the real ability already uses.
+
+**Effect — two innate-aware sites (`IsInnateActive`).**
+
+1. **Watch hook (`src/battle_stat_change.c`, `ChangeStatBuffs`).** When a battler's stat is raised, the engine loops
+   over the *opposing* side and, for a Mirror Herb holder or an Opportunist, queues the same increase into
+   `gQueuedStatBoosts[]` and sets a per-battler `activateOpportunist` flag. The chosen-ability read gained the
+   innate:
+
+   ```c
+   if ((cv->abilities[battler] == ABILITY_OPPORTUNIST || IsInnateActive(battler, ABILITY_OPPORTUNIST)) && !st->opportunistActivation)
+       gProtectStructs[battler].activateOpportunist = TRUE;
+   ```
+
+   The `!opportunistActivation` guard (set while the Opportunist's *own* copied boost is being applied) is what
+   stops it mirroring its own gains — unchanged, so the innate inherits it for free.
+
+2. **Effect site (`src/battle_util.c`, `ABILITYEFFECT_OPPORTUNIST`).** This case applies the queued boosts and runs
+   `BattleScript_OpportunistCopyStatChange` (which shows the ability pop-up). Its **three callers** — the move-end
+   step (`MoveEndOpportunist`), the switch-in step (`SWITCH_IN_EVENTS_OPPORTUNIST`), and the post-stat-change check
+   in `Cmd_...` — all pass the **chosen** ability, so an innate whose chosen slot differs would never match a
+   `switch (ability)`. The case was rewritten from that switch to an `IsInnateActive`-aware guard, and — since the
+   effect body only reads the `activateOpportunist` flag (already set by site 1) — that is all it takes:
+
+   ```c
+   if ((ability == ABILITY_OPPORTUNIST || IsInnateActive(battler, ABILITY_OPPORTUNIST))
+    && gProtectStructs[battler].activateOpportunist)
+   {
+       ... // apply gQueuedStatBoosts[battler]
+       if (GetBattlerAbility(battler) != ABILITY_OPPORTUNIST) // pop-up/record show the innate (Speed Boost precedent)
+           gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_OPPORTUNIST;
+       BattleScriptCall(BattleScript_OpportunistCopyStatChange);
+   }
+   ```
+
+- **Pure boon, 1:1.** Opportunist only ever copies a foe's *gains* (never drops — the queue is filled only for
+  positive `stageIncrease`), so the real ability has no downside; it is a plain 1:1 copy.
+- **Suppression parity.** `IsInnateActive` supplies the usual feature-flag / Gastro Acid / Neutralizing Gas /
+  Ability Shield / not-on-field parity; Opportunist is breakable in name but has no on-attacker interaction for
+  Mold Breaker to pierce, so nothing special is needed.
+
+**AI — two dedicated reads made innate-aware.** The AI avoids handing a stat boost to an Opportunist foe: the
+`ShouldRaiseAnyStat` guard and the doubles `GetAllyStatChangeScore` early-out (both `src/battle_ai_util.c`) read
+`AI_IsAbilityOnSide(..., ABILITY_OPPORTUNIST)`; each gained a matching `AI_IsInnateOnSide(..., ABILITY_OPPORTUNIST)`
+clause. (There is no shared-calc path here — copying a boost isn't part of damage/turn-order calc — so these two
+reads are the whole AI surface.)
+
+**Species (Step 1) — canon-only** (free stat-mirroring off any foe boost is strong utility, kept tight, matching
+the Y5 / Comatose / Magic Guard / Mold Breaker canon-only decisions). The **sole** carrier is **Espathra**
+(`SPECIES_ESPATHRA`, its primary ability), which already carried innate **Frisk / Speed Boost** — Opportunist is
+added to that row. Because Opportunist is Espathra's natural slot-0 ability, it stays **observable as the chosen
+slot** with no override needed (unlike the sole-ability carriers whose innate would otherwise be invisible).
+
+**Step 3.5 — deferred to Batch W.** Both Espathra frontier sets (`src/fork/frontier_extended_mons.c`) chose
+Opportunist (one had already been repointed there when Speed Boost went innate). With **all three** of Espathra's
+abilities now innate **and no free slot** to hand a distinct chosen ability, freeing the redundant chosen slot
+would need a game-wide override that *replaces a real ability* (plus a `test/battle` audit) — so, exactly like Mold
+Breaker's all-abilities-innate sets (Excadrill / Sawk / Haxorus / …), both sets keep their now-redundant chosen
+Opportunist (still correct: the chosen runs it, the innate is redundant-but-skipped there) and freeing is deferred
+to the Batch W sweep. This differs from the Gholdengo / Komala / Reshiram inline overrides, which had an **empty**
+slot to fill rather than a real ability to replace.
+
 ### Batch X — script `jumpifability` innate-awareness
 
 A **cross-cutting polish** follow-up (not one of the 133 pending abilities): a handful of ability blocks live

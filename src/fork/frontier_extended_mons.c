@@ -23910,7 +23910,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_OPPORTUNIST,
+        .ability = ABILITY_OPPORTUNIST, // now innate too (all 3 abilities innate); chosen slot redundant-but-correct, freeing deferred to Batch W
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23930,7 +23930,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_OPPORTUNIST, // Speed Boost now innate; chosen Opportunist mirrors foe boosts
+        .ability = ABILITY_OPPORTUNIST, // Opportunist / Frisk / Speed Boost all now innate; chosen slot redundant-but-correct, freeing deferred to Batch W
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

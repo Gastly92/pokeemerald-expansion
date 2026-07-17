@@ -2382,7 +2382,7 @@ bool32 ShouldRaiseAnyStat(enum BattlerId battlerAtk, enum BattlerId battlerDef)
         return FALSE;
 
     // Don't increase stats if opposing battler has Opportunist
-    if (AI_IsAbilityOnSide(battlerDef, ABILITY_OPPORTUNIST))
+    if (AI_IsAbilityOnSide(battlerDef, ABILITY_OPPORTUNIST) || AI_IsInnateOnSide(battlerDef, ABILITY_OPPORTUNIST)) // FORK: innate-aware
         return FALSE;
 
     // Don't increase stats if opposing battler has used Haze effect or AI effect
@@ -6829,7 +6829,7 @@ s32 GetAllyStatChangeScore(u32 battlerAtk, u32 partner, u32 move)
     enum BattlerId foe = LEFT_FOE(battlerAtk);
 
     if (AI_IsAbilityOnSide(foe, ABILITY_UNAWARE) || AI_IsAbilityOnSide(foe, ABILITY_OPPORTUNIST)
-     || AI_IsInnateOnSide(foe, ABILITY_UNAWARE)) // FORK: innate-aware (Opportunist isn't an innate)
+     || AI_IsInnateOnSide(foe, ABILITY_UNAWARE) || AI_IsInnateOnSide(foe, ABILITY_OPPORTUNIST)) // FORK: innate-aware
         return tempScore;
 
     if (gBattleMons[partner].volatiles.yawn && CanBeSlept(partner, partner, gAiLogicData->abilities[partner], BLOCKED_BY_SLEEP_CLAUSE))
