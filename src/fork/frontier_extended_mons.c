@@ -15640,7 +15640,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_TURBOBLAZE,
+        .ability = ABILITY_FLASH_FIRE, // Turboblaze now innate (fork override, Flash Fire slot 1); chosen Flash Fire shrugs off Fire
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15660,7 +15660,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_TURBOBLAZE,
+        .ability = ABILITY_FLASH_FIRE, // Turboblaze now innate (fork override, Flash Fire slot 1); chosen Flash Fire shrugs off Fire
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15682,7 +15682,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_TERAVOLT,
+        .ability = ABILITY_MOTOR_DRIVE, // Teravolt now innate (fork override, Motor Drive slot 1); chosen Motor Drive draws Electric + Speed
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15702,7 +15702,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_TERAVOLT,
+        .ability = ABILITY_MOTOR_DRIVE, // Teravolt now innate (fork override, Motor Drive slot 1); chosen Motor Drive draws Electric + Speed
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15830,7 +15830,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_TERAVOLT,
+        .ability = ABILITY_MOTOR_DRIVE, // Teravolt now innate (fork override, Motor Drive slot 1); chosen Motor Drive draws Electric + Speed
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15850,7 +15850,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FUSION_BOLT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_TERAVOLT,
+        .ability = ABILITY_MOTOR_DRIVE, // Teravolt now innate (fork override, Motor Drive slot 1); chosen Motor Drive draws Electric + Speed
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15872,7 +15872,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_TURBOBLAZE,
+        .ability = ABILITY_FLASH_FIRE, // Turboblaze now innate (fork override, Flash Fire slot 1); chosen Flash Fire shrugs off Fire
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

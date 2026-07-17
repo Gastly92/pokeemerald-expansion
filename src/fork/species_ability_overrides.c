@@ -709,6 +709,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TORNADUS_THERIAN, 1,
         ABILITY_PRANKSTER
     },
+    { // 0643
+        // Reshiram's only real ability (Turboblaze) is now innate (Batch Y8), and it's a frontier set, so like the
+        // Regi legends (Y2) / Necrozma (Y3) / Solgaleo (Y4) it takes the innate AND a fork-owned chosen ability in its
+        // EMPTY slot 1. Flash Fire is :x: (never an innate -> stable) and thematic for the Vast White dragon: it
+        // shrugs off Fire moves for an immunity + a Fire-power boost on its Blue Flare special sets, stacking with the
+        // innate Turboblaze ability-ignore. (Kyurem-White, its fusion, takes the same pick.)
+        SPECIES_RESHIRAM, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0644
+        // Zekrom's only real ability (Teravolt) is now innate (Batch Y8), and it's a frontier set, so it takes the
+        // innate AND a fork-owned chosen ability in its EMPTY slot 1. Motor Drive is :x: (never an innate -> stable)
+        // and thematic for the Deep Black dragon: it draws in Electric moves for an immunity + a Speed boost that
+        // snowballs its Dragon Dance sweeper, on top of the innate Teravolt ability-ignore. Same pick as Klinklang /
+        // Vikavolt. (Kyurem-Black, its fusion, takes the same pick.)
+        SPECIES_ZEKROM, 1,
+        ABILITY_MOTOR_DRIVE
+    },
     { // 0645
         // Landorus-Therian's only real ability (Intimidate) is now innate, and it's a frontier set, so like
         // Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its empty slot 1. Sheer
@@ -720,6 +738,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0646
         SPECIES_KYUREM, 1,
         ABILITY_SNOW_WARNING
+    },
+    { // 0646
+        // Kyurem-White's only real ability (Turboblaze) is now innate (Batch Y8), and it's a frontier set, so it takes
+        // the innate AND a fork-owned chosen ability in its EMPTY slot 1. Flash Fire is :x: (never an innate -> stable)
+        // and thematic: fused with Reshiram, the Boundary dragon wields fire (Fusion Flare), so it shrugs off Fire for
+        // an immunity + a Fire-power boost on its special sets. Same pick as Reshiram itself.
+        SPECIES_KYUREM_WHITE, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0646
+        // Kyurem-Black's only real ability (Teravolt) is now innate (Batch Y8), and it's a frontier set, so it takes
+        // the innate AND a fork-owned chosen ability in its EMPTY slot 1. Motor Drive is :x: (never an innate ->
+        // stable) and thematic: fused with Zekrom, the Boundary dragon wields lightning (Fusion Bolt), so it draws in
+        // Electric moves for an immunity + a Speed boost that snowballs its Dragon Dance sweeper. Same pick as Zekrom.
+        SPECIES_KYUREM_BLACK, 1,
+        ABILITY_MOTOR_DRIVE
     },
     { // 0648
         // Meloetta's only real ability (Serene Grace) is now innate, so its empty slot 1 takes Punk

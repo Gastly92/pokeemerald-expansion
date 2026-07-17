@@ -3372,8 +3372,53 @@ set, so its chosen ability already grants it and an innate could never be observ
 precedent) — keeping only its existing innate Levitate row.
 
 **Step 3.5**: all twenty frontier sets (two per UB) freed → their chosen override via the `.ability` change in
-`src/fork/frontier_extended_mons.c`. This is **Batch Y sub-group Y7**; only **Y8** (Turboblaze / Teravolt, blocked on
-Tier 5.5 Mold Breaker) remains open in Batch Y.
+`src/fork/frontier_extended_mons.c`. This is **Batch Y sub-group Y7**; only **Y8** (Turboblaze / Teravolt) remained
+open in Batch Y, and is now done (below).
+
+### ABILITY_TERAVOLT / ABILITY_TURBOBLAZE
+
+**Batch Y sub-group Y8 — the last of Batch Y.** Two **1:1 clean-upside clones of Mold Breaker (Tier 5.5)**: the
+holder's moves ignore the target's *breakable* ability, exactly like Mold Breaker. They were `:x:` only because Mold
+Breaker's machinery hadn't shipped when triaged; with 5.5 done, this is pure follow-on.
+
+**Effect (`src/battle_util.c`) — two lines, everything downstream for free.** `IsMoldBreakerTypeAbility` already
+recognized the chosen-slot `ABILITY_TERAVOLT` / `ABILITY_TURBOBLAZE` (alongside Mold Breaker) and set
+`gBattleStruct->moldBreakerActive`. The single trailing innate clause Mold Breaker added grew two more disjuncts:
+
+```c
+if (IsInnateActive(battler, ABILITY_MOLD_BREAKER)
+ || IsInnateActive(battler, ABILITY_TERAVOLT)
+ || IsInnateActive(battler, ABILITY_TURBOBLAZE))
+    return TRUE;
+```
+
+Because the whole effect flows through that one flag, every effect site (the `CanBreakThroughAbility` gate in
+`GetBattlerAbility`) **and** every AI read that routes through `IsMoldBreakerTypeAbility` (the ~12 call sites across
+`battle_ai_util.c` / `battle_ai_main.c` / `battle_ai_switch.c`) is innate-aware for free — no per-site edits, no
+dedicated AI work. Same as Mold Breaker: **no `RecordAbilityBattle`** for the innate (never identity), and **no**
+switch-in pop-up (that lives on the chosen-slot switch-in path an innate never triggers).
+
+**Suppression parity, 1:1.** Neither ability is `.breakable`, and `CanBreakThroughInnate` exempts the attacker's own
+ability, so an innate Teravolt / Turboblaze is never self-broken — but it *is* suppressed by Gastro Acid /
+Neutralizing Gas via `IsInnateActive`, and is a no-op with the feature off.
+
+**Species (Step 1) — canon-only** (ability-ignoring is strong offensive utility, kept tight, matching Mold Breaker /
+the Y5 decisions). Every canon carrier is a **sole-ability frontier legend**, so — like the Regi legends (Y2) /
+Necrozma (Y3) / Solgaleo (Y4) / Zacian-Zamazenta (Y6) — each takes the innate **plus a fork chosen override** in its
+empty slot 1 so the innate is observable *and* the frontier set is freed:
+
+- **Turboblaze → Reshiram** (new row) + its fusion **Kyurem-White** (new row), both chosen **Flash Fire** — thematic
+  (the Vast White dragon / Fusion Flare wields fire), `:x:` (never an innate → stable), a clean special-attacker boon.
+- **Teravolt → Zekrom** (new row) + its fusion **Kyurem-Black** (new row), both chosen **Motor Drive** — thematic
+  (the Deep Black dragon / Fusion Bolt wields lightning), `:x:`, snowballs their Dragon Dance sweeper (same pick as
+  Klinklang / Vikavolt).
+
+Base **Kyurem** keeps its existing innate Pressure + chosen Snow Warning override (unchanged).
+
+**Step 3.5.** All seven affected frontier sets (Reshiram ×2, Zekrom ×2, Kyurem-Black ×2, Kyurem-White ×1) are freed
+by pointing `.ability` at the new override slot (`src/fork/frontier_extended_mons.c`) — no all-abilities-innate
+deferral needed, since each species' now-innate Turboblaze/Teravolt was its only real ability. **Batch Y is
+complete.**
 
 ### ABILITY_MEGA_SOL
 

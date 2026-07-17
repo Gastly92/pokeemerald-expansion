@@ -5267,9 +5267,11 @@ bool32 IsMoldBreakerTypeAbility(enum BattlerId battler, enum Ability ability)
     // RecordAbilityBattle (innates are never identity) and no switch-in "breaks the mold" pop-up
     // (that lives on the chosen-slot switch-in path, which an innate deliberately never triggers).
     // IsInnateActive() honors suppression/Mold-Breaker parity and is FALSE with the feature off,
-    // so this is a no-op in stock play. (Teravolt/Turboblaze clones follow in Batch Y8, which just
-    // adds their species data + the two matching IsInnateActive lines here.)
-    if (IsInnateActive(battler, ABILITY_MOLD_BREAKER))
+    // so this is a no-op in stock play. The Teravolt / Turboblaze clones (Batch Y8) share this exact
+    // path — the same flag drives every effect site and AI read — so each is one more IsInnateActive line.
+    if (IsInnateActive(battler, ABILITY_MOLD_BREAKER)
+     || IsInnateActive(battler, ABILITY_TERAVOLT)
+     || IsInnateActive(battler, ABILITY_TURBOBLAZE))
         return TRUE;
 
     return FALSE;
