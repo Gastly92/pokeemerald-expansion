@@ -5156,6 +5156,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_MOLD_BREAKER,
         ABILITY_TERAVOLT, ABILITY_TURBOBLAZE,
         ABILITY_OPPORTUNIST,
+        ABILITY_MIRROR_ARMOR,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
