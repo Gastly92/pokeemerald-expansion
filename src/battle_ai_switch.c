@@ -1000,14 +1000,15 @@ static bool32 ShouldSwitchIfIntimidateBenefit(struct SwitchAiContext *switchCont
         enum Ability abilityDef = gAiLogicData->abilities[switchContext->opposingBattler];
         bool32 canLowerAtk = CanIntimidateLowerOpponentAtk(switchContext->battler, switchContext->opposingBattler);
 
-        // FORK: a foe's innate Defiant / Competitive / Rattled / Guard Dog turns our Intimidate into a boon
-        // for it (FEATURE_INNATE_ABILITIES: +2 Atk / +2 Sp.Atk / +1 Speed / +1 Atk), so don't switch an
-        // Intimidator in expecting to weaken it — mirroring how DoesIntimidateRaiseStats already flags a
-        // chosen Guard Dog / Rattled.
+        // FORK: a foe's innate Defiant / Competitive / Rattled / Guard Dog / Mirror Armor turns our Intimidate
+        // into a boon for it (or reflects the drop back at the Intimidator), so don't switch an Intimidator in
+        // expecting to weaken it — mirroring how DoesIntimidateRaiseStats / the chosen Mirror Armor read already
+        // flag it.
         if (canLowerAtk && (DoesIntimidateRaiseStats(abilityDef) || abilityDef == ABILITY_MIRROR_ARMOR
          || IsInnateActive(switchContext->opposingBattler, ABILITY_DEFIANT)
          || IsInnateActive(switchContext->opposingBattler, ABILITY_COMPETITIVE)
          || IsInnateActive(switchContext->opposingBattler, ABILITY_GUARD_DOG)
+         || IsInnateActive(switchContext->opposingBattler, ABILITY_MIRROR_ARMOR)
          || (GetConfig(B_UPDATED_INTIMIDATE) >= GEN_8 && IsInnateActive(switchContext->opposingBattler, ABILITY_RATTLED))))
             return FALSE;
         if (canLowerAtk && IsOpponentPhysicalAttacker(switchContext->battler, switchContext->opposingBattler))
@@ -1019,14 +1020,15 @@ static bool32 ShouldSwitchIfIntimidateBenefit(struct SwitchAiContext *switchCont
         enum Ability abilityDef = gAiLogicData->abilities[opposingPartner];
         bool32 canLowerAtk = CanIntimidateLowerOpponentAtk(switchContext->battler, opposingPartner);
 
-        // FORK: a foe's innate Defiant / Competitive / Rattled / Guard Dog turns our Intimidate into a boon
-        // for it (FEATURE_INNATE_ABILITIES: +2 Atk / +2 Sp.Atk / +1 Speed / +1 Atk), so don't switch an
-        // Intimidator in expecting to weaken it — mirroring how DoesIntimidateRaiseStats already flags a
-        // chosen Guard Dog / Rattled.
+        // FORK: a foe's innate Defiant / Competitive / Rattled / Guard Dog / Mirror Armor turns our Intimidate
+        // into a boon for it (or reflects the drop back at the Intimidator), so don't switch an Intimidator in
+        // expecting to weaken it — mirroring how DoesIntimidateRaiseStats / the chosen Mirror Armor read already
+        // flag it.
         if (canLowerAtk && (DoesIntimidateRaiseStats(abilityDef) || abilityDef == ABILITY_MIRROR_ARMOR
          || IsInnateActive(opposingPartner, ABILITY_DEFIANT)
          || IsInnateActive(opposingPartner, ABILITY_COMPETITIVE)
          || IsInnateActive(opposingPartner, ABILITY_GUARD_DOG)
+         || IsInnateActive(opposingPartner, ABILITY_MIRROR_ARMOR)
          || (GetConfig(B_UPDATED_INTIMIDATE) >= GEN_8 && IsInnateActive(opposingPartner, ABILITY_RATTLED))))
             return FALSE;
         if (canLowerAtk && IsOpponentPhysicalAttacker(switchContext->battler, opposingPartner))

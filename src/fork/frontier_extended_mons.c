@@ -367,6 +367,12 @@
 // chosen Mold Breaker — still correct (the chosen runs it; the innate is redundant-but-skipped there) —
 // deferred to the Batch W override sweep.
 //
+// Tier 5.7 (Mirror Armor — the holder bounces a stat drop back at its source) frees no set: its sole
+// carrier Corviknight now has ALL THREE of its abilities innate (Pressure / Unnerve / Mirror Armor) with
+// no free complementary slot, so its three sets keep their now-redundant chosen Mirror Armor — still
+// correct (the chosen runs it, and it stays the observed slot; the innate is redundant-but-skipped there) —
+// deferred to the Batch W override sweep, exactly like Opportunist's Espathra and Mold Breaker's Excadrill.
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
@@ -20647,7 +20653,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_IRON_DEFENSE
         },
-        .ability = ABILITY_MIRROR_ARMOR, // Pressure now innate; chosen Mirror Armor reflects stat drops
+        .ability = ABILITY_MIRROR_ARMOR, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Mirror Armor observable + redundant-but-correct (Batch W deferral)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20667,7 +20673,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_MIRROR_ARMOR,
+        .ability = ABILITY_MIRROR_ARMOR, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Mirror Armor observable + redundant-but-correct (Batch W deferral)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20687,7 +20693,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_MIRROR_ARMOR, // Pressure now innate; chosen Mirror Armor reflects stat drops
+        .ability = ABILITY_MIRROR_ARMOR, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Mirror Armor observable + redundant-but-correct (Batch W deferral)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

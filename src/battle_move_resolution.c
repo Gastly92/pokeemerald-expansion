@@ -5007,7 +5007,10 @@ static enum MoveResult StatChangeMirrorArmor(struct BattleCalcValues *cv)
          || cv->battlerAtk == battler)
             continue;
 
-        if (GetBattlerAbility(battler) == ABILITY_MIRROR_ARMOR)
+        // FORK: BattlerHasAbility credits an innate Mirror Armor (Tier 5.7) here too, so a spread stat-lowering
+        // move flags the innate holder for reflection just like the chosen ability (IsMirrorArmorReflected then
+        // reads this pending flag).
+        if (BattlerHasAbility(battler, ABILITY_MIRROR_ARMOR))
             gBattleStruct->moveResultFlags[battler] = MOVE_RESULT_MIRROR_ARMOR_PENDING;
     }
 

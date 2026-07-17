@@ -768,6 +768,22 @@
 //   sets keep their now-redundant chosen Opportunist (still correct: the chosen runs it, the innate is
 //   redundant-but-skipped there) and freeing is deferred to Batch W — the same all-abilities-innate deferral as
 //   Mold Breaker's Excadrill/Sawk/... sets.
+//   MIRROR_ARMOR (Tier 5.7 — a 1:1 clean-upside copy): instead of being affected by a stat-lowering effect, the
+//   holder bounces it back at whichever battler caused it (a foe's Intimidate drops the Intimidator, Sticky Web /
+//   Parting Shot rebound on the setter, and so on). It is the reactive twin of Opportunist and shares the same
+//   stat-change plumbing (src/battle_stat_change.c), so wiring the innate needed no new hook — only crediting it at
+//   the reflection site IsMirrorArmorReflected, the pending-flag setter StatChangeMirrorArmor
+//   (src/battle_move_resolution.c, made innate-aware via BattlerHasAbility so spread-move drops still flag the
+//   holder), and the Gooey/Tangling-Hair contact-reflect corner case (src/battle_util.c). Mirror Armor only ever
+//   spares the holder its own drop (redirecting it), so it is already a pure boon — a plain 1:1 copy; the pop-up/
+//   record is overwritten to Mirror Armor when the chosen ability differs (Speed Boost precedent). Breakable, so an
+//   attacker's Mold Breaker pierces it (via IsInnateActive). The AI's don't-Intimidate-switch-into-Mirror-Armor read
+//   (ShouldSwitchIfIntimidateBenefit, src/battle_ai_switch.c) credits an innate holder too. CANON-ONLY (free
+//   stat-drop reflection is strong defensive utility, kept tight like Opportunist / Mold Breaker): the sole carrier is
+//   Corviknight (SPECIES_CORVIKNIGHT + _GMAX, its hidden ability), joining its existing innate Pressure / Unnerve.
+//   Step 3.5: with all THREE of Corviknight's abilities now innate and no free slot, its frontier sets keep their
+//   now-redundant chosen Mirror Armor (still observable + correct — the chosen runs it, the innate is
+//   redundant-but-skipped there) and freeing is deferred to Batch W (Opportunist / Mold Breaker precedent).
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -7922,6 +7938,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0823
         SPECIES_CORVIKNIGHT,
         INNATES(
+            ABILITY_MIRROR_ARMOR,
             ABILITY_PRESSURE,
             ABILITY_UNNERVE
         )
@@ -7929,6 +7946,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0823
         SPECIES_CORVIKNIGHT_GMAX,
         INNATES(
+            ABILITY_MIRROR_ARMOR,
             ABILITY_PRESSURE,
             ABILITY_UNNERVE
         )

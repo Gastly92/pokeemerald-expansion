@@ -866,7 +866,17 @@ static bool32 IsAbilityBlocked(struct BattleCalcValues *cv, struct StatChange *s
 
 static bool32 IsMirrorArmorReflected(struct BattleCalcValues *cv, struct StatChange *st)
 {
-    if (cv->abilities[cv->battlerDef] != ABILITY_MIRROR_ARMOR
+    // FORK: an innate Mirror Armor (Tier 5.7) bounces a stat drop back at its source exactly like the real
+    // ability — a pure boon (it only ever spares the holder its own drop and redirects it). The chosen-ability
+    // guard below would miss an innate whose chosen slot differs, so credit the innate too; when the innate did
+    // the matching, the pop-up/record is overwritten to Mirror Armor (CreateAbilityPopUp reads the primary slot).
+    // IsInnateActive supplies suppression parity (Mirror Armor is breakable, so an attacker's Mold Breaker pierces
+    // it). Spread-move drops still reach here with MOVE_RESULT_MIRROR_ARMOR_PENDING set for the innate holder by
+    // the innate-aware StatChangeMirrorArmor (src/battle_move_resolution.c).
+    bool32 innateMirrorArmor = cv->abilities[cv->battlerDef] != ABILITY_MIRROR_ARMOR
+                            && IsInnateActive(cv->battlerDef, ABILITY_MIRROR_ARMOR);
+
+    if ((cv->abilities[cv->battlerDef] != ABILITY_MIRROR_ARMOR && !innateMirrorArmor)
      || st->ignoreMirrorArmored
      || st->certain)
         return FALSE;
@@ -878,7 +888,9 @@ static bool32 IsMirrorArmorReflected(struct BattleCalcValues *cv, struct StatCha
     {
         st->script = BattleScript_MirrorArmorReflect;
         gBattlerAbility = cv->battlerDef;
-        RecordAbilityBattle(cv->battlerDef, cv->abilities[cv->battlerDef]);
+        RecordAbilityBattle(cv->battlerDef, ABILITY_MIRROR_ARMOR);
+        if (innateMirrorArmor)
+            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_MIRROR_ARMOR;
 
         if (st->stickyWeb)
         {

@@ -4330,7 +4330,9 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 if (CanBattlerAvoidContactEffects(gBattlerAttacker, gBattlerTarget, cv.abilities[gBattlerAttacker], cv.holdEffects[gBattlerAttacker], move))
                     break;
 
-                if (TryStatChange(&cv, &st) == STAT_CHANGE_WORKED || cv.abilities[gBattlerAttacker] == ABILITY_MIRROR_ARMOR)
+                // FORK: BattlerHasAbility credits an innate Mirror Armor (Tier 5.7) on the attacker, so the
+                // Gooey / Tangling Hair Speed drop it just reflected back at the holder still runs the script.
+                if (TryStatChange(&cv, &st) == STAT_CHANGE_WORKED || BattlerHasAbility(gBattlerAttacker, ABILITY_MIRROR_ARMOR))
                 {
                     gEffectBattler = gBattlerAbility = gBattlerTarget;
                     // FORK: innate Gooey / Tangling Hair — show the innate in the pop-up, not the

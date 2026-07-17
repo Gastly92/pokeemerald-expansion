@@ -3801,6 +3801,73 @@ Opportunist (still correct: the chosen runs it, the innate is redundant-but-skip
 to the Batch W sweep. This differs from the Gholdengo / Komala / Reshiram inline overrides, which had an **empty**
 slot to fill rather than a real ability to replace.
 
+### ABILITY_MIRROR_ARMOR
+
+**Tier 5.7 — a 1:1 clean-upside copy.** Instead of being affected by a stat-lowering effect, the holder bounces it
+back at whichever battler caused it — a foe's Intimidate drops the *Intimidator*, Sticky Web / Parting Shot / a
+Growl rebound on the source, a Contrary foe's flipped drop is copied as-is, and so on. It is the reactive twin of
+**Opportunist** (which copies a foe's *gains*); the two live in the same `src/battle_stat_change.c` stat-change
+plumbing, so wiring the innate needed **no new hook** — only crediting the innate at the three sites the real
+ability already uses.
+
+**Effect — three innate-aware sites.**
+
+1. **Reflection site (`src/battle_stat_change.c`, `IsMirrorArmorReflected`).** This is the whole effect: it swaps
+   the queued drop off the holder and onto the attacker (`SetStatChange2`), runs `BattleScript_MirrorArmorReflect`
+   (which shows the pop-up), and handles the Sticky Web setter / attacker-vs-def targeting. The chosen-ability guard
+   at the top would miss an innate whose chosen slot differs, so it gained an `IsInnateActive` clause; when the
+   innate did the matching, the pop-up/record is overwritten to Mirror Armor (`CreateAbilityPopUp` reads the primary
+   slot — Speed Boost precedent):
+
+   ```c
+   bool32 innateMirrorArmor = cv->abilities[cv->battlerDef] != ABILITY_MIRROR_ARMOR
+                           && IsInnateActive(cv->battlerDef, ABILITY_MIRROR_ARMOR);
+
+   if ((cv->abilities[cv->battlerDef] != ABILITY_MIRROR_ARMOR && !innateMirrorArmor)
+    || st->ignoreMirrorArmored || st->certain)
+       return FALSE;
+   ...
+   RecordAbilityBattle(cv->battlerDef, ABILITY_MIRROR_ARMOR);
+   if (innateMirrorArmor)
+       gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_MIRROR_ARMOR;
+   ```
+
+2. **Pending-flag setter (`src/battle_move_resolution.c`, `StatChangeMirrorArmor`).** For a spread stat-lowering
+   move, this pre-pass flags each Mirror Armor holder with `MOVE_RESULT_MIRROR_ARMOR_PENDING` (which
+   `IsMirrorArmorReflected` then reads). Its `GetBattlerAbility(battler) == ABILITY_MIRROR_ARMOR` became
+   `BattlerHasAbility(battler, ABILITY_MIRROR_ARMOR)` so the innate holder is flagged too.
+
+3. **Gooey / Tangling Hair contact-reflect corner case (`src/battle_util.c`).** When a Gooey/Tangling-Hair holder
+   is hit by contact, it lowers the *attacker's* Speed; if that attacker has Mirror Armor, the drop reflects back
+   at the Gooey holder. The `cv.abilities[gBattlerAttacker] == ABILITY_MIRROR_ARMOR` guard that keeps the script
+   running became `BattlerHasAbility(gBattlerAttacker, ABILITY_MIRROR_ARMOR)`.
+
+- **Pure boon, 1:1.** Mirror Armor only ever spares the holder its own drop (redirecting it), so the real ability
+  has no downside to strip — a plain 1:1 copy.
+- **Suppression parity.** `IsInnateActive` supplies the usual feature-flag / Gastro Acid / Neutralizing Gas /
+  Ability Shield / not-on-field parity. Mirror Armor is **breakable** (`.breakable = TRUE`), so an attacker's Mold
+  Breaker pierces it — and this matches the chosen path, which reads `cv->abilities[battlerDef] =
+  GetBattlerAbility(battlerDef)` (already Mold-Breaker-aware for a breakable ability), so innate and chosen are
+  pierced identically.
+
+**AI — one dedicated read made innate-aware.** The switch AI's `ShouldSwitchIfIntimidateBenefit`
+(`src/battle_ai_switch.c`) won't switch an Intimidator in against a foe whose Intimidate would rebound; its
+`abilityDef == ABILITY_MIRROR_ARMOR` guard gained a matching `IsInnateActive(..., ABILITY_MIRROR_ARMOR)` clause on
+both the active-foe and doubles-partner branches. Everything else is automatic: the AI's "will this stat drop land"
+prediction routes through the same `IsMirrorArmorReflected` (with `onlyChecking`), so it sees the innate for free.
+
+**Species (Step 1) — canon-only** (free stat-drop reflection is strong defensive utility, kept tight, matching the
+Opportunist / Mold Breaker / Y5 decisions). The **sole** carrier is **Corviknight** (`SPECIES_CORVIKNIGHT` +
+`SPECIES_CORVIKNIGHT_GMAX`, its hidden ability), which already carried innate **Pressure / Unnerve** — Mirror Armor
+is added to those rows.
+
+**Step 3.5 — deferred to Batch W.** All three Corviknight frontier sets (`src/fork/frontier_extended_mons.c`) choose
+Mirror Armor. With **all three** of Corviknight's abilities now innate **and no free slot** to hand a distinct
+chosen ability, freeing the redundant chosen slot would need a game-wide override that *replaces a real ability*
+(plus a `test/battle` audit) — so, exactly like Opportunist's Espathra and Mold Breaker's all-abilities-innate
+sets, the three sets keep their now-redundant chosen Mirror Armor (still correct, and Mirror Armor stays the
+observed slot) and freeing is deferred to the Batch W sweep.
+
 ### Batch X — script `jumpifability` innate-awareness
 
 A **cross-cutting polish** follow-up (not one of the 133 pending abilities): a handful of ability blocks live
