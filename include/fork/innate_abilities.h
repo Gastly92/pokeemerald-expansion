@@ -221,6 +221,15 @@
 //   Espathra (its primary ability), joining its innate Frisk / Speed Boost; Opportunist stays observable as its natural
 //   chosen slot (no override needed). Step 3.5: all three of its abilities are now innate with no free slot, so both
 //   frontier sets keep the now-redundant chosen Opportunist and freeing is deferred to Batch W (Mold Breaker precedent).
+//   MIRROR_ARMOR (Tier 5.7 — a 1:1 clean-upside copy, canon-only): instead of being affected by a stat-lowering
+//   effect, the holder bounces it back at the battler that caused it (the reactive twin of Opportunist). Shares the
+//   stat-change plumbing, so it needed no new hook — only crediting the innate at IsMirrorArmorReflected
+//   (src/battle_stat_change.c), the pending-flag setter StatChangeMirrorArmor (src/battle_move_resolution.c) and the
+//   Gooey/Tangling-Hair contact-reflect corner case (src/battle_util.c), with the pop-up overwritten to Mirror Armor
+//   when the chosen ability differs. Only ever spares the holder its own drop, so a plain 1:1 copy; breakable (Mold
+//   Breaker pierces). The AI's don't-Intimidate-switch-into-Mirror-Armor read is innate-aware. Sole carrier:
+//   Corviknight (+ Gmax, its hidden ability), joining its innate Pressure / Unnerve; Step 3.5 (all three abilities
+//   now innate, no free slot) keeps its now-redundant chosen Mirror Armor and defers freeing to Batch W.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

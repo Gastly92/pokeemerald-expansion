@@ -9570,3 +9570,84 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate O
         EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE); // did not copy the foe's Swords Dance
     }
 }
+
+// Tier 5.7 — an innate Mirror Armor bounces a stat-lowering effect back at its source, exactly like the real
+// ability (a pure boon: it only ever spares the holder its own drop and redirects it). Corviknight's chosen
+// slot here is Pressure (also innate), so the innate Mirror Armor is what fires and the pop-up overwrite shows
+// Mirror Armor rather than the chosen ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mirror Armor reflects a stat drop back at the attacker")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CORVIKNIGHT, ABILITY_MIRROR_ARMOR));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CORVIKNIGHT) { Ability(ABILITY_PRESSURE); } // chosen differs from the innate Mirror Armor
+        OPPONENT(SPECIES_WYNAUT);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GROWL); }
+    } SCENE {
+        if (enabled)
+        {
+            ABILITY_POPUP(player, ABILITY_MIRROR_ARMOR); // innate fires; pop-up overwrite shows Mirror Armor, not chosen Pressure
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, opponent);
+        }
+        else
+        {
+            NOT ABILITY_POPUP(player, ABILITY_MIRROR_ARMOR);
+        }
+    } THEN {
+        if (enabled)
+        {
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);       // holder's Attack unaffected
+            EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // reflected onto the attacker
+        }
+        else
+        {
+            EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);   // no innate -> the drop lands on the holder
+            EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
+        }
+    }
+}
+
+// An innate Mirror Armor reflects a switch-in Intimidate back at the Intimidator (the marquee interaction),
+// mirroring the vanilla chosen-ability test.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mirror Armor reflects Intimidate back at its source")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CORVIKNIGHT, ABILITY_MIRROR_ARMOR));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_CORVIKNIGHT) { Ability(ABILITY_PRESSURE); } // chosen differs from the innate Mirror Armor
+        OPPONENT(SPECIES_GYARADOS) { Ability(ABILITY_INTIMIDATE); }
+    } WHEN {
+        TURN {}
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_INTIMIDATE);
+        ABILITY_POPUP(player, ABILITY_MIRROR_ARMOR);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, opponent);
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);       // holder's Attack unaffected
+        EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // Intimidate reflected onto Gyarados
+    }
+}
+
+// Suppression parity: an innate Mirror Armor honors general suppression via IsInnateActive. Gastro Acid on the
+// holder turns the innate off, so a later stat-lowering move lands on the holder instead of being reflected.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Mirror Armor")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CORVIKNIGHT, ABILITY_MIRROR_ARMOR));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_GROWL); }
+        OPPONENT(SPECIES_CORVIKNIGHT) { Ability(ABILITY_PRESSURE); } // innate Mirror Armor
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); } // suppress the holder's abilities (incl. the innate Mirror Armor)
+        TURN { MOVE(player, MOVE_GROWL); }
+    } SCENE {
+        NOT ABILITY_POPUP(opponent, ABILITY_MIRROR_ARMOR); // innate suppressed -> the drop is not reflected
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // the drop lands on the holder
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);       // attacker not affected
+    }
+}
