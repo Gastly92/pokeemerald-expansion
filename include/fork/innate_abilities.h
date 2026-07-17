@@ -239,6 +239,17 @@
 //   move scoring) are innate-aware. Carriers: Espeon / the Natu line / the Hatenna line, plus the pure-boon Mega
 //   rows whose real ability is Magic Bounce (Sableye / Absol / Diancie / Clefable Megas). Step 3.5: Xatu + Espeon
 //   frontier sets free to their real :x:-stable Synchronize; the all-innate Hatterene sets defer to Batch W.
+//   DANCER (Tier 5.9 — a 1:1 clean-upside copy, no new machinery): the instant any battler uses a dance move, the
+//   holder immediately copies it and still gets to use its own move. The copy already fires off the per-battler
+//   activateDancer volatile in TryDancer(), so the queue site MoveEndQueueDancer (src/battle_move_resolution.c) —
+//   which sets that volatile from the chosen slot — was made innate-aware via IsInnateActive, and TryDancer forces
+//   the pop-up to Dancer when the chosen slot differs (CreateAbilityPopUp reads the chosen slot). Copying a move is
+//   never a downside, so a plain 1:1 copy; not breakable (Mold
+//   Breaker can't stop it, like the real ability), suppressible by Gastro Acid / Neutralizing Gas. No AI wiring
+//   (nothing reads Dancer). Canon: the four Oricorio forms (its sole ability, redundant-but-correct); flavor: a
+//   tight dance-themed set that lacks the real ability — Ludicolo, Bellossom, the Lilligant lines, Meloetta (both
+//   formes) and Maractus. Step 3.5: the two Oricorio frontier sets keep their now-redundant chosen Dancer
+//   (Oricorio has no other real ability), deferred to Batch W.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

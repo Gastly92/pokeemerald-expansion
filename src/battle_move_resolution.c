@@ -3020,7 +3020,12 @@ static enum MoveEndResult MoveEndQueueDancer(struct BattleCalcValues *cv)
         if (battler == cv->battlerAtk)
             continue;
 
-        if (cv->abilities[battler] == ABILITY_DANCER)
+        // FORK: innate-aware Dancer (FEATURE_INNATE_ABILITIES). An innate Dancer holder queues
+        // to copy the dance move too; the copy then fires off the activateDancer volatile in
+        // TryDancer() (ABILITYEFFECT_DANCER), where the only added effect-site work is forcing the
+        // pop-up to Dancer when the chosen slot differs. IsInnateActive honors the same suppression
+        // as the chosen slot (Gastro Acid / Neutralizing Gas / not-on-field).
+        if (cv->abilities[battler] == ABILITY_DANCER || IsInnateActive(battler, ABILITY_DANCER))
             gBattleMons[battler].volatiles.activateDancer = TRUE;
     }
 

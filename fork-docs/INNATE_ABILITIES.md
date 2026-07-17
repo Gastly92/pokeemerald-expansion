@@ -3942,6 +3942,67 @@ still bounces; Synchronize is now the observable chosen slot). The **three Hatte
 (Healer + Anticipation + Magic Bounce, no free slot), so — exactly like Corviknight (Mirror Armor) and Espathra
 (Opportunist) — they keep their now-redundant chosen Magic Bounce and freeing is **deferred to the Batch W sweep**.
 
+### ABILITY_DANCER
+
+**Tier 5.9 — a 1:1 clean-upside copy.** The instant *any* battler uses a **dance move** (Swords Dance, Quiver
+Dance, Petal Dance, Teeter Dance, Feather Dance, Revelation Dance, ...), an innate Dancer holder immediately
+**copies** it — targeting the original target (or the original user, if the copy would hit an ally) — and then
+**still gets to use its own move** that turn. It reacts to a dance from **any** battler, foe *or* ally, which
+makes it distinct from the foe-only reactive abilities (Mirror Armor / Magic Bounce). Copying a move is never a
+downside, so the innate is a plain 1:1 copy of the real ability.
+
+**Effect — one queue site + a pop-up overwrite, no new machinery.** The engine already implements Dancer in two
+halves that both key off a **per-battler volatile** (`activateDancer`), so the copy itself is already generic —
+only the *queue* site (which reads the chosen slot) needed the innate clause, plus a one-line pop-up overwrite:
+
+1. **Queue site (`src/battle_move_resolution.c`, `MoveEndQueueDancer`).** After a dance move resolves, this loops
+   every non-attacker battler and flags the ones with Dancer to dance. Its chosen-slot read gained the innate
+   clause:
+
+   ```c
+   if (cv->abilities[battler] == ABILITY_DANCER || IsInnateActive(battler, ABILITY_DANCER))
+       gBattleMons[battler].volatiles.activateDancer = TRUE;
+   ```
+
+2. **Effect site (`src/battle_util.c`, `TryDancer`, the `ABILITYEFFECT_DANCER` case).** Reached from the
+   `MOVEEND_DANCER` step, it picks a flagged battler off the `activateDancer` volatile (in the Gen-8+ speed
+   order), makes it re-use the dance move, and already sets `gLastUsedAbility = ABILITY_DANCER` +
+   `RecordAbilityBattle(..., ABILITY_DANCER)`. The copy therefore fires for an innate holder unchanged — but
+   `BattleScript_DancerActivates` shows the pop-up via `showabilitypopup`/`CreateAbilityPopUp`, which reads the
+   dancer's **chosen** slot, so an innate holder's pop-up would name its chosen ability. As with
+   Sturdy/Speed Boost/Magic Bounce, force the overwrite to Dancer **only when the chosen ability differs** (the
+   real-ability path stays untouched); `BattleScript_AbilityPopUp` clears `sABILITY_OVERWRITE`, so the per-battler
+   loop stays clean:
+
+   ```c
+   if (GetBattlerAbility(dancerBattler) != ABILITY_DANCER)
+       gBattleScripting.abilityPopupOverwrite = ABILITY_DANCER;
+   ```
+
+- **Suppression parity.** `IsInnateActive` supplies the feature-flag / Gastro Acid / Neutralizing Gas / Ability
+  Shield / not-on-field parity. Dancer is **not breakable** (`.breakable` unset), so — like the real ability — an
+  attacker's Mold Breaker does **not** stop it (contrast the breakable Mirror Armor / Magic Bounce). This matches
+  the chosen path, where `cv->abilities[battler]` still reads Dancer under Mold Breaker for a non-breakable ability.
+- **No `DETERMINISTIC_*` surface.** The copy is deterministic (no accuracy/evasion/secondary/crit/status-chance/
+  held-item roll), so nothing to re-route.
+
+**AI — none.** `grep ABILITY_DANCER src/battle_ai_*.c` is empty: nothing in the AI reasons about Dancer (it is a
+reactive mid-turn copy the AI does not pre-plan around), and the copied move itself runs through the shared move
+machinery, so no AI wiring is needed.
+
+**Species (Step 1) — canon + a tight flavor set.** *Canon:* the four **Oricorio** forms (Baile / Pom-Pom / Pa'u /
+Sensu), for whom Dancer is their **sole** ability — so the innate is redundant-but-correct there (added for
+convention/consistency). *Flavor* (species that *lack* the real ability but are strongly dance-themed, where the
+innate is the **observable** one): **Ludicolo** (the iconic carefree dancer), **Bellossom** (its swaying flower
+dance), the **Lilligant** lines (Kanto's graceful Petal/Teeter Dance + Hisui's whirling martial dance),
+**Meloetta** (both formes — the melody/dance mythical with its Pirouette dance forme) and **Maractus** (dances
+rhythmically to scare off bird Pokémon). Each flavor pick is merged into the species' existing innate row.
+
+**Step 3.5 — defer.** `grep -n ABILITY_DANCER src/fork/frontier_extended_mons.c` hit the two **Oricorio** sets
+(base + Pa'u). Dancer is Oricorio's **only** real ability, so there is no complementary slot to repoint to — like
+Espathra (Opportunist) and Corviknight (Mirror Armor), they keep their now-redundant chosen Dancer (still
+observable + correct) and freeing is **deferred to the Batch W sweep**.
+
 ### Batch X — script `jumpifability` innate-awareness
 
 A **cross-cutting polish** follow-up (not one of the 133 pending abilities): a handful of ability blocks live

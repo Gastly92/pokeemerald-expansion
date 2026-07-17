@@ -382,6 +382,12 @@
 // so they keep their now-redundant chosen Magic Bounce — still correct (the chosen runs it, and it stays
 // the observed slot; the innate is redundant-but-skipped there) — deferred to the Batch W override sweep.
 //
+// Tier 5.9 (Dancer — the holder copies any dance move the instant it is used) frees no set: its only
+// frontier carriers are the two Oricorio sets (base + Pa'u), and Dancer is Oricorio's SOLE real ability,
+// so there is no complementary slot to repoint to. They keep their now-redundant chosen Dancer — still
+// correct (the chosen runs it, and it stays the observed slot; the innate is redundant-but-skipped there) —
+// deferred to the Batch W override sweep, like Opportunist's Espathra and Mirror Armor's Corviknight.
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
