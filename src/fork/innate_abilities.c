@@ -743,6 +743,15 @@
 //   correct (the chosen ability runs; the innate is redundant-but-skipped there), matching the Batch J/T/Y5
 //   all-abilities-innate deferrals. (The Teravolt / Turboblaze clones share this exact machinery and follow in Batch
 //   Y8, which just adds their species data + the two matching IsInnateActive lines in IsMoldBreakerTypeAbility.)
+//   TERAVOLT / TURBOBLAZE (Batch Y8 — Mold Breaker clones, both 1:1 clean-upside copies, canon-only): identical to
+//   Mold Breaker — the holder's moves ignore the target's breakable ability. They share Mold Breaker's exact
+//   machinery: IsMoldBreakerTypeAbility (src/battle_util.c) already recognized the chosen-slot Teravolt/Turboblaze,
+//   so Batch Y8 added two more IsInnateActive(battler, ABILITY_TERAVOLT/TURBOBLAZE) clauses beside the Mold Breaker
+//   one, making every effect site and every AI read innate-aware for free. Not breakable (never self-broken),
+//   suppressible by Gastro Acid / Neutralizing Gas via IsInnateActive. The canon carriers are all sole-ability
+//   frontier legends, so each takes the innate + a fork chosen override so the innate is observable and the frontier
+//   set is freed: Turboblaze -> Reshiram (+ Kyurem-White fusion), both chosen Flash Fire (its Reshiram-fused fire);
+//   Teravolt -> Zekrom (+ Kyurem-Black fusion), both chosen Motor Drive (its Zekrom-fused electric).
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -6366,6 +6375,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRANKSTER
         )
     },
+    { // 0643
+        SPECIES_RESHIRAM,
+        INNATES(
+            ABILITY_TURBOBLAZE
+        )
+    },
+    { // 0644
+        SPECIES_ZEKROM,
+        INNATES(
+            ABILITY_TERAVOLT
+        )
+    },
     { // 0645
         SPECIES_LANDORUS_INCARNATE,
         INNATES(
@@ -6382,6 +6403,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KYUREM,
         INNATES(
             ABILITY_PRESSURE
+        )
+    },
+    { // 1104
+        SPECIES_KYUREM_WHITE,
+        INNATES(
+            ABILITY_TURBOBLAZE
+        )
+    },
+    { // 1105
+        SPECIES_KYUREM_BLACK,
+        INNATES(
+            ABILITY_TERAVOLT
         )
     },
     { // 0648

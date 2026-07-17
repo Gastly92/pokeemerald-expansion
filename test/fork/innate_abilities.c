@@ -5154,6 +5154,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_COMATOSE,
         ABILITY_MAGIC_GUARD,
         ABILITY_MOLD_BREAKER,
+        ABILITY_TERAVOLT, ABILITY_TURBOBLAZE,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -9421,6 +9422,96 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate M
         OPPONENT(SPECIES_GASTLY) { Moves(MOVE_GASTRO_ACID); } // real Levitate + Gastro Acid
     } WHEN {
         TURN { MOVE(opponent, MOVE_GASTRO_ACID); } // suppress the holder's abilities (incl. the innate Mold Breaker)
+        TURN { MOVE(player, MOVE_MUD_SLAP); }
+    } SCENE {
+        MESSAGE("It doesn't affect the opposing Gastly…"); // innate suppressed -> Levitate blocks the Ground hit again
+    }
+}
+
+// ===== Batch Y8 — Turboblaze / Teravolt (Mold Breaker clones) ==============================
+// Identical to Mold Breaker: the HOLDER's moves ignore the target's breakable ability. They share
+// Mold Breaker's exact machinery — IsMoldBreakerTypeAbility now credits an innate Turboblaze / Teravolt
+// too — so one clause each covers every effect site and AI read. Isolate the INNATE (not the chosen
+// slot) by forcing a neutral chosen ability, so any ability-piercing can only come from the innate.
+// Levitate is the clean binary observable, exactly as for Mold Breaker.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Turboblaze pierces the target's Levitate")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
+        ASSUME(SpeciesHasInnate(SPECIES_RESHIRAM, ABILITY_TURBOBLAZE));
+        ASSUME(gSpeciesInfo[SPECIES_GASTLY].abilities[0] == ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_RESHIRAM) { Ability(ABILITY_DAMP); Moves(MOVE_MUD_SLAP); } // chosen Damp; innate Turboblaze
+        OPPONENT(SPECIES_GASTLY); // real Levitate blocks Ground
+    } WHEN {
+        TURN { MOVE(player, MOVE_MUD_SLAP); }
+    } SCENE {
+        if (enabled)
+            HP_BAR(opponent); // innate Turboblaze ignores Levitate -> the Ground hit connects
+        else
+            MESSAGE("It doesn't affect the opposing Gastly…"); // no innate -> Levitate holds
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Teravolt pierces the target's Levitate")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
+        ASSUME(SpeciesHasInnate(SPECIES_ZEKROM, ABILITY_TERAVOLT));
+        ASSUME(gSpeciesInfo[SPECIES_GASTLY].abilities[0] == ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_ZEKROM) { Ability(ABILITY_DAMP); Moves(MOVE_MUD_SLAP); } // chosen Damp; innate Teravolt
+        OPPONENT(SPECIES_GASTLY); // real Levitate blocks Ground
+    } WHEN {
+        TURN { MOVE(player, MOVE_MUD_SLAP); }
+    } SCENE {
+        if (enabled)
+            HP_BAR(opponent); // innate Teravolt ignores Levitate -> the Ground hit connects
+        else
+            MESSAGE("It doesn't affect the opposing Gastly…"); // no innate -> Levitate holds
+    }
+}
+
+// The Kyurem fusions share the machinery: White = Turboblaze, Black = Teravolt. Same binary observable,
+// forcing a neutral chosen ability so only the innate pierces.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Turboblaze / Teravolt on the Kyurem fusions pierces Levitate")
+{
+    u32 species;
+    PARAMETRIZE { species = SPECIES_KYUREM_WHITE; } // Turboblaze
+    PARAMETRIZE { species = SPECIES_KYUREM_BLACK; } // Teravolt
+    GIVEN {
+        ASSUME(GetMoveType(MOVE_MUD_SLAP) == TYPE_GROUND);
+        ASSUME(SpeciesHasInnate(SPECIES_KYUREM_WHITE, ABILITY_TURBOBLAZE));
+        ASSUME(SpeciesHasInnate(SPECIES_KYUREM_BLACK, ABILITY_TERAVOLT));
+        ASSUME(gSpeciesInfo[SPECIES_GASTLY].abilities[0] == ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(species) { Ability(ABILITY_DAMP); Moves(MOVE_MUD_SLAP); } // chosen Damp; innate Turboblaze/Teravolt
+        OPPONENT(SPECIES_GASTLY); // real Levitate blocks Ground
+    } WHEN {
+        TURN { MOVE(player, MOVE_MUD_SLAP); }
+    } SCENE {
+        HP_BAR(opponent); // innate ignores Levitate -> the Ground hit connects
+    }
+}
+
+// Suppression parity: neither clone is self-broken, but an innate honors general suppression via
+// IsInnateActive. Gastro Acid on the holder turns the innate off, so the target's Levitate blocks again.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Turboblaze")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_RESHIRAM, ABILITY_TURBOBLAZE));
+        ASSUME(gSpeciesInfo[SPECIES_GASTLY].abilities[0] == ABILITY_LEVITATE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_RESHIRAM) { Ability(ABILITY_DAMP); Moves(MOVE_MUD_SLAP); } // innate Turboblaze
+        OPPONENT(SPECIES_GASTLY) { Moves(MOVE_GASTRO_ACID); } // real Levitate + Gastro Acid
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); } // suppress the holder's abilities (incl. the innate Turboblaze)
         TURN { MOVE(player, MOVE_MUD_SLAP); }
     } SCENE {
         MESSAGE("It doesn't affect the opposing Gastly…"); // innate suppressed -> Levitate blocks the Ground hit again

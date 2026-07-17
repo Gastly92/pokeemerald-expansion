@@ -205,6 +205,13 @@
 //   only (ability-ignoring is strong offensive utility): the Pinsir, Cranidos, Drilbur, Basculin/Basculegion, Axew,
 //   Pancham, Tinkatink lines, Throh, Sawk, Druddigon, Hawlucha, Veluza and Ogerpon-Hearthflame (Megas whose own
 //   ability is already Mold Breaker are omitted as redundant); Teravolt / Turboblaze clones follow in Batch Y8.
+//   TERAVOLT / TURBOBLAZE (Batch Y8 — Mold Breaker clones, both 1:1 clean-upside copies, canon-only): the holder's
+//   moves ignore the target's breakable ability, exactly like Mold Breaker. They share Mold Breaker's single
+//   machinery — two more IsInnateActive clauses in IsMoldBreakerTypeAbility (src/battle_util.c) made every effect
+//   site and AI read innate-aware for free. Not breakable; suppressible by Gastro Acid / Neutralizing Gas. Every
+//   canon carrier is a sole-ability frontier legend, so each takes the innate + a fork chosen override so the innate
+//   is observable + the frontier set freed: Turboblaze -> Reshiram + Kyurem-White (chosen Flash Fire), Teravolt ->
+//   Zekrom + Kyurem-Black (chosen Motor Drive).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
