@@ -373,6 +373,15 @@
 // correct (the chosen runs it, and it stays the observed slot; the innate is redundant-but-skipped there) —
 // deferred to the Batch W override sweep, exactly like Opportunist's Espathra and Mold Breaker's Excadrill.
 //
+// Tier 5.8 (Magic Bounce — the holder reflects a bounceable status move back at its user) frees three
+// sets: the Xatu set (Synchronize / Early Bird / Magic Bounce) and both Espeon sets (Synchronize / -- /
+// Magic Bounce) repoint from the now-redundant chosen Magic Bounce to their real, non-innate Synchronize
+// (:x: stable, slot 0), so a chosen ability stays observable on top of the innate Magic Bounce. DEFERRED
+// (tracked follow-up, like Batch J/T/K/L/U/Y5 and Tier 5.4/5.5/5.7): the three Hatterene sets have ALL
+// their real abilities now innate (Healer / Anticipation / Magic Bounce) with no free complementary slot,
+// so they keep their now-redundant chosen Magic Bounce — still correct (the chosen runs it, and it stays
+// the observed slot; the innate is redundant-but-skipped there) — deferred to the Batch W override sweep.
+//
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
 // silently falls back to slot 0). For an "ability-locked" innate species whose
@@ -4911,7 +4920,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_U_TURN
         },
-        .ability = ABILITY_MAGIC_BOUNCE,
+        .ability = ABILITY_SYNCHRONIZE, // Magic Bounce now innate (Tier 5.8); chosen Synchronize (:x: stable, its real slot 0) is the freed complementary ability
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5349,7 +5358,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_MAGIC_BOUNCE,
+        .ability = ABILITY_SYNCHRONIZE, // Magic Bounce now innate (Tier 5.8); chosen Synchronize (:x: stable, its real slot 0) is the freed complementary ability
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5369,7 +5378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_TRICK
         },
-        .ability = ABILITY_MAGIC_BOUNCE,
+        .ability = ABILITY_SYNCHRONIZE, // Magic Bounce now innate (Tier 5.8); chosen Synchronize (:x: stable, its real slot 0) is the freed complementary ability
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

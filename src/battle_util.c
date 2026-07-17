@@ -2275,7 +2275,7 @@ bool32 CanTargetBlockPranksterMove(struct DamageContext *ctx, s32 movePriority)
     if (movePriority <= 0
      || !IsBattleMoveStatus(ctx->move)
      || !BlocksPrankster(ctx->move, ctx->battlerAtk, ctx->battlerDef, TRUE)
-     || (IsBattleMoveStatus(ctx->move) && (ctx->abilities[ctx->battlerDef] == ABILITY_MAGIC_BOUNCE || gProtectStructs[ctx->battlerDef].bounceMove)))
+     || (IsBattleMoveStatus(ctx->move) && (BattlerHasAbility(ctx->battlerDef, ABILITY_MAGIC_BOUNCE) || gProtectStructs[ctx->battlerDef].bounceMove))) // FORK: innate-aware Magic Bounce takes precedence over the Dark-type Prankster block (Tier 5.8)
         return FALSE;
 
     if (ctx->runScript)

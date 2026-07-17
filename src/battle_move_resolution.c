@@ -3437,6 +3437,11 @@ static enum MoveEndResult MoveEndBouncedMove(struct BattleCalcValues *cv)
             if (gBattleStruct->magicBouncePending & 1u << bounceBattler)
             {
                 gBattlerAbility = bounceBattler;
+                // FORK: an innate Magic Bounce holder (FEATURE_INNATE_ABILITIES) whose chosen ability
+                // differs shows the Magic Bounce pop-up / records it (CreateAbilityPopUp + recordability
+                // read the chosen slot; the overwrite is consumed and cleared by BattleScript_AbilityPopUp).
+                if (GetBattlerAbility(bounceBattler) != ABILITY_MAGIC_BOUNCE)
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_MAGIC_BOUNCE;
                 gBattlescriptCurrInstr = GetMoveBattleScript(gCurrentMove);
                 BattleScriptCall(BattleScript_MagicBounce);
             }
@@ -5589,7 +5594,12 @@ static bool32 TryMagicBounce(struct BattleCalcValues *cv)
     if (gBattleStruct->bouncedMoveIsUsed)
         return FALSE;
 
-    if (cv->abilities[cv->battlerDef] != ABILITY_MAGIC_BOUNCE)
+    // FORK: credit an innate Magic Bounce (Tier 5.8, FEATURE_INNATE_ABILITIES) beside the chosen
+    // slot. IsInnateActive supplies the usual suppression + Mold-Breaker parity (Magic Bounce is
+    // breakable, so an attacker's Mold Breaker pierces both paths identically). The pop-up/record
+    // overwrite for an innate holder happens at the script-call site in MoveEndBouncedMove.
+    if (cv->abilities[cv->battlerDef] != ABILITY_MAGIC_BOUNCE
+     && !IsInnateActive(cv->battlerDef, ABILITY_MAGIC_BOUNCE))
         return FALSE;
 
     gBattleStruct->magicBouncePending |= 1u << cv->battlerDef;

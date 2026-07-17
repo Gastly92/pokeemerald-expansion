@@ -3868,6 +3868,80 @@ chosen ability, freeing the redundant chosen slot would need a game-wide overrid
 sets, the three sets keep their now-redundant chosen Mirror Armor (still correct, and Mirror Armor stays the
 observed slot) and freeing is deferred to the Batch W sweep.
 
+### ABILITY_MAGIC_BOUNCE
+
+**Tier 5.8 — a 1:1 clean-upside copy.** Instead of being hit by a *bounceable status move* (Toxic, Thunder Wave,
+Will-O-Wisp, Leech Seed, Taunt, entry hazards, ...), the holder reflects it back at the user. It is the whole-*move*
+analogue of **Mirror Armor** (which bounces a stat *drop*); where Mirror Armor lives in the stat-change plumbing,
+Magic Bounce reuses the upstream *move*-bounce machinery (`gBattleStruct->magicBouncePending` +
+`BattleScript_MagicBounce`), so wiring the innate needed **no new hook** — only crediting the innate where the real
+ability is already read.
+
+**Effect — one detection site + a pop-up overwrite.**
+
+1. **Detection site (`src/battle_move_resolution.c`, `TryMagicBounce`).** The single chokepoint (reached from
+   `CanBattlerBounceBackMove` for every move-hit) that flags a battler to bounce. Its
+   `cv->abilities[cv->battlerDef] != ABILITY_MAGIC_BOUNCE` guard gained an `IsInnateActive` clause so an innate
+   holder whose chosen slot differs is flagged too:
+
+   ```c
+   if (cv->abilities[cv->battlerDef] != ABILITY_MAGIC_BOUNCE
+    && !IsInnateActive(cv->battlerDef, ABILITY_MAGIC_BOUNCE))
+       return FALSE;
+
+   gBattleStruct->magicBouncePending |= 1u << cv->battlerDef;
+   ```
+
+2. **Pop-up / record overwrite (`src/battle_move_resolution.c`, `MoveEndBouncedMove`).** The pending flag is later
+   consumed one battler at a time; each fires `BattleScript_MagicBounce` (which calls `BattleScript_AbilityPopUp`).
+   `CreateAbilityPopUp` and `recordability` both read the chosen slot, so — like Sturdy/Speed Boost — the overwrite is
+   forced to Magic Bounce **only when the chosen ability differs** (an innate holder), keeping the real-ability path
+   byte-for-byte untouched. The script's trailing `sethword sABILITY_OVERWRITE, 0` clears it, so the per-battler loop
+   stays correct:
+
+   ```c
+   gBattlerAbility = bounceBattler;
+   if (GetBattlerAbility(bounceBattler) != ABILITY_MAGIC_BOUNCE)
+       gBattleScripting.abilityPopupOverwrite = ABILITY_MAGIC_BOUNCE;
+   ```
+
+3. **Dark-type Prankster-block precedence (`src/battle_util.c`, `CanTargetBlockPranksterMove`).** A Dark-type target
+   normally shrugs off a Prankster-boosted status move, but a Magic Bounce holder *bounces* it instead (the bounce
+   takes precedence). The `ctx->abilities[ctx->battlerDef] == ABILITY_MAGIC_BOUNCE` guard became
+   `BattlerHasAbility(ctx->battlerDef, ABILITY_MAGIC_BOUNCE)` so an innate holder keeps the same precedence.
+
+- **Pure boon, 1:1.** Reflecting a status move only ever spares the holder (and punishes the user), so the real
+  ability has no downside to strip — a plain 1:1 copy.
+- **Suppression parity.** `IsInnateActive` supplies the feature-flag / Gastro Acid / Neutralizing Gas / Ability
+  Shield / not-on-field parity. Magic Bounce is **breakable** (`.breakable = TRUE`), so an attacker's Mold Breaker
+  pierces it — and this matches the chosen path (`cv->abilities[battlerDef] = GetBattlerAbility(battlerDef)`, already
+  `NONE` under Mold Breaker for a breakable ability), so innate and chosen are pierced identically.
+- **No `DETERMINISTIC_*` surface.** The reflect is deterministic (no accuracy/evasion/secondary/crit/status-chance/
+  held-item roll), so nothing to re-route.
+
+**AI — three dedicated reads made innate-aware.** All three are "don't throw a bounceable move at a Magic Bounce
+foe" heuristics, none inside the shared damage calc:
+- `AI_ShouldSetUpHazards` (`src/battle_ai_util.c`) — won't set entry hazards into a Magic Bounce foe; its
+  `abilities[battlerDef] == ABILITY_MAGIC_BOUNCE` gained an `IsInnateActive` clause.
+- The move-scoring `switch (abilityDef)` case + the doubles `switch (abilities[partner])` case (`src/battle_ai_main.c`)
+  — each `RETURN_SCORE_MINUS(20)` for a bounceable move now has a matching FORK pre-check before the switch
+  (`abilityDef != ABILITY_MAGIC_BOUNCE && IsInnateActive(...)`, and the partner analogue guarded on `hasTwoOpponents`),
+  so an innate-only holder / partner is avoided just like the chosen-ability holder.
+
+**Species (Step 1) — canon-only** (free status-move reflection is strong utility, kept tight like Mirror Armor /
+Opportunist / Mold Breaker / Y5). The non-Mega canon carriers — **Espeon** (new row), the **Natu / Xatu** line
+(merged with innate Early Bird), and the **Hatenna / Hattrem / Hatterene / Hatterene-Gmax** line (merged with innate
+Anticipation / Healer) — take it, and it is *observable* there (their chosen slot can be Synchronize / Early Bird /
+Healer / Anticipation). The Mega carriers whose real ability **is** Magic Bounce — **Sableye / Absol (+ Mega-Z) /
+Diancie / Clefable** Megas — get it as a pure-boon Mega row on top of the base creature's inherited innates.
+
+**Step 3.5 — partial free, partial defer.** `grep -n ABILITY_MAGIC_BOUNCE src/fork/frontier_extended_mons.c` hit six
+sets. The **Xatu** set and **both Espeon** sets have a real, non-innate complementary slot (Synchronize, `:x:`
+stable), so they repoint `.ability` from the now-redundant chosen Magic Bounce to `ABILITY_SYNCHRONIZE` (the innate
+still bounces; Synchronize is now the observable chosen slot). The **three Hatterene** sets are all-abilities-innate
+(Healer + Anticipation + Magic Bounce, no free slot), so — exactly like Corviknight (Mirror Armor) and Espathra
+(Opportunist) — they keep their now-redundant chosen Magic Bounce and freeing is **deferred to the Batch W sweep**.
+
 ### Batch X — script `jumpifability` innate-awareness
 
 A **cross-cutting polish** follow-up (not one of the 133 pending abilities): a handful of ability blocks live
