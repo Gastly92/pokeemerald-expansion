@@ -2993,6 +2993,13 @@ static bool32 TryDancer(void)
         gLastUsedAbility = ABILITY_DANCER;
         RecordAbilityBattle(gBattlerAttacker, ABILITY_DANCER);
 
+        // FORK: innate-aware Dancer (FEATURE_INNATE_ABILITIES). CreateAbilityPopUp reads the
+        // dancer's chosen slot, so force the pop-up to Dancer when an innate holder danced (its
+        // chosen ability differs). Only diverges for the innate; the real-ability path is
+        // untouched. BattleScript_AbilityPopUp clears sABILITY_OVERWRITE, so the loop stays clean.
+        if (GetBattlerAbility(dancerBattler) != ABILITY_DANCER)
+            gBattleScripting.abilityPopupOverwrite = ABILITY_DANCER;
+
         // Set the target to the original target of the mon that first used a Dance move
         gBattlerTarget = gBattleStruct->dancerSavedTarget;
 

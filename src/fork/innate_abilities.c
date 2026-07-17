@@ -802,6 +802,21 @@
 //   real, :x:-stable chosen Synchronize (innate still bounces); the three Hatterene sets are all-abilities-innate
 //   (Healer + Anticipation + Magic Bounce) with no free slot, so they keep the redundant chosen Magic Bounce and
 //   freeing is deferred to Batch W (Corviknight / Espathra precedent).
+//   DANCER (Tier 5.9 — a 1:1 clean-upside copy): the instant any battler uses a dance move, an innate Dancer
+//   holder immediately copies it, then still gets to use its own move that turn. It needed no new machinery —
+//   the copy already fires off the per-battler activateDancer volatile in TryDancer() (ABILITYEFFECT_DANCER,
+//   src/battle_util.c). The queue site MoveEndQueueDancer (src/battle_move_resolution.c), which sets that volatile
+//   from the CHOSEN slot, was made innate-aware via IsInnateActive so an innate holder is queued to dance too;
+//   TryDancer then forces the pop-up to Dancer when the chosen slot differs (CreateAbilityPopUp reads the chosen
+//   slot — Sturdy / Magic Bounce precedent). Copying a move is never a downside, so a plain
+//   1:1 copy; not breakable (like the real ability, Mold Breaker cannot stop it), suppressible by Gastro Acid /
+//   Neutralizing Gas via IsInnateActive. No AI wiring (nothing in battle_ai_*.c reads Dancer — it is a reactive
+//   mid-turn copy the AI does not pre-plan around). Canon users: the four Oricorio forms (Baile / Pom-Pom /
+//   Pa'u / Sensu), for whom Dancer is their sole ability, so the innate is redundant-but-correct; plus a tight
+//   dance-themed FLAVOR set that lacks the real ability — Ludicolo, Bellossom, the Lilligant lines (Kanto +
+//   Hisui), Meloetta (both formes) and Maractus — where the innate is the observable one. Step 3.5: the two
+//   Oricorio frontier sets keep their now-redundant chosen Dancer (still observable + correct), deferred to
+//   Batch W (Oricorio has no other real ability to free the slot to).
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -2481,6 +2496,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BELLOSSOM,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_DANCER, // flavor: its swaying flower dance
             ABILITY_HEALER,
             ABILITY_NATURAL_CURE
         )
@@ -3557,6 +3573,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0272
         SPECIES_LUDICOLO,
         INNATES(
+            ABILITY_DANCER, // flavor: the iconic carefree dancer (its folk-dance motif)
             ABILITY_OWN_TEMPO,
             ABILITY_RAIN_DISH,
             ABILITY_SWIFT_SWIM
@@ -5733,6 +5750,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LILLIGANT,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_DANCER, // flavor: a dancer-motif flower (its graceful Petal/Teeter Dance)
             ABILITY_LEAF_GUARD,
             ABILITY_OWN_TEMPO
         )
@@ -5741,6 +5759,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LILLIGANT_HISUI,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_DANCER, // flavor: its whirling martial dance
             ABILITY_LEAF_GUARD
         )
     },
@@ -5807,7 +5826,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0556
         SPECIES_MARACTUS,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_DANCER // flavor: it dances rhythmically to scare off bird Pokemon
         )
     },
     { // 0557
@@ -6486,12 +6506,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0648
         SPECIES_MELOETTA,
         INNATES(
+            ABILITY_DANCER, // flavor: the melody/dance mythical (its Pirouette dance forme)
             ABILITY_SERENE_GRACE
         )
     },
     { // 0648
         SPECIES_MELOETTA_PIROUETTE,
         INNATES(
+            ABILITY_DANCER, // flavor: its Pirouette dance forme
             ABILITY_SERENE_GRACE
         )
     },
@@ -7400,6 +7422,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRABOMINABLE_MEGA,
         INNATES(
             ABILITY_IRON_FIST
+        )
+    },
+    { // 0741
+        SPECIES_ORICORIO, // == ORICORIO_BAILE; canon Dancer (its sole ability)
+        INNATES(
+            ABILITY_DANCER
+        )
+    },
+    { // 0741
+        SPECIES_ORICORIO_POM_POM,
+        INNATES(
+            ABILITY_DANCER
+        )
+    },
+    { // 0741
+        SPECIES_ORICORIO_PAU,
+        INNATES(
+            ABILITY_DANCER
+        )
+    },
+    { // 0741
+        SPECIES_ORICORIO_SENSU,
+        INNATES(
+            ABILITY_DANCER
         )
     },
     { // 0742

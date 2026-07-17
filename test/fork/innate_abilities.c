@@ -5158,6 +5158,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_OPPORTUNIST,
         ABILITY_MIRROR_ARMOR,
         ABILITY_MAGIC_BOUNCE,
+        ABILITY_DANCER,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -9725,5 +9726,80 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
         STATUS_ICON(opponent, badPoison: TRUE);            // the move lands on the holder
     } THEN {
         EXPECT_EQ(player->status1 & STATUS1_PSN_ANY, 0);   // attacker not poisoned
+    }
+}
+
+// ===== Tier 5.9 — Dancer ==================================================================
+// The instant ANY battler uses a dance move, an innate Dancer holder immediately copies it (and still gets
+// to use its own move that turn). Isolate the INNATE from the chosen slot: Lilligant's chosen ability here is
+// Own Tempo, so any copied dance can only come from its innate Dancer. Quiver Dance (+1 Speed / Sp. Atk /
+// Sp. Def, self-targeting) is the clean binary observable — the holder copies the boost and the volatile-driven
+// pop-up shows Dancer. With the feature off the innate is inert and nothing is copied.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Dancer copies a dance move used by a foe")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(IsDanceMove(MOVE_QUIVER_DANCE));
+        ASSUME(SpeciesHasInnate(SPECIES_LILLIGANT, ABILITY_DANCER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_QUIVER_DANCE); }
+        OPPONENT(SPECIES_LILLIGANT) { Ability(ABILITY_OWN_TEMPO); Moves(MOVE_CELEBRATE); } // chosen differs from the innate Dancer
+    } WHEN {
+        TURN { MOVE(player, MOVE_QUIVER_DANCE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_QUIVER_DANCE, player);
+        if (enabled)
+            ABILITY_POPUP(opponent, ABILITY_DANCER); // innate fires; the pop-up shows Dancer, not chosen Own Tempo
+        else
+            NOT ABILITY_POPUP(opponent, ABILITY_DANCER);
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(opponent->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 1); // copied the foe's Quiver Dance
+        else
+            EXPECT_EQ(opponent->statStages[STAT_SPEED], DEFAULT_STAT_STAGE);     // no innate -> nothing to copy
+    }
+}
+
+// Dancer copies a dance move used by ANY battler, including an ally — it is not limited to foes. In doubles the
+// innate Dancer holder copies its partner's Swords Dance (+2 Attack) onto itself.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Dancer copies an ally's dance move")
+{
+    GIVEN {
+        ASSUME(IsDanceMove(MOVE_SWORDS_DANCE));
+        ASSUME(SpeciesHasInnate(SPECIES_LILLIGANT, ABILITY_DANCER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_LILLIGANT) { Ability(ABILITY_OWN_TEMPO); Moves(MOVE_CELEBRATE); } // innate Dancer
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_SWORDS_DANCE); }
+        OPPONENT(SPECIES_WYNAUT);
+        OPPONENT(SPECIES_WYNAUT);
+    } WHEN {
+        TURN { MOVE(playerRight, MOVE_SWORDS_DANCE); MOVE(playerLeft, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWORDS_DANCE, playerRight);
+        ABILITY_POPUP(playerLeft, ABILITY_DANCER); // copies the ally's dance
+    } THEN {
+        EXPECT_EQ(playerLeft->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 2); // copied the ally's Swords Dance
+    }
+}
+
+// Suppression parity: an innate Dancer honors general suppression via IsInnateActive. Gastro Acid on the holder
+// turns the innate off, so a later dance move is no longer copied.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Dancer")
+{
+    GIVEN {
+        ASSUME(IsDanceMove(MOVE_QUIVER_DANCE));
+        ASSUME(SpeciesHasInnate(SPECIES_LILLIGANT, ABILITY_DANCER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_QUIVER_DANCE); }
+        OPPONENT(SPECIES_LILLIGANT) { Ability(ABILITY_OWN_TEMPO); Moves(MOVE_CELEBRATE); } // innate Dancer
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); } // suppress the holder's abilities (incl. the innate Dancer)
+        TURN { MOVE(player, MOVE_QUIVER_DANCE); }
+    } SCENE {
+        NOT ABILITY_POPUP(opponent, ABILITY_DANCER); // innate suppressed -> the dance is not copied
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_SPEED], DEFAULT_STAT_STAGE); // did not copy the foe's Quiver Dance
     }
 }
