@@ -5155,6 +5155,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_MAGIC_GUARD,
         ABILITY_MOLD_BREAKER,
         ABILITY_TERAVOLT, ABILITY_TURBOBLAZE,
+        ABILITY_OPPORTUNIST,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -9515,5 +9516,57 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate T
         TURN { MOVE(player, MOVE_MUD_SLAP); }
     } SCENE {
         MESSAGE("It doesn't affect the opposing Gastly…"); // innate suppressed -> Levitate blocks the Ground hit again
+    }
+}
+
+// ===== Tier 5.6 — Opportunist =============================================================
+// Whenever an OPPOSING battler's stat is boosted, an innate Opportunist copies that exact boost onto its
+// holder (the ability twin of the Mirror Herb item). Isolate the INNATE (not the chosen slot): Espathra's
+// chosen ability is forced to Synchronize, so any stat mirroring can only come from its innate Opportunist.
+// The foe's Swords Dance (+2 Attack) is the clean binary observable: the holder copies it and the pop-up
+// shows Opportunist, not the chosen Synchronize.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Opportunist copies a foe's stat boost")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ESPATHRA, ABILITY_OPPORTUNIST));
+        ASSUME(gSpeciesInfo[SPECIES_ESPATHRA].abilities[0] == ABILITY_OPPORTUNIST);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_SWORDS_DANCE); }
+        OPPONENT(SPECIES_ESPATHRA) { Ability(ABILITY_SYNCHRONIZE); Moves(MOVE_CELEBRATE); } // chosen differs from the innate Opportunist
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWORDS_DANCE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWORDS_DANCE, player);
+        if (enabled)
+            ABILITY_POPUP(opponent, ABILITY_OPPORTUNIST); // innate fires; pop-up overwrite shows Opportunist, not chosen Synchronize
+        else
+            NOT ABILITY_POPUP(opponent, ABILITY_OPPORTUNIST);
+    } THEN {
+        if (enabled)
+            EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 2); // copied the foe's Swords Dance
+        else
+            EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE); // no innate -> nothing to copy
+    }
+}
+
+// Suppression parity: an innate Opportunist honors general suppression via IsInnateActive. Gastro Acid on
+// the holder turns the innate off, so a foe's later boost is no longer mirrored.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Opportunist")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_ESPATHRA, ABILITY_OPPORTUNIST));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_SWORDS_DANCE); }
+        OPPONENT(SPECIES_ESPATHRA) { Ability(ABILITY_SYNCHRONIZE); Moves(MOVE_CELEBRATE); } // innate Opportunist
+    } WHEN {
+        TURN { MOVE(player, MOVE_GASTRO_ACID); } // suppress the holder's abilities (incl. the innate Opportunist)
+        TURN { MOVE(player, MOVE_SWORDS_DANCE); }
+    } SCENE {
+        NOT ABILITY_POPUP(opponent, ABILITY_OPPORTUNIST); // innate suppressed -> the foe's boost is not copied
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_ATK], DEFAULT_STAT_STAGE); // did not copy the foe's Swords Dance
     }
 }

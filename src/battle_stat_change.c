@@ -442,7 +442,8 @@ static enum StatChangeResult IncreaseStat(struct BattleCalcValues *cv, struct St
                 if (CompareStat(battler, st->stat, MAX_STAT_STAGE, CMP_EQUAL, cv->abilities[battler]))
                     continue;
 
-                if (cv->abilities[battler] == ABILITY_OPPORTUNIST && !st->opportunistActivation)
+                // FORK: innate-aware Opportunist (FEATURE_INNATE_ABILITIES) — queue the foe's boost for an innate holder too.
+                if ((cv->abilities[battler] == ABILITY_OPPORTUNIST || IsInnateActive(battler, ABILITY_OPPORTUNIST)) && !st->opportunistActivation)
                     gProtectStructs[battler].activateOpportunist = TRUE;
 
                 if (cv->holdEffects[battler] == HOLD_EFFECT_MIRROR_HERB && !st->mirrorHerbActivation)

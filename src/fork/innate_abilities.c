@@ -752,6 +752,22 @@
 //   frontier legends, so each takes the innate + a fork chosen override so the innate is observable and the frontier
 //   set is freed: Turboblaze -> Reshiram (+ Kyurem-White fusion), both chosen Flash Fire (its Reshiram-fused fire);
 //   Teravolt -> Zekrom (+ Kyurem-Black fusion), both chosen Motor Drive (its Zekrom-fused electric).
+//   OPPORTUNIST (Tier 5.6 — a 1:1 clean-upside copy): whenever an OPPOSING battler's stat is boosted, the
+//   holder copies that exact boost onto itself (Attack +2 from a foe's Swords Dance, and so on), mirroring
+//   its own held-item cousin Mirror Herb. Wired at the two sites the real ability already uses: the watch
+//   hook in ChangeStatBuffs (src/battle_stat_change.c) queues the boost for an innate holder too, and the
+//   ABILITYEFFECT_OPPORTUNIST effect site (src/battle_util.c) fires it for the innate — the three callers
+//   pass the CHOSEN slot, so an IsInnateActive clause there catches an innate whose chosen ability differs,
+//   with the pop-up/record overwritten to Opportunist (Speed Boost precedent). Opportunist only ever copies
+//   a foe's *gains* (never drops), so it is already a pure boon — a plain 1:1 copy. The AI's don't-boost-
+//   into-Opportunist reads (ShouldRaiseAnyStat's guard + GetAllyStatChangeScore, src/battle_ai_util.c) are
+//   innate-aware via AI_IsInnateOnSide. CANON-ONLY (no flavor picks — free stat mirroring is strong): the sole
+//   carrier is Espathra (SPECIES_ESPATHRA, its primary ability), joining its existing innate Frisk / Speed
+//   Boost. Opportunist is Espathra's natural slot-0 ability, so it stays observable as the chosen slot with no
+//   override needed. Step 3.5: with all THREE of Espathra's abilities now innate and no free slot, both frontier
+//   sets keep their now-redundant chosen Opportunist (still correct: the chosen runs it, the innate is
+//   redundant-but-skipped there) and freeing is deferred to Batch W — the same all-abilities-innate deferral as
+//   Mold Breaker's Excadrill/Sawk/... sets.
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -8921,6 +8937,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0956
         SPECIES_ESPATHRA,
         INNATES(
+            ABILITY_OPPORTUNIST,
             ABILITY_FRISK,
             ABILITY_SPEED_BOOST
         )

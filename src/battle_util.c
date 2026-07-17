@@ -4978,26 +4978,27 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         }
         break;
     case ABILITYEFFECT_OPPORTUNIST:
-        switch (ability)
+        // FORK: innate-aware (FEATURE_INNATE_ABILITIES). The three ABILITYEFFECT_OPPORTUNIST callers
+        // (move-end, switch-in, and the post-stat-change check) pass the chosen ability, so an innate
+        // Opportunist would never match a `switch (ability)` on it. Fire on the innate too; the
+        // queued-boost flag is set at the watch hook (src/battle_stat_change.c), itself innate-aware.
+        if ((ability == ABILITY_OPPORTUNIST || IsInnateActive(battler, ABILITY_OPPORTUNIST))
+         && gProtectStructs[battler].activateOpportunist)
         {
-        case ABILITY_OPPORTUNIST:
-            if (gProtectStructs[battler].activateOpportunist)
+            for (enum Stat stat = STAT_ATK; stat < NUM_BATTLE_STATS; stat++)
             {
-                for (enum Stat stat = STAT_ATK; stat < NUM_BATTLE_STATS; stat++)
-                {
-                    u32 queuedStat = stat - 1;
-                    if (gQueuedStatBoosts[battler].stats & (1 << queuedStat))
-                        SetStatChange(battler, stat, gQueuedStatBoosts[battler].statChanges[queuedStat]);
+                u32 queuedStat = stat - 1;
+                if (gQueuedStatBoosts[battler].stats & (1 << queuedStat))
+                    SetStatChange(battler, stat, gQueuedStatBoosts[battler].statChanges[queuedStat]);
 
-                }
-                gBattleScripting.battler = gBattlerAbility = battler;
-                gProtectStructs[battler].activateOpportunist = FALSE;
-                BattleScriptCall(BattleScript_OpportunistCopyStatChange);
-                effect = 1;
             }
-            break;
-        default:
-            break;
+            gBattleScripting.battler = gBattlerAbility = battler;
+            gProtectStructs[battler].activateOpportunist = FALSE;
+            // FORK: pop-up/record show Opportunist even when the chosen ability differs (Speed Boost precedent).
+            if (GetBattlerAbility(battler) != ABILITY_OPPORTUNIST)
+                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_OPPORTUNIST;
+            BattleScriptCall(BattleScript_OpportunistCopyStatChange);
+            effect = 1;
         }
         break;
     case ABILITYEFFECT_IMMUNITY:
