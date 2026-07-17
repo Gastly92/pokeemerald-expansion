@@ -784,6 +784,24 @@
 //   Step 3.5: with all THREE of Corviknight's abilities now innate and no free slot, its frontier sets keep their
 //   now-redundant chosen Mirror Armor (still observable + correct — the chosen runs it, the innate is
 //   redundant-but-skipped there) and freeing is deferred to Batch W (Opportunist / Mold Breaker precedent).
+//   MAGIC_BOUNCE (Tier 5.8 — a 1:1 clean-upside copy): instead of being hit by a bounceable status move
+//   (Toxic, Thunder Wave, Will-O-Wisp, Leech Seed, Taunt, entry hazards, ...), the holder reflects it back at
+//   the user. It is the whole-move analogue of Mirror Armor's stat-drop bounce and reuses the upstream bounce
+//   machinery (magicBouncePending + BattleScript_MagicBounce), so wiring needed no new hook — only crediting the
+//   innate at the detection site TryMagicBounce (src/battle_move_resolution.c) and overwriting the pop-up/record to
+//   Magic Bounce for an innate holder at the script-call site MoveEndBouncedMove (Speed Boost precedent). The
+//   Dark-type Prankster-block precedence read (CanTargetBlockPranksterMove, src/battle_util.c) is innate-aware via
+//   BattlerHasAbility. Reflecting a status move never hurts the holder, so a plain 1:1 copy. Breakable, so an
+//   attacker's Mold Breaker pierces it (via IsInnateActive, matching the chosen path). AI don't-throw-a-bounceable-
+//   move reads are innate-aware: the hazard-setter guard (AI_ShouldSetUpHazards, src/battle_ai_util.c) and the
+//   move-scoring avoid cases (src/battle_ai_main.c, holder + doubles partner). CANON-ONLY (free status-move
+//   reflection is strong utility, kept tight like Mirror Armor / Opportunist / Mold Breaker): the canon carriers
+//   Espeon, the Natu line, and the Hatenna line take it (merged into any existing innate rows); the Mega carriers
+//   whose real ability IS Magic Bounce also get it as a pure-boon Mega row (Sableye / Absol / Diancie / Clefable
+//   Megas). Step 3.5: the Xatu + two Espeon frontier sets free their now-redundant chosen Magic Bounce to their
+//   real, :x:-stable chosen Synchronize (innate still bounces); the three Hatterene sets are all-abilities-innate
+//   (Healer + Anticipation + Magic Bounce) with no free slot, so they keep the redundant chosen Magic Bounce and
+//   freeing is deferred to Batch W (Corviknight / Espathra precedent).
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -1124,7 +1142,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFABLE_MEGA,
         INNATES(
             ABILITY_UNAWARE,
-            ABILITY_MAGIC_GUARD
+            ABILITY_MAGIC_GUARD,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0037
@@ -2447,13 +2466,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0177
         SPECIES_NATU,
         INNATES(
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0178
         SPECIES_XATU,
         INNATES(
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0182
@@ -2559,6 +2580,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
+        )
+    },
+    { // 0196
+        SPECIES_ESPEON,
+        INNATES(
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0197
@@ -2700,28 +2727,32 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HATENNA,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_HEALER
+            ABILITY_HEALER,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0857
         SPECIES_HATTREM,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_HEALER
+            ABILITY_HEALER,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0858
         SPECIES_HATTERENE,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_HEALER
+            ABILITY_HEALER,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0858
         SPECIES_HATTERENE_GMAX,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_HEALER
+            ABILITY_HEALER,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0928
@@ -3737,7 +3768,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SABLEYE_MEGA,
         INNATES(
             ABILITY_KEEN_EYE,
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0303
@@ -4206,14 +4238,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
-            ABILITY_SUPER_LUCK
+            ABILITY_SUPER_LUCK,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0359
         SPECIES_ABSOL_MEGA_Z,
         INNATES(
             ABILITY_PRESSURE,
-            ABILITY_SUPER_LUCK
+            ABILITY_SUPER_LUCK,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0360
@@ -7190,7 +7224,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DIANCIE_MEGA,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0720

@@ -9652,3 +9652,77 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate M
         EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);       // attacker not affected
     }
 }
+
+// Tier 5.8 — an innate Magic Bounce reflects a bounceable status move back at its user, exactly like the real
+// ability (a pure boon: it only ever spares the holder and punishes the user). Natu's chosen slot here is Early
+// Bird (also innate, inert while awake), so the innate Magic Bounce is what fires and the pop-up overwrite shows
+// Magic Bounce rather than the chosen ability. With the feature off, the chosen Early Bird does nothing and the
+// status move lands on the holder.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Bounce reflects a status move back at the attacker")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TOXIC) == EFFECT_NON_VOLATILE_STATUS);
+        ASSUME(SpeciesHasInnate(SPECIES_NATU, ABILITY_MAGIC_BOUNCE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_NATU) { Ability(ABILITY_EARLY_BIRD); } // chosen differs from the innate Magic Bounce
+        OPPONENT(SPECIES_WYNAUT);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TOXIC); }
+    } SCENE {
+        if (enabled)
+        {
+            ABILITY_POPUP(player, ABILITY_MAGIC_BOUNCE); // innate fires; pop-up overwrite shows Magic Bounce, not chosen Early Bird
+            STATUS_ICON(opponent, badPoison: TRUE);      // the move is reflected onto the attacker
+        }
+        else
+        {
+            NOT ABILITY_POPUP(player, ABILITY_MAGIC_BOUNCE);
+            STATUS_ICON(player, badPoison: TRUE);        // no innate -> the move lands on the holder
+        }
+    }
+}
+
+// Suppression parity #1: Magic Bounce is breakable, so an attacker's Mold Breaker pierces the innate exactly like a
+// chosen Magic Bounce — the status move is not reflected and lands on the holder.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Magic Bounce")
+{
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TOXIC) == EFFECT_NON_VOLATILE_STATUS);
+        ASSUME(SpeciesHasInnate(SPECIES_NATU, ABILITY_MAGIC_BOUNCE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_NATU) { Ability(ABILITY_EARLY_BIRD); } // innate Magic Bounce
+        OPPONENT(SPECIES_HAXORUS) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_TOXIC); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TOXIC); }
+    } SCENE {
+        NOT ABILITY_POPUP(player, ABILITY_MAGIC_BOUNCE); // Mold Breaker pierces -> no bounce
+        STATUS_ICON(player, badPoison: TRUE);            // the move lands on the holder
+    } THEN {
+        EXPECT_EQ(opponent->status1 & STATUS1_PSN_ANY, 0); // attacker not poisoned
+    }
+}
+
+// Suppression parity #2: an innate Magic Bounce honors general suppression via IsInnateActive. A Neutralizing Gas
+// mon on the field turns the innate off, so a status move lands on the holder instead of being reflected. (Gastro
+// Acid can't be used to test this — like the real ability, an active Magic Bounce reflects the Gastro Acid itself,
+// so it never lands to suppress the holder.)
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an innate Magic Bounce")
+{
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TOXIC) == EFFECT_NON_VOLATILE_STATUS);
+        ASSUME(SpeciesHasInnate(SPECIES_NATU, ABILITY_MAGIC_BOUNCE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WEEZING) { Ability(ABILITY_NEUTRALIZING_GAS); Moves(MOVE_TOXIC); }
+        OPPONENT(SPECIES_NATU) { Ability(ABILITY_EARLY_BIRD); } // innate Magic Bounce
+    } WHEN {
+        TURN { MOVE(player, MOVE_TOXIC); }
+    } SCENE {
+        NOT ABILITY_POPUP(opponent, ABILITY_MAGIC_BOUNCE); // innate suppressed by Neutralizing Gas -> no bounce
+        STATUS_ICON(opponent, badPoison: TRUE);            // the move lands on the holder
+    } THEN {
+        EXPECT_EQ(player->status1 & STATUS1_PSN_ANY, 0);   // attacker not poisoned
+    }
+}

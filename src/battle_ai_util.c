@@ -5958,7 +5958,8 @@ bool32 AI_ShouldSetUpHazards(enum BattlerId battlerAtk, enum BattlerId battlerDe
             return FALSE;
         if (DoesBattlerIgnoreAbilityChecks(battlerAtk, aiData->abilities[battlerAtk], move))
             return TRUE;
-        if (aiData->abilities[battlerDef] == ABILITY_MAGIC_BOUNCE)
+        if (aiData->abilities[battlerDef] == ABILITY_MAGIC_BOUNCE
+         || IsInnateActive(battlerDef, ABILITY_MAGIC_BOUNCE)) // FORK: an innate Magic Bounce foe bounces the hazard back too (Tier 5.8)
             return FALSE;
     }
     else

@@ -230,6 +230,15 @@
 //   Breaker pierces). The AI's don't-Intimidate-switch-into-Mirror-Armor read is innate-aware. Sole carrier:
 //   Corviknight (+ Gmax, its hidden ability), joining its innate Pressure / Unnerve; Step 3.5 (all three abilities
 //   now innate, no free slot) keeps its now-redundant chosen Mirror Armor and defers freeing to Batch W.
+//   MAGIC_BOUNCE (Tier 5.8 — a 1:1 clean-upside copy, canon-only): the holder reflects a bounceable status move
+//   (Toxic, Thunder Wave, Taunt, entry hazards, ...) back at the user — the whole-move analogue of Mirror Armor.
+//   Reuses the upstream bounce machinery, so it needed no new hook — only crediting the innate at TryMagicBounce
+//   (src/battle_move_resolution.c) with the pop-up/record overwritten to Magic Bounce when the chosen ability
+//   differs, plus the Dark-type Prankster-block precedence read (src/battle_util.c). Never hurts the holder, so a
+//   plain 1:1 copy; breakable (Mold Breaker pierces). AI don't-throw-a-bounceable-move reads (hazard setter +
+//   move scoring) are innate-aware. Carriers: Espeon / the Natu line / the Hatenna line, plus the pure-boon Mega
+//   rows whose real ability is Magic Bounce (Sableye / Absol / Diancie / Clefable Megas). Step 3.5: Xatu + Espeon
+//   frontier sets free to their real :x:-stable Synchronize; the all-innate Hatterene sets defer to Batch W.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

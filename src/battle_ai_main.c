@@ -1363,6 +1363,18 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
          && !AI_IsAbilityOnSide(battlerDef, ABILITY_FLOWER_VEIL) && AI_IsInnateOnSide(battlerDef, ABILITY_FLOWER_VEIL))
             RETURN_SCORE_MINUS(10);
 
+        // FORK: innate Magic Bounce (Tier 5.8, FEATURE_INNATE_ABILITIES) reflects a bounceable status move
+        // back at the user, so an innate-only holder — or, in doubles, an innate holder's partner for a
+        // spread status move — should be avoided exactly like the chosen-ability switch cases below. Each is
+        // guarded on the chosen-ability match so it never double-penalizes.
+        if (MoveCanBeBouncedBack(move)
+         && abilityDef != ABILITY_MAGIC_BOUNCE && IsInnateActive(battlerDef, ABILITY_MAGIC_BOUNCE))
+            RETURN_SCORE_MINUS(20);
+        if (hasTwoOpponents && CanMoveBeBouncedBack(battlerAtk, move)
+         && aiData->abilities[BATTLE_PARTNER(battlerDef)] != ABILITY_MAGIC_BOUNCE
+         && IsInnateActive(BATTLE_PARTNER(battlerDef), ABILITY_MAGIC_BOUNCE))
+            RETURN_SCORE_MINUS(20);
+
         // FORK: an innate Magic Guard foe (FEATURE_INNATE_ABILITIES) takes no chip damage exactly like the
         // chosen-ability case below, so discourage the same Leech Seed / same-type Curse / status-chip moves.
         // Gated on abilityDef != ABILITY_MAGIC_GUARD so it only fires for an innate-only holder (no double count).
