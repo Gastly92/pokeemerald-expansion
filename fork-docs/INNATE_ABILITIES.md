@@ -3631,6 +3631,63 @@ Guard / Regenerator), so — like the Batch J/T/K/L/U all-innate tails — they 
 Guard (still correct: the chosen runs it; the innate is redundant-but-skipped there) and are **deferred to Batch
 W** rather than a game-wide override sweep. This is **Tier 5.4**; Tier 5.5 (Mold Breaker) is next.
 
+### ABILITY_MOLD_BREAKER
+
+**Tier 5.5 — a 1:1 clean-upside copy.** The holder's moves ignore the target's ability whenever that ability is
+*breakable* (Levitate, Sturdy, Thick Fat, Multiscale, Volt/Water Absorb, Wonder Guard, Filter, …), exactly like
+the real ability. Anticipated as a "cross-cutting sweep" but it collapsed to **one clause**: the entire effect is
+funnelled through the single flag `gBattleStruct->moldBreakerActive`.
+
+**Effect (`src/battle_util.c`) — one function, everything downstream for free.** `moldBreakerActive` is set once
+per move at the `ClearDamageCalcResults` chokepoint from
+`IsMoldBreakerTypeAbility(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker))`. That function gained a single
+trailing clause:
+
+```c
+// after the chosen-slot ABILITY_MOLD_BREAKER / TERAVOLT / TURBOBLAZE / MYCELIUM_MIGHT check:
+if (IsInnateActive(battler, ABILITY_MOLD_BREAKER))
+    return TRUE;
+```
+
+Because **every** effect site (the `CanBreakThroughAbility` gate inside `GetBattlerAbility`, which returns
+`ABILITY_NONE` for a breakable defender ability while `moldBreakerActive`) reads that one flag, crediting the
+innate here covers the whole ability with no per-site edits. The clone abilities Teravolt / Turboblaze share this
+exact path — **Batch Y8** just adds their species data + two more `IsInnateActive` lines beside this one.
+
+- **No identity leak / no pop-up.** The innate path deliberately does **not** call `RecordAbilityBattle` (innates
+  are never identity) and there is **no** switch-in "breaks the mold" message — that flavor lives on the
+  chosen-slot switch-in path (`src/battle_util.c` ~L3202), which an innate never triggers. Mold Breaker's real
+  effect has no per-move pop-up, so nothing else is needed.
+- **Suppression parity, 1:1.** Mold Breaker is `.breakable = FALSE` and `CanBreakThroughInnate` exempts the
+  attacker's own ability, so an innate Mold Breaker is never self-broken — but it *is* suppressed by Gastro Acid /
+  Neutralizing Gas exactly like the real ability (both the top-of-function `gastroAcid` guard and `IsInnateActive`
+  bail), and is a no-op with the feature off.
+
+**AI — automatic.** Every AI read of Mold Breaker routes through the **same** `IsMoldBreakerTypeAbility`
+(`AI_GetMoldBreakerSanitizedAbility` and ~12 call sites across `battle_ai_util.c` / `battle_ai_main.c` /
+`battle_ai_switch.c`: damage/immunity prediction, the ice-face/disguise setup-safety checks, the switch
+heuristics), each passing a matching `(battler, aiData->abilities[battler])` pair — so the one clause makes them
+all innate-aware for free, keyed off the real battler. No dedicated AI edits.
+
+**Species (Step 1) — canon-only** (ability-ignoring is a strong offensive utility, kept tight, matching the Y5 /
+Comatose / Magic Guard canon-only decisions). Every canon Mold Breaker user in **any** slot, merged into existing
+innate rows where present: **Pinsir** (+ Mega, pure-boon), the **Cranidos / Rampardos** line (new rows), the
+**Drilbur / Excadrill** (+ Mega) line, **Throh**, **Sawk**, the **Basculin** (all three stripes) / **Basculegion**
+(M/F) line, the **Axew / Fraxure / Haxorus** line, **Druddigon**, the **Pancham / Pangoro** line, **Hawlucha**
+(+ Mega), the **Tinkatink / Tinkatuff / Tinkaton** line, **Veluza**, and **Ogerpon-Hearthflame** (new row). The
+**all-Mold-Breaker Mega forms** (Emboar / Gyarados / Ampharos Mega, whose own ability data is Mold Breaker in
+every slot) are **omitted as redundant** — their chosen ability is always Mold Breaker, so an innate could never
+be observed (the Calyrex / Mega Lopunny omission precedent).
+
+**Step 3.5.** Nineteen hardcoded frontier sets held Mold Breaker (`src/fork/frontier_extended_mons.c`). Only
+**Rampardos** has a clean complementary real slot — it is freed from chosen Mold Breaker to its **`:x:` Sheer
+Force** HA (a real slot, no override needed), so a chosen ability stays observable atop the innate. Every other
+Mold Breaker set is on a species whose remaining real slots are **themselves now innate** (Excadrill ×3, Sawk ×2,
+Haxorus ×2 — its only non-innate slot Rivalry is a drawback — Pangoro ×2, Hawlucha ×2, Basculegion ×2, Tinkaton
+×2, Veluza ×2, Ogerpon-Hearthflame), so they keep their now-redundant chosen Mold Breaker (still correct: the
+chosen runs it; the innate is redundant-but-skipped there) and are **deferred to Batch W** — the same
+all-abilities-innate deferral as Batch J/T/K/L/U/Y5.
+
 ### Batch X — script `jumpifability` innate-awareness
 
 A **cross-cutting polish** follow-up (not one of the 133 pending abilities): a handful of ability blocks live

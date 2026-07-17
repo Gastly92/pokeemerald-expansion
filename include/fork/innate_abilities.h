@@ -199,6 +199,12 @@
 //   predictors and status/hazard/recoil/weather heuristics are innate-aware too. Breakable (Mold Breaker pierces). Canon
 //   carriers only (a strong defensive boon, like Y5 / Comatose): the Clefairy, Abra and Solosis lines (+ Mega Clefable /
 //   Mega Alakazam) and Sigilyph, each merged into its existing innate row,
+//   Mold Breaker (Tier 5.5, 1:1) — the holder's moves ignore the target's breakable ability. The whole effect flows
+//   through the single gBattleStruct->moldBreakerActive flag set from IsMoldBreakerTypeAbility (src/battle_util.c), so
+//   one IsInnateActive clause there makes every effect site and every AI read innate-aware for free. Canon carriers
+//   only (ability-ignoring is strong offensive utility): the Pinsir, Cranidos, Drilbur, Basculin/Basculegion, Axew,
+//   Pancham, Tinkatink lines, Throh, Sawk, Druddigon, Hawlucha, Veluza and Ogerpon-Hearthflame (Megas whose own
+//   ability is already Mold Breaker are omitted as redundant); Teravolt / Turboblaze clones follow in Batch Y8.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

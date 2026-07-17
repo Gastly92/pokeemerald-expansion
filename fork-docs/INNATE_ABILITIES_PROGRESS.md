@@ -110,7 +110,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :white_check_mark: | Technician | Boosts the power of the Pokémon's moves by 50% if their power is 60 or less. |
 | :white_check_mark: | Leaf Guard | The Pokémon is immune to status conditions in harsh sunlight. |
 | :x: | Klutz | Items do not work when held by the Pokémon. |
-| :white_large_square: | Mold Breaker | The Pokémon's moves are unaffected by the Ability of the target (with certain exceptions). |
+| :white_check_mark: | Mold Breaker | The Pokémon's moves are unaffected by the Ability of the target (with certain exceptions). |
 | :white_check_mark: | Super Luck | The Pokémon has a 1-stage Critical-Hit Ratio Boost. |
 | :white_check_mark: | Aftermath | Attackers that knock out the Pokémon with a contact move take damage equal to 1/4 of their max HP. |
 | :white_check_mark: | Anticipation | When the Pokémon enters a battle, it senses whether the opponents know any one-hit KO moves or moves that are super effective against it. |

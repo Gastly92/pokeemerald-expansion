@@ -5259,6 +5259,19 @@ bool32 IsMoldBreakerTypeAbility(enum BattlerId battler, enum Ability ability)
         return TRUE;
     }
 
+    // FORK: an innate Mold Breaker (FEATURE_INNATE_ABILITIES) lets the holder's moves ignore
+    // the target's breakable ability, exactly like the real ability — a clean upside, so 1:1.
+    // The whole effect flows through gBattleStruct->moldBreakerActive (set from this function at
+    // the ClearDamageCalcResults chokepoint), so crediting the innate here covers every effect
+    // site AND all the AI reads that route through IsMoldBreakerTypeAbility for free. No
+    // RecordAbilityBattle (innates are never identity) and no switch-in "breaks the mold" pop-up
+    // (that lives on the chosen-slot switch-in path, which an innate deliberately never triggers).
+    // IsInnateActive() honors suppression/Mold-Breaker parity and is FALSE with the feature off,
+    // so this is a no-op in stock play. (Teravolt/Turboblaze clones follow in Batch Y8, which just
+    // adds their species data + the two matching IsInnateActive lines here.)
+    if (IsInnateActive(battler, ABILITY_MOLD_BREAKER))
+        return TRUE;
+
     return FALSE;
 }
 

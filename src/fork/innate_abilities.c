@@ -717,6 +717,32 @@
 //   the Clefairy line (Cleffa / Clefairy / Clefable, + fork Mega Clefable), the Abra line (Abra / Kadabra / Alakazam, +
 //   Mega Alakazam), Sigilyph, and the Solosis line (Solosis / Duosion / Reuniclus) — each merged into its existing innate
 //   row.
+//   MOLD_BREAKER (Tier 5.5 — a 1:1 clean-upside copy): the holder's moves ignore the target's ability whenever that
+//   ability is breakable (Levitate, Sturdy, Thick Fat, Multiscale, Volt Absorb, Wonder Guard, ...), exactly like the
+//   real ability. The whole effect flows through ONE flag, gBattleStruct->moldBreakerActive, set from
+//   IsMoldBreakerTypeAbility(gBattlerAttacker, ...) at the ClearDamageCalcResults chokepoint (src/battle_util.c); that
+//   function gained a single IsInnateActive(battler, ABILITY_MOLD_BREAKER) clause, so EVERY effect site (the
+//   CanBreakThroughAbility gate in GetBattlerAbility) AND every AI read that routes through IsMoldBreakerTypeAbility
+//   (battle_ai_util.c / battle_ai_main.c / battle_ai_switch.c — damage prediction, the ice-face/disguise setup-safety
+//   checks, the switch heuristics) become innate-aware for free with no per-site edits. No RecordAbilityBattle for the
+//   innate (innates are never identity) and no switch-in "breaks the mold" pop-up (that lives on the chosen-slot
+//   switch-in path, which an innate deliberately never triggers). Mold Breaker's real ability has no downside, so it is
+//   a plain 1:1 copy; it is itself never self-broken (.breakable = FALSE, and CanBreakThroughInnate exempts the
+//   attacker's own ability), but is suppressible by Gastro Acid / Neutralizing Gas exactly like the real ability via
+//   IsInnateActive. CANON-ONLY (no flavor picks — ability-ignoring is a strong offensive utility, kept tight): every
+//   canon Mold Breaker user in any slot — Pinsir (+ Mega), the Cranidos / Rampardos line, the Drilbur / Excadrill
+//   (+ Mega) line, Throh, Sawk, the Basculin (all three stripes) / Basculegion (M/F) line, the Axew / Fraxure / Haxorus
+//   line, Druddigon, the Pancham / Pangoro line, Hawlucha (+ Mega), the Tinkatink / Tinkatuff / Tinkaton line, Veluza,
+//   and Ogerpon-Hearthflame — each merged into its existing innate row (new rows for Cranidos / Rampardos / Ogerpon-
+//   Hearthflame). The all-Mold-Breaker Mega forms (Emboar / Gyarados / Ampharos Mega, whose own ability data is Mold
+//   Breaker in every slot) are OMITTED as redundant: their chosen ability is always Mold Breaker, so an innate could
+//   never be observed. Step 3.5: only Rampardos has a clean complementary real slot, freed from chosen Mold Breaker to
+//   its :x: Sheer Force HA; every other Mold Breaker frontier set is on an all-abilities-innate species (Excadrill,
+//   Sawk, Haxorus, Pangoro, Hawlucha, Basculegion, Tinkaton, Veluza, Ogerpon-Hearthflame) with no free complementary
+//   slot, so it keeps its now-redundant chosen Mold Breaker and is deferred to the Batch W override sweep — still
+//   correct (the chosen ability runs; the innate is redundant-but-skipped there), matching the Batch J/T/Y5
+//   all-abilities-innate deferrals. (The Teravolt / Turboblaze clones share this exact machinery and follow in Batch
+//   Y8, which just adds their species data + the two matching IsInnateActive lines in IsMoldBreakerTypeAbility.)
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -1928,6 +1954,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PINSIR,
         INNATES(
             ABILITY_HYPER_CUTTER,
+            ABILITY_MOLD_BREAKER,
             ABILITY_MOXIE
         )
     },
@@ -1935,6 +1962,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PINSIR_MEGA,
         INNATES(
             ABILITY_HYPER_CUTTER,
+            ABILITY_MOLD_BREAKER,
             ABILITY_MOXIE
         )
     },
@@ -4516,6 +4544,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TECHNICIAN
         )
     },
+    { // 0408
+        SPECIES_CRANIDOS,
+        INNATES(
+            ABILITY_MOLD_BREAKER
+        )
+    },
+    { // 0409
+        SPECIES_RAMPARDOS,
+        INNATES(
+            ABILITY_MOLD_BREAKER
+        )
+    },
     { // 0410
         SPECIES_SHIELDON,
         INNATES(
@@ -5445,6 +5485,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0529
         SPECIES_DRILBUR,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH
         )
@@ -5452,6 +5493,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0530
         SPECIES_EXCADRILL,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH
         )
@@ -5459,6 +5501,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0530
         SPECIES_EXCADRILL_MEGA,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_PIERCING_DRILL,
             ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH
@@ -5522,13 +5565,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_THROH,
         INNATES(
             ABILITY_GUTS,
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_MOLD_BREAKER
         )
     },
     { // 0539
         SPECIES_SAWK,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_MOLD_BREAKER,
             ABILITY_STURDY
         )
     },
@@ -5628,6 +5673,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULIN_RED_STRIPED,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_MOLD_BREAKER,
             ABILITY_RECKLESS
         )
     },
@@ -5635,6 +5681,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULIN_BLUE_STRIPED,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_MOLD_BREAKER,
             ABILITY_ROCK_HEAD
         )
     },
@@ -5642,6 +5689,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULIN_WHITE_STRIPED,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_MOLD_BREAKER,
             ABILITY_RATTLED
         )
     },
@@ -6112,18 +6160,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0610
         SPECIES_AXEW,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_UNNERVE
         )
     },
     { // 0611
         SPECIES_FRAXURE,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_UNNERVE
         )
     },
     { // 0612
         SPECIES_HAXORUS,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_UNNERVE
         )
     },
@@ -6191,6 +6242,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0621
         SPECIES_DRUDDIGON,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_ROUGH_SKIN
         )
     },
@@ -6625,6 +6677,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PANCHAM,
         INNATES(
             ABILITY_IRON_FIST,
+            ABILITY_MOLD_BREAKER,
             ABILITY_SCRAPPY
         )
     },
@@ -6632,6 +6685,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PANGORO,
         INNATES(
             ABILITY_IRON_FIST,
+            ABILITY_MOLD_BREAKER,
             ABILITY_SCRAPPY
         )
     },
@@ -6867,13 +6921,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HAWLUCHA,
         INNATES(
             ABILITY_LIMBER,
+            ABILITY_MOLD_BREAKER,
             ABILITY_UNBURDEN
         )
     },
     { // 0701
         SPECIES_HAWLUCHA_MEGA,
         INNATES(
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_MOLD_BREAKER
         )
     },
     { // 0703
@@ -8455,6 +8511,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULEGION_M,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_MOLD_BREAKER,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -8462,6 +8519,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULEGION_F,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_MOLD_BREAKER,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -8837,6 +8895,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0957
         SPECIES_TINKATINK,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_OWN_TEMPO,
             ABILITY_PICKPOCKET
         )
@@ -8844,6 +8903,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0958
         SPECIES_TINKATUFF,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_OWN_TEMPO,
             ABILITY_PICKPOCKET
         )
@@ -8851,6 +8911,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0959
         SPECIES_TINKATON,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_OWN_TEMPO,
             ABILITY_PICKPOCKET
         )
@@ -8953,6 +9014,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0976
         SPECIES_VELUZA,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_SHARPNESS
         )
     },
@@ -9099,6 +9161,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OGERPON_CORNERSTONE,
         INNATES(
             ABILITY_STURDY
+        )
+    },
+    { // 1017
+        SPECIES_OGERPON_HEARTHFLAME,
+        INNATES(
+            ABILITY_MOLD_BREAKER
         )
     },
     { // 1018

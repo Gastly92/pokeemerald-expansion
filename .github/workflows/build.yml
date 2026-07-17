@@ -26,21 +26,48 @@ jobs:
     if: github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
     outputs:
-      code: ${{ steps.filter.outputs.code }}
+      code: ${{ steps.decide.outputs.code }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
       # A filter of only negation patterns matches any changed file that is
-      # NOT markdown. If dorny can't determine the diff it returns true, so an
-      # unknown state runs full CI rather than skipping it.
+      # NOT markdown, so `code` is true whenever a non-*.md file changed.
+      #
+      # FORK: fail open. dorny calls the GitHub REST API (listFiles) to get the
+      # PR's changed-file list; during a GitHub API outage that call returns an
+      # HTML error page and this step FAILS outright — it does NOT quietly
+      # "return true". A bare failure here would skip every build/test job and
+      # fail the required `build` gate on a pure infra blip (observed: the
+      # "Degraded REST API Availability" incident). So we let this step fail
+      # softly (continue-on-error) and let the `decide` step below default
+      # code=true whenever the filter didn't conclusively answer.
       - name: Detect non-docs changes
         id: filter
+        continue-on-error: true
         uses: dorny/paths-filter@v3
         with:
           filters: |
             code:
               - '!**/*.md'
+
+      # FORK: resolve the job output. Pass through the filter's answer when it
+      # actually produced one; otherwise (the step errored / the API was down /
+      # the output is empty) default to code=true so the FULL build+test suite
+      # runs. Unknown state must run CI, never silently skip it.
+      - name: Decide whether to run heavy jobs
+        id: decide
+        env:
+          FILTER_OUTCOME: ${{ steps.filter.outcome }}
+          FILTER_CODE: ${{ steps.filter.outputs.code }}
+        run: |
+          if [ "$FILTER_OUTCOME" = "success" ] && [ -n "$FILTER_CODE" ]; then
+            echo "paths-filter concluded: code=$FILTER_CODE"
+            echo "code=$FILTER_CODE" >> "$GITHUB_OUTPUT"
+          else
+            echo "paths-filter did not conclude (outcome=$FILTER_OUTCOME, code='$FILTER_CODE'); defaulting code=true to run full CI"
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          fi
 
   build-emerald:
     needs: changes
