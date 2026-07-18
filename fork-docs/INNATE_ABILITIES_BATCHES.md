@@ -419,19 +419,76 @@ a documented half missing. Batch L built `TryActivateInnateSwitchInEffects`
   a fallback for Immunity and non-switch-in re-checks.
 
 ### Batch W — Frontier-slot freeing sweep (Step 3.5 backlog)
-**data cleanup · multi-session · low-risk · deferred across J/T/K/L/M/U**
+**data cleanup · multi-session · low-risk · deferred across I/J/T/K/L/U + Tier 5/Y tails**
 
-Every active batch (J, T, K, L, M, U) deferred the same Step-3.5 tail: species in
-`src/fork/frontier_extended_mons.c` whose real abilities are **all now innate**
-keep a now-redundant *chosen* ability instead of freeing that complementary slot
-to a stable `:x:` pick. This is **functionally correct today** (the chosen ability
-still runs; the innate is redundant-but-skipped there) — it's an *upgrade*, not a
-bug. Freeing each needs a game-wide fork override **plus a per-species
-`test/battle/` audit**, so it's a mechanical, low-risk track best done in its own
-focused sessions, in parallel with Tier 5. See the `INNATE ABILITIES` header note
-in `frontier_extended_mons.c` and the per-batch `DEFERRED` notes in
-`INNATE_ABILITIES.md` for the affected set (~40 Batch-J sets and the tails of T/K/
-L/M/U).
+Every batch that made a dense-ability species innate deferred the same Step-3.5
+tail: sets in `src/fork/frontier_extended_mons.c` whose real abilities are **all
+now innate** keep a now-redundant *chosen* ability instead of freeing that
+complementary slot to a stable `:x:` pick. This is **functionally correct today**
+(the chosen ability still runs; the innate is redundant-but-skipped there) — it's
+an *upgrade*, not a bug. Freeing each needs a game-wide fork override **plus a
+per-species `test/battle/` audit**, so it's a mechanical, low-risk track best done
+in its own focused sessions, in parallel with Tier 5. See the `INNATE ABILITIES`
+header note in `frontier_extended_mons.c` and the per-batch `DEFERRED` notes in
+`INNATE_ABILITIES.md` for the affected sets. **The [Batch W sub-queue](#batch-w-sub-queue-the-breakdown)
+below is the actionable breakdown** — take it top-down exactly like the main queue.
+
+#### Batch W sub-queue (the breakdown)
+
+**The unit of work.** Batch W's deferrals are all the *same shape*: a frontier set
+whose `.ability` is a now-innate ability because **every one of that species' real
+abilities became innate**, so there is no free complementary real slot to repoint
+to. Freeing one means giving the species a **fork-owned chosen-ability override**
+(`src/fork/species_ability_overrides.c`) that hands out a **stable `:x:` pick** (an
+ability never on the innate allowlist, so it won't need re-pointing as the
+allowlist grows), then auditing that species in `test/battle/` so the new chosen
+ability doesn't perturb a pinned test. The override is **per species, not per set**
+(Corviknight's 3 sets share one override), so the species count is the real size.
+
+**Recipe for one species (repeat across the sub-batch):**
+1. Re-grep the species' frontier sets (`grep -n SPECIES_X src/fork/frontier_extended_mons.c`)
+   and its real ability data (`gSpeciesInfo[SPECIES_X].abilities[]`).
+2. Confirm all its real abilities are innate. If a free real slot exists, just
+   repoint `.ability` to it — no override needed, and it isn't really a Batch W set.
+3. Pick a **stable `:x:`** chosen ability (see "Why some abilities are never wired"
+   in `INNATE_ABILITIES.md`) that is observable and thematically sensible; prefer
+   one already used for a sibling (Snow Warning for ice legends, Adaptability for
+   STAB attackers, Water Absorb for Water walls, Sheer Force for physical attackers).
+4. Add the `{ SPECIES_X, slot, ABILITY_Y }` row to `species_ability_overrides.c`.
+5. Repoint each of that species' `.ability` frontier rows to the new chosen ability
+   and drop the "redundant/deferred" comment.
+6. `make check TESTS="..."` for any test that pins the species; the roster test
+   (`test/frontier_extended_roster.c`) enforces every `.ability` stays slot-legal.
+
+**Order** — smallest / most self-contained first (like the Tier 5 sub-queue). The
+next sub-batch is the first row still `open`.
+
+| # | Sub-batch | Species (re-grep for exact sets) | ~sets | Status |
+| :-: | :-- | :-- | :-: | :-: |
+| W1 | Tier 5 & Y5 single-species tails | Espathra (5.6), Corviknight (5.7), Hatterene (5.8), Oricorio base+Pa'u (5.9), Garganacl (Y5) | ~13 | open |
+| W2 | Tier 5.4 Magic Guard all-innate | Clefable, Sigilyph, Reuniclus | ~7 | open |
+| W3 | Tier 5.5 Mold Breaker all-innate | Excadrill, Sawk, Haxorus, Pangoro, Hawlucha, Basculegion, Tinkaton, Veluza, Ogerpon-Hearthflame | ~18 | open |
+| W4 | Batch U ally-support all-innate | Dialga, Palkia, Giratina, Orbeetle, Aromatisse | 7 | open |
+| W5 | Batch T berry/item all-innate | Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne, Appletun | ~7 | open |
+| W6 | Batch K steal / Liquid Ooze / Cursed Body all-innate | Tentacruel, Swalot, Weavile, Grimmsnarl, Delphox, Klefki, Hoopa (+Unbound), Froslass, Banette | ~19 | open |
+| W7 | Batch L Download all-innate | Porygon-Z, Genesect | 4 | open |
+| W8 | Batch L Intimidate all-innate (**split by dex**) | the ~40 sets that hardcoded Intimidate | ~40 | open |
+| W9 | Batch I status-immunity all-innate (**split by dex**) | ~24 sets — see the Batch I note in `FORK.md`; re-grep the status-immunity innates | ~24 | open |
+| W10 | Batch J end-of-turn all-innate (**split by dex**) | Blastoise, Dewgong, Chansey, Blissey, Ludicolo, Manaphy, Phione, Darkrai, the Avalugg / Exeggutor / Bellossom / Walrein / Luvdisc / Gorebyss / Whiscash / Tropius / Glaceon / Gliscor lines, … | ~40 | open |
+
+W8–W10 are each too big for one PR — carve them by National-Dex range into
+review-sized chunks (~8–12 species), take them top-down, and mark sub-chunks `done`
+in place. **Dugtrio-Alola** (Batch K Tangling Hair) is **excluded**: its slot is
+test-pinned (`test/battle/move_effect/pursuit.c`), so it stays a real ability.
+
+**Scope note.** This breakdown folds in two tails the original Batch W line didn't
+name: **Batch I** (~24 status-immunity all-innate sets, tracked separately in
+`FORK.md`) and the **Tier 5.5–5.9 / Y5** one-off tails (which accrued after the
+Batch W row was written). All are the same override-plus-audit work, so they belong
+in one sweep. **Batch M and Tier 5.10 (Flower Gift) contribute nothing** (M freed or
+hardcoded no sets; no Cherrim on the roster). Batch W is **done** only when every
+W-row above reads `done`; at that point the whole batches doc can be retired (its
+lifecycle rule), leaving the progress doc + wiring reference as the record.
 
 ### Batch X — Script `jumpifability` innate-awareness (cross-slot) ✅ DONE
 **cross-cutting polish · companion to Mold Breaker (5.5)**
@@ -503,7 +560,7 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 | 33 | Tier 5.9 — Dancer | one-off | done |
 | 34 | Tier 5.10 — Flower Gift | one-off | done |
 | 35 | Tier 5.11 — Aura Break (resolve as won't-wire, don't ship a dead clause) | disposition | done (won't-wire: flipped to `:x:` with rationale in the progress doc + auras bucket of INNATE_ABILITIES.md; no code) |
-| ⟂ | Batch W — Frontier-slot freeing sweep (Step 3.5 backlog, J/T/K/L/M/U) | data cleanup, multi-session | open (parallel track) |
+| ⟂ | Batch W — Frontier-slot freeing sweep (Step 3.5 backlog, I/J/T/K/L/U + Tier 5/Y tails) | data cleanup, multi-session | open (parallel track; broken into the ordered [W1–W10 sub-queue](#batch-w-sub-queue-the-breakdown)) |
 
 > Step 9 folds Batch E into D (same code block). Steps 24–35 are the **ordered**
 > Tier 5 one-offs (see the [Tier 5 sub-queue](#tier-5--bespoke--deferred-one-off-multi-site-or-dependency-blocked)) —
@@ -580,7 +637,7 @@ section for detail.
 | Follow-up | Kind | Scope | Status |
 | :-- | :-- | :-- | :-: |
 | V — Guard Dog + Pastel Veil partial halves | active (Batch L driver now exists) | 2 half-abilities | done |
-| W — Frontier-slot freeing sweep | data cleanup, multi-session | ~40 J-sets + T/K/L/M/U + Tier 5.4 tails | open (parallel track) |
+| W — Frontier-slot freeing sweep | data cleanup, multi-session | ~24 I-sets + ~40 J-sets + T/K/L/U + Tier 5.4–5.9/Y5 tails | open (parallel track; ordered [W1–W10 breakdown](#batch-w-sub-queue-the-breakdown)) |
 | X — Script `jumpifability` innate-awareness | cross-cutting polish | Sticky Hold / Own Tempo cross-slot reads | done |
 | Y — Promoted-from-rejected clones | active/calc/trait (drivers exist) | 18 (see sub-groups) | done (Y1–Y8 all done) |
 
