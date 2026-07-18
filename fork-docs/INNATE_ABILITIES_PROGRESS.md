@@ -194,7 +194,7 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Parental Bond | The parent and child attack one after the other. The power of the child's attacks is 1/4 of those of the parent. |
 | :x: | Dark Aura | Powers up the Dark-type moves of all Pokémon on the field. |
 | :x: | Fairy Aura | Boosts the power of the Fairy-type moves of all Pokémon on the field by 33%. |
-| :white_large_square: | Aura Break | The effects of "Aura" Abilities are reversed to lower the power of affected moves. |
+| :x: | Aura Break | The effects of "Aura" Abilities are reversed to lower the power of affected moves. (Won't wire: its counterparts Dark Aura / Fairy Aura are `:x:`, so an innate clause would be dead code. See INNATE_ABILITIES.md.) |
 | :x: | Primordial Sea | The Pokémon changes the weather to nullify Fire-type attacks. |
 | :x: | Desolate Land | The Pokémon changes the weather to nullify Water-type attacks. |
 | :x: | Delta Stream | The Pokémon changes the weather so that no moves are supereffective against the Flying type. |
