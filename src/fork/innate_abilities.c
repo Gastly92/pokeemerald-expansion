@@ -817,6 +817,21 @@
 //   Hisui), Meloetta (both formes) and Maractus — where the innate is the observable one. Step 3.5: the two
 //   Oricorio frontier sets keep their now-redundant chosen Dancer (still observable + correct), deferred to
 //   Batch W (Oricorio has no other real ability to free the slot to).
+//   FLOWER_GIFT (Tier 5.10 — a PURE-BOON divergence): the real ability boosts the holder's (and its allies')
+//   physical Attack and Sp. Def by 50% in harsh sunlight, but only once Cherrim has flipped to its Sunshine
+//   form via the weather form change. The innate ships the STAT BOOST ONLY (it deliberately DROPS the Cherrim
+//   form change — that display/form half stays chosen-only), so all four calc sites in CalcAttackStat /
+//   GetDefenderAbilitiesModifier (src/battle_util.c) that the chosen case gates on SPECIES_CHERRIM_SUNSHINE
+//   are mirrored beside it gated on sun directly (IsBattlerWeatherAffected, so Utility Umbrella / Cloud Nine
+//   suppress it exactly like the chosen path): the holder's own Attack (physical) + Sp. Def (special) halves,
+//   plus the two ally halves that boost a partner in doubles. Each clause guards against the chosen case with
+//   `!= ABILITY_FLOWER_GIFT` so a real Cherrim-Sunshine never double-applies. AI weather-move scoring credits
+//   the innate's sun benefit (DoesInnateBenefitFromWeather in battle_ai_field_statuses.c +
+//   DoesAbilityBenefitFromSunOrRain in battle_ai_main.c); on-field damage prediction is correct for free
+//   (shared calc). Not breakable. Canon: Cherrim (both forms — Flower Gift is its sole ability, so the innate
+//   is redundant-but-correct, added per the Oricorio/Dancer convention). Flavor (observable, since their
+//   chosen abilities differ): the Sunkern / Sunflora sunflower line (the Sun Pokemon, thrives on sunlight).
+//   Step 3.5 no-op (no frontier set hardcodes Flower Gift).
 //
 // The exact per-ability semantics — effect sites, the deliberate pure-boon
 // divergences, the AI wiring, and the species-selection rationale — live in the
@@ -2559,14 +2574,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SUNKERN,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_FLOWER_GIFT // flavor: the Seed Pokemon that soaks up sunlight; observable (chosen Chlorophyll/Solar Power differ)
         )
     },
     { // 0192
         SPECIES_SUNFLORA,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_FLOWER_GIFT // flavor: the Sun Pokemon (a sunflower that thrives on sunlight); observable (chosen Chlorophyll/Solar Power differ)
         )
     },
     { // 0193
@@ -4727,6 +4744,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHERUBI,
         INNATES(
             ABILITY_CHLOROPHYLL
+        )
+    },
+    { // 0421
+        SPECIES_CHERRIM_OVERCAST,
+        INNATES(
+            ABILITY_FLOWER_GIFT // canon: Cherrim's sole ability, persisted as an innate (redundant-but-correct)
+        )
+    },
+    { // 0421 (Sunshine Form)
+        SPECIES_CHERRIM_SUNSHINE,
+        INNATES(
+            ABILITY_FLOWER_GIFT // canon: keyed to the sunshine form too, so the innate survives the weather form change
         )
     },
     { // 0422
