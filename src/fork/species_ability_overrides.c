@@ -888,6 +888,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TURTONATOR, 1,
         ABILITY_FLAME_BODY
     },
+    { // 0741
+        // Oricorio's sole real ability (Dancer) is now innate (Tier 5.9), and it's a frontier set, so like the
+        // other sole-ability innate carriers its EMPTY slot 1 takes a chosen ability. Tinted Lens is an already-
+        // implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) the Baile dancer does not carry
+        // innately: its Life Orb Revelation Dance / Hurricane special sweeper punches through resists for full
+        // damage, a clean offensive boon on top of the innate Dancer copy.
+        SPECIES_ORICORIO, 1,
+        ABILITY_TINTED_LENS
+    },
+    { // 0741
+        // Oricorio-Pau shares base Oricorio's sole Dancer (now innate); its EMPTY slot 1 takes the same chosen
+        // Tinted Lens so the ability is consistent across the forms and lets its Hurricane / Revelation Dance
+        // pivot hit resists for full, on top of the innate Dancer.
+        SPECIES_ORICORIO_PAU, 1,
+        ABILITY_TINTED_LENS
+    },
     { // 0779
         // Bruxish's three real abilities (Dazzling, Strong Jaw, Wonder Skin) are ALL now innate, so its
         // innate-redundant slot-1 Strong Jaw -- unpinned by any test (audited: only slot-0 Dazzling is
@@ -1048,6 +1064,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GREEDENT, 1,
         ABILITY_PICKUP
     },
+    { // 0823
+        // Corviknight's three real abilities (Pressure, Unnerve, Mirror Armor) are ALL now innate (Tier 5.7);
+        // slot-2 Mirror Armor is pinned by tests (mirror_armor.c / pursuit.c / sticky_web.c / parting_shot.c /
+        // ...), so its innate-redundant slot-1 Unnerve -- unpinned by any test (audited) and dead weight on a wall
+        // -- takes Bulletproof. Bulletproof is :x: (never an innate -> stable) and thematic for the armored raven:
+        // it deflects the Focus Blast / Sludge Bomb / Energy Ball ball-and-bomb moves that threaten its Steel/Flying
+        // Defog wall, on top of the innate Mirror Armor and Pressure. Same pick as the Steel walls Skarmory / Registeel.
+        SPECIES_CORVIKNIGHT, 1,
+        ABILITY_BULLETPROOF
+    },
     { // 0847
         // Barraskewda's only real abilities (Swift Swim, Propeller Tail) are BOTH now innate, so its EMPTY
         // slot 1 takes Water Absorb — :x: (never an innate -> stable) and on-theme for the skewer fish: it
@@ -1064,6 +1090,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // boon for its bulky Octolock / Bulk Up setup sweeper.
         SPECIES_GRAPPLOCT, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0858
+        // Hatterene's three real abilities (Healer, Anticipation, Magic Bounce) are ALL now innate (Tier 5.8), so
+        // its innate-redundant slot-1 Anticipation -- unpinned by any test (audited: only dynamax.c references
+        // Hatterene, and never pins Anticipation) -- takes Unaware. Unaware is an already-implemented
+        // :white_check_mark: innate (stable, like Slurpuff / Gothitelle / Ursaluna-Bloodmoon) the serene witch
+        // does not carry innately and a pure boon for its bulky Calm Mind sets: it ignores the foe's stat boosts,
+        // on top of the innate Magic Bounce reflection. (Slot-2 Magic Bounce stays a real slot -- its identity.)
+        SPECIES_HATTERENE, 1,
+        ABILITY_UNAWARE
     },
     { // 0865
         // Sirfetch'd's Scrappy is now innate and its remaining slot-0 Steadfast is weak (and pending), so its
@@ -1229,6 +1265,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MAUSHOLD, 1,
         ABILITY_NO_GUARD
     },
+    { // 0934
+        // Garganacl's three real abilities (Purifying Salt, Sturdy, Clear Body) are ALL now innate; slot-0
+        // Purifying Salt is pinned by purifying_salt.c, so its innate-redundant slot-1 Sturdy -- unpinned by any
+        // test (audited) -- takes Solid Rock. Solid Rock is an already-implemented :white_check_mark: innate
+        // (stable, like Regirock / Carbink / Stonjourner / Stakataka) the rock-salt golem does not carry innately
+        // and blunts the supereffective Water / Grass / Ground / Steel / Fighting hits its Salt Cure wall fears,
+        // on top of the innate Purifying Salt status immunity.
+        SPECIES_GARGANACL, 1,
+        ABILITY_SOLID_ROCK
+    },
     { // 0943
         // Guard Dog and Stakeout now innate (slot-0 Intimidate is pending), so its innate-redundant slot-2
         // Stakeout (audited: unpinned) takes Strong Jaw, an implemented :white_check_mark: innate (stable) that
@@ -1243,6 +1289,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Flamethrower / Earth Power gain +30% and drop their secondaries (and skip Life Orb recoil too).
         SPECIES_SCOVILLAIN, 2,
         ABILITY_SHEER_FORCE
+    },
+    { // 0956
+        // Espathra's three real abilities (Opportunist, Frisk, Speed Boost) are ALL now innate; slot-0
+        // Opportunist is pinned by opportunist.c, so its innate-redundant slot-1 Frisk -- unpinned by any test
+        // (audited) -- takes Competitive. Competitive is an already-implemented :white_check_mark: innate (stable)
+        // the Ostrich Pokemon does not carry innately and is self-synergistic with its Calm Mind / Stored Power
+        // sweeper: a foe's stat drop instead sharply raises its Sp. Atk (feeding Stored Power), on top of the
+        // innate Opportunist boost-copy and Speed Boost.
+        SPECIES_ESPATHRA, 1,
+        ABILITY_COMPETITIVE
     },
     { // 0961
         // Wugtrio's real abilities are Gooey (slot 0, now innate), Rattled (slot 1, still :white_large_square:

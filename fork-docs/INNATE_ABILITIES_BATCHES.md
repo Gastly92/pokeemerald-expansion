@@ -465,7 +465,7 @@ next sub-batch is the first row still `open`.
 
 | # | Sub-batch | Species (re-grep for exact sets) | ~sets | Status |
 | :-: | :-- | :-- | :-: | :-: |
-| W1 | Tier 5 & Y5 single-species tails | Espathra (5.6), Corviknight (5.7), Hatterene (5.8), Oricorio base+Pa'u (5.9), Garganacl (Y5) | ~13 | open |
+| W1 | Tier 5 & Y5 single-species tails | Espathra (5.6), Corviknight (5.7), Hatterene (5.8), Oricorio base+Pa'u (5.9), Garganacl (Y5) | 13 | done (fork chosen overrides: Espathra→Competitive, Corviknight→Bulletproof, Hatterene→Unaware, Oricorio+Pau→Tinted Lens, Garganacl→Solid Rock; all `.ability` rows repointed) |
 | W2 | Tier 5.4 Magic Guard all-innate | Clefable, Sigilyph, Reuniclus | ~7 | open |
 | W3 | Tier 5.5 Mold Breaker all-innate | Excadrill, Sawk, Haxorus, Pangoro, Hawlucha, Basculegion, Tinkaton, Veluza, Ogerpon-Hearthflame | ~18 | open |
 | W4 | Batch U ally-support all-innate | Dialga, Palkia, Giratina, Orbeetle, Aromatisse | 7 | open |
