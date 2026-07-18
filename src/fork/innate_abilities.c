@@ -839,6 +839,11 @@
 // for `### ABILITY_NAME` to read just the one you need). When you wire a new
 // ability, add/edit its block there and keep this name list + the SCOPE list in
 // include/fork/innate_abilities.h in sync (names only — the detail lives in the doc).
+// CI TRIPWIRE: also add the ability to the sImplementedInnates[] array in
+// test/fork/innate_abilities.c (test "every declared innate is on the implemented allowlist").
+// That array — NOT this comment — is what CI enforces: any species row below whose ability is
+// missing from it fails the build. Update it in the SAME edit as a new species row. It is the
+// single most-forgotten step when wiring an innate.
 //
 // FORMS ARE KEYED EXACTLY (no base-species fallback): the lookup matches the exact battle species,
 // so a Mega / Gigantamax / regional / forme variant gets innates ONLY if it has its own row. After

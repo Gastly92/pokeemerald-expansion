@@ -5159,6 +5159,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_MIRROR_ARMOR,
         ABILITY_MAGIC_BOUNCE,
         ABILITY_DANCER,
+        ABILITY_FLOWER_GIFT,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;

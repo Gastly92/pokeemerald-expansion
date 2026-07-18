@@ -207,11 +207,21 @@ static const enum Ability sInnateRegeneratorUnaware[] = { ABILITY_REGENERATOR, A
 Order within a list doesn't matter (membership lookups + display iterate the whole
 list). Reuse one combined list across every line that needs the same pair.
 
-### Step 2 — put the ability on the allowlist
+### Step 2 — put the ability on the allowlist (**two places, one is CI-enforced**)
 
-Add `ABILITY_X` to the **allowlist comment** in `src/fork/innate_abilities.c` (and the
-SCOPE note in `include/fork/innate_abilities.h` if the supported set's character
-changes). This is the human record of what's actually wired; keep it honest.
+There are **two** allowlists — miss the second and CI fails, not the local Flower-Gift-style
+subset run:
+
+1. **The human record (comment):** add `ABILITY_X` to the **allowlist comment** in
+   `src/fork/innate_abilities.c` (and the SCOPE note in `include/fork/innate_abilities.h` if the
+   supported set's character changes). Keep it honest.
+2. **The enforced array (test — DON'T SKIP):** add `ABILITY_X` to the `sImplementedInnates[]` array in
+   the test **`Innate abilities: every declared innate is on the implemented allowlist`**
+   (`test/fork/innate_abilities.c`, grep `sImplementedInnates`). That test walks every species row and
+   fails (`EXPECT_EQ(offenders, 0)`) for any innate you *declared* on a species (Step 1) but didn't add
+   here — so a Step-1 species row without this line is a **guaranteed CI red**, and because it only fires
+   when you run *this* test (not your new ability's own tests), it is the single most-forgotten step in
+   the whole recipe. Add the ability here in the **same edit** as its species rows.
 
 ### Step 3 — wire the effect (the only per-ability work)
 
@@ -523,7 +533,7 @@ Run through this every time — it exists because Step 3.5 and the full test run
 the two things easiest to skip:
 
 - [ ] **Step 1** — species rows added (merged into existing rows where the species already has an innate).
-- [ ] **Step 2** — allowlist comment in `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h` updated.
+- [ ] **Step 2** — allowlist comment in `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h` updated, **AND** `ABILITY_X` added to the CI-enforced `sImplementedInnates[]` array in `test/fork/innate_abilities.c` (the most-forgotten line — its own test is `every declared innate is on the implemented allowlist`).
 - [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`) **and the `DETERMINISTIC_*` reroutes** (PP-economy taxes, would-it-land consume mirrors, gated additional effects — grep `DETERMINISTIC` around each effect site); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
 - [ ] **Step 3.5 — ran `grep -n ABILITY_X src/fork/frontier_extended_mons.c`** and freed every hardcoded set (override-table rows for ability-locked / all-abilities-innate species). *This is the step that gets forgotten.*
 - [ ] **Step 4** — tests added, **including the `DETERMINISTIC_*` interactions the ability touches** (the shipping default); `make check TESTS="FEATURE_INNATE_ABILITIES"` green; **full `make check` green** if a shared battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.

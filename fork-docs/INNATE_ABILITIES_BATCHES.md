@@ -518,7 +518,10 @@ Mark a row `done` (in place, don't delete) when its PR merges.
 - [ ] **Step 1** — species rows per ability (canon users in any slot + tight
   flavor set; merge into existing rows where a species already has an innate).
 - [ ] **Step 2** — add each ability to the allowlist comment in
-  `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h`.
+  `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h`
+  **AND the CI-enforced `sImplementedInnates[]` array in `test/fork/innate_abilities.c`**
+  (grep `sImplementedInnates` — the most-forgotten line; a Step-1 species row without it is
+  a guaranteed CI red via the `every declared innate is on the implemented allowlist` test).
 - [ ] **Step 3** — wire the effect at *every* site (`grep -n ABILITY_X src/`),
   **including AI effect reads** (`grep src/battle_ai_*.c`) **and the
   `DETERMINISTIC_*` reroutes** (PP-economy taxes, consume mirrors, gated
