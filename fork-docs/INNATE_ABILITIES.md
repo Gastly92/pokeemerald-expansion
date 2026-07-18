@@ -207,11 +207,21 @@ static const enum Ability sInnateRegeneratorUnaware[] = { ABILITY_REGENERATOR, A
 Order within a list doesn't matter (membership lookups + display iterate the whole
 list). Reuse one combined list across every line that needs the same pair.
 
-### Step 2 — put the ability on the allowlist
+### Step 2 — put the ability on the allowlist (**two places, one is CI-enforced**)
 
-Add `ABILITY_X` to the **allowlist comment** in `src/fork/innate_abilities.c` (and the
-SCOPE note in `include/fork/innate_abilities.h` if the supported set's character
-changes). This is the human record of what's actually wired; keep it honest.
+There are **two** allowlists — miss the second and CI fails, not the local Flower-Gift-style
+subset run:
+
+1. **The human record (comment):** add `ABILITY_X` to the **allowlist comment** in
+   `src/fork/innate_abilities.c` (and the SCOPE note in `include/fork/innate_abilities.h` if the
+   supported set's character changes). Keep it honest.
+2. **The enforced array (test — DON'T SKIP):** add `ABILITY_X` to the `sImplementedInnates[]` array in
+   the test **`Innate abilities: every declared innate is on the implemented allowlist`**
+   (`test/fork/innate_abilities.c`, grep `sImplementedInnates`). That test walks every species row and
+   fails (`EXPECT_EQ(offenders, 0)`) for any innate you *declared* on a species (Step 1) but didn't add
+   here — so a Step-1 species row without this line is a **guaranteed CI red**, and because it only fires
+   when you run *this* test (not your new ability's own tests), it is the single most-forgotten step in
+   the whole recipe. Add the ability here in the **same edit** as its species rows.
 
 ### Step 3 — wire the effect (the only per-ability work)
 
@@ -523,7 +533,7 @@ Run through this every time — it exists because Step 3.5 and the full test run
 the two things easiest to skip:
 
 - [ ] **Step 1** — species rows added (merged into existing rows where the species already has an innate).
-- [ ] **Step 2** — allowlist comment in `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h` updated.
+- [ ] **Step 2** — allowlist comment in `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h` updated, **AND** `ABILITY_X` added to the CI-enforced `sImplementedInnates[]` array in `test/fork/innate_abilities.c` (the most-forgotten line — its own test is `every declared innate is on the implemented allowlist`).
 - [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`) **and the `DETERMINISTIC_*` reroutes** (PP-economy taxes, would-it-land consume mirrors, gated additional effects — grep `DETERMINISTIC` around each effect site); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
 - [ ] **Step 3.5 — ran `grep -n ABILITY_X src/fork/frontier_extended_mons.c`** and freed every hardcoded set (override-table rows for ability-locked / all-abilities-innate species). *This is the step that gets forgotten.*
 - [ ] **Step 4** — tests added, **including the `DETERMINISTIC_*` interactions the ability touches** (the shipping default); `make check TESTS="FEATURE_INNATE_ABILITIES"` green; **full `make check` green** if a shared battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.
@@ -4002,6 +4012,54 @@ rhythmically to scare off bird Pokémon). Each flavor pick is merged into the sp
 (base + Pa'u). Dancer is Oricorio's **only** real ability, so there is no complementary slot to repoint to — like
 Espathra (Opportunist) and Corviknight (Mirror Armor), they keep their now-redundant chosen Dancer (still
 observable + correct) and freeing is **deferred to the Batch W sweep**.
+
+### ABILITY_FLOWER_GIFT
+
+**Tier 5.10 — a PURE-BOON divergence (the innate ships the stat boost only).** The real ability boosts the
+**physical Attack and Sp. Def** of the holder *and its allies* by **50% in harsh sunlight** — but only once
+Cherrim is in its **Sunshine Form**, which it reaches through the weather-driven form change. The innate
+deliberately **drops that form change** (the innate ships the stat boost only — no `SPECIES_CHERRIM_SUNSHINE`
+flip, no switch-in display half), so it gates the boost on **sun directly** instead of on the Sunshine species.
+The boost never hurts its holder, so aside from the dropped form the effect is a clean upside.
+
+**Effect — four calc clauses, no new machinery.** Flower Gift lives entirely in the shared damage calc as four
+sites in `src/battle_util.c`, each of which the chosen-ability path gates on
+`gBattleMons[b].species == SPECIES_CHERRIM_SUNSHINE`. The innate mirrors each one beside its chosen case, gated
+on `IsBattlerWeatherAffected(holdEffect, weather, B_WEATHER_SUN)` (so Utility Umbrella / Cloud Nine suppress it
+exactly like the chosen path) with a `!= ABILITY_FLOWER_GIFT` guard so a real Cherrim-Sunshine never
+double-applies:
+
+1. **`CalcAttackStat`, holder's own Attack** (in the `ctx->innatesEnabled` attacker-innate block): `+50%` when
+   the move is physical.
+2. **`CalcAttackStat`, ally's Attack** (the partner switch, `BATTLE_PARTNER(battlerAtk)`): a partner with the
+   innate boosts the attacker's physical Attack `+50%`.
+3. **`GetDefenderAbilitiesModifier`, holder's own Sp. Def** (after the Fur Coat / Marvel Scale / Grass Pelt
+   innate clauses): `+50%` when the move reads Sp. Def (`!usesDefStat`, a special hit).
+4. **`GetDefenderAbilitiesModifier`, ally's Sp. Def** (the partner switch, `BATTLE_PARTNER(battlerDef)`): a
+   partner with the innate boosts the defender's Sp. Def `+50%` against special hits.
+
+- **Suppression parity.** `IsInnateActive` supplies the feature-flag / Gastro Acid / Neutralizing Gas / Ability
+  Shield / not-on-field parity. Flower Gift is **not breakable**, so Mold Breaker never touches it (matching the
+  chosen path). Identity is untouched (no `RecordAbilityBattle`), matching the silent Filter/Thick Fat calc
+  modifiers; on-field AI damage prediction is correct **for free** because it runs this shared calc keyed off the
+  real battler.
+- **No `DETERMINISTIC_*` surface.** A flat conditional stat modifier — no accuracy/secondary/crit roll to reroute.
+
+**AI.** The two sun-benefit heuristics that let the AI value *setting* sun for a Flower Gift holder are made
+innate-aware: `DoesInnateBenefitFromWeather` (`src/battle_ai_field_statuses.c`) and the innate check block in
+`DoesAbilityBenefitFromSunOrRain` (`src/battle_ai_main.c`) both credit an active innate Flower Gift under sun.
+The damage-side reads need nothing extra (the shared calc above covers them).
+
+**Species (Step 1) — canon + a tight flavor line.** *Canon:* **Cherrim** (both the Overcast base and the
+Sunshine form — the form must be keyed explicitly so the innate survives the weather form change). Flower Gift is
+Cherrim's **sole** ability, so the innate is redundant-but-correct there (added per the Oricorio/Dancer
+convention). *Flavor* (species that lack the real ability, where the innate is the **observable** one): the
+**Sunkern / Sunflora** sunflower line — the Sun Pokémon, which soaks up and thrives on sunlight — merged into
+their existing Chlorophyll / Early Bird rows (their chosen Chlorophyll / Solar Power differ, so the sun-gated
+Atk/SpD boost is visible on them).
+
+**Step 3.5 — no-op.** `grep -n ABILITY_FLOWER_GIFT src/fork/frontier_extended_mons.c` is empty — no frontier set
+hardcodes Flower Gift, so there is no slot to free.
 
 ### Batch X — script `jumpifability` innate-awareness
 

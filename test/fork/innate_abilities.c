@@ -5159,6 +5159,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_MIRROR_ARMOR,
         ABILITY_MAGIC_BOUNCE,
         ABILITY_DANCER,
+        ABILITY_FLOWER_GIFT,
     };
     u32 row, i, j, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
@@ -9801,5 +9802,163 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate D
         NOT ABILITY_POPUP(opponent, ABILITY_DANCER); // innate suppressed -> the dance is not copied
     } THEN {
         EXPECT_EQ(opponent->statStages[STAT_SPEED], DEFAULT_STAT_STAGE); // did not copy the foe's Quiver Dance
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Flower Gift (Tier 5.10) — a PURE-BOON divergence: +50% physical Attack and
+// Sp. Def for the holder and its allies in harsh sunlight. The innate ships the
+// stat boost only, gated on sun directly (the real Cherrim Sunshine form change
+// is deliberately dropped). Four calc clauses in src/battle_util.c: the holder's
+// own Attack / Sp. Def halves and the two doubles ally halves. Flavor carriers
+// (Sunkern / Sunflora) have a chosen ability other than Flower Gift, so the
+// sun-gated boost is observable on them; Cherrim (canon) proves no double-apply.
+// ---------------------------------------------------------------------------
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Flower Gift boosts the holder's physical Attack in harsh sun", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SUNFLORA, ABILITY_FLOWER_GIFT));
+        ASSUME(gSpeciesInfo[SPECIES_SUNFLORA].abilities[0] != ABILITY_FLOWER_GIFT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SUNFLORA) { Ability(ABILITY_CHLOROPHYLL); Moves(MOVE_SUNNY_DAY, MOVE_TACKLE); } // chosen Chlorophyll, NOT Flower Gift
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SUNNY_DAY); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SUNNY_DAY, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player);
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Feature off: chosen Chlorophyll only, no Attack boost. Feature on: innate Flower Gift in sun -> 1.5x.
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Flower Gift boosts the holder's Sp. Def in harsh sun", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SUNFLORA, ABILITY_FLOWER_GIFT));
+        ASSUME(GetMoveCategory(MOVE_SWIFT) == DAMAGE_CATEGORY_SPECIAL);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_SUNFLORA) { Ability(ABILITY_CHLOROPHYLL); Moves(MOVE_SUNNY_DAY, MOVE_CELEBRATE); } // chosen Chlorophyll, NOT Flower Gift
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SWIFT, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SUNNY_DAY); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_SWIFT); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SUNNY_DAY, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWIFT, opponent);
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Feature off: no Sp. Def boost. Feature on: innate Flower Gift in sun -> +50% Sp. Def -> ~0.67x damage.
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.5), results[0].damage);
+    }
+}
+
+// Gating: the boost requires harsh sunlight. Feature on both runs; only the sun run gets the +50%.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Flower Gift only boosts in harsh sun", s16 damage)
+{
+    bool32 sun;
+    PARAMETRIZE { sun = FALSE; }
+    PARAMETRIZE { sun = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SUNFLORA, ABILITY_FLOWER_GIFT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SUNFLORA) { Ability(ABILITY_CHLOROPHYLL); Moves(MOVE_SUNNY_DAY, MOVE_TACKLE, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { if (sun) MOVE(player, MOVE_SUNNY_DAY); else MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        if (sun)
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_SUNNY_DAY, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player);
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Only the sun run gets the +50%; the no-sun run's Tackle is unboosted.
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an ally's innate Flower Gift boosts the partner's physical Attack in sun", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SUNFLORA, ABILITY_FLOWER_GIFT));
+        ASSUME(gSpeciesInfo[SPECIES_SUNFLORA].abilities[0] != ABILITY_FLOWER_GIFT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE, MOVE_CELEBRATE); }
+        PLAYER(SPECIES_SUNFLORA) { Ability(ABILITY_CHLOROPHYLL); Moves(MOVE_CELEBRATE); } // ally: innate Flower Gift
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_TORKOAL) { Ability(ABILITY_DROUGHT); Moves(MOVE_CELEBRATE); } // sun up at switch-in
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_TACKLE, target: opponentLeft); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, playerLeft);
+        HP_BAR(opponentLeft, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Feature off: the ally has only chosen Chlorophyll, no boost. Feature on: innate Flower Gift -> +50% ally Attack.
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.5), results[1].damage);
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an ally's innate Flower Gift boosts the partner's Sp. Def in sun", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SUNFLORA, ABILITY_FLOWER_GIFT));
+        ASSUME(GetMoveCategory(MOVE_SWIFT) == DAMAGE_CATEGORY_SPECIAL);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+        PLAYER(SPECIES_SUNFLORA) { Ability(ABILITY_CHLOROPHYLL); Moves(MOVE_CELEBRATE); } // ally: innate Flower Gift
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SWIFT, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_TORKOAL) { Ability(ABILITY_DROUGHT); Moves(MOVE_CELEBRATE); } // sun up at switch-in
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_SWIFT, target: playerLeft); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWIFT, opponentLeft);
+        HP_BAR(playerLeft, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Feature on: the ally's innate Flower Gift boosts the partner's Sp. Def +50% in sun -> ~0.67x damage.
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.5), results[0].damage);
+    }
+}
+
+// Canon: Cherrim's chosen Flower Gift already applies (via its Sunshine form change), and the redundant
+// innate Flower Gift must NOT stack on top of it (the `!= ABILITY_FLOWER_GIFT` guard). So the damage is
+// identical whether the feature is on or off.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Flower Gift does not double-apply on a real Flower Gift Cherrim", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CHERRIM, ABILITY_FLOWER_GIFT));
+        ASSUME(gSpeciesInfo[SPECIES_CHERRIM].abilities[0] == ABILITY_FLOWER_GIFT);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CHERRIM) { Moves(MOVE_SUNNY_DAY, MOVE_TACKLE); } // chosen Flower Gift -> flips to Sunshine in sun
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SUNNY_DAY); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TACKLE); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SUNNY_DAY, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, player);
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        // Chosen Flower Gift applies in both runs; the innate adds nothing extra -> identical damage.
+        EXPECT_EQ(results[0].damage, results[1].damage);
     }
 }
