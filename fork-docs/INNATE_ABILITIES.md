@@ -91,7 +91,12 @@ determinism-safe. The buckets (each rejected ability sits in exactly one):
   not a personal boon (big AI + power swing). Drizzle, Sand Stream, Drought, Snow
   Warning, Electric/Psychic/Misty/Grassy Surge, Primordial Sea, Desolate Land, Delta
   Stream, Orichalcum Pulse, Hadron Engine, Cloud Nine, Air Lock, Dark Aura, Fairy
-  Aura, Vessel/Sword/Tablets/Beads of Ruin, Victory Star.
+  Aura, Vessel/Sword/Tablets/Beads of Ruin, Victory Star. **Aura Break** sits here
+  too, but for a downstream reason: it only *reverses* Dark Aura / Fairy Aura, and
+  both of those are themselves `:x:` (never wired as innates), so an innate Aura
+  Break clause would be **dead code** — there is nothing on the innate side to
+  reverse. Resolved as won't-wire rather than shipped as a no-op (the last Tier 5
+  disposition step).
 - **Pure drawback (no boon to extract)** — strip the cost and nothing remains.
   Truant, Slow Start, Defeatist, Stall, Klutz, Gorilla Tactics, Mycelium Might.
 - **Double-edged (upside welded to downside)** — Simple, Contrary, Moody, No Guard,
