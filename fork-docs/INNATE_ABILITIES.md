@@ -3297,11 +3297,12 @@ low-impact — the coin hoard won't be robbed), so the innate Good as Gold is **
 sets are freed (chosen Good as Gold → chosen Sticky Hold; the innate still blocks status moves).
 
 **Step 3.5**: Gholdengo's three frontier sets freed → chosen **Sticky Hold** (via the new override row). The
-**salt line is a Batch W deferral**: all three of Garganacl's real abilities (Purifying Salt / Sturdy / Clear
-Body) are now innate with no free complementary slot, so its frontier sets keep their now-redundant chosen
-Purifying Salt — still correct (the chosen ability runs; the innate is redundant-but-skipped there), matching the
-Batch J/T all-abilities-innate deferrals. This is **Batch Y sub-group Y5**; the remaining Batch Y sub-groups
-(Y6–Y8) stay open.
+salt line was a Batch W deferral — all three of Garganacl's real abilities (Purifying Salt / Sturdy / Clear
+Body) are now innate with no free complementary slot — and is now **RESOLVED in Batch W1**: a fork override
+repurposes Garganacl's innate-redundant slot-1 Sturdy to chosen **Solid Rock** (an implemented
+`:white_check_mark:` innate, stable, the Regirock/Carbink/Stakataka rock-golem pick), and its three frontier
+sets repoint from chosen Purifying Salt to Solid Rock, so a distinct chosen ability stays observable on top of
+the innate Purifying Salt. This is **Batch Y sub-group Y5**; the remaining Batch Y sub-groups (Y6–Y8) stay open.
 
 ### ABILITY_INTREPID_SWORD / ABILITY_DAUNTLESS_SHIELD
 
@@ -3807,14 +3808,15 @@ the Y5 / Comatose / Magic Guard / Mold Breaker canon-only decisions). The **sole
 added to that row. Because Opportunist is Espathra's natural slot-0 ability, it stays **observable as the chosen
 slot** with no override needed (unlike the sole-ability carriers whose innate would otherwise be invisible).
 
-**Step 3.5 — deferred to Batch W.** Both Espathra frontier sets (`src/fork/frontier_extended_mons.c`) chose
+**Step 3.5 — RESOLVED in Batch W1.** Both Espathra frontier sets (`src/fork/frontier_extended_mons.c`) chose
 Opportunist (one had already been repointed there when Speed Boost went innate). With **all three** of Espathra's
-abilities now innate **and no free slot** to hand a distinct chosen ability, freeing the redundant chosen slot
-would need a game-wide override that *replaces a real ability* (plus a `test/battle` audit) — so, exactly like Mold
-Breaker's all-abilities-innate sets (Excadrill / Sawk / Haxorus / …), both sets keep their now-redundant chosen
-Opportunist (still correct: the chosen runs it, the innate is redundant-but-skipped there) and freeing is deferred
-to the Batch W sweep. This differs from the Gholdengo / Komala / Reshiram inline overrides, which had an **empty**
-slot to fill rather than a real ability to replace.
+abilities now innate **and no free slot**, freeing the redundant chosen slot needed a game-wide override that
+*replaces a real ability* (plus the `test/battle` audit) — the slot-repurpose class rather than the Gholdengo /
+Komala / Reshiram empty-slot fills. Batch W1 did exactly that: a fork override repurposes Espathra's
+innate-redundant slot-1 Frisk (slot-0 Opportunist is test-pinned by `opportunist.c`) to chosen **Competitive** (an
+implemented `:white_check_mark:` innate it does not carry, self-synergistic with its Calm Mind / Stored Power
+sweeper), and both sets repoint from chosen Opportunist to Competitive, so a distinct chosen ability stays
+observable on top of the innate Opportunist.
 
 ### ABILITY_MIRROR_ARMOR
 
@@ -3876,12 +3878,14 @@ Opportunist / Mold Breaker / Y5 decisions). The **sole** carrier is **Corviknigh
 `SPECIES_CORVIKNIGHT_GMAX`, its hidden ability), which already carried innate **Pressure / Unnerve** — Mirror Armor
 is added to those rows.
 
-**Step 3.5 — deferred to Batch W.** All three Corviknight frontier sets (`src/fork/frontier_extended_mons.c`) choose
-Mirror Armor. With **all three** of Corviknight's abilities now innate **and no free slot** to hand a distinct
-chosen ability, freeing the redundant chosen slot would need a game-wide override that *replaces a real ability*
-(plus a `test/battle` audit) — so, exactly like Opportunist's Espathra and Mold Breaker's all-abilities-innate
-sets, the three sets keep their now-redundant chosen Mirror Armor (still correct, and Mirror Armor stays the
-observed slot) and freeing is deferred to the Batch W sweep.
+**Step 3.5 — RESOLVED in Batch W1.** All three Corviknight frontier sets (`src/fork/frontier_extended_mons.c`) chose
+Mirror Armor. With **all three** of Corviknight's abilities now innate **and no free slot**, freeing the redundant
+chosen slot needed a game-wide override that *replaces a real ability* (plus the `test/battle` audit). Batch W1 did
+that: a fork override repurposes Corviknight's innate-redundant slot-1 Unnerve (slot-2 Mirror Armor is heavily
+test-pinned — `mirror_armor.c` / `pursuit.c` / `sticky_web.c` / …) to chosen **Bulletproof** (`:x:` stable, the
+Skarmory/Registeel Steel-wall pick — deflects Focus Blast / Sludge Bomb / Energy Ball), and its three sets repoint
+from chosen Mirror Armor to Bulletproof, so a distinct chosen ability stays observable on top of the innate Mirror
+Armor.
 
 ### ABILITY_MAGIC_BOUNCE
 
@@ -3955,7 +3959,10 @@ sets. The **Xatu** set and **both Espeon** sets have a real, non-innate compleme
 stable), so they repoint `.ability` from the now-redundant chosen Magic Bounce to `ABILITY_SYNCHRONIZE` (the innate
 still bounces; Synchronize is now the observable chosen slot). The **three Hatterene** sets are all-abilities-innate
 (Healer + Anticipation + Magic Bounce, no free slot), so — exactly like Corviknight (Mirror Armor) and Espathra
-(Opportunist) — they keep their now-redundant chosen Magic Bounce and freeing is **deferred to the Batch W sweep**.
+(Opportunist) — freeing needs a slot-repurpose override. **RESOLVED in Batch W1**: a fork override repurposes
+Hatterene's innate-redundant slot-1 Anticipation to chosen **Unaware** (an implemented `:white_check_mark:` innate,
+the Calm Mind-wall pick, stable) and the three sets repoint from chosen Magic Bounce to Unaware (slot-2 Magic Bounce
+stays a real slot — its identity), keeping a distinct chosen ability observable on top of the innate Magic Bounce.
 
 ### ABILITY_DANCER
 
@@ -4013,10 +4020,12 @@ dance), the **Lilligant** lines (Kanto's graceful Petal/Teeter Dance + Hisui's w
 **Meloetta** (both formes — the melody/dance mythical with its Pirouette dance forme) and **Maractus** (dances
 rhythmically to scare off bird Pokémon). Each flavor pick is merged into the species' existing innate row.
 
-**Step 3.5 — defer.** `grep -n ABILITY_DANCER src/fork/frontier_extended_mons.c` hit the two **Oricorio** sets
-(base + Pa'u). Dancer is Oricorio's **only** real ability, so there is no complementary slot to repoint to — like
-Espathra (Opportunist) and Corviknight (Mirror Armor), they keep their now-redundant chosen Dancer (still
-observable + correct) and freeing is **deferred to the Batch W sweep**.
+**Step 3.5 — RESOLVED in Batch W1.** `grep -n ABILITY_DANCER src/fork/frontier_extended_mons.c` hit the two
+**Oricorio** sets (base + Pa'u). Dancer is Oricorio's **only** real ability, so — like the sole-ability legends —
+a fork override fills each form's **empty slot 1** with chosen **Tinted Lens** (an implemented `:white_check_mark:`
+innate it does not carry, stable; its Hurricane / Revelation Dance punch through resists for full), and both sets
+repoint from chosen Dancer to Tinted Lens, so a distinct chosen ability stays observable on top of the innate
+Dancer.
 
 ### ABILITY_FLOWER_GIFT
 

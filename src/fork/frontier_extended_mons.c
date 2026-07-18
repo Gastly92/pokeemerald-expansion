@@ -365,28 +365,30 @@
 // Ogerpon-Hearthflame sets are all on species whose only complementary real slots are themselves now
 // innate (or a drawback / empty slot needing a game-wide override), so they keep their now-redundant
 // chosen Mold Breaker — still correct (the chosen runs it; the innate is redundant-but-skipped there) —
-// deferred to the Batch W override sweep.
+// deferred to the Batch W override sweep (Batch W3).
 //
-// Tier 5.7 (Mirror Armor — the holder bounces a stat drop back at its source) frees no set: its sole
-// carrier Corviknight now has ALL THREE of its abilities innate (Pressure / Unnerve / Mirror Armor) with
-// no free complementary slot, so its three sets keep their now-redundant chosen Mirror Armor — still
-// correct (the chosen runs it, and it stays the observed slot; the innate is redundant-but-skipped there) —
-// deferred to the Batch W override sweep, exactly like Opportunist's Espathra and Mold Breaker's Excadrill.
+// Tier 5.7 (Mirror Armor — the holder bounces a stat drop back at its source): its sole carrier Corviknight
+// has ALL THREE of its abilities innate (Pressure / Unnerve / Mirror Armor) with no free complementary slot.
+// RESOLVED in Batch W1 — a fork override (src/species_ability_overrides.c) repurposes its innate-redundant
+// slot-1 Unnerve to chosen Bulletproof (:x: stable, Skarmory/Registeel precedent) and its three sets repoint
+// from chosen Mirror Armor to Bulletproof (slot-2 Mirror Armor stays a real slot — test-pinned), so a distinct
+// chosen ability stays observable on top of the innate Mirror Armor.
 //
 // Tier 5.8 (Magic Bounce — the holder reflects a bounceable status move back at its user) frees three
 // sets: the Xatu set (Synchronize / Early Bird / Magic Bounce) and both Espeon sets (Synchronize / -- /
 // Magic Bounce) repoint from the now-redundant chosen Magic Bounce to their real, non-innate Synchronize
-// (:x: stable, slot 0), so a chosen ability stays observable on top of the innate Magic Bounce. DEFERRED
-// (tracked follow-up, like Batch J/T/K/L/U/Y5 and Tier 5.4/5.5/5.7): the three Hatterene sets have ALL
-// their real abilities now innate (Healer / Anticipation / Magic Bounce) with no free complementary slot,
-// so they keep their now-redundant chosen Magic Bounce — still correct (the chosen runs it, and it stays
-// the observed slot; the innate is redundant-but-skipped there) — deferred to the Batch W override sweep.
+// (:x: stable, slot 0), so a chosen ability stays observable on top of the innate Magic Bounce. RESOLVED in
+// Batch W1: the three Hatterene sets have ALL their real abilities now innate (Healer / Anticipation / Magic
+// Bounce) with no free complementary slot, so a fork override repurposes its innate-redundant slot-1
+// Anticipation to chosen Unaware (:white_check_mark: stable, the Calm Mind-wall pick) and the sets repoint
+// from chosen Magic Bounce to Unaware (slot-2 Magic Bounce stays a real slot — its identity), keeping a
+// distinct chosen ability observable on top of the innate Magic Bounce.
 //
-// Tier 5.9 (Dancer — the holder copies any dance move the instant it is used) frees no set: its only
-// frontier carriers are the two Oricorio sets (base + Pa'u), and Dancer is Oricorio's SOLE real ability,
-// so there is no complementary slot to repoint to. They keep their now-redundant chosen Dancer — still
-// correct (the chosen runs it, and it stays the observed slot; the innate is redundant-but-skipped there) —
-// deferred to the Batch W override sweep, like Opportunist's Espathra and Mirror Armor's Corviknight.
+// Tier 5.9 (Dancer — the holder copies any dance move the instant it is used): its only frontier carriers are
+// the two Oricorio sets (base + Pa'u), and Dancer is Oricorio's SOLE real ability. RESOLVED in Batch W1 — a
+// fork override fills each form's EMPTY slot 1 with chosen Tinted Lens (:white_check_mark: stable), and both
+// sets repoint from chosen Dancer to Tinted Lens, so a distinct chosen ability stays observable on top of the
+// innate Dancer.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
@@ -18253,7 +18255,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_DANCER,
+        .ability = ABILITY_TINTED_LENS, // Dancer now innate (Tier 5.9); chosen Tinted Lens (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18273,7 +18275,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_DANCER,
+        .ability = ABILITY_TINTED_LENS, // Dancer now innate (Tier 5.9); chosen Tinted Lens (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20668,7 +20670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_IRON_DEFENSE
         },
-        .ability = ABILITY_MIRROR_ARMOR, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Mirror Armor observable + redundant-but-correct (Batch W deferral)
+        .ability = ABILITY_BULLETPROOF, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Bulletproof (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20688,7 +20690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_MIRROR_ARMOR, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Mirror Armor observable + redundant-but-correct (Batch W deferral)
+        .ability = ABILITY_BULLETPROOF, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Bulletproof (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20708,7 +20710,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_MIRROR_ARMOR, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Mirror Armor observable + redundant-but-correct (Batch W deferral)
+        .ability = ABILITY_BULLETPROOF, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Bulletproof (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21329,7 +21331,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_DRAIN_PUNCH
         },
-        .ability = ABILITY_MAGIC_BOUNCE,
+        .ability = ABILITY_UNAWARE, // Healer / Anticipation / Magic Bounce all now innate (Tier 5.8); chosen Unaware (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21349,7 +21351,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_PROTECT
         },
-        .ability = ABILITY_MAGIC_BOUNCE,
+        .ability = ABILITY_UNAWARE, // Healer / Anticipation / Magic Bounce all now innate (Tier 5.8); chosen Unaware (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21369,7 +21371,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_POWER_WHIP
         },
-        .ability = ABILITY_MAGIC_BOUNCE,
+        .ability = ABILITY_UNAWARE, // Healer / Anticipation / Magic Bounce all now innate (Tier 5.8); chosen Unaware (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23483,7 +23485,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_PURIFYING_SALT,
+        .ability = ABILITY_SOLID_ROCK, // Purifying Salt / Sturdy / Clear Body all now innate; chosen Solid Rock (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23503,7 +23505,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SALT_CURE,
             MOVE_RECOVER
         },
-        .ability = ABILITY_PURIFYING_SALT,
+        .ability = ABILITY_SOLID_ROCK, // Purifying Salt / Sturdy / Clear Body all now innate; chosen Solid Rock (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23523,7 +23525,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_PURIFYING_SALT,
+        .ability = ABILITY_SOLID_ROCK, // Purifying Salt / Sturdy / Clear Body all now innate; chosen Solid Rock (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23931,7 +23933,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_OPPORTUNIST, // now innate too (all 3 abilities innate); chosen slot redundant-but-correct, freeing deferred to Batch W
+        .ability = ABILITY_COMPETITIVE, // Opportunist / Frisk / Speed Boost all now innate; chosen Competitive (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23951,7 +23953,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_OPPORTUNIST, // Opportunist / Frisk / Speed Boost all now innate; chosen slot redundant-but-correct, freeing deferred to Batch W
+        .ability = ABILITY_COMPETITIVE, // Opportunist / Frisk / Speed Boost all now innate; chosen Competitive (fork override) observable + frees the redundant slot (Batch W1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
