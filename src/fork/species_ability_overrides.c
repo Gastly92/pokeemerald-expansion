@@ -627,6 +627,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_WHIMSICOTT, 2,
         ABILITY_SWEET_VEIL
     },
+    { // 0561
+        // Sigilyph's three real abilities (Wonder Skin, Magic Guard, Tinted Lens) are ALL now innate (Tier 5.4).
+        // Slot-1 Magic Guard is pinned by the innate test, so its innate-redundant slot-2 Tinted Lens (audited: no
+        // Ability(ABILITY_TINTED_LENS) on Sigilyph in test/) takes Simple -- :x: (never an innate -> stable) and
+        // thematic for the Psychic bird's Cosmic Power stallbreaker: each Cosmic Power now gives +2 Def / +2 Sp. Def,
+        // supercharging its Stored Power (the innate Magic Guard still voids the Life Orb recoil). Slots 0/1
+        // (Wonder Skin / Magic Guard) stay intact -- the innate test pins Magic Guard and reads Wonder Skin.
+        SPECIES_SIGILYPH, 2,
+        ABILITY_SIMPLE
+    },
     { // 0565
         // Carracosta's only real abilities (Solid Rock, Sturdy, Swift Swim) are ALL now innate, so its
         // innate-redundant slot-2 Swift Swim takes a chosen Water Absorb — :x: (never an innate -> stable)
@@ -657,6 +667,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // intact for the future Frisk/Competitive innates.)
         SPECIES_GOTHITELLE, 2,
         ABILITY_UNAWARE
+    },
+    { // 0579
+        // Reuniclus's three real abilities (Overcoat, Magic Guard, Regenerator) are ALL now innate (Tier 5.4) and
+        // NONE is test-pinned, so its innate-redundant slot-2 Regenerator (audited: no Ability() on Reuniclus in
+        // test/) takes No Guard -- :x: (never an innate -> stable) and thematic for the pure-intellect Psychic: its
+        // Focus Blast (run on both frontier sets) never misses. Slots 0/1 (Overcoat / Magic Guard) stay intact so
+        // Magic Guard remains a visible chosen option, and the innate Magic Guard still voids Life Orb recoil.
+        SPECIES_REUNICLUS, 2,
+        ABILITY_NO_GUARD
     },
     { // 0594
         SPECIES_ALOMOMOLA, 2,

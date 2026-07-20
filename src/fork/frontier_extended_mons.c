@@ -13891,7 +13891,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIGILYPH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Magic Guard Cosmic Power stallbreaker
+        .heldItem = ITEM_LIFE_ORB, // Simple Cosmic Power stallbreaker (innate Magic Guard voids Life Orb recoil)
         .moves =
         {
             MOVE_COSMIC_POWER,
@@ -13899,7 +13899,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_PSYCHO_SHIFT
         },
-        .ability = ABILITY_MAGIC_GUARD,
+        .ability = ABILITY_SIMPLE, // Wonder Skin/Magic Guard/Tinted Lens all innate now (Tier 5.4); chosen Simple doubles Cosmic Power (Batch W2)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13919,7 +13919,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_ROOST
         },
-        .ability = ABILITY_MAGIC_GUARD, // Wonder Skin/Tinted Lens/Magic Guard all innate now (Tier 5.4); chosen Magic Guard redundant-but-correct (Batch W deferral)
+        .ability = ABILITY_SIMPLE, // Wonder Skin/Tinted Lens/Magic Guard all innate now (Tier 5.4); chosen Simple observable atop them (Batch W2)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14230,7 +14230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REUNICLUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Magic Guard Calm Mind tank
+        .heldItem = ITEM_LEFTOVERS, // Calm Mind tank (innate Magic Guard); chosen No Guard makes Focus Blast reliable
         .moves =
         {
             MOVE_CALM_MIND,
@@ -14238,7 +14238,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_RECOVER
         },
-        .ability = ABILITY_MAGIC_GUARD,
+        .ability = ABILITY_NO_GUARD, // Overcoat/Magic Guard/Regenerator all innate now (Tier 5.4); chosen No Guard = sure-hit Focus Blast (Batch W2)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14250,7 +14250,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REUNICLUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Trick Room attacker
+        .heldItem = ITEM_LIFE_ORB, // Trick Room attacker (innate Magic Guard voids Life Orb recoil); No Guard = sure-hit Focus Blast
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -14258,7 +14258,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_MAGIC_GUARD,
+        .ability = ABILITY_NO_GUARD, // Overcoat/Magic Guard/Regenerator all innate now (Tier 5.4); chosen No Guard (Batch W2)
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
