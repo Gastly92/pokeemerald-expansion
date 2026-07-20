@@ -3753,9 +3753,16 @@ be observed (the Calyrex / Mega Lopunny omission precedent).
 Force** HA (a real slot, no override needed), so a chosen ability stays observable atop the innate. Every other
 Mold Breaker set is on a species whose remaining real slots are **themselves now innate** (Excadrill ×3, Sawk ×2,
 Haxorus ×2 — its only non-innate slot Rivalry is a drawback — Pangoro ×2, Hawlucha ×2, Basculegion ×2, Tinkaton
-×2, Veluza ×2, Ogerpon-Hearthflame), so they keep their now-redundant chosen Mold Breaker (still correct: the
-chosen runs it; the innate is redundant-but-skipped there) and are **deferred to Batch W** — the same
-all-abilities-innate deferral as Batch J/T/K/L/U/Y5.
+×2, Veluza ×2, Ogerpon-Hearthflame), so they kept their now-redundant chosen Mold Breaker (still correct: the
+chosen runs it; the innate is redundant-but-skipped there) and were **deferred to Batch W** — the same
+all-abilities-innate deferral as Batch J/T/K/L/U/Y5. **Resolved in [Batch W3](INNATE_ABILITIES_BATCHES.md#batch-w-sub-queue-the-breakdown):**
+Haxorus repointed to its real slot-0 **Rivalry** (`:x:`, no override); **Sawk** (slot-1 → Sheer Force), **Pangoro**
+(slot-0 → Tough Claws), **Hawlucha** (slot-1 → Tough Claws), **Basculegion M/F** (slot-1 → Water Absorb), **Veluza**
+(empty slot-1 → Water Absorb) and **Ogerpon-Hearthflame** (empty slot-1 → Flash Fire) took fork chosen overrides
+(`src/fork/species_ability_overrides.c`). **Excadrill and Tinkaton are excluded** (all three slots test-pinned —
+Excadrill's Sand Rush + Sand Force + Mold Breaker are each selected in test/, Tinkaton's Mold Breaker + Own Tempo in
+`levitate.c` and Pickpocket in `hit_escape.c`), so they stay chosen Mold Breaker (redundant-but-correct), the same
+exclusion as Clefable in W2.
 
 ### ABILITY_OPPORTUNIST
 

@@ -13225,7 +13225,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_MOLD_BREAKER, // Sand Rush & Sand Force now innate; chosen Mold Breaker
+        .ability = ABILITY_MOLD_BREAKER, // Sand Rush/Sand Force/Mold Breaker all now innate, but all 3 slots are test-pinned (Sand Rush + Sand Force + Mold Breaker each selected in test/), so it stays chosen Mold Breaker (redundant-but-correct); Batch W excluded, like Clefable
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13415,7 +13415,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_SHEER_FORCE, // Sturdy/Inner Focus/Mold Breaker all now innate; fork override frees slot 1 to a chosen Sheer Force
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13435,7 +13435,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_POISON_JAB
         },
-        .ability = ABILITY_MOLD_BREAKER, // Sturdy now innate; chosen Mold Breaker ignores the target's ability on this band breaker
+        .ability = ABILITY_SHEER_FORCE, // Sturdy/Inner Focus/Mold Breaker all now innate; fork override frees slot 1 to a chosen Sheer Force
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14773,7 +14773,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_POISON_JAB
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_RIVALRY, // Mold Breaker + Unnerve now innate; repointed to its real slot-0 Rivalry (:x:, no override needed)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14793,7 +14793,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_FIRST_IMPRESSION
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_RIVALRY, // Mold Breaker + Unnerve now innate; repointed to its real slot-0 Rivalry (:x:, no override needed)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16463,7 +16463,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_MOLD_BREAKER, // Iron Fist & Scrappy now innate; chosen Mold Breaker (its real slot 1) punches through abilities
+        .ability = ABILITY_TOUGH_CLAWS, // Iron Fist/Mold Breaker/Scrappy all now innate; fork override frees slot 0 to a chosen Tough Claws (all its moves make contact)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16483,7 +16483,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_MOLD_BREAKER, // Iron Fist & Scrappy now innate; chosen Mold Breaker
+        .ability = ABILITY_TOUGH_CLAWS, // Iron Fist/Mold Breaker/Scrappy all now innate; fork override frees slot 0 to a chosen Tough Claws (all its moves make contact)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17092,7 +17092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_MOLD_BREAKER, // Limber + Unburden now innate; chosen Mold Breaker (only free real slot)
+        .ability = ABILITY_TOUGH_CLAWS, // Limber/Unburden/Mold Breaker all now innate; fork override frees slot 1 to a chosen Tough Claws (all its STAB makes contact)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17112,7 +17112,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_PROTECT
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_TOUGH_CLAWS, // Limber/Unburden/Mold Breaker all now innate; fork override frees slot 1 to a chosen Tough Claws (all its STAB makes contact)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22912,7 +22912,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_MOLD_BREAKER, // Swift Swim & Adaptability now innate; chosen Mold Breaker
+        .ability = ABILITY_WATER_ABSORB, // Swift Swim/Adaptability/Mold Breaker all now innate; fork override frees slot 1 to a chosen Water Absorb
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22932,7 +22932,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_MOLD_BREAKER, // Swift Swim & Adaptability now innate; chosen Mold Breaker
+        .ability = ABILITY_WATER_ABSORB, // Swift Swim/Adaptability/Mold Breaker all now innate; fork override frees slot 1 to a chosen Water Absorb
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23975,7 +23975,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_MOLD_BREAKER, // Mold Breaker/Own Tempo/Pickpocket all now innate, but all 3 slots are test-pinned (Mold Breaker + Own Tempo in levitate.c, Pickpocket in hit_escape.c), so it stays chosen Mold Breaker (redundant-but-correct); Batch W excluded, like Clefable
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24384,7 +24384,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHT_SLASH,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_MOLD_BREAKER, // Sharpness now innate; chosen Mold Breaker
+        .ability = ABILITY_WATER_ABSORB, // Mold Breaker + Sharpness now innate; fork override fills empty slot 1 with a chosen Water Absorb
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24405,7 +24405,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_CUT,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_MOLD_BREAKER, // Sharpness now innate; chosen Mold Breaker
+        .ability = ABILITY_WATER_ABSORB, // Mold Breaker + Sharpness now innate; fork override fills empty slot 1 with a chosen Water Absorb
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -25884,7 +25884,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_HORN_LEECH
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_FLASH_FIRE, // Mold Breaker now innate (sole ability); fork override fills empty slot 1 with a chosen Flash Fire (Fire immunity + Fire-power boost)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

@@ -620,6 +620,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_AUDINO, 1,
         ABILITY_CUTE_CHARM
     },
+    { // 0539
+        // Sawk's three real abilities (Sturdy, Inner Focus, Mold Breaker) are ALL now innate (Mold Breaker,
+        // Tier 5.5), so its innate-redundant slot-1 Inner Focus (audited: no test selects Sawk) takes Sheer
+        // Force -- :x: (never an innate -> stable) and a clean boon for the karate breaker: Ice Punch / Poison
+        // Jab gain +30% and drop their secondaries, stacking with the innate Mold Breaker ability-ignore.
+        SPECIES_SAWK, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0547
         // Prankster, Infiltrator and Chlorophyll are ALL now innate, so its innate-redundant slot-2 Chlorophyll
         // (audited: unpinned) takes Sweet Veil, an implemented :white_check_mark: innate (stable) and thematic
@@ -792,6 +800,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DIGGERSBY, 2,
         ABILITY_SCRAPPY
     },
+    { // 0675
+        // Pangoro's three real abilities (Iron Fist, Mold Breaker, Scrappy) are ALL now innate (Mold Breaker,
+        // Tier 5.5); slots 1/2 (Mold Breaker, Scrappy) are pinned by ai_doubles.c, so its innate-redundant
+        // slot-0 Iron Fist (audited: unpinned) takes Tough Claws, an implemented :white_check_mark: innate
+        // (stable) it does not carry innately: every move on its sets (Knock Off / Close Combat / Gunk Shot /
+        // Drain Punch / Sucker Punch) makes contact, so the +30% is a broad boon alongside innate Iron Fist.
+        SPECIES_PANGORO, 0,
+        ABILITY_TOUGH_CLAWS
+    },
     { // 0678
         // Keen Eye, Infiltrator and Prankster are ALL now innate, so its innate-redundant slot-1 Infiltrator
         // (audited: unpinned) takes Own Tempo, an implemented :white_check_mark: innate (stable) and thematic:
@@ -821,6 +838,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // voids the recoil).
         SPECIES_TYRANTRUM, 1,
         ABILITY_RECKLESS
+    },
+    { // 0701
+        // Hawlucha's three real abilities (Limber, Unburden, Mold Breaker) are ALL now innate (Mold Breaker,
+        // Tier 5.5); slot-2 Mold Breaker is pinned by the innate test, so its innate-redundant slot-1 Unburden
+        // (audited: no Ability(ABILITY_UNBURDEN) on Hawlucha in test/) takes Tough Claws, an implemented
+        // :white_check_mark: innate (stable) it does not carry innately: all its STAB (Acrobatics / Close Combat
+        // / Thunder Punch / Stone Edge) makes contact, gaining +30% alongside the innate Unburden speed.
+        SPECIES_HAWLUCHA, 1,
+        ABILITY_TOUGH_CLAWS
     },
     { // 0703
         // Carbink's only real abilities (Clear Body, Sturdy) are BOTH now innate, so its EMPTY slot 1 takes Solid
@@ -1258,6 +1284,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_URSALUNA_BLOODMOON, 1,
         ABILITY_UNAWARE
     },
+    { // 0902
+        // Basculegion's three real abilities (Swift Swim, Adaptability, Mold Breaker) are ALL now innate (Mold
+        // Breaker, Tier 5.5); slot-0 Swift Swim and slot-2 Mold Breaker are pinned by tests, so its innate-
+        // redundant slot-1 Adaptability (audited: minds_eye.c selects only Swift Swim / Mold Breaker) takes Water
+        // Absorb -- :x: (never an innate -> stable) and thematic for the deep-sea fish: it heals on the Water
+        // moves its Wave Crash / Flip Turn switch-ins invite, alongside the innate Swift Swim + Adaptability.
+        SPECIES_BASCULEGION, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0902
+        // Basculegion-F shares the M form's all-innate slots (Swift Swim, Adaptability, Mold Breaker); its
+        // innate-redundant slot-1 Adaptability takes the same chosen Water Absorb -- :x: (never an innate ->
+        // stable) and thematic for the special breaker, healing on the Water its Hydro Pump / Flip Turn set draws.
+        SPECIES_BASCULEGION_F, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0905
         // Enamorus-Therian's only real ability is Overcoat (now innate), so its EMPTY slot 1 takes Sheer Force --
         // :x: (never an innate -> stable) and a strong boon for the Choice Band physical breaker: Play Rough /
@@ -1342,6 +1384,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_REVAVROOM, 1,
         ABILITY_SHEER_FORCE
     },
+    { // 0976
+        // Veluza's only real abilities are Mold Breaker (slot 0, now innate, Tier 5.5) and Sharpness (slot 2, now
+        // innate), so its EMPTY slot 1 takes Water Absorb -- :x: (never an innate -> stable) and thematic for the
+        // jettisoning fish: it heals on the Water moves its Fillet Away sweeper invites, alongside the innate
+        // Sharpness slicing boost.
+        SPECIES_VELUZA, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0998
         // Baxcalibur's only real abilities are Thermal Exchange (slot 0, now innate) and Ice Body (slot 2, now
         // innate), so its EMPTY slot 1 takes Snow Warning -- :x: (never an innate -> stable) and self-synergistic
@@ -1365,6 +1415,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Flash Fire — :x: (never an innate -> stable) and thematic: the haunted hot tea turns its Fire
         // weakness into an immunity (stacking with the innate Heatproof's burn-damage halving).
         SPECIES_SINISTCHA, 2,
+        ABILITY_FLASH_FIRE
+    },
+    { // 1017
+        // Ogerpon-Hearthflame's only ability (Mold Breaker, from the Hearthflame Mask) is now innate (Tier 5.5),
+        // and it's a frontier set, so like Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability
+        // in its EMPTY slot 1. Flash Fire is :x: (never an innate -> stable) and thematic for the fiery mask: it
+        // shrugs off Fire moves for an immunity + a Fire-power boost on its Ivy Cudgel (Fire-type) Swords Dance
+        // sweep, stacking with the innate Mold Breaker ability-ignore.
+        SPECIES_OGERPON_HEARTHFLAME, 1,
         ABILITY_FLASH_FIRE
     },
     { // 1017

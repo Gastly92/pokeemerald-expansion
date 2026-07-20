@@ -467,7 +467,7 @@ next sub-batch is the first row still `open`.
 | :-: | :-- | :-- | :-: | :-: |
 | W1 | Tier 5 & Y5 single-species tails | Espathra (5.6), Corviknight (5.7), Hatterene (5.8), Oricorio base+Pa'u (5.9), Garganacl (Y5) | 13 | done (fork chosen overrides: Espathra→Competitive, Corviknight→Bulletproof, Hatterene→Unaware, Oricorio+Pau→Tinted Lens, Garganacl→Solid Rock; all `.ability` rows repointed) |
 | W2 | Tier 5.4 Magic Guard all-innate | Clefable, Sigilyph, Reuniclus | ~7 | done (fork chosen overrides: Sigilyph→Simple (slot-2 Tinted Lens), Reuniclus→No Guard (slot-2 Regenerator); Clefable **excluded** — all 3 slots test-pinned, stays chosen Magic Guard) |
-| W3 | Tier 5.5 Mold Breaker all-innate | Excadrill, Sawk, Haxorus, Pangoro, Hawlucha, Basculegion, Tinkaton, Veluza, Ogerpon-Hearthflame | ~18 | open |
+| W3 | Tier 5.5 Mold Breaker all-innate | Excadrill, Sawk, Haxorus, Pangoro, Hawlucha, Basculegion, Tinkaton, Veluza, Ogerpon-Hearthflame | ~18 | done (Haxorus repointed to real slot-0 Rivalry; fork chosen overrides: Sawk→Sheer Force, Pangoro→Tough Claws, Hawlucha→Tough Claws, Basculegion M/F→Water Absorb, Veluza→Water Absorb, Ogerpon-Hearthflame→Flash Fire. **Excadrill & Tinkaton excluded** — all 3 slots test-pinned, stay chosen Mold Breaker, like Clefable in W2) |
 | W4 | Batch U ally-support all-innate | Dialga, Palkia, Giratina, Orbeetle, Aromatisse | 7 | open |
 | W5 | Batch T berry/item all-innate | Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne, Appletun | ~7 | open |
 | W6 | Batch K steal / Liquid Ooze / Cursed Body all-innate | Tentacruel, Swalot, Weavile, Grimmsnarl, Delphox, Klefki, Hoopa (+Unbound), Froslass, Banette | ~19 | open |
@@ -485,6 +485,12 @@ are test-pinned (Cute Charm the chosen-not-innate exemplar in
 `test/fork/innate_abilities.c`, Magic Guard the exemplar in
 `test/battle/ability/magic_guard.c`, Unaware the `chosen = ABILITY_UNAWARE`
 divergence PARAMETRIZE), so it keeps chosen Magic Guard (redundant-but-correct).
+**Excadrill and Tinkaton** (W3, Mold Breaker) are **excluded** for the same reason:
+all three of Excadrill's slots are test-pinned (Sand Rush + Sand Force in
+`test/fork/innate_abilities.c`, Mold Breaker in `beads_of_ruin.c` / `sword_of_ruin.c` /
+`ability_shield.c`) and all three of Tinkaton's are too (Mold Breaker + Own Tempo in
+`test/battle/ability/levitate.c`, Pickpocket in `test/battle/move_effect/hit_escape.c`),
+so both keep chosen Mold Breaker (redundant-but-correct).
 
 **Scope note.** This breakdown folds in two tails the original Batch W line didn't
 name: **Batch I** (~24 status-immunity all-innate sets, tracked separately in
