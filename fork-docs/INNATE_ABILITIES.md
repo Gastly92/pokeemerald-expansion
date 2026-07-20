@@ -2297,7 +2297,8 @@ Gooey (the Goomy line + both Hisui forms, Wiglett / Wugtrio), Tangling Hair (Dig
 The Megas mirror the base creature's contact reaction (pure-boon persistence, like the Mega convention). Step
 3.5 freed twelve frontier sets: Druddigon -> Sheer Force, Togedemaru -> Lightning Rod, Goodra -> Sap Sipper
 (complementary REAL slots); Sharpedo -> Strong Jaw, Garchomp -> Sand Stream, Ferrothorn -> Filter, Wugtrio ->
-Water Absorb (fork-owned overrides); Dugtrio-Alola's Tangling Hair set is kept because that slot is test-pinned.
+Water Absorb (fork-owned overrides); Dugtrio-Alola's Tangling Hair set is kept because that slot is test-pinned
+(`test/battle/move_effect/pursuit.c`), so it stays a real ability — a permanent Batch-W exclusion.
 
 ### ABILITY_AFTERMATH / ABILITY_INNARDS_OUT
 
@@ -3688,9 +3689,16 @@ Alakazam** sets are freed: with Magic Guard now innate, they repoint from the no
 Alakazam's real, **non-innate Synchronize** (`:x:` stable), so a chosen ability stays observable on top of the
 innate. The **3 Clefable / 2 Sigilyph / 2 Reuniclus** sets have **all** their real abilities now innate (Clefable:
 Cute Charm / Magic Guard / Unaware; Sigilyph: Wonder Skin / Magic Guard / Tinted Lens; Reuniclus: Overcoat / Magic
-Guard / Regenerator), so — like the Batch J/T/K/L/U all-innate tails — they keep their now-redundant chosen Magic
-Guard (still correct: the chosen runs it; the innate is redundant-but-skipped there) and are **deferred to Batch
-W** rather than a game-wide override sweep. This is **Tier 5.4**; Tier 5.5 (Mold Breaker) is next.
+Guard / Regenerator), so they were **deferred to Batch W** rather than a game-wide override sweep — **now resolved
+in Batch W2**: Sigilyph's innate-redundant slot-2 Tinted Lens takes chosen **Simple** (`:x:` stable — doubles its
+Cosmic Power / Stored Power stallbreaker) and Reuniclus's slot-2 Regenerator takes chosen **No Guard** (`:x:`
+stable — sure-hit Focus Blast on both sets), each observable atop the still-active innate Magic Guard (both slot-2
+picks were audited: no test selects those slots). **Clefable is a permanent Batch-W exclusion**: all three of its
+slots are test-pinned — Cute Charm is the chosen-not-innate exemplar in `test/fork/innate_abilities.c`, Magic Guard
+is the Magic Guard exemplar in `test/battle/ability/magic_guard.c` (+ pledge/retaliate/salt_cure/poison_heal/
+innards_out), and Unaware is the `chosen = ABILITY_UNAWARE` PARAMETRIZE in the innate divergence tests — so its 3
+sets keep their now-redundant chosen Magic Guard (still correct: the chosen runs it; the innate is
+redundant-but-skipped there), like the test-pinned Dugtrio-Alola. This is **Tier 5.4**; Tier 5.5 (Mold Breaker) is next.
 
 ### ABILITY_MOLD_BREAKER
 
