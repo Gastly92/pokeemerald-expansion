@@ -1382,9 +1382,33 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 
 };
 
+// GetSpeciesAbility (src/pokemon.c) calls this on EVERY ability lookup, game-wide
+// and in the AI's per-move hot path, but only the handful of species with a row
+// above ever match — so a plain linear scan taxes every lookup for the whole
+// roster (it was measurably inflating the AI's thinking time, and the Batch W sweep
+// keeps growing the table). A one-time bitmap of "which species have any override
+// row" lets the overwhelmingly common no-override case return in O(1); only a
+// species that actually carries an override falls through to the short scan.
+static u8 sSpeciesHasOverride[(NUM_SPECIES + 7) / 8];
+static bool8 sSpeciesHasOverrideReady;
+
 enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)
 {
     u32 i;
+
+    if (!sSpeciesHasOverrideReady)
+    {
+        for (i = 0; i < ARRAY_COUNT(sSpeciesAbilityOverrides); i++)
+        {
+            u16 s = sSpeciesAbilityOverrides[i].species;
+            sSpeciesHasOverride[s / 8] |= 1 << (s % 8);
+        }
+        sSpeciesHasOverrideReady = TRUE;
+    }
+
+    if (species >= NUM_SPECIES
+     || !(sSpeciesHasOverride[species / 8] & (1 << (species % 8))))
+        return ABILITY_NONE;
 
     for (i = 0; i < ARRAY_COUNT(sSpeciesAbilityOverrides); i++)
     {
