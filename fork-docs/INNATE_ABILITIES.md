@@ -2297,7 +2297,8 @@ Gooey (the Goomy line + both Hisui forms, Wiglett / Wugtrio), Tangling Hair (Dig
 The Megas mirror the base creature's contact reaction (pure-boon persistence, like the Mega convention). Step
 3.5 freed twelve frontier sets: Druddigon -> Sheer Force, Togedemaru -> Lightning Rod, Goodra -> Sap Sipper
 (complementary REAL slots); Sharpedo -> Strong Jaw, Garchomp -> Sand Stream, Ferrothorn -> Filter, Wugtrio ->
-Water Absorb (fork-owned overrides); Dugtrio-Alola's Tangling Hair set is kept because that slot is test-pinned.
+Water Absorb (fork-owned overrides); Dugtrio-Alola's Tangling Hair set is kept because that slot is test-pinned
+(`test/battle/move_effect/pursuit.c`), so it stays a real ability — a permanent Batch-W exclusion.
 
 ### ABILITY_AFTERMATH / ABILITY_INNARDS_OUT
 
