@@ -8785,7 +8785,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ZEN_HEADBUTT
         },
-        .ability = ABILITY_HYDRATION, // Oblivious now innate; chosen Hydration cures status in rain
+        .ability = ABILITY_STORM_DRAIN, // Oblivious + Anticipation + Hydration all innate; chosen Storm Drain (override, slot 2)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9105,7 +9105,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_HARVEST,
+        .ability = ABILITY_SOLAR_POWER, // Chlorophyll + Harvest now innate; chosen Solar Power (its real slot-1 HA, :x:)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9254,7 +9254,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PROTECT
         },
         // Thick Fat (and Oblivious) now innate; chosen Ice Body heals 1/16 HP each turn in snow.
-        .ability = ABILITY_ICE_BODY,
+        .ability = ABILITY_WATER_ABSORB, // Thick Fat + Ice Body + Oblivious all innate; chosen Water Absorb (override, slot 1)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9275,7 +9275,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_SLAM
         },
         // Thick Fat (and Oblivious) now innate; chosen Ice Body heals 1/16 HP each turn in snow.
-        .ability = ABILITY_ICE_BODY,
+        .ability = ABILITY_WATER_ABSORB, // Thick Fat + Ice Body + Oblivious all innate; chosen Water Absorb (override, slot 1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9319,7 +9319,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_HYDRATION, // Swift Swim now innate; chosen Hydration
+        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Hydration now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -9383,7 +9383,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWEET_KISS,
             MOVE_SOAK
         },
-        .ability = ABILITY_HYDRATION, // Swift Swim now innate; chosen Hydration
+        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Hydration now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11689,7 +11689,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATER_PULSE,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_ICE_BODY, // Snow Cloak now innate; chosen Ice Body (real slot 2) heals in snow
+        .ability = ABILITY_SNOW_WARNING, // Snow Cloak + Ice Body all innate; chosen Snow Warning (override, slot 2) feeds innate Snow Cloak/Ice Body
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12548,7 +12548,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_REST
         },
-        .ability = ABILITY_HYDRATION,
+        .ability = ABILITY_WATER_ABSORB, // Hydration now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12570,7 +12570,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_HYDRATION,
+        .ability = ABILITY_WATER_ABSORB, // Hydration now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -12590,7 +12590,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_SURF
         },
-        .ability = ABILITY_HYDRATION,
+        .ability = ABILITY_WATER_ABSORB, // Hydration now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -12612,7 +12612,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_BAD_DREAMS,
+        .ability = ABILITY_SHEER_FORCE, // Bad Dreams now innate; chosen Sheer Force (override, empty slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14293,7 +14293,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_HYDRATION,
+        .ability = ABILITY_STORM_DRAIN, // Keen Eye + Big Pecks + Hydration all innate; chosen Storm Drain (override, slot 2)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17358,7 +17358,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_HARVEST,
+        .ability = ABILITY_SAP_SIPPER, // Natural Cure + Frisk + Harvest all innate; chosen Sap Sipper (override, slot 2)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17378,7 +17378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_HARVEST, // Natural Cure now innate; chosen Harvest (real slot 2), Trevenant's signature
+        .ability = ABILITY_SAP_SIPPER, // Natural Cure + Frisk + Harvest all innate; chosen Sap Sipper (override, slot 2)
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17487,7 +17487,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_ICE_BODY, // Sturdy & Strong Jaw now innate; chosen Ice Body
+        .ability = ABILITY_ICE_SCALES, // Strong Jaw + Ice Body + Sturdy all innate; chosen Ice Scales (override, slot 1)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17507,7 +17507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_ICE_BODY, // Sturdy & Strong Jaw now innate; chosen Ice Body
+        .ability = ABILITY_ICE_SCALES, // Strong Jaw + Ice Body + Sturdy all innate; chosen Ice Scales (override, slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24162,7 +24162,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OVERHEAT,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_SHED_SKIN,
+        .ability = ABILITY_MOTOR_DRIVE, // Shed Skin + Regenerator now innate; chosen Motor Drive (override, empty slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24182,7 +24182,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_SHED_SKIN,
+        .ability = ABILITY_MOTOR_DRIVE, // Shed Skin + Regenerator now innate; chosen Motor Drive (override, empty slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
