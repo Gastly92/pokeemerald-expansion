@@ -325,6 +325,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BLAZIKEN, 1,
         ABILITY_SHEER_FORCE
     },
+    { // 0262
+        // Mightyena's three real abilities (Intimidate, Quick Feet, Moxie) are ALL now innate; slot-0 Intimidate is
+        // test-pinned (innate test / opportunist.c / contrary.c), so its innate-redundant slot-2 Moxie (audited: no
+        // Ability(ABILITY_MOXIE) on Mightyena in test/) takes a chosen Sheer Force -- :x: (never an innate -> stable)
+        // and a clean boon for the vicious biter: its Crunch / Play Rough / Fire Fang gain +30% and drop their
+        // secondaries, observable alongside the innate Intimidate.
+        SPECIES_MIGHTYENA, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0264
         // Linoone's three real abilities (Pickup, Gluttony, Quick Feet) are ALL now innate; slot-0 Pickup is the
         // default read by tests (fury_cutter.c / pursuit.c / ai.c / ai_switching.c), so its innate-redundant slot-1
@@ -349,6 +358,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // statused, stacking with the innate Guts.
         SPECIES_SWELLOW, 1,
         ABILITY_QUICK_FEET
+    },
+    { // 0284
+        // Masquerain's only real abilities (Intimidate, Unnerve) are BOTH now innate, so its EMPTY slot 1 takes a
+        // chosen Storm Drain -- :x: (never an innate -> stable) and thematic for the pond-skating water strider: it
+        // draws in Water moves for a Sp. Atk boost + immunity, a clean boon for its Quiver Dance special sweeper.
+        SPECIES_MASQUERAIN, 1,
+        ABILITY_STORM_DRAIN
     },
     { // 0291
         // Speed Boost and Infiltrator now innate, so its EMPTY slot 1 takes Tough Claws, an implemented
@@ -470,6 +486,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_RELICANTH, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0373
+        // Salamence's only real abilities (Intimidate, Moxie) are BOTH now innate, so its EMPTY slot 1 takes a chosen
+        // Rivalry -- :x: (never an innate -> stable) and thematic for the ferocious, territorial dragon: it hits
+        // same-gender foes 25% harder, observable on its Dragon Dance / Choice sweeper sets alongside the innate
+        // Intimidate.
+        SPECIES_SALAMENCE, 1,
+        ABILITY_RIVALRY
+    },
     { // 0376
         // Metagross's only real abilities are Clear Body (slot 0) and Light Metal (slot 2), BOTH now innate, so
         // its EMPTY slot 1 takes Tough Claws, an already-implemented :white_check_mark: innate (stable) and its Mega's
@@ -529,6 +553,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0389
         SPECIES_TORTERRA, 1,
         ABILITY_SAND_STREAM
+    },
+    { // 0398
+        // Staraptor's only real abilities (Intimidate, Reckless) are BOTH now innate, so its EMPTY slot 1 takes a
+        // chosen Hustle -- :x: (never an innate -> stable) and thematic for the reckless raptor: +50% Attack powers
+        // its Brave Bird / Double-Edge / Close Combat spam (the -20% accuracy is the brash predator's price),
+        // stacking with the innate Reckless recoil boost.
+        SPECIES_STARAPTOR, 1,
+        ABILITY_HUSTLE
     },
     { // 0401
         // Kricketune's only real abilities (Swarm, Technician) are BOTH now innate, so its empty slot 1
@@ -767,6 +799,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SAMUROTT, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0508
+        // Stoutland's three real abilities (Intimidate, Sand Rush, Scrappy) are ALL now innate; slot-1 Sand Rush is
+        // test-pinned (sand_rush.c), so its innate-redundant slot-2 Scrappy (audited: no Ability(ABILITY_SCRAPPY) on
+        // Stoutland in test/) takes a chosen Sheer Force -- :x: (never an innate -> stable) and a boon for the loyal
+        // gundog: its Crunch / Body Slam gain +30% and drop their secondaries, observable alongside the innate
+        // Intimidate.
+        SPECIES_STOUTLAND, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0510
         // Liepard's three real abilities (Limber, Unburden, Prankster) are ALL now innate; slot-0 Limber is the
         // default read by revelation_dance.c, so its innate-redundant slot-1 Unburden (audited: no
@@ -816,6 +857,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // for the cotton fairy: its team can't be put to sleep.
         SPECIES_WHIMSICOTT, 2,
         ABILITY_SWEET_VEIL
+    },
+    { // 0553
+        // Krookodile's three real abilities (Intimidate, Moxie, Anger Point) are ALL now innate; slot-0 Intimidate is
+        // test-pinned (frontier_battle_info_reveal.c), so its innate-redundant slot-2 Anger Point (audited: no
+        // Ability(ABILITY_ANGER_POINT) on Krookodile in test/) takes a chosen Sand Stream -- :x: (never an innate ->
+        // stable) and thematic for the desert croc: it kicks up a sandstorm on entry (Ground-immune to the chip, a
+        // clean team boon), observable alongside the innate Intimidate.
+        SPECIES_KROOKODILE, 2,
+        ABILITY_SAND_STREAM
+    },
+    { // 0560
+        // Scrafty's three real abilities (Shed Skin, Moxie, Intimidate) are ALL now innate; slot-2 Intimidate is
+        // test-pinned (primal_reversion.c) and slot-0 Shed Skin is the default read by ai_switching.c, so its
+        // innate-redundant slot-1 Moxie (audited: no Ability(ABILITY_MOXIE) on Scrafty in test/) takes a chosen
+        // Rivalry -- :x: (never an innate -> stable) and thematic for the gang-forming thug lizard: it hits
+        // same-gender rivals 25% harder, observable on its Bulk Up sweeper alongside the innate Intimidate.
+        SPECIES_SCRAFTY, 1,
+        ABILITY_RIVALRY
     },
     { // 0561
         // Sigilyph's three real abilities (Wonder Skin, Magic Guard, Tinted Lens) are ALL now innate (Tier 5.4).
