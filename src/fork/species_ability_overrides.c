@@ -1013,6 +1013,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_REUNICLUS, 2,
         ABILITY_NO_GUARD
     },
+    { // 0589
+        // Escavalier's three real abilities (Swarm, Shell Armor, Overcoat) are ALL now innate, and none is
+        // test-pinned (audited: no test selects Escavalier), so its innate-redundant slot-2 Overcoat takes Sheer
+        // Force -- :x: (never an innate -> stable) and a clean boon for the Cavalry Pokemon's Swords Dance sets: Iron
+        // Head gains +30% and drops its flinch, stacking with the innate Shell Armor (no crits taken).
+        SPECIES_ESCAVALIER, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0594
         SPECIES_ALOMOMOLA, 2,
         ABILITY_WATER_ABSORB
@@ -1056,6 +1064,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // rides the innate Unburden and also selects this Tinted Lens slot.)
         SPECIES_ACCELGOR, 1,
         ABILITY_TINTED_LENS
+    },
+    { // 0620
+        // Mienshao's three real abilities (Inner Focus, Regenerator, Reckless) are ALL now innate; slot-0 Inner Focus
+        // is the default read (upper_hand.c), so its innate-redundant slot-2 Reckless (audited: no Ability() on
+        // Mienshao in test/) takes No Guard -- :x: (never an innate -> stable) and thematic for the martial artist:
+        // its High Jump Kick never misses (and never crashes), a clean boon for the fast attacker on top of the
+        // innate Reckless (recoil/crash power) and Regenerator pivot. Same pick as the other fighters (Hitmonlee).
+        SPECIES_MIENSHAO, 2,
+        ABILITY_NO_GUARD
+    },
+    { // 0630
+        // Mandibuzz's non-drawback real abilities (Big Pecks, Overcoat) are BOTH now innate (Weak Armor, slot 2, is a
+        // drawback on a wall), and slot-1 Overcoat is the chosen-differs-from-innate exemplar in
+        // test/fork/innate_abilities.c, so its slot-2 Weak Armor takes Unaware -- an already-implemented
+        // :white_check_mark: innate (stable, like Spiritomb's) it does not carry innately and a pure boon for the
+        // Bone Vulture's Foul Play / Roost / Defog wall: it ignores the foe's stat boosts.
+        SPECIES_MANDIBUZZ, 2,
+        ABILITY_UNAWARE
     },
     { // 0635
         SPECIES_HYDREIGON, 1, 
@@ -1219,6 +1245,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_KLEFKI, 1,
         ABILITY_BULLETPROOF
     },
+    { // 0713
+        // Avalugg's three real abilities (Own Tempo, Ice Body, Sturdy) are ALL now innate, and none is test-pinned
+        // (audited: no test selects Avalugg); both its frontier sets ran the now-innate Own Tempo / Ice Body, so its
+        // slot-2 Sturdy takes Ice Scales -- an already-implemented :white_check_mark: innate (stable) it does not
+        // carry innately and perfectly patches the Iceberg Pokemon's one soft spot: its huge physical wall gains a
+        // halved special-damage cushion, on top of the innate Sturdy / Ice Body. (Both sets select this slot.)
+        SPECIES_AVALUGG, 2,
+        ABILITY_ICE_SCALES
+    },
     { // 0715
         // Infiltrator now innate (slots 0/2 Frisk/Telepathy are pending), so its pending slot-2 Telepathy
         // (audited: unpinned) takes Punk Rock, an implemented :white_check_mark: innate (stable) that powers
@@ -1290,6 +1325,17 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Toxic-spreading innate Corrosion.
         SPECIES_SALAZZLE, 1,
         ABILITY_FLAME_BODY
+    },
+    { // 0763
+        // Tsareena's three real abilities (Leaf Guard, Queenly Majesty, Sweet Veil) are ALL now innate; slot-0 Leaf
+        // Guard is the chosen-differs-from-innate exemplar (test/fork/innate_abilities.c) and slot-1 Queenly Majesty
+        // is test-pinned (dazzling.c / ai.c), so its innate-redundant slot-2 Sweet Veil takes Grassy Surge -- :x:
+        // (never an innate -> stable) and thematic for the Fruit Pokemon: the terrain it sets powers its Grass STAB
+        // (Power Whip / Trop Kick) and passively heals, on top of the innate Queenly Majesty (priority block). Same
+        // pick as the other Grass mons (Lilligant / Venusaur). Non-immunity pick avoids perturbing the ai.c /
+        // dazzling.c priority-block tests that read Tsareena's ability set.
+        SPECIES_TSAREENA, 2,
+        ABILITY_GRASSY_SURGE
     },
     { // 0764
         // Comfey's Triage is now innate (and its Natural Cure was already innate), so its slot-2 Natural

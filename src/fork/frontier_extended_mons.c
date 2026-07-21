@@ -14399,7 +14399,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_OVERCOAT, // Swarm now innate (latched); chosen Overcoat
+        .ability = ABILITY_SHEER_FORCE, // Swarm/Shell Armor/Overcoat ALL now innate; chosen Sheer Force (fork override, slot 2) boosts Iron Head (Batch W9)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14419,7 +14419,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_OVERCOAT,
+        .ability = ABILITY_SHEER_FORCE, // Swarm/Shell Armor/Overcoat ALL now innate; chosen Sheer Force (fork override, slot 2) boosts Iron Head (Batch W9)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14977,7 +14977,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_INNER_FOCUS, // Regenerator & Reckless now innate; chosen Inner Focus
+        .ability = ABILITY_NO_GUARD, // Inner Focus/Regenerator/Reckless ALL now innate; chosen No Guard (fork override, slot 2) makes High Jump Kick never miss (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14997,7 +14997,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_U_TURN
         },
-        .ability = ABILITY_INNER_FOCUS, // Regenerator & Reckless now innate; chosen Inner Focus
+        .ability = ABILITY_NO_GUARD, // Inner Focus/Regenerator/Reckless ALL now innate; chosen No Guard (fork override, slot 2) makes High Jump Kick never miss (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15209,7 +15209,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_TOXIC
         },
-        .ability = ABILITY_OVERCOAT,
+        .ability = ABILITY_UNAWARE, // Big Pecks + Overcoat now innate; chosen Unaware (fork override, slot 2, ignores foe boosts) suits this Foul Play wall (Batch W9)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15229,7 +15229,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_TAUNT
         },
-        .ability = ABILITY_OVERCOAT,
+        .ability = ABILITY_UNAWARE, // Big Pecks + Overcoat now innate; chosen Unaware (fork override, slot 2, ignores foe boosts) suits this Foul Play wall (Batch W9)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17442,7 +17442,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_OWN_TEMPO, // Sturdy now innate; chosen Own Tempo keeps this wall confusion-proof
+        .ability = ABILITY_ICE_SCALES, // Own Tempo/Ice Body/Sturdy ALL now innate; chosen Ice Scales (fork override, slot 2) halves special damage on this physical wall (Batch W9)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17462,7 +17462,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_ICE_BODY,
+        .ability = ABILITY_ICE_SCALES, // Own Tempo/Ice Body/Sturdy ALL now innate; chosen Ice Scales (fork override, slot 2) halves special damage on this physical wall (Batch W9)
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18749,7 +18749,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_LEAF_GUARD, // Queenly Majesty now innate; chosen Leaf Guard (real slot) adds sun status-immunity
+        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard/Queenly Majesty/Sweet Veil ALL now innate; chosen Grassy Surge (fork override, slot 2) powers its Grass STAB (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18769,7 +18769,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SYNTHESIS,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_LEAF_GUARD, // Queenly Majesty now innate; chosen Leaf Guard (real slot) adds sun status-immunity
+        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard/Queenly Majesty/Sweet Veil ALL now innate; chosen Grassy Surge (fork override, slot 2) powers its Grass STAB (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24439,7 +24439,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST,
             MOVE_SLEEP_TALK
         },
-        .ability = ABILITY_WATER_VEIL, // Unaware now innate; chosen Water Veil keeps this Curse wall burn-proof
+        .ability = ABILITY_WATER_VEIL, // Unaware/Oblivious/Water Veil ALL now innate, but slots 1/2 (Oblivious, Water Veil) are chosen-differs exemplars in the innate test and slot-0 Unaware is the default read in AI tests (ai_check_viability/ai_switching), so Dondozo keeps chosen Water Veil (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24459,7 +24459,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_WATER_VEIL, // Unaware & Oblivious now innate; chosen Water Veil prevents burn on the bulky pivot
+        .ability = ABILITY_WATER_VEIL, // all real innate now, but slots 1/2 are innate-test chosen-differs exemplars and slot-0 Unaware is the AI-test default read, so kept chosen Water Veil (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
