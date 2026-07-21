@@ -1176,6 +1176,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DECIDUEYE, 1,
         ABILITY_SNIPER
     },
+    { // 0727
+        // Incineroar's only real abilities (Blaze, Intimidate) are BOTH now innate, so its EMPTY slot 1 takes
+        // Tough Claws -- an already-implemented :white_check_mark: innate (stable, like Weavile/Metagross) it does
+        // not carry innately and perfectly thematic for the Heel Pokemon: its entirely-contact kit (Fake Out /
+        // Flare Blitz / Darkest Lariat / Knock Off / U-turn) gains +30%, a clean offensive boon on its bulky
+        // Intimidate pivot sets, observable alongside the innate Intimidate.
+        SPECIES_INCINEROAR, 1,
+        ABILITY_TOUGH_CLAWS
+    },
     { // 0738
         SPECIES_VIKAVOLT, 1,
         ABILITY_MOTOR_DRIVE
@@ -1661,9 +1670,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SOLID_ROCK
     },
     { // 0943
-        // Guard Dog and Stakeout now innate (slot-0 Intimidate is pending), so its innate-redundant slot-2
-        // Stakeout (audited: unpinned) takes Strong Jaw, an implemented :white_check_mark: innate (stable) that
-        // powers the Boss mastiff's Crunch / Jaw Lock / Psychic Fangs bites.
+        // Mabosstiff's three real abilities (Intimidate, Guard Dog, Stakeout) are ALL now innate, so its
+        // innate-redundant slot-2 Stakeout (audited: unpinned) takes Strong Jaw, an implemented
+        // :white_check_mark: innate (stable) that powers the Boss mastiff's Crunch / Jaw Lock / Psychic Fangs
+        // bites, observable alongside the innate Intimidate. (Both frontier sets select this Strong Jaw slot.)
         SPECIES_MABOSSTIFF, 2,
         ABILITY_STRONG_JAW
     },

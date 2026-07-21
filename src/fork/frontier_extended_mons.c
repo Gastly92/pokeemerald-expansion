@@ -17992,7 +17992,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARKEST_LARIAT,
             MOVE_PARTING_SHOT
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_TOUGH_CLAWS, // Blaze + Intimidate now innate; chosen Tough Claws powers its contact kit (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18012,7 +18012,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARKEST_LARIAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_INTIMIDATE, // Blaze now innate (latched); chosen Intimidate
+        .ability = ABILITY_TOUGH_CLAWS, // Blaze + Intimidate now innate; chosen Tough Claws powers its contact kit (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18032,7 +18032,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_U_TURN
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_TOUGH_CLAWS, // Blaze + Intimidate now innate; chosen Tough Claws powers its contact kit (override)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22794,7 +22794,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SAP_SIPPER, // Intimidate + Frisk now innate; chosen Sap Sipper (real slot 2)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23007,7 +23007,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_POISON_POINT, // Intimidate + Swift Swim now innate; chosen Poison Point (real slot 0)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23474,7 +23474,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_DOUBLE_EDGE
         },
-        .ability = ABILITY_INTIMIDATE, // Guts now innate; Intimidate adds switch-in utility
+        .ability = ABILITY_HUSTLE, // Intimidate + Guts now innate; chosen Hustle (real slot 1) powers its Facade attacker
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23729,7 +23729,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_STRONG_JAW, // Intimidate + Guard Dog + Stakeout now innate; chosen Strong Jaw powers its bites (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
