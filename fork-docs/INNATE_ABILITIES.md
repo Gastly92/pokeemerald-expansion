@@ -2608,9 +2608,10 @@ Levitate rows) and **every Genesect form** (base + Douse / Shock / Burn / Chill 
 **Supersweet Syrup** -> the Dipplin / Hydrapple line (merged onto their existing Sticky Hold rows). No omissions:
 Genesect is sole-Download but **is** a frontier set, so it takes the innate (see Step 3.5) rather than being
 dropped as redundant. **Step 3.5**: the Porygon2 Download frontier set is freed to its complementary REAL slot-0
-**Trace** (`:x:` stable — copies a foe ability); the all-real-abilities-innate Porygon-Z sets and the sole-ability
-Genesect sets keep their now-redundant chosen Download (still correct: the chosen runs it, the innate is
-redundant-but-skipped) — **deferred** like Batch J/T/K and the Intimidate sub-group. Supersweet Syrup has no other
+**Trace** (`:x:` stable — copies a foe ability). The all-real-abilities-innate Porygon-Z sets and the sole-ability
+Genesect sets were freed in **Batch W7** via fork chosen-ability overrides (`src/fork/species_ability_overrides.c`):
+Porygon-Z repurposes its innate-redundant slot-2 Analytic HA to **Simple** (`:x:` stable; slot-0 Adaptability is
+test-pinned so it stays), and Genesect fills its EMPTY slot 1 with **Sheer Force** (`:x:` stable). Supersweet Syrup has no other
 frontier set to free (Dipplin is off-roster; Hydrapple already runs a fork-owned chosen Grassy Surge override).
 
 ### ABILITY_UNNERVE / ABILITY_HOSPITALITY
