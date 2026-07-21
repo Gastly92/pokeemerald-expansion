@@ -7196,7 +7196,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_MOXIE, // Quick Feet now innate; Moxie snowballs on KOs
+        .ability = ABILITY_SHEER_FORCE, // Quick Feet + Moxie now innate; chosen Sheer Force (slot 2)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7216,7 +7216,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7595,7 +7595,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_HYDRO_PUMP
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_STORM_DRAIN, // Intimidate now innate; chosen Storm Drain (slot 1)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7954,7 +7954,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (real slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7974,7 +7974,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (real slot 2)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9404,7 +9404,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9424,7 +9424,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (slot 1)
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9444,7 +9444,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (slot 1)
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10201,7 +10201,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_INTIMIDATE, // Reckless now innate; chosen Intimidate
+        .ability = ABILITY_HUSTLE, // Reckless + Intimidate now innate; chosen Hustle (slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10221,7 +10221,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUICK_ATTACK,
             MOVE_DOUBLE_EDGE
         },
-        .ability = ABILITY_INTIMIDATE, // Reckless now innate; chosen Intimidate
+        .ability = ABILITY_HUSTLE, // Reckless + Intimidate now innate; chosen Hustle (slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10289,7 +10289,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (real slot 0)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10309,7 +10309,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_INTIMIDATE, // Guts now innate; Intimidate adds switch-in utility
+        .ability = ABILITY_RIVALRY, // Guts + Intimidate now innate; chosen Rivalry (real slot 0)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12954,7 +12954,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_INTIMIDATE, // Sand Rush now innate; chosen Intimidate
+        .ability = ABILITY_SHEER_FORCE, // Sand Rush + Intimidate now innate; chosen Sheer Force (slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12974,7 +12974,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROAR,
             MOVE_REST
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 2)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13677,7 +13677,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_MOXIE,
+        .ability = ABILITY_SAND_STREAM, // Moxie now innate; chosen Sand Stream (slot 2)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13697,7 +13697,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TAUNT
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SAND_STREAM, // Intimidate now innate; chosen Sand Stream (slot 2)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13867,7 +13867,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_MOXIE,
+        .ability = ABILITY_RIVALRY, // Moxie now innate; chosen Rivalry (slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13887,7 +13887,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
