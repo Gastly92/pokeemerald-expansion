@@ -2977,7 +2977,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_UNBURDEN,
+        // Limber/Reckless/Unburden all now innate; chosen No Guard makes its kicks never miss (fork override).
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2997,7 +2998,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_BLAZE_KICK
         },
-        .ability = ABILITY_UNBURDEN, // Limber & Reckless now innate; chosen Unburden
+        .ability = ABILITY_NO_GUARD, // Limber/Reckless/Unburden now innate; chosen No Guard (kicks never miss)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3954,6 +3955,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
 
     // 0143
+    // BATCH W5 EXCLUSION: Snorlax's three real abilities (Immunity, Thick Fat, Gluttony) are ALL now innate, but
+    // ALL THREE slots are test-pinned -- Immunity (immunity.c / synchronize.c / corrosion.c / check_bad_move.c /
+    // deterministic_abilities.c / hit_switch_target.c), Thick Fat (thick_fat.c), Gluttony (the innate test's
+    // Ability(ABILITY_GLUTTONY) chosen-differs exemplar) -- so it keeps chosen Gluttony (redundant-but-correct),
+    // like Clefable (W2) / Excadrill & Tinkaton (W3). Do NOT free it.
     {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_SINGLES,
@@ -7232,7 +7238,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SEED_BOMB,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_GLUTTONY,
+        // Pickup/Gluttony/Quick Feet all now innate; chosen Scrappy lets its Normal STAB hit Ghosts (fork override).
+        .ability = ABILITY_SCRAPPY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7252,7 +7259,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SEED_BOMB
         },
-        .ability = ABILITY_GLUTTONY, // Quick Feet now innate; Gluttony (situational) frees the slot
+        .ability = ABILITY_SCRAPPY, // Pickup/Gluttony/Quick Feet now innate; chosen Scrappy (Facade hits Ghosts)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12989,7 +12996,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_UNBURDEN, // Limber + Prankster now innate; chosen Unburden doubles Speed once Sitrus is eaten
+        .ability = ABILITY_INFILTRATOR, // Limber/Unburden/Prankster now innate; chosen Infiltrator (Foul Play/Encore ignore subs & screens)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17137,7 +17144,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIGHT_SCREEN,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_CHEEK_POUCH,
+        // Cheek Pouch + Pickup now innate; chosen Plus (real slot 2) is the Electric mouse's doubles Sp. Atk gimmick.
+        .ability = ABILITY_PLUS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20779,7 +20787,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_FOUL_PLAY
         },
-        .ability = ABILITY_UNBURDEN, // Stakeout now innate; chosen Unburden
+        .ability = ABILITY_RUN_AWAY, // Unburden + Stakeout now innate; Run Away is its only stable non-innate real slot
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -20994,8 +21002,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_LEECH_SEED
         },
-        // Thick Fat now innate; chosen Ripen fills the slot (doubles any Berry's effect).
-        .ability = ABILITY_RIPEN,
+        // Ripen/Gluttony/Thick Fat all now innate; chosen Filter blunts its 4x Ice weakness (fork override).
+        .ability = ABILITY_FILTER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -21015,8 +21023,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_EARTH_POWER
         },
-        // Thick Fat now innate; chosen Ripen fills the slot (doubles any Berry's effect).
-        .ability = ABILITY_RIPEN,
+        // Ripen/Gluttony/Thick Fat all now innate; chosen Filter blunts its 4x Ice weakness (fork override).
+        .ability = ABILITY_FILTER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
