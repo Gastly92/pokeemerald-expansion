@@ -1986,7 +1986,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_HAZE
         },
-        .ability = ABILITY_LIQUID_OOZE,
+        .ability = ABILITY_WATER_ABSORB, // Clear Body / Liquid Ooze / Rain Dish all innate; chosen Water Absorb (override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2006,7 +2006,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_RAIN_DISH,
+        .ability = ABILITY_WATER_ABSORB, // Clear Body / Liquid Ooze / Rain Dish all innate; chosen Water Absorb (override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -8230,7 +8230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PAIN_SPLIT,
             MOVE_ENCORE
         },
-        .ability = ABILITY_LIQUID_OOZE,
+        .ability = ABILITY_POISON_TOUCH, // Liquid Ooze / Sticky Hold / Gluttony all innate; chosen Poison Touch (override)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9039,7 +9039,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_FRISK,
+        .ability = ABILITY_WANDERING_SPIRIT, // Insomnia / Frisk / Cursed Body all innate; chosen Wandering Spirit (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9059,7 +9059,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DESTINY_BOND,
             MOVE_TAUNT
         },
-        .ability = ABILITY_CURSED_BODY, // Insomnia now innate; chosen Cursed Body
+        .ability = ABILITY_WANDERING_SPIRIT, // Insomnia / Frisk / Cursed Body all innate; chosen Wandering Spirit (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11264,7 +11264,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_PICKPOCKET, // Pressure + Pickpocket both now innate; chosen Pickpocket redundant-but-correct (deferred, see header)
+        .ability = ABILITY_TOUGH_CLAWS, // Pressure / Pickpocket both innate; chosen Tough Claws (override)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11284,7 +11284,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_PICKPOCKET,
+        .ability = ABILITY_TOUGH_CLAWS, // Pressure / Pickpocket both innate; chosen Tough Claws (override)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11304,7 +11304,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LOW_KICK,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_PICKPOCKET, // Pressure + Pickpocket both now innate; chosen Pickpocket redundant-but-correct (deferred, see header)
+        .ability = ABILITY_TOUGH_CLAWS, // Pressure / Pickpocket both innate; chosen Tough Claws (override)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11968,7 +11968,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_CURSED_BODY,
+        .ability = ABILITY_SNOW_WARNING, // Snow Cloak / Cursed Body both innate; chosen Snow Warning (override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11988,7 +11988,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_TAUNT
         },
-        .ability = ABILITY_CURSED_BODY, // Snow Cloak now innate; chosen Cursed Body (real HA)
+        .ability = ABILITY_SNOW_WARNING, // Snow Cloak / Cursed Body both innate; chosen Snow Warning (override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16119,7 +16119,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_MAGICIAN, // Blaze + Magician both now innate; chosen Magician redundant-but-correct (deferred, see header)
+        .ability = ABILITY_FLASH_FIRE, // Blaze / Magician both innate; chosen Flash Fire (override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16139,7 +16139,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_MYSTICAL_FIRE
         },
-        .ability = ABILITY_MAGICIAN,
+        .ability = ABILITY_FLASH_FIRE, // Blaze / Magician both innate; chosen Flash Fire (override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16159,7 +16159,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_PSYSHOCK
         },
-        .ability = ABILITY_MAGICIAN, // Blaze + Magician both now innate; chosen Magician redundant-but-correct (deferred, see header)
+        .ability = ABILITY_FLASH_FIRE, // Blaze / Magician both innate; chosen Flash Fire (override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17314,7 +17314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_SPIKES
         },
-        .ability = ABILITY_MAGICIAN, // Prankster + Magician both now innate; chosen Magician redundant-but-correct (deferred, see header)
+        .ability = ABILITY_BULLETPROOF, // Prankster / Magician both innate; chosen Bulletproof (override)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17334,7 +17334,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_MAGICIAN, // Prankster + Magician both now innate; chosen Magician redundant-but-correct (deferred, see header)
+        .ability = ABILITY_BULLETPROOF, // Prankster / Magician both innate; chosen Bulletproof (override)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17757,7 +17757,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_MAGICIAN,
+        .ability = ABILITY_TINTED_LENS, // Magician innate; chosen Tinted Lens (override)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17779,7 +17779,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_MAGICIAN,
+        .ability = ABILITY_TOUGH_CLAWS, // Magician innate; chosen Tough Claws (override)
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17799,7 +17799,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_GUNK_SHOT
         },
-        .ability = ABILITY_MAGICIAN,
+        .ability = ABILITY_TOUGH_CLAWS, // Magician innate; chosen Tough Claws (override)
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21404,7 +21404,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIRIT_BREAK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_PICKPOCKET, // Prankster + Pickpocket both now innate; chosen Pickpocket redundant-but-correct, deferred (Spirit Break set)
+        .ability = ABILITY_INFILTRATOR, // Prankster / Frisk / Pickpocket all innate; chosen Infiltrator (override)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21424,7 +21424,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_DRAIN_PUNCH
         },
-        .ability = ABILITY_PICKPOCKET, // Prankster + Pickpocket both now innate; chosen Pickpocket redundant-but-correct, deferred (contact sweeper)
+        .ability = ABILITY_INFILTRATOR, // Prankster / Frisk / Pickpocket all innate; chosen Infiltrator (override)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21444,7 +21444,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_PARTING_SHOT
         },
-        .ability = ABILITY_PICKPOCKET, // Prankster + Pickpocket both now innate; chosen Pickpocket redundant-but-correct, deferred (Spirit Break set)
+        .ability = ABILITY_INFILTRATOR, // Prankster / Frisk / Pickpocket all innate; chosen Infiltrator (override)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
