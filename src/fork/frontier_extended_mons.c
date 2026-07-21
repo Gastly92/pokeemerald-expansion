@@ -2197,7 +2197,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_OWN_TEMPO, // Oblivious/Own Tempo/Regenerator ALL now innate, but slot-1 Own Tempo (swagger.c / berserk_gene.c) + slot-2 Regenerator (regenerator.c) are test-pinned and slot-0 Oblivious is the default read, so Slowbro keeps chosen Own Tempo (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2260,7 +2260,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_POISON_TOUCH, // Quick Draw/Own Tempo/Regenerator ALL now innate; chosen Poison Touch (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2280,7 +2280,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_POISON_TOUCH, // Quick Draw/Own Tempo/Regenerator ALL now innate; chosen Poison Touch (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2637,7 +2637,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_WISH
         },
-        .ability = ABILITY_INNER_FOCUS, // Insomnia now innate; chosen Inner Focus
+        .ability = ABILITY_INNER_FOCUS, // Insomnia/Forewarn/Inner Focus ALL now innate, but slot-2 Inner Focus is the chosen-differs-from-innate exemplar in test/fork/innate_abilities.c, so Hypno keeps chosen Inner Focus (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2657,7 +2657,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_INNER_FOCUS, // Insomnia now innate; chosen Inner Focus
+        .ability = ABILITY_INNER_FOCUS, // all real innate now, but slot-2 Inner Focus is the chosen-differs exemplar in the innate test, so kept (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3020,7 +3020,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_PUNCH,
             MOVE_MACH_PUNCH
         },
-        .ability = ABILITY_INNER_FOCUS, // Keen Eye & Iron Fist now innate; chosen Inner Focus prevents flinch
+        .ability = ABILITY_NO_GUARD, // Keen Eye/Iron Fist/Inner Focus ALL now innate; chosen No Guard (fork override, slot 2) makes its punches never miss (Batch W9)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3040,7 +3040,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_MACH_PUNCH
         },
-        .ability = ABILITY_INNER_FOCUS, // Keen Eye & Iron Fist now innate; chosen Inner Focus prevents flinch
+        .ability = ABILITY_NO_GUARD, // Keen Eye/Iron Fist/Inner Focus ALL now innate; chosen No Guard (fork override, slot 2) makes its punches never miss (Batch W9)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3188,7 +3188,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_POWER_UP_PUNCH
         },
-        .ability = ABILITY_INNER_FOCUS, // Early Bird & Scrappy now innate; chosen Inner Focus (its real slot 2) blocks flinches
+        .ability = ABILITY_INNER_FOCUS, // Early Bird/Scrappy/Inner Focus ALL now innate, but slot-1 Scrappy + slot-2 Inner Focus are test-pinned (lash_out.c / ai_calc_best_move_score.c) and slot-0 Early Bird is the default read, so Kangaskhan keeps chosen Inner Focus (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3208,7 +3208,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_INNER_FOCUS, // Early Bird & Scrappy now innate; chosen Inner Focus
+        .ability = ABILITY_INNER_FOCUS, // all real innate now; slots test-pinned so kept chosen Inner Focus (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4833,7 +4833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_INNER_FOCUS,
+        .ability = ABILITY_RECKLESS, // Inner Focus + Infiltrator now innate; chosen Reckless (fork override, slot 1) powers Brave Bird (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4873,7 +4873,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_INNER_FOCUS,
+        .ability = ABILITY_RECKLESS, // Inner Focus + Infiltrator now innate; chosen Reckless (fork override, slot 1) powers Brave Bird (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5459,7 +5459,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_WATER_ABSORB, // Oblivious/Own Tempo/Regenerator ALL now innate; chosen Water Absorb (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5479,7 +5479,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_WATER_ABSORB, // Oblivious/Own Tempo/Regenerator ALL now innate; chosen Water Absorb (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5499,7 +5499,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CHILLING_WATER,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_WATER_ABSORB, // Oblivious/Own Tempo/Regenerator ALL now innate; chosen Water Absorb (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6423,7 +6423,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIKES,
             MOVE_WHIRLWIND
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_MOODY, // Own Tempo + Technician now innate; chosen Moody (real slot 2, :x: never-innate) stays observable (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

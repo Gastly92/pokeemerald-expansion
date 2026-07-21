@@ -137,6 +137,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GOLEM, 2,
         ABILITY_SAND_STREAM
     },
+    { // 0080
+        // Galarian Slowbro's three real abilities (Quick Draw, Own Tempo, Regenerator) are ALL now innate;
+        // slot-0 Quick Draw + slot-1 Own Tempo are test-pinned (quick_draw.c / deterministic_abilities.c / the
+        // innate test), so its innate-redundant slot-2 Regenerator (audited: no Ability(ABILITY_REGENERATOR) on
+        // SLOWBRO_GALAR in test/) takes Poison Touch -- :x: (never an innate -> stable) and thematic for the
+        // Poison/Psychic mon: its Shell Side Arm contact can poison the target, observable alongside the innate
+        // Own Tempo / Quick Draw. Same Poison-flavor pick as Swalot / Skuntank.
+        SPECIES_SLOWBRO_GALAR, 2,
+        ABILITY_POISON_TOUCH
+    },
     { // 0091
         // Shell Armor, Skill Link and Overcoat are ALL now innate, so its innate-redundant slot-2 Overcoat
         // (audited: unpinned) takes Sniper, an implemented :white_check_mark: innate (stable) that pays off its
@@ -152,6 +162,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Blaze Kick / Stone Edge never miss (and HJK never crashes on a miss), a clean offensive boon alongside
         // its innate Reckless (recoil/crash boost) and Unburden (Speed). Same pick as Pidgeot.
         SPECIES_HITMONLEE, 2,
+        ABILITY_NO_GUARD
+    },
+    { // 0107
+        // Hitmonchan's three real abilities (Keen Eye, Iron Fist, Inner Focus) are ALL now innate; slot-0 Keen Eye
+        // is test-pinned (keen_eye.c PARAMETRIZE + the default read in the innate test), so its innate-redundant
+        // slot-2 Inner Focus (audited: no Ability(ABILITY_INNER_FOCUS) on Hitmonchan in test/) takes No Guard --
+        // :x: (never an innate -> stable) and thematic for the Punching Pokemon: its Mach Punch / Ice Punch /
+        // Thunder Punch / Close Combat never miss, a clean offensive boon alongside its innate Iron Fist (punch
+        // power) and Inner Focus (flinch immunity). Same pick as the sibling fighters Hitmonlee / Hitmontop.
+        SPECIES_HITMONCHAN, 2,
         ABILITY_NO_GUARD
     },
     { // 0128
@@ -230,6 +250,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // weed's Sleep Powder / Leech Seed support kit.
         SPECIES_JUMPLUFF, 1,
         ABILITY_PRANKSTER
+    },
+    { // 0199
+        // Slowking's three real abilities (Oblivious, Own Tempo, Regenerator) are ALL now innate; slot-0 Oblivious
+        // is the default read (psyblade.c) and slot-1 Own Tempo is test-pinned (frontier_battle_info_reveal.c), so
+        // its innate-redundant slot-2 Regenerator (audited: no Ability(ABILITY_REGENERATOR) on Slowking in test/)
+        // takes Water Absorb -- :x: (never an innate -> stable) and thematic for the Water/Psychic wall: it shrugs
+        // off Water moves and heals from them, a clean boon for its bulky Slack Off / Calm Mind sets alongside the
+        // innate Regenerator / Own Tempo. Same pick as the other Water walls (Suicune / Tentacruel / Samurott).
+        SPECIES_SLOWKING, 2,
+        ABILITY_WATER_ABSORB
     },
     { // 0205
         // Forretress's only real abilities (Sturdy, Overcoat) are BOTH now innate, so its EMPTY slot 1 takes
