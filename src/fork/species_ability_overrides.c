@@ -445,6 +445,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SHARPEDO, 1,
         ABILITY_STRONG_JAW
     },
+    // NOTE: Wailord (0321) and Camerupt (0323) are deliberately NOT given a chosen override — they are Batch W9
+    // EXCLUSIONS. Both are used in AI tests that are sensitive to the species' whole ability SET, not just the
+    // chosen slot: Wailord in test/battle/ai/ai.c ("best OHKO move" — a move-absorbing ability like Water Absorb in
+    // any slot makes the AI treat Water Spout as possibly-nullified and pick Thunder instead) and Camerupt in
+    // test/battle/ai/ai_thinking_time.c (the "Steven multi" node-count ceiling is already at its limit, so an extra
+    // AI-evaluation branch from an immunity ability like Flash Fire tips it over). So both keep their now-innate
+    // chosen ability (Water Veil / Magma Armor) — redundant-but-correct — like the other AI/test-pinned exclusions
+    // (Slowbro / Snorlax / Clefable).
+    { // 0326
+        // Grumpig's three real abilities (Thick Fat, Own Tempo, Gluttony) are ALL now innate; slot-0 Thick Fat is the
+        // default read and slot-2 Gluttony is the chosen-differs-from-innate exemplar in test/fork/innate_abilities.c,
+        // so its innate-redundant slot-1 Own Tempo (audited: no Ability(ABILITY_OWN_TEMPO) on Grumpig in test/) takes
+        // Synchronize -- :x: (never an innate -> stable) and thematic for the Psychic pig: burns / poison / paralysis
+        // inflicted on it bounce back, a clean boon for its Thick Fat / Calm Mind special tank alongside the innate
+        // Own Tempo (confusion immunity) and Gluttony.
+        SPECIES_GRUMPIG, 1,
+        ABILITY_SYNCHRONIZE
+    },
     { // 0330
         SPECIES_FLYGON, 1,
         ABILITY_SAND_STREAM
@@ -699,6 +717,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TANGROWTH, 2,
         ABILITY_SAP_SIPPER
     },
+    { // 0470
+        // Leafeon's real abilities (Leaf Guard in slots 0 AND 1, Chlorophyll in slot 2) are ALL now innate; slot-0
+        // Leaf Guard is the chosen-differs-from-innate exemplar in test/fork/innate_abilities.c (and leaf_guard.c),
+        // so its innate-redundant DUPLICATE slot-1 Leaf Guard (never selected -- Ability(ABILITY_LEAF_GUARD) resolves
+        // to slot 0) takes Sap Sipper -- :x: (never an innate -> stable) and thematic for the Verdant Pokemon: Grass
+        // moves give it an Attack boost + immunity, a clean boon for its Swords Dance physical sweeper alongside the
+        // innate Chlorophyll (Speed in sun). Same pick as the other Grass mons (Tangrowth).
+        SPECIES_LEAFEON, 1,
+        ABILITY_SAP_SIPPER
+    },
     { // 0473
         // Mamoswine's three real abilities (Oblivious, Snow Cloak, Thick Fat) are ALL now innate, so
         // its slot-2 Thick Fat — now innate-redundant — is repurposed to Snow Warning. Snow Warning is
@@ -873,6 +901,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_AUDINO, 1,
         ABILITY_CUTE_CHARM
     },
+    { // 0538
+        // Throh's three real abilities (Guts, Inner Focus, Mold Breaker) are ALL now innate, and none is test-pinned
+        // (audited: no test selects Throh), so its innate-redundant slot-1 Inner Focus takes Simple -- :x: (never an
+        // innate -> stable) and a perfect fit for its Bulk Up tank set: each Bulk Up counts double (+2 Atk / +2 Def),
+        // snowballing the Judo Pokemon's Drain Punch / Body Press sweep, on top of the innate Guts. (Its karate
+        // counterpart Sawk takes Sheer Force just below.)
+        SPECIES_THROH, 1,
+        ABILITY_SIMPLE
+    },
     { // 0539
         // Sawk's three real abilities (Sturdy, Inner Focus, Mold Breaker) are ALL now innate (Mold Breaker,
         // Tier 5.5), so its innate-redundant slot-1 Inner Focus (audited: no test selects Sawk) takes Sheer
@@ -881,12 +918,32 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SAWK, 1,
         ABILITY_SHEER_FORCE
     },
+    { // 0542
+        // Leavanny's three real abilities (Swarm, Chlorophyll, Overcoat) are ALL now innate, and none is test-pinned
+        // (audited: no test selects Leavanny), so its innate-redundant slot-2 Overcoat takes Sharpness -- an
+        // already-implemented :white_check_mark: innate (stable) it does not carry innately and perfectly thematic for
+        // the Nurturing Pokemon's scythe arms: its slicing STAB (Leaf Blade / X-Scissor) gains +50%, a clean boon for
+        // its Swords Dance / Sticky Web sets alongside the innate Chlorophyll (Speed in sun).
+        SPECIES_LEAVANNY, 2,
+        ABILITY_SHARPNESS
+    },
     { // 0547
         // Prankster, Infiltrator and Chlorophyll are ALL now innate, so its innate-redundant slot-2 Chlorophyll
         // (audited: unpinned) takes Sweet Veil, an implemented :white_check_mark: innate (stable) and thematic
         // for the cotton fairy: its team can't be put to sleep.
         SPECIES_WHIMSICOTT, 2,
         ABILITY_SWEET_VEIL
+    },
+    { // 0549
+        // Lilligant's three real abilities (Chlorophyll, Own Tempo, Leaf Guard) are ALL now innate; slot-0 Chlorophyll
+        // is the default read and slot-1 Own Tempo is the chosen-differs-from-innate exemplar in
+        // test/fork/innate_abilities.c, so its innate-redundant slot-2 Leaf Guard (audited: no Ability(ABILITY_LEAF_GUARD)
+        // on Lilligant in test/) takes Grassy Surge -- :x: (never an innate -> stable) and thematic for the Flowering
+        // Pokemon: the terrain it sets powers its Grass STAB (Giga Drain / Petal Dance) and passively heals, a clean
+        // boon for its Quiver Dance sweeper alongside the innate Chlorophyll (Speed in sun) and Dancer. Same pick as
+        // the other Grass mons (Venusaur / Meganium / Celebi).
+        SPECIES_LILLIGANT, 2,
+        ABILITY_GRASSY_SURGE
     },
     { // 0553
         // Krookodile's three real abilities (Intimidate, Moxie, Anger Point) are ALL now innate; slot-0 Intimidate is
