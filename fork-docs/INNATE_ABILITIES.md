@@ -3005,8 +3005,15 @@ partner/side-support effects with no thematic hook off their canon users). Each 
 slots), and **Stonjourner** (sole Power Spot, doubles-only) takes a fork-owned **Solid Rock** override
 (`species_ability_overrides.c`, an implemented `:white_check_mark:` innate, stable) on its empty slot 1, like
 Ogerpon-Cornerstone. The seven **Dialga / Palkia / Giratina / Orbeetle / Aromatisse** sets whose real abilities are
-**all** now innate keep their now-redundant chosen ability — still correct (the chosen runs it; the innate is
-redundant-but-skipped) — **deferred** as a focused follow-up, like Batch J/T/K/L. This completes Batch U.
+**all** now innate were **deferred** as a focused follow-up, like Batch J/T/K/L, and are **now resolved in
+[Batch W4](INNATE_ABILITIES_BATCHES.md#batch-w-sub-queue-the-breakdown):** a fork-owned override
+(`species_ability_overrides.c`) gives each species an observable chosen slot — **Dialga (+Origin)** → chosen
+**Bulletproof** (`:x:` stable, Steel-legend deflect Focus Blast, like Skarmory/Registeel/Corviknight), **Palkia
+(+Origin)** → chosen **Water Absorb** (`:x:` stable, the Water-legend pick), **Giratina-Altered** and **Orbeetle** →
+chosen **Unaware** (implemented `:white_check_mark:`, stable — the bulky-wall / Calm-Mind pick; Orbeetle has no empty
+slot so it repurposes its unpinned slot-2 Telepathy, the rest fill an empty slot 1), and **Aromatisse** → chosen
+**Misty Surge** (`:x:` stable, the Fairy cleric's terrain support). Giratina-Origin already had a stable Dragon's Maw
+override (an implemented `:white_check_mark:` innate it does not itself carry) and keeps it. This completes Batch U.
 
 ### ABILITY_CHILLING_NEIGH / ABILITY_GRIM_NEIGH / ABILITY_ELECTROMORPHOSIS
 

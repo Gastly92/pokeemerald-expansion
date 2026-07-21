@@ -311,9 +311,12 @@
 // Florges (Telepathy / Flower Veil now innate) -> chosen Symbiosis. Stonjourner (sole Power Spot, doubles-only, now
 // innate) is the one fork-owned override here: like Ogerpon-Cornerstone it fills its empty slot 1 with a chosen Solid
 // Rock (an already-implemented :white_check_mark: innate, stable) so its singles sets aren't stuck on a doubles-only
-// ability. DEFERRED (tracked follow-up, like Batch J/T/K/L): the seven Dialga / Palkia / Giratina / Orbeetle / Aromatisse
-// sets whose real abilities are ALL now innate keep their now-redundant chosen ability — still correct (the chosen runs
-// it; the innate is redundant-but-skipped there) — rather than a game-wide override sweep.
+// ability. RESOLVED in Batch W4 (fork-docs/INNATE_ABILITIES_BATCHES.md): the Dialga / Palkia / Giratina / Orbeetle /
+// Aromatisse sets, whose real abilities are ALL now innate, take a fork-owned override (src/species_ability_overrides.c)
+// so the chosen slot is observable rather than a now-redundant innate — Dialga (+Origin) -> chosen Bulletproof, Palkia
+// (+Origin) -> chosen Water Absorb, Giratina-Altered / Orbeetle -> chosen Unaware (Orbeetle has no empty slot, so it
+// repurposes its unpinned slot-2 Telepathy; the rest fill an empty slot 1), Aromatisse -> chosen Misty Surge; each a
+// stable :x: or already-implemented :white_check_mark: pick. (Giratina-Origin kept its earlier stable Dragon's Maw override.)
 //
 // The promoted-from-rejected clones (Batch Y sub-group Y1 — Chilling Neigh / Grim Neigh raise the holder's
 // Attack / Sp. Atk +1 per foe it KOs, Moxie clones; Electromorphosis charges the next Electric move on any
@@ -12258,7 +12261,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_TELEPATHY, // Pressure now innate; chosen Telepathy (only other real slot) dodges ally spread damage
+        .ability = ABILITY_BULLETPROOF, // Pressure + Telepathy both now innate; chosen Bulletproof (fork override) deflects Focus Blast at its Fighting weakness
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12278,7 +12281,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ROAR_OF_TIME
         },
-        .ability = ABILITY_TELEPATHY,
+        .ability = ABILITY_BULLETPROOF, // Pressure + Telepathy both now innate; chosen Bulletproof (fork override) for the armored Steel legend
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12300,7 +12303,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_TELEPATHY, // Pressure now innate; chosen Telepathy (only other real slot) dodges ally spread damage
+        .ability = ABILITY_BULLETPROOF, // Pressure + Telepathy both now innate; chosen Bulletproof (fork override) for the armored Steel legend
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12322,7 +12325,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_TELEPATHY, // Pressure now innate; chosen Telepathy (only other real slot) dodges ally spread damage
+        .ability = ABILITY_WATER_ABSORB, // Pressure + Telepathy both now innate; chosen Water Absorb (fork override) heals off Water for the space legend
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12342,7 +12345,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_TELEPATHY,
+        .ability = ABILITY_WATER_ABSORB, // Pressure + Telepathy both now innate; chosen Water Absorb (fork override) for the space legend
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12364,7 +12367,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_TELEPATHY, // Pressure now innate; chosen Telepathy (only other real slot) dodges ally spread damage
+        .ability = ABILITY_WATER_ABSORB, // Pressure + Telepathy both now innate; chosen Water Absorb (fork override) for the space legend
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12450,7 +12453,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST,
             MOVE_DEFOG
         },
-        .ability = ABILITY_TELEPATHY, // Pressure now innate; chosen Telepathy (only other real slot) dodges ally spread damage
+        .ability = ABILITY_UNAWARE, // Pressure + Telepathy both now innate; chosen Unaware (fork override) ignores setup on the bulky Renegade wall
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16643,7 +16646,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AROMATISSE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Aroma Veil Trick Room cleric
+        .heldItem = ITEM_LEFTOVERS, // Trick Room cleric (innate Aroma Veil / Healer)
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -16651,7 +16654,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AROMATHERAPY,
             MOVE_WISH
         },
-        .ability = ABILITY_AROMA_VEIL,
+        .ability = ABILITY_MISTY_SURGE, // Healer + Aroma Veil both now innate; chosen Misty Surge (fork override) sets terrain support for the Fairy cleric
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20732,7 +20735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_STICKY_WEB
         },
-        .ability = ABILITY_TELEPATHY,
+        .ability = ABILITY_UNAWARE, // Swarm/Frisk/Telepathy all now innate; chosen Unaware (fork override) on the dual-screens pivot
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20753,7 +20756,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_ROOST
         },
-        .ability = ABILITY_FRISK,
+        .ability = ABILITY_UNAWARE, // Swarm/Frisk/Telepathy all now innate; chosen Unaware (fork override) ignores setup on the bulky Calm Mind sweeper
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
