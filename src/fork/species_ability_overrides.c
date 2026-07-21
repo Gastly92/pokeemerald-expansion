@@ -111,6 +111,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VICTREEBEL, 1,
         ABILITY_EFFECT_SPORE
     },
+    { // 0073
+        // Tentacruel's three real abilities (Clear Body, Liquid Ooze, Rain Dish) are ALL now innate; slots 0/1
+        // (Clear Body, Liquid Ooze) are pinned by tests (ai_switching.c / liquid_ooze.c / the innate test), so its
+        // innate-redundant slot-2 Rain Dish -- unpinned by any test (audited) -- takes Water Absorb. Water Absorb is
+        // :x: (never an innate -> stable) and thematic for the jellyfish: it shrugs off Water moves and heals from
+        // them, a clean boon for its bulky spinner sets on top of the innate Liquid Ooze / Clear Body. Same pick as
+        // the other Water walls (Suicune / Samurott / Clawitzer).
+        SPECIES_TENTACRUEL, 2,
+        ABILITY_WATER_ABSORB
+    },
     { // 0076
         // Rock Head, Sturdy and Sand Veil are ALL now innate, so its innate-redundant slot-2 Sand Veil
         // (audited: unpinned) takes Sand Stream -- :x: (never an innate -> stable) and self-synergistic: the
@@ -317,6 +327,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VOLBEAT, 1,
         ABILITY_VICTORY_STAR
     },
+    { // 0317
+        // Swalot's three real abilities (Liquid Ooze, Sticky Hold, Gluttony) are ALL now innate, and NONE is
+        // test-pinned (audited: no reference to Swalot in test/), so its innate-redundant slot-2 Gluttony takes
+        // Poison Touch. Poison Touch is :x: (never an innate -> stable) and a clean boon for the Poison Bag's
+        // Sticky Hold status tank: its Gunk Shot / Body Slam contact can poison the target, adding chip to its
+        // Toxic / Encore disruption, on top of the innate Liquid Ooze (punishing drainers) and Sticky Hold.
+        SPECIES_SWALOT, 2,
+        ABILITY_POISON_TOUCH
+    },
     { // 0319
         // Sharpedo's only real abilities (Rough Skin, Speed Boost) are BOTH now innate, so its EMPTY slot 1
         // takes Strong Jaw, an already-implemented :white_check_mark: innate (stable) and its Mega's ability:
@@ -367,6 +386,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0348
         SPECIES_ARMALDO, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0354
+        // Banette's three real abilities (Insomnia, Frisk, Cursed Body) are ALL now innate; slot-0 Insomnia is the
+        // default read by terastal.c, so its innate-redundant slot-2 Cursed Body -- unpinned by any test (audited)
+        // -- takes Wandering Spirit. Wandering Spirit is :x: (never an innate -> stable) and thematic for the
+        // possessed Marionette Pokemon (the Mismagius precedent): contact attackers swap Abilities with the doll, a
+        // disruptive boon on top of the innate Frisk / Cursed Body. (Both frontier sets, formerly on the now-innate
+        // Frisk / Cursed Body, select this Wandering Spirit slot.)
+        SPECIES_BANETTE, 2,
+        ABILITY_WANDERING_SPIRIT
     },
     { // 0358
         SPECIES_CHIMECHO, 1,
@@ -532,6 +561,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CARNIVINE, 1,
         ABILITY_CHLOROPHYLL
     },
+    { // 0461
+        // Weavile's only real abilities (Pressure, Pickpocket) are BOTH now innate, so its EMPTY slot 1 takes Tough
+        // Claws, an already-implemented :white_check_mark: innate (stable) it does not carry innately and perfectly
+        // thematic for the Sharp Claw Pokemon: its entirely-contact kit (Triple Axel / Icicle Crash / Knock Off /
+        // Ice Shard / Low Kick) gains +30%, a broad boon for its fast Life Orb physical attacker on top of the innate
+        // Pickpocket steal.
+        SPECIES_WEAVILE, 1,
+        ABILITY_TOUGH_CLAWS
+    },
     { // 0462
         // Magnezone's three real abilities (Magnet Pull, Sturdy, Analytic) are ALL now innate; slot-0 Magnet Pull and
         // slot-1 Sturdy are pinned by tests, so its innate-redundant slot-2 Analytic (audited: no Ability(ABILITY_ANALYTIC)
@@ -558,6 +596,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // innate -> stable) and thematic for the compass magnet: an Electric immunity + Sp. Atk boost for its special wall.
         SPECIES_PROBOPASS, 1,
         ABILITY_LIGHTNING_ROD
+    },
+    { // 0478
+        // Froslass's only real abilities (Snow Cloak, Cursed Body) are BOTH now innate, so its EMPTY slot 1 takes
+        // Snow Warning -- :x: (never an innate -> stable) and self-synergistic for the Snow Land Pokemon: the snow
+        // it heralds turns on its own innate Snow Cloak evasion, a clean boon for its fast Spikes / Destiny Bond lead
+        // on top of the innate Cursed Body. Same pick as the other ice mons (Articuno / Beartic / Cryogonal / Frosmoth).
+        SPECIES_FROSLASS, 1,
+        ABILITY_SNOW_WARNING
     },
     { // 0479
         SPECIES_ROTOM, 1,
@@ -862,6 +908,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MELOETTA, 1,
         ABILITY_PUNK_ROCK
     },
+    { // 0655
+        // Delphox's only real abilities (Blaze, Magician) are BOTH now innate; slot-0 Blaze and slot-2 Magician are
+        // both pinned by tests (the innate test / magician.c / air_balloon.c), so its EMPTY slot 1 takes Flash Fire.
+        // Flash Fire is :x: (never an innate -> stable) and thematic for the mystic fox: it shrugs off Fire moves for
+        // an immunity + a Fire-power boost on its Choice Specs special breaker, on top of the innate Magician steal.
+        // Same pick as the other Fire attackers (Simisear / Reshiram / Sinistcha).
+        SPECIES_DELPHOX, 1,
+        ABILITY_FLASH_FIRE
+    },
     { // 0660
         // Diggersby's three real abilities (Pickup, Cheek Pouch, Huge Power) are ALL now innate, so its slot-2
         // Huge Power — now innate-redundant and unpinned by any test (audited: no Ability(ABILITY_HUGE_POWER)
@@ -937,6 +992,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CARBINK, 1,
         ABILITY_SOLID_ROCK
     },
+    { // 0707
+        // Klefki's only real abilities (Prankster, Magician) are BOTH now innate, and NONE is test-pinned (audited:
+        // no reference to Klefki in test/), so its EMPTY slot 1 takes Bulletproof. Bulletproof is :x: (never an
+        // innate -> stable) and thematic for the Steel/Fairy Key Ring: it deflects the Focus Blast / Sludge Bomb /
+        // Energy Ball ball-and-bomb moves aimed at its Prankster dual-screens + Spikes support core, on top of the
+        // innate Prankster (priority status) and Magician steal. Same pick as the other Steel walls (Skarmory / Dialga).
+        SPECIES_KLEFKI, 1,
+        ABILITY_BULLETPROOF
+    },
     { // 0715
         // Infiltrator now innate (slots 0/2 Frisk/Telepathy are pending), so its pending slot-2 Telepathy
         // (audited: unpinned) takes Punk Rock, an implemented :white_check_mark: innate (stable) that powers
@@ -950,6 +1014,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // supereffective Steel/Ground/Water/Grass hits its Life Orb / Leftovers sets fear.
         SPECIES_DIANCIE, 1,
         ABILITY_SOLID_ROCK
+    },
+    { // 0720
+        // Hoopa's only real ability (Magician) is now innate, so its EMPTY slot 1 takes Tinted Lens, an already-
+        // implemented :white_check_mark: innate (stable, like Accelgor) the Mischief Pokemon does not carry innately
+        // and thematic for the ringed djinn that warps space: its Psychic / Shadow Ball / Focus Blast special breaker
+        // punches through resists for full damage, on top of the innate Magician steal.
+        SPECIES_HOOPA, 1,
+        ABILITY_TINTED_LENS
+    },
+    { // 0720
+        // Hoopa-Unbound's only real ability (Magician) is now innate, so its EMPTY slot 1 takes Tough Claws, an
+        // already-implemented :white_check_mark: innate (stable) the Unbound djinn does not carry innately and
+        // thematic for its six massive arms: its physical contact kit (Hyperspace Fury / Drain Punch / Fire Punch /
+        // Zen Headbutt) gains +30%, a strong boon for its Life Orb mixed wallbreaker on top of the innate Magician steal.
+        SPECIES_HOOPA_UNBOUND, 1,
+        ABILITY_TOUGH_CLAWS
     },
     { // 0724
         // Decidueye-Hisui's only real abilities (Overgrow, Scrappy) are BOTH now innate, so its EMPTY slot 1
@@ -1247,6 +1327,17 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // on top of the innate Magic Bounce reflection. (Slot-2 Magic Bounce stays a real slot -- its identity.)
         SPECIES_HATTERENE, 1,
         ABILITY_UNAWARE
+    },
+    { // 0861
+        // Grimmsnarl's three real abilities (Prankster, Frisk, Pickpocket) are ALL now innate; slot-0 Prankster is
+        // the default read by lash_out.c, so its innate-redundant slot-2 Pickpocket -- unpinned by any test (audited)
+        // -- takes Infiltrator. Infiltrator is an already-implemented :white_check_mark: innate (stable, like Liepard)
+        // the Bulk Up imp does not carry innately and thematic for the sneaky hair-tendril attacker: its Foul Play /
+        // Spirit Break / Darkest Lariat ignore the foe's screens and Substitute, a clean boon for its Prankster
+        // dual-screens lead and Bulk Up sweeper on top of the innate Prankster / Frisk. (All three frontier sets,
+        // formerly on the now-innate Pickpocket, select this Infiltrator slot.)
+        SPECIES_GRIMMSNARL, 2,
+        ABILITY_INFILTRATOR
     },
     { // 0865
         // Sirfetch'd's Scrappy is now innate and its remaining slot-0 Steadfast is weak (and pending), so its
