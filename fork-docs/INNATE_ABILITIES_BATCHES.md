@@ -469,7 +469,7 @@ next sub-batch is the first row still `open`.
 | W2 | Tier 5.4 Magic Guard all-innate | Clefable, Sigilyph, Reuniclus | ~7 | done (fork chosen overrides: Sigilyph→Simple (slot-2 Tinted Lens), Reuniclus→No Guard (slot-2 Regenerator); Clefable **excluded** — all 3 slots test-pinned, stays chosen Magic Guard) |
 | W3 | Tier 5.5 Mold Breaker all-innate | Excadrill, Sawk, Haxorus, Pangoro, Hawlucha, Basculegion, Tinkaton, Veluza, Ogerpon-Hearthflame | ~18 | done (Haxorus repointed to real slot-0 Rivalry; fork chosen overrides: Sawk→Sheer Force, Pangoro→Tough Claws, Hawlucha→Tough Claws, Basculegion M/F→Water Absorb, Veluza→Water Absorb, Ogerpon-Hearthflame→Flash Fire. **Excadrill & Tinkaton excluded** — all 3 slots test-pinned, stay chosen Mold Breaker, like Clefable in W2) |
 | W4 | Batch U ally-support all-innate | Dialga, Palkia, Giratina, Orbeetle, Aromatisse | 7 | done (fork chosen overrides: Dialga(+Origin)→Bulletproof, Palkia(+Origin)→Water Absorb, Giratina-Altered→Unaware, Orbeetle→Unaware (slot-2 Telepathy repurposed; no empty slot), Aromatisse→Misty Surge; all `.ability` rows repointed off the now-innate Telepathy/Aroma Veil. Giratina-Origin already had a stable Dragon's Maw override — kept, comment clarified) |
-| W5 | Batch T berry/item all-innate | Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne, Appletun | ~7 | open |
+| W5 | Batch T berry/item all-innate | Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne, Appletun | ~7 | done (fork chosen overrides: Hitmonlee→No Guard (slot 2), Linoone→Scrappy (slot 1), Liepard→Infiltrator (slot 1), Appletun→Filter (slot 2); Thievul repointed to real slot-0 Run Away, Dedenne to real slot-2 Plus (no override — both had a free non-innate real slot). **Snorlax excluded** — all 3 slots test-pinned (Immunity/Thick Fat/Gluttony), stays chosen Gluttony like Clefable/Excadrill/Tinkaton) |
 | W6 | Batch K steal / Liquid Ooze / Cursed Body all-innate | Tentacruel, Swalot, Weavile, Grimmsnarl, Delphox, Klefki, Hoopa (+Unbound), Froslass, Banette | ~19 | open |
 | W7 | Batch L Download all-innate | Porygon-Z, Genesect | 4 | open |
 | W8 | Batch L Intimidate all-innate (**split by dex**) | the ~40 sets that hardcoded Intimidate | ~40 | open |
@@ -490,7 +490,12 @@ all three of Excadrill's slots are test-pinned (Sand Rush + Sand Force in
 `test/fork/innate_abilities.c`, Mold Breaker in `beads_of_ruin.c` / `sword_of_ruin.c` /
 `ability_shield.c`) and all three of Tinkaton's are too (Mold Breaker + Own Tempo in
 `test/battle/ability/levitate.c`, Pickpocket in `test/battle/move_effect/hit_escape.c`),
-so both keep chosen Mold Breaker (redundant-but-correct).
+so both keep chosen Mold Breaker (redundant-but-correct). **Snorlax** (W5, Gluttony) is
+**excluded** too: all three of its slots are test-pinned (Immunity in `immunity.c` /
+`synchronize.c` / `corrosion.c` / `check_bad_move.c` / `deterministic_abilities.c` /
+`hit_switch_target.c`, Thick Fat in `thick_fat.c`, Gluttony the `Ability(ABILITY_GLUTTONY)`
+chosen-differs exemplar in `test/fork/innate_abilities.c`), so it keeps chosen Gluttony
+(redundant-but-correct).
 
 **Scope note.** This breakdown folds in two tails the original Batch W line didn't
 name: **Batch I** (~24 status-immunity all-innate sets, tracked separately in

@@ -125,6 +125,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CLOYSTER, 2,
         ABILITY_SNIPER
     },
+    { // 0106
+        // Hitmonlee's three real abilities (Limber, Reckless, Unburden) are ALL now innate; slot-0 Limber is
+        // pinned by tests (last_respects.c / check_bad_move.c + the innate test's default read), so its innate-
+        // redundant slot-2 Unburden (audited: no Ability(ABILITY_UNBURDEN) on Hitmonlee in test/) takes No Guard.
+        // No Guard is :x: (never an innate -> stable) and thematic for the Kicking Pokemon: its High Jump Kick /
+        // Blaze Kick / Stone Edge never miss (and HJK never crashes on a miss), a clean offensive boon alongside
+        // its innate Reckless (recoil/crash boost) and Unburden (Speed). Same pick as Pidgeot.
+        SPECIES_HITMONLEE, 2,
+        ABILITY_NO_GUARD
+    },
     { // 0142
         // Rock Head + Pressure now innate; its pending slot-2 Unnerve (audited: unpinned) takes Tough Claws, an
         // implemented :white_check_mark: innate (stable) and its Mega's ability, powering its contact STAB
@@ -249,6 +259,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // (Close Combat / Blaze Kick / Thunder Punch all gain the +30% and drop their secondaries).
         SPECIES_BLAZIKEN, 1,
         ABILITY_SHEER_FORCE
+    },
+    { // 0264
+        // Linoone's three real abilities (Pickup, Gluttony, Quick Feet) are ALL now innate; slot-0 Pickup is the
+        // default read by tests (fury_cutter.c / pursuit.c / ai.c / ai_switching.c), so its innate-redundant slot-1
+        // Gluttony (audited: no Ability(ABILITY_GLUTTONY) on Linoone in test/) takes Scrappy -- an already-implemented
+        // :white_check_mark: innate (stable, like Diggersby's) it does not carry innately: its Normal STAB (Extreme
+        // Speed / Facade / Body Slam) then hits Ghosts, a clean coverage boon for its Belly Drum priority sweeper
+        // alongside the innate Quick Feet (Speed) / Gluttony.
+        SPECIES_LINOONE, 1,
+        ABILITY_SCRAPPY
     },
     { // 0269
         // Dustox's only real abilities (Shield Dust, Compound Eyes) are BOTH now innate, so its EMPTY slot 1
@@ -636,6 +656,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0503
         SPECIES_SAMUROTT, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0510
+        // Liepard's three real abilities (Limber, Unburden, Prankster) are ALL now innate; slot-0 Limber is the
+        // default read by revelation_dance.c, so its innate-redundant slot-1 Unburden (audited: no
+        // Ability(ABILITY_UNBURDEN) on Liepard in test/) takes Infiltrator -- an already-implemented
+        // :white_check_mark: innate (stable) it does not carry innately and thematic for the sneaky cat: its Foul
+        // Play / Knock Off / Encore ignore the target's Substitute and screens, a clean disruption boon alongside
+        // its innate Prankster (priority status) and Unburden (Speed once Sitrus is eaten).
+        SPECIES_LIEPARD, 1,
+        ABILITY_INFILTRATOR
     },
     { // 0512
         // Simisage's only real abilities (Gluttony, Overgrow) are BOTH now innate, so its EMPTY slot 1 takes
@@ -1180,6 +1210,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // on the now-innate Telepathy / Frisk, select this Unaware slot.)
         SPECIES_ORBEETLE, 2,
         ABILITY_UNAWARE
+    },
+    { // 0842
+        // Appletun's three real abilities (Ripen, Gluttony, Thick Fat) are ALL now innate; slot-0 Ripen is the
+        // default read by sleep_clause.c / dynamax.c, so its innate-redundant slot-2 Thick Fat (audited: no
+        // Ability(ABILITY_THICK_FAT) on Appletun in test/) takes Filter -- an already-implemented :white_check_mark:
+        // innate (stable) it does not carry innately: it blunts the crippling 4x Ice weakness its Grass/Dragon
+        // typing suffers, a clean defensive boon for its bulky special tank alongside the innate Thick Fat. Same
+        // "blunt the big supereffective weakness" pick as the Steel/Grass walls Forretress / Ferrothorn / Aggron.
+        SPECIES_APPLETUN, 2,
+        ABILITY_FILTER
     },
     { // 0847
         // Barraskewda's only real abilities (Swift Swim, Propeller Tail) are BOTH now innate, so its EMPTY
