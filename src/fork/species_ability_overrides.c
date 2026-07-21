@@ -57,6 +57,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VENUSAUR, 1,
         ABILITY_GRASSY_SURGE
     },
+    { // 0009
+        // Blastoise's only real abilities (Torrent, Rain Dish) are BOTH now innate, so its EMPTY slot 1 takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the water-cannon turtle: it soaks up
+        // Water-type moves for a heal, observable alongside the innate Torrent / Rain Dish.
+        SPECIES_BLASTOISE, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0012
         // Butterfree's only real abilities (Compound Eyes, Tinted Lens) are BOTH now innate, so its EMPTY
         // slot 1 takes Effect Spore — :x: (never an innate -> stable) and flavorful: the powder-scattering
@@ -147,12 +154,34 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SLOWBRO_GALAR, 2,
         ABILITY_POISON_TOUCH
     },
+    { // 0087
+        // Dewgong's three real abilities (Thick Fat, Hydration, Ice Body) are ALL now innate, and it is used by
+        // no test, so its innate-redundant slot-2 Ice Body takes a chosen Snow Warning -- :x: (never an innate ->
+        // stable) and thematic for the sea-lion of the icy seas: it summons snow, which its own innate Ice Body
+        // (and an Aurora Veil set) then cash in, observable alongside the innate Thick Fat / Hydration.
+        SPECIES_DEWGONG, 2,
+        ABILITY_SNOW_WARNING
+    },
     { // 0091
         // Shell Armor, Skill Link and Overcoat are ALL now innate, so its innate-redundant slot-2 Overcoat
         // (audited: unpinned) takes Sniper, an implemented :white_check_mark: innate (stable) that pays off its
         // Skill Link Icicle Spear crits.
         SPECIES_CLOYSTER, 2,
         ABILITY_SNIPER
+    },
+    { // 0103
+        // Exeggutor's only real abilities (Chlorophyll, Harvest) are BOTH now innate, so its EMPTY slot 1 takes
+        // Sap Sipper -- :x: (never an innate -> stable) and thematic for the walking palm: Grass-type moves miss
+        // it and instead boost its Attack, observable alongside the innate Chlorophyll / Harvest.
+        SPECIES_EXEGGUTOR, 1,
+        ABILITY_SAP_SIPPER
+    },
+    { // 0103
+        // Alolan Exeggutor's only real abilities (Frisk, Harvest) are BOTH now innate, so its EMPTY slot 1 takes
+        // Sap Sipper -- :x: (never an innate -> stable), the same Grass-immunity pick as its Kantonian sibling and
+        // fitting for the towering Grass/Dragon palm; its innate Harvest still recycles the set's berry.
+        SPECIES_EXEGGUTOR_ALOLA, 1,
+        ABILITY_SAP_SIPPER
     },
     { // 0106
         // Hitmonlee's three real abilities (Limber, Reckless, Unburden) are ALL now innate; slot-0 Limber is
@@ -236,6 +265,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // :white_check_mark: innate (stable) that powers the fast bat's Brave Bird recoil STAB.
         SPECIES_CROBAT, 1,
         ABILITY_RECKLESS
+    },
+    { // 0182
+        // Bellossom's only real abilities (Chlorophyll, Healer) are BOTH now innate, so its EMPTY slot 1 takes
+        // Effect Spore -- :x: (never an innate -> stable) and flavorful for the flower dancer: contact attackers
+        // risk poison/sleep/paralysis from its petals, guarding its Quiver Dance setup (same pick as Butterfree).
+        SPECIES_BELLOSSOM, 1,
+        ABILITY_EFFECT_SPORE
     },
     { // 0185
         // Sturdy and Rock Head now innate (slot-2 Rattled is pinned by rattled.c), so its innate-redundant
@@ -490,6 +526,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SOLROCK, 1,
         ABILITY_DROUGHT
     },
+    { // 0340
+        // Whiscash's three real abilities (Oblivious, Anticipation, Hydration) are ALL now innate; slot-1 Anticipation
+        // is the chosen-differs exemplar in the innate test (+ anticipation.c), so its unpinned innate-redundant slot-2
+        // Hydration (audited: no test selects it) takes Storm Drain -- :x: (never an innate -> stable) and thematic for
+        // the pond-dwelling catfish: it draws in Water moves for a Sp. Atk boost, observable alongside innate Oblivious.
+        SPECIES_WHISCASH, 2,
+        ABILITY_STORM_DRAIN
+    },
     { // 0342
         // Crawdaunt's three real abilities (Hyper Cutter, Shell Armor, Adaptability) are ALL now innate; its slot-2
         // Adaptability is pinned by adaptability.c, so its unpinned innate-redundant slot-1 Shell Armor (audited)
@@ -520,6 +564,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CHIMECHO, 1,
         ABILITY_SOUNDPROOF
     },
+    { // 0365
+        // Walrein's three real abilities (Thick Fat, Ice Body, Oblivious) are ALL now innate; slot-0 Thick Fat is the
+        // chosen-differs exemplar in the innate test, so its unpinned innate-redundant slot-1 Ice Body (audited: no
+        // test selects it) takes Water Absorb -- :x: (never an innate -> stable) and thematic for the blubbery Ice/Water
+        // wall: it heals on the Water hits it invites, observable alongside the innate Thick Fat / Ice Body.
+        SPECIES_WALREIN, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0367
         // Huntail's only real abilities (Swift Swim, Water Veil) are BOTH now innate, so its EMPTY slot 1 takes
         // Water Absorb -- :x: (never an innate -> stable) and thematic for the deep-sea fish: it heals on the
@@ -527,11 +579,25 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HUNTAIL, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0368
+        // Gorebyss's only real abilities (Swift Swim, Hydration) are BOTH now innate, so its EMPTY slot 1 takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the deep-sea siren: it heals on the Water
+        // hits its Shell Smash sweeper invites, the same pick as its Huntail counterpart.
+        SPECIES_GOREBYSS, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0369
         // Swift Swim, Rock Head and Sturdy are ALL now innate, so its innate-redundant slot-1 Rock Head
         // (audited: unpinned) takes Water Absorb -- :x: (never an innate -> stable) and thematic for the
         // deep-sea fossil: it heals on the Water hits a Rock Polish sweeper invites.
         SPECIES_RELICANTH, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0370
+        // Luvdisc's only real abilities (Swift Swim, Hydration) are BOTH now innate, so its EMPTY slot 1 takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the Water fish: it heals on the Water
+        // hits it invites, observable alongside the innate Swift Swim / Hydration.
+        SPECIES_LUVDISC, 1,
         ABILITY_WATER_ABSORB
     },
     { // 0373
@@ -727,6 +793,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LEAFEON, 1,
         ABILITY_SAP_SIPPER
     },
+    { // 0471
+        // Glaceon's real abilities (Snow Cloak in slots 0 & 1, Ice Body) are ALL now innate; Snow Cloak resolves to
+        // slot 0 (pinned by snow_cloak.c / pursuit.c / mega_sol.c + the default damage tests), so its unpinned innate-
+        // redundant slot-2 Ice Body (audited) takes Snow Warning -- :x: (never an innate -> stable) and self-synergistic:
+        // the snow the Fresh Snow fox heralds powers its own innate Snow Cloak evasion and Ice Body heal.
+        SPECIES_GLACEON, 2,
+        ABILITY_SNOW_WARNING
+    },
     { // 0473
         // Mamoswine's three real abilities (Oblivious, Snow Cloak, Thick Fat) are ALL now innate, so
         // its slot-2 Thick Fat — now innate-redundant — is repurposed to Snow Warning. Snow Warning is
@@ -844,6 +918,26 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0488
         SPECIES_CRESSELIA, 1,
         ABILITY_CLOUD_NINE
+    },
+    { // 0489
+        // Phione's only real ability (Hydration) is now innate, so its EMPTY slot 1 takes Water Absorb -- :x:
+        // (never an innate -> stable) and thematic for the sea-drifting mythical: it heals on the Water it swims
+        // through. (Its slot-0 Hydration is pinned by ow_abilities.c, so the fill goes in slot 1.)
+        SPECIES_PHIONE, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0490
+        // Manaphy's only real ability (Hydration) is now innate, so its EMPTY slot 1 takes Water Absorb -- :x:
+        // (never an innate -> stable), the same sea-mythical pick as its offspring Phione.
+        SPECIES_MANAPHY, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0491
+        // Darkrai's only real ability (Bad Dreams) is now innate, so its EMPTY slot 1 takes Sheer Force -- :x:
+        // (never an innate -> stable) and a clean boon for the Pitch-Black nightmare: its Dark Pulse / Sludge Bomb /
+        // Focus Blast drop their added effect for +30% power, observable alongside the innate Bad Dreams.
+        SPECIES_DARKRAI, 1,
+        ABILITY_SHEER_FORCE
     },
     { // 0492
         SPECIES_SHAYMIN, 1,
@@ -1012,6 +1106,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Magic Guard remains a visible chosen option, and the innate Magic Guard still voids Life Orb recoil.
         SPECIES_REUNICLUS, 2,
         ABILITY_NO_GUARD
+    },
+    { // 0581
+        // Swanna's three real abilities (Keen Eye, Big Pecks, Hydration) are ALL now innate, and it is used by no
+        // test, so its innate-redundant slot-2 Hydration takes Storm Drain -- :x: (never an innate -> stable) and
+        // thematic for the graceful Water/Flying bird: it draws in Water moves for a Sp. Atk boost, observable
+        // alongside the innate Keen Eye / Big Pecks.
+        SPECIES_SWANNA, 2,
+        ABILITY_STORM_DRAIN
     },
     { // 0589
         // Escavalier's three real abilities (Swarm, Shell Armor, Overcoat) are ALL now innate, and none is
@@ -1245,6 +1347,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_KLEFKI, 1,
         ABILITY_BULLETPROOF
     },
+    { // 0709
+        // Trevenant's three real abilities (Natural Cure, Frisk, Harvest) are ALL now innate; slot-0 Natural Cure is
+        // the AI-test default read (powder.c / revelation_dance.c), so its unpinned innate-redundant slot-2 Harvest
+        // (audited) takes Sap Sipper -- :x: (never an innate -> stable) and thematic for the Elder Tree: the old tree
+        // drinks in Grass moves for an Attack boost, observable alongside the innate Harvest / Frisk.
+        SPECIES_TREVENANT, 2,
+        ABILITY_SAP_SIPPER
+    },
     { // 0713
         // Avalugg's three real abilities (Own Tempo, Ice Body, Sturdy) are ALL now innate, and none is test-pinned
         // (audited: no test selects Avalugg); both its frontier sets ran the now-innate Own Tempo / Ice Body, so its
@@ -1252,6 +1362,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // carry innately and perfectly patches the Iceberg Pokemon's one soft spot: its huge physical wall gains a
         // halved special-damage cushion, on top of the innate Sturdy / Ice Body. (Both sets select this slot.)
         SPECIES_AVALUGG, 2,
+        ABILITY_ICE_SCALES
+    },
+    { // 0713
+        // Hisuian Avalugg's three real abilities (Strong Jaw, Ice Body, Sturdy) are ALL now innate, and it is used by
+        // no test, so its innate-redundant slot-1 Ice Body (both its frontier sets ran it) takes Ice Scales -- an
+        // already-implemented :white_check_mark: innate (stable) it does not carry innately, matching its Kalosian
+        // sibling above and cushioning the Ice/Rock wall's special-damage soft spot, on top of the innate Sturdy.
+        SPECIES_AVALUGG_HISUI, 1,
         ABILITY_ICE_SCALES
     },
     { // 0715
@@ -1850,6 +1968,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Iron Head gain +30% and drop their secondaries.
         SPECIES_REVAVROOM, 1,
         ABILITY_SHEER_FORCE
+    },
+    { // 0967
+        // Cyclizar's only real abilities (Shed Skin, Regenerator) are BOTH now innate, so its EMPTY slot 1 takes
+        // Motor Drive -- :x: (never an innate -> stable) and thematic for the ridable Mount Pokemon: the living
+        // motorbike shrugs off Electric moves and revs its Speed +1, observable alongside the innate Regenerator.
+        SPECIES_CYCLIZAR, 1,
+        ABILITY_MOTOR_DRIVE
     },
     { // 0976
         // Veluza's only real abilities are Mold Breaker (slot 0, now innate, Tier 5.5) and Sharpness (slot 2, now
