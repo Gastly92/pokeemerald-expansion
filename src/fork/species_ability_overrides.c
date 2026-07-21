@@ -57,6 +57,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VENUSAUR, 1,
         ABILITY_GRASSY_SURGE
     },
+    { // 0009
+        // Blastoise's only real abilities (Torrent, Rain Dish) are BOTH now innate, so its EMPTY slot 1 takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the water-cannon turtle: it soaks up
+        // Water-type moves for a heal, observable alongside the innate Torrent / Rain Dish.
+        SPECIES_BLASTOISE, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0012
         // Butterfree's only real abilities (Compound Eyes, Tinted Lens) are BOTH now innate, so its EMPTY
         // slot 1 takes Effect Spore — :x: (never an innate -> stable) and flavorful: the powder-scattering
@@ -147,12 +154,34 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SLOWBRO_GALAR, 2,
         ABILITY_POISON_TOUCH
     },
+    { // 0087
+        // Dewgong's three real abilities (Thick Fat, Hydration, Ice Body) are ALL now innate, and it is used by
+        // no test, so its innate-redundant slot-2 Ice Body takes a chosen Snow Warning -- :x: (never an innate ->
+        // stable) and thematic for the sea-lion of the icy seas: it summons snow, which its own innate Ice Body
+        // (and an Aurora Veil set) then cash in, observable alongside the innate Thick Fat / Hydration.
+        SPECIES_DEWGONG, 2,
+        ABILITY_SNOW_WARNING
+    },
     { // 0091
         // Shell Armor, Skill Link and Overcoat are ALL now innate, so its innate-redundant slot-2 Overcoat
         // (audited: unpinned) takes Sniper, an implemented :white_check_mark: innate (stable) that pays off its
         // Skill Link Icicle Spear crits.
         SPECIES_CLOYSTER, 2,
         ABILITY_SNIPER
+    },
+    { // 0103
+        // Exeggutor's only real abilities (Chlorophyll, Harvest) are BOTH now innate, so its EMPTY slot 1 takes
+        // Sap Sipper -- :x: (never an innate -> stable) and thematic for the walking palm: Grass-type moves miss
+        // it and instead boost its Attack, observable alongside the innate Chlorophyll / Harvest.
+        SPECIES_EXEGGUTOR, 1,
+        ABILITY_SAP_SIPPER
+    },
+    { // 0103
+        // Alolan Exeggutor's only real abilities (Frisk, Harvest) are BOTH now innate, so its EMPTY slot 1 takes
+        // Sap Sipper -- :x: (never an innate -> stable), the same Grass-immunity pick as its Kantonian sibling and
+        // fitting for the towering Grass/Dragon palm; its innate Harvest still recycles the set's berry.
+        SPECIES_EXEGGUTOR_ALOLA, 1,
+        ABILITY_SAP_SIPPER
     },
     { // 0106
         // Hitmonlee's three real abilities (Limber, Reckless, Unburden) are ALL now innate; slot-0 Limber is
@@ -236,6 +265,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // :white_check_mark: innate (stable) that powers the fast bat's Brave Bird recoil STAB.
         SPECIES_CROBAT, 1,
         ABILITY_RECKLESS
+    },
+    { // 0182
+        // Bellossom's only real abilities (Chlorophyll, Healer) are BOTH now innate, so its EMPTY slot 1 takes
+        // Effect Spore -- :x: (never an innate -> stable) and flavorful for the flower dancer: contact attackers
+        // risk poison/sleep/paralysis from its petals, guarding its Quiver Dance setup (same pick as Butterfree).
+        SPECIES_BELLOSSOM, 1,
+        ABILITY_EFFECT_SPORE
     },
     { // 0185
         // Sturdy and Rock Head now innate (slot-2 Rattled is pinned by rattled.c), so its innate-redundant

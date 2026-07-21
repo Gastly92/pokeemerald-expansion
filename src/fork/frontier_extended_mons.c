@@ -540,7 +540,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_RAIN_DISH, // Torrent now innate (latched); chosen Rain Dish
+        .ability = ABILITY_WATER_ABSORB, // Torrent + Rain Dish now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -560,7 +560,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_REST
         },
-        .ability = ABILITY_RAIN_DISH, // Torrent now innate (latched); chosen Rain Dish
+        .ability = ABILITY_WATER_ABSORB, // Torrent + Rain Dish now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -580,7 +580,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_RAIN_DISH, // Torrent now innate (latched); chosen Rain Dish
+        .ability = ABILITY_WATER_ABSORB, // Torrent + Rain Dish now innate; chosen Water Absorb (override, empty slot 1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2366,8 +2366,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICY_WIND,
             MOVE_PROTECT
         },
-        // Thick Fat now innate; chosen Ice Body (HA) heals 1/16 HP each turn in snow.
-        .ability = ABILITY_ICE_BODY,
+        // Thick Fat + Hydration + Ice Body all now innate; chosen Snow Warning (override) sets the snow its
+        // innate Ice Body heals in.
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2387,7 +2388,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURORA_VEIL,
             MOVE_PROTECT
         },
-        .ability = ABILITY_ICE_BODY,
+        // Snow Warning (override) auto-sets snow, enabling Aurora Veil without a lead and feeding innate Ice Body.
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2805,7 +2807,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_HARVEST, // Chlorophyll now innate; chosen Harvest
+        .ability = ABILITY_SAP_SIPPER, // Chlorophyll + Harvest now innate; chosen Sap Sipper (override, empty slot 1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2825,7 +2827,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_HARVEST,
+        .ability = ABILITY_SAP_SIPPER, // Chlorophyll + Harvest now innate; chosen Sap Sipper (override, empty slot 1)
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2848,7 +2850,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_HAMMER,
             MOVE_WOOD_HAMMER
         },
-        .ability = ABILITY_HARVEST,
+        .ability = ABILITY_SAP_SIPPER, // Frisk + Harvest now innate; chosen Sap Sipper (override, empty slot 1); innate Harvest still recycles the berry
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2869,7 +2871,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_HARVEST,
+        .ability = ABILITY_SAP_SIPPER, // Frisk + Harvest now innate; chosen Sap Sipper (override, empty slot 1); innate Harvest still recycles the berry
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5041,7 +5043,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_HEALER, // Chlorophyll now innate; chosen Healer
+        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Healer now innate; chosen Effect Spore (override, empty slot 1)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5061,7 +5063,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_HEALER, // Chlorophyll now innate; chosen Healer
+        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Healer now innate; chosen Effect Spore (override, empty slot 1)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
