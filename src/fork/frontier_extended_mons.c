@@ -856,7 +856,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_GLARE
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_POISON_POINT, // Intimidate now innate; chosen Poison Point (slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1674,7 +1674,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MORNING_SUN,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_FLASH_FIRE, // Intimidate now innate; chosen Flash Fire (real slot 1)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1714,7 +1714,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SNARL,
             MOVE_PROTECT
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_FLASH_FIRE, // Intimidate now innate; chosen Flash Fire (real slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1756,7 +1756,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EXTREME_SPEED,
             MOVE_MORNING_SUN
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_FLASH_FIRE, // Intimidate now innate; chosen Flash Fire (real slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3480,7 +3480,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (real slot 2)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3502,7 +3502,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3544,7 +3544,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLARE_BLITZ,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3566,7 +3566,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WAVE_CRASH,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 1)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3588,7 +3588,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_MOTOR_DRIVE, // Intimidate now innate; chosen Motor Drive (slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -3608,7 +3608,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_MOTOR_DRIVE, // Intimidate now innate; chosen Motor Drive (slot 1)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -5691,7 +5691,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_STATIC, // Intimidate now innate; chosen Static (slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5711,7 +5711,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_HEAL_BELL
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_STATIC, // Intimidate now innate; chosen Static (slot 2)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5733,7 +5733,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_HAZE
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_POISON_POINT, // Intimidate now innate; chosen Poison Point (real slot 0)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5753,7 +5753,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_INTIMIDATE, // Swift Swim now innate; chosen Intimidate
+        .ability = ABILITY_POISON_POINT, // Swift Swim + Intimidate now innate; chosen Poison Point (real slot 0)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6465,7 +6465,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRIPLE_AXEL,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_INTIMIDATE,
+        .ability = ABILITY_NO_GUARD, // Intimidate now innate; chosen No Guard (slot 2)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6485,7 +6485,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_TRIPLE_AXEL
         },
-        .ability = ABILITY_INTIMIDATE, // Technician now innate; chosen Intimidate drops the foe's Attack on switch-in
+        .ability = ABILITY_NO_GUARD, // Technician + Intimidate now innate; chosen No Guard (slot 2)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

@@ -319,5 +319,5 @@ Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
 | :x: | Poison Puppeteer | Pokémon poisoned by Pecharunt's moves will also become confused. |
 | :white_check_mark: | Piercing Drill | When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered. |
 | :x: | Dragonize | The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%. |
-| :white_large_square: | Mega Sol | Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight. |
+| :white_check_mark: | Mega Sol | Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight. |
 | :x: | Spicy Spray | When the Pokémon takes damage from a move, it burns the attacker. |

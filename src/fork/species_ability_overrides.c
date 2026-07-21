@@ -71,6 +71,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_PIDGEOT, 1,
         ABILITY_NO_GUARD
     },
+    { // 0024
+        // Arbok's three real abilities (Intimidate, Shed Skin, Unnerve) are ALL now innate, so its innate-
+        // redundant slot-2 Unnerve -- unpinned by any test (audited) -- takes a chosen Poison Point, :x: (never
+        // an innate -> stable) and on-theme for the venomous Cobra Pokemon: contact attackers risk poison,
+        // observable alongside the innate Intimidate. (Its slot-1 Shed Skin frontier set is pinned by shed_skin.c
+        // and stays a real Shed Skin.)
+        SPECIES_ARBOK, 2,
+        ABILITY_POISON_POINT
+    },
     { // 0026
         // Raichu-Alola's only real ability (Surge Surfer) is now innate, so its empty slot 1 takes a
         // flavorful chosen ability for the frontier sets. Lightning Rod is :x: (never an innate -> stable)
@@ -145,6 +154,35 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HITMONLEE, 2,
         ABILITY_NO_GUARD
     },
+    { // 0128
+        // Tauros-Paldea-Combat's three real abilities (Intimidate, Anger Point, Cud Chew) are ALL now innate;
+        // slot-0 Intimidate + slot-2 Cud Chew are test-pinned (innate test / cud_chew.c), so its innate-redundant
+        // slot-1 Anger Point takes a chosen Sheer Force -- :x: (never an innate -> stable) and the Tauros line's
+        // signature (base Tauros keeps its real Sheer Force below): raw force powers the raging bull's Raging Bull /
+        // Close Combat, observable alongside the innate Intimidate.
+        SPECIES_TAUROS_PALDEA_COMBAT, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0128
+        // Tauros-Paldea-Blaze -- same all-innate case as its Combat sibling; innate-redundant slot-1 Anger Point
+        // (unpinned, audited) takes chosen Sheer Force (:x: -> stable; Tauros-line flavor) for its frontier set.
+        SPECIES_TAUROS_PALDEA_BLAZE, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0128
+        // Tauros-Paldea-Aqua -- same all-innate case; innate-redundant slot-1 Anger Point (unpinned, audited)
+        // takes chosen Sheer Force (:x: -> stable; Tauros-line flavor) for its frontier set.
+        SPECIES_TAUROS_PALDEA_AQUA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0130
+        // Gyarados's real abilities (Intimidate, Moxie) are BOTH now innate, so its empty slot 1 takes a chosen
+        // Motor Drive -- :x: (never an innate -> stable) and a clean boon for the Dragon Dance sweeper: it turns
+        // Gyarados's 2x Electric weakness into an immunity plus a Speed boost, observable alongside the innate
+        // Intimidate. (Its slot-2 Moxie frontier set is pinned by dynamax.c and stays a real Moxie.)
+        SPECIES_GYARADOS, 1,
+        ABILITY_MOTOR_DRIVE
+    },
     { // 0142
         // Rock Head + Pressure now innate; its pending slot-2 Unnerve (audited: unpinned) takes Tough Claws, an
         // implemented :white_check_mark: innate (stable) and its Mega's ability, powering its contact STAB
@@ -200,6 +238,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_FORRETRESS, 1,
         ABILITY_FILTER
     },
+    { // 0210
+        // Granbull's three real abilities (Intimidate, Quick Feet, Rattled) are ALL now innate, so its innate-
+        // redundant slot-2 Rattled (audited: no test references Granbull at all) takes a chosen Static -- :x:
+        // (never an innate -> stable), pure-upside, and thematic for the charged-fur Fairy bulldog: contact
+        // attackers risk paralysis, which pairs with its Thunder Wave / Play Rough pivot sets.
+        SPECIES_GRANBULL, 2,
+        ABILITY_STATIC
+    },
     { // 0212
         // Swarm, Technician and Light Metal are ALL now innate (slot-2 Light Metal is pinned by light_metal.c),
         // so its innate-redundant slot-1 Technician (audited: unpinned) takes Tough Claws, an implemented
@@ -221,6 +267,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // sets turns on its own innate Sand Veil evasion. Same pick as base Sandslash above.
         SPECIES_DONPHAN, 1,
         ABILITY_SAND_STREAM
+    },
+    { // 0237
+        // Hitmontop's three real abilities (Intimidate, Technician, Steadfast) are ALL now innate; slot-0
+        // Intimidate is test-pinned (intimidate.c / ai_switching.c), so its innate-redundant slot-2 Steadfast
+        // (audited: unpinned) takes a chosen No Guard -- :x: (never an innate -> stable) and thematic for the
+        // spinning martial artist: its Triple Axel / Close Combat / Rapid Spin never miss. Same pick as Pidgeot /
+        // Hitmonlee.
+        SPECIES_HITMONTOP, 2,
+        ABILITY_NO_GUARD
     },
     { // 0243
         // Raikou's only real abilities (Pressure, Inner Focus) are BOTH now innate, so its EMPTY slot 1 takes
