@@ -590,6 +590,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MAMOSWINE, 2,
         ABILITY_SNOW_WARNING
     },
+    { // 0474
+        // Porygon-Z's three real abilities (Adaptability, Download, Analytic) are ALL now innate. Slot 0
+        // (Adaptability) is test-pinned (Ability(ABILITY_ADAPTABILITY) in test/fork/innate_abilities.c), so its
+        // innate-redundant slot-2 Analytic (its Hidden Ability, the Sceptile model) is repurposed to Simple.
+        // Simple is :x: (never an innate -> stable) and thematic for the glitched virtual Pokemon: it doubles
+        // the Nasty Plot boost on its special nuke, so both innates + the chosen ability stay observable.
+        SPECIES_PORYGON_Z, 2,
+        ABILITY_SIMPLE
+    },
     { // 0476
         // Probopass's three real abilities (Sturdy, Magnet Pull, Sand Force) are ALL now innate, so its innate-redundant
         // slot-1 Magnet Pull (audited: no Ability(ABILITY_MAGNET_PULL) on Probopass) takes Lightning Rod — :x: (never an
@@ -907,6 +916,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // (and softens incoming sound moves).
         SPECIES_MELOETTA, 1,
         ABILITY_PUNK_ROCK
+    },
+    { // 0649
+        // Genesect's only real ability (Download) is now innate, so its EMPTY slot 1 takes Sheer Force.
+        // Sheer Force is :x: (never an innate -> stable) and thematic for the paleo-cyborg cannon: raw
+        // mechanical force boosts its secondary-effect coverage (Ice Beam / Flamethrower / Thunderbolt /
+        // Flash Cannon) by 30%, keeping the chosen ability observable alongside the innate Download.
+        SPECIES_GENESECT, 1,
+        ABILITY_SHEER_FORCE
     },
     { // 0655
         // Delphox's only real abilities (Blaze, Magician) are BOTH now innate; slot-0 Blaze and slot-2 Magician are

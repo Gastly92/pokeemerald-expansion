@@ -11819,7 +11819,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_DOWNLOAD, // Adaptability, Analytic & Download all now innate; chosen Download redundant-but-correct (deferred)
+        .ability = ABILITY_SIMPLE, // Adaptability/Download/Analytic all now innate; slot-2 Analytic repurposed to chosen Simple (Nasty Plot synergy), innate Download intact
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11839,7 +11839,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_TRICK
         },
-        .ability = ABILITY_DOWNLOAD, // Adaptability, Analytic & Download all now innate; chosen Download redundant-but-correct (deferred)
+        .ability = ABILITY_SIMPLE, // Adaptability/Download/Analytic all now innate; slot-2 Analytic repurposed to chosen Simple (Nasty Plot synergy), innate Download intact
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16011,7 +16011,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_DOWNLOAD, // sole ability, now innate; chosen Download redundant-but-correct (deferred)
+        .ability = ABILITY_SHEER_FORCE, // sole real ability Download now innate; empty slot 1 filled with chosen Sheer Force, innate Download intact
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 4,
@@ -16031,7 +16031,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_DOWNLOAD, // sole ability, now innate; chosen Download redundant-but-correct (deferred)
+        .ability = ABILITY_SHEER_FORCE, // sole real ability Download now innate; empty slot 1 filled with chosen Sheer Force, innate Download intact
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
