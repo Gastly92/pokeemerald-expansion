@@ -8314,7 +8314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_WATER_VEIL,
+        .ability = ABILITY_WATER_ABSORB, // Water Veil/Oblivious/Pressure ALL now innate; chosen Water Absorb (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -8336,7 +8336,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ANCIENT_POWER
         },
-        .ability = ABILITY_MAGMA_ARMOR, // Solid Rock now innate; chosen Magma Armor keeps the wall from being frozen
+        .ability = ABILITY_FLASH_FIRE, // Magma Armor/Solid Rock/Anger Point ALL now innate; chosen Flash Fire (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8357,7 +8357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
         },
-        .ability = ABILITY_MAGMA_ARMOR,
+        .ability = ABILITY_FLASH_FIRE, // Magma Armor/Solid Rock/Anger Point ALL now innate; chosen Flash Fire (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8422,8 +8422,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_REST
         },
-        // Thick Fat now innate; chosen Own Tempo keeps this wall safe from confusion/Intimidate.
-        .ability = ABILITY_OWN_TEMPO,
+        // Thick Fat/Own Tempo/Gluttony ALL now innate; chosen Synchronize (fork override, slot 1) stays observable (Batch W9).
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9209,7 +9209,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_FREEZE_DRY
         },
-        .ability = ABILITY_INNER_FOCUS,
+        .ability = ABILITY_MOODY, // Inner Focus + Ice Body now innate; chosen Moody (real slot 2, :x: never-innate) stays observable (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9229,7 +9229,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_INNER_FOCUS,
+        .ability = ABILITY_MOODY, // Inner Focus + Ice Body now innate; chosen Moody (real slot 2, :x: never-innate) stays observable (Batch W9)
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11009,7 +11009,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_VACUUM_WAVE
         },
-        .ability = ABILITY_INNER_FOCUS,
+        .ability = ABILITY_STEADFAST, // Inner Focus + Justified now innate; chosen Steadfast (real slot 0, not carried innately) stays observable (Batch W9)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11665,7 +11665,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_X_SCISSOR
         },
-        .ability = ABILITY_LEAF_GUARD, // Chlorophyll now innate; chosen Leaf Guard
+        .ability = ABILITY_SAP_SIPPER, // Leaf Guard (x2) + Chlorophyll ALL now innate; chosen Sap Sipper (fork override, dup slot 1) stays observable (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13403,7 +13403,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_REST
         },
-        .ability = ABILITY_INNER_FOCUS, // Guts now innate; Inner Focus prevents flinch on the bulk-up tank
+        .ability = ABILITY_SIMPLE, // Guts/Inner Focus/Mold Breaker ALL now innate; chosen Simple (fork override, slot 1) doubles Bulk Up on this tank (Batch W9)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13467,7 +13467,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_OVERCOAT, // Swarm now innate (latched); chosen Overcoat
+        .ability = ABILITY_SHARPNESS, // Swarm/Chlorophyll/Overcoat ALL now innate; chosen Sharpness (fork override, slot 2) boosts its slicing STAB (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13487,7 +13487,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_X_SCISSOR
         },
-        .ability = ABILITY_OVERCOAT,
+        .ability = ABILITY_SHARPNESS, // Swarm/Chlorophyll/Overcoat ALL now innate; chosen Sharpness (fork override, slot 2) boosts its slicing STAB (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13593,7 +13593,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_GRASSY_SURGE, // Chlorophyll/Own Tempo/Leaf Guard ALL now innate; chosen Grassy Surge (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -13613,7 +13613,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_OWN_TEMPO, // Chlorophyll now innate; chosen Own Tempo
+        .ability = ABILITY_GRASSY_SURGE, // Chlorophyll/Own Tempo/Leaf Guard ALL now innate; chosen Grassy Surge (fork override, slot 2) stays observable (Batch W9)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -13635,7 +13635,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_TRIPLE_AXEL
         },
-        .ability = ABILITY_LEAF_GUARD, // Chlorophyll now innate; chosen Leaf Guard
+        .ability = ABILITY_HUSTLE, // Chlorophyll + Leaf Guard now innate; chosen Hustle (real slot 1, :x: never-innate) powers this physical sweeper (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13655,7 +13655,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_ICE_SPINNER
         },
-        .ability = ABILITY_LEAF_GUARD, // Chlorophyll now innate; chosen Leaf Guard
+        .ability = ABILITY_HUSTLE, // Chlorophyll + Leaf Guard now innate; chosen Hustle (real slot 1, :x: never-innate) powers this physical sweeper (Batch W9)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
