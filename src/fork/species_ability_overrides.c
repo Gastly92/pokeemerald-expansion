@@ -575,8 +575,50 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_AZELF, 1,
         ABILITY_VICTORY_STAR
     },
+    { // 0483
+        // Dialga's only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy, Batch U), so its
+        // EMPTY slot 1 takes Bulletproof -- :x: (never an innate -> stable) and thematic for the armored Steel
+        // legend: it deflects the Focus Blast / Sludge Bomb / Aura Sphere ball-and-bomb moves aimed at its
+        // Fighting weakness, a clean defensive boon on its bulky Leftovers sets. Same pick as the Steel walls
+        // Skarmory / Registeel / Corviknight.
+        SPECIES_DIALGA, 1,
+        ABILITY_BULLETPROOF
+    },
+    { // 0483
+        // Dialga-Origin shares base Dialga's now-all-innate real slots (Pressure, Telepathy), so its EMPTY slot 1
+        // takes the same Bulletproof pick for the armored Steel legend.
+        SPECIES_DIALGA_ORIGIN, 1,
+        ABILITY_BULLETPROOF
+    },
+    { // 0484
+        // Palkia's only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy, Batch U), so its
+        // EMPTY slot 1 takes Water Absorb -- :x: (never an innate -> stable) and thematic for the Water legend
+        // of space: it shrugs off Water moves and heals from them, a clean switch-in boon for its fast special
+        // sets. Same pick as the other Water legends / walls (Suicune / Clawitzer / Samurott).
+        SPECIES_PALKIA, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0484
+        // Palkia-Origin shares base Palkia's now-all-innate real slots (Pressure, Telepathy), so its EMPTY slot 1
+        // takes the same Water Absorb pick for the Water legend of space.
+        SPECIES_PALKIA_ORIGIN, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0487
-        SPECIES_GIRATINA_ORIGIN, 1, 
+        // Base Giratina (Altered)'s only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy,
+        // Batch U -- Levitate is an Origin-forme innate it also carries as flavor), so its EMPTY slot 1 takes
+        // Unaware -- an already-implemented :white_check_mark: innate (stable, like Spiritomb's) it does not carry
+        // innately and a pure boon for the Renegade's bulky Will-O / Dragon Tail / Defog wall: it ignores the
+        // foe's stat boosts. (Origin forme takes its own Dragon's Maw pick just below.)
+        SPECIES_GIRATINA_ALTERED, 1,
+        ABILITY_UNAWARE
+    },
+    { // 0487
+        // Giratina-Origin's only real ability (Levitate) is now innate, so its EMPTY slot 1 takes Dragon's Maw --
+        // an already-implemented :white_check_mark: innate (Batch Y2, stable) it does NOT carry innately (its sole
+        // innate is Levitate), so the pick stays observable and never needs re-pointing: the Renegade forme's
+        // draconic might powers its Draco Meteor / Dragon Claw / Shadow Force nuke.
+        SPECIES_GIRATINA_ORIGIN, 1,
         ABILITY_DRAGONS_MAW
     },
     { // 0488
@@ -815,6 +857,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // the Constraint cat keeps its own tempo, immune to confusion.
         SPECIES_MEOWSTIC_M, 1,
         ABILITY_OWN_TEMPO
+    },
+    { // 0683
+        // Aromatisse's only real abilities (Healer, Aroma Veil) are BOTH now innate (Aroma Veil, Batch U), so its
+        // EMPTY slot 1 takes Misty Surge -- :x: (never an innate -> stable) and thematic for the Fragrance
+        // Pokemon: on switch-in it blankets the field in Misty Terrain, protecting its team from status and
+        // softening Dragon moves, a clean support boon for its Trick Room / Aromatherapy / Wish cleric set.
+        // (Slot-2 Aroma Veil stays intact -- aroma_veil.c selects it -- so the innate Aroma Veil is still an
+        // observable chosen option.)
+        SPECIES_AROMATISSE, 1,
+        ABILITY_MISTY_SURGE
     },
     { // 0685
         // Slurpuff's only real abilities (Sweet Veil, Unburden) are BOTH now innate, so its empty slot 1 takes
@@ -1118,6 +1170,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Defog wall, on top of the innate Mirror Armor and Pressure. Same pick as the Steel walls Skarmory / Registeel.
         SPECIES_CORVIKNIGHT, 1,
         ABILITY_BULLETPROOF
+    },
+    { // 0826
+        // Orbeetle's three real abilities (Swarm, Frisk, Telepathy) are ALL now innate (Frisk Batch L,
+        // Telepathy Batch U), and NONE is test-pinned (audited: no reference to Orbeetle in test/), so its
+        // innate-redundant slot-2 Telepathy is repurposed to Unaware -- an already-implemented :white_check_mark:
+        // innate (stable, like Spiritomb's) it does not carry innately and a pure boon for the Seven Spot's bulky
+        // Calm Mind sweeper / dual-screens pivot: it ignores the foe's stat boosts. (Both frontier sets, formerly
+        // on the now-innate Telepathy / Frisk, select this Unaware slot.)
+        SPECIES_ORBEETLE, 2,
+        ABILITY_UNAWARE
     },
     { // 0847
         // Barraskewda's only real abilities (Swift Swim, Propeller Tail) are BOTH now innate, so its EMPTY
