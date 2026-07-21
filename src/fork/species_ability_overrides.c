@@ -445,26 +445,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SHARPEDO, 1,
         ABILITY_STRONG_JAW
     },
-    { // 0321
-        // Wailord's three real abilities (Water Veil, Oblivious, Pressure) are ALL now innate; slot-0 Water Veil is
-        // the frontier's chosen slot and slot-1 Oblivious is the chosen-differs-from-innate exemplar in
-        // test/fork/innate_abilities.c, so its innate-redundant slot-2 Pressure (audited: no Ability(ABILITY_PRESSURE)
-        // on Wailord in test/) takes Water Absorb -- :x: (never an innate -> stable) and thematic for the Float Whale:
-        // it shrugs off Water moves and heals from them, a clean boon for its bulky Water Spout / Rest sets. Same pick
-        // as the other Water walls (Suicune / Tentacruel / Slowking).
-        SPECIES_WAILORD, 2,
-        ABILITY_WATER_ABSORB
-    },
-    { // 0323
-        // Camerupt's three real abilities (Magma Armor, Solid Rock, Anger Point) are ALL now innate; slot-0 Magma
-        // Armor is the frontier's chosen slot and slot-1 Solid Rock is the chosen-differs-from-innate exemplar in
-        // test/fork/innate_abilities.c, so its innate-redundant slot-2 Anger Point (audited: no
-        // Ability(ABILITY_ANGER_POINT) on Camerupt in test/) takes Flash Fire -- :x: (never an innate -> stable) and
-        // thematic for the volcano camel: it shrugs off Fire moves for an immunity + a Fire-power boost on its Fire
-        // STAB (Lava Plume / Eruption).
-        SPECIES_CAMERUPT, 2,
-        ABILITY_FLASH_FIRE
-    },
+    // NOTE: Wailord (0321) and Camerupt (0323) are deliberately NOT given a chosen override — they are Batch W9
+    // EXCLUSIONS. Both are used in AI tests that are sensitive to the species' whole ability SET, not just the
+    // chosen slot: Wailord in test/battle/ai/ai.c ("best OHKO move" — a move-absorbing ability like Water Absorb in
+    // any slot makes the AI treat Water Spout as possibly-nullified and pick Thunder instead) and Camerupt in
+    // test/battle/ai/ai_thinking_time.c (the "Steven multi" node-count ceiling is already at its limit, so an extra
+    // AI-evaluation branch from an immunity ability like Flash Fire tips it over). So both keep their now-innate
+    // chosen ability (Water Veil / Magma Armor) — redundant-but-correct — like the other AI/test-pinned exclusions
+    // (Slowbro / Snorlax / Clefable).
     { // 0326
         // Grumpig's three real abilities (Thick Fat, Own Tempo, Gluttony) are ALL now innate; slot-0 Thick Fat is the
         // default read and slot-2 Gluttony is the chosen-differs-from-innate exemplar in test/fork/innate_abilities.c,

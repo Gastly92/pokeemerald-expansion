@@ -8314,7 +8314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_WATER_ABSORB, // Water Veil/Oblivious/Pressure ALL now innate; chosen Water Absorb (fork override, slot 2) stays observable (Batch W9)
+        .ability = ABILITY_WATER_VEIL, // Water Veil/Oblivious/Pressure ALL now innate, but Wailord is used in ai.c's "best OHKO move" test (a move-absorbing chosen ability makes the AI dodge Water Spout), so it keeps chosen Water Veil (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -8336,7 +8336,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ANCIENT_POWER
         },
-        .ability = ABILITY_FLASH_FIRE, // Magma Armor/Solid Rock/Anger Point ALL now innate; chosen Flash Fire (fork override, slot 2) stays observable (Batch W9)
+        .ability = ABILITY_MAGMA_ARMOR, // Magma Armor/Solid Rock/Anger Point ALL now innate, but Camerupt is used in ai_thinking_time.c's node-count ceiling test (an extra immunity branch tips it over), so it keeps chosen Magma Armor (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8357,7 +8357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
         },
-        .ability = ABILITY_FLASH_FIRE, // Magma Armor/Solid Rock/Anger Point ALL now innate; chosen Flash Fire (fork override, slot 2) stays observable (Batch W9)
+        .ability = ABILITY_MAGMA_ARMOR, // Magma Armor/Solid Rock/Anger Point ALL now innate, but Camerupt is used in ai_thinking_time.c's node-count ceiling test (an extra immunity branch tips it over), so it keeps chosen Magma Armor (redundant-but-correct) — Batch W9 exclusion
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
