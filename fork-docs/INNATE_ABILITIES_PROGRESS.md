@@ -1,9 +1,9 @@
 ## Innate Abilities Progress
 
 Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
-:x: rejected (won't be wired). To take on the pending set efficiently, see the
-[batching plan](INNATE_ABILITIES_BATCHES.md), which groups the
-:white_large_square: rows by shared code site / wiring class.
+:x: rejected (won't be wired). Every ability is now resolved (no `:white_large_square:`
+rows remain); see [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) for the per-ability
+wiring reference and the rationale for the `:x:` set.
 
 | Status | Ability | Description |
 | :---: | :---: | :--- |

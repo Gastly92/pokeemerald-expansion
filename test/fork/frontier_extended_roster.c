@@ -57,6 +57,51 @@ TEST("Frontier extended roster: every set's ability is legal for its species")
     EXPECT_EQ(illegalCount, 0);
 }
 
+// FORK: a frontier set's .ability is the mon's single CHOSEN (observable) ability,
+// layered ON TOP of that species' always-on innates (fork/innate_abilities.c). When the
+// chosen ability is ITSELF one of the species' innates, the chosen slot is REDUNDANT: the
+// mon would already have that ability from its innate, so the one observable pick is wasted
+// (the set intends a second, visible trait and gets a duplicate instead).
+//
+// Every such set has been given a real, non-innate chosen ability -- repointed to a free real
+// slot, or handed a stable pick via a fork-owned override in src/fork/species_ability_overrides.c
+// (an ability marked :x: in INNATE_ABILITIES_PROGRESS.md -- never itself an innate -- or an
+// already-implemented innate the species does not carry). A handful of all-innate species whose
+// every real ability slot is test-pinned (so no slot can be repurposed without perturbing an
+// unrelated battle test -- e.g. Snorlax, Dondozo, Kangaskhan, Pinsir, Excadrill, Ludicolo,
+// Slowbro, Clefable, Tinkaton, Sableye) instead carry .ability = ABILITY_NONE, letting the
+// Factory pick at draft rather than hardcoding a redundant innate.
+//
+// This test asserts the invariant holds for the WHOLE roster with no exceptions: a chosen
+// ability is either ABILITY_NONE or NOT one of the species' innates. It fails loudly if a new
+// set ever reintroduces redundancy.
+TEST("Frontier extended roster: no set's chosen ability duplicates a species innate")
+{
+    u32 i;
+    u32 redundant = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        enum Ability ability = set->ability;
+
+        // ABILITY_NONE lets the Factory pick; a chosen ability that is NOT an innate is the
+        // goal (a real, observable second trait), so both are fine.
+        if (ability == ABILITY_NONE)
+            continue;
+        if (!SpeciesHasInnate(set->species, ability))
+            continue;
+
+        redundant++;
+        Test_MgbaPrintf("roster[%d] %S: chosen %S duplicates a species innate -- give it a non-innate chosen ability (fork override / repoint) or ABILITY_NONE",
+                        i,
+                        gSpeciesInfo[set->species].speciesName,
+                        gAbilitiesInfo[ability].name);
+    }
+
+    EXPECT_EQ(redundant, 0);
+}
+
 // FORK: CreateFacilityMon grants the Gigantamax Factor at draft time to any mon
 // whose species has a G-Max form, so gmax-capable Factory/Tower mons Gigantamax
 // instead of plain Dynamaxing (without annotating each roster entry). A species
