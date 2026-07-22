@@ -886,6 +886,7 @@ static bool32 IsMirrorArmorReflected(struct BattleCalcValues *cv, struct StatCha
 
     if (gBattleStruct->moveResultFlags[cv->battlerDef] & MOVE_RESULT_MIRROR_ARMOR_PENDING || !st->ignoreCertainFailure)
     {
+        st->silentFailure = FALSE; // Mirror Armor still deflects damaging move stat drops
         st->script = BattleScript_MirrorArmorReflect;
         gBattlerAbility = cv->battlerDef;
         RecordAbilityBattle(cv->battlerDef, ABILITY_MIRROR_ARMOR);
@@ -894,22 +895,22 @@ static bool32 IsMirrorArmorReflected(struct BattleCalcValues *cv, struct StatCha
 
         if (st->stickyWeb)
         {
-            if (gSideTimers[GetBattlerSide(cv->battlerDef)].stickyWebBattlerId != 0xFF)
-            {
-                gBattleScripting.battler = gSideTimers[GetBattlerSide(cv->battlerDef)].stickyWebBattlerId;
-            }
-            else
+            if (GetConfig(B_MIRROR_ARMOR_STICKY_WEB) >= GEN_9)
             {
                 st->script = BattleScript_AbilityPopUp;
                 return TRUE;
             }
+            else if (gSideTimers[GetBattlerSide(cv->battlerDef)].stickyWebBattlerId != 0xFF)
+            {
+                gBattleScripting.battler = gSideTimers[GetBattlerSide(cv->battlerDef)].stickyWebBattlerId;
+            }
         }
         else
         {
-            if (cv->battlerAtk == cv->battlerDef)
-                gBattleScripting.battler = cv->battlerDef;
-            else
-                gBattleScripting.battler = cv->battlerAtk;
+            gBattleScripting.battler = cv->battlerAtk;
+
+            if (IsBattlerAlly(cv->battlerAtk, cv->battlerDef))
+                gBattleStruct->ignoreDefiant = TRUE;
 
             gBattleStruct->allowPartingShot = TRUE;
         }
@@ -989,7 +990,40 @@ static bool32 AbilityPreventsSpecificStatDrop(u32 ability, u32 stat)
     }
 }
 
-// FORK: returns the innate stat-drop-protecting ability active on `battler` for a drop of `stat`
+bool32 ShouldDefiantCompetitiveActivate(enum BattlerId battler, enum Ability ability)
+{
+    enum BattleSide side = GetBattlerSide(battler);
+
+    if (gBattleStruct->ignoreDefiant)
+        return FALSE;
+
+    switch (ability)
+    {
+    case ABILITY_DEFIANT:
+        if (CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_EQUAL, ability))
+            return FALSE;
+        break;
+    case ABILITY_COMPETITIVE:
+        if (CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_EQUAL, ability))
+            return FALSE;
+        break;
+    default:
+        return FALSE;
+    }
+
+    if (GetConfig(B_DEFIANT_STICKY_WEB) >= GEN_9 || !gBattleScripting.stickyWebStatDrop)
+        return TRUE;
+
+    // only activate Defiant/Competitive if Web was setup by foe
+    return gSideTimers[side].stickyWebBattlerSide != side;
+}
+
+// FORK: innate-aware stat-drop protection helper (forward-declared at top of file, used by the stat-drop
+// path below). Kept in a fork block *after* upstream's ShouldDefiantCompetitiveActivate rather than before
+// it, so this fork insertion stays out of upstream's churn zone and future upstream edits to the
+// surrounding functions merge cleanly instead of conflicting on our block.
+//
+// Returns the innate stat-drop-protecting ability active on `battler` for a drop of `stat`
 // (Clear Body / White Smoke / Full Metal Body block any stat, Hyper Cutter Atk, Big Pecks Def,
 // Keen Eye / Illuminate / Mind's Eye Acc), or ABILITY_NONE if none. Sets *fullProtection TRUE for the
 // whole-stat protectors so the caller can pick the right message/script. Suppression parity via
