@@ -5,41 +5,25 @@
 #include "constants/abilities.h"
 #include "constants/species.h"
 
-// FORK: fork-owned species->innate table (FEATURE_INNATE_ABILITIES). Kept here
-// instead of in gSpeciesInfo so upstream syncs never touch it and the upstream
-// species data stays untouched. Each row maps a species to an ABILITY_NONE-
-// terminated list of innate abilities that are always active on top of that
-// species' normal chosen ability. The list is variable-length (no fixed cap): add
-// or remove entries freely, just keep the terminating ABILITY_NONE.
+// FORK: fork-owned species->innate table (FEATURE_INNATE_ABILITIES). Kept here instead of in
+// gSpeciesInfo so upstream syncs never touch it. Each row maps a species to a list of innate
+// abilities always active on top of its normal chosen ability; write each row with the
+// INNATES(...) macro below.
 //
-// ALLOWLIST — only abilities whose innate behavior has been deliberately wired in
-// may appear here; giving a species an ability that is NOT supported silently does
-// nothing (no effect site activates it). The supported set is grown one ability at
-// a time. Two places track it and are the source of truth for WHICH abilities are
-// allowed — this comment intentionally does NOT duplicate that list:
-//   - the compact "supported set" index in include/fork/innate_abilities.h (SCOPE), and
-//   - the sImplementedInnates[] array in test/fork/innate_abilities.c, which CI ENFORCES:
-//     any species row below whose ability is missing from it fails the build.
-// The exact per-ability semantics — effect sites, the deliberate pure-boon divergences,
-// the AI wiring, and the species-selection rationale — live in the "Per-ability wiring
-// reference" appendix of fork-docs/INNATE_ABILITIES.md (grep it for `### ABILITY_NAME`
-// to read just the one you need).
+// ALLOWLIST: only abilities whose innate behavior is actually wired at an effect site may appear.
+// sImplementedInnates[] in test/fork/innate_abilities.c is the CI-enforced source of truth — a row
+// naming an unwired ability fails the build (rather than silently doing nothing at runtime). When
+// you wire a new ability, in the SAME edit: add its `### ABILITY_NAME` block to
+// fork-docs/INNATE_ABILITIES.md (per-ability semantics, divergences, and AI/species rationale live
+// there), add it to the SCOPE list in include/fork/innate_abilities.h, and add it to
+// sImplementedInnates[].
 //
-// WHEN YOU WIRE A NEW ABILITY: add/edit its `### ABILITY_NAME` block in
-// fork-docs/INNATE_ABILITIES.md, add the name to the SCOPE list in
-// include/fork/innate_abilities.h, and — the single most-forgotten step — add it to
-// sImplementedInnates[] in test/fork/innate_abilities.c in the SAME edit as the new
-// species row (that array, not any prose, is what CI checks).
-//
-// FORMS ARE KEYED EXACTLY (no base-species fallback): the lookup matches the exact battle species,
-// so a Mega / Gigantamax / regional / forme variant gets innates ONLY if it has its own row. After
-// a form change gBattleMons[].species becomes the form constant, so the form must be listed to keep
-// any innate. Mega forms are populated as a PURE BOON: each Mega whose BASE creature has innates has
-// its own row mirroring the base's list, so e.g. Mega Venusaur keeps Overgrow / Chlorophyll / etc.
-// even though its real ability is Thick Fat — the innate models the base creature's trait persisting
-// through the Mega, not the Mega's own ability data. DELIBERATE EXCEPTIONS — grounded Megas must not
-// float: Mega Gengar has NO row (Levitate was its only inheritable innate), and Mega Mewtwo X keeps
-// only the non-floating boon (Pressure), dropping base Mewtwo's Levitate.
+// FORMS ARE KEYED EXACTLY (no base-species fallback): a Mega / Gigantamax / regional / forme variant
+// gets innates ONLY if it has its own row, since gBattleMons[].species becomes the form constant after
+// a form change. Megas are a PURE BOON — each mirrors its base's list so the base creature's trait
+// persists (e.g. Mega Venusaur keeps Overgrow / Chlorophyll though its real ability is Thick Fat).
+// Exceptions: grounded Megas must not float — Mega Gengar has no row (Levitate was its only innate),
+// and Mega Mewtwo X keeps only Pressure (dropping base Mewtwo's Levitate).
 
 struct SpeciesInnates
 {
@@ -59,8 +43,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_FILTER,
+            ABILITY_FLOWER_GIFT,
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
     },
@@ -69,8 +58,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_FILTER,
+            ABILITY_FLOWER_GIFT,
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
     },
@@ -79,8 +73,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_FILTER,
+            ABILITY_FLOWER_GIFT,
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
     },
@@ -89,8 +88,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_FILTER,
+            ABILITY_FLOWER_GIFT,
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR,
             ABILITY_THICK_FAT
         )
@@ -100,8 +104,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_FILTER,
+            ABILITY_FLOWER_GIFT,
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
     },
