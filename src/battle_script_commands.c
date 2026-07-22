@@ -12777,6 +12777,9 @@ void BS_JumpIfRoarFails(void)
     else if (GetBattlerAbility(gBattlerTarget) != ABILITY_SUCTION_CUPS && IsInnateActive(gBattlerTarget, ABILITY_SUCTION_CUPS))
     {
         gBattlerAbility = gBattlerTarget;
+        // FORK: upstream's STRINGID_PKMNANCHORSITSELFWITH now reads B_EFF_NAME (gEffectBattler) rather than
+        // B_DEF_NAME, so point gEffectBattler at the phased mon for the anchor message to name it correctly.
+        gEffectBattler = gBattlerTarget;
         gBattleScripting.abilityPopupOverwrite = ABILITY_SUCTION_CUPS;
         gBattlescriptCurrInstr = BattleScript_AbilityPreventsPhasingOut;
     }
