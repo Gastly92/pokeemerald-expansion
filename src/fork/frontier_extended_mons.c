@@ -183,8 +183,8 @@
 // complementary REAL Sap Sipper (Grass immunity + Attack boost), stacking with the innate Grass Pelt Defense boost.
 // The physical-Attack doublers (Batch C) free seven sets: the Azumarill sets frees their slot to its complementary REAL
 // Sap Sipper (Grass immunity + Attack boost), Medicham (Pure Power now innate; Telepathy is dead in singles) takes a
-// chosen Reckless via an override on its empty slot 1 to power up its High Jump Kick STAB, and Diggersby (both its other
-// real abilities still pending) repurposes its now-redundant slot-2 Huge Power to a chosen Scrappy override so its Normal
+// chosen Reckless via an override on its empty slot 1 to power up its High Jump Kick STAB, and Diggersby (its other
+// real abilities Pickup / Cheek Pouch now innate too) repurposes its now-redundant slot-2 Huge Power to a chosen Scrappy override so its Normal
 // STAB hits Ghosts — Reckless and Scrappy both already-implemented :white_check_mark: innates (stable), like Slurpuff's Unaware.
 // (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
 // Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
@@ -216,182 +216,30 @@
 // Toucannon / Copperajah -> chosen Sheer Force; Gastrodon -> chosen Storm Drain; Okidogi -> chosen Toxic Chain
 // (each a :x: pick). The rest take a fork-owned override (src/species_ability_overrides.c): the all-real-abilities-
 // innate mons (Golem, Cloyster, Scizor, Whimsicott, Cinccino, Relicanth, Meowstic, Jumpluff, Aggron) and the
-// pending-only-real-slot mons (Sudowoodo, Aerodactyl, Ambipom, Dragapult, Hydrapple, Accelgor, Noivern, Mabosstiff)
-// repurpose an innate-redundant or pending slot, while the empty-slot mons (Crobat, Ninjask, Spiritomb, Tyrantrum,
+// single-non-innate-slot mons (Sudowoodo, Aerodactyl, Ambipom, Dragapult, Hydrapple, Accelgor, Noivern, Mabosstiff)
+// repurpose an innate-redundant or otherwise-dead slot, while the empty-slot mons (Crobat, Ninjask, Spiritomb, Tyrantrum,
 // Salazzle, Decidueye, Seviper, and both Urshifu — sole Unseen Fist, like Ogerpon-Cornerstone) fill slot 1 — each
 // with a stable :x: or already-implemented :white_check_mark: pick (Sand Stream / Sniper / Tough Claws / Filter /
 // Solid Rock / Prankster / Sweet Veil / Own Tempo / Water Absorb / Reckless / Unaware / Flame Body / Poison Point /
 // Dragon's Maw / Grassy Surge / Tinted Lens / Strong Jaw / Punk Rock).
-// The end-of-turn effects (Batch J — Rain Dish / Ice Body / Shed Skin / Hydration / Healer / Harvest / Cud Chew /
-// Pickup / Bad Dreams / Poison Heal) free five sets to a complementary REAL slot with a stable :x: pick: Breloom
-// (Poison Heal now innate; Toxic Orb still procs the heal) -> chosen Effect Spore; Goodra (Hydration) -> Sap Sipper;
-// Mr. Rime (Ice Body) -> Screen Cleaner; Arctovish (Slush Rush + Ice Body) -> Water Absorb; Sandaconda (Shed Skin) ->
-// Sand Spit. DEFERRED (tracked follow-up, see fork-docs/INNATE_ABILITIES_BATCHES.md): the remaining ~40 Batch J
-// sets are left on their now-innate chosen ability — functionally correct (the chosen ability still runs; the innate
-// is redundant on that specific set, so the driver skips it), just not upgraded. Most affected species (Blastoise,
-// Dewgong, Chansey, Blissey, Ludicolo, Manaphy, Phione, Darkrai, the Avalugg / Exeggutor / Bellossom / Walrein /
-// Luvdisc / Gorebyss / Whiscash / Tropius / Glaceon / Gliscor lines, ...) have ALL their real abilities now innate,
-// so freeing them needs a game-wide fork override each (with a per-species test/battle audit) — a batch-sized job
-// left to a focused follow-up rather than bundled here.
+// Step 3.5 -- freeing frontier slots from now-innate abilities. As each ability above became an
+// innate, any frontier set that had hardcoded it as its .ability turned redundant: the chosen slot
+// would merely duplicate the innate the mon already has. Such sets are freed to a distinct, observable
+// chosen ability wherever a good one exists -- repointed to a complementary real slot, or given a
+// fork-owned override (src/species_ability_overrides.c) to a STABLE pick (an ability marked :x: in
+// INNATE_ABILITIES_PROGRESS.md -- never itself an innate, so it never needs re-pointing as the innate
+// allowlist grows -- or an already-implemented innate the species does not carry). The tracked batch
+// tails (Batches I / J / T / K / L / U and the Tier 5 / Y one-offs) were completed by the
+// frontier-slot-freeing sweep; see each species' row in src/species_ability_overrides.c for its pick.
 //
-// The berry/item synergy abilities (Batch T — Gluttony / Ripen / Cheek Pouch / Unburden) free eleven sets:
-// Raticate-Alola (Gluttony) -> chosen Hustle, Drifblim x2 (Unburden) -> Aftermath, Hawlucha (Unburden) ->
-// Mold Breaker, Sneasler (Unburden) -> Poison Touch (all complementary REAL slots); Accelgor (Unburden) and
-// Slurpuff (Unburden, still doubling Speed on the innate once its Sitrus is eaten) repoint to their existing
-// Tinted Lens / Unaware overrides; Simisage / Simisear / Simipour (Gluttony), Victreebel (Gluttony) and
-// Greedent (Cheek Pouch) take a new empty-slot override (Chlorophyll / Flash Fire / Water Absorb / Effect Spore /
-// Pickup). DEFERRED (tracked follow-up, like Batch J): Snorlax, Linoone, Hitmonlee, Liepard, Thievul, Dedenne and
-// Appletun have ALL their useful real abilities now innate with no free complementary slot, so their sets are left
-// on the now-innate chosen ability — still correct (the chosen runs; the innate is redundant-but-skipped there) —
-// rather than a game-wide override sweep.
-//
-// The on-hit contact reactions (Batch K first sub-group — Rough Skin / Iron Barbs / Gooey / Tangling Hair) free
-// twelve sets. Three take a complementary REAL slot with a stable :x: pick: Druddigon (Rough Skin) -> chosen Sheer
-// Force, Togedemaru (Iron Barbs) -> chosen Lightning Rod, Goodra (Gooey; its Hydration set already repointed to
-// Sap Sipper in Batch J) -> chosen Sap Sipper. Four take a fork-owned override (src/species_ability_overrides.c):
-// the all-real-abilities-innate mons Sharpedo (Rough Skin + Speed Boost) and Garchomp (Rough Skin + Sand Veil) fill
-// their empty slot 1 with a chosen Strong Jaw / Sand Stream; Ferrothorn (Iron Barbs innate, Anticipation still
-// pending) fills its empty slot 1 with a chosen Filter; and Wugtrio (Gooey + Sand Veil innate, Rattled pending)
-// repurposes its innate-redundant slot-0 Gooey to a chosen Water Absorb — each a stable :x: or already-implemented
-// :white_check_mark: pick. DEFERRED: the two Dugtrio-Alola sets keep their chosen Tangling Hair — all three of its
-// real abilities are now innate, but Tangling Hair is a test-pinned real slot (test/battle/move_effect/pursuit.c), so
-// it stays a real ability and the set is redundant-but-correct (the innate still fires).
-// The on-faint retaliation reactions (Batch K second sub-group — Aftermath chips a contact attacker 1/4 max HP when it
-// KOs the holder, Innards Out deals the attacker the holder's lost HP on any KO) free five sets, all to a fork-owned
-// override (src/species_ability_overrides.c) since every affected species now has its useful real abilities innate:
-// Drifblim x2 (Aftermath + Unburden + Flare Boost all innate) repurpose their unpinned slot-0 Aftermath to a chosen
-// Unaware; Skuntank (Aftermath + Stench + Keen Eye all innate) its slot-1 Aftermath to a chosen Poison Touch; Garbodor
-// (Aftermath innate, slot-1 Weak Armor a wall drawback) its slot-2 Aftermath to a chosen Poison Touch; and Pyukumuku
-// (Innards Out + Unaware innate) its empty slot 1 to a chosen Water Absorb — each a stable :x: or already-implemented
-// :white_check_mark: pick (Innards Out itself stays a real, test-pinned slot 0 on Pyukumuku).
-// The on-hit stat/charge reactions (Batch K third sub-group — Steam Engine raises Speed +6 on a Fire/Water hit, Thermal
-// Exchange raises Attack +1 on a Fire hit + grants burn immunity, Wind Power charges the next Electric move on a wind
-// hit) free three sets: Coalossal (Steam Engine now innate) takes its complementary REAL slot-2 Flash Fire (:x: stable —
-// Fire immunity + boost); and both Baxcalibur sets (Thermal Exchange + Ice Body both now innate, so all its real
-// abilities are innate) take a fork-owned override (src/species_ability_overrides.c) filling their empty slot 1 with a
-// chosen Snow Warning (:x: stable) whose snow turns on the innate Ice Body heal. (Wattrel/Kilowattrel's Wind Power has
-// no frontier set to free.)
-// The on-hit move-disable reaction (Batch K fourth sub-group — Cursed Body has a chance to disable the move that just
-// hit the holder) frees two sets to a complementary REAL slot with a stable :x: pick: Jellicent (Cursed Body now
-// innate) -> chosen Water Absorb (soaks Water hits + heals), and Polteageist -> chosen Weak Armor (its only other real
-// slot; adds Speed on a physical hit). DEFERRED (tracked follow-up, like Batch J/T): the Froslass x2 sets (Snow Cloak +
-// Cursed Body both innate, no free real slot) and the Banette set (Insomnia + Cursed Body innate; only Frisk left, still
-// pending) keep their now-redundant chosen Cursed Body — correct (the chosen runs it; the innate is redundant-but-
-// skipped). Gengar's four sets are UNTOUCHED: Cursed Body is its sole ability, so it is omitted from the innate table
-// (never redundant) and keeps chosen Cursed Body as its real, observed ability.
-// The item-steal reactions + Liquid Ooze (Batch K fifth/final sub-group — Pickpocket steals a contact attacker's held
-// item, Magician steals a held item off a target it damages, Liquid Ooze makes HP-draining moves damage the attacker
-// instead of healing it) touch sixteen sets, all DEFERRED (tracked follow-up, like Batch J/T and the Cursed Body sub-
-// group): every affected species now has all its useful real abilities innate (or its only free real slot is the still-
-// pending Frisk), so the sets are left on their now-innate chosen ability — still correct (the chosen runs it; the innate
-// is redundant-but-skipped there) rather than a game-wide override sweep. Tentacruel (Clear Body + Liquid Ooze + Rain Dish
-// all innate) and Swalot (Liquid Ooze + Sticky Hold + Gluttony all innate) keep chosen Liquid Ooze; the three Weavile sets
-// (Pressure + Pickpocket both innate) and three Grimmsnarl sets (Prankster + Pickpocket innate, Frisk still pending) keep
-// chosen Pickpocket; the three Delphox sets (Blaze + Magician innate), two Klefki sets (Prankster + Magician innate) and
-// three Hoopa / Hoopa-Unbound sets (sole Magician, now innate) keep chosen Magician. Each remains a real, roster-legal slot.
-//
-// The switch-in effect (Batch L first sub-group — Intimidate lowers every opposing battler's Attack by 1 stage on switch-in)
-// touches ~40 sets. Landorus-Therian (sole Intimidate, now innate) is the one freed here: like Ogerpon-Cornerstone it takes a
-// fork-owned override (src/species_ability_overrides.c) filling its empty slot 1 with a chosen Sheer Force (:x: stable, its
-// Incarnate forme's signature), so both its sets run Sheer Force offense on top of the innate Intimidate. DEFERRED (tracked
-// follow-up, like Batch J/T/K): the remaining ~40 sets that hardcoded Intimidate now have it innately, so they are left on
-// their now-redundant chosen Intimidate — still correct (the chosen runs it; the innate is redundant-but-skipped there) —
-// with the complementary-slot freeing left to a focused follow-up rather than a game-wide override sweep.
-// The switch-in stat changes (Batch L third sub-group — Download raises the holder's Attack or Sp. Atk toward the
-// foe's weaker defense, Supersweet Syrup lowers every foe's evasiveness once per battle) free the Porygon2 Download
-// set to its complementary REAL slot-0 Trace (:x: stable — copies a foe ability). DEFERRED (tracked follow-up, like
-// Batch J/T/K and the Intimidate sub-group): the two Porygon-Z sets (Adaptability + Analytic + Download all now
-// innate) and the two Genesect sets (sole Download, now innate) keep their now-redundant chosen Download — still
-// correct (the chosen runs it; the innate is redundant-but-skipped). (Supersweet Syrup has no other frontier set to
-// free — Dipplin is not on the roster, and Hydrapple already runs a fork-owned chosen Grassy Surge override.)
-//
-// The ally-support abilities (Batch U — Battery / Power Spot boost an ally's moves, Telepathy dodges an ally's move,
-// Aroma Veil / Flower Veil shield the side from mental status / stat drops) free six sets. Four take a complementary
-// REAL slot with a stable :x: pick: Musharna and Rabsca (Telepathy now innate) -> chosen Synchronize; Oranguru and
-// Florges (Telepathy / Flower Veil now innate) -> chosen Symbiosis. Stonjourner (sole Power Spot, doubles-only, now
-// innate) is the one fork-owned override here: like Ogerpon-Cornerstone it fills its empty slot 1 with a chosen Solid
-// Rock (an already-implemented :white_check_mark: innate, stable) so its singles sets aren't stuck on a doubles-only
-// ability. RESOLVED in Batch W4 (fork-docs/INNATE_ABILITIES_BATCHES.md): the Dialga / Palkia / Giratina / Orbeetle /
-// Aromatisse sets, whose real abilities are ALL now innate, take a fork-owned override (src/species_ability_overrides.c)
-// so the chosen slot is observable rather than a now-redundant innate — Dialga (+Origin) -> chosen Bulletproof, Palkia
-// (+Origin) -> chosen Water Absorb, Giratina-Altered / Orbeetle -> chosen Unaware (Orbeetle has no empty slot, so it
-// repurposes its unpinned slot-2 Telepathy; the rest fill an empty slot 1), Aromatisse -> chosen Misty Surge; each a
-// stable :x: or already-implemented :white_check_mark: pick. (Giratina-Origin kept its earlier stable Dragon's Maw override.)
-//
-// The promoted-from-rejected clones (Batch Y sub-group Y1 — Chilling Neigh / Grim Neigh raise the holder's
-// Attack / Sp. Atk +1 per foe it KOs, Moxie clones; Electromorphosis charges the next Electric move on any
-// damaging hit, a Wind Power clone) free five sets. Glastrier (sole Chilling Neigh) and Spectrier (sole Grim
-// Neigh) are both sole-ability genderless legends, so like Landorus-Therian / Ogerpon-Cornerstone each takes a
-// fork-owned override (src/species_ability_overrides.c) filling its empty slot 1: Glastrier -> chosen Snow
-// Warning (:x: stable, the ice-legend standard — its snow boosts its own Ice-type Defense), Spectrier ->
-// chosen Infiltrator (an already-implemented :white_check_mark: innate, stable — its Sub sweeper ignores the
-// foe's screens/Substitute), so both run the override on top of the innate neigh. Bellibolt's singles set is
-// freed from chosen Electromorphosis to a complementary REAL slot-1 Static (contact paralysis) — its doubles
-// set already runs Static, and the innate Electromorphosis stays observable on both.
-//
-// Batch Y sub-group Y2 (Transistor / Dragon's Maw — flat type-power-booster clones of Steelworker / Rocky
-// Payload) frees the two adjacent Regi-legend sets the same way: Regieleki (sole Transistor) and Regidrago
-// (sole Dragon's Maw) each takes a fork-owned override filling its empty slot 1 — Regieleki -> chosen Lightning
-// Rod (:x: stable, the Raichu-Alola precedent — draws Electric for immunity + Sp. Atk), Regidrago -> chosen
-// Adaptability (an already-implemented :white_check_mark: innate, stable — 2x STAB stacks on the innate Dragon's
-// Maw 1.5x for a Choice breaker), so both run the override on top of the innate type-power boost.
-//
-// Batch Y sub-group Y3 (Prism Armor / Shadow Shield / Neuroforce / Supreme Overlord — damage/power calc clones)
-// frees seven sets: the sole-ability legends Necrozma (base / Dusk-Mane / Dawn-Wings, Prism Armor) and Lunala
-// (Shadow Shield) each take a fork-owned chosen Adaptability override in their empty slot 1 (2x STAB stacking
-// on the innate defensive cut), and Kingambit's two sets — Supreme Overlord now joining its innate Defiant /
-// Pressure — repoint from the now-innate chosen Supreme Overlord to chosen Defiant (its slot-0 signature).
-//
-// Batch Y sub-group Y4 (Full Metal Body / Mind's Eye — stat-drop / accuracy / hit-trait clones of Clear Body /
-// Keen Eye + Scrappy) frees three sets, both species being sole-ability frontier legends that take the innate
-// AND a fork-owned override in their empty slot 1: Solgaleo x2 (sole Full Metal Body) -> chosen Tough Claws
-// (an already-implemented :white_check_mark: innate, stable — powers its Sunsteel Strike / Close Combat / Flare
-// Blitz contact STAB on top of the innate stat-drop lock), Ursaluna-Bloodmoon (sole Mind's Eye) -> chosen
-// Unaware (:white_check_mark: stable — ignores the foe's boosts on its Calm Mind special tank, alongside the
-// innate evasion-ignore + Ghost coverage).
-//
-// Tier 5.4 (Magic Guard — the holder takes damage only from direct attacks, sparing it every
-// indirect/chip source) frees the three Alakazam sets: with Magic Guard now innate, they repoint
-// from the now-redundant chosen Magic Guard to Alakazam's real, non-innate Synchronize (:x: stable),
-// so a chosen ability stays observable on top of the innate Magic Guard. DEFERRED (tracked follow-up,
-// like Batch J/T/K/L/U): the three Clefable, two Sigilyph and two Reuniclus sets have ALL their real
-// abilities now innate (Clefable: Cute Charm / Magic Guard / Unaware; Sigilyph: Wonder Skin / Magic
-// Guard / Tinted Lens; Reuniclus: Overcoat / Magic Guard / Regenerator), so they keep their now-
-// redundant chosen Magic Guard — still correct (the chosen runs it; the innate is redundant-but-
-// skipped there) — rather than a game-wide override sweep.
-//
-// Tier 5.5 (Mold Breaker — the holder's moves ignore the target's breakable ability) frees one set:
-// Rampardos (Mold Breaker / -- / Sheer Force) repoints from the now-redundant chosen Mold Breaker to
-// its real, non-innate Sheer Force HA (:x: stable), so a chosen ability stays observable on top of the
-// innate Mold Breaker. DEFERRED (tracked follow-up, like Batch J/T/K/L/U/Y5): the Excadrill (x3), Sawk
-// (x2), Haxorus (x2), Pangoro (x2), Hawlucha (x2), Basculegion (x2), Tinkaton (x2), Veluza (x2) and
-// Ogerpon-Hearthflame sets are all on species whose only complementary real slots are themselves now
-// innate (or a drawback / empty slot needing a game-wide override), so they keep their now-redundant
-// chosen Mold Breaker — still correct (the chosen runs it; the innate is redundant-but-skipped there) —
-// deferred to the Batch W override sweep (Batch W3).
-//
-// Tier 5.7 (Mirror Armor — the holder bounces a stat drop back at its source): its sole carrier Corviknight
-// has ALL THREE of its abilities innate (Pressure / Unnerve / Mirror Armor) with no free complementary slot.
-// RESOLVED in Batch W1 — a fork override (src/species_ability_overrides.c) repurposes its innate-redundant
-// slot-1 Unnerve to chosen Bulletproof (:x: stable, Skarmory/Registeel precedent) and its three sets repoint
-// from chosen Mirror Armor to Bulletproof (slot-2 Mirror Armor stays a real slot — test-pinned), so a distinct
-// chosen ability stays observable on top of the innate Mirror Armor.
-//
-// Tier 5.8 (Magic Bounce — the holder reflects a bounceable status move back at its user) frees three
-// sets: the Xatu set (Synchronize / Early Bird / Magic Bounce) and both Espeon sets (Synchronize / -- /
-// Magic Bounce) repoint from the now-redundant chosen Magic Bounce to their real, non-innate Synchronize
-// (:x: stable, slot 0), so a chosen ability stays observable on top of the innate Magic Bounce. RESOLVED in
-// Batch W1: the three Hatterene sets have ALL their real abilities now innate (Healer / Anticipation / Magic
-// Bounce) with no free complementary slot, so a fork override repurposes its innate-redundant slot-1
-// Anticipation to chosen Unaware (:white_check_mark: stable, the Calm Mind-wall pick) and the sets repoint
-// from chosen Magic Bounce to Unaware (slot-2 Magic Bounce stays a real slot — its identity), keeping a
-// distinct chosen ability observable on top of the innate Magic Bounce.
-//
-// Tier 5.9 (Dancer — the holder copies any dance move the instant it is used): its only frontier carriers are
-// the two Oricorio sets (base + Pa'u), and Dancer is Oricorio's SOLE real ability. RESOLVED in Batch W1 — a
-// fork override fills each form's EMPTY slot 1 with chosen Tinted Lens (:white_check_mark: stable), and both
-// sets repoint from chosen Dancer to Tinted Lens, so a distinct chosen ability stays observable on top of the
-// innate Dancer.
+// What remains are "redundant-but-correct" sets whose .ability is still one of the species' own
+// innates. These are kept deliberately: either the species' every real slot is now an innate with no
+// good free alternative (a fork-override cleanup backlog), or a slot is pinned by a test (e.g. the
+// chosen-differs-from-innate exemplars in test/fork/innate_abilities.c, or Chansey / Blissey / Ludicolo
+// / Snorlax / Clefable). They battle correctly -- the chosen ability still fires; the innate is simply
+// redundant on that set. The complete, current set is catalogued and CI-guarded by the sKnownRedundant
+// table in test/fork/frontier_extended_roster.c, which FAILS on any NEW redundant set not on the list.
+// That table -- not this comment -- is the living record of what is still redundant.
 //
 // IMPORTANT: every .ability here must resolve to a real ability slot for the
 // species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability

@@ -125,8 +125,8 @@ determinism-safe. The buckets (each rejected ability sits in exactly one):
 **`:x:` is not always permanent.** An ability rejected only because its driver or its
 implemented *clone* didn't exist yet can be promoted to `:white_large_square:` once
 it does — that's how the clone-of-implemented set (Chilling Neigh = Moxie, Full Metal
-Body = Clear Body, Transistor = Steelworker, …) became **Batch Y** in
-`INNATE_ABILITIES_BATCHES.md`. Before promoting an `:x:`, confirm it isn't
+Body = Clear Body, Transistor = Steelworker, …) became **Batch Y** (the promoted
+clone set, all since wired). Before promoting an `:x:`, confirm it isn't
 load-bearing as a stable frontier-override pick (`src/fork/frontier_extended_mons.c`);
 un-rejecting one forces the Step 3.5 sweep to re-point every override that hands it
 out.
@@ -2213,8 +2213,10 @@ The `BattlerBenefitsFromAbilityScore` Trace/transfer-scoring case is intentional
 are never traced/swapped), as is the overworld poison-damage check (`event_object_movement.c`, keyed to the
 chosen ability like other overworld reads). Canon-only (Gliscor, the Shroomish line). Its frontier sets
 (Breloom, Gliscor) keep their now-innate `.ability` for now except Breloom, freed to a stable chosen Effect
-Spore (its Toxic Orb still procs the innate heal); the rest of the Batch J frontier freeing is a deferred
-follow-up (see `INNATE_ABILITIES_BATCHES.md`).
+Spore (its Toxic Orb still procs the innate heal); Gliscor stays on its now-innate `.ability` as a permanent
+redundant-but-correct exclusion (all three of its slots are test-pinned). The rest of the Batch J frontier
+freeing is complete — any residual redundant-but-correct sets are catalogued in the `sKnownRedundant` table in
+`test/fork/frontier_extended_roster.c`, which CI-guards against new ones.
 
 ### ABILITY_GLUTTONY / ABILITY_RIPEN / ABILITY_CHEEK_POUCH / ABILITY_UNBURDEN
 
@@ -3007,7 +3009,7 @@ slots), and **Stonjourner** (sole Power Spot, doubles-only) takes a fork-owned *
 (`species_ability_overrides.c`, an implemented `:white_check_mark:` innate, stable) on its empty slot 1, like
 Ogerpon-Cornerstone. The seven **Dialga / Palkia / Giratina / Orbeetle / Aromatisse** sets whose real abilities are
 **all** now innate were **deferred** as a focused follow-up, like Batch J/T/K/L, and are **now resolved in
-[Batch W4](INNATE_ABILITIES_BATCHES.md#batch-w-sub-queue-the-breakdown):** a fork-owned override
+the Batch W4 frontier-slot sweep:** a fork-owned override
 (`species_ability_overrides.c`) gives each species an observable chosen slot — **Dialga (+Origin)** → chosen
 **Bulletproof** (`:x:` stable, Steel-legend deflect Focus Blast, like Skarmory/Registeel/Corviknight), **Palkia
 (+Origin)** → chosen **Water Absorb** (`:x:` stable, the Water-legend pick), **Giratina-Altered** and **Orbeetle** →
@@ -3763,7 +3765,7 @@ Mold Breaker set is on a species whose remaining real slots are **themselves now
 Haxorus ×2 — its only non-innate slot Rivalry is a drawback — Pangoro ×2, Hawlucha ×2, Basculegion ×2, Tinkaton
 ×2, Veluza ×2, Ogerpon-Hearthflame), so they kept their now-redundant chosen Mold Breaker (still correct: the
 chosen runs it; the innate is redundant-but-skipped there) and were **deferred to Batch W** — the same
-all-abilities-innate deferral as Batch J/T/K/L/U/Y5. **Resolved in [Batch W3](INNATE_ABILITIES_BATCHES.md#batch-w-sub-queue-the-breakdown):**
+all-abilities-innate deferral as Batch J/T/K/L/U/Y5. **Resolved in the Batch W3 frontier-slot sweep:**
 Haxorus repointed to its real slot-0 **Rivalry** (`:x:`, no override); **Sawk** (slot-1 → Sheer Force), **Pangoro**
 (slot-0 → Tough Claws), **Hawlucha** (slot-1 → Tough Claws), **Basculegion M/F** (slot-1 → Water Absorb), **Veluza**
 (empty slot-1 → Water Absorb) and **Ogerpon-Hearthflame** (empty slot-1 → Flash Fire) took fork chosen overrides
