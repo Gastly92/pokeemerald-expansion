@@ -100,7 +100,10 @@ determinism-safe. The buckets (each rejected ability sits in exactly one):
 - **Pure drawback (no boon to extract)** — strip the cost and nothing remains.
   Truant, Slow Start, Defeatist, Stall, Klutz, Gorilla Tactics, Mycelium Might.
 - **Double-edged (upside welded to downside)** — Simple, Contrary, Moody, No Guard,
-  Fluffy, Anger Shell, Dry Skin, Rivalry.
+  Fluffy, Anger Shell, Dry Skin, Rivalry, Hustle (Atk +50% welded to accuracy −20%),
+  Weak Armor (Speed +2 welded to Def −1 on being hit), Perish Body (the attacker's
+  perish is welded to the holder's *own* perish — strip the self-faint and the
+  reactive on-contact effect left over is a bespoke auto-KO, not a clean boon).
 - **Non-volatile status-on-contact/hit** — auto-applies a *major* status, which is
   mutually exclusive, so it can *block the holder's own* status move (an innate
   Static paralyses a target you wanted to Toxic). Not a pure boon — unlike the
