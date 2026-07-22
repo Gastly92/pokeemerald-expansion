@@ -71,12 +71,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BUTTERFREE, 1,
         ABILITY_EFFECT_SPORE
     },
+    { // 0015
+        // Beedrill: all real abilities now innate, so its empty slot takes a chosen
+        // Poison Point so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_BEEDRILL, 1,
+        ABILITY_POISON_POINT
+    },
     { // 0018
         // Pidgeot's three real abilities (Keen Eye, Tangled Feet, Big Pecks) are ALL now innate, so its innate-
         // redundant slot-1 Tangled Feet -- unpinned by any test (audited) -- takes a chosen No Guard, :x: (never an
         // innate -> stable) and its Mega's signature: Hurricane / Focus Blast never miss.
         SPECIES_PIDGEOT, 1,
         ABILITY_NO_GUARD
+    },
+    { // 0022
+        // Fearow: all real abilities now innate, so its empty slot takes a chosen
+        // Hustle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_FEAROW, 1,
+        ABILITY_HUSTLE
     },
     { // 0024
         // Arbok's three real abilities (Intimidate, Shed Skin, Unnerve) are ALL now innate, so its innate-
@@ -111,6 +123,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SANDSLASH_ALOLA, 1,
         ABILITY_SNOW_WARNING
     },
+    { // 0040
+        // Wigglytuff: all real abilities now innate, so its innate-redundant slot-0 Cute Charm takes a chosen
+        // Sweet Veil so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_WIGGLYTUFF, 0,
+        ABILITY_SWEET_VEIL
+    },
+    { // 0049
+        // Venomoth: all real abilities now innate, so its innate-redundant slot-2 Wonder Skin takes a chosen
+        // Effect Spore (non-redundant). Slot 0 stays real Shield Dust -- ai_check_viability.c selects it.
+        SPECIES_VENOMOTH, 2,
+        ABILITY_EFFECT_SPORE
+    },
     { // 0051
         // Dugtrio's three real abilities (Sand Veil, Arena Trap, Sand Force) are ALL now innate. Slot-1 Arena
         // Trap is pinned by tests, so its innate-redundant slot-2 Sand Force (audited: no Ability(ABILITY_SAND_FORCE)
@@ -119,6 +143,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // immunity). Same pick as Sandslash/Donphan/Flygon.
         SPECIES_DUGTRIO, 2,
         ABILITY_SAND_STREAM
+    },
+    { // 0051
+        // Dugtrio Alola: all real abilities now innate, so its innate-redundant slot-0 Sand Veil takes a chosen
+        // Earth Eater so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_DUGTRIO_ALOLA, 0,
+        ABILITY_EARTH_EATER
+    },
+    { // 0053
+        // Persian: all real abilities now innate, so its innate-redundant slot-2 Unnerve takes a chosen
+        // Fur Coat so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_PERSIAN, 2,
+        ABILITY_FUR_COAT
+    },
+    { // 0053
+        // Persian Alola: all real abilities now innate, so its innate-redundant slot-2 Rattled takes a chosen
+        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_PERSIAN_ALOLA, 2,
+        ABILITY_CUTE_CHARM
     },
     { // 0071
         // Victreebel's only real abilities (Chlorophyll, Gluttony) are BOTH now innate, so its EMPTY slot 1
@@ -144,6 +186,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GOLEM, 2,
         ABILITY_SAND_STREAM
     },
+    { // 0078
+        // Rapidash Galar: all real abilities now innate, so its innate-redundant slot-1 Pastel Veil takes a chosen
+        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_RAPIDASH_GALAR, 1,
+        ABILITY_CUTE_CHARM
+    },
     { // 0080
         // Galarian Slowbro's three real abilities (Quick Draw, Own Tempo, Regenerator) are ALL now innate;
         // slot-0 Quick Draw + slot-1 Own Tempo are test-pinned (quick_draw.c / deterministic_abilities.c / the
@@ -153,6 +201,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Own Tempo / Quick Draw. Same Poison-flavor pick as Swalot / Skuntank.
         SPECIES_SLOWBRO_GALAR, 2,
         ABILITY_POISON_TOUCH
+    },
+    { // 0083
+        // Farfetchd: all real abilities now innate, so its innate-redundant slot-1 Inner Focus takes a chosen
+        // Super Luck so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_FARFETCHD, 1,
+        ABILITY_SUPER_LUCK
+    },
+    { // 0085
+        // Dodrio: all real abilities now innate, so its innate-redundant slot-0 Run Away takes a chosen
+        // Hustle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_DODRIO, 0,
+        ABILITY_HUSTLE
     },
     { // 0087
         // Dewgong's three real abilities (Thick Fat, Hydration, Ice Body) are ALL now innate, and it is used by
@@ -168,6 +228,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Skill Link Icicle Spear crits.
         SPECIES_CLOYSTER, 2,
         ABILITY_SNIPER
+    },
+    { // 0097
+        // Hypno: all real abilities now innate, so its innate-redundant slot-1 Forewarn takes a chosen
+        // Bad Dreams so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_HYPNO, 1,
+        ABILITY_BAD_DREAMS
     },
     { // 0103
         // Exeggutor's only real abilities (Chlorophyll, Harvest) are BOTH now innate, so its EMPTY slot 1 takes
@@ -202,6 +268,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // power) and Inner Focus (flinch immunity). Same pick as the sibling fighters Hitmonlee / Hitmontop.
         SPECIES_HITMONCHAN, 2,
         ABILITY_NO_GUARD
+    },
+    { // 0113
+        // Chansey: all real abilities now innate, so its innate-redundant slot-1 Serene Grace takes a chosen
+        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_CHANSEY, 1,
+        ABILITY_CUTE_CHARM
+    },
+    { // 0121
+        // Starmie: all real abilities now innate, so its innate-redundant slot-1 Natural Cure takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_STARMIE, 1,
+        ABILITY_WATER_ABSORB
     },
     { // 0128
         // Tauros-Paldea-Combat's three real abilities (Intimidate, Anger Point, Cud Chew) are ALL now innate;
@@ -253,12 +331,48 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DRAGONITE, 1,
         ABILITY_RECKLESS
     },
+    { // 0150
+        // Mewtwo: all real abilities now innate, so its empty slot takes a chosen
+        // Synchronize so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_MEWTWO, 1,
+        ABILITY_SYNCHRONIZE
+    },
     { // 0154
         // Meganium's only real abilities (Overgrow, Leaf Guard) are BOTH now innate, so its EMPTY slot 1 takes
         // Grassy Surge -- :x: (never an innate -> stable) and thematic for the Herb Pokemon: the terrain it
         // sets powers its Grass STAB and passively heals its bulky sets. Same pick as Venusaur/Celebi.
         SPECIES_MEGANIUM, 1,
         ABILITY_GRASSY_SURGE
+    },
+    { // 0157
+        // Typhlosion Hisui: all real abilities now innate, so its empty slot takes a chosen
+        // Flash Fire so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_TYPHLOSION_HISUI, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0162
+        // Furret: all real abilities now innate, so its innate-redundant slot-0 Run Away takes a chosen
+        // Hustle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_FURRET, 0,
+        ABILITY_HUSTLE
+    },
+    { // 0164
+        // Noctowl: all real abilities now innate, so its innate-redundant slot-0 Insomnia takes a chosen
+        // Frisk so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_NOCTOWL, 0,
+        ABILITY_FRISK
+    },
+    { // 0166
+        // Ledian: all real abilities now innate, so its innate-redundant slot-0 Swarm takes a chosen
+        // Tinted Lens so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_LEDIAN, 0,
+        ABILITY_TINTED_LENS
+    },
+    { // 0168
+        // Ariados: all real abilities now innate, so its innate-redundant slot-1 Insomnia takes a chosen
+        // Poison Point so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_ARIADOS, 1,
+        ABILITY_POISON_POINT
     },
     { // 0169
         // Inner Focus and Infiltrator now innate, so its EMPTY slot 1 takes Reckless, an implemented
@@ -297,6 +411,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SLOWKING, 2,
         ABILITY_WATER_ABSORB
     },
+    { // 0202
+        // Wobbuffet: all real abilities now innate, so its empty slot takes a chosen
+        // Synchronize so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_WOBBUFFET, 1,
+        ABILITY_SYNCHRONIZE
+    },
     { // 0205
         // Forretress's only real abilities (Sturdy, Overcoat) are BOTH now innate, so its EMPTY slot 1 takes
         // Filter, an already-implemented :white_check_mark: innate (stable) it does not carry innately: it blunts
@@ -318,6 +438,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // :white_check_mark: innate (stable) that powers Bullet Punch / U-turn contact.
         SPECIES_SCIZOR, 1,
         ABILITY_TOUGH_CLAWS
+    },
+    { // 0214
+        // Heracross: all real abilities now innate, so its innate-redundant slot-2 Moxie takes a chosen
+        // No Guard so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_HERACROSS, 2,
+        ABILITY_NO_GUARD
+    },
+    { // 0217
+        // Ursaring: all real abilities now innate, so its innate-redundant slot-1 Quick Feet takes a chosen
+        // Hustle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_URSARING, 1,
+        ABILITY_HUSTLE
     },
     { // 0227
         // Skarmory's only non-drawback real abilities (Keen Eye, Sturdy) are BOTH now innate (Weak Armor,
@@ -342,6 +474,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Hitmonlee.
         SPECIES_HITMONTOP, 2,
         ABILITY_NO_GUARD
+    },
+    { // 0242
+        // Blissey: all real abilities now innate, so its innate-redundant slot-2 Healer takes a chosen
+        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_BLISSEY, 2,
+        ABILITY_CUTE_CHARM
     },
     { // 0243
         // Raikou's only real abilities (Pressure, Inner Focus) are BOTH now innate, so its EMPTY slot 1 takes
@@ -464,6 +602,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VOLBEAT, 1,
         ABILITY_VICTORY_STAR
     },
+    { // 0314
+        // Illumise: all real abilities now innate, so its innate-redundant slot-0 Oblivious takes a chosen
+        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_ILLUMISE, 0,
+        ABILITY_CUTE_CHARM
+    },
     { // 0317
         // Swalot's three real abilities (Liquid Ooze, Sticky Hold, Gluttony) are ALL now innate, and NONE is
         // test-pinned (audited: no reference to Swalot in test/), so its innate-redundant slot-2 Gluttony takes
@@ -489,6 +633,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     // AI-evaluation branch from an immunity ability like Flash Fire tips it over). So both keep their now-innate
     // chosen ability (Water Veil / Magma Armor) — redundant-but-correct — like the other AI/test-pinned exclusions
     // (Slowbro / Snorlax / Clefable).
+    { // 0321
+        // Wailord: all real abilities now innate, so its innate-redundant slot-2 Pressure takes a chosen
+        // Drizzle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_WAILORD, 2,
+        ABILITY_DRIZZLE
+    },
     { // 0326
         // Grumpig's three real abilities (Thick Fat, Own Tempo, Gluttony) are ALL now innate; slot-0 Thick Fat is the
         // default read and slot-2 Gluttony is the chosen-differs-from-innate exemplar in test/fork/innate_abilities.c,
@@ -550,6 +700,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ARMALDO, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0350
+        // Milotic: all real abilities now innate, so its innate-redundant slot-2 Cute Charm takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_MILOTIC, 2,
+        ABILITY_WATER_ABSORB
+    },
     { // 0354
         // Banette's three real abilities (Insomnia, Frisk, Cursed Body) are ALL now innate; slot-0 Insomnia is the
         // default read by terastal.c, so its innate-redundant slot-2 Cursed Body -- unpinned by any test (audited)
@@ -560,9 +716,21 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BANETTE, 2,
         ABILITY_WANDERING_SPIRIT
     },
+    { // 0356
+        // Dusclops: all real abilities now innate, so its empty slot takes a chosen
+        // Mummy so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_DUSCLOPS, 1,
+        ABILITY_MUMMY
+    },
     { // 0358
         SPECIES_CHIMECHO, 1,
         ABILITY_SOUNDPROOF
+    },
+    { // 0359
+        // Absol: all real abilities now innate, so its innate-redundant slot-2 Justified takes a chosen
+        // Magic Bounce so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_ABSOL, 2,
+        ABILITY_MAGIC_BOUNCE
     },
     { // 0365
         // Walrein's three real abilities (Thick Fat, Ice Body, Oblivious) are ALL now innate; slot-0 Thick Fat is the
@@ -668,6 +836,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TORTERRA, 1,
         ABILITY_SAND_STREAM
     },
+    { // 0392
+        // Infernape: all real abilities now innate, so its empty slot takes a chosen
+        // Flash Fire so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_INFERNAPE, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0395
+        // Empoleon: all real abilities now innate, so its empty slot takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_EMPOLEON, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0398
         // Staraptor's only real abilities (Intimidate, Reckless) are BOTH now innate, so its EMPTY slot 1 takes a
         // chosen Hustle -- :x: (never an innate -> stable) and thematic for the reckless raptor: +50% Attack powers
@@ -683,6 +863,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // its Speed-lowering secondary, on top of the innate Technician Fury Cutter ramp.
         SPECIES_KRICKETUNE, 1,
         ABILITY_SHEER_FORCE
+    },
+    { // 0416
+        // Vespiquen: all real abilities now innate, so its empty slot takes a chosen
+        // Effect Spore so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_VESPIQUEN, 1,
+        ABILITY_EFFECT_SPORE
     },
     { // 0419
         // Floatzel's only real abilities (Swift Swim, Water Veil) are BOTH now innate, so its EMPTY slot 1 takes
@@ -718,6 +904,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0429
         SPECIES_MISMAGIUS, 1,
         ABILITY_WANDERING_SPIRIT
+    },
+    { // 0430
+        // Honchkrow: all real abilities now innate, so its innate-redundant slot-1 Super Luck takes a chosen
+        // Sniper so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_HONCHKROW, 1,
+        ABILITY_SNIPER
+    },
+    { // 0432
+        // Purugly: all real abilities now innate, so its innate-redundant slot-0 Thick Fat takes a chosen
+        // Hustle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_PURUGLY, 0,
+        ABILITY_HUSTLE
     },
     { // 0435
         // Skuntank's three real abilities (Stench, Aftermath, Keen Eye) are ALL now innate, so its innate-
@@ -758,6 +956,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GARCHOMP, 1,
         ABILITY_SAND_STREAM
     },
+    { // 0448
+        // Lucario: all real abilities now innate, so its innate-redundant slot-1 Inner Focus takes a chosen
+        // No Guard so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_LUCARIO, 1,
+        ABILITY_NO_GUARD
+    },
     { // 0455
         SPECIES_CARNIVINE, 1,
         ABILITY_CHLOROPHYLL
@@ -782,6 +986,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0465
         SPECIES_TANGROWTH, 2,
         ABILITY_SAP_SIPPER
+    },
+    { // 0468
+        // Togekiss: all real abilities now innate, so its innate-redundant slot-1 Serene Grace takes a chosen
+        // Sheer Force so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_TOGEKISS, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0469
+        // Yanmega: all real abilities now innate, so its innate-redundant slot-1 Tinted Lens takes a chosen
+        // Sheer Force so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_YANMEGA, 1,
+        ABILITY_SHEER_FORCE
     },
     { // 0470
         // Leafeon's real abilities (Leaf Guard in slots 0 AND 1, Chlorophyll in slot 2) are ALL now innate; slot-0
@@ -818,12 +1034,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_PORYGON_Z, 2,
         ABILITY_SIMPLE
     },
+    { // 0475
+        // Gallade: all real abilities now innate, so its innate-redundant slot-0 Steadfast takes a chosen
+        // Super Luck so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_GALLADE, 0,
+        ABILITY_SUPER_LUCK
+    },
     { // 0476
         // Probopass's three real abilities (Sturdy, Magnet Pull, Sand Force) are ALL now innate, so its innate-redundant
         // slot-1 Magnet Pull (audited: no Ability(ABILITY_MAGNET_PULL) on Probopass) takes Lightning Rod — :x: (never an
         // innate -> stable) and thematic for the compass magnet: an Electric immunity + Sp. Atk boost for its special wall.
         SPECIES_PROBOPASS, 1,
         ABILITY_LIGHTNING_ROD
+    },
+    { // 0477
+        // Dusknoir: all real abilities now innate, so its empty slot takes a chosen
+        // Mummy so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_DUSKNOIR, 1,
+        ABILITY_MUMMY
     },
     { // 0478
         // Froslass's only real abilities (Snow Cloak, Cursed Body) are BOTH now innate, so its EMPTY slot 1 takes
@@ -947,9 +1175,27 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SHAYMIN_SKY, 1,
         ABILITY_WIND_RIDER
     },
+    { // 0500
+        // Emboar: all real abilities now innate, so its empty slot takes a chosen
+        // Flash Fire so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_EMBOAR, 1,
+        ABILITY_FLASH_FIRE
+    },
     { // 0503
         SPECIES_SAMUROTT, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0503
+        // Samurott Hisui: all real abilities now innate, so its empty slot takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_SAMUROTT_HISUI, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0505
+        // Watchog: all real abilities now innate, so its innate-redundant slot-1 Keen Eye takes a chosen
+        // Frisk so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_WATCHOG, 1,
+        ABILITY_FRISK
     },
     { // 0508
         // Stoutland's three real abilities (Intimidate, Sand Rush, Scrappy) are ALL now innate; slot-1 Sand Rush is
@@ -1127,6 +1373,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ALOMOMOLA, 2,
         ABILITY_WATER_ABSORB
     },
+    { // 0596
+        // Galvantula: all real abilities now innate, so its innate-redundant slot-1 Unnerve takes a chosen
+        // Static so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_GALVANTULA, 1,
+        ABILITY_STATIC
+    },
     { // 0598
         // Ferrothorn's only non-pending real abilities are Iron Barbs (slot 0, now innate) and Anticipation (slot 2,
         // still :white_large_square: pending), so its EMPTY slot 1 takes Filter, an already-implemented
@@ -1191,6 +1443,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0641
         SPECIES_TORNADUS_THERIAN, 1,
         ABILITY_PRANKSTER
+    },
+    { // 0641
+        // Tornadus: all real abilities now innate, so its empty slot takes a chosen
+        // Cloud Nine so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_TORNADUS, 1,
+        ABILITY_CLOUD_NINE
+    },
+    { // 0642
+        // Thundurus: all real abilities now innate, so its empty slot takes a chosen
+        // Volt Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_THUNDURUS, 1,
+        ABILITY_VOLT_ABSORB
     },
     { // 0643
         // Reshiram's only real ability (Turboblaze) is now innate (Batch Y8), and it's a frontier set, so like the
@@ -1289,6 +1553,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MEOWSTIC_M, 1,
         ABILITY_OWN_TEMPO
     },
+    { // 0678
+        // Meowstic F: all real abilities now innate, so its innate-redundant slot-0 Keen Eye takes a chosen
+        // Prankster so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_MEOWSTIC_F, 0,
+        ABILITY_PRANKSTER
+    },
     { // 0683
         // Aromatisse's only real abilities (Healer, Aroma Veil) are BOTH now innate (Aroma Veil, Batch U), so its
         // EMPTY slot 1 takes Misty Surge -- :x: (never an innate -> stable) and thematic for the Fragrance
@@ -1306,6 +1576,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // now rides the innate Unburden — still doubling Speed once the Sitrus is eaten — and selects this Unaware slot.)
         SPECIES_SLURPUFF, 1,
         ABILITY_UNAWARE
+    },
+    { // 0689
+        // Barbaracle: all real abilities now innate, so its innate-redundant slot-1 Sniper takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_BARBARACLE, 1,
+        ABILITY_WATER_ABSORB
     },
     { // 0693
         // Clawitzer's only real ability (Mega Launcher) is now innate, so its empty slot 1 takes a
@@ -1354,6 +1630,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // drinks in Grass moves for an Attack boost, observable alongside the innate Harvest / Frisk.
         SPECIES_TREVENANT, 2,
         ABILITY_SAP_SIPPER
+    },
+    { // 0711
+        // Gourgeist Super: all real abilities now innate, so its innate-redundant slot-0 Pickup takes a chosen
+        // Harvest so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_GOURGEIST_SUPER, 0,
+        ABILITY_HARVEST
     },
     { // 0713
         // Avalugg's three real abilities (Own Tempo, Ice Body, Sturdy) are ALL now innate, and none is test-pinned
@@ -1425,9 +1707,27 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_INCINEROAR, 1,
         ABILITY_TOUGH_CLAWS
     },
+    { // 0735
+        // Gumshoos: all real abilities now innate, so its innate-redundant slot-1 Strong Jaw takes a chosen
+        // Super Luck so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_GUMSHOOS, 1,
+        ABILITY_SUPER_LUCK
+    },
     { // 0738
         SPECIES_VIKAVOLT, 1,
         ABILITY_MOTOR_DRIVE
+    },
+    { // 0740
+        // Crabominable: all real abilities now innate, so its innate-redundant slot-1 Iron Fist takes a chosen
+        // No Guard so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_CRABOMINABLE, 1,
+        ABILITY_NO_GUARD
+    },
+    { // 0743
+        // Ribombee: all real abilities now innate, so its innate-redundant slot-0 Honey Gather takes a chosen
+        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_RIBOMBEE, 0,
+        ABILITY_CUTE_CHARM
     },
     { // 0745
         // Lycanroc-Dusk's only real ability (Tough Claws) is now innate, so its empty slot 1 takes a
@@ -1436,6 +1736,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // forms, doubling this wolf's Speed in the sand.
         SPECIES_LYCANROC_DUSK, 1,
         ABILITY_SAND_RUSH
+    },
+    { // 0745
+        // Lycanroc: all real abilities now innate, so its innate-redundant slot-1 Sand Rush takes a chosen
+        // Sand Stream so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_LYCANROC, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0748
+        // Toxapex: all real abilities now innate, so its innate-redundant slot-2 Regenerator takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_TOXAPEX, 2,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0750
+        // Mudsdale: all real abilities now innate, so its innate-redundant slot-1 Stamina takes a chosen
+        // Earth Eater so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_MUDSDALE, 1,
+        ABILITY_EARTH_EATER
     },
     { // 0758
         // Corrosion and Oblivious now innate, so its EMPTY slot 1 takes Flame Body -- :x: (never an innate ->
@@ -1463,6 +1781,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // to sleep. (Slot 1 Triage stays intact — upstream upper_hand/ai_doubles tests pin it.)
         SPECIES_COMFEY, 2,
         ABILITY_SWEET_VEIL
+    },
+    { // 0766
+        // Passimian: all real abilities now innate, so its empty slot takes a chosen
+        // Rivalry so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_PASSIMIAN, 1,
+        ABILITY_RIVALRY
+    },
+    { // 0770
+        // Palossand: all real abilities now innate, so its empty slot takes a chosen
+        // Earth Eater so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_PALOSSAND, 1,
+        ABILITY_EARTH_EATER
     },
     { // 0771
         // Pyukumuku's real abilities are Innards Out (slot 0, now innate AND pinned by innards_out.c) and Unaware
@@ -1511,6 +1841,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Life Orb set skips its recoil), stacking with the innate Strong Jaw fang boost and Dazzling block.
         SPECIES_BRUXISH, 1,
         ABILITY_SHEER_FORCE
+    },
+    { // 0781
+        // Dhelmise: all real abilities now innate, so its empty slot takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_DHELMISE, 1,
+        ABILITY_WATER_ABSORB
     },
     { // 0791
         // Solgaleo's only real ability (Full Metal Body) is now innate, and it's a frontier set, so like the
@@ -1654,6 +1990,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MELMETAL, 1,
         ABILITY_FILTER
     },
+    { // 0818
+        // Inteleon: all real abilities now innate, so its empty slot takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_INTELEON, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0820
         // Greedent's only real abilities (Cheek Pouch, Gluttony) are BOTH now innate, so its EMPTY slot 1 takes
         // Pickup -- an already-implemented :white_check_mark: innate (stable) it does not carry innately and
@@ -1682,6 +2024,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ORBEETLE, 2,
         ABILITY_UNAWARE
     },
+    { // 0834
+        // Drednaw: all real abilities now innate, so its innate-redundant slot-1 Shell Armor takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_DREDNAW, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0836
+        // Boltund: all real abilities now innate, so its empty slot takes a chosen
+        // Lightning Rod so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_BOLTUND, 1,
+        ABILITY_LIGHTNING_ROD
+    },
     { // 0842
         // Appletun's three real abilities (Ripen, Gluttony, Thick Fat) are ALL now innate; slot-0 Ripen is the
         // default read by sleep_clause.c / dynamax.c, so its innate-redundant slot-2 Thick Fat (audited: no
@@ -1700,6 +2054,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // other water mons in this table (Clawitzer / Grapploct / Carracosta).
         SPECIES_BARRASKEWDA, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0849
+        // Toxtricity Low Key: all real abilities now innate, so its innate-redundant slot-0 Punk Rock takes a chosen
+        // Volt Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_TOXTRICITY_LOW_KEY, 0,
+        ABILITY_VOLT_ABSORB
     },
     { // 0853
         // Grapploct's only real abilities (Limber, Technician) are BOTH now innate, so its empty slot 1
@@ -1730,12 +2090,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GRIMMSNARL, 2,
         ABILITY_INFILTRATOR
     },
+    { // 0862
+        // Obstagoon: all real abilities now innate, so its innate-redundant slot-0 Reckless takes a chosen
+        // Quick Feet so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_OBSTAGOON, 0,
+        ABILITY_QUICK_FEET
+    },
+    { // 0863
+        // Perrserker: all real abilities now innate, so its innate-redundant slot-1 Tough Claws takes a chosen
+        // Bulletproof so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_PERRSERKER, 1,
+        ABILITY_BULLETPROOF
+    },
     { // 0865
         // Sirfetch'd's Scrappy is now innate and its remaining slot-0 Steadfast is weak (and pending), so its
         // EMPTY slot 1 takes Super Luck, an already-implemented :white_check_mark: innate (stable) that it does
         // not carry innately: the duelist's precision stacks with the Leek for guaranteed crits.
         SPECIES_SIRFETCHD, 1,
         ABILITY_SUPER_LUCK
+    },
+    { // 0870
+        // Falinks: all real abilities now innate, so its empty slot takes a chosen
+        // No Guard so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_FALINKS, 1,
+        ABILITY_NO_GUARD
     },
     { // 0873
         // Frosmoth's only real abilities (Shield Dust, Ice Scales) are BOTH now innate, so its EMPTY slot 1
@@ -1895,6 +2273,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SKELEDIRGE, 1,
         ABILITY_MUMMY
     },
+    { // 0914
+        // Quaquaval: all real abilities now innate, so its empty slot takes a chosen
+        // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_QUAQUAVAL, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0918
+        // Spidops: all real abilities now innate, so its empty slot takes a chosen
+        // Sticky Hold so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_SPIDOPS, 1,
+        ABILITY_STICKY_HOLD
+    },
     { // 0920
         // Lokix's only real abilities (Swarm, Tinted Lens) are BOTH now innate, so its EMPTY slot 1 takes
         // Tough Claws, an already-implemented :white_check_mark: innate (stable) that it does not carry innately:
@@ -1984,6 +2374,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VELUZA, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0982
+        // Dudunsparce: all real abilities now innate, so its innate-redundant slot-0 Serene Grace takes a chosen
+        // Simple so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_DUDUNSPARCE, 0,
+        ABILITY_SIMPLE
+    },
+    { // 0983
+        // Kingambit: all real abilities now innate, so its innate-redundant slot-2 Pressure takes a chosen
+        // Sheer Force so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_KINGAMBIT, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0998
         // Baxcalibur's only real abilities are Thermal Exchange (slot 0, now innate) and Ice Body (slot 2, now
         // innate), so its EMPTY slot 1 takes Snow Warning -- :x: (never an innate -> stable) and self-synergistic
@@ -2022,6 +2424,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_OGERPON_CORNERSTONE, 1,
         ABILITY_EARTH_EATER
     },
+    { // 1018
+        // Archaludon: all real abilities now innate, so its innate-redundant slot-1 Sturdy takes a chosen
+        // Bulletproof so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        SPECIES_ARCHALUDON, 1,
+        ABILITY_BULLETPROOF
+    },
     { // 1019
         // Regenerator and Sticky Hold now innate (slot-0 Supersweet Syrup is pinned by supersweet_syrup.c), so
         // its innate-redundant slot-2 Sticky Hold (audited: unpinned) takes Grassy Surge -- :x: (never an
@@ -2046,6 +2454,7 @@ static bool8 sSpeciesHasOverrideReady;
 enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)
 {
     u32 i;
+    bool32 foundSpecies = FALSE;
 
     if (!sSpeciesHasOverrideReady)
     {
@@ -2063,8 +2472,19 @@ enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)
 
     for (i = 0; i < ARRAY_COUNT(sSpeciesAbilityOverrides); i++)
     {
-        if (sSpeciesAbilityOverrides[i].species == species
-         && sSpeciesAbilityOverrides[i].slot == slot)
+        if (sSpeciesAbilityOverrides[i].species != species)
+        {
+            // A species' rows are contiguous (the table is dex-sorted, with a species'
+            // slots and formes kept together), so once we have stepped past this species'
+            // block there is nothing left to find -- stop rather than scan the whole
+            // table. Keeps this hot lookup cheap (it runs deep in AI evaluation) as the
+            // override table grows.
+            if (foundSpecies)
+                break;
+            continue;
+        }
+        foundSpecies = TRUE;
+        if (sSpeciesAbilityOverrides[i].slot == slot)
             return sSpeciesAbilityOverrides[i].ability;
     }
 

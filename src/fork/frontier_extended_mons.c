@@ -492,7 +492,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRILL_RUN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SNIPER, // Swarm now innate (latched); chosen Sniper
+        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -512,7 +512,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SNIPER, // Swarm now innate (latched); chosen Sniper
+        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -662,7 +662,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_AGILITY
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -682,7 +682,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SNIPER, // Keen Eye now innate; chosen Sniper powers up this sweeper's critical hits
+        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -724,7 +724,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SHED_SKIN,
+        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -998,7 +998,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SOFT_BOILED,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_MAGIC_GUARD,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1018,7 +1018,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_MAGIC_GUARD,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1038,7 +1038,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_MAGIC_GUARD, // Cute Charm/Unaware/Magic Guard all innate now (Tier 5.4); chosen Magic Guard redundant-but-correct (Batch W deferral)
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1144,7 +1144,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_COMPETITIVE,
+        .ability = ABILITY_SWEET_VEIL, // all real abilities innate; chosen Sweet Veil (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1164,7 +1164,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_PROTECT
         },
-        .ability = ABILITY_FRISK,
+        .ability = ABILITY_SWEET_VEIL, // all real abilities innate; chosen Sweet Veil (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1270,7 +1270,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as are Shield Dust & Wonder Skin); left redundant — all three slots are real abilities, and a real-slot override deletes one game-wide
+        .ability = ABILITY_EFFECT_SPORE, // all real abilities innate; chosen Effect Spore (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1290,7 +1290,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUIVER_DANCE,
             MOVE_ROOST
         },
-        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no empty slot to override
+        .ability = ABILITY_EFFECT_SPORE, // all real abilities innate; chosen Effect Spore (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1354,7 +1354,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_TANGLING_HAIR, // all three real abilities (Sand Veil / Sand Force / Tangling Hair) now innate; chosen Tangling Hair kept (test-pinned real slot, so redundant-but-correct — the innate still fires)
+        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1374,7 +1374,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_TANGLING_HAIR, // all three real abilities now innate; chosen Tangling Hair kept (test-pinned real slot, redundant-but-correct)
+        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1396,7 +1396,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_RATTLED, // Fur Coat (+ Technician) now innate; chosen Rattled boosts Speed when struck
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1416,7 +1416,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_TAUNT
         },
-        .ability = ABILITY_RATTLED,
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -1438,7 +1438,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_DARK_PULSE
         },
-        .ability = ABILITY_UNNERVE, // Limber + Technician now innate; chosen Unnerve denies the foe its Berry
+        .ability = ABILITY_FUR_COAT, // all real abilities innate; chosen Fur Coat (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1458,7 +1458,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_UNNERVE, // Limber + Technician now innate; chosen Unnerve denies the foe its Berry on the fast pivot
+        .ability = ABILITY_FUR_COAT, // all real abilities innate; chosen Fur Coat (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2003,7 +2003,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND
         },
         // FORK: Pastel Veil is now an innate (Step 3.5) — freed to its real Hidden Ability slot.
-        .ability = ABILITY_ANTICIPATION,
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2023,7 +2023,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLARE_BLITZ,
             MOVE_AGILITY
         },
-        .ability = ABILITY_ANTICIPATION,
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2045,7 +2045,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_OWN_TEMPO, // Oblivious/Own Tempo/Regenerator ALL now innate, but slot-1 Own Tempo (swagger.c / berserk_gene.c) + slot-2 Regenerator (regenerator.c) are test-pinned and slot-0 Oblivious is the default read, so Slowbro keeps chosen Own Tempo (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2065,7 +2065,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2085,7 +2085,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CHILLING_WATER,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_OWN_TEMPO,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2150,7 +2150,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_SUPER_LUCK, // all real abilities innate; chosen Super Luck (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2172,7 +2172,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_TANGLED_FEET, // now innate (as is Early Bird); left redundant — no empty slot (Run Away is dead weight, but a real-slot override deletes it game-wide)
+        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2192,7 +2192,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DOUBLE_EDGE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TANGLED_FEET, // now innate; left redundant — no empty slot to override
+        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2487,7 +2487,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_WISH
         },
-        .ability = ABILITY_INNER_FOCUS, // Insomnia/Forewarn/Inner Focus ALL now innate, but slot-2 Inner Focus is the chosen-differs-from-innate exemplar in test/fork/innate_abilities.c, so Hypno keeps chosen Inner Focus (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_BAD_DREAMS, // all real abilities innate; chosen Bad Dreams (non-redundant)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2507,7 +2507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_INNER_FOCUS, // all real innate now, but slot-2 Inner Focus is the chosen-differs exemplar in the innate test, so kept (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_BAD_DREAMS, // all real abilities innate; chosen Bad Dreams (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3016,7 +3016,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_HEAL_BELL
         },
-        .ability = ABILITY_HEALER, // Natural Cure + Serene Grace now innate; chosen Healer (real slot 2)
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3038,7 +3038,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_POWER_UP_PUNCH
         },
-        .ability = ABILITY_INNER_FOCUS, // Early Bird/Scrappy/Inner Focus ALL now innate, but slot-1 Scrappy + slot-2 Inner Focus are test-pinned (lash_out.c / ai_calc_best_move_score.c) and slot-0 Early Bird is the default read, so Kangaskhan keeps chosen Inner Focus (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3058,7 +3058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_INNER_FOCUS, // all real innate now; slots test-pinned so kept chosen Inner Focus (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3122,7 +3122,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_ANALYTIC,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3142,7 +3142,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_ANALYTIC, // Natural Cure now innate; chosen Analytic (real slot 2)
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3162,7 +3162,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_ANALYTIC,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3268,7 +3268,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOXIE, // Hyper Cutter now innate; chosen Moxie (HA) snowballs Attack on KO
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3288,7 +3288,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_MOXIE,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3372,7 +3372,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_CUD_CHEW,
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3478,7 +3478,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATERFALL,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOXIE,
+        .ability = ABILITY_MOTOR_DRIVE, // all real abilities innate; chosen Motor Drive (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -3822,7 +3822,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST
         },
         // Thick Fat (and Immunity) now innate; chosen Gluttony fills the slot.
-        .ability = ABILITY_GLUTTONY,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3843,7 +3843,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SELF_DESTRUCT
         },
         // Thick Fat (and Immunity) now innate; chosen Gluttony fills the slot.
-        .ability = ABILITY_GLUTTONY,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 132,
@@ -3863,7 +3863,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_GLUTTONY,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4199,7 +4199,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_UNNERVE, // Pressure now innate; chosen Unnerve denies the foe its Berry
+        .ability = ABILITY_SYNCHRONIZE, // all real abilities innate; chosen Synchronize (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4219,7 +4219,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_UNNERVE, // Pressure now innate; chosen Unnerve denies the foe its Berry
+        .ability = ABILITY_SYNCHRONIZE, // all real abilities innate; chosen Synchronize (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4239,7 +4239,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_UNNERVE,
+        .ability = ABILITY_SYNCHRONIZE, // all real abilities innate; chosen Synchronize (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4451,7 +4451,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_INFERNAL_PARADE
         },
-        .ability = ABILITY_FRISK,
+        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4471,7 +4471,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_FRISK,
+        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4555,7 +4555,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SUPER_FANG
         },
-        .ability = ABILITY_FRISK, // Keen Eye now innate; chosen Frisk scouts the foe's item on the pivot
+        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4577,7 +4577,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as are Insomnia & Keen Eye); left redundant — all three slots are real abilities
+        .ability = ABILITY_FRISK, // all real abilities innate; chosen Frisk (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4597,7 +4597,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no empty slot to override
+        .ability = ABILITY_FRISK, // all real abilities innate; chosen Frisk (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4619,7 +4619,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_ROOST
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_TINTED_LENS, // all real abilities innate; chosen Tinted Lens (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -4641,7 +4641,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SNIPER, // Swarm & Insomnia now innate; chosen Sniper
+        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4661,7 +4661,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_LEECH_LIFE
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5413,7 +5413,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENCORE,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_SHADOW_TAG, // now also innate; kept as the chosen ability too (its empty 2nd slot can't take a complementary one without changing Wobbuffet's game-wide ability data, which many tests depend on)
+        .ability = ABILITY_SYNCHRONIZE, // all real abilities innate; chosen Synchronize (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5709,7 +5709,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BULLET_SEED,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_MOXIE, // Guts now innate; Moxie snowballs on KOs (Megas to Skill Link)
+        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5729,7 +5729,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_MOXIE, // Guts now innate; Moxie snowballs on KOs
+        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5749,7 +5749,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MEGAHORN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_MOXIE, // Guts now innate; Moxie snowballs on KOs
+        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5771,7 +5771,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_UNNERVE, // Guts + Quick Feet now innate; Unnerve denies foe Berries
+        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5791,7 +5791,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_UNNERVE, // Guts + Quick Feet now innate; Unnerve denies foe Berries
+        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6400,7 +6400,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAL_BELL,
             MOVE_TOXIC
         },
-        .ability = ABILITY_HEALER, // Natural Cure + Serene Grace now innate; chosen Healer (real slot 2)
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -6420,7 +6420,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_HEALER, // Natural Cure + Serene Grace now innate; chosen Healer (real slot 2)
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -7175,7 +7175,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_RAIN_DISH, // Swift Swim now innate; chosen Rain Dish (rain heal)
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7195,7 +7195,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_RAIN_DANCE
         },
-        .ability = ABILITY_RAIN_DISH,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7215,7 +7215,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_RAIN_DANCE
         },
-        .ability = ABILITY_RAIN_DISH, // Swift Swim now innate; chosen Rain Dish (rain heal)
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7762,7 +7762,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_KEEN_EYE, // Prankster + Keen Eye now both innate; Mega -> Magic Bounce anyway, chosen Keen Eye is redundant-but-harmless filler (Sableye's only free real slot, Stall, is a drawback)
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7782,7 +7782,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_TAUNT
         },
-        .ability = ABILITY_KEEN_EYE, // Prankster + Keen Eye now both innate; chosen Keen Eye is redundant-but-harmless (Sableye's only free real slot, Stall, is a drawback used by tests, so not overridden)
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8058,7 +8058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_BUG_BUZZ
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as are Oblivious & Prankster); left redundant — all three slots are real abilities
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -8164,7 +8164,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_WATER_VEIL, // Water Veil/Oblivious/Pressure ALL now innate, but Wailord is used in ai.c's "best OHKO move" test (a move-absorbing chosen ability makes the AI dodge Water Spout), so it keeps chosen Water Veil (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_DRIZZLE, // all real abilities innate; chosen Drizzle (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -8186,7 +8186,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ANCIENT_POWER
         },
-        .ability = ABILITY_MAGMA_ARMOR, // Magma Armor/Solid Rock/Anger Point ALL now innate, but Camerupt is used in ai_thinking_time.c's node-count ceiling test (an extra immunity branch tips it over), so it keeps chosen Magma Armor (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (slot needed by an AI test, no free non-innate slot)
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8207,7 +8207,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
         },
-        .ability = ABILITY_MAGMA_ARMOR, // Magma Armor/Solid Rock/Anger Point ALL now innate, but Camerupt is used in ai_thinking_time.c's node-count ceiling test (an extra immunity branch tips it over), so it keeps chosen Magma Armor (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (slot needed by an AI test, no free non-innate slot)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8803,7 +8803,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_HAZE
         },
-        .ability = ABILITY_COMPETITIVE, // Marvel Scale + Cute Charm now innate; Competitive punishes stat drops
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -8823,7 +8823,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_COMPETITIVE, // Marvel Scale + Cute Charm now innate; Competitive punishes stat drops
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -8931,7 +8931,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PAIN_SPLIT,
             MOVE_HEX
         },
-        .ability = ABILITY_FRISK, // Pressure now innate; chosen Frisk reveals the foe's item
+        .ability = ABILITY_MUMMY, // all real abilities innate; chosen Mummy (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8997,7 +8997,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_MAGIC_BOUNCE, // all real abilities innate; chosen Magic Bounce (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9017,7 +9017,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_PSYCHO_CUT
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_MAGIC_BOUNCE, // all real abilities innate; chosen Magic Bounce (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9037,7 +9037,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_MAGIC_BOUNCE, // all real abilities innate; chosen Magic Bounce (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9948,7 +9948,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_IRON_FIST,
+        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9968,7 +9968,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_IRON_FIST, // Blaze now innate (latched); chosen Iron Fist
+        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9988,7 +9988,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_IRON_FIST, // Blaze now innate (latched); chosen Iron Fist
+        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10010,7 +10010,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_DEFOG
         },
-        .ability = ABILITY_COMPETITIVE, // Torrent now innate (latched); chosen Competitive
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10029,7 +10029,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_COMPETITIVE,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10287,7 +10287,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_UNNERVE, // Pressure now innate; chosen Unnerve denies the foe its Berry
+        .ability = ABILITY_EFFECT_SPORE, // all real abilities innate; chosen Effect Spore (non-redundant)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -10583,7 +10583,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_MOXIE,
+        .ability = ABILITY_SNIPER, // all real abilities innate; chosen Sniper (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10603,7 +10603,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHT_SLASH,
             MOVE_PSYCHO_CUT
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_SNIPER, // all real abilities innate; chosen Sniper (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10626,7 +10626,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH
         },
         // Thick Fat now innate; chosen Defiant (HA) punishes stat drops with a +2 Attack boost.
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -10839,7 +10839,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_BULLET_PUNCH
         },
-        .ability = ABILITY_JUSTIFIED,
+        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10943,7 +10943,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TAUNT
         },
-        .ability = ABILITY_SNIPER, // Battle Armor now innate; chosen Sniper sharpens its own crits
+        .ability = ABILITY_BATTLE_ARMOR, // all real abilities innate; chosen Battle Armor (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10963,7 +10963,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_AQUA_TAIL
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_BATTLE_ARMOR, // all real abilities innate; chosen Battle Armor (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11431,7 +11431,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_SUPER_LUCK, // Serene Grace now innate; chosen Super Luck (real slot 2)
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11451,7 +11451,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11473,7 +11473,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_PROTECT
         },
-        .ability = ABILITY_TINTED_LENS, // now innate (as is Speed Boost); left redundant — no empty slot (Frisk is near-dead but real)
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11493,7 +11493,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ANCIENT_POWER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_TINTED_LENS, // now innate; left redundant — no empty slot to override
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11559,7 +11559,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_POISON_HEAL,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (slot needed by an AI test, no free non-innate slot)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 244,
@@ -11579,7 +11579,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ROOST
         },
-        .ability = ABILITY_POISON_HEAL,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (slot needed by an AI test, no free non-innate slot)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 244,
@@ -11711,7 +11711,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_CUT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_JUSTIFIED,
+        .ability = ABILITY_SUPER_LUCK, // all real abilities innate; chosen Super Luck (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11731,7 +11731,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_CUT,
             MOVE_LEAF_BLADE
         },
-        .ability = ABILITY_JUSTIFIED, // Sharpness now innate; chosen Justified
+        .ability = ABILITY_SUPER_LUCK, // all real abilities innate; chosen Super Luck (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11775,7 +11775,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PAIN_SPLIT,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_FRISK, // Pressure now innate; chosen Frisk reveals the foe's item
+        .ability = ABILITY_MUMMY, // all real abilities innate; chosen Mummy (non-redundant)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11795,7 +11795,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_FRISK,
+        .ability = ABILITY_MUMMY, // all real abilities innate; chosen Mummy (non-redundant)
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12656,7 +12656,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILD_CHARGE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_RECKLESS,
+        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12676,7 +12676,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_RECKLESS, // Blaze now innate (latched); chosen Reckless
+        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12740,7 +12740,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SHARPNESS,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12760,7 +12760,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SHARPNESS,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12782,7 +12782,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_ANALYTIC,
+        .ability = ABILITY_FRISK, // all real abilities innate; chosen Frisk (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -12977,7 +12977,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_ROOST
         },
-        .ability = ABILITY_SUPER_LUCK,
+        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13085,7 +13085,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_MOLD_BREAKER, // Sand Rush/Sand Force/Mold Breaker all now innate, but all 3 slots are test-pinned (Sand Rush + Sand Force + Mold Breaker each selected in test/), so it stays chosen Mold Breaker (redundant-but-correct); Batch W excluded, like Clefable
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13105,7 +13105,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13125,7 +13125,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_HIGH_HORSEPOWER
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14397,7 +14397,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_UNNERVE, // Compound Eyes + Swarm now innate; chosen Unnerve denies the foe its Berry
+        .ability = ABILITY_STATIC, // all real abilities innate; chosen Static (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14417,7 +14417,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_UNNERVE, // Compound Eyes + Swarm now innate; chosen Unnerve denies the foe its Berry
+        .ability = ABILITY_STATIC, // all real abilities innate; chosen Static (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14975,7 +14975,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15395,7 +15395,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_DEFIANT, // Prankster now innate (Incarnate forme); chosen Defiant punishes Intimidate/stat drops
+        .ability = ABILITY_CLOUD_NINE, // all real abilities innate; chosen Cloud Nine (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15415,7 +15415,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_RAIN_DANCE
         },
-        .ability = ABILITY_DEFIANT, // Prankster now innate (Incarnate forme); chosen Defiant punishes Intimidate/stat drops
+        .ability = ABILITY_CLOUD_NINE, // all real abilities innate; chosen Cloud Nine (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15459,7 +15459,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_DEFIANT, // Prankster now innate (Incarnate forme); chosen Defiant punishes Intimidate/stat drops
+        .ability = ABILITY_VOLT_ABSORB, // all real abilities innate; chosen Volt Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15479,7 +15479,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_DEFIANT, // Prankster now innate (Incarnate forme); chosen Defiant punishes Intimidate/stat drops
+        .ability = ABILITY_VOLT_ABSORB, // all real abilities innate; chosen Volt Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16197,7 +16197,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_SOLAR_BEAM
         },
-        .ability = ABILITY_UNNERVE,
+        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16217,7 +16217,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SNARL,
             MOVE_PROTECT
         },
-        .ability = ABILITY_UNNERVE,
+        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16407,7 +16407,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_COMPETITIVE,
+        .ability = ABILITY_PRANKSTER, // all real abilities innate; chosen Prankster (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16427,7 +16427,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_COMPETITIVE,
+        .ability = ABILITY_PRANKSTER, // all real abilities innate; chosen Prankster (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16618,7 +16618,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_CROSS_CHOP
         },
-        .ability = ABILITY_SNIPER, // Tough Claws now innate; chosen Sniper
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16638,7 +16638,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_CLAW
         },
-        .ability = ABILITY_SNIPER, // Tough Claws now innate; chosen Sniper
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17249,7 +17249,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_SYNTHESIS
         },
-        .ability = ABILITY_FRISK,
+        .ability = ABILITY_HARVEST, // all real abilities innate; chosen Harvest (non-redundant)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17269,7 +17269,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_FRISK, // Insomnia now innate; chosen Frisk
+        .ability = ABILITY_HARVEST, // all real abilities innate; chosen Harvest (non-redundant)
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17417,7 +17417,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_HEAT_WAVE
         },
-        .ability = ABILITY_FRISK,
+        .ability = ABILITY_PUNK_ROCK, // all real abilities innate; chosen Punk Rock (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18008,7 +18008,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_STAKEOUT,
+        .ability = ABILITY_SUPER_LUCK, // all real abilities innate; chosen Super Luck (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18073,7 +18073,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_HAMMER
         },
-        .ability = ABILITY_ANGER_POINT, // Hyper Cutter now innate (Iron Fist too); chosen Anger Point maxes Attack on a crit
+        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18094,7 +18094,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_ANGER_POINT, // Hyper Cutter now innate (Iron Fist too); chosen Anger Point maxes Attack on a crit
+        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18158,7 +18158,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_STUN_SPORE
         },
-        .ability = ABILITY_SHIELD_DUST, // now innate (as is Sweet Veil); left redundant — no empty slot (Honey Gather is dead but real)
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18178,7 +18178,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_POLLEN_PUFF
         },
-        .ability = ABILITY_SHIELD_DUST, // now innate; left redundant — no empty slot to override
+        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18200,7 +18200,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_PSYCHIC_FANGS
         },
-        .ability = ABILITY_STEADFAST, // Sand Rush + Keen Eye now innate; chosen Steadfast snowballs Speed on flinch
+        .ability = ABILITY_SAND_STREAM, // all real abilities innate; chosen Sand Stream (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18304,7 +18304,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_HAZE
         },
-        .ability = ABILITY_MERCILESS, // Limber + Regenerator now innate; chosen Merciless crits its Toxic'd foes
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18324,7 +18324,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_CHILLING_WATER
         },
-        .ability = ABILITY_MERCILESS, // Limber + Regenerator now innate; chosen Merciless crits its Toxic-Spikes'd foes
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18344,7 +18344,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_HAZE
         },
-        .ability = ABILITY_MERCILESS,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18366,7 +18366,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_ROAR
         },
-        .ability = ABILITY_STAMINA,
+        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18386,7 +18386,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
         },
-        .ability = ABILITY_STAMINA,
+        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18726,7 +18726,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_GUNK_SHOT
         },
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18746,7 +18746,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18810,7 +18810,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_SHORE_UP
         },
-        .ability = ABILITY_WATER_COMPACTION,
+        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18830,7 +18830,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_SHORE_UP
         },
-        .ability = ABILITY_WATER_COMPACTION,
+        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19188,7 +19188,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_BERSERK,
+        .ability = ABILITY_SAP_SIPPER, // all real abilities innate; chosen Sap Sipper (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19208,7 +19208,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_GLARE
         },
-        .ability = ABILITY_BERSERK,
+        .ability = ABILITY_SAP_SIPPER, // all real abilities innate; chosen Sap Sipper (non-redundant)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19230,7 +19230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_CLAW
         },
-        .ability = ABILITY_STEELWORKER,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -19251,7 +19251,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_CLAW,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_STEELWORKER,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20447,7 +20447,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SNIPER, // Torrent now innate (latched); chosen Sniper
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20467,7 +20467,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_SNIPER,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20487,7 +20487,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_DARK_PULSE
         },
-        .ability = ABILITY_SNIPER, // Torrent now innate (latched); chosen Sniper
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20703,7 +20703,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_STRONG_JAW,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20723,7 +20723,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_STRONG_JAW, // Shell Armor & Swift Swim now innate; chosen Strong Jaw powers up Crunch
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -20746,7 +20746,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_COMPETITIVE, // Strong Jaw now innate; chosen Competitive
+        .ability = ABILITY_LIGHTNING_ROD, // all real abilities innate; chosen Lightning Rod (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21003,7 +21003,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_WAVE,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_PUNK_ROCK,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21023,7 +21023,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_PUNK_ROCK,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21043,7 +21043,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_BOOMBURST
         },
-        .ability = ABILITY_PUNK_ROCK,
+        .ability = ABILITY_VOLT_ABSORB, // all real abilities innate; chosen Volt Absorb (non-redundant)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21316,7 +21316,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_DEFIANT, // Guts + Reckless now innate; Defiant punishes stat drops
+        .ability = ABILITY_QUICK_FEET, // all real abilities innate; chosen Quick Feet (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21336,7 +21336,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_DEFIANT, // Guts + Reckless now innate; Defiant punishes stat drops
+        .ability = ABILITY_QUICK_FEET, // all real abilities innate; chosen Quick Feet (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21358,7 +21358,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_U_TURN
         },
-        .ability = ABILITY_STEELY_SPIRIT,
+        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21378,7 +21378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_TOUGH_CLAWS,
+        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21568,7 +21568,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21588,7 +21588,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23089,7 +23089,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SPINNER,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_MOXIE,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23109,7 +23109,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRIPLE_AXEL,
             MOVE_U_TURN
         },
-        .ability = ABILITY_MOXIE,
+        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23131,7 +23131,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_CIRCLE_THROW
         },
-        .ability = ABILITY_STAKEOUT, // Insomnia now innate; chosen Stakeout
+        .ability = ABILITY_STICKY_HOLD, // all real abilities innate; chosen Sticky Hold (non-redundant)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23836,7 +23836,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_MOLD_BREAKER, // Mold Breaker/Own Tempo/Pickpocket all now innate, but all 3 slots are test-pinned (Mold Breaker + Own Tempo in levitate.c, Pickpocket in hit_escape.c), so it stays chosen Mold Breaker (redundant-but-correct); Batch W excluded, like Clefable
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23856,7 +23856,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ICE_HAMMER
         },
-        .ability = ABILITY_MOLD_BREAKER,
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24289,7 +24289,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST,
             MOVE_SLEEP_TALK
         },
-        .ability = ABILITY_WATER_VEIL, // Unaware/Oblivious/Water Veil ALL now innate, but slots 1/2 (Oblivious, Water Veil) are chosen-differs exemplars in the innate test and slot-0 Unaware is the default read in AI tests (ai_check_viability/ai_switching), so Dondozo keeps chosen Water Veil (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24309,7 +24309,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_WATER_VEIL, // all real innate now, but slots 1/2 are innate-test chosen-differs exemplars and slot-0 Unaware is the AI-test default read, so kept chosen Water Veil (redundant-but-correct) — Batch W9 exclusion
+        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24353,7 +24353,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_TAUNT
         },
-        .ability = ABILITY_DEFIANT, // Vital Spirit now innate; chosen Defiant
+        .ability = ABILITY_VITAL_SPIRIT, // all real abilities innate; chosen Vital Spirit (non-redundant)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24373,7 +24373,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_VITAL_SPIRIT, // all real abilities innate; chosen Vital Spirit (non-redundant)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24480,7 +24480,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_RATTLED, // Serene Grace now innate; chosen Rattled (real slot 2)
+        .ability = ABILITY_SIMPLE, // all real abilities innate; chosen Simple (non-redundant)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24500,7 +24500,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ROOST
         },
-        .ability = ABILITY_RATTLED, // Serene Grace now innate; chosen Rattled (real slot 2)
+        .ability = ABILITY_SIMPLE, // all real abilities innate; chosen Simple (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24522,7 +24522,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_DEFIANT, // Supreme Overlord now innate (with Defiant/Pressure); chosen Defiant (slot 0) frees the now-innate Supreme Overlord + keeps it observable
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 112,
@@ -24542,7 +24542,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_DEFIANT,
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 112,
@@ -24562,7 +24562,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_DEFIANT, // Supreme Overlord now innate (with Defiant/Pressure); chosen Defiant (slot 0) frees the now-innate Supreme Overlord + keeps it observable
+        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25811,7 +25811,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_STAMINA,
+        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25831,7 +25831,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_TAIL,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_STAMINA,
+        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25851,7 +25851,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_PROTECT
         },
-        .ability = ABILITY_STAMINA,
+        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

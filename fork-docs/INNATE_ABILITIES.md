@@ -2213,10 +2213,11 @@ The `BattlerBenefitsFromAbilityScore` Trace/transfer-scoring case is intentional
 are never traced/swapped), as is the overworld poison-damage check (`event_object_movement.c`, keyed to the
 chosen ability like other overworld reads). Canon-only (Gliscor, the Shroomish line). Its frontier sets
 (Breloom, Gliscor) keep their now-innate `.ability` for now except Breloom, freed to a stable chosen Effect
-Spore (its Toxic Orb still procs the innate heal); Gliscor stays on its now-innate `.ability` as a permanent
-redundant-but-correct exclusion (all three of its slots are test-pinned). The rest of the Batch J frontier
-freeing is complete — any residual redundant-but-correct sets are catalogued in the `sKnownRedundant` table in
-`test/fork/frontier_extended_roster.c`, which CI-guards against new ones.
+Spore (its Toxic Orb still procs the innate heal); Gliscor's `.ability` is set to `ABILITY_NONE` (all three of
+its slots are pinned by battle tests, so no slot can be repurposed to a non-innate chosen ability). More
+broadly, no frontier set's chosen `.ability` duplicates one of its species' innates any more — each was
+repointed or given a fork override to a real, non-innate pick — an invariant CI-guarded by
+`test/fork/frontier_extended_roster.c`.
 
 ### ABILITY_GLUTTONY / ABILITY_RIPEN / ABILITY_CHEEK_POUCH / ABILITY_UNBURDEN
 
