@@ -63,8 +63,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_FILTER,
+            ABILITY_FLOWER_GIFT,
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
     },
@@ -73,8 +78,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_FILTER,
+            ABILITY_FLOWER_GIFT,
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
     },
