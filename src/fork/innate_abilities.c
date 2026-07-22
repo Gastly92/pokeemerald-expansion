@@ -10,13 +10,17 @@
 // species data stays untouched. Each row maps a species to an ABILITY_NONE-
 // terminated list of innate abilities that are always active on top of that
 // species' normal chosen ability. The list is variable-length (no fixed cap): add
-// or remove entries freely, just keep the terminating ABILITY_NONE.
+// or remove entries freely with the INNATES(...) macro below, which appends the
+// terminating ABILITY_NONE for you — you never hand-write the terminator.
 //
 // ALLOWLIST — only abilities whose innate behavior has been deliberately wired in
-// may appear here; giving a species an ability that is NOT supported silently does
-// nothing (no effect site activates it). The supported set is grown one ability at
-// a time. Two places track it and are the source of truth for WHICH abilities are
-// allowed — this comment intentionally does NOT duplicate that list:
+// may appear here. An unsupported ability has no effect site to activate it, so at
+// runtime the innate would do nothing — but you can't actually ship that: the
+// "every declared innate is on the implemented allowlist" test (see below) fails
+// the build for any row whose ability isn't wired, so the footgun is caught, not
+// silent. The supported set is grown one ability at a time. Two places track it and
+// are the source of truth for WHICH abilities are allowed — this comment
+// intentionally does NOT duplicate that list:
 //   - the compact "supported set" index in include/fork/innate_abilities.h (SCOPE), and
 //   - the sImplementedInnates[] array in test/fork/innate_abilities.c, which CI ENFORCES:
 //     any species row below whose ability is missing from it fails the build.
