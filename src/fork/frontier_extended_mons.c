@@ -338,13 +338,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // no-mega special breaker
+        .heldItem = ITEM_CHOICE_SPECS, // Mega Charizard Y (Drought); Choice-locked sun breaker
         .moves =
         {
             MOVE_FIRE_BLAST,
             MOVE_AIR_SLASH,
             MOVE_FOCUS_BLAST,
-            MOVE_OVERHEAT
+            MOVE_DRAGON_PULSE // distinct 4th coverage; avoids a redundant Choice-locked, self-debuffing Overheat
         },
         .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
