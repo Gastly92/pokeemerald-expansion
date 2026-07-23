@@ -57,6 +57,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VENUSAUR, 1,
         ABILITY_GRASSY_SURGE
     },
+    { // 0006
+        // Charizard's real abilities (Blaze, Solar Power) are both now innate, and Solar Power is
+        // Sp.Atk-only -- dead weight on its physical Dragon Dance set. Its EMPTY slot 1 takes Tough
+        // Claws, an already-implemented :white_check_mark: innate (stable) and its Mega X's ability:
+        // it powers the physical set's contact STAB (Flare Blitz / Dragon Claw). The special sets
+        // keep their real Solar Power.
+        SPECIES_CHARIZARD, 1,
+        ABILITY_TOUGH_CLAWS
+    },
     { // 0009
         // Blastoise's only real abilities (Torrent, Rain Dish) are BOTH now innate, so its EMPTY slot 1 takes
         // Water Absorb -- :x: (never an innate -> stable) and thematic for the water-cannon turtle: it soaks up

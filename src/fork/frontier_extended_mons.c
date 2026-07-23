@@ -35,7 +35,7 @@
 //          under B_FRONTIER_MAX_IVS); set .iv = TRAINER_PARTY_IVS(...) only for an
 //          intentional spread (e.g. 0 Speed for Trick Room). Omit .ball for
 //          BALL_POKE; set it only for a non-Poke look.
-//  - .teraType is recorded but inert (Tera is disabled in this fork for now).
+//  - .teraType sets the set's Terastallization type (Tera is active in this fork).
 //
 // Design intent — sets are tuned around this fork's DETERMINISTIC_* changes (no
 // misses, crits only when guaranteed, one-shot Focus Sash, guaranteed multi-hit,
@@ -136,7 +136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SOLAR_POWER, // Blaze now innate (latched); chosen Solar Power
+        .ability = ABILITY_TOUGH_CLAWS, // Mega X's ability (fork override); Solar Power is Sp.Atk-only, wrong on a physical set. Powers Flare Blitz / Dragon Claw contact
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
