@@ -108,53 +108,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAT_ROCK, // Mega Charizard Y (Drought); extends its own sun
+        .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
             MOVE_FIRE_BLAST,
             MOVE_SOLAR_BEAM,
             MOVE_AIR_SLASH,
-            MOVE_ROOST
-        },
-        .ability = ABILITY_SOLAR_POWER, // Blaze now innate (latched); chosen Solar Power
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FIRE,
-    },
-    {
-        .species = SPECIES_CHARIZARD,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Charizard X (Tough Claws); power for the Dragon Dance sweeper
-        .moves =
-        {
-            MOVE_DRAGON_DANCE,
-            MOVE_FLARE_BLITZ,
-            MOVE_DRAGON_CLAW,
-            MOVE_EARTHQUAKE
-        },
-        .ability = ABILITY_TOUGH_CLAWS, // Mega X's ability (fork override); Solar Power is Sp.Atk-only, wrong on a physical set. Powers Flare Blitz / Dragon Claw contact
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_DRAGON,
-    },
-    {
-        .species = SPECIES_CHARIZARD,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Mega Charizard Y (Drought); Choice-locked sun breaker
-        .moves =
-        {
-            MOVE_FIRE_BLAST,
-            MOVE_AIR_SLASH,
-            MOVE_FOCUS_BLAST,
-            MOVE_DRAGON_PULSE // distinct 4th coverage; avoids a redundant Choice-locked, self-debuffing Overheat
+            MOVE_DRAGON_PULSE
         },
         .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -167,30 +127,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CHARIZARD,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sub-Roost stallbreaker
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_SUBSTITUTE,
-            MOVE_ROOST,
-            MOVE_FIRE_BLAST,
-            MOVE_DRAGON_PULSE
+            MOVE_DRAGON_DANCE,
+            MOVE_FLARE_BLITZ,
+            MOVE_DRAGON_CLAW,
+            MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SOLAR_POWER, // Blaze now innate (latched); chosen Solar Power
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ability = ABILITY_TOUGH_CLAWS,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
-            .spa = 252,
+            .atk = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_DRAGON,
     },
 
     // 0009
     {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MYSTIC_WATER, // Mega Blastoise (Mega Launcher); Water STAB boost for the pulse spammer
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -198,7 +158,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_WATER_ABSORB, // Torrent + Rain Dish now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -210,7 +170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky spinner
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -218,7 +178,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_REST
         },
-        .ability = ABILITY_WATER_ABSORB, // Torrent + Rain Dish now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -230,7 +190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -238,7 +198,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_WATER_ABSORB, // Torrent + Rain Dish now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -250,7 +210,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WHITE_HERB, // physical Shell Smash sweeper; White Herb undoes the Def/SpD drop
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -258,7 +218,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_WATER_ABSORB, // Torrent + Rain Dish now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
