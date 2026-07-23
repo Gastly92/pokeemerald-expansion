@@ -36,26 +36,46 @@ and enhancements."*
 For each species/form in the line:
 
 1. **Read the existing `INNATES(...)` row.** Does the set make flavorful sense
-   for the creature? (Venusaur carrying Chlorophyll / Overgrow / Harvest / Leaf
-   Guard / Poison Heal is on-theme grass/poison plant flavor.)
-2. **Consider additions.** Any ability that fits the creature's biology/lore and
-   is a clean boon is a candidate.
-3. **HARD CONSTRAINT — only allowlisted abilities.** An innate must be one whose
+   for the creature? (Venusaur carrying Chlorophyll / Filter / Flower Gift /
+   Flower Veil / Harvest / Leaf Guard / Natural Cure / Overgrow / Poison Heal /
+   Regenerator is on-theme grass/poison plant flavor.)
+2. **Aim for a GENEROUS set — but gate every pick on genuine flavor fit.** A
+   base-stage line usually shouldn't sit at just its type ability (Blaze/Torrent);
+   the fork is happy to stack many innates (Venusaur carries **ten**, Mega adds
+   an eleventh). BUT "many" is not "any" — each pick must read as *this* creature.
+   The test: measure the ability against how it reads on its **established
+   users**. Intimidate belongs to menacing-presence bruisers (Gyarados, Salamence,
+   Arcanine, Incineroar); handing it to a proud fire-flyer that *burns* rather than
+   cows is a flavor miss even though it's a clean boon. Prefer picks that are
+   canon (its own ability), Pokédex-supported (Charizard's "the hotter the battle,
+   the hotter its flame" → Berserk), or that literally belong to a same-typed
+   relative (Gale Wings is Talonflame's, a Fire/Flying flyer → fits Charizard).
+   Be honest about a narrow flavor space: "fire dragon that flies" has fewer clean
+   fits than "plant", so a flavor-honest fire line may top out around five — don't
+   pad to a number with reaches.
+3. **Keep the line consistent by default, but differentiate by form when
+   morphology/temperament justifies it.** The three base rows usually carry the
+   *same* list — but they need not be identical: a wingless Charmander shouldn't
+   carry Gale Wings, a placid pre-evo shouldn't carry a rage ability its vicious
+   evolution earns. Escalate the list up the line where the creature changes.
+4. **HARD CONSTRAINT — only allowlisted abilities.** An innate must be one whose
    behavior is actually *wired* at an effect site. The CI source of truth is
    `sImplementedInnates[]` in `test/fork/innate_abilities.c`, mirrored by the
    SCOPE list in `include/fork/innate_abilities.h`. **Naming an unwired ability
    fails the build.** A line review adds *already-implemented* innates to a
    species — it does **not** wire brand-new abilities (that's a separate, much
    larger task with its own doc updates).
-4. **Forms:**
+5. **Forms:**
    - A form gets innates **only if it has its own row** — add/maintain rows for
      `_MEGA`, `_GMAX`, regional forms, etc.
    - **Megas are a pure boon:** mirror the base's list so the creature's traits
-     persist, then add the Mega's own flavor (Mega Venusaur adds `THICK_FAT`).
+     persist, then add the Mega's own flavor (Mega Venusaur adds `THICK_FAT`;
+     Mega Charizard X adds `TOUGH_CLAWS`, its canon ability). Tune a Mega's extras
+     to how its Factory set actually plays (see the free-gimmicks note in Step 3):
+     the physical Mega X set leads with Flare Blitz, so `RECKLESS` there is *live*,
+     not just flavor; a special Mega Y wants `BERSERK` (Sp. Atk) not a physical boost.
    - **Watch grounded forms:** a form that shouldn't float must not inherit
      `LEVITATE` (see the Mega Gengar / Mega Mewtwo X notes in the file header).
-5. **Keep the line internally consistent** unless a form justifies divergence —
-   the three base-stage rows of a line usually carry the *same* innate list.
 
 **Verify:** `make check TESTS="Innate"` (the innate test rejects unwired picks).
 
@@ -82,7 +102,14 @@ line:
      uses in `test/battle/` for that species before repurposing a real slot.
 2. **Consider adding a row** if the line lacks one and a species' chosen slot is a
    redundant innate (or empty) — pick a stable, flavorful non-innate ability.
-3. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
+3. **Don't override a base form to hand it its Mega's ability.** Under
+   `FEATURE_FREE_GIMMICKS` a base Factory set Mega Evolves on its own (see the
+   free-gimmicks note in Step 3) and *becomes* the Mega, gaining the Mega's real
+   ability automatically. An override giving base Charizard `TOUGH_CLAWS` to feed
+   a "Mega X" set is dead weight — the set is Mega X within a turn and has Tough
+   Claws for real. Overrides earn their keep for mons whose chosen trait must be
+   observable *without* transforming, not for pre-transform placeholders.
+4. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
    `// <dex>` comment; forms share the base number and follow it.
 
 **Verify:** `make check TESTS="Frontier extended roster"` — two tests enforce the
@@ -120,6 +147,30 @@ open-ended, creative step.
    - Optional: `.dynamaxLevel`, `.gender`, `.isShiny`, etc. (gmax mons get the
      Gigantamax Factor + max Dynamax Level automatically at draft).
 4. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
+
+### Free gimmicks — base sets Mega Evolve on their own (`FEATURE_FREE_GIMMICKS`)
+
+This fork drops the held-item requirement for battle transformations, so **every
+eligible Factory set Mega Evolves (or Dynamaxes / Teras) with no stone**, turn one,
+via the gimmick picker. This has three consequences a line review must account for:
+
+1. **A "Mega" set is authored on the *base* species and transforms in battle.** The
+   roster's Charizard sets are `SPECIES_CHARIZARD` (not `_MEGA_X/_Y`) holding a real
+   competitive item (Life Orb, Heat Rock, Choice Specs), and they *become* the Mega
+   in the first turn. So don't "fix" a base set that looks like it lacks its Mega's
+   tools — check what it Megas into first.
+2. **For a multi-Mega species, the form is chosen by Attack vs Sp. Atk** (physical →
+   **X**, special → **Y**, tie → **X**; see `test/fork/free_gimmicks.c`). The set's
+   EV spread and nature therefore *steer* which Mega it becomes — a `spa`/Timid set
+   lands Mega Y, an `atk`/Jolly set lands Mega X. A Charizard "sun" set needs no
+   Sunny Day: as a special build it becomes Mega Y, whose **Drought** sets the sun
+   its Heat Rock then extends. Build the spread to match the intended form.
+3. **The Mega form's rows are what's live in battle after evolution.** Post-Mega the
+   mon's `gBattleMons[].species` is the `_MEGA_*` constant, so its **innate row and
+   ability come from that form**, not the base — which is why the Mega X / Mega Y
+   innate rows (Step 1) matter more than the base row for Factory play, and why the
+   base `.ability` field is a pre-transform placeholder (largely cosmetic once it
+   Megas turn one). Tune the Mega's innates to how its steered set actually plays.
 
 **Verify:** the same `"Frontier extended roster"` tests (legality + non-innate).
 
