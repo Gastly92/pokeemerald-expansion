@@ -176,6 +176,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SQUIRTLE,
         INNATES(
             ABILITY_RAIN_DISH,
+            ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
     },
@@ -183,6 +184,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WARTORTLE,
         INNATES(
             ABILITY_RAIN_DISH,
+            ABILITY_REGENERATOR,
+            ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
     },
@@ -190,6 +193,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BLASTOISE,
         INNATES(
             ABILITY_RAIN_DISH,
+            ABILITY_REGENERATOR,
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STAMINA,
             ABILITY_TORRENT
         )
     },
@@ -197,6 +203,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BLASTOISE_MEGA,
         INNATES(
             ABILITY_MEGA_LAUNCHER,
+            ABILITY_RAIN_DISH,
+            ABILITY_REGENERATOR,
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STAMINA,
             ABILITY_TORRENT
         )
     },
@@ -204,6 +214,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BLASTOISE_GMAX,
         INNATES(
             ABILITY_RAIN_DISH,
+            ABILITY_REGENERATOR,
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STAMINA,
             ABILITY_TORRENT
         )
     },

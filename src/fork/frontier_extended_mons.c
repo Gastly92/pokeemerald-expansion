@@ -437,6 +437,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_BLASTOISE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_WHITE_HERB, // physical Shell Smash sweeper; White Herb undoes the Def/SpD drop
+        .moves =
+        {
+            MOVE_SHELL_SMASH,
+            MOVE_LIQUIDATION,
+            MOVE_ICE_PUNCH,
+            MOVE_EARTHQUAKE
+        },
+        .ability = ABILITY_WATER_ABSORB, // Torrent + Rain Dish now innate; chosen Water Absorb (override, empty slot 1)
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0012
     {
