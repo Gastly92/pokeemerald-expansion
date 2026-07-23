@@ -117,38 +117,59 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0004
         SPECIES_CHARMANDER,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0005
         SPECIES_CHARMELEON,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BERSERK,
+            ABILITY_BLAZE,
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0006
         SPECIES_CHARIZARD,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BERSERK,
+            ABILITY_BLAZE,
+            ABILITY_GALE_WINGS,
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0006
         SPECIES_CHARIZARD_MEGA_X,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_BLAZE,
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_RECKLESS,
+            ABILITY_THERMAL_EXCHANGE,
             ABILITY_TOUGH_CLAWS
         )
     },
     { // 0006
         SPECIES_CHARIZARD_MEGA_Y,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BERSERK,
+            ABILITY_BLAZE,
+            ABILITY_GALE_WINGS,
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0006
         SPECIES_CHARIZARD_GMAX,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BERSERK,
+            ABILITY_BLAZE,
+            ABILITY_GALE_WINGS,
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0007
