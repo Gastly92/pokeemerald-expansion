@@ -12,259 +12,69 @@
 
 // FORK: fork-owned Battle Factory roster overhaul (B_FRONTIER_EXTENDED_MONS).
 // A from-scratch roster of modern competitive sets that replaces the vanilla
-// gBattleFrontierMons on the Battle Factory's code paths. Kept in this new file
-// (not gBattleFrontierMons) so upstream syncs never touch it and the vanilla
-// roster stays intact for the other facilities (Tower/Dome) until they adopt this
-// list too. Same struct TrainerMon format as gBattleFrontierMons, so every field
-// CreateFacilityMon understands is available: moves, heldItem, ability, nature,
-// ev, iv, teraType, gender, isShiny, ball, dynamax/gigantamax.
+// gBattleFrontierMons on the Battle Factory's code paths, kept in this new file so
+// upstream syncs never touch it. Same struct TrainerMon format as
+// gBattleFrontierMons, so every field CreateFacilityMon understands is available.
+// The feature (draft rules, tier gating, format tags, innate handling, gimmick
+// readiness, save-index caveat) is documented in full in fork-docs/FORK.md — see
+// the "Extended frontier roster" row. This header only covers what you need to
+// EDIT an entry; consult the docs for the why.
 //
-// Field notes:
-//  - Each entry opens with a `{ // NNNN` comment giving the species' National
-//    Pokédex number, matching src/fork/innate_abilities.c. Entries stay sorted by
-//    that number (formes share their base's number); see ORDER at the end of this
-//    header. The `// ---- Species ----` banner above each group is just a label.
-//  - .ev   uses EVS(...) — name only the stats you want, in any order, the rest
-//          default to 0: EVS(.hp = 252, .def = 252, .spd = 4). Field names are the
-//          competitive shorthand hp/atk/def/spa/spd/spe (spd is Sp. Def, spe is
-//          Speed). Defined in frontier_extended_mons.h.
-//  - .nature uses NATURE(UP, DOWN) — say what the nature does, not its name:
-//          NATURE(DEF_UP, ATK_DOWN) is Bold. Stats are ATK/DEF/SPA/SPD/SPE; the
-//          first arg is boosted, the second lowered. Neutral natures have no pair,
-//          so use NATURE_NEUTRAL (== NATURE_HARDY) for those.
-//  - .iv   is OPTIONAL. Leave it out and the mon keeps the Factory's fixed IVs
-//          (31 in every stat under B_FRONTIER_MAX_IVS). Only set .iv =
-//          TRAINER_PARTY_IVS(...) for an intentional non-max spread (e.g. 0 Speed
-//          for a Trick Room attacker).
-//  - .ball is cosmetic and OPTIONAL. Leave it out for BALL_POKE (CreateFacilityMon
-//          treats an unset .ball, value 0/BALL_STRANGE, as BALL_POKE); only set it
-//          for an intentional non-Poke ball look (e.g. BALL_DIVE, BALL_NEST).
-//  - .teraType TYPE_NORMAL (0) reads as "unset" in CreateFacilityMon, so a Tera
-//          Normal set would not apply — fine, Tera is disabled in this fork for now
-//          (B_FLAG_TERA_ORB_* = 0), so teraType is recorded as future-proofing only.
-//  - .tags  is REQUIRED here: FORMAT_SINGLES / FORMAT_DOUBLES / FORMAT_BOTH
-//          marks which battle format(s) the set is suited for, so a singles-only
-//          set never shows up in a doubles challenge (and vice versa). A set that
-//          works in either mode is FORMAT_BOTH. (See frontier_extended_mons.h.)
+// Authoring an entry — the helpers are defined in frontier_extended_mons.h:
+//  - Each entry opens with a `{ // NNNN` National-Dex comment (like
+//    innate_abilities.c). Entries stay sorted by that number; see ORDER below.
+//  - .ev   uses EVS(...): name only the stats you want, any order, rest default to
+//          0 — EVS(.hp = 252, .def = 252, .spd = 4). Field names hp/atk/def/spa/
+//          spd/spe (spd is Sp. Def, spe is Speed).
+//  - .nature uses NATURE(UP, DOWN): boosted stat first, lowered second, from
+//          ATK/DEF/SPA/SPD/SPE — NATURE(DEF_UP, ATK_DOWN) is Bold. Neutral natures
+//          use NATURE_NEUTRAL (== NATURE_HARDY).
+//  - .tags is REQUIRED: FORMAT_SINGLES / FORMAT_DOUBLES / FORMAT_BOTH gates which
+//          battle format(s) the set can be drawn for.
+//  - .iv and .ball are OPTIONAL. Omit .iv to keep the Factory's fixed IVs (31s
+//          under B_FRONTIER_MAX_IVS); set .iv = TRAINER_PARTY_IVS(...) only for an
+//          intentional spread (e.g. 0 Speed for Trick Room). Omit .ball for
+//          BALL_POKE; set it only for a non-Poke look.
+//  - .teraType is recorded but inert (Tera is disabled in this fork for now).
 //
-// Design intent — these sets are tuned for THIS fork, not the live competitive
-// metagame. Account for the DETERMINISTIC_* changes (see fork-docs/FORK.md):
-//  - Accuracy never misses (low-accuracy moves instead cost extra PP), so
-//    Hydro Pump / Focus Blast / Fire Blast / Hurricane are "reliable" — pick power.
-//  - Crits only land when guaranteed; crit items (Scope Lens / Razor Claw / Lucky
-//    Punch / Leek) give a guaranteed first-hit crit via DETERMINISTIC_HOLD_EFFECTS.
-//  - Focus Sash behaves like a one-shot entry Focus Band (survives one lethal hit
-//    from any HP on the entry turn, then is consumed).
-//  - Skill Link / Loaded Dice guarantee max multi-hit; 2-5 hit moves always hit 3.
-//  - King's Rock / Razor Fang flinch on the holder's first attack; Quick Claw
-//    guarantees a first-turn first-strike once.
-//  - Paralysis is a PP/priority tax (no full-para, full Speed kept), so Thunder
-//    Wave still has value as a priority-bracket demotion.
-//  - Sub-100% additional effects (burn/para/flinch) are gated on super effective
-//    or STAB; sub-100% sleep moves only drowse (Yawn-like); 100% Spore sleeps.
+// Design intent — sets are tuned around this fork's DETERMINISTIC_* changes (no
+// misses, crits only when guaranteed, one-shot Focus Sash, guaranteed multi-hit,
+// paralysis as a priority tax, etc.), NOT the live metagame. See
+// fork-docs/DETERMINISM.md for the exact rules that make e.g. Hydro Pump reliable
+// or crit items a guaranteed first-hit crit.
 //
-// Roster rules enforced at draft time (src/battle_factory.c): unique species and
-// unique held item per team. (The old "one Mega Stone + one Z-Crystal per team"
-// limit is gone: under FEATURE_FREE_GIMMICKS the gimmicks are item-free, so these
-// sets no longer carry stones/crystals — Mega builds hold a real competitive item
-// and the former Z builds hold a Type Gem or utility item; the mon still Mega
-// Evolves / uses its Z-Move via the gimmick picker.) The roster intentionally
-// carries several distinct builds per species so the opponent's exact set can't be
-// read off the species alone.
+// Innate abilities (FEATURE_INNATE_ABILITIES, src/fork/innate_abilities.c): a
+// species keeps its innate ability in battle regardless of its .ability slot, so
+// each set's .ability carries a *complementary* chosen ability that runs alongside
+// the innate (e.g. Slowbro OWN_TEMPO + innate Regenerator, Rotom LIGHTNING_ROD +
+// innate Levitate). Role comments naming an innate describe that innate-backed
+// playstyle, not the .ability field. For the full picture — which species are
+// freed vs. left "redundant-but-correct", and the per-species override picks — see
+// fork-docs/INNATE_ABILITIES.md, fork-docs/INNATE_ABILITIES_PROGRESS.md, and the
+// override rows in src/fork/species_ability_overrides.c. The current set of still-
+// redundant sets is CI-guarded by sKnownRedundant in
+// test/fork/frontier_extended_roster.c — that table, not a comment, is the record.
 //
-// INNATE ABILITIES (FEATURE_INNATE_ABILITIES, src/innate_abilities.c): a species
-// that carries an innate Levitate, Regenerator, Unaware, Sturdy, Natural Cure, Prankster, Filter,
-// Pressure, Stench, Speed Boost (+1 Speed each end-turn), Battle Armor / Shell Armor (crit immunity),
-// Limber (paralysis immunity), Cute Charm (infatuates an opposite-gender attacker on contact),
-// Oblivious (infatuation/Taunt/Intimidate immunity), Sand Veil / Snow Cloak (weather evasion + chip immunity),
-// Compound Eyes / Keen Eye / Illuminate (ignore the target's evasion — under DETERMINISTIC_ACCURACY_EVASION a
-// PP-economy boon — with Keen Eye / Illuminate also keeping the holder's own accuracy from being lowered),
-// Insomnia / Vital Spirit / Sweet Veil (cannot be put to sleep or made drowsy — Sweet Veil side-wide),
-// Early Bird (wakes from sleep twice as fast),
-// Immunity / Pastel Veil (poison immunity), Thick Fat (halves Fire/Ice damage),
-// Technician (+50% to moves of base power 60 or less),
-// an offensive move-power booster (Iron Fist / Reckless / Strong Jaw / Tough Claws / Sharpness /
-// Mega Launcher / Steelworker / Steely Spirit / Rocky Payload / Sand Force / Analytic / Adaptability /
-// Punk Rock / Stakeout — Sand Force also shrugs off sandstorm chip),
-// Serene Grace (doubles the chance of the holder's moves' additional effects),
-// a weather speed-doubler (Swift Swim / Chlorophyll / Sand Rush / Slush Rush),
-// or a defensive damage reducer (Multiscale / Solid Rock / Fur Coat / Ice Scales / Heatproof / Friend Guard /
-// Water Bubble — Heatproof also halves burn damage; Water Bubble also doubles the holder's Water moves and blocks burn),
-// or a status-conditional stat boost (Guts +50% physical Atk while statused & negates burn's physical cut /
-// Marvel Scale +50% Def while statused / Quick Feet +50% Speed while statused & ignores the paralysis penalty /
-// Toxic Boost +50% physical while poisoned / Flare Boost +50% special while burned),
-// or a crit-rate / crit-damage modifier (Super Luck +1 crit stage / Sniper crits deal x2.25 / Merciless auto-crits a poisoned target),
-// or an accuracy / type-effectiveness / effect-chance modifier (Shield Dust blocks incoming moves' added effects /
-// Tinted Lens doubles resisted-move damage / Scrappy hits Ghosts with Normal & Fighting and shrugs off Intimidate /
-// Wonder Skin caps incoming status moves at 50% accuracy — a PP tax under DETERMINISTIC_ACCURACY_EVASION /
-// Tangled Feet doubles evasion while confused)
-// or a priority granter (Gale Wings gives Flying moves +1 priority at full HP / Triage gives healing moves +3 priority)
-// or a terrain modifier (Surge Surfer doubles the holder's Speed on Electric Terrain / Grass Pelt boosts its Defense 1.5x on Grassy Terrain)
-// or a physical-Attack doubler (Huge Power / Pure Power double the holder's physical Attack)
-// or a stat-drop protector (Clear Body / White Smoke keep ANY of the holder's stats from being lowered by
-// another mon; Hyper Cutter protects Attack, Big Pecks Defense)
-// or a priority-move blocker (Dazzling / Queenly Majesty / Armor Tail stop opponents using priority moves
-// against the holder or its allies)
-// or a redirection-ignore (Propeller Tail / Stalwart make the holder's moves ignore Follow Me / Lightning Rod / Storm Drain redirection)
-// or a trapping ability (Shadow Tag traps any foe / Arena Trap traps grounded foes / Magnet Pull traps Steel-types, keeping them from switching out)
-// or a status-condition immunity (Magma Armor blocks freeze / Water Veil burn / Own Tempo confusion /
-// Inner Focus flinching / Leaf Guard all status in sun / Overcoat powder + sandstorm/hail chip)
-// or a miscellaneous single-site trait (Suction Cups / Guard Dog resist forced switch-out / Rock Head negates recoil /
-// Long Reach makes moves non-contact / Skill Link maxes multistrike hits / Infiltrator ignores screens/Safeguard/Mist/Substitute /
-// Corrosion poisons Poison/Steel types / Sticky Hold keeps the held item / Unseen Fist + Piercing Drill hit through Protect /
-// Heavy Metal / Light Metal double/halve weight)
-// or a berry/item synergy (Gluttony eats a pinch Berry at 1/2 HP / Ripen doubles every Berry effect /
-// Cheek Pouch heals 1/3 max HP on eating a Berry / Unburden doubles the holder's Speed once its item is consumed or lost)
-// or an on-hit contact reaction (Rough Skin / Iron Barbs chip a contact attacker 1/8 max HP /
-// Gooey / Tangling Hair drop a contact attacker's Speed by 1)
-// or an item-steal reaction (Pickpocket steals a contact attacker's held item / Magician steals a
-// held item off a target it damages) or Liquid Ooze (HP-draining moves damage the attacker instead of healing it)
-// or a switch-in effect (Intimidate lowers every opposing battler's Attack by 1 stage on switch-in /
-// Download raises the holder's Attack or Sp. Atk toward the foe's weaker defense / Supersweet Syrup lowers
-// every opposing battler's evasiveness once per battle / Unnerve denies every opposing battler its Berries /
-// Hospitality heals the ally 1/4 max HP on switch-in in doubles)
-// always has it in battle, so its .ability slot here is free to carry a *complementary* chosen
-// ability — the mon then runs both. E.g. a Slowbro set lists .ability = ABILITY_OWN_TEMPO yet still
-// pivots on its innate Regenerator; a Rotom set lists ABILITY_LIGHTNING_ROD yet
-// still floats on its innate Levitate; an Unaware staller like Clefable lists
-// ABILITY_MAGIC_GUARD yet still ignores the foe's boosts via its innate Unaware; a
-// Skarmory wall lists ABILITY_KEEN_EYE yet still endures a lethal hit via its innate
-// Sturdy; a Blissey lists ABILITY_HEALER yet still self-cleanses on its innate
-// Natural Cure (and doubles its moves' effect chances via its innate Serene Grace); a
-// Grimmsnarl lists ABILITY_PICKPOCKET yet still gets +1 priority on its
-// status moves via its innate Prankster; a Ludicolo lists ABILITY_RAIN_DISH yet still
-// doubles its Speed in rain via its innate Swift Swim, and an Excadrill lists
-// ABILITY_SAND_FORCE yet still doubles in sand via its innate Sand Rush; a Revavroom set lists
-// ABILITY_OVERCOAT yet still shaves supereffective hits via its innate Filter; an Aerodactyl lists
-// ABILITY_ROCK_HEAD yet still taxes the foe's PP via its innate Pressure; a Drapion lists
-// ABILITY_SNIPER yet still shrugs off crits via its innate Battle Armor; a Ninjask lists
-// ABILITY_INFILTRATOR yet still snowballs +1 Speed each turn via its innate Speed Boost; a Toxapex wall
-// lists ABILITY_MERCILESS yet still cannot be paralyzed via its innate Limber; a Whiscash lists
-// ABILITY_HYDRATION yet still shrugs off Taunt/Intimidate/infatuation via its innate Oblivious. Role comments
-// that mention "Unaware"/"Levitate"/"Regenerator"/"Sturdy"/"Natural Cure"/"Prankster"/"Filter"/"Limber"/
-// "Cute Charm"/"Oblivious"/"Sand Veil"/"Snow Cloak"/"Pressure"/"Speed Boost"/"Battle Armor"/"Shell Armor"/the weather doublers describe the set's innate-backed playstyle, not the .ability field. (Tornadus-Therian is the one Prankster set NOT freed:
-// its forme is canon Regenerator, not Prankster, so it is NOT an innate-Prankster species —
-// it keeps its fork-owned chosen Prankster from src/species_ability_overrides.c.)
-// (Cornerstone Ogerpon's only real ability WAS Sturdy, and Celebi's/Shaymin's only real
-// ability WAS Natural Cure; now that those are innate, a fork-owned ability override —
-// src/species_ability_overrides.c — gives each a chosen ability so the slot isn't wasted,
-// the same trick used for ability-locked innate-Levitate floaters. Venusaur is the weather-doubler
-// version: BOTH its real abilities — Overgrow and Chlorophyll — are now innate, so the override gives
-// it a chosen Drought. Blaziken is the Speed-Boost version of the same case: BOTH its real abilities —
-// Blaze and Speed Boost — are now innate, so the override gives it a chosen Sheer Force; Lopunny is the
-// Cute Charm version: both its real non-drawback abilities — Cute Charm and Limber — are now innate
-// (Klutz is a drawback), so the override gives it a chosen Sheer Force too. The weather-evasion abilities add more
-// all-real-abilities-innate cases: Sandslash and Donphan (Sand Veil + Sand Rush / Sturdy) get a chosen Sand Stream,
-// while Sandslash-Alola, Articuno and Beartic (Snow Cloak alongside Slush Rush/Swift Swim/Pressure) get a chosen
-// Snow Warning — each a stable :x: weather-setter that also turns on the mon's own evasion innate. The accuracy
-// abilities add two more: Skarmory (Keen Eye + Sturdy innate; Weak Armor is a drawback) gets a chosen Bulletproof,
-// and Volbeat (Illuminate + Swarm + Prankster all innate) gets a chosen Victory Star — each a stable :x: pick.
-// Technician adds three more all-real-abilities-innate cases: Marshadow (sole Technician) gets a chosen Illusion,
-// while Kricketune (Swarm + Technician) and Grapploct (Limber + Technician) get a chosen Sheer Force / Water Absorb
-// respectively — each a stable :x: pick.
-// The offensive move-power boosters add three more sole-real-ability cases: Clawitzer (sole Mega Launcher) gets a
-// chosen Water Absorb (:x:), Melmetal (sole Iron Fist) gets a chosen Filter and Lycanroc-Dusk (sole Tough Claws) gets
-// a chosen Sand Rush — the latter two already-implemented :white_check_mark: innates (stable, like Slurpuff's Unaware).
-// Most booster sets instead free their slot to a complementary REAL ability (e.g. Gigalith's Sand Force -> chosen Sand
-// Stream; Kleavor's Sharpness -> chosen Sheer Force; Dracovish's Strong Jaw -> chosen Water Absorb).
-// The defensive damage reducers (Batch B) add four more all-real-abilities-innate override cases: Lugia (Pressure +
-// Multiscale) gets a chosen Storm Drain, Carracosta (Solid Rock + Sturdy + Swift Swim) a chosen Water Absorb, Maushold
-// (Friend Guard + Technician) a chosen No Guard, and Bronzong / Sinistcha (Levitate/Heatproof / Hospitality-dead-in-singles)
-// repurpose a dead-weight slot to a chosen Soundproof / Flash Fire respectively — each a stable :x: pick. The rest free
-// their slot to a complementary REAL ability (Dragonite's Multiscale -> chosen Inner Focus; Camerupt's Solid Rock ->
-// chosen Magma Armor; Frosmoth's Ice Scales -> chosen Shield Dust; Persian-Alola's Fur Coat -> chosen Rattled;
-// Rhyperior's Solid Rock -> chosen Lightning Rod; Araquanid's Water Bubble -> chosen Water Absorb).
-// The priority granters (Batch Q) free two sets: Talonflame's Gale Wings sets take a complementary REAL slot
-// (chosen Flame Body, a :x: pick), and Comfey (whose Triage and Natural Cure are both now innate) repurposes its
-// innate-redundant slot-2 Natural Cure to a chosen Sweet Veil — an already-implemented :white_check_mark: innate
-// (stable) it lacks natively, keeping its doubles team awake.
-// The terrain modifiers (Batch R) free two sets: Raichu-Alola (sole Surge Surfer, now innate) gets a fork-owned chosen
-// Lightning Rod override (:x:, stable) so its slot isn't wasted, and Gogoat's Grass-Pelt set frees its slot to its
-// complementary REAL Sap Sipper (Grass immunity + Attack boost), stacking with the innate Grass Pelt Defense boost.
-// The physical-Attack doublers (Batch C) free seven sets: the Azumarill sets frees their slot to its complementary REAL
-// Sap Sipper (Grass immunity + Attack boost), Medicham (Pure Power now innate; Telepathy is dead in singles) takes a
-// chosen Reckless via an override on its empty slot 1 to power up its High Jump Kick STAB, and Diggersby (its other
-// real abilities Pickup / Cheek Pouch now innate too) repurposes its now-redundant slot-2 Huge Power to a chosen Scrappy override so its Normal
-// STAB hits Ghosts — Reckless and Scrappy both already-implemented :white_check_mark: innates (stable), like Slurpuff's Unaware.
-// (Sableye keeps a redundant-but-harmless chosen Keen Eye: its only free real slot is Stall, a drawback the vanilla
-// Stall tests rely on, so it can't be overridden.) Sceptile is the lone non-ability-locked override: only its Overgrow is
-// innate, but its HA Unburden is dead weight on these non-consumable-item sets, so the override
-// repurposes that slot for its Mega's Lightning Rod. Each override hands out a deliberately STABLE
-// ability — one marked :x: in INNATE_ABILITIES_PROGRESS.md (never an innate), so it won't need
-// re-pointing once more abilities join the innate allowlist; see that table's header.)
-// The stat-drop protectors (Batch D+E) free 28 sets. Most take a complementary REAL slot: Kingler's Hyper
-// Cutter -> chosen Sheer Force; Pinsir's -> chosen Moxie (HA); Crabominable's -> chosen Anger Point;
-// Torkoal's White Smoke -> chosen Drought; Centiskorch's -> chosen Flash Fire; Dragapult's Clear Body ->
-// chosen Infiltrator. The all-real-abilities-innate mons take a fork-owned override: Pidgeot / Chatot
-// (Keen Eye + Tangled Feet + Big Pecks all innate) get a chosen No Guard / Punk Rock, Crawdaunt (Hyper
-// Cutter + Shell Armor + Adaptability) a chosen Sniper, Bombirdier (Big Pecks + Keen Eye + Rocky Payload)
-// a chosen Reckless, Klinklang (Clear Body innate; Plus/Minus dead in singles) a chosen Motor Drive,
-// Metagross / Regirock / Regice / Registeel / Carbink / Diancie (Clear Body [+ Sturdy] innate, empty
-// slot 1) a chosen Tough Claws / Solid Rock / Ice Scales / Bulletproof / Solid Rock / Solid Rock — each a
-// stable :x: or already-implemented :white_check_mark: pick.
-// The priority-move blockers (Batch F) free six sets: the Tsareena sets take their complementary REAL slot-0
-// Leaf Guard (sun status-immunity; Sweet Veil is already Tsareena's innate), the Farigiraf sets take their
-// complementary REAL HA Sap Sipper (:x:, Grass immunity + Attack boost), and Bruxish (Dazzling + Strong Jaw +
-// Wonder Skin ALL now innate) repurposes its innate-redundant slot-1 Strong Jaw to a chosen Sheer Force
-// override (:x:, powers up its biting kit) — its slot-0 Dazzling stays a real ability (pinned by tests).
-// The redirection-ignore abilities (Batch G — Propeller Tail / Stalwart, the holder's moves ignore
-// Follow Me / Lightning Rod / Storm Drain redirection) free the two Barraskewda sets: both its real
-// abilities (Swift Swim + Propeller Tail) are now innate, so a fork-owned override on its empty slot 1
-// gives it a chosen Water Absorb (:x:, heals off Water) so the slot isn't wasted.
-// The miscellaneous single-site traits (Batch S) free ~64 sets. Nine take a complementary REAL slot: Hisuian
-// Arcanine / Chandelure -> chosen Flash Fire; Marowak / Marowak-Alola -> chosen Lightning Rod; Steelix /
-// Toucannon / Copperajah -> chosen Sheer Force; Gastrodon -> chosen Storm Drain; Okidogi -> chosen Toxic Chain
-// (each a :x: pick). The rest take a fork-owned override (src/species_ability_overrides.c): the all-real-abilities-
-// innate mons (Golem, Cloyster, Scizor, Whimsicott, Cinccino, Relicanth, Meowstic, Jumpluff, Aggron) and the
-// single-non-innate-slot mons (Sudowoodo, Aerodactyl, Ambipom, Dragapult, Hydrapple, Accelgor, Noivern, Mabosstiff)
-// repurpose an innate-redundant or otherwise-dead slot, while the empty-slot mons (Crobat, Ninjask, Spiritomb, Tyrantrum,
-// Salazzle, Decidueye, Seviper, and both Urshifu — sole Unseen Fist, like Ogerpon-Cornerstone) fill slot 1 — each
-// with a stable :x: or already-implemented :white_check_mark: pick (Sand Stream / Sniper / Tough Claws / Filter /
-// Solid Rock / Prankster / Sweet Veil / Own Tempo / Water Absorb / Reckless / Unaware / Flame Body / Poison Point /
-// Dragon's Maw / Grassy Surge / Tinted Lens / Strong Jaw / Punk Rock).
-// Step 3.5 -- freeing frontier slots from now-innate abilities. As each ability above became an
-// innate, any frontier set that had hardcoded it as its .ability turned redundant: the chosen slot
-// would merely duplicate the innate the mon already has. Such sets are freed to a distinct, observable
-// chosen ability wherever a good one exists -- repointed to a complementary real slot, or given a
-// fork-owned override (src/species_ability_overrides.c) to a STABLE pick (an ability marked :x: in
-// INNATE_ABILITIES_PROGRESS.md -- never itself an innate, so it never needs re-pointing as the innate
-// allowlist grows -- or an already-implemented innate the species does not carry). The tracked batch
-// tails (Batches I / J / T / K / L / U and the Tier 5 / Y one-offs) were completed by the
-// frontier-slot-freeing sweep; see each species' row in src/species_ability_overrides.c for its pick.
-//
-// What remains are "redundant-but-correct" sets whose .ability is still one of the species' own
-// innates. These are kept deliberately: either the species' every real slot is now an innate with no
-// good free alternative (a fork-override cleanup backlog), or a slot is pinned by a test (e.g. the
-// chosen-differs-from-innate exemplars in test/fork/innate_abilities.c, or Chansey / Blissey / Ludicolo
-// / Snorlax / Clefable). They battle correctly -- the chosen ability still fires; the innate is simply
-// redundant on that set. The complete, current set is catalogued and CI-guarded by the sKnownRedundant
-// table in test/fork/frontier_extended_roster.c, which FAILS on any NEW redundant set not on the list.
-// That table -- not this comment -- is the living record of what is still redundant.
-//
-// IMPORTANT: every .ability here must resolve to a real ability slot for the
-// species (see CreateFacilityMon, src/battle_frontier.c — an unmatched ability
-// silently falls back to slot 0). For an "ability-locked" innate species whose
-// only real ability is the one now granted innately (Rotom, Hydreigon, the lake
-// trio, ...), the complementary ability is made selectable by a fork-owned
-// override table (src/species_ability_overrides.c) rather than by editing upstream
-// species data. The roster test (test/frontier_extended_roster.c) enforces that
-// every .ability is legal through that hook, so a typo can't silently downgrade.
+// IMPORTANT: every .ability must resolve to a real ability slot for the species
+// (CreateFacilityMon, src/battle_frontier.c, silently falls back to slot 0 on an
+// unmatched ability). For an ability-locked innate species whose only real ability
+// is the one now granted innately (Rotom, Hydreigon, the lake trio, ...), the
+// complementary ability is made selectable via src/fork/species_ability_overrides.c
+// rather than by editing upstream species data. test/fork/frontier_extended_roster.c
+// enforces that every .ability is legal through that hook, so a typo can't silently
+// downgrade.
 //
 // STATUS: Generations I-IX are all built out (~2-4 builds per reasonable species,
-// mega & non-mega, with a deliberate mix of offensive and defensive/support sets).
-// B_FRONTIER_EXTENDED_MONS is TRUE — the list is large enough to draft a 6-mon
-// team (plus distinct opponents) in both singles and doubles from any subset.
-// ORDER: entries are sorted by National Pokédex number (see the Generation
-// banners, which delimit the dex ranges). All builds for one species are kept
-// contiguous, and alternate formes (megas share the base entry; Rotom/Therian/
-// Hisuian/Paradox/etc. are their own entries) sort with their base species' dex
-// number. Cross-gen evolutions therefore live at their own dex slot — e.g.
-// Magnezone/Electivire/Magmortar/Rhyperior/Tangrowth sit in the Generation IV
-// range (#462/466/467/464/465), NOT next to their Gen I pre-evolutions. Insert a
-// new species at its correct dex position. NOTE: saved rentals reference entries
-// by array INDEX, so any mid-list insertion/removal invalidates an in-progress
-// rented team in an existing save (appending past the end is the only save-safe
-// edit) — acceptable while iterating, but be aware when editing a shipped save.
+// offense/defense mix). B_FRONTIER_EXTENDED_MONS is TRUE.
+// ORDER: sorted by National Pokédex number (see the Generation banners). All builds
+// for one species are contiguous; alternate formes (megas share the base entry;
+// Rotom/Therian/Hisuian/Paradox/etc. are their own entries) sort with their base
+// species' dex number, so cross-gen evolutions live at their own dex slot (e.g.
+// Magnezone/Electivire/Magmortar/Rhyperior/Tangrowth sit at #462/466/467/464/465,
+// not next to their Gen I pre-evolutions). Insert a new species at its correct dex
+// position. NOTE: saved rentals reference entries by array INDEX, so any mid-list
+// insertion/removal invalidates an in-progress rented team in an existing save
+// (appending past the end is the only save-safe edit).
 
 const struct TrainerMon gFrontierExtendedMons[] =
 {
