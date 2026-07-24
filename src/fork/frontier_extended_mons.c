@@ -86,7 +86,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -101,7 +101,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .teraType = TYPE_WATER,
+        .teraType = TYPE_POISON,
     },
 
     // 0006
@@ -232,7 +232,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BUTTERFREE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Quiver Dance sweeper, sash = one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -240,7 +240,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_EFFECT_SPORE, // Compound Eyes & Tinted Lens now innate; chosen Effect Spore (empty-slot override) may status contact attackers
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -252,7 +252,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BUTTERFREE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // doubles spread + support
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -260,7 +260,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_TAILWIND
         },
-        .ability = ABILITY_EFFECT_SPORE, // Compound Eyes & Tinted Lens now innate; chosen Effect Spore (empty-slot override)
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
