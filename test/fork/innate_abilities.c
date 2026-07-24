@@ -528,7 +528,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware keeps the attacker'
         ANIMATION(ANIM_TYPE_MOVE, MOVE_TACKLE, opponent);
         HP_BAR(player, captureDamage: &damage[1]);
     } THEN {
-        if (chosen == ABILITY_MAGIC_GUARD)
+        if (chosen == ABILITY_MAGIC_BOUNCE)
             EXPECT_LT(damage[1], damage[0]); // boon: the -1 Atk drop is respected -> less damage
         else
             EXPECT_EQ(damage[1], damage[0]); // real Unaware ignores the drop -> same damage
@@ -560,7 +560,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware keeps the target's 
         ANIMATION(ANIM_TYPE_MOVE, MOVE_SWIFT, player);
         HP_BAR(opponent, captureDamage: &damage[1]);
     } THEN {
-        if (chosen == ABILITY_MAGIC_GUARD)
+        if (chosen == ABILITY_MAGIC_BOUNCE)
             EXPECT_GT(damage[1], damage[0]); // boon: the target's -1 Sp. Def is respected -> more damage
         else
             EXPECT_EQ(damage[1], damage[0]); // real Unaware ignores the target's Sp. Def drop
