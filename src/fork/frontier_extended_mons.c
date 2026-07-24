@@ -103,26 +103,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_POISON,
     },
-    {
-        .species = SPECIES_VENUSAUR,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET,
-        .moves =
-        {
-            MOVE_LEECH_SEED,
-            MOVE_SYNTHESIS,
-            MOVE_SLUDGE_BOMB,
-            MOVE_SLEEP_POWDER
-        },
-        .ability = ABILITY_GRASSY_SURGE,
-        .nature = NATURE(DEF_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .def = 252,
-            .spd = 4
-        ),
-        .teraType = TYPE_STEEL,
-    },
 
     // 0006
     {
@@ -165,28 +145,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_DRAGON,
     },
-    {
-        // Special build -> Mega Charizard Y under FEATURE_FREE_GIMMICKS; its Drought
-        // powers a sun-boosted Eruption (flavor over legality) and 1-turn Solar Beam.
-        .species = SPECIES_CHARIZARD,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS,
-        .moves =
-        {
-            MOVE_ERUPTION,
-            MOVE_FIRE_BLAST,
-            MOVE_SOLAR_BEAM,
-            MOVE_AIR_SLASH
-        },
-        .ability = ABILITY_FLASH_FIRE,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FIRE,
-    },
 
     // 0009
     {
@@ -199,28 +157,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYDRO_PUMP,
             MOVE_ICE_BEAM,
             MOVE_DARK_PULSE
-        },
-        .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE(SPA_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 4,
-            .spa = 252,
-            .spe = 252
-        ),
-        .teraType = TYPE_WATER,
-    },
-    {
-        // Special build -> Mega Blastoise; its Mega Launcher innate boosts every pulse
-        // ~1.5x, headlined by Kyogre's twin-cannon Origin Pulse (flavor over legality).
-        .species = SPECIES_BLASTOISE,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WISE_GLASSES,
-        .moves =
-        {
-            MOVE_ORIGIN_PULSE,
-            MOVE_AURA_SPHERE,
-            MOVE_DARK_PULSE,
-            MOVE_DRAGON_PULSE
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
