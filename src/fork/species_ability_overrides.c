@@ -70,11 +70,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_GRASSY_SURGE
     },
     { // 0006
-        // Charizard's real abilities (Blaze, Solar Power) are both now innate, and Solar Power is
-        // Sp.Atk-only -- dead weight on its physical Dragon Dance set. Its EMPTY slot 1 takes Tough
-        // Claws, an already-implemented :white_check_mark: innate (stable) and its Mega X's ability:
-        // it powers the physical set's contact STAB (Flare Blitz / Dragon Claw). The special sets
-        // keep their real Solar Power.
+        // Charizard: Blaze (slot 0) is now innate, so its redundant slot-0 takes Flash Fire -- :x: (never an
+        // innate -> stable) and thematic for the Flame Pokemon: a Fire immunity plus a Fire-move boost. The
+        // special (Mega Y / Drought) set chooses it in place of its old, dead Solar Power: Solar Power did
+        // nothing pre-Mega (no sun turn 1) and is overwritten by the Mega's Drought (it is not in Mega Y's
+        // innate list, so it never persists), whereas Flash Fire is a real trait on the pre-Mega / no-Mega turn.
+        SPECIES_CHARIZARD, 0,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0006
+        // Charizard's EMPTY slot 1 takes Tough Claws -- an already-implemented :white_check_mark: innate (stable)
+        // and its Mega X's ability: it powers the physical Dragon Dance set's contact STAB (Flare Blitz /
+        // Dragon Claw). (Solar Power, slot 2, stays Charizard's real hidden ability but no set chooses it now --
+        // it is Sp.Atk-only dead weight that the Mega's Drought supersedes; the special set uses slot-0 Flash Fire.)
         SPECIES_CHARIZARD, 1,
         ABILITY_TOUGH_CLAWS
     },
@@ -145,11 +153,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0036
-        // Clefable: all real abilities (Cute Charm, Magic Guard, Unaware) now innate; slot-0 Cute Charm and
-        // slot-1 Magic Guard are pinned by the fork innate test (test/fork/innate_abilities.c), so its innate-
-        // redundant slot-2 Unaware takes Magic Bounce -- an implemented :white_check_mark: innate it does not
-        // carry (stable) and thematic for the support fairy: it reflects status/hazards, atop innate Unaware.
-        SPECIES_CLEFABLE, 2,
+        // Clefable: all real abilities (Cute Charm, Magic Guard, Unaware) are now innate, so it has no real
+        // non-innate slot. The fork innate test pins slot-0 Cute Charm (its innate-Magic-Guard cases) and slot-2
+        // Unaware (its real-vs-innate-Unaware cases), so slot-1 Magic Guard takes Magic Bounce -- an implemented
+        // :white_check_mark: innate it does not carry (stable) and thematic for the support fairy: it reflects
+        // status/hazards atop innate Unaware. The innate test used real Magic Guard only as an inert non-Unaware
+        // chosen ability; those refs were repointed to this Magic Bounce (equally inert there -- no status move
+        // targets Clefable in those cases). Innate Magic Guard is untouched, so its innate-Magic-Guard cases pass.
+        SPECIES_CLEFABLE, 1,
         ABILITY_MAGIC_BOUNCE
     },
     { // 0040

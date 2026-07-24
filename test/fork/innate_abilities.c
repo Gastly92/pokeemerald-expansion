@@ -483,7 +483,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Unaware user keeps it via 
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_UNAWARE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_GUARD); } // chosen ability is NOT Unaware
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); } // inert, non-Unaware chosen (Clefable's real slot-1 is a Magic Bounce fork override; no status move targets it here)
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE, MOVE_SWORDS_DANCE); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_TACKLE); }
@@ -511,7 +511,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware keeps the attacker'
 {
     s16 damage[2];
     enum Ability chosen;
-    PARAMETRIZE { chosen = ABILITY_MAGIC_GUARD; } // Unaware innate-only -> boon (respects the drop)
+    PARAMETRIZE { chosen = ABILITY_MAGIC_BOUNCE; } // Unaware innate-only -> boon (respects the drop); inert non-Unaware chosen (slot-1 override)
     PARAMETRIZE { chosen = ABILITY_UNAWARE; }     // real Unaware -> ignores the drop (canon)
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_UNAWARE));
@@ -541,7 +541,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unaware keeps the target's 
 {
     s16 damage[2];
     enum Ability chosen;
-    PARAMETRIZE { chosen = ABILITY_MAGIC_GUARD; } // Unaware innate-only -> boon (respects the drop)
+    PARAMETRIZE { chosen = ABILITY_MAGIC_BOUNCE; } // Unaware innate-only -> boon (respects the drop); inert non-Unaware chosen (slot-1 override)
     PARAMETRIZE { chosen = ABILITY_UNAWARE; }     // real Unaware -> ignores the drop (canon)
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_UNAWARE));
