@@ -183,9 +183,6 @@
 //     keep the OHKO immunities: Sturdy, Dynamax, a higher-level target and type immunity
 //     all still block them entirely. See DoesOHKOMoveMissTarget and EFFECT_OHKO in
 //     DoMoveDamageCalc (src/battle_util.c).
-//   - Sleep moves that were not 100% accurate (Hypnosis, Sleep Powder, ...) now cause
-//     drowsiness like Yawn instead of sleeping outright; 100%-accurate Spore is
-//     unchanged (Cmd_setnonvolatilestatus in src/battle_script_commands.c).
 //   - Moves that were exactly 50% accurate (Zap Cannon, Inferno, ...) now require a
 //     recharge turn like Hyper Beam (MOVEEND_DETERMINISTIC_RECHARGE in
 //     src/battle_move_resolution.c).

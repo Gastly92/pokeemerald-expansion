@@ -4445,8 +4445,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
 
                 // FORK: under DETERMINISTIC_ABILITIES, Effect Spore drops both the
                 // trigger roll and the 3-way status pick and always attempts to make
-                // the attacker drowsy (Yawn), reusing the deterministic sleep->drowsy
-                // mechanism.
+                // the attacker drowsy (Yawn) via BattleScript_EffectSporeDrowsy.
                 if (GetConfig(DETERMINISTIC_ABILITIES))
                 {
                     if (gBattleMons[gBattlerAttacker].volatiles.yawn == 0

@@ -3767,10 +3767,6 @@ bool32 AI_CanPutToSleep(enum BattlerId battlerAtk, enum BattlerId battlerDef, en
       || StatusWillBeCuredDeterministically(battlerDef, defAbility)
       || PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))   // shouldn't try to sleep mon that partner is trying to make sleep
         return FALSE;
-    // FORK: under DETERMINISTIC_ACCURACY_EVASION a sub-100% sleep move only makes the
-    // target drowsy (Yawn); don't waste it on a foe that is already drowsy.
-    if (MoveSleepBecomesDrowsy(move) && gBattleMons[battlerDef].volatiles.yawn)
-        return FALSE;
     return TRUE;
 }
 

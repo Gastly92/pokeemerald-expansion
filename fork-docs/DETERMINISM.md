@@ -215,22 +215,14 @@ PP. **OHKO moves** become always-hitting attacks dealing
 immunity still block them (`DoesOHKOMoveMissTarget` + `EFFECT_OHKO` in
 `DoMoveDamageCalc`). The AI treats every move as always-hitting
 (`Ai_SetMoveAccuracy`, `src/battle_ai_main.c`) so it neither avoids low-accuracy
-moves nor fears evasion. **Sleep moves** that weren't 100% accurate (Hypnosis,
-Sleep Powder, …) now cause drowsiness like Yawn instead of sleeping outright
-(intercepted in `Cmd_setnonvolatilestatus`/`TRIGGER_ON_MOVE`,
-`src/battle_script_commands.c`, via `BattleScript_DeterministicSleepBecomesDrowsy`);
-100% Spore is unchanged. **Moves that were exactly 50% accurate** (Zap Cannon,
+moves nor fears evasion. **Moves that were exactly 50% accurate** (Zap Cannon,
 Inferno, DynamicPunch) now require a recharge turn like Hyper Beam, set at move end
 via the new `MOVEEND_DETERMINISTIC_RECHARGE` reusing Hyper Beam's
 `rechargeTimer`/`gLockedMoves` state. **AI awareness:** the shared
 `MoveGainsDeterministicRecharge` predicate (`src/fork/deterministic_moves.c`) drives both the
 move-end hook and the AI, so the AI treats a 50% move as a recharge move
 (`AI_IsMoveEffectInMinus` downside + Instruct avoidance,
-`src/battle_ai_util.c`/`battle_ai_main.c`). For the sub-100% sleep→drowse
-conversion, the shared `MoveSleepBecomesDrowsy` predicate (`src/fork/deterministic_moves.c`,
-also driving the engine's `Cmd_setnonvolatilestatus`) gates `AI_CanPutToSleep`:
-such a move is treated like Yawn, so the AI won't waste it on a foe that is already
-drowsy. **Move-info display:** because accuracy is now meaningless, the in-battle
+`src/battle_ai_util.c`/`battle_ai_main.c`). **Move-info display:** because accuracy is now meaningless, the in-battle
 move-info submenu (press L on move select, `MoveSelectionDisplayMoveDescription`,
 `src/battle_controller_player.c`) replaces its `ACC` field with the move's
 **projected net PP cost** this turn — `GetProjectedMovePPCost`

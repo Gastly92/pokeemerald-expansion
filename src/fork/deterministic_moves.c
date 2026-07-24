@@ -111,19 +111,3 @@ bool32 MoveGainsDeterministicRecharge(enum Move move)
         && !IsBattleMoveStatus(move)
         && GetMoveNonVolatileStatus(move) != MOVE_EFFECT_SLEEP;
 }
-
-// DETERMINISTIC_ACCURACY_EVASION — a sleep move that wasn't 100% accurate causes
-// drowsiness (Yawn) instead of sleeping outright (see Cmd_setnonvolatilestatus). Shared so
-// the AI agrees with the engine on which sleep moves become drowse moves.
-bool32 MoveSleepBecomesDrowsy(enum Move move)
-{
-    u32 moveAcc = GetMoveAccuracy(move);
-    // Dark Void is Darkrai's signature move and is meant to inflict sleep outright, so it is
-    // exempt from the DETERMINISTIC_ACCURACY_EVASION sleep->drowsy weakening despite its sub-100%
-    // accuracy. (Under DETERMINISTIC_ACCURACY_EVASION accuracy never misses, so it always sleeps.)
-    if (move == MOVE_DARK_VOID)
-        return FALSE;
-    return GetConfig(DETERMINISTIC_ACCURACY_EVASION)
-        && GetMoveNonVolatileStatus(move) == MOVE_EFFECT_SLEEP
-        && moveAcc > 0 && moveAcc < 100;
-}
