@@ -150,79 +150,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MYSTIC_WATER,
-        .moves =
-        {
-            MOVE_HYDRO_PUMP,
-            MOVE_AURA_SPHERE,
-            MOVE_DARK_PULSE,
-            MOVE_ICE_BEAM
-        },
-        .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE(SPA_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_WATER,
-    },
-    {
-        .species = SPECIES_BLASTOISE,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
-        .moves =
-        {
-            MOVE_CHILLING_WATER,
-            MOVE_RAPID_SPIN,
-            MOVE_ICE_BEAM,
-            MOVE_REST
-        },
-        .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE(DEF_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .def = 252,
-            .spa = 4
-        ),
-        .teraType = TYPE_WATER,
-    },
-    {
-        .species = SPECIES_BLASTOISE,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST,
-        .moves =
-        {
-            MOVE_HYDRO_PUMP,
-            MOVE_ICE_BEAM,
-            MOVE_FLIP_TURN,
-            MOVE_EARTHQUAKE
-        },
-        .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE(SPA_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .spa = 252,
-            .spd = 4
-        ),
-        .teraType = TYPE_WATER,
-    },
-    {
-        .species = SPECIES_BLASTOISE,
-        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
-            MOVE_LIQUIDATION,
-            MOVE_ICE_PUNCH,
-            MOVE_EARTHQUAKE
+            MOVE_HYDRO_PUMP,
+            MOVE_ICE_BEAM,
+            MOVE_DARK_PULSE
         },
         .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
-            .atk = 252,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_WATER,
