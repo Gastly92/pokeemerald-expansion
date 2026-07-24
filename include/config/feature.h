@@ -49,8 +49,11 @@
 // chosen from a picker. Specifically:
 //   - Mega Evolution no longer needs a Mega Stone (any species with a Mega form
 //     can evolve); for species with X/Y Megas (Charizard, Mewtwo) the form is
-//     chosen by the base form's higher attacking stat (Attack vs Sp. Atk, tie
-//     -> X) via GetMegaTargetSpecies() instead of by which stone is held.
+//     chosen by the battler's RESOLVED in-battle stats -- physical (X) when its
+//     current Attack >= Sp. Atk, else special (Y), tie -> X -- via
+//     GetMegaStoneForBattler() (src/battle_util.c) instead of by which stone is
+//     held. Resolved stats (EVs/nature/IVs), not base, so a physical-EV Charizard
+//     reaches Mega X while a special-EV one reaches Mega Y.
 //   - Z-Moves no longer need a Z-Crystal (any damaging move becomes its type's
 //     Z-Move; signature Z-Moves still require the specific base move).
 //   - Terastallization and Dynamax no longer need the Tera Orb / Dynamax Band in
