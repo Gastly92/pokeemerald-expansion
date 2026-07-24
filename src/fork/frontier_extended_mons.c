@@ -116,7 +116,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_DRAGON_PULSE
         },
-        .ability = ABILITY_FLASH_FIRE, // slot-0 override (species_ability_overrides.c): a real Fire immunity/boost vs dead Solar Power; Mega Y's Drought carries the sun
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -136,7 +136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_TOUGH_CLAWS,
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

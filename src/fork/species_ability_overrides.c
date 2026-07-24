@@ -70,26 +70,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_GRASSY_SURGE
     },
     { // 0006
-        // Charizard: Blaze (slot 0) is now innate, so its redundant slot-0 takes Flash Fire -- :x: (never an
-        // innate -> stable) and thematic for the Flame Pokemon: a Fire immunity plus a Fire-move boost. The
-        // special (Mega Y / Drought) set chooses it in place of its old, dead Solar Power: Solar Power did
-        // nothing pre-Mega (no sun turn 1) and is overwritten by the Mega's Drought (it is not in Mega Y's
-        // innate list, so it never persists), whereas Flash Fire is a real trait on the pre-Mega / no-Mega turn.
         SPECIES_CHARIZARD, 0,
         ABILITY_FLASH_FIRE
     },
-    { // 0006
-        // Charizard's EMPTY slot 1 takes Tough Claws -- an already-implemented :white_check_mark: innate (stable)
-        // and its Mega X's ability: it powers the physical Dragon Dance set's contact STAB (Flare Blitz /
-        // Dragon Claw). (Solar Power, slot 2, stays Charizard's real hidden ability but no set chooses it now --
-        // it is Sp.Atk-only dead weight that the Mega's Drought supersedes; the special set uses slot-0 Flash Fire.)
-        SPECIES_CHARIZARD, 1,
-        ABILITY_TOUGH_CLAWS
-    },
     { // 0009
-        // Blastoise's only real abilities (Torrent, Rain Dish) are BOTH now innate, so its EMPTY slot 1 takes
-        // Water Absorb -- :x: (never an innate -> stable) and thematic for the water-cannon turtle: it soaks up
-        // Water-type moves for a heal, observable alongside the innate Torrent / Rain Dish.
         SPECIES_BLASTOISE, 1,
         ABILITY_WATER_ABSORB
     },
