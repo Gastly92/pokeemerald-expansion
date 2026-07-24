@@ -5,9 +5,8 @@
 // Determinism flags default off in the test baseline (see TestInitConfigData), so each
 // test opts in with WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE). With the flag on,
 // accuracy/evasion stop deciding hit/miss and instead drive a PP economy; sub-100%
-// moves always hit but have their max PP scaled down by their accuracy, and OHKO moves
-// deal a fixed % of max HP. (Stage 2 will add the sleep->drowse and 50%->recharge
-// conversions; those are not covered here yet.)
+// moves always hit but have their max PP scaled down by their accuracy, OHKO moves
+// deal a fixed % of max HP, and 50%-accurate moves gain a Hyper Beam-style recharge.
 
 ASSUMPTIONS
 {
@@ -237,7 +236,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 0-accuracy move ignores th
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% sleep move causes drowsiness, not sleep")
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% sleep move sleeps outright (never misses)")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
@@ -246,13 +245,13 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% sleep move causes
     } WHEN {
         TURN { MOVE(player, MOVE_HYPNOSIS); MOVE(opponent, MOVE_CELEBRATE); }
     } SCENE {
-        MESSAGE("The opposing Wobbuffet grew drowsy!");
+        MESSAGE("The opposing Wobbuffet fell asleep!");
     } THEN {
-        EXPECT_EQ(opponent->status1 & STATUS1_SLEEP, 0); // drowsy now; Yawn puts it to sleep later
+        EXPECT(opponent->status1 & STATUS1_SLEEP); // sub-100% sleep moves now sleep like any other
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 100% sleep move (Spore) still sleeps directly")
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 100% sleep move (Spore) sleeps directly")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
@@ -281,22 +280,5 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 50% accurate move requires
         MESSAGE("Wobbuffet used Zap Cannon!");
         MESSAGE("Wobbuffet must recharge!");
         MESSAGE("Wobbuffet used Celebrate!");
-    }
-}
-
-
-AI_SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: AI won't use a sub-100% sleep move on an already-drowsy foe")
-{
-    GIVEN {
-        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
-        ASSUME(GetMoveAccuracy(MOVE_HYPNOSIS) > 0 && GetMoveAccuracy(MOVE_HYPNOSIS) < 100);
-        ASSUME(GetMoveNonVolatileStatus(MOVE_HYPNOSIS) == MOVE_EFFECT_SLEEP);
-        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);
-        PLAYER(SPECIES_WOBBUFFET) { HP(600); MaxHP(600); }
-        OPPONENT(SPECIES_HYPNO) { Moves(MOVE_HYPNOSIS, MOVE_PSYCHIC); }
-    } WHEN {
-        TURN { EXPECT_MOVE(opponent, MOVE_HYPNOSIS); } // sub-100% sleep -> makes the foe drowsy
-        // Foe is now drowsy, so Hypnosis would be wasted; the AI should attack instead.
-        TURN { SCORE_LT(opponent, MOVE_HYPNOSIS, MOVE_PSYCHIC); }
     }
 }

@@ -30,8 +30,4 @@ bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId batt
 // recharge turn (a damaging, non-sleep move that was exactly 50% accurate).
 bool32 MoveGainsDeterministicRecharge(enum Move move);
 
-// DETERMINISTIC_ACCURACY_EVASION: TRUE when a sub-100% accurate sleep move should cause
-// drowsiness (Yawn) instead of sleeping outright.
-bool32 MoveSleepBecomesDrowsy(enum Move move);
-
 #endif // GUARD_FORK_DETERMINISTIC_MOVES_H
