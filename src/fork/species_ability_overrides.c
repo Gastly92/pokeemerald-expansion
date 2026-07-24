@@ -70,7 +70,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_GRASSY_SURGE
     },
     { // 0006
-        SPECIES_CHARIZARD, 0,
+        SPECIES_CHARIZARD, 1,
         ABILITY_FLASH_FIRE
     },
     { // 0009
