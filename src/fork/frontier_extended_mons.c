@@ -788,7 +788,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SOFT_BOILED,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_MAGIC_BOUNCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -808,7 +808,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_MAGIC_BOUNCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -828,7 +828,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_MAGIC_BOUNCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1835,7 +1835,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_ICE_SCALES, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1855,7 +1855,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_ICE_SCALES, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1875,7 +1875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CHILLING_WATER,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_ICE_SCALES, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2828,7 +2828,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_POWER_UP_PUNCH
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2848,7 +2848,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3058,7 +3058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_TOUGH_CLAWS, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3078,7 +3078,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_TOUGH_CLAWS, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3612,7 +3612,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST
         },
         // Thick Fat (and Immunity) now innate; chosen Gluttony fills the slot.
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SAP_SIPPER, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3633,7 +3633,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SELF_DESTRUCT
         },
         // Thick Fat (and Immunity) now innate; chosen Gluttony fills the slot.
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SAP_SIPPER, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 132,
@@ -3653,7 +3653,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SAP_SIPPER, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6965,7 +6965,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_STORM_DRAIN, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6985,7 +6985,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_RAIN_DANCE
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_STORM_DRAIN, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7005,7 +7005,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_RAIN_DANCE
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_STORM_DRAIN, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7552,7 +7552,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_MAGIC_BOUNCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7572,7 +7572,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_TAUNT
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_MAGIC_BOUNCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7976,7 +7976,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ANCIENT_POWER
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (slot needed by an AI test, no free non-innate slot)
+        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7997,7 +7997,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (slot needed by an AI test, no free non-innate slot)
+        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11349,7 +11349,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (slot needed by an AI test, no free non-innate slot)
+        .ability = ABILITY_UNAWARE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 244,
@@ -11369,7 +11369,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ROOST
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (slot needed by an AI test, no free non-innate slot)
+        .ability = ABILITY_UNAWARE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 244,
@@ -12875,7 +12875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SAND_STREAM, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12895,7 +12895,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SAND_STREAM, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12915,7 +12915,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_HIGH_HORSEPOWER
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SAND_STREAM, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20793,7 +20793,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_WAVE,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_VOLT_ABSORB, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20813,7 +20813,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_VOLT_ABSORB, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23626,7 +23626,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23646,7 +23646,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ICE_HAMMER
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24079,7 +24079,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST,
             MOVE_SLEEP_TALK
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_WATER_ABSORB, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24099,7 +24099,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_NONE, // all real abilities innate; Factory picks (no non-redundant chosen slot available)
+        .ability = ABILITY_WATER_ABSORB, // chosen via fork override (species_ability_overrides.c)
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

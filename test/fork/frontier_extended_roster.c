@@ -2,6 +2,7 @@
 #include "test/test.h"
 #include "data.h"
 #include "battle_frontier.h"
+#include "config_changes.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/innate_abilities.h"
 #include "constants/abilities.h"
@@ -19,6 +20,11 @@ TEST("Frontier extended roster: every set's ability is legal for its species")
 {
     u32 i, slot;
     u32 illegalCount = 0;
+
+    // The fork ability layer (innates + the species ability-override table) is gated by
+    // FEATURE_INNATE_ABILITIES, which TestInitConfigData force-disables by default. The real
+    // frontier (CreateFacilityMon) runs with it on, so opt in to resolve overridden slots.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
 
     for (i = 0; i < gFrontierExtendedMonsCount; i++)
     {
@@ -66,11 +72,14 @@ TEST("Frontier extended roster: every set's ability is legal for its species")
 // Every such set has been given a real, non-innate chosen ability -- repointed to a free real
 // slot, or handed a stable pick via a fork-owned override in src/fork/species_ability_overrides.c
 // (an ability marked :x: in INNATE_ABILITIES_PROGRESS.md -- never itself an innate -- or an
-// already-implemented innate the species does not carry). A handful of all-innate species whose
-// every real ability slot is test-pinned (so no slot can be repurposed without perturbing an
-// unrelated battle test -- e.g. Snorlax, Dondozo, Kangaskhan, Pinsir, Excadrill, Ludicolo,
-// Slowbro, Clefable, Tinkaton, Sableye) instead carry .ability = ABILITY_NONE, letting the
-// Factory pick at draft rather than hardcoding a redundant innate.
+// already-implemented innate the species does not carry). Species that once had NO repurposable
+// slot (every real ability innate AND every slot pinned by a battle test -- Snorlax, Kangaskhan,
+// Pinsir, Sableye, Clefable, Slowbro, Camerupt, ...) are now convertible too: the override table
+// is gated by FEATURE_INNATE_ABILITIES and thus invisible to upstream tests (see
+// GetSpeciesAbilityOverride), so a row can repurpose a slot an upstream test pins without
+// perturbing it -- only flag-on fork tests observe the override, and each species kept a free slot
+// clear of those. So the whole roster now carries a real chosen ability; ABILITY_NONE is banned
+// (see the next test).
 //
 // This test asserts the invariant holds for the WHOLE roster with no exceptions: a chosen
 // ability is either ABILITY_NONE or NOT one of the species' innates. It fails loudly if a new
@@ -100,6 +109,35 @@ TEST("Frontier extended roster: no set's chosen ability duplicates a species inn
     }
 
     EXPECT_EQ(redundant, 0);
+}
+
+// FORK: ABILITY_NONE on a set means "let the Factory pick the ability at draft", which yields a
+// non-deterministic, unlabeled ability -- and for the fork's all-innate species it can only ever
+// land on a redundant innate. Every set must instead name a real, deliberate chosen ability. This
+// was previously impossible for species whose every real slot was pinned by an upstream battle test
+// (the override that would free a slot also rewrote it inside that test); gating the override table
+// behind FEATURE_INNATE_ABILITIES fixed that (the override is invisible to flag-off upstream tests),
+// so the escape hatch is gone. This test bans ABILITY_NONE outright and fails loudly if a new set
+// reintroduces it -- give the set a fork override (src/fork/species_ability_overrides.c) instead.
+TEST("Frontier extended roster: no set uses ABILITY_NONE (every set names a real chosen ability)")
+{
+    u32 i;
+    u32 noneCount = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        if (set->ability != ABILITY_NONE)
+            continue;
+
+        noneCount++;
+        Test_MgbaPrintf("roster[%d] %S: uses ABILITY_NONE -- give it a real chosen ability via a fork override (species_ability_overrides.c)",
+                        i,
+                        gSpeciesInfo[set->species].speciesName);
+    }
+
+    EXPECT_EQ(noneCount, 0);
 }
 
 // FORK: CreateFacilityMon grants the Gigantamax Factor at draft time to any mon

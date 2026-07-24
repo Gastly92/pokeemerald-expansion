@@ -1,5 +1,6 @@
 #include "global.h"
 #include "fork/species_ability_overrides.h"
+#include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES) gates the override table
 #include "constants/abilities.h"
 #include "constants/species.h"
 
@@ -19,6 +20,15 @@
 // roster's non-consumable-item sets, so the slot is repurposed for a flavorful pick.
 // The roster test test/frontier_extended_roster.c verifies every set's chosen ability
 // resolves to a real slot through this hook, so an out-of-place row fails CI.
+//
+// GATED BY FEATURE_INNATE_ABILITIES (see GetSpeciesAbilityOverride below). Like innates and
+// the fork's other runtime features, the table is FORCE-DISABLED in tests by default
+// (TestInitConfigData), so upstream battle-ability tests see VANILLA slots and a row can no
+// longer perturb them; a fork test that wants an override opts in with WITH_CONFIG. This is
+// what lets a row repurpose a slot that an *upstream* test pins via Ability(...) or a default
+// read -- that test never sees the override. Only *fork* tests that opt into the flag observe
+// a repurposed slot, so the "SLOT CHOICE MATTERS" audit below now only needs to clear
+// flag-on fork tests (the innate test, the frontier roster), not the whole upstream suite.
 
 struct SpeciesAbilityOverride
 {
@@ -42,15 +52,17 @@ struct SpeciesAbilityOverride
 // or an already-*implemented* :white_check_mark: innate the species does NOT itself carry (Carnivine's
 // Chlorophyll, Tornadus-Therian's Prankster, Swellow's Quick Feet, ...), which is likewise stable.
 //
-// SLOT CHOICE MATTERS — this table is consulted UNCONDITIONALLY by GetSpeciesAbility (it is NOT gated
-// by FEATURE_INNATE_ABILITIES), so a row REPLACES that slot's ability game-wide even with innates off.
-// Filling an EMPTY slot (ABILITY_NONE) is always safe: nothing is deleted and no upstream test can
-// select an empty slot. Repurposing a REAL slot deletes that ability from the species everywhere —
-// only do it when nothing observes the slot (audit `Ability(ABILITY_X)` uses in test/battle/ first;
-// e.g. Kangaskhan's Scrappy and Vivillon's Shield Dust slots are pinned by upstream tests and must
-// stay). The rows above that repurpose real slots (Sceptile, Lopunny, Bronzong, Mamoswine, Beartic,
-// Carracosta, Scovillain, Sinistcha, Volbeat, Zangoose, Pidgeot, Chatot, Crawdaunt, Klinklang,
-// Bombirdier) were each audited this way.
+// SLOT CHOICE MATTERS — because the table is gated by FEATURE_INNATE_ABILITIES, a row REPLACES that
+// slot's ability only where the flag is on: all real gameplay/frontier, plus any FORK test that opts
+// in with WITH_CONFIG. Upstream tests run flag-off and see vanilla slots, so a row can now safely
+// repurpose a slot that an upstream `Ability(ABILITY_X)` or default read pins. Filling an EMPTY slot
+// (ABILITY_NONE) is always safe. Repurposing a REAL slot deletes that ability from the species in
+// every flag-on context, so audit that no *fork* test with the flag on observes it: `Ability(ABILITY_X)`
+// on the species in test/fork/ (chiefly the innate test) and the frontier roster. (Upstream test/battle/
+// pins no longer matter for slot choice, but a repurposed slot still changes real gameplay, so keep the
+// pick a redundant innate or empty slot as before.) The rows above that repurpose real slots (Sceptile,
+// Lopunny, Bronzong, Mamoswine, Beartic, Carracosta, Scovillain, Sinistcha, Volbeat, Zangoose, Pidgeot,
+// Chatot, Crawdaunt, Klinklang, Bombirdier) were each audited this way.
 static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 {
     { // 0003
@@ -132,6 +144,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SANDSLASH_ALOLA, 1,
         ABILITY_SNOW_WARNING
     },
+    { // 0036
+        // Clefable: all real abilities (Cute Charm, Magic Guard, Unaware) now innate; slot-0 Cute Charm and
+        // slot-1 Magic Guard are pinned by the fork innate test (test/fork/innate_abilities.c), so its innate-
+        // redundant slot-2 Unaware takes Magic Bounce -- an implemented :white_check_mark: innate it does not
+        // carry (stable) and thematic for the support fairy: it reflects status/hazards, atop innate Unaware.
+        SPECIES_CLEFABLE, 2,
+        ABILITY_MAGIC_BOUNCE
+    },
     { // 0040
         // Wigglytuff: all real abilities now innate, so its innate-redundant slot-0 Cute Charm takes a chosen
         // Sweet Veil so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
@@ -200,6 +220,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_RAPIDASH_GALAR, 1,
         ABILITY_CUTE_CHARM
+    },
+    { // 0080
+        // Slowbro: all real abilities (Oblivious, Own Tempo, Regenerator) now innate; slot-2 Regenerator is
+        // Ability()-pinned in the fork innate test, so its innate-redundant slot-1 Own Tempo takes Ice Scales --
+        // an implemented :white_check_mark: innate it does not carry (stable) and thematic for the bulky
+        // Water/Psychic wall: it halves special damage, a clean boon atop innate Regenerator.
+        SPECIES_SLOWBRO, 1,
+        ABILITY_ICE_SCALES
     },
     { // 0080
         // Galarian Slowbro's three real abilities (Quick Draw, Own Tempo, Regenerator) are ALL now innate;
@@ -284,11 +312,27 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CHANSEY, 1,
         ABILITY_CUTE_CHARM
     },
+    { // 0115
+        // Kangaskhan: all real abilities (Early Bird, Scrappy, Inner Focus) now innate; slot-2 Inner Focus is
+        // Ability()-pinned in the fork innate test, so its innate-redundant slot-1 Scrappy takes Sheer Force --
+        // :x: (never an innate -> stable) and a clean physical boon: its coverage (Body Slam / Earthquake /
+        // Sucker Punch) trades secondaries for +30% power, observable atop innate Scrappy (Normal hits Ghosts).
+        SPECIES_KANGASKHAN, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0121
         // Starmie: all real abilities now innate, so its innate-redundant slot-1 Natural Cure takes a chosen
         // Water Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_STARMIE, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0127
+        // Pinsir: all real abilities (Hyper Cutter, Mold Breaker, Moxie) now innate; slot-1 Mold Breaker and
+        // slot-2 Moxie are Ability()-pinned in the fork innate test, so its innate-redundant slot-0 Hyper Cutter
+        // takes Tough Claws -- an implemented :white_check_mark: innate it does not carry (stable) and its Mega X's
+        // ability: it powers the Stag Beetle's contact STAB (X-Scissor / Close Combat), atop innate Moxie.
+        SPECIES_PINSIR, 0,
+        ABILITY_TOUGH_CLAWS
     },
     { // 0128
         // Tauros-Paldea-Combat's three real abilities (Intimidate, Anger Point, Cud Chew) are ALL now innate;
@@ -325,6 +369,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // (Stone Edge/Crunch/Aqua Tail).
         SPECIES_AERODACTYL, 2,
         ABILITY_TOUGH_CLAWS
+    },
+    { // 0143
+        // Snorlax: all real abilities (Immunity, Thick Fat, Gluttony) now innate; slot-0 Immunity is the fork
+        // innate test's default read and slot-2 Gluttony is Ability()-pinned there, so its innate-redundant
+        // slot-1 Thick Fat takes Sap Sipper -- :x: (never an innate -> stable) and thematic for the Pokemon that
+        // eats anything: Grass moves miss it and boost its Attack, observable atop innate Thick Fat.
+        SPECIES_SNORLAX, 1,
+        ABILITY_SAP_SIPPER
     },
     { // 0144
         // Articuno's only real abilities (Pressure, Snow Cloak) are BOTH now innate, so its empty
@@ -564,6 +616,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DUSTOX, 1,
         ABILITY_POISON_POINT
     },
+    { // 0272
+        // Ludicolo: all real abilities (Swift Swim, Rain Dish, Own Tempo) now innate; slot-2 Own Tempo is
+        // Ability()-pinned in the fork innate test, so its innate-redundant slot-1 Rain Dish takes Storm Drain --
+        // :x: (never an innate -> stable) and thematic for the carefree dancer: it draws in Water moves for a
+        // Sp. Atk boost + immunity, a clean boon for its rain special sweeper atop innate Swift Swim.
+        SPECIES_LUDICOLO, 1,
+        ABILITY_STORM_DRAIN
+    },
     { // 0277
         // Swellow's only real abilities (Guts, Scrappy) are BOTH now innate, so its EMPTY slot 1 takes Quick
         // Feet — an already-implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) that Swellow
@@ -585,6 +645,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // contact.
         SPECIES_NINJASK, 1,
         ABILITY_TOUGH_CLAWS
+    },
+    { // 0302
+        // Sableye: its innate traits are Keen Eye (slot 0) and Prankster (slot 2); slot-1 Stall is a real but
+        // drawback ability (it always moves last), dead weight on the roster like Sceptile's Unburden. That slot
+        // takes Magic Bounce -- an implemented :white_check_mark: innate it does not carry (stable) and its Mega's
+        // ability: the Darkness Pokemon reflects status/hazards, a clean boon atop innate Prankster.
+        SPECIES_SABLEYE, 1,
+        ABILITY_MAGIC_BOUNCE
     },
     { // 0306
         // Sturdy, Rock Head and Heavy Metal are ALL now innate (slot-2 Heavy Metal pinned by heavy_metal.c), so
@@ -647,6 +715,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Drizzle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_WAILORD, 2,
         ABILITY_DRIZZLE
+    },
+    { // 0323
+        // Camerupt: all real abilities (Magma Armor, Solid Rock, Anger Point) now innate; slot-0 Magma Armor is
+        // the default read and slot-1 Solid Rock is Ability()-pinned in the fork innate test, so its innate-
+        // redundant slot-2 Anger Point takes Sheer Force -- :x: (never an innate -> stable) and a clean special
+        // boon: Earth Power / Lava Plume / Flamethrower trade secondaries for +30% power, atop innate Solid Rock.
+        SPECIES_CAMERUPT, 2,
+        ABILITY_SHEER_FORCE
     },
     { // 0326
         // Grumpig's three real abilities (Thick Fat, Own Tempo, Gluttony) are ALL now innate; slot-0 Thick Fat is the
@@ -1026,6 +1102,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GLACEON, 2,
         ABILITY_SNOW_WARNING
     },
+    { // 0472
+        // Gliscor: all real abilities (Hyper Cutter, Sand Veil, Poison Heal) now innate; slot-1 Sand Veil is
+        // Ability()-pinned in the fork innate test, so its innate-redundant slot-2 Poison Heal takes Unaware --
+        // an implemented :white_check_mark: innate it does not carry (stable) and a clean boon for the Ground/Flying
+        // wall: it ignores foes' stat boosts, observable atop its always-on innate Poison Heal (Toxic Orb recovery).
+        SPECIES_GLISCOR, 2,
+        ABILITY_UNAWARE
+    },
     { // 0473
         // Mamoswine's three real abilities (Oblivious, Snow Cloak, Thick Fat) are ALL now innate, so
         // its slot-2 Thick Fat — now innate-redundant — is repurposed to Snow Warning. Snow Warning is
@@ -1245,6 +1329,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Water hits its bulky switch-ins invite.
         SPECIES_SIMIPOUR, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0530
+        // Excadrill: all real abilities (Sand Rush, Sand Force, Mold Breaker) now innate; slot-0 Sand Rush and
+        // slot-1 Sand Force are Ability()-pinned in the fork innate test, so its innate-redundant slot-2 Mold
+        // Breaker takes Sand Stream -- :x: (never an innate -> stable) and self-synergistic: the sandstorm it sets
+        // turns on its own innate Sand Rush (Speed) and Sand Force (power). Same pick as Sandslash / Dugtrio.
+        SPECIES_EXCADRILL, 2,
+        ABILITY_SAND_STREAM
     },
     { // 0531
         SPECIES_AUDINO, 1,
@@ -2065,6 +2157,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0849
+        // Toxtricity (Amped): its innate traits are Punk Rock (slot 0) and Technician (slot 2); slot-1 Plus is a
+        // real ability that is dead weight in singles, so it takes Volt Absorb -- :x: (never an innate -> stable)
+        // and thematic for the Electric/Poison punk: Electric moves miss it and heal it instead, atop innate Punk
+        // Rock. Same pick as its Low Key sibling below.
+        SPECIES_TOXTRICITY, 1,
+        ABILITY_VOLT_ABSORB
+    },
+    { // 0849
         // Toxtricity Low Key: all real abilities now innate, so its innate-redundant slot-0 Punk Rock takes a chosen
         // Volt Absorb so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_TOXTRICITY_LOW_KEY, 0,
@@ -2345,6 +2445,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ESPATHRA, 1,
         ABILITY_COMPETITIVE
     },
+    { // 0959
+        // Tinkaton: all real abilities (Mold Breaker, Own Tempo, Pickpocket) now innate; slot-0 Mold Breaker is
+        // Ability()-pinned in the fork innate test, so its innate-redundant slot-1 Own Tempo takes Sheer Force --
+        // :x: (never an innate -> stable) and a clean physical boon: Play Rough trades its secondary for +30%
+        // power, observable atop innate Mold Breaker (its Gigaton Hammer already ignoring abilities).
+        SPECIES_TINKATON, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0961
         // Wugtrio's real abilities are Gooey (slot 0, now innate), Rattled (slot 1, still :white_large_square:
         // pending) and Sand Veil (slot 2, now innate). Its innate-redundant slot-0 Gooey -- unpinned by any test
@@ -2381,6 +2489,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // jettisoning fish: it heals on the Water moves its Fillet Away sweeper invites, alongside the innate
         // Sharpness slicing boost.
         SPECIES_VELUZA, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0977
+        // Dondozo: all real abilities (Unaware, Oblivious, Water Veil) now innate; slot-1 Oblivious and slot-2
+        // Water Veil are Ability()-pinned in the fork innate test, so its innate-redundant slot-0 Unaware takes
+        // Water Absorb -- :x: (never an innate -> stable) and thematic for the huge Water fish: it shrugs off Water
+        // moves and heals, a clean boon for its bulky Rest / Order Up sets, atop its always-on innate Unaware.
+        SPECIES_DONDOZO, 0,
         ABILITY_WATER_ABSORB
     },
     { // 0982
@@ -2464,6 +2580,16 @@ enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)
 {
     u32 i;
     bool32 foundSpecies = FALSE;
+
+    // FORK: gate the override table behind FEATURE_INNATE_ABILITIES, exactly like innates
+    // and the fork's other runtime features. TestInitConfigData() force-disables every fork
+    // FEATURE flag by default, so upstream tests see VANILLA ability slots -- an override can
+    // no longer rewrite a species' ability inside a test that does not opt in via WITH_CONFIG.
+    // Real builds default the flag TRUE, so gameplay/frontier behavior is unchanged. Overrides
+    // exist solely as the counterpart to innates (they hand a species a real chosen ability
+    // precisely because innates made its real slots redundant), so they share the one flag.
+    if (!GetConfig(FEATURE_INNATE_ABILITIES))
+        return ABILITY_NONE;
 
     if (!sSpeciesHasOverrideReady)
     {
