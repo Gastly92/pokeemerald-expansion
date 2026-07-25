@@ -79,10 +79,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0012
         // Butterfree's only real abilities (Compound Eyes, Tinted Lens) are BOTH now innate, so its EMPTY
-        // slot 1 takes Effect Spore — :x: (never an innate -> stable) and flavorful: the powder-scattering
-        // butterfly may poison/sleep/paralyze contact attackers, guarding its Quiver Dance setup.
+        // slot 1 takes Sheer Force -- :x: (never an innate -> stable). Effect Spore was moved off: under
+        // DETERMINISTIC_ABILITIES it always sleeps (drowsy) contact attackers, colliding with the set's own
+        // Sleep Powder for the single status slot. Sheer Force instead powers up its Air Slash / Bug Buzz.
         SPECIES_BUTTERFREE, 1,
-        ABILITY_EFFECT_SPORE
+        ABILITY_SHEER_FORCE
     },
     { // 0015
         // Beedrill: all real abilities now innate, so its empty slot takes a chosen
@@ -153,11 +154,21 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_WIGGLYTUFF, 0,
         ABILITY_SWEET_VEIL
     },
+    { // 0045
+        // Vileplume's real abilities are Chlorophyll (now innate) and Effect Spore. Effect Spore is a poor
+        // chosen slot here: under DETERMINISTIC_ABILITIES it always sleeps contact attackers, which is
+        // redundant with the set's own Sleep Powder. Its EMPTY slot 1 instead takes Solar Power -- :x:
+        // (never an innate -> stable) and self-synergistic with the innate Chlorophyll on a sun team.
+        SPECIES_VILEPLUME, 1,
+        ABILITY_SOLAR_POWER
+    },
     { // 0049
         // Venomoth: all real abilities now innate, so its innate-redundant slot-2 Wonder Skin takes a chosen
-        // Effect Spore (non-redundant). Slot 0 stays real Shield Dust -- ai_check_viability.c selects it.
+        // Sheer Force -- :x: (never an innate -> stable), powering up its Sludge Bomb / Bug Buzz. (Effect Spore
+        // was moved off: under DETERMINISTIC_ABILITIES it always sleeps contact attackers, colliding with the
+        // set's own Sleep Powder.) Slot 0 stays real Shield Dust -- ai_check_viability.c selects it.
         SPECIES_VENOMOTH, 2,
-        ABILITY_EFFECT_SPORE
+        ABILITY_SHEER_FORCE
     },
     { // 0051
         // Dugtrio's three real abilities (Sand Veil, Arena Trap, Sand Force) are ALL now innate. Slot-1 Arena
@@ -188,10 +199,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0071
         // Victreebel's only real abilities (Chlorophyll, Gluttony) are BOTH now innate, so its EMPTY slot 1
-        // takes Effect Spore -- :x: (never an innate -> stable) and flavorful for the carnivorous pitcher
-        // plant: contact attackers risk poison/sleep/paralysis, punishing the hits its Sleep Powder set invites.
+        // takes Sheer Force -- :x: (never an innate -> stable), powering up its Sludge Bomb. (Effect Spore was
+        // moved off: under DETERMINISTIC_ABILITIES it always sleeps contact attackers, colliding with the
+        // Singles set's own Sleep Powder for the single status slot; Sheer Force is safe on the physical set too.)
         SPECIES_VICTREEBEL, 1,
-        ABILITY_EFFECT_SPORE
+        ABILITY_SHEER_FORCE
     },
     { // 0073
         // Tentacruel's three real abilities (Clear Body, Liquid Ooze, Rain Dish) are ALL now innate; slots 0/1
@@ -438,10 +450,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0182
         // Bellossom's only real abilities (Chlorophyll, Healer) are BOTH now innate, so its EMPTY slot 1 takes
-        // Effect Spore -- :x: (never an innate -> stable) and flavorful for the flower dancer: contact attackers
-        // risk poison/sleep/paralysis from its petals, guarding its Quiver Dance setup (same pick as Butterfree).
+        // Solar Power -- :x: (never an innate -> stable) and self-synergistic with the innate Chlorophyll on a
+        // sun team, boosting its special Quiver Dance set. (Effect Spore was moved off: under
+        // DETERMINISTIC_ABILITIES it always sleeps contact attackers, redundant with the set's own Sleep Powder.)
         SPECIES_BELLOSSOM, 1,
-        ABILITY_EFFECT_SPORE
+        ABILITY_SOLAR_POWER
     },
     { // 0185
         // Sturdy and Rock Head now innate (slot-2 Rattled is pinned by rattled.c), so its innate-redundant
@@ -633,6 +646,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // draws in Water moves for a Sp. Atk boost + immunity, a clean boon for its Quiver Dance special sweeper.
         SPECIES_MASQUERAIN, 1,
         ABILITY_STORM_DRAIN
+    },
+    { // 0286
+        // Breloom's real abilities are Effect Spore, Poison Heal and Technician; the latter two are now innate.
+        // Its natural Effect Spore is a poor chosen slot: under DETERMINISTIC_ABILITIES it always sleeps contact
+        // attackers, redundant with the set's own Spore. Its innate-redundant slot-1 Poison Heal (kept as an
+        // innate, and unpinned by any test -- audited) takes Hustle instead -- :x: (never an innate -> stable):
+        // +50% Attack for the punching mushroom, its accuracy cost softened to a small PP tax under
+        // DETERMINISTIC_ACCURACY_EVASION. Slot 0 stays real Effect Spore (pinned by sleep_clause.c / safety_goggles.c).
+        SPECIES_BRELOOM, 1,
+        ABILITY_HUSTLE
     },
     { // 0291
         // Speed Boost and Infiltrator now innate, so its EMPTY slot 1 takes Tough Claws, an implemented
@@ -945,10 +968,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0416
-        // Vespiquen: all real abilities now innate, so its empty slot takes a chosen
-        // Effect Spore so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Vespiquen: all real abilities now innate, so its empty slot 1 takes Water Absorb -- :x: (never an
+        // innate -> stable) and a clean defensive boon for the Roost / Defog / Toxic staller (Water immunity +
+        // recovery). Effect Spore was moved off: under DETERMINISTIC_ABILITIES it always sleeps contact
+        // attackers, which pre-empts the set's own Toxic for the single status slot -- actively fighting the plan.
         SPECIES_VESPIQUEN, 1,
-        ABILITY_EFFECT_SPORE
+        ABILITY_WATER_ABSORB
     },
     { // 0419
         // Floatzel's only real abilities (Swift Swim, Water Veil) are BOTH now innate, so its EMPTY slot 1 takes
@@ -1464,6 +1489,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         // Head gains +30% and drops its flinch, stacking with the innate Shell Armor (no crits taken).
         SPECIES_ESCAVALIER, 2,
         ABILITY_SHEER_FORCE
+    },
+    { // 0591
+        // Amoonguss's real abilities are Effect Spore and Regenerator (now innate). Effect Spore is a poor chosen
+        // slot: under DETERMINISTIC_ABILITIES it always sleeps contact attackers, which pre-empts the Singles set's
+        // own Toxic (single status slot) and is redundant with the Doubles set's Spore. Its EMPTY slot 1 takes
+        // Water Absorb instead -- :x: (never an innate -> stable) and a defensive boon for the fungus pivot.
+        SPECIES_AMOONGUSS, 1,
+        ABILITY_WATER_ABSORB
     },
     { // 0594
         SPECIES_ALOMOMOLA, 2,
