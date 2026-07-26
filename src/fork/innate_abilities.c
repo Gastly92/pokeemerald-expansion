@@ -118,7 +118,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHARMANDER,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_MAGMA_ARMOR,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -127,7 +126,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BERSERK,
             ABILITY_BLAZE,
-            ABILITY_MAGMA_ARMOR,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -137,7 +135,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BERSERK,
             ABILITY_BLAZE,
             ABILITY_GALE_WINGS,
-            ABILITY_MAGMA_ARMOR,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -146,7 +143,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANGER_POINT,
             ABILITY_BLAZE,
-            ABILITY_MAGMA_ARMOR,
             ABILITY_RECKLESS,
             ABILITY_THERMAL_EXCHANGE,
             ABILITY_TOUGH_CLAWS
@@ -158,7 +154,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BERSERK,
             ABILITY_BLAZE,
             ABILITY_GALE_WINGS,
-            ABILITY_MAGMA_ARMOR,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -168,7 +163,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BERSERK,
             ABILITY_BLAZE,
             ABILITY_GALE_WINGS,
-            ABILITY_MAGMA_ARMOR,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -230,6 +224,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_LEVITATE,
+            ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
     },
@@ -237,6 +233,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE_GMAX,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_LEVITATE,
+            ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
     },
