@@ -2461,10 +2461,17 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Unimplemented."),
     },
 
-    [ABILITY_317] =
+    // FORK: first member of the "Affinity" ability family. On switch-in the holder gains a
+    // latent third type (here Psychic) for the rest of the battle -- it gets that type's STAB
+    // and resistances, but also its weaknesses. The type is applied at the GetBattlerTypes()
+    // chokepoint (src/fork/type_affinity.c), so STAB, matchups and the AI all see it; a
+    // switch-in popup + message announces it. The built-in downside (new weaknesses) is why
+    // this is a chosen ability, not a "pure boon" innate. See fork-docs/NEW_ABILITIES.md.
+    [ABILITY_PSYCHIC_AFFINITY] =
     {
-        .name = _("-------"),
-        .description = COMPOUND_STRING("No special ability."),
+        .name = _("Psychic Affinity"),
+        .description = COMPOUND_STRING("Also gains a Psychic type."),
+        .aiRating = 5,
     },
 
     [ABILITY_SPICY_SPRAY] =
