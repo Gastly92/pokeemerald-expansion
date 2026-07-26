@@ -180,7 +180,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Air Slash/Bug Buzz
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -200,7 +200,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_TAILWIND
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Air Slash/Bug Buzz
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -916,7 +916,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONBLAST
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (redundant deterministic sleep vs Sleep Powder); sun Sp.Atk w/ innate Chlorophyll
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -936,7 +936,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll now innate; chosen Effect Spore
+        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (redundant deterministic sleep vs Sleep Powder); sun Sp.Atk w/ innate Chlorophyll
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -958,7 +958,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_DRY_SKIN, // moved off Effect Spore (redundant deterministic sleep vs Spore); real slot, fungus flavor
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1000,7 +1000,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_EFFECT_SPORE, // all real abilities innate; chosen Effect Spore (non-redundant)
+        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Sludge Bomb/Bug Buzz
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1020,7 +1020,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUIVER_DANCE,
             MOVE_ROOST
         },
-        .ability = ABILITY_EFFECT_SPORE, // all real abilities innate; chosen Effect Spore (non-redundant)
+        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore; powers Sludge Bomb/Bug Buzz
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1522,7 +1522,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Gluttony now innate; chosen Effect Spore (override, empty slot 1)
+        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (shared override); safe on this physical set
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1542,7 +1542,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Gluttony now innate; chosen Effect Spore (override, empty slot 1)
+        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Sludge Bomb
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4621,7 +4621,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Healer now innate; chosen Effect Spore (override, empty slot 1)
+        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (shared override); sun Sp.Atk w/ innate Chlorophyll
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4641,7 +4641,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Healer now innate; chosen Effect Spore (override, empty slot 1)
+        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (redundant deterministic sleep vs Sleep Powder); sun Sp.Atk w/ innate Chlorophyll
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7197,7 +7197,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_ROCK_TOMB
         },
-        .ability = ABILITY_EFFECT_SPORE, // Technician now innate; chosen Effect Spore punishes contact attackers
+        .ability = ABILITY_HUSTLE, // moved off Effect Spore (redundant deterministic sleep vs Spore); +50% Atk, Poison Heal/Technician still innate
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7217,7 +7217,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_PUNCH,
             MOVE_SEED_BOMB
         },
-        .ability = ABILITY_EFFECT_SPORE, // Poison Heal now innate (Toxic Orb still procs the heal); chosen Effect Spore punishes contact
+        .ability = ABILITY_HUSTLE, // moved off Effect Spore (redundant deterministic sleep vs Spore); +50% Atk, Poison Heal still innate (Toxic Orb)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 236,
@@ -7237,7 +7237,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_EFFECT_SPORE, // Technician now innate; chosen Effect Spore punishes contact attackers
+        .ability = ABILITY_HUSTLE, // moved off Effect Spore (redundant deterministic sleep vs Spore); +50% Atk, Poison Heal/Technician still innate
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10017,7 +10017,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_EFFECT_SPORE, // all real abilities innate; chosen Effect Spore (non-redundant)
+        .ability = ABILITY_WATER_ABSORB, // moved off Effect Spore (deterministic sleep pre-empted its Toxic); Water immunity + recovery for the staller
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -14021,7 +14021,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_WATER_ABSORB, // moved off Effect Spore (redundant deterministic sleep vs Spore); defensive pivot
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14041,7 +14041,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLEAR_SMOG,
             MOVE_TOXIC
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_WATER_ABSORB, // moved off Effect Spore (deterministic sleep pre-empted its Toxic); defensive pivot
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18223,7 +18223,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_ILLUMINATE, // moved off Effect Spore (redundant deterministic sleep vs Spore); real slot, glowing-mushroom flavor
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
