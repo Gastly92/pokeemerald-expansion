@@ -78,10 +78,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0012
-        // Butterfree's only real abilities (Compound Eyes, Tinted Lens) are BOTH now innate, so its EMPTY
-        // slot 1 takes Sheer Force -- :x: (never an innate -> stable). Effect Spore was moved off: under
-        // DETERMINISTIC_ABILITIES it always sleeps (drowsy) contact attackers, colliding with the set's own
-        // Sleep Powder for the single status slot. Sheer Force instead powers up its Air Slash / Bug Buzz.
         SPECIES_BUTTERFREE, 1,
         ABILITY_SHEER_FORCE
     },
