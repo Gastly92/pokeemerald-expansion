@@ -7,6 +7,7 @@
 #include "battle_util.h"
 #include "battle_controllers.h"
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
+#include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -3384,6 +3385,15 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 BattleScriptCall(BattleScript_SwitchInAbilityMsg);
                 effect++;
             }
+            break;
+        // FORK: Affinity family (see src/fork/type_affinity.c). The latent third type is applied
+        // passively in GetBattlerTypes(); this only announces it on switch-in (popup + message).
+        case ABILITY_PSYCHIC_AFFINITY:
+            if (!shouldAbilityTrigger)
+                break;
+            PREPARE_TYPE_BUFFER(gBattleTextBuff1, GetAbilityAffinityType(gLastUsedAbility));
+            BattleScriptCall(BattleScript_TypeAffinityActivates);
+            effect++;
             break;
         case ABILITY_DRIZZLE:
             if (!shouldAbilityTrigger)
@@ -10986,6 +10996,11 @@ void GetBattlerTypes(enum BattlerId battler, bool32 ignoreTera, enum Type types[
     types[0] = gBattleMons[battler].types[0];
     types[1] = gBattleMons[battler].types[1];
     types[2] = gBattleMons[battler].types[2];
+
+    // FORK: an "Affinity" ability grants a latent third type in battle (src/fork/type_affinity.c).
+    // Placed after the Tera early-return above, so a Terastallized mon shows only its Tera type;
+    // it only fills an empty third slot, so type-changing moves keep precedence.
+    TryApplyTypeAffinity(battler, types);
 
     // Roost.
     if (!isTera && gBattleMons[battler].volatiles.roostActive)

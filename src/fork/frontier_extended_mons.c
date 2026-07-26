@@ -178,9 +178,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUIVER_DANCE,
             MOVE_BUG_BUZZ,
             MOVE_AIR_SLASH,
-            MOVE_SLEEP_POWDER
+            MOVE_PSYCHIC // Psychic Affinity grants Psychic type -> STAB; Bug + Flying + Psychic is only resisted by Steel
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_PSYCHIC_AFFINITY, // latent Psychic type; Air Slash keeps its DETERMINISTIC_FLINCH tempo, Focus Band hedges the added frailty
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

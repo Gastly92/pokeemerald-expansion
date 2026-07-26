@@ -895,6 +895,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     // STRINGID_* enum values, also appended at the end of include/constants/battle_string_ids.h.
     [STRINGID_EFFECTSPOREDROWSY]                    = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} grew drowsy!"), // Effect Spore victim is the attacker
     [STRINGID_HARVESTHPGAIN]                        = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} restored a little HP!"), // Harvest sun heal
+    [STRINGID_TYPEAFFINITYAWAKENED]                 = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX}'s affinity awakened its latent {B_BUFF1} type!"), // FORK: Affinity ability family
 };
 
 const u16 gTrainerUsedItemStringIds[] =

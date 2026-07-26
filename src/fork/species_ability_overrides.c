@@ -98,8 +98,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0012
+        // Butterfree's real abilities (Compound Eyes, Tinted Lens) are BOTH now innate, so its empty slot 1
+        // takes a chosen Psychic Affinity -- the fork's first "Affinity" ability (grants a latent Psychic type
+        // in battle; see src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md). It leans the scale-winged moth
+        // into its psychic flavour: its Quiver Dance set gains Psychic STAB (and Fighting/Psychic resistances)
+        // at the cost of new Dark/Ghost weaknesses. Maximally STABLE as a chosen pick -- an Affinity ability has
+        // a built-in downside, so it can NEVER become an innate (a fork innate is a pure boon), which means the
+        // Step 3.5 innate sweep never has to revisit it. Replaces a flavourless Sheer Force.
         SPECIES_BUTTERFREE, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_PSYCHIC_AFFINITY
     },
     { // 0015
         // Beedrill: all real abilities now innate, so its empty slot takes a chosen

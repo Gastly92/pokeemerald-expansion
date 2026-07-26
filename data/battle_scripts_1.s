@@ -5138,6 +5138,14 @@ BattleScript_SwitchInAbilityMsg::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: Affinity ability family (src/fork/type_affinity.c). Type name is pre-buffered into
+@ gBattleTextBuff1 by the ABILITYEFFECT_ON_SWITCHIN handler before this is called.
+BattleScript_TypeAffinityActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_TYPEAFFINITYAWAKENED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_ActivateAsOne::
 	call BattleScript_AbilityPopUp
 	printfromtable gSwitchInAbilityStringIds
