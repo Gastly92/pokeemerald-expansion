@@ -70,7 +70,23 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_GRASSY_SURGE
     },
     {
+        // Mega Venusaur's real ability slots are ALL Thick Fat ({THICK_FAT, THICK_FAT, THICK_FAT}), and
+        // Thick Fat is now handed to it as an innate instead, so its chosen slot is repurposed to Grassy
+        // Surge -- :x: (never an innate -> stable) and thematic, same pick as base Venusaur/Meganium/Celebi.
+        // A mega mon KEEPS the abilityNum it was built with on the base form: base Venusaur's Grassy Surge
+        // set resolves to slot 1 (its empty slot, overridden above), so on Mega Evolution the game reads
+        // VENUSAUR_MEGA at slot 1 -- NOT slot 0. Overriding only slot 0 would therefore be dead (the mon
+        // never reads it) and the mega would show its raw Thick Fat. Override ALL THREE identical slots so
+        // Grassy Surge is presented no matter which abilityNum the base set resolves to.
         SPECIES_VENUSAUR_MEGA, 0,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_VENUSAUR_MEGA, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_VENUSAUR_MEGA, 2,
         ABILITY_GRASSY_SURGE
     },
     { // 0006
