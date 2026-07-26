@@ -42,44 +42,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BULBASAUR,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_FILTER,
-            ABILITY_FLOWER_GIFT,
-            ABILITY_FLOWER_VEIL,
-            ABILITY_HARVEST,
-            ABILITY_LEAF_GUARD,
-            ABILITY_NATURAL_CURE,
-            ABILITY_OVERGROW,
-            ABILITY_POISON_HEAL,
-            ABILITY_REGENERATOR
+            ABILITY_OVERGROW
         )
     },
     { // 0002
         SPECIES_IVYSAUR,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_FILTER,
-            ABILITY_FLOWER_GIFT,
-            ABILITY_FLOWER_VEIL,
-            ABILITY_HARVEST,
             ABILITY_LEAF_GUARD,
-            ABILITY_NATURAL_CURE,
-            ABILITY_OVERGROW,
-            ABILITY_POISON_HEAL,
-            ABILITY_REGENERATOR
+            ABILITY_OVERGROW
         )
     },
     { // 0003
         SPECIES_VENUSAUR,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_FILTER,
-            ABILITY_FLOWER_GIFT,
-            ABILITY_FLOWER_VEIL,
-            ABILITY_HARVEST,
             ABILITY_LEAF_GUARD,
-            ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
     },
@@ -87,14 +66,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VENUSAUR_MEGA,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_FILTER,
-            ABILITY_FLOWER_GIFT,
-            ABILITY_FLOWER_VEIL,
-            ABILITY_HARVEST,
             ABILITY_LEAF_GUARD,
-            ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR,
             ABILITY_THICK_FAT
         )
@@ -103,79 +76,50 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VENUSAUR_GMAX,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_FILTER,
-            ABILITY_FLOWER_GIFT,
-            ABILITY_FLOWER_VEIL,
-            ABILITY_HARVEST,
             ABILITY_LEAF_GUARD,
-            ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
     },
     { // 0004
         SPECIES_CHARMANDER,
         INNATES(
-            ABILITY_BLAZE,
-            ABILITY_MAGMA_ARMOR,
-            ABILITY_THERMAL_EXCHANGE
+            ABILITY_BLAZE
         )
     },
     { // 0005
         SPECIES_CHARMELEON,
         INNATES(
-            ABILITY_BERSERK,
-            ABILITY_BLAZE,
-            ABILITY_MAGMA_ARMOR,
-            ABILITY_THERMAL_EXCHANGE
+            ABILITY_BLAZE
         )
     },
     { // 0006
         SPECIES_CHARIZARD,
         INNATES(
-            ABILITY_BERSERK,
-            ABILITY_BLAZE,
-            ABILITY_GALE_WINGS,
-            ABILITY_MAGMA_ARMOR,
-            ABILITY_THERMAL_EXCHANGE
+            ABILITY_BLAZE
         )
     },
     { // 0006
         SPECIES_CHARIZARD_MEGA_X,
         INNATES(
-            ABILITY_ANGER_POINT,
-            ABILITY_BLAZE,
-            ABILITY_MAGMA_ARMOR,
-            ABILITY_RECKLESS,
-            ABILITY_THERMAL_EXCHANGE,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_BLAZE
         )
     },
     { // 0006
         SPECIES_CHARIZARD_MEGA_Y,
         INNATES(
-            ABILITY_BERSERK,
-            ABILITY_BLAZE,
-            ABILITY_GALE_WINGS,
-            ABILITY_MAGMA_ARMOR,
-            ABILITY_THERMAL_EXCHANGE
+            ABILITY_BLAZE
         )
     },
     { // 0006
         SPECIES_CHARIZARD_GMAX,
         INNATES(
-            ABILITY_BERSERK,
-            ABILITY_BLAZE,
-            ABILITY_GALE_WINGS,
-            ABILITY_MAGMA_ARMOR,
-            ABILITY_THERMAL_EXCHANGE
+            ABILITY_BLAZE
         )
     },
     { // 0007
         SPECIES_SQUIRTLE,
         INNATES(
-            ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
@@ -183,8 +127,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0008
         SPECIES_WARTORTLE,
         INNATES(
-            ABILITY_RAIN_DISH,
-            ABILITY_REGENERATOR,
             ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
@@ -192,44 +134,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0009
         SPECIES_BLASTOISE,
         INNATES(
-            ABILITY_RAIN_DISH,
-            ABILITY_REGENERATOR,
             ABILITY_SHELL_ARMOR,
-            ABILITY_STAMINA,
             ABILITY_TORRENT
         )
     },
     { // 0009
         SPECIES_BLASTOISE_MEGA,
         INNATES(
-            ABILITY_MEGA_LAUNCHER,
-            ABILITY_RAIN_DISH,
-            ABILITY_REGENERATOR,
             ABILITY_SHELL_ARMOR,
-            ABILITY_STAMINA,
             ABILITY_TORRENT
         )
     },
     { // 0009
         SPECIES_BLASTOISE_GMAX,
         INNATES(
-            ABILITY_RAIN_DISH,
-            ABILITY_REGENERATOR,
             ABILITY_SHELL_ARMOR,
-            ABILITY_STAMINA,
             ABILITY_TORRENT
-        )
-    },
-    { // 0010
-        SPECIES_CATERPIE,
-        INNATES(
-            ABILITY_SHIELD_DUST
         )
     },
     { // 0012
         SPECIES_BUTTERFREE,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_LEVITATE,
             ABILITY_TINTED_LENS
         )
     },
@@ -237,13 +164,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE_GMAX,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_LEVITATE,
             ABILITY_TINTED_LENS
-        )
-    },
-    { // 0013
-        SPECIES_WEEDLE,
-        INNATES(
-            ABILITY_SHIELD_DUST
         )
     },
     { // 0015
@@ -256,7 +178,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0015
         SPECIES_BEEDRILL_MEGA,
         INNATES(
-            ABILITY_ADAPTABILITY,
             ABILITY_SNIPER,
             ABILITY_SWARM
         )

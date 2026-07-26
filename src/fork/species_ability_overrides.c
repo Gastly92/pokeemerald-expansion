@@ -69,6 +69,26 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VENUSAUR, 1,
         ABILITY_GRASSY_SURGE
     },
+    {
+        // Mega Venusaur's real ability slots are ALL Thick Fat ({THICK_FAT, THICK_FAT, THICK_FAT}), and
+        // Thick Fat is now handed to it as an innate instead, so its chosen slot is repurposed to Grassy
+        // Surge -- :x: (never an innate -> stable) and thematic, same pick as base Venusaur/Meganium/Celebi.
+        // A mega mon KEEPS the abilityNum it was built with on the base form: base Venusaur's Grassy Surge
+        // set resolves to slot 1 (its empty slot, overridden above), so on Mega Evolution the game reads
+        // VENUSAUR_MEGA at slot 1 -- NOT slot 0. Overriding only slot 0 would therefore be dead (the mon
+        // never reads it) and the mega would show its raw Thick Fat. Override ALL THREE identical slots so
+        // Grassy Surge is presented no matter which abilityNum the base set resolves to.
+        SPECIES_VENUSAUR_MEGA, 0,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_VENUSAUR_MEGA, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_VENUSAUR_MEGA, 2,
+        ABILITY_GRASSY_SURGE
+    },
     { // 0006
         SPECIES_CHARIZARD, 1,
         ABILITY_FLASH_FIRE
@@ -78,10 +98,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0012
-        // Butterfree's only real abilities (Compound Eyes, Tinted Lens) are BOTH now innate, so its EMPTY
-        // slot 1 takes Sheer Force -- :x: (never an innate -> stable). Effect Spore was moved off: under
-        // DETERMINISTIC_ABILITIES it always sleeps (drowsy) contact attackers, colliding with the set's own
-        // Sleep Powder for the single status slot. Sheer Force instead powers up its Air Slash / Bug Buzz.
         SPECIES_BUTTERFREE, 1,
         ABILITY_SHEER_FORCE
     },

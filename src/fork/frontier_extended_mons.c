@@ -108,26 +108,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAT_ROCK,
-        .moves =
-        {
-            MOVE_FIRE_BLAST,
-            MOVE_SOLAR_BEAM,
-            MOVE_AIR_SLASH,
-            MOVE_DRAGON_PULSE
-        },
-        .ability = ABILITY_FLASH_FIRE,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FIRE,
-    },
-    {
-        .species = SPECIES_CHARIZARD,
-        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
@@ -144,6 +124,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
+    },
+    {
+        .species = SPECIES_CHARIZARD,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_FIRE_BLAST,
+            MOVE_SOLAR_BEAM,
+            MOVE_AIR_SLASH,
+            MOVE_DRAGON_PULSE
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
     },
 
     // 0009
@@ -171,7 +171,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0012
     {
         .species = SPECIES_BUTTERFREE,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
@@ -180,31 +180,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Air Slash/Bug Buzz
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_BUG,
-    },
-    {
-        .species = SPECIES_BUTTERFREE,
-        .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB,
-        .moves =
-        {
-            MOVE_BUG_BUZZ,
-            MOVE_AIR_SLASH,
-            MOVE_SLEEP_POWDER,
-            MOVE_TAILWIND
-        },
-        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Air Slash/Bug Buzz
-        .nature = NATURE(SPA_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 4,
-            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_BUG,

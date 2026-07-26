@@ -2827,7 +2827,8 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Oblivious user keeps it vi
 // FORK: explicit Mega-form innate rows (src/fork/innate_abilities.c). A Mega form does NOT
 // inherit its base species' innates automatically — each Mega that should keep them has its
 // own row, mirroring the base creature's innate list as a pure boon (e.g. Mega Venusaur keeps
-// Overgrow/Chlorophyll/etc. even though its real ability is Thick Fat). Grounded Megas are the
+// Overgrow/Chlorophyll/etc. and additionally gains Thick Fat as an innate, since its chosen slot
+// is repurposed to Grassy Surge via a fork override). Grounded Megas are the
 // deliberate exceptions: Mega Gengar gets NO row (Levitate was its only inheritable innate, and
 // it must not float), and Mega Mewtwo X keeps only the non-floating boon (Pressure), dropping
 // Levitate. These are pure data-lookup tests, in the species_tiers.c forme-resolution style.
@@ -2835,9 +2836,10 @@ TEST("Innate abilities: Mega Venusaur carries the same innates as base Venusaur"
 {
     EXPECT(SpeciesHasInnate(SPECIES_VENUSAUR_MEGA, ABILITY_OVERGROW));
     EXPECT(SpeciesHasInnate(SPECIES_VENUSAUR_MEGA, ABILITY_CHLOROPHYLL));
-    EXPECT(SpeciesHasInnate(SPECIES_VENUSAUR_MEGA, ABILITY_FILTER));
-    EXPECT(SpeciesHasInnate(SPECIES_VENUSAUR_MEGA, ABILITY_NATURAL_CURE));
+    EXPECT(SpeciesHasInnate(SPECIES_VENUSAUR_MEGA, ABILITY_LEAF_GUARD));
     EXPECT(SpeciesHasInnate(SPECIES_VENUSAUR_MEGA, ABILITY_REGENERATOR));
+    // Mega Venusaur additionally gains Thick Fat (its signature ability) as an innate boon.
+    EXPECT(SpeciesHasInnate(SPECIES_VENUSAUR_MEGA, ABILITY_THICK_FAT));
     // Both Charizard Megas keep base Charizard's Blaze.
     EXPECT(SpeciesHasInnate(SPECIES_CHARIZARD_MEGA_X, ABILITY_BLAZE));
     EXPECT(SpeciesHasInnate(SPECIES_CHARIZARD_MEGA_Y, ABILITY_BLAZE));
@@ -5893,10 +5895,10 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rain Dish heals 1/16 max HP
     PARAMETRIZE { enabled = TRUE; }
     PARAMETRIZE { enabled = FALSE; }
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_BLASTOISE, ABILITY_RAIN_DISH));
+        ASSUME(SpeciesHasInnate(SPECIES_TENTACRUEL, ABILITY_RAIN_DISH));
         ASSUME(GetMoveWeatherType(MOVE_RAIN_DANCE) == BATTLE_WEATHER_RAIN);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_BLASTOISE) { Ability(ABILITY_TORRENT); HP(1); MaxHP(160); } // chosen differs from innate Rain Dish
+        PLAYER(SPECIES_TENTACRUEL) { Ability(ABILITY_CLEAR_BODY); HP(1); MaxHP(160); } // chosen differs from innate Rain Dish
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
         TURN { MOVE(opponent, MOVE_RAIN_DANCE); }
