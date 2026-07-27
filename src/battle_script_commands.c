@@ -7930,6 +7930,16 @@ static void Cmd_setfocusenergy(void)
             gBattleMons[battler].volatiles.focusEnergy = TRUE;
         else
             gBattleMons[battler].volatiles.dragonCheer = TRUE;
+        // FORK: under DETERMINISTIC_CRITICAL_HITS the +2 crit stage set above can never reach 1/1 on its own,
+        // so Focus Energy also arms a one-shot guaranteed crit on the user's next attack by reusing Laser
+        // Focus's volatile + timer (which clears itself). Scoped to the Focus Energy move (not Dragon Cheer);
+        // the +stage boost still applies for later-turn crit-stacking. See CalcCritChanceStage.
+        if (GetConfig(DETERMINISTIC_CRITICAL_HITS) && effect == EFFECT_FOCUS_ENERGY
+         && gBattleMons[battler].volatiles.focusEnergy)
+        {
+            gBattleMons[battler].volatiles.laserFocus = TRUE;
+            gBattleMons[battler].volatiles.laserFocusTimer = B_LASER_FOCUS_TIMER;
+        }
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_GETTING_PUMPED;
     }
     gBattlescriptCurrInstr = cmd->nextInstr;
