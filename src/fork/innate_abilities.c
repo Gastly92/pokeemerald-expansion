@@ -100,9 +100,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0006
+        // Mega Charizard X: add its canon ABILITY_TOUGH_CLAWS as an innate. Like Mega Beedrill/Venusaur, the
+        // override table repurposes all of Mega X's real slots to Flash Fire (carrying base Charizard's chosen
+        // ability forward), so Tough Claws survives Mega Evolution only as an innate. (Mega Y is left alone --
+        // its canon Drought is not an implemented innate, so it cannot be carried forward this way.)
         SPECIES_CHARIZARD_MEGA_X,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0006
@@ -139,8 +144,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0009
+        // Mega Blastoise: add its canon ABILITY_MEGA_LAUNCHER as an innate (still boosts pulse/aura moves when
+        // innate). The override table repurposes all of Mega Blastoise's real slots to Water Absorb (carrying
+        // base Blastoise's chosen ability forward, the Mega Venusaur pattern), so Mega Launcher would otherwise
+        // be lost on Mega Evolution.
         SPECIES_BLASTOISE_MEGA,
         INNATES(
+            ABILITY_MEGA_LAUNCHER,
             ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
@@ -171,15 +181,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0015
         SPECIES_BEEDRILL,
         INNATES(
+            ABILITY_MERCILESS,
             ABILITY_SNIPER,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0015
+        // Mega Beedrill: mirror the base's precision-striker kit and add its canon ABILITY_ADAPTABILITY.
+        // Adaptability is meaningful as an innate here (not redundant) because the override table repurposes
+        // ALL of Mega Beedrill's real slots to Poison Point (carrying the base's chosen ability forward, the
+        // Mega Venusaur pattern), so its canon Adaptability would otherwise be lost on Mega Evolution.
         SPECIES_BEEDRILL_MEGA,
         INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_MERCILESS,
             ABILITY_SNIPER,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0016

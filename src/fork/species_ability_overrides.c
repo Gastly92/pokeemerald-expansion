@@ -85,8 +85,37 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CHARIZARD, 1,
         ABILITY_FLASH_FIRE
     },
+    // Carry base Charizard's chosen Flash Fire forward onto Mega X (all real slots), the Mega Venusaur pattern.
+    // Mega X's canon Tough Claws is preserved as an innate (see innate_abilities.c). Mega Y is intentionally NOT
+    // carried forward -- its Drought is not an implemented innate, so overriding it would delete Drought for good.
+    {
+        SPECIES_CHARIZARD_MEGA_X, 0,
+        ABILITY_FLASH_FIRE
+    },
+    {
+        SPECIES_CHARIZARD_MEGA_X, 1,
+        ABILITY_FLASH_FIRE
+    },
+    {
+        SPECIES_CHARIZARD_MEGA_X, 2,
+        ABILITY_FLASH_FIRE
+    },
     { // 0009
         SPECIES_BLASTOISE, 1,
+        ABILITY_WATER_ABSORB
+    },
+    // Carry base Blastoise's chosen Water Absorb forward onto its Mega (all real slots); Mega Launcher is
+    // preserved as an innate (see innate_abilities.c).
+    {
+        SPECIES_BLASTOISE_MEGA, 0,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_BLASTOISE_MEGA, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_BLASTOISE_MEGA, 2,
         ABILITY_WATER_ABSORB
     },
     { // 0012
@@ -95,6 +124,20 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0015
         SPECIES_BEEDRILL, 1,
+        ABILITY_POISON_POINT
+    },
+    // Carry base Beedrill's chosen Poison Point forward onto its Mega (all real slots), the Mega Venusaur
+    // pattern; Mega Beedrill's canon Adaptability is preserved as an innate (see innate_abilities.c).
+    {
+        SPECIES_BEEDRILL_MEGA, 0,
+        ABILITY_POISON_POINT
+    },
+    {
+        SPECIES_BEEDRILL_MEGA, 1,
+        ABILITY_POISON_POINT
+    },
+    {
+        SPECIES_BEEDRILL_MEGA, 2,
         ABILITY_POISON_POINT
     },
     { // 0018

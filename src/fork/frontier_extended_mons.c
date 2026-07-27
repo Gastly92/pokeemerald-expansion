@@ -231,6 +231,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    {
+        // Precision striker: Poison Jab poisons, then innate Merciless auto-crits the target and innate Sniper
+        // makes each crit 2.25x -- a setup-free guaranteed-crit engine under DETERMINISTIC_CRITICAL_HITS. Scope
+        // Lens lands a guaranteed crit on the very first hit (before poison lands), Technician boosts its
+        // signature Twineedle, and it Mega Evolves into Adaptability STAB turn one.
+        .species = SPECIES_BEEDRILL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SCOPE_LENS, // Mega Beedrill (Adaptability); guaranteed first-hit crit, then Merciless takes over
+        .moves =
+        {
+            MOVE_TWINEEDLE,
+            MOVE_POISON_JAB,
+            MOVE_X_SCISSOR,
+            MOVE_DRILL_RUN
+        },
+        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_BUG,
+    },
 
     // 0018
     {
