@@ -8994,7 +8994,16 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
           || MoveAlwaysCrits(ctx->move)
           || ((ctx->abilities[ctx->battlerAtk] == ABILITY_MERCILESS
             || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_MERCILESS)))
-              && gBattleMons[ctx->battlerDef].status1 & STATUS1_PSN_ANY))
+              && gBattleMons[ctx->battlerDef].status1 & STATUS1_PSN_ANY)
+          // FORK: DETERMINISTIC_CRITICAL_HITS strips the random crit roll, so Super Luck's +1 crit stage would
+          // never reach 1/1 on its own. Under the flag it instead guarantees a crit on the user's FIRST turn on
+          // the field, mirroring the fork's deterministic Stench (AbilityBattleEffects); its +1 crit stage (added
+          // below) still applies every turn, so it keeps contributing to crit-stacking on later turns. (Focus
+          // Energy's deterministic one-shot crit is armed at use via Laser Focus's volatile; see Cmd_setfocusenergy.)
+          || ((ctx->abilities[ctx->battlerAtk] == ABILITY_SUPER_LUCK
+            || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK)))
+           && GetConfig(DETERMINISTIC_CRITICAL_HITS)
+           && IsBattlersFirstTurn(ctx->battlerAtk)))
     {
         critChance = CRITICAL_HIT_ALWAYS;
     }
