@@ -9000,9 +9000,9 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
           // the field, mirroring the fork's deterministic Stench (AbilityBattleEffects); its +1 crit stage (added
           // below) still applies every turn, so it keeps contributing to crit-stacking on later turns. (Focus
           // Energy's deterministic one-shot crit is armed at use via Laser Focus's volatile; see Cmd_setfocusenergy.)
-          || (GetConfig(DETERMINISTIC_CRITICAL_HITS)
-           && (ctx->abilities[ctx->battlerAtk] == ABILITY_SUPER_LUCK
+          || ((ctx->abilities[ctx->battlerAtk] == ABILITY_SUPER_LUCK
             || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK)))
+           && GetConfig(DETERMINISTIC_CRITICAL_HITS)
            && IsBattlersFirstTurn(ctx->battlerAtk)))
     {
         critChance = CRITICAL_HIT_ALWAYS;
