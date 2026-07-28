@@ -36,13 +36,18 @@ and enhancements."*
 For each species/form in the line:
 
 1. **Read the existing `INNATES(...)` row.** Does the set make flavorful sense
-   for the creature? (Venusaur carrying Chlorophyll / Filter / Flower Gift /
-   Flower Veil / Harvest / Leaf Guard / Natural Cure / Overgrow / Poison Heal /
-   Regenerator is on-theme grass/poison plant flavor.)
+   for the creature? (Venusaur carrying Chlorophyll / Leaf Guard / Overgrow /
+   Regenerator is on-theme grass/poison plant flavor — its own abilities plus a
+   sun/plant guard and a plant's regrowth. Note two abilities that *look* on-type
+   but read wrong here: Natural Cure is a nurturing-healer trait (Celebi/Chansey),
+   not a plant's, and Poison Heal is dead weight on a Poison-type that can't be
+   poisoned — flavor fit is about how an ability *reads on this creature*, not
+   just sharing a type.)
 2. **Aim for a GENEROUS set — but gate every pick on genuine flavor fit.** A
    base-stage line usually shouldn't sit at just its type ability (Blaze/Torrent);
-   the fork is happy to stack many innates (Venusaur carries **ten**, Mega adds
-   an eleventh). BUT "many" is not "any" — each pick must read as *this* creature.
+   the fork is happy to stack several innates (Venusaur carries **four** —
+   Chlorophyll, Leaf Guard, Overgrow, Regenerator — and Mega adds a fifth, Thick
+   Fat). BUT "several" is not "any" — each pick must read as *this* creature.
    The test: measure the ability against how it reads on its **established
    users**. Intimidate belongs to menacing-presence bruisers (Gyarados, Salamence,
    Arcanine, Incineroar); handing it to a proud fire-flyer that *burns* rather than
