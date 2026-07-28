@@ -283,6 +283,42 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a super-effective/STAB high-crit
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a Scope Lens saved by a gate crit fires on the next non-qualifying attack")
+{
+    // The lens is deferred, not disabled: a Psychic user (no Dark/Normal STAB) crits turn 1
+    // via the super-effective gate (Dark vs Psychic) and keeps the lens; turn 2's neutral,
+    // non-STAB Slash no longer crits from the gate, so the lens fires its one-shot crit and
+    // is spent; turn 3 has no lens and no gate, so it doesn't crit.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(GetMoveCriticalHitStage(MOVE_NIGHT_SLASH) == 1);
+        ASSUME(GetMoveCriticalHitStage(MOVE_SLASH) == 1);
+        ASSUME(GetMoveType(MOVE_NIGHT_SLASH) == TYPE_DARK);
+        ASSUME(GetMoveType(MOVE_SLASH) == TYPE_NORMAL);
+        ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_SCOPE_LENS); Speed(100); }                            // Psychic: no Dark/Normal STAB
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); } // Psychic: Dark is SE, Normal neutral
+    } WHEN {
+        TURN { MOVE(player, MOVE_NIGHT_SLASH); MOVE(opponent, MOVE_CELEBRATE); } // SE gate crit -> lens saved
+        TURN { MOVE(player, MOVE_SLASH);       MOVE(opponent, MOVE_CELEBRATE); } // not SE / not STAB -> lens fires
+        TURN { MOVE(player, MOVE_SLASH);       MOVE(opponent, MOVE_CELEBRATE); } // lens gone -> no crit
+    } SCENE {
+        // Turn 1: super effective Night Slash crits via the gate, lens untouched.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NIGHT_SLASH, player);
+        MESSAGE("A critical hit!");
+        // Turn 2: neutral non-STAB Slash no longer crits from the gate, so the lens fires and is consumed.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SLASH, player);
+        MESSAGE("A critical hit!");
+        MESSAGE("The Scope Lens was used up…");
+        // Turn 3: lens gone, no crit.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SLASH, player);
+        NONE_OF { MESSAGE("A critical hit!"); }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Flinch items (King's Rock family)
 // ---------------------------------------------------------------------------
