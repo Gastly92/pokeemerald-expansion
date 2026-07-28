@@ -145,3 +145,37 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_CRITICAL_HITS: stacking the crit ratio to 1/1 
     }
 }
 
+DOUBLE_BATTLE_TEST("DETERMINISTIC_CRITICAL_HITS: Dragon Cheer arms a one-shot crit on the ally's next attack only")
+{
+    // Like Focus Energy, Dragon Cheer arms the ally's next attack (reusing Laser Focus's
+    // volatile) instead of a dead crit-stage boost. Parametrized over both arming branches:
+    // a non-Dragon ally gets the +1 (dragonCheer volatile), a Dragon ally the +2 (focusEnergy).
+    u32 allySpecies;
+    PARAMETRIZE { allySpecies = SPECIES_WOBBUFFET; } // non-Dragon: dragonCheer volatile
+    PARAMETRIZE { allySpecies = SPECIES_DRATINI; }   // Dragon: focusEnergy volatile
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(GetMoveEffect(MOVE_DRAGON_CHEER) == EFFECT_DRAGON_CHEER);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_DRAGON_CHEER, MOVE_CELEBRATE); }
+        PLAYER(allySpecies) { Speed(99); MaxHP(600); HP(600); Moves(MOVE_SCRATCH, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_DRAGON_CHEER, target: playerRight); MOVE(playerRight, MOVE_CELEBRATE);
+               MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(opponentRight, MOVE_CELEBRATE); }
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_SCRATCH, target: opponentLeft);
+               MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(opponentRight, MOVE_CELEBRATE); }
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_SCRATCH, target: opponentLeft);
+               MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(opponentRight, MOVE_CELEBRATE); }
+    } SCENE {
+        // Turn 1: the ally is cheered but doesn't attack.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_DRAGON_CHEER, playerLeft);
+        // Turn 2: the armed next-attack crit lands.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, playerRight);
+        MESSAGE("A critical hit!");
+        // Turn 3: the volatile has cleared, so no crit follows.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, playerRight);
+        NONE_OF { MESSAGE("A critical hit!"); }
+    }
+}
+

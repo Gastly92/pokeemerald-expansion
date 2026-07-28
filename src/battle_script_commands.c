@@ -7911,6 +7911,9 @@ static void Cmd_setfocusenergy(void)
     CMD_ARGS(u8 battler);
     enum BattlerId battler = GetBattlerForBattleScript(cmd->battler);
     enum BattleMoveEffects effect = GetMoveEffect(gCurrentMove);
+    // FORK: DETERMINISTIC_CRITICAL_HITS — remember whether a crit volatile was already up, so the one-shot
+    // arming below only fires when THIS use actually sets one (not on a failed re-use of an already-pumped mon).
+    bool32 hadCritVolatile = gBattleMons[battler].volatiles.focusEnergy || gBattleMons[battler].volatiles.dragonCheer;
 
     if ((effect == EFFECT_DRAGON_CHEER && (!(IsDoubleBattle()) || (gAbsentBattlerFlags & (1u << battler))))
          || gBattleMons[battler].volatiles.dragonCheer || gBattleMons[battler].volatiles.focusEnergy)
@@ -7930,17 +7933,20 @@ static void Cmd_setfocusenergy(void)
             gBattleMons[battler].volatiles.focusEnergy = TRUE;
         else
             gBattleMons[battler].volatiles.dragonCheer = TRUE;
-        // FORK: under DETERMINISTIC_CRITICAL_HITS the +2 crit stage set above can never reach 1/1 on its own,
-        // so Focus Energy also arms a one-shot guaranteed crit on the user's next attack by reusing Laser
-        // Focus's volatile + timer (which clears itself). Scoped to the Focus Energy move (not Dragon Cheer);
-        // the +stage boost still applies for later-turn crit-stacking. See CalcCritChanceStage.
-        if (GetConfig(DETERMINISTIC_CRITICAL_HITS) && effect == EFFECT_FOCUS_ENERGY
-         && gBattleMons[battler].volatiles.focusEnergy)
-        {
-            gBattleMons[battler].volatiles.laserFocus = TRUE;
-            gBattleMons[battler].volatiles.laserFocusTimer = B_LASER_FOCUS_TIMER;
-        }
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_GETTING_PUMPED;
+    }
+    // FORK: under DETERMINISTIC_CRITICAL_HITS the crit-stage boost set above (Focus Energy's +2, Dragon Cheer's
+    // +1, or +2 for a Dragon-type ally) can never reach 1/1 on its own, so both moves also arm a one-shot
+    // guaranteed crit on the affected battler's next attack by reusing Laser Focus's volatile + timer (which
+    // clears itself). Gated on the volatile having just been set this use (hadCritVolatile was false) so a
+    // failed re-use doesn't re-arm; the +stage boost still applies for later-turn crit-stacking. See
+    // CalcCritChanceStage.
+    if (GetConfig(DETERMINISTIC_CRITICAL_HITS) && !hadCritVolatile
+     && (effect == EFFECT_FOCUS_ENERGY || effect == EFFECT_DRAGON_CHEER)
+     && (gBattleMons[battler].volatiles.focusEnergy || gBattleMons[battler].volatiles.dragonCheer))
+    {
+        gBattleMons[battler].volatiles.laserFocus = TRUE;
+        gBattleMons[battler].volatiles.laserFocusTimer = B_LASER_FOCUS_TIMER;
     }
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
