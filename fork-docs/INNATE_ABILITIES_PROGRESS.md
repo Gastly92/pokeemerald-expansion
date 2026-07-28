@@ -1,11 +1,29 @@
-## Innate Abilities Progress
+## Ability reference for the extended frontier roster
 
-Legend: :white_check_mark: done · :white_large_square: pending (on track) ·
-:x: rejected (won't be wired). Every ability is now resolved (no `:white_large_square:`
-rows remain); see [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) for the per-ability
-wiring reference and the rationale for the `:x:` set.
+**This doc has been retired as a progress tracker** — the innate-abilities feature
+is complete (every ability below is resolved), so there is no more "pending" state
+to track. It is **repurposed** as the ability reference for filling out the
+extended frontier roster (`src/fork/frontier_extended_mons.c`) and its companion
+overrides (`src/fork/species_ability_overrides.c`). When authoring a set or a
+line review, use it to place each ability into one of two buckets:
 
-| Status | Ability | Description |
+Legend:
+- :white_check_mark: **implemented innate** — the ability is wired and can be
+  handed to a species as an always-on innate in `src/fork/innate_abilities.c`
+  (the allowlist / source of truth is `sImplementedInnates[]` in
+  `test/fork/innate_abilities.c`). It is *not* a stable override pick: a set's
+  chosen `.ability` must never duplicate one of the species' own innates.
+- :x: **rejected as an innate** — deliberately never wired as an innate, so it is
+  a **stable species-ability-override pick**: a set can select it as its chosen
+  ability without it ever colliding with a future innate. Prefer these for
+  `species_ability_overrides.c` rows (see that file's "pick a stable chosen
+  ability" note and [`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2).
+
+Every ability is resolved (no pending rows remain). See
+[`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) for the per-ability wiring reference
+and the rationale for the `:x:` set.
+
+| Use | Ability | Description |
 | :---: | :---: | :--- |
 | :white_check_mark: | Stench | When the Pokémon deals damage with its moves, there is a 10% chance that targets will flinch. |
 | :x: | Drizzle | Summons rain for 5 turns when the Pokémon enters a battle. |
