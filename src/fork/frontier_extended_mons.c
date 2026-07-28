@@ -109,7 +109,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_POLLEN_PUFF
+            MOVE_POLLEN_PUFF,
             MOVE_RAGE_POWDER,
             MOVE_GIGA_DRAIN,
             MOVE_SLEEP_POWDER
