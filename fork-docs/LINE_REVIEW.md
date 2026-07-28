@@ -74,6 +74,10 @@ For each species/form in the line:
      to how its Factory set actually plays (see the free-gimmicks note in Step 3):
      the physical Mega X set leads with Flare Blitz, so `RECKLESS` there is *live*,
      not just flavor; a special Mega Y wants `BERSERK` (Sp. Atk) not a physical boost.
+     **When the Mega's own ability is itself an implemented innate** (e.g. Mega
+     Venusaur's Thick Fat), adding it as an innate here means the Mega's single
+     observable slot would waste on a duplicate — so pair this with an override on
+     the Mega form that matches the base form's chosen ability (see Step 2, point 4).
    - **Watch grounded forms:** a form that shouldn't float must not inherit
      `LEVITATE` (see the Mega Gengar / Mega Mewtwo X notes in the file header).
 
@@ -109,7 +113,22 @@ line:
    a "Mega X" set is dead weight — the set is Mega X within a turn and has Tough
    Claws for real. Overrides earn their keep for mons whose chosen trait must be
    observable *without* transforming, not for pre-transform placeholders.
-4. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
+4. **DO override a MEGA form to match the base form when the Mega's own ability
+   is already an innate.** Per Step 1, a Mega mirrors the base's innates and adds
+   its own signature ability. When that signature is an *implemented* innate, the
+   Mega already carries it as an always-on innate — so the Mega's single
+   observable ability slot would otherwise default to that same ability, a wasted
+   duplicate (exactly what Step 2's point 1 forbids). The fix: override **every
+   real slot** of the Mega form to the **base form's chosen override ability**, so
+   the base's observable trait persists through the transformation instead of
+   collapsing into the now-innate Mega ability. Worked example — the whole
+   Venusaur pattern: base Venusaur overrides to `GRASSY_SURGE`; Mega Venusaur adds
+   `THICK_FAT` as an innate (Step 1) **and** overrides slots 0/1/2 to
+   `GRASSY_SURGE`. A set authored on base Venusaur shows Grassy Surge, Megas turn
+   one, and *still* shows Grassy Surge — now with Thick Fat live on top. (Contrast
+   point 3: that's about not handing a *base* form its Mega's ability; this is
+   handing the *Mega* the base's ability so the observable trait carries over.)
+5. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
    `// <dex>` comment; forms share the base number and follow it.
 
 **Verify:** `make check TESTS="Frontier extended roster"` — two tests enforce the
@@ -121,16 +140,42 @@ actually selects, so a new override row is best paired with a set that uses it.
 
 ## Step 3 — Frontier sets (`src/fork/frontier_extended_mons.c`)
 
-The Battle Factory movesets have **no restrictions** — any move (flavor, gimmick,
-or power) is fair game, and sets need not be competitive. This is the most
-open-ended, creative step.
+The Battle Factory movesets have **no move-legality restrictions** — *any* move
+is fair game, the only bar being that it reads as flavorful on the creature (a
+signature move, a canon TM/tutor move, an on-type coverage move, a lore gimmick).
+Sets need not be competitive. This is the most open-ended, creative step.
 
 1. **Read the existing set(s) for the line.** Note what niche each fills so a new
    set adds variety rather than duplicating.
-2. **Propose new sets** that are fun or flavorful — a signature-move set, a
-   gimmick (Trick Room, weather, Baton Pass, status spreader), a lore set, etc.
+2. **Aim for ~4–5 sets per species**, each filling a distinct niche so the
+   Factory has real variety to draw among — a signature-move set, a gimmick
+   (Trick Room, weather, Baton Pass, status spreader), a lore set, a defensive
+   staller, an offensive sweeper, etc. Fewer is fine when a species genuinely has
+   a narrow kit; don't pad with near-duplicates.
+3. **Build each set around its held item.** The `.heldItem` is the centerpiece,
+   not an afterthought — pick the item first and let it define the set's plan,
+   then choose moves/EVs/nature to make it pay off. The four Venusaur sets model
+   this: each pivots on a *different* item (Black Sludge → poison-typed staller,
+   Leftovers → doubles Rage Powder redirector, Rocky Helmet → physical wall,
+   Life Orb → sun sweeper), so no two sets play alike. Any item is allowed.
+4. **Account for this fork's mechanics when picking moves and items** — they
+   change what's good in ways stock knowledge misses:
+   - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) strip RNG, so
+     chance-based moves become *reliable*: Sleep Powder / Spore always land for a
+     fixed `DETERMINISTIC_SLEEP_TURNS` sleep, `DETERMINISTIC_ACCURACY_EVASION`
+     makes low-accuracy moves (Hydro Pump, Focus Blast, Stone Edge) always hit,
+     `DETERMINISTIC_ADDITIONAL_EFFECTS` / `DETERMINISTIC_FLINCH` make secondary
+     burns/paralysis/flinches (Scald, Air Slash, Iron Head) fire every time, and
+     `DETERMINISTIC_CRITICAL_HITS` turns Focus Energy / Super Luck into guaranteed
+     crits. `DETERMINISTIC_DAMAGE` ramps damage upward each turn, rewarding sets
+     that survive to snowball. Lean into these — a "risky" move here is a sure one.
+   - **`BUFF_*` item/mechanic improvements** (`include/config/buff.h`): Shell Bell
+     heals 1/4 of damage dealt (up from 1/8), and Leech Seed stacks across seeders
+     and re-drains instead of failing — both make those build-arounds far stronger
+     than vanilla, so a Shell Bell bruiser or a Leech Seed staller is a live plan.
+5. **Propose new sets** that are fun or flavorful and cover the niches above;
    Multiple sets per species are fine; the Factory draws among them.
-3. **Fields of `struct TrainerMon`** (authoring helpers in
+6. **Fields of `struct TrainerMon`** (authoring helpers in
    `include/fork/frontier_extended_mons.h`):
    - `.species` — the exact species/form constant.
    - `.tags` — **required**: `FORMAT_SINGLES`, `FORMAT_DOUBLES`, or `FORMAT_BOTH`
@@ -146,7 +191,7 @@ open-ended, creative step.
    - `.teraType` — optional Tera type.
    - Optional: `.dynamaxLevel`, `.gender`, `.isShiny`, etc. (gmax mons get the
      Gigantamax Factor + max Dynamax Level automatically at draft).
-4. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
+7. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
 
 ### Free gimmicks — base sets Mega Evolve on their own (`FEATURE_FREE_GIMMICKS`)
 

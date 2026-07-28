@@ -35,9 +35,19 @@ welcome but not required.
   `fork-docs/INNATE_ABILITIES_PROGRESS.md`, or an implemented innate the species
   doesn't carry). Only repurpose a *real* slot that's redundant and not
   test-pinned; filling an empty slot is always safe.
-- **Frontier movesets:** no move restrictions — anything flavorful or powerful.
-  The set's `.ability` must resolve to a real slot and not be an innate (or use
-  `ABILITY_NONE`).
+- **Megas whose ability is an innate:** when a Mega's own ability is an
+  implemented innate, give the Mega that ability as an *innate* (Step 1) and
+  override *every* real slot of the Mega form to the **base form's** chosen
+  override ability, so the base's observable trait carries through the
+  transformation (the Venusaur pattern: base → Grassy Surge override; Mega →
+  Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
+- **Frontier movesets:** no move-legality restrictions — any move that's
+  *flavorful* (or powerful) is fair game. Aim for ~4–5 sets per species, each
+  **built around a distinct held item** and filling a different niche. Account
+  for the fork's `DETERMINISTIC_*` flags (RNG-free status/accuracy/crits/effects)
+  and `BUFF_*` item improvements (Shell Bell, Leech Seed) when choosing moves and
+  items. The set's `.ability` must resolve to a real slot and not be an innate (or
+  use `ABILITY_NONE`).
 
 ## Verify
 
