@@ -256,6 +256,33 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Lansat Berry makes the holder's 
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a super-effective/STAB high-crit does not consume Scope Lens")
+{
+    // A high-crit move that already crits via the deterministic super-effective/STAB gate
+    // makes the crit guaranteed (CRITICAL_HIT_ALWAYS) before the Scope Lens is ever
+    // consulted in IsCriticalHit, so the lens is saved for a later attack that needs it --
+    // mirroring how a King's Rock isn't spent on a move that already flinches.
+    u32 playerSpecies, move;
+    PARAMETRIZE { move = MOVE_NIGHT_SLASH; playerSpecies = SPECIES_WOBBUFFET; } // Dark into Psychic: super effective
+    PARAMETRIZE { move = MOVE_SLASH;       playerSpecies = SPECIES_ZANGOOSE;  } // Normal from a Normal user: STAB
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(GetMoveCriticalHitStage(MOVE_NIGHT_SLASH) == 1);
+        ASSUME(GetMoveCriticalHitStage(MOVE_SLASH) == 1);
+        ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
+        PLAYER(playerSpecies) { Item(ITEM_SCOPE_LENS); Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, move); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("A critical hit!");                         // the crit comes from the SE/STAB gate...
+        NONE_OF { MESSAGE("The Scope Lens was used up…"); } // ...so the lens is not consumed
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_SCOPE_LENS);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Flinch items (King's Rock family)
 // ---------------------------------------------------------------------------
