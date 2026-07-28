@@ -8,6 +8,7 @@
 #include "battle_controllers.h"
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
+#include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -9003,7 +9004,21 @@ s32 CalcCritChanceStage(struct DamageContext *ctx)
           || ((ctx->abilities[ctx->battlerAtk] == ABILITY_SUPER_LUCK
             || (ctx->innatesEnabled && IsInnateActive(ctx->battlerAtk, ABILITY_SUPER_LUCK)))
            && GetConfig(DETERMINISTIC_CRITICAL_HITS)
-           && IsBattlersFirstTurn(ctx->battlerAtk)))
+           && IsBattlersFirstTurn(ctx->battlerAtk))
+          // FORK: DETERMINISTIC_CRITICAL_HITS — a high-crit-ratio move (Slash, Night Slash, Leaf Blade, ...) is
+          // only +1/+2 crit stage, so it never reaches 1/1 on its own. Under the flag it instead guarantees a
+          // crit on the same "strong hit" condition the deterministic secondary effects use
+          // (DeterministicAdditionalEffectApplies): a move whose type CAN be super effective crits on a super
+          // effective hit, and a type that never can (Normal) crits from a STAB user. Gated to real execution
+          // (!aiCalc) because the AI's damage prediction runs this crit calc BEFORE it computes type
+          // effectiveness (see AI_CalcDamage), so ctx->typeEffectivenessModifier isn't valid there yet -- which
+          // matches the AI already approximating crits to protect its thinking-time budget.
+          || (!ctx->aiCalc
+           && GetConfig(DETERMINISTIC_CRITICAL_HITS)
+           && GetMoveCriticalHitStage(ctx->move) > 0
+           && DeterministicAdditionalEffectApplies(ctx->moveType,
+                  ctx->typeEffectivenessModifier >= UQ_4_12(2.0),
+                  IS_BATTLER_OF_TYPE(ctx->battlerAtk, ctx->moveType))))
     {
         critChance = CRITICAL_HIT_ALWAYS;
     }
