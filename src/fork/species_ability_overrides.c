@@ -762,7 +762,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SHARPEDO, 1,
         ABILITY_STRONG_JAW
     },
-    // NOTE: Wailord (0321) and Camerupt (0323) are deliberately NOT given a chosen override — they are Batch W9
+    // NOTE: Wailord (0321) and Camerupt (0323) are deliberately NOT given a chosen override — they are permanent
     // EXCLUSIONS. Both are used in AI tests that are sensitive to the species' whole ability SET, not just the
     // chosen slot: Wailord in test/battle/ai/ai.c ("best OHKO move" — a move-absorbing ability like Water Absorb in
     // any slot makes the AI treat Water Spout as possibly-nullified and pick Thunder instead) and Camerupt in
@@ -1253,7 +1253,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_VICTORY_STAR
     },
     { // 0483
-        // Dialga's only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy, Batch U), so its
+        // Dialga's only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy), so its
         // EMPTY slot 1 takes Bulletproof -- :x: (never an innate -> stable) and thematic for the armored Steel
         // legend: it deflects the Focus Blast / Sludge Bomb / Aura Sphere ball-and-bomb moves aimed at its
         // Fighting weakness, a clean defensive boon on its bulky Leftovers sets. Same pick as the Steel walls
@@ -1268,7 +1268,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_BULLETPROOF
     },
     { // 0484
-        // Palkia's only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy, Batch U), so its
+        // Palkia's only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy), so its
         // EMPTY slot 1 takes Water Absorb -- :x: (never an innate -> stable) and thematic for the Water legend
         // of space: it shrugs off Water moves and heals from them, a clean switch-in boon for its fast special
         // sets. Same pick as the other Water legends / walls (Suicune / Clawitzer / Samurott).
@@ -1282,8 +1282,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0487
-        // Base Giratina (Altered)'s only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy,
-        // Batch U -- Levitate is an Origin-forme innate it also carries as flavor), so its EMPTY slot 1 takes
+        // Base Giratina (Altered)'s only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy -- Levitate is an Origin-forme innate it also carries as flavor), so its EMPTY slot 1 takes
         // Unaware -- an already-implemented :white_check_mark: innate (stable, like Spiritomb's) it does not carry
         // innately and a pure boon for the Renegade's bulky Will-O / Dragon Tail / Defog wall: it ignores the
         // foe's stat boosts. (Origin forme takes its own Dragon's Maw pick just below.)
@@ -1292,7 +1291,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0487
         // Giratina-Origin's only real ability (Levitate) is now innate, so its EMPTY slot 1 takes Dragon's Maw --
-        // an already-implemented :white_check_mark: innate (Batch Y2, stable) it does NOT carry innately (its sole
+        // an already-implemented :white_check_mark: innate (stable) it does NOT carry innately (its sole
         // innate is Levitate), so the pick stays observable and never needs re-pointing: the Renegade forme's
         // draconic might powers its Draco Meteor / Dragon Claw / Shadow Force nuke.
         SPECIES_GIRATINA_ORIGIN, 1,
@@ -1628,7 +1627,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_VOLT_ABSORB
     },
     { // 0643
-        // Reshiram's only real ability (Turboblaze) is now innate (Batch Y8), and it's a frontier set, so like the
+        // Reshiram's only real ability (Turboblaze) is now innate, and it's a frontier set, so like the
         // Regi legends (Y2) / Necrozma (Y3) / Solgaleo (Y4) it takes the innate AND a fork-owned chosen ability in its
         // EMPTY slot 1. Flash Fire is :x: (never an innate -> stable) and thematic for the Vast White dragon: it
         // shrugs off Fire moves for an immunity + a Fire-power boost on its Blue Flare special sets, stacking with the
@@ -1637,7 +1636,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_FLASH_FIRE
     },
     { // 0644
-        // Zekrom's only real ability (Teravolt) is now innate (Batch Y8), and it's a frontier set, so it takes the
+        // Zekrom's only real ability (Teravolt) is now innate, and it's a frontier set, so it takes the
         // innate AND a fork-owned chosen ability in its EMPTY slot 1. Motor Drive is :x: (never an innate -> stable)
         // and thematic for the Deep Black dragon: it draws in Electric moves for an immunity + a Speed boost that
         // snowballs its Dragon Dance sweeper, on top of the innate Teravolt ability-ignore. Same pick as Klinklang /
@@ -1658,7 +1657,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0646
-        // Kyurem-White's only real ability (Turboblaze) is now innate (Batch Y8), and it's a frontier set, so it takes
+        // Kyurem-White's only real ability (Turboblaze) is now innate, and it's a frontier set, so it takes
         // the innate AND a fork-owned chosen ability in its EMPTY slot 1. Flash Fire is :x: (never an innate -> stable)
         // and thematic: fused with Reshiram, the Boundary dragon wields fire (Fusion Flare), so it shrugs off Fire for
         // an immunity + a Fire-power boost on its special sets. Same pick as Reshiram itself.
@@ -1666,7 +1665,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_FLASH_FIRE
     },
     { // 0646
-        // Kyurem-Black's only real ability (Teravolt) is now innate (Batch Y8), and it's a frontier set, so it takes
+        // Kyurem-Black's only real ability (Teravolt) is now innate, and it's a frontier set, so it takes
         // the innate AND a fork-owned chosen ability in its EMPTY slot 1. Motor Drive is :x: (never an innate ->
         // stable) and thematic: fused with Zekrom, the Boundary dragon wields lightning (Fusion Bolt), so it draws in
         // Electric moves for an immunity + a Speed boost that snowballs its Dragon Dance sweeper. Same pick as Zekrom.
@@ -1731,7 +1730,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PRANKSTER
     },
     { // 0683
-        // Aromatisse's only real abilities (Healer, Aroma Veil) are BOTH now innate (Aroma Veil, Batch U), so its
+        // Aromatisse's only real abilities (Healer, Aroma Veil) are BOTH now innate (Aroma Veil), so its
         // EMPTY slot 1 takes Misty Surge -- :x: (never an innate -> stable) and thematic for the Fragrance
         // Pokemon: on switch-in it blankets the field in Misty Terrain, protecting its team from status and
         // softening Dragon moves, a clean support boon for its Trick Room / Aromatherapy / Wish cleric set.
@@ -1974,7 +1973,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0775
-        // Komala's only real ability (Comatose) is now innate, and it's a frontier set, so like the Y-batch
+        // Komala's only real ability (Comatose) is now innate, and it's a frontier set, so like the
         // sole-ability legends / Gholdengo it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
         // Sticky Hold is an already-implemented :white_check_mark: innate (stable, the same pick as Gholdengo) that
         // the Drowsing Pokemon does not carry innately and is perfectly thematic: Komala clings to its log and never
@@ -2070,7 +2069,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_ILLUSION
     },
     { // 0793
-        // Nihilego's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so like
+        // Nihilego's only real ability (Beast Boost) is now innate, and it's a frontier set, so like
         // the Regi legends (Y2) / Necrozma / the Zacian line (Y6) it takes the innate AND a fork-owned chosen
         // ability in its EMPTY slot 1. Merciless is an already-implemented :white_check_mark: innate (stable) the
         // Parasite Pokemon does not carry innately and is self-synergistic: its Toxic Spikes / Sludge Wave poison
@@ -2080,7 +2079,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MERCILESS
     },
     { // 0794
-        // Buzzwole's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Buzzwole's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Iron Fist, an already-implemented :white_check_mark: innate (stable) the Swollen
         // Pokemon does not carry innately and powers its all-punch kit (Ice Punch / Thunder Punch / Drain Punch),
         // stacking with the innate Beast Boost on-KO snowball.
@@ -2088,7 +2087,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_IRON_FIST
     },
     { // 0795
-        // Pheromosa's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Pheromosa's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Tough Claws, an already-implemented :white_check_mark: innate (stable) the Lissome
         // Pokemon does not carry innately and powers its contact STAB (Close Combat / Triple Axel / U-turn / Rapid
         // Spin), stacking with the innate Beast Boost snowball.
@@ -2096,7 +2095,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_TOUGH_CLAWS
     },
     { // 0796
-        // Xurkitree's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Xurkitree's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Lightning Rod -- :x: (never an innate -> stable) and thematic for the living power
         // line (the Raichu-Alola / Regieleki precedent): it draws in Electric moves for immunity + a Sp. Atk boost
         // for its Tail Glow special sets, on top of the innate Beast Boost snowball (and innate Levitate).
@@ -2104,7 +2103,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_LIGHTNING_ROD
     },
     { // 0797
-        // Celesteela's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Celesteela's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Filter, an already-implemented :white_check_mark: innate (stable, like Melmetal /
         // Zamazenta) the Launch Pokemon does not carry innately: it blunts the supereffective Fire / Electric hits
         // its bulky Leech Seed / Autotomize sets otherwise fear, stacking with the innate Beast Boost snowball.
@@ -2112,7 +2111,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_FILTER
     },
     { // 0798
-        // Kartana's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Kartana's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Sharpness, an already-implemented :white_check_mark: innate (stable) the Drawn Sword
         // Pokemon does not carry innately and is perfectly thematic: the origami blade's slicing STAB (Leaf Blade /
         // Sacred Sword) gets +50%, stacking with the innate Beast Boost on-KO snowball (and innate Levitate).
@@ -2120,7 +2119,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHARPNESS
     },
     { // 0799
-        // Guzzlord's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Guzzlord's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Filter, an already-implemented :white_check_mark: innate (stable, like Celesteela)
         // the Junkivore Pokemon does not carry innately: it blunts the supereffective hits (notably its 4x Fairy
         // weakness) its enormous-HP mixed tank sets fear, stacking with the innate Beast Boost snowball.
@@ -2128,7 +2127,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_FILTER
     },
     { // 0804
-        // Naganadel's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Naganadel's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Sheer Force -- :x: (never an innate -> stable) and a strong boon for the Poison Pin
         // Pokemon's Nasty Plot special sweeper: Sludge Wave / Fire Blast / Draco Meteor gain +30% and drop their
         // secondaries, stacking with the innate Beast Boost snowball.
@@ -2136,7 +2135,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0805
-        // Stakataka's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Stakataka's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Solid Rock, an already-implemented :white_check_mark: innate (stable, like Regirock /
         // Carbink / Stonjourner) the Rampart Pokemon does not carry innately: it blunts the supereffective Fighting
         // / Ground / Water / Steel / Grass hits its Trick Room wall otherwise fears, stacking with the innate Beast
@@ -2145,7 +2144,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SOLID_ROCK
     },
     { // 0806
-        // Blacephalon's only real ability (Beast Boost) is now innate (Batch Y7), and it's a frontier set, so its
+        // Blacephalon's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
         // EMPTY slot 1 takes Infiltrator, an already-implemented :white_check_mark: innate (stable, like Spectrier)
         // the Fireworks Pokemon does not carry innately and is thematic for a ghostly clown: its Shadow Ball /
         // Fire Blast / Focus Blast special sweeper ignores the foe's screens and Substitute, on top of the innate
@@ -2186,8 +2185,8 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_BULLETPROOF
     },
     { // 0826
-        // Orbeetle's three real abilities (Swarm, Frisk, Telepathy) are ALL now innate (Frisk Batch L,
-        // Telepathy Batch U), and NONE is test-pinned (audited: no reference to Orbeetle in test/), so its
+        // Orbeetle's three real abilities (Swarm, Frisk, Telepathy) are ALL now innate (Frisk,
+        // Telepathy), and NONE is test-pinned (audited: no reference to Orbeetle in test/), so its
         // innate-redundant slot-2 Telepathy is repurposed to Unaware -- an already-implemented :white_check_mark:
         // innate (stable, like Spiritomb's) it does not carry innately and a pure boon for the Seven Spot's bulky
         // Calm Mind sweeper / dual-screens pivot: it ignores the foe's stat boosts. (Both frontier sets, formerly
@@ -2639,7 +2638,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
 // GetSpeciesAbility (src/pokemon.c) calls this on EVERY ability lookup, game-wide
 // and in the AI's per-move hot path, but only the handful of species with a row
 // above ever match — so a plain linear scan taxes every lookup for the whole
-// roster (it was measurably inflating the AI's thinking time, and the Batch W sweep
+// roster (it was measurably inflating the AI's thinking time, and the frontier-slot sweep
 // keeps growing the table). A one-time bitmap of "which species have any override
 // row" lets the overwhelmingly common no-override case return in O(1); only a
 // species that actually carries an override falls through to the short scan.
