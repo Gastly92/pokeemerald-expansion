@@ -152,13 +152,27 @@ Sets need not be competitive. This is the most open-ended, creative step.
    (Trick Room, weather, Baton Pass, status spreader), a lore set, a defensive
    staller, an offensive sweeper, etc. Fewer is fine when a species genuinely has
    a narrow kit; don't pad with near-duplicates.
-3. **Build each set around its held item.** The `.heldItem` is the centerpiece,
-   not an afterthought — pick the item first and let it define the set's plan,
-   then choose moves/EVs/nature to make it pay off. The four Venusaur sets model
-   this: each pivots on a *different* item (Black Sludge → poison-typed staller,
-   Leftovers → doubles Rage Powder redirector, Rocky Helmet → physical wall,
-   Life Orb → sun sweeper), so no two sets play alike. Any item is allowed.
-4. **Account for this fork's mechanics when picking moves and items** — they
+3. **Cover both battle formats across the line's sets.** Every set is tagged
+   `FORMAT_SINGLES`, `FORMAT_DOUBLES`, or `FORMAT_BOTH` (see the `.tags` field in
+   point 7), and the Factory
+   draws from the pool matching the current format — so a line whose sets are all
+   one format starves the other. Aim for a spread: some singles-only, some
+   doubles-only, some that work in both. Let the *format* shape the set — doubles
+   sets can lean on partner-facing tools (Rage Powder / Follow Me redirection,
+   Helping Hand, Fake Out, spread moves, Trick Room support), while singles sets
+   want self-sufficient sweeping/stalling. A set is `FORMAT_BOTH` only when it
+   genuinely holds up in each; don't tag a doubles-support set `FORMAT_BOTH`.
+4. **Consider the held item, but as one lens among several — not the main
+   focus.** A good technique is to iterate through items and ask what would be
+   *fun* on this creature: an item can define a set (Choice Specs sweeper, a
+   pinch-Berry survivor, a weather-rock setter, a Toxic Orb + Poison Heal staller)
+   and the four Venusaur sets show that (each pivots on a different item — Black
+   Sludge, Leftovers, Rocky Helmet, Life Orb). But the item is a springboard, not
+   a requirement: plenty of items are weak or pointless and aren't worth building
+   around, and a set can just as well start from a move, an ability, or a gimmick
+   with `ITEM_LEFTOVERS` (or nothing special) attached. Don't force a themed item
+   onto every set.
+5. **Account for this fork's mechanics when picking moves and items** — they
    change what's good in ways stock knowledge misses:
    - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) strip RNG, so
      chance-based moves become *reliable*: Sleep Powder / Spore always land for a
@@ -173,9 +187,9 @@ Sets need not be competitive. This is the most open-ended, creative step.
      heals 1/4 of damage dealt (up from 1/8), and Leech Seed stacks across seeders
      and re-drains instead of failing — both make those build-arounds far stronger
      than vanilla, so a Shell Bell bruiser or a Leech Seed staller is a live plan.
-5. **Propose new sets** that are fun or flavorful and cover the niches above;
+6. **Propose new sets** that are fun or flavorful and cover the niches above;
    Multiple sets per species are fine; the Factory draws among them.
-6. **Fields of `struct TrainerMon`** (authoring helpers in
+7. **Fields of `struct TrainerMon`** (authoring helpers in
    `include/fork/frontier_extended_mons.h`):
    - `.species` — the exact species/form constant.
    - `.tags` — **required**: `FORMAT_SINGLES`, `FORMAT_DOUBLES`, or `FORMAT_BOTH`
@@ -191,7 +205,7 @@ Sets need not be competitive. This is the most open-ended, creative step.
    - `.teraType` — optional Tera type.
    - Optional: `.dynamaxLevel`, `.gender`, `.isShiny`, etc. (gmax mons get the
      Gigantamax Factor + max Dynamax Level automatically at draft).
-7. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
+8. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
 
 ### Free gimmicks — base sets Mega Evolve on their own (`FEATURE_FREE_GIMMICKS`)
 

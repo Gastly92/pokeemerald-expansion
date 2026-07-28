@@ -43,11 +43,16 @@ welcome but not required.
   Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
 - **Frontier movesets:** no move-legality restrictions — any move that's
   *flavorful* (or powerful) is fair game. Aim for ~4–5 sets per species, each
-  **built around a distinct held item** and filling a different niche. Account
-  for the fork's `DETERMINISTIC_*` flags (RNG-free status/accuracy/crits/effects)
-  and `BUFF_*` item improvements (Shell Bell, Leech Seed) when choosing moves and
-  items. The set's `.ability` must resolve to a real slot and not be an innate (or
-  use `ABILITY_NONE`).
+  filling a different niche. **Cover both formats** across the line's sets
+  (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
+  redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
+  moves), singles sets want self-sufficiency. Held items are **one lens among
+  several** (iterate items for fun ideas, but many items are weak and not worth
+  building around — a set can start from a move, ability, or gimmick just as
+  well). Account for the fork's `DETERMINISTIC_*` flags (RNG-free
+  status/accuracy/crits/effects) and `BUFF_*` item improvements (Shell Bell, Leech
+  Seed) when choosing moves and items. The set's `.ability` must resolve to a real
+  slot and not be an innate (or use `ABILITY_NONE`).
 
 ## Verify
 
