@@ -22,12 +22,13 @@
 // ability vs. a poisoned target, and crit-stage stacks high enough to reach 1/1
 // odds. Because the stripped random roll would otherwise leave the sub-1/1
 // crit-ratio boosts doing nothing, two dedicated crit-enablers escalate to a
-// guaranteed crit under this flag: Focus Energy arms a one-shot guaranteed crit
-// on the user's next attack (reusing Laser Focus's volatile; see
-// Cmd_setfocusenergy), and Super Luck guarantees a crit on the user's first turn
-// on the field (its +1 crit stage still stacks every turn), mirroring the fork's
-// deterministic Stench. Crit-blocking (Battle Armor, Shell Armor, Lucky Chant)
-// is unaffected. See IsCriticalHit()/CalcCritChanceStage() in src/battle_util.c.
+// guaranteed crit under this flag: Focus Energy and Dragon Cheer each arm a
+// one-shot guaranteed crit on the affected battler's next attack (reusing Laser
+// Focus's volatile; see Cmd_setfocusenergy), and Super Luck guarantees a crit on
+// the user's first turn on the field (its +1 crit stage still stacks every turn),
+// mirroring the fork's deterministic Stench. Crit-blocking (Battle Armor, Shell
+// Armor, Lucky Chant) is unaffected. See IsCriticalHit()/CalcCritChanceStage()
+// in src/battle_util.c.
 #define DETERMINISTIC_CRITICAL_HITS TRUE
 
 // When TRUE, the post-calc damage roll no longer multiplies damage by a random
