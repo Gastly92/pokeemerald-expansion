@@ -256,6 +256,120 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Lansat Berry makes the holder's 
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a super-effective/STAB high-crit does not consume Scope Lens")
+{
+    // A high-crit move that already crits via the deterministic super-effective/STAB gate
+    // makes the crit guaranteed (CRITICAL_HIT_ALWAYS) before the Scope Lens is ever
+    // consulted in IsCriticalHit, so the lens is saved for a later attack that needs it --
+    // mirroring how a King's Rock isn't spent on a move that already flinches.
+    u32 playerSpecies, move;
+    PARAMETRIZE { move = MOVE_NIGHT_SLASH; playerSpecies = SPECIES_WOBBUFFET; } // Dark into Psychic: super effective
+    PARAMETRIZE { move = MOVE_SLASH;       playerSpecies = SPECIES_ZANGOOSE;  } // Normal from a Normal user: STAB
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(GetMoveCriticalHitStage(MOVE_NIGHT_SLASH) == 1);
+        ASSUME(GetMoveCriticalHitStage(MOVE_SLASH) == 1);
+        ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
+        PLAYER(playerSpecies) { Item(ITEM_SCOPE_LENS); Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, move); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("A critical hit!");                         // the crit comes from the SE/STAB gate...
+        NONE_OF { MESSAGE("The Scope Lens was used up…"); } // ...so the lens is not consumed
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_SCOPE_LENS);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a Scope Lens saved by a gate crit fires on the next non-qualifying attack")
+{
+    // The lens is deferred, not disabled: a Psychic user (no Dark/Normal STAB) crits turn 1
+    // via the super-effective gate (Dark vs Psychic) and keeps the lens; turn 2's neutral,
+    // non-STAB Slash no longer crits from the gate, so the lens fires its one-shot crit and
+    // is spent; turn 3 has no lens and no gate, so it doesn't crit.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(GetMoveCriticalHitStage(MOVE_NIGHT_SLASH) == 1);
+        ASSUME(GetMoveCriticalHitStage(MOVE_SLASH) == 1);
+        ASSUME(GetMoveType(MOVE_NIGHT_SLASH) == TYPE_DARK);
+        ASSUME(GetMoveType(MOVE_SLASH) == TYPE_NORMAL);
+        ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_SCOPE_LENS); Speed(100); }                            // Psychic: no Dark/Normal STAB
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); } // Psychic: Dark is SE, Normal neutral
+    } WHEN {
+        TURN { MOVE(player, MOVE_NIGHT_SLASH); MOVE(opponent, MOVE_CELEBRATE); } // SE gate crit -> lens saved
+        TURN { MOVE(player, MOVE_SLASH);       MOVE(opponent, MOVE_CELEBRATE); } // not SE / not STAB -> lens fires
+        TURN { MOVE(player, MOVE_SLASH);       MOVE(opponent, MOVE_CELEBRATE); } // lens gone -> no crit
+    } SCENE {
+        // Turn 1: super effective Night Slash crits via the gate, lens untouched.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NIGHT_SLASH, player);
+        MESSAGE("A critical hit!");
+        // Turn 2: neutral non-STAB Slash no longer crits from the gate, so the lens fires and is consumed.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SLASH, player);
+        MESSAGE("A critical hit!");
+        MESSAGE("The Scope Lens was used up…");
+        // Turn 3: lens gone, no crit.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SLASH, player);
+        NONE_OF { MESSAGE("A critical hit!"); }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a Merciless crit on a poisoned target does not consume Scope Lens")
+{
+    // Merciless guarantees the crit (CRITICAL_HIT_ALWAYS) on a poisoned target before the
+    // Scope Lens is consulted, so the lens is saved -- same precedence as the high-crit gate.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
+        PLAYER(SPECIES_MAREANIE) { Ability(ABILITY_MERCILESS); Item(ITEM_SCOPE_LENS); Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); Status1(STATUS1_POISON); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("A critical hit!");                         // crit from Merciless...
+        NONE_OF { MESSAGE("The Scope Lens was used up…"); } // ...lens not consumed
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_SCOPE_LENS);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a Super Luck first-turn crit saves Scope Lens for a later attack")
+{
+    // Super Luck guarantees the crit on the first turn out (CRITICAL_HIT_ALWAYS), so the lens
+    // is saved; on a later turn its lone +1 crit stage can't reach 1/1, so the lens fires its
+    // one-shot crit and is consumed; after that there is neither, so no crit.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
+        PLAYER(SPECIES_ABSOL) { Ability(ABILITY_SUPER_LUCK); Item(ITEM_SCOPE_LENS); Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); } // first turn -> Super Luck crit, lens saved
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); } // not first turn -> lens fires, consumed
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); } // lens gone -> no crit
+    } SCENE {
+        // Turn 1: first-turn Super Luck crit; lens untouched (it must survive to fire on turn 2).
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+        MESSAGE("A critical hit!");
+        // Turn 2: no longer the first turn, so the saved lens fires and is consumed.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+        MESSAGE("A critical hit!");
+        MESSAGE("The Scope Lens was used up…");
+        // Turn 3: lens gone, no crit.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+        NONE_OF { MESSAGE("A critical hit!"); }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Flinch items (King's Rock family)
 // ---------------------------------------------------------------------------
