@@ -50,19 +50,19 @@ For each species/form in the line:
    Fat). BUT "several" is not "any" — each pick must read as *this* creature.
    The test: measure the ability against how it reads on its **established
    users**. Intimidate belongs to menacing-presence bruisers (Gyarados, Salamence,
-   Arcanine, Incineroar); handing it to a proud fire-flyer that *burns* rather than
+   Arcanine, Incineroar); handing it to a creature that *overpowers* rather than
    cows is a flavor miss even though it's a clean boon. Prefer picks that are
-   canon (its own ability), Pokédex-supported (Charizard's "the hotter the battle,
-   the hotter its flame" → Berserk), or that literally belong to a same-typed
-   relative (Gale Wings is Talonflame's, a Fire/Flying flyer → fits Charizard).
-   Be honest about a narrow flavor space: "fire dragon that flies" has fewer clean
-   fits than "plant", so a flavor-honest fire line may top out around five — don't
-   pad to a number with reaches.
+   canon (its own ability), Pokédex-supported (a trait the creature's dex flavor
+   literally describes), or that belong to a same-typed relative (a shared-type
+   neighbor's signature ability reads as in-family). Be honest about a narrow
+   flavor space: some types have fewer clean fits than others ("plant" is roomy),
+   so a flavor-honest line may stay short — don't pad to a number with reaches.
 3. **Keep the line consistent by default, but differentiate by form when
    morphology/temperament justifies it.** The three base rows usually carry the
-   *same* list — but they need not be identical: a wingless Charmander shouldn't
-   carry Gale Wings, a placid pre-evo shouldn't carry a rage ability its vicious
-   evolution earns. Escalate the list up the line where the creature changes.
+   *same* list — but they need not be identical: a wingless pre-evo shouldn't
+   carry a flight ability its winged final stage earns, a placid pre-evo shouldn't
+   carry a rage ability its vicious evolution earns. Escalate the list up the line
+   where the creature changes.
 4. **HARD CONSTRAINT — only allowlisted abilities.** An innate must be one whose
    behavior is actually *wired* at an effect site. The CI source of truth is
    `sImplementedInnates[]` in `test/fork/innate_abilities.c`, mirrored by the
@@ -74,11 +74,11 @@ For each species/form in the line:
    - A form gets innates **only if it has its own row** — add/maintain rows for
      `_MEGA`, `_GMAX`, regional forms, etc.
    - **Megas are a pure boon:** mirror the base's list so the creature's traits
-     persist, then add the Mega's own flavor (Mega Venusaur adds `THICK_FAT`;
-     Mega Charizard X adds `TOUGH_CLAWS`, its canon ability). Tune a Mega's extras
-     to how its Factory set actually plays (see the free-gimmicks note in Step 3):
-     the physical Mega X set leads with Flare Blitz, so `RECKLESS` there is *live*,
-     not just flavor; a special Mega Y wants `BERSERK` (Sp. Atk) not a physical boost.
+     persist, then add the Mega's own flavor (Mega Venusaur adds `THICK_FAT`, its
+     canon ability). Tune a Mega's extras to how its Factory set actually plays
+     (see the free-gimmicks note in Step 3): a Mega whose set leads with a recoil
+     move wants `RECKLESS` *live*, not just as flavor; a special-attacking Mega
+     wants a Sp. Atk booster, not a physical one.
      **When the Mega's own ability is itself an implemented innate** (e.g. Mega
      Venusaur's Thick Fat), adding it as an innate here means the Mega's single
      observable slot would waste on a duplicate — so pair this with an override on
