@@ -319,6 +319,57 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a Scope Lens saved by a gate cri
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a Merciless crit on a poisoned target does not consume Scope Lens")
+{
+    // Merciless guarantees the crit (CRITICAL_HIT_ALWAYS) on a poisoned target before the
+    // Scope Lens is consulted, so the lens is saved -- same precedence as the high-crit gate.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
+        PLAYER(SPECIES_MAREANIE) { Ability(ABILITY_MERCILESS); Item(ITEM_SCOPE_LENS); Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); Status1(STATUS1_POISON); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("A critical hit!");                         // crit from Merciless...
+        NONE_OF { MESSAGE("The Scope Lens was used up…"); } // ...lens not consumed
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_SCOPE_LENS);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a Super Luck first-turn crit saves Scope Lens for a later attack")
+{
+    // Super Luck guarantees the crit on the first turn out (CRITICAL_HIT_ALWAYS), so the lens
+    // is saved; on a later turn its lone +1 crit stage can't reach 1/1, so the lens fires its
+    // one-shot crit and is consumed; after that there is neither, so no crit.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
+        PLAYER(SPECIES_ABSOL) { Ability(ABILITY_SUPER_LUCK); Item(ITEM_SCOPE_LENS); Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); } // first turn -> Super Luck crit, lens saved
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); } // not first turn -> lens fires, consumed
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); } // lens gone -> no crit
+    } SCENE {
+        // Turn 1: first-turn Super Luck crit; lens untouched (it must survive to fire on turn 2).
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+        MESSAGE("A critical hit!");
+        // Turn 2: no longer the first turn, so the saved lens fires and is consumed.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+        MESSAGE("A critical hit!");
+        MESSAGE("The Scope Lens was used up…");
+        // Turn 3: lens gone, no crit.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+        NONE_OF { MESSAGE("A critical hit!"); }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Flinch items (King's Rock family)
 // ---------------------------------------------------------------------------
