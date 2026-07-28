@@ -90,9 +90,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SLUDGE_BOMB,
-            MOVE_GIGA_DRAIN,
-            MOVE_SLEEP_POWDER,
-            MOVE_LEECH_SEED
+            MOVE_EARTH_POWER,
+            MOVE_LEECH_SEED,
+            MOVE_SLEEP_POWDER
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
@@ -102,6 +102,66 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_VENUSAUR,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves =
+        {
+            MOVE_POLLEN_PUFF,
+            MOVE_RAGE_POWDER,
+            MOVE_GIGA_DRAIN,
+            MOVE_SLEEP_POWDER
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_VENUSAUR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_TOXIC,
+            MOVE_LEECH_SEED,
+            MOVE_STRENGTH_SAP,
+            MOVE_SYNTHESIS
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_VENUSAUR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LIFE_ORB,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BEAM,
+            MOVE_GIGA_DRAIN,
+            MOVE_EARTH_POWER
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spe = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GRASS,
     },
 
     // 0006
