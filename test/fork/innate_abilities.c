@@ -15,7 +15,7 @@
 // every turn — the first active, scripted end-turn innate), and the accuracy abilities
 // COMPOUND_EYES / KEEN_EYE / ILLUMINATE (which all ignore the target's evasion — under
 // DETERMINISTIC_ACCURACY_EVASION a PP-economy boon — and, for KEEN_EYE/ILLUMINATE, keep
-// the holder's accuracy from being lowered); plus the Batch A offensive move-power boosters
+// the holder's accuracy from being lowered); plus the offensive move-power boosters
 // (IRON_FIST / RECKLESS / STRONG_JAW / TOUGH_CLAWS / SHARPNESS / MEGA_LAUNCHER / STEELWORKER /
 // STEELY_SPIRIT / ROCKY_PAYLOAD / SAND_FORCE / ANALYTIC / ADAPTABILITY / PUNK_ROCK / STAKEOUT);
 // plus SERENE_GRACE (doubles the chance of the holder's moves' additional effects).
@@ -1406,7 +1406,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Slush Rush doubles Speed in
     }
 }
 
-// ---- Surge Surfer / Grass Pelt (Batch R — terrain modifiers) ----
+// ---- Surge Surfer / Grass Pelt (terrain modifiers) ----
 // The terrain edition of the weather speed-doublers / defensive boosters: both live in shared calcs
 // the AI runs, so on-field prediction is innate-aware for free; each is a clean upside (1:1 copy).
 
@@ -3357,10 +3357,10 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Pas
     }
 }
 
-// Batch V: an innate Pastel Veil now runs the real ability's full switch-in cure via the switch-in driver
+// An innate Pastel Veil now runs the real ability's full switch-in cure via the switch-in driver
 // (FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE -> BattleScript_PastelVeilActivates), so when the holder
 // switches in beside a poisoned ally it clears the ally's pre-existing poison under its pop-up, exactly
-// like the chosen ability ("Pastel Veil cures partner's poison on switch in"). This is the half Batch S/I
+// like the chosen ability ("Pastel Veil cures partner's poison on switch in"). This is the half
 // deferred until the switch-in driver existed. (The holder here is unpoisoned so the ally cure is
 // attributable solely to the new switch-in script, not the passive self-cure fallback below.)
 DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pastel Veil cures its partner's pre-existing poison on switch-in")
@@ -3415,7 +3415,7 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pastel Veil cures its own p
     }
 }
 
-// ===== Batch A — offensive move-power boosters =====
+// ===== Offensive move-power boosters =====
 // All wired beside their chosen-ability case in CalcMoveBasePowerAfterModifiers / CalcAttackStat
 // (src/battle_util.c), Adaptability in GetSameTypeAttackBonusModifier. Each is a 1:1 clean-upside
 // copy: a parametrized off/on run shows the multiplier appears only with the feature on, on a holder
@@ -3711,7 +3711,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Stakeout doubles damage to 
     }
 }
 
-// Suppression parity: Gastro Acid nullifies an innate Iron Fist (none of Batch A is breakable, so
+// Suppression parity: Gastro Acid nullifies an innate Iron Fist (none of these is breakable, so
 // Mold Breaker can't pierce them — Gastro Acid is the relevant suppressor, same as the real ability).
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Iron Fist", s16 damage)
 {
@@ -3842,7 +3842,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor Serene Grace (Gardevoir) 
     }
 }
 
-// ===== Batch B: defensive damage reducers =====
+// ===== Defensive damage reducers =====
 // All seven are pure calc-modifier passives wired beside the existing defender-ability sites in
 // src/battle_util.c (Multiscale/Solid Rock/Ice Scales in GetDefenderAbilitiesModifier, Fur Coat in the
 // defense-stat calc, Heatproof/Water Bubble in the Fire-damage calc, Friend Guard in the partner
@@ -4104,7 +4104,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Water Bubble blocks burn")
     }
 }
 
-// ===== Batch N: status-conditional stat boosts (Guts / Marvel Scale / Quick Feet / Toxic Boost / Flare Boost) =====
+// ===== Status-conditional stat boosts (Guts / Marvel Scale / Quick Feet / Toxic Boost / Flare Boost) =====
 
 // Guts: +50% physical Attack while statused. Hariyama's slot-0 ability is Thick Fat, so the off-run never
 // touches the attack calc. Poison (not burn) isolates the Attack boost — it has no physical-damage cut.
@@ -4274,7 +4274,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate G
     }
 }
 
-// ===== Batch O: crit-rate / crit-damage modifiers (Super Luck / Sniper / Merciless) =====
+// ===== Crit-rate / crit-damage modifiers (Super Luck / Sniper / Merciless) =====
 // All three are crit-calc modifiers in src/battle_util.c (CalcCritChanceStage / the Gen-1 formula /
 // GetAttackerAbilitiesModifier), 1:1 clean-upside copies (no pure-boon divergence). No script / pop-up /
 // driver; on-field AI is correct for free (the shared crit calc keys off the real battler).
@@ -4380,7 +4380,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sniper boosts critical-hit 
     }
 }
 
-// ---- Batch P: accuracy / type-effectiveness / effect-chance modifiers ----
+// ---- Accuracy / type-effectiveness / effect-chance modifiers ----
 // Shield Dust / Tinted Lens / Scrappy / Wonder Skin / Tangled Feet — all 1:1 clean-upside copies wired
 // as calc clauses (src/battle_util.c; Scrappy's Intimidate-immunity half in src/battle_stat_change.c).
 // Each test runs the holder on a chosen ability that is NOT the tested one, so the effect is
@@ -4675,7 +4675,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: under DETERMINISTIC_ACCURACY_EVASI
     }
 }
 
-// ===== Batch C: physical-Attack doublers (Huge Power / Pure Power) =====
+// ===== Physical-Attack doublers (Huge Power / Pure Power) =====
 
 // Huge Power doubles the holder's physical Attack. Azumarill's chosen ability is Thick Fat, so the
 // x2 here is purely the innate Huge Power.
@@ -4763,7 +4763,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate H
     }
 }
 
-// ===== Batch D+E: stat-drop protection (Clear Body / White Smoke / Hyper Cutter / Big Pecks) =====
+// ===== Stat-drop protection (Clear Body / White Smoke / Hyper Cutter / Big Pecks) =====
 
 // Clear Body / White Smoke block ANY stat drop from another mon; Hyper Cutter protects Attack, Big Pecks
 // Defense. Each test uses a canon user whose CHOSEN ability differs, so the effect is purely the innate.
@@ -4892,7 +4892,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate H
     }
 }
 
-// FORK: Batch G — redirection-ignore innates (Propeller Tail / Stalwart). The holder's moves ignore
+// FORK: redirection-ignore innates (Propeller Tail / Stalwart). The holder's moves ignore
 // Follow Me / Rage Powder and Lightning Rod / Storm Drain redirection, hitting the originally-selected
 // target. Wired at the shared redirection sites in src/battle_move_resolution.c (IsAffectedByFollowMe +
 // the Lightning-Rod/Storm-Drain redirect loop) beside the chosen-ability tests. Both are 1:1 clean-upside
@@ -4973,7 +4973,7 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate S
 }
 
 // ==========================================================================================
-// Batch H — trapping (Shadow Tag / Arena Trap / Magnet Pull). Each keeps opposing mons from
+// Trapping (Shadow Tag / Arena Trap / Magnet Pull). Each keeps opposing mons from
 // switching out, wired at the single chokepoint IsAbilityPreventingEscape (src/battle_util.c)
 // via BattlerHasAbility. The tests assert the mechanic directly (like the upstream trapping
 // tests) so they don't depend on the escape/switch message text.
@@ -5282,7 +5282,7 @@ TEST("Innate abilities: species-keyed lookup matches the raw table for every row
     EXPECT_EQ(GetSpeciesInnate(SPECIES_NONE, 0), ABILITY_NONE);
 }
 
-// ===== Batch I — status-condition immunities (Magma Armor / Water Veil / Own Tempo /
+// ===== Status-condition immunities (Magma Armor / Water Veil / Own Tempo /
 // Inner Focus / Leaf Guard / Overcoat) =====
 // All 1:1 clean-upside copies of the real ability, wired at the shared trait chokepoints
 // (CanSetNonVolatileStatus / CanBeConfused / IsLeafGuardProtected / IsAffectedByPowderMove /
@@ -5566,7 +5566,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies the chosen ability, n
 }
 
 // ============================================================================
-// Batch S — miscellaneous single-site traits: Suction Cups / Guard Dog /
+// Miscellaneous single-site traits: Suction Cups / Guard Dog /
 // Rock Head / Long Reach / Skill Link / Infiltrator / Corrosion / Sticky Hold /
 // Unseen Fist / Piercing Drill / Heavy Metal / Light Metal.
 // ============================================================================
@@ -5615,7 +5615,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Guard Dog blocks Dragon Tai
     }
 }
 
-// Batch V: an innate Guard Dog is immune to Intimidate's Attack drop and instead boosts its own Attack by
+// An innate Guard Dog is immune to Intimidate's Attack drop and instead boosts its own Attack by
 // 1 stage, exactly like the real ability (mirrors the chosen ABILITY_GUARD_DOG case in IsIntimidateBlocked).
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Guard Dog boosts Attack instead of losing it when intimidated")
 {
@@ -5876,7 +5876,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate R
     }
 }
 
-// ===== Batch J — end-of-turn effects (Rain Dish / Ice Body / Shed Skin / Hydration /
+// ===== End-of-turn effects (Rain Dish / Ice Body / Shed Skin / Hydration /
 // Healer / Harvest / Cud Chew / Pickup / Bad Dreams / Poison Heal) =====
 // The first nine are active, scripted end-turn innates that reuse the Speed Boost driver
 // (TryActivateInnateEndTurnEffects -> IsActiveEndTurnInnate) to delegate to the upstream
@@ -6182,7 +6182,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate P
     }
 }
 
-// ───────────────────────── Berry / item synergy (Batch T) ─────────────────────────
+// ───────────────────────── Berry / item synergy ─────────────────────────
 // Gluttony (eat a pinch Berry at 1/2 HP), Ripen (double every Berry effect), Cheek Pouch
 // (heal 1/3 max HP on eating a Berry), Unburden (double Speed once the held item is lost).
 // All 1:1 clean-upside boons. See src/fork/innate_abilities.c and the wiring reference.
@@ -6311,7 +6311,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate U
     }
 }
 
-// ===== Batch K (on-hit contact reactions) =====
+// ===== On-hit contact reactions =====
 // The first active, scripted ON-HIT innates, fired through the new re-entrant on-hit driver
 // (TryActivateInnateOnHitEffects -> IsActiveOnHitInnate), hooked from the MOVEEND_ABILITIES_INNATE
 // step and delegating to the upstream ABILITYEFFECT_MOVE_END case. Rough Skin / Iron Barbs chip a
@@ -6436,7 +6436,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Gooey / Tangling Hair drop 
     }
 }
 
-// On-faint retaliation (Batch K second sub-group): Aftermath / Innards Out fire from the SAME
+// On-faint retaliation (second on-hit sub-group): Aftermath / Innards Out fire from the SAME
 // ABILITYEFFECT_MOVE_END step once a move KOs the holder — the fainted-but-still-on-field holder is
 // credited because notOnField is not yet set. Aftermath chips the attacker 1/4 max HP only on a contact
 // KO (Damp still blocks it); Innards Out deals the attacker the holder's lost HP on any KO. Both are 1:1
@@ -6559,7 +6559,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Innards Out deals the attac
     }
 }
 
-// On-hit stat/charge (Batch K third sub-group): Steam Engine (Speed +6 on a Fire/Water hit), Thermal
+// On-hit stat/charge (third on-hit sub-group): Steam Engine (Speed +6 on a Fire/Water hit), Thermal
 // Exchange (Attack +1 on a Fire hit + burn immunity), Wind Power (charge the next Electric move on a wind
 // hit) all reuse the same re-entrant on-hit driver — a one-line IsActiveOnHitInnate addition each,
 // delegating to the upstream ABILITYEFFECT_MOVE_END case so the stat change / charge / script / pop-up
@@ -6773,12 +6773,12 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Wind Power charges when Tai
     }
 }
 
-// On-hit move-disable (Batch K fourth sub-group): Cursed Body has a chance (30%, always under
+// On-hit move-disable (fourth on-hit sub-group): Cursed Body has a chance (30%, always under
 // DETERMINISTIC_ABILITIES — the shipping default) to disable the move that just damaged the holder. It reuses
 // the same re-entrant on-hit driver — a one-line IsActiveOnHitInnate addition — delegating to the upstream
 // ABILITYEFFECT_MOVE_END case so the disable / script / pop-up match the real ability. A 1:1 clean-upside copy
 // (it only ever hampers the FOE), with the pop-up overwritten to the innate when the chosen ability differs.
-// Tested under DETERMINISTIC_ABILITIES (like the RNG-gated Batch J members), where the disable is guaranteed.
+// Tested under DETERMINISTIC_ABILITIES (like the RNG-gated end-turn members), where the disable is guaranteed.
 // NB: every canon Cursed Body user is a Ghost-type, so the attacking move must not be Normal/Fighting
 // (immune) — Water Gun damages both a Water/Ghost Frillish and a Dragon/Ghost Dragapult.
 
@@ -6864,7 +6864,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: Gastro A
     }
 }
 
-// Batch K fifth/final sub-group: Pickpocket / Magician / Liquid Ooze (item-steal reactions + drain punish).
+// Fifth/final on-hit sub-group: Pickpocket / Magician / Liquid Ooze (item-steal reactions + drain punish).
 // All 1:1 clean-upside copies. Pickpocket is a one-line swap at the dedicated MoveEndPickpocket step; Magician
 // is attacker-side, fired through the new attacker-side on-hit driver; Liquid Ooze is a passive calc modifier
 // (no driver) that damages a drainer instead of healing it. Each shows an ability pop-up, so an innate that
@@ -7184,7 +7184,7 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Intimidate lowers both oppo
 }
 
 // ─── Innate Anticipation / Forewarn / Frisk (switch-in information reveals) ────
-// Batch L's second sub-group: three information-reveal switch-in innates that reuse the same driver as
+// Switch-in information reveals: three information-reveal innates that reuse the same driver as
 // Intimidate (a one-line IsActiveSwitchInInnate addition each), delegating to the upstream
 // ABILITYEFFECT_ON_SWITCHIN case so the message / reveal / script / pop-up match the real ability. All
 // three are pure 1:1 clean-upside boons; each effect site (src/battle_util.c) forces the pop-up to show
@@ -7275,7 +7275,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
 }
 
 // ─── Innate Download / Supersweet Syrup (switch-in stat changes) ──────────────
-// Batch L's third sub-group: two switch-in stat-change innates that reuse the same driver as Intimidate
+// Switch-in stat-change innates: two that reuse the same driver as Intimidate
 // (a one-line IsActiveSwitchInInnate addition each), delegating to the upstream ABILITYEFFECT_ON_SWITCHIN
 // case so the stat change / script / pop-up match the real ability. Both are 1:1 clean-upside boons
 // (self-boost / foe-debuff); each effect site (src/battle_util.c) forces the pop-up to the innate when the
@@ -7383,7 +7383,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Supersweet Syrup fires o
 }
 
 // ─── Innate Unnerve / Hospitality (switch-in effects) ─────────────────────────
-// Batch L's fourth/final sub-group. Both reuse the same switch-in driver as Intimidate, but at their OWN
+// Fourth/final switch-in sub-group. Both reuse the same switch-in driver as Intimidate, but at their OWN
 // switch-in phases rather than through ABILITYEFFECT_ON_SWITCHIN: Unnerve delegates to the upstream
 // ABILITYEFFECT_UNNERVE case (hooked from the new SWITCH_IN_EVENTS_UNNERVE_INNATE event), Hospitality to
 // ABILITYEFFECT_DEPENDS_ON_ALLY (hooked from the new SECOND_EVENT_ABILITIES_INNATE step). Both are 1:1
@@ -7478,7 +7478,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Hospitality does nothing ou
     }
 }
 
-// ─── Innate Defiant / Competitive (Batch M, stat-drop reactions) ──────────────
+// ─── Innate Defiant / Competitive (stat-drop reactions) ──────────────
 // When a FOE lowers one of the holder's stats (a move, Intimidate, or Sticky Web),
 // Defiant raises the holder's Attack and Competitive its Sp. Atk by 2 stages. Both are
 // 1:1 clean-upside copies wired at the single scripted reaction site BS_TryDefiantRattled
@@ -7593,7 +7593,7 @@ AI_SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: AI won't cycle Intimidate into 
     }
 }
 
-// ─── Innate on-hit stat boosts (Batch M: Justified / Stamina / Water Compaction / Anger Point) ─────
+// ─── Innate on-hit stat boosts (Justified / Stamina / Water Compaction / Anger Point) ─────
 //
 // Four on-hit reactions that fire from the upstream ABILITYEFFECT_MOVE_END case, so each reuses the
 // existing on-hit driver (IsActiveOnHitInnate) — a one-line addition each. When the holder is hit:
@@ -7726,10 +7726,10 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate J
     }
 }
 
-// ─── Innate fear-response Speed boosts (Batch M: Rattled / Steadfast) ───────────────────────────────
+// ─── Innate fear-response Speed boosts (Rattled / Steadfast) ───────────────────────────────
 //
 // Both raise the holder's Speed +1 when it is frightened. Rattled has TWO triggers, spanning the two
-// Batch M sites already opened: a Dark/Ghost/Bug hit (reuses the on-hit driver, like Justified) and a
+// The two on-hit/reaction sites already opened: a Dark/Ghost/Bug hit (reuses the on-hit driver, like Justified) and a
 // foe's Intimidate (credited at BS_TryDefiantRattled beside Defiant/Competitive, Gen8+ only). Steadfast
 // reacts to flinching (made innate-aware at the CancelerFlinch site). Both are 1:1 clean-upside copies;
 // the pop-up shows the innate, not the (different) chosen ability.
@@ -7871,9 +7871,9 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Steadfast is dropped on the Lucari
     }
 }
 
-// ─── Innate KO / on-damage / on-faint stat boosts (Batch M: Moxie / Berserk / Soul-Heart) ───────────
+// ─── Innate KO / on-damage / on-faint stat boosts (Moxie / Berserk / Soul-Heart) ───────────
 //
-// Batch M's fourth and final sub-group. Moxie raises Attack +1 for each foe the holder knocks out
+// The fourth on-hit sub-group. Moxie raises Attack +1 for each foe the holder knocks out
 // (fired from the upstream ABILITYEFFECT_MOVE_END_FOES_FAINTED case, a one-line addition to the
 // attacker-side on-hit driver, beside Magician). Berserk raises Sp. Atk +1 when an attack drops the
 // holder's HP from above 1/2 to 1/2 or less (fired from the per-damaged-battler ABILITYEFFECT_COLOR_CHANGE
@@ -7973,7 +7973,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate B
 }
 
 // ───────────────────────────────────────────────────────────────────────────
-// Batch U — ally-support: Battery / Power Spot / Telepathy / Aroma Veil / Flower Veil
+// Ally-support: Battery / Power Spot / Telepathy / Aroma Veil / Flower Veil
 // ───────────────────────────────────────────────────────────────────────────
 
 // Battery: an innate Battery on the partner boosts the attacker's SPECIAL moves x1.3. Charjabug is sole
@@ -8186,7 +8186,7 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate A
 }
 
 // ───────────────────────────────────────────────────────────────────────────
-// Batch Y1 — promoted-from-rejected clones: Chilling Neigh / Grim Neigh / Electromorphosis
+// Promoted-from-rejected clones: Chilling Neigh / Grim Neigh / Electromorphosis
 // ───────────────────────────────────────────────────────────────────────────
 // Chilling Neigh / Grim Neigh are Moxie clones (raise the holder's Attack / Sp. Atk +1 per foe it KOs) and
 // reuse the attacker-side on-hit driver's shared ABILITYEFFECT_MOVE_END_FOES_FAINTED case. Electromorphosis is
@@ -8301,7 +8301,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate E
     }
 }
 
-// Batch Y sub-group Y2 — Transistor / Dragon's Maw (flat type-power-booster clones of Steelworker /
+// Transistor / Dragon's Maw (flat type-power-booster clones of Steelworker /
 // Rocky Payload, wired in CalcAttackStat). A forced chosen Damp keeps the innate observable (chosen !=
 // the innate), mirroring the Steelworker / Rocky Payload tests; the boost lives in the shared damage
 // calc, so comparing feature-off vs feature-on isolates the innate's exact multiplier.
@@ -8346,11 +8346,11 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Dragon's Maw boosts a Drago
     }
 }
 
-// Batch Y3 — Prism Armor / Shadow Shield / Neuroforce / Supreme Overlord (damage / power calc clones).
+// Prism Armor / Shadow Shield / Neuroforce / Supreme Overlord (damage / power calc clones).
 // Prism Armor rides Filter / Solid Rock's -25%-vs-supereffective clause and Shadow Shield rides
 // Multiscale's halve-at-full-HP clause (both in GetDefenderAbilitiesModifier); a forced chosen Damp keeps
 // the innate observable (chosen != the innate), like the Solid Rock / Multiscale tests. Unlike their
-// breakable Batch B cousins, Prism Armor / Shadow Shield are UNBREAKABLE, so an attacker's Mold Breaker
+// breakable cousins, Prism Armor / Shadow Shield are UNBREAKABLE, so an attacker's Mold Breaker
 // cannot pierce them (the distinguishing contrast tests below).
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Prism Armor reduces supereffective damage by 0.75", s16 damage)
 {
@@ -8463,7 +8463,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Neuroforce boosts a superef
 }
 
 // Supreme Overlord latches a +10%/fallen-teammate move-power boost at switch-in, so an innate holder
-// rides the Batch L switch-in driver (ABILITYEFFECT_ON_SWITCHIN) to set the counter + show the pop-up
+// rides the switch-in driver (ABILITYEFFECT_ON_SWITCHIN) to set the counter + show the pop-up
 // (overwritten to the innate when the chosen ability differs) exactly like the real ability; the boost is
 // read back in CalcAttackStat. A forced chosen Damp keeps the innate observable. One teammate faints (via
 // Memento) before Kingambit switches in, so the counter latches at 1 -> +10%.
@@ -8491,7 +8491,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Supreme Overlord boosts pow
     }
 }
 
-// Batch Y4 — Full Metal Body / Mind's Eye (stat-drop / accuracy / hit-trait clones).
+// Full Metal Body / Mind's Eye (stat-drop / accuracy / hit-trait clones).
 // Full Metal Body is the UNBREAKABLE clone of Clear Body: it blocks ANY stat drop exactly like Clear Body
 // (GetInnateStatDropProtector / IsAbilityBlocked, pop-up overwritten to the innate), but because its
 // .breakable = FALSE an attacker's Mold Breaker cannot pierce it — the distinguishing contrast test below.
@@ -8629,7 +8629,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Min
     }
 }
 
-// Batch Y5 — Purifying Salt / Good as Gold (status immunities).
+// Purifying Salt / Good as Gold (status immunities).
 // Purifying Salt makes the holder immune to EVERY non-volatile status and halves incoming Ghost damage;
 // Good as Gold blocks incoming status moves. Both 1:1 clean-upside copies (Purifying Salt's only real cost —
 // blocking the holder's OWN Rest — is dropped for the innate, the Insomnia/Vital Spirit pure-boon precedent).
@@ -8769,7 +8769,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Goo
     }
 }
 
-// ─── Innate Intrepid Sword / Dauntless Shield (switch-in stat boosts, Batch Y6) ────────────────────────────
+// ─── Innate Intrepid Sword / Dauntless Shield (switch-in stat boosts) ────────────────────────────
 // Both reuse the same switch-in driver as Intimidate (a SwitchInInnateAbilityEffect -> ABILITYEFFECT_ON_SWITCHIN
 // addition), so the +1 Attack / +1 Defense, the once-per-battle latch (party-state boost flag, active under
 // B_* >= GEN_9), and the pop-up match the real ability. Each vehicle carries a chosen ability != the innate
@@ -8862,7 +8862,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Dauntless Shield raises the
     }
 }
 
-// ─── Innate Beast Boost (on-KO best-stat boost, Batch Y7) ───────────────────────────────────────────────────
+// ─── Innate Beast Boost (on-KO best-stat boost) ───────────────────────────────────────────────────
 // Beast Boost is Moxie's best-stat edition: on a KO the holder's HIGHEST stat rises +1. It rides the same
 // attacker-side on-hit driver as Moxie / Chilling Neigh / Grim Neigh (the upstream
 // ABILITYEFFECT_MOVE_END_FOES_FAINTED case already reads GetHighestStatId for it), so the stat pick / stat
@@ -9300,7 +9300,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
     }
 }
 
-// ===== Batch X — script jumpifability innate-awareness =====================================
+// ===== Script jumpifability innate-awareness =====================================
 // The per-battler jumpifability form used to read only the chosen ability slot, so an innate holder
 // was invisible to the two ability blocks that live in a battle script rather than in C: Sticky Hold
 // vs Corrosive Gas / a Pickpocket steal, and Own Tempo's confuse-move pop-up. Cmd_jumpifability now
@@ -9365,7 +9365,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Sticky Hold blocks a Pickpo
     }
 }
 
-// Batch X also upgrades the innate Own Tempo confuse block from a silent immunity (handled by
+// This fix also upgrades the innate Own Tempo confuse block from a silent immunity (handled by
 // CanBeConfused) to one that shows the Own Tempo pop-up, because BattleScript_EffectConfuse's own
 // jumpifability now sees the innate. The immunity itself is already covered above; this pins the pop-up.
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo shows its pop-up when blocking a confuse move")
@@ -9435,7 +9435,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate M
     }
 }
 
-// ===== Batch Y8 — Turboblaze / Teravolt (Mold Breaker clones) ==============================
+// ===== Turboblaze / Teravolt (Mold Breaker clones) ==============================
 // Identical to Mold Breaker: the HOLDER's moves ignore the target's breakable ability. They share
 // Mold Breaker's exact machinery — IsMoldBreakerTypeAbility now credits an innate Turboblaze / Teravolt
 // too — so one clause each covers every effect site and AI read. Isolate the INNATE (not the chosen

@@ -128,8 +128,8 @@ determinism-safe. The buckets (each rejected ability sits in exactly one):
 **`:x:` is not always permanent.** An ability rejected only because its driver or its
 implemented *clone* didn't exist yet can be promoted to `:white_large_square:` once
 it does — that's how the clone-of-implemented set (Chilling Neigh = Moxie, Full Metal
-Body = Clear Body, Transistor = Steelworker, …) became **Batch Y** (the promoted
-clone set, all since wired). Before promoting an `:x:`, confirm it isn't
+Body = Clear Body, Transistor = Steelworker, …) became the **promoted-from-rejected
+clone set** (all since wired). Before promoting an `:x:`, confirm it isn't
 load-bearing as a stable frontier-override pick (`src/fork/frontier_extended_mons.c`);
 un-rejecting one forces the Step 3.5 sweep to re-point every override that hands it
 out.
@@ -491,7 +491,7 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
    > real-slot repurpose first**: the override table is consulted unconditionally by `GetSpeciesAbility`
    > (not feature-gated), so the row deletes that real ability from the species game-wide — grep
    > `test/battle/` for `Ability(ABILITY_X)` on that species before repurposing (empty-`ABILITY_NONE`
-   > slots need no audit; nothing observes them). See the Batch P block's refined rule.
+   > slots need no audit; nothing observes them). See the refined override rule.
 6. Update the roster header's INNATE ABILITIES note to mention the new ability.
 
 ### Step 4 — test it
@@ -1106,7 +1106,7 @@ chosen-only since `AI_CanPutToSleep` already covers them (Insomnia/Vital Spirit 
 the real ability). Suppression parity via `IsInnateActive()`: all three are breakable, so an attacker's
 Mold Breaker pierces an innate one exactly as the real ability. The overworld wild-encounter read of
 Vital Spirit (`src/wild_encounter.c`) is deliberately untouched (innates are battle-only). CANON-ONLY (no
-flavor picks — sleep immunity is a strong defensive boon and this is a 4-ability batch, so the set stays
+flavor picks — sleep immunity is a strong defensive boon and this is a four-ability group, so the set stays
 tight to species whose ability data carries it in any slot): every such species keeps the immunity no
 matter which slot a build picks, with forms listed where their own data carries it (Galarian Mr. Mime's
 Vital Spirit; Megas mirror the base as a pure boon — Banette-Mega keeps Insomnia+Levitate). Alcremie's
@@ -1133,7 +1133,7 @@ identity). AI is made innate-aware at its three Early Bird reads: the wake-turn 
 and the Rest-value heuristic (`src/battle_ai_util.c` / `src/battle_ai_main.c`) and the Yawn stay-in switch
 heuristic (`src/battle_ai_switch.c`). No script/pop-up/driver. Suppression parity via `IsInnateActive()`
 (Early Bird is not breakable, so Mold Breaker never touches it, same as the real ability). CANON-ONLY
-(no flavor picks, matching the batch): every species whose data carries Early Bird in any slot, forms
+(no flavor picks, matching the group): every species whose data carries Early Bird in any slot, forms
 where their data carries it (Megas mirror the base as a pure boon — Houndoom-Mega / Kangaskhan-Mega keep
 Early Bird). Many already carry other innates (Ledyba/Ledian's Swarm, the Sunkern/Seedot/Nuzleaf/Shiftry
 Chlorophyll), so they take a combined `INNATES(...)` list.
@@ -1157,11 +1157,10 @@ precedent in the same file) so the AI never predicts phantom Toxic Spikes poison
 innate-immune switch-in candidate. NO pure-boon divergence: poison immunity is a clean upside that
 never hurts its holder, so both innates are a 1:1 copy of the real ability. Suppression parity
 holds via `IsInnateActive()` / `AI_IsInnateOnSide()`: both are breakable, so an attacker's Mold Breaker
-pierces an innate Immunity/Pastel Veil exactly as it would the real ability. **Switch-in ally-cure
-(Batch V, now wired):** the real Pastel Veil's switch-in ALLY-cure
+pierces an innate Immunity/Pastel Veil exactly as it would the real ability. **Switch-in ally-cure:** the real Pastel Veil's switch-in ALLY-cure
 (`BattleScript_PastelVeilActivates`, looping self+partner to cure pre-existing poison on the holder's
 switch-in) — previously left unwired for want of a switch-in-with-script driver — now rides the switch-in
-driver Batch L built (`TryActivateInnateSwitchInEffects`): `SwitchInInnateAbilityEffect` maps
+switch-in driver built (`TryActivateInnateSwitchInEffects`): `SwitchInInnateAbilityEffect` maps
 `ABILITY_PASTEL_VEIL` to `ABILITYEFFECT_ON_SWITCHIN`, so the `FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE`
 hook runs the full script (holder + ally) with the pop-up overwritten to Pastel Veil when the chosen
 ability differs. That block runs BEFORE the `ABILITYEFFECT_IMMUNITY` self-cure chokepoint, so at a
@@ -1172,7 +1171,7 @@ poison (the pop-up clobbers the cure script's loop counter — reproducible with
 a fork divergence). CANON-ONLY (no flavor picks): Immunity goes to
 Gligar (combined with its innate Sand Veil) and Snorlax/Snorlax-Gmax (combined with innate Unaware),
 each whose real ability data carries Immunity in some slot. (Zangoose also has slot-0 Immunity in its
-data, but is given innate Toxic Boost instead — see the Batch N reference: the two are contradictory and
+data, but is given innate Toxic Boost instead (see the status-conditional-boosts note): the two are contradictory and
 Toxic Boost is Zangoose's actual frontier identity.) Pastel Veil goes to
 Galarian Ponyta/Rapidash, the only species whose real ability data carries it. Frontier roster sets
 that hardcoded Pastel Veil are freed (Step 3.5): Rapidash-Galar → Anticipation (its real Hidden
@@ -1238,7 +1237,7 @@ Sheer Force, Grapploct (Limber + Technician) → Water Absorb.
 
 ### ABILITY_IRON_FIST / ABILITY_RECKLESS / ABILITY_STRONG_JAW / ABILITY_TOUGH_CLAWS / ABILITY_SHARPNESS / ABILITY_MEGA_LAUNCHER / ABILITY_STEELWORKER / ABILITY_STEELY_SPIRIT / ABILITY_ROCKY_PAYLOAD / ABILITY_SAND_FORCE / ABILITY_ANALYTIC / ABILITY_ADAPTABILITY / ABILITY_PUNK_ROCK / ABILITY_STAKEOUT
 
-The Batch A **offensive move-power boosters**: each gives the holder a conditional damage multiplier on
+The **offensive move-power boosters**: each gives the holder a conditional damage multiplier on
 its own moves (Iron Fist +20% punching, Reckless +20% recoil/crash, Strong Jaw +50% biting, Tough Claws
 +30% contact, Sharpness +50% slicing, Mega Launcher +50% pulse, Steelworker / Steely Spirit +50% Steel,
 Rocky Payload +50% Rock, Sand Force +30% Ground/Rock/Steel in sandstorm, Analytic +30% when moving last,
@@ -1277,11 +1276,11 @@ abilities the set stays to species whose ability data carries the booster in any
 where its own data carries it, and a Mega whose base creature has the innate mirrors it as a pure boon —
 e.g. Gallade-Mega keeps Sharpness, Starmie-Mega keeps Analytic, Excadrill-Mega keeps Sand Force, even where
 the Mega's own ability differs). Many users already carry other innates, so they take a combined
-`INNATES(...)` list with the booster added. Frontier roster sets that hardcoded a Batch A ability are freed
+`INNATES(...)` list with the booster added. Frontier roster sets that hardcoded one of these are freed
 (Step 3.5) to a complementary REAL slot where one exists (e.g. Gigalith's Sand Force → chosen Sand Stream,
 Kleavor's Sharpness → chosen Sheer Force, Dracovish's Strong Jaw → chosen Water Absorb, Hitmonchan's Iron
 Fist → chosen Inner Focus); sets whose only complementary slots are themselves already innate are left as-is
-(still correct — the chosen Batch A ability provides the boost). Three sole-real-ability species take a
+(still correct — the chosen booster provides the boost). Three sole-real-ability species take a
 fork-owned chosen-ability override (`species_ability_overrides.c`): Clawitzer (sole Mega Launcher) → Water
 Absorb, Melmetal (sole Iron Fist) → Filter, Lycanroc-Dusk (sole Tough Claws) → Sand Rush.
 
@@ -1320,7 +1319,7 @@ Jirachi → Victory Star, Shaymin-Sky → Effect Spore, Meloetta → Punk Rock.
 
 ### ABILITY_MULTISCALE / ABILITY_SOLID_ROCK / ABILITY_FUR_COAT / ABILITY_ICE_SCALES / ABILITY_HEATPROOF / ABILITY_FRIEND_GUARD / ABILITY_WATER_BUBBLE
 
-The "defensive damage reducers" (Batch B): all seven cut the damage the holder (or its ally) takes,
+The "defensive damage reducers": all seven cut the damage the holder (or its ally) takes,
 handled by additive `IsInnateActive()` clauses beside the existing chosen-ability reads in the damage
 calc (`src/battle_util.c`), with a `chosen != ABILITY_X` guard so a mon running the real ability never
 double-applies. NO pure-boon divergence — each real ability is a clean upside that never hurts its holder,
@@ -1346,7 +1345,7 @@ keyed off the real battler, so it both threatens and respects them. Per-ability 
 - **Friend Guard** (ally-side −25%): the `GetDefenderPartnerAbilitiesModifier` clause (beside the chosen Friend
   Guard case), keyed off the partner; like the real ability it does not reduce confusion self-hits.
 - **Water Bubble** (halve Fire damage + double the holder's Water moves + burn immunity): wired in FULL as a
-  pure-boon innate, not just the Batch B "fire-half". (1) Fire-damage halving shares Heatproof's clause in the
+  pure-boon innate, not just the "fire-half". (1) Fire-damage halving shares Heatproof's clause in the
   CalcAttackStat defender switch. (2) Water-move doubling is an `IsInnateActive(battlerAtk, ABILITY_WATER_BUBBLE)`
   clause in the offensive-booster innate block (`CalcAttackStat`), beside the chosen Water Bubble case. (3) Burn
   immunity is wired at the burn status-set site in `CanSetNonVolatileStatus` (`src/battle_util.c`), mirroring the
@@ -1371,7 +1370,7 @@ No Guard, Bronzong → Soundproof, Sinistcha → Flash Fire — each a stable `:
 
 ### ABILITY_GUTS / ABILITY_MARVEL_SCALE / ABILITY_QUICK_FEET / ABILITY_TOXIC_BOOST / ABILITY_FLARE_BOOST
 
-The "status-conditional stat boosts" (Batch N): each grants the holder a stat/damage boost while it carries a
+The "status-conditional stat boosts": each grants the holder a stat/damage boost while it carries a
 status condition (Guts +50% physical Attack while statused, Marvel Scale +50% Defense while statused, Quick Feet
 +50% Speed while statused, Toxic Boost +50% physical power while poisoned, Flare Boost +50% special power while
 burned). All five are **clean upsides** — the boost only ever helps the holder, and even the burn/paralysis
@@ -1417,17 +1416,17 @@ added (Heracross + Swarm, the Makuhita/Hariyama + Thick Fat, Larvitar + Sand Vei
 Timburr line + Iron Fist, Obstagoon + Reckless, Milotic + Cute Charm + Serene Grace).
 
 **TOXIC_BOOST's user is Zangoose, which carries innate Toxic Boost INSTEAD of innate Immunity.** Zangoose's real
-ability data is Immunity (slot 0) / Toxic Boost (HA), and a prior batch gave it innate Immunity — but the two are
+ability data is Immunity (slot 0) / Toxic Boost (HA), and it was earlier given innate Immunity — but the two are
 **contradictory** (Immunity blocks the poison Toxic Boost needs), so a Zangoose can't usefully carry both as
 always-on innates. Toxic Boost is Zangoose's actual competitive/frontier identity (its sets run Toxic Orb + Facade),
-which innate Immunity silently neuters, so this batch **reassigns** Zangoose's innate from Immunity → Toxic Boost.
+which innate Immunity silently neuters, so Zangoose's innate is **reassigned** from Immunity → Toxic Boost.
 Innate Immunity still lives on its other canon users, Gligar and Snorlax (the Immunity tests were repointed to
 Snorlax). This is the one place where a species' canon slot-0 ability is *not* its innate — the general rule when a
 species has two contradictory candidate innates (a status-immunity vs a same-status-requiring boost) is to keep the
 one that matches how the species is actually used; Zangoose is currently the only such case (every other
 toxic-themed species is a Poison-type, type-immune to poison, so none competes for Toxic Boost).
 
-**Step 3.5 (frontier roster):** sets that hardcoded a Batch N ability are freed to a complementary REAL slot
+**Step 3.5 (frontier roster):** sets that hardcoded one of these are freed to a complementary REAL slot
 (Hariyama/Conkeldurr → Sheer Force; Flareon → Flash Fire; Machamp → No Guard; Heracross/Mightyena → Moxie;
 Ursaring → Unnerve; Milotic → Competitive; Obstagoon → Defiant; Luxray/Squawkabilly → Intimidate; Throh →
 Inner Focus; Ursaluna → Bulletproof; Swellow → Scrappy; Linoone → Gluttony; Drifblim → Unburden; Raticate →
@@ -1437,7 +1436,7 @@ Boost needs (a stable `:x:` pick that also skips Life Orb recoil on the SD set).
 
 ### ABILITY_SUPER_LUCK / ABILITY_SNIPER / ABILITY_MERCILESS
 
-The "crit-rate / crit-damage modifiers" (Batch O): all three live in the critical-hit calc in
+The "crit-rate / crit-damage modifiers": all three live in the critical-hit calc in
 `src/battle_util.c`. **Super Luck** adds +1 to the holder's crit stage; **Merciless** auto-crits a target
 that is poisoned or badly poisoned; **Sniper** boosts critical-hit *damage* (the crit multiplier becomes
 ×2.25 instead of ×1.5). All three are **clean upsides** that never hurt the holder, so each innate is a plain
@@ -1476,7 +1475,7 @@ issue. What the AI *does* keep:
   `src/battle_ai_main.c` / `src/battle_ai_items.c`) and the "poison the target" score (Merciless,
   `src/battle_ai_util.c`).
 
-(Lesson for the next crit-touching batch: the crit-chance calc is AI-hot and budget-bound — keep it
+(Lesson for future crit-touching work: the crit-chance calc is AI-hot and budget-bound — keep it
 `ctx->innatesEnabled`-gated and do **not** set that flag on the AI's `ShouldCalcCritDamage` context.)
 
 **Species (canon-only, no flavor picks** — crit boosts are potent and hard to justify thematically): every
@@ -1502,11 +1501,11 @@ Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simpl
 (redundant but harmless; the effect sites guard against double-applying), so only the second-ability
 *upgrade* is forgone. (An earlier version of this note also blamed the override table's linear scan for
 the `ai_thinking_time.c` budget — overstated: in-battle reads use the cached `gBattleMons[].ability`, not
-`GetSpeciesAbility`. **Empty-slot** override rows remain fine — see the Batch P refined rule.)
+`GetSpeciesAbility`. **Empty-slot** override rows remain fine — see the refined override rule.)
 
 ### ABILITY_SHIELD_DUST / ABILITY_TINTED_LENS / ABILITY_SCRAPPY / ABILITY_WONDER_SKIN / ABILITY_TANGLED_FEET
 
-The "accuracy / type-effectiveness / effect-chance modifiers" (Batch P). All five are **clean upsides**
+The "accuracy / type-effectiveness / effect-chance modifiers". All five are **clean upsides**
 that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon divergence. (Tangled
 Feet's trigger — being confused — is a bad state, but the *ability's own effect* only ever helps; the
 innate doesn't cause the confusion.) Wiring:
@@ -1535,7 +1534,7 @@ innate doesn't cause the confusion.) Wiring:
   (`src/battle_stat_change.c`): the existing innate-Oblivious block is generalized to a small
   `innateImmunity` pick (Oblivious first, then Scrappy), mirroring the switch cases and overwriting
   the pop-up/record to the innate (the Levitate/Sturdy `abilityPopupOverwrite` precedent). This half
-  did NOT need the Batch L switch-in driver — that driver is only for *casting* Intimidate as an
+  did NOT need the switch-in driver — that driver is only for *casting* Intimidate as an
   innate; *defending* against a real Intimidate is a passive trait at this site.
 - **Wonder Skin** (incoming status moves capped at 50% accuracy) — `GetTotalAccuracy`
   (`src/battle_util.c`), an innate clause beside the `defAbility` test (reordered so the
@@ -1563,19 +1562,18 @@ The dedicated AI *effect* reads were wired by hand (`grep src/battle_ai_*.c`):
   switch check (`src/battle_ai_switch.c`, extending the innate-Oblivious clause).
 
 **AI frame budget (bisected before re-baselining):** the doubles/no-flags thinking-time baseline sat
-*exactly at* its ceiling (21/21 — zero fractional headroom), and with this batch it measures 22. A full
-bisection showed the +1 is NOT algorithmic: reverting *all* of the batch's engine code (battle_util /
+*exactly at* its ceiling (21/21 — zero fractional headroom), and with this work it measures 22. A full
+bisection showed the +1 is NOT algorithmic: reverting *all* of this feature's engine code (battle_util /
 battle_stat_change / battle_ai_*) still measures 22; reverting only the species-table rows (engine at
 HEAD) still measures 22; only reverting *everything* returns 21. I.e. the tip is frame quantization
-plus ROM-layout shift from ~1.2 KB of new species data — every future batch that adds species rows
+plus ROM-layout shift from ~1.2 KB of new species data — every future change that adds species rows
 would hit it regardless of how optimal its code is. `AI_FRAME_CEILING_DOUBLES_NO_FLAGS` was therefore
-re-baselined 21 → 22 (the Technician batch's `SINGLES_SMART_TRAINER` 8 → 9 precedent). The hunt still
-produced three real improvements, kept: (1) the AI's six off-field `SpeciesHasInnate` reads (Batches
-Levitate/Sturdy/Immunity) were **not config-gated**, so they walked the whole innate table even with
+re-baselined 21 → 22 (the Technician `SINGLES_SMART_TRAINER` 8 → 9 precedent). The hunt still
+produced three real improvements, kept: (1) the AI's six off-field `SpeciesHasInnate` reads (Levitate/Sturdy/Immunity) were **not config-gated**, so they walked the whole innate table even with
 the feature off — and, worse, credited innates that don't function (a feature-off misprediction bug);
 all six now check `GetConfig(FEATURE_INNATE_ABILITIES)` first. (2) the innate Sniper / Tinted Lens
 clauses in `GetAttackerAbilitiesModifier` now take the cached `ctx->innatesEnabled` instead of calling
-`GetConfig()` per evaluation (the Batch O caching discipline). (3) `SpeciesHasInnate` is now
+`GetConfig()` per evaluation (the crit-calc caching discipline). (3) `SpeciesHasInnate` is now
 **sublinear**: `GetSpeciesInnateList` binary-searches a lazily built species-sorted row index (~1 KB
 EWRAM bss) instead of walking the ~500-row table linearly — with the feature ON in shipped play, every
 `IsInnateActive` paid that walk on the AI-hot calcs, a cost CI never measures because tests force the
@@ -1596,11 +1594,11 @@ Wonder Skin: Skitty/Delcatty, Venomoth, Sigilyph, Bruxish. Tangled Feet: the Pid
 Pidgeot, mirroring the base), Doduo/Dodrio, Spinda, Chatot, Mr. Rime, Flamigo.
 
 **Frontier (Step 3.5):** these abilities were pending, so many sets had spent their `.ability` slot on
-them. Every set was freed, three ways (this batch also *refined* the Batch O override rule — see below):
+them. Every set was freed, three ways (this work also *refined* the override rule — see below):
 - **Complementary real slot** (no override needed): Kangaskhan → Inner Focus, Miltank → Sap Sipper,
   Exploud → Soundproof, Sigilyph → Magic Guard, Braviary-Hisui → Sheer Force, Pangoro → Mold Breaker,
   Flamigo → Costar. (Inner Focus / Magic Guard / Mold Breaker are still pending, so those re-points get
-  revisited when their batches land — real-slot picks are allowed to be pending; the alternatives were
+  revisited when those abilities land — real-slot picks are allowed to be pending; the alternatives were
   dead slots.)
 - **Empty-slot override rows** (`species_ability_overrides.c`, the established Venusaur/Blaziken shape —
   filling an `ABILITY_NONE` slot deletes nothing and no upstream test can select an empty slot):
@@ -1610,21 +1608,21 @@ them. Every set was freed, three ways (this batch also *refined* the Batch O ove
   double-applying): Venomoth, Dodrio, Noctowl, Illumise, Yanmega, Ribombee — species with **no empty
   slot**, where an override would have to repurpose a *real* slot.
 
-**The refined override rule** (supersedes the blanket "no new rows" reading of the Batch O note): the
+**The refined override rule** (supersedes the blanket "no new rows" reading of the crit-calc note): the
 override table is consulted **unconditionally** by `GetSpeciesAbility` (`src/pokemon.c`) — it is NOT
 gated by `FEATURE_INNATE_ABILITIES` — so a row **replaces that slot game-wide even with innates off**.
 Filling an **empty** slot is therefore always safe; repurposing a **real** slot deletes that ability
 from the species everywhere and breaks any upstream test that selects it (`Ability(ABILITY_X)` —
 e.g. `scrappy.c` pins Kangaskhan's Scrappy, `fling.c`/`stench.c` pin Vivillon's Shield Dust), so it
 needs a per-slot audit (the Sceptile/Bronzong-style dead-weight repurposes were each audited). The
-Batch O note's other concern — the linear override scan costing AI budget — was overstated: in-battle
+The crit-calc note's other concern — the linear override scan costing AI budget — was overstated: in-battle
 ability reads use the cached `gBattleMons[].ability`, not `GetSpeciesAbility` (~37 call sites, mostly
 creation/form-change/AI party reads); the real sensitivity was the frame-boundary baseline, addressed
 by the ceiling re-baseline above.
 
 ### ABILITY_GALE_WINGS / ABILITY_TRIAGE
 
-The "priority granters" (Batch Q): both raise the priority of a class of the holder's moves. Both are
+The "priority granters": both raise the priority of a class of the holder's moves. Both are
 **clean upsides** that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon
 divergence. Wired at the single effect site `GetBattleMovePriority` (`src/battle_main.c`) — **the exact
 function Prankster was wired into**, so each mirrors the Prankster `IsInnateActive()` clause:
@@ -1671,7 +1669,7 @@ natively and that is thematic (its soothing aroma keeps the doubles team awake).
 
 ### ABILITY_SURGE_SURFER / ABILITY_GRASS_PELT
 
-The "terrain modifiers" (Batch R): each is a stat calc keyed off a field terrain — the terrain edition of
+The "terrain modifiers": each is a stat calc keyed off a field terrain — the terrain edition of
 the weather speed-doublers / defensive boosters. Both are **clean upsides** that never hurt the holder, so
 each innate is a plain **1:1 copy** — no pure-boon divergence. Each is wired at a single shared-calc site:
 
@@ -1683,7 +1681,7 @@ each innate is a plain **1:1 copy** — no pure-boon divergence. Each is wired a
   Quick Feet (a statused Quick Feet holder wins the chain), exactly like the real ability.
 - **Grass Pelt** (Defense ×1.5 on Grassy Terrain) — the upstream effect lives in a
   `switch (ctx->abilities[battlerDef])` in `CalcDefenseStat` (`src/battle_util.c`) that dispatches on the
-  *chosen* ability, so (like the Batch B / N reducers Fur Coat and Marvel Scale beside it) the innate
+  *chosen* ability, so (like the reducers Fur Coat and Marvel Scale beside it) the innate
   clause is an additive `if` *after* the switch: `usesDefStat && (fieldStatuses & GRASSY_TERRAIN) &&
   ctx->abilities[battlerDef] != ABILITY_GRASS_PELT && ctx->innatesEnabled &&
   IsInnateActive(battlerDef, ABILITY_GRASS_PELT)`. The `!= ABILITY_GRASS_PELT` guard stops a chosen
@@ -1719,11 +1717,11 @@ immunity + Attack boost), which stacks with the innate Grass Pelt Defense boost.
 
 ### ABILITY_HUGE_POWER / ABILITY_PURE_POWER
 
-The "physical-Attack doublers" (Batch C): each doubles the holder's physical Attack. Both are **clean
+The "physical-Attack doublers": each doubles the holder's physical Attack. Both are **clean
 upsides** that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon divergence.
 Upstream handles the two identically in **one shared `case ABILITY_HUGE_POWER: case ABILITY_PURE_POWER:`**
 of the attack-stat `switch (ctx->abilities[battlerAtk])` in `CalcAttackStat` (`src/battle_util.c`), so the
-innate is a single additive clause *after* the switch (same shape as Batch A's Stakeout / Rocky Payload /
+innate is a single additive clause *after* the switch (same shape as Stakeout / Rocky Payload /
 Guts, in the `if (ctx->innatesEnabled)` block):
 
 ```c
@@ -1748,7 +1746,7 @@ ability is breakable, so Mold Breaker never touches them, same as the real abili
 off the real battler. The `BattlerBenefitsFromAbilityScore` read at `case ABILITY_HUGE_POWER: case
 ABILITY_PURE_POWER:` (`src/battle_ai_util.c`) is an ability-*value* rating for Trace/Skill-Swap-style
 decisions (keyed off the hypothetical ability, not the battler's real one), NOT an effect read, so it is
-correctly left untouched — same call the other calc-modifier batches leave alone.
+correctly left untouched — same call the other calc-modifiers leave alone.
 
 **Species (canon-only, no flavor picks):** Huge Power → the Marill line (Azurill, Marill, Azumarill — each
 merged with its existing innate Thick Fat) and the Diggersby line (Bunnelby, Diggersby). Pure Power → the
@@ -1769,14 +1767,14 @@ Normal STAB (Return / Quick Attack) hits Ghosts.
 
 ### ABILITY_CLEAR_BODY / ABILITY_WHITE_SMOKE / ABILITY_HYPER_CUTTER / ABILITY_BIG_PECKS
 
-The "stat-drop protectors" (Batch D+E, folding the single-stat Batch E into the full-protection Batch D):
+The "stat-drop protectors" (the single-stat protector folded into the full-protection set):
 **Clear Body** and **White Smoke** keep *any* of the holder's stats from being lowered by another mon's
 move or ability; **Hyper Cutter** protects **Attack**, **Big Pecks** protects **Defense**. All four are
 **clean upsides** that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon
 divergence.
 
 **Effect site — one shared block in `IsAbilityBlocked` (`src/battle_stat_change.c`).** The prior Keen Eye /
-Illuminate accuracy block (an innate whose accuracy-drop immunity landed here in Batch P) is **generalized**:
+Illuminate accuracy block (an innate whose accuracy-drop immunity landed here) is **generalized**:
 a new helper `GetInnateStatDropProtector(battler, stat, &fullProtection)` returns the innate ability that
 would block a drop of `stat` on `battler` — Clear Body / White Smoke for any stat (setting `*fullProtection`),
 Hyper Cutter for Attack, Big Pecks for Defense, Keen Eye / Illuminate for accuracy — or `ABILITY_NONE`. The
@@ -1831,7 +1829,7 @@ Regirock / Regice / Registeel / Carbink / Diancie** (Clear Body [+ Sturdy] innat
 
 ### ABILITY_DAZZLING / ABILITY_QUEENLY_MAJESTY / ABILITY_ARMOR_TAIL
 
-The "priority-move blockers" (Batch F): opponents cannot use increased-priority moves against the holder
+The "priority-move blockers": opponents cannot use increased-priority moves against the holder
 **or its allies**. All three are **clean upsides** that never hurt the holder, so each innate is a plain
 **1:1 copy** — no pure-boon divergence.
 
@@ -1866,14 +1864,14 @@ correctly omitted.)
 **Frontier (Step 3.5):** all six hardcoded sets were freed. The **Tsareena** sets take their complementary
 REAL slot-0 **Leaf Guard** (Sweet Veil is already Tsareena's innate, so it can't be reused), the **Farigiraf**
 sets take their complementary REAL HA **Sap Sipper** (`:x:`, a Grass immunity + Attack boost). **Bruxish**
-is the *all-real-abilities-innate* case — Dazzling **and** Strong Jaw (Batch A) **and** Wonder Skin (Batch P)
+is the *all-real-abilities-innate* case — Dazzling **and** Strong Jaw **and** Wonder Skin
 are all now innate — so it takes a fork-owned override (`species_ability_overrides.c`) repurposing its
 innate-redundant, test-unpinned slot-1 Strong Jaw to a chosen **Sheer Force** (`:x:`, powers up its biting
 kit); its slot-0 Dazzling stays a real ability because `dazzling.c` / `bide.c` / `last_resort.c` pin it.
 
 ### ABILITY_PROPELLER_TAIL / ABILITY_STALWART
 
-The "redirection-ignore" abilities (Batch G): the holder's moves ignore every form of move redirection and
+The "redirection-ignore" abilities: the holder's moves ignore every form of move redirection and
 hit the originally-selected target. Both abilities have the **identical** effect and are **clean upsides**
 that never hurt the holder, so each innate is a plain **1:1 copy** — no pure-boon divergence.
 
@@ -1920,7 +1918,7 @@ no frontier set, so no roster change was needed there.
 
 ### ABILITY_SHADOW_TAG / ABILITY_ARENA_TRAP / ABILITY_MAGNET_PULL
 
-The "trapping" abilities (Batch H): the holder keeps opposing mons from switching out or fleeing.
+The "trapping" abilities: the holder keeps opposing mons from switching out or fleeing.
 **Shadow Tag** traps any foe (except one that itself carries Shadow Tag, chosen or innate, under
 `B_SHADOW_TAG_ESCAPE >= GEN_4`); **Arena Trap** traps grounded foes; **Magnet Pull** traps Steel-types
 (regardless of grounding). All three are **clean upsides** that never hurt the holder, so each innate is a
@@ -1990,7 +1988,7 @@ Shadow Tag (redundant with the now-innate one, but harmless) rather than risk th
 
 ### ABILITY_MAGMA_ARMOR / ABILITY_WATER_VEIL / ABILITY_OWN_TEMPO / ABILITY_INNER_FOCUS / ABILITY_LEAF_GUARD / ABILITY_OVERCOAT
 
-The **status-condition immunities** (Batch I): each blocks a specific status/effect on its
+The **status-condition immunities**: each blocks a specific status/effect on its
 holder — Magma Armor (freeze/frostbite), Water Veil (burn), Own Tempo (confusion), Inner Focus
 (flinching), Leaf Guard (all non-volatile status *while the holder is in harsh sunlight*), Overcoat
 (powder moves + sandstorm/hail chip damage). All are **1:1 clean-upside copies** — the same class as
@@ -2004,7 +2002,7 @@ the already-done Limber / Immunity / Insomnia — so no pure-boon divergence.
 - **Own Tempo** — `CanBeConfused` (blocks confusion) plus the AI's `AI_CanBeConfused`
   (`src/battle_ai_util.c`). The confuse *move* path (`BattleScript_EffectConfuse`) additionally shows the
   Own Tempo pop-up now that the per-battler `Cmd_jumpifability` is innate-aware
-  ([Batch X](#batch-x--script-jumpifability-innate-awareness)); before Batch X this immunity was silent
+  ([script `jumpifability` awareness](#script-jumpifability-innate-awareness)); before that fix this immunity was silent
   (the `jumpifability` read only the chosen slot), the immunity itself always coming from `CanBeConfused`.
 - **Inner Focus** — the `MOVE_EFFECT_FLINCH` case of `SetMoveEffect` (`src/battle_script_commands.c`)
   and the `DETERMINISTIC_HOLD_EFFECTS` King's-Rock would-it-land mirror (`src/battle_hold_effects.c`);
@@ -2041,7 +2039,7 @@ omitted as redundant** (their sole chosen ability already grants the effect) *un
 frontier set — **Zarude** (sole Leaf Guard) and **Enamorus-Therian** (sole Overcoat) instead take the
 innate + a fork-owned chosen override (Tough Claws / Sheer Force), like Ogerpon-Cornerstone.
 
-**Frontier slot freeing (Step 3.5) is partial for this batch.** These status-immunity species are
+**Frontier slot freeing (Step 3.5) is partial here.** These status-immunity species are
 unusually innate-dense — many already carry several innates — so most frontier sets that hardcoded one
 of these six abilities are on species whose *remaining* real slots are all likewise innate (or a
 drawback, or a still-pending innate). The cleanly-tractable sets were freed: 11 species took an
@@ -2058,15 +2056,15 @@ focused follow-up rather than risked here.
 
 ### ABILITY_SUCTION_CUPS / ABILITY_GUARD_DOG
 
-Both resist being forced out of battle (Batch S). Wired at the two C forced-switch sites in
+Both resist being forced out of battle. Wired at the two C forced-switch sites in
 `src/battle_move_resolution.c`: the Dragon Tail / Circle Throw hit-switch (`EFFECT_HIT_SWITCH_TARGET`,
 Guard Dog silently breaks, Suction Cups shows its anchor pop-up) and the Red Card activation
 (`TryRedCardActivation`). Roar / Whirlwind (`EFFECT_ROAR`) resolve through a *battle script* whose
 `jumpifability` reads only the chosen slot, so `BS_JumpIfRoarFails` (`src/battle_script_commands.c`) is
 made innate-aware there: an innate Guard Dog fails the phaze plainly, an innate Suction Cups jumps to
 `BattleScript_AbilityPreventsPhasingOut` with the pop-up overwritten to Suction Cups. Both are 1:1
-clean-upside copies (no downside). **Guard Dog's Intimidate half (Batch V, now wired):** the forced-switch
-block shipped in Batch S; Guard Dog's **Intimidate-immunity + Attack-boost** half — deferred until the
+clean-upside copies (no downside). **Guard Dog's Intimidate half:** the forced-switch
+block shipped earlier; Guard Dog's **Intimidate-immunity + Attack-boost** half — deferred until the
 Intimidate switch-in driver existed — is now wired at the Intimidate-reaction site
 `IsIntimidateBlocked` (`src/battle_stat_change.c`). An innate Guard Dog (chosen ability differs, so the
 `ABILITY_GUARD_DOG` switch case misses it) is immune to Intimidate's Attack drop and instead boosts its
@@ -2084,17 +2082,17 @@ Toxic Chain).
 
 ### ABILITY_ROCK_HEAD
 
-Negates recoil damage from the holder's own moves (Batch S), 1:1 clean-upside copy. Wired at the single
+Negates recoil damage from the holder's own moves, 1:1 clean-upside copy. Wired at the single
 recoil site in `src/battle_move_resolution.c` (`EFFECT_RECOIL` / `EFFECT_CHLOROBLAST`) beside the chosen
 `IsAbilityAndRecord(...ABILITY_ROCK_HEAD)` test — an `IsInnateActive` clause that does NOT record (the
-chosen slot stays identity, mirroring the Batch G Propeller Tail/Stalwart pattern). No pop-up (silent).
+chosen slot stays identity, mirroring the Propeller Tail/Stalwart pattern). No pop-up (silent).
 AI is innate-aware: `AI_IsDamagedByRecoil` (`src/battle_ai_util.c`) credits an innate Rock Head so the AI
 doesn't over-fear its own recoil. Canon-only. Many canon Rock Head users are frontier sets; those whose
 every real ability is now innate take a fork-owned override.
 
 ### ABILITY_LONG_REACH
 
-Makes all of the holder's moves non-contact (Batch S), 1:1 clean-upside copy. Wired at the single contact
+Makes all of the holder's moves non-contact, 1:1 clean-upside copy. Wired at the single contact
 chokepoint `IsMoveMakingContact` (`src/battle_util.c`) — an `IsInnateActive` clause after the chosen
 `abilityAtk == ABILITY_LONG_REACH` test (no record). Because every contact-triggered effect (Rocky
 Helmet, Rough Skin/Iron Barbs, Static/Flame Body, Pickpocket, King's Rock-on-contact, …) flows through
@@ -2104,7 +2102,7 @@ Helmet/Iron Barbs move-comparison in `AI_CompareDamagingMoves` and `AI_MoveMakes
 
 ### ABILITY_SKILL_LINK
 
-Multistrike moves always hit the maximum number of times (Batch S), 1:1 clean-upside copy. Wired at the
+Multistrike moves always hit the maximum number of times, 1:1 clean-upside copy. Wired at the
 multi-hit-count sites in `src/battle_move_resolution.c` (`CancelerMultihitMoves` +
 `ShouldSkipAccuracyCalcPastFirstHit`) beside the chosen reads, including the `DETERMINISTIC_MOVE_RESULTS`
 reroute (Skill Link forces `DETERMINISTIC_MULTI_HIT_MAX_COUNT` instead of `..._COUNT`, and guarantees
@@ -2114,7 +2112,7 @@ an innate Skill Link's guaranteed damage. No pop-up. Canon-only.
 
 ### ABILITY_INFILTRATOR
 
-Ignores the foe's Light Screen / Reflect / Aurora Veil, Safeguard, Mist and Substitute (Batch S), 1:1
+Ignores the foe's Light Screen / Reflect / Aurora Veil, Safeguard, Mist and Substitute, 1:1
 clean-upside copy. Wired at each foe-barrier site: `GetDefenderAbilitiesModifier`'s screen check
 (`src/battle_util.c`), `IsSafeguardProtected` (`src/battle_util.c`), `IsMistProtected`
 (`src/battle_stat_change.c`) and the Substitute-block resolver in `src/battle_script_commands.c` (the
@@ -2125,7 +2123,7 @@ innate-aware: the Mist-ignore check (`src/battle_ai_util.c`) and the Substitute/
 
 ### ABILITY_CORROSION
 
-Lets the holder poison / badly-poison Poison- and Steel-type targets (Batch S), 1:1 clean-upside copy.
+Lets the holder poison / badly-poison Poison- and Steel-type targets, 1:1 clean-upside copy.
 Wired at the single type-immunity gate in `CanSetNonVolatileStatus` (`src/battle_util.c`) — the innate
 clause sits beside the chosen `abilityAtk != ABILITY_CORROSION` test, so a move-based poison from an
 innate Corrosion holder lands on a Steel/Poison foe exactly as the real ability does (Corrosion only
@@ -2133,21 +2131,21 @@ ever applies to the holder's own poisoning, so this one site is the whole effect
 
 ### ABILITY_STICKY_HOLD
 
-Keeps the holder's item from being stolen or removed (Batch S), 1:1 clean-upside copy. Wired at the
+Keeps the holder's item from being stolen or removed, 1:1 clean-upside copy. Wired at the
 common removal sites: Knock Off and Thief/Covet steal (`src/battle_move_resolution.c`, pop-up overwritten
 to Sticky Hold), Trick/Switcheroo (`src/battle_script_commands.c`, pop-up overwrite), Incinerate and Bug
 Bite (`src/battle_script_commands.c`, silent), and Magician (`src/battle_util.c`, silent). AI is
 innate-aware: the Knock Off/Corrosive Gas/Thief scoring and the item-swap heuristics
 (`src/battle_ai_main.c`, `src/battle_ai_util.c`) credit an innate Sticky Hold. **The two script-driven
-sites are now covered (Batch X):** an innate Sticky Hold blocks a Pickpocket's on-contact steal (its
+sites are now covered:** an innate Sticky Hold blocks a Pickpocket's on-contact steal (its
 `BattleScript_Pickpocket` `jumpifability` is innate-aware, plus the C-side steal gate in
 `src/battle_move_resolution.c` now reads `IsInnateActive` beside the cached chosen ability) and Corrosive
 Gas (`BattleScript_EffectCorrosiveGas`'s `jumpifability`), both via the innate-aware per-battler
-`Cmd_jumpifability` — see the [Batch X block](#batch-x--script-jumpifability-innate-awareness). Canon-only.
+`Cmd_jumpifability` — see the [script `jumpifability` awareness section](#script-jumpifability-innate-awareness). Canon-only.
 
 ### ABILITY_UNSEEN_FIST / ABILITY_PIERCING_DRILL
 
-Contact moves hit through the target's Protect (Batch S), an identical pair, both 1:1 clean-upside
+Contact moves hit through the target's Protect, an identical pair, both 1:1 clean-upside
 copies. Wired at the two shared Protect sites in `src/battle_util.c` (`IsBattlerProtected`) and
 `src/battle_move_resolution.c` (`CancelerPriorityBlock`-style protect resolver) — both already read both
 abilities, so the innate clause adds `IsInnateActive` for each beside the chosen reads. AI is
@@ -2158,7 +2156,7 @@ membership only, since the effect site is identical to Unseen Fist's (which is f
 
 ### ABILITY_HEAVY_METAL / ABILITY_LIGHT_METAL
 
-Double / halve the holder's weight (Batch S), 1:1 clean-upside copies. Wired at the single weight calc
+Double / halve the holder's weight, 1:1 clean-upside copies. Wired at the single weight calc
 `GetBattlerWeight` (`src/battle_util.c`) beside the chosen `ability == ABILITY_HEAVY_METAL` /
 `... LIGHT_METAL` tests, so every weight-based interaction (Low Kick / Grass Knot power against the
 holder, its own Heavy Slam / Heat Crash, Sky Drop, Heavy Ball) reflects the innate. AI weight reads run
@@ -2170,7 +2168,7 @@ Copperajah lines.
 
 ### ABILITY_RAIN_DISH / ABILITY_ICE_BODY / ABILITY_SHED_SKIN / ABILITY_HYDRATION / ABILITY_HEALER / ABILITY_HARVEST / ABILITY_CUD_CHEW / ABILITY_PICKUP / ABILITY_BAD_DREAMS
 
-The **end-of-turn effects** (Batch J), all 1:1 clean-upside copies. These nine are *active, scripted
+The **end-of-turn effects**, all 1:1 clean-upside copies. These nine are *active, scripted
 end-turn* innates: they reuse the **existing Speed Boost driver** — added to `IsActiveEndTurnInnate`
 (`src/fork/innate_abilities.c`), which `TryActivateInnateEndTurnEffects` dispatches from the
 `THIRD_EVENT_BLOCK_ABILITIES_INNATE` end-turn step by delegating to the upstream
@@ -2197,13 +2195,13 @@ switch-in predictions (`GetSwitchinWeatherImpact`, `GetSwitchinStatusDamage`,
 hail-damage predictor) credit an innate Rain Dish / Ice Body / Shed Skin / Hydration. Canon-only for all
 nine EXCEPT **Bad Dreams**, whose sole canon user (Darkrai) always has it chosen and so can't *observe* an
 innate Bad Dreams — a tight dream-eater flavor pair (the Munna line, whose real abilities are all
-non-Bad-Dreams) carries an observable innate Bad Dreams. Sole-ability species whose only ability is a
-Batch J ability are omitted as redundant (Cascoon/Silcoon/Kakuna/Metapod/Pupitar/Audino-Mega/Darkrai-Mega)
+non-Bad-Dreams) carries an observable innate Bad Dreams. Sole-ability species whose only ability is an
+end-of-turn ability are omitted as redundant (Cascoon/Silcoon/Kakuna/Metapod/Pupitar/Audino-Mega/Darkrai-Mega)
 unless they are a frontier set (Manaphy/Phione keep their rows).
 
 ### ABILITY_POISON_HEAL
 
-Heals 1/8 max HP at the end of every turn while poisoned/badly-poisoned instead of losing HP (Batch J),
+Heals 1/8 max HP at the end of every turn while poisoned/badly-poisoned instead of losing HP,
 a 1:1 clean-upside copy. **NOT** a driver innate — it *replaces* the poison-damage step rather than adding
 an end-turn effect, so it is wired at the poison-damage site `HandleEndTurnPoison` (`src/battle_end_turn.c`)
 by swapping the chosen-only `ability == ABILITY_POISON_HEAL` for `BattlerHasAbility(battler,
@@ -2224,7 +2222,7 @@ repointed or given a fork override to a real, non-innate pick — an invariant C
 
 ### ABILITY_GLUTTONY / ABILITY_RIPEN / ABILITY_CHEEK_POUCH / ABILITY_UNBURDEN
 
-The berry/item-synergy set (Batch T), all **1:1 clean-upside copies** (none of the real abilities ever
+The berry/item-synergy set, all **1:1 clean-upside copies** (none of the real abilities ever
 hurts its holder). Each is wired beside its chosen-ability read with an `IsInnateActive()` clause; the four
 are `canon-only` (no flavor picks — the effects are berry/item-conditional and hard to justify off-roster).
 
@@ -2257,17 +2255,17 @@ users of each ability get their rows (Sceptile and its Mega mirror an innate Unb
 override repurposed the selectable slot — a pure-boon persistence, like the Mega convention). Several species
 whose real abilities are now **all** innate with no free complementary slot (Snorlax, Linoone, Hitmonlee,
 Liepard, Thievul, Dedenne, Appletun) keep their now-redundant chosen frontier ability rather than a game-wide
-override sweep — a deferred follow-up, mirroring Batch J. The frontier sets whose species can free the slot do
+override sweep — a deferred follow-up. The frontier sets whose species can free the slot do
 (Raticate-Alola -> Hustle, the Drifblim/Hawlucha/Sneasler Unburden sets -> a real complementary slot, and the
 Simi trio / Victreebel / Greedent -> a new empty-slot override in `src/fork/species_ability_overrides.c`).
 
 ### ABILITY_ROUGH_SKIN / ABILITY_IRON_BARBS / ABILITY_GOOEY / ABILITY_TANGLING_HAIR
 
-The first sub-group of the on-hit / on-contact set (Batch K), all **1:1 clean-upside copies** — a contact
+The first sub-group of the on-hit / on-contact set, all **1:1 clean-upside copies** — a contact
 reaction only ever hurts the *attacker*, never the holder. Rough Skin / Iron Barbs chip a contact attacker
 1/8 max HP; Gooey / Tangling Hair lower a contact attacker's Speed by 1. All four are `canon-only` (no flavor
 picks). They are the **first active, scripted ON-HIT innates**, and they introduce a **new on-hit driver**
-that later Batch K sub-PRs reuse — the on-hit analogue of the Speed Boost end-turn driver.
+that later on-hit sub-groups reuse — the on-hit analogue of the Speed Boost end-turn driver.
 
 - **The driver — `TryActivateInnateOnHitEffects(battler, *index, move)`** (`src/fork/innate_abilities.c`).
   Re-entrant, modeled byte-for-byte on `TryActivateInnateEndTurnEffects`: it scans the holder's innate list
@@ -2304,11 +2302,11 @@ The Megas mirror the base creature's contact reaction (pure-boon persistence, li
 3.5 freed twelve frontier sets: Druddigon -> Sheer Force, Togedemaru -> Lightning Rod, Goodra -> Sap Sipper
 (complementary REAL slots); Sharpedo -> Strong Jaw, Garchomp -> Sand Stream, Ferrothorn -> Filter, Wugtrio ->
 Water Absorb (fork-owned overrides); Dugtrio-Alola's Tangling Hair set is kept because that slot is test-pinned
-(`test/battle/move_effect/pursuit.c`), so it stays a real ability — a permanent Batch-W exclusion.
+(`test/battle/move_effect/pursuit.c`), so it stays a real ability — a permanent exclusion.
 
 ### ABILITY_AFTERMATH / ABILITY_INNARDS_OUT
 
-The second sub-group of Batch K (the on-hit set), both **1:1 clean-upside copies** — an on-faint retaliation
+The second sub-group of the on-hit set, both **1:1 clean-upside copies** — an on-faint retaliation
 only ever hurts the *attacker*. **Aftermath** chips the attacker 1/4 max HP when a **contact** move KOs the
 holder (Damp still blocks it); **Innards Out** deals the attacker the exact HP the holder lost, from **any**
 move. Both `canon-only` (no flavor picks).
@@ -2340,7 +2338,7 @@ ability).
 
 ### ABILITY_STEAM_ENGINE / ABILITY_THERMAL_EXCHANGE / ABILITY_WIND_POWER
 
-The third sub-group of Batch K (the on-hit set), all **1:1 clean-upside copies** — each only ever helps the
+The third sub-group of the on-hit set, all **1:1 clean-upside copies** — each only ever helps the
 holder. **Steam Engine** raises Speed +6 when the holder is hit by a **Fire- or Water-type** move; **Thermal
 Exchange** raises Attack +1 when hit by a **Fire-type** move *and* grants **burn immunity**; **Wind Power**
 charges the holder's next Electric move (Charge volatile) when hit by a **wind** move *or* when **Tailwind**
@@ -2384,7 +2382,7 @@ Wattrel/Kilowattrel have no frontier set to free.
 
 ### ABILITY_CURSED_BODY
 
-The fourth sub-group of Batch K (the on-hit set), a **1:1 clean-upside copy** — it only ever hampers the FOE.
+The fourth sub-group of the on-hit set, a **1:1 clean-upside copy** — it only ever hampers the FOE.
 When the holder takes damage from a move, **Cursed Body** has a 30% chance (always, under `DETERMINISTIC_ABILITIES`
 — the shipping default) to **disable the move the attacker just used**, exactly like the real ability.
 
@@ -2416,25 +2414,25 @@ Step 3.5 freed two frontier sets to a complementary real slot with a stable `:x:
 now innate) -> chosen **Water Absorb**, **Polteageist** -> its only other real slot **Weak Armor**. The
 sole/all-abilities-innate sets keep their now-redundant chosen Cursed Body (still correct — the chosen runs it, the
 innate is redundant-but-skipped): **Froslass x2** (Snow Cloak + Cursed Body both innate) and **Banette x1** (only
-the still-pending Frisk left), deferred as a focused follow-up like Batch J/T. Gengar's four sets are untouched
+the still-pending Frisk left), deferred as a focused follow-up. Gengar's four sets are untouched
 (Gengar isn't in the innate table, so its chosen Cursed Body is its real, observed ability).
 
 ### ABILITY_PICKPOCKET / ABILITY_MAGICIAN / ABILITY_LIQUID_OOZE
 
-The fifth and **final** sub-group of Batch K (the on-hit set), all **1:1 clean-upside copies** — each only ever
+The fifth and **final** sub-group of the on-hit set, all **1:1 clean-upside copies** — each only ever
 hurts the FOE. **Pickpocket** steals a contact attacker's held item when the holder has none; **Magician** steals a
 held item off a target the holder *damaged* when the holder has none; **Liquid Ooze** makes an HP-draining move
 (Absorb / Giga Drain / Leech Seed / Dream Eater) *damage* the attacker for the drained amount instead of healing it.
-All three `canon-only` (no flavor picks). This sub-group completes Batch K, so **Batch K is done**.
+All three `canon-only` (no flavor picks).
 
-- **Pickpocket — a one-line innate-aware swap, NOT the on-hit driver.** Unlike the other Batch K abilities, Pickpocket
+- **Pickpocket — a one-line innate-aware swap, NOT the on-hit driver.** Unlike the other on-hit abilities, Pickpocket
   has its own dedicated move-end step (`MoveEndPickpocket`, `src/battle_move_resolution.c`) that already scans every
   battler reading the cached chosen ability; wiring the driver would double-fire. So the effect site just gains an
   `IsInnateActive(battlerDef, ABILITY_PICKPOCKET)` clause beside the `cv->abilities[battlerDef] == ABILITY_PICKPOCKET`
   read. `BattleScript_Pickpocket` shows an ability pop-up, so the site sets `gBattleScripting.abilityPopupOverwrite =
   ABILITY_PICKPOCKET` when the chosen ability differs (the Speed Boost precedent).
 - **Magician — a NEW attacker-side on-hit driver.** Magician is *attacker*-side (it fires from the upstream
-  `ABILITYEFFECT_MOVE_END_FOES_FAINTED` case, the same one that later serves Moxie/Beast Boost in Batch M), so the
+  `ABILITYEFFECT_MOVE_END_FOES_FAINTED` case, the same one that later serves Moxie/Beast Boost), so the
   target-side on-hit driver doesn't reach it. The fork adds `TryActivateInnateOnHitAttackerEffects` ->
   `IsActiveOnHitAttackerInnate` (`src/fork/innate_abilities.c`), the attacker-side analogue of the target-side on-hit
   driver — re-entrant, delegating to `AbilityBattleEffects(ABILITYEFFECT_MOVE_END_FOES_FAINTED, battler, innate, move,
@@ -2468,7 +2466,7 @@ already documented for Sticky Hold. **Species (canon-only):** Pickpocket -> the 
 and **Tinkatink / Tinkatuff / Tinkaton** lines; Magician -> the **Fennekin / Braixen / Delphox** line (+ the fork's
 **Mega Delphox** as a pure-boon mirror), **Klefki**, and both **Hoopa** forms; Liquid Ooze -> the **Tentacool /
 Tentacruel** and **Gulpin / Swalot** lines — each merged into the species' existing innate row. **Step 3.5** touched
-sixteen frontier sets, all **deferred** (like Batch J/T and the Cursed Body sub-group): every affected species now has
+sixteen frontier sets, all **deferred** (like the Cursed Body sub-group): every affected species now has
 all its useful real abilities innate (or only the still-pending Frisk free), so they keep their now-redundant chosen
 ability — still correct (the chosen runs it; the innate is redundant-but-skipped). **Tentacruel** / **Swalot** keep
 chosen Liquid Ooze; the three **Weavile** and three **Grimmsnarl** sets keep chosen Pickpocket; the three **Delphox**,
@@ -2476,7 +2474,7 @@ two **Klefki** and three **Hoopa / Hoopa-Unbound** sets keep chosen Magician —
 
 ### ABILITY_INTIMIDATE
 
-The first sub-group of **Batch L** and the **first active, scripted SWITCH-IN innate** — a **1:1 clean-upside copy**
+The **first active, scripted SWITCH-IN innate** — a **1:1 clean-upside copy**
 (Intimidate only ever hurts the foe). On switch-in the holder lowers **every opposing battler's Attack by 1 stage**.
 
 **Driver + hook (the new infrastructure).** Intimidate introduces the **switch-in driver**
@@ -2486,7 +2484,7 @@ of the Speed Boost end-turn driver and the on-hit driver. It is **re-entrant** v
 `AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, battler, ABILITY_INTIMIDATE, …)` case, so the Attack drop / script /
 pop-up — and **every downstream reaction** (the target's Clear Body / White Smoke / Hyper Cutter / Big Pecks stat-drop
 protection, the Own Tempo / Inner Focus / Oblivious / Scrappy / Guard Dog Intimidate-immunity halves already made
-innate-aware in Batches D-E/I/P/S, plus Defiant / Competitive / Rattled / Adrenaline Orb) — match the real ability for
+innate-aware earlier, plus Defiant / Competitive / Rattled / Adrenaline Orb) — match the real ability for
 free. It is hooked from the new `FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE` step
 (`include/constants/battle_switch_in.h`, dispatched in `FirstEventBlockEvents`, `src/battle_switch_in.c`) right after the
 chosen-ability switch-in block, **inside the `switchinevents` state machine that drives every normal switch-in** (battle
@@ -2530,12 +2528,12 @@ Scrappy precedent). **Landorus-Therian** is sole-Intimidate but a **frontier set
 the innate **and** a fork-owned chosen **Sheer Force** override (`src/fork/species_ability_overrides.c`; Sheer Force is `:x:`
 (never an innate -> stable) and its Incarnate forme's signature), and its two frontier sets now run Sheer Force on top of the
 innate Intimidate. **Step 3.5** touched ~40 frontier sets: Landorus-Therian is freed via the override above; the rest are
-**deferred** (like Batch J/T/K) — they keep their now-redundant chosen Intimidate (still correct: the chosen runs it, the
+**deferred** — they keep their now-redundant chosen Intimidate (still correct: the chosen runs it, the
 innate is redundant-but-skipped) rather than a game-wide complementary-slot sweep.
 
 ### ABILITY_ANTICIPATION / ABILITY_FOREWARN / ABILITY_FRISK
 
-**Batch L's second sub-group** — three **switch-in information reveals**, each a **1:1 clean-upside copy**
+**Switch-in information reveals** — three abilities, each a **1:1 clean-upside copy**
 (pure information; none ever hurts the holder). On switch-in **Anticipation** shows a warning message if any
 foe knows a super-effective or OHKO move, **Forewarn** reveals one of a foe's strongest moves, and **Frisk**
 reveals the foes' held items.
@@ -2571,11 +2569,11 @@ Hatenna (+ Gmax) lines. **Flittle carries both Frisk and Anticipation**, matchin
 species is sole-ability for any of the three, so there are no redundant omissions or override rows. **Step 3.5**:
 the ~14 frontier sets that hardcoded chosen Frisk / Anticipation now carry it innately, so they keep their
 now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the
-complementary-slot freeing is **deferred** like Batch J/T/K and the Intimidate sub-group.
+complementary-slot freeing is **deferred** like the Intimidate sub-group.
 
 ### ABILITY_DOWNLOAD / ABILITY_SUPERSWEET_SYRUP
 
-**Batch L's third sub-group** — two **switch-in stat-change** innates, each a **1:1 clean-upside copy** (a
+**Switch-in stat-change innates** — two, each a **1:1 clean-upside copy** (a
 self-boost / foe-debuff that only ever helps the holder, so no pure-boon divergence). On switch-in **Download**
 compares each foe's Defense vs Sp. Def and raises the holder's **Attack or Sp. Atk** (whichever hits the weaker
 defense, via `GetDownloadStat`) by 1 stage; **Supersweet Syrup** lowers **every opposing battler's evasiveness**
@@ -2615,19 +2613,19 @@ Levitate rows) and **every Genesect form** (base + Douse / Shock / Burn / Chill 
 Genesect is sole-Download but **is** a frontier set, so it takes the innate (see Step 3.5) rather than being
 dropped as redundant. **Step 3.5**: the Porygon2 Download frontier set is freed to its complementary REAL slot-0
 **Trace** (`:x:` stable — copies a foe ability). The all-real-abilities-innate Porygon-Z sets and the sole-ability
-Genesect sets were freed in **Batch W7** via fork chosen-ability overrides (`src/fork/species_ability_overrides.c`):
+Genesect sets were freed via fork chosen-ability overrides (`src/fork/species_ability_overrides.c`):
 Porygon-Z repurposes its innate-redundant slot-2 Analytic HA to **Simple** (`:x:` stable; slot-0 Adaptability is
 test-pinned so it stays), and Genesect fills its EMPTY slot 1 with **Sheer Force** (`:x:` stable). Supersweet Syrup has no other
 frontier set to free (Dipplin is off-roster; Hydrapple already runs a fork-owned chosen Grassy Surge override).
 
 ### ABILITY_UNNERVE / ABILITY_HOSPITALITY
 
-**Batch L's fourth/final sub-group** — two **switch-in effects**, each a **1:1 clean-upside copy** (foe Berry
+**Switch-in effects** — two more, each a **1:1 clean-upside copy** (foe Berry
 denial / ally heal, never a downside). On switch-in **Unnerve** denies every opposing battler its Berries (shows
 the "too nervous to eat Berries" message) and **Hospitality** restores **1/4 of the ally's max HP** in a double
 battle.
 
-**Driver + hook — the generalization these two forced.** Every earlier Batch L member runs through the upstream
+**Driver + hook — the generalization these two forced.** Every earlier switch-in member runs through the upstream
 `ABILITYEFFECT_ON_SWITCHIN` case, so the driver `TryActivateInnateSwitchInEffects` delegated to *that* case only.
 Unnerve and Hospitality do **not**: their effects live in the separate upstream cases `ABILITYEFFECT_UNNERVE` and
 `ABILITYEFFECT_DEPENDS_ON_ALLY`, which upstream dispatches at **different points of the switch-in sequence** (the
@@ -2682,12 +2680,11 @@ Masterpiece — merged onto their existing Heatproof / Levitate rows). **Step 3.
 set is freed to its complementary chosen **Flash Fire** override (the sibling Sinistcha set already runs it — both
 its real abilities, Hospitality and Heatproof, are now innate); the ~14 frontier sets that hardcoded chosen Unnerve
 now carry it innately, so they keep their now-redundant chosen Unnerve (still correct: the chosen runs it, the
-innate is redundant-but-skipped) — the complementary-slot freeing **deferred** like Batch J/T/K and the earlier
-Batch L sub-groups.
+innate is redundant-but-skipped) — the complementary-slot freeing **deferred** like the earlier sub-groups.
 
 ### ABILITY_DEFIANT / ABILITY_COMPETITIVE
 
-**Batch M's first sub-group** — two **stat-drop reactions**, each a **1:1 clean-upside copy** (they react to a
+**Stat-drop reactions** — two, each a **1:1 clean-upside copy** (they react to a
 *foe's* debuff, so they only ever help the holder). When a foe lowers one of the holder's stats — a stat-lowering
 move, Intimidate, or an opposing Sticky Web — **Defiant** raises the holder's **Attack** by 2 stages and
 **Competitive** its **Sp. Atk** by 2 stages.
@@ -2718,7 +2715,7 @@ back" check, which read `DoesAbilityRaiseStatsWhenLowered(chosen)` — and `Shou
 (`src/battle_ai_switch.c`) — the "don't switch an Intimidator into a foe that *wants* to be Intimidated" check,
 which read `DoesIntimidateRaiseStats(chosen)`. Both now also credit an innate Defiant / Competitive foe via
 `IsInnateActive()`. The soft **incoming-ability value scorer** (`battle_ai_util.c`, `DoesIntimidateRaiseStats` from
-the ability-swap-move value path) is **left keyed to the chosen ability**, mirroring the Intimidate batch's decision
+the ability-swap-move value path) is **left keyed to the chosen ability**, mirroring the Intimidate decision
 (a soft heuristic about *acquiring* an ability, not a hard on-field effect read). The doubles partner-fire scoring
 (`ShouldTriggerAbility` / the `scoringPartnerAbility` switch in `battle_ai_main.c`) has **no** Defiant / Competitive
 case, so there's nothing to make innate-aware there.
@@ -2735,21 +2732,21 @@ ability already grants it, so an innate could never be observed — the Mega Lop
 (sole Defiant), **Articuno-Galar** (sole Competitive), **Ogerpon / Ogerpon-Teal** (sole Defiant), and **Falinks-Mega**
 (sole Defiant — its existing `BATTLE_ARMOR` innate row stays, since *that* is observable while its chosen ability is
 Defiant). **Innate Rattled** — which also reacts through `BS_TryDefiantRattled`, but only to Intimidate (Speed +1) — is
-a **separate Batch M sub-group**, deliberately not credited here. **Step 3.5**: the ~30 frontier sets that hardcoded
+a **separate sub-group**, deliberately not credited here. **Step 3.5**: the ~30 frontier sets that hardcoded
 chosen Defiant / Competitive already resolve to the species' real slot (these are canon users), so they keep their
 now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the
-complementary-slot freeing **deferred** as a focused follow-up, like Batch J/T/K and the Batch L sub-groups.
+complementary-slot freeing **deferred** as a focused follow-up, like the earlier sub-groups.
 
 ### ABILITY_JUSTIFIED / ABILITY_STAMINA / ABILITY_WATER_COMPACTION / ABILITY_ANGER_POINT
 
-**Batch M's second sub-group** — four **on-hit stat reactions**, each a **1:1 clean-upside copy** (they react to
+**On-hit stat reactions** — four, each a **1:1 clean-upside copy** (they react to
 *being hit*, so they only ever help the holder). When the holder is damaged by a move: **Justified** raises its
 **Attack** by 1 stage if the move is **Dark**-type; **Stamina** raises its **Defense** by 1 stage on **any** move;
 **Water Compaction** raises its **Defense** by 2 stages if the move is **Water**-type; **Anger Point** maxes its
 **Attack** (to +6 / `MAX_STAT_STAGE`) when the holder takes a **critical hit**.
 
 **Reuses the existing on-hit driver — no new infra.** All four fire from the **same** upstream
-`ABILITYEFFECT_MOVE_END` case (`src/battle_util.c`) as the Batch K contact reactions, so each is a **one-line
+`ABILITYEFFECT_MOVE_END` case (`src/battle_util.c`) as the contact reactions, so each is a **one-line
 addition to `IsActiveOnHitInnate`** (`src/fork/innate_abilities.c`). The driver delegates to that case with the innate
 passed explicitly, so the stat change / `BattleScript_AbilityStatChange` script / pop-up match the real ability for
 free. Here `battler` (the delegated case's parameter) is `gBattlerTarget`, the holder that was hit.
@@ -2794,7 +2791,7 @@ where present), plus base creatures' **Megas** as pure-boon mirrors:
   **Camerupt** (+ Mega), **Sandile / Krokorok / Krookodile**, and **Crabrawler / Crabominable** lines.
 
 **Sole-ability species are OMITTED as redundant** (their sole chosen ability already grants it, so an innate could
-never be observed — the Mega Lopunny / Scrappy precedent, matching Batch M's Defiant / Competitive sub-group): the
+never be observed — the Mega Lopunny / Scrappy precedent, matching the Defiant / Competitive sub-group): the
 **Swords of Justice** trio (**Cobalion / Terrakion / Virizion**) and **Keldeo** (both formes), all sole-Justified.
 They *are* frontier sets, but their `.ability = ABILITY_JUSTIFIED` is their real (and only) slot, so it keeps working
 untouched; the innate + a fork-owned chosen override (the Landorus-Therian route) is **deferred** as a focused
@@ -2804,18 +2801,18 @@ follow-up.
 Stamina (Mudsdale, Archaludon), Water Compaction (Palossand), Anger Point (Crabominable) — already resolve to the
 species' real slot, so they keep their now-redundant chosen ability (still correct: the chosen runs it, the innate
 is redundant-but-skipped, and for the several sets whose *other* real abilities are also now innate the set simply
-runs all of them). A few of these slots were freed in an **earlier** batch to what was then a pending ability
+runs all of them). A few of these slots were freed **earlier** to what was then a pending ability
 (Gallade's Sharpness sweep → chosen Justified; Crabominable's Hyper Cutter / Iron Fist sweep → chosen Anger Point);
 now that those become innate the chosen pick is redundant, but harmless — the complementary-slot re-pointing is
-**deferred** as a focused follow-up, like the Defiant / Competitive sub-group and Batch J/T/K/L.
+**deferred** as a focused follow-up, like the Defiant / Competitive sub-group.
 
 ### ABILITY_RATTLED / ABILITY_STEADFAST
 
-**Batch M's third sub-group** — the **fear-response Speed pair**, both **1:1 clean-upside copies** (they react to
+The **fear-response Speed pair**, both **1:1 clean-upside copies** (they react to
 being frightened, so only ever help the holder). When frightened, the holder's **Speed** rises by **1 stage**.
 **Rattled** reacts to **two** triggers; **Steadfast** to one.
 
-**Rattled spans the two Batch M sites already opened — no new infra:**
+**Rattled spans the two on-hit/reaction sites already opened — no new infra:**
 - **Hit by a Dark / Ghost / Bug move** → fired from the upstream `ABILITYEFFECT_MOVE_END` case (`src/battle_util.c`),
   so it is a **one-line addition to `IsActiveOnHitInnate`** (`src/fork/innate_abilities.c`), exactly like Justified.
   The driver delegates to that case with the innate passed explicitly, so the stat change /
@@ -2880,15 +2877,15 @@ is the stronger, already-wired boon, so **Steadfast is dropped** on that line.
 **Step 3.5**: the frontier sets that hardcoded chosen Rattled (Persian-Alola, Dunsparce / Dudunsparce) and Steadfast
 (a Machamp-family set, Lycanroc-Midday) already resolve to the species' real slot, so they keep their now-redundant
 chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with the complementary-slot
-re-pointing **deferred** as a focused follow-up, like the earlier Batch M sub-groups and Batch J/T/K/L.
+re-pointing **deferred** as a focused follow-up, like the earlier sub-groups.
 
 ### ABILITY_MOXIE / ABILITY_BERSERK / ABILITY_SOUL_HEART
 
-**Batch M's fourth and final sub-group** — three **KO / on-damage / on-faint stat boosts**, each a **1:1 clean-upside
+**KO / on-damage / on-faint stat boosts** — three, each a **1:1 clean-upside
 copy** (they react to a KO, a big hit, or a faint, so they only ever help the holder). **Moxie** raises the holder's
 **Attack** by 1 stage for each foe it knocks out with a move; **Berserk** raises its **Sp. Atk** by 1 stage when an
 attack drops its HP from above 1/2 to 1/2 or less; **Soul-Heart** raises its **Sp. Atk** by 1 stage every time **any**
-Pokémon faints. This sub-group completes Batch M, so **Batch M is done**.
+Pokémon faints.
 
 **Three distinct scripted sites — two reuse existing infra, one adds a small driver:**
 - **Moxie** fires from the upstream **`ABILITYEFFECT_MOVE_END_FOES_FAINTED`** case (`src/battle_util.c`, the
@@ -2953,12 +2950,11 @@ not-on-field); none is `breakable`, so Mold Breaker never touches them.
 **Step 3.5**: the frontier sets that hardcoded chosen Moxie (Pinsir, Gyarados, Salamence, Krookodile, Scrafty, …),
 Berserk (Galarian Moltres, Drampa), and Soul-Heart (Magearna) already resolve to the species' real slot, so they keep
 their now-redundant chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with the
-complementary-slot re-pointing **deferred** as a focused follow-up, like the earlier Batch M sub-groups and Batch
-J/T/K/L.
+complementary-slot re-pointing **deferred** as a focused follow-up, like the earlier sub-groups.
 
 ### ABILITY_BATTERY / ABILITY_POWER_SPOT / ABILITY_TELEPATHY / ABILITY_AROMA_VEIL / ABILITY_FLOWER_VEIL
 
-The **ally-support batch (Batch U)** — team-oriented, mostly doubles-relevant effects. All five are **1:1
+The **ally-support abilities** — team-oriented, mostly doubles-relevant effects. All five are **1:1
 clean-upside copies** (none ever hurts its holder) and **canon-only** (no flavor picks: these are
 partner/side-support effects with no thematic hook off their canon users). Each is suppression-safe via
 `IsInnateActive()` and none is `breakable`, so Mold Breaker never touches them.
@@ -3012,19 +3008,18 @@ partner/side-support effects with no thematic hook off their canon users). Each 
 slots), and **Stonjourner** (sole Power Spot, doubles-only) takes a fork-owned **Solid Rock** override
 (`species_ability_overrides.c`, an implemented `:white_check_mark:` innate, stable) on its empty slot 1, like
 Ogerpon-Cornerstone. The seven **Dialga / Palkia / Giratina / Orbeetle / Aromatisse** sets whose real abilities are
-**all** now innate were **deferred** as a focused follow-up, like Batch J/T/K/L, and are **now resolved in
-the Batch W4 frontier-slot sweep:** a fork-owned override
+**all** now innate were **deferred** as a focused follow-up, and are **now resolved via fork-owned overrides:** a fork-owned override
 (`species_ability_overrides.c`) gives each species an observable chosen slot — **Dialga (+Origin)** → chosen
 **Bulletproof** (`:x:` stable, Steel-legend deflect Focus Blast, like Skarmory/Registeel/Corviknight), **Palkia
 (+Origin)** → chosen **Water Absorb** (`:x:` stable, the Water-legend pick), **Giratina-Altered** and **Orbeetle** →
 chosen **Unaware** (implemented `:white_check_mark:`, stable — the bulky-wall / Calm-Mind pick; Orbeetle has no empty
 slot so it repurposes its unpinned slot-2 Telepathy, the rest fill an empty slot 1), and **Aromatisse** → chosen
 **Misty Surge** (`:x:` stable, the Fairy cleric's terrain support). Giratina-Origin already had a stable Dragon's Maw
-override (an implemented `:white_check_mark:` innate it does not itself carry) and keeps it. This completes Batch U.
+override (an implemented `:white_check_mark:` innate it does not itself carry) and keeps it.
 
 ### ABILITY_CHILLING_NEIGH / ABILITY_GRIM_NEIGH / ABILITY_ELECTROMORPHOSIS
 
-**Batch Y's first sub-group (Y1)** — the promoted-from-rejected clones, each a **1:1 clean-upside copy** of an
+The **promoted-from-rejected clones** — each a **1:1 clean-upside copy** of an
 already-implemented ability whose driver already exists, so the wiring is near-free (reuse the existing site).
 **Chilling Neigh** raises the holder's **Attack** by 1 stage and **Grim Neigh** its **Sp. Atk** by 1 stage for
 each foe it knocks out with a move — the on-KO half of **Moxie**. **Electromorphosis** charges the holder's next
@@ -3058,7 +3053,7 @@ holder benefits from a KO" — and the sacrifice-the-ally spread scoring) read
 `IsInnateActive(b, ABILITY_MOXIE)`; that inline clause is replaced by the fork helper
 **`IsMoxieTypeInnateActive(b)`** (`src/battle_ai_util.c`, beside `IsMoxieTypeAbility`), which credits an innate
 Moxie **or** Beast Boost **or** Chilling Neigh **or** Grim Neigh (the Moxie-type set members that can be innates —
-the As One combos never are; Beast Boost joined this helper in Batch Y7). **Electromorphosis needs no AI wiring**: Wind Power's dedicated reads
+the As One combos never are; Beast Boost joined this helper later). **Electromorphosis needs no AI wiring**: Wind Power's dedicated reads
 (`GetWindAbilityScore`, the switch-in Tailwind sim) are wind/Tailwind-specific and do not apply to a
 charge-on-any-hit clone, and the Charge volatile itself is not a state the AI dodges.
 
@@ -3081,15 +3076,14 @@ signature-specific).**
 **Step 3.5**: five frontier sets freed. Glastrier ×2 → chosen **Snow Warning** and Spectrier ×2 → chosen
 **Infiltrator** (both via the new override rows), and Bellibolt's singles set → its complementary real
 slot-1 **Static** (its doubles set already runs Static). Each now runs the chosen ability **and** the innate.
-This is **Batch Y sub-group Y1**; the remaining Batch Y sub-groups (Y2–Y8) stay open.
 
 ### ABILITY_TRANSISTOR / ABILITY_DRAGONS_MAW
 
-**Batch Y's second sub-group (Y2)** — two **flat type-power-booster clones** of Batch A's Steelworker /
+Two **flat type-power-booster clones** of the Steelworker /
 Rocky Payload, each a **1:1 clean-upside copy** (a flat conditional power boost never hurts the holder).
 **Transistor** boosts the holder's **Electric** moves and **Dragon's Maw** its **Dragon** moves. Both were
 `:x:` only because they read as "just another type booster" at triage; they are now wired exactly like the
-Batch A boosters they clone.
+move-power boosters they clone.
 
 **One shared effect site, two lines.** Both are pure **`CalcAttackStat`** modifiers (`src/battle_util.c`),
 added to the `if (ctx->innatesEnabled)` innate block that already holds **Rocky Payload / Stakeout / Guts /
@@ -3115,7 +3109,7 @@ real battler, so on-field damage prediction is innate-aware automatically. **Sup
 
 **Species (canon-only — sole-ability signature legends).** **Transistor → Regieleki** (added beside its existing
 innate Levitate) and **Dragon's Maw → Regidrago**, each the ability's **sole** canon user. Both are
-**sole-ability genderless Regi legends with a frontier set**, so — like Glastrier / Spectrier (Y1) — each takes
+**sole-ability genderless Regi legends with a frontier set**, so — like Glastrier / Spectrier — each takes
 the innate **plus a fork-owned chosen override** in its empty slot 1 (`src/fork/species_ability_overrides.c`) so
 the innate is **observable**: **Regieleki → Lightning Rod** (`:x:`, the Raichu-Alola precedent — the Electron
 Pokémon draws in Electric moves for immunity + a Sp. Atk boost), **Regidrago → Adaptability** (an implemented
@@ -3124,15 +3118,15 @@ Choice Dragon breaker: 2x STAB on top of the 1.5x boost).
 
 **Step 3.5**: four frontier sets freed. Regieleki ×2 → chosen **Lightning Rod** and Regidrago ×2 → chosen
 **Adaptability** (both via the new override rows). Each now runs the chosen ability **and** the innate type-power
-boost. This is **Batch Y sub-group Y2**; the remaining Batch Y sub-groups (Y3–Y8) stay open.
+boost.
 
 ### ABILITY_PRISM_ARMOR / ABILITY_SHADOW_SHIELD / ABILITY_NEUROFORCE / ABILITY_SUPREME_OVERLORD
 
-**Batch Y's third sub-group (Y3)** — four **damage / power calc clones**, each a **1:1 clean-upside copy**.
-Three are the "unbreakable" cousins of already-wired Batch B / P defenders and attackers; the fourth is a
-party-faint-gated power boost that reuses the Batch L switch-in driver to latch its counter.
+**Damage / power calc clones** — four, each a **1:1 clean-upside copy**.
+Three are the "unbreakable" cousins of already-wired defenders and attackers; the fourth is a
+party-faint-gated power boost that reuses the switch-in driver to latch its counter.
 
-**Prism Armor / Shadow Shield ride the existing Batch B innate clauses** in `GetDefenderAbilitiesModifier`
+**Prism Armor / Shadow Shield ride the existing damage-reducer innate clauses** in `GetDefenderAbilitiesModifier`
 (`src/battle_util.c`) — no new clause, just an added `IsInnateActive(...)` disjunct beside the ones already
 there:
 
@@ -3172,9 +3166,9 @@ if (typeEffectivenessModifier >= UQ_4_12(2.0) && abilityAtk != ABILITY_NEUROFORC
 sets `supremeOverlordCounter[battler] = min(5, faintCounter[trainer])` in its `ABILITYEFFECT_ON_SWITCHIN`
 case (showing a pop-up) and reads it back via `GetSupremeOverlordModifier` in `CalcAttackStat`. To match this
 for an innate holder, Supreme Overlord is added to **`SwitchInInnateAbilityEffect`** (mapping it to
-`ABILITYEFFECT_ON_SWITCHIN`, so the **Batch L switch-in driver** runs the real case — latching the counter and
+`ABILITYEFFECT_ON_SWITCHIN`, so the **switch-in driver** runs the real case — latching the counter and
 showing the pop-up, overwritten to the innate when the chosen ability differs), plus a one-line innate clause
-in `CalcAttackStat` beside the Batch A boosters:
+in `CalcAttackStat` beside the move-power boosters:
 
 ```c
 if (atkAbility != ABILITY_SUPREME_OVERLORD && IsInnateActive(battlerAtk, ABILITY_SUPREME_OVERLORD))
@@ -3205,15 +3199,14 @@ the now-innate chosen Supreme Overlord to chosen **Defiant** (its slot-0 signatu
 Supreme Overlord observable via its switch-in pop-up.
 
 **Step 3.5**: seven frontier sets freed — Lunala ×2 + Necrozma-Dusk-Mane / Dawn-Wings / base → chosen
-**Adaptability** (via the new override rows), Kingambit ×2 → chosen **Defiant**. This is **Batch Y sub-group
-Y3**; the remaining Batch Y sub-groups (Y4–Y8) stay open.
+**Adaptability** (via the new override rows), Kingambit ×2 → chosen **Defiant**.
 
 ### ABILITY_FULL_METAL_BODY / ABILITY_MINDS_EYE
 
-**Batch Y's fourth sub-group (Y4)** — two **stat-drop / accuracy / hit-trait clones**, each a **1:1 clean-upside
+**Stat-drop / accuracy / hit-trait clones** — two, each a **1:1 clean-upside
 copy**. Full Metal Body is the *unbreakable* cousin of Clear Body; Mind's Eye is Keen Eye + Scrappy combined.
 
-**Full Metal Body rides the existing Batch D+E stat-drop-protection path** in `GetInnateStatDropProtector` /
+**Full Metal Body rides the existing stat-drop-protection path** in `GetInnateStatDropProtector` /
 `IsAbilityBlocked` (`src/battle_stat_change.c`) — a new full-protection clause beside Clear Body / White Smoke
 that keeps **any** of the holder's stats from being lowered by another mon's move or ability, using the same
 `MarkStatsAsDone(NUM_BATTLE_STATS)` + `BattleScript_AbilityNoStatLoss` script and the pop-up/record overwrite to
@@ -3244,10 +3237,9 @@ Scrappy (contrast test asserts it). Its only canon user is **Ursaluna-Bloodmoon*
 
 **No `DETERMINISTIC_*` surface beyond the one already covered** — the evasion-ignore is tested under
 `DETERMINISTIC_ACCURACY_EVASION` (the PP-tax mirror), like Keen Eye; the stat-drop protection routes through the
-same `IsAbilityBlocked` that needs no additional-effects/hold-effect mirror (the Batch D note).
+same `IsAbilityBlocked` that needs no additional-effects/hold-effect mirror (the stat-drop-protector note).
 
-**Species (canon-only, no flavor picks).** Both are sole-ability legends **and** frontier sets, so — like the Y2/Y3
-legends — each takes the innate **plus a fork-owned chosen override** in its empty slot 1
+**Species (canon-only, no flavor picks).** Both are sole-ability legends **and** frontier sets, so — like the other sole-ability legends — each takes the innate **plus a fork-owned chosen override** in its empty slot 1
 (`src/fork/species_ability_overrides.c`): **Solgaleo → Tough Claws** (an implemented `:white_check_mark:` innate it
 does not carry, powering its Sunsteel Strike / Close Combat / Flare Blitz contact STAB on top of the innate stat-drop
 lock — the Metagross precedent), **Ursaluna-Bloodmoon → Unaware** (an implemented `:white_check_mark:` innate,
@@ -3255,13 +3247,12 @@ stable — ignoring the foe's boosts on its Calm Mind special tank, alongside th
 coverage). So the innate is **observable** and the frontier set is freed.
 
 **Step 3.5**: three frontier sets freed — Solgaleo ×2 → chosen **Tough Claws**, Ursaluna-Bloodmoon → chosen
-**Unaware** (via the new override rows). This is **Batch Y sub-group Y4**; the remaining Batch Y sub-groups
-(Y5–Y8) stay open.
+**Unaware** (via the new override rows).
 
 ### ABILITY_PURIFYING_SALT / ABILITY_GOOD_AS_GOLD
 
-**Batch Y's fifth sub-group (Y5)** — two **status-immunity clones**, each a **1:1 clean-upside copy**. Purifying
-Salt is a whole-status immunity + a Ghost-damage cut (Batch I + Batch B); Good as Gold is a blanket status-*move*
+**Status-immunity clones** — two, each a **1:1 clean-upside copy**. Purifying
+Salt is a whole-status immunity + a Ghost-damage cut; Good as Gold is a blanket status-*move*
 immunity.
 
 **Purifying Salt is wired at two sites in `src/battle_util.c`:**
@@ -3305,26 +3296,26 @@ roll, so neither ability touches the accuracy/effect-chance/hold-effect reroutes
 
 **Species (canon-only, no flavor picks).** Purifying Salt → the **Nacli / Naclstack / Garganacl** salt line
 (merged onto their existing Clear Body / Sturdy rows). Good as Gold → **Gholdengo** (its sole ability). Gholdengo
-is a sole-ability frontier set, so — like the Y2/Y3/Y4 legends — it takes the innate **plus a fork-owned chosen
+is a sole-ability frontier set, so — like the other sole-ability legends — it takes the innate **plus a fork-owned chosen
 override** in its empty slot 1 (`src/fork/species_ability_overrides.c`): **Gholdengo → Sticky Hold** (an
 implemented `:white_check_mark:` innate it does not itself carry, stable like Carnivine's Chlorophyll; thematic +
 low-impact — the coin hoard won't be robbed), so the innate Good as Gold is **observable** and its three frontier
 sets are freed (chosen Good as Gold → chosen Sticky Hold; the innate still blocks status moves).
 
 **Step 3.5**: Gholdengo's three frontier sets freed → chosen **Sticky Hold** (via the new override row). The
-salt line was a Batch W deferral — all three of Garganacl's real abilities (Purifying Salt / Sturdy / Clear
-Body) are now innate with no free complementary slot — and is now **RESOLVED in Batch W1**: a fork override
+salt line was a deferral — all three of Garganacl's real abilities (Purifying Salt / Sturdy / Clear
+Body) are now innate with no free complementary slot — and is now **resolved**: a fork override
 repurposes Garganacl's innate-redundant slot-1 Sturdy to chosen **Solid Rock** (an implemented
 `:white_check_mark:` innate, stable, the Regirock/Carbink/Stakataka rock-golem pick), and its three frontier
 sets repoint from chosen Purifying Salt to Solid Rock, so a distinct chosen ability stays observable on top of
-the innate Purifying Salt. This is **Batch Y sub-group Y5**; the remaining Batch Y sub-groups (Y6–Y8) stay open.
+the innate Purifying Salt.
 
 ### ABILITY_INTREPID_SWORD / ABILITY_DAUNTLESS_SHIELD
 
-**Batch Y's sixth sub-group (Y6)** — two **switch-in stat-boost clones**, each a **1:1 clean-upside copy**. The
+**Switch-in stat-boost clones** — two, each a **1:1 clean-upside copy**. The
 first time the holder enters battle, Intrepid Sword raises its Attack and Dauntless Shield its Defense by 1 stage.
 
-**Both ride the Batch L switch-in driver** (`TryActivateInnateSwitchInEffects`, `src/fork/innate_abilities.c`) —
+**Both ride the switch-in driver** (`TryActivateInnateSwitchInEffects`, `src/fork/innate_abilities.c`) —
 a **one-line `SwitchInInnateAbilityEffect` case each** returning `ABILITYEFFECT_ON_SWITCHIN`, exactly like
 Intimidate / Download / Supreme Overlord. The driver delegates to the upstream `ABILITYEFFECT_ON_SWITCHIN` case
 (`src/battle_util.c`) with the innate passed explicitly, so the +1 stat change, the `BattleScript_AbilityStatChange`
@@ -3349,7 +3340,7 @@ real-ability `case`s in the same function, it does **not** model the once-per-ba
 boost.
 
 **Species (canon-only, no flavor picks).** Intrepid Sword → **Zacian / Zacian-Crowned**; Dauntless Shield →
-**Zamazenta / Zamazenta-Crowned**. All four are **sole-ability frontier sets**, so — like the Y2/Y3/Y4/Y5 legends
+**Zamazenta / Zamazenta-Crowned**. All four are **sole-ability frontier sets**, so — like the other sole-ability legends
 — each takes the innate **plus a fork-owned chosen override** in its empty slot 1
 (`src/fork/species_ability_overrides.c`): **Zacian → Tough Claws** (an implemented `:white_check_mark:` innate it
 does not itself carry, stable; powers its entirely-contact kit — Behemoth Blade / Play Rough / Close Combat /
@@ -3361,15 +3352,14 @@ the frontier slot (chosen Intrepid Sword / Dauntless Shield → chosen Tough Cla
 at switch-in).
 
 **Step 3.5**: all four frontier sets freed → chosen **Tough Claws** (Zacian ×2) / **Filter** (Zamazenta ×2) via
-the new override rows + the `.ability` change in `src/fork/frontier_extended_mons.c`. This is **Batch Y sub-group
-Y6**; the remaining Batch Y sub-groups (Y7–Y8) stay open (Y8 is blocked on Tier 5.5 Mold Breaker).
+the new override rows + the `.ability` change in `src/fork/frontier_extended_mons.c`.
 
 ### ABILITY_BEAST_BOOST
 
-**Batch Y's seventh sub-group (Y7)** — a single **on-KO best-stat clone**, a **1:1 clean-upside copy**. When the
+A single **on-KO best-stat clone** — a **1:1 clean-upside copy**. When the
 holder knocks out a foe with a move, its **highest** stat rises by 1 stage — **Moxie**, best-stat edition. It was
 `:x:` only because it's a clone that couldn't be observed on any of its (all sole-ability) canon users until the
-frontier-override pattern existed; that pattern (Y2–Y6) is now routine.
+frontier-override pattern existed; that pattern is now routine.
 
 **One shared effect site, no new C.** Beast Boost fires from the upstream **`ABILITYEFFECT_MOVE_END_FOES_FAINTED`**
 case (`src/battle_util.c`) — the exact Moxie / Beast Boost / Chilling Neigh / Grim Neigh cluster the **attacker-side**
@@ -3403,12 +3393,11 @@ set, so its chosen ability already grants it and an innate could never be observ
 precedent) — keeping only its existing innate Levitate row.
 
 **Step 3.5**: all twenty frontier sets (two per UB) freed → their chosen override via the `.ability` change in
-`src/fork/frontier_extended_mons.c`. This is **Batch Y sub-group Y7**; only **Y8** (Turboblaze / Teravolt) remained
-open in Batch Y, and is now done (below).
+`src/fork/frontier_extended_mons.c`.
 
 ### ABILITY_TERAVOLT / ABILITY_TURBOBLAZE
 
-**Batch Y sub-group Y8 — the last of Batch Y.** Two **1:1 clean-upside clones of Mold Breaker (Tier 5.5)**: the
+Two **1:1 clean-upside clones of Mold Breaker (Tier 5.5)**: the
 holder's moves ignore the target's *breakable* ability, exactly like Mold Breaker. They were `:x:` only because Mold
 Breaker's machinery hadn't shipped when triaged; with 5.5 done, this is pure follow-on.
 
@@ -3434,8 +3423,7 @@ ability, so an innate Teravolt / Turboblaze is never self-broken — but it *is*
 Neutralizing Gas via `IsInnateActive`, and is a no-op with the feature off.
 
 **Species (Step 1) — canon-only** (ability-ignoring is strong offensive utility, kept tight, matching Mold Breaker /
-the Y5 decisions). Every canon carrier is a **sole-ability frontier legend**, so — like the Regi legends (Y2) /
-Necrozma (Y3) / Solgaleo (Y4) / Zacian-Zamazenta (Y6) — each takes the innate **plus a fork chosen override** in its
+the Purifying Salt decisions). Every canon carrier is a **sole-ability frontier legend**, so — like the Regi legends / Necrozma / Solgaleo / Zacian-Zamazenta — each takes the innate **plus a fork chosen override** in its
 empty slot 1 so the innate is observable *and* the frontier set is freed:
 
 - **Turboblaze → Reshiram** (new row) + its fusion **Kyurem-White** (new row), both chosen **Flash Fire** — thematic
@@ -3448,8 +3436,7 @@ Base **Kyurem** keeps its existing innate Pressure + chosen Snow Warning overrid
 
 **Step 3.5.** All seven affected frontier sets (Reshiram ×2, Zekrom ×2, Kyurem-Black ×2, Kyurem-White ×1) are freed
 by pointing `.ability` at the new override slot (`src/fork/frontier_extended_mons.c`) — no all-abilities-innate
-deferral needed, since each species' now-innate Turboblaze/Teravolt was its only real ability. **Batch Y is
-complete.**
+deferral needed, since each species' now-innate Turboblaze/Teravolt was its only real ability.
 
 ### ABILITY_MEGA_SOL
 
@@ -3478,7 +3465,7 @@ disjunct beside it.
 
 **AI-free.** No dedicated AI heuristic reads Mega Sol; the AI reasons about weather purely through the shared move /
 damage calc, which runs the same `GetAttackerWeather` chokepoint keyed off the real battler — so threats and
-responses are innate-aware for free (the batch's litmus: "if this were innate-only, would the AI still do the right
+responses are innate-aware for free (the litmus: "if this were innate-only, would the AI still do the right
 thing?" — yes).
 
 **Suppression.** Suppressible by Gastro Acid / Neutralizing Gas and **not** breakable by Mold Breaker (the ability
@@ -3514,7 +3501,7 @@ the reset in the entry loop, and the `CheckChangingTurnOrderEffects` activation 
 regardless of ability: `quickDrawRandom[b] = GetConfig(DETERMINISTIC_ABILITIES) ? IsBattlersFirstTurn(b) :
 RandomPercentage(RNG_QUICK_DRAW, 30)`. Because the roll doesn't gate on the ability, wiring only the ability *read*
 is sufficient — an innate holder consults the same precomputed roll as a real one. No `config/deterministic.h`
-change was needed (the concern flagged in the batch plan); the determinism reroute already lives at the roll, not
+change was needed (the concern flagged earlier); the determinism reroute already lives at the roll, not
 the ability check.
 
 **Pop-up / message overwrite.** The activation site (`CheckChangingTurnOrderEffects`) sets
@@ -3548,7 +3535,7 @@ observable win. This is **Tier 5.2**; Tier 5.3 (Comatose) is next.
 
 ### ABILITY_COMATOSE
 
-**Tier 5.3** — a **status-immunity trait** (reusing the Batch I / Purifying Salt pattern) **plus** a narrow
+**Tier 5.3** — a **status-immunity trait** (reusing the status-immunity / Purifying Salt pattern) **plus** a narrow
 sleep-move self-synergy. **NOT a 1:1 copy — a deliberate PURE-BOON divergence** (bigger than most): the real
 Comatose's "always asleep" trait is *double-edged* (own Snore / Sleep Talk = boon; enemy Hex / Dream Eater /
 Nightmare / Bad Dreams exploitation + own Rest block = cost), so the innate keeps only the boon halves and drops
@@ -3585,7 +3572,7 @@ deliberately **not** treated as asleep where the always-asleep trait would *hurt
 - **Bad Dreams** — the damage script's `jumpifability BS_TARGET, ABILITY_COMATOSE`
   (`data/battle_scripts_1.s`) reads only the **chosen** slot, and the fork's `BadDreamsHasValidTarget`
   (`src/battle_util.c`) checks chosen Comatose / real sleep, so an innate Comatose opposing a Bad Dreams holder is
-  **not** chipped — the cost stays dropped, here working in the holder's favor. **Batch X preserves this:** it made
+  **not** chipped — the cost stays dropped, here working in the holder's favor. **The `jumpifability` awareness fix preserves this:** it made
   the per-battler `Cmd_jumpifability` innate-aware only for an explicit boon allowlist (Sticky Hold / Own Tempo) and
   deliberately **excludes Comatose**, precisely so its cost sites (Nightmare / Bad Dreams / own Rest, all driven by
   this command) stay chosen-slot-only.
@@ -3603,7 +3590,7 @@ each site.)
 
 **Dropped display half.** The real Comatose's switch-in **"… is drowsing!"** message (the `ABILITY_COMATOSE` case
 of `ABILITYEFFECT_ON_SWITCHIN`) is deliberately **not** wired for the innate — it's pure display flavor and would
-need a switch-in driver; the batch plan's "drop the form/display half" note. So an innate Comatose is silent on
+need a switch-in driver; the "drop the form/display half" design note. So an innate Comatose is silent on
 switch-in. The overworld Dream-Ball catch modifier (`src/battle_script_commands.c`) and Battle Pike sleep room
 (`src/battle_pike.c`) are likewise left chosen-only (innates are battle-only / never touch economy or the
 overworld).
@@ -3613,10 +3600,9 @@ Neutralizing Gas / Mold Breaker never touch the innate** either: `IsInnateActive
 `cantBeSuppressed` ability regardless of Mold Breaker / Gastro Acid / Neutralizing Gas. This is the distinctive
 contrast with the breakable Purifying Salt (Mold Breaker pierces *that* innate). Tests assert both.
 
-**Species (canon-only, no flavor picks — full status immunity is a strong defensive boon, matching the Y5
-Purifying Salt / Good as Gold decision).** The sole carrier is **Komala** (`SPECIES_KOMALA`), whose only real
+**Species (canon-only, no flavor picks — full status immunity is a strong defensive boon, matching the Purifying Salt / Good as Gold decision).** The sole carrier is **Komala** (`SPECIES_KOMALA`), whose only real
 ability is Comatose. Its existing innate row (flavor Unaware) gains Comatose, and — as a sole-ability frontier set,
-like the Y-batch legends / Gholdengo — it takes a **fork-owned chosen Sticky Hold override**
+like the sole-ability legends / Gholdengo — it takes a **fork-owned chosen Sticky Hold override**
 (`src/fork/species_ability_overrides.c`, its empty slot 1): thematic (the Drowsing Pokémon clings to its log and
 never lets go) and a stable already-implemented `:white_check_mark:` innate it does not itself carry (the same pick
 as Gholdengo). **Step 3.5**: Komala's one frontier set (was chosen Comatose) is freed to **chosen Sticky Hold**, so
@@ -3691,7 +3677,7 @@ The only bare `ABILITY_MAGIC_GUARD` reads left chosen-only are pure **identity**
 damage (end-turn poison, hazards) happens with no attacker move in play, where Mold Breaker never applies. Gastro
 Acid / Neutralizing Gas suppress the innate generally (tested via Neutralizing Gas restoring poison chip).
 
-**Species (canon-only — total indirect-damage immunity is a strong defensive boon, matching the Y5 Purifying
+**Species (canon-only — total indirect-damage immunity is a strong defensive boon, matching the Purifying
 Salt / Good as Gold and Comatose decisions).** Every canon Magic Guard user, each **merged into its existing
 innate row** (so `GetSpeciesInnateList` still returns one row): the **Clefairy line** (Cleffa / Clefairy /
 Clefable, + the fork Mega Clefable, mirroring the base creature's boon), the **Abra line** (Abra / Kadabra /
@@ -3703,11 +3689,10 @@ Alakazam** sets are freed: with Magic Guard now innate, they repoint from the no
 Alakazam's real, **non-innate Synchronize** (`:x:` stable), so a chosen ability stays observable on top of the
 innate. The **3 Clefable / 2 Sigilyph / 2 Reuniclus** sets have **all** their real abilities now innate (Clefable:
 Cute Charm / Magic Guard / Unaware; Sigilyph: Wonder Skin / Magic Guard / Tinted Lens; Reuniclus: Overcoat / Magic
-Guard / Regenerator), so they were **deferred to Batch W** rather than a game-wide override sweep — **now resolved
-in Batch W2**: Sigilyph's innate-redundant slot-2 Tinted Lens takes chosen **Simple** (`:x:` stable — doubles its
+Guard / Regenerator), so they were **deferred** rather than a game-wide override sweep — **now resolved**: Sigilyph's innate-redundant slot-2 Tinted Lens takes chosen **Simple** (`:x:` stable — doubles its
 Cosmic Power / Stored Power stallbreaker) and Reuniclus's slot-2 Regenerator takes chosen **No Guard** (`:x:`
 stable — sure-hit Focus Blast on both sets), each observable atop the still-active innate Magic Guard (both slot-2
-picks were audited: no test selects those slots). **Clefable is a permanent Batch-W exclusion**: all three of its
+picks were audited: no test selects those slots). **Clefable is a permanent exclusion**: all three of its
 slots are test-pinned — Cute Charm is the chosen-not-innate exemplar in `test/fork/innate_abilities.c`, Magic Guard
 is the Magic Guard exemplar in `test/battle/ability/magic_guard.c` (+ pledge/retaliate/salt_cure/poison_heal/
 innards_out), and Unaware is the `chosen = ABILITY_UNAWARE` PARAMETRIZE in the innate divergence tests — so its 3
@@ -3735,7 +3720,7 @@ if (IsInnateActive(battler, ABILITY_MOLD_BREAKER))
 Because **every** effect site (the `CanBreakThroughAbility` gate inside `GetBattlerAbility`, which returns
 `ABILITY_NONE` for a breakable defender ability while `moldBreakerActive`) reads that one flag, crediting the
 innate here covers the whole ability with no per-site edits. The clone abilities Teravolt / Turboblaze share this
-exact path — **Batch Y8** just adds their species data + two more `IsInnateActive` lines beside this one.
+exact path — Teravolt / Turboblaze just add their species data + two more `IsInnateActive` lines beside this one.
 
 - **No identity leak / no pop-up.** The innate path deliberately does **not** call `RecordAbilityBattle` (innates
   are never identity) and there is **no** switch-in "breaks the mold" message — that flavor lives on the
@@ -3752,7 +3737,7 @@ exact path — **Batch Y8** just adds their species data + two more `IsInnateAct
 heuristics), each passing a matching `(battler, aiData->abilities[battler])` pair — so the one clause makes them
 all innate-aware for free, keyed off the real battler. No dedicated AI edits.
 
-**Species (Step 1) — canon-only** (ability-ignoring is a strong offensive utility, kept tight, matching the Y5 /
+**Species (Step 1) — canon-only** (ability-ignoring is a strong offensive utility, kept tight, matching the Purifying Salt /
 Comatose / Magic Guard canon-only decisions). Every canon Mold Breaker user in **any** slot, merged into existing
 innate rows where present: **Pinsir** (+ Mega, pure-boon), the **Cranidos / Rampardos** line (new rows), the
 **Drilbur / Excadrill** (+ Mega) line, **Throh**, **Sawk**, the **Basculin** (all three stripes) / **Basculegion**
@@ -3768,15 +3753,14 @@ Force** HA (a real slot, no override needed), so a chosen ability stays observab
 Mold Breaker set is on a species whose remaining real slots are **themselves now innate** (Excadrill ×3, Sawk ×2,
 Haxorus ×2 — its only non-innate slot Rivalry is a drawback — Pangoro ×2, Hawlucha ×2, Basculegion ×2, Tinkaton
 ×2, Veluza ×2, Ogerpon-Hearthflame), so they kept their now-redundant chosen Mold Breaker (still correct: the
-chosen runs it; the innate is redundant-but-skipped there) and were **deferred to Batch W** — the same
-all-abilities-innate deferral as Batch J/T/K/L/U/Y5. **Resolved in the Batch W3 frontier-slot sweep:**
+chosen runs it; the innate is redundant-but-skipped there) and were **deferred** — the same all-abilities-innate case. **Resolved via fork overrides:**
 Haxorus repointed to its real slot-0 **Rivalry** (`:x:`, no override); **Sawk** (slot-1 → Sheer Force), **Pangoro**
 (slot-0 → Tough Claws), **Hawlucha** (slot-1 → Tough Claws), **Basculegion M/F** (slot-1 → Water Absorb), **Veluza**
 (empty slot-1 → Water Absorb) and **Ogerpon-Hearthflame** (empty slot-1 → Flash Fire) took fork chosen overrides
 (`src/fork/species_ability_overrides.c`). **Excadrill and Tinkaton are excluded** (all three slots test-pinned —
 Excadrill's Sand Rush + Sand Force + Mold Breaker are each selected in test/, Tinkaton's Mold Breaker + Own Tempo in
 `levitate.c` and Pickpocket in `hit_escape.c`), so they stay chosen Mold Breaker (redundant-but-correct), the same
-exclusion as Clefable in W2.
+exclusion as Clefable.
 
 ### ABILITY_OPPORTUNIST
 
@@ -3832,16 +3816,16 @@ clause. (There is no shared-calc path here — copying a boost isn't part of dam
 reads are the whole AI surface.)
 
 **Species (Step 1) — canon-only** (free stat-mirroring off any foe boost is strong utility, kept tight, matching
-the Y5 / Comatose / Magic Guard / Mold Breaker canon-only decisions). The **sole** carrier is **Espathra**
+the Purifying Salt / Comatose / Magic Guard / Mold Breaker canon-only decisions). The **sole** carrier is **Espathra**
 (`SPECIES_ESPATHRA`, its primary ability), which already carried innate **Frisk / Speed Boost** — Opportunist is
 added to that row. Because Opportunist is Espathra's natural slot-0 ability, it stays **observable as the chosen
 slot** with no override needed (unlike the sole-ability carriers whose innate would otherwise be invisible).
 
-**Step 3.5 — RESOLVED in Batch W1.** Both Espathra frontier sets (`src/fork/frontier_extended_mons.c`) chose
+**Step 3.5 (frontier roster).** Both Espathra frontier sets (`src/fork/frontier_extended_mons.c`) chose
 Opportunist (one had already been repointed there when Speed Boost went innate). With **all three** of Espathra's
 abilities now innate **and no free slot**, freeing the redundant chosen slot needed a game-wide override that
 *replaces a real ability* (plus the `test/battle` audit) — the slot-repurpose class rather than the Gholdengo /
-Komala / Reshiram empty-slot fills. Batch W1 did exactly that: a fork override repurposes Espathra's
+Komala / Reshiram empty-slot fills. The override did exactly that: a fork override repurposes Espathra's
 innate-redundant slot-1 Frisk (slot-0 Opportunist is test-pinned by `opportunist.c`) to chosen **Competitive** (an
 implemented `:white_check_mark:` innate it does not carry, self-synergistic with its Calm Mind / Stored Power
 sweeper), and both sets repoint from chosen Opportunist to Competitive, so a distinct chosen ability stays
@@ -3903,13 +3887,13 @@ both the active-foe and doubles-partner branches. Everything else is automatic: 
 prediction routes through the same `IsMirrorArmorReflected` (with `onlyChecking`), so it sees the innate for free.
 
 **Species (Step 1) — canon-only** (free stat-drop reflection is strong defensive utility, kept tight, matching the
-Opportunist / Mold Breaker / Y5 decisions). The **sole** carrier is **Corviknight** (`SPECIES_CORVIKNIGHT` +
+Opportunist / Mold Breaker / Purifying Salt decisions). The **sole** carrier is **Corviknight** (`SPECIES_CORVIKNIGHT` +
 `SPECIES_CORVIKNIGHT_GMAX`, its hidden ability), which already carried innate **Pressure / Unnerve** — Mirror Armor
 is added to those rows.
 
-**Step 3.5 — RESOLVED in Batch W1.** All three Corviknight frontier sets (`src/fork/frontier_extended_mons.c`) chose
+**Step 3.5 (frontier roster).** All three Corviknight frontier sets (`src/fork/frontier_extended_mons.c`) chose
 Mirror Armor. With **all three** of Corviknight's abilities now innate **and no free slot**, freeing the redundant
-chosen slot needed a game-wide override that *replaces a real ability* (plus the `test/battle` audit). Batch W1 did
+chosen slot needed a game-wide override that *replaces a real ability* (plus the `test/battle` audit). The override did
 that: a fork override repurposes Corviknight's innate-redundant slot-1 Unnerve (slot-2 Mirror Armor is heavily
 test-pinned — `mirror_armor.c` / `pursuit.c` / `sticky_web.c` / …) to chosen **Bulletproof** (`:x:` stable, the
 Skarmory/Registeel Steel-wall pick — deflects Focus Blast / Sludge Bomb / Energy Ball), and its three sets repoint
@@ -3977,7 +3961,7 @@ foe" heuristics, none inside the shared damage calc:
   so an innate-only holder / partner is avoided just like the chosen-ability holder.
 
 **Species (Step 1) — canon-only** (free status-move reflection is strong utility, kept tight like Mirror Armor /
-Opportunist / Mold Breaker / Y5). The non-Mega canon carriers — **Espeon** (new row), the **Natu / Xatu** line
+Opportunist / Mold Breaker / Purifying Salt). The non-Mega canon carriers — **Espeon** (new row), the **Natu / Xatu** line
 (merged with innate Early Bird), and the **Hatenna / Hattrem / Hatterene / Hatterene-Gmax** line (merged with innate
 Anticipation / Healer) — take it, and it is *observable* there (their chosen slot can be Synchronize / Early Bird /
 Healer / Anticipation). The Mega carriers whose real ability **is** Magic Bounce — **Sableye / Absol (+ Mega-Z) /
@@ -3988,7 +3972,7 @@ sets. The **Xatu** set and **both Espeon** sets have a real, non-innate compleme
 stable), so they repoint `.ability` from the now-redundant chosen Magic Bounce to `ABILITY_SYNCHRONIZE` (the innate
 still bounces; Synchronize is now the observable chosen slot). The **three Hatterene** sets are all-abilities-innate
 (Healer + Anticipation + Magic Bounce, no free slot), so — exactly like Corviknight (Mirror Armor) and Espathra
-(Opportunist) — freeing needs a slot-repurpose override. **RESOLVED in Batch W1**: a fork override repurposes
+(Opportunist) — freeing needs a slot-repurpose override. **Resolved**: a fork override repurposes
 Hatterene's innate-redundant slot-1 Anticipation to chosen **Unaware** (an implemented `:white_check_mark:` innate,
 the Calm Mind-wall pick, stable) and the three sets repoint from chosen Magic Bounce to Unaware (slot-2 Magic Bounce
 stays a real slot — its identity), keeping a distinct chosen ability observable on top of the innate Magic Bounce.
@@ -4049,7 +4033,7 @@ dance), the **Lilligant** lines (Kanto's graceful Petal/Teeter Dance + Hisui's w
 **Meloetta** (both formes — the melody/dance mythical with its Pirouette dance forme) and **Maractus** (dances
 rhythmically to scare off bird Pokémon). Each flavor pick is merged into the species' existing innate row.
 
-**Step 3.5 — RESOLVED in Batch W1.** `grep -n ABILITY_DANCER src/fork/frontier_extended_mons.c` hit the two
+**Step 3.5 (frontier roster).** `grep -n ABILITY_DANCER src/fork/frontier_extended_mons.c` hit the two
 **Oricorio** sets (base + Pa'u). Dancer is Oricorio's **only** real ability, so — like the sole-ability legends —
 a fork override fills each form's **empty slot 1** with chosen **Tinted Lens** (an implemented `:white_check_mark:`
 innate it does not carry, stable; its Hurricane / Revelation Dance punch through resists for full), and both sets
@@ -4104,23 +4088,23 @@ Atk/SpD boost is visible on them).
 **Step 3.5 — no-op.** `grep -n ABILITY_FLOWER_GIFT src/fork/frontier_extended_mons.c` is empty — no frontier set
 hardcodes Flower Gift, so there is no slot to free.
 
-### Batch X — script `jumpifability` innate-awareness
+### Script `jumpifability` innate-awareness
 
 A **cross-cutting polish** follow-up (not one of the 133 pending abilities): a handful of ability blocks live
 in a **battle script** rather than in C, checked with the script command `jumpifability`, whose per-battler form
 read **only the chosen ability slot** — so an *innate* holder was invisible to them. Two documented instances
-were left as known limitations by earlier batches:
+were left as known limitations earlier:
 
-- **Sticky Hold** (Batch S) — an innate Sticky Hold did **not** block a Pickpocket's on-contact steal
+- **Sticky Hold** — an innate Sticky Hold did **not** block a Pickpocket's on-contact steal
   (`BattleScript_Pickpocket`) or Corrosive Gas (`BattleScript_EffectCorrosiveGas`), both `jumpifability`-driven.
-- **Own Tempo** (Batch I) — an innate Own Tempo's confuse-move immunity worked (via `CanBeConfused` in C) but
+- **Own Tempo** — an innate Own Tempo's confuse-move immunity worked (via `CanBeConfused` in C) but
   was **silent**, because `BattleScript_EffectConfuse`'s `jumpifability` never saw the innate to show the pop-up.
 
 **The fix — one central chokepoint edit.** `Cmd_jumpifability`'s per-battler `default` case
 (`src/battle_script_commands.c`) now credits an innate beside the chosen-ability read, but **only for an explicit
 boon allowlist** — currently `ABILITY_STICKY_HOLD` and `ABILITY_OWN_TEMPO` — via `IsInnateActive` (a no-op with
 the feature off). When an innate did the matching, the ability pop-up is overwritten to it (the same
-`abilityPopupOverwrite` mechanism the Batch U side form uses; the shared `matchedInnate` flag now covers both the
+`abilityPopupOverwrite` mechanism the ally-side form uses; the shared `matchedInnate` flag now covers both the
 side and per-battler cases). One companion C edit: the Pickpocket steal gate in `src/battle_move_resolution.c`
 (which does the item move before the script runs) now reads `IsInnateActive(...ABILITY_STICKY_HOLD)` beside the
 cached chosen ability, so the item is retained and the script prints the "cannot be removed" pop-up.
@@ -4129,16 +4113,16 @@ cached chosen ability, so the item is retained and the script prints the "cannot
 COST sites** — Nightmare, Bad Dreams, and the "already asleep" own-Rest gate — which the Comatose wiring
 deliberately leaves **chosen-slot-only** (its pure-boon divergence: an innate Comatose is never treated as asleep
 where that would *hurt* its holder). A blanket "credit any innate here" would silently re-enable those costs, so
-the allowlist keeps Batch X to the abilities whose scripted check is unambiguously a boon. Every other ability
+the allowlist keeps this fix to the abilities whose scripted check is unambiguously a boon. Every other ability
 that uses this command is either already boon-only-and-innate (Magic Guard, Insomnia, Overcoat, Ripen, …, whose
 immunity already lands in C so the script line is a redundant pop-up path) or a never-innate `:x:` ability
 (Multitype, RKS System, Disguise), so leaving them chosen-only changes nothing; abilities can be added to the
-allowlist as future batches need them.
+allowlist as future work needs them.
 
 **AI.** No new AI work — the Sticky Hold item-removal scoring (Knock Off / Corrosive Gas / Thief) and the Own
-Tempo confuse scoring were already made innate-aware in Batches S / I (the AI uses its own C heuristics, not
-script execution). Batch X only closes the in-battle script-execution gap.
+Tempo confuse scoring were already made innate-aware earlier (the AI uses its own C heuristics, not
+script execution). This fix only closes the in-battle script-execution gap.
 
-**Companion (Batch X's sibling).** The redirection / side-form `jumpifability` cases were already innate-aware
-(Batch U's Aroma Veil `IsInnateOnSide`). The remaining cross-slot script read of interest belongs to
+**Companion.** The redirection / side-form `jumpifability` cases were already innate-aware
+(the Aroma Veil `IsInnateOnSide` path). The remaining cross-slot script read of interest belongs to
 **Mold Breaker (Tier 5.5)**, which pokes the same machinery from the *attacker* side and is done next.
