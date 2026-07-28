@@ -179,3 +179,54 @@ DOUBLE_BATTLE_TEST("DETERMINISTIC_CRITICAL_HITS: Dragon Cheer arms a one-shot cr
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_CRITICAL_HITS: a typed high-crit move crits only on a super effective hit, not on STAB")
+{
+    // High-crit moves reuse the deterministic secondary-effect gate: a type that CAN be
+    // super effective (Dark) crits only on a super effective hit -- STAB alone is not enough.
+    u32 playerSpecies, targetSpecies;
+    bool32 crits;
+    PARAMETRIZE { playerSpecies = SPECIES_WOBBUFFET; targetSpecies = SPECIES_WOBBUFFET; crits = TRUE;  } // non-Dark user, Psychic target -> super effective
+    PARAMETRIZE { playerSpecies = SPECIES_UMBREON;   targetSpecies = SPECIES_ZANGOOSE; crits = FALSE; } // Dark STAB user, neutral target -> no crit
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(GetMoveCriticalHitStage(MOVE_NIGHT_SLASH) == 1);
+        ASSUME(GetMoveType(MOVE_NIGHT_SLASH) == TYPE_DARK);
+        PLAYER(playerSpecies) { Speed(100); }
+        OPPONENT(targetSpecies) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_NIGHT_SLASH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_NIGHT_SLASH, player);
+        if (crits)
+            MESSAGE("A critical hit!");
+        else
+            NONE_OF { MESSAGE("A critical hit!"); }
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_CRITICAL_HITS: a Normal high-crit move crits from a STAB user only")
+{
+    // Normal can never be super effective, so its high-crit moves fall back to the STAB
+    // gate (matching Normal-type deterministic secondary effects): Slash crits from a
+    // Normal user, and does nothing from an off-type user.
+    u32 playerSpecies;
+    bool32 crits;
+    PARAMETRIZE { playerSpecies = SPECIES_ZANGOOSE;  crits = TRUE;  } // Normal: STAB Slash -> crit
+    PARAMETRIZE { playerSpecies = SPECIES_WOBBUFFET; crits = FALSE; } // Psychic: no STAB, Normal never SE -> no crit
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(GetMoveCriticalHitStage(MOVE_SLASH) == 1);
+        ASSUME(GetMoveType(MOVE_SLASH) == TYPE_NORMAL);
+        PLAYER(playerSpecies) { Speed(100); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); MaxHP(600); HP(600); Defense(255); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SLASH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SLASH, player);
+        if (crits)
+            MESSAGE("A critical hit!");
+        else
+            NONE_OF { MESSAGE("A critical hit!"); }
+    }
+}
+
