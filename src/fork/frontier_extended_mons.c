@@ -3882,7 +3882,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
-            MOVE_DRAGON_DANCE
+            MOVE_DRAGON_DANCE,
             MOVE_EXTREME_SPEED,
             MOVE_OUTRAGE,
             MOVE_EARTHQUAKE
