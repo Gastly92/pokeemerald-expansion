@@ -3879,35 +3879,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAGONITE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Multiscale DD sweeper
+        .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
-            MOVE_OUTRAGE,
-            MOVE_EARTHQUAKE,
-            MOVE_ROOST
-        },
-        .ability = ABILITY_RECKLESS, // Inner Focus now innate; chosen Reckless (override) powers Brave Bird/Double-Edge
-        .nature = NATURE(ATK_UP, SPA_DOWN),
-        .ev = EVS(
-            .hp = 4,
-            .atk = 252,
-            .spe = 252
-        ),
-        .teraType = TYPE_FLYING,
-    },
-    {
-        .species = SPECIES_DRAGONITE,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Extreme Speed band
-        .moves =
-        {
             MOVE_EXTREME_SPEED,
             MOVE_OUTRAGE,
-            MOVE_EARTHQUAKE,
-            MOVE_FIRE_PUNCH
+            MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_RECKLESS, // Inner Focus now innate; chosen Reckless (override) powers Brave Bird/Double-Edge
+        .ability = ABILITY_RECKLESS,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -3915,26 +3895,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-    },
-    {
-        .species = SPECIES_DRAGONITE,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Dragon Dance
-        .moves =
-        {
-            MOVE_DRAGON_DANCE,
-            MOVE_FLY,
-            MOVE_EARTHQUAKE,
-            MOVE_OUTRAGE
-        },
-        .ability = ABILITY_RECKLESS, // Inner Focus now innate; chosen Reckless (override) powers Brave Bird/Double-Edge
-        .nature = NATURE(ATK_UP, SPA_DOWN),
-        .ev = EVS(
-            .hp = 4,
-            .atk = 252,
-            .spe = 252
-        ),
-        .teraType = TYPE_FLYING,
     },
 
     // 0150
@@ -10856,7 +10816,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WEAVILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // fast physical attacker
+        .heldItem = ITEM_KINGS_ROCK,
         .moves =
         {
             MOVE_TRIPLE_AXEL,
@@ -10864,54 +10824,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_TOUGH_CLAWS, // Pressure / Pickpocket both innate; chosen Tough Claws (override)
+        .ability = ABILITY_TOUGH_CLAWS,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ICE,
-    },
-    {
-        .species = SPECIES_WEAVILE,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Swords Dance + Pickpocket
-        .moves =
-        {
-            MOVE_SWORDS_DANCE,
-            MOVE_ICICLE_CRASH,
-            MOVE_KNOCK_OFF,
-            MOVE_ICE_SHARD
-        },
-        .ability = ABILITY_TOUGH_CLAWS, // Pressure / Pickpocket both innate; chosen Tough Claws (override)
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_DARK,
-    },
-    {
-        .species = SPECIES_WEAVILE,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_KINGS_ROCK, // base 125 Speed and no flinch move: its opening Knock Off flinches via King's Rock for a free turn
-        .moves =
-        {
-            MOVE_KNOCK_OFF,
-            MOVE_ICE_PUNCH,
-            MOVE_LOW_KICK,
-            MOVE_ICE_SHARD
-        },
-        .ability = ABILITY_TOUGH_CLAWS, // Pressure / Pickpocket both innate; chosen Tough Claws (override)
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_FLYING,
     },
 
     // 0462
@@ -19595,39 +19515,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0798 (innate Beast Boost + Levitate)
+    // 0798
     {
         .species = SPECIES_KARTANA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Beast Boost physical breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_LEAF_BLADE,
             MOVE_SACRED_SWORD,
-            MOVE_KNOCK_OFF,
-            MOVE_SMART_STRIKE
+            MOVE_SMART_STRIKE,
+            MOVE_AERIAL_ACE
         },
-        .ability = ABILITY_SHARPNESS, // Beast Boost now innate (Y7); chosen Sharpness (override) boosts Leaf Blade/Sacred Sword
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_GRASS,
-    },
-    {
-        .species = SPECIES_KARTANA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GRASS_GEM, // one-shot Grass burst after Swords Dance
-        .moves =
-        {
-            MOVE_SWORDS_DANCE,
-            MOVE_LEAF_BLADE,
-            MOVE_SACRED_SWORD,
-            MOVE_SMART_STRIKE
-        },
-        .ability = ABILITY_SHARPNESS, // Beast Boost now innate (Y7); chosen Sharpness (override) boosts Leaf Blade/Sacred Sword
+        .ability = ABILITY_SHARPNESS,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
