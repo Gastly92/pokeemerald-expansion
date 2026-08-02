@@ -42,10 +42,11 @@ session (the session-start hook does this automatically; the manual command is):
 git remote add upstream https://github.com/rh-hideout/pokeemerald-expansion.git
 ```
 
-**Web-session caveat (important):** the `upstream` remote does **not** fetch out
-of the box from a web session — see "Fetching upstream from a web session" just
-below for why and the working recipe. The rest of this section (unshallow, merge,
-conflict rules) applies once the upstream commits are reachable. To sync:
+**Web-session note:** the `upstream` remote fetches fine from a web session as of
+the 1.16.3 sync (Aug 2026); confirm with `git ls-remote upstream HEAD` before
+assuming otherwise. If it ever returns `403`, see "Fetching upstream from a web
+session" just below for why and the fallback recipe. The rest of this section
+(unshallow, merge, conflict rules) applies either way. To sync:
 
 ```bash
 # 0. Web containers clone the fork SHALLOWLY. A shallow clone has no common
@@ -78,18 +79,30 @@ git merge upstream/master      # MERGE, not rebase — this is a long-lived shar
 - After every sync, re-verify the build and tests (see below) before merging to
   `master`.
 
-#### Fetching upstream from a web session (egress is blocked by default)
+#### Fetching upstream from a web session
 
-Findings from a real sync session (the earlier "Verified working" claim was
-stale — it is **not** true by default):
+**Try `git fetch upstream` first — as of the 1.16.3 sync (Aug 2026) it just works.**
+The scoped GitHub proxy now serves the public `rh-hideout/pokeemerald-expansion`
+alongside our fork, so the plain remote is enough:
+
+```bash
+git remote add upstream https://github.com/rh-hideout/pokeemerald-expansion.git
+git fetch --filter=blob:none upstream master   # verify first: git ls-remote upstream HEAD
+```
+
+Everything below is the **fallback** for if that regresses to a `403`. Note that
+`add_repo` for `rh-hideout/...` does *not* work — it refuses cross-owner adds
+("session already has repos from owner(s) [gastly92]").
 
 - **GitHub traffic uses a separate, scoped GitHub proxy, independent of the
   network-access level.** All git remotes are transparently rewritten (via an
   `insteadOf` rule in `/root/.gitconfig`: `https://github.com/` →
-  `http://local_proxy@127.0.0.1:<port>/git/`) to that proxy, which only allows
-  the repos in the session's scope — i.e. **our fork only**. So
-  `git fetch upstream` against `rh-hideout/...` returns **`403`** ("requested URL
-  returned error: 403"). This is a repo-scope denial, not a network outage.
+  `http://local_proxy@127.0.0.1:<port>/git/`) to that proxy, which allows only
+  the repos in the session's scope. When upstream is outside that scope,
+  `git fetch upstream` returns **`403`** ("requested URL returned error: 403").
+  That is a repo-scope denial, not a network outage — plain egress can be fine
+  (`curl https://example.com` → 200) while `github.com` still 403s, so test with
+  `git ls-remote upstream HEAD` rather than a `curl` to github.com.
 - **`origin/upstream-mirror/master` is unreliable.** The fork carries
   `upstream-mirror/*` branches meant as an in-scope mirror, but they can be far
   out of date (observed sitting at the merge-base, i.e. behind *our* HEAD), so
