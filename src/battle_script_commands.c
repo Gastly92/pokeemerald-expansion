@@ -2602,9 +2602,11 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
     case MOVE_EFFECT_FLAME_BURST:
         if (IsBattlerAlive(GetPartnerBattler(effectBattler))
          && !IsSemiInvulnerable(GetPartnerBattler(effectBattler), CHECK_ALL)
-         // FORK: replaces upstream's GetBattlerAbility(...) != ABILITY_MAGIC_GUARD — innate-aware
-         // (FEATURE_INNATE_ABILITIES). On conflict, keep BattlerHasAbility().
-         && !BattlerHasAbility(GetPartnerBattler(effectBattler), ABILITY_MAGIC_GUARD))
+         && GetBattlerAbility(GetPartnerBattler(effectBattler)) != ABILITY_MAGIC_GUARD
+         // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES). Kept as a separate additive
+         // clause rather than folding upstream's line into BattlerHasAbility(), so upstream's line
+         // stays byte-identical and future syncs auto-merge here.
+         && !IsInnateActive(GetPartnerBattler(effectBattler), ABILITY_MAGIC_GUARD))
         {
             enum BattlerId partnerTarget = GetPartnerBattler(effectBattler);
             gEffectBattler = partnerTarget;

@@ -2169,9 +2169,12 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     case EFFECT_HELPING_HAND:
         if (!hasPartner
           || DoesPartnerHaveSameMoveEffect(GetPartnerBattler(battlerAtk), battlerDef, move, aiData->partnerMove)
-          // FORK: replaces upstream's `aiData->abilities[...] == ABILITY_GOOD_AS_GOLD` — BattlerHasAbility()
-          // covers the real ability AND an innate one. On conflict, keep this call, not the array read.
-          || BattlerHasAbility(GetPartnerBattler(battlerAtk), ABILITY_GOOD_AS_GOLD)
+          || aiData->abilities[GetPartnerBattler(battlerAtk)] == ABILITY_GOOD_AS_GOLD
+          // FORK: an innate Good as Gold partner blocks Helping Hand too. Kept as a separate additive
+          // clause rather than folding upstream's line into BattlerHasAbility(), so upstream's line
+          // stays byte-identical and future syncs auto-merge here. Matches the sibling Good as Gold
+          // site in AI_ShouldLowerStat (battle_ai_util.c), which is already shaped this way.
+          || IsInnateActive(GetPartnerBattler(battlerAtk), ABILITY_GOOD_AS_GOLD)
           || (aiData->partnerMove != MOVE_NONE && IsBattleMoveStatus(aiData->partnerMove))
           || gBattleStruct->monToSwitchIntoId[GetPartnerBattler(battlerAtk)] != PARTY_SIZE) //Partner is switching out.
             ADJUST_SCORE(-20);
@@ -3487,7 +3490,7 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             enum Ability scoringPartnerAbility = atkPartnerAbility;
             if (moveType == TYPE_GROUND
              && scoringPartnerAbility != ABILITY_LEVITATE && scoringPartnerAbility != ABILITY_EARTH_EATER
-             && BattlerHasAbility(GetPartnerBattler(battlerAtk), ABILITY_LEVITATE))
+             && BattlerHasAbility(battlerAtkPartner, ABILITY_LEVITATE))
                 scoringPartnerAbility = ABILITY_LEVITATE;
             // FORK: promote an innate Steam Engine / Thermal Exchange the same way (FEATURE_INNATE_ABILITIES), so
             // the on-hit-boost partner-fire scoring below (and ShouldTriggerAbility) treats the ally's innate
@@ -3496,11 +3499,11 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             // is moot. Skipped when the chosen ability already IS that (the switch handles it).
             else if ((moveType == TYPE_FIRE || moveType == TYPE_WATER)
                   && scoringPartnerAbility != ABILITY_STEAM_ENGINE
-                  && IsInnateActive(GetPartnerBattler(battlerAtk), ABILITY_STEAM_ENGINE))
+                  && IsInnateActive(battlerAtkPartner, ABILITY_STEAM_ENGINE))
                 scoringPartnerAbility = ABILITY_STEAM_ENGINE;
             else if (moveType == TYPE_FIRE
                   && scoringPartnerAbility != ABILITY_THERMAL_EXCHANGE
-                  && IsInnateActive(GetPartnerBattler(battlerAtk), ABILITY_THERMAL_EXCHANGE))
+                  && IsInnateActive(battlerAtkPartner, ABILITY_THERMAL_EXCHANGE))
                 scoringPartnerAbility = ABILITY_THERMAL_EXCHANGE;
             // FORK: promote an innate Justified / Water Compaction / Anger Point the same way
             // (FEATURE_INNATE_ABILITIES), so the on-hit-boost partner-fire scoring below treats the ally's
@@ -3508,22 +3511,22 @@ static s32 AI_DoubleBattle(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             // Anger Point on an always-crit move; a mon can't carry two of these, so ordering is moot.
             else if (moveType == TYPE_DARK
                   && scoringPartnerAbility != ABILITY_JUSTIFIED
-                  && IsInnateActive(GetPartnerBattler(battlerAtk), ABILITY_JUSTIFIED))
+                  && IsInnateActive(battlerAtkPartner, ABILITY_JUSTIFIED))
                 scoringPartnerAbility = ABILITY_JUSTIFIED;
             else if (moveType == TYPE_WATER
                   && scoringPartnerAbility != ABILITY_WATER_COMPACTION
-                  && IsInnateActive(GetPartnerBattler(battlerAtk), ABILITY_WATER_COMPACTION))
+                  && IsInnateActive(battlerAtkPartner, ABILITY_WATER_COMPACTION))
                 scoringPartnerAbility = ABILITY_WATER_COMPACTION;
             else if (MoveAlwaysCrits(move)
                   && scoringPartnerAbility != ABILITY_ANGER_POINT
-                  && IsInnateActive(GetPartnerBattler(battlerAtk), ABILITY_ANGER_POINT))
+                  && IsInnateActive(battlerAtkPartner, ABILITY_ANGER_POINT))
                 scoringPartnerAbility = ABILITY_ANGER_POINT;
             // FORK: promote an innate Rattled the same way (FEATURE_INNATE_ABILITIES), so the on-hit-boost
             // partner-fire scoring below treats the ally's innate like the real ability — the AI values
             // hitting an innate-only holder with a Dark/Ghost/Bug move to trigger its Speed boost.
             else if ((moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG)
                   && scoringPartnerAbility != ABILITY_RATTLED
-                  && IsInnateActive(GetPartnerBattler(battlerAtk), ABILITY_RATTLED))
+                  && IsInnateActive(battlerAtkPartner, ABILITY_RATTLED))
                 scoringPartnerAbility = ABILITY_RATTLED;
             switch (scoringPartnerAbility)
             {

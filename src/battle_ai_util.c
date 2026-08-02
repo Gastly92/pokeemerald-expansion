@@ -1965,8 +1965,11 @@ bool32 AI_IsAbilityOnSide(enum BattlerId battlerId, enum Ability ability)
 // off and never leaks the chosen ability (it credits only the species' active innate).
 bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability)
 {
+    // GetPartnerBattler() is a three-call chain since upstream #10542 dropped the BATTLE_PARTNER
+    // XOR macro, and this helper is AI-hot — resolve the partner once.
+    enum BattlerId partner = GetPartnerBattler(battlerId);
     return (IsBattlerAlive(battlerId) && IsInnateActive(battlerId, ability))
-        || (IsBattlerAlive(GetPartnerBattler(battlerId)) && IsInnateActive(GetPartnerBattler(battlerId), ability));
+        || (IsBattlerAlive(partner) && IsInnateActive(partner, ability));
 }
 
 // does NOT include ability suppression checks

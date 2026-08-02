@@ -167,6 +167,22 @@ easily; rewrites of existing logic conflict the most.
   exception (config headers).
 - **When you must touch a shared file, keep edits additive and localized** (append
   a switch case / table entry / new function) rather than restructuring.
+- **Add a line; don't rewrite upstream's line.** This is the single highest-leverage
+  habit, because git conflicts are line-based: a line we left byte-identical to
+  upstream auto-merges forever, while a line we edited conflicts every time upstream
+  touches it. It bites most often when making a condition innate-aware. Prefer
+  ```c
+  if (... || aiData->abilities[battler] == ABILITY_GOOD_AS_GOLD  // upstream's line, untouched
+         || IsInnateActive(battler, ABILITY_GOOD_AS_GOLD))       // FORK: innate-aware
+  ```
+  over folding upstream's test into `BattlerHasAbility(battler, ABILITY_GOOD_AS_GOLD)`.
+  The two are equivalent (`BattlerHasAbility` *is* `GetBattlerAbility(b) == a ||
+  IsInnateActive(b, a)`), but only the first keeps upstream's line mergeable. Same for
+  a negated test: `X != ABILITY_FOO && !IsInnateActive(b, ABILITY_FOO)` rather than
+  `!BattlerHasAbility(b, ABILITY_FOO)`.
+  Where a rewrite is genuinely unavoidable — a `? :` we must extend, a hoisted local a
+  hot loop needs, a restructured `if/else if` chain — leave a `FORK:` hint saying how to
+  resolve it, and accept the recurring conflict.
 - Caveats: this is not a silver bullet — adding enum values, species, moves, etc.
   still touches shared tables. And new files don't prevent *semantic* conflicts
   (upstream renaming a symbol we call breaks the build without a git conflict),

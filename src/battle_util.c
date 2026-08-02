@@ -5529,8 +5529,11 @@ u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability)
 {
     if (IsBattlerAlive(battler) && IsInnateActive(battler, ability))
         return battler + 1;
-    else if (IsBattlerAlive(GetPartnerBattler(battler)) && IsInnateActive(GetPartnerBattler(battler), ability))
-        return GetPartnerBattler(battler) + 1;
+    // GetPartnerBattler() is a three-call chain since upstream #10542 dropped the BATTLE_PARTNER
+    // XOR macro, and this helper is AI-hot — resolve the partner once.
+    enum BattlerId partner = GetPartnerBattler(battler);
+    if (IsBattlerAlive(partner) && IsInnateActive(partner, ability))
+        return partner + 1;
     else
         return 0;
 }
