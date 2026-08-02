@@ -134,59 +134,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_POISON_POINT
     },
     { // 0018
-        // Pidgeot's three real abilities (Keen Eye, Tangled Feet, Big Pecks) are ALL now innate, so its innate-
-        // redundant slot-1 Tangled Feet -- unpinned by any test (audited) -- takes a chosen No Guard, :x: (never an
-        // innate -> stable) and its Mega's signature: Hurricane / Focus Blast never miss.
         SPECIES_PIDGEOT, 1,
         ABILITY_NO_GUARD
     },
     { // 0022
-        // Fearow: all real abilities now innate, so its empty slot takes a chosen
-        // Hustle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_FEAROW, 1,
         ABILITY_HUSTLE
     },
     { // 0024
-        // Arbok's three real abilities (Intimidate, Shed Skin, Unnerve) are ALL now innate, so its innate-
-        // redundant slot-2 Unnerve -- unpinned by any test (audited) -- takes a chosen Poison Point, :x: (never
-        // an innate -> stable) and on-theme for the venomous Cobra Pokemon: contact attackers risk poison,
-        // observable alongside the innate Intimidate. (Its slot-1 Shed Skin frontier set is pinned by shed_skin.c
-        // and stays a real Shed Skin.)
         SPECIES_ARBOK, 2,
         ABILITY_POISON_POINT
     },
     { // 0026
-        // Raichu-Alola's only real ability (Surge Surfer) is now innate, so its empty slot 1 takes a
-        // flavorful chosen ability for the frontier sets. Lightning Rod is :x: (never an innate -> stable)
-        // and on-theme for the Electric mouse: it draws in Electric moves for immunity + a Sp. Atk boost,
-        // a clean offensive boon for its special-attacker sets alongside the innate Surge Surfer speed.
         SPECIES_RAICHU_ALOLA, 1,
         ABILITY_LIGHTNING_ROD
     },
     { // 0028
-        // Sandslash's only real abilities (Sand Veil, Sand Rush) are BOTH now innate, so its empty
-        // slot 1 takes a flavorful chosen ability. Sand Stream is :x: (never an innate -> stable) and
-        // self-synergistic: it sets the sandstorm that turns on Sandslash's own innate Sand Rush (Speed)
-        // and Sand Veil (evasion). Precedent: Flygon/Claydol/Torterra also hand out Sand Stream.
         SPECIES_SANDSLASH, 1,
         ABILITY_SAND_STREAM
     },
     { // 0028
-        // Sandslash-Alola's only real abilities (Snow Cloak, Slush Rush) are BOTH now innate, so its
-        // empty slot 1 takes Snow Warning — :x: (never an innate -> stable) and self-synergistic: the
-        // snow it sets turns on its own innate Slush Rush (Speed) and Snow Cloak (evasion). Snowy
-        // counterpart to base Sandslash's Sand Stream above.
         SPECIES_SANDSLASH_ALOLA, 1,
         ABILITY_SNOW_WARNING
     },
     { // 0036
-        // Clefable: all real abilities (Cute Charm, Magic Guard, Unaware) are now innate, so it has no real
-        // non-innate slot. The fork innate test pins slot-0 Cute Charm (its innate-Magic-Guard cases) and slot-2
-        // Unaware (its real-vs-innate-Unaware cases), so slot-1 Magic Guard takes Magic Bounce -- an implemented
-        // :white_check_mark: innate it does not carry (stable) and thematic for the support fairy: it reflects
-        // status/hazards atop innate Unaware. The innate test used real Magic Guard only as an inert non-Unaware
-        // chosen ability; those refs were repointed to this Magic Bounce (equally inert there -- no status move
-        // targets Clefable in those cases). Innate Magic Guard is untouched, so its innate-Magic-Guard cases pass.
         SPECIES_CLEFABLE, 1,
         ABILITY_MAGIC_BOUNCE
     },
