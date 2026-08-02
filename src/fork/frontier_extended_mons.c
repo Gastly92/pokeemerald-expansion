@@ -276,27 +276,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PIDGEOT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHARP_BEAK, // Mega Pidgeot (No Guard); boosts its perfect-accuracy Hurricane
-        .moves =
-        {
-            MOVE_HURRICANE,
-            MOVE_HEAT_WAVE,
-            MOVE_U_TURN,
-            MOVE_ROOST
-        },
-        .ability = ABILITY_NO_GUARD, // Big Pecks now innate (Keen Eye/Tangled Feet too); chosen No Guard via override lands Hurricane
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FLYING,
-    },
-    {
-        .species = SPECIES_PIDGEOT,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Keen Eye Choice Specs (Tinted Lens needs the Mega)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HURRICANE,
@@ -304,7 +284,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_NO_GUARD, // Big Pecks now innate (Keen Eye/Tangled Feet too); chosen No Guard via override lands Hurricane
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -316,9 +296,29 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0020
     {
+        .species = SPECIES_RATICATE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_BAND,
+        .moves =
+        {
+            MOVE_BODY_SLAM,
+            MOVE_DRILL_RUN,
+            MOVE_KNOCK_OFF,
+            MOVE_AQUA_JET
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
         .species = SPECIES_RATICATE_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SILK_SCARF, // Hustle wallbreaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -333,65 +333,23 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_DARK,
-    },
-    {
-        .species = SPECIES_RATICATE_ALOLA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // bulky pivot, Thick Fat eats fire/ice
-        .moves =
-        {
-            MOVE_KNOCK_OFF,
-            MOVE_BODY_SLAM,
-            MOVE_U_TURN,
-            MOVE_SUPER_FANG
-        },
-        // Thick Fat + Gluttony now innate (Gluttony still eats the Sitrus Berry early, at 1/2 HP);
-        // chosen Hustle (its only free real slot) boosts Attack for the physical set.
-        .ability = ABILITY_HUSTLE,
-        .nature = NATURE(ATK_UP, SPA_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .atk = 80,
-            .spe = 176
-        ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_GHOST,
     },
 
-    // 0020
+    // 0022
     {
-        .species = SPECIES_RATICATE,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Guts attacker
-        .moves =
-        {
-            MOVE_FACADE,
-            MOVE_KNOCK_OFF,
-            MOVE_SUCKER_PUNCH,
-            MOVE_SWORDS_DANCE
-        },
-        .ability = ABILITY_RUN_AWAY, // Guts now innate; Run Away is its only stable non-drawback slot
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_NORMAL,
-    },
-    {
-        .species = SPECIES_RATICATE,
+        .species = SPECIES_FEAROW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SILK_SCARF, // Hustle hits
+        .heldItem = ITEM_SCOPE_LENS,
         .moves =
         {
-            MOVE_BODY_SLAM,
+            MOVE_DRILL_PECK,
             MOVE_DRILL_RUN,
             MOVE_KNOCK_OFF,
-            MOVE_AQUA_JET
+            MOVE_U_TURN
         },
         .ability = ABILITY_HUSTLE,
-        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
@@ -400,61 +358,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GROUND,
     },
 
-    // 0022
-    {
-        .species = SPECIES_FEAROW,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SCOPE_LENS, // Sniper crits
-        .moves =
-        {
-            MOVE_DRILL_PECK,
-            MOVE_DRILL_RUN,
-            MOVE_KNOCK_OFF,
-            MOVE_AGILITY
-        },
-        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FLYING,
-    },
-    {
-        .species = SPECIES_FEAROW,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SHARP_BEAK, // Sharp Beak sweeper
-        .moves =
-        {
-            MOVE_BRAVE_BIRD,
-            MOVE_DRILL_RUN,
-            MOVE_U_TURN,
-            MOVE_SWORDS_DANCE
-        },
-        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FLYING,
-    },
-
     // 0024
     {
         .species = SPECIES_ARBOK,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_GLASSES, // Intimidate pivot
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_GUNK_SHOT,
             MOVE_EARTHQUAKE,
             MOVE_KNOCK_OFF,
-            MOVE_GLARE
+            MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_POISON_POINT, // Intimidate now innate; chosen Poison Point (slot 2)
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -462,26 +378,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
-    },
-    {
-        .species = SPECIES_ARBOK,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_POISON_BARB, // STAB poison
-        .moves =
-        {
-            MOVE_POISON_JAB,
-            MOVE_SUCKER_PUNCH,
-            MOVE_EARTHQUAKE,
-            MOVE_AQUA_JET
-        },
-        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
-        .nature = NATURE(ATK_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_POISON,
     },
 
     // 0026
@@ -491,9 +387,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_THUNDERBOLT,
-            MOVE_FOCUS_BLAST,
+            MOVE_THUNDER,
             MOVE_SURF,
+            MOVE_FOCUS_BLAST,
             MOVE_NASTY_PLOT
         },
         .ability = ABILITY_LIGHTNING_ROD,
@@ -503,104 +399,42 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ELECTRIC,
+        .teraType = TYPE_WATER,
     },
     {
-        .species = SPECIES_RAICHU,
-        .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast Fake Out support
+        .species = SPECIES_RAICHU_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
-            MOVE_THUNDERBOLT,
-            MOVE_FAKE_OUT,
-            MOVE_VOLT_SWITCH,
-            MOVE_GRASS_KNOT
+            MOVE_THUNDER,
+            MOVE_PSYCHIC,
+            MOVE_FOCUS_BLAST,
+            MOVE_VOLT_SWITCH
         },
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 4,
-            .spa = 252,
-            .spe = 252
-        ),
-        .teraType = TYPE_ELECTRIC,
-    },
-
-    // 0026
-    {
-        .species = SPECIES_RAICHU_ALOLA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TWISTED_SPOON, // Surge Surfer sweeper
-        .moves =
-        {
-            MOVE_THUNDERBOLT,
-            MOVE_PSYCHIC,
-            MOVE_NASTY_PLOT,
-            MOVE_FOCUS_BLAST
-        },
-        .ability = ABILITY_LIGHTNING_ROD, // Surge Surfer now innate; chosen Lightning Rod (override) draws Electric moves + boosts Sp. Atk
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ELECTRIC,
-    },
-    {
-        .species = SPECIES_RAICHU_ALOLA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MAGNET, // fast pivot variant
-        .moves =
-        {
-            MOVE_VOLT_SWITCH,
-            MOVE_PSYSHOCK,
-            MOVE_DAZZLING_GLEAM,
-            MOVE_FOCUS_BLAST
-        },
-        .ability = ABILITY_LIGHTNING_ROD, // Surge Surfer now innate; chosen Lightning Rod (override) draws Electric moves + boosts Sp. Atk
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_PSYCHIC,
+        .teraType = TYPE_FIGHTING,
     },
 
     // 0028
     {
         .species = SPECIES_SANDSLASH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EARTHQUAKE,
             MOVE_KNOCK_OFF,
-            MOVE_RAPID_SPIN,
-            MOVE_SWORDS_DANCE
-        },
-        .ability = ABILITY_SAND_STREAM, // Sand Rush + Sand Veil now innate; chosen Sand Stream (override) sets sand to power both
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_GROUND,
-    },
-    {
-        .species = SPECIES_SANDSLASH,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_GROUND_GEM, // one-shot Ground burst for the Swords Dance attacker
-        .moves =
-        {
-            MOVE_SWORDS_DANCE,
-            MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE,
-            MOVE_KNOCK_OFF
+            MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_SAND_STREAM, // Sand Rush + Sand Veil now innate; chosen Sand Stream (override) sets sand to power both
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -609,20 +443,18 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
-
-    // 0028
     {
         .species = SPECIES_SANDSLASH_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_NEVER_MELT_ICE, // Slush Rush physical sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_ICICLE_CRASH,
+            MOVE_TRIPLE_AXEL,
             MOVE_IRON_HEAD,
             MOVE_EARTHQUAKE,
-            MOVE_SWORDS_DANCE
+            MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_SNOW_WARNING, // Slush Rush + Snow Cloak now innate; chosen Snow Warning (override) sets snow to power both
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -631,32 +463,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ICE,
     },
-    {
-        .species = SPECIES_SANDSLASH_ALOLA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky spinner/hazard control
-        .moves =
-        {
-            MOVE_TRIPLE_AXEL,
-            MOVE_IRON_HEAD,
-            MOVE_RAPID_SPIN,
-            MOVE_KNOCK_OFF
-        },
-        .ability = ABILITY_SNOW_WARNING, // Slush Rush + Snow Cloak now innate; chosen Snow Warning (override) sets snow to power both
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .hp = 248,
-            .def = 8,
-            .spe = 252
-        ),
-        .teraType = TYPE_STEEL,
-    },
 
     // 0031
     {
         .species = SPECIES_NIDOQUEEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sheer Force nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -676,13 +488,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIDOQUEEN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky hazards
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC_SPIKES,
-            MOVE_EARTH_POWER,
-            MOVE_ICE_BEAM
+            MOVE_SLUDGE_WAVE,
+            MOVE_EARTH_POWER
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
@@ -691,20 +503,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 200,
             .spd = 56
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_POISON,
     },
 
     // 0034
     {
         .species = SPECIES_NIDOKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sheer Force nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EARTH_POWER,
             MOVE_SLUDGE_WAVE,
-            MOVE_ICE_BEAM,
-            MOVE_THUNDERBOLT
+            MOVE_THUNDERBOLT,
+            MOVE_ICE_BEAM
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -713,12 +525,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_ICE,
     },
     {
         .species = SPECIES_NIDOKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -733,22 +545,22 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_FIRE,
     },
 
     // 0036
     {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Magic Guard CM wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_MOONBLAST,
+            MOVE_FLAMETHROWER,
             MOVE_CALM_MIND,
-            MOVE_SOFT_BOILED,
-            MOVE_FLAMETHROWER
+            MOVE_SOFT_BOILED
         },
-        .ability = ABILITY_MAGIC_BOUNCE, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_MAGIC_BOUNCE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -759,16 +571,16 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CLEFABLE,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Unaware / offensive
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_MOONBLAST,
-            MOVE_NASTY_PLOT,
+            MOVE_DAZZLING_GLEAM,
             MOVE_FLAMETHROWER,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_MAGIC_BOUNCE, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_MAGIC_BOUNCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -777,37 +589,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
-    {
-        .species = SPECIES_CLEFABLE,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware staller (toggle-friendly)
-        .moves =
-        {
-            MOVE_MOONBLAST,
-            MOVE_SOFT_BOILED,
-            MOVE_TOXIC,
-            MOVE_THUNDER_WAVE
-        },
-        .ability = ABILITY_MAGIC_BOUNCE, // chosen via fork override (species_ability_overrides.c)
-        .nature = NATURE(SPD_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .def = 4,
-            .spd = 252
-        ),
-        .teraType = TYPE_STEEL,
-    },
 
     // 0038
     {
         .species = SPECIES_NINETALES,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAT_ROCK, // Drought setter
+        .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
             MOVE_FIRE_BLAST,
             MOVE_SOLAR_BEAM,
-            MOVE_NASTY_PLOT,
+            MOVE_SCORCHING_SANDS,
             MOVE_WILL_O_WISP
         },
         .ability = ABILITY_DROUGHT,
@@ -817,38 +609,16 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_GRASS,
     },
-    {
-        .species = SPECIES_NINETALES,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAT_ROCK, // extends its own Drought sun
-        .moves =
-        {
-            MOVE_NASTY_PLOT,
-            MOVE_FIRE_BLAST,
-            MOVE_SOLAR_BEAM,
-            MOVE_SCORCHING_SANDS
-        },
-        .ability = ABILITY_DROUGHT,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FIRE,
-    },
-
-    // 0038
     {
         .species = SPECIES_NINETALES_ALOLA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Snow Warning + Aurora Veil support
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_AURORA_VEIL,
-            MOVE_MOONBLAST,
+            MOVE_DAZZLING_GLEAM,
             MOVE_FREEZE_DRY,
             MOVE_ICY_WIND
         },
@@ -864,13 +634,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NINETALES_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_NEVER_MELT_ICE, // offensive Snow Warning special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BLIZZARD,
             MOVE_MOONBLAST,
             MOVE_FREEZE_DRY,
-            MOVE_NASTY_PLOT
+            MOVE_ICY_WIND
         },
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -22457,12 +22227,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SNEASLER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Poison Touch Dire Claw attacker
+        .heldItem = ITEM_KINGS_ROCK,
         .moves =
         {
-            MOVE_DIRE_CLAW,
-            MOVE_CLOSE_COMBAT,
             MOVE_FAKE_OUT,
+            MOVE_GUNK_SHOT,
+            MOVE_CLOSE_COMBAT,
             MOVE_THROAT_CHOP
         },
         .ability = ABILITY_POISON_TOUCH,
@@ -22477,15 +22247,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SNEASLER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SCOPE_LENS, // Swords Dance Unburden-style sweeper
+        .heldItem = ITEM_QUICK_CLAW,
         .moves =
         {
-            MOVE_SWORDS_DANCE,
+            MOVE_GUNK_SHOT,
             MOVE_CLOSE_COMBAT,
-            MOVE_DIRE_CLAW,
-            MOVE_ACROBATICS
+            MOVE_ACROBATICS,
+            MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_POISON_TOUCH, // Pressure + Unburden now innate; chosen Poison Touch (only free real slot)
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
