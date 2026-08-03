@@ -14,6 +14,7 @@
 #include "caps.h"
 #include "data.h"
 #include "daycare.h"
+#include "fork/deterministic_moves.h" // FORK: DETERMINISTIC_ACCURACY_EVASION — max-PP accuracy pricing
 #include "dexnav.h"
 #include "event_data.h"
 #include "event_object_movement.h"
@@ -3395,9 +3396,11 @@ u8 CalculatePPWithBonus(enum Move move, u8 ppBonuses, u8 moveIndex)
     // idea as DETERMINISTIC_DAMAGE's fixed roll. Only the 50<acc<100 band is scaled;
     // 100%/0-accuracy moves are exempt, and so are sleep moves (handled as drowsiness)
     // and OHKO/50% moves (handled as %-damage / recharge), which carry their own change.
+    // The accuracy a move is PRICED at is not always the one it is fought at — moves whose
+    // miss cost more than the wasted turn are discounted (see DeterministicEffectiveAccuracy).
     if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
     {
-        u32 acc = GetMoveAccuracy(move);
+        u32 acc = DeterministicEffectiveAccuracy(move);
         if (acc > 50 && acc < 100 && GetMoveNonVolatileStatus(move) != MOVE_EFFECT_SLEEP)
         {
             basePP = (basePP * acc) / 100; // scale by accuracy, rounded down (extra penalty for the misses it no longer suffers)

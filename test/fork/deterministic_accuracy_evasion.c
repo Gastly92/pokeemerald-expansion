@@ -85,6 +85,84 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: 100% moves keep full PP and 
     }
 }
 
+// A move whose MISS cost more than the wasted turn is priced at a discount
+// (DETERMINISTIC_EXTRA_MISS_COST_PERCENT of its real accuracy), so the max-PP scaling
+// charges it for the whole drawback the flag removes rather than one roll's worth:
+// EFFECT_TRIPLE_KICK rolled accuracy once per strike, and EFFECT_RECOIL_IF_MISS staked
+// half the user's max HP on the roll. Parametrized over every move in both effects so a
+// change to either the constant or the move data shows up here.
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a move whose miss cost more than a turn is priced below its accuracy")
+{
+    u32 move;
+    u32 flag;
+    u32 expectedPP;
+    PARAMETRIZE { move = MOVE_TRIPLE_AXEL;    flag = FALSE; expectedPP = 10; }
+    PARAMETRIZE { move = MOVE_TRIPLE_AXEL;    flag = TRUE;  expectedPP = 6; }  // floor(10 * 0.90 * 0.72), not floor(10 * 0.90)
+    PARAMETRIZE { move = MOVE_TRIPLE_KICK;    flag = FALSE; expectedPP = 10; }
+    PARAMETRIZE { move = MOVE_TRIPLE_KICK;    flag = TRUE;  expectedPP = 6; }  // same effect, so same price
+    PARAMETRIZE { move = MOVE_HIGH_JUMP_KICK; flag = FALSE; expectedPP = 10; }
+    PARAMETRIZE { move = MOVE_HIGH_JUMP_KICK; flag = TRUE;  expectedPP = 6; }
+    PARAMETRIZE { move = MOVE_AXE_KICK;       flag = FALSE; expectedPP = 10; }
+    PARAMETRIZE { move = MOVE_AXE_KICK;       flag = TRUE;  expectedPP = 6; }
+    PARAMETRIZE { move = MOVE_JUMP_KICK;      flag = FALSE; expectedPP = 10; }
+    PARAMETRIZE { move = MOVE_JUMP_KICK;      flag = TRUE;  expectedPP = 6; }  // floor(10 * 0.95 * 0.72)
+    PARAMETRIZE { move = MOVE_SUPERCELL_SLAM; flag = FALSE; expectedPP = 15; }
+    PARAMETRIZE { move = MOVE_SUPERCELL_SLAM; flag = TRUE;  expectedPP = 10; } // floor(15 * 0.95 * 0.72)
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, flag);
+        ASSUME(GetMoveEffect(move) == EFFECT_TRIPLE_KICK || GetMoveEffect(move) == EFFECT_RECOIL_IF_MISS);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, move); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[1], expectedPP); // unused, so pp == its (scaled) max
+    }
+}
+
+// Population Bomb rolls accuracy per strike too, but is deliberately NOT discounted: it
+// already pays on the strike-count axis (DETERMINISTIC_POPULATION_BOMB_COUNT). It still
+// takes the ordinary accuracy scaling like any other 90% move.
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: Population Bomb is priced at its plain accuracy")
+{
+    u32 flag;
+    u32 expectedPP;
+    PARAMETRIZE { flag = FALSE; expectedPP = 10; }
+    PARAMETRIZE { flag = TRUE;  expectedPP = 9; } // floor(10 * 0.90), not the discounted price
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, flag);
+        ASSUME(GetMoveEffect(MOVE_POPULATION_BOMB) == EFFECT_POPULATION_BOMB);
+        ASSUME(GetMoveAccuracy(MOVE_POPULATION_BOMB) == 90);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE, MOVE_POPULATION_BOMB); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[1], expectedPP);
+    }
+}
+
+// The discount above is priced on the assumption that a crash move keeps its drawback
+// where the target is genuinely unaffected. Protect sets MOVE_RESULT_PROTECTED, which is
+// part of MOVE_RESULT_NO_EFFECT, which is what MoveEndMoveBlockRecoil gates the crash on —
+// so the crash survives the flag. If this ever stops holding, the discount is too small.
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a crash move still crashes into Protect")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        ASSUME(!MoveIgnoresProtect(MOVE_JUMP_KICK));
+        ASSUME(GetMoveEffect(MOVE_JUMP_KICK) == EFFECT_RECOIL_IF_MISS);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_PROTECT); MOVE(player, MOVE_JUMP_KICK); }
+    } SCENE {
+        s32 maxHP = GetMonData(&PLAYER_PARTY[0], MON_DATA_MAX_HP);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_PROTECT, opponent);
+        HP_BAR(player, damage: maxHP / 2);
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: raised target evasion costs extra PP")
 {
     GIVEN {

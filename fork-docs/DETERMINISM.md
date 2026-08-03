@@ -185,7 +185,7 @@ Test: `deterministic_hold_effects.c`.
 
 ### `DETERMINISTIC_ACCURACY_EVASION`
 
-Tuning: `DETERMINISTIC_OHKO_MAX_HP_PERCENT`.
+Tuning: `DETERMINISTIC_OHKO_MAX_HP_PERCENT`, `DETERMINISTIC_EXTRA_MISS_COST_PERCENT`.
 
 Accuracy/evasion stop being a hit/miss coin flip and become a **PP economy**.
 Every move that reaches the accuracy roll always hits (`DoesMoveMissTarget`,
@@ -196,7 +196,25 @@ PP is scaled down by its base accuracy, rounded down** (a 5 PP/80% move → 4 PP
 `CalculatePPWithBonus` (`src/pokemon.c`, so the overworld PP counter shows it) and
 clamped onto battle PP in `REQUEST_ALL_BATTLE` (`src/battle_controllers.c`) so
 stored/effective PP can't diverge when the flag is toggled; only the 50<acc<100
-band is scaled (100%/0-acc exempt). A **per-use PP economy**
+band is scaled (100%/0-acc exempt). Two effects are **priced below their real
+accuracy** (`DeterministicEffectiveAccuracy`, `src/fork/deterministic_moves.c`),
+at `DETERMINISTIC_EXTRA_MISS_COST_PERCENT` (72%) of it, because their miss cost
+more than the wasted turn and the flag deletes that extra cost for free:
+`EFFECT_TRIPLE_KICK` (Triple Kick, Triple Axel) rolled accuracy **once per
+strike**, so a nominally 90% Triple Axel really landed its full combo 73% of the
+time and delivered 78% of its max damage — it now always lands all three strikes
+for full escalating power, the guarantee Skill Link/Loaded Dice used to be the only
+way to buy; and `EFFECT_RECOIL_IF_MISS` (Jump Kick, High Jump Kick, Axe Kick,
+Supercell Slam) staked **half the user's max HP** on the roll. Both drop from 10
+max PP to 6 (Supercell Slam 15 → 10). The crash still fires wherever the target is
+genuinely unaffected — Protect (`MOVE_RESULT_PROTECTED`, part of
+`MOVE_RESULT_NO_EFFECT`) or a type immunity (`B_CRASH_IF_TARGET_IMMUNE`) — so those
+moves keep their counterplay; only the whiff case is gone. 72 is a **tuned** value,
+not a derivation: it puts Triple Axel's lifetime-output cut (−28%) level with what
+the plain scaling already does to Focus Blast (−29%). `EFFECT_POPULATION_BOMB` rolls
+per strike too but is deliberately **not** discounted — it already pays on the
+strike-count axis (see `DETERMINISTIC_MOVE_RESULTS`), so it keeps the ordinary 90%
+scaling (10 → 9 PP). A **per-use PP economy**
 (`CancelerPPDeduction`, `src/battle_move_resolution.c`) for moves targeting
 opponents, derived from the same net accuracy/evasion stage as the old hit calc
 (`GetAccEvasionStageDelta`, `src/battle_util.c` — so Keen Eye/Unaware/Foresight/Minds

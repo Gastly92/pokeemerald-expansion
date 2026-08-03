@@ -30,4 +30,10 @@ bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId batt
 // recharge turn (a damaging, non-sleep move that was exactly 50% accurate).
 bool32 MoveGainsDeterministicRecharge(enum Move move);
 
+// DETERMINISTIC_ACCURACY_EVASION: the accuracy `move` should be PRICED at by the max-PP
+// scaling — its real accuracy, except for the two effects whose miss cost more than the
+// wasted turn (EFFECT_TRIPLE_KICK, EFFECT_RECOIL_IF_MISS), which are discounted so the
+// scaling charges them for the whole drawback the flag removes.
+u32 DeterministicEffectiveAccuracy(enum Move move);
+
 #endif // GUARD_FORK_DETERMINISTIC_MOVES_H
