@@ -84,38 +84,54 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0004
         SPECIES_CHARMANDER,
         INNATES(
+            ABILITY_BERSERK, // flavor: dex — the tail flame "blazes when it is enraged"
             ABILITY_BLAZE
         )
     },
     { // 0005
         SPECIES_CHARMELEON,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BERSERK,
+            ABILITY_BLAZE,
+            ABILITY_TOUGH_CLAWS // flavor: dex — "without pity, its sharp claws destroy foes" (also Mega X's canon ability)
         )
     },
     { // 0006
         SPECIES_CHARIZARD,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BERSERK,
+            ABILITY_BLAZE,
+            ABILITY_MOXIE, // flavor: dex — "flies about in search of strong opponents"
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0006
         SPECIES_CHARIZARD_MEGA_X,
         INNATES(
+            ABILITY_BERSERK,
             ABILITY_BLAZE,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_DRAGONS_MAW, // flavor: Mega X is Fire/DRAGON; its Factory set runs Dragon Dance + Dragon Claw
+            ABILITY_MOXIE,
+            ABILITY_RECKLESS,    // its Factory sets lead with Flare Blitz, so the recoil boost is live (not just flavor)
+            ABILITY_TOUGH_CLAWS  // canon: Mega X's real ability
         )
     },
     { // 0006
         SPECIES_CHARIZARD_MEGA_Y,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BERSERK, // Mega Y is the special-attacking form, so the Sp. Atk boost is the live one
+            ABILITY_BLAZE,
+            ABILITY_MOXIE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0006
         SPECIES_CHARIZARD_GMAX,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BERSERK,
+            ABILITY_BLAZE,
+            ABILITY_MOXIE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0007
@@ -123,6 +139,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SWIFT_SWIM, // flavor: dex — its shell's grooves "minimize resistance in water, enabling Squirtle to swim at high speeds"
             ABILITY_TORRENT
         )
     },
@@ -131,31 +148,38 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
     { // 0009
         SPECIES_BLASTOISE,
         INNATES(
+            ABILITY_KEEN_EYE, // flavor: dex — its waterspouts "are highly accurate", nailing tin cans from over 160 feet
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
     { // 0009
         SPECIES_BLASTOISE_MEGA,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_MEGA_LAUNCHER,
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
     { // 0009
         SPECIES_BLASTOISE_GMAX,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },

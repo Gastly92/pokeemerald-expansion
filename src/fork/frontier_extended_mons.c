@@ -163,6 +163,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        // Physical Swords Dance build — the one set that cashes in its own Grassy Surge:
+        // the terrain it sets on entry gives Grassy Glide priority and boosts it further.
+        .species = SPECIES_VENUSAUR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_GRASSY_GLIDE,
+            MOVE_POWER_WHIP,
+            MOVE_EARTHQUAKE
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_GRASS,
+    },
 
     // 0006
     {
@@ -205,6 +227,73 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIRE,
     },
+    {
+        // Doubles sun support. The special spread steers the free Mega into Y, whose Drought
+        // powers the spread Heat Wave; Shell Bell (buffed to 1/4) heals off BOTH targets at once.
+        .species = SPECIES_CHARIZARD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_HEAT_WAVE,
+            MOVE_SOLAR_BEAM,
+            MOVE_TAILWIND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        // Choice Specs Mega Y nuke. DETERMINISTIC_ACCURACY_EVASION cancels the accuracy drawbacks
+        // outright, so Hurricane lands every time despite the sun its own Drought sets.
+        .species = SPECIES_CHARIZARD,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SPECS,
+        .moves =
+        {
+            MOVE_FIRE_BLAST,
+            MOVE_HURRICANE,
+            MOVE_FOCUS_BLAST,
+            MOVE_SOLAR_BEAM
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        // Bulky physical build — the spread steers the free Mega into X, which trades Flying for
+        // Dragon and so loses the Rock/Electric weaknesses base Charizard cannot afford to wall with.
+        // Mega X's innate Reckless powers the Flare Blitz recoil.
+        .species = SPECIES_CHARIZARD,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves =
+        {
+            MOVE_WILL_O_WISP,
+            MOVE_ROOST,
+            MOVE_FLARE_BLITZ,
+            MOVE_DRAGON_CLAW
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_DRAGON,
+    },
 
     // 0009
     {
@@ -224,6 +313,73 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 4,
             .spa = 252,
             .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        // The Mega Launcher set: every move is a pulse/aura move, so the free Mega boosts all four
+        // by 1.5x. No status moves, so Assault Vest costs nothing, and deterministic secondaries
+        // mean Water Pulse confuses on every hit.
+        .species = SPECIES_BLASTOISE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ASSAULT_VEST,
+        .moves =
+        {
+            MOVE_WATER_PULSE,
+            MOVE_AURA_SPHERE,
+            MOVE_DARK_PULSE,
+            MOVE_DRAGON_PULSE
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        // Doubles rain setter — the rain it sets switches on its own innate Rain Dish and Swift Swim,
+        // and Damp Rock keeps it up for the team.
+        .species = SPECIES_BLASTOISE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_DAMP_ROCK,
+        .moves =
+        {
+            MOVE_RAIN_DANCE,
+            MOVE_MUDDY_WATER,
+            MOVE_ICY_WIND,
+            MOVE_HELPING_HAND
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 128,
+            .spd = 128
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        // Defensive staller. DETERMINISTIC_ADDITIONAL_EFFECTS makes Scald burn on every hit, so it
+        // neuters physical attackers outright while Toxic and Protect run the clock.
+        .species = SPECIES_BLASTOISE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves =
+        {
+            MOVE_SCALD,
+            MOVE_TOXIC,
+            MOVE_PROTECT,
+            MOVE_REST
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
         .teraType = TYPE_WATER,
     },
