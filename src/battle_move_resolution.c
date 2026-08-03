@@ -2293,6 +2293,16 @@ static enum CancelerResult CancelerTargetFailure(struct BattleCalcValues *cv)
 
         if (targetAvoidedAttack)
         {
+            // FORK: DETERMINISTIC_HOLD_EFFECTS — Blunder Policy's stock trigger is an accuracy
+            // miss, which DETERMINISTIC_ACCURACY_EVASION makes unreachable (every set site sits
+            // behind DoesMoveMissTarget, which always returns FALSE there). It arms on the
+            // deterministic blunders instead: any way the target avoided the attack outright.
+            // Only the flag is set here — TryBlunderPolicy still owns the +2 Speed, the
+            // already-maxed check, and consuming the item, so the item behaves as it always did.
+            if (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
+             && cv->holdEffects[cv->battlerAtk] == HOLD_EFFECT_BLUNDER_POLICY)
+                gBattleStruct->blunderPolicy = TRUE;
+
             gLastLandedMoves[cv->battlerDef] = 0; // Might need investigation on what exactly clears is
             gLastHitByType[cv->battlerDef] = 0;
             gBattleScripting.battler = cv->battlerDef;

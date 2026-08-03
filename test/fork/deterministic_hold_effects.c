@@ -14,6 +14,7 @@ ASSUMPTIONS
     ASSUME(gItemsInfo[ITEM_SCOPE_LENS].holdEffect == HOLD_EFFECT_SCOPE_LENS);
     ASSUME(gItemsInfo[ITEM_KINGS_ROCK].holdEffect == HOLD_EFFECT_FLINCH);
     ASSUME(gItemsInfo[ITEM_STARF_BERRY].holdEffect == HOLD_EFFECT_RANDOM_STAT_UP);
+    ASSUME(gItemsInfo[ITEM_BLUNDER_POLICY].holdEffect == HOLD_EFFECT_BLUNDER_POLICY);
 }
 
 // ---------------------------------------------------------------------------
@@ -738,5 +739,108 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Starf Berry raises the holder's 
         EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE);
         EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE);
         EXPECT_EQ(player->statStages[STAT_SPDEF], DEFAULT_STAT_STAGE);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Blunder Policy
+// ---------------------------------------------------------------------------
+//
+// Stock, the item pays out when the holder's move MISSES. DETERMINISTIC_ACCURACY_EVASION
+// makes that unreachable (every site arming it sits behind DoesMoveMissTarget, which
+// always returns FALSE there), leaving the item completely dead. It now arms on the
+// deterministic blunders instead: any way the target avoided the attack outright, which
+// all funnel through the single targetAvoidedAttack branch of CancelerTargetFailure.
+// The tests below take the distinct branches of that funnel. They do NOT enable
+// DETERMINISTIC_ACCURACY_EVASION — the new trigger is gated on DETERMINISTIC_HOLD_EFFECTS
+// alone, so it stands on its own. The stock "never triggers on Protect/immunity" behavior
+// is still covered by test/battle/hold_effect/blunder_policy.c (determinism off).
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Blunder Policy triggers when the target Protects")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_BLUNDER_POLICY); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_PROTECT); MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_PROTECT, opponent);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_EFFECT, player);
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 2);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Blunder Policy triggers when the move hits a type immunity")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_BLUNDER_POLICY); }
+        OPPONENT(SPECIES_GASTLY); // Ghost: immune to Normal
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_EFFECT, player);
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 2);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Blunder Policy triggers when the target is semi-invulnerable")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_BLUNDER_POLICY); Speed(20); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); } // flies up first
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_FLY); MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_EFFECT, player);
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 2);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Blunder Policy does not trigger when the move lands")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_BLUNDER_POLICY); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(opponent);
+        NOT ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_EFFECT, player);
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_BLUNDER_POLICY);
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Deliberate design call: in doubles ANY avoiding target arms it, so a spread move that
+// still lands on the other foe pays out. "Any blunder activates."
+DOUBLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Blunder Policy triggers when only one target of a spread move avoids it")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        ASSUME(GetMoveTarget(MOVE_ROCK_SLIDE) == TARGET_BOTH);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_BLUNDER_POLICY); }
+        PLAYER(SPECIES_WYNAUT);
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WYNAUT);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_PROTECT); MOVE(playerLeft, MOVE_ROCK_SLIDE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_PROTECT, opponentLeft);
+        HP_BAR(opponentRight); // the other foe is still hit
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_EFFECT, playerLeft);
+    } THEN {
+        EXPECT_EQ(playerLeft->item, ITEM_NONE);
+        EXPECT_EQ(playerLeft->statStages[STAT_SPEED], DEFAULT_STAT_STAGE + 2);
     }
 }

@@ -143,6 +143,19 @@
 //     Out, this flinch is set via SetMoveEffect (not the additional-effect path), so it
 //     bypasses DETERMINISTIC_FLINCH's anti-lock cap and flinches even a target that
 //     flinched last turn. See TryKingsRock() in battle_hold_effects.c.
+//   - Blunder Policy (HOLD_EFFECT_BLUNDER_POLICY): stock, it pays +2 Speed when the
+//     holder's move MISSES — a trigger DETERMINISTIC_ACCURACY_EVASION makes unreachable,
+//     since every site that arms it sits behind DoesMoveMissTarget (always FALSE there),
+//     leaving the item completely dead. It now arms on the deterministic blunders instead:
+//     any way the target avoided the attack outright — Protect, a semi-invulnerable target
+//     (Fly/Dig/Dive/Phantom Force), Wide/Quick/Crafty Guard, Psychic Terrain, a type
+//     immunity, a blocking ability (Levitate, Flash Fire, Wonder Guard, ...) or an Air
+//     Balloon. In doubles ANY avoiding target arms it, so a spread move that one foe dodges
+//     still pays out. It stays a one-shot: TryBlunderPolicy is untouched, so it still grants
+//     +2 Speed (skipped if Speed is already maxed) and consumes the item. Note the item only
+//     changes at all when DETERMINISTIC_ACCURACY_EVASION is also on — with that flag off the
+//     stock miss trigger still works and this simply adds the blunder cases. See
+//     CancelerTargetFailure() in src/battle_move_resolution.c.
 // Crit and flinch items are consumed at move end via MOVEEND_DETERMINISTIC_HOLD_CONSUME,
 // which announces the consumption ("The <item> was used up...") so the otherwise-silent
 // crit/flinch is credited to the item.
