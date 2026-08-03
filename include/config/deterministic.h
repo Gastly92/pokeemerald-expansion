@@ -162,9 +162,24 @@
 //     becomes 4 PP; a 10 PP / 85% move becomes 8), so the holder pays for the misses
 //     it no longer suffers — the same idea as
 //     DETERMINISTIC_DAMAGE's fixed roll. 100%/0-accuracy moves and the specially
-//     handled classes below are exempt. The 50<acc<100 band intentionally carries
-//     no further penalty yet (a knob for that can be added later). See
-//     CalculatePPWithBonus() in src/pokemon.c.
+//     handled classes below are exempt. See CalculatePPWithBonus() in src/pokemon.c.
+//     Two move classes whose MISS cost more than the wasted turn are priced at a
+//     REDUCED accuracy (DETERMINISTIC_EXTRA_MISS_COST_PERCENT of it), so the scaling
+//     charges them for the whole drawback the flag removes rather than one roll's worth:
+//       * EFFECT_TRIPLE_KICK (Triple Kick, Triple Axel) rolls accuracy once per STRIKE
+//         (see ShouldSkipAccuracyCalcPastFirstHit), so a nominally 90% Triple Axel really
+//         landed its full combo 73% of the time and delivered 78% of its max damage.
+//         It now always lands all three strikes for full escalating power — the guarantee
+//         that Skill Link / Loaded Dice used to be the only way to buy.
+//       * EFFECT_RECOIL_IF_MISS (Jump Kick, High Jump Kick, Axe Kick, Supercell Slam)
+//         paid half the user's max HP on a whiff. The crash still fires wherever the
+//         target is genuinely unaffected — Protect (MOVE_RESULT_PROTECTED) or a type
+//         immunity (B_CRASH_IF_TARGET_IMMUNE) — so the move keeps its counterplay, but
+//         the common whiff case is gone. See MoveEndMoveBlockRecoil().
+//     EFFECT_POPULATION_BOMB also rolls per strike but is deliberately NOT charged here:
+//     it already pays on the strike-count axis (DETERMINISTIC_POPULATION_BOMB_COUNT), and
+//     billing it twice would gut it. See DeterministicEffectiveAccuracy() in
+//     src/fork/deterministic_moves.c.
 //   - Per-use PP economy (CancelerPPDeduction in src/battle_move_resolution.c) for a
 //     move that targets an opposing mon, derived from the SAME net accuracy/evasion
 //     stage the hit calc used (so Keen Eye, Unaware, Foresight/Miracle Eye, Minds
@@ -200,6 +215,16 @@
 // Tuning for DETERMINISTIC_ACCURACY_EVASION (ignored when it is FALSE): the
 // percentage of the target's max HP that a (formerly one-hit-KO) OHKO move deals.
 #define DETERMINISTIC_OHKO_MAX_HP_PERCENT 40
+
+// Tuning for DETERMINISTIC_ACCURACY_EVASION (ignored when it is FALSE): the fraction of
+// its real accuracy that an "extra miss cost" move (EFFECT_TRIPLE_KICK /
+// EFFECT_RECOIL_IF_MISS, see above) is PRICED at by the max-PP scaling. 72 is a tuned
+// value, not a derivation: it puts Triple Axel's lifetime-output cut (-28%) level with
+// what the plain accuracy scaling already does to Focus Blast (-29%), the closest
+// comparable 120 BP move. Concretely it takes Triple Axel, Triple Kick, High Jump Kick,
+// Axe Kick and Jump Kick from 10 max PP to 6, and Supercell Slam from 15 to 10. Raise it
+// toward 100 to soften the charge; lower it to bite harder.
+#define DETERMINISTIC_EXTRA_MISS_COST_PERCENT 72
 
 // When TRUE, abilities whose effect is a random chance (or a random choice) stop
 // rolling and become guaranteed/state-based, so an ability pays off on the matchup

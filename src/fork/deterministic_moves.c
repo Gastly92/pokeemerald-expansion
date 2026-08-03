@@ -111,3 +111,34 @@ bool32 MoveGainsDeterministicRecharge(enum Move move)
         && !IsBattleMoveStatus(move)
         && GetMoveNonVolatileStatus(move) != MOVE_EFFECT_SLEEP;
 }
+
+// DETERMINISTIC_ACCURACY_EVASION — the accuracy a move should be PRICED at by the max-PP
+// scaling in CalculatePPWithBonus, which is not always the accuracy it is fought at.
+//
+// For almost every move the two are the same: one use, one roll, so scaling max PP by the
+// accuracy amortizes exactly the uses that used to be wasted. Two effects break that
+// assumption because their miss cost more than the wasted turn, and the flag deletes that
+// extra cost for free:
+//   - EFFECT_TRIPLE_KICK rolls accuracy once per strike, so a nominally 90% Triple Axel
+//     really landed its full combo 73% of the time (0.9^3) and delivered 78% of its max
+//     damage on average. Pricing it at 90 charges it for one roll out of three.
+//   - EFFECT_RECOIL_IF_MISS staked half the user's max HP on the roll. The crash survives
+//     only where the target is genuinely unaffected (Protect / type immunity), so the
+//     whiff case — the common one — costs nothing now.
+// Both are charged by pricing them at DETERMINISTIC_EXTRA_MISS_COST_PERCENT of their real
+// accuracy. Keying off the EFFECT rather than a move list means anything upstream adds to
+// either effect is priced correctly without touching this.
+//
+// EFFECT_POPULATION_BOMB also rolls per strike but is deliberately absent: it already pays
+// on the strike-count axis (DETERMINISTIC_POPULATION_BOMB_COUNT cuts it from 10 strikes to
+// 5), and charging it on both axes would gut it.
+u32 DeterministicEffectiveAccuracy(enum Move move)
+{
+    u32 accuracy = GetMoveAccuracy(move);
+    enum BattleMoveEffects moveEffect = GetMoveEffect(move);
+
+    if (moveEffect == EFFECT_TRIPLE_KICK || moveEffect == EFFECT_RECOIL_IF_MISS)
+        accuracy = (accuracy * DETERMINISTIC_EXTRA_MISS_COST_PERCENT) / 100;
+
+    return accuracy;
+}
