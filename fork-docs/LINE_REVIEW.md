@@ -24,9 +24,19 @@ and enhancements."*
   exact species constant (`gBattleMons[].species` becomes the form constant after
   a Mega/G-Max/forme change — there is **no** base-species fallback). Grep all of
   `BULBASAUR|IVYSAUR|VENUSAUR` (incl. `_MEGA`, `_GMAX`, `_ALOLA`, …) in each file.
-- **Present proposals before editing.** Flavor picks are subjective and the
-  maintainer's call — for the first pass on a line, lay out the findings + a
-  concrete proposal per file and get a yes/no (or swaps) before writing code.
+- **Present proposals before editing, then WAIT for a yes.** Flavor picks are
+  subjective and the maintainer's call — for the first pass on a line, lay out the
+  findings + a concrete proposal per file and get a yes/no (or swaps) before writing
+  code. **A deferral is not an approval:** "let's do X first" leaves the proposal
+  pending, not accepted. **An unanswered question is not a yes:** if you asked which
+  of two picks to take and never got an answer, that pick is still open — don't
+  resolve it for the maintainer and ship it. And "let's return to the line review"
+  means resume the *review*, not build the backlog.
+- **Expect to be wrong about flavor, and check before defending.** Most proposals in
+  a first pass get rejected; that is the process working, not a failure. When a pick
+  is challenged, go and verify (canon users, the repo's dex text, the engine) rather
+  than arguing from memory — the evidence usually settles it in the maintainer's
+  favor, and occasionally it will support the pick, which is worth saying plainly.
 - **Two CI tests gate the ability data** — keep them green (see each step).
 
 ---
@@ -57,6 +67,38 @@ For each species/form in the line:
    neighbor's signature ability reads as in-family). Be honest about a narrow
    flavor space: some types have fewer clean fits than others ("plant" is roomy),
    so a flavor-honest line may stay short — don't pad to a number with reaches.
+
+   **Count the canon users before proposing. It is cheap and it is the whole test.**
+   (Walk `.abilities` across `src/data/pokemon/species_info/*.h` and group by
+   ability.) The count tells you what kind of pick you are holding:
+   - **1 user → it is a signature, not an ability.** Berserk belongs to Drampa
+     alone; Dragon's Maw to Regidrago alone. Each is welded to one creature's
+     specific design — Dragon's Maw is *named for* Regidrago being a giant maw — so
+     giving it to another species is **inventing**, not borrowing. Reject on sight
+     unless the species is that creature's close relative.
+   - **Many users → read the family, then check the species actually belongs.**
+     Moxie's 16 (Krookodile, Scrafty, Gyarados, Pinsir, Honchkrow, Heracross …) are
+     uniformly swaggering predators, so it misreads on a creature whose dex says it
+     "will never torch a weaker foe." Keen Eye's 41 are overwhelmingly birds and
+     sharp-eyed watchers, so it misreads on Blastoise, whose accuracy is
+     **ballistics, not eyesight**. Conversely the check can *support* a pick that
+     looks wrong: Swift Swim's users include Carracosta, a heavy armored shelled
+     turtle, so it is not the speedster-only ability it appears to be.
+
+   **Derive the pick from the creature; never reverse-engineer it from mechanics.**
+   The failure mode is choosing an ability because it is strong or synergises with
+   the species' Factory set, then combing the dex for a sentence to justify it. A
+   dex line that merely contains a matching *word* is not grounding: "the flame
+   blazes when it is enraged" describes a mood indicator, not a rage power-up
+   (Berserk); "its waterspouts are highly accurate" describes artillery, not vision
+   (Keen Eye). If the honest reason for a pick is "its set leads with a recoil
+   move," that is a mechanics-first pick — drop it.
+
+   **Quote the repo's own dex text, never recalled flavor.** `.description` in
+   `src/data/pokemon/species_info/*.h` is the source of truth, and it differs from
+   the wider series (Charmander's "steam spouts when it rains" line is *not* in this
+   repo, so a Magma Armor pitch resting on it has no support here). Read the field
+   before citing it.
 3. **Keep the line consistent by default, but differentiate by form when
    morphology/temperament justifies it.** The three base rows usually carry the
    *same* list — but they need not be identical: a wingless pre-evo shouldn't
@@ -157,6 +199,20 @@ Sets need not be competitive. This is the most open-ended, creative step.
    (Trick Room, weather, Baton Pass, status spreader), a lore set, a defensive
    staller, an offensive sweeper, etc. Fewer is fine when a species genuinely has
    a narrow kit; don't pad with near-duplicates.
+
+   **Every set must be one you would actually want to draft.** The Factory draws
+   among a species' sets, so a set that is strictly worse than its siblings has
+   *negative* value — it dilutes the pool with a draw you would trade away. Filling
+   "a different niche" is not sufficient on its own; the set has to be a genuinely
+   competitive option against the others already there. Worked example: a physical
+   Venusaur build fills an empty niche and is still wrong, because even with the
+   Mega it swings 100 Atk against the special sets' 122 SpA — and without the Mega,
+   82. Nobody would pick it, so it does not belong in the pool.
+
+   **"No changes" is a legitimate result.** A species with four coherent,
+   format-covering, base-form-viable sets is done. Adding a fifth to hit the range
+   in this point is padding — the same reasoning as the "don't pad to a number"
+   rule for innates in Step 1.
 3. **Cover both battle formats across the line's sets.** Every set is tagged
    `FORMAT_SINGLES`, `FORMAT_DOUBLES`, or `FORMAT_BOTH` (see the `.tags` field in
    point 7), and the Factory
@@ -212,15 +268,35 @@ Sets need not be competitive. This is the most open-ended, creative step.
      Gigantamax Factor + max Dynamax Level automatically at draft).
 8. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
 
-### Free gimmicks — base sets Mega Evolve on their own (`FEATURE_FREE_GIMMICKS`)
+### Free gimmicks — a set *may* Mega, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
 
-This fork drops the held-item requirement for battle transformations, so **every
-eligible Factory set Mega Evolves (or Dynamaxes / Teras) with no stone**, turn one,
-via the gimmick picker. This has three consequences a line review must account for:
+This fork drops the held-item requirement for battle transformations, so **any
+eligible Factory set _may_ Mega Evolve (or Dynamax / Tera) with no stone**, turn one,
+via the gimmick picker.
+
+**But it is still one gimmick per trainer per battle.** `HasTrainerUsedGimmick()`
+(`src/battle_gimmick.c`) gates the trigger on a per-trainer `activated[]` flag, and the
+fork adds a per-mon `monGimmickUsed` record on top. Dropping the stone requirement means
+*every* mon on the drafted team is eligible — so as `src/fork/frontier_draft.c` puts it,
+"a team is no longer limited to one." They **compete** for that single slot, and a given
+mon Megas only when it wins that competition. Often it will not.
+
+> **Therefore: build the set for the BASE form, and treat the Mega as upside.**
+> This is the easiest rule in Step 3 to get backwards, and getting it backwards
+> produces sets that are dead weight most of the time. A build that only makes sense
+> after transforming is a bad build, because most battles it never transforms. Check
+> every set against the base stat line first: a physical Venusaur set reads fine off
+> Mega's 100 Atk and is *unplayable* off base Venusaur's 82.
+>
+> A corollary: **do not "fix" several of a species' sets sharing one spread.** Three
+> Venusaur sets running Bold 252 HP / 252 Def is a deliberate hedge — that bulk is
+> live whether or not the Mega arrives — not a failure of imagination.
+
+Three further consequences a line review must account for:
 
 1. **A "Mega" set is authored on the *base* species and transforms in battle.** The
    roster's Charizard sets are `SPECIES_CHARIZARD` (not `_MEGA_X/_Y`) holding a real
-   competitive item (Life Orb, Heat Rock, Choice Specs), and they *become* the Mega
+   competitive item (Life Orb, Heat Rock, Choice Specs), and they *may* become the Mega
    in the first turn. So don't "fix" a base set that looks like it lacks its Mega's
    tools — check what it Megas into first.
 2. **For a multi-Mega species, the form is chosen by Attack vs Sp. Atk** (physical →
@@ -242,6 +318,16 @@ via the gimmick picker. This has three consequences a line review must account f
 
 ## Wrap-up (after applying approved changes)
 
+- **Record what you rejected, and why.** Much of a line review's value is in the
+  candidates considered and dropped — undocumented, they get re-proposed on the next
+  pass. Put them in the PR body; if a pick was rejected on a durable *structural*
+  ground rather than taste (e.g. a transformation ability, which is out of scope for
+  innates entirely — see the "Identity / form / type-transform" bucket in
+  `INNATE_ABILITIES.md`), record it in the relevant doc instead so it sticks.
+- **Note the save-index cost when adding frontier sets.** Sets are inserted at the
+  species' dex position, and saved rentals reference entries by array *index*, so any
+  insertion invalidates an in-progress rented team in an existing save. Inherent to
+  keeping dex order — surface it to the maintainer rather than burying it.
 - **Update `fork-docs/FORK.md`** if the change is worth indexing (usually the
   innate/override/roster features already have rows; a per-line data tweak rarely
   needs a new row, but note anything with a known limitation).

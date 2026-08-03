@@ -21,15 +21,26 @@ welcome but not required.
    - `src/fork/frontier_extended_mons.c` — Battle Factory sets (Step 3).
 3. **For each file, per the rubric:** report what's already there, whether it
    makes flavorful sense, and concrete candidate additions/changes.
-4. **Present proposals before editing.** Lay out findings + a specific proposal
-   per file and get the maintainer's yes/no/swaps first — flavor picks are their
-   call. Then apply the approved changes.
+4. **Present proposals before editing, then WAIT for a yes.** Lay out findings + a
+   specific proposal per file and get the maintainer's yes/no/swaps first — flavor
+   picks are their call. Then apply the approved changes. A **deferral is not an
+   approval**, an **unanswered question is not a yes**, and "let's return to the
+   line review" means resume the *review*, not ship the backlog. Expect most first-
+   pass flavor picks to be rejected — that's the process working.
 
 ## Hard constraints (see the rubric for detail)
 
 - **Innates:** only *already-implemented* abilities (the `sImplementedInnates[]`
   allowlist in `test/fork/innate_abilities.c`) — an unwired pick fails CI. Don't
   wire new abilities in a line review.
+- **Flavor test — count the canon users first** (group `.abilities` across
+  `src/data/pokemon/species_info/*.h`). **One user = a signature**, welded to that
+  creature's design; giving it away is inventing, not borrowing (Berserk→Drampa,
+  Dragon's Maw→Regidrago). **Many users = read the family** and check the species
+  belongs in it (Moxie's 16 are all swaggering predators; Keen Eye's 41 are all
+  birds and sharp-eyed watchers). Never reverse-engineer flavor from mechanics — a
+  dex line sharing a *word* isn't grounding ("blazes when enraged" is a mood
+  indicator, not Berserk). Quote `.description` from the repo, never recalled flavor.
 - **Overrides:** the chosen ability must **not** duplicate a species innate and
   must be a *stable* pick (`:x:` never-an-innate in
   `fork-docs/INNATE_ABILITIES_PROGRESS.md`, or an implemented innate the species
@@ -53,6 +64,15 @@ welcome but not required.
   status/accuracy/crits/effects) and `BUFF_*` item improvements (Shell Bell, Leech
   Seed) when choosing moves and items. The set's `.ability` must resolve to a real
   slot and not be an innate (or use `ABILITY_NONE`).
+- **Build sets for the BASE form; the Mega is upside.** Gimmicks are **once per
+  trainer per battle** (`HasTrainerUsedGimmick`), and free gimmicks make the whole
+  drafted team eligible, so they compete for one slot — a given mon often won't
+  transform. A build that only works post-Mega is dead weight most battles. Corollary:
+  several of a species' sets sharing one spread is usually a deliberate hedge, not
+  monotony — don't "fix" it.
+- **Every set must be one you'd actually draft.** The Factory draws among a species'
+  sets, so a strictly-worse set is *negative* value. Filling an empty niche isn't
+  enough. **"No changes" is a legitimate result** — don't pad to hit 4–5.
 
 ## Verify
 
