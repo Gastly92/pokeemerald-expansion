@@ -92,7 +92,9 @@ determinism-safe. The buckets (each rejected ability sits in exactly one):
   cleanly separable and it was briefly wired as a "stat boost only" innate on Cherrim /
   Sunkern / Sunflora. That's a tractability argument, not an admissibility one: the
   bloom *is* the ability, and stripping it leaves an unnamed sun-gated stat rider
-  wearing Flower Gift's name. Reverted — do not re-wire.
+  wearing Flower Gift's name. Reverted — do not re-wire. Note it is also **not** a
+  usable override pick, despite the `:x:`: upstream's chosen-ability path gates on
+  `SPECIES_CHERRIM_SUNSHINE`, so it is inert on any other species.
 - **Ability copy / swap / nullify** — same invariant, from the ability side. Mummy,
   Wandering Spirit, Receiver, Power of Alchemy, Neutralizing Gas, Lingering Aroma,
   Synchronize.
