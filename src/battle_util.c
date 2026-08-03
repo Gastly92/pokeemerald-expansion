@@ -7895,21 +7895,6 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
          && atkAbility != ABILITY_HUGE_POWER && atkAbility != ABILITY_PURE_POWER
          && (IsInnateActive(battlerAtk, ABILITY_HUGE_POWER) || IsInnateActive(battlerAtk, ABILITY_PURE_POWER)))
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
-        // FORK: innate Flower Gift (Tier 5.10, FEATURE_INNATE_ABILITIES) — the holder's own physical
-        // Attack half. The real ability boosts the holder's (and its allies') physical Attack and Sp. Def
-        // by 50% in harsh sunlight, but only once Cherrim has flipped to its Sunshine form via the weather
-        // form change, so the chosen-ability case above gates on SPECIES_CHERRIM_SUNSHINE. The innate
-        // deliberately DROPS that form change (pure-boon divergence — the innate ships the stat boost
-        // only), so it gates on sun directly (IsBattlerWeatherAffected respects Utility Umbrella / Cloud
-        // Nine exactly like the chosen case). The `!= ABILITY_FLOWER_GIFT` guard skips the case the switch
-        // already handled, so a real Cherrim-Sunshine never double-applies. The Sp. Def half rides the
-        // defense-stat calc and the ally halves ride the partner switches below. IsInnateActive() supplies
-        // the suppression gates (Flower Gift is not breakable). On-field AI damage prediction is correct
-        // for free (shared calc keyed off the real battler).
-        if (IsBattleMovePhysical(move)
-         && IsBattlerWeatherAffected(ctx->holdEffects[ctx->battlerAtk], ctx->weather, B_WEATHER_SUN)
-         && atkAbility != ABILITY_FLOWER_GIFT && IsInnateActive(battlerAtk, ABILITY_FLOWER_GIFT))
-            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
     }
 
     // target's abilities
@@ -7962,28 +7947,15 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
     // ally's abilities
     if (IsBattlerAlive(GetPartnerBattler(battlerAtk)))
     {
-        // FORK: upstream inlines GetPartnerBattler(battlerAtk); hoisted to a local because the innate
-        // Flower Gift block below reuses it. On conflict, keep the local.
-        enum BattlerId atkPartner = GetPartnerBattler(battlerAtk);
-        switch (GetBattlerAbility(atkPartner))
+        switch (GetBattlerAbility(GetPartnerBattler(battlerAtk)))
         {
         case ABILITY_FLOWER_GIFT:
-            if (gBattleMons[atkPartner].species == SPECIES_CHERRIM_SUNSHINE && IsBattlerWeatherAffected(GetBattlerHoldEffect(atkPartner), GetWeather(), B_WEATHER_SUN) && IsBattleMovePhysical(move))
+            if (gBattleMons[GetPartnerBattler(battlerAtk)].species == SPECIES_CHERRIM_SUNSHINE && IsBattlerWeatherAffected(GetBattlerHoldEffect(GetPartnerBattler(battlerAtk)), GetWeather(), B_WEATHER_SUN) && IsBattleMovePhysical(move))
                 modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
             break;
         default:
             break;
         }
-        // FORK: an innate Flower Gift (Tier 5.10, FEATURE_INNATE_ABILITIES) on the attacker's partner boosts
-        // the attacker's physical Attack by 50% in harsh sunlight — the ally Attack half, mirroring the switch
-        // case above but gated on sun directly (the innate drops the Cherrim-Sunshine form change, so an
-        // innate holder never has the species the chosen case checks). The `!= ABILITY_FLOWER_GIFT` guard
-        // skips the case the switch already applied. IsInnateActive() supplies the suppression gates.
-        if (ctx->innatesEnabled && IsBattleMovePhysical(move)
-         && IsBattlerWeatherAffected(GetBattlerHoldEffect(atkPartner), ctx->weather, B_WEATHER_SUN)
-         && GetBattlerAbility(atkPartner) != ABILITY_FLOWER_GIFT
-         && IsInnateActive(atkPartner, ABILITY_FLOWER_GIFT))
-            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
     }
 
     // Ruin field effects
@@ -8191,44 +8163,19 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
      && ctx->innatesEnabled && IsInnateActive(battlerDef, ABILITY_GRASS_PELT))
         modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
 
-    // FORK: innate Flower Gift (Tier 5.10, FEATURE_INNATE_ABILITIES) — the holder's own Sp. Def half.
-    // The innate boosts the holder's Sp. Def by 50% in harsh sunlight, mirroring the chosen-ability case
-    // in the switch above but gated on sun directly (the innate drops the Cherrim-Sunshine form change,
-    // so it never has the SPECIES_CHERRIM_SUNSHINE the chosen case checks). !usesDefStat means the move
-    // reads Sp. Def (a special hit), the same gate the real ability uses. The `!= ABILITY_FLOWER_GIFT`
-    // guard skips the case the switch already handled. Flower Gift is not breakable; on-field AI damage
-    // prediction is correct for free (shared calc keyed off the real battler); identity is untouched.
-    if (!usesDefStat
-     && IsBattlerWeatherAffected(ctx->holdEffects[ctx->battlerDef], ctx->weather, B_WEATHER_SUN)
-     && ctx->abilities[battlerDef] != ABILITY_FLOWER_GIFT
-     && ctx->innatesEnabled && IsInnateActive(battlerDef, ABILITY_FLOWER_GIFT))
-        modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
-
     // ally's abilities
     if (IsBattlerAlive(GetPartnerBattler(battlerDef)))
     {
-        // FORK: upstream inlines GetPartnerBattler(battlerDef); hoisted to a local because the innate
-        // Flower Gift block below reuses it. On conflict, keep the local.
-        enum BattlerId defPartner = GetPartnerBattler(battlerDef);
-        switch (GetBattlerAbility(defPartner))
+        switch (GetBattlerAbility(GetPartnerBattler(battlerDef)))
         {
         case ABILITY_FLOWER_GIFT:
-            if (gBattleMons[defPartner].species == SPECIES_CHERRIM_SUNSHINE
-             && IsBattlerWeatherAffected(GetBattlerHoldEffect(defPartner), ctx->weather, B_WEATHER_SUN) && !usesDefStat)
+            if (gBattleMons[GetPartnerBattler(battlerDef)].species == SPECIES_CHERRIM_SUNSHINE
+             && IsBattlerWeatherAffected(GetBattlerHoldEffect(GetPartnerBattler(battlerDef)), ctx->weather, B_WEATHER_SUN) && !usesDefStat)
                 modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
             break;
         default:
             break;
         }
-        // FORK: an innate Flower Gift (Tier 5.10, FEATURE_INNATE_ABILITIES) on the defender's partner boosts
-        // the defender's Sp. Def by 50% in harsh sunlight — the ally Sp. Def half, mirroring the switch case
-        // above but gated on sun directly (the innate drops the Cherrim-Sunshine form change). The
-        // `!= ABILITY_FLOWER_GIFT` guard skips the case the switch already applied.
-        if (ctx->innatesEnabled && !usesDefStat
-         && IsBattlerWeatherAffected(GetBattlerHoldEffect(defPartner), ctx->weather, B_WEATHER_SUN)
-         && GetBattlerAbility(defPartner) != ABILITY_FLOWER_GIFT
-         && IsInnateActive(defPartner, ABILITY_FLOWER_GIFT))
-            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
     }
 
     // Ruin field effects

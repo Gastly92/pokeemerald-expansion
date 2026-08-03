@@ -146,7 +146,7 @@ and the rationale for the `:x:` set.
 | :white_check_mark: | Frisk | When the Pokémon enters a battle, it identifies opponents' held items. |
 | :white_check_mark: | Reckless | Boosts the power of the Pokémon's moves by 20% if they have recoil or crash damage. |
 | :x: | Multitype | Changes the Pokémon's type to match the plate it holds. |
-| :white_check_mark: | Flower Gift | Boosts the Attack and Sp. Def stats of the Pokémon and its allies in harsh sunlight. |
+| :x: | Flower Gift | Boosts the Attack and Sp. Def stats of the Pokémon and its allies in harsh sunlight. |
 | :white_check_mark: | Bad Dreams | Damages opposing Pokémon that are asleep. |
 | :white_check_mark: | Pickpocket | When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item. |
 | :x: | Sheer Force | The Pokémon's moves lose their additional effects, but the power of those moves will be boosted by 30%. |

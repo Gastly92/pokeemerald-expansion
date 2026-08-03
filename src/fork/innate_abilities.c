@@ -1742,16 +1742,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SUNKERN,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD,
-            ABILITY_FLOWER_GIFT // flavor: the Seed Pokemon that soaks up sunlight; observable (chosen Chlorophyll/Solar Power differ)
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0192
         SPECIES_SUNFLORA,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD,
-            ABILITY_FLOWER_GIFT // flavor: the Sun Pokemon (a sunflower that thrives on sunlight); observable (chosen Chlorophyll/Solar Power differ)
+            ABILITY_EARLY_BIRD
         )
     },
     { // 0193
@@ -3912,18 +3910,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHERUBI,
         INNATES(
             ABILITY_CHLOROPHYLL
-        )
-    },
-    { // 0421
-        SPECIES_CHERRIM_OVERCAST,
-        INNATES(
-            ABILITY_FLOWER_GIFT // canon: Cherrim's sole ability, persisted as an innate (redundant-but-correct)
-        )
-    },
-    { // 0421 (Sunshine Form)
-        SPECIES_CHERRIM_SUNSHINE,
-        INNATES(
-            ABILITY_FLOWER_GIFT // canon: keyed to the sunshine form too, so the innate survives the weather form change
         )
     },
     { // 0422

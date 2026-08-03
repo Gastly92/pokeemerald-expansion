@@ -82,8 +82,19 @@ determinism-safe. The buckets (each rejected ability sits in exactly one):
   Change, Schooling, Disguise, Power Construct, Multitype, RKS System, Protean,
   Libero, Mimicry, Battle Bond, Ice Face, Hunger Switch, Zero to Hero, Commander, As
   One (×2), Tera Shift/Shell/Teraform Zero, Embody Aspect (×4), Gulp Missile, Shields
-  Down, Refrigerate, Pixilate, Aerilate, Galvanize, Liquid Voice, Normalize,
-  Dragonize.
+  Down, Flower Gift, Refrigerate, Pixilate, Aerilate, Galvanize, Liquid Voice,
+  Normalize, Dragonize.
+  **The family is marked in the data:** every transformation ability carries
+  `cantBeCopied = TRUE` in `src/data/abilities.h`, and no wired innate does — use that
+  flag as the membership test before wiring anything.
+  **Flower Gift** is the one that slipped through. Its form change is *statless*
+  (Cherrim-Overcast and Cherrim-Sunshine share one base-stat line), so the boost looked
+  cleanly separable and it was briefly wired as a "stat boost only" innate on Cherrim /
+  Sunkern / Sunflora. That's a tractability argument, not an admissibility one: the
+  bloom *is* the ability, and stripping it leaves an unnamed sun-gated stat rider
+  wearing Flower Gift's name. Reverted — do not re-wire. Note it is also **not** a
+  usable override pick, despite the `:x:`: upstream's chosen-ability path gates on
+  `SPECIES_CHERRIM_SUNSHINE`, so it is inert on any other species.
 - **Ability copy / swap / nullify** — same invariant, from the ability side. Mummy,
   Wandering Spirit, Receiver, Power of Alchemy, Neutralizing Gas, Lingering Aroma,
   Synchronize.
@@ -4039,54 +4050,6 @@ a fork override fills each form's **empty slot 1** with chosen **Tinted Lens** (
 innate it does not carry, stable; its Hurricane / Revelation Dance punch through resists for full), and both sets
 repoint from chosen Dancer to Tinted Lens, so a distinct chosen ability stays observable on top of the innate
 Dancer.
-
-### ABILITY_FLOWER_GIFT
-
-**Tier 5.10 — a PURE-BOON divergence (the innate ships the stat boost only).** The real ability boosts the
-**physical Attack and Sp. Def** of the holder *and its allies* by **50% in harsh sunlight** — but only once
-Cherrim is in its **Sunshine Form**, which it reaches through the weather-driven form change. The innate
-deliberately **drops that form change** (the innate ships the stat boost only — no `SPECIES_CHERRIM_SUNSHINE`
-flip, no switch-in display half), so it gates the boost on **sun directly** instead of on the Sunshine species.
-The boost never hurts its holder, so aside from the dropped form the effect is a clean upside.
-
-**Effect — four calc clauses, no new machinery.** Flower Gift lives entirely in the shared damage calc as four
-sites in `src/battle_util.c`, each of which the chosen-ability path gates on
-`gBattleMons[b].species == SPECIES_CHERRIM_SUNSHINE`. The innate mirrors each one beside its chosen case, gated
-on `IsBattlerWeatherAffected(holdEffect, weather, B_WEATHER_SUN)` (so Utility Umbrella / Cloud Nine suppress it
-exactly like the chosen path) with a `!= ABILITY_FLOWER_GIFT` guard so a real Cherrim-Sunshine never
-double-applies:
-
-1. **`CalcAttackStat`, holder's own Attack** (in the `ctx->innatesEnabled` attacker-innate block): `+50%` when
-   the move is physical.
-2. **`CalcAttackStat`, ally's Attack** (the partner switch, `BATTLE_PARTNER(battlerAtk)`): a partner with the
-   innate boosts the attacker's physical Attack `+50%`.
-3. **`GetDefenderAbilitiesModifier`, holder's own Sp. Def** (after the Fur Coat / Marvel Scale / Grass Pelt
-   innate clauses): `+50%` when the move reads Sp. Def (`!usesDefStat`, a special hit).
-4. **`GetDefenderAbilitiesModifier`, ally's Sp. Def** (the partner switch, `BATTLE_PARTNER(battlerDef)`): a
-   partner with the innate boosts the defender's Sp. Def `+50%` against special hits.
-
-- **Suppression parity.** `IsInnateActive` supplies the feature-flag / Gastro Acid / Neutralizing Gas / Ability
-  Shield / not-on-field parity. Flower Gift is **not breakable**, so Mold Breaker never touches it (matching the
-  chosen path). Identity is untouched (no `RecordAbilityBattle`), matching the silent Filter/Thick Fat calc
-  modifiers; on-field AI damage prediction is correct **for free** because it runs this shared calc keyed off the
-  real battler.
-- **No `DETERMINISTIC_*` surface.** A flat conditional stat modifier — no accuracy/secondary/crit roll to reroute.
-
-**AI.** The two sun-benefit heuristics that let the AI value *setting* sun for a Flower Gift holder are made
-innate-aware: `DoesInnateBenefitFromWeather` (`src/battle_ai_field_statuses.c`) and the innate check block in
-`DoesAbilityBenefitFromSunOrRain` (`src/battle_ai_main.c`) both credit an active innate Flower Gift under sun.
-The damage-side reads need nothing extra (the shared calc above covers them).
-
-**Species (Step 1) — canon + a tight flavor line.** *Canon:* **Cherrim** (both the Overcast base and the
-Sunshine form — the form must be keyed explicitly so the innate survives the weather form change). Flower Gift is
-Cherrim's **sole** ability, so the innate is redundant-but-correct there (added per the Oricorio/Dancer
-convention). *Flavor* (species that lack the real ability, where the innate is the **observable** one): the
-**Sunkern / Sunflora** sunflower line — the Sun Pokémon, which soaks up and thrives on sunlight — merged into
-their existing Chlorophyll / Early Bird rows (their chosen Chlorophyll / Solar Power differ, so the sun-gated
-Atk/SpD boost is visible on them).
-
-**Step 3.5 — no-op.** `grep -n ABILITY_FLOWER_GIFT src/fork/frontier_extended_mons.c` is empty — no frontier set
-hardcodes Flower Gift, so there is no slot to free.
 
 ### Script `jumpifability` innate-awareness
 
