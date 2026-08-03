@@ -176,7 +176,24 @@ anti-lock cap and flinches even a target that flinched last turn (`TryKingsRock`
 new `MOVEEND_DETERMINISTIC_HOLD_CONSUME` (`src/battle_move_resolution.c`), which
 announces the consumption ("The *item* was used up…",
 `BattleScript_DeterministicHoldEffectConsume`) so the otherwise-silent crit/flinch
-is credited to the item. Separately, **Starf Berry** raises the holder's
+is credited to the item. **Blunder Policy** is the one item here that isn't an
+entry item: stock, it pays +2 Speed when the holder's move **misses**, a trigger
+`DETERMINISTIC_ACCURACY_EVASION` makes unreachable — all three sites arming
+`gBattleStruct->blunderPolicy` sit behind `DoesMoveMissTarget`, which always
+returns FALSE under that flag, leaving the item completely dead. It now arms on
+the deterministic **blunders** instead: any way the target avoided the attack
+outright — Protect, a semi-invulnerable target (Fly/Dig/Dive/Phantom Force),
+Wide/Quick/Crafty Guard, Psychic Terrain, a type immunity, a blocking ability
+(Levitate, Flash Fire, Wonder Guard, …) or an Air Balloon. Those all funnel
+through the single `targetAvoidedAttack` branch of `CancelerTargetFailure`
+(`src/battle_move_resolution.c`), which is the only hook needed — `TryBlunderPolicy`
+is untouched, so the +2 Speed, the already-maxed check and consuming the item all
+behave exactly as before, and it stays a one-shot. In doubles **any** avoiding
+target arms it, so a spread move that one foe dodges still pays out even though it
+landed on the other. Note the item only changes at all when
+`DETERMINISTIC_ACCURACY_EVASION` is also on; with that flag off the stock miss
+trigger still works and this simply adds the blunder cases on top. Separately,
+**Starf Berry** raises the holder's
 currently-highest stat instead of a random one (`RandomStatRaiseBerry`). The AI's
 OHKO reasoning (`ShouldTryOHKO`, `src/battle_ai_util.c`) and crit/damage prediction
 are taught the new behavior. **Evasion items (BrightPowder / Lax Incense) are
