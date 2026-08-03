@@ -250,13 +250,6 @@
 //   tight dance-themed set that lacks the real ability — Ludicolo, Bellossom, the Lilligant lines, Meloetta (both
 //   formes) and Maractus. Step 3.5: the two Oricorio frontier sets keep their now-redundant chosen Dancer
 //   (Oricorio has no other real ability), deferred to Batch W.
-//   FLOWER_GIFT (Tier 5.10 — a PURE-BOON divergence): +50% physical Attack and Sp. Def for the holder and its
-//   allies in harsh sunlight. The innate ships the STAT BOOST ONLY, deliberately dropping the Cherrim Sunshine
-//   form change — so the four CalcAttackStat / GetDefenderAbilitiesModifier calc sites (src/battle_util.c) that
-//   the chosen case gates on SPECIES_CHERRIM_SUNSHINE are mirrored beside it gated on sun directly (holder Atk
-//   + Sp. Def halves and the two doubles ally halves), each guarding the chosen case so it never double-applies.
-//   AI sun-move scoring credits the innate; not breakable. Canon: Cherrim (both forms, sole ability, redundant-
-//   but-correct). Flavor (observable): the Sunkern / Sunflora sunflower line. Step 3.5 no-op.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
