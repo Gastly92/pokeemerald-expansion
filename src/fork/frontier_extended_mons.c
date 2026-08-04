@@ -11320,7 +11320,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_TRICK
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11340,7 +11340,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -11362,7 +11362,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_PAIN_SPLIT
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -11382,7 +11382,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_TRICK
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11404,7 +11404,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11426,7 +11426,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11448,7 +11448,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11470,7 +11470,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
