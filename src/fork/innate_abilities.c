@@ -163,7 +163,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE,
         INNATES(
             ABILITY_COMPOUND_EYES,
-            ABILITY_LEVITATE,
             ABILITY_TINTED_LENS
         )
     },
@@ -171,13 +170,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE_GMAX,
         INNATES(
             ABILITY_COMPOUND_EYES,
-            ABILITY_LEVITATE,
             ABILITY_TINTED_LENS
         )
     },
     { // 0015
         SPECIES_BEEDRILL,
         INNATES(
+            ABILITY_LEVITATE,
             ABILITY_MERCILESS,
             ABILITY_SNIPER,
             ABILITY_SWARM,
@@ -188,6 +187,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BEEDRILL_MEGA,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_LEVITATE,
             ABILITY_MERCILESS,
             ABILITY_SNIPER,
             ABILITY_SWARM,
