@@ -1189,27 +1189,27 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0479
         SPECIES_ROTOM, 1,
-        ABILITY_LIGHTNING_ROD
+        ABILITY_MOTOR_DRIVE
     },
     { // 0479
         SPECIES_ROTOM_HEAT, 1,
-        ABILITY_LIGHTNING_ROD
+        ABILITY_MOTOR_DRIVE
     },
     { // 0479
         SPECIES_ROTOM_WASH, 1, 
-        ABILITY_LIGHTNING_ROD
+        ABILITY_MOTOR_DRIVE
     },
     { // 0479
         SPECIES_ROTOM_FROST, 1, 
-        ABILITY_LIGHTNING_ROD
+        ABILITY_MOTOR_DRIVE
     },
     { // 0479
         SPECIES_ROTOM_FAN, 1, 
-        ABILITY_LIGHTNING_ROD
+        ABILITY_MOTOR_DRIVE
     },
     { // 0479
         SPECIES_ROTOM_MOW, 1, 
-        ABILITY_LIGHTNING_ROD
+        ABILITY_MOTOR_DRIVE
     },
     { // 0480
         SPECIES_UXIE, 1,
