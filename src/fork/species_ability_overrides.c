@@ -117,6 +117,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BUTTERFREE, 1,
         ABILITY_PSYCHIC_AFFINITY
     },
+    {
+        SPECIES_BUTTERFREE_GMAX, 1,
+        ABILITY_PSYCHIC_AFFINITY
+    },
     { // 0015
         SPECIES_BEEDRILL, 1,
         ABILITY_POISON_POINT

@@ -69,9 +69,13 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_STATUS: sleep always lasts a fixed number of t
         PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_CELEBRATE); }
         OPPONENT(SPECIES_BRELOOM) { Speed(100); Moves(MOVE_SPORE); }
     } WHEN {
-        TURN { MOVE(opponent, MOVE_SPORE); MOVE(player, MOVE_CELEBRATE); } // asleep (DETERMINISTIC_SLEEP_TURNS == 2)
-        TURN { MOVE(player, MOVE_CELEBRATE); }                             // wakes on the 2nd turn
+        // DETERMINISTIC_SLEEP_TURNS == 3, and the counter is decremented when the sleeper
+        // tries to act, so the target misses 3 - 1 == 2 actions and acts on the wake turn.
+        TURN { MOVE(opponent, MOVE_SPORE); MOVE(player, MOVE_CELEBRATE); } // asleep, 1st missed action
+        TURN { MOVE(player, MOVE_CELEBRATE); }                             // asleep, 2nd missed action
+        TURN { MOVE(player, MOVE_CELEBRATE); }                             // wakes AND acts
     } SCENE {
+        MESSAGE("Wobbuffet is fast asleep.");
         MESSAGE("Wobbuffet is fast asleep.");
         MESSAGE("Wobbuffet woke up!");
         MESSAGE("Wobbuffet used Celebrate!");

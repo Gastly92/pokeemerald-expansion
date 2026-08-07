@@ -159,10 +159,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TORRENT
         )
     },
+    { // 0010
+        SPECIES_CATERPIE,
+        INNATES(
+            ABILITY_SHIELD_DUST
+        )
+    },
+    { // 0011
+        SPECIES_METAPOD,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
     { // 0012
         SPECIES_BUTTERFREE,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
     },
@@ -170,6 +183,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE_GMAX,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
     },

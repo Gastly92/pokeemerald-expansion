@@ -20,6 +20,18 @@ and enhancements."*
 
 - **These are upstream-synced feature files, but they're fork-owned** — edits
   here never conflict on sync. Still keep rows additive and in dex order.
+- **NO explanatory comments in the three data files.** They are data tables, not
+  logic: a row carries only its values and the `// <dex>` marker the file already
+  uses on every row. Do **not** annotate a row with why a build works, what an item
+  or config flag does, how an ability interacts, or what a spread is hedging against
+  — not above the row, not inline. This is settled convention, actively enforced
+  (PRs #390-392 stripped exactly this kind of prose back out of all three files), so
+  a comment added here is churn that a later PR deletes. The reasoning is still worth
+  writing down — put it where prose belongs: `fork-docs/` for feature-level notes,
+  the `#define`'s own comment in `include/config/*.h` for a flag's semantics, and the
+  PR body for why *this* row was chosen. If a row seems to *need* a comment to be
+  understood, that is a signal the explanation belongs in one of those places, not
+  that this rule has an exception.
 - **Cover the WHOLE line, every form.** Innates and frontier sets are keyed by
   exact species constant (`gBattleMons[].species` becomes the form constant after
   a Mega/G-Max/forme change — there is **no** base-species fallback). Grep all of
@@ -191,6 +203,18 @@ The Battle Factory movesets have **no move-legality restrictions** — *any* mov
 is fair game, the only bar being that it reads as flavorful on the creature (a
 signature move, a canon TM/tutor move, an on-type coverage move, a lore gimmick).
 Sets need not be competitive. This is the most open-ended, creative step.
+
+**Flavor is the ONLY test — do not gate a move on the learnset.** The bar is "does
+this read as this creature," full stop. A move the species cannot learn in any game
+is still fine if it fits: give a spider a web move, a psychic a mind move, a bruiser
+a punch. You do **not** need to check `all_learnables.json`, the level-up tables, or
+the teachable sets before proposing — and a move failing that check is **not** a
+reason to drop it. (Consulting the learnset is a fine way to *find* flavorful ideas,
+and citing it is fine supporting evidence for one; the failure mode is treating a
+miss there as a veto, or spending the review's effort verifying legality it does not
+have.) Contrast Step 1, where the canon-user count genuinely *is* the gate: innates
+are constrained because an ability rewrites what a creature fundamentally is, while
+a moveset is just four things it does today.
 
 1. **Read the existing set(s) for the line.** Note what niche each fills so a new
    set adds variety rather than duplicating.
