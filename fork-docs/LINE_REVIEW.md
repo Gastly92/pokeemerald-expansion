@@ -163,6 +163,17 @@ line:
      species game-wide — only do it when the slot is redundant (that ability is
      now innate) **and** not pinned by an upstream test. Audit `Ability(ABILITY_X)`
      uses in `test/battle/` for that species before repurposing a real slot.
+   **Never take an ability's `.description` as its behavior — read the effect
+   site.** Those strings are ~45-char upstream UI text and are routinely ambiguous
+   or outright duplicated between abilities that do different things. The trap this
+   doc was written from: `ABILITY_POISON_POINT` and `ABILITY_POISON_TOUCH` ship with
+   the byte-identical description `"Poisons foe on contact."`, yet they fire in
+   opposite directions — Poison Point sets `gEffectBattler = gBattlerAttacker`
+   (poisons whoever hits the holder) while Poison Touch sets
+   `gEffectBattler = gBattlerTarget` (poisons what the holder hits). Which one a
+   species wants is the whole question, and the description cannot answer it. Grep
+   `ABILITY_X` in `src/battle_util.c` and read who the effect lands on.
+
 2. **Consider adding a row** if the line lacks one and a species' chosen slot is a
    redundant innate (or empty) — pick a stable, flavorful non-innate ability.
 3. **Don't override a base form to hand it its Mega's ability.** Under
@@ -216,13 +227,47 @@ have.) Contrast Step 1, where the canon-user count genuinely *is* the gate: inna
 are constrained because an ability rewrites what a creature fundamentally is, while
 a moveset is just four things it does today.
 
+**The rule above governs the VETO. The failure that actually happens is at
+GENERATION** — and it is invisible, because it leaves no trace to catch. You never
+open a learnset, so you never "reject a move for being illegal"; you simply never
+*think* of the moves outside it, because the candidates you recall for a species
+are the ones it canonically learns. The tell is a proposal that reads like the
+species' in-game moveset with the item slot doing all the creative work, followed
+by the conclusion that the species has a shallow kit. **A species' kit is never
+narrow — the whole move list is available to every set.** If a line review is about
+to say "this species only has about six usable moves," that sentence is proof the
+gate is on, not evidence about the species.
+
+**Generate from the creature, not from its moveset.** Read the dex `.description`
+and the design, ask *what does this thing actually do*, and only then go looking for
+moves that match — including **other species' signature moves**, which are usually
+the best-written expression of a concept and are fully fair game here (the
+signature/canon-user gate belongs to Step 1, and applies to abilities only). Worked
+examples from the Beedrill pass: its dex says *"if angered, they will attack in a
+swarm,"* so **Attack Order** (Vespiquen's swarm-summon) is the dex line rendered as
+a move; *"extremely territorial… no one should ever approach its nest"* is an
+ambusher, so **First Impression** (Golisopod's +2-priority strike) fits better than
+anything Beedrill learns; and a cornered venomous defender wants **Baneful Bunker**
+over plain Protect. None of the three are in its learnset, and all three read more
+truly than the moves that are.
+
 1. **Read the existing set(s) for the line.** Note what niche each fills so a new
    set adds variety rather than duplicating.
-2. **Aim for ~4–5 sets per species**, each filling a distinct niche so the
-   Factory has real variety to draw among — a signature-move set, a gimmick
-   (Trick Room, weather, Baton Pass, status spreader), a lore set, a defensive
-   staller, an offensive sweeper, etc. Fewer is fine when a species genuinely has
-   a narrow kit; don't pad with near-duplicates.
+2. **Aim for at least 2 quality sets per species** — that is the bar, not a
+   quota to fill. Each should occupy a distinct niche so the Factory has real
+   variety to draw among: a signature-move set, a gimmick (Trick Room, weather,
+   Baton Pass, status spreader), a lore set, a defensive staller, an offensive
+   sweeper. More than two is welcome when each new set genuinely earns its place;
+   two excellent sets beat five where three are filler, because of the draft
+   dilution rule below. **Never pad with near-duplicates to reach a number.**
+
+   **"Narrow kit" is the most-abused clause in this doc — earn it before you use
+   it.** Because every move in the game is legal (see the generation rule above), a
+   kit is only ever narrow in *flavor*, never in availability. Before invoking this
+   as a reason to stop, name the creature's concept and show that the move list has
+   nothing left to express it. "I can't think of more moves it learns" is the
+   learnset gate wearing a disguise, and it will happily justify a two-set pool for
+   a species with plenty of design space left.
 
    **Every set must be one you would actually want to draft.** The Factory draws
    among a species' sets, so a set that is strictly worse than its siblings has
@@ -233,10 +278,11 @@ a moveset is just four things it does today.
    Mega it swings 100 Atk against the special sets' 122 SpA — and without the Mega,
    82. Nobody would pick it, so it does not belong in the pool.
 
-   **"No changes" is a legitimate result.** A species with four coherent,
-   format-covering, base-form-viable sets is done. Adding a fifth to hit the range
-   in this point is padding — the same reasoning as the "don't pad to a number"
-   rule for innates in Step 1.
+   **"No changes" is a legitimate result.** A species already at two or more
+   coherent, format-covering, base-form-viable sets is done unless you have a set
+   that is genuinely as good as what is there. Adding one to hit a number is
+   padding — the same reasoning as the "don't pad to a number" rule for innates in
+   Step 1.
 3. **Cover both battle formats across the line's sets.** Every set is tagged
    `FORMAT_SINGLES`, `FORMAT_DOUBLES`, or `FORMAT_BOTH` (see the `.tags` field in
    point 7), and the Factory
@@ -259,15 +305,12 @@ a moveset is just four things it does today.
    onto every set.
 5. **Account for this fork's mechanics when picking moves and items** — they
    change what's good in ways stock knowledge misses:
-   - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) strip RNG, so
-     chance-based moves become *reliable*: Sleep Powder / Spore always land for a
-     fixed `DETERMINISTIC_SLEEP_TURNS` sleep, `DETERMINISTIC_ACCURACY_EVASION`
-     makes low-accuracy moves (Hydro Pump, Focus Blast, Stone Edge) always hit,
-     `DETERMINISTIC_ADDITIONAL_EFFECTS` / `DETERMINISTIC_FLINCH` make secondary
-     burns/paralysis/flinches (Scald, Air Slash, Iron Head) fire every time, and
-     `DETERMINISTIC_CRITICAL_HITS` turns Focus Energy / Super Luck into guaranteed
-     crits. `DETERMINISTIC_DAMAGE` ramps damage upward each turn, rewarding sets
-     that survive to snowball. Lean into these — a "risky" move here is a sure one.
+   - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) replace the
+     fork's RNG with fixed, *state-based* outcomes. "Deterministic" does **not**
+     mean "always happens" — several of these are conditional, and guessing which
+     is the single most common way a line review gets a set wrong. Read
+     ["The `DETERMINISTIC_*` regime"](#the-deterministic_-regime--what-actually-changes-for-set-building)
+     below before proposing any move or item.
    - **`BUFF_*` item/mechanic improvements** (`include/config/buff.h`): Shell Bell
      heals 1/4 of damage dealt (up from 1/8), and Leech Seed stacks across seeders
      and re-drains instead of failing — both make those build-arounds far stronger
@@ -291,6 +334,79 @@ a moveset is just four things it does today.
    - Optional: `.dynamaxLevel`, `.gender`, `.isShiny`, etc. (gmax mons get the
      Gigantamax Factor + max Dynamax Level automatically at draft).
 8. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
+
+### The `DETERMINISTIC_*` regime — what actually changes for set-building
+
+`include/config/deterministic.h` is the **source of truth**, and every flag's
+`#define` carries a long comment describing its exact rule. Read the relevant one
+before claiming a move or item behaves a certain way; this section is a map of
+what to look at, not a replacement for it. Where a proposal turns on a mechanic,
+cite the header (or the effect site it names) rather than stock Pokémon knowledge
+— several rules here inverted a "well-known" interaction.
+
+**The three traps, in the order they bite:**
+
+**First, the concept that unifies several of these: the "strong hit" gate.** The
+fork replaces a number of separate random rolls with one shared condition,
+`DeterministicAdditionalEffectApplies()` in `src/fork/deterministic_moves.c`:
+
+> the hit was **super effective** — or, for a move type that can *never* be super
+> effective (Normal), the move is **STAB**.
+
+Learn this one rule and several flags below collapse into it. It governs **secondary
+effects**, **flinch**, and **high-crit-ratio moves** alike. When you see a mechanic
+that used to be a percentage, the first question is whether it now rides this gate.
+
+1. **Secondary effects are GATED, not guaranteed.** This is the big one.
+   `DETERMINISTIC_ADDITIONAL_EFFECTS` does *not* make a 30% burn fire every time.
+   A chance-based additional effect lands only when the hit was **super
+   effective** — or, for a type that can never be super effective (Normal), only
+   when the move is **STAB**. So Fire Punch burns only a Fire-weak target; Body
+   Slam paralyzes only from a Normal-type user; Poison Jab poisons only Grass and
+   Fairy. Effects already at ≥100% are unchanged, and Serene Grace / the Pledge
+   Rainbow bypass the gate entirely (they make the effect *certain* rather than
+   doubling odds) — which makes Serene Grace far stronger here than in vanilla.
+   **Never build a set around a secondary landing on a neutral target.**
+2. **Crits have three separate routes, and the crit *stage* is the dead one.**
+   `DETERMINISTIC_CRITICAL_HITS` removes the random roll, and the Gen-7 odds table
+   (`{24, 8, 2, 1, 1}`) only reaches 1/1 at **crit stage 3** — so stacking +1s never
+   gets there (a high-crit move plus Scope Lens is stage 2). Reasoning from the
+   stage alone gives the wrong answer for every crit set. The routes that *do* fire,
+   each an independent branch:
+   - **The strong-hit gate.** A move with any high crit ratio
+     (`GetMoveCriticalHitStage(move) > 0` — Slash, Night Slash, Leaf Blade, Cross
+     Poison, Attack Order, Stone Edge …) **always crits on a super-effective hit**,
+     or from a STAB user for Normal-type moves. This makes high-crit-ratio moves
+     *strong* here, not dead — the opposite of the naive reading.
+   - **Crit items**, via `DETERMINISTIC_HOLD_EFFECTS`, which branches in
+     `IsCriticalHit()` *before* the stage check: first landed attack crits, item
+     consumed.
+   - **Guaranteed sources**: always-crit moves, Laser Focus, Focus Energy / Dragon
+     Cheer (one-shot), Super Luck on its first turn, and **Merciless vs. a poisoned
+     target**.
+
+   Note the high-crit route is gated on `!ctx->aiCalc`: the AI's damage prediction
+   runs the crit calc before type effectiveness is known, so it does *not* foresee
+   these crits. That is deliberate (thinking-time budget), and it means a
+   high-crit-ratio move is quietly better against the AI than the AI expects.
+3. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
+   *and* the Speed drop, replacing them with a PP and priority tax — so paralysis
+   is far weaker here, not stronger. `DETERMINISTIC_STATUS` turns confusion into a
+   single self-hit that a status move shakes off for free. Check the direction of
+   each change before leaning on it.
+
+| Flag | What it means for a set |
+|---|---|
+| `DETERMINISTIC_ADDITIONAL_EFFECTS` | Secondaries land **only on a super-effective hit** (or on STAB for Normal-type moves). ≥100% effects unchanged; Serene Grace / Pledge Rainbow bypass the gate. Flinch obeys the same gate. |
+| `DETERMINISTIC_FLINCH` | Anti-lock cap: a gated flinch can't be re-applied to a target that flinched last turn. Fake Out and ≥100% flinches are exempt. Inner Focus / Shield Dust / Covert Cloak unchanged. |
+| `DETERMINISTIC_CRITICAL_HITS` | Crits only when guaranteed. **A high-crit-ratio move always crits through the strong-hit gate** (super effective, or STAB for Normal) — so Slash/Night Slash/Cross Poison/Attack Order are live picks, not dead ones. Also: always-crit moves, Laser Focus, **Merciless vs. a poisoned target**, Focus Energy and Dragon Cheer (one-shot), Super Luck on its first turn. Crit *stage* stacking is the dead route — it needs stage 3 and +1s never reach it. Battle/Shell Armor and Lucky Chant still block. |
+| `DETERMINISTIC_HOLD_EFFECTS` | Chance items become guaranteed **one-shots**, then are consumed. Crit items (Scope Lens/Razor Claw, Lucky Punch, Leek) → first landed attack crits. Focus Band → a Sash that works from **any** HP, entry turn only. Quick Claw → first in bracket, entry turn. King's Rock/Razor Fang → one guaranteed flinch (bypasses the anti-lock cap). Lansat → next attack crits. Blunder Policy rearmed onto Protect/immunity/semi-invulnerable "blunders". Starf raises the highest stat. |
+| `DETERMINISTIC_ABILITIES` | Contact-status abilities **always attempt**: Poison Point, Poison Touch, Static, Flame Body, Effect Spore, Cute Charm (gender requirement dropped), Toxic Chain, Cursed Body. Shed Skin always cures; Harvest always recovers. Stench and Quick Draw fire on the first turn on the field, then always. Rivalry keys off shared **type**, not gender. |
+| `DETERMINISTIC_MOVE_RESULTS` | 2–5 hit moves always hit **3** times — **5** with Loaded Dice or Skill Link (Population Bomb: 5, or 10). **Protect-family always fails on consecutive turns.** Binding moves last 4 turns, 7 with Grip Claw. Rampage 2 turns. Speed ties resolve on a fixed ladder. Roar/Whirlwind/Dragon Tail drag the next party member **in slot order**. |
+| `DETERMINISTIC_STATUS` | Sleep is a fixed `DETERMINISTIC_SLEEP_TURNS` (3) — but the wake-up turn is still an acting turn, so N costs the target **N−1** actions. Rest is exempt. Confusion = one 40-BP self-hit on the next attacking move, then clears; a status move shakes it off free. Infatuation lasts 2 actions and halves damage instead of blocking it. |
+| `DETERMINISTIC_PARALYSIS` | **No full-paralysis and no Speed drop.** Paralysis costs +1 PP per move and −1 priority. Quick Feet is exempt from both. |
+| `DETERMINISTIC_ACCURACY_EVASION` | Every move that reaches the accuracy roll hits, so Hydro Pump / Focus Blast / Stone Edge are reliable — paid for as a **PP economy** (low-accuracy moves get reduced max PP; accuracy/evasion stages shift per-use PP cost). OHKO moves deal 40% max HP and keep their immunities. Formerly-50% moves (Zap Cannon, Inferno) now need a recharge turn. |
+| `DETERMINISTIC_DAMAGE` | Damage roll is fixed at 92% on turn 1 and **+1% per turn, uncapped** — so it passes 100% from turn 9. Rewards sets that survive to snowball. |
 
 ### Free gimmicks — a set *may* Mega, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
 

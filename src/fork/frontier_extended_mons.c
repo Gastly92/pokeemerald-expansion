@@ -298,11 +298,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_TWINEEDLE,
-            MOVE_POISON_JAB,
+            MOVE_CROSS_POISON,
             MOVE_KNOCK_OFF,
             MOVE_DRILL_RUN
         },
-        .ability = ABILITY_POISON_POINT,
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_BUG,
+    },
+    {
+        .species = SPECIES_BEEDRILL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_BAND,
+        .moves =
+        {
+            MOVE_U_TURN,
+            MOVE_FELL_STINGER,
+            MOVE_CROSS_POISON,
+            MOVE_DRILL_RUN
+        },
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

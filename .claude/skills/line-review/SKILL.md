@@ -65,15 +65,28 @@ welcome but not required.
   teachable sets to validate a pick, and never drop a flavorful move because it
   isn't learnable. (Browsing the learnset for *ideas* is fine — treating a miss as a
   veto is not.) Contrast the innate rule above, where the canon-user count really is
-  the gate. Aim for ~4–5 sets per species, each filling a different niche. **Cover both formats** across the line's sets
+  the gate. **The gate usually bites at generation, not veto:** you never open a
+  learnset, you just never *think* of the moves outside it. Generate from the dex
+  text and the design — "what does this creature DO?" — then find moves to match,
+  freely including **other species' signature moves**. If you're about to conclude a
+  species "has a narrow kit," that is the gate talking; every move in the game is
+  available to every set.
+  Aim for **at least 2 quality sets per species**, each filling a different niche —
+  a bar, not a quota. More is welcome when each set earns its place; two excellent
+  sets beat five where three are filler. **Cover both formats** across the line's sets
   (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
   redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
   moves), singles sets want self-sufficiency. Held items are **one lens among
   several** (iterate items for fun ideas, but many items are weak and not worth
   building around — a set can start from a move, ability, or gimmick just as
-  well). Account for the fork's `DETERMINISTIC_*` flags (RNG-free
-  status/accuracy/crits/effects) and `BUFF_*` item improvements (Shell Bell, Leech
-  Seed) when choosing moves and items. The set's `.ability` must resolve to a real
+  well). Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
+  improvements (Shell Bell, Leech Seed) when choosing moves and items —
+  **deterministic does NOT mean "always happens"**: secondary effects land only on
+  a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while
+  crit *items* give one guaranteed crit, and paralysis loses full-para and the
+  Speed drop entirely. Read the "`DETERMINISTIC_*` regime" section of the rubric —
+  and `include/config/deterministic.h` itself, which is the source of truth —
+  before building a set around any mechanic. The set's `.ability` must resolve to a real
   slot and not be an innate (or use `ABILITY_NONE`).
 - **Build sets for the BASE form; the Mega is upside.** Gimmicks are **once per
   trainer per battle** (`HasTrainerUsedGimmick`), and free gimmicks make the whole
@@ -83,7 +96,8 @@ welcome but not required.
   monotony — don't "fix" it.
 - **Every set must be one you'd actually draft.** The Factory draws among a species'
   sets, so a strictly-worse set is *negative* value. Filling an empty niche isn't
-  enough. **"No changes" is a legitimate result** — don't pad to hit 4–5.
+  enough. **"No changes" is a legitimate result** — a species already at two or more
+  coherent sets is done unless a new one is genuinely as good; don't pad to a number.
 
 ## Verify
 
