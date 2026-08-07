@@ -298,7 +298,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_TWINEEDLE,
-            MOVE_POISON_JAB,
+            MOVE_CROSS_POISON,
             MOVE_KNOCK_OFF,
             MOVE_DRILL_RUN
         },
