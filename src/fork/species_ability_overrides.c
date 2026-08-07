@@ -117,6 +117,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BUTTERFREE, 1,
         ABILITY_PSYCHIC_AFFINITY
     },
+    // Gigantamaxing re-resolves the ability from abilityNum against the NEW species
+    // (CopyMonAbilityAndTypesToBattleMon), so without this row a Butterfree drafted with
+    // Psychic Affinity would fall back to slot 0 (Compound Eyes, already an innate) the moment
+    // it Gigantamaxes, silently losing the Psychic third type.
+    {
+        SPECIES_BUTTERFREE_GMAX, 1,
+        ABILITY_PSYCHIC_AFFINITY
+    },
     { // 0015
         SPECIES_BEEDRILL, 1,
         ABILITY_POISON_POINT
