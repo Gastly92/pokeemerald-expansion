@@ -30,6 +30,12 @@ welcome but not required.
 
 ## Hard constraints (see the rubric for detail)
 
+- **NO explanatory comments in the three data files.** They are data tables: a row
+  carries its values and the `// <dex>` marker the file already uses, nothing else.
+  Never annotate a row with why a build works, what an item/flag does, or how an
+  ability interacts. Settled convention, actively enforced — prose added here gets
+  stripped by a later PR. Put the reasoning in `fork-docs/`, on the config
+  `#define`, or in the PR body.
 - **Innates:** only *already-implemented* abilities (the `sImplementedInnates[]`
   allowlist in `test/fork/innate_abilities.c`) — an unwired pick fails CI. Don't
   wire new abilities in a line review.
@@ -53,8 +59,13 @@ welcome but not required.
   transformation (the Venusaur pattern: base → Grassy Surge override; Mega →
   Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
 - **Frontier movesets:** no move-legality restrictions — any move that's
-  *flavorful* (or powerful) is fair game. Aim for ~4–5 sets per species, each
-  filling a different niche. **Cover both formats** across the line's sets
+  *flavorful* (or powerful) is fair game. **Flavor is the only test: do NOT gate a
+  move on the learnset.** A move the species cannot learn in any game is still fine
+  if it reads as this creature. Don't check `all_learnables.json` / level-up /
+  teachable sets to validate a pick, and never drop a flavorful move because it
+  isn't learnable. (Browsing the learnset for *ideas* is fine — treating a miss as a
+  veto is not.) Contrast the innate rule above, where the canon-user count really is
+  the gate. Aim for ~4–5 sets per species, each filling a different niche. **Cover both formats** across the line's sets
   (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
   redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
   moves), singles sets want self-sufficiency. Held items are **one lens among
