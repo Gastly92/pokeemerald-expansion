@@ -343,6 +343,17 @@ cite the header (or the effect site it names) rather than stock Pokémon knowled
 
 **The three traps, in the order they bite:**
 
+**First, the concept that unifies several of these: the "strong hit" gate.** The
+fork replaces a number of separate random rolls with one shared condition,
+`DeterministicAdditionalEffectApplies()` in `src/fork/deterministic_moves.c`:
+
+> the hit was **super effective** — or, for a move type that can *never* be super
+> effective (Normal), the move is **STAB**.
+
+Learn this one rule and several flags below collapse into it. It governs **secondary
+effects**, **flinch**, and **high-crit-ratio moves** alike. When you see a mechanic
+that used to be a percentage, the first question is whether it now rides this gate.
+
 1. **Secondary effects are GATED, not guaranteed.** This is the big one.
    `DETERMINISTIC_ADDITIONAL_EFFECTS` does *not* make a 30% burn fire every time.
    A chance-based additional effect lands only when the hit was **super
@@ -353,14 +364,28 @@ cite the header (or the effect site it names) rather than stock Pokémon knowled
    Rainbow bypass the gate entirely (they make the effect *certain* rather than
    doubling odds) — which makes Serene Grace far stronger here than in vanilla.
    **Never build a set around a secondary landing on a neutral target.**
-2. **Crit *items* work; crit *stages* mostly don't.** `DETERMINISTIC_CRITICAL_HITS`
-   removes the random crit roll, so a crit needs to be guaranteed — and the Gen-7
-   odds table (`{24, 8, 2, 1, 1}`) only reaches 1/1 at **crit stage 3**. A high-crit
-   move (+1) plus Scope Lens (+1) is stage 2 and still never crits *by stage*.
-   But `DETERMINISTIC_HOLD_EFFECTS` has its own branch in `IsCriticalHit()` that
-   runs **before** the stage check: a crit item makes the holder's first landed
-   attack a guaranteed crit outright. Both facts are needed to reason about a crit
-   set; either one alone gives the wrong answer.
+2. **Crits have three separate routes, and the crit *stage* is the dead one.**
+   `DETERMINISTIC_CRITICAL_HITS` removes the random roll, and the Gen-7 odds table
+   (`{24, 8, 2, 1, 1}`) only reaches 1/1 at **crit stage 3** — so stacking +1s never
+   gets there (a high-crit move plus Scope Lens is stage 2). Reasoning from the
+   stage alone gives the wrong answer for every crit set. The routes that *do* fire,
+   each an independent branch:
+   - **The strong-hit gate.** A move with any high crit ratio
+     (`GetMoveCriticalHitStage(move) > 0` — Slash, Night Slash, Leaf Blade, Cross
+     Poison, Attack Order, Stone Edge …) **always crits on a super-effective hit**,
+     or from a STAB user for Normal-type moves. This makes high-crit-ratio moves
+     *strong* here, not dead — the opposite of the naive reading.
+   - **Crit items**, via `DETERMINISTIC_HOLD_EFFECTS`, which branches in
+     `IsCriticalHit()` *before* the stage check: first landed attack crits, item
+     consumed.
+   - **Guaranteed sources**: always-crit moves, Laser Focus, Focus Energy / Dragon
+     Cheer (one-shot), Super Luck on its first turn, and **Merciless vs. a poisoned
+     target**.
+
+   Note the high-crit route is gated on `!ctx->aiCalc`: the AI's damage prediction
+   runs the crit calc before type effectiveness is known, so it does *not* foresee
+   these crits. That is deliberate (thinking-time budget), and it means a
+   high-crit-ratio move is quietly better against the AI than the AI expects.
 3. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
    *and* the Speed drop, replacing them with a PP and priority tax — so paralysis
    is far weaker here, not stronger. `DETERMINISTIC_STATUS` turns confusion into a
@@ -371,7 +396,7 @@ cite the header (or the effect site it names) rather than stock Pokémon knowled
 |---|---|
 | `DETERMINISTIC_ADDITIONAL_EFFECTS` | Secondaries land **only on a super-effective hit** (or on STAB for Normal-type moves). ≥100% effects unchanged; Serene Grace / Pledge Rainbow bypass the gate. Flinch obeys the same gate. |
 | `DETERMINISTIC_FLINCH` | Anti-lock cap: a gated flinch can't be re-applied to a target that flinched last turn. Fake Out and ≥100% flinches are exempt. Inner Focus / Shield Dust / Covert Cloak unchanged. |
-| `DETERMINISTIC_CRITICAL_HITS` | Crits only when guaranteed: always-crit moves, Laser Focus, **Merciless vs. a poisoned target**, or crit stage ≥3. Focus Energy and Dragon Cheer each arm a one-shot guaranteed crit; Super Luck guarantees one on its first turn on the field. Battle/Shell Armor and Lucky Chant still block. |
+| `DETERMINISTIC_CRITICAL_HITS` | Crits only when guaranteed. **A high-crit-ratio move always crits through the strong-hit gate** (super effective, or STAB for Normal) — so Slash/Night Slash/Cross Poison/Attack Order are live picks, not dead ones. Also: always-crit moves, Laser Focus, **Merciless vs. a poisoned target**, Focus Energy and Dragon Cheer (one-shot), Super Luck on its first turn. Crit *stage* stacking is the dead route — it needs stage 3 and +1s never reach it. Battle/Shell Armor and Lucky Chant still block. |
 | `DETERMINISTIC_HOLD_EFFECTS` | Chance items become guaranteed **one-shots**, then are consumed. Crit items (Scope Lens/Razor Claw, Lucky Punch, Leek) → first landed attack crits. Focus Band → a Sash that works from **any** HP, entry turn only. Quick Claw → first in bracket, entry turn. King's Rock/Razor Fang → one guaranteed flinch (bypasses the anti-lock cap). Lansat → next attack crits. Blunder Policy rearmed onto Protect/immunity/semi-invulnerable "blunders". Starf raises the highest stat. |
 | `DETERMINISTIC_ABILITIES` | Contact-status abilities **always attempt**: Poison Point, Poison Touch, Static, Flame Body, Effect Spore, Cute Charm (gender requirement dropped), Toxic Chain, Cursed Body. Shed Skin always cures; Harvest always recovers. Stench and Quick Draw fire on the first turn on the field, then always. Rivalry keys off shared **type**, not gender. |
 | `DETERMINISTIC_MOVE_RESULTS` | 2–5 hit moves always hit **3** times — **5** with Loaded Dice or Skill Link (Population Bomb: 5, or 10). **Protect-family always fails on consecutive turns.** Binding moves last 4 turns, 7 with Grip Claw. Rampage 2 turns. Speed ties resolve on a fixed ladder. Roar/Whirlwind/Dragon Tail drag the next party member **in slot order**. |
