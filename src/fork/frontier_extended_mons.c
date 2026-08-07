@@ -353,6 +353,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FLYING,
     },
+    {
+        .species = SPECIES_PIDGEOT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_FEATHER_DANCE,
+            MOVE_ROOST,
+            MOVE_TAILWIND,
+            MOVE_AIR_CUTTER
+        },
+        .ability = ABILITY_NO_GUARD,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
 
     // 0020
     {
