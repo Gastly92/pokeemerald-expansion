@@ -253,11 +253,13 @@ truly than the moves that are.
 
 1. **Read the existing set(s) for the line.** Note what niche each fills so a new
    set adds variety rather than duplicating.
-2. **Aim for ~4–5 sets per species**, each filling a distinct niche so the
-   Factory has real variety to draw among — a signature-move set, a gimmick
-   (Trick Room, weather, Baton Pass, status spreader), a lore set, a defensive
-   staller, an offensive sweeper, etc. Fewer is fine when a species genuinely has
-   a narrow kit; don't pad with near-duplicates.
+2. **Aim for at least 2 quality sets per species** — that is the bar, not a
+   quota to fill. Each should occupy a distinct niche so the Factory has real
+   variety to draw among: a signature-move set, a gimmick (Trick Room, weather,
+   Baton Pass, status spreader), a lore set, a defensive staller, an offensive
+   sweeper. More than two is welcome when each new set genuinely earns its place;
+   two excellent sets beat five where three are filler, because of the draft
+   dilution rule below. **Never pad with near-duplicates to reach a number.**
 
    **"Narrow kit" is the most-abused clause in this doc — earn it before you use
    it.** Because every move in the game is legal (see the generation rule above), a
@@ -276,10 +278,11 @@ truly than the moves that are.
    Mega it swings 100 Atk against the special sets' 122 SpA — and without the Mega,
    82. Nobody would pick it, so it does not belong in the pool.
 
-   **"No changes" is a legitimate result.** A species with four coherent,
-   format-covering, base-form-viable sets is done. Adding a fifth to hit the range
-   in this point is padding — the same reasoning as the "don't pad to a number"
-   rule for innates in Step 1.
+   **"No changes" is a legitimate result.** A species already at two or more
+   coherent, format-covering, base-form-viable sets is done unless you have a set
+   that is genuinely as good as what is there. Adding one to hit a number is
+   padding — the same reasoning as the "don't pad to a number" rule for innates in
+   Step 1.
 3. **Cover both battle formats across the line's sets.** Every set is tagged
    `FORMAT_SINGLES`, `FORMAT_DOUBLES`, or `FORMAT_BOTH` (see the `.tags` field in
    point 7), and the Factory

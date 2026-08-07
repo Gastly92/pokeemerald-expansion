@@ -70,7 +70,10 @@ welcome but not required.
   text and the design — "what does this creature DO?" — then find moves to match,
   freely including **other species' signature moves**. If you're about to conclude a
   species "has a narrow kit," that is the gate talking; every move in the game is
-  available to every set. Aim for ~4–5 sets per species, each filling a different niche. **Cover both formats** across the line's sets
+  available to every set.
+  Aim for **at least 2 quality sets per species**, each filling a different niche —
+  a bar, not a quota. More is welcome when each set earns its place; two excellent
+  sets beat five where three are filler. **Cover both formats** across the line's sets
   (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
   redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
   moves), singles sets want self-sufficiency. Held items are **one lens among
@@ -93,7 +96,8 @@ welcome but not required.
   monotony — don't "fix" it.
 - **Every set must be one you'd actually draft.** The Factory draws among a species'
   sets, so a strictly-worse set is *negative* value. Filling an empty niche isn't
-  enough. **"No changes" is a legitimate result** — don't pad to hit 4–5.
+  enough. **"No changes" is a legitimate result** — a species already at two or more
+  coherent sets is done unless a new one is genuinely as good; don't pad to a number.
 
 ## Verify
 
