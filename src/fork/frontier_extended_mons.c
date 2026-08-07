@@ -273,9 +273,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // than 4 (SetWrapTurns), and the wrap chip is 1/8 max HP per turn — so the trap alone is the
     // win condition and Butterfree needs no attacking stat. Sleep Powder always lands and now costs
     // the foe two actions (DETERMINISTIC_SLEEP_TURNS 3), which it cannot switch away from while
-    // wrapped; Dream Eater cashes that sleep in for Psychic STAB (via the Psychic Affinity third
-    // type) plus healing, and Roost covers the turns the foe is awake — its Flying-type shed also
-    // drops the 4x Rock weakness for that turn. EVs sit in HP, not SpA, to make Roost heal more.
+    // wrapped. Those free turns go into Substitute: a trapped foe cannot pivot to something that
+    // breaks the sub, so the sub tends to survive across sleeps, and it blocks the status a 60/50/80
+    // body cannot otherwise afford. Dream Eater pays the sub back — Psychic STAB via the Psychic
+    // Affinity third type, healing half of a 100 BP hit. Note the sleep counter is decremented when
+    // the FOE tries to act, so a faster Butterfree still sees a sleeping target on the wake turn:
+    // two Dream Eater windows per Sleep Powder, which is what makes carrying no other recovery work.
+    // EVs sit in HP rather than SpA to make the sub fatter.
     {
         .species = SPECIES_BUTTERFREE,
         .tags = FORMAT_SINGLES,
@@ -284,7 +288,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_INFESTATION,
             MOVE_SLEEP_POWDER,
-            MOVE_ROOST,
+            MOVE_SUBSTITUTE,
             MOVE_DREAM_EATER
         },
         .ability = ABILITY_PSYCHIC_AFFINITY,
