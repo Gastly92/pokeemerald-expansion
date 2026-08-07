@@ -338,8 +338,20 @@ coin flip the battler always acts, and its moves **against the loved target deal
 tracks it); the infatuation lasts a fixed `DETERMINISTIC_INFATUATION_TURNS` of the
 battler's actions (new `VOLATILE_INFATUATION_TIMER`, decremented in
 `CancelerInfatuation`, then cured via new `BattleScript_DeterministicInfatuationEnds`).
-**Sleep** always lasts `DETERMINISTIC_SLEEP_TURNS` turns (default 2, like Rest) at
-both the move (`MOVE_EFFECT_SLEEP`) and end-of-turn (Yawn/Effect Spore) sites.
+**Sleep** always lasts `DETERMINISTIC_SLEEP_TURNS` turns (3) at both the move
+(`MOVE_EFFECT_SLEEP`) and end-of-turn (Yawn/Effect Spore) sites. Note the counter
+is decremented when the sleeper **tries to act**, and on the turn it reaches 0 the
+mon wakes and *still takes its action*, so a value of N costs the target **N-1
+actions**, not N. 3 is chosen so sleep costs two actions, matching the *expected*
+value of vanilla's Gen 5+ `RandomUniform(2, 4)` (1-3 missed actions, mean 2) rather
+than nerfing it — at 2 a sleep move cost exactly one action. Two consequences worth
+knowing: **Rest is not governed by this flag** (it hardcodes `STATUS1_SLEEP_TURN(3)`
+at the `EFFECT_REST` site in `src/battle_script_commands.c`), and **Early Bird**,
+which subtracts 2 per attempt, therefore no longer sheds a sleep move outright
+(3-2=1, still asleep for one action) — it halves sleep, as its name implies.
+Because the counter only moves on the *sleeper's* action, a faster attacker still
+sees a sleeping target on the wake turn, so sleep-gated moves (Dream Eater,
+Nightmare) get two windows per application rather than one.
 **Confusion** stops being a 2-5 turn chain of self-hit rolls (`CancelerConfused`):
 on its first confused action the battler takes **one** guaranteed 40-BP typeless
 self-hit but **still carries out its chosen move that turn** (the move is never
