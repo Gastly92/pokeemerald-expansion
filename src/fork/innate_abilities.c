@@ -187,6 +187,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TINTED_LENS
         )
     },
+    { // 0013
+        SPECIES_WEEDLE,
+        INNATES(
+            ABILITY_SHIELD_DUST
+        )
+    },
+    { // 0014
+        SPECIES_KAKUNA,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
     { // 0015
         SPECIES_BEEDRILL,
         INNATES(
