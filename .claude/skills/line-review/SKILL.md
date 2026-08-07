@@ -71,9 +71,14 @@ welcome but not required.
   moves), singles sets want self-sufficiency. Held items are **one lens among
   several** (iterate items for fun ideas, but many items are weak and not worth
   building around — a set can start from a move, ability, or gimmick just as
-  well). Account for the fork's `DETERMINISTIC_*` flags (RNG-free
-  status/accuracy/crits/effects) and `BUFF_*` item improvements (Shell Bell, Leech
-  Seed) when choosing moves and items. The set's `.ability` must resolve to a real
+  well). Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
+  improvements (Shell Bell, Leech Seed) when choosing moves and items —
+  **deterministic does NOT mean "always happens"**: secondary effects land only on
+  a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while
+  crit *items* give one guaranteed crit, and paralysis loses full-para and the
+  Speed drop entirely. Read the "`DETERMINISTIC_*` regime" section of the rubric —
+  and `include/config/deterministic.h` itself, which is the source of truth —
+  before building a set around any mechanic. The set's `.ability` must resolve to a real
   slot and not be an innate (or use `ABILITY_NONE`).
 - **Build sets for the BASE form; the Mega is upside.** Gimmicks are **once per
   trainer per battle** (`HasTrainerUsedGimmick`), and free gimmicks make the whole

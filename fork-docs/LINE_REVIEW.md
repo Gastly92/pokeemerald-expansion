@@ -259,15 +259,12 @@ a moveset is just four things it does today.
    onto every set.
 5. **Account for this fork's mechanics when picking moves and items** — they
    change what's good in ways stock knowledge misses:
-   - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) strip RNG, so
-     chance-based moves become *reliable*: Sleep Powder / Spore always land for a
-     fixed `DETERMINISTIC_SLEEP_TURNS` sleep, `DETERMINISTIC_ACCURACY_EVASION`
-     makes low-accuracy moves (Hydro Pump, Focus Blast, Stone Edge) always hit,
-     `DETERMINISTIC_ADDITIONAL_EFFECTS` / `DETERMINISTIC_FLINCH` make secondary
-     burns/paralysis/flinches (Scald, Air Slash, Iron Head) fire every time, and
-     `DETERMINISTIC_CRITICAL_HITS` turns Focus Energy / Super Luck into guaranteed
-     crits. `DETERMINISTIC_DAMAGE` ramps damage upward each turn, rewarding sets
-     that survive to snowball. Lean into these — a "risky" move here is a sure one.
+   - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) replace the
+     fork's RNG with fixed, *state-based* outcomes. "Deterministic" does **not**
+     mean "always happens" — several of these are conditional, and guessing which
+     is the single most common way a line review gets a set wrong. Read
+     ["The `DETERMINISTIC_*` regime"](#the-deterministic_-regime--what-actually-changes-for-set-building)
+     below before proposing any move or item.
    - **`BUFF_*` item/mechanic improvements** (`include/config/buff.h`): Shell Bell
      heals 1/4 of damage dealt (up from 1/8), and Leech Seed stacks across seeders
      and re-drains instead of failing — both make those build-arounds far stronger
@@ -291,6 +288,54 @@ a moveset is just four things it does today.
    - Optional: `.dynamaxLevel`, `.gender`, `.isShiny`, etc. (gmax mons get the
      Gigantamax Factor + max Dynamax Level automatically at draft).
 8. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
+
+### The `DETERMINISTIC_*` regime — what actually changes for set-building
+
+`include/config/deterministic.h` is the **source of truth**, and every flag's
+`#define` carries a long comment describing its exact rule. Read the relevant one
+before claiming a move or item behaves a certain way; this section is a map of
+what to look at, not a replacement for it. Where a proposal turns on a mechanic,
+cite the header (or the effect site it names) rather than stock Pokémon knowledge
+— several rules here inverted a "well-known" interaction.
+
+**The three traps, in the order they bite:**
+
+1. **Secondary effects are GATED, not guaranteed.** This is the big one.
+   `DETERMINISTIC_ADDITIONAL_EFFECTS` does *not* make a 30% burn fire every time.
+   A chance-based additional effect lands only when the hit was **super
+   effective** — or, for a type that can never be super effective (Normal), only
+   when the move is **STAB**. So Fire Punch burns only a Fire-weak target; Body
+   Slam paralyzes only from a Normal-type user; Poison Jab poisons only Grass and
+   Fairy. Effects already at ≥100% are unchanged, and Serene Grace / the Pledge
+   Rainbow bypass the gate entirely (they make the effect *certain* rather than
+   doubling odds) — which makes Serene Grace far stronger here than in vanilla.
+   **Never build a set around a secondary landing on a neutral target.**
+2. **Crit *items* work; crit *stages* mostly don't.** `DETERMINISTIC_CRITICAL_HITS`
+   removes the random crit roll, so a crit needs to be guaranteed — and the Gen-7
+   odds table (`{24, 8, 2, 1, 1}`) only reaches 1/1 at **crit stage 3**. A high-crit
+   move (+1) plus Scope Lens (+1) is stage 2 and still never crits *by stage*.
+   But `DETERMINISTIC_HOLD_EFFECTS` has its own branch in `IsCriticalHit()` that
+   runs **before** the stage check: a crit item makes the holder's first landed
+   attack a guaranteed crit outright. Both facts are needed to reason about a crit
+   set; either one alone gives the wrong answer.
+3. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
+   *and* the Speed drop, replacing them with a PP and priority tax — so paralysis
+   is far weaker here, not stronger. `DETERMINISTIC_STATUS` turns confusion into a
+   single self-hit that a status move shakes off for free. Check the direction of
+   each change before leaning on it.
+
+| Flag | What it means for a set |
+|---|---|
+| `DETERMINISTIC_ADDITIONAL_EFFECTS` | Secondaries land **only on a super-effective hit** (or on STAB for Normal-type moves). ≥100% effects unchanged; Serene Grace / Pledge Rainbow bypass the gate. Flinch obeys the same gate. |
+| `DETERMINISTIC_FLINCH` | Anti-lock cap: a gated flinch can't be re-applied to a target that flinched last turn. Fake Out and ≥100% flinches are exempt. Inner Focus / Shield Dust / Covert Cloak unchanged. |
+| `DETERMINISTIC_CRITICAL_HITS` | Crits only when guaranteed: always-crit moves, Laser Focus, **Merciless vs. a poisoned target**, or crit stage ≥3. Focus Energy and Dragon Cheer each arm a one-shot guaranteed crit; Super Luck guarantees one on its first turn on the field. Battle/Shell Armor and Lucky Chant still block. |
+| `DETERMINISTIC_HOLD_EFFECTS` | Chance items become guaranteed **one-shots**, then are consumed. Crit items (Scope Lens/Razor Claw, Lucky Punch, Leek) → first landed attack crits. Focus Band → a Sash that works from **any** HP, entry turn only. Quick Claw → first in bracket, entry turn. King's Rock/Razor Fang → one guaranteed flinch (bypasses the anti-lock cap). Lansat → next attack crits. Blunder Policy rearmed onto Protect/immunity/semi-invulnerable "blunders". Starf raises the highest stat. |
+| `DETERMINISTIC_ABILITIES` | Contact-status abilities **always attempt**: Poison Point, Poison Touch, Static, Flame Body, Effect Spore, Cute Charm (gender requirement dropped), Toxic Chain, Cursed Body. Shed Skin always cures; Harvest always recovers. Stench and Quick Draw fire on the first turn on the field, then always. Rivalry keys off shared **type**, not gender. |
+| `DETERMINISTIC_MOVE_RESULTS` | 2–5 hit moves always hit **3** times — **5** with Loaded Dice or Skill Link (Population Bomb: 5, or 10). **Protect-family always fails on consecutive turns.** Binding moves last 4 turns, 7 with Grip Claw. Rampage 2 turns. Speed ties resolve on a fixed ladder. Roar/Whirlwind/Dragon Tail drag the next party member **in slot order**. |
+| `DETERMINISTIC_STATUS` | Sleep is a fixed `DETERMINISTIC_SLEEP_TURNS` (3) — but the wake-up turn is still an acting turn, so N costs the target **N−1** actions. Rest is exempt. Confusion = one 40-BP self-hit on the next attacking move, then clears; a status move shakes it off free. Infatuation lasts 2 actions and halves damage instead of blocking it. |
+| `DETERMINISTIC_PARALYSIS` | **No full-paralysis and no Speed drop.** Paralysis costs +1 PP per move and −1 priority. Quick Feet is exempt from both. |
+| `DETERMINISTIC_ACCURACY_EVASION` | Every move that reaches the accuracy roll hits, so Hydro Pump / Focus Blast / Stone Edge are reliable — paid for as a **PP economy** (low-accuracy moves get reduced max PP; accuracy/evasion stages shift per-use PP cost). OHKO moves deal 40% max HP and keep their immunities. Formerly-50% moves (Zap Cannon, Inferno) now need a recharge turn. |
+| `DETERMINISTIC_DAMAGE` | Damage roll is fixed at 92% on turn 1 and **+1% per turn, uncapped** — so it passes 100% from turn 9. Rewards sets that survive to snowball. |
 
 ### Free gimmicks — a set *may* Mega, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
 
