@@ -302,7 +302,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_DRILL_RUN
         },
-        .ability = ABILITY_POISON_POINT,
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

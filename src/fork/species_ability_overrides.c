@@ -123,19 +123,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0015
         SPECIES_BEEDRILL, 1,
-        ABILITY_POISON_POINT
+        ABILITY_POISON_TOUCH
     },
     {
         SPECIES_BEEDRILL_MEGA, 0,
-        ABILITY_POISON_POINT
+        ABILITY_POISON_TOUCH
     },
     {
         SPECIES_BEEDRILL_MEGA, 1,
-        ABILITY_POISON_POINT
+        ABILITY_POISON_TOUCH
     },
     {
         SPECIES_BEEDRILL_MEGA, 2,
-        ABILITY_POISON_POINT
+        ABILITY_POISON_TOUCH
     },
     { // 0018
         SPECIES_PIDGEOT, 1,
