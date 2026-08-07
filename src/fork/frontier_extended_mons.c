@@ -269,6 +269,33 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    // Trapper. Grip Claw fixes Infestation at DETERMINISTIC_WRAP_GRIP_CLAW_TURNS (7) turns rather
+    // than 4 (SetWrapTurns), and the wrap chip is 1/8 max HP per turn — so the trap alone is the
+    // win condition and Butterfree needs no attacking stat. Sleep Powder always lands and now costs
+    // the foe two actions (DETERMINISTIC_SLEEP_TURNS 3), which it cannot switch away from while
+    // wrapped; Dream Eater cashes that sleep in for Psychic STAB (via the Psychic Affinity third
+    // type) plus healing, and Roost covers the turns the foe is awake — its Flying-type shed also
+    // drops the 4x Rock weakness for that turn. EVs sit in HP, not SpA, to make Roost heal more.
+    {
+        .species = SPECIES_BUTTERFREE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_GRIP_CLAW,
+        .moves =
+        {
+            MOVE_INFESTATION,
+            MOVE_SLEEP_POWDER,
+            MOVE_ROOST,
+            MOVE_DREAM_EATER
+        },
+        .ability = ABILITY_PSYCHIC_AFFINITY,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_BUG,
+    },
 
     // 0015
     {

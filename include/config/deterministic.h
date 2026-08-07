@@ -295,9 +295,13 @@
 //     the loved target deal DETERMINISTIC_INFATUATION_DMG_PERCENT% damage. See
 //     CancelerInfatuation in src/battle_move_resolution.c and the Attract/Cute
 //     Charm application sites.
-//   - Sleep always lasts DETERMINISTIC_SLEEP_TURNS turns (default 2, like Rest)
-//     instead of the random 2-4/2-5/2-8 spread. See the MOVE_EFFECT_SLEEP and
-//     end-of-turn Yawn/Effect-Spore sites.
+//   - Sleep always lasts DETERMINISTIC_SLEEP_TURNS turns instead of the random
+//     2-4/2-5/2-8 spread. See the MOVE_EFFECT_SLEEP and end-of-turn
+//     Yawn/Effect-Spore sites. NOTE the counter is decremented when the sleeper
+//     TRIES TO ACT, and the turn it reaches 0 the mon wakes and still takes its
+//     action, so a value of N costs the target N-1 actions, not N. Rest is NOT
+//     governed by this flag: it hardcodes STATUS1_SLEEP_TURN(3) at the EFFECT_REST
+//     site in src/battle_script_commands.c.
 //   - Confusion stops being a 2-5 turn chain of self-hit rolls. The confused
 //     battler's next ATTACKING move makes it hit itself once (the usual 40-BP
 //     typeless self-hit) and then confusion clears; a STATUS move shakes it off
@@ -313,7 +317,13 @@
 // infatuated; SLEEP_TURNS is the fixed sleep duration.
 #define DETERMINISTIC_INFATUATION_TURNS 2
 #define DETERMINISTIC_INFATUATION_DMG_PERCENT 50
-#define DETERMINISTIC_SLEEP_TURNS 2
+// 3, not 2: because the wake-up turn is still an acting turn (see above), a value of
+// N costs the target N-1 actions. At 2 a sleep move cost exactly ONE action, well
+// under vanilla. Gen 5+ rolls RandomUniform(2, 4) = 1-3 missed actions, mean 2, so 3
+// reproduces the vanilla EXPECTED value deterministically rather than nerfing sleep.
+// Knock-on: Early Bird subtracts 2 per attempt, so it no longer sheds a sleep move
+// outright (3-2=1, still asleep) — it now halves sleep as its name implies.
+#define DETERMINISTIC_SLEEP_TURNS 3
 
 // When TRUE, the random rolls baked into move outcomes become fixed or
 // state-based, so a move's result is read off the board rather than diced:

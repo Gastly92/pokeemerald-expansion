@@ -1136,6 +1136,9 @@ species' real abilities are now innate.
 ### ABILITY_EARLY_BIRD
 
 The holder wakes from sleep twice as fast (its sleep counter drops by 2 per turn).
+Note this is *halving*, not immunity: against `DETERMINISTIC_SLEEP_TURNS` (3) an Early Bird holder still
+misses one action (3-2=1, so it is asleep for that attempt, then clears). It shed a sleep move outright
+only while that constant was 2 — see the rationale on the `#define` in `include/config/deterministic.h`.
 A clean-upside pure boon (1:1 copy), wired at the two real sleep-counter sites — the move-use wake check
 in `CancelerForSleep` (`src/battle_move_resolution.c`) and the per-turn wake check in `src/battle_util2.c` —
 each gains an `IsInnateActive()`/`BattlerHasAbility()` clause so `toSub` becomes 2 for an innate holder too

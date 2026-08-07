@@ -3205,8 +3205,11 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies the chosen ability, n
 }
 
 // Early Bird: the holder wakes from sleep twice as fast. Houndoom (Early Bird/Flash Fire/Unnerve) with a
-// chosen Flash Fire carries Early Bird only via the innate; with DETERMINISTIC_SLEEP_TURNS a 2-turn sleep
-// is shed in one turn (counter -2), so it acts turn 1; with the feature off it stays asleep.
+// chosen Flash Fire carries Early Bird only via the innate; a 2-turn sleep is shed in one turn
+// (counter -2), so it acts turn 1; with the feature off it stays asleep.
+// The sleep counter is pinned at 2 here deliberately, to isolate the counter -2 mechanism — it is NOT
+// DETERMINISTIC_SLEEP_TURNS (3), against which Early Bird now halves sleep rather than shedding it
+// outright (3-2=1, still asleep for one action).
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Early Bird wakes from sleep twice as fast")
 {
     bool32 enabled;
