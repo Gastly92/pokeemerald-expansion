@@ -163,6 +163,17 @@ line:
      species game-wide — only do it when the slot is redundant (that ability is
      now innate) **and** not pinned by an upstream test. Audit `Ability(ABILITY_X)`
      uses in `test/battle/` for that species before repurposing a real slot.
+   **Never take an ability's `.description` as its behavior — read the effect
+   site.** Those strings are ~45-char upstream UI text and are routinely ambiguous
+   or outright duplicated between abilities that do different things. The trap this
+   doc was written from: `ABILITY_POISON_POINT` and `ABILITY_POISON_TOUCH` ship with
+   the byte-identical description `"Poisons foe on contact."`, yet they fire in
+   opposite directions — Poison Point sets `gEffectBattler = gBattlerAttacker`
+   (poisons whoever hits the holder) while Poison Touch sets
+   `gEffectBattler = gBattlerTarget` (poisons what the holder hits). Which one a
+   species wants is the whole question, and the description cannot answer it. Grep
+   `ABILITY_X` in `src/battle_util.c` and read who the effect lands on.
+
 2. **Consider adding a row** if the line lacks one and a species' chosen slot is a
    redundant innate (or empty) — pick a stable, flavorful non-innate ability.
 3. **Don't override a base form to hand it its Mega's ability.** Under
@@ -216,6 +227,30 @@ have.) Contrast Step 1, where the canon-user count genuinely *is* the gate: inna
 are constrained because an ability rewrites what a creature fundamentally is, while
 a moveset is just four things it does today.
 
+**The rule above governs the VETO. The failure that actually happens is at
+GENERATION** — and it is invisible, because it leaves no trace to catch. You never
+open a learnset, so you never "reject a move for being illegal"; you simply never
+*think* of the moves outside it, because the candidates you recall for a species
+are the ones it canonically learns. The tell is a proposal that reads like the
+species' in-game moveset with the item slot doing all the creative work, followed
+by the conclusion that the species has a shallow kit. **A species' kit is never
+narrow — the whole move list is available to every set.** If a line review is about
+to say "this species only has about six usable moves," that sentence is proof the
+gate is on, not evidence about the species.
+
+**Generate from the creature, not from its moveset.** Read the dex `.description`
+and the design, ask *what does this thing actually do*, and only then go looking for
+moves that match — including **other species' signature moves**, which are usually
+the best-written expression of a concept and are fully fair game here (the
+signature/canon-user gate belongs to Step 1, and applies to abilities only). Worked
+examples from the Beedrill pass: its dex says *"if angered, they will attack in a
+swarm,"* so **Attack Order** (Vespiquen's swarm-summon) is the dex line rendered as
+a move; *"extremely territorial… no one should ever approach its nest"* is an
+ambusher, so **First Impression** (Golisopod's +2-priority strike) fits better than
+anything Beedrill learns; and a cornered venomous defender wants **Baneful Bunker**
+over plain Protect. None of the three are in its learnset, and all three read more
+truly than the moves that are.
+
 1. **Read the existing set(s) for the line.** Note what niche each fills so a new
    set adds variety rather than duplicating.
 2. **Aim for ~4–5 sets per species**, each filling a distinct niche so the
@@ -223,6 +258,14 @@ a moveset is just four things it does today.
    (Trick Room, weather, Baton Pass, status spreader), a lore set, a defensive
    staller, an offensive sweeper, etc. Fewer is fine when a species genuinely has
    a narrow kit; don't pad with near-duplicates.
+
+   **"Narrow kit" is the most-abused clause in this doc — earn it before you use
+   it.** Because every move in the game is legal (see the generation rule above), a
+   kit is only ever narrow in *flavor*, never in availability. Before invoking this
+   as a reason to stop, name the creature's concept and show that the move list has
+   nothing left to express it. "I can't think of more moves it learns" is the
+   learnset gate wearing a disguise, and it will happily justify a two-set pool for
+   a species with plenty of design space left.
 
    **Every set must be one you would actually want to draft.** The Factory draws
    among a species' sets, so a set that is strictly worse than its siblings has

@@ -65,7 +65,12 @@ welcome but not required.
   teachable sets to validate a pick, and never drop a flavorful move because it
   isn't learnable. (Browsing the learnset for *ideas* is fine — treating a miss as a
   veto is not.) Contrast the innate rule above, where the canon-user count really is
-  the gate. Aim for ~4–5 sets per species, each filling a different niche. **Cover both formats** across the line's sets
+  the gate. **The gate usually bites at generation, not veto:** you never open a
+  learnset, you just never *think* of the moves outside it. Generate from the dex
+  text and the design — "what does this creature DO?" — then find moves to match,
+  freely including **other species' signature moves**. If you're about to conclude a
+  species "has a narrow kit," that is the gate talking; every move in the game is
+  available to every set. Aim for ~4–5 sets per species, each filling a different niche. **Cover both formats** across the line's sets
   (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
   redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
   moves), singles sets want self-sufficiency. Held items are **one lens among
