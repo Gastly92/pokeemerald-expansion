@@ -23,5 +23,6 @@ bool32 MoveSelectionDisplayZMove(enum Move zmove, enum BattlerId battler);
 void SetZEffect(const u8 *nextInstr);
 void AssignUsableZMoves(enum BattlerId battler, enum Move *moves);
 u32 GetZMovePower(enum Move move);
+u32 GetZMoveBasePower(enum Move baseMove, enum Move zMove);
 
 #endif // GUARD_BATTLE_Z_MOVE_H

@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle.h"
+#include "fork/battle_ai_gimmick.h" // FORK: AI picks among its gimmick candidates
 #include "fork/innate_abilities.h" // SpeciesHasInnate (off-field innate lookup)
 #include "battle_anim.h"
 #include "battle_ai_main.h"
@@ -3837,6 +3838,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         memset(gQueuedStatBoosts, 0, sizeof(gQueuedStatBoosts));
         BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
         AssignUsableGimmicks();
+        AI_SelectGimmicksForTurn(); // FORK: AI picks among its candidates before damage is simulated
         SetShellSideArmCategory();
         SetAiLogicDataForTurn(gAiLogicData); // get assumed abilities, hold effects, etc of all battlers
         gBattleMainFunc = HandleTurnActionSelectionState;
@@ -3955,6 +3957,7 @@ bool32 EndTurnEvents(void) // Called from Battle Script
 
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
     AssignUsableGimmicks();
+    AI_SelectGimmicksForTurn(); // FORK: AI picks among its candidates before damage is simulated
     SetShellSideArmCategory();
     SetAiLogicDataForTurn(gAiLogicData); // get assumed abilities, hold effects, etc of all battlers
     SetBattleCallback(HandleTurnActionSelectionState);

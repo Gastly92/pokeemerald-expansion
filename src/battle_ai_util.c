@@ -7,6 +7,7 @@
 #include "battle_ai_util.h"
 #include "battle_ai_main.h"
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
+#include "fork/battle_ai_zmove.h" // FORK: AI_FLAG_SMART_Z_MOVE
 #include "battle_stat_change.h"
 #include "battle_controllers.h"
 #include "battle_factory.h"
@@ -5500,9 +5501,10 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
                     return FALSE;
                 break;
             case Z_EFFECT_RESET_STATS:
-                if (CountNegativeStatStages(battlerAtk) > 1)
-                    return TRUE;
-                break;
+                // FORK: falling through here reached the unconditional `return TRUE` at the
+                // end of the function, so "my stats are barely lowered" still spent the
+                // Z-Move. Decline instead.
+                return (CountNegativeStatStages(battlerAtk) > 1);
             case Z_EFFECT_ALL_STATS_UP_1:
                 return ShouldRaiseAnyStat(battlerAtk, battlerDef);
             case Z_EFFECT_BOOST_CRITS:
@@ -5564,9 +5566,13 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
                 return FALSE;
             }
 
-            if (stat != STAT_HP && (isEager || IncreaseStatUpScoreContrary(battlerAtk, battlerDef, stat, stage) > 0))
-                return TRUE;
+            // FORK: this used to fall through to the unconditional `return TRUE` below when
+            // the boost was judged not worth it, so the "don't bother" branch spent the
+            // Z-Move anyway. A status move's Z-Move is only ever worth its stat boost.
+            if (stat == STAT_HP)
+                return FALSE;
 
+            return (isEager || IncreaseStatUpScoreContrary(battlerAtk, battlerDef, stat, stage) > 0);
         }
         else if (GetMoveEffect(zMove) == EFFECT_EXTREME_EVOBOOST)
         {
@@ -5641,6 +5647,11 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
                     return FALSE;
             }
         }
+
+        // FORK: opt-in deliberate spending of the one-per-battle Z-Move. Without the flag
+        // this keeps upstream's behaviour of always upgrading the chosen move.
+        if (gAiThinkingStruct->aiFlags[battlerAtk] & AI_FLAG_SMART_Z_MOVE)
+            return AI_ShouldSpendZMove(battlerAtk, battlerDef, chosenMove);
 
         return TRUE;
     }
