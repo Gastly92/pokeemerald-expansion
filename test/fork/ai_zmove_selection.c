@@ -34,8 +34,9 @@ AI_SINGLE_BATTLE_TEST("AI SMART Z: spends the Z-Move when it turns a 2HKO into a
 {
     GIVEN {
         AI_FLAGS(AI_FLAG_BASIC_TRAINER | AI_FLAG_OMNISCIENT | AI_FLAG_SMART_Z_MOVE);
-        // Tuned so plain Ember needs two turns but Inferno Overdrive does not.
-        PLAYER(SPECIES_WOBBUFFET) { HP(60); Moves(MOVE_SPLASH); }
+        // Measured on this matchup: plain Ember deals 17, Inferno Overdrive 43. At 30 HP
+        // only the Z-Move secures the KO, which is the one thing that justifies spending it.
+        PLAYER(SPECIES_WOBBUFFET) { HP(30); Moves(MOVE_SPLASH); }
         OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_FIRIUM_Z); Moves(MOVE_EMBER); }
     } WHEN {
         TURN { MOVE(player, MOVE_SPLASH); EXPECT_MOVE(opponent, MOVE_EMBER, gimmick: GIMMICK_Z_MOVE); }
