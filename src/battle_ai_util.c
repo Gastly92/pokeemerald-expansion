@@ -5566,13 +5566,14 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
                 return FALSE;
             }
 
-            // FORK: this used to fall through to the unconditional `return TRUE` below when
-            // the boost was judged not worth it, so the "don't bother" branch spent the
-            // Z-Move anyway. A status move's Z-Move is only ever worth its stat boost.
-            if (stat == STAT_HP)
-                return FALSE;
-
-            return (isEager || IncreaseStatUpScoreContrary(battlerAtk, battlerDef, stat, stage) > 0);
+            // FORK: judging the boost not worth it used to fall through to the
+            // unconditional `return TRUE` at the end of the function, so the "don't bother"
+            // branch spent the Z-Move anyway. Decide here instead.
+            // stat is still STAT_HP for the cases that deliberately fall through to the
+            // damaging path below - Z_EFFECT_NONE on a status move that still becomes a
+            // damaging Z-Move (Nature Power, .power = 1) and Z_EFFECT_RESTORE_REPLACEMENT_HP.
+            if (stat != STAT_HP)
+                return (isEager || IncreaseStatUpScoreContrary(battlerAtk, battlerDef, stat, stage) > 0);
         }
         else if (GetMoveEffect(zMove) == EFFECT_EXTREME_EVOBOOST)
         {

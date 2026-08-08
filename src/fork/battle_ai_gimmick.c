@@ -1,6 +1,7 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_ai_util.h"
+#include "battle_controllers.h" // BattlerHasAi, GetBattlerTrainer
 #include "battle_gimmick.h"
 #include "config/feature.h"
 #include "constants/config_changes.h"

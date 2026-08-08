@@ -91,12 +91,12 @@ SINGLE_BATTLE_TEST("Z-MOVE FORK: a base move's zMove.powerOverride is honoured",
 
 SINGLE_BATTLE_TEST("Z-MOVE FORK: a signature Z-Move uses its own power", s16 damage)
 {
-    u32 move;
+    u32 item, move;
     // Both Psychic and both special, so both get Mew's STAB and only the Z-Move's base
-    // power differs. Confusion takes the tier table; Psychic becomes Mew's signature
-    // Genesis Supernova, which carries its own power.
-    PARAMETRIZE { move = MOVE_CONFUSION; } // 50 BP -> Shattered Psyche 100
-    PARAMETRIZE { move = MOVE_PSYCHIC; }   //          Genesis Supernova 185
+    // power differs. Confusion takes the tier table; Psychic with Mew's own crystal
+    // becomes the signature Genesis Supernova, which carries its own power.
+    PARAMETRIZE { item = ITEM_PSYCHIUM_Z; move = MOVE_CONFUSION; } // 50 BP -> Shattered Psyche 100
+    PARAMETRIZE { item = ITEM_MEWNIUM_Z;  move = MOVE_PSYCHIC; }   //         Genesis Supernova 185
     GIVEN {
         // Before the fix Genesis Supernova dealt 200 BP, because GetZMovePower was handed
         // the Z-Move itself and re-ran its own 185 through the tier table.
@@ -104,7 +104,7 @@ SINGLE_BATTLE_TEST("Z-MOVE FORK: a signature Z-Move uses its own power", s16 dam
         ASSUME(GetMovePower(MOVE_GENESIS_SUPERNOVA) == 185);
         ASSUME(GetZMoveBasePower(MOVE_CONFUSION, MOVE_SHATTERED_PSYCHE) == 100);
         ASSUME(GetZMoveBasePower(MOVE_PSYCHIC, MOVE_GENESIS_SUPERNOVA) == 185);
-        PLAYER(SPECIES_MEW) { Item(ITEM_MEWNIUM_Z); Moves(MOVE_CONFUSION, MOVE_PSYCHIC); }
+        PLAYER(SPECIES_MEW) { Item(item); Moves(MOVE_CONFUSION, MOVE_PSYCHIC); }
         OPPONENT(SPECIES_CHANSEY) { MaxHP(700); HP(700); }
     } WHEN {
         TURN { MOVE(player, move, gimmick: GIMMICK_Z_MOVE); }
