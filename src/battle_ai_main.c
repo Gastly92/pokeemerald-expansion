@@ -826,6 +826,11 @@ void SetAiLogicDataForTurn(struct AiLogicData *aiData)
         SetBattlerAiData(battler, aiData);
     }
 
+    // FORK: choose among every gimmick each AI mon is eligible for. Must sit between the
+    // battler-data pass above (its KO check runs damage calcs) and the move-damage pass
+    // below (which caches a turn of damage with the selected gimmick forced on).
+    AI_SelectGimmicksForTurn();
+
     for (enum BattlerId battler = 0; battler < battlersCount; battler++)
         aiData->turnOrder[battler] = battler;
     SetBattlerTurnOrder(aiData->turnOrder);

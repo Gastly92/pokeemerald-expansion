@@ -1804,6 +1804,22 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
         move = GetMaxMove(battler, move);
         acc = 0;
     }
+    // FORK: the Dynamax branch above had no Z-Move counterpart, so with the Z trigger armed
+    // this window reported the *base* move's power (PWR: 110 for Fire Blast) while the
+    // Z-Move preview alongside it correctly showed 185. Damaging moves only - a status
+    // move keeps its own description and its Z-effect is shown by the preview instead.
+    else if ((GetActiveGimmick(battler) == GIMMICK_Z_MOVE || IsGimmickSelected(battler, GIMMICK_Z_MOVE))
+          && !IsBattleMoveStatus(move))
+    {
+        enum Move zMove = GetUsableZMove(battler, move);
+
+        if (zMove != MOVE_NONE && zMove != MOVE_Z_STATUS)
+        {
+            pwr = GetZMoveBasePower(move, zMove);
+            move = zMove;
+            acc = 0; // Z-Moves bypass the accuracy check unless the target is semi-invulnerable.
+        }
+    }
 
     // FORK: under DETERMINISTIC_ACCURACY_EVASION every move always hits, so the accuracy
     // field is meaningless. Show the move's projected net PP cost this turn instead — the

@@ -13,10 +13,12 @@
 // is Z-Move eligible, so Z-Move preempts Dynamax and Tera permanently and AI trainers
 // never use them. DecideTerastal bails for the same reason.
 //
-// The preference order below is deliberately a plain, tunable list rather than an
-// evaluation: ranking a one-shot burst against a multi-turn form change is a balance
-// decision, not something to infer per turn. Persistent gimmicks come first and the
-// single-use Z-Move is the fallback. Reorder to taste; index 0 is picked first.
+// Selection is situational first, then falls back to this list: a candidate that turns
+// the current turn into a KO is taken outright, and only when none does is the list
+// consulted. The list itself is deliberately a plain, tunable ordering rather than a
+// scoring function - ranking a one-shot burst against a multi-turn form change outside
+// of a concrete KO is a balance decision, not something to infer per turn. Persistent
+// gimmicks come first so the single-use Z-Move stays in reserve. Index 0 is picked first.
 #define AI_GIMMICK_PREFERENCE_ORDER \
     GIMMICK_MEGA,                   \
     GIMMICK_ULTRA_BURST,            \
