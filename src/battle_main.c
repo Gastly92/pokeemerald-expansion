@@ -3837,7 +3837,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         memset(gQueuedStatBoosts, 0, sizeof(gQueuedStatBoosts));
         BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
         AssignUsableGimmicks();
-            SetShellSideArmCategory();
+        SetShellSideArmCategory();
         SetAiLogicDataForTurn(gAiLogicData); // get assumed abilities, hold effects, etc of all battlers
         gBattleMainFunc = HandleTurnActionSelectionState;
         ResetSentPokesToOpponentValue();
