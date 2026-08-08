@@ -54,13 +54,13 @@ static const u16 sMythicalSpecies[] =
 // Legendary: exactly 1 per frontier boss battle
 static const u16 sLegendarySpecies[] =
 {
+    SPECIES_LATIOS,                // 0381
     SPECIES_SHAYMIN_SKY,           // 0492
     SPECIES_KYUREM_BLACK,          // 0646
     SPECIES_KYUREM_WHITE,          // 0646
     SPECIES_URSHIFU,               // 0892
     SPECIES_URSHIFU_RAPID_STRIKE,  // 0892
     SPECIES_SPECTRIER,             // 0897
-    SPECIES_WALKING_WAKE,          // 1009
 };
 
 // Pseudo: at most 1 per frontier draft team
@@ -79,7 +79,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_SALAMENCE,           // 0373
     SPECIES_METAGROSS,           // 0376
     SPECIES_LATIAS,              // 0380
-    SPECIES_LATIOS,              // 0381
     SPECIES_JIRACHI,             // 0385
     SPECIES_DEOXYS_DEFENSE,      // 0386
     SPECIES_GARCHOMP,            // 0445
@@ -151,6 +150,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_CHI_YU,              // 1004
     SPECIES_ROARING_MOON,        // 1005
     SPECIES_IRON_VALIANT,        // 1006
+    SPECIES_WALKING_WAKE,        // 1009
     SPECIES_IRON_LEAVES,         // 1010
     SPECIES_OGERPON_CORNERSTONE, // 1017
     SPECIES_OGERPON_HEARTHFLAME, // 1017
