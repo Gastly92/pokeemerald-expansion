@@ -24,9 +24,12 @@ bool32 AI_ShouldSpendZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     u32 plainHits = GetNoOfHitsToKOBattlerDmg(plainDmg.minimum, battlerDef);
     u32 zHits = GetNoOfHitsToKOBattlerDmg(zDmg.minimum, battlerDef);
 
-    // The Z-Move takes fewer hits to KO than the plain move would. (GetNoOfHitsToKO
-    // returns 0 for "deals no damage", so a zero plainHits means anything beats it.)
-    if (zHits != 0 && (plainHits == 0 || zHits < plainHits))
+    // The Z-Move secures a KO this turn that the plain move does not. Merely needing
+    // fewer hits is not enough: a stronger move almost always lowers the raw hit count
+    // (a 24-hit chip becomes a 10-hit chip), which would spend the Z-Move on turn one
+    // against anything bulky. Only a KO actually changes the outcome of the turn.
+    // GetNoOfHitsToKO returns 0 for "deals no damage", so plainHits == 0 never matches 1.
+    if (zHits == 1 && plainHits != 1)
         return TRUE;
 
     // About to be KO'd, so there is no later turn to save it for.
