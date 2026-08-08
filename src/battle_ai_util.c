@@ -7,6 +7,7 @@
 #include "battle_ai_util.h"
 #include "battle_ai_main.h"
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
+#include "fork/battle_ai_zmove.h" // FORK: AI_FLAG_SMART_Z_MOVE
 #include "battle_stat_change.h"
 #include "battle_controllers.h"
 #include "battle_factory.h"
@@ -5500,9 +5501,10 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
                     return FALSE;
                 break;
             case Z_EFFECT_RESET_STATS:
-                if (CountNegativeStatStages(battlerAtk) > 1)
-                    return TRUE;
-                break;
+                // FORK: falling through here reached the unconditional `return TRUE` at the
+                // end of the function, so "my stats are barely lowered" still spent the
+                // Z-Move. Decline instead.
+                return (CountNegativeStatStages(battlerAtk) > 1);
             case Z_EFFECT_ALL_STATS_UP_1:
                 return ShouldRaiseAnyStat(battlerAtk, battlerDef);
             case Z_EFFECT_BOOST_CRITS:
@@ -5564,9 +5566,14 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
                 return FALSE;
             }
 
-            if (stat != STAT_HP && (isEager || IncreaseStatUpScoreContrary(battlerAtk, battlerDef, stat, stage) > 0))
-                return TRUE;
-
+            // FORK: judging the boost not worth it used to fall through to the
+            // unconditional `return TRUE` at the end of the function, so the "don't bother"
+            // branch spent the Z-Move anyway. Decide here instead.
+            // stat is still STAT_HP for the cases that deliberately fall through to the
+            // damaging path below - Z_EFFECT_NONE on a status move that still becomes a
+            // damaging Z-Move (Nature Power, .power = 1) and Z_EFFECT_RESTORE_REPLACEMENT_HP.
+            if (stat != STAT_HP)
+                return (isEager || IncreaseStatUpScoreContrary(battlerAtk, battlerDef, stat, stage) > 0);
         }
         else if (GetMoveEffect(zMove) == EFFECT_EXTREME_EVOBOOST)
         {
@@ -5609,6 +5616,20 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
             return acc < LOW_ACCURACY_THRESHOLD;
         }
 
+        // FORK: never spend the one-per-battle Z-Move on a move the target resists unless
+        // it still secures the KO. Upstream only declines when the *plain* move already
+        // KOs, so a 4x-resisted hit was upgraded as happily as a super-effective one -
+        // the most visible symptom of eager Z-Move use. Unconditional (not behind
+        // AI_FLAG_SMART_Z_MOVE) because Z-ing into a resist is never the better play:
+        // any other damaging move in the moveset would spend the resource better.
+        if (!IsBattleMoveStatus(chosenMove) && effectiveness < UQ_4_12(1.0))
+        {
+            struct SimulatedDamage resistedZDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &effectiveness, USE_GIMMICK, NO_GIMMICK);
+
+            if (resistedZDmg.minimum < gBattleMons[battlerDef].hp)
+                return FALSE;
+        }
+
         // FORK: a damaging Z-Move (e.g. Knock Off -> Black Hole Eclipse) keeps NONE of
         // Knock Off's utility: it doesn't strip the target's item, and Knock Off's own
         // 1.5x boost vs item holders makes the regular hit competitive. With free gimmicks
@@ -5641,6 +5662,11 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
                     return FALSE;
             }
         }
+
+        // FORK: opt-in deliberate spending of the one-per-battle Z-Move. Without the flag
+        // this keeps upstream's behaviour of always upgrading the chosen move.
+        if (gAiThinkingStruct->aiFlags[battlerAtk] & AI_FLAG_SMART_Z_MOVE)
+            return AI_ShouldSpendZMove(battlerAtk, battlerDef, chosenMove);
 
         return TRUE;
     }

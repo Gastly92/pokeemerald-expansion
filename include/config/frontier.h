@@ -70,12 +70,13 @@
 // The AI flag set used when B_FRONTIER_HARD_AI is TRUE. Defaults to the
 // expansion's strongest *standard* preset: basic AI + OMNISCIENT (knows the
 // player's moves/abilities/items) + smart switching/mon choices + PP-stall
-// prevention + smart Tera. Tweak here to taste — e.g. add AI_FLAG_PREDICTION
+// prevention + smart Tera + smart Z-Move (spends the one-per-battle Z-Move only when
+// it secures a KO, instead of burning it turn one). Tweak here to taste — e.g. add AI_FLAG_PREDICTION
 // for a meaner AI, or drop AI_FLAG_OMNISCIENT so it can't see the player's team.
 // Only expanded at the use site (battle_factory.c, which includes
 // constants/battle_ai.h and battle_ai_species_overrides.h), so no extra include
 // is needed here.
-#define B_FRONTIER_HARD_AI_FLAGS    (AI_FLAG_SMART_TRAINER | AI_FLAG_SMART_SPECIES_LOGIC)
+#define B_FRONTIER_HARD_AI_FLAGS    (AI_FLAG_SMART_TRAINER | AI_FLAG_SMART_SPECIES_LOGIC | AI_FLAG_SMART_Z_MOVE)
 
 // If TRUE, the post-battle Battle Factory rental-swap screen lets the player
 // open a Pokémon summary for the *opponent's* mons too, not just their own.

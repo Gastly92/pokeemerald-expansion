@@ -486,6 +486,9 @@ void HandleAction_UseMove(void)
     if (GetActiveGimmick(gBattlerAttacker) == GIMMICK_Z_MOVE && !IsBattleMoveStatus(gCurrentMove) && !IsZMove(gCurrentMove))
     {
         gBattleStruct->categoryOverride = GetMoveCategory(gCurrentMove);
+        // FORK: remember the pre-conversion move so CalcMoveBasePower can derive the
+        // Z-Move's real power from it (see GetZMoveBasePower).
+        gBattleStruct->zmove.baseMoves[gBattlerAttacker] = gCurrentMove;
         gCurrentMove = gChosenMove = GetUsableZMove(gBattlerAttacker, gCurrentMove);
     }
     // check Max Move used
@@ -6897,8 +6900,22 @@ static inline u32 CalcMoveBasePower(struct DamageContext *ctx)
     u32 moveEffect = GetMoveEffect(move);
     u32 weight, hpFraction, speed;
 
+    // FORK: `move` is the base move while the AI simulates damage, but the Z-Move itself
+    // during execution (HandleAction_UseMove swaps gCurrentMove/gChosenMove before the
+    // damage calc). Upstream read the global gCurrentMove here, which is the Z-Move in the
+    // execution case and a stale MOVE_NONE while the AI thinks - both bottom out the tier
+    // table at a flat 100 BP. Recover the base move from zmove.baseMoves (recorded at every
+    // conversion site, the way dynamax.baseMoves already worked) and share the power lookup
+    // with the move-selection preview.
+    // On conflict: port upstream's change into GetZMoveBasePower; do not restore gCurrentMove here.
     if (GetActiveGimmick(battlerAtk) == GIMMICK_Z_MOVE)
-        return GetZMovePower(gCurrentMove);
+    {
+        bool32 isExecuting = IsZMove(move);
+        enum Move baseMove = isExecuting ? gBattleStruct->zmove.baseMoves[battlerAtk] : move;
+        enum Move zMove = isExecuting ? move : GetUsableZMove(battlerAtk, move);
+
+        return GetZMoveBasePower(baseMove, zMove);
+    }
 
     if (GetActiveGimmick(battlerAtk) == GIMMICK_DYNAMAX)
         return GetMaxMovePower(move);

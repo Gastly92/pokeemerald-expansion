@@ -652,7 +652,12 @@ static enum CancelerResult CancelerCallSubmove(struct BattleCalcValues *cv)
     if (calledMove != MOVE_NONE)
     {
         if (GetActiveGimmick(cv->battlerAtk) == GIMMICK_Z_MOVE && !IsBattleMoveStatus(calledMove))
+        {
+            // FORK: record the base move so the Z-Move's power can be derived from it
+            // (see GetZMoveBasePower); called moves reach the damage calc the same way.
+            gBattleStruct->zmove.baseMoves[cv->battlerAtk] = calledMove;
             calledMove = GetTypeBasedZMove(calledMove);
+        }
         if (cv->moveEffect == EFFECT_COPYCAT && IsMaxMove(calledMove))
             calledMove = gBattleStruct->dynamax.lastUsedBaseMove;
 
@@ -5474,7 +5479,12 @@ static enum Move GetMirrorMoveMove(void)
         move = validMoves[Random() % validMovesCount];
 
     if (GetActiveGimmick(gBattlerAttacker) == GIMMICK_Z_MOVE && !IsBattleMoveStatus(move))
+    {
+        // FORK: record the base move so the Z-Move's power can be derived from it
+        // (see GetZMoveBasePower).
+        gBattleStruct->zmove.baseMoves[gBattlerAttacker] = move;
         move = GetTypeBasedZMove(move);
+    }
 
     return move;
 }

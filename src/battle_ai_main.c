@@ -6,6 +6,7 @@
 #include "battle_ai_util.h"
 #include "battle_ai_items.h"
 #include "battle_ai_switch.h"
+#include "fork/battle_ai_gimmick.h" // FORK: AI picks among its gimmick candidates
 #include "fork/battle_ai_species_overrides.h" // FORK: species-aware AI overrides
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
 #include "battle_ai_main.h"
@@ -824,6 +825,11 @@ void SetAiLogicDataForTurn(struct AiLogicData *aiData)
 
         SetBattlerAiData(battler, aiData);
     }
+
+    // FORK: choose among every gimmick each AI mon is eligible for. Must sit between the
+    // battler-data pass above (its KO check runs damage calcs) and the move-damage pass
+    // below (which caches a turn of damage with the selected gimmick forced on).
+    AI_SelectGimmicksForTurn();
 
     for (enum BattlerId battler = 0; battler < battlersCount; battler++)
         aiData->turnOrder[battler] = battler;

@@ -432,10 +432,7 @@ bool32 MoveSelectionDisplayZMove(enum Move zmove, enum BattlerId battler)
 static void ZMoveSelectionDisplayPower(enum Move move, enum Move zMove)
 {
     u8 *txtPtr;
-    u16 power = GetZMovePower(move);
-
-    if (zMove >= MOVE_CATASTROPIKA)
-        power = GetMovePower(zMove);
+    u16 power = GetZMoveBasePower(move, zMove);
 
     if (GetMoveCategory(move) != DAMAGE_CATEGORY_STATUS)
     {
@@ -631,6 +628,25 @@ void SetZEffect(const u8 *nextInstr)
         gBattlescriptCurrInstr = nextInstr;
         break;
     }
+}
+
+// FORK: single source of truth for how much base power a Z-Move actually has, shared by
+// the move-selection preview and the damage calc. These used to be separate: the preview
+// derived the power from the base move (correctly), while CalcMoveBasePower read the
+// global gCurrentMove, which HandleAction_UseMove has already overwritten with the Z-Move
+// itself. Every type-based Z-Move carries a placeholder .power of 1, so the tier table
+// below bottomed out and *every* Z-Move dealt a flat 100 BP - for the player and for the
+// AI's damage simulation alike. Route both callers through here so the number the menu
+// advertises and the number the engine uses can never drift apart again.
+// On conflict: keep this helper and port upstream's change into it rather than re-inlining.
+u32 GetZMoveBasePower(enum Move baseMove, enum Move zMove)
+{
+    // Signature Z-Moves carry their own power; every other Z-Move derives it from the
+    // base move (via the per-move zMove.powerOverride, else the tier table).
+    if (zMove >= MOVE_CATASTROPIKA)
+        return GetMovePower(zMove);
+
+    return GetZMovePower(baseMove);
 }
 
 u32 GetZMovePower(enum Move move)
