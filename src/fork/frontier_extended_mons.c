@@ -542,7 +542,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARBOK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_GUNK_SHOT,
@@ -550,14 +550,34 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_POISON_POINT,
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .def = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_DARK,
+    },
+    {
+        .species = SPECIES_ARBOK,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_GRIP_CLAW,
+        .moves =
+        {
+            MOVE_WRAP,
+            MOVE_COIL,
+            MOVE_REST,
+            MOVE_GUNK_SHOT
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 4,
+            .def = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0026
