@@ -349,12 +349,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_STEEL,
     },
     {
         .species = SPECIES_BEEDRILL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND,
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_U_TURN,

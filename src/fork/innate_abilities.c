@@ -197,6 +197,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0014
         SPECIES_KAKUNA,
         INNATES(
+            ABILITY_SHED_SKIN,
             ABILITY_STURDY
         )
     },
