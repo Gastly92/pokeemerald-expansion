@@ -155,7 +155,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0024
         SPECIES_ARBOK, 2,
-        ABILITY_POISON_POINT
+        ABILITY_POISON_TOUCH
     },
     { // 0026
         SPECIES_RAICHU_ALOLA, 1,
