@@ -216,7 +216,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHELL_SMASH,
             MOVE_HYDRO_PUMP,
             MOVE_ICE_BEAM,
-            MOVE_DARK_PULSE
+            MOVE_AURA_SPHERE
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -230,7 +230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_DAMP_ROCK,
         .moves =
         {
             MOVE_RAIN_DANCE,
@@ -243,6 +243,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 252,
             .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_BLASTOISE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_SNIPE_SHOT,
+            MOVE_ICY_WIND,
+            MOVE_WIDE_GUARD,
+            MOVE_DARK_PULSE
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_BLASTOISE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_WATER_SPOUT,
+            MOVE_FLASH_CANNON,
+            MOVE_AURA_SPHERE,
+            MOVE_RAPID_SPIN
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
             .spd = 4
         ),
         .teraType = TYPE_WATER,

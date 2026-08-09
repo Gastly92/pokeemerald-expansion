@@ -117,6 +117,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BLASTOISE_MEGA, 2,
         ABILITY_WATER_ABSORB
     },
+    {
+        SPECIES_BLASTOISE_GMAX, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0012
         SPECIES_BUTTERFREE, 1,
         ABILITY_PSYCHIC_AFFINITY
