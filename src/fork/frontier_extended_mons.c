@@ -106,7 +106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_TERRAIN_EXTENDER,
         .moves =
         {
             MOVE_POLLEN_PUFF,
@@ -121,7 +121,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_VENUSAUR,
@@ -146,7 +146,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
             MOVE_SUNNY_DAY,
