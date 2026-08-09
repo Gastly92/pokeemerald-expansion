@@ -267,6 +267,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_BLASTOISE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_WATER_SPOUT,
+            MOVE_FLASH_CANNON,
+            MOVE_AURA_SPHERE,
+            MOVE_RAPID_SPIN
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0012
     {
