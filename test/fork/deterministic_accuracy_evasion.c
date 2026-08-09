@@ -314,6 +314,79 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a 0-accuracy move ignores th
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: No Guard's user ignores the evasion PP tax")
+{
+    u32 ability;
+    u32 expectedPP;
+    PARAMETRIZE { ability = ABILITY_TELEPATHY; expectedPP = 33; } // 35 - 1 (base) - 1 (foe +1 evasion)
+    PARAMETRIZE { ability = ABILITY_NO_GUARD;  expectedPP = 34; } // accuracy is 100% regardless of evasion
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ability); Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // opponent +1 evasion
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], expectedPP);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: No Guard on the TARGET also ignores the evasion PP tax")
+{
+    u32 ability;
+    u32 expectedPP;
+    PARAMETRIZE { ability = ABILITY_TELEPATHY; expectedPP = 33; } // 35 - 1 (base) - 1 (foe +1 evasion)
+    PARAMETRIZE { ability = ABILITY_NO_GUARD;  expectedPP = 34; } // moves against a No Guard holder always hit too
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ability); Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // opponent +1 evasion
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], expectedPP);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: No Guard ignores the flat BrightPowder PP tax")
+{
+    u32 ability;
+    u32 expectedPP;
+    PARAMETRIZE { ability = ABILITY_TELEPATHY; expectedPP = 33; } // 35 - 1 (base) - 1 (BrightPowder)
+    PARAMETRIZE { ability = ABILITY_NO_GUARD;  expectedPP = 34; } // 100% accuracy overrides the item
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ability); Moves(MOVE_POUND); }
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_BRIGHT_POWDER); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_POUND); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], expectedPP);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: No Guard still recovers PP from raised accuracy")
+{
+    // Pure boon: No Guard drops the penalties without clamping away the boost recovery.
+    // Pressure drains the move below max so the +1 PP recovery is observable.
+    u32 useHoneClaws;
+    u32 expectedPP;
+    PARAMETRIZE { useHoneClaws = FALSE; expectedPP = 33; } // 35 - 1 (base) - 1 (Pressure)
+    PARAMETRIZE { useHoneClaws = TRUE;  expectedPP = 34; } // 35 - 1 - 1 + 1 (accuracy recovery)
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_NO_GUARD); Moves(MOVE_HONE_CLAWS, MOVE_POUND, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_PRESSURE); }
+    } WHEN {
+        TURN { MOVE(player, useHoneClaws ? MOVE_HONE_CLAWS : MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_POUND); }
+    } THEN {
+        EXPECT_EQ(player->pp[1], expectedPP);
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% sleep move sleeps outright (never misses)")
 {
     GIVEN {
