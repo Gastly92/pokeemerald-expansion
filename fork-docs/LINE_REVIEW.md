@@ -16,6 +16,44 @@ and enhancements."*
 
 ---
 
+## How a review runs — three sequential approval gates
+
+**The three steps are run one at a time, in order, each gated on the
+maintainer's approval before the next begins:**
+
+> Step 1 innates → **yes** → Step 2 overrides → **yes** → Step 3 frontier sets →
+> **yes** → apply the edits → wrap-up.
+
+Propose **only** the step you are on. Do not preview the next step, and do not
+reason about it out loud — a step's proposal may rest only on the **approved**
+output of the steps before it, never on a pending one.
+
+**Why this is a rule and not a style preference.** The three files are coupled in
+one direction: innates determine which abilities are still free, overrides
+determine which abilities a set can legally name, and sets consume both. Propose
+all three at once and every later proposal is silently built on picks that have
+not been approved yet — and since *most first-pass flavor picks get rejected*
+(see the golden rule below), the rework cascades: a rejected innate invalidates
+the override that assumed it, which invalidates the set that named that override.
+The maintainer then has to re-litigate the same line three times. Running the
+gates in order costs one extra round-trip and removes that entire class of churn.
+
+Two concrete consequences worth stating, because they are the ones that get
+violated:
+
+- **An override cannot be justified against a proposed innate.** "Slot 0 is
+  redundant because Gluttony is innate" is only true once Gluttony's innate row is
+  approved. If the innate is still pending, the override is not proposable yet.
+- **A set's `.ability` cannot name an unapproved override.** If Step 2 has not
+  closed, the only abilities a Step 3 set may name are the species' existing real
+  slots.
+
+Directional feedback the maintainer volunteers early ("a Body Slam set would suit
+the Alolan one") is **banked, not promoted** — write it down, and spec it properly
+when its step comes up. It is a hint about Step 3, not an approval of Step 3.
+
+---
+
 ## Golden rules (read before touching anything)
 
 - **These are upstream-synced feature files, but they're fork-owned** — edits
@@ -36,10 +74,11 @@ and enhancements."*
   exact species constant (`gBattleMons[].species` becomes the form constant after
   a Mega/G-Max/forme change — there is **no** base-species fallback). Grep all of
   `BULBASAUR|IVYSAUR|VENUSAUR` (incl. `_MEGA`, `_GMAX`, `_ALOLA`, …) in each file.
-- **Present proposals before editing, then WAIT for a yes.** Flavor picks are
-  subjective and the maintainer's call — for the first pass on a line, lay out the
-  findings + a concrete proposal per file and get a yes/no (or swaps) before writing
-  code. **A deferral is not an approval:** "let's do X first" leaves the proposal
+- **Present proposals before editing, then WAIT for a yes — one step at a time.**
+  Flavor picks are subjective and the maintainer's call, so lay out the findings +
+  a concrete proposal for **the current step only** and get a yes/no (or swaps)
+  before moving to the next step or writing code (see "How a review runs" above).
+  **A deferral is not an approval:** "let's do X first" leaves the proposal
   pending, not accepted. **An unanswered question is not a yes:** if you asked which
   of two picks to take and never got an answer, that pick is still open — don't
   resolve it for the maintainer and ship it. And "let's return to the line review"
@@ -142,6 +181,10 @@ For each species/form in the line:
 
 **Verify:** `make check TESTS="Innate"` (the innate test rejects unwired picks).
 
+**Gate:** stop here and get a yes on the innate list before starting Step 2. Which
+slots Step 2 may repurpose is determined by which innates were *approved*, not
+which were proposed.
+
 ---
 
 ## Step 2 — Override (`src/fork/species_ability_overrides.c`)
@@ -201,10 +244,17 @@ line:
 5. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
    `// <dex>` comment; forms share the base number and follow it.
 
-**Verify:** `make check TESTS="Frontier extended roster"` — two tests enforce the
-invariants ("every set's ability is legal for its species" + "no set's chosen
-ability duplicates a species innate"). Note these only exercise slots a roster set
-actually selects, so a new override row is best paired with a set that uses it.
+**Verify:** `make check TESTS="Frontier extended roster"` — three tests enforce the
+invariants: "every set's ability is legal for its species" and "no set's chosen
+ability duplicates a species innate" cover the sets that select a slot, and "no
+species ability override duplicates a species innate" sweeps the **whole override
+table** independently, so a redundant row fails CI even before any set uses it.
+Pairing a new override with a set that uses it is still good practice (it proves
+the slot resolves end-to-end), but it is no longer what catches a duplicate.
+
+**Gate:** stop here and get a yes on the override rows before starting Step 3. A
+set's `.ability` may only name an ability that is already a real slot for the
+species or comes from an *approved* override row.
 
 ---
 
@@ -453,6 +503,9 @@ Three further consequences a line review must account for:
    Megas turn one). Tune the Mega's innates to how its steered set actually plays.
 
 **Verify:** the same `"Frontier extended roster"` tests (legality + non-innate).
+
+**Gate:** get a yes on the sets, then apply the edits for all three approved steps
+and move to the wrap-up.
 
 ---
 

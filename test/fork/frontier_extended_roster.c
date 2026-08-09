@@ -5,6 +5,7 @@
 #include "config_changes.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/innate_abilities.h"
+#include "fork/species_ability_overrides.h"
 #include "constants/abilities.h"
 #include "constants/species.h"
 
@@ -108,6 +109,55 @@ TEST("Frontier extended roster: no set's chosen ability duplicates a species inn
                         gAbilitiesInfo[ability].name);
     }
 
+    EXPECT_EQ(redundant, 0);
+}
+
+// FORK: the same redundancy invariant as the test above, but checked at its SOURCE -- the
+// fork-owned override table (src/fork/species_ability_overrides.c) rather than the roster that
+// consumes it. An override row exists to hand a species a real, OBSERVABLE second trait alongside
+// its always-on innates, so a row granting an ability the species already has innately defeats its
+// own purpose: the chosen slot resolves to a duplicate and the mon shows one trait instead of two.
+//
+// The roster test above only sees a bad row once some set actually selects that slot, so a
+// redundant row could sit in the table indefinitely -- and would then be inherited by the next set
+// authored on that species (exactly the trap a line review walks into: propose an override against
+// an innate, then build a set on it). This test sweeps EVERY species x slot through
+// GetSpeciesAbilityOverride and fails on any row that duplicates an innate, independent of roster
+// coverage. Species with no override row return ABILITY_NONE and are skipped.
+TEST("Frontier extended roster: no species ability override duplicates a species innate")
+{
+    u32 species, slot;
+    u32 redundant = 0;
+    u32 rowsSeen = 0;
+
+    // GetSpeciesAbilityOverride returns ABILITY_NONE for every species while the flag is off
+    // (TestInitConfigData force-disables it), which would make this test vacuously pass.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability ability = GetSpeciesAbilityOverride(species, slot);
+
+            if (ability == ABILITY_NONE)
+                continue;
+
+            rowsSeen++;
+            if (!SpeciesHasInnate(species, ability))
+                continue;
+
+            redundant++;
+            Test_MgbaPrintf("override %S slot %d: %S is already an innate of this species -- the chosen slot would resolve to a duplicate; pick a non-innate ability for the row or drop it",
+                            gSpeciesInfo[species].speciesName,
+                            slot,
+                            gAbilitiesInfo[ability].name);
+        }
+    }
+
+    // Guard against a vacuous pass: if the flag gating on GetSpeciesAbilityOverride ever changes
+    // so that it stops resolving here, the sweep above would silently check nothing.
+    EXPECT_GT(rowsSeen, 0);
     EXPECT_EQ(redundant, 0);
 }
 

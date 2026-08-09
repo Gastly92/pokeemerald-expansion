@@ -19,14 +19,23 @@ welcome but not required.
    - `src/fork/innate_abilities.c` — always-on innates (Step 1).
    - `src/fork/species_ability_overrides.c` — the chosen ability (Step 2).
    - `src/fork/frontier_extended_mons.c` — Battle Factory sets (Step 3).
-3. **For each file, per the rubric:** report what's already there, whether it
-   makes flavorful sense, and concrete candidate additions/changes.
-4. **Present proposals before editing, then WAIT for a yes.** Lay out findings + a
-   specific proposal per file and get the maintainer's yes/no/swaps first — flavor
-   picks are their call. Then apply the approved changes. A **deferral is not an
-   approval**, an **unanswered question is not a yes**, and "let's return to the
-   line review" means resume the *review*, not ship the backlog. Expect most first-
-   pass flavor picks to be rejected — that's the process working.
+3. **Run the three steps ONE AT A TIME, each behind its own approval gate.**
+   Innates → *yes* → overrides → *yes* → frontier sets → *yes* → apply. Propose
+   **only** the current step; do not preview or reason about the next one. Each
+   step's proposal may rest only on the **approved** output of earlier steps,
+   never on a pending one — an override cannot be justified against a proposed-
+   but-unapproved innate, and a set's `.ability` cannot name an override that has
+   not been agreed. Proposing all three at once is what this rule exists to
+   prevent: it silently couples the later steps to picks that are about to be
+   rejected, and the rework cascades.
+4. **For the current step, per the rubric:** report what's already there, whether
+   it makes flavorful sense, and concrete candidate additions/changes.
+5. **WAIT for a yes before moving on.** Flavor picks are the maintainer's call. A
+   **deferral is not an approval**, an **unanswered question is not a yes**, and
+   "let's return to the line review" means resume the *review*, not ship the
+   backlog. Expect most first-pass flavor picks to be rejected — that's the
+   process working. Apply the edits for all three files once the last gate
+   passes (or per step, if the maintainer asks for that).
 
 ## Hard constraints (see the rubric for detail)
 
