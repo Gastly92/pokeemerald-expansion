@@ -58,8 +58,6 @@ static const u16 sLegendarySpecies[] =
     SPECIES_SHAYMIN_SKY,           // 0492
     SPECIES_KYUREM_BLACK,          // 0646
     SPECIES_KYUREM_WHITE,          // 0646
-    SPECIES_URSHIFU,               // 0892
-    SPECIES_URSHIFU_RAPID_STRIKE,  // 0892
     SPECIES_SPECTRIER,             // 0897
 };
 
@@ -126,6 +124,8 @@ static const u16 sPseudoSpecies[] =
     SPECIES_MELMETAL,            // 0809
     SPECIES_DRACOVISH,           // 0882
     SPECIES_DRAGAPULT,           // 0887
+    SPECIES_URSHIFU,             // 0892
+    SPECIES_URSHIFU_RAPID_STRIKE, // 0892
     SPECIES_ZARUDE,              // 0893
     SPECIES_REGIELEKI,           // 0894
     SPECIES_REGIDRAGO,           // 0895
