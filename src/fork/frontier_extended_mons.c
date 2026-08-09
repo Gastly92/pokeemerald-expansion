@@ -216,7 +216,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHELL_SMASH,
             MOVE_HYDRO_PUMP,
             MOVE_ICE_BEAM,
-            MOVE_DARK_PULSE
+            MOVE_AURA_SPHERE
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -230,7 +230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLASTOISE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_DAMP_ROCK,
         .moves =
         {
             MOVE_RAIN_DANCE,
@@ -245,7 +245,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .teraType = TYPE_WATER,
+        .teraType = TYPE_FAIRY,
     },
 
     // 0012
