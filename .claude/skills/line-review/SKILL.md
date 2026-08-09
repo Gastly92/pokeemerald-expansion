@@ -20,7 +20,8 @@ welcome but not required.
    - `src/fork/species_ability_overrides.c` — the chosen ability (Step 2).
    - `src/fork/frontier_extended_mons.c` — Battle Factory sets (Step 3).
 3. **Run the three steps ONE AT A TIME, each behind its own approval gate.**
-   Innates → *yes* → overrides → *yes* → frontier sets → *yes* → apply. Propose
+   Innates → *yes* → overrides → *yes* → frontier sets (Part A audit → *yes* →
+   Part B new sets) → *yes* → apply. Propose
    **only** the current step; do not preview or reason about the next one. Each
    step's proposal may rest only on the **approved** output of earlier steps,
    never on a pending one — an override cannot be justified against a proposed-
@@ -67,6 +68,17 @@ welcome but not required.
   override ability, so the base's observable trait carries through the
   transformation (the Venusaur pattern: base → Grassy Surge override; Mega →
   Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
+- **Frontier sets run in two parts: Part A audits the EXISTING sets, Part B
+  proposes new ones** — Part A first, with its own yes. Part A walks each existing
+  set field by field: **Tera type** (what is it *for*? — a tactical immunity beats
+  doubling an existing type, and it must match the item/ability/moves, because
+  Terastallizing overwrites all three type slots and e.g. flips Black Sludge from
+  healing to chip damage on a non-Poison Tera), **moves** (each earning its slot),
+  **item** (still doing anything under `BUFF_*` / `DETERMINISTIC_HOLD_EFFECTS`),
+  **nature/EVs/IVs** (spread matches what the set does; note
+  `TRAINER_PARTY_IVS` takes **Speed 4th**, unlike `EVS()`'s named fields),
+  **ability**, **format tag**, and **base-form viability**. "Keep as-is" is a fine
+  verdict. See the rubric's Step 3 Part A for the full checklist.
 - **Frontier movesets:** no move-legality restrictions — any move that's
   *flavorful* (or powerful) is fair game. **Flavor is the only test: do NOT gate a
   move on the learnset.** A move the species cannot learn in any game is still fine

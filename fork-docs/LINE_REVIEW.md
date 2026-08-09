@@ -301,9 +301,77 @@ anything Beedrill learns; and a cornered venomous defender wants **Baneful Bunke
 over plain Protect. None of the three are in its learnset, and all three read more
 truly than the moves that are.
 
-1. **Read the existing set(s) for the line.** Note what niche each fills so a new
-   set adds variety rather than duplicating.
-2. **Aim for at least 2 quality sets per species** — that is the bar, not a
+**Step 3 runs in two parts, in order: Part A audits what is already there, Part B
+proposes new sets.** Part A gets its own yes before Part B starts — same reasoning
+as the step gates themselves. Auditing first also tells you what Part B needs: a
+species whose one existing set turns out to be fine needs a *different* new set
+than one whose existing set is about to be rewritten.
+
+1. **PART A — audit the existing set(s) before proposing anything new.** Go
+   through each existing set for the line field by field and give a verdict:
+   *keep as-is*, *change X*, or *replace*. **"Keep as-is" is a fine verdict** — the
+   point is to have actually checked, not to find something to change.
+
+   a. **Tera type — every set has one, so ask what it is actually FOR.** Three
+      legitimate jobs, roughly best to worst: (i) a **tactical immunity or
+      resistance flip** (Tera Flying to blank an Earthquake, Tera Fairy into a
+      Dragon, Tera Water on a Fire-weak mon) — usually the highest-value use;
+      (ii) **STAB for a move the set actually carries** — a Tera type matching no
+      move on the set does nothing offensively; (iii) **doubling an existing
+      type** for 2× STAB, which is legitimate but normally the weakest, since it
+      trades the whole resistance profile and the immunity option for raw power
+      on moves that were already STAB.
+
+      **The trap: Terastallizing OVERWRITES ALL THREE type slots**
+      (`types[0] = types[1] = types[2] = teraType`, `src/battle_util.c`), so it
+      silently breaks anything keyed on the original type. The canonical case is
+      **Black Sludge**: it heals only `IS_BATTLER_OF_TYPE(itemBattler, TYPE_POISON)`
+      and *damages* everything else (`src/battle_hold_effects.c`), so a Poison-type
+      holding Black Sludge with a non-Poison Tera type turns its own recovery into
+      chip damage the moment it Teras. Same class of bug: losing an immunity the
+      set was built around (a Ghost that Teras out of its Normal/Fighting
+      immunity), losing the STAB its moves depend on, or switching off a
+      type-gated ability. Check the Tera type against the **item, the ability and
+      every move** before calling it fine.
+
+      Also: **Tera is a gimmick**, so under `FEATURE_FREE_GIMMICKS` it competes for
+      the one-per-trainer slot exactly like a Mega (see the free-gimmicks section
+      below). A set that *needs* to Tera to function is unreliable for the same
+      reason a set that needs its Mega is. Tera is upside.
+
+   b. **Moves — is each of the four earning its slot?** Look for redundant
+      coverage, a move strictly outclassed by another the set could run, a
+      secondary effect that can never fire under the deterministic gate (see the
+      `DETERMINISTIC_*` section — never build on a secondary landing against a
+      neutral target), missing STAB, no answer to a common immunity, or four
+      attacking moves where one utility slot would do more.
+   c. **Held item — is it still doing anything?** Re-check it against the set's
+      moves and ability, and against the fork's changes (`BUFF_*`,
+      `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently here than
+      stock knowledge expects).
+   d. **Nature, EVs, IVs — does the spread match what the set actually does?**
+      A nature dropping a stat the set uses, EVs invested in an unused attacking
+      stat, or a Speed investment that reaches no relevant benchmark. On IVs:
+      only ~42 of 1200+ sets set `.iv` at all, and `CreateFacilityMon` applies it
+      only `if (fmon->iv)`, so leaving it unset means "facility default" and is
+      normal — the usual reason to set one is minimum Speed for Trick Room.
+      **Footgun:** `TRAINER_PARTY_IVS(hp, atk, def, speed, spatk, spdef)` takes
+      **Speed as its 4th argument**, whereas `EVS()` uses named fields in struct
+      order (`hp/atk/def/spa/spd/spe`). Reading the IV macro as if it matched the
+      EV field order silently zeroes Sp. Atk instead of Speed.
+   e. **Ability — still the right pick** given the species' innates (CI already
+      enforces legal-and-non-innate; this is the flavor//usefulness question).
+   f. **Format tag** — does a `FORMAT_BOTH` set genuinely hold up in both, and is
+      the line's coverage across singles/doubles balanced?
+   g. **Base-form viability** — re-check the set against the base stat line per
+      the free-gimmicks rule below.
+
+   Note what niche each surviving set fills, so Part B adds variety rather than
+   duplicating.
+
+   **Gate:** present the Part A verdicts and get a yes before starting Part B.
+
+2. **PART B — propose new sets. Aim for at least 2 quality sets per species** — that is the bar, not a
    quota to fill. Each should occupy a distinct niche so the Factory has real
    variety to draw among: a signature-move set, a gimmick (Trick Room, weather,
    Baton Pass, status spreader), a lore set, a defensive staller, an offensive
@@ -504,8 +572,9 @@ Three further consequences a line review must account for:
 
 **Verify:** the same `"Frontier extended roster"` tests (legality + non-innate).
 
-**Gate:** get a yes on the sets, then apply the edits for all three approved steps
-and move to the wrap-up.
+**Gate:** Part A (audit verdicts) and Part B (new sets) are approved separately.
+Once Part B has its yes, apply the edits for all three approved steps and move to
+the wrap-up.
 
 ---
 
