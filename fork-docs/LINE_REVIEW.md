@@ -345,10 +345,14 @@ than one whose existing set is about to be rewritten.
       `DETERMINISTIC_*` section — never build on a secondary landing against a
       neutral target), missing STAB, no answer to a common immunity, or four
       attacking moves where one utility slot would do more.
-   c. **Held item — is it still doing anything?** Re-check it against the set's
-      moves and ability, and against the fork's changes (`BUFF_*`,
-      `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently here than
-      stock knowledge expects).
+   c. **Held item — is it still doing anything, and is it too crowded?** Re-check
+      it against the set's moves and ability, and against the fork's changes
+      (`BUFF_*`, `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently
+      here than stock knowledge expects). Then check its **scarcity**: only one of
+      each item can appear per drafted team, so a set on Leftovers or Life Orb
+      (21% and 17% of the roster) is drafted measurably less often than one on a
+      tail item. See the scarcity note under point 4 below — an existing set
+      sitting on a default Leftovers is a prime candidate to move off it.
    d. **Nature, EVs, IVs — does the spread match what the set actually does?**
       A nature dropping a stat the set uses, EVs invested in an unused attacking
       stat, or a Speed investment that reaches no relevant benchmark. On IVs:
@@ -421,6 +425,29 @@ than one whose existing set is about to be rewritten.
    around, and a set can just as well start from a move, an ability, or a gimmick
    with `ITEM_LEFTOVERS` (or nothing special) attached. Don't force a themed item
    onto every set.
+
+   **A held item is also a SCARCITY cost, not just a stat line — check how crowded
+   it is before choosing it.** The Factory draft rejects any candidate whose
+   `heldItem` already appears on the team being built (`src/battle_frontier.c`, the
+   "Ensure this Pokemon's held item isn't a duplicate" loop — a non-`ITEM_NONE`
+   match makes the draft skip that mon and roll again). Only **one of each item can
+   appear per team**, for the player's rental team and for each opponent's team
+   alike. So a set holding a heavily-used item is *drafted less often*: it loses
+   every roll where some other mon already took that item.
+
+   The distribution is extremely lopsided, so this matters more than it sounds.
+   Measure it before picking — `grep -o "\.heldItem = ITEM_[A-Z_0-9]*"
+   src/fork/frontier_extended_mons.c | sort | uniq -c | sort -rn` — which as of this
+   writing gives **Leftovers 260 sets (21%) and Life Orb 209 (17%)**, i.e. ~39% of
+   the roster fighting over two item slots, against 87 distinct items total and a
+   long tail used once or twice.
+
+   Practical rule: when an item is a genuine build-around (Flame Orb on a Guts mon,
+   a weather rock, Choice Specs), take it regardless of crowding — the set needs it.
+   But when you are reaching for Leftovers or Life Orb as a **default** because
+   nothing else suggested itself, prefer a near-equivalent from the tail; the set
+   plays about as well and actually shows up. A Figy Berry on a Gluttony mon does a
+   comparable job to Leftovers *and* has essentially no competition.
 5. **Account for this fork's mechanics when picking moves and items** — they
    change what's good in ways stock knowledge misses:
    - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) replace the

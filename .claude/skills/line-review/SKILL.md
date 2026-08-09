@@ -100,7 +100,12 @@ welcome but not required.
   moves), singles sets want self-sufficiency. Held items are **one lens among
   several** (iterate items for fun ideas, but many items are weak and not worth
   building around — a set can start from a move, ability, or gimmick just as
-  well). Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
+  well). **An item is also a scarcity cost:** only one of each item can appear per
+  drafted team (`src/battle_frontier.c` rejects a duplicate `heldItem`), so a set
+  on a crowded item is drafted less often — Leftovers is 21% of the roster and Life
+  Orb 17%. Take a crowded item when the set genuinely builds around it; when you're
+  reaching for Leftovers/Life Orb as a *default*, prefer a near-equivalent from the
+  long tail so the set actually shows up. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
   improvements (Shell Bell, Leech Seed) when choosing moves and items —
   **deterministic does NOT mean "always happens"**: secondary effects land only on
   a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while

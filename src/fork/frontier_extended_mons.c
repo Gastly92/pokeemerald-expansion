@@ -384,7 +384,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_SLAM,
             MOVE_DRILL_RUN,
             MOVE_KNOCK_OFF,
-            MOVE_AQUA_JET
+            MOVE_QUICK_ATTACK
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -393,7 +393,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_RATICATE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FLAME_ORB,
+        .moves =
+        {
+            MOVE_FACADE,
+            MOVE_KNOCK_OFF,
+            MOVE_DRILL_RUN,
+            MOVE_QUICK_ATTACK
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
     },
     {
         .species = SPECIES_RATICATE_ALOLA,
@@ -401,7 +421,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_DOUBLE_EDGE,
+            MOVE_BODY_SLAM,
             MOVE_CRUNCH,
             MOVE_SUCKER_PUNCH,
             MOVE_SUPER_FANG
@@ -412,6 +432,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spd = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_RATICATE_ALOLA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FIGY_BERRY,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_BEAT_UP,
+            MOVE_KNOCK_OFF,
+            MOVE_PARTING_SHOT
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
         .teraType = TYPE_GHOST,
     },
