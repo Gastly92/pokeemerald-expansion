@@ -19,14 +19,24 @@ welcome but not required.
    - `src/fork/innate_abilities.c` — always-on innates (Step 1).
    - `src/fork/species_ability_overrides.c` — the chosen ability (Step 2).
    - `src/fork/frontier_extended_mons.c` — Battle Factory sets (Step 3).
-3. **For each file, per the rubric:** report what's already there, whether it
-   makes flavorful sense, and concrete candidate additions/changes.
-4. **Present proposals before editing, then WAIT for a yes.** Lay out findings + a
-   specific proposal per file and get the maintainer's yes/no/swaps first — flavor
-   picks are their call. Then apply the approved changes. A **deferral is not an
-   approval**, an **unanswered question is not a yes**, and "let's return to the
-   line review" means resume the *review*, not ship the backlog. Expect most first-
-   pass flavor picks to be rejected — that's the process working.
+3. **Run the three steps ONE AT A TIME, each behind its own approval gate.**
+   Innates → *yes* → overrides → *yes* → frontier sets (Part A audit → *yes* →
+   Part B new sets) → *yes* → apply. Propose
+   **only** the current step; do not preview or reason about the next one. Each
+   step's proposal may rest only on the **approved** output of earlier steps,
+   never on a pending one — an override cannot be justified against a proposed-
+   but-unapproved innate, and a set's `.ability` cannot name an override that has
+   not been agreed. Proposing all three at once is what this rule exists to
+   prevent: it silently couples the later steps to picks that are about to be
+   rejected, and the rework cascades.
+4. **For the current step, per the rubric:** report what's already there, whether
+   it makes flavorful sense, and concrete candidate additions/changes.
+5. **WAIT for a yes before moving on.** Flavor picks are the maintainer's call. A
+   **deferral is not an approval**, an **unanswered question is not a yes**, and
+   "let's return to the line review" means resume the *review*, not ship the
+   backlog. Expect most first-pass flavor picks to be rejected — that's the
+   process working. Apply the edits for all three files once the last gate
+   passes (or per step, if the maintainer asks for that).
 
 ## Hard constraints (see the rubric for detail)
 
@@ -58,6 +68,17 @@ welcome but not required.
   override ability, so the base's observable trait carries through the
   transformation (the Venusaur pattern: base → Grassy Surge override; Mega →
   Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
+- **Frontier sets run in two parts: Part A audits the EXISTING sets, Part B
+  proposes new ones** — Part A first, with its own yes. Part A walks each existing
+  set field by field: **Tera type** (what is it *for*? — a tactical immunity beats
+  doubling an existing type, and it must match the item/ability/moves, because
+  Terastallizing overwrites all three type slots and e.g. flips Black Sludge from
+  healing to chip damage on a non-Poison Tera), **moves** (each earning its slot),
+  **item** (still doing anything under `BUFF_*` / `DETERMINISTIC_HOLD_EFFECTS`),
+  **nature/EVs/IVs** (spread matches what the set does; note
+  `TRAINER_PARTY_IVS` takes **Speed 4th**, unlike `EVS()`'s named fields),
+  **ability**, **format tag**, and **base-form viability**. "Keep as-is" is a fine
+  verdict. See the rubric's Step 3 Part A for the full checklist.
 - **Frontier movesets:** no move-legality restrictions — any move that's
   *flavorful* (or powerful) is fair game. **Flavor is the only test: do NOT gate a
   move on the learnset.** A move the species cannot learn in any game is still fine
@@ -79,7 +100,12 @@ welcome but not required.
   moves), singles sets want self-sufficiency. Held items are **one lens among
   several** (iterate items for fun ideas, but many items are weak and not worth
   building around — a set can start from a move, ability, or gimmick just as
-  well). Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
+  well). **An item is also a scarcity cost:** only one of each item can appear per
+  drafted team (`src/battle_frontier.c` rejects a duplicate `heldItem`), so a set
+  on a crowded item is drafted less often — Leftovers is 21% of the roster and Life
+  Orb 17%. Take a crowded item when the set genuinely builds around it; when you're
+  reaching for Leftovers/Life Orb as a *default*, prefer a near-equivalent from the
+  long tail so the set actually shows up. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
   improvements (Shell Bell, Leech Seed) when choosing moves and items —
   **deterministic does NOT mean "always happens"**: secondary effects land only on
   a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while
