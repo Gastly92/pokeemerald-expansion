@@ -167,8 +167,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0006
     {
         .species = SPECIES_CHARIZARD,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -183,7 +183,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_DRAGON,
+        .teraType = TYPE_GROUND,
     },
     {
         .species = SPECIES_CHARIZARD,
@@ -193,7 +193,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_FIRE_BLAST,
             MOVE_SOLAR_BEAM,
-            MOVE_AIR_SLASH,
+            MOVE_HURRICANE,
             MOVE_DRAGON_PULSE
         },
         .ability = ABILITY_FLASH_FIRE,
