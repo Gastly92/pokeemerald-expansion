@@ -387,6 +387,28 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: No Guard still recovers PP f
     }
 }
 
+DOUBLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a partner's Victory Star ignores the evasion PP tax")
+{
+    u32 allyAbility;
+    u32 expectedPP;
+    PARAMETRIZE { allyAbility = ABILITY_TELEPATHY;    expectedPP = 33; } // 35 - 1 (base) - 1 (foe +1 evasion)
+    PARAMETRIZE { allyAbility = ABILITY_VICTORY_STAR; expectedPP = 34; } // the ally's accuracy boost ignores evasion
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); }
+        PLAYER(SPECIES_WOBBUFFET) { Ability(allyAbility); Speed(50); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_CELEBRATE);
+               MOVE(opponentLeft, MOVE_DOUBLE_TEAM); MOVE(opponentRight, MOVE_CELEBRATE); }
+        TURN { MOVE(playerLeft, MOVE_POUND, target: opponentLeft); MOVE(playerRight, MOVE_CELEBRATE);
+               MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(opponentRight, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(playerLeft->pp[0], expectedPP);
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_ACCURACY_EVASION: a sub-100% sleep move sleeps outright (never misses)")
 {
     GIVEN {

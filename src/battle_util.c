@@ -11900,7 +11900,8 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
 // PP economy inherits them: positive = attacker advantage (PP recovered), negative = the
 // target is harder to hit (extra PP). Keen Eye / Unaware / Minds Eye / Illuminate (Gen 9)
 // and — repurposed from their accuracy boosts — Compound Eyes / Victory Star all make the
-// user ignore the target's evasion; Foresight / Miracle Eye / Unaware on the target and
+// user ignore the target's evasion, as does a living PARTNER's Victory Star; Foresight /
+// Miracle Eye / Unaware on the target and
 // MoveIgnoresDefenseEvasionStages do the same. Unaware on the target also nullifies the
 // user's accuracy boosts. No Guard on either battler is treated as ignorePenalties (see
 // below). When ignorePenalties is set (Micle Berry), the user's accuracy
@@ -11928,6 +11929,18 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
         evasionStage = DEFAULT_STAT_STAGE;
     else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
         evasionStage = InnateUnawareBoonStage(battlerAtk, evasionStage);
+    // FORK: mirror GetTotalAccuracy()'s ally clause -- a living partner's Victory Star boosts this
+    // battler's accuracy, so (repurposed as evasion-ignore, exactly like the user's OWN Victory Star
+    // above) it makes the user ignore the target's evasion in the PP economy too. PURE BOON: the
+    // boost guard keeps a foe's evasion DROP recovering PP, and keeps the partner lookup off the
+    // common no-boost path. No IsInnateActive(): Victory Star is never an innate (:x: in
+    // fork-docs/INNATE_ABILITIES_PROGRESS.md, absent from sImplementedInnates[]).
+    if (evasionStage > DEFAULT_STAT_STAGE)
+    {
+        enum BattlerId atkAlly = GetPartnerBattler(battlerAtk);
+        if (IsBattlerAlive(atkAlly) && GetBattlerAbility(atkAlly) == ABILITY_VICTORY_STAR)
+            evasionStage = DEFAULT_STAT_STAGE;
+    }
     if (MoveIgnoresDefenseEvasionStages(move))
         evasionStage = DEFAULT_STAT_STAGE;
     if (gBattleMons[battlerDef].volatiles.foresight || gBattleMons[battlerDef].volatiles.miracleEye)
