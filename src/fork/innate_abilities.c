@@ -168,6 +168,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0011
         SPECIES_METAPOD,
         INNATES(
+            ABILITY_SHED_SKIN,
             ABILITY_STURDY
         )
     },
