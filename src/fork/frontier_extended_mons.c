@@ -411,7 +411,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FLYING,
+        .teraType = TYPE_STEEL,
     },
 
     // 0020

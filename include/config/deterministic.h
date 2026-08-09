@@ -197,7 +197,12 @@
 //     move that targets an opposing mon, derived from the SAME net accuracy/evasion
 //     stage the hit calc used (so Keen Eye, Unaware, Foresight/Miracle Eye, Minds
 //     Eye, Compound Eyes and Victory Star — which all ignore the target's evasion —
-//     carry over for free, satisfying "abilities that affected accuracy still do"):
+//     carry over for free, satisfying "abilities that affected accuracy still do").
+//     No Guard carries over the furthest: its 100% accuracy applies for AND against its
+//     holder and overrides every source on this axis, so a move used by or against a No
+//     Guard battler is never taxed by an accuracy/evasion stage, nor by BrightPowder/Lax
+//     Incense, Sand Veil, Snow Cloak, Tangled Feet or Wonder Skin. It stays a pure boon —
+//     the user's accuracy boosts and the target's evasion drops still recover PP:
 //       * raising the user's accuracy recovers 1 PP per net stage;
 //       * lowering it costs 1 PP per net stage;
 //       * raising the target's evasion costs 1 PP per net stage;

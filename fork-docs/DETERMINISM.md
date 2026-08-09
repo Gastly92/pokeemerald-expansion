@@ -235,7 +235,8 @@ scaling (10 → 9 PP). A **per-use PP economy**
 (`CancelerPPDeduction`, `src/battle_move_resolution.c`) for moves targeting
 opponents, derived from the same net accuracy/evasion stage as the old hit calc
 (`GetAccEvasionStageDelta`, `src/battle_util.c` — so Keen Eye/Unaware/Foresight/Minds
-Eye and the repurposed Compound Eyes/Victory Star carry over): +acc/−evasion
+Eye, the repurposed Compound Eyes/Victory Star, and a living **partner's** Victory
+Star all carry over): +acc/−evasion
 recover 1 PP per net stage, −acc/+evasion cost 1, accuracy and evasion cancel,
 doubles sums both foes. Always spends ≥1 PP (last PP spent if it can't pay in
 full), recovery clamped to max PP. Flat additive uncapped taxes
@@ -244,7 +245,13 @@ Cloak, Tangled Feet add 1 PP to offensive moves; Wonder Skin adds 1 to status
 moves; Hustle adds 1 to the user's physical moves; Micle Berry (the old accuracy
 berry) makes its next move ignore the user's accuracy drops and the foe's evasion
 increases (never taxed by them, still recovers from boosts/drops) plus a flat 1
-PP. **OHKO moves** become always-hitting attacks dealing
+PP. **No Guard** goes furthest: its 100% accuracy applies for *and against* its
+holder and overrides every source on this axis, so a move used by or against a No
+Guard battler pays no stage tax and no flat tax at all — it takes the same
+pure-boon shape as Micle Berry, still recovering PP from the user's accuracy
+boosts and the foe's evasion drops. (Known gap: the Hustle tax is applied in
+`CancelerPPDeduction` outside the per-target loop, so a Hustle attacker into a No
+Guard defender still pays it.) **OHKO moves** become always-hitting attacks dealing
 `DETERMINISTIC_OHKO_MAX_HP_PERCENT` (40%) of max HP instead of a full KO, but
 **keep the OHKO immunities** — Sturdy, Dynamax, a higher-level target, and type
 immunity still block them (`DoesOHKOMoveMissTarget` + `EFFECT_OHKO` in

@@ -11900,9 +11900,11 @@ u32 GetTotalAccuracy(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
 // PP economy inherits them: positive = attacker advantage (PP recovered), negative = the
 // target is harder to hit (extra PP). Keen Eye / Unaware / Minds Eye / Illuminate (Gen 9)
 // and — repurposed from their accuracy boosts — Compound Eyes / Victory Star all make the
-// user ignore the target's evasion; Foresight / Miracle Eye / Unaware on the target and
+// user ignore the target's evasion, as does a living PARTNER's Victory Star; Foresight /
+// Miracle Eye / Unaware on the target and
 // MoveIgnoresDefenseEvasionStages do the same. Unaware on the target also nullifies the
-// user's accuracy boosts. When ignorePenalties is set (Micle Berry), the user's accuracy
+// user's accuracy boosts. No Guard on either battler is treated as ignorePenalties (see
+// below). When ignorePenalties is set (Micle Berry), the user's accuracy
 // drops and the target's evasion increases are ignored, so the move can still recover PP
 // from boosts/evasion drops but is never taxed by them. Clamped to the same +-6 the
 // hit-calc buff used.
@@ -11927,6 +11929,18 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
         evasionStage = DEFAULT_STAT_STAGE;
     else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
         evasionStage = InnateUnawareBoonStage(battlerAtk, evasionStage);
+    // FORK: mirror GetTotalAccuracy()'s ally clause -- a living partner's Victory Star boosts this
+    // battler's accuracy, so (repurposed as evasion-ignore, exactly like the user's OWN Victory Star
+    // above) it makes the user ignore the target's evasion in the PP economy too. PURE BOON: the
+    // boost guard keeps a foe's evasion DROP recovering PP, and keeps the partner lookup off the
+    // common no-boost path. No IsInnateActive(): Victory Star is never an innate (:x: in
+    // fork-docs/INNATE_ABILITIES_PROGRESS.md, absent from sImplementedInnates[]).
+    if (evasionStage > DEFAULT_STAT_STAGE)
+    {
+        enum BattlerId atkAlly = GetPartnerBattler(battlerAtk);
+        if (IsBattlerAlive(atkAlly) && GetBattlerAbility(atkAlly) == ABILITY_VICTORY_STAR)
+            evasionStage = DEFAULT_STAT_STAGE;
+    }
     if (MoveIgnoresDefenseEvasionStages(move))
         evasionStage = DEFAULT_STAT_STAGE;
     if (gBattleMons[battlerDef].volatiles.foresight || gBattleMons[battlerDef].volatiles.miracleEye)
@@ -11935,6 +11949,14 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
         accStage = DEFAULT_STAT_STAGE;
     else // FORK: an innate Unaware ignores the attacker's accuracy boosts but keeps its drops (pure boon)
         accStage = InnateUnawareBoonStage(battlerDef, accStage);
+
+    // FORK: No Guard makes accuracy 100% for AND against its holder, so neither the user's
+    // accuracy drops nor the target's evasion increases can cost it PP -- the same shape as
+    // the Micle Berry case, so it reuses it. PURE BOON: the user's accuracy boosts and the
+    // target's evasion drops still recover PP. No IsInnateActive() check: No Guard is never
+    // an innate (:x: in fork-docs/INNATE_ABILITIES_PROGRESS.md, absent from sImplementedInnates[]).
+    if (atkAbility == ABILITY_NO_GUARD || defAbility == ABILITY_NO_GUARD)
+        ignorePenalties = TRUE;
 
     if (ignorePenalties)
     {
@@ -11955,10 +11977,17 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
 // FORK: flat extra PP that a single target imposes on `move` under DETERMINISTIC_ACCURACY_EVASION,
 // stacking additively on top of the accuracy/evasion stage economy with no cap. BrightPowder /
 // Lax Incense, Sand Veil (in sand), Snow Cloak (in hail/snow) and Tangled Feet (while confused)
-// each add 1 PP to OFFENSIVE moves; Wonder Skin adds 1 PP to STATUS moves.
+// each add 1 PP to OFFENSIVE moves; Wonder Skin adds 1 PP to STATUS moves. No Guard on
+// either battler zeroes the whole tax, since its 100% accuracy overrides every source here.
 u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect)
 {
     u32 tax = 0;
+
+    // FORK: No Guard's 100% accuracy, for and against its holder, overrides every evasion
+    // source below, so the move pays none of these taxes. defAbility is already in hand, so
+    // it is tested first to keep the GetBattlerAbility() lookup off the common path.
+    if (defAbility == ABILITY_NO_GUARD || GetBattlerAbility(battlerAtk) == ABILITY_NO_GUARD)
+        return 0;
 
     if (IsBattleMoveStatus(move))
     {
