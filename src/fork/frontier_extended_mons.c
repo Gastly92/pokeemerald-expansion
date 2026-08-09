@@ -267,7 +267,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_STEEL,
     },
     {
         .species = SPECIES_BUTTERFREE,
@@ -287,7 +287,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spe = 252
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_PSYCHIC,
     },
 
     // 0015
