@@ -380,6 +380,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0038
+        SPECIES_NINETALES,
+        INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_SHADOW_TAG
+        )
+    },
+    { // 0038
         SPECIES_NINETALES_ALOLA,
         INNATES(
             ABILITY_SNOW_CLOAK
