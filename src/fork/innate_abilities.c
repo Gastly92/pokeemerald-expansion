@@ -373,12 +373,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0037
-        SPECIES_VULPIX,
-        INNATES(
-            ABILITY_SHADOW_TAG
-        )
-    },
-    { // 0037
         SPECIES_VULPIX_ALOLA,
         INNATES(
             ABILITY_SNOW_CLOAK
