@@ -61,21 +61,20 @@ SINGLE_BATTLE_TEST("Halo does not cap fixed-damage moves")
     }
 }
 
-SINGLE_BATTLE_TEST("Halo's cap is per hit, so a multi-hit move can exceed it in one turn", s16 damage)
+SINGLE_BATTLE_TEST("Halo's cap is per hit, so a multi-hit move can exceed it in one turn")
 {
     // Deliberate counterplay: the clamp lives in the per-hit damage calc, so a move that hits
-    // three times can take up to three caps' worth in a turn.
+    // three times (DETERMINISTIC_MOVE_RESULTS) can take up to three caps' worth in a turn.
+    // The cap here is 12 (40% of 30), so no SINGLE hit could ever KO this target -- fainting
+    // is therefore proof that more than one capped hit landed in the same turn.
     GIVEN {
-        ASSUME(GetMoveEffect(MOVE_BULLET_SEED) == EFFECT_MULTI_HIT);
+        ASSUME(IsMultiHitMove(MOVE_BULLET_SEED));
         PLAYER(SPECIES_BRELOOM) { Moves(MOVE_BULLET_SEED); }
         OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_HALO); MaxHP(30); HP(30); }
     } WHEN {
         TURN { MOVE(player, MOVE_BULLET_SEED); }
     } SCENE {
-        // Cap is 12 (40% of 30); three capped hits take the 30-HP target past a single cap.
-        HP_BAR(opponent, captureDamage: &results[0].damage);
-    } FINALLY {
-        EXPECT_GT(results[0].damage, 12);
+        MESSAGE("The opposing Wobbuffet fainted!");
     }
 }
 
