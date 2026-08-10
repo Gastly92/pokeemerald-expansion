@@ -336,6 +336,36 @@ anything Beedrill learns; and a cornered venomous defender wants **Baneful Bunke
 over plain Protect. None of the three are in its learnset, and all three read more
 truly than the moves that are.
 
+**Smogon is a legitimate input — for EVALUATION, never for generation.** Competitive
+analysis (Smogon dex entries, standard sets, spread benchmarks, what a species is
+actually considered good and bad at, what checks it) genuinely sharpens both parts of
+this step: it is a good second opinion on whether a move earns its slot, whether a
+spread reaches anything, and whether a set is one you would really draft. Use it to
+enhance the analysis. Three limits, because it is describing a different game:
+
+- **It is learnset-constrained, and this step is not.** Every Smogon set is legal by
+  construction, so building *from* one silently re-imports the exact gate the
+  generation rule above spends its length removing — the "narrow kit" failure, arrived
+  at by a more respectable route. Generate from the creature first (dex, design, other
+  media), *then* let Smogon critique what you built. Never let it bound the move pool.
+- **This fork's mechanics are not vanilla, so a competitive claim can be flatly wrong
+  here.** Blizzard's max PP is scaled to 3 by `DETERMINISTIC_ACCURACY_EVASION`;
+  secondaries fire only on super-effective hits; paralysis loses full-para and the Speed
+  drop; high-crit moves always crit through the strong-hit gate; Shell Bell and Leech
+  Seed are buffed. Re-check any Smogon-derived claim against
+  `include/config/deterministic.h` and `include/config/buff.h` before acting on it.
+- **The format is different.** Battle Factory drafting means item scarcity (one of each
+  item per team), no player-side teambuilding, no team preview, AI opponents, and
+  gimmicks competing for one slot per trainer. Smogon assumes full teambuilding and
+  free switching; its item and spread advice does not transfer unexamined.
+
+And **flavor still governs.** A Smogon-optimal set that reads as nothing in particular
+is a worse outcome here than a flavorful one that gives up some power — this doc is
+flavor-first by design, and competitive strength is welcome, not required. Smogon
+breaks ties and catches mistakes; it does not pick the concept. Same honesty rule as
+the other-media clause in Step 1: it is not in the repo, so flag it as recall (or fetch
+the actual analysis if the session has network) rather than presenting it as verified.
+
 **Step 3 runs in two parts, in order: Part A audits what is already there, Part B
 proposes new sets.** Part A gets its own yes before Part B starts — same reasoning
 as the step gates themselves. Auditing first also tells you what Part B needs: a

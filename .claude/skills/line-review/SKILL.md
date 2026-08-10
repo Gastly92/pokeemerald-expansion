@@ -133,6 +133,20 @@ welcome but not required.
   and `include/config/deterministic.h` itself, which is the source of truth —
   before building a set around any mechanic. The set's `.ability` must resolve to a real
   slot and not be an innate (or use `ABILITY_NONE`).
+- **Smogon is a legitimate input for EVALUATION, never for generation.** Competitive
+  analysis sharpens both parts of Step 3 — a second opinion on whether a move earns
+  its slot, whether a spread reaches a benchmark, whether a set is one you'd draft.
+  Three limits: it is **learnset-constrained**, so building *from* a Smogon set
+  re-imports the very gate the moveset rule above removes (generate from the creature
+  first, then let Smogon critique it — never let it bound the move pool); this fork's
+  **mechanics aren't vanilla**, so re-check any claim against `deterministic.h` /
+  `buff.h` (Blizzard is 3 PP here, secondaries need a super-effective hit, paralysis
+  is weaker, high-crit moves always crit through the gate); and the **format differs**
+  (Factory drafting, item scarcity, no teambuilding or team preview, AI opponents).
+  **Flavor still governs** — a Smogon-optimal set that reads as nothing is a worse
+  outcome than a flavorful one that gives up power. Smogon breaks ties and catches
+  mistakes; it doesn't pick the concept. Flag it as recall (or fetch it) — it's not
+  in the repo.
 - **Build sets for the BASE form; the Mega is upside.** Gimmicks are **once per
   trainer per battle** (`HasTrainerUsedGimmick`), and free gimmicks make the whole
   drafted team eligible, so they compete for one slot — a given mon often won't
