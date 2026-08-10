@@ -173,6 +173,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CLEFABLE, 1,
         ABILITY_MAGIC_BOUNCE
     },
+    {
+        SPECIES_CLEFABLE_MEGA, 0,
+        ABILITY_PIXILATE
+    },
+    {
+        SPECIES_CLEFABLE_MEGA, 1,
+        ABILITY_PIXILATE
+    },
+    {
+        SPECIES_CLEFABLE_MEGA, 2,
+        ABILITY_PIXILATE
+    },
     { // 0040
         // Wigglytuff: all real abilities now innate, so its innate-redundant slot-0 Cute Charm takes a chosen
         // Sweet Veil so the frontier chosen slot is a real, non-innate ability (not a redundant innate).

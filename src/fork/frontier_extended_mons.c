@@ -898,16 +898,36 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_DAZZLING_GLEAM,
             MOVE_FLAMETHROWER,
-            MOVE_THUNDERBOLT
+            MOVE_ICY_WIND
         },
         .ability = ABILITY_MAGIC_BOUNCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_CLEFABLE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_FOLLOW_ME,
+            MOVE_MOONBLAST,
+            MOVE_MOONLIGHT,
+            MOVE_LUNAR_DANCE
+        },
+        .ability = ABILITY_MAGIC_BOUNCE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0038
