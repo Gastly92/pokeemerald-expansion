@@ -694,7 +694,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_EARTH_POWER,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_THUNDERBOLT,
             MOVE_ICE_BEAM
         },
@@ -705,11 +705,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_NIDOKING,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
@@ -719,13 +719,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER
         },
         .ability = ABILITY_SHEER_FORCE,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_GHOST,
     },
 
     // 0036
