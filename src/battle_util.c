@@ -8,6 +8,7 @@
 #include "battle_controllers.h"
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
+#include "fork/halo.h" // FORK: Halo (field-wide per-hit damage cap)
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "battle_interface.h"
 #include "battle_setup.h"
@@ -3440,6 +3441,14 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 break;
             PREPARE_TYPE_BUFFER(gBattleTextBuff1, GetAbilityAffinityType(gLastUsedAbility));
             BattleScriptCall(BattleScript_TypeAffinityActivates);
+            effect++;
+            break;
+        // FORK: Halo (see src/fork/halo.c). The damage cap itself is applied passively in the
+        // shared damage calc; this only announces the aura on switch-in (popup + message).
+        case ABILITY_HALO:
+            if (!shouldAbilityTrigger)
+                break;
+            BattleScriptCall(BattleScript_HaloActivates);
             effect++;
             break;
         case ABILITY_DRIZZLE:
@@ -8770,6 +8779,13 @@ s32 ApplyModifiersAfterDmgRoll(struct DamageContext *ctx, s32 dmg)
     DAMAGE_APPLY_MODIFIER(GetBurnOrFrostBiteModifier(ctx));
     DAMAGE_APPLY_MODIFIER(GetZMaxMoveAgainstProtectionModifier(ctx));
     DAMAGE_APPLY_MODIFIER(GetOtherModifiers(ctx));
+
+    // FORK: a Halo holder anywhere on the field caps every hit at a fraction of its target's max
+    // HP (src/fork/halo.c). Last, so it bounds the fully-modified number. The AI reaches this via
+    // AI_ApplyModifiersAfterDmgRoll(), so its predictions are capped too. On conflict, keep this
+    // clamp at the end of the chain rather than folding it into a modifier -- it is a ceiling,
+    // not a multiplier.
+    dmg = ApplyHaloDamageCap(ctx->battlerDef, dmg);
 
     return dmg;
 }

@@ -920,7 +920,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONLIGHT,
             MOVE_LUNAR_DANCE
         },
-        .ability = ABILITY_MAGIC_BOUNCE,
+        .ability = ABILITY_HALO,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

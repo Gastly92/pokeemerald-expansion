@@ -2443,10 +2443,16 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Unimplemented."),
     },
 
-    [ABILITY_314] =
+    // FORK: an aura the holder projects over the whole field: no single hit may take more than
+    // HALO_DAMAGE_CAP_PERCENT% of its target's max HP, for EVERY battler present, the holder
+    // included. Applied at the shared damage chokepoint (src/fork/halo.c), so the AI prices it
+    // in for free. The holder alone pays the upkeep: every move it uses costs HALO_PP_TAX extra
+    // PP. Fixed-damage moves ignore the cap. See fork-docs/NEW_ABILITIES.md.
+    [ABILITY_HALO] =
     {
-        .name = _("-------"),
-        .description = COMPOUND_STRING("No special ability."),
+        .name = _("Halo"),
+        .description = COMPOUND_STRING("Caps all damage at 40% of HP."),
+        .aiRating = 6,
     },
 
     [ABILITY_MEGA_SOL] =

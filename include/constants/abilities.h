@@ -335,7 +335,7 @@ enum __attribute__((packed)) Ability
     ABILITY_PIERCING_DRILL = 311,
     ABILITY_DRAGONIZE = 312,
     ABILITY_EELEVATE = 313,
-    ABILITY_314 = 314,
+    ABILITY_HALO = 314, // FORK: field-wide damage cap, paid for in the holder's PP. See src/fork/halo.c + fork-docs/NEW_ABILITIES.md.
     ABILITY_MEGA_SOL = 315,
     ABILITY_FIRE_MANE = 316,
     ABILITY_PSYCHIC_AFFINITY = 317, // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.

@@ -9188,7 +9188,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents recoil
         ASSUME(GetMoveRecoil(MOVE_DOUBLE_EDGE) == 33);
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); Moves(MOVE_DOUBLE_EDGE); } // chosen Cute Charm; innate Magic Guard
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); Moves(MOVE_DOUBLE_EDGE); } // chosen Magic Bounce; innate Magic Guard
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
         TURN { MOVE(player, MOVE_DOUBLE_EDGE); }
@@ -9211,7 +9211,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents poison
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); Status1(status); MaxHP(300); HP(300); } // innate Magic Guard
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); Status1(status); MaxHP(300); HP(300); } // innate Magic Guard
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
         TURN {}
@@ -9226,7 +9226,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents sandst
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); MaxHP(300); HP(300); } // Fairy-type, not sandstorm-immune by type
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); MaxHP(300); HP(300); } // Fairy-type, not sandstorm-immune by type
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SANDSTORM); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_SANDSTORM); }
@@ -9242,7 +9242,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents Leech 
         ASSUME(GetMoveEffect(MOVE_LEECH_SEED) == EFFECT_LEECH_SEED);
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); MaxHP(300); HP(300); } // innate Magic Guard
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); MaxHP(300); HP(300); } // innate Magic Guard
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_LEECH_SEED); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_LEECH_SEED); }
@@ -9258,7 +9258,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents Life O
         ASSUME(gItemsInfo[ITEM_LIFE_ORB].holdEffect == HOLD_EFFECT_LIFE_ORB);
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); Item(ITEM_LIFE_ORB); Moves(MOVE_MOONBLAST); } // innate Magic Guard
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); Item(ITEM_LIFE_ORB); Moves(MOVE_MOONBLAST); } // innate Magic Guard
         OPPONENT(SPECIES_WOBBUFFET) { MaxHP(500); HP(500); }
     } WHEN {
         TURN { MOVE(player, MOVE_MOONBLAST); }
@@ -9274,7 +9274,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magic Guard prevents Stealt
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         PLAYER(SPECIES_WOBBUFFET);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); } // innate Magic Guard
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); } // innate Magic Guard
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_STEALTH_ROCK); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_STEALTH_ROCK); }
@@ -9293,7 +9293,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_MAGIC_GUARD));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_CUTE_CHARM); Status1(STATUS1_POISON); MaxHP(300); HP(300); } // innate Magic Guard
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); Status1(STATUS1_POISON); MaxHP(300); HP(300); } // innate Magic Guard
         OPPONENT(SPECIES_WEEZING) { Ability(ABILITY_NEUTRALIZING_GAS); }
     } WHEN {
         TURN {}
