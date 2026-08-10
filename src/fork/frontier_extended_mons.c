@@ -583,7 +583,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0026
     {
         .species = SPECIES_RAICHU,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
@@ -600,6 +600,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_RAICHU,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_VOLT_TACKLE,
+            MOVE_ICE_PUNCH,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_STATIC,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
     {
         .species = SPECIES_RAICHU_ALOLA,
@@ -619,7 +639,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIGHTING,
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_RAICHU_ALOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_BAND,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_PSYSHOCK,
+            MOVE_THUNDERBOLT,
+            MOVE_SURF
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0028
