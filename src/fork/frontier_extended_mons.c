@@ -665,7 +665,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0028
     {
         .species = SPECIES_SANDSLASH,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
@@ -681,7 +681,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_SANDSLASH,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_RAZOR_CLAW,
+        .moves =
+        {
+            MOVE_DRILL_RUN,
+            MOVE_STONE_EDGE,
+            MOVE_NIGHT_SLASH,
+            MOVE_CROSS_POISON
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
     },
     {
         .species = SPECIES_SANDSLASH_ALOLA,
@@ -701,7 +721,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_SANDSLASH_ALOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ICY_ROCK,
+        .moves =
+        {
+            MOVE_IRON_DEFENSE,
+            MOVE_BODY_PRESS,
+            MOVE_ICICLE_CRASH,
+            MOVE_EARTHQUAKE
+        },
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIGHTING,
     },
 
     // 0031
