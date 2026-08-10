@@ -792,6 +792,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GRASS,
     },
     {
+        .species = SPECIES_NINETALES,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_PERISH_SONG,
+            MOVE_SUBSTITUTE,
+            MOVE_WILL_O_WISP,
+            MOVE_MYSTICAL_FIRE
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
         .species = SPECIES_NINETALES_ALOLA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY,
@@ -809,18 +829,18 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_STEEL,
     },
     {
         .species = SPECIES_NINETALES_ALOLA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
-            MOVE_BLIZZARD,
             MOVE_MOONBLAST,
             MOVE_FREEZE_DRY,
-            MOVE_ICY_WIND
+            MOVE_SHEER_COLD,
+            MOVE_ENCORE
         },
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -829,7 +849,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_FAIRY,
     },
 
     // 0040
