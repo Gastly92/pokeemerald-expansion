@@ -652,7 +652,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_EARTH_POWER,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_ICE_BEAM,
             MOVE_FLAMETHROWER
         },
@@ -663,7 +663,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_FIRE,
     },
     {
         .species = SPECIES_NIDOQUEEN,
@@ -684,6 +684,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 56
         ),
         .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_NIDOQUEEN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_DRILL_RUN,
+            MOVE_POISON_JAB,
+            MOVE_MEGAHORN,
+            MOVE_ICE_PUNCH
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
+        .species = SPECIES_NIDOQUEEN,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHUCA_BERRY,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_EARTH_POWER,
+            MOVE_SLUDGE_BOMB,
+            MOVE_HELPING_HAND
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0034
