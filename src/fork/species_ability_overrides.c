@@ -81,6 +81,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_VENUSAUR_MEGA, 2,
         ABILITY_GRASSY_SURGE
     },
+    {
+        SPECIES_VENUSAUR_GMAX, 0,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_VENUSAUR_GMAX, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_VENUSAUR_GMAX, 2,
+        ABILITY_GRASSY_SURGE
+    },
     { // 0006
         SPECIES_CHARIZARD, 1,
         ABILITY_FLASH_FIRE

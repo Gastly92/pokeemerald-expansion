@@ -2969,9 +2969,10 @@ complementary-slot re-pointing **deferred** as a focused follow-up, like the ear
 ### ABILITY_BATTERY / ABILITY_POWER_SPOT / ABILITY_TELEPATHY / ABILITY_AROMA_VEIL / ABILITY_FLOWER_VEIL
 
 The **ally-support abilities** — team-oriented, mostly doubles-relevant effects. All five are **1:1
-clean-upside copies** (none ever hurts its holder) and **canon-only** (no flavor picks: these are
-partner/side-support effects with no thematic hook off their canon users). Each is suppression-safe via
-`IsInnateActive()` and none is `breakable`, so Mold Breaker never touches them.
+clean-upside copies** (none ever hurts its holder), and four of the five are **canon-only** (no flavor
+picks: these are partner/side-support effects with no thematic hook off their canon users). **Aroma Veil
+is the one exception** — see its bullet below. Each is suppression-safe via `IsInnateActive()` and none is
+`breakable`, so Mold Breaker never touches them.
 
 - **Battery / Power Spot (partner damage boosters).** Battery boosts the attacker's **special** moves ×1.3, Power
   Spot boosts **all** the attacker's moves ×1.3. Wired in `CalcAttackStat` (`src/battle_util.c`) in the
@@ -3003,9 +3004,14 @@ partner/side-support effects with no thematic hook off their canon users). Each 
     `jumpifability`) like the real ability. Each pop-up site overwrites to Aroma Veil when the protector's chosen
     ability differs (Speed Boost precedent). AI: `AI_CanBeInfatuated`, the `AI_CheckBadMove` Aroma-Veil switch cases
     (via a side-wide pre-check before the switch), and the "don't bait into Encore" read all credit an innate via
-    `AI_IsInnateOnSide`. Canon-only: the **Spritzee / Milcery** (incl. the default **Alcremie** form + **Gmax**) **/
+    `AI_IsInnateOnSide`. Canon: the **Spritzee / Milcery** (incl. the default **Alcremie** form + **Gmax**) **/
     Lechonk** (Oinkologne-F) **/ Dachsbun** lines. (Alcremie's 63 decorative sub-forms are represented by the default
-    form only — the Vivillon-pattern precedent for cosmetic forms sharing one ability.)
+    form only — the Vivillon-pattern precedent for cosmetic forms sharing one ability.) **One flavor pick** — alone
+    among the five ally-support abilities, Aroma Veil *does* have a thematic hook off its canon users, because that
+    family is uniformly *creatures defined by an emitted scent*: **Venusaur** (+ **Mega** / **Gmax**), whose repo dex
+    text reads *"The flower's aroma soothes the emotions of people."* Soothing emotions is precisely this ability's
+    effect — a shield against the mental statuses (infatuation, Taunt, Disable, Encore, Torment, Heal Block). Final
+    stage only: Ivysaur's dex says the bud *"will soon bloom into a large flower,"* so the aroma is not yet its trait.
 
 - **Flower Veil (Grass-ally status + stat-drop shield).** Protects Grass-type allies from non-volatile status **and**
   from stat drops. Wired by making the two existing chokepoints innate-aware: `IsFlowerVeilProtected`

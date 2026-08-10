@@ -56,6 +56,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0003
         SPECIES_VENUSAUR,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_OVERGROW,
@@ -65,6 +66,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0003
         SPECIES_VENUSAUR_MEGA,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_OVERGROW,
@@ -75,6 +77,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0003
         SPECIES_VENUSAUR_GMAX,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_OVERGROW,
