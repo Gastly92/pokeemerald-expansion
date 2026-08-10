@@ -15,6 +15,20 @@
 // still exceed the cap in a turn, which is deliberate counterplay. Fixed-damage moves run
 // through DoFixedDamageMoveCalc() instead and are exempt for the same reason.
 // See fork-docs/NEW_ABILITIES.md.
+//
+// PERFORMANCE -- read this before moving the gate. Because the aura is field-wide, answering
+// "is a Halo up?" means scanning every battler, and ApplyModifiersAfterDmgRoll() sits on the
+// AI's measured hot path: the AI re-runs it FOUR times against the same DamageContext (the
+// min/median/max/random rolls in AI_CalcDamage, src/battle_ai_util.c) and its total thinking
+// time is asserted by test/battle/ai/ai_thinking_time.c. A per-call scan -- even an inlined one
+// that early-outs -- put three of those assertions over budget. So the scan is resolved ONCE
+// per context into the cached ctx->haloOnField bit (set in DoMoveDamageCalcVars beside the
+// existing FORK ctx->innatesEnabled flag, which exists for exactly the same reason), and the
+// hot path pays only a single bitfield test. Do not "simplify" that back into a live scan.
+// Two things that look like optimisations and are NOT: hoisting a `maxHP * PERCENT / 100`
+// pre-check ahead of the scan (the multiply/divide costs more per call than the scan it skips
+// -- measured), and inlining the scan into the header (better than an out-of-line call, but
+// still not enough in doubles, where there are four battlers to walk).
 
 // The most any one hit may take, as a percentage of the target's max HP. 40 is deliberately the
 // same ceiling the fork already applies to (formerly one-hit-KO) OHKO moves via
@@ -27,8 +41,11 @@
 // the holder's effective PP: a 5-PP recovery move maxes out at 8 PP, i.e. 4 uses rather than 8.
 #define HALO_PP_TAX 1
 
-// Clamps `dmg` dealt to `battlerDef` to the Halo cap when any Halo holder is on the field.
-// Returns `dmg` unchanged otherwise. Called from ApplyModifiersAfterDmgRoll().
+// TRUE when a battler with an active (suppression-aware) Halo is on the field. Called once per
+// DamageContext to fill ctx->haloOnField -- never per damage roll; see the performance note.
+bool32 IsHaloOnField(void);
+
+// Clamps `dmg` dealt to `battlerDef` to the Halo cap. Callers must gate on ctx->haloOnField.
 s32 ApplyHaloDamageCap(u32 battlerDef, s32 dmg);
 
 #endif // GUARD_FORK_HALO_H

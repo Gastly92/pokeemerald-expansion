@@ -2451,7 +2451,7 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_HALO] =
     {
         .name = _("Halo"),
-        .description = COMPOUND_STRING("Caps all damage at 40% of HP."),
+        .description = COMPOUND_STRING("Caps all hits at 40% of HP."),
         .aiRating = 6,
     },
 

@@ -8729,6 +8729,7 @@ static inline s32 DoMoveDamageCalcVars(struct DamageContext *ctx)
     // in budget). Every damage path — real combat and the AI's CalculateMoveDamageVars — funnels through here
     // before any modifier function runs, so the flag is always set before it is read.
     ctx->innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES);
+    ctx->haloOnField = IsHaloOnField(); // FORK: resolved once per ctx, not per damage roll (see include/fork/halo.h)
 
     if (ctx->fixedBasePower)
         gBattleMovePower = ctx->fixedBasePower;
@@ -8782,10 +8783,13 @@ s32 ApplyModifiersAfterDmgRoll(struct DamageContext *ctx, s32 dmg)
 
     // FORK: a Halo holder anywhere on the field caps every hit at a fraction of its target's max
     // HP (src/fork/halo.c). Last, so it bounds the fully-modified number. The AI reaches this via
-    // AI_ApplyModifiersAfterDmgRoll(), so its predictions are capped too. On conflict, keep this
+    // AI_ApplyModifiersAfterDmgRoll(), so its predictions are capped too. The gate is the cached
+    // ctx->haloOnField bit rather than a live scan because the AI re-runs this function four
+    // times per ctx and a scan here costs measurably (ai_thinking_time.c). On conflict, keep this
     // clamp at the end of the chain rather than folding it into a modifier -- it is a ceiling,
     // not a multiplier.
-    dmg = ApplyHaloDamageCap(ctx->battlerDef, dmg);
+    if (ctx->haloOnField)
+        dmg = ApplyHaloDamageCap(ctx->battlerDef, dmg);
 
     return dmg;
 }
@@ -8897,6 +8901,7 @@ static inline s32 DoMoveDamageCalc(struct DamageContext *ctx)
     // the cheap cached field rather than calling the non-inline GetConfig() per AI crit prediction (keeps AI
     // thinking time in budget). DoMoveDamageCalcVars re-sets it for the modifier passes below.
     ctx->innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES);
+    ctx->haloOnField = IsHaloOnField(); // FORK: resolved once per ctx, not per damage roll (see include/fork/halo.h)
     ctx->isCrit = IsCriticalHit(ctx);
     return DoMoveDamageCalcVars(ctx);
 }
@@ -8923,6 +8928,7 @@ static inline s32 DoFutureSightAttackDamageCalc(struct DamageContext *ctx)
     ctx->holdEffects[ctx->battlerAtk] = HOLD_EFFECT_NONE;
     ctx->typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(ctx);
     ctx->innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES); // FORK: set before the crit roll (see DoMoveDamageCalc)
+    ctx->haloOnField = IsHaloOnField(); // FORK: resolved once per ctx, not per damage roll (see include/fork/halo.h)
     ctx->isCrit = IsCriticalHit(ctx);
 
     if (ctx->typeEffectivenessModifier == UQ_4_12(0.0))
