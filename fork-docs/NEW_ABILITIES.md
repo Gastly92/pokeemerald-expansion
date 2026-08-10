@@ -11,6 +11,12 @@ The worked example throughout is the **Affinity** family — the fork's first cu
 mechanic — whose first member is **`Psychic Affinity`** (grants a latent Psychic type in
 battle). It's assigned to **Butterfree**.
 
+A second worked example, **`Halo`** (assigned to **Clefable**), is written up in its own
+[case study](#case-study-halo) below. It is worth reading alongside Affinity because it shows
+a different shape of effect: where an Affinity ability changes only its *holder*, Halo is an
+**aura** whose effect applies to every battler on the field, and where Affinity pays for
+itself with a type weakness, Halo pays for itself in **PP**.
+
 ## Design first: is this an ability, or an innate?
 
 Before writing any code, decide which fork mechanism you want — they are **opposites**, and
@@ -185,3 +191,81 @@ It's a data-only change once the machinery exists:
   explicit AI handling to be valued correctly.
 - **Affinity is in-battle only** by design (matches Trick-or-Treat) — the summary screen and
   Pokédex still show the species' normal types.
+
+## Case study: Halo
+
+**`Halo`** (`ABILITY_HALO`, on **Clefable**) is the fork's second custom ability, and it is
+deliberately a different *shape* from Affinity — worth reading as a contrast.
+
+> While a Halo holder is on the field, **no single hit may take more than
+> `HALO_DAMAGE_CAP_PERCENT`% (40) of its target's max HP** — for *every* battler present, foes,
+> allies and the holder alike. The holder alone pays for it: each move it uses costs
+> `HALO_PP_TAX` (1) extra PP.
+
+**It is an aura, not armour.** The cap keys off "is a Halo holder anywhere on the field", not
+"is the target the holder", so it protects the holder's opponents too. This is what makes it
+balanced enough to be interesting: the holder cannot use the cap to win a damage race, because
+its own attacks are bounded by exactly the same ceiling.
+
+**Why 40.** It is the same ceiling the fork already applies to (formerly one-hit-KO) OHKO moves
+via `DETERMINISTIC_OHKO_MAX_HP_PERCENT`, so the number is not new to the engine. It also makes
+the ability legible in one sentence: 40 × 2 < 100 but 40 × 3 > 100, so **a battler under a Halo
+can never be knocked out in fewer than three hits**.
+
+**Why the downside is PP.** A custom ability needs a real cost (see the design note at the top).
+Two constraints picked this one:
+
+- Clefable carries **innate Magic Guard**, so any cost expressed as recoil or chip damage would
+  simply be erased. The cost had to be non-HP.
+- This fork already prices two separate mechanics in PP — `DETERMINISTIC_PARALYSIS_PP_TAX` and
+  the whole `DETERMINISTIC_ACCURACY_EVASION` PP economy — so PP is the fork's established
+  currency for drawbacks rather than a bolted-on one.
+
+At +1 PP the holder's effective PP is halved, which matters most where it should: a Gen-9
+recovery move has 5 base PP (8 with PP Ups), so a Halo'd staller gets **4 heals, not 8**. The
+cap stops it being burst down; the PP tax puts it on a clock.
+
+**One hook each.** The clamp is the last step of `ApplyModifiersAfterDmgRoll()`
+(`src/battle_util.c`), which both the live calc and the AI's simulation
+(`AI_ApplyModifiersAfterDmgRoll`, `src/battle_ai_util.c`) funnel through — so the AI predicts
+capped damage for free, exactly as Affinity gets correct AI type reads for free. The PP tax is
+one clause in the existing `ppToDeduct` accumulator (`src/battle_move_resolution.c`), stacking
+additively with Pressure and the paralysis tax. A switch-in popup + *"A halo appears above
+{mon}!"* (`STRINGID_HALOAPPEARED`, `BattleScript_HaloActivates`) announces it.
+
+**Deliberate exemptions — both are counterplay, not oversights:**
+
+- **Fixed-damage moves** (Seismic Toss, Night Shade, Endeavor, Super Fang, Psywave) run through
+  `DoFixedDamageMoveCalc()` and never reach the clamp.
+- **The cap is per hit, not per turn**, because it lives in the per-hit calc. A multi-hit move
+  (always 3 hits under `DETERMINISTIC_MOVE_RESULTS`, 5 with Skill Link / Loaded Dice) can take
+  several caps' worth in one turn.
+
+**Composition.** Gastro Acid / Neutralizing Gas put the aura out (the holder is resolved via
+`GetBattlerAbility`); the cap is idempotent, so two holders on the field cannot stack it; and
+the aura ends when the holder leaves the field, like Cloud Nine or Fairy Aura.
+
+**Assignment: Mega Clefable only** — **all three** `SPECIES_CLEFABLE_MEGA` slots. Base Clefable
+is untouched and keeps its slot-1 Magic Bounce override.
+
+This is worth understanding, because it is a pattern future abilities can reuse. Factory sets
+are authored on the *base* species, so a Clefable set selects Magic Bounce (its only real,
+non-innate slot — slots 0 and 2 are Cute Charm and Unaware, both innates, and a set may not
+name an ability the species already has innately). On Mega Evolving, `abilityNum` is preserved
+and re-resolved against the new species (`CopyMonAbilityAndTypesToBattleMon`), so whichever
+slot the set picked lands on Halo — which is why **all three** Mega slots carry it. Nothing is
+lost in the swap either: Magic Bounce is an *innate* on the Mega form, so a transformed
+Clefable keeps it while gaining Halo as its chosen ability.
+
+The trade-off is deliberate. Halo is **upside on transformation** rather than a turn-one trait,
+and under `FEATURE_FREE_GIMMICKS` a given mon often will not Mega (see the free-gimmicks note in
+[`LINE_REVIEW.md`](LINE_REVIEW.md)). That is the cost of keeping the base form's identity
+intact; in exchange the aura reads as something the creature *ascends* into. Note this is not
+the same failure mode as an ability that is inert for a given moveset — when Halo does come up
+it works regardless of what the set is holding or clicking.
+
+Covered by `test/battle/ability/halo.c`.
+
+**Halo is a shared ability, not a family** — it takes no parameter, so other gentle/"cute"
+species (Togekiss, Comfey, Blissey, Audino, Sylveon, Alcremie, the Jigglypuff line) can simply
+be given the same ability rather than a variant of it.

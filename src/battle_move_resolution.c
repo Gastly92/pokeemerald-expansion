@@ -15,6 +15,7 @@
 #include "battle_controllers.h"
 #include "move.h"
 #include "constants/battle_move_resolution.h"
+#include "fork/halo.h" // FORK: Halo (the holder's per-move PP upkeep)
 
 static void ValidateBattlers(void);
 static enum Move GetOriginallyUsedMove(enum Move chosenMove);
@@ -1109,6 +1110,12 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         && !BattlerHasAbility(cv->battlerAtk, ABILITY_QUICK_FEET) // FORK: innate Quick Feet is exempt from the para PP tax, like the real ability
         && GetConfig(DETERMINISTIC_PARALYSIS))
         ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
+
+    // FORK: Halo's holder pays the upkeep of the field-wide damage cap it projects -- every move
+    // it uses costs HALO_PP_TAX extra PP, stacking additively with Pressure and the paralysis tax
+    // above. See include/fork/halo.h.
+    if (cv->abilities[cv->battlerAtk] == ABILITY_HALO)
+        ppToDeduct += HALO_PP_TAX;
 
     // FORK: DETERMINISTIC_ACCURACY_EVASION turns accuracy/evasion into a PP economy.
     // For a move that targets opposing mon(s), the net accuracy/evasion stage advantage

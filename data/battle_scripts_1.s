@@ -5147,6 +5147,13 @@ BattleScript_TypeAffinityActivates::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: Halo ability -- announces the field-wide damage-cap aura on switch-in.
+BattleScript_HaloActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_HALOAPPEARED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_ActivateAsOne::
 	call BattleScript_AbilityPopUp
 	printfromtable gSwitchInAbilityStringIds

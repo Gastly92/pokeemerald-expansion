@@ -179,15 +179,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     {
         SPECIES_CLEFABLE_MEGA, 0,
-        ABILITY_PIXILATE
+        ABILITY_HALO
     },
     {
         SPECIES_CLEFABLE_MEGA, 1,
-        ABILITY_PIXILATE
+        ABILITY_HALO
     },
     {
         SPECIES_CLEFABLE_MEGA, 2,
-        ABILITY_PIXILATE
+        ABILITY_HALO
     },
     { // 0040
         // Wigglytuff: all real abilities now innate, so its innate-redundant slot-0 Cute Charm takes a chosen

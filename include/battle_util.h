@@ -133,7 +133,8 @@ struct DamageContext
     u32 abilityBlocked:1;
     u32 runScript:1;  // Used during actual combat where scripts have to be run / flags need to be set
     u32 innatesEnabled:1; // FORK: cached GetConfig(FEATURE_INNATE_ABILITIES), set once in DoMoveDamageCalcVars
-    u32 padding:21;
+    u32 haloOnField:1; // FORK: cached "a Halo holder is on the field", set once in DoMoveDamageCalcVars (see include/fork/halo.h)
+    u32 padding:20;
 };
 
 // Helper struct to keep the arg list small and prevent constant recalculations of abilities/hold effects.
