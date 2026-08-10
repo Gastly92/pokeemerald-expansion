@@ -605,7 +605,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0028
     {
         .species = SPECIES_SANDSLASH,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
@@ -625,7 +625,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_SANDSLASH,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_RAZOR_CLAW,
         .moves =
         {
