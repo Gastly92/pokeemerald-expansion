@@ -132,7 +132,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_LEECH_SEED,
             MOVE_STRENGTH_SAP,
-            MOVE_SYNTHESIS
+            MOVE_GIGA_DRAIN
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
@@ -161,7 +161,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252,
             .spd = 4
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_WATER,
     },
 
     // 0006
