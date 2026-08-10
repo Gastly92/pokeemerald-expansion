@@ -621,7 +621,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_ROCK,
     },
     {
         .species = SPECIES_SANDSLASH_ALOLA,
@@ -641,7 +641,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_GHOST,
     },
 
     // 0031
