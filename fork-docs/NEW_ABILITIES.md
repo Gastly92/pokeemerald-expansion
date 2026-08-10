@@ -245,11 +245,26 @@ additively with Pressure and the paralysis tax. A switch-in popup + *"A halo app
 `GetBattlerAbility`); the cap is idempotent, so two holders on the field cannot stack it; and
 the aura ends when the holder leaves the field, like Cloud Nine or Fairy Aura.
 
-**Assignment.** Base Clefable slot 0 and **all three** `SPECIES_CLEFABLE_MEGA` slots — the same
-paired-row requirement as Butterfree/G-Max, since a form change re-resolves the ability from
-`abilityNum` against the new species. Clefable's Cute Charm is unaffected: it was slot 0's real
-ability but is also an innate, so it stays live in play. Its doubles redirector set in
-`frontier_extended_mons.c` selects Halo. Covered by `test/battle/ability/halo.c`.
+**Assignment: Mega Clefable only** — **all three** `SPECIES_CLEFABLE_MEGA` slots. Base Clefable
+is untouched and keeps its slot-1 Magic Bounce override.
+
+This is worth understanding, because it is a pattern future abilities can reuse. Factory sets
+are authored on the *base* species, so a Clefable set selects Magic Bounce (its only real,
+non-innate slot — slots 0 and 2 are Cute Charm and Unaware, both innates, and a set may not
+name an ability the species already has innately). On Mega Evolving, `abilityNum` is preserved
+and re-resolved against the new species (`CopyMonAbilityAndTypesToBattleMon`), so whichever
+slot the set picked lands on Halo — which is why **all three** Mega slots carry it. Nothing is
+lost in the swap either: Magic Bounce is an *innate* on the Mega form, so a transformed
+Clefable keeps it while gaining Halo as its chosen ability.
+
+The trade-off is deliberate. Halo is **upside on transformation** rather than a turn-one trait,
+and under `FEATURE_FREE_GIMMICKS` a given mon often will not Mega (see the free-gimmicks note in
+[`LINE_REVIEW.md`](LINE_REVIEW.md)). That is the cost of keeping the base form's identity
+intact; in exchange the aura reads as something the creature *ascends* into. Note this is not
+the same failure mode as an ability that is inert for a given moveset — when Halo does come up
+it works regardless of what the set is holding or clicking.
+
+Covered by `test/battle/ability/halo.c`.
 
 **Halo is a shared ability, not a family** — it takes no parameter, so other gentle/"cute"
 species (Togekiss, Comfey, Blissey, Audino, Sylveon, Alcremie, the Jigglypuff line) can simply

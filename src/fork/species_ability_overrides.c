@@ -170,10 +170,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0036
-        SPECIES_CLEFABLE, 0,
-        ABILITY_HALO
-    },
-    {
         SPECIES_CLEFABLE, 1,
         ABILITY_MAGIC_BOUNCE
     },
