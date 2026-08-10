@@ -732,7 +732,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FAIRY_FEATHER,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_MOONBLAST,
