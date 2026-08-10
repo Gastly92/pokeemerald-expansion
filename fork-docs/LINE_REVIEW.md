@@ -150,6 +150,29 @@ For each species/form in the line:
    the wider series (Charmander's "steam spouts when it rains" line is *not* in this
    repo, so a Magma Armor pitch resting on it has no support here). Read the field
    before citing it.
+
+   **Wider media ARE legitimate flavor evidence — the anime, the movies, the manga,
+   the spin-offs.** The rule directly above governs *dex text* (don't pass remembered
+   flavor off as this repo's `.description`); it is not a rule that the games are the
+   only admissible source. A `.description` is four lines and frequently says nothing
+   an ability can be built on, whereas what a creature is shown *doing* on screen is
+   often the sharper evidence — and it is fair to rest a pick on it. Worked example
+   from the Ninetales pass: the repo dex gives only *"each of the nine tails embody an
+   enchanted power,"* which is thin support for anything. Its anime episode is
+   *entirely* a Ninetales sealing a mansion so the cast physically cannot leave, plus
+   the tail-curse enacted on a character who grabs its tails — which is a far better
+   case for Shadow Tag and Cursed Body than the dex line could ever carry alone. Two
+   conditions on using it:
+   - **Name the medium and flag that it is recall.** The repo cannot confirm it, so
+     say so plainly rather than presenting it with the same confidence as a quoted
+     `.description`. Being wrong about an episode is fine; being wrong *silently* is
+     what corrupts the evidence base.
+   - **Cite a specific action, not a vibe.** "It traps the cast inside a mansion for
+     the whole episode" is evidence. "I think it's mysterious in the anime" is not,
+     and neither is a half-remembered episode title with no scene attached.
+
+   The canon-user count (above) is still the gate. Media evidence tells you *which*
+   ability expresses the creature; it never licenses a 1-user signature.
 3. **Keep the line consistent by default, but differentiate by form when
    morphology/temperament justifies it.** The three base rows usually carry the
    *same* list — but they need not be identical: a wingless pre-evo shouldn't
@@ -241,7 +264,17 @@ line:
    one, and *still* shows Grassy Surge — now with Thick Fat live on top. (Contrast
    point 3: that's about not handing a *base* form its Mega's ability; this is
    handing the *Mega* the base's ability so the observable trait carries over.)
-5. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
+5. **Pre-evolutions don't need an override row.** An override earns its keep by
+   letting a *Factory set* run a real second trait alongside the innates — so a
+   species with no sets has nothing to spend it on, and a row there is dead data.
+   Give the row to the stage that actually gets drafted (normally the final one,
+   plus any regional/Mega form that is its own final stage) and leave the pre-evos
+   alone. The exception follows Step 3's: a pre-evo that *does* carry sets (the
+   Eviolite walls) is treated as a final stage for this purpose.
+   Note the asymmetry with Step 1 — **innates still cover the whole line**, because
+   an innate is always-on identity that a Vulpix has whether or not anything drafts
+   it, while an override only exists to be selected by a set.
+6. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
    `// <dex>` comment; forms share the base number and follow it.
 
 **Verify:** `make check TESTS="Frontier extended roster"` — three tests enforce the
@@ -289,8 +322,10 @@ to say "this species only has about six usable moves," that sentence is proof th
 gate is on, not evidence about the species.
 
 **Generate from the creature, not from its moveset.** Read the dex `.description`
-and the design, ask *what does this thing actually do*, and only then go looking for
-moves that match — including **other species' signature moves**, which are usually
+and the design — and the wider media, per Step 1's rule on the anime/movies/manga,
+which pays off even better here than it does for abilities, since a move only has to
+depict one thing the creature is shown doing — ask *what does this thing actually
+do*, and only then go looking for moves that match — including **other species' signature moves**, which are usually
 the best-written expression of a concept and are fully fair game here (the
 signature/canon-user gate belongs to Step 1, and applies to abilities only). Worked
 examples from the Beedrill pass: its dex says *"if angered, they will attack in a
@@ -405,6 +440,20 @@ than one whose existing set is about to be rewritten.
    that is genuinely as good as what is there. Adding one to hit a number is
    padding — the same reasoning as the "don't pad to a number" rule for innates in
    Step 1.
+
+   **Pre-evolutions don't get sets.** The "would you actually draft this" bar above,
+   applied to a whole stage: a Vulpix or an Ivysaur set is drafted into the same team
+   slot as fully-evolved mons and simply loses, so building one adds a draw nobody
+   wants. The two-sets-per-species bar means **per species that gets sets at all** —
+   it is not an instruction to give the base stage a pool. Spend the line's budget on
+   the final stage and on any regional/Mega form that is its own final stage.
+
+   The roster already works this way and is worth checking against: of **642 species
+   with sets, the only non-final stages are Chansey, Porygon2 and Dusclops** — and
+   all four of those sets hold **Eviolite**, which is the entire reason they qualify.
+   That is the exception in full: a pre-evo gets sets when Eviolite (or a comparable
+   niche) makes it genuinely better at something than its evolution. If you cannot
+   name what it beats its evolution at, it does not get a set.
 3. **Cover both battle formats across the line's sets.** Every set is tagged
    `FORMAT_SINGLES`, `FORMAT_DOUBLES`, or `FORMAT_BOTH` (see the `.tags` field in
    point 7), and the Factory

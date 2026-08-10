@@ -57,11 +57,30 @@ welcome but not required.
   birds and sharp-eyed watchers). Never reverse-engineer flavor from mechanics — a
   dex line sharing a *word* isn't grounding ("blazes when enraged" is a mood
   indicator, not Berserk). Quote `.description` from the repo, never recalled flavor.
+- **Wider media are fair flavor evidence — anime, movies, manga, spin-offs.** The
+  dex-text rule above is about not passing recalled flavor off as the repo's
+  `.description`; it does not make the games the only source. A four-line dex often
+  supports nothing, while what a creature is shown *doing* on screen is sharper
+  evidence (Ninetales' anime episode is entirely about it sealing a mansion so nobody
+  can leave, plus the tail-curse — a far better case for Shadow Tag and Cursed Body
+  than its dex line). Two conditions: **name the medium and flag that it is recall**
+  the repo can't confirm, and **cite a specific action, not a vibe**. The canon-user
+  count is still the gate — media evidence picks *which* ability fits, and never
+  licenses a 1-user signature.
 - **Overrides:** the chosen ability must **not** duplicate a species innate and
   must be a *stable* pick (`:x:` never-an-innate in
   `fork-docs/INNATE_ABILITIES_PROGRESS.md`, or an implemented innate the species
   doesn't carry). Only repurpose a *real* slot that's redundant and not
   test-pinned; filling an empty slot is always safe.
+- **Pre-evolutions get no override rows and no frontier sets.** An override exists
+  to be selected by a set, and a pre-evo set is drafted against fully-evolved mons
+  and loses — so both are dead data on a Vulpix or an Ivysaur. Spend them on the
+  final stage plus any regional/Mega form that is its own final stage. The roster
+  agrees: of 642 species with sets, the only non-final stages are **Chansey,
+  Porygon2 and Dusclops, all on Eviolite** — that niche is the whole exception, so
+  if you can't name what a pre-evo beats its evolution at, it gets nothing.
+  **Innates are the opposite and still cover the whole line** — an innate is
+  always-on identity a pre-evo carries whether or not anything drafts it.
 - **Megas whose ability is an innate:** when a Mega's own ability is an
   implemented innate, give the Mega that ability as an *innate* (Step 1) and
   override *every* real slot of the Mega form to the **base form's** chosen
@@ -92,8 +111,8 @@ welcome but not required.
   freely including **other species' signature moves**. If you're about to conclude a
   species "has a narrow kit," that is the gate talking; every move in the game is
   available to every set.
-  Aim for **at least 2 quality sets per species**, each filling a different niche —
-  a bar, not a quota. More is welcome when each set earns its place; two excellent
+  Aim for **at least 2 quality sets per species that gets sets at all** (see the
+  pre-evolution rule above), each filling a different niche — a bar, not a quota. More is welcome when each set earns its place; two excellent
   sets beat five where three are filler. **Cover both formats** across the line's sets
   (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
   redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
