@@ -315,6 +315,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0026
         SPECIES_RAICHU_ALOLA,
         INNATES(
+            ABILITY_LEVITATE,
             ABILITY_SURGE_SURFER
         )
     },
