@@ -111,7 +111,7 @@
 //   innate-aware at the BS_TryActivateSoulheart native command). Pop-up overwritten to the innate; Moxie's two
 //   AI reads are innate-aware, Berserk/Soul-Heart need none. Completes Batch M),
 //   BATTERY / POWER_SPOT / TELEPATHY / AROMA_VEIL / FLOWER_VEIL (ally-support, Batch U — all 1:1 clean-upside
-//   copies, canon-only except Aroma Veil's one Venusaur-line flavor pick: Battery / Power Spot boost an ally's
+//   copies; canon users plus Aroma Veil's one Venusaur-line flavor pick: Battery / Power Spot boost an ally's
 //   (special / all) moves +30% (calc modifiers beside
 //   partner Steely Spirit, AI-free); Telepathy nullifies an ally's damaging move (type-eff calc); Aroma Veil
 //   shields the side from mental status — infatuation / Taunt / Disable / Encore / Torment / Heal Block — wired via
@@ -120,7 +120,7 @@
 //   drops (IsFlowerVeilProtected / StatChange_IsFlowerVeilProtected made innate-aware). Pop-up overwritten to the
 //   innate; the dedicated AI side reads are innate-aware via AI_IsInnateOnSide. Completes Batch U),
 //   CHILLING_NEIGH / GRIM_NEIGH / ELECTROMORPHOSIS (promoted-from-rejected clones, Batch Y sub-group Y1 — all
-//   1:1 clean-upside copies, canon-only: Chilling Neigh / Grim Neigh raise the holder's Attack / Sp. Atk +1 per
+//   1:1 clean-upside copies, canon only so far: Chilling Neigh / Grim Neigh raise the holder's Attack / Sp. Atk +1 per
 //   foe it KOs — Moxie clones, one-line additions to the attacker-side on-hit driver reusing the shared
 //   ABILITYEFFECT_MOVE_END_FOES_FAINTED case; Electromorphosis charges the next Electric move when hit by any
 //   damaging move — a Wind Power clone minus the wind gate, a one-line addition to the target-side on-hit driver
@@ -128,13 +128,13 @@
 //   IsMoxieTypeInnateActive(); Electromorphosis needs no AI wiring. Sole-ability legends Glastrier / Spectrier
 //   take the innate + a fork override; Bellibolt (Static/Damp) leaves it observable),
 //   TRANSISTOR / DRAGONS_MAW (promoted-from-rejected clones, Batch Y sub-group Y2 — both 1:1 clean-upside
-//   copies, canon-only: flat type-power-booster clones of Steelworker / Rocky Payload (Batch A) wired as two
+//   copies, canon only so far: flat type-power-booster clones of Steelworker / Rocky Payload (Batch A) wired as two
 //   lines in CalcAttackStat — Transistor boosts the holder's Electric moves (x1.3 GEN_9+, else x1.5), Dragon's
 //   Maw its Dragon moves x1.5. AI-free (shared damage calc). Sole-ability Regi legends: Transistor -> Regieleki,
 //   Dragon's Maw -> Regidrago, each taking the innate + a fork chosen override (Lightning Rod / Adaptability) so
 //   the innate is observable and the frontier set is freed),
 //   PRISM_ARMOR / SHADOW_SHIELD / NEUROFORCE / SUPREME_OVERLORD (Batch Y3 — damage/power calc clones, all 1:1
-//   clean-upside copies, canon-only): Prism Armor (Necrozma / Dusk-Mane / Dawn-Wings) rides Filter / Solid
+//   clean-upside copies, canon only so far): Prism Armor (Necrozma / Dusk-Mane / Dawn-Wings) rides Filter / Solid
 //   Rock's -25%-vs-supereffective clause, Shadow Shield (Lunala) rides Multiscale's halve-at-full-HP clause
 //   (both in GetDefenderAbilitiesModifier), Neuroforce (Necrozma-Ultra) is the offensive mirror of Tinted Lens
 //   (+25% to supereffective hits in GetAttackerAbilitiesModifier), and Supreme Overlord (Kingambit) boosts move
@@ -144,27 +144,27 @@
 //   Necrozma forms / Lunala take the innate + a fork chosen Adaptability override (observable + frontier set
 //   freed); Kingambit's Supreme Overlord joins its Defiant / Pressure innates and its sets choose Defiant),
 //   FULL_METAL_BODY / MINDS_EYE (Batch Y4 — stat-drop / accuracy / hit-trait clones, both 1:1 clean-upside
-//   copies, canon-only): Full Metal Body (Solgaleo) is the UNBREAKABLE clone of Clear Body — same full
+//   copies, canon only so far): Full Metal Body (Solgaleo) is the UNBREAKABLE clone of Clear Body — same full
 //   stat-drop protection (GetInnateStatDropProtector / IsAbilityBlocked + the AI reads), but its
 //   .breakable = FALSE means Mold Breaker can't pierce it (for free via IsInnateActive). Mind's Eye
 //   (Ursaluna-Bloodmoon) combines Keen Eye (ignore the target's evasion + own accuracy can't be lowered)
 //   and Scrappy (Normal/Fighting hit Ghosts), with no Intimidate immunity. Both are sole-ability frontier
 //   sets, so they take the innate + a fork chosen override (Solgaleo -> Tough Claws, Ursaluna-Bloodmoon ->
 //   Unaware) so the innate is observable + the frontier set freed,
-//   PURIFYING_SALT / GOOD_AS_GOLD (Batch Y5 — status immunities, both 1:1 clean-upside copies, canon-only):
+//   PURIFYING_SALT / GOOD_AS_GOLD (Batch Y5 — status immunities, both 1:1 clean-upside copies, canon only so far):
 //   Purifying Salt (the Nacli / Naclstack / Garganacl line) makes the holder immune to every non-volatile status
 //   (its own Rest still works) and halves incoming Ghost damage; Good as Gold (Gholdengo) blocks incoming status
 //   moves. Both breakable (Mold Breaker pierces, for free via IsInnateActive). Good as Gold is VERY strong (blanket
-//   status-move immunity) — a deliberate power divergence kept canon-only. Gholdengo takes the innate + a fork
+//   status-move immunity) — a deliberate power divergence kept canon only so far. Gholdengo takes the innate + a fork
 //   chosen Sticky Hold override so the innate is observable + the frontier set freed,
-//   INTREPID_SWORD / DAUNTLESS_SHIELD (Batch Y6 — switch-in stat boosts, both 1:1 clean-upside copies, canon-only):
+//   INTREPID_SWORD / DAUNTLESS_SHIELD (Batch Y6 — switch-in stat boosts, both 1:1 clean-upside copies, canon only so far):
 //   the first time the holder enters battle, Intrepid Sword (Zacian / Zacian-Crowned) raises its Attack and
 //   Dauntless Shield (Zamazenta / Zamazenta-Crowned) raises its Defense by 1 stage (the real once-per-battle latch
 //   matched via the party-state boost flag). Both ride the Batch L switch-in driver and neither is breakable. All
 //   four are sole-ability frontier sets, so each takes the innate + a fork chosen override (Zacian -> Tough Claws,
 //   Zamazenta -> Filter) so the innate is observable + the frontier set freed,
 //   BEAST_BOOST (Batch Y7 — on-KO best-stat boost, a 1:1 clean-upside copy of Moxie's best-stat edition,
-//   canon-only): when the holder KOs a foe, its HIGHEST stat rises +1 stage. It rides the same attacker-side on-hit
+//   canon only so far): when the holder KOs a foe, its HIGHEST stat rises +1 stage. It rides the same attacker-side on-hit
 //   driver as Moxie / Chilling Neigh / Grim Neigh (the upstream ABILITYEFFECT_MOVE_END_FOES_FAINTED case already
 //   reads GetHighestStatId for it) and is one of the Moxie-type abilities the AI reasons about (innate credited via
 //   IsMoxieTypeInnateActive). Not breakable. Every canon user is a sole-Beast-Boost Ultra Beast, so the ten
@@ -185,14 +185,14 @@
 //   unpredictable, so the AI models it only under the deterministic config, as in stock). Canon carrier: Galarian
 //   Slowbro (its primary ability); the Galarian Farfetch'd -> Sirfetch'd duelist line takes it as a tight, observable
 //   flavor pick,
-//   COMATOSE (Tier 5.3 — a PURE-BOON divergence, canon-only): the holder is immune to every non-volatile status and
+//   COMATOSE (Tier 5.3 — a PURE-BOON divergence, canon only so far): the holder is immune to every non-volatile status and
 //   counts as asleep for its own Snore / Sleep Talk, but — unlike the real ability — is NOT treated as asleep at the
 //   COST sites (enemy Hex / Dream Eater / Nightmare / Bad Dreams, and its own Rest block are all left chosen-only), so
 //   the always-asleep trait only ever helps it. Status immunity rides the catch-all status block in
 //   CanSetNonVolatileStatus (so the AI's CanBe* status reads are innate-aware for free); cantBeSuppressed, so Gastro
-//   Acid / Neutralizing Gas / Mold Breaker never touch it. Canon-only: Komala takes it beside its innate Unaware, plus a
+//   Acid / Neutralizing Gas / Mold Breaker never touch it. Canon only so far: Komala takes it beside its innate Unaware, plus a
 //   fork chosen Sticky Hold override so both innates are observable and the frontier set is freed,
-//   MAGIC_GUARD (Tier 5.4 — a 1:1 clean-upside copy, canon-only): the holder takes damage only from direct attacks,
+//   MAGIC_GUARD (Tier 5.4 — a 1:1 clean-upside copy, canon only so far): the holder takes damage only from direct attacks,
 //   sparing it every indirect/chip source (sandstorm & hail, poison/burn, Leech Seed, Curse, Nightmare, binding moves,
 //   entry hazards, recoil/crash, Life Orb, the Sticky-Barb/Black-Sludge item chip, Rough Skin/Iron Barbs/Rocky-Helmet
 //   contact recoil). A cross-cutting sweep with no new machinery: every chip site was made innate-aware, most via the new
@@ -206,14 +206,14 @@
 //   only (ability-ignoring is strong offensive utility): the Pinsir, Cranidos, Drilbur, Basculin/Basculegion, Axew,
 //   Pancham, Tinkatink lines, Throh, Sawk, Druddigon, Hawlucha, Veluza and Ogerpon-Hearthflame (Megas whose own
 //   ability is already Mold Breaker are omitted as redundant); Teravolt / Turboblaze clones follow in Batch Y8.
-//   TERAVOLT / TURBOBLAZE (Batch Y8 — Mold Breaker clones, both 1:1 clean-upside copies, canon-only): the holder's
+//   TERAVOLT / TURBOBLAZE (Batch Y8 — Mold Breaker clones, both 1:1 clean-upside copies, canon only so far): the holder's
 //   moves ignore the target's breakable ability, exactly like Mold Breaker. They share Mold Breaker's single
 //   machinery — two more IsInnateActive clauses in IsMoldBreakerTypeAbility (src/battle_util.c) made every effect
 //   site and AI read innate-aware for free. Not breakable; suppressible by Gastro Acid / Neutralizing Gas. Every
 //   canon carrier is a sole-ability frontier legend, so each takes the innate + a fork chosen override so the innate
 //   is observable + the frontier set freed: Turboblaze -> Reshiram + Kyurem-White (chosen Flash Fire), Teravolt ->
 //   Zekrom + Kyurem-Black (chosen Motor Drive).
-//   OPPORTUNIST (Tier 5.6 — a 1:1 clean-upside copy, canon-only): whenever an opposing battler's stat is boosted, the
+//   OPPORTUNIST (Tier 5.6 — a 1:1 clean-upside copy, canon only so far): whenever an opposing battler's stat is boosted, the
 //   holder copies that exact boost onto itself (the ability twin of the Mirror Herb item). Wired at the two sites the
 //   real ability uses — the watch hook in ChangeStatBuffs (src/battle_stat_change.c) and the ABILITYEFFECT_OPPORTUNIST
 //   effect site (src/battle_util.c), the latter made innate-aware because its three callers pass the chosen slot — with
@@ -222,7 +222,7 @@
 //   Espathra (its primary ability), joining its innate Frisk / Speed Boost; Opportunist stays observable as its natural
 //   chosen slot (no override needed). Step 3.5: all three of its abilities are now innate with no free slot, so both
 //   frontier sets keep the now-redundant chosen Opportunist and freeing is deferred to Batch W (Mold Breaker precedent).
-//   MIRROR_ARMOR (Tier 5.7 — a 1:1 clean-upside copy, canon-only): instead of being affected by a stat-lowering
+//   MIRROR_ARMOR (Tier 5.7 — a 1:1 clean-upside copy, canon only so far): instead of being affected by a stat-lowering
 //   effect, the holder bounces it back at the battler that caused it (the reactive twin of Opportunist). Shares the
 //   stat-change plumbing, so it needed no new hook — only crediting the innate at IsMirrorArmorReflected
 //   (src/battle_stat_change.c), the pending-flag setter StatChangeMirrorArmor (src/battle_move_resolution.c) and the
@@ -231,7 +231,7 @@
 //   Breaker pierces). The AI's don't-Intimidate-switch-into-Mirror-Armor read is innate-aware. Sole carrier:
 //   Corviknight (+ Gmax, its hidden ability), joining its innate Pressure / Unnerve; Step 3.5 (all three abilities
 //   now innate, no free slot) keeps its now-redundant chosen Mirror Armor and defers freeing to Batch W.
-//   MAGIC_BOUNCE (Tier 5.8 — a 1:1 clean-upside copy, canon-only): the holder reflects a bounceable status move
+//   MAGIC_BOUNCE (Tier 5.8 — a 1:1 clean-upside copy, canon only so far): the holder reflects a bounceable status move
 //   (Toxic, Thunder Wave, Taunt, entry hazards, ...) back at the user — the whole-move analogue of Mirror Armor.
 //   Reuses the upstream bounce machinery, so it needed no new hook — only crediting the innate at TryMagicBounce
 //   (src/battle_move_resolution.c) with the pop-up/record overwritten to Magic Bounce when the chosen ability
