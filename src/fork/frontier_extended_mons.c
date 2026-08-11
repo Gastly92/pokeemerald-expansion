@@ -1016,7 +1016,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulky fairy
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -1036,7 +1036,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Doubles support
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_DAZZLING_GLEAM,
