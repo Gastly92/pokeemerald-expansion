@@ -92,7 +92,9 @@ welcome but not required.
   set field by field: **Tera type** (what is it *for*? — a tactical immunity beats
   doubling an existing type, and it must match the item/ability/moves, because
   Terastallizing overwrites all three type slots and e.g. flips Black Sludge from
-  healing to chip damage on a non-Poison Tera), **moves** (each earning its slot),
+  healing to chip damage on a non-Poison Tera — but **not** STAB, which takes its
+  own `GetTeraMultiplier` path off the base types and is never lost),
+  **moves** (each earning its slot),
   **item** (still doing anything under `BUFF_*` / `DETERMINISTIC_HOLD_EFFECTS`),
   **nature/EVs/IVs** (spread matches what the set does; note
   `TRAINER_PARTY_IVS` takes **Speed 4th**, unlike `EVS()`'s named fields),

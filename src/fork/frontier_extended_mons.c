@@ -1016,15 +1016,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulky fairy
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HYPER_VOICE,
             MOVE_DAZZLING_GLEAM,
-            MOVE_ICE_BEAM,
+            MOVE_MOONLIGHT,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_SWEET_VEIL, // all real abilities innate; chosen Sweet Veil (non-redundant)
+        .ability = ABILITY_HALO,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1036,29 +1036,29 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Doubles support
+        .heldItem = ITEM_COVERT_CLOAK,
         .moves =
         {
-            MOVE_DAZZLING_GLEAM,
-            MOVE_HELPING_HAND,
-            MOVE_THUNDER_WAVE,
-            MOVE_PROTECT
+            MOVE_FOLLOW_ME,
+            MOVE_SING,
+            MOVE_MOONLIGHT,
+            MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_SWEET_VEIL, // all real abilities innate; chosen Sweet Veil (non-redundant)
-        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ability = ABILITY_HALO,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 4,
-            .spa = 252
+            .def = 252,
+            .spa = 4
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_STEEL,
     },
 
     // 0045
     {
         .species = SPECIES_VILEPLUME,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // boosts Sludge Bomb chip
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -1066,7 +1066,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONBLAST
         },
-        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (redundant deterministic sleep vs Sleep Powder); sun Sp.Atk w/ innate Chlorophyll
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1078,29 +1078,49 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VILEPLUME,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-proof Chlorophyll
+        .heldItem = ITEM_BIG_ROOT,
         .moves =
         {
+            MOVE_LEECH_SEED,
+            MOVE_STRENGTH_SAP,
             MOVE_GIGA_DRAIN,
-            MOVE_SLUDGE_BOMB,
-            MOVE_MOONBLAST,
-            MOVE_SLEEP_POWDER
+            MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (redundant deterministic sleep vs Sleep Powder); sun Sp.Atk w/ innate Chlorophyll
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ability = ABILITY_EFFECT_SPORE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
-            .def = 4,
-            .spa = 252,
-            .spe = 252
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_VILEPLUME,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_RAGE_POWDER,
+            MOVE_POLLEN_PUFF,
+            MOVE_GIGA_DRAIN,
+            MOVE_SLUDGE_BOMB
+        },
+        .ability = ABILITY_EFFECT_SPORE,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0047
     {
         .species = SPECIES_PARASECT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Spore disabler
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_SPORE,
@@ -1108,7 +1128,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_DRY_SKIN, // moved off Effect Spore (redundant deterministic sleep vs Spore); real slot, fungus flavor
+        .ability = ABILITY_DRY_SKIN,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1120,11 +1140,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PARASECT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FIGY_BERRY, // Dry Skin sweeper
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_SPORE,
-            MOVE_GIGA_DRAIN,
+            MOVE_SEED_BOMB,
             MOVE_LEECH_LIFE,
             MOVE_SWORDS_DANCE
         },
@@ -1136,6 +1156,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_BUG,
+    },
+    {
+        .species = SPECIES_PARASECT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BIG_ROOT,
+        .moves =
+        {
+            MOVE_SPORE,
+            MOVE_RAGE_POWDER,
+            MOVE_LEECH_SEED,
+            MOVE_SEED_BOMB
+        },
+        .ability = ABILITY_DRY_SKIN,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0049
@@ -4799,6 +4839,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_BELLOSSOM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BEAM,
+            MOVE_WEATHER_BALL,
+            MOVE_POLLEN_PUFF
+        },
+        .ability = ABILITY_SOLAR_POWER,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIRE,
     },
 
     // 0184
