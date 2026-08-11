@@ -448,6 +448,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STENCH
         )
     },
+    { // 0046
+        SPECIES_PARAS,
+        INNATES(
+            ABILITY_POISON_HEAL,
+            ABILITY_REGENERATOR
+        )
+    },
+    { // 0047
+        SPECIES_PARASECT,
+        INNATES(
+            ABILITY_POISON_HEAL,
+            ABILITY_REGENERATOR
+        )
+    },
     { // 0048
         SPECIES_VENONAT,
         INNATES(
