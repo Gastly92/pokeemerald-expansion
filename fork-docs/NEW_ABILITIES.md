@@ -245,8 +245,16 @@ additively with Pressure and the paralysis tax. A switch-in popup + *"A halo app
 `GetBattlerAbility`); the cap is idempotent, so two holders on the field cannot stack it; and
 the aura ends when the holder leaves the field, like Cloud Nine or Fairy Aura.
 
-**Assignment: Mega Clefable only** — **all three** `SPECIES_CLEFABLE_MEGA` slots. Base Clefable
-is untouched and keeps its slot-1 Magic Bounce override.
+**Assignment: Mega Clefable and Wigglytuff.** Mega Clefable takes it on **all three**
+`SPECIES_CLEFABLE_MEGA` slots (base Clefable is untouched and keeps its slot-1 Magic Bounce
+override); **Wigglytuff** takes it on slot 0 alone, replacing a redundant Cute Charm.
+
+The two are deliberately different shapes, and the contrast is the thing to understand. Mega
+Clefable needs all three slots because of the transformation mechanic below; Wigglytuff has no
+Mega, so one slot is enough and its Factory sets name Halo directly. That also makes Wigglytuff
+the **first unconditional Halo** — Mega Clefable must win the one-gimmick-per-trainer slot to
+get its aura, while Wigglytuff has it from turn one of every battle — and the first roster set
+anywhere to actually select the ability. Weigh that before adding a third non-Mega holder.
 
 This is worth understanding, because it is a pattern future abilities can reuse. Factory sets
 are authored on the *base* species, so a Clefable set selects Magic Bounce (its only real,
@@ -257,7 +265,8 @@ slot the set picked lands on Halo — which is why **all three** Mega slots carr
 lost in the swap either: Magic Bounce is an *innate* on the Mega form, so a transformed
 Clefable keeps it while gaining Halo as its chosen ability.
 
-The trade-off is deliberate. Halo is **upside on transformation** rather than a turn-one trait,
+The trade-off is deliberate. On Clefable, Halo is **upside on transformation** rather than a
+turn-one trait,
 and under `FEATURE_FREE_GIMMICKS` a given mon often will not Mega (see the free-gimmicks note in
 [`LINE_REVIEW.md`](LINE_REVIEW.md)). That is the cost of keeping the base form's identity
 intact; in exchange the aura reads as something the creature *ascends* into. Note this is not
@@ -267,5 +276,6 @@ it works regardless of what the set is holding or clicking.
 Covered by `test/battle/ability/halo.c`.
 
 **Halo is a shared ability, not a family** — it takes no parameter, so other gentle/"cute"
-species (Togekiss, Comfey, Blissey, Audino, Sylveon, Alcremie, the Jigglypuff line) can simply
-be given the same ability rather than a variant of it.
+species (Togekiss, Comfey, Blissey, Audino, Sylveon, Alcremie) can simply be given the same
+ability rather than a variant of it. Wigglytuff was the first such addition, via the Jigglypuff
+line review.

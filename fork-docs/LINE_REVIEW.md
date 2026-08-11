@@ -395,9 +395,22 @@ than one whose existing set is about to be rewritten.
       holding Black Sludge with a non-Poison Tera type turns its own recovery into
       chip damage the moment it Teras. Same class of bug: losing an immunity the
       set was built around (a Ghost that Teras out of its Normal/Fighting
-      immunity), losing the STAB its moves depend on, or switching off a
-      type-gated ability. Check the Tera type against the **item, the ability and
-      every move** before calling it fine.
+      immunity), or switching off a type-gated ability. Check the Tera type
+      against the **item, the ability and every move** before calling it fine.
+
+      **STAB is the ONE thing the overwrite does NOT break — do not "fix" a set
+      over it.** Damage takes a different path once Terastallized:
+      `ApplyModifiersAfterDmgRoll()` (`src/battle_util.c`) swaps
+      `GetSameTypeAttackBonusModifier()` for `GetTeraMultiplier()`
+      (`src/battle_terastal.c`), which keys off **`IS_BATTLER_OF_BASE_TYPE`** — the
+      `ignoreTera` variant, reading the `gBattleMons[].types[]` array that the Tera
+      branch of `GetBattlerTypes()` returns early without touching. So a move
+      matching the Tera type **and** an original type gets **2.0×**; one matching
+      only the Tera type, **1.5×**; and one matching only an *original* type keeps
+      its full **1.5×**. Terastallizing never costs a set offense — it only ever
+      adds. Worked example: Tera Fairy on a Normal/Fairy mon takes Dazzling Gleam
+      to 2.0× and leaves Hyper Voice at 1.5×. The overwrite's consequences are
+      **defensive and type-gated only** (matchups, items, abilities), never STAB.
 
       Also: **Tera is a gimmick**, so under `FEATURE_FREE_GIMMICKS` it competes for
       the one-per-trainer slot exactly like a Mega (see the free-gimmicks section

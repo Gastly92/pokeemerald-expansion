@@ -1016,15 +1016,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulky fairy
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HYPER_VOICE,
             MOVE_DAZZLING_GLEAM,
-            MOVE_ICE_BEAM,
+            MOVE_MOONLIGHT,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_SWEET_VEIL, // all real abilities innate; chosen Sweet Veil (non-redundant)
+        .ability = ABILITY_HALO,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1036,22 +1036,22 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Doubles support
+        .heldItem = ITEM_COVERT_CLOAK,
         .moves =
         {
-            MOVE_DAZZLING_GLEAM,
-            MOVE_HELPING_HAND,
-            MOVE_THUNDER_WAVE,
-            MOVE_PROTECT
+            MOVE_FOLLOW_ME,
+            MOVE_SING,
+            MOVE_MOONLIGHT,
+            MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_SWEET_VEIL, // all real abilities innate; chosen Sweet Veil (non-redundant)
-        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ability = ABILITY_HALO,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 4,
-            .spa = 252
+            .def = 252,
+            .spa = 4
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_STEEL,
     },
 
     // 0045
