@@ -1058,7 +1058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VILEPLUME,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // boosts Sludge Bomb chip
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -1066,7 +1066,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONBLAST
         },
-        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (redundant deterministic sleep vs Sleep Powder); sun Sp.Atk w/ innate Chlorophyll
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1078,22 +1078,42 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VILEPLUME,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-proof Chlorophyll
+        .heldItem = ITEM_BIG_ROOT,
         .moves =
         {
+            MOVE_LEECH_SEED,
+            MOVE_STRENGTH_SAP,
             MOVE_GIGA_DRAIN,
-            MOVE_SLUDGE_BOMB,
-            MOVE_MOONBLAST,
-            MOVE_SLEEP_POWDER
+            MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (redundant deterministic sleep vs Sleep Powder); sun Sp.Atk w/ innate Chlorophyll
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ability = ABILITY_EFFECT_SPORE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
-            .def = 4,
-            .spa = 252,
-            .spe = 252
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_VILEPLUME,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_RAGE_POWDER,
+            MOVE_POLLEN_PUFF,
+            MOVE_GIGA_DRAIN,
+            MOVE_SLUDGE_BOMB
+        },
+        .ability = ABILITY_EFFECT_SPORE,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0047
@@ -4759,6 +4779,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_BELLOSSOM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BEAM,
+            MOVE_WEATHER_BALL,
+            MOVE_POLLEN_PUFF
+        },
+        .ability = ABILITY_SOLAR_POWER,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIRE,
     },
 
     // 0184
