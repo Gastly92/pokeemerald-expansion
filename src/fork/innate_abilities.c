@@ -1719,7 +1719,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BELLOSSOM,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_DANCER, // flavor: its swaying flower dance
+            ABILITY_DANCER,
             ABILITY_HEALER,
             ABILITY_NATURAL_CURE
         )
