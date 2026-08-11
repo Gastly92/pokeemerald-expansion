@@ -1021,10 +1021,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HYPER_VOICE,
             MOVE_DAZZLING_GLEAM,
-            MOVE_ICE_BEAM,
+            MOVE_MOONLIGHT,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_SWEET_VEIL, // all real abilities innate; chosen Sweet Veil (non-redundant)
+        .ability = ABILITY_HALO,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1044,12 +1044,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_PROTECT
         },
-        .ability = ABILITY_SWEET_VEIL, // all real abilities innate; chosen Sweet Veil (non-redundant)
-        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ability = ABILITY_HALO,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 4,
-            .spa = 252
+            .spa = 4,
+            .spd = 252
         ),
         .teraType = TYPE_FAIRY,
     },

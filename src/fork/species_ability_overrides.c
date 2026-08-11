@@ -190,10 +190,8 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_HALO
     },
     { // 0040
-        // Wigglytuff: all real abilities now innate, so its innate-redundant slot-0 Cute Charm takes a chosen
-        // Sweet Veil so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_WIGGLYTUFF, 0,
-        ABILITY_SWEET_VEIL
+        ABILITY_HALO
     },
     { // 0045
         // Vileplume's real abilities are Chlorophyll (now innate) and Effect Spore. Effect Spore is a poor
