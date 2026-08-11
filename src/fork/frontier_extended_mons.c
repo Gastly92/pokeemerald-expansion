@@ -1053,6 +1053,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
+    {
+        .species = SPECIES_WIGGLYTUFF,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_FOLLOW_ME,
+            MOVE_SING,
+            MOVE_MOONLIGHT,
+            MOVE_DAZZLING_GLEAM
+        },
+        .ability = ABILITY_HALO,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spa = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0045
     {
