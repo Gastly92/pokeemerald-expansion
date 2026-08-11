@@ -1081,7 +1081,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_BIG_ROOT,
         .moves =
         {
-            MOVE_SPORE,
+            MOVE_LEECH_SEED,
             MOVE_STRENGTH_SAP,
             MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB
@@ -1103,8 +1103,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_RAGE_POWDER,
             MOVE_POLLEN_PUFF,
-            MOVE_SLUDGE_BOMB,
-            MOVE_SLEEP_POWDER
+            MOVE_GIGA_DRAIN,
+            MOVE_SLUDGE_BOMB
         },
         .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
