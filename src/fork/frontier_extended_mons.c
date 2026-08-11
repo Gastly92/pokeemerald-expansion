@@ -1120,7 +1120,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PARASECT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Spore disabler
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_SPORE,
@@ -1128,7 +1128,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_DRY_SKIN, // moved off Effect Spore (redundant deterministic sleep vs Spore); real slot, fungus flavor
+        .ability = ABILITY_DRY_SKIN,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1140,11 +1140,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PARASECT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FIGY_BERRY, // Dry Skin sweeper
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_SPORE,
-            MOVE_GIGA_DRAIN,
+            MOVE_SEED_BOMB,
             MOVE_LEECH_LIFE,
             MOVE_SWORDS_DANCE
         },
@@ -1156,6 +1156,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_BUG,
+    },
+    {
+        .species = SPECIES_PARASECT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BIG_ROOT,
+        .moves =
+        {
+            MOVE_SPORE,
+            MOVE_RAGE_POWDER,
+            MOVE_LEECH_SEED,
+            MOVE_SEED_BOMB
+        },
+        .ability = ABILITY_DRY_SKIN,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0049
