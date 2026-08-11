@@ -1108,7 +1108,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_DRY_SKIN, // moved off Effect Spore (redundant deterministic sleep vs Spore); real slot, fungus flavor
+        .ability = ABILITY_DRY_SKIN,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
