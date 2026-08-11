@@ -202,12 +202,8 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SOLAR_POWER
     },
     { // 0049
-        // Venomoth: all real abilities now innate, so its innate-redundant slot-2 Wonder Skin takes a chosen
-        // Sheer Force -- :x: (never an innate -> stable), powering up its Sludge Bomb / Bug Buzz. (Effect Spore
-        // was moved off: under DETERMINISTIC_ABILITIES it always sleeps contact attackers, colliding with the
-        // set's own Sleep Powder.) Slot 0 stays real Shield Dust -- ai_check_viability.c selects it.
         SPECIES_VENOMOTH, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_PSYCHIC_AFFINITY
     },
     { // 0051
         // Dugtrio's three real abilities (Sand Veil, Arena Trap, Sand Force) are ALL now innate. Slot-1 Arena

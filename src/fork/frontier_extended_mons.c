@@ -1182,42 +1182,82 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENOMOTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Quiver Dance + Sleep Powder sweeper
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_QUIVER_DANCE,
             MOVE_BUG_BUZZ,
-            MOVE_SLUDGE_BOMB,
+            MOVE_PSYCHIC,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Sludge Bomb/Bug Buzz
+        .ability = ABILITY_PSYCHIC_AFFINITY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_STEEL,
     },
     {
         .species = SPECIES_VENOMOTH,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BRIGHT_POWDER,
         .moves =
         {
-            MOVE_BUG_BUZZ,
-            MOVE_SLUDGE_BOMB,
-            MOVE_QUIVER_DANCE,
-            MOVE_ROOST
+            MOVE_RAGE_POWDER,
+            MOVE_SLEEP_POWDER,
+            MOVE_STRUGGLE_BUG,
+            MOVE_PSYCHIC
         },
-        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore; powers Sludge Bomb/Bug Buzz
+        .ability = ABILITY_PSYCHIC_AFFINITY,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_VENOMOTH,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BLACK_SLUDGE,
+        .moves =
+        {
+            MOVE_TOXIC,
+            MOVE_VENOSHOCK,
+            MOVE_PSYCHIC,
+            MOVE_MOONLIGHT
+        },
+        .ability = ABILITY_PSYCHIC_AFFINITY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .spa = 252,
-            .spd = 4,
+            .hp = 252,
+            .spa = 4,
             .spe = 252
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_VENOMOTH,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BIG_ROOT,
+        .moves =
+        {
+            MOVE_SLEEP_POWDER,
+            MOVE_DREAM_EATER,
+            MOVE_DRAINING_KISS,
+            MOVE_GIGA_DRAIN
+        },
+        .ability = ABILITY_PSYCHIC_AFFINITY,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
     },
 
     // 0051

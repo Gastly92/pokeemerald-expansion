@@ -475,6 +475,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0049
         SPECIES_VENOMOTH,
         INNATES(
+            ABILITY_COMPOUND_EYES,
+            ABILITY_LEVITATE,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS,
             ABILITY_WONDER_SKIN
