@@ -431,6 +431,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ODDISH,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD,
             ABILITY_STENCH
         )
     },
@@ -438,6 +439,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GLOOM,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD,
             ABILITY_STENCH
         )
     },
@@ -445,6 +447,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VILEPLUME,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD,
             ABILITY_STENCH
         )
     },
@@ -1721,6 +1724,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL,
             ABILITY_DANCER,
             ABILITY_HEALER,
+            ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE
         )
     },
