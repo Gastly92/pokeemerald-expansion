@@ -1272,7 +1272,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SAND_STREAM, // Arena Trap/Sand Veil/Sand Force now innate; chosen Sand Stream (override) sets the sand that powers them
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1292,7 +1292,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_FISSURE
         },
-        .ability = ABILITY_SAND_STREAM, // Arena Trap/Sand Veil/Sand Force now innate; chosen Sand Stream (override) sets the sand that powers them
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1314,7 +1314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1334,7 +1334,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
