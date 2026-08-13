@@ -206,17 +206,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PSYCHIC_AFFINITY
     },
     { // 0051
-        // Dugtrio's three real abilities (Sand Veil, Arena Trap, Sand Force) are ALL now innate. Slot-1 Arena
-        // Trap is pinned by tests, so its innate-redundant slot-2 Sand Force (audited: no Ability(ABILITY_SAND_FORCE)
-        // on Dugtrio) takes Sand Stream — :x: (never an innate -> stable) and self-synergistic: the sandstorm it
-        // kicks up turns on its own innate Sand Veil (evasion) and Sand Force (Rock/Ground/Steel power + sandstorm
-        // immunity). Same pick as Sandslash/Donphan/Flygon.
         SPECIES_DUGTRIO, 2,
         ABILITY_SAND_STREAM
     },
     { // 0051
-        // Dugtrio Alola: all real abilities now innate, so its innate-redundant slot-0 Sand Veil takes a chosen
-        // Earth Eater so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_DUGTRIO_ALOLA, 0,
         ABILITY_EARTH_EATER
     },

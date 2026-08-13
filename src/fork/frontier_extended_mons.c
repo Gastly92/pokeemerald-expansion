@@ -1264,7 +1264,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Arena Trap revenge / trapper
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -1306,7 +1306,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // Sand Force trapper/revenge killer
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -1326,7 +1326,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SOFT_SAND, // Tangling Hair contact-punisher
+        .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
