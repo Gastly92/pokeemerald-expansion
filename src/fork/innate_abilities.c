@@ -717,6 +717,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VICTREEBEL_MEGA,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_GLUTTONY,
             ABILITY_INNARDS_OUT
         )
     },
