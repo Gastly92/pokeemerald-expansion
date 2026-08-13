@@ -1509,11 +1509,14 @@ issue. What the AI *does* keep:
 (Lesson for future crit-touching work: the crit-chance calc is AI-hot and budget-bound — keep it
 `ctx->innatesEnabled`-gated and do **not** set that flag on the AI's `ShouldCalcCritDamage` context.)
 
-**Species (canon only so far, no flavor picks yet** — crit boosts are potent and hard to justify thematically): every
+**Species (canon, plus one flavor pick** — crit boosts are potent and hard to justify thematically): every
 species whose ability data carries the ability in any slot, in dex order, so the signature survives whichever
 slot a build picks. Sniper: the Beedrill, Spearow/Fearow, Horsea/Seadra/Kingdra, Spinarak/Ariados,
 Remoraid/Octillery, Skorupi/Drapion, Binacle/Barbaracle and Sobble/Drizzile/Inteleon lines (Mega Beedrill /
-Mega Barbaracle / Inteleon-Gmax mirror the base per the Mega convention). Super Luck: the Togepi line, the
+Mega Barbaracle / Inteleon-Gmax mirror the base per the Mega convention), plus **Kantonian Farfetch'd** — the
+Farfetch'd line review's one flavor pick, grounded in the repo's own data rather than dex prose: all three forms
+list `ITEM_LEEK` as a wild held item (a crit-ratio item), and the Galarian line's evolution condition is
+`EVO_BATTLE_END … {IF_CRITICAL_HITS_GE, 3}`, so critical hits are the line's mechanical identity in-repo. Super Luck: the Togepi line, the
 Murkrow/Honchkrow line, Absol (+ its Megas), and the Pidove line. Merciless: the Mareanie/Toxapex line. Each
 new ability is merged into the existing innate row where a species already carries one (e.g. Ariados keeps
 Insomnia/Swarm, Kingdra keeps Swift Swim, Toxapex keeps Limber/Regenerator, Togekiss keeps Serene Grace).
@@ -3559,16 +3562,20 @@ else to wire (the rest of turn order rides the shared speed calc keyed off the r
 (turn order is computed before any attacker's move resolves, so Mold Breaker never applies) — all handled by
 `IsInnateActive`.
 
-**Species.** The **sole canon carrier** is **Galarian Slowbro** (`SPECIES_SLOWBRO_GALAR`), whose primary ability
+**Species.** The **sole carrier** is **Galarian Slowbro** (`SPECIES_SLOWBRO_GALAR`), whose primary ability
 *is* Quick Draw; its existing innate row (Own Tempo / Regenerator) gains it so the trait persists no matter which
-slot a build picks. Because that innate is redundant with G-Slowbro's default ability, the **observable** carriers
-are the **Galarian Farfetch'd → Sirfetch'd** duelist line, which takes Quick Draw as a **tight flavor pick** (knights
-quick to draw their leek-lance in a duel; their chosen Steadfast / Scrappy differ, so the innate is visible and
-testable). Grep of `src/data/pokemon/species_info/` confirms G-Slowbro is the only species carrying `ABILITY_QUICK_DRAW`.
+slot a build picks. It stays observable there because a build that picks Own Tempo or Regenerator still shows the
+innate. Grep of `src/data/pokemon/species_info/` confirms G-Slowbro is the only species carrying
+`ABILITY_QUICK_DRAW`.
+
+The **Galarian Farfetch'd → Sirfetch'd** line originally took Quick Draw as a flavor pick (knights quick to draw
+their leek-lance). The Farfetch'd line review removed it: with one canon user, Quick Draw is a **signature** welded
+to G-Slowbro's Shellder-cannon design, and the line-review rubric rejects 1-user abilities on unrelated species.
+Do not re-add it.
 
 **Step 3.5**: no-op — no frontier set hardcoded `ABILITY_QUICK_DRAW`. The two G-Slowbro frontier sets (chosen Own
-Tempo) and the Sirfetch'd sets (chosen Scrappy/Steadfast) simply **gain** innate Quick Draw on top, which is the
-observable win. This is **Tier 5.2**; Tier 5.3 (Comatose) is next.
+Tempo) simply **gain** innate Quick Draw on top, which is the observable win. This is **Tier 5.2**; Tier 5.3
+(Comatose) is next.
 
 ### ABILITY_COMATOSE
 

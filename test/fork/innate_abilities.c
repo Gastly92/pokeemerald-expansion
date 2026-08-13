@@ -8966,8 +8966,8 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
 // bracket; under DETERMINISTIC_ABILITIES (the shipping default) it instead always fires on the holder's
 // entry turn, like Quick Claw. Wired at the two effect sites in TryChangingTurnOrderEffects
 // (src/battle_main.c) via BattlerHasAbility, with the activation pop-up / message overwritten to Quick
-// Draw when the chosen ability differs. Galarian Slowbro carries it canonically; the Galarian Farfetch'd
-// -> Sirfetch'd duelist line takes it as an observable flavor pick (chosen Steadfast / Scrappy differ).
+// Draw when the chosen ability differs. Galarian Slowbro is the sole carrier, and takes it canonically
+// (its chosen Own Tempo differs, so only the innate can be responsible for the turn-order override).
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Quick Draw lets the slower holder move first on its entry turn")
 {
     bool32 enabled;
@@ -8996,20 +8996,19 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Quick Draw lets the slower 
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor duelist's innate Quick Draw fires on its 30% roll (non-deterministic)")
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Quick Draw fires on its 30% roll (non-deterministic)")
 {
     PASSES_RANDOMLY(3, 10, RNG_QUICK_DRAW);
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_SIRFETCHD, ABILITY_QUICK_DRAW));
-        ASSUME(gSpeciesInfo[SPECIES_SIRFETCHD].abilities[0] != ABILITY_QUICK_DRAW);
+        ASSUME(SpeciesHasInnate(SPECIES_SLOWBRO_GALAR, ABILITY_QUICK_DRAW));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         // DETERMINISTIC_ABILITIES is off in the test baseline, so Quick Draw uses its stock 30% roll.
-        PLAYER(SPECIES_SIRFETCHD) { Ability(ABILITY_STEADFAST); Speed(1); } // chosen Steadfast; Quick Draw only as innate
+        PLAYER(SPECIES_SLOWBRO_GALAR) { Ability(ABILITY_OWN_TEMPO); Speed(1); } // chosen Own Tempo; Quick Draw only as innate
         OPPONENT(SPECIES_WOBBUFFET) { Speed(100); }
     } WHEN {
         TURN { MOVE(player, MOVE_TACKLE); }
     } SCENE {
-        // On the 30% branch the pop-up shows Quick Draw even though the chosen ability is Steadfast.
+        // On the 30% branch the pop-up shows Quick Draw even though the chosen ability is Own Tempo.
         ABILITY_POPUP(player, ABILITY_QUICK_DRAW);
     }
 }

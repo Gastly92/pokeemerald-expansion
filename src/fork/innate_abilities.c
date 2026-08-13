@@ -858,13 +858,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_DEFIANT,
             ABILITY_INNER_FOCUS,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_SNIPER
         )
     },
     { // 0083
         SPECIES_FARFETCHD_GALAR,
         INNATES(
-            ABILITY_QUICK_DRAW,
             ABILITY_SCRAPPY,
             ABILITY_STEADFAST
         )
@@ -7625,7 +7625,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0865
         SPECIES_SIRFETCHD,
         INNATES(
-            ABILITY_QUICK_DRAW,
             ABILITY_SCRAPPY,
             ABILITY_STEADFAST
         )
