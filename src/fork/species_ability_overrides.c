@@ -232,6 +232,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_PERSIAN_ALOLA, 2,
         ABILITY_CUTE_CHARM
     },
+    { // 0065
+        SPECIES_ALAKAZAM, 1,
+        ABILITY_PSYCHIC_SURGE
+    },
     { // 0071
         // Victreebel's only real abilities (Chlorophyll, Gluttony) are BOTH now innate, so its EMPTY slot 1
         // takes Sheer Force -- :x: (never an innate -> stable), powering up its Sludge Bomb. (Effect Spore was
