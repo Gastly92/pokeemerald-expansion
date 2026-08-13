@@ -1284,13 +1284,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sand Force band
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH,
-            MOVE_AERIAL_ACE
+            MOVE_FISSURE
         },
         .ability = ABILITY_SAND_STREAM, // Arena Trap/Sand Veil/Sand Force now innate; chosen Sand Stream (override) sets the sand that powers them
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -1321,7 +1321,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_FAIRY,
     },
     {
         .species = SPECIES_DUGTRIO_ALOLA,
