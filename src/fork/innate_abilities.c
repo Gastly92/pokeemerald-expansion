@@ -517,6 +517,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0052
         SPECIES_MEOWTH,
         INNATES(
+            ABILITY_MOXIE,
+            ABILITY_PICKPOCKET,
+            ABILITY_PICKUP,
             ABILITY_TECHNICIAN,
             ABILITY_UNNERVE
         )
@@ -524,6 +527,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0052
         SPECIES_MEOWTH_ALOLA,
         INNATES(
+            ABILITY_MOXIE,
+            ABILITY_PICKPOCKET,
             ABILITY_PICKUP,
             ABILITY_RATTLED,
             ABILITY_TECHNICIAN
@@ -532,6 +537,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0052
         SPECIES_MEOWTH_GALAR,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_PICKUP,
             ABILITY_TOUGH_CLAWS,
             ABILITY_UNNERVE
@@ -540,6 +546,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0052
         SPECIES_MEOWTH_GMAX,
         INNATES(
+            ABILITY_MOXIE,
+            ABILITY_PICKPOCKET,
+            ABILITY_PICKUP,
             ABILITY_TECHNICIAN,
             ABILITY_UNNERVE
         )
@@ -548,6 +557,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PERSIAN,
         INNATES(
             ABILITY_LIMBER,
+            ABILITY_PICKPOCKET,
             ABILITY_TECHNICIAN,
             ABILITY_UNNERVE
         )
@@ -7618,6 +7628,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PERRSERKER,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_MOXIE,
             ABILITY_STEELY_SPIRIT,
             ABILITY_TOUGH_CLAWS
         )

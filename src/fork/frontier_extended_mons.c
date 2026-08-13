@@ -1363,7 +1363,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_DARK,
+        .teraType = TYPE_GHOST,
     },
     {
         .species = SPECIES_PERSIAN_ALOLA,
@@ -1380,10 +1380,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
-            .def = 8,
+            .spd = 8,
             .spe = 252
         ),
-        .teraType = TYPE_DARK,
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_PERSIAN_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_THROAT_SPRAY,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_DARK_PULSE,
+            MOVE_SNARL,
+            MOVE_HYPER_VOICE
+        },
+        .ability = ABILITY_CUTE_CHARM,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
     },
 
     // 0053
@@ -1410,22 +1430,22 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PERSIAN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Fast support
+        .heldItem = ITEM_NONE,
         .moves =
         {
-            MOVE_KNOCK_OFF,
+            MOVE_THIEF,
+            MOVE_SLASH,
             MOVE_FAKE_OUT,
-            MOVE_U_TURN,
-            MOVE_THUNDER_WAVE
+            MOVE_U_TURN
         },
-        .ability = ABILITY_FUR_COAT, // all real abilities innate; chosen Fur Coat (non-redundant)
+        .ability = ABILITY_FUR_COAT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .def = 4,
             .spe = 252
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_GHOST,
     },
 
     // 0055
@@ -21241,9 +21261,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_STEEL,
     },
@@ -21265,7 +21285,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 4,
             .def = 252
         ),
-        .teraType = TYPE_STEEL,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_PERRSERKER,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_IRON_BALL,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_GYRO_BALL,
+            MOVE_CLOSE_COMBAT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_BULLETPROOF,
+        .nature = NATURE(ATK_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .teraType = TYPE_WATER,
     },
 
     // 0864 (innate Perish Body)
