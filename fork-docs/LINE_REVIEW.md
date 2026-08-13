@@ -151,18 +151,23 @@ For each species/form in the line:
    repo, so a Magma Armor pitch resting on it has no support here). Read the field
    before citing it.
 
-   **Wider media ARE legitimate flavor evidence — the anime, the movies, the manga,
-   the spin-offs.** The rule directly above governs *dex text* (don't pass remembered
-   flavor off as this repo's `.description`); it is not a rule that the games are the
-   only admissible source. A `.description` is four lines and frequently says nothing
-   an ability can be built on, whereas what a creature is shown *doing* on screen is
-   often the sharper evidence — and it is fair to rest a pick on it. Worked example
-   from the Ninetales pass: the repo dex gives only *"each of the nine tails embody an
-   enchanted power,"* which is thin support for anything. Its anime episode is
-   *entirely* a Ninetales sealing a mansion so the cast physically cannot leave, plus
-   the tail-curse enacted on a character who grabs its tails — which is a far better
-   case for Shadow Tag and Cursed Body than the dex line could ever carry alone. Two
-   conditions on using it:
+   **Check the wider media before proposing — the anime, the movies, the manga, the
+   spin-offs.** This is a *required* input alongside the dex text, not a permission you
+   may decline. The rule directly above governs *dex text* (don't pass remembered flavor
+   off as this repo's `.description`); it is not a rule that the games are the only
+   admissible source. A `.description` is four lines and frequently says nothing an
+   ability can be built on, whereas what a creature is shown *doing* on screen is often
+   the sharper evidence. Worked example from the Ninetales pass: the repo dex gives only
+   *"each of the nine tails embody an enchanted power,"* which is thin support for
+   anything. Its anime episode is *entirely* a Ninetales sealing a mansion so the cast
+   physically cannot leave, plus the tail-curse enacted on a character who grabs its
+   tails — which is a far better case for Shadow Tag and Cursed Body than the dex line
+   could ever carry alone.
+
+   **Report the result either way.** *"No usable media evidence for this line"* is a
+   normal, expected line in a proposal — stating it is what proves the pass was run.
+   Silence is indistinguishable from having skipped it, so silence counts as skipping
+   it. Two conditions on using it:
    - **Name the medium and flag that it is recall.** The repo cannot confirm it, so
      say so plainly rather than presenting it with the same confidence as a quoted
      `.description`. Being wrong about an episode is fine; being wrong *silently* is
@@ -170,6 +175,13 @@ For each species/form in the line:
    - **Cite a specific action, not a vibe.** "It traps the cast inside a mansion for
      the whole episode" is evidence. "I think it's mysterious in the anime" is not,
      and neither is a half-remembered episode title with no scene attached.
+
+   Flagging recall is the *price* of using media evidence, not a reason to avoid it.
+   A pick that misremembers an episode and says so is a better outcome than a review
+   that quietly never looked — the first is correctable in one round-trip, the second
+   is invisible. Do not let the honesty requirement become an incentive to omit. The
+   tell that it has: media cited only to *reject* a candidate (the direction where
+   being wrong costs nothing) and never to generate one.
 
    The canon-user count (above) is still the gate. Media evidence tells you *which*
    ability expresses the creature; it never licenses a 1-user signature.

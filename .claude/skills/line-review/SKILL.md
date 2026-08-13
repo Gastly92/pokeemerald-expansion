@@ -30,7 +30,8 @@ welcome but not required.
    prevent: it silently couples the later steps to picks that are about to be
    rejected, and the rework cascades.
 4. **For the current step, per the rubric:** report what's already there, whether
-   it makes flavorful sense, and concrete candidate additions/changes.
+   it makes flavorful sense — citing both the repo `.description` **and** a
+   wider-media check — and concrete candidate additions/changes.
 5. **WAIT for a yes before moving on.** Flavor picks are the maintainer's call. A
    **deferral is not an approval**, an **unanswered question is not a yes**, and
    "let's return to the line review" means resume the *review*, not ship the
@@ -57,16 +58,20 @@ welcome but not required.
   birds and sharp-eyed watchers). Never reverse-engineer flavor from mechanics — a
   dex line sharing a *word* isn't grounding ("blazes when enraged" is a mood
   indicator, not Berserk). Quote `.description` from the repo, never recalled flavor.
-- **Wider media are fair flavor evidence — anime, movies, manga, spin-offs.** The
-  dex-text rule above is about not passing recalled flavor off as the repo's
-  `.description`; it does not make the games the only source. A four-line dex often
-  supports nothing, while what a creature is shown *doing* on screen is sharper
+- **Check wider media before proposing — anime, movies, manga, spin-offs — and say so
+  explicitly, including when the answer is "nothing usable."** A required input
+  alongside the dex text, not a permission you may decline; silence reads as having
+  skipped it. The dex-text rule above is about not passing recalled flavor off as the
+  repo's `.description`; it does not make the games the only source. A four-line dex
+  often supports nothing, while what a creature is shown *doing* on screen is sharper
   evidence (Ninetales' anime episode is entirely about it sealing a mansion so nobody
   can leave, plus the tail-curse — a far better case for Shadow Tag and Cursed Body
   than its dex line). Two conditions: **name the medium and flag that it is recall**
-  the repo can't confirm, and **cite a specific action, not a vibe**. The canon-user
-  count is still the gate — media evidence picks *which* ability fits, and never
-  licenses a 1-user signature.
+  the repo can't confirm, and **cite a specific action, not a vibe**. Flagging recall
+  is the price of using media evidence, not a reason to avoid it — citing media only
+  to *reject* a candidate is the tell that the honesty requirement has turned into an
+  incentive to omit. The canon-user count is still the gate — media evidence picks
+  *which* ability fits, and never licenses a 1-user signature.
 - **Overrides:** the chosen ability must **not** duplicate a species innate and
   must be a *stable* pick (`:x:` never-an-innate in
   `fork-docs/INNATE_ABILITIES_PROGRESS.md`, or an implemented innate the species
