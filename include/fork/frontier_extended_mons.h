@@ -42,7 +42,7 @@ struct EvSpread { u8 hp, atk, def, spa, spd, spe; };
 // changed still has to spell out five 31s. IVS() lets you name just the stats you
 // are changing; every stat you don't name defaults to 31:
 //     .iv = IVS(SPE, 0),                    // == TRAINER_PARTY_IVS(31,31,31,0,31,31)
-//     .iv = IVS(SPE, 0, ATK, 0),            // == TRAINER_PARTY_IVS(31,0,31,0,31,31)
+//     .iv = IVS(ATK, 0, SPE, 0),            // == TRAINER_PARTY_IVS(31,0,31,0,31,31)
 // One to six STAT, value pairs in any order, naming stats with the same shorthand
 // as EVS(): HP / ATK / DEF / SPA / SPD / SPE. The STATIC_ASSERTs below pin the
 // encoding. At least one pair is required — to leave every IV at 31, omit the .iv
@@ -65,7 +65,9 @@ struct EvSpread { u8 hp, atk, def, spa, spd, spe; };
 //
 // Pair ORDER does not matter — each pair only touches its own 5-bit field, and both
 // the mask and the value are combined with |. IVS(SPE, 0, ATK, 0) and
-// IVS(ATK, 0, SPE, 0) are the same constant (sIvsAnyOrder below pins this).
+// IVS(ATK, 0, SPE, 0) are the same constant (sIvsAnyOrder below pins this). Since
+// it is free, the roster's CONVENTION is to write the pairs ALPHABETICALLY by stat
+// name — ATK, DEF, HP, SPA, SPD, SPE — so multi-stat spreads all read the same way.
 //
 // But DO NOT name the same stat twice: the values are OR'd, not overwritten, so
 // IVS(SPE, 1, SPE, 2) silently yields a Speed IV of 3 rather than 1 or 2. There is
@@ -110,7 +112,7 @@ struct EvSpread { u8 hp, atk, def, spa, spd, spe; };
                            IVS_3_, IVS_3_, IVS_2_, IVS_2_, IVS_1_, IVS_1_, )(__VA_ARGS__)
 
 STATIC_ASSERT(IVS(SPE, 0) == TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), sIvsMinSpeed);
-STATIC_ASSERT(IVS(SPE, 0, ATK, 0) == TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31), sIvsMinSpeedAtk);
+STATIC_ASSERT(IVS(ATK, 0, SPE, 0) == TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31), sIvsMinSpeedAtk);
 STATIC_ASSERT(IVS(HP, 31) == TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31), sIvsAllMax);
 STATIC_ASSERT(IVS(HP, 1, ATK, 2, DEF, 3, SPE, 4, SPA, 5, SPD, 6)
               == TRAINER_PARTY_IVS(1, 2, 3, 4, 5, 6), sIvsFieldOrder);

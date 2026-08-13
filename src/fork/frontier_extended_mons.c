@@ -8154,7 +8154,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FIRE,
     },
     {
@@ -8197,7 +8197,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FIRE,
     },
     {
@@ -8535,7 +8535,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -12882,7 +12882,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spa = 4
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -13749,7 +13749,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_GHOST,
     },
 
@@ -14046,7 +14046,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -14475,7 +14475,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -14538,7 +14538,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FIRE,
     },
 
@@ -17964,7 +17964,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_VIKAVOLT,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room special attacker
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -18597,7 +18597,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_ORANGURU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Trick Room setter / Instruct support
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -19937,7 +19937,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FAIRY_GEM, // one-shot Fairy burst for the Trick Room nuke
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -23357,7 +23357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -24386,7 +24386,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spd = 252
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FIRE,
     },
 
@@ -25481,7 +25481,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = IVS(SPE, 0, ATK, 0),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FAIRY,
     },
 
