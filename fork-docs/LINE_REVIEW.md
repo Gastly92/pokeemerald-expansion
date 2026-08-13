@@ -289,13 +289,23 @@ line:
 6. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
    `// <dex>` comment; forms share the base number and follow it.
 
-**Verify:** `make check TESTS="Frontier extended roster"` — three tests enforce the
+**Verify:** `make check TESTS="Frontier extended roster"` — four tests enforce the
 invariants: "every set's ability is legal for its species" and "no set's chosen
-ability duplicates a species innate" cover the sets that select a slot, and "no
+ability duplicates a species innate" cover the sets that select a slot, "no
 species ability override duplicates a species innate" sweeps the **whole override
-table** independently, so a redundant row fails CI even before any set uses it.
-Pairing a new override with a set that uses it is still good practice (it proves
-the slot resolves end-to-end), but it is no longer what catches a duplicate.
+table** independently, so a redundant row fails CI even before any set uses it, and
+"no set uses ABILITY_NONE" bans the let-the-Factory-pick escape hatch. Pairing a new
+override with a set that uses it is still good practice (it proves the slot resolves
+end-to-end), but it is no longer what catches a duplicate.
+
+**The two duplicate-innate tests are scoped PER SPECIES, which is what makes the
+second stable branch legal.** Both gate on `SpeciesHasInnate(species, ability)`, and
+that helper walks only *that species'* innate list (`src/fork/innate_abilities.c`) —
+it never asks whether the ability is an innate on some *other* species. So borrowing
+an implemented innate the species doesn't carry is not a near-miss the tests tolerate;
+it is the intended design, and the table already does it at scale (`ABILITY_UNAWARE`
+in 10 rows, `ABILITY_STICKY_HOLD` in 3, plus Harvest and Gooey). The only thing that
+fails is naming an ability *this* species already has innately.
 
 **Gate:** stop here and get a yes on the override rows before starting Step 3. A
 set's `.ability` may only name an ability that is already a real slot for the
@@ -575,8 +585,15 @@ than one whose existing set is about to be rewritten.
    - `.moves` — up to 4; **no legality restriction**.
    - `.ability` — the chosen ability. Must resolve to a real slot for the species
      (via `GetSpeciesAbility`, i.e. through the override table) **and** must not be
-     an innate — or set `ABILITY_NONE` to let the Factory pick. Both roster tests
-     check this.
+     an innate. **`ABILITY_NONE` is banned** — a fourth roster test
+     (*"no set uses ABILITY_NONE"*, `test/fork/frontier_extended_roster.c`) fails on
+     it outright. Letting the Factory pick yields an unlabeled ability that, for the
+     fork's all-innate species, can only land on a redundant innate; gating the
+     override table behind `FEATURE_INNATE_ABILITIES` removed the last reason to
+     allow it, so every set names a real chosen ability, freeing a slot with a fork
+     override where needed. (Note the test file's *own* comment in the
+     duplicate-innate test still describes `ABILITY_NONE` as acceptable — it predates
+     the ban.)
    - `.nature` — `NATURE(DEF_UP, ATK_DOWN)` style (boosted, lowered).
    - `.ev` — `EVS(.hp = 252, .def = 252, .spd = 4)` (names: hp/atk/def/spa/spd/spe).
    - `.teraType` — optional Tera type.

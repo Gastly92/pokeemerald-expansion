@@ -139,7 +139,10 @@ welcome but not required.
   Speed drop entirely. Read the "`DETERMINISTIC_*` regime" section of the rubric —
   and `include/config/deterministic.h` itself, which is the source of truth —
   before building a set around any mechanic. The set's `.ability` must resolve to a real
-  slot and not be an innate (or use `ABILITY_NONE`).
+  slot and not be an innate of **that** species — the duplicate-innate tests are scoped
+  per species, so borrowing an implemented innate another species carries is intended,
+  not a loophole. **`ABILITY_NONE` is banned** by a fourth roster test; free a slot with
+  a fork override instead.
 - **Smogon is a legitimate input for EVALUATION, never for generation.** Competitive
   analysis sharpens both parts of Step 3 — a second opinion on whether a move earns
   its slot, whether a spread reaches a benchmark, whether a set is one you'd draft.
