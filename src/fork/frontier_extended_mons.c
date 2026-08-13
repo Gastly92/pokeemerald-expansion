@@ -1640,8 +1640,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0065
     {
         .species = SPECIES_ALAKAZAM,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Magic Guard nuke
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -1649,39 +1649,39 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_PSYCHIC,
-    },
-    {
-        .species = SPECIES_ALAKAZAM,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TWISTED_SPOON, // Mega Alakazam (Trace); Psychic STAB boost
-        .moves =
-        {
-            MOVE_PSYCHIC,
-            MOVE_FOCUS_BLAST,
-            MOVE_SHADOW_BALL,
-            MOVE_ENERGY_BALL
-        },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_PSYCHIC,
+        .teraType = TYPE_FAIRY,
     },
     {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast lead, sash = one-shot guard
+        .heldItem = ITEM_CHOICE_SPECS,
+        .moves =
+        {
+            MOVE_PSYCHIC,
+            MOVE_PSYSHOCK,
+            MOVE_SHADOW_BALL,
+            MOVE_TRICK
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_ALAKAZAM,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -1689,14 +1689,54 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_ENCORE
         },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_PSYCHIC,
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_ALAKAZAM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_TERRAIN_EXTENDER,
+        .moves =
+        {
+            MOVE_EXPANDING_FORCE,
+            MOVE_SHADOW_BALL,
+            MOVE_ALLY_SWITCH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_ALAKAZAM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY,
+        .moves =
+        {
+            MOVE_LIGHT_SCREEN,
+            MOVE_REFLECT,
+            MOVE_EXPANDING_FORCE,
+            MOVE_HELPING_HAND
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0068

@@ -656,28 +656,35 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ABRA,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGIC_GUARD
+            ABILITY_MAGIC_GUARD,
+            ABILITY_TELEPATHY
         )
     },
     { // 0064
         SPECIES_KADABRA,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGIC_GUARD
+            ABILITY_MAGIC_GUARD,
+            ABILITY_TELEPATHY
         )
     },
     { // 0065
         SPECIES_ALAKAZAM,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGIC_GUARD
+            ABILITY_MAGIC_GUARD,
+            ABILITY_TELEPATHY
         )
     },
     { // 0065
         SPECIES_ALAKAZAM_MEGA,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGIC_GUARD
+            ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
+            ABILITY_TELEPATHY
         )
     },
     { // 0066
