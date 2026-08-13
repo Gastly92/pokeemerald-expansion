@@ -63,6 +63,14 @@ struct EvSpread { u8 hp, atk, def, spa, spd, spe; };
 // preprocessing time, so the default mask below is built by the preprocessor and
 // the whole thing folds to one u32 constant.
 //
+// Pair ORDER does not matter — each pair only touches its own 5-bit field, and both
+// the mask and the value are combined with |. IVS(SPE, 0, ATK, 0) and
+// IVS(ATK, 0, SPE, 0) are the same constant (sIvsAnyOrder below pins this).
+//
+// But DO NOT name the same stat twice: the values are OR'd, not overwritten, so
+// IVS(SPE, 1, SPE, 2) silently yields a Speed IV of 3 rather than 1 or 2. There is
+// no way to make that a compile error here, so just don't repeat a stat.
+//
 // Note the engine treats iv == 0 as "unset" and falls back to the facility default
 // (`if (fmon->iv)` in CreateFacilityMon), so a spread that names all six stats as 0
 // is silently ignored. That is inherited from TRAINER_PARTY_IVS, not new here.
