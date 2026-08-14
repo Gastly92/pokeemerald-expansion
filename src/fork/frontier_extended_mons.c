@@ -2312,10 +2312,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // bulky special tank
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
-            MOVE_GUNK_SHOT,
+            MOVE_POISON_JAB,
             MOVE_KNOCK_OFF,
             MOVE_DRAIN_PUNCH,
             MOVE_TOXIC
@@ -2349,12 +2349,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_DARK,
     },
+    {
+        .species = SPECIES_MUK,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_CORROSIVE_GAS,
+            MOVE_CLEAR_SMOG,
+            MOVE_POISON_JAB,
+            MOVE_DRAIN_PUNCH
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .atk = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0089
     {
         .species = SPECIES_MUK_ALOLA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Power of Alchemy special wall
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_GUNK_SHOT,
@@ -2369,12 +2389,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spd = 4
         ),
-        .teraType = TYPE_DARK,
+        .teraType = TYPE_FLYING,
     },
     {
         .species = SPECIES_MUK_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Poison Touch bulky attacker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_POISON_JAB,
@@ -2389,7 +2409,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .teraType = TYPE_POISON,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_MUK_ALOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FIGY_BERRY,
+        .moves =
+        {
+            MOVE_RECYCLE,
+            MOVE_PROTECT,
+            MOVE_POISON_JAB,
+            MOVE_CRUNCH
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .atk = 4
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0091
