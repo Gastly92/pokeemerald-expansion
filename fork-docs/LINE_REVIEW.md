@@ -219,11 +219,24 @@ line:
 1. **Read the existing override row(s), if any.** Confirm:
    - **The chosen ability is NOT one of the species' innates** (otherwise the
      one observable pick is a wasted duplicate — the whole point of the row).
-   - **It's a STABLE pick:** either `:x:` in `fork-docs/INNATE_ABILITIES_PROGRESS.md`
-     (never going to become an innate — e.g. Lightning Rod, Water Absorb, Sheer
-     Force, Grassy Surge) **or** an already-`:white_check_mark:`-implemented innate
-     the species does **not** itself carry. Avoid a `:white_large_square:` pending
-     ability — it becomes future churn the moment it's wired as an innate.
+   - **It's a STABLE pick: `:x:` in `fork-docs/INNATE_ABILITIES_PROGRESS.md`** —
+     an ability that can **never** become an innate (Lightning Rod, Water Absorb,
+     Sheer Force, Grassy Surge, Bulletproof …). That is the whole rule. An ability
+     that is innate-*capable* (anything on the `sImplementedInnates[]` allowlist)
+     is **not** a legal override, even when this species does not currently carry
+     it: an innate-capable ability belongs in an `INNATES(...)` row, where it is
+     always-on and costs nothing, so spending the single observable slot on one
+     both wastes that slot's only purpose — a trait the species can express no
+     other way — and leaves a latent duplicate that collapses the moment a future
+     line review gives the species that ability innately.
+     **This rule was previously written the other way round** ("or an
+     already-implemented innate the species does not itself carry"), which is
+     wrong and was the source of a large backlog: 122 of 369 override rows and 259
+     of 1227 sets currently name an innate-capable ability. The guard is
+     `TEST("Innate abilities: no ability override or frontier set names an
+     innate-capable ability")` in `test/fork/innate_abilities.c`, marked
+     `KNOWN_FAILING` until that backlog clears. **Do not add new rows to it** —
+     new picks must be `:x:`.
    - **The freed slot is safe to repurpose:** filling an *empty* (`ABILITY_NONE`)
      slot is always safe. Repurposing a *real* slot deletes that ability from the
      species game-wide — only do it when the slot is redundant (that ability is
