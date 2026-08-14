@@ -237,6 +237,31 @@ line:
      innate-capable ability")` in `test/fork/innate_abilities.c`, marked
      `KNOWN_FAILING` until that backlog clears. **Do not add new rows to it** —
      new picks must be `:x:`.
+
+   - **CONVERTING A LEGACY LINE IS PART OF THE REVIEW.** This is how the backlog
+     clears — there is no separate sweep, because 134 of the 138 affected species
+     need a brand-new override ability chosen on flavour, which is exactly the
+     judgement a line review exists to make. So when the line you are reviewing
+     holds a legacy row (its override or any of its sets names a
+     `:white_check_mark:` ability), **converting it is in scope for Step 2**, the
+     same as proposing a new row: pick a `:x:` replacement, and repoint every set
+     whose `.ability` named the old one. Check the line with:
+
+     ```bash
+     make check TESTS="no ability override or frontier set names an innate-capable ability"
+     ```
+
+     and grep its output for your species. Two things follow that are easy to get
+     wrong. First, **a conversion can cost the line a trait it was built around** —
+     if the old pick was the observable half of a package (Farfetch'd's Super Luck
+     feeding its Leek crits), say so plainly in the proposal rather than quietly
+     swapping in something weaker; the maintainer may prefer a different `:x:`
+     pick, or to accept the loss. Second, **the repointed sets reach into Step 3**:
+     a set cannot keep an ability the override no longer supplies, so flag the
+     affected sets in Step 2 and treat their `.ability` field as settled there,
+     leaving the rest of each set to its normal Part A audit.
+     See [`INNATE_ABILITIES_PROGRESS.md`](INNATE_ABILITIES_PROGRESS.md) for the
+     direction, the current counts, and the promotion criterion.
    - **The freed slot is safe to repurpose:** filling an *empty* (`ABILITY_NONE`)
      slot is always safe. Repurposing a *real* slot deletes that ability from the
      species game-wide — only do it when the slot is redundant (that ability is

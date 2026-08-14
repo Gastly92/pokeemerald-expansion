@@ -7,21 +7,71 @@ extended frontier roster (`src/fork/frontier_extended_mons.c`) and its companion
 overrides (`src/fork/species_ability_overrides.c`). When authoring a set or a
 line review, use it to place each ability into one of two buckets:
 
-Legend:
-- :white_check_mark: **implemented innate** — the ability is wired and can be
-  handed to a species as an always-on innate in `src/fork/innate_abilities.c`
-  (the allowlist / source of truth is `sImplementedInnates[]` in
-  `test/fork/innate_abilities.c`). It is *not* a stable override pick: a set's
-  chosen `.ability` must never duplicate one of the species' own innates.
+Legend — the two buckets are **mutually exclusive** and decide where an ability may
+be used:
+
+- :white_check_mark: **implemented innate** — the ability is wired and belongs in an
+  `INNATES(...)` row in `src/fork/innate_abilities.c` (the allowlist / source of
+  truth is `sImplementedInnates[]` in `test/fork/innate_abilities.c`). It is
+  **never a legal override or chosen `.ability`** — not merely "unstable", and not
+  merely when the species already carries it. See the direction below.
 - :x: **rejected as an innate** — deliberately never wired as an innate, so it is
-  a **stable species-ability-override pick**: a set can select it as its chosen
-  ability without it ever colliding with a future innate. Prefer these for
-  `species_ability_overrides.c` rows (see that file's "pick a stable chosen
-  ability" note and [`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2).
+  the **only legal species-ability-override pick**: a set can select it as its
+  chosen ability without it ever colliding with a future innate.
 
 Every ability is resolved (no pending rows remain). See
 [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) for the per-ability wiring reference
 and the rationale for the `:x:` set.
+
+---
+
+## Direction: every species ends with innates ✅ + a `:x:` override
+
+The two buckets above are heading toward a clean split, and this is the direction
+all future work should push in:
+
+> **If an ability can be an innate, it is given as an innate. The one observable
+> ability slot is spent on something that can only ever be observable — a `:x:`
+> pick.**
+
+That is the whole rule, and it is why a `:white_check_mark:` ability is never a
+legal override even on a species that does not carry it. Handing out an
+innate-capable ability through the override slot wastes the slot's only purpose (a
+trait the species can express no other way) and leaves a latent duplicate: the day
+a line review gives that species the ability innately, the override silently
+collapses into a redundant pick.
+
+**Status.** The rule was written the other way round for most of the table's life
+(it accepted "an already-implemented innate the species does not itself carry"),
+so there is a backlog:
+
+| | Conforming | Legacy (innate-capable) | Total |
+|---|---:|---:|---:|
+| Override rows (`species_ability_overrides.c`) | 247 | **122** | 369 |
+| Frontier sets (`frontier_extended_mons.c`) | 968 | **259** | 1227 |
+
+Measure it at any time with:
+
+```bash
+make check TESTS="no ability override or frontier set names an innate-capable ability"
+```
+
+That test (`test/fork/innate_abilities.c`) enumerates every offender by name and is
+marked **`KNOWN_FAILING`**, so it reports without blocking CI. The runner flags a
+`KNOWN_FAILING` test that starts passing, so **it promotes itself to a real gate the
+day the backlog reaches zero** — at which point the `KNOWN_FAILING;` line should be
+deleted.
+
+**How the backlog clears: line reviews.** 134 of the 138 affected species need a
+brand-new override ability chosen from the ~130 `:x:` abilities, which is a
+per-species flavour judgement, not a mechanical rewrite — so it is *not* done as a
+sweep. Instead, **a line review converts the line it touches** (see
+[`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2): if the line has a legacy row, moving it
+to a `:x:` pick and repointing its sets is part of that review's Step 2, the same as
+any other override work. Eventually every species is covered.
+
+**Meanwhile, do not grow the backlog.** Any *new* override row or set — from a line
+review or anywhere else — must name a `:x:` ability.
 
 | Use | Ability | Description |
 | :---: | :---: | :--- |
