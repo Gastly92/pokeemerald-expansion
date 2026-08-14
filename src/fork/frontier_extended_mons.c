@@ -2102,7 +2102,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FARFETCHD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEEK, // Guaranteed crit
+        .heldItem = ITEM_LEEK,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -2110,7 +2110,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_SUPER_LUCK, // all real abilities innate; chosen Super Luck (non-redundant)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21314,7 +21314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIRFETCHD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEEK, // guaranteed-crit Leaf Blade Scrappy fighter
+        .heldItem = ITEM_LEEK,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -21322,7 +21322,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_FIRST_IMPRESSION
         },
-        .ability = ABILITY_SUPER_LUCK, // Scrappy now innate; chosen Super Luck (empty-slot override) stacks with the Leek for guaranteed crits
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21334,7 +21334,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIRFETCHD,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -21342,7 +21342,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_BRAVE_BIRD
         },
-        .ability = ABILITY_SUPER_LUCK, // Scrappy now innate; chosen Super Luck (empty-slot override)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

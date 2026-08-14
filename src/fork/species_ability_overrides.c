@@ -288,10 +288,8 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_POISON_TOUCH
     },
     { // 0083
-        // Farfetchd: all real abilities now innate, so its innate-redundant slot-1 Inner Focus takes a chosen
-        // Super Luck so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_FARFETCHD, 1,
-        ABILITY_SUPER_LUCK
+        ABILITY_HUSTLE
     },
     { // 0085
         // Dodrio: all real abilities now innate, so its innate-redundant slot-0 Run Away takes a chosen
@@ -2280,11 +2278,8 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_BULLETPROOF
     },
     { // 0865
-        // Sirfetch'd's Scrappy is now innate and its remaining slot-0 Steadfast is weak (and pending), so its
-        // EMPTY slot 1 takes Super Luck, an already-implemented :white_check_mark: innate (stable) that it does
-        // not carry innately: the duelist's precision stacks with the Leek for guaranteed crits.
         SPECIES_SIRFETCHD, 1,
-        ABILITY_SUPER_LUCK
+        ABILITY_BULLETPROOF
     },
     { // 0870
         // Falinks: all real abilities now innate, so its empty slot takes a chosen
