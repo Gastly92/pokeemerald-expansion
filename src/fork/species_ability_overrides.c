@@ -230,12 +230,20 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PSYCHIC_SURGE
     },
     { // 0071
-        // Victreebel's only real abilities (Chlorophyll, Gluttony) are BOTH now innate, so its EMPTY slot 1
-        // takes Sheer Force -- :x: (never an innate -> stable), powering up its Sludge Bomb. (Effect Spore was
-        // moved off: under DETERMINISTIC_ABILITIES it always sleeps contact attackers, colliding with the
-        // Singles set's own Sleep Powder for the single status slot; Sheer Force is safe on the physical set too.)
         SPECIES_VICTREEBEL, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_STAKEOUT
+    },
+    {
+        SPECIES_VICTREEBEL_MEGA, 0,
+        ABILITY_STAKEOUT
+    },
+    {
+        SPECIES_VICTREEBEL_MEGA, 1,
+        ABILITY_STAKEOUT
+    },
+    {
+        SPECIES_VICTREEBEL_MEGA, 2,
+        ABILITY_STAKEOUT
     },
     { // 0073
         // Tentacruel's three real abilities (Clear Body, Liquid Ooze, Rain Dish) are ALL now innate; slots 0/1

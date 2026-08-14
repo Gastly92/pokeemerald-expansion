@@ -1805,7 +1805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VICTREEBEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SOLAR_BLADE,
@@ -1813,7 +1813,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (shared override); safe on this physical set
+        .ability = ABILITY_STAKEOUT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1833,7 +1833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Sludge Bomb
+        .ability = ABILITY_STAKEOUT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
