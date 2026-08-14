@@ -2144,7 +2144,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DODRIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Swords Dance
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -2157,6 +2157,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .atk = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_DODRIO,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SILK_SCARF,
+        .moves =
+        {
+            MOVE_TRI_ATTACK,
+            MOVE_DOUBLE_EDGE,
+            MOVE_BRAVE_BIRD,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_DODRIO,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_TAILWIND,
+            MOVE_BRAVE_BIRD,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
