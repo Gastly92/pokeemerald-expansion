@@ -1828,27 +1828,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOLEM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sturdy band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE,
             MOVE_EXPLOSION,
-            MOVE_SUPERPOWER
+            MOVE_DOUBLE_EDGE
         },
-        .ability = ABILITY_SAND_STREAM, // Rock Head + Sturdy + Sand Veil now innate; chosen Sand Stream turns on innate Sand Veil (override)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .def = 4
         ),
         .teraType = TYPE_GROUND,
     },
     {
         .species = SPECIES_GOLEM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CUSTAP_BERRY, // Sturdy + Custap lead w/ rocks
+        .heldItem = ITEM_CUSTAP_BERRY,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -1856,21 +1856,61 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_SAND_STREAM, // Rock Head + Sturdy + Sand Veil now innate; chosen Sand Stream turns on innate Sand Veil (override)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
+            .def = 4
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_GOLEM,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_WHITE_HERB,
+        .moves =
+        {
+            MOVE_SHELL_SMASH,
+            MOVE_STONE_EDGE,
+            MOVE_EARTHQUAKE,
+            MOVE_DOUBLE_EDGE
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
-        .teraType = TYPE_GHOST,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_GOLEM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SMOOTH_ROCK,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_ROCK_SLIDE,
+            MOVE_EARTHQUAKE,
+            MOVE_EXPLOSION
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_GROUND,
     },
 
     // 0076
     {
         .species = SPECIES_GOLEM_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // Galvanize Explosion/STAB attacker
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -1881,16 +1921,16 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_GALVANIZE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .def = 4,
-            .spe = 252
+            .def = 4
         ),
         .teraType = TYPE_ELECTRIC,
     },
     {
         .species = SPECIES_GOLEM_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HARD_STONE, // Sturdy bulky tank
+        .heldItem = ITEM_HARD_STONE,
         .moves =
         {
             MOVE_STONE_EDGE,
@@ -1898,7 +1938,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_CURSE
         },
-        .ability = ABILITY_GALVANIZE, // Magnet Pull & Sturdy now innate; chosen Galvanize (real slot) makes its Normal moves Electric for this slow tank
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1906,6 +1946,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_GOLEM_ALOLA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_FOLLOW_ME,
+            MOVE_ROCK_SLIDE,
+            MOVE_BOLT_STRIKE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_GOLEM_ALOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MAGNET,
+        .moves =
+        {
+            MOVE_MAGNET_RISE,
+            MOVE_BOLT_STRIKE,
+            MOVE_STONE_EDGE,
+            MOVE_EARTHQUAKE
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_ELECTRIC,
     },
 
     // 0078
