@@ -182,9 +182,8 @@
 //   entry turn like Quick Claw). Wired at the two effect sites in TryChangingTurnOrderEffects (src/battle_main.c) via
 //   BattlerHasAbility, with the activation pop-up / message overwritten to Quick Draw when the chosen ability differs,
 //   and the deterministic turn-order prediction in AI_WhoStrikesFirst made innate-aware (the random 30% roll is
-//   unpredictable, so the AI models it only under the deterministic config, as in stock). Canon carrier: Galarian
-//   Slowbro (its primary ability); the Galarian Farfetch'd -> Sirfetch'd duelist line takes it as a tight, observable
-//   flavor pick,
+//   unpredictable, so the AI models it only under the deterministic config, as in stock). Sole carrier: Galarian
+//   Slowbro (its primary ability),
 //   COMATOSE (Tier 5.3 — a PURE-BOON divergence, canon only so far): the holder is immune to every non-volatile status and
 //   counts as asleep for its own Snore / Sleep Talk, but — unlike the real ability — is NOT treated as asleep at the
 //   COST sites (enemy Hex / Dream Eater / Nightmare / Bad Dreams, and its own Rest block are all left chosen-only), so

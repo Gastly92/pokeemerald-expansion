@@ -231,11 +231,52 @@ line:
 1. **Read the existing override row(s), if any.** Confirm:
    - **The chosen ability is NOT one of the species' innates** (otherwise the
      one observable pick is a wasted duplicate — the whole point of the row).
-   - **It's a STABLE pick:** either `:x:` in `fork-docs/INNATE_ABILITIES_PROGRESS.md`
-     (never going to become an innate — e.g. Lightning Rod, Water Absorb, Sheer
-     Force, Grassy Surge) **or** an already-`:white_check_mark:`-implemented innate
-     the species does **not** itself carry. Avoid a `:white_large_square:` pending
-     ability — it becomes future churn the moment it's wired as an innate.
+   - **It's a STABLE pick: an ability absent from `sImplementedInnates[]`**
+     (`test/fork/innate_abilities.c`) — one that can **never** become an innate
+     (Lightning Rod, Water Absorb, Sheer Force, Grassy Surge, Bulletproof …). That
+     array is the single source of truth: on it = implemented innate, off it =
+     never-an-innate. That is the whole rule. An ability
+     that is innate-*capable* (anything on the `sImplementedInnates[]` allowlist)
+     is **not** a legal override, even when this species does not currently carry
+     it: an innate-capable ability belongs in an `INNATES(...)` row, where it is
+     always-on and costs nothing, so spending the single observable slot on one
+     both wastes that slot's only purpose — a trait the species can express no
+     other way — and leaves a latent duplicate that collapses the moment a future
+     line review gives the species that ability innately.
+     **This rule was previously written the other way round** ("or an
+     already-implemented innate the species does not itself carry"), which is
+     wrong and was the source of a large backlog — a third of the override table
+     and a fifth of the roster still name an innate-capable ability (current
+     counts live in `INNATE_ABILITIES.md`; the test below prints them). The guard is
+     `TEST("Innate abilities: no ability override or frontier set names an
+     innate-capable ability")` in `test/fork/innate_abilities.c`, marked
+     `KNOWN_FAILING` until that backlog clears. **Do not add new rows to it** —
+     new picks must be `:x:`.
+
+   - **CONVERTING A LEGACY LINE IS PART OF THE REVIEW.** This is how the backlog
+     clears — there is no separate sweep, because 134 of the 138 affected species
+     need a brand-new override ability chosen on flavour, which is exactly the
+     judgement a line review exists to make. So when the line you are reviewing
+     holds a legacy row (its override or any of its sets names a
+     `:white_check_mark:` ability), **converting it is in scope for Step 2**, the
+     same as proposing a new row: pick a `:x:` replacement, and repoint every set
+     whose `.ability` named the old one. Check the line with:
+
+     ```bash
+     make check TESTS="no ability override or frontier set names an innate-capable ability"
+     ```
+
+     and grep its output for your species. Two things follow that are easy to get
+     wrong. First, **a conversion can cost the line a trait it was built around** —
+     if the old pick was the observable half of a package (Farfetch'd's Super Luck
+     feeding its Leek crits), say so plainly in the proposal rather than quietly
+     swapping in something weaker; the maintainer may prefer a different `:x:`
+     pick, or to accept the loss. Second, **the repointed sets reach into Step 3**:
+     a set cannot keep an ability the override no longer supplies, so flag the
+     affected sets in Step 2 and treat their `.ability` field as settled there,
+     leaving the rest of each set to its normal Part A audit.
+     See [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) ("Direction") for the
+     rationale, the current counts, and the promotion criterion.
    - **The freed slot is safe to repurpose:** filling an *empty* (`ABILITY_NONE`)
      slot is always safe. Repurposing a *real* slot deletes that ability from the
      species game-wide — only do it when the slot is redundant (that ability is

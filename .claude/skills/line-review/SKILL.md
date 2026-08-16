@@ -72,11 +72,18 @@ welcome but not required.
   to *reject* a candidate is the tell that the honesty requirement has turned into an
   incentive to omit. The canon-user count is still the gate — media evidence picks
   *which* ability fits, and never licenses a 1-user signature.
-- **Overrides:** the chosen ability must **not** duplicate a species innate and
-  must be a *stable* pick (`:x:` never-an-innate in
-  `fork-docs/INNATE_ABILITIES_PROGRESS.md`, or an implemented innate the species
-  doesn't carry). Only repurpose a *real* slot that's redundant and not
-  test-pinned; filling an empty slot is always safe.
+- **Overrides:** the chosen ability must be a **never-an-innate** pick — one
+  **absent from `sImplementedInnates[]`** (`test/fork/innate_abilities.c`, the
+  single source of truth: on it = implemented innate, off it = never-an-innate).
+  An innate-capable ability is **not** legal even when this species doesn't carry
+  it — if an ability *can* be an innate it is given as an innate, and the one
+  observable slot is spent on something that can only ever be observable. Most of
+  the table predates this rule; `TEST("Innate abilities: no ability override or
+  frontier set names an innate-capable ability")` is `KNOWN_FAILING` until that
+  backlog clears, and **a line review converts the line it touches** — that is how
+  it clears, so treat conversion as in-scope for Step 2 and never add to it. See
+  `fork-docs/INNATE_ABILITIES.md` ("Direction"). Only repurpose a *real* slot
+  that's redundant and not test-pinned; filling an empty slot is always safe.
 - **Pre-evolutions get no override rows and no frontier sets.** An override exists
   to be selected by a set, and a pre-evo set is drafted against fully-evolved mons
   and loses — so both are dead data on a Vulpix or an Ivysaur. Spend them on the

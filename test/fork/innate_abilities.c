@@ -1,6 +1,9 @@
 #include "global.h"
 #include "test/battle.h"
+#include "config_changes.h"
 #include "fork/innate_abilities.h"
+#include "fork/frontier_extended_mons.h"
+#include "fork/species_ability_overrides.h"
 
 // FORK: coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
 // default off in the test baseline (see TestInitConfigData), so each test that
@@ -5088,15 +5091,14 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate S
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
 
-// (1) Every declared innate must be on the implemented allowlist — an ability whose innate
-// behavior is actually wired at an effect site. An off-allowlist innate has no effect site
-// to honor it, so it would silently do NOTHING (the footgun the file header warns about);
-// this fails loudly instead. Keep this set in sync with the ALLOWLIST note in
-// src/fork/innate_abilities.c when a new ability is wired.
-TEST("Innate abilities: every declared innate is on the implemented allowlist")
+// The implemented-innate allowlist: abilities whose innate behavior is actually wired at an
+// effect site. File scope because two tests below read it in opposite directions — (1) every
+// declared innate must be ON this list (an off-allowlist innate has no effect site and would
+// silently do nothing), and (6) no override row or frontier set may name an ability that is on
+// it (an innate-capable ability belongs in an INNATES(...) row, not in the one observable slot).
+// Keep in sync with the ALLOWLIST note in src/fork/innate_abilities.c when a new ability is wired.
+static const enum Ability sImplementedInnates[] =
 {
-    static const enum Ability sImplementedInnates[] =
-    {
         ABILITY_LEVITATE, ABILITY_REGENERATOR, ABILITY_UNAWARE, ABILITY_STURDY,
         ABILITY_NATURAL_CURE, ABILITY_PRANKSTER, ABILITY_OVERGROW, ABILITY_BLAZE,
         ABILITY_TORRENT, ABILITY_SWARM, ABILITY_SWIFT_SWIM, ABILITY_CHLOROPHYLL,
@@ -5164,8 +5166,27 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
         ABILITY_MIRROR_ARMOR,
         ABILITY_MAGIC_BOUNCE,
         ABILITY_DANCER,
-    };
-    u32 row, i, j, count = GetSpeciesInnatesEntryCount();
+};
+
+static bool32 IsImplementedInnate(enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sImplementedInnates); i++)
+    {
+        if (ability == sImplementedInnates[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// (1) Every declared innate must be on the implemented allowlist — an ability whose innate
+// behavior is actually wired at an effect site. An off-allowlist innate has no effect site
+// to honor it, so it would silently do NOTHING (the footgun the file header warns about);
+// this fails loudly instead.
+TEST("Innate abilities: every declared innate is on the implemented allowlist")
+{
+    u32 row, i, count = GetSpeciesInnatesEntryCount();
     u32 offenders = 0;
 
     for (row = 0; row < count; row++)
@@ -5175,16 +5196,7 @@ TEST("Innate abilities: every declared innate is on the implemented allowlist")
 
         for (i = 0; list[i] != ABILITY_NONE; i++)
         {
-            bool32 allowed = FALSE;
-            for (j = 0; j < ARRAY_COUNT(sImplementedInnates); j++)
-            {
-                if (list[i] == sImplementedInnates[j])
-                {
-                    allowed = TRUE;
-                    break;
-                }
-            }
-            if (!allowed)
+            if (!IsImplementedInnate(list[i]))
             {
                 offenders++;
                 Test_MgbaPrintf("%S declares unwired innate %S (no effect site honors it)",
@@ -5282,6 +5294,65 @@ TEST("Innate abilities: species-keyed lookup matches the raw table for every row
     EXPECT_EQ(mismatches, 0);
     EXPECT(!SpeciesHasInnate(SPECIES_NONE, ABILITY_LEVITATE)); // no-row species misses cleanly
     EXPECT_EQ(GetSpeciesInnate(SPECIES_NONE, 0), ABILITY_NONE);
+}
+
+// (6) An ability override row, and any frontier set's chosen ability, must name an ability that
+// can NEVER be an innate — i.e. one absent from sImplementedInnates[] above.
+//
+// The two roster tests in test/fork/frontier_extended_roster.c check the weaker, per-species
+// form of this: the chosen ability must not duplicate an innate THIS species happens to carry.
+// That misses the general case. An ability that is innate-capable belongs in an INNATES(...)
+// row, where it is always-on and costs nothing; spending the single observable slot on one both
+// wastes that slot's only purpose (a trait the species can express no other way) and leaves the
+// row a latent duplicate — the day the species is given that ability innately, which is exactly
+// what a line review does, the override silently collapses into a redundant pick.
+//
+// KNOWN_FAILING: the roster predates this rule -- roughly a third of the override table and a
+// fifth of the sets name an innate-capable ability (this test prints the exact list and count;
+// fork-docs/INNATE_ABILITIES.md "Direction" carries the last snapshot). Converting them is a
+// per-species flavor judgement -- nearly every affected species needs a brand-new override
+// ability picked from the ~130 never-an-innate abilities -- so it is staged as its own work
+// rather than blocking CI, and each line review converts the line it touches. The runner reports
+// when a KNOWN_FAILING test starts passing, so this promotes itself to a real gate the moment
+// the backlog is cleared (delete the KNOWN_FAILING; line then).
+TEST("Innate abilities: no ability override or frontier set names an innate-capable ability")
+{
+    u32 species, slot, i;
+    u32 offenders = 0;
+
+    // GetSpeciesAbilityOverride returns ABILITY_NONE for every species while the flag is off
+    // (TestInitConfigData force-disables it), which would make the override sweep vacuous.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability ability = GetSpeciesAbilityOverride(species, slot);
+
+            if (ability == ABILITY_NONE || !IsImplementedInnate(ability))
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("override %S slot %d: %S is innate-capable -- give the species that ability as an innate and spend the override on a never-an-innate pick",
+                            gSpeciesInfo[species].speciesName, slot, gAbilitiesInfo[ability].name);
+        }
+    }
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        if (set->ability == ABILITY_NONE || !IsImplementedInnate(set->ability))
+            continue;
+
+        offenders++;
+        Test_MgbaPrintf("roster[%d] %S: chosen %S is innate-capable -- repoint the set at a never-an-innate ability",
+                        i, gSpeciesInfo[set->species].speciesName, gAbilitiesInfo[set->ability].name);
+    }
+
+    KNOWN_FAILING;
+    EXPECT_EQ(offenders, 0);
 }
 
 // ===== Status-condition immunities (Magma Armor / Water Veil / Own Tempo /
@@ -8966,8 +9037,8 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Neutralizing Gas suppresses an inn
 // bracket; under DETERMINISTIC_ABILITIES (the shipping default) it instead always fires on the holder's
 // entry turn, like Quick Claw. Wired at the two effect sites in TryChangingTurnOrderEffects
 // (src/battle_main.c) via BattlerHasAbility, with the activation pop-up / message overwritten to Quick
-// Draw when the chosen ability differs. Galarian Slowbro carries it canonically; the Galarian Farfetch'd
-// -> Sirfetch'd duelist line takes it as an observable flavor pick (chosen Steadfast / Scrappy differ).
+// Draw when the chosen ability differs. Galarian Slowbro is the sole carrier, and takes it canonically
+// (its chosen Own Tempo differs, so only the innate can be responsible for the turn-order override).
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Quick Draw lets the slower holder move first on its entry turn")
 {
     bool32 enabled;
@@ -8996,20 +9067,19 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Quick Draw lets the slower 
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a flavor duelist's innate Quick Draw fires on its 30% roll (non-deterministic)")
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Quick Draw fires on its 30% roll (non-deterministic)")
 {
     PASSES_RANDOMLY(3, 10, RNG_QUICK_DRAW);
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_SIRFETCHD, ABILITY_QUICK_DRAW));
-        ASSUME(gSpeciesInfo[SPECIES_SIRFETCHD].abilities[0] != ABILITY_QUICK_DRAW);
+        ASSUME(SpeciesHasInnate(SPECIES_SLOWBRO_GALAR, ABILITY_QUICK_DRAW));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         // DETERMINISTIC_ABILITIES is off in the test baseline, so Quick Draw uses its stock 30% roll.
-        PLAYER(SPECIES_SIRFETCHD) { Ability(ABILITY_STEADFAST); Speed(1); } // chosen Steadfast; Quick Draw only as innate
+        PLAYER(SPECIES_SLOWBRO_GALAR) { Ability(ABILITY_OWN_TEMPO); Speed(1); } // chosen Own Tempo; Quick Draw only as innate
         OPPONENT(SPECIES_WOBBUFFET) { Speed(100); }
     } WHEN {
         TURN { MOVE(player, MOVE_TACKLE); }
     } SCENE {
-        // On the 30% branch the pop-up shows Quick Draw even though the chosen ability is Steadfast.
+        // On the 30% branch the pop-up shows Quick Draw even though the chosen ability is Own Tempo.
         ABILITY_POPUP(player, ABILITY_QUICK_DRAW);
     }
 }

@@ -40,17 +40,24 @@ struct SpeciesAbilityOverride
 // Sorted by National Pokédex number (shown in each row's trailing comment); formes share their
 // base's number and follow it. Adding a row: drop it at its dex position with a trailing `// <dex>`.
 //
-// PICK A STABLE CHOSEN ABILITY — cross-reference it against fork-docs/INNATE_ABILITIES_PROGRESS.md.
-// Prefer an ability that will NEVER be wired as an innate (marked :x: there — e.g. Lightning Rod,
-// Soundproof, Water Absorb, Sheer Force) over one still PENDING (:white_large_square:). A pending
-// ability is on track to become an innate, and the moment it is, the Step 3.5 sweep
-// (INNATE_ABILITIES.md) has to revisit every set and override that hands it out — so a
-// :white_large_square: pick is future churn baked in, while a :x: pick is stable for good. Sceptile's
+// PICK A NEVER-AN-INNATE CHOSEN ABILITY — cross-reference it against sImplementedInnates[] in
+// test/fork/innate_abilities.c, the single source of truth. The ability MUST be ABSENT from that
+// array (never wired as an innate — e.g. Lightning Rod, Soundproof, Water Absorb, Sheer Force). An
+// innate-CAPABLE ability (one ON the array) is NOT a legal pick, even when this species
+// does not currently carry it: an innate-capable ability belongs in an INNATES(...) row, where it is
+// always-on and costs nothing, so spending the one observable slot on it both wastes that slot's
+// only purpose (a trait the species can express no other way) and leaves a latent duplicate that
+// collapses the moment a line review gives the species that ability innately. Sceptile's
 // LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
-// *implemented* :white_check_mark: innate — that's the row's whole premise; noted in each comment.)
-// The table below was audited on this rule: every row hands out a :x: (never-an-innate) ability,
-// or an already-*implemented* :white_check_mark: innate the species does NOT itself carry (Carnivine's
-// Chlorophyll, Tornadus-Therian's Prankster, Swellow's Quick Feet, ...), which is likewise stable.
+// *implemented* :white_check_mark: innate — that's the row's whole premise.)
+//
+// MIGRATION IN PROGRESS — roughly a third of the rows below predate this rule and still hand
+// out an innate-capable ability. They are enumerated by name by TEST("Innate abilities: no
+// ability override or frontier set names an innate-capable ability") in
+// test/fork/innate_abilities.c, marked KNOWN_FAILING until the backlog clears; run it for the
+// current list and counts. Line reviews convert the lines they touch (fork-docs/LINE_REVIEW.md
+// Step 2, and fork-docs/INNATE_ABILITIES.md "Direction"). DO NOT ADD NEW ROWS TO THE BACKLOG —
+// a new pick must be absent from sImplementedInnates[].
 //
 // SLOT CHOICE MATTERS — because the table is gated by FEATURE_INNATE_ABILITIES, a row REPLACES that
 // slot's ability only where the flag is on: all real gameplay/frontier, plus any FORK test that opts
@@ -287,10 +294,8 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_POISON_TOUCH
     },
     { // 0083
-        // Farfetchd: all real abilities now innate, so its innate-redundant slot-1 Inner Focus takes a chosen
-        // Super Luck so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_FARFETCHD, 1,
-        ABILITY_SUPER_LUCK
+        ABILITY_HUSTLE
     },
     { // 0085
         // Dodrio: all real abilities now innate, so its innate-redundant slot-0 Run Away takes a chosen
@@ -2279,11 +2284,8 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_BULLETPROOF
     },
     { // 0865
-        // Sirfetch'd's Scrappy is now innate and its remaining slot-0 Steadfast is weak (and pending), so its
-        // EMPTY slot 1 takes Super Luck, an already-implemented :white_check_mark: innate (stable) that it does
-        // not carry innately: the duelist's precision stacks with the Leek for guaranteed crits.
         SPECIES_SIRFETCHD, 1,
-        ABILITY_SUPER_LUCK
+        ABILITY_BULLETPROOF
     },
     { // 0870
         // Falinks: all real abilities now innate, so its empty slot takes a chosen

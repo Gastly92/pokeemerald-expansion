@@ -51,7 +51,7 @@
 // innate Levitate). Role comments naming an innate describe that innate-backed
 // playstyle, not the .ability field. For the full picture — which species are
 // freed vs. left "redundant-but-correct", and the per-species override picks — see
-// fork-docs/INNATE_ABILITIES.md, fork-docs/INNATE_ABILITIES_PROGRESS.md, and the
+// fork-docs/INNATE_ABILITIES.md and the
 // override rows in src/fork/species_ability_overrides.c. The current set of still-
 // redundant sets is CI-guarded by sKnownRedundant in
 // test/fork/frontier_extended_roster.c — that table, not a comment, is the record.
@@ -2162,23 +2162,43 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0083
     {
         .species = SPECIES_FARFETCHD,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEEK, // Guaranteed crit
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEEK,
         .moves =
         {
-            MOVE_SWORDS_DANCE,
+            MOVE_FIRST_IMPRESSION,
             MOVE_BRAVE_BIRD,
             MOVE_KNOCK_OFF,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_SUPER_LUCK, // all real abilities innate; chosen Super Luck (non-redundant)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIGHTING,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_FARFETCHD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_FOLLOW_ME,
+            MOVE_TAILWIND,
+            MOVE_BRAVE_BIRD
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0085
@@ -21476,7 +21496,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIRFETCHD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEEK, // guaranteed-crit Leaf Blade Scrappy fighter
+        .heldItem = ITEM_LEEK,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -21484,7 +21504,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_FIRST_IMPRESSION
         },
-        .ability = ABILITY_SUPER_LUCK, // Scrappy now innate; chosen Super Luck (empty-slot override) stacks with the Leek for guaranteed crits
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21496,15 +21516,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIRFETCHD,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SWORDS_DANCE,
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF,
-            MOVE_BRAVE_BIRD
+            MOVE_NIGHT_SLASH
         },
-        .ability = ABILITY_SUPER_LUCK, // Scrappy now innate; chosen Super Luck (empty-slot override)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21512,6 +21532,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
+    },
+    {
+        .species = SPECIES_SIRFETCHD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_COACHING,
+            MOVE_CLOSE_COMBAT,
+            MOVE_FIRST_IMPRESSION
+        },
+        .ability = ABILITY_BULLETPROOF,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0866

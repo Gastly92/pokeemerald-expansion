@@ -70,11 +70,22 @@ comment + `FORK.md`). If no, a 1:1 copy is already pure-boon.
 
 ## Why some abilities are never wired (the `:x:` set)
 
-`INNATE_ABILITIES_PROGRESS.md` marks abilities we will **not** wire as innates with
-`:x:`, but that tracker is a scratch record that gets deleted once the feature is
-complete — so the *reasons* live here, permanently. An ability is `:x:` when it fails
-a gate above: it's not a pure boon, or it can't be identity-neutral, AI-tractable, or
-determinism-safe. The buckets (each rejected ability sits in exactly one):
+The feature is complete, so the progress tracker that used to carry this list has
+been **retired and deleted** — as it always said it would be. The *reasons* live
+here, permanently, and the membership test is now purely mechanical:
+
+> **An ability is `:x:` (never-an-innate) if and only if it is absent from
+> `sImplementedInnates[]` in `test/fork/innate_abilities.c`.**
+
+That array is the single source of truth for both buckets — everything on it is an
+implemented innate, everything else is `:x:`. There is no third "pending" state:
+every ability is resolved. (When the tracker was deleted its two columns were checked
+against the array and agreed exactly — 185 implemented on both sides, with no `:x:`
+ability appearing on the allowlist — which is what made deleting it lossless.)
+
+An ability is `:x:` when it fails a gate above: it's not a pure boon, or it can't be
+identity-neutral, AI-tractable, or determinism-safe. The buckets (each rejected
+ability sits in exactly one):
 
 - **Identity / form / type-transform** — breaks the identity-neutral invariant
   (innates are never copied/swapped/displayed as identity; `-ate` abilities retype
@@ -501,17 +512,16 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
    fails CI if any `.ability` doesn't resolve to a real slot (through the override hook), so a bad
    pick can't slip through.
 
-   > **Pick a *stable* chosen ability — cross-reference it against `INNATE_ABILITIES_PROGRESS.md`.**
-   > Prefer an ability marked `:x:` there (rejected — it will *never* be wired as an innate: Lightning
-   > Rod, Soundproof, Water Absorb, Sheer Force, …) over one still marked `:white_large_square:`
-   > (pending). A `:white_large_square:` ability is on track to become an innate, and the moment it
-   > does, *this* Step 3.5 sweep has to come back and re-point every override (and roster set) that
-   > hands it out — so a pending pick is churn baked in, while a `:x:` pick is stable for good.
-   > Sceptile→`LIGHTNING_ROD` is the model: Lightning Rod is `:x:`, so that override never needs
-   > revisiting. (The whole table was audited on this rule — every row now hands out a `:x:` ability
-   > except the two that hand out an already-implemented `:white_check_mark:` innate, Carnivine→
-   > Chlorophyll and Tornadus-Therian→Prankster, which are likewise stable.) Separately, the slot a row *frees* must
-   > already be redundant via an *implemented* (`:white_check_mark:`) innate — that's the row's whole
+   > **Pick a never-an-innate chosen ability — it MUST be absent from `sImplementedInnates[]`**
+   > (`test/fork/innate_abilities.c`), i.e. `:x:` in the sense defined under
+   > ["Why some abilities are never wired"](#why-some-abilities-are-never-wired-the-x-set):
+   > Lightning Rod, Soundproof, Water Absorb, Sheer Force, Bulletproof, …
+   > An innate-*capable* ability is **not** a legal pick, even when this species does not
+   > currently carry it — see ["Direction"](#direction-innates-get-the-innate-capable-abilities-overrides-get-the-rest)
+   > for why, and for the conversion backlog this rule left behind.
+   > Sceptile→`LIGHTNING_ROD` is the model: Lightning Rod is never-an-innate, so that override
+   > never needs revisiting. Separately, the slot a row *frees* must
+   > already be redundant via an *implemented* innate — that's the row's whole
    > premise. A row may even repurpose a *real, non-empty* slot whose ability is dead weight on the
    > roster's sets (Sceptile's HA Unburden does nothing on its non-consumable-item sets, so with
    > Overgrow innately latched the slot is freed to `LIGHTNING_ROD`), so long as that freeing innate
@@ -550,8 +560,58 @@ Two human-facing records, both fork-owned:
 - **`FORK.md`** — edit the **Innate abilities** row: add the ability to the
   supported-set parenthetical in the *status* column, to the "Today the allowlist
   is …" sentence, and to the "Known limitations" list; note any new wiring.
-- **`INNATE_ABILITIES_PROGRESS.md`** — flip the ability's row from
-  `:white_large_square:` to `:white_check_mark:`.
+(The old `INNATE_ABILITIES_PROGRESS.md` tracker has been retired and deleted;
+adding `ABILITY_X` to `sImplementedInnates[]` in Step 2 is now the only place an
+ability's implemented/never status is recorded.)
+
+## Direction: innates get the innate-capable abilities, overrides get the rest
+
+The two buckets are heading toward a clean split, and this is the direction all
+future work should push in:
+
+> **If an ability can be an innate, it is given as an innate. The single observable
+> ability slot is spent on something that can only ever be observable — a
+> never-an-innate (`:x:`) pick.**
+
+That is why an innate-capable ability is never a legal override or chosen
+`.ability`, *even on a species that does not carry it*. Handing one out through the
+override slot wastes that slot's only purpose — a trait the species can express no
+other way — and leaves a latent duplicate: the day a line review grants that species
+the ability innately, the override silently collapses into a redundant pick.
+
+**Status.** The rule was written the other way round for most of the override
+table's life (it accepted "an already-implemented innate the species does not itself
+carry"), so there is a backlog:
+
+**These numbers are a snapshot and go stale on every merge** — each line review
+that lands before converting its line adds to the backlog. This is the only place
+that carries them; everywhere else points at the test. Re-measure and update here:
+
+| | Conforming | Legacy (innate-capable) | Total |
+|---|---:|---:|---:|
+| Override rows (`species_ability_overrides.c`) | 249 | **124** | 373 |
+| Frontier sets (`frontier_extended_mons.c`) | 978 | **259** | 1237 |
+
+The test names every offender:
+
+```bash
+make check TESTS="no ability override or frontier set names an innate-capable ability"
+```
+
+`TEST("Innate abilities: no ability override or frontier set names an innate-capable
+ability")` (`test/fork/innate_abilities.c`) sweeps the whole override table and the
+whole roster against `sImplementedInnates[]`. It is marked **`KNOWN_FAILING`**, so it
+reports without blocking CI, and the runner flags a `KNOWN_FAILING` test that starts
+passing — so **it promotes itself to a real gate the day the backlog reaches zero**,
+at which point the `KNOWN_FAILING;` line should be deleted.
+
+**How the backlog clears: line reviews.** Nearly every affected species needs a
+brand-new override ability chosen from the ~130 never-an-innate abilities, which is a
+per-species flavour judgement rather than a mechanical rewrite — so it is *not* done
+as a sweep. Instead **a line review converts the line it touches** (see
+[`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2), the same as any other override work in
+that review. Eventually every species is covered. Meanwhile, **do not grow the
+backlog**: any new override row or set must name a never-an-innate ability.
 
 ## Why "mostly automatic" depends on the ability
 
@@ -573,7 +633,7 @@ the two things easiest to skip:
 - [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`) **and the `DETERMINISTIC_*` reroutes** (PP-economy taxes, would-it-land consume mirrors, gated additional effects — grep `DETERMINISTIC` around each effect site); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
 - [ ] **Step 3.5 — ran `grep -n ABILITY_X src/fork/frontier_extended_mons.c`** and freed every hardcoded set (override-table rows for ability-locked / all-abilities-innate species). *This is the step that gets forgotten.*
 - [ ] **Step 4** — tests added, **including the `DETERMINISTIC_*` interactions the ability touches** (the shipping default); `make check TESTS="FEATURE_INNATE_ABILITIES"` green; **full `make check` green** if a shared battle file was touched; ROM builds under `UNUSED_ERROR=1 DEPRECATED_ERROR=1`.
-- [ ] **Step 5** — `FORK.md` (status parenthetical, allowlist sentence, known-limitations, wiring note **and** the frontier-freeing note) + `INNATE_ABILITIES_PROGRESS.md` flipped to `:white_check_mark:`.
+- [ ] **Step 5** — `FORK.md` (status parenthetical, allowlist sentence, known-limitations, wiring note **and** the frontier-freeing note). Note the ability just became innate-capable, so it is no longer a legal override/chosen `.ability`: re-run `make check TESTS="no ability override or frontier set names an innate-capable ability"` and re-point anything it now names (see [Direction](#direction-innates-get-the-innate-capable-abilities-overrides-get-the-rest)).
 
 ## Per-ability wiring reference
 
@@ -1509,11 +1569,14 @@ issue. What the AI *does* keep:
 (Lesson for future crit-touching work: the crit-chance calc is AI-hot and budget-bound — keep it
 `ctx->innatesEnabled`-gated and do **not** set that flag on the AI's `ShouldCalcCritDamage` context.)
 
-**Species (canon only so far, no flavor picks yet** — crit boosts are potent and hard to justify thematically): every
+**Species (canon, plus one flavor pick** — crit boosts are potent and hard to justify thematically): every
 species whose ability data carries the ability in any slot, in dex order, so the signature survives whichever
 slot a build picks. Sniper: the Beedrill, Spearow/Fearow, Horsea/Seadra/Kingdra, Spinarak/Ariados,
 Remoraid/Octillery, Skorupi/Drapion, Binacle/Barbaracle and Sobble/Drizzile/Inteleon lines (Mega Beedrill /
-Mega Barbaracle / Inteleon-Gmax mirror the base per the Mega convention). Super Luck: the Togepi line, the
+Mega Barbaracle / Inteleon-Gmax mirror the base per the Mega convention), plus **Kantonian Farfetch'd** — the
+Farfetch'd line review's one flavor pick, grounded in the repo's own data rather than dex prose: all three forms
+list `ITEM_LEEK` as a wild held item (a crit-ratio item), and the Galarian line's evolution condition is
+`EVO_BATTLE_END … {IF_CRITICAL_HITS_GE, 3}`, so critical hits are the line's mechanical identity in-repo. Super Luck: the Togepi line, the
 Murkrow/Honchkrow line, Absol (+ its Megas), and the Pidove line. Merciless: the Mareanie/Toxapex line. Each
 new ability is merged into the existing innate row where a species already carries one (e.g. Ariados keeps
 Insomnia/Swarm, Kingdra keeps Swift Swim, Toxapex keeps Limber/Regenerator, Togekiss keeps Serene Grace).
@@ -3559,16 +3622,20 @@ else to wire (the rest of turn order rides the shared speed calc keyed off the r
 (turn order is computed before any attacker's move resolves, so Mold Breaker never applies) — all handled by
 `IsInnateActive`.
 
-**Species.** The **sole canon carrier** is **Galarian Slowbro** (`SPECIES_SLOWBRO_GALAR`), whose primary ability
+**Species.** The **sole carrier** is **Galarian Slowbro** (`SPECIES_SLOWBRO_GALAR`), whose primary ability
 *is* Quick Draw; its existing innate row (Own Tempo / Regenerator) gains it so the trait persists no matter which
-slot a build picks. Because that innate is redundant with G-Slowbro's default ability, the **observable** carriers
-are the **Galarian Farfetch'd → Sirfetch'd** duelist line, which takes Quick Draw as a **tight flavor pick** (knights
-quick to draw their leek-lance in a duel; their chosen Steadfast / Scrappy differ, so the innate is visible and
-testable). Grep of `src/data/pokemon/species_info/` confirms G-Slowbro is the only species carrying `ABILITY_QUICK_DRAW`.
+slot a build picks. It stays observable there because a build that picks Own Tempo or Regenerator still shows the
+innate. Grep of `src/data/pokemon/species_info/` confirms G-Slowbro is the only species carrying
+`ABILITY_QUICK_DRAW`.
+
+The **Galarian Farfetch'd → Sirfetch'd** line originally took Quick Draw as a flavor pick (knights quick to draw
+their leek-lance). The Farfetch'd line review removed it: with one canon user, Quick Draw is a **signature** welded
+to G-Slowbro's Shellder-cannon design, and the line-review rubric rejects 1-user abilities on unrelated species.
+Do not re-add it.
 
 **Step 3.5**: no-op — no frontier set hardcoded `ABILITY_QUICK_DRAW`. The two G-Slowbro frontier sets (chosen Own
-Tempo) and the Sirfetch'd sets (chosen Scrappy/Steadfast) simply **gain** innate Quick Draw on top, which is the
-observable win. This is **Tier 5.2**; Tier 5.3 (Comatose) is next.
+Tempo) simply **gain** innate Quick Draw on top, which is the observable win. This is **Tier 5.2**; Tier 5.3
+(Comatose) is next.
 
 ### ABILITY_COMATOSE
 
