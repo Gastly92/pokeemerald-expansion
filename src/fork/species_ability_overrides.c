@@ -308,6 +308,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CLOYSTER, 2,
         ABILITY_SNIPER
     },
+    { // 0094
+        SPECIES_GENGAR, 1,
+        ABILITY_ILLUSION
+    },
+    {
+        SPECIES_GENGAR_GMAX, 1,
+        ABILITY_ILLUSION
+    },
     { // 0097
         // Hypno: all real abilities now innate, so its innate-redundant slot-1 Forewarn takes a chosen
         // Bad Dreams so the frontier chosen slot is a real, non-innate ability (not a redundant innate).

@@ -2357,15 +2357,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Gengar (Shadow Tag); power for the trapping nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SHADOW_BALL,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_FOCUS_BLAST,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_CURSED_BODY,
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2377,7 +2377,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast lead w/ Destiny Bond
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -2385,7 +2385,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_CURSED_BODY,
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2397,15 +2397,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_SHADOW_BALL,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_FOCUS_BLAST,
             MOVE_TRICK
         },
-        .ability = ABILITY_CURSED_BODY,
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2416,21 +2416,61 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_GENGAR,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst nuke
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
-            MOVE_NASTY_PLOT,
-            MOVE_SHADOW_BALL,
-            MOVE_SLUDGE_WAVE,
-            MOVE_FOCUS_BLAST
+            MOVE_WILL_O_WISP,
+            MOVE_HEX,
+            MOVE_SLUDGE_BOMB,
+            MOVE_PAIN_SPLIT
         },
-        .ability = ABILITY_CURSED_BODY,
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_GENGAR,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SPELL_TAG,
+        .moves =
+        {
+            MOVE_HYPNOSIS,
+            MOVE_SHADOW_BALL,
+            MOVE_SLUDGE_BOMB,
+            MOVE_ALLY_SWITCH
+        },
+        .ability = ABILITY_ILLUSION,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_GENGAR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_MEAN_LOOK,
+            MOVE_PERISH_SONG,
+            MOVE_PROTECT,
+            MOVE_SHADOW_BALL
+        },
+        .ability = ABILITY_ILLUSION,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spa = 4
         ),
         .teraType = TYPE_GHOST,
     },

@@ -22,8 +22,8 @@
 // gets innates ONLY if it has its own row, since gBattleMons[].species becomes the form constant after
 // a form change. Megas are a PURE BOON — each mirrors its base's list so the base creature's trait
 // persists (e.g. Mega Venusaur keeps Overgrow / Chlorophyll though its real ability is Thick Fat).
-// Exceptions: grounded Megas must not float — Mega Gengar has no row (Levitate was its only innate),
-// and Mega Mewtwo X keeps only Pressure (dropping base Mewtwo's Levitate).
+// Exceptions: grounded Megas must not float — Mega Gengar mirrors the base row minus Levitate, and
+// Mega Mewtwo X keeps only Pressure (dropping base Mewtwo's Levitate).
 
 struct SpeciesInnates
 {
@@ -946,25 +946,44 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0092
         SPECIES_GASTLY,
         INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
         )
     },
     { // 0093
         SPECIES_HAUNTER,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0094
         SPECIES_GENGAR,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
+        )
+    },
+    { // 0094
+        SPECIES_GENGAR_MEGA,
+        INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR,
+            ABILITY_PRANKSTER
         )
     },
     { // 0094
         SPECIES_GENGAR_GMAX,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0095
