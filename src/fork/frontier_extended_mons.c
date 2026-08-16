@@ -2439,15 +2439,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HYPNO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // CM wall
+        .heldItem = ITEM_QUICK_CLAW,
         .moves =
         {
+            MOVE_HYPNOSIS,
             MOVE_PSYCHIC,
-            MOVE_CALM_MIND,
             MOVE_FOUL_PLAY,
             MOVE_WISH
         },
-        .ability = ABILITY_BAD_DREAMS, // all real abilities innate; chosen Bad Dreams (non-redundant)
+        .ability = ABILITY_BAD_DREAMS,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2458,23 +2458,44 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_HYPNO,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
-            MOVE_NASTY_PLOT,
-            MOVE_PSYCHIC,
-            MOVE_SHADOW_BALL,
-            MOVE_FOCUS_BLAST
+            MOVE_TRICK_ROOM,
+            MOVE_FOLLOW_ME,
+            MOVE_HYPNOSIS,
+            MOVE_PSYCHIC
         },
-        .ability = ABILITY_BAD_DREAMS, // all real abilities innate; chosen Bad Dreams (non-redundant)
-        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ability = ABILITY_BAD_DREAMS,
+        .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spa = 252,
-            .spe = 4
+            .def = 4,
+            .spd = 252
         ),
-        .teraType = TYPE_PSYCHIC,
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_HYPNO,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_AGUAV_BERRY,
+        .moves =
+        {
+            MOVE_MEAN_LOOK,
+            MOVE_HYPNOSIS,
+            MOVE_NIGHTMARE,
+            MOVE_FOUL_PLAY
+        },
+        .ability = ABILITY_BAD_DREAMS,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_DARK,
     },
 
     // 0099
