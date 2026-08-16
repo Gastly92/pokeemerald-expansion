@@ -342,7 +342,7 @@ intentionally ours and must never go upstream).
 We keep our human-facing docs in files we own (so they never conflict on sync).
 `README.md` stays at the repo root (it's the front page); all other fork docs
 live under **`fork-docs/`** (`FORK.md`, `DETERMINISM.md`, `FRONTIER_ENDLESS.md`,
-`INNATE_ABILITIES.md`, `INNATE_ABILITIES_PROGRESS.md`, `NEW_TYPES.md`). New files
+`INNATE_ABILITIES.md`, `NEW_TYPES.md`). New files
 in a fork-owned directory never conflict on sync. The two top-level docs:
 
 - **`README.md`** (root) — the repo's front page, rewritten as our own (a short

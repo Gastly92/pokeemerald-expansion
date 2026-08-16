@@ -219,9 +219,11 @@ line:
 1. **Read the existing override row(s), if any.** Confirm:
    - **The chosen ability is NOT one of the species' innates** (otherwise the
      one observable pick is a wasted duplicate — the whole point of the row).
-   - **It's a STABLE pick: `:x:` in `fork-docs/INNATE_ABILITIES_PROGRESS.md`** —
-     an ability that can **never** become an innate (Lightning Rod, Water Absorb,
-     Sheer Force, Grassy Surge, Bulletproof …). That is the whole rule. An ability
+   - **It's a STABLE pick: an ability absent from `sImplementedInnates[]`**
+     (`test/fork/innate_abilities.c`) — one that can **never** become an innate
+     (Lightning Rod, Water Absorb, Sheer Force, Grassy Surge, Bulletproof …). That
+     array is the single source of truth: on it = implemented innate, off it =
+     never-an-innate. That is the whole rule. An ability
      that is innate-*capable* (anything on the `sImplementedInnates[]` allowlist)
      is **not** a legal override, even when this species does not currently carry
      it: an innate-capable ability belongs in an `INNATES(...)` row, where it is
@@ -260,8 +262,8 @@ line:
      a set cannot keep an ability the override no longer supplies, so flag the
      affected sets in Step 2 and treat their `.ability` field as settled there,
      leaving the rest of each set to its normal Part A audit.
-     See [`INNATE_ABILITIES_PROGRESS.md`](INNATE_ABILITIES_PROGRESS.md) for the
-     direction, the current counts, and the promotion criterion.
+     See [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) ("Direction") for the
+     rationale, the current counts, and the promotion criterion.
    - **The freed slot is safe to repurpose:** filling an *empty* (`ABILITY_NONE`)
      slot is always safe. Repurposing a *real* slot deletes that ability from the
      species game-wide — only do it when the slot is redundant (that ability is

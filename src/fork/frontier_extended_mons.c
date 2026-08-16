@@ -50,7 +50,7 @@
 // innate Levitate). Role comments naming an innate describe that innate-backed
 // playstyle, not the .ability field. For the full picture — which species are
 // freed vs. left "redundant-but-correct", and the per-species override picks — see
-// fork-docs/INNATE_ABILITIES.md, fork-docs/INNATE_ABILITIES_PROGRESS.md, and the
+// fork-docs/INNATE_ABILITIES.md and the
 // override rows in src/fork/species_ability_overrides.c. The current set of still-
 // redundant sets is CI-guarded by sKnownRedundant in
 // test/fork/frontier_extended_roster.c — that table, not a comment, is the record.

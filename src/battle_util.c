@@ -11956,7 +11956,7 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
     // above) it makes the user ignore the target's evasion in the PP economy too. PURE BOON: the
     // boost guard keeps a foe's evasion DROP recovering PP, and keeps the partner lookup off the
     // common no-boost path. No IsInnateActive(): Victory Star is never an innate (:x: in
-    // fork-docs/INNATE_ABILITIES_PROGRESS.md, absent from sImplementedInnates[]).
+    // absent from sImplementedInnates[] in test/fork/innate_abilities.c).
     if (evasionStage > DEFAULT_STAT_STAGE)
     {
         enum BattlerId atkAlly = GetPartnerBattler(battlerAtk);
@@ -11976,7 +11976,7 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
     // accuracy drops nor the target's evasion increases can cost it PP -- the same shape as
     // the Micle Berry case, so it reuses it. PURE BOON: the user's accuracy boosts and the
     // target's evasion drops still recover PP. No IsInnateActive() check: No Guard is never
-    // an innate (:x: in fork-docs/INNATE_ABILITIES_PROGRESS.md, absent from sImplementedInnates[]).
+    // an innate (absent from sImplementedInnates[] in test/fork/innate_abilities.c).
     if (atkAbility == ABILITY_NO_GUARD || defAbility == ABILITY_NO_GUARD)
         ignorePenalties = TRUE;
 

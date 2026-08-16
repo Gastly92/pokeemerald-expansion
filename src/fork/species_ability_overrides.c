@@ -40,10 +40,10 @@ struct SpeciesAbilityOverride
 // Sorted by National Pokédex number (shown in each row's trailing comment); formes share their
 // base's number and follow it. Adding a row: drop it at its dex position with a trailing `// <dex>`.
 //
-// PICK A NEVER-AN-INNATE CHOSEN ABILITY — cross-reference it against
-// fork-docs/INNATE_ABILITIES_PROGRESS.md. The ability MUST be one marked :x: there (never wired as
-// an innate — e.g. Lightning Rod, Soundproof, Water Absorb, Sheer Force). An innate-CAPABLE ability
-// (:white_check_mark:, i.e. on sImplementedInnates[]) is NOT a legal pick, even when this species
+// PICK A NEVER-AN-INNATE CHOSEN ABILITY — cross-reference it against sImplementedInnates[] in
+// test/fork/innate_abilities.c, the single source of truth. The ability MUST be ABSENT from that
+// array (never wired as an innate — e.g. Lightning Rod, Soundproof, Water Absorb, Sheer Force). An
+// innate-CAPABLE ability (one ON the array) is NOT a legal pick, even when this species
 // does not currently carry it: an innate-capable ability belongs in an INNATES(...) row, where it is
 // always-on and costs nothing, so spending the one observable slot on it both wastes that slot's
 // only purpose (a trait the species can express no other way) and leaves a latent duplicate that

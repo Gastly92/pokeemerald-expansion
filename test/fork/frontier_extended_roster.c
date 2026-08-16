@@ -72,7 +72,7 @@ TEST("Frontier extended roster: every set's ability is legal for its species")
 //
 // Every such set has been given a real, non-innate chosen ability -- repointed to a free real
 // slot, or handed a stable pick via a fork-owned override in src/fork/species_ability_overrides.c
-// (an ability marked :x: in INNATE_ABILITIES_PROGRESS.md -- never itself an innate -- or an
+// (an ability absent from sImplementedInnates[] -- never itself an innate -- or an
 // already-implemented innate the species does not carry). Species that once had NO repurposable
 // slot (every real ability innate AND every slot pinned by a battle test -- Snorlax, Kangaskhan,
 // Pinsir, Sableye, Clefable, Slowbro, Camerupt, ...) are now convertible too: the override table
