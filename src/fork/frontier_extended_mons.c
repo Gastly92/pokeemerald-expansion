@@ -1495,7 +1495,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCANINE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -1503,8 +1503,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MORNING_SUN,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_FLASH_FIRE, // Intimidate now innate; chosen Flash Fire (real slot 1)
-        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
             .def = 4,
@@ -1515,7 +1515,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCANINE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band wallbreaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -1535,7 +1535,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCANINE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // doubles Intimidate support
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -1543,7 +1543,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SNARL,
             MOVE_PROTECT
         },
-        .ability = ABILITY_FLASH_FIRE, // Intimidate now innate; chosen Flash Fire (real slot 1)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1552,12 +1552,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_ARCANINE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_FLAME_CHARGE,
+            MOVE_FLARE_BLITZ,
+            MOVE_EXTREME_SPEED,
+            MOVE_CRUNCH
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_NORMAL,
+    },
 
     // 0059
     {
         .species = SPECIES_ARCANINE_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Rock Head Head Smash breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HEAD_SMASH,
@@ -1565,7 +1585,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EXTREME_SPEED,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_FLASH_FIRE, // Rock Head now innate; chosen Flash Fire grants a Fire immunity
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1576,23 +1596,43 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_ARCANINE_HISUI,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Intimidate bulky pivot
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
+            MOVE_FOLLOW_ME,
             MOVE_FLARE_BLITZ,
             MOVE_ROCK_SLIDE,
-            MOVE_EXTREME_SPEED,
-            MOVE_MORNING_SUN
+            MOVE_BURNING_BULWARK
         },
-        .ability = ABILITY_FLASH_FIRE, // Intimidate now innate; chosen Flash Fire (real slot 1)
-        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_ARCANINE_HISUI,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_PASSHO_BERRY,
+        .moves =
+        {
+            MOVE_HOWL,
+            MOVE_HEAD_SMASH,
+            MOVE_FLARE_BLITZ,
+            MOVE_EXTREME_SPEED
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0062
