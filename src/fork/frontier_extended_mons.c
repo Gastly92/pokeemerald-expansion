@@ -2117,7 +2117,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIGHTING,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_FARFETCHD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_FOLLOW_ME,
+            MOVE_TAILWIND,
+            MOVE_BRAVE_BIRD
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0085
@@ -21350,6 +21370,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
+    },
+    {
+        .species = SPECIES_SIRFETCHD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_COACHING,
+            MOVE_CLOSE_COMBAT,
+            MOVE_FIRST_IMPRESSION
+        },
+        .ability = ABILITY_BULLETPROOF,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0866
