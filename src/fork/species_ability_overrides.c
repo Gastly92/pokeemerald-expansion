@@ -263,11 +263,12 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0076
-        // Rock Head, Sturdy and Sand Veil are ALL now innate, so its innate-redundant slot-2 Sand Veil
-        // (audited: unpinned) takes Sand Stream -- :x: (never an innate -> stable) and self-synergistic: the
-        // sandstorm turns on its own innate Sand Veil evasion. Same pick as Golem's Rock/Ground kin.
         SPECIES_GOLEM, 2,
         ABILITY_SAND_STREAM
+    },
+    { // 0076
+        SPECIES_GOLEM_ALOLA, 0,
+        ABILITY_LIGHTNING_ROD
     },
     { // 0078
         // Rapidash Galar: all real abilities now innate, so its innate-redundant slot-1 Pastel Veil takes a chosen
