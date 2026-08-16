@@ -51,12 +51,13 @@ struct SpeciesAbilityOverride
 // LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
 // *implemented* :white_check_mark: innate — that's the row's whole premise.)
 //
-// MIGRATION IN PROGRESS — 122 of the rows below predate this rule and still hand out an
-// innate-capable ability (Tough Claws x18, Unaware x10, Filter x9, Cute Charm x7, Sniper x7,
-// Solid Rock x7, ...). They are enumerated by TEST("Innate abilities: no ability override or
-// frontier set names an innate-capable ability") in test/fork/innate_abilities.c, marked
-// KNOWN_FAILING until the backlog clears. Line reviews convert the lines they touch; see
-// fork-docs/LINE_REVIEW.md Step 2. DO NOT ADD NEW ROWS TO THE BACKLOG — new picks must be :x:.
+// MIGRATION IN PROGRESS — roughly a third of the rows below predate this rule and still hand
+// out an innate-capable ability. They are enumerated by name by TEST("Innate abilities: no
+// ability override or frontier set names an innate-capable ability") in
+// test/fork/innate_abilities.c, marked KNOWN_FAILING until the backlog clears; run it for the
+// current list and counts. Line reviews convert the lines they touch (fork-docs/LINE_REVIEW.md
+// Step 2, and fork-docs/INNATE_ABILITIES.md "Direction"). DO NOT ADD NEW ROWS TO THE BACKLOG —
+// a new pick must be absent from sImplementedInnates[].
 //
 // SLOT CHOICE MATTERS — because the table is gated by FEATURE_INNATE_ABILITIES, a row REPLACES that
 // slot's ability only where the flag is on: all real gameplay/frontier, plus any FORK test that opts
@@ -212,17 +213,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PSYCHIC_AFFINITY
     },
     { // 0051
-        // Dugtrio's three real abilities (Sand Veil, Arena Trap, Sand Force) are ALL now innate. Slot-1 Arena
-        // Trap is pinned by tests, so its innate-redundant slot-2 Sand Force (audited: no Ability(ABILITY_SAND_FORCE)
-        // on Dugtrio) takes Sand Stream — :x: (never an innate -> stable) and self-synergistic: the sandstorm it
-        // kicks up turns on its own innate Sand Veil (evasion) and Sand Force (Rock/Ground/Steel power + sandstorm
-        // immunity). Same pick as Sandslash/Donphan/Flygon.
         SPECIES_DUGTRIO, 2,
         ABILITY_SAND_STREAM
     },
     { // 0051
-        // Dugtrio Alola: all real abilities now innate, so its innate-redundant slot-0 Sand Veil takes a chosen
-        // Earth Eater so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
         SPECIES_DUGTRIO_ALOLA, 0,
         ABILITY_EARTH_EATER
     },
@@ -238,13 +232,25 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_PERSIAN_ALOLA, 2,
         ABILITY_CUTE_CHARM
     },
+    { // 0065
+        SPECIES_ALAKAZAM, 1,
+        ABILITY_PSYCHIC_SURGE
+    },
     { // 0071
-        // Victreebel's only real abilities (Chlorophyll, Gluttony) are BOTH now innate, so its EMPTY slot 1
-        // takes Sheer Force -- :x: (never an innate -> stable), powering up its Sludge Bomb. (Effect Spore was
-        // moved off: under DETERMINISTIC_ABILITIES it always sleeps contact attackers, colliding with the
-        // Singles set's own Sleep Powder for the single status slot; Sheer Force is safe on the physical set too.)
         SPECIES_VICTREEBEL, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_STAKEOUT
+    },
+    {
+        SPECIES_VICTREEBEL_MEGA, 0,
+        ABILITY_STAKEOUT
+    },
+    {
+        SPECIES_VICTREEBEL_MEGA, 1,
+        ABILITY_STAKEOUT
+    },
+    {
+        SPECIES_VICTREEBEL_MEGA, 2,
+        ABILITY_STAKEOUT
     },
     { // 0073
         // Tentacruel's three real abilities (Clear Body, Liquid Ooze, Rain Dish) are ALL now innate; slots 0/1

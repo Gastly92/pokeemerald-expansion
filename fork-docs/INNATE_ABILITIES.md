@@ -583,12 +583,16 @@ the ability innately, the override silently collapses into a redundant pick.
 table's life (it accepted "an already-implemented innate the species does not itself
 carry"), so there is a backlog:
 
+**These numbers are a snapshot and go stale on every merge** — each line review
+that lands before converting its line adds to the backlog. This is the only place
+that carries them; everywhere else points at the test. Re-measure and update here:
+
 | | Conforming | Legacy (innate-capable) | Total |
 |---|---:|---:|---:|
-| Override rows (`species_ability_overrides.c`) | 249 | **120** | 369 |
-| Frontier sets (`frontier_extended_mons.c`) | 973 | **256** | 1229 |
+| Override rows (`species_ability_overrides.c`) | 249 | **124** | 373 |
+| Frontier sets (`frontier_extended_mons.c`) | 978 | **259** | 1237 |
 
-Re-measure at any time — the test names every offender:
+The test names every offender:
 
 ```bash
 make check TESTS="no ability override or frontier set names an innate-capable ability"

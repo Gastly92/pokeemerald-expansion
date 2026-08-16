@@ -32,9 +32,10 @@
 //  - .tags is REQUIRED: FORMAT_SINGLES / FORMAT_DOUBLES / FORMAT_BOTH gates which
 //          battle format(s) the set can be drawn for.
 //  - .iv and .ball are OPTIONAL. Omit .iv to keep the Factory's fixed IVs (31s
-//          under B_FRONTIER_MAX_IVS); set .iv = TRAINER_PARTY_IVS(...) only for an
-//          intentional spread (e.g. 0 Speed for Trick Room). Omit .ball for
-//          BALL_POKE; set it only for a non-Poke look.
+//          under B_FRONTIER_MAX_IVS); set .iv = IVS(SPE, 0) — naming only the
+//          stats that change, the rest defaulting to 31 — for an intentional
+//          spread (e.g. 0 Speed for Trick Room). Omit .ball for BALL_POKE; set it
+//          only for a non-Poke look.
 //  - .teraType sets the set's Terastallization type (Tera is active in this fork).
 //
 // Design intent — sets are tuned around this fork's DETERMINISTIC_* changes (no
@@ -1264,7 +1265,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Arena Trap revenge / trapper
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -1272,7 +1273,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SAND_STREAM, // Arena Trap/Sand Veil/Sand Force now innate; chosen Sand Stream (override) sets the sand that powers them
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1284,15 +1285,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sand Force band
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH,
-            MOVE_AERIAL_ACE
+            MOVE_FISSURE
         },
-        .ability = ABILITY_SAND_STREAM, // Arena Trap/Sand Veil/Sand Force now innate; chosen Sand Stream (override) sets the sand that powers them
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1306,7 +1307,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUGTRIO_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // Sand Force trapper/revenge killer
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -1314,19 +1315,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_FAIRY,
     },
     {
         .species = SPECIES_DUGTRIO_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SOFT_SAND, // Tangling Hair contact-punisher
+        .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -1334,7 +1335,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1363,7 +1364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_DARK,
+        .teraType = TYPE_GHOST,
     },
     {
         .species = SPECIES_PERSIAN_ALOLA,
@@ -1380,10 +1381,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
-            .def = 8,
+            .spd = 8,
             .spe = 252
         ),
-        .teraType = TYPE_DARK,
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_PERSIAN_ALOLA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_THROAT_SPRAY,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_DARK_PULSE,
+            MOVE_SNARL,
+            MOVE_HYPER_VOICE
+        },
+        .ability = ABILITY_CUTE_CHARM,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
     },
 
     // 0053
@@ -1410,22 +1431,22 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PERSIAN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Fast support
+        .heldItem = ITEM_NONE,
         .moves =
         {
-            MOVE_KNOCK_OFF,
+            MOVE_THIEF,
+            MOVE_SLASH,
             MOVE_FAKE_OUT,
-            MOVE_U_TURN,
-            MOVE_THUNDER_WAVE
+            MOVE_U_TURN
         },
-        .ability = ABILITY_FUR_COAT, // all real abilities innate; chosen Fur Coat (non-redundant)
+        .ability = ABILITY_FUR_COAT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .def = 4,
             .spe = 252
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_GHOST,
     },
 
     // 0055
@@ -1619,8 +1640,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0065
     {
         .species = SPECIES_ALAKAZAM,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Magic Guard nuke
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -1628,39 +1649,39 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_PSYCHIC,
-    },
-    {
-        .species = SPECIES_ALAKAZAM,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TWISTED_SPOON, // Mega Alakazam (Trace); Psychic STAB boost
-        .moves =
-        {
-            MOVE_PSYCHIC,
-            MOVE_FOCUS_BLAST,
-            MOVE_SHADOW_BALL,
-            MOVE_ENERGY_BALL
-        },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_PSYCHIC,
+        .teraType = TYPE_FAIRY,
     },
     {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast lead, sash = one-shot guard
+        .heldItem = ITEM_CHOICE_SPECS,
+        .moves =
+        {
+            MOVE_PSYCHIC,
+            MOVE_PSYSHOCK,
+            MOVE_SHADOW_BALL,
+            MOVE_TRICK
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_ALAKAZAM,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -1668,14 +1689,54 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_ENCORE
         },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Guard now innate (Tier 5.4); freed chosen slot to its real, non-innate Synchronize
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_PSYCHIC,
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_ALAKAZAM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_TERRAIN_EXTENDER,
+        .moves =
+        {
+            MOVE_EXPANDING_FORCE,
+            MOVE_SHADOW_BALL,
+            MOVE_ALLY_SWITCH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_ALAKAZAM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY,
+        .moves =
+        {
+            MOVE_LIGHT_SCREEN,
+            MOVE_REFLECT,
+            MOVE_EXPANDING_FORCE,
+            MOVE_HELPING_HAND
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0068
@@ -1744,7 +1805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VICTREEBEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SOLAR_BLADE,
@@ -1752,7 +1813,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (shared override); safe on this physical set
+        .ability = ABILITY_STAKEOUT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1772,7 +1833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_SHEER_FORCE, // moved off Effect Spore (deterministic sleep collides w/ Sleep Powder); powers Sludge Bomb
+        .ability = ABILITY_STAKEOUT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2052,7 +2113,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_FAIRY,
     },
 
@@ -2164,7 +2225,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DODRIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Swords Dance
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -2177,6 +2238,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .atk = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_DODRIO,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SILK_SCARF,
+        .moves =
+        {
+            MOVE_TRI_ATTACK,
+            MOVE_DOUBLE_EDGE,
+            MOVE_BRAVE_BIRD,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_DODRIO,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_TAILWIND,
+            MOVE_BRAVE_BIRD,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
@@ -2231,10 +2332,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // bulky special tank
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
-            MOVE_GUNK_SHOT,
+            MOVE_POISON_JAB,
             MOVE_KNOCK_OFF,
             MOVE_DRAIN_PUNCH,
             MOVE_TOXIC
@@ -2268,12 +2369,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_DARK,
     },
+    {
+        .species = SPECIES_MUK,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_CORROSIVE_GAS,
+            MOVE_CLEAR_SMOG,
+            MOVE_POISON_JAB,
+            MOVE_DRAIN_PUNCH
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .atk = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0089
     {
         .species = SPECIES_MUK_ALOLA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Power of Alchemy special wall
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_GUNK_SHOT,
@@ -2288,12 +2409,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spd = 4
         ),
-        .teraType = TYPE_DARK,
+        .teraType = TYPE_FLYING,
     },
     {
         .species = SPECIES_MUK_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Poison Touch bulky attacker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_POISON_JAB,
@@ -2308,7 +2429,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .teraType = TYPE_POISON,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_MUK_ALOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FIGY_BERRY,
+        .moves =
+        {
+            MOVE_RECYCLE,
+            MOVE_PROTECT,
+            MOVE_POISON_JAB,
+            MOVE_CRUNCH
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .atk = 4
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0091
@@ -2662,7 +2803,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_GRASS,
     },
 
@@ -2685,7 +2826,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_DRAGON,
     },
     {
@@ -2706,7 +2847,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 128,
             .spa = 128
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_GRASS,
     },
 
@@ -2729,7 +2870,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_GROUND,
     },
     {
@@ -5402,7 +5543,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_STEEL,
     },
     {
@@ -5423,7 +5564,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_STEEL,
     },
 
@@ -8153,7 +8294,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FIRE,
     },
     {
@@ -8196,7 +8337,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FIRE,
     },
     {
@@ -8534,7 +8675,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -8577,7 +8718,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_ROCK,
     },
 
@@ -10637,7 +10778,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spd = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room / Gyro Ball
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_STEEL,
     },
     {
@@ -11147,7 +11288,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_NORMAL,
     },
     {
@@ -11722,7 +11863,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31), // min Speed for Trick Room
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_GHOST,
     },
 
@@ -12881,7 +13022,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spa = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -13748,7 +13889,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_GHOST,
     },
 
@@ -14045,7 +14186,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -14366,7 +14507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 88,
             .spd = 168
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_STEEL,
     },
     {
@@ -14387,7 +14528,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_GRASS,
     },
 
@@ -14474,7 +14615,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -14537,7 +14678,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FIRE,
     },
 
@@ -16439,7 +16580,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
     },
 
     // 0685
@@ -16965,7 +17106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
     },
 
     // 0706
@@ -17154,7 +17295,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GHOST,
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
     },
 
     // 0711
@@ -17197,7 +17338,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_GHOST,
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
     },
 
     // 0713
@@ -17240,7 +17381,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
     },
 
     // 0713
@@ -17577,7 +17718,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
     },
 
     // 0721
@@ -17963,7 +18104,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_VIKAVOLT,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room special attacker
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -18006,7 +18147,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_CRABOMINABLE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room bruiser
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -18341,7 +18482,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_ARAQUANID,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room Water Bubble nuke
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -18596,7 +18737,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_ORANGURU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LEFTOVERS, // Trick Room setter / Instruct support
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -19163,7 +19304,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_DHELMISE,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST, // Trick Room trapper
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .moves =
         {
             MOVE_ANCHOR_SHOT,
@@ -19936,7 +20077,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FAIRY_GEM, // one-shot Fairy burst for the Trick Room nuke
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -20043,7 +20184,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .species = SPECIES_STAKATAKA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_WEAKNESS_POLICY, // Trick Room Beast Boost wallbreaker
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .moves =
         {
             MOVE_GYRO_BALL,
@@ -21261,9 +21402,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_STEEL,
     },
@@ -21285,7 +21426,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 4,
             .def = 252
         ),
-        .teraType = TYPE_STEEL,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_PERRSERKER,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_IRON_BALL,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_GYRO_BALL,
+            MOVE_CLOSE_COMBAT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_BULLETPROOF,
+        .nature = NATURE(ATK_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .iv = IVS(SPE, 0),
+        .teraType = TYPE_WATER,
     },
 
     // 0864 (innate Perish Body)
@@ -21537,7 +21699,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_ELECTRIC,
         .ball = BALL_DIVE,
     },
@@ -22423,7 +22585,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_ICE,
     },
     {
@@ -22528,7 +22690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -22635,7 +22797,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_GROUND,
     },
     {
@@ -23355,7 +23517,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -23698,7 +23860,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
@@ -24384,7 +24546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spd = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FIRE,
     },
 
@@ -25479,7 +25641,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .iv = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31),
+        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FAIRY,
     },
 

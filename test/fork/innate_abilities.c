@@ -5307,11 +5307,14 @@ TEST("Innate abilities: species-keyed lookup matches the raw table for every row
 // row a latent duplicate — the day the species is given that ability innately, which is exactly
 // what a line review does, the override silently collapses into a redundant pick.
 //
-// KNOWN_FAILING: the roster predates this rule and 122 of 369 override rows plus 259 of 1227 sets
-// name an innate-capable ability. Converting them is a per-species flavor judgement (134 species
-// need a brand-new override ability picked from the ~130 never-an-innate abilities), so it is
-// staged as its own work rather than blocking CI. The runner reports when a KNOWN_FAILING test
-// starts passing, so this promotes itself to a real gate the moment the backlog is cleared.
+// KNOWN_FAILING: the roster predates this rule -- roughly a third of the override table and a
+// fifth of the sets name an innate-capable ability (this test prints the exact list and count;
+// fork-docs/INNATE_ABILITIES.md "Direction" carries the last snapshot). Converting them is a
+// per-species flavor judgement -- nearly every affected species needs a brand-new override
+// ability picked from the ~130 never-an-innate abilities -- so it is staged as its own work
+// rather than blocking CI, and each line review converts the line it touches. The runner reports
+// when a KNOWN_FAILING test starts passing, so this promotes itself to a real gate the moment
+// the backlog is cleared (delete the KNOWN_FAILING; line then).
 TEST("Innate abilities: no ability override or frontier set names an innate-capable ability")
 {
     u32 species, slot, i;
