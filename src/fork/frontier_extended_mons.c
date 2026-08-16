@@ -2101,11 +2101,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0083
     {
         .species = SPECIES_FARFETCHD,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEEK,
         .moves =
         {
-            MOVE_SWORDS_DANCE,
+            MOVE_FIRST_IMPRESSION,
             MOVE_BRAVE_BIRD,
             MOVE_KNOCK_OFF,
             MOVE_CLOSE_COMBAT
@@ -21334,13 +21334,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIRFETCHD,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SWORDS_DANCE,
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF,
-            MOVE_BRAVE_BIRD
+            MOVE_NIGHT_SLASH
         },
         .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
