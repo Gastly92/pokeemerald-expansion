@@ -752,16 +752,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TENTACOOL,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_HYDRATION,
             ABILITY_LIQUID_OOZE,
-            ABILITY_RAIN_DISH
+            ABILITY_RAIN_DISH,
+            ABILITY_REGENERATOR
         )
     },
     { // 0073
         SPECIES_TENTACRUEL,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_HYDRATION,
             ABILITY_LIQUID_OOZE,
-            ABILITY_RAIN_DISH
+            ABILITY_RAIN_DISH,
+            ABILITY_REGENERATOR
         )
     },
     { // 0074
