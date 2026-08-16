@@ -2481,11 +2481,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KINGLER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MYSTIC_WATER, // Sheer Force pincer
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_LIQUIDATION,
-            MOVE_CRABHAMMER,
+            MOVE_ROCK_SLIDE,
             MOVE_KNOCK_OFF,
             MOVE_AGILITY
         },
@@ -2515,6 +2515,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_KINGLER,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_GRIP_CLAW,
+        .moves =
+        {
+            MOVE_CLAMP,
+            MOVE_GUILLOTINE,
+            MOVE_CRABHAMMER,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_KINGLER,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_HELPING_HAND,
+            MOVE_CRABHAMMER,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_WATER,
     },
