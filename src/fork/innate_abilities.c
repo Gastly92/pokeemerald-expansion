@@ -1046,7 +1046,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
-            ABILITY_INSOMNIA
+            ABILITY_INSOMNIA,
+            ABILITY_TELEPATHY
         )
     },
     { // 0097
@@ -1054,7 +1055,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
-            ABILITY_INSOMNIA
+            ABILITY_INSOMNIA,
+            ABILITY_TELEPATHY
         )
     },
     { // 0098
