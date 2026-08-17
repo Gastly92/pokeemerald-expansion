@@ -1452,16 +1452,16 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0055
     {
         .species = SPECIES_GOLDUCK,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_HYDRO_PUMP,
             MOVE_ICE_BEAM,
-            MOVE_CALM_MIND,
+            MOVE_RAIN_DANCE,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_DAMP, // Swift Swim now innate; chosen Damp
+        .ability = ABILITY_DAMP,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1473,7 +1473,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOLDUCK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -1486,9 +1486,29 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 252,
             .def = 252,
-            .spa = 4
+            .spd = 4
         ),
-        .teraType = TYPE_WATER,
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_GOLDUCK,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_FOLLOW_ME,
+            MOVE_HELPING_HAND,
+            MOVE_MUDDY_WATER,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_CLOUD_NINE,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0059
