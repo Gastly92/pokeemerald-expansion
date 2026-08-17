@@ -2675,28 +2675,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0091
     {
         .species = SPECIES_CLOYSTER,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper, Skill Link max multi-hit
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
             MOVE_ICICLE_SPEAR,
             MOVE_ROCK_BLAST,
-            MOVE_HYDRO_PUMP
+            MOVE_LIQUIDATION
         },
-        .ability = ABILITY_SNIPER, // Shell Armor + Skill Link + Overcoat now innate; chosen Sniper crits Icicle Spear (override)
-        .nature = NATURE(ATK_UP, SPD_DOWN),
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spa = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_STEEL,
     },
     {
         .species = SPECIES_CLOYSTER,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // guaranteed Shell Smash via one-shot entry guard
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -2704,27 +2704,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_BLAST,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_SNIPER, // Shell Armor + Skill Link + Overcoat now innate; chosen Sniper crits Icicle Spear (override)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spa = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_CLOYSTER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // defensive spiker
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_SPIKES,
             MOVE_ICICLE_SPEAR,
             MOVE_RAPID_SPIN,
-            MOVE_ICE_SHARD
+            MOVE_TOXIC
         },
-        .ability = ABILITY_SNIPER, // Shell Armor + Skill Link + Overcoat now innate; chosen Sniper crits Icicle Spear (override)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2732,6 +2732,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_CLOYSTER,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_ICY_WIND,
+            MOVE_ICICLE_SPEAR,
+            MOVE_ROCK_BLAST
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_CLOYSTER,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ICY_ROCK,
+        .moves =
+        {
+            MOVE_SNOWSCAPE,
+            MOVE_AURORA_VEIL,
+            MOVE_ICICLE_SPEAR,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPD_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_ICE,
     },
 
     // 0094
