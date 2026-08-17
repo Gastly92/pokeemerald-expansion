@@ -1681,14 +1681,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0068
     {
         .species = SPECIES_MACHAMP,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // No Guard band breaker
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF,
             MOVE_ICE_PUNCH,
-            MOVE_STONE_EDGE
+            MOVE_POISON_JAB
         },
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -1702,7 +1702,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MACHAMP,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLAME_ORB, // Guts staller-breaker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -1710,7 +1710,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_BULLET_PUNCH
         },
-        .ability = ABILITY_NO_GUARD, // Guts now innate; No Guard lands its STABs reliably
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1722,7 +1722,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MACHAMP,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // doubles bulk
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -1736,6 +1736,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .atk = 252,
             .spe = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_MACHAMP,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_GRIP_CLAW,
+        .moves =
+        {
+            MOVE_BIND,
+            MOVE_BULK_UP,
+            MOVE_DRAIN_PUNCH,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_NO_GUARD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_MACHAMP,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BLACK_BELT,
+        .moves =
+        {
+            MOVE_COACHING,
+            MOVE_WIDE_GUARD,
+            MOVE_CLOSE_COMBAT,
+            MOVE_ROCK_SLIDE
+        },
+        .ability = ABILITY_NO_GUARD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
     },
