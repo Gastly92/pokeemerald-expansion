@@ -7,20 +7,20 @@ done for the **Battle Factory** (first) and the **Battle Tower** (second) so the
 **Battle Palace, Battle Arena, Battle Dome, Battle Pyramid, Battle Pike** can
 follow the same path with far less rediscovery.
 
-It is a how-to, not a spec — the flag comments in `include/config/frontier.h` and
-the feature rows in [`FORK.md`](FORK.md) remain the source of truth for exact
-behavior. Read this top to bottom before converting a facility, then work the
-checklist.
+It is the how-to *and* the reference for how these facilities actually behave; the
+flag comments in `include/config/frontier.h` remain the source of truth for each
+flag's exact rule, and [`FORK.md`](FORK.md) is only the one-line index. Read this top
+to bottom before converting a facility, then work the checklist.
 
 ## Status
 
 | Facility | 6v6 | Endless | Forced Lv100 | Roster opponents | Notes |
 |---|---|---|---|---|---|
 | Factory | ✅ | ✅ | ✅ | ✅ | First conversion; rents a team (see "rental vs own-party"). |
-| Tower | ✅ | ✅ | ✅ | ✅ | Second; own-party. Static competitive Brain teams (silver/gold) + random gym-leader bosses every 10 wins (`battle_tower_trainers.c`); general opponents have no tier-gating yet. |
+| Tower | ✅ | ✅ | ✅ | ✅ | Second; own-party. Static competitive Brain teams (silver/gold) + random gym-leader bosses every 10 wins (`battle_tower_trainers.c`). General opponents are tier-gated. See "The Battle Tower" below. |
 | Palace | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Own-party, AI-driven mons, singles+doubles. |
 | Arena | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Own-party, judged 3-turn bouts, **singles only** (`arenaWinStreaks[lvlMode]`, no battleMode index). |
-| Dome | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Tournament bracket — fixed 3-mon coordinate tables not generalized to 6 (see FORK.md). |
+| Dome | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Tournament bracket — fixed 3-mon coordinate tables not generalized to 6. |
 | Pyramid | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Keeps a working bag; survival/floor structure differs most. |
 | Pike | ⛔ | ⛔ | ⛔ | ⛔ | Pending. Room-based, not a straight battle streak. |
 
@@ -63,7 +63,7 @@ These already exist and are facility-agnostic; a conversion *extends* them:
   in the fork-owned `src/fork/battle_tower_trainers.c` (authored `struct TrainerMon`
   arrays built via `CreateFacilityMon`). A facility that wants hand-authored boss
   teams instead of (or beside) a draft can follow the same id-range + hook pattern
-  (see the boss notes there and the hook list in the Tower's `FORK.md` row).
+  (see the boss notes there and the hook list under "The Battle Tower" below).
   *Known issue (glide):* gym-leader bosses **glide** to the battle spot instead of
   walking — their overworld sheets are 3-frame (one pose per facing, no step
   cycle), unlike the Salon Maiden's 9-frame walk sheet. Cosmetic, sprite-art
@@ -80,8 +80,8 @@ These already exist and are facility-agnostic; a conversion *extends* them:
 
 ## Step-by-step checklist
 
-Numbers in brackets point at the equivalent change in the Tower commit history /
-`FORK.md` row for reference.
+Numbers in brackets point at the equivalent change in the Tower commit history; see
+"The Battle Tower" below for what that conversion ended up looking like.
 
 ### C side (`src/frontier_util.c`, the facility's `src/battle_<fac>.c`)
 
@@ -164,6 +164,86 @@ The biggest per-facility fork is **where the team comes from on resume**:
   zeroes `<fac>WinStreaks[mode][lvl]` when that mode's active flag is unset), so
   the streak continues across the re-pick automatically. Singles and doubles stay
   independent because the streak + active flag are per `[battleMode][lvlMode]`.
+
+## The Battle Tower — the worked reference conversion
+
+The Tower is the second conversion and the fullest one; read it as the model for the
+rest. It covers Singles and Doubles, with the player's own party.
+
+### Opponent draw is keyed to the win streak — this is the independence mechanism
+
+`SetNextTowerOpponent` / `SetTowerBattleWon` derive
+`battleNum = winStreak % FRONTIER_STAGES_PER_CHALLENGE` — **never**
+`curChallengeBattleNum`.
+
+> This is what lets a rested **Singles** run and a rested **Doubles** run continue
+> **independently**, each keeping its own streak and active flag. It is **not** a
+> difficulty ramp.
+
+There is **no scaling** at all: opponents' mons are drawn uniformly from the
+competitive roster via the shared `GetRandomFrontierExtendedMonId()` wired into
+`FillTrainerParty`, always at max IVs. The vanilla per-trainer themed `monSet` and
+high-tier gate are bypassed for the Tower only.
+
+### Rest and resume
+
+"Rest" saves and returns to the lobby with **no reboot**, keeping the player's real
+party and leaving the streak active. The lobby no longer auto-resumes a paused
+challenge — the player can leave, come back, talk to the attendant and **choose a
+fresh team** to continue (`tower_init` preserves an active streak; see "Rental vs
+own-party" above).
+
+### Every general opponent brings a Mega
+
+The player hand-picks their own team, so opponents always carry one:
+`FillTrainerParty` reserves a random slot for a guaranteed Mega Stone holder, forbids
+Mega Stones elsewhere, and applies the shared gimmick rule from `frontier_draft.c`
+(which also caps Z-Crystals at one).
+
+General opponents are **tier-gated like the Factory** — no legendaries or mythicals,
+at most one pseudo-legendary per team (`TierRejectsCandidate`, every slot
+`TIER_NORMAL`). Bosses and the Brain return earlier, so their fixed legendaries are
+unaffected.
+
+### Two kinds of special battle
+
+**The Salon Maiden (Anabel)** appears at the 50th and 100th win
+(`streakAppearances` `{50, 100, 50, 1}`). She fields a fork-owned **static
+competitive team** modelled on her vanilla set — psychic specialist plus the
+legendary beasts and the Lati twins — at full six, with separate **Silver** (50th)
+and tougher **Gold** (100th) variants (`src/fork/battle_tower_trainers.c`, routed
+through `CreateFrontierBrainPokemon`). Beating her awards BP equal to the win number
+and the streak **continues** instead of warping out.
+
+**Gym-leader bosses** take every *other* set-end win — the 10th, 20th, … that isn't a
+50/100 Brain mark. Each is a real Hoenn gym leader with their own overworld sprite,
+battle pic, name and trainer class, fielding an authored competitive team with one
+legendary-tier mon and one Mega. They are chosen at **random** from `sTowerBosses[]`
+(8 Hoenn leaders), which is deliberately extensible — Elite Four and Champions later.
+
+A fork `BOSS_TRAINER` id range above `TRAINER_PLAYER` marks them, recognized by
+additive branches in seven functions:
+
+`FillTrainerParty` · `SetBattleFacilityTrainerGfxId` · `GetFrontierTrainerName` ·
+`GetFrontierTrainerFrontSpriteId` · `GetFrontierOpponentClass` ·
+`GetOpponentIntroSpeech` · `CopyFrontierTrainerText`
+
+Copy that id-range + branch pattern for any facility that wants named bosses.
+
+### Multi and Link Multi are disabled
+
+Under `B_FRONTIER_TOWER_DISABLE_MULTI_LINK`, those two attendants show a "not
+available" message. The code and scripts are kept fully intact behind the flag.
+
+### Tower-specific known limitations
+
+- **Bosses are pure-random** — no immediate-repeat avoidance. A mutable static would
+  land in `.data`, which the linker script doesn't place for fork files.
+- **Boss and Brain battle music** is the default frontier track.
+- **Resting on exactly a Brain-threshold win** (49 or 99) can skip that Brain
+  appearance.
+- **The shared `trainerIds` dedup list** can briefly hold the other mode's trainers
+  after a Singles↔Doubles switch.
 
 ## Footguns (each cost real debugging — read these)
 

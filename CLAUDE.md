@@ -341,9 +341,11 @@ intentionally ours and must never go upstream).
 
 We keep our human-facing docs in files we own (so they never conflict on sync).
 `README.md` stays at the repo root (it's the front page); all other fork docs
-live under **`fork-docs/`** (`FORK.md`, `DETERMINISM.md`, `FRONTIER_ENDLESS.md`,
-`INNATE_ABILITIES.md`, `NEW_TYPES.md`). New files
-in a fork-owned directory never conflict on sync. The two top-level docs:
+live under **`fork-docs/`**. New files in a fork-owned directory never conflict on
+sync. `FORK.md` carries the current doc index; as of now it is `DETERMINISM.md`,
+`INNATE_ABILITIES.md`, `NEW_ABILITIES.md`, `NEW_TYPES.md`, `FRONTIER_ENDLESS.md`,
+`FRONTIER_ROSTER.md`, `FREE_GIMMICKS.md`, `BATTLE_INFO.md` and `LINE_REVIEW.md`.
+The two top-level docs:
 
 - **`README.md`** (root) — the repo's front page, rewritten as our own (a short
   intro describing the standalone Battle Frontier romhack, linking to
@@ -359,9 +361,26 @@ in a fork-owned directory never conflict on sync. The two top-level docs:
 **When you add or change a fork feature, update `fork-docs/FORK.md` in the same PR.** Add or
 edit its row — especially the *status* and *notes* columns when something is
 partial or has a known limitation (e.g. "Battle Dome layout not yet generalized
-to 6"). Keep rows one line; don't restate the flag comment. The `FORK:` code tag
-(above) and `FORK.md` are complementary: the tag marks the divergence in-code,
-the table indexes the feature for a human.
+to 6"). The `FORK:` code tag (above) and `FORK.md` are complementary: the tag marks
+the divergence in-code, the table indexes the feature for a human.
+
+**A row is one or two sentences. This is a hard rule, and it has been enforced
+once already** — the table had grown to 82 KB with single cells over 8,000 chars,
+which is unreadable on a phone, and it had silently duplicated (and drifted from)
+`FRONTIER_ENDLESS.md`, `INNATE_ABILITIES.md` and `NEW_ABILITIES.md`. When a feature
+needs more than two sentences:
+
+- **Put the detail in the relevant `fork-docs/` doc** and have the row point at it
+  with a link. The `DETERMINISTIC_*` rows are the model to copy: one sentence of
+  what-it-does, a `[Mechanics](DOC.md#anchor)` link, and the test file.
+- **Create a new doc** if no existing one fits, and add it to `FORK.md`'s doc-index
+  table. `BATTLE_INFO.md`, `FREE_GIMMICKS.md` and `FRONTIER_ROSTER.md` were all
+  created this way.
+- **Never restate a detail doc, a flag comment, or another row.** Two copies drift;
+  the row is the copy that gets stale.
+- **Don't narrate development history in a row.** "It used to display Prankster
+  because…" belongs in the commit message or the detail doc's rationale, not the
+  index. Describe current behavior only.
 
 ## Workflow conventions
 

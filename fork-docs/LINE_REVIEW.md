@@ -639,6 +639,13 @@ than one whose existing set is about to be rewritten.
      Gigantamax Factor + max Dynamax Level automatically at draft).
 8. **Keep dex order** (rows are grouped by generation with `// <dex>` markers).
 
+**Why the helpers exist.** `EVS()`, `NATURE()` and the `{ // NNNN` dex comment (the
+same convention as `innate_abilities.c`) are readability-only — they compile to
+identical bytes. They replace positional `TRAINER_PARTY_EVS` and raw `NATURE_BOLD`
+constants specifically so a set can be read and edited on a phone without counting
+argument positions or recalling that Bold is +Def/−Atk. All three are defined in
+`include/fork/frontier_extended_mons.h`.
+
 ### The `DETERMINISTIC_*` regime — what actually changes for set-building
 
 `include/config/deterministic.h` is the **source of truth**, and every flag's
