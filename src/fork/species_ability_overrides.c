@@ -302,11 +302,8 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0091
-        // Shell Armor, Skill Link and Overcoat are ALL now innate, so its innate-redundant slot-2 Overcoat
-        // (audited: unpinned) takes Sniper, an implemented :white_check_mark: innate (stable) that pays off its
-        // Skill Link Icicle Spear crits.
         SPECIES_CLOYSTER, 2,
-        ABILITY_SNIPER
+        ABILITY_WATER_ABSORB
     },
     { // 0097
         // Hypno: all real abilities now innate, so its innate-redundant slot-1 Forewarn takes a chosen
