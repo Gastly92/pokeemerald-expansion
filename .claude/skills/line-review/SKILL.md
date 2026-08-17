@@ -77,11 +77,11 @@ welcome but not required.
   single source of truth: on it = implemented innate, off it = never-an-innate).
   An innate-capable ability is **not** legal even when this species doesn't carry
   it — if an ability *can* be an innate it is given as an innate, and the one
-  observable slot is spent on something that can only ever be observable. Most of
-  the table predates this rule; `TEST("Innate abilities: no ability override or
-  frontier set names an innate-capable ability")` is `KNOWN_FAILING` until that
-  backlog clears, and **a line review converts the line it touches** — that is how
-  it clears, so treat conversion as in-scope for Step 2 and never add to it. See
+  observable slot is spent on something that can only ever be observable. The
+  legacy backlog is cleared, so `TEST("Innate abilities: no ability override or
+  frontier set names an innate-capable ability")` is a **real CI gate** — a
+  non-conforming pick fails the build. Wiring a new innate can still invalidate an
+  existing row, so treat converting the line you touch as in-scope for Step 2. See
   `fork-docs/INNATE_ABILITIES.md` ("Direction"). Only repurpose a *real* slot
   that's redundant and not test-pinned; filling an empty slot is always safe.
 - **Pre-evolutions get no override rows and no frontier sets.** An override exists

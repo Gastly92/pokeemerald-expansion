@@ -51,13 +51,11 @@ struct SpeciesAbilityOverride
 // LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
 // *implemented* :white_check_mark: innate — that's the row's whole premise.)
 //
-// MIGRATION IN PROGRESS — roughly a third of the rows below predate this rule and still hand
-// out an innate-capable ability. They are enumerated by name by TEST("Innate abilities: no
+// MIGRATION COMPLETE — every row below conforms. The legacy rows that predated this rule (123 of
+// them, roughly a third of the table) were converted in one sweep, and TEST("Innate abilities: no
 // ability override or frontier set names an innate-capable ability") in
-// test/fork/innate_abilities.c, marked KNOWN_FAILING until the backlog clears; run it for the
-// current list and counts. Line reviews convert the lines they touch (fork-docs/LINE_REVIEW.md
-// Step 2, and fork-docs/INNATE_ABILITIES.md "Direction"). DO NOT ADD NEW ROWS TO THE BACKLOG —
-// a new pick must be absent from sImplementedInnates[].
+// test/fork/innate_abilities.c is no longer KNOWN_FAILING: it is a REAL CI GATE, so a row naming an
+// innate-capable ability now fails the build. Run it after editing this table.
 //
 // SLOT CHOICE MATTERS — because the table is gated by FEATURE_INNATE_ABILITIES, a row REPLACES that
 // slot's ability only where the flag is on: all real gameplay/frontier, plus any FORK test that opts
@@ -181,8 +179,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0036
+        // Clefable: all its real abilities are now innate, so its innate-redundant slot-1 Magic Guard takes a
+        // chosen Misty Surge -- :x: (never an innate -> stable): it sets Misty Terrain on entry, blocking
+        // status on grounded mons and halving Dragon moves.
         SPECIES_CLEFABLE, 1,
-        ABILITY_MAGIC_BOUNCE
+        ABILITY_MISTY_SURGE
     },
     {
         SPECIES_CLEFABLE_MEGA, 0,
@@ -221,36 +222,49 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_EARTH_EATER
     },
     { // 0053
-        // Persian: all real abilities now innate, so its innate-redundant slot-2 Unnerve takes a chosen
-        // Fur Coat so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Persian: all its real abilities are now innate, so its innate-redundant slot-2 Unnerve takes a chosen
+        // Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x
+        // power.
         SPECIES_PERSIAN, 2,
-        ABILITY_FUR_COAT
+        ABILITY_SHEER_FORCE
     },
     { // 0053
-        // Persian Alola: all real abilities now innate, so its innate-redundant slot-2 Rattled takes a chosen
-        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Persian-Alola: all its real abilities are now innate, so its innate-redundant slot-2 Rattled takes a
+        // chosen Dark Aura -- :x: (never an innate -> stable): every Dark-type move on the field gains 1.33x
+        // power.
         SPECIES_PERSIAN_ALOLA, 2,
-        ABILITY_CUTE_CHARM
+        ABILITY_DARK_AURA
     },
     { // 0065
         SPECIES_ALAKAZAM, 1,
         ABILITY_PSYCHIC_SURGE
     },
     { // 0071
+        // Victreebel: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Poison Touch --
+        // :x: (never an innate -> stable): its contact moves carry a poison chance.
         SPECIES_VICTREEBEL, 1,
-        ABILITY_STAKEOUT
+        ABILITY_POISON_TOUCH
     },
     {
+        // Victreebel-Mega: all its real abilities are now innate, so its innate-redundant slot-0 Innards Out
+        // takes a chosen Poison Touch -- :x: (never an innate -> stable): its contact moves carry a poison
+        // chance.
         SPECIES_VICTREEBEL_MEGA, 0,
-        ABILITY_STAKEOUT
+        ABILITY_POISON_TOUCH
     },
     {
+        // Victreebel-Mega: all its real abilities are now innate, so its innate-redundant slot-1 Innards Out
+        // takes a chosen Poison Touch -- :x: (never an innate -> stable): its contact moves carry a poison
+        // chance.
         SPECIES_VICTREEBEL_MEGA, 1,
-        ABILITY_STAKEOUT
+        ABILITY_POISON_TOUCH
     },
     {
+        // Victreebel-Mega: all its real abilities are now innate, so its innate-redundant slot-2 Innards Out
+        // takes a chosen Poison Touch -- :x: (never an innate -> stable): its contact moves carry a poison
+        // chance.
         SPECIES_VICTREEBEL_MEGA, 2,
-        ABILITY_STAKEOUT
+        ABILITY_POISON_TOUCH
     },
     { // 0073
         // Tentacruel's three real abilities (Clear Body, Liquid Ooze, Rain Dish) are ALL now innate; slots 0/1
@@ -271,18 +285,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_LIGHTNING_ROD
     },
     { // 0078
-        // Rapidash Galar: all real abilities now innate, so its innate-redundant slot-1 Pastel Veil takes a chosen
-        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Rapidash-Galar: Pastel Veil, Anticipation are now innate, so its innate-redundant slot-1 Pastel Veil
+        // takes a chosen Misty Surge -- :x: (never an innate -> stable): it sets Misty Terrain on entry,
+        // blocking status on grounded mons and halving Dragon moves.
         SPECIES_RAPIDASH_GALAR, 1,
-        ABILITY_CUTE_CHARM
+        ABILITY_MISTY_SURGE
     },
     { // 0080
-        // Slowbro: all real abilities (Oblivious, Own Tempo, Regenerator) now innate; slot-2 Regenerator is
-        // Ability()-pinned in the fork innate test, so its innate-redundant slot-1 Own Tempo takes Ice Scales --
-        // an implemented :white_check_mark: innate it does not carry (stable) and thematic for the bulky
-        // Water/Psychic wall: it halves special damage, a clean boon atop innate Regenerator.
+        // Slowbro: all its real abilities are now innate, so its innate-redundant slot-1 Own Tempo takes a
+        // chosen Storm Drain -- :x: (never an innate -> stable): Water moves are drawn in and absorbed for +1
+        // Sp. Atk. (Slot audited: no flag-on fork test pins it.)
         SPECIES_SLOWBRO, 1,
-        ABILITY_ICE_SCALES
+        ABILITY_STORM_DRAIN
     },
     { // 0080
         // Galarian Slowbro's three real abilities (Quick Draw, Own Tempo, Regenerator) are ALL now innate;
@@ -325,8 +339,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_ILLUSION
     },
     { // 0097
+        // Hypno: all its real abilities are now innate, so its innate-redundant slot-1 Forewarn takes a chosen
+        // Synchronize -- :x: (never an innate -> stable): any burn, poison or paralysis it takes is passed
+        // straight back.
         SPECIES_HYPNO, 1,
-        ABILITY_BAD_DREAMS
+        ABILITY_SYNCHRONIZE
     },
     { // 0103
         // Exeggutor's only real abilities (Chlorophyll, Harvest) are BOTH now innate, so its EMPTY slot 1 takes
@@ -363,10 +380,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_NO_GUARD
     },
     { // 0113
-        // Chansey: all real abilities now innate, so its innate-redundant slot-1 Serene Grace takes a chosen
-        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Chansey: all its real abilities are now innate, so its innate-redundant slot-1 Serene Grace takes a
+        // chosen Fluffy -- :x: (never an innate -> stable): contact damage is halved (at the cost of doubled
+        // Fire damage).
         SPECIES_CHANSEY, 1,
-        ABILITY_CUTE_CHARM
+        ABILITY_FLUFFY
     },
     { // 0115
         // Kangaskhan: all real abilities (Early Bird, Scrappy, Inner Focus) now innate; slot-2 Inner Focus is
@@ -383,12 +401,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0127
-        // Pinsir: all real abilities (Hyper Cutter, Mold Breaker, Moxie) now innate; slot-1 Mold Breaker and
-        // slot-2 Moxie are Ability()-pinned in the fork innate test, so its innate-redundant slot-0 Hyper Cutter
-        // takes Tough Claws -- an implemented :white_check_mark: innate it does not carry (stable) and its Mega X's
-        // ability: it powers the Stag Beetle's contact STAB (X-Scissor / Close Combat), atop innate Moxie.
+        // Pinsir: all its real abilities are now innate, so its innate-redundant slot-0 Hyper Cutter takes a
+        // chosen Aerilate -- :x: (never an innate -> stable): its Normal-type moves turn Flying and gain 1.2x
+        // power. (Slot audited: no flag-on fork test pins it.)
         SPECIES_PINSIR, 0,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_AERILATE
     },
     { // 0128
         // Tauros-Paldea-Combat's three real abilities (Intimidate, Anger Point, Cud Chew) are ALL now innate;
@@ -420,11 +437,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MOTOR_DRIVE
     },
     { // 0142
-        // Rock Head + Pressure now innate; its pending slot-2 Unnerve (audited: unpinned) takes Tough Claws, an
-        // implemented :white_check_mark: innate (stable) and its Mega's ability, powering its contact STAB
-        // (Stone Edge/Crunch/Aqua Tail).
+        // Aerodactyl: all its real abilities are now innate, so its innate-redundant slot-2 Unnerve takes a
+        // chosen Hustle -- :x: (never an innate -> stable): its physical attacks gain 1.5x power for an
+        // accuracy cost. (Slot audited: no flag-on fork test pins it.)
         SPECIES_AERODACTYL, 2,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_HUSTLE
     },
     { // 0143
         // Snorlax: all real abilities (Immunity, Thick Fat, Gluttony) now innate; slot-0 Immunity is the fork
@@ -441,12 +458,33 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ARTICUNO, 1,
         ABILITY_SNOW_WARNING
     },
+    { // 0144
+        // Articuno-Galar: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Psychic Surge -- :x: (never an innate ->
+        // stable): it sets Psychic Terrain on entry, boosting Psychic moves 1.3x and blocking priority on
+        // grounded mons.
+        SPECIES_ARTICUNO_GALAR, 1,
+        ABILITY_PSYCHIC_SURGE
+    },
+    { // 0145
+        // Zapdos-Galar: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Hustle -- :x: (never an innate -> stable): its
+        // physical attacks gain 1.5x power for an accuracy cost.
+        SPECIES_ZAPDOS_GALAR, 1,
+        ABILITY_HUSTLE
+    },
+    { // 0146
+        // Moltres-Galar: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Dark Aura -- :x: (never an innate -> stable):
+        // every Dark-type move on the field gains 1.33x power.
+        SPECIES_MOLTRES_GALAR, 1,
+        ABILITY_DARK_AURA
+    },
     { // 0149
-        // Dragonite's only real abilities (Inner Focus, Multiscale) are BOTH now innate, so its EMPTY slot 1
-        // takes Reckless, an already-implemented :white_check_mark: innate (stable) it does not carry innately:
-        // its recoil STAB (Brave Bird / Double-Edge) is powered up, stacking with the innate Multiscale bulk.
+        // Dragonite: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Aerilate -- :x:
+        // (never an innate -> stable): its Normal-type moves turn Flying and gain 1.2x power.
         SPECIES_DRAGONITE, 1,
-        ABILITY_RECKLESS
+        ABILITY_AERILATE
     },
     { // 0150
         // Mewtwo: all real abilities now innate, so its empty slot takes a chosen
@@ -474,16 +512,17 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_HUSTLE
     },
     { // 0164
-        // Noctowl: all real abilities now innate, so its innate-redundant slot-0 Insomnia takes a chosen
-        // Frisk so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Noctowl: all its real abilities are now innate, so its innate-redundant slot-0 Insomnia takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power.
         SPECIES_NOCTOWL, 0,
-        ABILITY_FRISK
+        ABILITY_SHEER_FORCE
     },
     { // 0166
-        // Ledian: all real abilities now innate, so its innate-redundant slot-0 Swarm takes a chosen
-        // Tinted Lens so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Ledian: all its real abilities are now innate, so its innate-redundant slot-0 Swarm takes a chosen
+        // Victory Star -- :x: (never an innate -> stable): it and its allies gain 1.1x accuracy.
         SPECIES_LEDIAN, 0,
-        ABILITY_TINTED_LENS
+        ABILITY_VICTORY_STAR
     },
     { // 0168
         // Ariados: all real abilities now innate, so its innate-redundant slot-1 Insomnia takes a chosen
@@ -492,10 +531,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_POISON_POINT
     },
     { // 0169
-        // Inner Focus and Infiltrator now innate, so its EMPTY slot 1 takes Reckless, an implemented
-        // :white_check_mark: innate (stable) that powers the fast bat's Brave Bird recoil STAB.
+        // Crobat: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Poison Touch -- :x:
+        // (never an innate -> stable): its contact moves carry a poison chance.
         SPECIES_CROBAT, 1,
-        ABILITY_RECKLESS
+        ABILITY_POISON_TOUCH
     },
     { // 0182
         // Bellossom's only real abilities (Chlorophyll, Healer) are BOTH now innate, so its EMPTY slot 1 takes
@@ -506,18 +545,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SOLAR_POWER
     },
     { // 0185
-        // Sturdy and Rock Head now innate (slot-2 Rattled is pinned by rattled.c), so its innate-redundant
-        // slot-1 Rock Head takes Solid Rock, an implemented :white_check_mark: innate (stable) that blunts the
-        // Rock mimic's many supereffective hits.
+        // Sudowoodo: all its real abilities are now innate, so its innate-redundant slot-1 Rock Head takes a
+        // chosen Illusion -- :x: (never an innate -> stable): it enters disguised as the party's last member
+        // until it takes a direct hit. (Slot audited: no flag-on fork test pins it.)
         SPECIES_SUDOWOODO, 1,
-        ABILITY_SOLID_ROCK
+        ABILITY_ILLUSION
     },
     { // 0189
-        // Chlorophyll, Leaf Guard and Infiltrator are ALL now innate, so its innate-redundant slot-1 Leaf Guard
-        // (audited: unpinned) takes Prankster, an implemented :white_check_mark: innate (stable) for the cotton
-        // weed's Sleep Powder / Leech Seed support kit.
+        // Jumpluff: all its real abilities are now innate, so its innate-redundant slot-1 Leaf Guard takes a
+        // chosen Effect Spore -- :x: (never an innate -> stable): contact attackers risk poison, paralysis or
+        // sleep. (Slot audited: no flag-on fork test pins it.)
         SPECIES_JUMPLUFF, 1,
-        ABILITY_PRANKSTER
+        ABILITY_EFFECT_SPORE
     },
     { // 0199
         // Slowking's three real abilities (Oblivious, Own Tempo, Regenerator) are ALL now innate; slot-0 Oblivious
@@ -536,11 +575,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SYNCHRONIZE
     },
     { // 0205
-        // Forretress's only real abilities (Sturdy, Overcoat) are BOTH now innate, so its EMPTY slot 1 takes
-        // Filter, an already-implemented :white_check_mark: innate (stable) it does not carry innately: it blunts
-        // the supereffective Fire hit its Spikes/Rapid Spin wall most fears.
+        // Forretress: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Bulletproof --
+        // :x: (never an innate -> stable): ball, bomb and cannon moves (Focus Blast, Shadow Ball, Sludge Bomb)
+        // cannot touch it.
         SPECIES_FORRETRESS, 1,
-        ABILITY_FILTER
+        ABILITY_BULLETPROOF
     },
     { // 0210
         // Granbull's three real abilities (Intimidate, Quick Feet, Rattled) are ALL now innate, so its innate-
@@ -551,11 +590,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_STATIC
     },
     { // 0212
-        // Swarm, Technician and Light Metal are ALL now innate (slot-2 Light Metal is pinned by light_metal.c),
-        // so its innate-redundant slot-1 Technician (audited: unpinned) takes Tough Claws, an implemented
-        // :white_check_mark: innate (stable) that powers Bullet Punch / U-turn contact.
+        // Scizor: all its real abilities are now innate, so its innate-redundant slot-1 Technician takes a
+        // chosen Well-Baked Body -- :x: (never an innate -> stable): Fire moves are shrugged off entirely for
+        // +2 Defense. (Slot audited: no flag-on fork test pins it.)
         SPECIES_SCIZOR, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0214
         // Heracross: all real abilities now innate, so its innate-redundant slot-2 Moxie takes a chosen
@@ -594,10 +633,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_NO_GUARD
     },
     { // 0242
-        // Blissey: all real abilities now innate, so its innate-redundant slot-2 Healer takes a chosen
-        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Blissey: all its real abilities are now innate, so its innate-redundant slot-2 Healer takes a chosen
+        // Fluffy -- :x: (never an innate -> stable): contact damage is halved (at the cost of doubled Fire
+        // damage).
         SPECIES_BLISSEY, 2,
-        ABILITY_CUTE_CHARM
+        ABILITY_FLUFFY
     },
     { // 0243
         // Raikou's only real abilities (Pressure, Inner Focus) are BOTH now innate, so its EMPTY slot 1 takes
@@ -657,14 +697,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0264
-        // Linoone's three real abilities (Pickup, Gluttony, Quick Feet) are ALL now innate; slot-0 Pickup is the
-        // default read by tests (fury_cutter.c / pursuit.c / ai.c / ai_switching.c), so its innate-redundant slot-1
-        // Gluttony (audited: no Ability(ABILITY_GLUTTONY) on Linoone in test/) takes Scrappy -- an already-implemented
-        // :white_check_mark: innate (stable, like Diggersby's) it does not carry innately: its Normal STAB (Extreme
-        // Speed / Facade / Body Slam) then hits Ghosts, a clean coverage boon for its Belly Drum priority sweeper
-        // alongside the innate Quick Feet (Speed) / Gluttony.
+        // Linoone: all its real abilities are now innate, so its innate-redundant slot-1 Gluttony takes a
+        // chosen Hustle -- :x: (never an innate -> stable): its physical attacks gain 1.5x power for an
+        // accuracy cost. (Slot audited: no flag-on fork test pins it.)
         SPECIES_LINOONE, 1,
-        ABILITY_SCRAPPY
+        ABILITY_HUSTLE
     },
     { // 0269
         // Dustox's only real abilities (Shield Dust, Compound Eyes) are BOTH now innate, so its EMPTY slot 1
@@ -682,12 +719,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_STORM_DRAIN
     },
     { // 0277
-        // Swellow's only real abilities (Guts, Scrappy) are BOTH now innate, so its EMPTY slot 1 takes Quick
-        // Feet — an already-implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) that Swellow
-        // does not carry innately: its Toxic Orb Facade set also gains +50% Speed (and ignores paralysis) once
-        // statused, stacking with the innate Guts.
+        // Swellow: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Wind Rider -- :x:
+        // (never an innate -> stable): wind moves and Tailwind give it +1 Attack instead of landing.
         SPECIES_SWELLOW, 1,
-        ABILITY_QUICK_FEET
+        ABILITY_WIND_RIDER
     },
     { // 0284
         // Masquerain's only real abilities (Intimidate, Unnerve) are BOTH now innate, so its EMPTY slot 1 takes a
@@ -707,36 +742,29 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_HUSTLE
     },
     { // 0291
-        // Speed Boost and Infiltrator now innate, so its EMPTY slot 1 takes Tough Claws, an implemented
-        // :white_check_mark: innate (stable) that powers the fastest bug's U-turn / Leech Life / Aerial Ace
-        // contact.
+        // Ninjask: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Hustle -- :x:
+        // (never an innate -> stable): its physical attacks gain 1.5x power for an accuracy cost.
         SPECIES_NINJASK, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_HUSTLE
     },
     { // 0302
-        // Sableye: its innate traits are Keen Eye (slot 0) and Prankster (slot 2); slot-1 Stall is a real but
-        // drawback ability (it always moves last), dead weight on the roster like Sceptile's Unburden. That slot
-        // takes Magic Bounce -- an implemented :white_check_mark: innate it does not carry (stable) and its Mega's
-        // ability: the Darkness Pokemon reflects status/hazards, a clean boon atop innate Prankster.
+        // Sableye: Keen Eye, Prankster are now innate, so its slot-1 Stall takes a chosen Wandering Spirit --
+        // :x: (never an innate -> stable): contact attackers have their ability swapped with its own.
         SPECIES_SABLEYE, 1,
-        ABILITY_MAGIC_BOUNCE
+        ABILITY_WANDERING_SPIRIT
     },
     { // 0306
-        // Sturdy, Rock Head and Heavy Metal are ALL now innate (slot-2 Heavy Metal pinned by heavy_metal.c), so
-        // its innate-redundant slot-1 Rock Head (audited: unpinned) takes Filter, an implemented
-        // :white_check_mark: innate (stable) and its Mega's ability, blunting its 4x Fighting/Ground
-        // weaknesses.
+        // Aggron: all its real abilities are now innate, so its innate-redundant slot-1 Rock Head takes a
+        // chosen Well-Baked Body -- :x: (never an innate -> stable): Fire moves are shrugged off entirely for
+        // +2 Defense. (Slot audited: no flag-on fork test pins it.)
         SPECIES_AGGRON, 1,
-        ABILITY_FILTER
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0308
-        // Medicham's only real abilities are Pure Power (slot 0, now innate) and Telepathy (slot 2, dead in
-        // frontier singles), so its EMPTY slot 1 takes Reckless — an already-implemented :white_check_mark:
-        // innate (stable, like Slurpuff's Unaware) that Medicham does not carry innately and is a pure boon
-        // for the martial artist: it powers up its High Jump Kick STAB (crash move) by 20%, stacking with the
-        // innate Pure Power. (Slot 2 Telepathy is left intact for any future doubles set.)
+        // Medicham: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force --
+        // :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_MEDICHAM, 1,
-        ABILITY_RECKLESS
+        ABILITY_SHEER_FORCE
     },
     { // 0313
         // Volbeat's three real abilities (Illuminate, Swarm, Prankster) are ALL now innate, so its slot-1
@@ -747,10 +775,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_VICTORY_STAR
     },
     { // 0314
-        // Illumise: all real abilities now innate, so its innate-redundant slot-0 Oblivious takes a chosen
-        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Illumise: all its real abilities are now innate, so its innate-redundant slot-0 Oblivious takes a
+        // chosen Lingering Aroma -- :x: (never an innate -> stable): contact attackers have their own ability
+        // replaced by Lingering Aroma.
         SPECIES_ILLUMISE, 0,
-        ABILITY_CUTE_CHARM
+        ABILITY_LINGERING_AROMA
     },
     { // 0317
         // Swalot's three real abilities (Liquid Ooze, Sticky Hold, Gluttony) are ALL now innate, and NONE is
@@ -762,21 +791,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_POISON_TOUCH
     },
     { // 0319
-        // Sharpedo's only real abilities (Rough Skin, Speed Boost) are BOTH now innate, so its EMPTY slot 1
-        // takes Strong Jaw, an already-implemented :white_check_mark: innate (stable) and its Mega's ability:
-        // it powers the Brutal Pokemon's biting STAB (Crunch / Psychic Fangs / Ice Fang) alongside the innate
-        // Speed Boost and Rough Skin.
+        // Sharpedo: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force --
+        // :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_SHARPEDO, 1,
-        ABILITY_STRONG_JAW
+        ABILITY_SHEER_FORCE
     },
-    // NOTE: Wailord (0321) and Camerupt (0323) are deliberately NOT given a chosen override — they are permanent
-    // EXCLUSIONS. Both are used in AI tests that are sensitive to the species' whole ability SET, not just the
-    // chosen slot: Wailord in test/battle/ai/ai.c ("best OHKO move" — a move-absorbing ability like Water Absorb in
-    // any slot makes the AI treat Water Spout as possibly-nullified and pick Thunder instead) and Camerupt in
-    // test/battle/ai/ai_thinking_time.c (the "Steven multi" node-count ceiling is already at its limit, so an extra
-    // AI-evaluation branch from an immunity ability like Flash Fire tips it over). So both keep their now-innate
-    // chosen ability (Water Veil / Magma Armor) — redundant-but-correct — like the other AI/test-pinned exclusions
-    // (Slowbro / Snorlax / Clefable).
     { // 0321
         // Wailord: all real abilities now innate, so its innate-redundant slot-2 Pressure takes a chosen
         // Drizzle so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
@@ -837,12 +856,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_STORM_DRAIN
     },
     { // 0342
-        // Crawdaunt's three real abilities (Hyper Cutter, Shell Armor, Adaptability) are ALL now innate; its slot-2
-        // Adaptability is pinned by adaptability.c, so its unpinned innate-redundant slot-1 Shell Armor (audited)
-        // takes Sniper, an already-implemented :white_check_mark: innate (stable, like Decidueye-Hisui) that pays off
-        // the Rogue Pokemon's high-crit Crabhammer.
+        // Crawdaunt: all its real abilities are now innate, so its innate-redundant slot-1 Shell Armor takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power. (Slot audited: no flag-on fork test pins it.)
         SPECIES_CRAWDAUNT, 1,
-        ABILITY_SNIPER
+        ABILITY_SHEER_FORCE
     },
     { // 0344
         SPECIES_CLAYDOL, 1, 
@@ -879,10 +897,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SOUNDPROOF
     },
     { // 0359
-        // Absol: all real abilities now innate, so its innate-redundant slot-2 Justified takes a chosen
-        // Magic Bounce so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Absol: all its real abilities are now innate, so its innate-redundant slot-2 Justified takes a chosen
+        // Dark Aura -- :x: (never an innate -> stable): every Dark-type move on the field gains 1.33x power.
         SPECIES_ABSOL, 2,
-        ABILITY_MAGIC_BOUNCE
+        ABILITY_DARK_AURA
     },
     { // 0365
         // Walrein's three real abilities (Thick Fat, Ice Body, Oblivious) are ALL now innate; slot-0 Thick Fat is the
@@ -929,25 +947,23 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_RIVALRY
     },
     { // 0376
-        // Metagross's only real abilities are Clear Body (slot 0) and Light Metal (slot 2), BOTH now innate, so
-        // its EMPTY slot 1 takes Tough Claws, an already-implemented :white_check_mark: innate (stable) and its Mega's
-        // ability: it powers up its contact STAB (Meteor Mash / Bullet Punch / Zen Headbutt).
+        // Metagross: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force --
+        // :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_METAGROSS, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_SHEER_FORCE
     },
     { // 0377
-        // Regirock's only real abilities (Clear Body, Sturdy) are BOTH now innate, so its EMPTY slot 1 takes Solid
-        // Rock, an already-implemented :white_check_mark: innate (stable) and thematic for the rock golem: it blunts
-        // the supereffective Water/Grass/Ground/Steel/Fighting hits its defensive sets fear.
+        // Regirock: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sand Stream --
+        // :x: (never an innate -> stable): it sets sandstorm on entry, chipping the field and boosting Rock-
+        // type Sp. Def.
         SPECIES_REGIROCK, 1,
-        ABILITY_SOLID_ROCK
+        ABILITY_SAND_STREAM
     },
     { // 0378
-        // Regice's only real abilities are Clear Body (slot 0, now innate) and Ice Body (slot 2, pending), so its
-        // EMPTY slot 1 takes Ice Scales, an already-implemented :white_check_mark: innate (stable) that halves the
-        // special damage its Assault Vest special wall already invites.
+        // Regice: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Snow Warning -- :x:
+        // (never an innate -> stable): it sets snow on entry, boosting Ice-type Defense.
         SPECIES_REGICE, 1,
-        ABILITY_ICE_SCALES
+        ABILITY_SNOW_WARNING
     },
     { // 0379
         // Registeel's only real abilities are Clear Body (slot 0) and Light Metal (slot 2), BOTH now innate, so
@@ -1032,20 +1048,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0424
-        // Technician, Skill Link and Prankster are ALL now innate, so its pending slot-1 Pickup (audited:
-        // unpinned) takes Tough Claws, an implemented :white_check_mark: innate (stable) that powers the Long
-        // Tail monkey's contact kit (Fake Out / Double Hit / Return).
+        // Ambipom: all its real abilities are now innate, so its innate-redundant slot-1 Pickup takes a chosen
+        // Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x
+        // power. (Slot audited: no flag-on fork test pins it.)
         SPECIES_AMBIPOM, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_SHEER_FORCE
     },
     { // 0426
-        // Drifblim's three real abilities (Aftermath, Unburden, Flare Boost) are ALL now innate. Slots 1/2
-        // (Unburden, Flare Boost) are pinned by tests (unburden.c / flare_boost.c), so its unpinned slot-0
-        // Aftermath (audited: aftermath.c uses Voltorb, not Drifblim) takes Unaware — an already-implemented
-        // :white_check_mark: innate (stable, like Slurpuff's) that the balloon does not carry innately and pays
-        // off its bulky Calm Mind / Strength Sap staller by ignoring the foe's stat boosts.
+        // Drifblim: all its real abilities are now innate, so its innate-redundant slot-0 Aftermath takes a
+        // chosen Cloud Nine -- :x: (never an innate -> stable): all weather effects are switched off while it
+        // is on the field. (Slot audited: no flag-on fork test pins it.)
         SPECIES_DRIFBLIM, 0,
-        ABILITY_UNAWARE
+        ABILITY_CLOUD_NINE
     },
     { // 0428
         // Lopunny's only real non-drawback abilities (Cute Charm, Limber) are BOTH now innate
@@ -1060,10 +1074,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WANDERING_SPIRIT
     },
     { // 0430
-        // Honchkrow: all real abilities now innate, so its innate-redundant slot-1 Super Luck takes a chosen
-        // Sniper so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Honchkrow: all its real abilities are now innate, so its innate-redundant slot-1 Super Luck takes a
+        // chosen Dark Aura -- :x: (never an innate -> stable): every Dark-type move on the field gains 1.33x
+        // power.
         SPECIES_HONCHKROW, 1,
-        ABILITY_SNIPER
+        ABILITY_DARK_AURA
     },
     { // 0432
         // Purugly: all real abilities now innate, so its innate-redundant slot-0 Thick Fat takes a chosen
@@ -1088,19 +1103,17 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SOUNDPROOF
     },
     { // 0441
-        // Chatot's three real abilities (Keen Eye, Tangled Feet, Big Pecks) are ALL now innate, so its innate-
-        // redundant slot-1 Tangled Feet -- unpinned by any test (audited) -- takes Punk Rock, an already-implemented
-        // :white_check_mark: innate (stable, like Meloetta) that powers the Music Note Pokemon's sound STAB (Boomburst
-        // / Hyper Voice / Chatter).
+        // Chatot: all its real abilities are now innate, so its innate-redundant slot-1 Tangled Feet takes a
+        // chosen Aerilate -- :x: (never an innate -> stable): its Normal-type moves turn Flying and gain 1.2x
+        // power. (Slot audited: no flag-on fork test pins it.)
         SPECIES_CHATOT, 1,
-        ABILITY_PUNK_ROCK
+        ABILITY_AERILATE
     },
     { // 0442
-        // Pressure and Infiltrator now innate, so its EMPTY slot 1 takes Unaware, an implemented
-        // :white_check_mark: innate (stable, like Slurpuff) that pays off the Forbidden Pokemon's Calm Mind /
-        // WoW staller by ignoring the foe's boosts.
+        // Spiritomb: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Mummy -- :x:
+        // (never an innate -> stable): contact attackers have their own ability replaced by Mummy.
         SPECIES_SPIRITOMB, 1,
-        ABILITY_UNAWARE
+        ABILITY_MUMMY
     },
     { // 0445
         // Garchomp's only real abilities (Sand Veil, Rough Skin) are BOTH now innate, so its EMPTY slot 1 takes
@@ -1116,18 +1129,31 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LUCARIO, 1,
         ABILITY_NO_GUARD
     },
+    { // 0448
+        // Lucario: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its innate-redundant slot-2 Justified takes a chosen Sheer Force -- :x: (never
+        // an innate -> stable): moves with a secondary effect trade it for 1.3x power.
+        SPECIES_LUCARIO, 2,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0452
+        // Drapion: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its innate-redundant slot-1 Sniper takes a chosen Poison Touch -- :x: (never an
+        // innate -> stable): its contact moves carry a poison chance.
+        SPECIES_DRAPION, 1,
+        ABILITY_POISON_TOUCH
+    },
     { // 0455
+        // Carnivine: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Seed Sower --
+        // :x: (never an innate -> stable): being hit sets Grassy Terrain.
         SPECIES_CARNIVINE, 1,
-        ABILITY_CHLOROPHYLL
+        ABILITY_SEED_SOWER
     },
     { // 0461
-        // Weavile's only real abilities (Pressure, Pickpocket) are BOTH now innate, so its EMPTY slot 1 takes Tough
-        // Claws, an already-implemented :white_check_mark: innate (stable) it does not carry innately and perfectly
-        // thematic for the Sharp Claw Pokemon: its entirely-contact kit (Triple Axel / Icicle Crash / Knock Off /
-        // Ice Shard / Low Kick) gains +30%, a broad boon for its fast Life Orb physical attacker on top of the innate
-        // Pickpocket steal.
+        // Weavile: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Dark Aura -- :x:
+        // (never an innate -> stable): every Dark-type move on the field gains 1.33x power.
         SPECIES_WEAVILE, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_DARK_AURA
     },
     { // 0462
         // Magnezone's three real abilities (Magnet Pull, Sturdy, Analytic) are ALL now innate; slot-0 Magnet Pull and
@@ -1172,12 +1198,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0472
-        // Gliscor: all real abilities (Hyper Cutter, Sand Veil, Poison Heal) now innate; slot-1 Sand Veil is
-        // Ability()-pinned in the fork innate test, so its innate-redundant slot-2 Poison Heal takes Unaware --
-        // an implemented :white_check_mark: innate it does not carry (stable) and a clean boon for the Ground/Flying
-        // wall: it ignores foes' stat boosts, observable atop its always-on innate Poison Heal (Toxic Orb recovery).
+        // Gliscor: all its real abilities are now innate, so its innate-redundant slot-2 Poison Heal takes a
+        // chosen Poison Touch -- :x: (never an innate -> stable): its contact moves carry a poison chance.
+        // (Slot audited: no flag-on fork test pins it.)
         SPECIES_GLISCOR, 2,
-        ABILITY_UNAWARE
+        ABILITY_POISON_TOUCH
     },
     { // 0473
         // Mamoswine's three real abilities (Oblivious, Snow Cloak, Thick Fat) are ALL now innate, so
@@ -1197,10 +1222,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SIMPLE
     },
     { // 0475
-        // Gallade: all real abilities now innate, so its innate-redundant slot-0 Steadfast takes a chosen
-        // Super Luck so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Gallade: all its real abilities are now innate, so its innate-redundant slot-0 Steadfast takes a
+        // chosen Simple -- :x: (never an innate -> stable): every stat change it takes is doubled.
         SPECIES_GALLADE, 0,
-        ABILITY_SUPER_LUCK
+        ABILITY_SIMPLE
     },
     { // 0476
         // Probopass's three real abilities (Sturdy, Magnet Pull, Sand Force) are ALL now innate, so its innate-redundant
@@ -1289,20 +1314,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0487
-        // Base Giratina (Altered)'s only real abilities (Pressure, Telepathy) are BOTH now innate (Telepathy -- Levitate is an Origin-forme innate it also carries as flavor), so its EMPTY slot 1 takes
-        // Unaware -- an already-implemented :white_check_mark: innate (stable, like Spiritomb's) it does not carry
-        // innately and a pure boon for the Renegade's bulky Will-O / Dragon Tail / Defog wall: it ignores the
-        // foe's stat boosts. (Origin forme takes its own Dragon's Maw pick just below.)
+        // Giratina: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Wandering Spirit
+        // -- :x: (never an innate -> stable): contact attackers have their ability swapped with its own.
         SPECIES_GIRATINA_ALTERED, 1,
-        ABILITY_UNAWARE
+        ABILITY_WANDERING_SPIRIT
     },
     { // 0487
-        // Giratina-Origin's only real ability (Levitate) is now innate, so its EMPTY slot 1 takes Dragon's Maw --
-        // an already-implemented :white_check_mark: innate (stable) it does NOT carry innately (its sole
-        // innate is Levitate), so the pick stays observable and never needs re-pointing: the Renegade forme's
-        // draconic might powers its Draco Meteor / Dragon Claw / Shadow Force nuke.
+        // Giratina-Origin: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer
+        // Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_GIRATINA_ORIGIN, 1,
-        ABILITY_DRAGONS_MAW
+        ABILITY_SHEER_FORCE
     },
     { // 0488
         SPECIES_CRESSELIA, 1,
@@ -1353,10 +1374,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0505
-        // Watchog: all real abilities now innate, so its innate-redundant slot-1 Keen Eye takes a chosen
-        // Frisk so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Watchog: all its real abilities are now innate, so its innate-redundant slot-1 Keen Eye takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power.
         SPECIES_WATCHOG, 1,
-        ABILITY_FRISK
+        ABILITY_SHEER_FORCE
     },
     { // 0508
         // Stoutland's three real abilities (Intimidate, Sand Rush, Scrappy) are ALL now innate; slot-1 Sand Rush is
@@ -1368,21 +1390,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0510
-        // Liepard's three real abilities (Limber, Unburden, Prankster) are ALL now innate; slot-0 Limber is the
-        // default read by revelation_dance.c, so its innate-redundant slot-1 Unburden (audited: no
-        // Ability(ABILITY_UNBURDEN) on Liepard in test/) takes Infiltrator -- an already-implemented
-        // :white_check_mark: innate (stable) it does not carry innately and thematic for the sneaky cat: its Foul
-        // Play / Knock Off / Encore ignore the target's Substitute and screens, a clean disruption boon alongside
-        // its innate Prankster (priority status) and Unburden (Speed once Sitrus is eaten).
+        // Liepard: all its real abilities are now innate, so its innate-redundant slot-1 Unburden takes a
+        // chosen Illusion -- :x: (never an innate -> stable): it enters disguised as the party's last member
+        // until it takes a direct hit. (Slot audited: no flag-on fork test pins it.)
         SPECIES_LIEPARD, 1,
-        ABILITY_INFILTRATOR
+        ABILITY_ILLUSION
     },
     { // 0512
-        // Simisage's only real abilities (Gluttony, Overgrow) are BOTH now innate, so its EMPTY slot 1 takes
-        // Chlorophyll -- an already-implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) it
-        // does not carry innately -- doubling the grass monkey's Speed in sun for its offensive sets.
+        // Simisage: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Grassy Surge --
+        // :x: (never an innate -> stable): it sets Grassy Terrain on entry, healing grounded allies and
+        // boosting Grass moves 1.3x.
         SPECIES_SIMISAGE, 1,
-        ABILITY_CHLOROPHYLL
+        ABILITY_GRASSY_SURGE
     },
     { // 0514
         // Simisear's only real abilities (Gluttony, Blaze) are BOTH now innate, so its EMPTY slot 1 takes
@@ -1407,8 +1426,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SAND_STREAM
     },
     { // 0531
+        // Audino: Healer, Regenerator are now innate, so its innate-redundant slot-1 Regenerator takes a chosen
+        // Synchronize -- :x: (never an innate -> stable): any burn, poison or paralysis it takes is passed
+        // straight back.
         SPECIES_AUDINO, 1,
-        ABILITY_CUTE_CHARM
+        ABILITY_SYNCHRONIZE
     },
     { // 0538
         // Throh's three real abilities (Guts, Inner Focus, Mold Breaker) are ALL now innate, and none is test-pinned
@@ -1428,20 +1450,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0542
-        // Leavanny's three real abilities (Swarm, Chlorophyll, Overcoat) are ALL now innate, and none is test-pinned
-        // (audited: no test selects Leavanny), so its innate-redundant slot-2 Overcoat takes Sharpness -- an
-        // already-implemented :white_check_mark: innate (stable) it does not carry innately and perfectly thematic for
-        // the Nurturing Pokemon's scythe arms: its slicing STAB (Leaf Blade / X-Scissor) gains +50%, a clean boon for
-        // its Swords Dance / Sticky Web sets alongside the innate Chlorophyll (Speed in sun).
+        // Leavanny: all its real abilities are now innate, so its innate-redundant slot-2 Overcoat takes a
+        // chosen Hustle -- :x: (never an innate -> stable): its physical attacks gain 1.5x power for an
+        // accuracy cost. (Slot audited: no flag-on fork test pins it.)
         SPECIES_LEAVANNY, 2,
-        ABILITY_SHARPNESS
+        ABILITY_HUSTLE
     },
     { // 0547
-        // Prankster, Infiltrator and Chlorophyll are ALL now innate, so its innate-redundant slot-2 Chlorophyll
-        // (audited: unpinned) takes Sweet Veil, an implemented :white_check_mark: innate (stable) and thematic
-        // for the cotton fairy: its team can't be put to sleep.
+        // Whimsicott: all its real abilities are now innate, so its innate-redundant slot-2 Chlorophyll takes a
+        // chosen Cotton Down -- :x: (never an innate -> stable): anything that hits it eats a -1 Speed drop.
+        // (Slot audited: no flag-on fork test pins it.)
         SPECIES_WHIMSICOTT, 2,
-        ABILITY_SWEET_VEIL
+        ABILITY_COTTON_DOWN
     },
     { // 0549
         // Lilligant's three real abilities (Chlorophyll, Own Tempo, Leaf Guard) are ALL now innate; slot-0 Chlorophyll
@@ -1498,20 +1518,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_POISON_TOUCH
     },
     { // 0573
-        // Cute Charm, Technician and Skill Link are ALL now innate, so its innate-redundant slot-1 Technician
-        // (audited: unpinned) takes Tough Claws, an implemented :white_check_mark: innate (stable) for the
-        // Scarf Chinchilla's Tail Slap / Bullet Seed multi-hit contact.
+        // Cinccino: all its real abilities are now innate, so its innate-redundant slot-1 Technician takes a
+        // chosen Hustle -- :x: (never an innate -> stable): its physical attacks gain 1.5x power for an
+        // accuracy cost. (Slot audited: no flag-on fork test pins it.)
         SPECIES_CINCCINO, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_HUSTLE
     },
     { // 0576
-        // Gothitelle's slot-2 Shadow Tag is now innate; slots 0/1 (Frisk, Competitive) are both still PENDING innates, so
-        // rather than hand out a pending pick (future churn) its innate-redundant slot-2 Shadow Tag (audited: no
-        // Ability(ABILITY_SHADOW_TAG) on Gothitelle) takes Unaware — an already-implemented :white_check_mark: innate
-        // (stable, like Slurpuff's) that pays off its Calm Mind sweeper by ignoring the foe's boosts. (Slots 0/1 kept
-        // intact for the future Frisk/Competitive innates.)
+        // Gothitelle: all its real abilities are now innate, so its innate-redundant slot-2 Shadow Tag takes a
+        // chosen Synchronize -- :x: (never an innate -> stable): any burn, poison or paralysis it takes is
+        // passed straight back. (Slot audited: no flag-on fork test pins it.)
         SPECIES_GOTHITELLE, 2,
-        ABILITY_UNAWARE
+        ABILITY_SYNCHRONIZE
     },
     { // 0579
         // Reuniclus's three real abilities (Overcoat, Magic Guard, Regenerator) are ALL now innate (Tier 5.4) and
@@ -1557,12 +1575,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_STATIC
     },
     { // 0598
-        // Ferrothorn's only non-pending real abilities are Iron Barbs (slot 0, now innate) and Anticipation (slot 2,
-        // still :white_large_square: pending), so its EMPTY slot 1 takes Filter, an already-implemented
-        // :white_check_mark: innate (stable) it does not carry innately: the Barb Wire wall blunts the supereffective
-        // Fire hit its Spikes / Leech Seed sets most fear. Same pick as the Steel spiker Forretress.
+        // Ferrothorn: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Well-Baked Body
+        // -- :x: (never an innate -> stable): Fire moves are shrugged off entirely for +2 Defense.
         SPECIES_FERROTHORN, 1,
-        ABILITY_FILTER
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0601
         // Klinklang's slot-2 Clear Body is now innate and its slots 0/1 are Plus/Minus (dead in singles); slot-0 Plus
@@ -1589,12 +1605,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0617
-        // Hydration, Sticky Hold and Unburden are ALL now innate, so its innate-redundant slot-1 Sticky Hold
-        // (audited: unpinned) takes Tinted Lens, an implemented :white_check_mark: innate (stable) that lets the
-        // glass-cannon ninja's Bug Buzz / Focus Blast hit resists for full. (Its former Unburden roster set now
-        // rides the innate Unburden and also selects this Tinted Lens slot.)
+        // Accelgor: all its real abilities are now innate, so its innate-redundant slot-1 Sticky Hold takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power. (Slot audited: no flag-on fork test pins it.)
         SPECIES_ACCELGOR, 1,
-        ABILITY_TINTED_LENS
+        ABILITY_SHEER_FORCE
     },
     { // 0620
         // Mienshao's three real abilities (Inner Focus, Regenerator, Reckless) are ALL now innate; slot-0 Inner Focus
@@ -1606,20 +1621,41 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_NO_GUARD
     },
     { // 0630
-        // Mandibuzz's non-drawback real abilities (Big Pecks, Overcoat) are BOTH now innate (Weak Armor, slot 2, is a
-        // drawback on a wall), and slot-1 Overcoat is the chosen-differs-from-innate exemplar in
-        // test/fork/innate_abilities.c, so its slot-2 Weak Armor takes Unaware -- an already-implemented
-        // :white_check_mark: innate (stable, like Spiritomb's) it does not carry innately and a pure boon for the
-        // Bone Vulture's Foul Play / Roost / Defog wall: it ignores the foe's stat boosts.
+        // Mandibuzz: Big Pecks, Overcoat are now innate, so its slot-2 Weak Armor takes a chosen Wind Rider --
+        // :x: (never an innate -> stable): wind moves and Tailwind give it +1 Attack instead of landing.
         SPECIES_MANDIBUZZ, 2,
-        ABILITY_UNAWARE
+        ABILITY_WIND_RIDER
     },
     { // 0635
         SPECIES_HYDREIGON, 1, 
         ABILITY_SHEER_FORCE },
+    { // 0638
+        // Cobalion: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Bulletproof -- :x: (never an innate -> stable):
+        // ball, bomb and cannon moves (Focus Blast, Shadow Ball, Sludge Bomb) cannot touch it.
+        SPECIES_COBALION, 1,
+        ABILITY_BULLETPROOF
+    },
+    { // 0639
+        // Terrakion: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Sand Stream -- :x: (never an innate -> stable):
+        // it sets sandstorm on entry, chipping the field and boosting Rock-type Sp. Def.
+        SPECIES_TERRAKION, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0640
+        // Virizion: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Sap Sipper -- :x: (never an innate -> stable):
+        // Grass moves are absorbed for +1 Attack instead of landing.
+        SPECIES_VIRIZION, 1,
+        ABILITY_SAP_SIPPER
+    },
     { // 0641
+        // Tornadus-Therian: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Wind
+        // Rider -- :x: (never an innate -> stable): wind moves and Tailwind give it +1 Attack instead of
+        // landing.
         SPECIES_TORNADUS_THERIAN, 1,
-        ABILITY_PRANKSTER
+        ABILITY_WIND_RIDER
     },
     { // 0641
         // Tornadus: all real abilities now innate, so its empty slot takes a chosen
@@ -1679,13 +1715,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_KYUREM_BLACK, 1,
         ABILITY_MOTOR_DRIVE
     },
+    { // 0647
+        // Keldeo: every real ability it has is innate-capable, so its frontier sets had no legal chosen ability
+        // left to name. Its EMPTY slot 1 takes a chosen Storm Drain -- :x: (never an innate -> stable): Water
+        // moves are drawn in and absorbed for +1 Sp. Atk.
+        SPECIES_KELDEO, 1,
+        ABILITY_STORM_DRAIN
+    },
     { // 0648
-        // Meloetta's only real ability (Serene Grace) is now innate, so its empty slot 1 takes Punk
-        // Rock — an already-implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) and
-        // on-theme: the Melody Pokemon's powerful voice boosts its sound-based Hyper Voice / Relic Song
-        // (and softens incoming sound moves).
+        // Meloetta: its only real ability (Serene Grace) is innate-capable, so its EMPTY slot 1 takes a chosen
+        // Pixilate -- :x: (never an innate -> stable): its Normal-type moves turn Fairy and gain 1.2x power.
         SPECIES_MELOETTA, 1,
-        ABILITY_PUNK_ROCK
+        ABILITY_PIXILATE
     },
     { // 0649
         // Genesect's only real ability (Download) is now innate, so its EMPTY slot 1 takes Sheer Force.
@@ -1705,36 +1746,32 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_FLASH_FIRE
     },
     { // 0660
-        // Diggersby's three real abilities (Pickup, Cheek Pouch, Huge Power) are ALL now innate, so its slot-2
-        // Huge Power — now innate-redundant and unpinned by any test (audited: no Ability(ABILITY_HUGE_POWER)
-        // on Diggersby in test/battle) — is repurposed to Scrappy, an already-implemented :white_check_mark:
-        // innate (stable, like Lokix's Tough Claws) it does not carry innately: its Normal STAB (Return / Quick
-        // Attack) then hits Ghosts, a clean coverage boon alongside the innate Huge Power. (Dead-weight real-slot
-        // repurpose, Sceptile-style.)
+        // Diggersby: all its real abilities are now innate, so its innate-redundant slot-2 Huge Power takes a
+        // chosen Earth Eater -- :x: (never an innate -> stable): Ground-type moves heal it for 1/4 max HP
+        // instead of damaging it. (Slot audited: no flag-on fork test pins it.)
         SPECIES_DIGGERSBY, 2,
-        ABILITY_SCRAPPY
+        ABILITY_EARTH_EATER
     },
     { // 0675
-        // Pangoro's three real abilities (Iron Fist, Mold Breaker, Scrappy) are ALL now innate (Mold Breaker,
-        // Tier 5.5); slots 1/2 (Mold Breaker, Scrappy) are pinned by ai_doubles.c, so its innate-redundant
-        // slot-0 Iron Fist (audited: unpinned) takes Tough Claws, an implemented :white_check_mark: innate
-        // (stable) it does not carry innately: every move on its sets (Knock Off / Close Combat / Gunk Shot /
-        // Drain Punch / Sucker Punch) makes contact, so the +30% is a broad boon alongside innate Iron Fist.
+        // Pangoro: all its real abilities are now innate, so its innate-redundant slot-0 Iron Fist takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power. (Slot audited: no flag-on fork test pins it.)
         SPECIES_PANGORO, 0,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_SHEER_FORCE
     },
     { // 0678
-        // Keen Eye, Infiltrator and Prankster are ALL now innate, so its innate-redundant slot-1 Infiltrator
-        // (audited: unpinned) takes Own Tempo, an implemented :white_check_mark: innate (stable) and thematic:
-        // the Constraint cat keeps its own tempo, immune to confusion.
+        // Meowstic-M: all its real abilities are now innate, so its innate-redundant slot-1 Infiltrator takes a
+        // chosen Synchronize -- :x: (never an innate -> stable): any burn, poison or paralysis it takes is
+        // passed straight back. (Slot audited: no flag-on fork test pins it.)
         SPECIES_MEOWSTIC_M, 1,
-        ABILITY_OWN_TEMPO
+        ABILITY_SYNCHRONIZE
     },
     { // 0678
-        // Meowstic F: all real abilities now innate, so its innate-redundant slot-0 Keen Eye takes a chosen
-        // Prankster so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Meowstic-F: all its real abilities are now innate, so its innate-redundant slot-0 Keen Eye takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power.
         SPECIES_MEOWSTIC_F, 0,
-        ABILITY_PRANKSTER
+        ABILITY_SHEER_FORCE
     },
     { // 0683
         // Aromatisse's only real abilities (Healer, Aroma Veil) are BOTH now innate (Aroma Veil), so its
@@ -1747,12 +1784,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MISTY_SURGE
     },
     { // 0685
-        // Slurpuff's only real abilities (Sweet Veil, Unburden) are BOTH now innate, so its empty slot 1 takes
-        // Unaware — an already-implemented :white_check_mark: innate (stable, like Carnivine/Tornadus-Therian)
-        // and a pure boon for its Calm Mind wall: it ignores the foe's stat boosts. (Its Belly Drum sweeper set
-        // now rides the innate Unburden — still doubling Speed once the Sitrus is eaten — and selects this Unaware slot.)
+        // Slurpuff: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Well-Baked Body
+        // -- :x: (never an innate -> stable): Fire moves are shrugged off entirely for +2 Defense.
         SPECIES_SLURPUFF, 1,
-        ABILITY_UNAWARE
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0689
         // Barbaracle: all real abilities now innate, so its innate-redundant slot-1 Sniper takes a chosen
@@ -1769,27 +1804,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0697
-        // Strong Jaw and Rock Head now innate, so its EMPTY slot 1 takes Reckless, an implemented
-        // :white_check_mark: innate (stable) that powers the Despot's Head Smash (its innate Rock Head already
-        // voids the recoil).
+        // Tyrantrum: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force --
+        // :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_TYRANTRUM, 1,
-        ABILITY_RECKLESS
+        ABILITY_SHEER_FORCE
     },
     { // 0701
-        // Hawlucha's three real abilities (Limber, Unburden, Mold Breaker) are ALL now innate (Mold Breaker,
-        // Tier 5.5); slot-2 Mold Breaker is pinned by the innate test, so its innate-redundant slot-1 Unburden
-        // (audited: no Ability(ABILITY_UNBURDEN) on Hawlucha in test/) takes Tough Claws, an implemented
-        // :white_check_mark: innate (stable) it does not carry innately: all its STAB (Acrobatics / Close Combat
-        // / Thunder Punch / Stone Edge) makes contact, gaining +30% alongside the innate Unburden speed.
+        // Hawlucha: all its real abilities are now innate, so its innate-redundant slot-1 Unburden takes a
+        // chosen Hustle -- :x: (never an innate -> stable): its physical attacks gain 1.5x power for an
+        // accuracy cost. (Slot audited: no flag-on fork test pins it.)
         SPECIES_HAWLUCHA, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_HUSTLE
     },
     { // 0703
-        // Carbink's only real abilities (Clear Body, Sturdy) are BOTH now innate, so its EMPTY slot 1 takes Solid
-        // Rock, an already-implemented :white_check_mark: innate (stable) and thematic for the jewel: it blunts the
-        // many supereffective hits its dual-screens wall fears.
+        // Carbink: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Bulletproof -- :x:
+        // (never an innate -> stable): ball, bomb and cannon moves (Focus Blast, Shadow Ball, Sludge Bomb)
+        // cannot touch it.
         SPECIES_CARBINK, 1,
-        ABILITY_SOLID_ROCK
+        ABILITY_BULLETPROOF
     },
     { // 0707
         // Klefki's only real abilities (Prankster, Magician) are BOTH now innate, and NONE is test-pinned (audited:
@@ -1809,86 +1841,76 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SAP_SIPPER
     },
     { // 0711
-        // Gourgeist Super: all real abilities now innate, so its innate-redundant slot-0 Pickup takes a chosen
-        // Harvest so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Gourgeist-Super: all its real abilities are now innate, so its innate-redundant slot-0 Pickup takes a
+        // chosen Well-Baked Body -- :x: (never an innate -> stable): Fire moves are shrugged off entirely for
+        // +2 Defense.
         SPECIES_GOURGEIST_SUPER, 0,
-        ABILITY_HARVEST
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0713
-        // Avalugg's three real abilities (Own Tempo, Ice Body, Sturdy) are ALL now innate, and none is test-pinned
-        // (audited: no test selects Avalugg); both its frontier sets ran the now-innate Own Tempo / Ice Body, so its
-        // slot-2 Sturdy takes Ice Scales -- an already-implemented :white_check_mark: innate (stable) it does not
-        // carry innately and perfectly patches the Iceberg Pokemon's one soft spot: its huge physical wall gains a
-        // halved special-damage cushion, on top of the innate Sturdy / Ice Body. (Both sets select this slot.)
+        // Avalugg: all its real abilities are now innate, so its innate-redundant slot-2 Sturdy takes a chosen
+        // Water Absorb -- :x: (never an innate -> stable): Water moves heal it for 1/4 max HP instead of
+        // damaging it. (Slot audited: no flag-on fork test pins it.)
         SPECIES_AVALUGG, 2,
-        ABILITY_ICE_SCALES
+        ABILITY_WATER_ABSORB
     },
     { // 0713
-        // Hisuian Avalugg's three real abilities (Strong Jaw, Ice Body, Sturdy) are ALL now innate, and it is used by
-        // no test, so its innate-redundant slot-1 Ice Body (both its frontier sets ran it) takes Ice Scales -- an
-        // already-implemented :white_check_mark: innate (stable) it does not carry innately, matching its Kalosian
-        // sibling above and cushioning the Ice/Rock wall's special-damage soft spot, on top of the innate Sturdy.
+        // Avalugg-Hisui: all its real abilities are now innate, so its innate-redundant slot-1 Ice Body takes a
+        // chosen Water Absorb -- :x: (never an innate -> stable): Water moves heal it for 1/4 max HP instead of
+        // damaging it.
         SPECIES_AVALUGG_HISUI, 1,
-        ABILITY_ICE_SCALES
+        ABILITY_WATER_ABSORB
     },
     { // 0715
-        // Infiltrator now innate (slots 0/2 Frisk/Telepathy are pending), so its pending slot-2 Telepathy
-        // (audited: unpinned) takes Punk Rock, an implemented :white_check_mark: innate (stable) that powers
-        // the Sound Wave dragon's Boomburst / Hyper Voice STAB (and softens incoming sound).
+        // Noivern: all its real abilities are now innate, so its innate-redundant slot-2 Telepathy takes a
+        // chosen Soundproof -- :x: (never an innate -> stable): sound moves (Boomburst, Hyper Voice, Snarl)
+        // cannot touch it. (Slot audited: no flag-on fork test pins it.)
         SPECIES_NOIVERN, 2,
-        ABILITY_PUNK_ROCK
+        ABILITY_SOUNDPROOF
     },
     { // 0719
-        // Diancie's only real ability (Clear Body) is now innate, so its EMPTY slot 1 takes Solid Rock, an already-
-        // implemented :white_check_mark: innate (stable) and thematic for the Jewel Pokemon: it blunts the
-        // supereffective Steel/Ground/Water/Grass hits its Life Orb / Leftovers sets fear.
+        // Diancie: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Misty Surge -- :x:
+        // (never an innate -> stable): it sets Misty Terrain on entry, blocking status on grounded mons and
+        // halving Dragon moves.
         SPECIES_DIANCIE, 1,
-        ABILITY_SOLID_ROCK
+        ABILITY_MISTY_SURGE
     },
     { // 0720
-        // Hoopa's only real ability (Magician) is now innate, so its EMPTY slot 1 takes Tinted Lens, an already-
-        // implemented :white_check_mark: innate (stable, like Accelgor) the Mischief Pokemon does not carry innately
-        // and thematic for the ringed djinn that warps space: its Psychic / Shadow Ball / Focus Blast special breaker
-        // punches through resists for full damage, on top of the innate Magician steal.
+        // Hoopa: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force -- :x:
+        // (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_HOOPA, 1,
-        ABILITY_TINTED_LENS
+        ABILITY_SHEER_FORCE
     },
     { // 0720
-        // Hoopa-Unbound's only real ability (Magician) is now innate, so its EMPTY slot 1 takes Tough Claws, an
-        // already-implemented :white_check_mark: innate (stable) the Unbound djinn does not carry innately and
-        // thematic for its six massive arms: its physical contact kit (Hyperspace Fury / Drain Punch / Fire Punch /
-        // Zen Headbutt) gains +30%, a strong boon for its Life Orb mixed wallbreaker on top of the innate Magician steal.
+        // Hoopa-Unbound: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force
+        // -- :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_HOOPA_UNBOUND, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_SHEER_FORCE
     },
     { // 0724
-        // Decidueye-Hisui's only real abilities (Overgrow, Scrappy) are BOTH now innate, so its EMPTY slot 1
-        // takes Sniper, an already-implemented :white_check_mark: innate (stable) that it does not carry innately:
-        // the archer's precision pays off Triple Arrows' boosted crit rate on both roster sets.
+        // Decidueye-Hisui: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer
+        // Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_DECIDUEYE_HISUI, 1,
-        ABILITY_SNIPER
+        ABILITY_SHEER_FORCE
     },
     { // 0724
-        // Overgrow and Long Reach now innate, so its EMPTY slot 1 takes Sniper, an implemented
-        // :white_check_mark: innate (stable) -- same pick as Decidueye-Hisui -- paying off Spirit Shackle /
-        // Triple Arrows precision.
+        // Decidueye: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Soundproof --
+        // :x: (never an innate -> stable): sound moves (Boomburst, Hyper Voice, Snarl) cannot touch it.
         SPECIES_DECIDUEYE, 1,
-        ABILITY_SNIPER
+        ABILITY_SOUNDPROOF
     },
     { // 0727
-        // Incineroar's only real abilities (Blaze, Intimidate) are BOTH now innate, so its EMPTY slot 1 takes
-        // Tough Claws -- an already-implemented :white_check_mark: innate (stable, like Weavile/Metagross) it does
-        // not carry innately and perfectly thematic for the Heel Pokemon: its entirely-contact kit (Fake Out /
-        // Flare Blitz / Darkest Lariat / Knock Off / U-turn) gains +30%, a clean offensive boon on its bulky
-        // Intimidate pivot sets, observable alongside the innate Intimidate.
+        // Incineroar: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Flame Body --
+        // :x: (never an innate -> stable): contact attackers risk a burn.
         SPECIES_INCINEROAR, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_FLAME_BODY
     },
     { // 0735
-        // Gumshoos: all real abilities now innate, so its innate-redundant slot-1 Strong Jaw takes a chosen
-        // Super Luck so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Gumshoos: all its real abilities are now innate, so its innate-redundant slot-1 Strong Jaw takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power.
         SPECIES_GUMSHOOS, 1,
-        ABILITY_SUPER_LUCK
+        ABILITY_SHEER_FORCE
     },
     { // 0738
         SPECIES_VIKAVOLT, 1,
@@ -1901,18 +1923,17 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_NO_GUARD
     },
     { // 0743
-        // Ribombee: all real abilities now innate, so its innate-redundant slot-0 Honey Gather takes a chosen
-        // Cute Charm so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Ribombee: Shield Dust, Sweet Veil are now innate, so its slot-0 Honey Gather takes a chosen Effect
+        // Spore -- :x: (never an innate -> stable): contact attackers risk poison, paralysis or sleep.
         SPECIES_RIBOMBEE, 0,
-        ABILITY_CUTE_CHARM
+        ABILITY_EFFECT_SPORE
     },
     { // 0745
-        // Lycanroc-Dusk's only real ability (Tough Claws) is now innate, so its empty slot 1 takes a
-        // flavorful chosen ability. Sand Rush is an already-implemented :white_check_mark: innate (stable,
-        // like Carnivine/Tornadus-Therian) and on-theme — it is the signature ability of Lycanroc's other
-        // forms, doubling this wolf's Speed in the sand.
+        // Lycanroc-Dusk: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sand Stream
+        // -- :x: (never an innate -> stable): it sets sandstorm on entry, chipping the field and boosting Rock-
+        // type Sp. Def.
         SPECIES_LYCANROC_DUSK, 1,
-        ABILITY_SAND_RUSH
+        ABILITY_SAND_STREAM
     },
     { // 0745
         // Lycanroc: all real abilities now innate, so its innate-redundant slot-1 Sand Rush takes a chosen
@@ -1951,13 +1972,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_GRASSY_SURGE
     },
     { // 0764
-        // Comfey's Triage is now innate (and its Natural Cure was already innate), so its slot-2 Natural
-        // Cure — now innate-redundant and unpinned by any test — takes Sweet Veil, an already-implemented
-        // :white_check_mark: innate (stable, like Slurpuff's Unaware) that Comfey does not carry innately and
-        // is thematic for the flower-lei Pokemon: its soothing aroma keeps the doubles team from being put
-        // to sleep. (Slot 1 Triage stays intact — upstream upper_hand/ai_doubles tests pin it.)
+        // Comfey: all its real abilities are now innate, so its innate-redundant slot-2 Natural Cure takes a
+        // chosen Grassy Surge -- :x: (never an innate -> stable): it sets Grassy Terrain on entry, healing
+        // grounded allies and boosting Grass moves 1.3x. (Slot audited: no flag-on fork test pins it.)
         SPECIES_COMFEY, 2,
-        ABILITY_SWEET_VEIL
+        ABILITY_GRASSY_SURGE
     },
     { // 0766
         // Passimian: all real abilities now innate, so its empty slot takes a chosen
@@ -1980,34 +1999,35 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0775
-        // Komala's only real ability (Comatose) is now innate, and it's a frontier set, so like the
-        // sole-ability legends / Gholdengo it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
-        // Sticky Hold is an already-implemented :white_check_mark: innate (stable, the same pick as Gholdengo) that
-        // the Drowsing Pokemon does not carry innately and is perfectly thematic: Komala clings to its log and never
-        // lets go, so its held item can't be knocked off or stolen -- a clean boon on top of its innate Comatose
-        // (full status immunity) and innate Unaware.
+        // Komala: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Hustle -- :x:
+        // (never an innate -> stable): its physical attacks gain 1.5x power for an accuracy cost.
         SPECIES_KOMALA, 1,
-        ABILITY_STICKY_HOLD
+        ABILITY_HUSTLE
     },
     { // 0776
         SPECIES_TURTONATOR, 1,
         ABILITY_FLAME_BODY
     },
     { // 0741
-        // Oricorio's sole real ability (Dancer) is now innate (Tier 5.9), and it's a frontier set, so like the
-        // other sole-ability innate carriers its EMPTY slot 1 takes a chosen ability. Tinted Lens is an already-
-        // implemented :white_check_mark: innate (stable, like Slurpuff's Unaware) the Baile dancer does not carry
-        // innately: its Life Orb Revelation Dance / Hurricane special sweeper punches through resists for full
-        // damage, a clean offensive boon on top of the innate Dancer copy.
+        // Oricorio-Baile: its only real ability (Dancer) is innate-capable, so its EMPTY slot 1 takes a chosen
+        // Flash Fire -- :x: (never an innate -> stable): Fire moves are absorbed for a 1.5x Fire-power boost
+        // instead of landing.
         SPECIES_ORICORIO, 1,
-        ABILITY_TINTED_LENS
+        ABILITY_FLASH_FIRE
     },
     { // 0741
-        // Oricorio-Pau shares base Oricorio's sole Dancer (now innate); its EMPTY slot 1 takes the same chosen
-        // Tinted Lens so the ability is consistent across the forms and lets its Hurricane / Revelation Dance
-        // pivot hit resists for full, on top of the innate Dancer.
+        // Oricorio-Pa'u: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Synchronize
+        // -- :x: (never an innate -> stable): any burn, poison or paralysis it takes is passed straight back.
         SPECIES_ORICORIO_PAU, 1,
-        ABILITY_TINTED_LENS
+        ABILITY_SYNCHRONIZE
+    },
+    { // 0756
+        // Shiinotic: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its innate-redundant slot-2 Rain Dish takes a chosen Mycelium Might -- :x:
+        // (never an innate -> stable): its status moves ignore the target's ability, at the cost of always
+        // moving last.
+        SPECIES_SHIINOTIC, 2,
+        ABILITY_MYCELIUM_MIGHT
     },
     { // 0779
         // Bruxish's three real abilities (Dazzling, Strong Jaw, Wonder Skin) are ALL now innate, so its
@@ -2026,47 +2046,38 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0791
-        // Solgaleo's only real ability (Full Metal Body) is now innate, and it's a frontier set, so like the
-        // Regi legends (Y2) / Necrozma / Lunala (Y3) it takes the innate AND a fork-owned chosen ability in its
-        // EMPTY slot 1. Tough Claws is an already-implemented :white_check_mark: innate (stable) the Sunne
-        // Pokemon does not carry innately and powers its contact STAB (Sunsteel Strike / Close Combat / Flare
-        // Blitz) on both physical sets, stacking with the innate Full Metal Body stat-drop lock. Same pick as
-        // its fellow Steel bruiser Metagross.
+        // Solgaleo: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Drought -- :x:
+        // (never an innate -> stable): it sets harsh sunlight on entry.
         SPECIES_SOLGALEO, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_DROUGHT
     },
     { // 0792
-        // Lunala's only real ability (Shadow Shield) is now innate, and it's a frontier set, so like the
-        // Regi legends (Y2) it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
-        // Adaptability is an already-implemented :white_check_mark: innate (stable) the Moone Pokemon does
-        // not carry innately and is self-synergistic: its Moongeist Beam / Shadow Ball get 2x STAB on top of
-        // the innate Shadow Shield full-HP bulk (and innate Levitate), a devastating Calm Mind special sweeper.
+        // Lunala: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Psychic Surge --
+        // :x: (never an innate -> stable): it sets Psychic Terrain on entry, boosting Psychic moves 1.3x and
+        // blocking priority on grounded mons.
         SPECIES_LUNALA, 1,
-        ABILITY_ADAPTABILITY
+        ABILITY_PSYCHIC_SURGE
     },
     { // 0800
-        // Necrozma's only real ability (Prism Armor) is now innate, and it's a frontier set, so like the
-        // Regi legends (Y2) it takes the innate AND a fork-owned chosen Adaptability in its EMPTY slot 1
-        // (stable :white_check_mark: innate it does not carry): 2x STAB on its Photon Geyser on top of the
-        // innate Prism Armor supereffective-damage cut (and innate Levitate).
+        // Necrozma: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Psychic Surge --
+        // :x: (never an innate -> stable): it sets Psychic Terrain on entry, boosting Psychic moves 1.3x and
+        // blocking priority on grounded mons.
         SPECIES_NECROZMA, 1,
-        ABILITY_ADAPTABILITY
+        ABILITY_PSYCHIC_SURGE
     },
     { // 0800
-        // Necrozma-Dusk-Mane's only real ability (Prism Armor) is now innate, and it's a frontier set, so
-        // like the Regi legends (Y2) its EMPTY slot 1 takes a chosen Adaptability (stable :white_check_mark:
-        // innate it does not carry): 2x STAB on Sunsteel Strike / Photon Geyser stacks with the innate Prism
-        // Armor supereffective cut, a fearsome Swords Dance physical sweeper.
+        // Necrozma-Dusk Mane: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Psychic
+        // Surge -- :x: (never an innate -> stable): it sets Psychic Terrain on entry, boosting Psychic moves
+        // 1.3x and blocking priority on grounded mons.
         SPECIES_NECROZMA_DUSK_MANE, 1,
-        ABILITY_ADAPTABILITY
+        ABILITY_PSYCHIC_SURGE
     },
     { // 0800
-        // Necrozma-Dawn-Wings' only real ability (Prism Armor) is now innate, and it's a frontier set, so
-        // like the Regi legends (Y2) its EMPTY slot 1 takes a chosen Adaptability (stable :white_check_mark:
-        // innate it does not carry): 2x STAB on Moongeist Beam / Photon Geyser stacks with the innate Prism
-        // Armor supereffective cut, a strong Calm Mind special sweeper.
+        // Necrozma-Dawn Wings: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen
+        // Psychic Surge -- :x: (never an innate -> stable): it sets Psychic Terrain on entry, boosting Psychic
+        // moves 1.3x and blocking priority on grounded mons.
         SPECIES_NECROZMA_DAWN_WINGS, 1,
-        ABILITY_ADAPTABILITY
+        ABILITY_PSYCHIC_SURGE
     },
     { // 0802
         // Marshadow's only real ability (Technician) is now innate, so its empty slot 1 takes a flavorful
@@ -2076,30 +2087,23 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_ILLUSION
     },
     { // 0793
-        // Nihilego's only real ability (Beast Boost) is now innate, and it's a frontier set, so like
-        // the Regi legends (Y2) / Necrozma / the Zacian line (Y6) it takes the innate AND a fork-owned chosen
-        // ability in its EMPTY slot 1. Merciless is an already-implemented :white_check_mark: innate (stable) the
-        // Parasite Pokemon does not carry innately and is self-synergistic: its Toxic Spikes / Sludge Wave poison
-        // the foe, then Merciless auto-crits the poisoned target, on top of the innate Beast Boost snowball (and
-        // innate Levitate).
+        // Nihilego: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Toxic Debris --
+        // :x: (never an innate -> stable): a physical hit scatters Toxic Spikes on the attacker's side.
         SPECIES_NIHILEGO, 1,
-        ABILITY_MERCILESS
+        ABILITY_TOXIC_DEBRIS
     },
     { // 0794
-        // Buzzwole's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
-        // EMPTY slot 1 takes Iron Fist, an already-implemented :white_check_mark: innate (stable) the Swollen
-        // Pokemon does not carry innately and powers its all-punch kit (Ice Punch / Thunder Punch / Drain Punch),
-        // stacking with the innate Beast Boost on-KO snowball.
+        // Buzzwole: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Poison Touch --
+        // :x: (never an innate -> stable): its contact moves carry a poison chance.
         SPECIES_BUZZWOLE, 1,
-        ABILITY_IRON_FIST
+        ABILITY_POISON_TOUCH
     },
     { // 0795
-        // Pheromosa's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
-        // EMPTY slot 1 takes Tough Claws, an already-implemented :white_check_mark: innate (stable) the Lissome
-        // Pokemon does not carry innately and powers its contact STAB (Close Combat / Triple Axel / U-turn / Rapid
-        // Spin), stacking with the innate Beast Boost snowball.
+        // Pheromosa: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Lingering Aroma
+        // -- :x: (never an innate -> stable): contact attackers have their own ability replaced by Lingering
+        // Aroma.
         SPECIES_PHEROMOSA, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_LINGERING_AROMA
     },
     { // 0796
         // Xurkitree's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
@@ -2110,28 +2114,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_LIGHTNING_ROD
     },
     { // 0797
-        // Celesteela's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
-        // EMPTY slot 1 takes Filter, an already-implemented :white_check_mark: innate (stable, like Melmetal /
-        // Zamazenta) the Launch Pokemon does not carry innately: it blunts the supereffective Fire / Electric hits
-        // its bulky Leech Seed / Autotomize sets otherwise fear, stacking with the innate Beast Boost snowball.
+        // Celesteela: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Well-Baked Body
+        // -- :x: (never an innate -> stable): Fire moves are shrugged off entirely for +2 Defense.
         SPECIES_CELESTEELA, 1,
-        ABILITY_FILTER
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0798
-        // Kartana's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
-        // EMPTY slot 1 takes Sharpness, an already-implemented :white_check_mark: innate (stable) the Drawn Sword
-        // Pokemon does not carry innately and is perfectly thematic: the origami blade's slicing STAB (Leaf Blade /
-        // Sacred Sword) gets +50%, stacking with the innate Beast Boost on-KO snowball (and innate Levitate).
+        // Kartana: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Bulletproof -- :x:
+        // (never an innate -> stable): ball, bomb and cannon moves (Focus Blast, Shadow Ball, Sludge Bomb)
+        // cannot touch it.
         SPECIES_KARTANA, 1,
-        ABILITY_SHARPNESS
+        ABILITY_BULLETPROOF
     },
     { // 0799
-        // Guzzlord's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
-        // EMPTY slot 1 takes Filter, an already-implemented :white_check_mark: innate (stable, like Celesteela)
-        // the Junkivore Pokemon does not carry innately: it blunts the supereffective hits (notably its 4x Fairy
-        // weakness) its enormous-HP mixed tank sets fear, stacking with the innate Beast Boost snowball.
+        // Guzzlord: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Earth Eater --
+        // :x: (never an innate -> stable): Ground-type moves heal it for 1/4 max HP instead of damaging it.
         SPECIES_GUZZLORD, 1,
-        ABILITY_FILTER
+        ABILITY_EARTH_EATER
+    },
+    { // 0801
+        // Magearna: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Misty Surge -- :x: (never an innate -> stable):
+        // it sets Misty Terrain on entry, blocking status on grounded mons and halving Dragon moves.
+        SPECIES_MAGEARNA, 1,
+        ABILITY_MISTY_SURGE
     },
     { // 0804
         // Naganadel's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
@@ -2142,30 +2148,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0805
-        // Stakataka's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
-        // EMPTY slot 1 takes Solid Rock, an already-implemented :white_check_mark: innate (stable, like Regirock /
-        // Carbink / Stonjourner) the Rampart Pokemon does not carry innately: it blunts the supereffective Fighting
-        // / Ground / Water / Steel / Grass hits its Trick Room wall otherwise fears, stacking with the innate Beast
-        // Boost snowball.
+        // Stakataka: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Bulletproof --
+        // :x: (never an innate -> stable): ball, bomb and cannon moves (Focus Blast, Shadow Ball, Sludge Bomb)
+        // cannot touch it.
         SPECIES_STAKATAKA, 1,
-        ABILITY_SOLID_ROCK
+        ABILITY_BULLETPROOF
     },
     { // 0806
-        // Blacephalon's only real ability (Beast Boost) is now innate, and it's a frontier set, so its
-        // EMPTY slot 1 takes Infiltrator, an already-implemented :white_check_mark: innate (stable, like Spectrier)
-        // the Fireworks Pokemon does not carry innately and is thematic for a ghostly clown: its Shadow Ball /
-        // Fire Blast / Focus Blast special sweeper ignores the foe's screens and Substitute, on top of the innate
-        // Beast Boost snowball (and innate Levitate).
+        // Blacephalon: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Flash Fire --
+        // :x: (never an innate -> stable): Fire moves are absorbed for a 1.5x Fire-power boost instead of
+        // landing.
         SPECIES_BLACEPHALON, 1,
-        ABILITY_INFILTRATOR
+        ABILITY_FLASH_FIRE
     },
     { // 0809
-        // Melmetal's only real ability (Iron Fist) is now innate, so its empty slot 1 takes a flavorful
-        // chosen ability. Filter is an already-implemented :white_check_mark: innate (stable, like
-        // Slurpuff's Unaware) and a clean defensive boon for the colossal steel titan: it blunts the
-        // supereffective Fire/Fighting/Ground hits its bulky Iron Fist sets otherwise fear.
+        // Melmetal: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Well-Baked Body
+        // -- :x: (never an innate -> stable): Fire moves are shrugged off entirely for +2 Defense.
         SPECIES_MELMETAL, 1,
-        ABILITY_FILTER
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0818
         // Inteleon: all real abilities now innate, so its empty slot takes a chosen
@@ -2174,12 +2174,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0820
-        // Greedent's only real abilities (Cheek Pouch, Gluttony) are BOTH now innate, so its EMPTY slot 1 takes
-        // Pickup -- an already-implemented :white_check_mark: innate (stable) it does not carry innately and
-        // flavorful for the hoarding squirrel: at end of turn it grabs an item consumed on the field, on top of
-        // the innate Cheek Pouch heal loop.
+        // Greedent: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force --
+        // :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_GREEDENT, 1,
-        ABILITY_PICKUP
+        ABILITY_SHEER_FORCE
     },
     { // 0823
         // Corviknight's three real abilities (Pressure, Unnerve, Mirror Armor) are ALL now innate (Tier 5.7);
@@ -2192,14 +2190,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_BULLETPROOF
     },
     { // 0826
-        // Orbeetle's three real abilities (Swarm, Frisk, Telepathy) are ALL now innate (Frisk,
-        // Telepathy), and NONE is test-pinned (audited: no reference to Orbeetle in test/), so its
-        // innate-redundant slot-2 Telepathy is repurposed to Unaware -- an already-implemented :white_check_mark:
-        // innate (stable, like Spiritomb's) it does not carry innately and a pure boon for the Seven Spot's bulky
-        // Calm Mind sweeper / dual-screens pivot: it ignores the foe's stat boosts. (Both frontier sets, formerly
-        // on the now-innate Telepathy / Frisk, select this Unaware slot.)
+        // Orbeetle: all its real abilities are now innate, so its innate-redundant slot-2 Telepathy takes a
+        // chosen Synchronize -- :x: (never an innate -> stable): any burn, poison or paralysis it takes is
+        // passed straight back. (Slot audited: no flag-on fork test pins it.)
         SPECIES_ORBEETLE, 2,
-        ABILITY_UNAWARE
+        ABILITY_SYNCHRONIZE
     },
     { // 0834
         // Drednaw: all real abilities now innate, so its innate-redundant slot-1 Shell Armor takes a chosen
@@ -2214,14 +2209,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_LIGHTNING_ROD
     },
     { // 0842
-        // Appletun's three real abilities (Ripen, Gluttony, Thick Fat) are ALL now innate; slot-0 Ripen is the
-        // default read by sleep_clause.c / dynamax.c, so its innate-redundant slot-2 Thick Fat (audited: no
-        // Ability(ABILITY_THICK_FAT) on Appletun in test/) takes Filter -- an already-implemented :white_check_mark:
-        // innate (stable) it does not carry innately: it blunts the crippling 4x Ice weakness its Grass/Dragon
-        // typing suffers, a clean defensive boon for its bulky special tank alongside the innate Thick Fat. Same
-        // "blunt the big supereffective weakness" pick as the Steel/Grass walls Forretress / Ferrothorn / Aggron.
+        // Appletun: all its real abilities are now innate, so its innate-redundant slot-2 Thick Fat takes a
+        // chosen Well-Baked Body -- :x: (never an innate -> stable): Fire moves are shrugged off entirely for
+        // +2 Defense. (Slot audited: no flag-on fork test pins it.)
         SPECIES_APPLETUN, 2,
-        ABILITY_FILTER
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0847
         // Barraskewda's only real abilities (Swift Swim, Propeller Tail) are BOTH now innate, so its EMPTY
@@ -2255,31 +2247,26 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0858
-        // Hatterene's three real abilities (Healer, Anticipation, Magic Bounce) are ALL now innate (Tier 5.8), so
-        // its innate-redundant slot-1 Anticipation -- unpinned by any test (audited: only dynamax.c references
-        // Hatterene, and never pins Anticipation) -- takes Unaware. Unaware is an already-implemented
-        // :white_check_mark: innate (stable, like Slurpuff / Gothitelle / Ursaluna-Bloodmoon) the serene witch
-        // does not carry innately and a pure boon for its bulky Calm Mind sets: it ignores the foe's stat boosts,
-        // on top of the innate Magic Bounce reflection. (Slot-2 Magic Bounce stays a real slot -- its identity.)
+        // Hatterene: all its real abilities are now innate, so its innate-redundant slot-1 Anticipation takes a
+        // chosen Psychic Surge -- :x: (never an innate -> stable): it sets Psychic Terrain on entry, boosting
+        // Psychic moves 1.3x and blocking priority on grounded mons. (Slot audited: no flag-on fork test pins
+        // it.)
         SPECIES_HATTERENE, 1,
-        ABILITY_UNAWARE
+        ABILITY_PSYCHIC_SURGE
     },
     { // 0861
-        // Grimmsnarl's three real abilities (Prankster, Frisk, Pickpocket) are ALL now innate; slot-0 Prankster is
-        // the default read by lash_out.c, so its innate-redundant slot-2 Pickpocket -- unpinned by any test (audited)
-        // -- takes Infiltrator. Infiltrator is an already-implemented :white_check_mark: innate (stable, like Liepard)
-        // the Bulk Up imp does not carry innately and thematic for the sneaky hair-tendril attacker: its Foul Play /
-        // Spirit Break / Darkest Lariat ignore the foe's screens and Substitute, a clean boon for its Prankster
-        // dual-screens lead and Bulk Up sweeper on top of the innate Prankster / Frisk. (All three frontier sets,
-        // formerly on the now-innate Pickpocket, select this Infiltrator slot.)
+        // Grimmsnarl: all its real abilities are now innate, so its innate-redundant slot-2 Pickpocket takes a
+        // chosen Illusion -- :x: (never an innate -> stable): it enters disguised as the party's last member
+        // until it takes a direct hit. (Slot audited: no flag-on fork test pins it.)
         SPECIES_GRIMMSNARL, 2,
-        ABILITY_INFILTRATOR
+        ABILITY_ILLUSION
     },
     { // 0862
-        // Obstagoon: all real abilities now innate, so its innate-redundant slot-0 Reckless takes a chosen
-        // Quick Feet so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Obstagoon: all its real abilities are now innate, so its innate-redundant slot-0 Reckless takes a
+        // chosen Dark Aura -- :x: (never an innate -> stable): every Dark-type move on the field gains 1.33x
+        // power.
         SPECIES_OBSTAGOON, 0,
-        ABILITY_QUICK_FEET
+        ABILITY_DARK_AURA
     },
     { // 0863
         // Perrserker: all real abilities now innate, so its innate-redundant slot-1 Tough Claws takes a chosen
@@ -2305,80 +2292,65 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0874
-        // Stonjourner's only real ability (Power Spot) is now innate, and it's a frontier set, so like
-        // Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
-        // Power Spot is doubles-only (it boosts allies), so a singles set needs a real ability: Solid Rock
-        // is an already-implemented :white_check_mark: innate (stable) and thematic for the giant megalith,
-        // blunting the supereffective Water/Grass/Fighting/Ground/Steel hits its bulk otherwise fears. Same
-        // pick as the other lone rocks (Regirock / Carbink / Diancie).
+        // Stonjourner: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sand Stream --
+        // :x: (never an innate -> stable): it sets sandstorm on entry, chipping the field and boosting Rock-
+        // type Sp. Def.
         SPECIES_STONJOURNER, 1,
-        ABILITY_SOLID_ROCK
+        ABILITY_SAND_STREAM
     },
     { // 0887
-        // Clear Body and Infiltrator now innate (slot-2 Cursed Body is pending), so its pending slot-2 Cursed
-        // Body (audited: unpinned) takes Dragon's Maw -- :x: (never an innate -> stable) and thematic: the
-        // Stealth dragon's Draco Meteor / Dragon Darts hit harder. Same pick as Giratina-Origin.
+        // Dragapult: all its real abilities are now innate, so its innate-redundant slot-2 Cursed Body takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power. (Slot audited: no flag-on fork test pins it.)
         SPECIES_DRAGAPULT, 2,
-        ABILITY_DRAGONS_MAW
+        ABILITY_SHEER_FORCE
     },
     { // 0888
-        // Zacian's only real ability (Intrepid Sword) is now innate, and it's a frontier set, so like the
-        // Regi legends (Y2) / Necrozma / Lunala (Y3) it takes the innate AND a fork-owned chosen ability in its
-        // EMPTY slot 1. Tough Claws is an already-implemented :white_check_mark: innate (stable) the Warrior
-        // Pokemon does not carry innately and powers its entirely-contact kit (Behemoth Blade / Play Rough /
-        // Close Combat / Crunch / Wild Charge), stacking with the innate Intrepid Sword switch-in Attack boost.
-        // Same pick as its fellow physical contact bruisers Solgaleo / Zarude.
+        // Zacian: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sword of Ruin --
+        // :x: (never an innate -> stable): every other battler's Defense is cut to 3/4.
         SPECIES_ZACIAN, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_SWORD_OF_RUIN
     },
     { // 0888
-        // Zacian-Crowned shares base Zacian's sole Intrepid Sword (now innate); its EMPTY slot 1 takes the same
-        // chosen Tough Claws so the ability is consistent across the Hero <-> Crowned form change and powers its
-        // contact STAB (Behemoth Blade / Play Rough / Close Combat), stacking with the innate Intrepid Sword.
+        // Zacian-Crowned: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sword of
+        // Ruin -- :x: (never an innate -> stable): every other battler's Defense is cut to 3/4.
         SPECIES_ZACIAN_CROWNED, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_SWORD_OF_RUIN
     },
     { // 0889
-        // Zamazenta's only real ability (Dauntless Shield) is now innate, and it's a frontier set, so like the
-        // Regi legends (Y2) it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1. Filter is an
-        // already-implemented :white_check_mark: innate (stable, like Melmetal / Stonjourner) the Warrior Pokemon
-        // does not carry innately and is thematic for the "Shield" defender: it blunts the supereffective hits its
-        // Body Press / Iron Defense wall otherwise fears, stacking with the innate Dauntless Shield switch-in Defense
-        // boost.
+        // Zamazenta: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Tablets of Ruin
+        // -- :x: (never an innate -> stable): every other battler's Attack is cut to 3/4.
         SPECIES_ZAMAZENTA, 1,
-        ABILITY_FILTER
+        ABILITY_TABLETS_OF_RUIN
     },
     { // 0889
-        // Zamazenta-Crowned shares base Zamazenta's sole Dauntless Shield (now innate); its EMPTY slot 1 takes the
-        // same chosen Filter so the ability is consistent across the Hero <-> Crowned form change and blunts the
-        // supereffective Fire / Fighting / Ground hits its Fighting/Steel Body Press wall fears, on top of the innate
-        // Dauntless Shield.
+        // Zamazenta-Crowned: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Tablets
+        // of Ruin -- :x: (never an innate -> stable): every other battler's Attack is cut to 3/4.
         SPECIES_ZAMAZENTA_CROWNED, 1,
-        ABILITY_FILTER
+        ABILITY_TABLETS_OF_RUIN
     },
     { // 0890
         SPECIES_ETERNATUS, 1,
         ABILITY_POISON_TOUCH
     },
     { // 0892
-        // Its ONLY real ability is Unseen Fist (now innate) -- like Ogerpon-Cornerstone its EMPTY slot 1 takes
-        // Sniper, an implemented :white_check_mark: innate (stable) that pays off Single Strike's always-crit
-        // Wicked Blow.
+        // Urshifu: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Dark Aura -- :x:
+        // (never an innate -> stable): every Dark-type move on the field gains 1.33x power.
         SPECIES_URSHIFU, 1,
-        ABILITY_SNIPER
+        ABILITY_DARK_AURA
     },
     { // 0892
-        // Its ONLY real ability is Unseen Fist (now innate), so its EMPTY slot 1 takes Sniper, an implemented
-        // :white_check_mark: innate (stable) that pays off Rapid Strike's always-crit Surging Strikes.
+        // Urshifu-Rapid Strike: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Water
+        // Absorb -- :x: (never an innate -> stable): Water moves heal it for 1/4 max HP instead of damaging it.
         SPECIES_URSHIFU_RAPID_STRIKE, 1,
-        ABILITY_SNIPER
+        ABILITY_WATER_ABSORB
     },
     { // 0893
-        // Zarude's only real ability is Leaf Guard (now innate), so -- like Ogerpon-Cornerstone -- its EMPTY slot 1
-        // takes Tough Claws, an already-implemented :white_check_mark: innate (stable) it does not carry innately:
-        // the Rogue Monkey's kit (Power Whip / Darkest Lariat / Knock Off / U-turn) is all contact.
+        // Zarude: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Grassy Surge -- :x:
+        // (never an innate -> stable): it sets Grassy Terrain on entry, healing grounded allies and boosting
+        // Grass moves 1.3x.
         SPECIES_ZARUDE, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_GRASSY_SURGE
     },
     { // 0894
         // Regieleki's only real ability is Transistor (now innate), and it's a frontier set, so like
@@ -2390,14 +2362,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_LIGHTNING_ROD
     },
     { // 0895
-        // Regidrago's only real ability is Dragon's Maw (now innate), and it's a frontier set, so like
-        // Glastrier / Spectrier it takes the innate AND a fork-owned chosen ability in its EMPTY slot 1.
-        // Adaptability is an already-implemented :white_check_mark: innate (stable, like Spectrier's
-        // Infiltrator) the Dragon Orb Pokemon does not carry innately, and is self-synergistic: its Draco
-        // Meteor / Outrage / Dragon Claw get 2x STAB on top of the innate Dragon's Maw 1.5x, a devastating
-        // Choice Dragon breaker.
+        // Regidrago: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force --
+        // :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_REGIDRAGO, 1,
-        ABILITY_ADAPTABILITY
+        ABILITY_SHEER_FORCE
     },
     { // 0896
         // Glastrier's only real ability is Chilling Neigh (now innate), and it's a frontier set, so like
@@ -2409,24 +2377,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 0897
-        // Spectrier's only real ability is Grim Neigh (now innate), and it's a frontier set, so like
-        // Landorus-Therian / Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its
-        // EMPTY slot 1. Infiltrator is an already-implemented :white_check_mark: innate (stable, like
-        // Slurpuff's Unaware) that the Swift Horse does not carry innately and is thematic for a phasing
-        // phantom: its Nasty Plot / Substitute special sweeper ignores the foe's screens and Substitute,
-        // on top of the innate Grim Neigh on-KO Sp. Atk snowball.
+        // Spectrier: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force --
+        // :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_SPECTRIER, 1,
-        ABILITY_INFILTRATOR
+        ABILITY_SHEER_FORCE
+    },
+    { // 0898
+        // Calyrex: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Grassy Surge -- :x: (never an innate ->
+        // stable): it sets Grassy Terrain on entry, healing grounded allies and boosting Grass moves 1.3x.
+        SPECIES_CALYREX, 1,
+        ABILITY_GRASSY_SURGE
     },
     { // 0901
-        // Ursaluna-Bloodmoon's only real ability is Mind's Eye (now innate), and it's a frontier set, so like
-        // Landorus-Therian / Ogerpon-Cornerstone it takes the innate AND a fork-owned chosen ability in its
-        // EMPTY slot 1. Unaware is an already-implemented :white_check_mark: innate (stable, like Slurpuff /
-        // Spiritomb / Gothitelle) the Peat Pokemon does not carry innately and is a pure boon for its bulky
-        // Calm Mind special tank set: it ignores the foe's stat boosts, stacking with the innate Mind's Eye
-        // evasion-ignore + Ghost coverage on Hyper Voice.
+        // Ursaluna-Bloodmoon: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Earth
+        // Eater -- :x: (never an innate -> stable): Ground-type moves heal it for 1/4 max HP instead of
+        // damaging it.
         SPECIES_URSALUNA_BLOODMOON, 1,
-        ABILITY_UNAWARE
+        ABILITY_EARTH_EATER
     },
     { // 0902
         // Basculegion's three real abilities (Swift Swim, Adaptability, Mold Breaker) are ALL now innate (Mold
@@ -2462,18 +2430,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0918
-        // Spidops: all real abilities now innate, so its empty slot takes a chosen
-        // Sticky Hold so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
+        // Spidops: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Toxic Debris --
+        // :x: (never an innate -> stable): a physical hit scatters Toxic Spikes on the attacker's side.
         SPECIES_SPIDOPS, 1,
-        ABILITY_STICKY_HOLD
+        ABILITY_TOXIC_DEBRIS
     },
     { // 0920
-        // Lokix's only real abilities (Swarm, Tinted Lens) are BOTH now innate, so its EMPTY slot 1 takes
-        // Tough Claws, an already-implemented :white_check_mark: innate (stable) that it does not carry innately:
-        // the kickboxing grasshopper's kit (First Impression / Sucker Punch / Leech Life / Throat Chop) is
-        // all contact.
+        // Lokix: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Dark Aura -- :x:
+        // (never an innate -> stable): every Dark-type move on the field gains 1.33x power.
         SPECIES_LOKIX, 1,
-        ABILITY_TOUGH_CLAWS
+        ABILITY_DARK_AURA
     },
     { // 0925
         // Maushold's only real abilities (Friend Guard, Technician) are BOTH now innate, so its empty slot 1
@@ -2483,22 +2449,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_NO_GUARD
     },
     { // 0934
-        // Garganacl's three real abilities (Purifying Salt, Sturdy, Clear Body) are ALL now innate; slot-0
-        // Purifying Salt is pinned by purifying_salt.c, so its innate-redundant slot-1 Sturdy -- unpinned by any
-        // test (audited) -- takes Solid Rock. Solid Rock is an already-implemented :white_check_mark: innate
-        // (stable, like Regirock / Carbink / Stonjourner / Stakataka) the rock-salt golem does not carry innately
-        // and blunts the supereffective Water / Grass / Ground / Steel / Fighting hits its Salt Cure wall fears,
-        // on top of the innate Purifying Salt status immunity.
+        // Garganacl: all its real abilities are now innate, so its innate-redundant slot-1 Sturdy takes a
+        // chosen Earth Eater -- :x: (never an innate -> stable): Ground-type moves heal it for 1/4 max HP
+        // instead of damaging it. (Slot audited: no flag-on fork test pins it.)
         SPECIES_GARGANACL, 1,
-        ABILITY_SOLID_ROCK
+        ABILITY_EARTH_EATER
     },
     { // 0943
-        // Mabosstiff's three real abilities (Intimidate, Guard Dog, Stakeout) are ALL now innate, so its
-        // innate-redundant slot-2 Stakeout (audited: unpinned) takes Strong Jaw, an implemented
-        // :white_check_mark: innate (stable) that powers the Boss mastiff's Crunch / Jaw Lock / Psychic Fangs
-        // bites, observable alongside the innate Intimidate. (Both frontier sets select this Strong Jaw slot.)
+        // Mabosstiff: all its real abilities are now innate, so its innate-redundant slot-2 Stakeout takes a
+        // chosen Sheer Force -- :x: (never an innate -> stable): moves with a secondary effect trade it for
+        // 1.3x power. (Slot audited: no flag-on fork test pins it.)
         SPECIES_MABOSSTIFF, 2,
-        ABILITY_STRONG_JAW
+        ABILITY_SHEER_FORCE
     },
     { // 0952
         // Scovillain's only non-drawback real abilities (Chlorophyll, Insomnia) are BOTH now innate (Klutz,
@@ -2509,14 +2471,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0956
-        // Espathra's three real abilities (Opportunist, Frisk, Speed Boost) are ALL now innate; slot-0
-        // Opportunist is pinned by opportunist.c, so its innate-redundant slot-1 Frisk -- unpinned by any test
-        // (audited) -- takes Competitive. Competitive is an already-implemented :white_check_mark: innate (stable)
-        // the Ostrich Pokemon does not carry innately and is self-synergistic with its Calm Mind / Stored Power
-        // sweeper: a foe's stat drop instead sharply raises its Sp. Atk (feeding Stored Power), on top of the
-        // innate Opportunist boost-copy and Speed Boost.
+        // Espathra: all its real abilities are now innate, so its innate-redundant slot-1 Frisk takes a chosen
+        // Psychic Surge -- :x: (never an innate -> stable): it sets Psychic Terrain on entry, boosting Psychic
+        // moves 1.3x and blocking priority on grounded mons. (Slot audited: no flag-on fork test pins it.)
         SPECIES_ESPATHRA, 1,
-        ABILITY_COMPETITIVE
+        ABILITY_PSYCHIC_SURGE
     },
     { // 0959
         // Tinkaton: all real abilities (Mold Breaker, Own Tempo, Pickpocket) now innate; slot-0 Mold Breaker is
@@ -2536,11 +2495,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0962
-        // Bombirdier's three real abilities (Big Pecks, Keen Eye, Rocky Payload) are ALL now innate, so its innate-
-        // redundant slot-1 Keen Eye -- unpinned by any test (audited) -- takes Reckless, an already-implemented
-        // :white_check_mark: innate (stable, like Medicham) that powers the vulture's Brave Bird recoil dive.
+        // Bombirdier: all its real abilities are now innate, so its innate-redundant slot-1 Keen Eye takes a
+        // chosen Wind Rider -- :x: (never an innate -> stable): wind moves and Tailwind give it +1 Attack
+        // instead of landing. (Slot audited: no flag-on fork test pins it.)
         SPECIES_BOMBIRDIER, 1,
-        ABILITY_RECKLESS
+        ABILITY_WIND_RIDER
     },
     { // 0966
         // Revavroom's only real abilities (Overcoat, Filter) are BOTH now innate, so its EMPTY slot 1 takes Sheer
@@ -2572,6 +2531,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DONDOZO, 0,
         ABILITY_WATER_ABSORB
     },
+    { // 0979
+        // Annihilape: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its innate-redundant slot-1 Inner Focus takes a chosen Anger Shell -- :x:
+        // (never an innate -> stable): dropping below half HP trades its defenses for +1 Atk/Sp. Atk/Speed.
+        SPECIES_ANNIHILAPE, 1,
+        ABILITY_ANGER_SHELL
+    },
     { // 0982
         // Dudunsparce: all real abilities now innate, so its innate-redundant slot-0 Serene Grace takes a chosen
         // Simple so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
@@ -2593,13 +2559,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SNOW_WARNING
     },
     { // 1000
-        // Gholdengo's ONLY real ability (Good as Gold) is now innate, so its EMPTY slot 1 takes a chosen ability
-        // for the frontier sets. Sticky Hold is an already-implemented :white_check_mark: innate Gholdengo does
-        // NOT itself carry (stable, like Carnivine's Chlorophyll) and thematic + low-impact: the hoard of 1000
-        // coins won't let its treasure be stolen. The innate Good as Gold (still blocking status moves) stays
-        // observable behind the different chosen ability.
+        // Gholdengo: all its real abilities are now innate, so its EMPTY slot 1 takes a chosen Sheer Force --
+        // :x: (never an innate -> stable): moves with a secondary effect trade it for 1.3x power.
         SPECIES_GHOLDENGO, 1,
-        ABILITY_STICKY_HOLD
+        ABILITY_SHEER_FORCE
     },
     { // 1013
         // Sinistcha's Heatproof is now innate, freeing its frontier slot; its slot-0 Hospitality is dead in
@@ -2622,6 +2585,13 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_OGERPON_CORNERSTONE, 1,
         ABILITY_EARTH_EATER
     },
+    { // 1017
+        // Ogerpon: every real ability it has is innate-capable, so its frontier sets had no legal chosen
+        // ability left to name. Its EMPTY slot 1 takes a chosen Seed Sower -- :x: (never an innate -> stable):
+        // being hit sets Grassy Terrain.
+        SPECIES_OGERPON, 1,
+        ABILITY_SEED_SOWER
+    },
     { // 1018
         // Archaludon: all real abilities now innate, so its innate-redundant slot-1 Sturdy takes a chosen
         // Bulletproof so the frontier chosen slot is a real, non-innate ability (not a redundant innate).
@@ -2636,7 +2606,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HYDRAPPLE, 2,
         ABILITY_GRASSY_SURGE
     },
-
 };
 
 // GetSpeciesAbility (src/pokemon.c) calls this on EVERY ability lookup, game-wide

@@ -518,7 +518,8 @@ pinch abilities (Venusaur→`CHLOROPHYLL`, Charizard→`SOLAR_POWER`, Greninja�
    > Lightning Rod, Soundproof, Water Absorb, Sheer Force, Bulletproof, …
    > An innate-*capable* ability is **not** a legal pick, even when this species does not
    > currently carry it — see ["Direction"](#direction-innates-get-the-innate-capable-abilities-overrides-get-the-rest)
-   > for why, and for the conversion backlog this rule left behind.
+   > for why. The legacy backlog this rule left behind has been cleared, and the test that
+   > enforces it is a real CI gate.
    > Sceptile→`LIGHTNING_ROD` is the model: Lightning Rod is never-an-innate, so that override
    > never needs revisiting. Separately, the slot a row *frees* must
    > already be redundant via an *implemented* innate — that's the row's whole
@@ -579,20 +580,24 @@ override slot wastes that slot's only purpose — a trait the species can expres
 other way — and leaves a latent duplicate: the day a line review grants that species
 the ability innately, the override silently collapses into a redundant pick.
 
-**Status.** The rule was written the other way round for most of the override
-table's life (it accepted "an already-implemented innate the species does not itself
-carry"), so there is a backlog:
-
-**These numbers are a snapshot and go stale on every merge** — each line review
-that lands before converting its line adds to the backlog. This is the only place
-that carries them; everywhere else points at the test. Re-measure and update here:
+**Status: the backlog is cleared, and the rule is now a CI gate.** The rule was
+written the other way round for most of the override table's life (it accepted "an
+already-implemented innate the species does not itself carry"), which left a legacy
+backlog. That backlog was converted in one sweep:
 
 | | Conforming | Legacy (innate-capable) | Total |
 |---|---:|---:|---:|
-| Override rows (`species_ability_overrides.c`) | 249 | **124** | 373 |
-| Frontier sets (`frontier_extended_mons.c`) | 978 | **259** | 1237 |
+| Override rows (`species_ability_overrides.c`) | 390 | **0** | 390 |
+| Frontier sets (`frontier_extended_mons.c`) | 1262 | **0** | 1262 |
 
-The test names every offender:
+123 override rows and 254 sets were repointed at never-an-innate picks. Fourteen
+species had *no* legal chosen ability left once innate-capable ones were excluded —
+every real slot they own is innate-capable (Cobalion, Terrakion, Virizion, Keldeo,
+Magearna, Calyrex, Annihilape, Drapion, Lucario, Shiinotic, Ogerpon and the three
+Galarian birds) — so each gained a **new override row** on a free or
+innate-redundant slot to give its sets something real to name.
+
+The test that enforces it:
 
 ```bash
 make check TESTS="no ability override or frontier set names an innate-capable ability"
@@ -600,18 +605,16 @@ make check TESTS="no ability override or frontier set names an innate-capable ab
 
 `TEST("Innate abilities: no ability override or frontier set names an innate-capable
 ability")` (`test/fork/innate_abilities.c`) sweeps the whole override table and the
-whole roster against `sImplementedInnates[]`. It is marked **`KNOWN_FAILING`**, so it
-reports without blocking CI, and the runner flags a `KNOWN_FAILING` test that starts
-passing — so **it promotes itself to a real gate the day the backlog reaches zero**,
-at which point the `KNOWN_FAILING;` line should be deleted.
+whole roster against `sImplementedInnates[]`. It is **no longer `KNOWN_FAILING`** — it
+is a real gate, so a row or set naming an innate-capable ability fails CI, and it
+names every offender in its output.
 
-**How the backlog clears: line reviews.** Nearly every affected species needs a
-brand-new override ability chosen from the ~130 never-an-innate abilities, which is a
-per-species flavour judgement rather than a mechanical rewrite — so it is *not* done
-as a sweep. Instead **a line review converts the line it touches** (see
-[`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2), the same as any other override work in
-that review. Eventually every species is covered. Meanwhile, **do not grow the
-backlog**: any new override row or set must name a never-an-innate ability.
+**Keeping it at zero.** Any new override row or set must name a never-an-innate
+ability. The trap to watch is the *other* direction: wiring a new innate (Step 2
+above) makes that ability innate-capable, which can retroactively invalidate an
+existing override row or set — so re-run the test after every allowlist addition and
+repoint whatever it names. Line reviews follow the same rule for the lines they touch
+(see [`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2).
 
 ## Why "mostly automatic" depends on the ability
 
