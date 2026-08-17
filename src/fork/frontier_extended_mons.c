@@ -2278,7 +2278,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWBRO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Mega Slowbro (Shell Armor); recovery for the Calm Mind wall
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -2286,7 +2286,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_ICE_SCALES, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_ICE_SCALES,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2298,15 +2298,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWBRO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator pivot wall
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_CHILLING_WATER,
             MOVE_FUTURE_SIGHT,
             MOVE_SLACK_OFF,
-            MOVE_THUNDER_WAVE
+            MOVE_TELEPORT
         },
-        .ability = ABILITY_ICE_SCALES, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_ICE_SCALES,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2361,20 +2361,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWBRO_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_SHELL_SIDE_ARM,
-            MOVE_SLUDGE_BOMB,
-            MOVE_CALM_MIND,
-            MOVE_SLACK_OFF
+            MOVE_GUNK_SHOT,
+            MOVE_ZEN_HEADBUTT,
+            MOVE_DRAIN_PUNCH
         },
-        .ability = ABILITY_POISON_TOUCH, // Quick Draw/Own Tempo/Regenerator ALL now innate; chosen Poison Touch (fork override, slot 2) stays observable
-        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 252,
-            .spa = 4
+            .atk = 252,
+            .def = 4
         ),
         .teraType = TYPE_STEEL,
     },
@@ -5702,15 +5702,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWKING,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator special wall / pivot
+        .heldItem = ITEM_COVERT_CLOAK,
         .moves =
         {
             MOVE_CHILLING_WATER,
             MOVE_FUTURE_SIGHT,
             MOVE_SLACK_OFF,
-            MOVE_THUNDER_WAVE
+            MOVE_PSYCHIC_NOISE
         },
-        .ability = ABILITY_WATER_ABSORB, // Oblivious/Own Tempo/Regenerator ALL now innate; chosen Water Absorb (fork override, slot 2) stays observable
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5750,7 +5750,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CHILLING_WATER,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_WATER_ABSORB, // Oblivious/Own Tempo/Regenerator ALL now innate; chosen Water Absorb (fork override, slot 2) stays observable
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5759,20 +5759,40 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_PSYCHIC,
     },
+    {
+        .species = SPECIES_SLOWKING,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_INSTRUCT,
+            MOVE_HELPING_HAND,
+            MOVE_CHILLING_WATER,
+            MOVE_PSYCHIC
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 132,
+            .spd = 124
+        ),
+        .teraType = TYPE_FAIRY,
+    },
 
     // 0199
     {
         .species = SPECIES_SLOWKING_GALAR,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky special pivot
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
-            MOVE_FUTURE_SIGHT,
+            MOVE_TOXIC,
+            MOVE_HEX,
             MOVE_SLUDGE_BOMB,
-            MOVE_PSYCHIC,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_CURIOUS_MEDICINE, // Own Tempo now innate; chosen Curious Medicine (real slot) for doubles support
+        .ability = ABILITY_CURIOUS_MEDICINE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
