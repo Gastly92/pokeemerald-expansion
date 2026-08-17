@@ -1578,7 +1578,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLIWRATH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Bulk Up
+        .heldItem = ITEM_CHESTO_BERRY,
         .moves =
         {
             MOVE_BULK_UP,
@@ -1598,7 +1598,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLIWRATH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swift Swim attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -1606,7 +1606,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_DARKEST_LARIAT
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim now innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1614,6 +1614,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_POLIWRATH,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_FOLLOW_ME,
+            MOVE_HYPNOSIS,
+            MOVE_DRAIN_PUNCH,
+            MOVE_LIQUIDATION
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPD_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_POLIWRATH,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_SUBSTITUTE,
+            MOVE_FOCUS_PUNCH,
+            MOVE_LIQUIDATION,
+            MOVE_ICE_PUNCH
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIGHTING,
     },
 
     // 0065
