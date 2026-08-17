@@ -245,22 +245,19 @@ line:
      line review gives the species that ability innately.
      **This rule was previously written the other way round** ("or an
      already-implemented innate the species does not itself carry"), which is
-     wrong and was the source of a large backlog — a third of the override table
-     and a fifth of the roster still name an innate-capable ability (current
-     counts live in `INNATE_ABILITIES.md`; the test below prints them). The guard is
+     wrong and left a large legacy backlog — since cleared in one sweep, so every
+     row and set now conforms. The guard is
      `TEST("Innate abilities: no ability override or frontier set names an
-     innate-capable ability")` in `test/fork/innate_abilities.c`, marked
-     `KNOWN_FAILING` until that backlog clears. **Do not add new rows to it** —
-     new picks must be `:x:`.
+     innate-capable ability")` in `test/fork/innate_abilities.c`, which is **no
+     longer `KNOWN_FAILING`**: it is a real CI gate, so a non-conforming pick now
+     fails the build. New picks must be `:x:`.
 
-   - **CONVERTING A LEGACY LINE IS PART OF THE REVIEW.** This is how the backlog
-     clears — there is no separate sweep, because 134 of the 138 affected species
-     need a brand-new override ability chosen on flavour, which is exactly the
-     judgement a line review exists to make. So when the line you are reviewing
-     holds a legacy row (its override or any of its sets names a
-     `:white_check_mark:` ability), **converting it is in scope for Step 2**, the
-     same as proposing a new row: pick a `:x:` replacement, and repoint every set
-     whose `.ability` named the old one. Check the line with:
+   - **A CONVERSION CAN STILL LAND IN A REVIEW.** Wiring a new innate makes that
+     ability innate-capable, which can retroactively invalidate an existing
+     override row or set that names it. When that happens on the line you are
+     reviewing, **converting it is in scope for Step 2**, the same as proposing a
+     new row: pick a `:x:` replacement, and repoint every set whose `.ability`
+     named the old one. Check the line with:
 
      ```bash
      make check TESTS="no ability override or frontier set names an innate-capable ability"

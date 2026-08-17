@@ -486,7 +486,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Unaware user keeps it via 
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_CLEFABLE, ABILITY_UNAWARE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_BOUNCE); } // inert, non-Unaware chosen (Clefable's real slot-1 is a Magic Bounce fork override; no status move targets it here)
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MISTY_SURGE); } // inert, non-Unaware chosen (Clefable's real slot-1 is a Misty Surge fork override; no status or Dragon move here)
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE, MOVE_SWORDS_DANCE); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_TACKLE); }
@@ -2108,7 +2108,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Stench user keeps it via i
         ASSUME(SpeciesHasInnate(SPECIES_MUK, ABILITY_STENCH));
         ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_MUK) { Ability(ABILITY_STICKY_HOLD); Speed(100); } // chosen ability is NOT Stench
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_HUSTLE); Speed(100); } // chosen ability is NOT Stench
         OPPONENT(SPECIES_WOBBUFFET) { Speed(50); }
     } WHEN {
         TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_STENCH, TRUE)); MOVE(opponent, MOVE_CELEBRATE); }
@@ -2165,7 +2165,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate S
         ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
-        PLAYER(SPECIES_MUK) { Ability(ABILITY_STICKY_HOLD); Speed(50); } // chosen ability is NOT Stench
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_HUSTLE); Speed(50); } // chosen ability is NOT Stench
         OPPONENT(SPECIES_WOBBUFFET) { Speed(10); }
     } WHEN {
         TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
@@ -2187,7 +2187,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate S
         ASSUME(GetMovePower(MOVE_SCRATCH) > 0);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
-        PLAYER(SPECIES_MUK) { Ability(ABILITY_STICKY_HOLD); Speed(50); } // chosen ability is NOT Stench
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_HUSTLE); Speed(50); } // chosen ability is NOT Stench
         PLAYER(SPECIES_WYNAUT) { Speed(50); }
         OPPONENT(SPECIES_WOBBUFFET) { Speed(10); }
     } WHEN {
@@ -2217,7 +2217,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Stench holder's King's R
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE); // King's Rock = guaranteed first-turn flinch
         // DETERMINISTIC_ABILITIES off (baseline): Stench takes its RNG path, forced to miss below.
-        PLAYER(SPECIES_MUK) { Ability(ABILITY_STICKY_HOLD); Item(ITEM_KINGS_ROCK); Speed(50); } // chosen ability is NOT Stench
+        PLAYER(SPECIES_MUK) { Ability(ABILITY_HUSTLE); Item(ITEM_KINGS_ROCK); Speed(50); } // chosen ability is NOT Stench
         OPPONENT(SPECIES_WOBBUFFET) { Speed(10); }
     } WHEN {
         TURN { MOVE(player, MOVE_SCRATCH, WITH_RNG(RNG_STENCH, FALSE)); MOVE(opponent, MOVE_CELEBRATE); }
@@ -5307,14 +5307,12 @@ TEST("Innate abilities: species-keyed lookup matches the raw table for every row
 // row a latent duplicate — the day the species is given that ability innately, which is exactly
 // what a line review does, the override silently collapses into a redundant pick.
 //
-// KNOWN_FAILING: the roster predates this rule -- roughly a third of the override table and a
-// fifth of the sets name an innate-capable ability (this test prints the exact list and count;
-// fork-docs/INNATE_ABILITIES.md "Direction" carries the last snapshot). Converting them is a
-// per-species flavor judgement -- nearly every affected species needs a brand-new override
-// ability picked from the ~130 never-an-innate abilities -- so it is staged as its own work
-// rather than blocking CI, and each line review converts the line it touches. The runner reports
-// when a KNOWN_FAILING test starts passing, so this promotes itself to a real gate the moment
-// the backlog is cleared (delete the KNOWN_FAILING; line then).
+// This was KNOWN_FAILING while the roster still predated the rule (123 override rows and 254 sets
+// named an innate-capable ability). That backlog is now cleared -- every one of them was given a
+// never-an-innate pick, and the species that had no legal chosen ability left (Cobalion, Keldeo,
+// Magearna, the Galarian birds, Ogerpon, ...) got a new override row -- so this is a REAL GATE
+// again. A new row or set naming an innate-capable ability now fails CI; give the species that
+// ability as an INNATES(...) entry instead and spend the observable slot on a never-an-innate pick.
 TEST("Innate abilities: no ability override or frontier set names an innate-capable ability")
 {
     u32 species, slot, i;
@@ -5351,7 +5349,6 @@ TEST("Innate abilities: no ability override or frontier set names an innate-capa
                         i, gSpeciesInfo[set->species].speciesName, gAbilitiesInfo[set->ability].name);
     }
 
-    KNOWN_FAILING;
     EXPECT_EQ(offenders, 0);
 }
 
@@ -5862,7 +5859,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Unseen Fist hits through Pr
         ASSUME(MoveMakesContact(MOVE_CLOSE_COMBAT));
         ASSUME(SpeciesHasInnate(SPECIES_URSHIFU, ABILITY_UNSEEN_FIST));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_URSHIFU) { Ability(ABILITY_SNIPER); Moves(MOVE_CLOSE_COMBAT); } // chosen differs from the innate Unseen Fist
+        PLAYER(SPECIES_URSHIFU) { Ability(ABILITY_DARK_AURA); Moves(MOVE_CLOSE_COMBAT); } // chosen differs from the innate Unseen Fist (inert here: no Dark move)
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_PROTECT); MaxHP(400); HP(400); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_PROTECT); MOVE(player, MOVE_CLOSE_COMBAT); }
@@ -6953,7 +6950,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Liquid Ooze damages a drain
         ASSUME(GetMoveEffect(MOVE_GIGA_DRAIN) == EFFECT_ABSORB);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
         PLAYER(SPECIES_WOBBUFFET) { MaxHP(300); HP(150); Moves(MOVE_GIGA_DRAIN); }
-        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_STICKY_HOLD); } // chosen ability is NOT Liquid Ooze
+        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_HUSTLE); } // chosen ability is NOT Liquid Ooze
     } WHEN {
         TURN { MOVE(player, MOVE_GIGA_DRAIN); }
     } SCENE {
@@ -6983,7 +6980,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Liquid Ooze damages a Leech
         ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_LIQUID_OOZE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
         PLAYER(SPECIES_WYNAUT) { MaxHP(300); HP(150); Moves(MOVE_LEECH_SEED); }
-        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_STICKY_HOLD); } // chosen ability is NOT Liquid Ooze
+        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_HUSTLE); } // chosen ability is NOT Liquid Ooze
     } WHEN {
         TURN { MOVE(player, MOVE_LEECH_SEED); }
     } THEN {
@@ -7001,7 +6998,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate L
         ASSUME(GetMoveEffect(MOVE_GIGA_DRAIN) == EFFECT_ABSORB);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         PLAYER(SPECIES_WOBBUFFET) { Speed(100); MaxHP(300); HP(150); Moves(MOVE_GASTRO_ACID, MOVE_GIGA_DRAIN); }
-        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_STICKY_HOLD); Speed(50); }
+        OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_HUSTLE); Speed(50); }
     } WHEN {
         TURN { MOVE(player, MOVE_GASTRO_ACID); }
         TURN { MOVE(player, MOVE_GIGA_DRAIN); }
@@ -9141,15 +9138,15 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose blocks every non-v
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_KOMALA, ABILITY_COMATOSE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); } // chosen Sticky Hold; innate Comatose
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_HUSTLE); } // chosen Hustle; innate Comatose
         OPPONENT(SPECIES_WOBBUFFET) { Moves(move); }
     } WHEN {
         TURN { MOVE(opponent, move); }
     } SCENE {
         // No switch-in "Komala is drowsing!" message fires: the innate deliberately drops the display half
-        // (no switch-in driver), and the chosen Sticky Hold isn't Comatose, so the flavor pop-up never shows.
+        // (no switch-in driver), and the chosen Hustle isn't Comatose, so the flavor pop-up never shows.
         NOT ANIMATION(ANIM_TYPE_MOVE, move, opponent);
-        ABILITY_POPUP(player, ABILITY_COMATOSE); // pop-up shows Comatose, not the chosen Sticky Hold
+        ABILITY_POPUP(player, ABILITY_COMATOSE); // pop-up shows Comatose, not the chosen Hustle
         MESSAGE("It doesn't affect Komala…");
         NONE_OF {
             STATUS_ICON(player, sleep: TRUE);
@@ -9160,13 +9157,13 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose blocks every non-v
     }
 }
 
-// Feature gate: with FEATURE_INNATE_ABILITIES off, Komala's innate Comatose is inert, so a chosen Sticky Hold
+// Feature gate: with FEATURE_INNATE_ABILITIES off, Komala's innate Comatose is inert, so a chosen Hustle
 // holder is put to sleep normally (stock behavior).
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: with the feature off, no innate Comatose (stock behavior)")
 {
     GIVEN {
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, FALSE);
-        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); }
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_HUSTLE); }
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_SPORE); }
@@ -9185,7 +9182,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker does NOT pierce an in
         ASSUME(!gAbilitiesInfo[ABILITY_COMATOSE].breakable);
         ASSUME(SpeciesHasInnate(SPECIES_KOMALA, ABILITY_COMATOSE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); } // innate Comatose
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_HUSTLE); } // innate Comatose
         OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); Moves(MOVE_SPORE); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_SPORE); }
@@ -9202,7 +9199,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose does NOT block the
 {
     GIVEN {
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); MaxHP(200); HP(100); Moves(MOVE_REST); } // innate Comatose
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_HUSTLE); MaxHP(200); HP(100); Moves(MOVE_REST); } // innate Comatose
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
     } WHEN {
         TURN { MOVE(player, MOVE_REST); MOVE(opponent, MOVE_CELEBRATE); }
@@ -9225,7 +9222,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose lets the holder us
         ASSUME(GetMoveEffect(MOVE_SNORE) == EFFECT_SNORE);
         ASSUME(SpeciesHasInnate(SPECIES_KOMALA, ABILITY_COMATOSE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_STICKY_HOLD); Moves(MOVE_SNORE); } // innate Comatose, but not actually asleep
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_HUSTLE); Moves(MOVE_SNORE); } // innate Comatose, but not actually asleep
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
     } WHEN {
         TURN { MOVE(player, MOVE_SNORE); MOVE(opponent, MOVE_CELEBRATE); }
