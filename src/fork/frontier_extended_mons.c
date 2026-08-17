@@ -2193,7 +2193,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAPIDASH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -2208,7 +2208,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_FLYING,
     },
     {
         .species = SPECIES_RAPIDASH,
@@ -2217,9 +2217,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FLARE_BLITZ,
-            MOVE_HIGH_HORSEPOWER,
-            MOVE_WILD_CHARGE,
-            MOVE_MEGAHORN
+            MOVE_MEGAHORN,
+            MOVE_HORN_LEECH,
+            MOVE_EXTREME_SPEED
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -2228,23 +2228,42 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_RAPIDASH,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_BAND,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_FOLLOW_ME,
+            MOVE_WILL_O_WISP,
+            MOVE_FLARE_BLITZ
+        },
+        .ability = ABILITY_FLAME_BODY,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0078
     {
         .species = SPECIES_RAPIDASH_GALAR,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FAIRY_FEATHER,
         .moves =
         {
-            MOVE_PSYCHIC,
+            MOVE_MORNING_SUN,
             MOVE_DAZZLING_GLEAM,
             MOVE_MYSTICAL_FIRE,
             MOVE_CALM_MIND
         },
-        // FORK: Pastel Veil is now an innate (Step 3.5) — freed to its real Hidden Ability slot.
-        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
+        .ability = ABILITY_CUTE_CHARM,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2256,18 +2275,38 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAPIDASH_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // physical sweeper
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_PLAY_ROUGH,
             MOVE_HIGH_HORSEPOWER,
             MOVE_FLARE_BLITZ,
-            MOVE_AGILITY
+            MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_CUTE_CHARM, // all real abilities innate; chosen Cute Charm (non-redundant)
+        .ability = ABILITY_CUTE_CHARM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_RAPIDASH_GALAR,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_WISE_GLASSES,
+        .moves =
+        {
+            MOVE_DAZZLING_GLEAM,
+            MOVE_MYSTICAL_FIRE,
+            MOVE_HELPING_HAND,
+            MOVE_HEALING_WISH
+        },
+        .ability = ABILITY_CUTE_CHARM,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
             .spd = 4,
             .spe = 252
         ),

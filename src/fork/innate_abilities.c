@@ -818,17 +818,33 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0077
+        SPECIES_PONYTA,
+        INNATES(
+            ABILITY_SPEED_BOOST
+        )
+    },
+    { // 0077
         SPECIES_PONYTA_GALAR,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_PASTEL_VEIL
+            ABILITY_HEALER,
+            ABILITY_PASTEL_VEIL,
+            ABILITY_SPEED_BOOST
+        )
+    },
+    { // 0078
+        SPECIES_RAPIDASH,
+        INNATES(
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0078
         SPECIES_RAPIDASH_GALAR,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_PASTEL_VEIL
+            ABILITY_HEALER,
+            ABILITY_PASTEL_VEIL,
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0079
