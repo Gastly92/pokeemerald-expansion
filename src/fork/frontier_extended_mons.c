@@ -2507,7 +2507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DEWGONG,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Thick Fat tank
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_ICE_BEAM,
@@ -2515,8 +2515,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICY_WIND,
             MOVE_PROTECT
         },
-        // Thick Fat + Hydration + Ice Body all now innate; chosen Snow Warning (override) sets the snow its
-        // innate Ice Body heals in.
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
@@ -2524,12 +2522,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252
         ),
-        .teraType = TYPE_WATER,
+        .teraType = TYPE_ICE,
     },
     {
         .species = SPECIES_DEWGONG,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_NEVER_MELT_ICE, // Freeze-Dry tech
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_FREEZE_DRY,
@@ -2537,7 +2535,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURORA_VEIL,
             MOVE_PROTECT
         },
-        // Snow Warning (override) auto-sets snow, enabling Aurora Veil without a lead and feeding innate Ice Body.
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
@@ -2546,6 +2543,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_ICE,
+    },
+    {
+        .species = SPECIES_DEWGONG,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_GRIP_CLAW,
+        .moves =
+        {
+            MOVE_WHIRLPOOL,
+            MOVE_PERISH_SONG,
+            MOVE_PROTECT,
+            MOVE_SURF
+        },
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_DEWGONG,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_THROAT_SPRAY,
+        .moves =
+        {
+            MOVE_SING,
+            MOVE_SPARKLING_ARIA,
+            MOVE_HELPING_HAND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0089
