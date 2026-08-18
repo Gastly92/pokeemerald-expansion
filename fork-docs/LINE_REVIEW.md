@@ -16,41 +16,43 @@ and enhancements."*
 
 ---
 
-## How a review runs — three sequential approval gates
+## How a review runs — three sequential steps, then one PR
 
-**The three steps are run one at a time, in order, each gated on the
-maintainer's approval before the next begins:**
+**The three steps are worked one at a time, in order, and the review runs
+through to a pull request without stopping for approval along the way:**
 
-> Step 1 innates → **yes** → Step 2 overrides → **yes** → Step 3 frontier sets →
-> **yes** → apply the edits → wrap-up.
+> Step 1 innates → Step 2 overrides → Step 3 frontier sets (Part A audit →
+> Part B new sets) → apply the edits → verify → open the PR → review feedback.
 
-Propose **only** the step you are on. Do not preview the next step, and do not
-reason about it out loud — a step's proposal may rest only on the **approved**
-output of the steps before it, never on a pending one.
+Settle each step before starting the next: decide the current step, write the
+decision down, and let the following step build on it. Don't interleave the
+steps, and don't reopen Step 1 while drafting Step 3 sets.
 
-**Why this is a rule and not a style preference.** The three files are coupled in
-one direction: innates determine which abilities are still free, overrides
-determine which abilities a set can legally name, and sets consume both. Propose
-all three at once and every later proposal is silently built on picks that have
-not been approved yet — and since *most first-pass flavor picks get rejected*
-(see the golden rule below), the rework cascades: a rejected innate invalidates
-the override that assumed it, which invalidates the set that named that override.
-The maintainer then has to re-litigate the same line three times. Running the
-gates in order costs one extra round-trip and removes that entire class of churn.
+**Why the order is a rule and not a style preference.** The three files are
+coupled in one direction: innates determine which abilities are still free,
+overrides determine which abilities a set can legally name, and sets consume
+both. Work them out of order and a later pick rests on an earlier one that is
+still moving, so the whole line has to be re-derived. Two concrete consequences
+worth stating, because they are the ones that get violated:
 
-Two concrete consequences worth stating, because they are the ones that get
-violated:
+- **An override is justified against the innates you actually settled on.** "Slot
+  0 is redundant because Gluttony is innate" is only true if Gluttony's innate row
+  is part of this change.
+- **A set's `.ability` may only name a real slot of the species or an override row
+  settled in Step 2.** Both CI tests below enforce this for real.
 
-- **An override cannot be justified against a proposed innate.** "Slot 0 is
-  redundant because Gluttony is innate" is only true once Gluttony's innate row is
-  approved. If the innate is still pending, the override is not proposable yet.
-- **A set's `.ability` cannot name an unapproved override.** If Step 2 has not
-  closed, the only abilities a Step 3 set may name are the species' existing real
-  slots.
+**The PR is the review surface.** Flavor picks are still the maintainer's call —
+that call is just made on the PR, after seeing the whole line, instead of three
+times mid-session. So the PR body has to carry enough to make it: what each step
+changed, the flavor evidence behind each pick (repo dex text, canon-user count,
+wider media flagged as recall), and what was considered and dropped. Expect
+changes to be requested; that is the process working. See "Wrap-up" below for the
+PR body shape and how to handle the review comments that come back.
 
-Directional feedback the maintainer volunteers early ("a Body Slam set would suit
-the Alolan one") is **banked, not promoted** — write it down, and spec it properly
-when its step comes up. It is a hint about Step 3, not an approval of Step 3.
+Directional feedback the maintainer volunteers mid-review ("a Body Slam set would
+suit the Alolan one") is a hint to spec properly **when its step comes up** —
+carry it into that step and act on it there, rather than bolting it onto the step
+you are currently on.
 
 ---
 
@@ -74,20 +76,19 @@ when its step comes up. It is a hint about Step 3, not an approval of Step 3.
   exact species constant (`gBattleMons[].species` becomes the form constant after
   a Mega/G-Max/forme change — there is **no** base-species fallback). Grep all of
   `BULBASAUR|IVYSAUR|VENUSAUR` (incl. `_MEGA`, `_GMAX`, `_ALOLA`, …) in each file.
-- **Present proposals before editing, then WAIT for a yes — one step at a time.**
-  Flavor picks are subjective and the maintainer's call, so lay out the findings +
-  a concrete proposal for **the current step only** and get a yes/no (or swaps)
-  before moving to the next step or writing code (see "How a review runs" above).
-  **A deferral is not an approval:** "let's do X first" leaves the proposal
-  pending, not accepted. **An unanswered question is not a yes:** if you asked which
-  of two picks to take and never got an answer, that pick is still open — don't
-  resolve it for the maintainer and ship it. And "let's return to the line review"
-  means resume the *review*, not build the backlog.
-- **Expect to be wrong about flavor, and check before defending.** Most proposals in
-  a first pass get rejected; that is the process working, not a failure. When a pick
-  is challenged, go and verify (canon users, the repo's dex text, the engine) rather
-  than arguing from memory — the evidence usually settles it in the maintainer's
-  favor, and occasionally it will support the pick, which is worth saying plainly.
+- **Run the review to completion, then open a PR — don't gate on a yes between
+  steps.** Work the three steps in order (see "How a review runs" above), apply the
+  edits, verify, and put the findings and reasoning for all three steps in the PR
+  body. The maintainer reviews there and requests changes; that is the approval
+  step. When two picks are genuinely a coin-flip on taste, take one, ship it, and
+  name it in the PR body as an open question — an unresolved question is a line in
+  the PR, not a reason to stop the review.
+- **Expect to be wrong about flavor, and check before defending.** Many picks get
+  rejected in review; that is the process working, not a failure. When a pick is
+  challenged on the PR, go and verify (canon users, the repo's dex text, the engine)
+  rather than arguing from memory — the evidence usually settles it in the
+  maintainer's favor, and occasionally it will support the pick, which is worth
+  saying plainly.
 - **Two CI tests gate the ability data** — keep them green (see each step).
 
 ---
@@ -216,9 +217,9 @@ For each species/form in the line:
 
 **Verify:** `make check TESTS="Innate"` (the innate test rejects unwired picks).
 
-**Gate:** stop here and get a yes on the innate list before starting Step 2. Which
-slots Step 2 may repurpose is determined by which innates were *approved*, not
-which were proposed.
+**Before Step 2:** settle the innate list. Which slots Step 2 may repurpose is
+determined by the innates you have actually decided on, so don't start Step 2
+with the list still in flux.
 
 ---
 
@@ -345,9 +346,9 @@ it is the intended design, and the table already does it at scale (`ABILITY_UNAW
 in 10 rows, `ABILITY_STICKY_HOLD` in 3, plus Harvest and Gooey). The only thing that
 fails is naming an ability *this* species already has innately.
 
-**Gate:** stop here and get a yes on the override rows before starting Step 3. A
-set's `.ability` may only name an ability that is already a real slot for the
-species or comes from an *approved* override row.
+**Before Step 3:** settle the override rows. A set's `.ability` may only name an
+ability that is already a real slot for the species or comes from an override row
+in this change.
 
 ---
 
@@ -427,8 +428,8 @@ the other-media clause in Step 1: it is not in the repo, so flag it as recall (o
 the actual analysis if the session has network) rather than presenting it as verified.
 
 **Step 3 runs in two parts, in order: Part A audits what is already there, Part B
-proposes new sets.** Part A gets its own yes before Part B starts — same reasoning
-as the step gates themselves. Auditing first also tells you what Part B needs: a
+adds new sets.** Finish Part A before starting Part B — same reasoning as the step
+order itself. Auditing first also tells you what Part B needs: a
 species whose one existing set turns out to be fine needs a *different* new set
 than one whose existing set is about to be rewritten.
 
@@ -511,9 +512,10 @@ than one whose existing set is about to be rewritten.
    Note what niche each surviving set fills, so Part B adds variety rather than
    duplicating.
 
-   **Gate:** present the Part A verdicts and get a yes before starting Part B.
+   **Before Part B:** finish the Part A verdicts. What Part B should add depends
+   on which existing sets survived and in what shape.
 
-2. **PART B — propose new sets. Aim for at least 2 quality sets per species** — that is the bar, not a
+2. **PART B — write the new sets. Aim for at least 2 quality sets per species** — that is the bar, not a
    quota to fill. Each should occupy a distinct niche so the Factory has real
    variety to draw among: a signature-move set, a gimmick (Trick Room, weather,
    Baton Pass, status spreader), a lore set, a defensive staller, an offensive
@@ -765,29 +767,67 @@ Three further consequences a line review must account for:
 
 **Verify:** the same `"Frontier extended roster"` tests (legality + non-innate).
 
-**Gate:** Part A (audit verdicts) and Part B (new sets) are approved separately.
-Once Part B has its yes, apply the edits for all three approved steps and move to
-the wrap-up.
+**Then apply:** with Part B settled, apply the edits for all three steps, run the
+filtered tests, and move to the wrap-up.
 
 ---
 
-## Wrap-up (after applying approved changes)
+## Wrap-up — apply, open the PR, then act on the review
 
+### 1. Apply and verify
+
+- **Build both flag states** for any new/changed config-gated code, per
+  `CLAUDE.md` (Building & testing). Data-only additions to these three files are
+  covered by the roster/innate tests; run those filtered
+  (`make check TESTS="Frontier extended roster"`, `make check TESTS="Innate"`) and
+  let CI run the full suite on the PR.
+- **Update `fork-docs/FORK.md`** if the change is worth indexing (usually the
+  innate/override/roster features already have rows; a per-line data tweak rarely
+  needs a new row, but note anything with a known limitation).
+- **One line per branch/PR** unless the maintainer says otherwise. Branch as
+  `claude/<line>-line-review`; PR against the fork's `master`.
+
+### 2. Write the PR body — it is the review surface
+
+Nothing was approved mid-session, so the PR body is where the maintainer sees the
+reasoning for the first time. It has to stand on its own; a diff of ability
+constants and move slots does not. Structure it by step:
+
+- **Per step (innates / overrides / frontier sets), what changed and why.** For
+  each pick, the flavor evidence that carries it: the repo's `.description` quoted
+  verbatim, the canon-user count for an ability, and any wider-media evidence
+  **flagged as recall** the repo can't confirm (same honesty rule as Step 1 —
+  naming the medium and the specific action). A reviewer should be able to reject a
+  pick without opening the source files.
+- **Part A verdicts for existing frontier sets**, including the *keep as-is* ones —
+  "checked and unchanged" is information; silence reads as "not looked at."
 - **Record what you rejected, and why.** Much of a line review's value is in the
   candidates considered and dropped — undocumented, they get re-proposed on the next
   pass. Put them in the PR body; if a pick was rejected on a durable *structural*
   ground rather than taste (e.g. a transformation ability, which is out of scope for
   innates entirely — see the "Identity / form / type-transform" bucket in
   `INNATE_ABILITIES.md`), record it in the relevant doc instead so it sticks.
+- **Open questions** — the coin-flip picks you resolved yourself, called out so the
+  maintainer can flip them back cheaply.
 - **Note the save-index cost when adding frontier sets.** Sets are inserted at the
   species' dex position, and saved rentals reference entries by array *index*, so any
   insertion invalidates an in-progress rented team in an existing save. Inherent to
-  keeping dex order — surface it to the maintainer rather than burying it.
-- **Update `fork-docs/FORK.md`** if the change is worth indexing (usually the
-  innate/override/roster features already have rows; a per-line data tweak rarely
-  needs a new row, but note anything with a known limitation).
-- **Build both flag states** for any new/changed config-gated code, per
-  `CLAUDE.md` (Building & testing). Data-only additions to these three files are
-  covered by the roster/innate tests; run those filtered, and let CI run the full
-  suite on the PR.
-- **One line per branch/PR** unless the maintainer says otherwise.
+  keeping dex order — surface it in the PR rather than burying it.
+
+### 3. Act on the review
+
+The maintainer reviews the PR and requests changes there. Expect rejections —
+flavor is subjective and most first-pass picks don't survive; that is the process,
+not a failure.
+
+- **Apply requested changes on the same branch and push** — don't open a second PR
+  for the same line.
+- **Respect the step coupling when reworking.** A rejected innate can invalidate the
+  override that assumed it and the set that named that override; re-derive forward
+  through the steps rather than patching the one row that was commented on.
+- **Verify before defending.** When a pick is challenged, go check (canon users, the
+  repo's dex text, `deterministic.h`) rather than arguing from memory, and say
+  plainly when the evidence supports the maintainer — or, less often, the pick.
+- **A rejected candidate goes into the PR body's rejected list** (or the relevant
+  `fork-docs/` doc if the ground was structural) so the next pass doesn't re-propose
+  it.
