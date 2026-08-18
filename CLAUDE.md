@@ -202,6 +202,45 @@ easily; rewrites of existing logic conflict the most.
   which is why re-running `make`/`make check` after every sync is mandatory. Don't
   over-split files just to dodge conflicts; keep it idiomatic.
 
+### After the merge: what a git conflict does *not* tell you
+
+Resolving every `<<<<<<<` marker is the start of a sync, not the end. Three failure
+modes produce no conflict marker at all, and all three showed up in the Aug 2026
+1.16.x sync (34 commits, 4 markers). Work through them in this order after merging.
+
+- **Semantic conflicts — a signature change under our call site.** Upstream's sleep
+  clause fix changed `TryDeactivateSleepClause`'s first parameter from
+  `enum BattleSide` to `enum BattlerId` and updated every one of its own callers.
+  Our innate Natural Cure call still passed `GetBattlerSide(battler)`, which git
+  merged cleanly and the compiler rejected. Only the build finds these, which is
+  why `make` and `make check` after a sync are mandatory rather than a formality.
+  When one turns up, grep the other call sites and copy how upstream now calls it.
+- **Upstream reimplementing something we already fixed — check theirs is complete
+  before dropping ours.** Upstream's #10616 added a properly plumbed `ctx->baseMove`,
+  which supersedes the fork's hand-rolled `zmove.baseMoves` recovery on the ordinary
+  path, and the tempting resolution was to take upstream's one-liner and delete our
+  block. Their version was narrower in two ways: it derives *every* Z-Move's power
+  from the base move via the tier table (wrong for signature Z-Moves, which carry
+  their own power), and `ctx->baseMove` is not the base move on the called-move path
+  (the canceler converts before assigning `gCalledMove`, so `Cmd_setcalledmove`
+  overwrites it with the Z-Move). Both would have been silent power regressions.
+  Before deleting a fork divergence because upstream "fixed it too", diff the two
+  behaviours over the *edge cases our version was written for* — the fork test that
+  documents the original bug is the fastest way to check, and the `FORK:` comment
+  should say what those edge cases are.
+- **A fork test's control case can be invalidated by an upstream fix.** Our Palafin
+  test pair was "with the flag it stays in / without the flag it pivots out".
+  Upstream #10626 stopped Palafin-Hero switching for the Zero to Hero benefit, so
+  the *control* started failing while the feature test still passed. A failing
+  control after a sync usually means upstream caught up, not that our feature broke
+  — confirm which by reading the upstream commit before touching the test, then
+  either repoint the control at a case that still diverges or flip it into a guard
+  on the new upstream behaviour (say which, and why, in a comment).
+
+The general shape: a clean merge proves nothing about behaviour. Budget for a full
+`make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
+the upstream commit behind any test that changed state.
+
 ### Fork-owned code lives under `fork/`
 
 Just like our docs live under `fork-docs/`, our **net-new code files** live under a

@@ -123,7 +123,7 @@ static enum CancelerResult CancelerAsleepOrFrozen(struct BattleCalcValues *cv)
     {
         if (GetConfig(B_UPROAR) < GEN_5 && UproarWakeUpCheck(cv->battlerAtk))
         {
-            TryDeactivateSleepClause(GetBattlerSide(cv->battlerAtk), gBattlerPartyIndexes[cv->battlerAtk]);
+            TryDeactivateSleepClause(cv->battlerAtk, gBattlerPartyIndexes[cv->battlerAtk]);
             gBattleMons[cv->battlerAtk].status1 &= ~STATUS1_SLEEP;
             gBattleMons[cv->battlerAtk].volatiles.nightmare = FALSE;
             gEffectBattler = cv->battlerAtk;
@@ -164,7 +164,7 @@ static enum CancelerResult CancelerAsleepOrFrozen(struct BattleCalcValues *cv)
             }
             else
             {
-                TryDeactivateSleepClause(GetBattlerSide(cv->battlerAtk), gBattlerPartyIndexes[cv->battlerAtk]);
+                TryDeactivateSleepClause(cv->battlerAtk, gBattlerPartyIndexes[cv->battlerAtk]);
                 gBattleMons[cv->battlerAtk].volatiles.nightmare = FALSE;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WOKE_UP;
                 result = CANCELER_RESULT_RUN_SCRIPT_AND_INCREMENT;
@@ -213,6 +213,7 @@ static enum CancelerResult CancelerObedience(struct BattleCalcValues *cv)
             struct DamageContext dmgCtx = {0};
             dmgCtx.battlerAtk = dmgCtx.battlerDef = cv->battlerAtk;
             dmgCtx.move = dmgCtx.chosenMove = MOVE_NONE;
+            dmgCtx.baseMove = gBattleStruct->baseMove;
             dmgCtx.moveType = TYPE_MYSTERY;
             dmgCtx.isCrit = FALSE;
             dmgCtx.randomFactor = FALSE;
@@ -462,7 +463,7 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
                 gBattlerTarget = gBattlerAttacker;
                 struct DamageContext dmgCtx = {0};
                 dmgCtx.battlerAtk = dmgCtx.battlerDef = cv->battlerAtk;
-                dmgCtx.move = dmgCtx.chosenMove = MOVE_NONE;
+                dmgCtx.move = dmgCtx.chosenMove = dmgCtx.baseMove = MOVE_NONE;
                 dmgCtx.moveType = TYPE_MYSTERY;
                 dmgCtx.isCrit = FALSE;
                 dmgCtx.randomFactor = FALSE;
@@ -999,10 +1000,11 @@ static bool32 WasOriginalTargetAlly(enum BattlerId battlerAtk, enum BattlerId ba
 static enum CancelerResult CancelerSetTargets(struct BattleCalcValues *cv)
 {
     enum MoveTarget moveTarget = GetBattlerMoveTargetType(cv->battlerAtk, cv->move);
+    bool32 isDoubleBattle = IsDoubleBattle();
 
     if (!HandleMoveTargetRedirection(cv, moveTarget))
     {
-        if (IsDoubleBattle() && moveTarget == TARGET_RANDOM)
+        if (isDoubleBattle && moveTarget == TARGET_RANDOM)
         {
             cv->battlerDef = SetRandomTarget(cv->battlerAtk);
             if (gAbsentBattlerFlags & (1u << cv->battlerAtk)
@@ -1015,7 +1017,7 @@ static enum CancelerResult CancelerSetTargets(struct BattleCalcValues *cv)
         {
             cv->battlerDef = GetPartnerBattler(cv->battlerAtk);
         }
-        else if (IsDoubleBattle() && moveTarget == TARGET_FOES_AND_ALLY)
+        else if (isDoubleBattle && moveTarget == TARGET_FOES_AND_ALLY)
         {
             for (enum BattlerId battlerDef = 0; battlerDef < gBattlersCount; battlerDef++)
             {
@@ -1033,10 +1035,14 @@ static enum CancelerResult CancelerSetTargets(struct BattleCalcValues *cv)
         {
             cv->battlerDef = cv->battlerAtk;
         }
-        else if (!IsBattlerAlive(cv->battlerDef)
+        else if (isDoubleBattle && moveTarget == TARGET_USER_OR_ALLY && !IsBattlerAlive(cv->battlerDef))
+        {
+            cv->battlerDef = cv->battlerAtk;
+        }
+        else if (isDoubleBattle
               && moveTarget != TARGET_OPPONENTS_FIELD
-              && IsDoubleBattle()
-              && (!IsBattlerAlly(cv->battlerAtk, cv->battlerDef)))
+              && !IsBattlerAlive(cv->battlerDef)
+              && !IsBattlerAlly(cv->battlerAtk, cv->battlerDef))
         {
             cv->battlerDef = GetPartnerBattler(cv->battlerDef);
         }
@@ -1894,15 +1900,16 @@ static enum CancelerResult HandleSkyDropResult(struct BattleCalcValues *cv)
         gBattleScripting.animTargetsHit = 0;
         gBattleMons[cv->battlerAtk].volatiles.multipleTurns = FALSE;
         gBattleMons[cv->battlerAtk].volatiles.semiInvulnerable = STATE_NONE;
-        gBattleMons[cv->battlerAtk].volatiles.skyDropTarget = 0;
 
         // Sky Drop fails if target already left the field
-        if (gBattleMons[cv->battlerDef].volatiles.semiInvulnerable == STATE_NONE)
+        if (gBattleMons[cv->battlerDef].volatiles.semiInvulnerable == STATE_NONE || gBattleMons[cv->battlerAtk].volatiles.skyDropTarget == 0)
         {
+            gBattleMons[cv->battlerAtk].volatiles.skyDropTarget = 0;
             gBattlescriptCurrInstr = BattleScript_SkyDropNoTarget;
             return CANCELER_RESULT_FAILURE;
         }
 
+        gBattleMons[cv->battlerAtk].volatiles.skyDropTarget = 0;
         gBattleMons[cv->battlerDef].volatiles.semiInvulnerable = STATE_NONE;
         return CANCELER_RESULT_SUCCESS;
     }
@@ -2173,6 +2180,7 @@ static void SetDamageContextValues(struct DamageContext *ctx, struct BattleCalcV
     ctx->battlerDef = cv->battlerDef;
     ctx->move = cv->move;
     ctx->chosenMove = gChosenMove;
+    ctx->baseMove = gBattleStruct->baseMove;
     ctx->moveType = GetBattleMoveType(cv->move);
     ctx->updateFlags = TRUE;
     ctx->runScript = TRUE;
@@ -2433,10 +2441,7 @@ static enum CancelerResult CancelerAccuracyCheck(struct BattleCalcValues *cv)
 
     while (gBattleStruct->eventState.atkCancelerBattler < gBattlersCount)
     {
-        if (isSmartTarget)
-            cv->battlerDef = gBattlerTarget;
-        else
-            cv->battlerDef = GetTargetBySlot(cv->battlerAtk, gBattleStruct->eventState.atkCancelerBattler);
+        cv->battlerDef = GetTargetBySlot(cv->battlerAtk, gBattleStruct->eventState.atkCancelerBattler);
 
         gBattleStruct->eventState.atkCancelerBattler++;
 
@@ -3773,9 +3778,8 @@ static enum MoveEndResult MoveEndMoveBlock(struct BattleCalcValues *cv)
              && CanBattlerGetOrLoseItem(battlerDef, cv->battlerAtk, gBattleMons[battlerDef].item)
              && !NoAliveMonsForEitherParty())
             {
-                enum BattleSide side = GetBattlerSide(battlerDef);
-
-                if (cv->abilities[battlerDef] == ABILITY_STICKY_HOLD || IsInnateActive(battlerDef, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
+                if (cv->abilities[battlerDef] == ABILITY_STICKY_HOLD
+                 || IsInnateActive(battlerDef, ABILITY_STICKY_HOLD)) // FORK: innate-aware Sticky Hold (FEATURE_INNATE_ABILITIES)
                 {
                     gBattlerAbility = battlerDef;
                     if (cv->abilities[battlerDef] != ABILITY_STICKY_HOLD)
@@ -3801,7 +3805,7 @@ static enum MoveEndResult MoveEndMoveBlock(struct BattleCalcValues *cv)
                     BtlController_EmitSetMonData(battlerDef, B_COMM_TO_CONTROLLER, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[battlerDef].item), &gBattleMons[battlerDef].item);
                     MarkBattlerForControllerExec(battlerDef);
                     // Mark item as stolen so it will be restored after battle
-                    gBattleStruct->itemLost[side][gBattlerPartyIndexes[battlerDef]].stolen = TRUE;
+                    gBattleStruct->itemLost[GetBattlerTrainer(battlerDef)][gBattlerPartyIndexes[battlerDef]].stolen = TRUE;
                 }
                 else
                 {
@@ -5047,6 +5051,7 @@ static enum MoveResult StatChangeCanAnyChange(struct BattleCalcValues *cv)
             gBattleStruct->moveResultFlags[cv->battlerDef] = MOVE_RESULT_ATTEMPT_STAT_CHANGE;
     }
 
+    cv->battlerDef = gBattlerTarget;
     gBattleStruct->additionalEffectsCounter = 0;
     gBattleStruct->statChangeBattler = 0;
 
@@ -5062,14 +5067,16 @@ static enum MoveResult StatChangeAccuracy(struct BattleCalcValues *cv)
          || cv->battlerAtk == battler)
             continue;
 
+        cv->battlerDef = battler;
         if (DoesMoveMissTarget(cv))
         {
-            if (cv->holdEffects[gBattlerAttacker] == HOLD_EFFECT_BLUNDER_POLICY)
+            if (cv->holdEffects[cv->battlerAtk] == HOLD_EFFECT_BLUNDER_POLICY)
                 gBattleStruct->blunderPolicy = TRUE;
             gBattleStruct->moveResultFlags[battler] = MOVE_RESULT_MISSED;
         }
     }
 
+    cv->battlerDef = gBattlerTarget;
     return MOVE_RESULT_CONTINUE;
 }
 
@@ -5154,7 +5161,7 @@ static enum MoveResult StatChangeBeforeChange(struct BattleCalcValues *cv)
         {
             u32 status = gBattleMons[cv->battlerAtk].status1;
             if (status & STATUS1_SLEEP)
-                TryDeactivateSleepClause(GetBattlerSide(cv->battlerAtk), gBattlerPartyIndexes[cv->battlerAtk]);
+                TryDeactivateSleepClause(cv->battlerAtk, gBattlerPartyIndexes[cv->battlerAtk]);
 
             if (status & STATUS1_PARALYSIS)
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_PARALYSIS;
@@ -5309,6 +5316,7 @@ static enum MoveResult StatChangeTryChange(struct BattleCalcValues *cv)
         }
     }
 
+    cv->battlerDef = gBattlerTarget;
     return MOVE_RESULT_DONE;
 }
 

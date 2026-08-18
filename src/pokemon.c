@@ -877,7 +877,7 @@ bool32 ComputePlayerShinyOdds(u32 personality, u32 value)
     if (P_ONLY_OBTAINABLE_SHINIES && (CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE || (FlagGet(WE_FLAG_NO_CATCHING))))
         return FALSE;
 
-    if (P_NO_SHINIES_WITHOUT_POKEBALLS && !HasAtLeastOnePokeBall())
+    if (P_NO_SHINIES_WITHOUT_POKEBALLS && !HasAtLeastOnePokeBall() && FlagGet(FLAG_SYS_POKEDEX_GET))
         return FALSE;
 
     u32 totalRerolls = 0;
@@ -1690,7 +1690,10 @@ enum Move MonTryLearningNewMoveAtLevel(struct Pokemon *mon, bool32 firstMove, u3
             for (u32 j = 0; j < MAX_MON_MOVES; j++)
             {
                 if (formChanges[i].param2 == GetMonData(mon, MON_DATA_MOVE1 + j))
-                    return MOVE_NONE;
+                {
+                    sLearningMoveTableID++;
+                    return MON_ALREADY_KNOWS_MOVE;
+                }
             }
         }
     }
@@ -1795,32 +1798,6 @@ u8 CountAliveMonsInBattle(u8 caseId, enum BattlerId battler)
     }
 
     return retVal;
-}
-
-u8 GetDefaultMoveTarget(enum BattlerId battlerId)
-{
-    u8 opposing = GetBattlerLeftFoe(battlerId);
-
-    if (!IsDoubleBattle())
-        return GetBattlerAtPosition(opposing);
-    if (CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_BATTLER, battlerId) > 1)
-    {
-        u8 position;
-
-        if ((Random() & 1) == 0)
-            position = GetPartnerPosition(opposing);
-        else
-            position = opposing;
-
-        return GetBattlerAtPosition(position);
-    }
-    else
-    {
-        if ((gAbsentBattlerFlags & (1u << opposing)))
-            return GetBattlerAtPosition(GetPartnerPosition(opposing));
-        else
-            return GetBattlerAtPosition(opposing);
-    }
 }
 
 u8 GetMonGender(struct Pokemon *mon)
@@ -4006,14 +3983,13 @@ bool8 HealStatusConditions(struct Pokemon *mon, u32 healMask, enum BattlerId bat
             gBattleMons[battler].status1 &= ~healMask;
             if ((healMask & STATUS1_SLEEP))
             {
-                u32 battlerSide = GetBattlerSide(battler);
                 struct Pokemon *party = GetBattlerParty(battler);
 
                 for (u32 i = 0; i < PARTY_SIZE; i++)
                 {
                     if (&party[i] == mon)
                     {
-                        TryDeactivateSleepClause(battlerSide, i);
+                        TryDeactivateSleepClause(battler, i);
                         break;
                     }
                 }
