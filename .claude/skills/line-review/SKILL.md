@@ -19,25 +19,24 @@ welcome but not required.
    - `src/fork/innate_abilities.c` — always-on innates (Step 1).
    - `src/fork/species_ability_overrides.c` — the chosen ability (Step 2).
    - `src/fork/frontier_extended_mons.c` — Battle Factory sets (Step 3).
-3. **Run the three steps ONE AT A TIME, each behind its own approval gate.**
-   Innates → *yes* → overrides → *yes* → frontier sets (Part A audit → *yes* →
-   Part B new sets) → *yes* → apply. Propose
-   **only** the current step; do not preview or reason about the next one. Each
-   step's proposal may rest only on the **approved** output of earlier steps,
-   never on a pending one — an override cannot be justified against a proposed-
-   but-unapproved innate, and a set's `.ability` cannot name an override that has
-   not been agreed. Proposing all three at once is what this rule exists to
-   prevent: it silently couples the later steps to picks that are about to be
-   rejected, and the rework cascades.
-4. **For the current step, per the rubric:** report what's already there, whether
-   it makes flavorful sense — citing both the repo `.description` **and** a
-   wider-media check — and concrete candidate additions/changes.
-5. **WAIT for a yes before moving on.** Flavor picks are the maintainer's call. A
-   **deferral is not an approval**, an **unanswered question is not a yes**, and
-   "let's return to the line review" means resume the *review*, not ship the
-   backlog. Expect most first-pass flavor picks to be rejected — that's the
-   process working. Apply the edits for all three files once the last gate
-   passes (or per step, if the maintainer asks for that).
+3. **Run the three steps ONE AT A TIME, in order, without stopping for approval.**
+   Innates → overrides → frontier sets (Part A audit → Part B new sets) → apply →
+   verify → PR. Settle each step before starting the next: a step builds only on
+   decisions already made, never on one still in flux — an override is justified
+   against the innates in this change, and a set's `.ability` may only name a real
+   slot or an override row settled in Step 2. Work them out of order and the whole
+   line has to be re-derived.
+4. **For each step, per the rubric:** report what's already there, whether it makes
+   flavorful sense — citing both the repo `.description` **and** a wider-media
+   check — and the concrete additions/changes you're making.
+5. **Then apply the edits, verify, and open a PR — the PR is where approval
+   happens.** Flavor picks are still the maintainer's call; they make it on the PR
+   after seeing the whole line. So the PR body must carry the per-step reasoning,
+   the flavor evidence (with recall flagged as recall), the Part A verdicts
+   including "keep as-is", what you rejected and why, and any coin-flip you
+   resolved yourself. Expect changes to be requested — that's the process working.
+   Apply review feedback on the **same branch**, re-deriving forward through the
+   steps when a rejected innate invalidates a later pick.
 
 ## Hard constraints (see the rubric for detail)
 
@@ -100,7 +99,7 @@ welcome but not required.
   transformation (the Venusaur pattern: base → Grassy Surge override; Mega →
   Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
 - **Frontier sets run in two parts: Part A audits the EXISTING sets, Part B
-  proposes new ones** — Part A first, with its own yes. Part A walks each existing
+  writes new ones** — Part A first, finished before Part B starts. Part A walks each existing
   set field by field: **Tera type** (what is it *for*? — a tactical immunity beats
   doubling an existing type, and it must match the item/ability/moves, because
   Terastallizing overwrites all three type slots and e.g. flips Black Sludge from
@@ -175,9 +174,10 @@ welcome but not required.
   enough. **"No changes" is a legitimate result** — a species already at two or more
   coherent sets is done unless a new one is genuinely as good; don't pad to a number.
 
-## Verify
+## Verify and ship
 
 After applying changes: `make check TESTS="Frontier extended roster"` and
 `make check TESTS="Innate"` (filtered — let CI run the full suite on the PR).
 Keep rows in dex order. Update `fork-docs/FORK.md` only if the change warrants an
-index entry.
+index entry. Then commit to a `claude/<line>-line-review` branch, push, and open a
+PR against the fork's `master` with the body described above — one line per PR.
