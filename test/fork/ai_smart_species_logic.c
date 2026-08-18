@@ -49,7 +49,18 @@ AI_SINGLE_BATTLE_TEST("Smart species AI: Palafin-Hero is kept in on a bad matchu
     }
 }
 
-AI_SINGLE_BATTLE_TEST("Smart species AI: without the flag Palafin pivots out of the same bad matchup")
+// This used to be the control for the test above: without AI_FLAG_SMART_SPECIES_LOGIC the
+// generic switch logic pivoted the Hero form out of this matchup. Upstream #10626 ("Fix
+// Palafin-Hero repeatedly switching to activate Zero to Hero") closed that path by returning
+// early from the ZERO_TO_HERO switch-benefit check for any form that is not PALAFIN_ZERO, so
+// the Hero form now stays in here on its own and the two cases no longer diverge.
+//
+// Kept, with the expectation flipped, as a guard on that upstream behaviour: if a future sync
+// reopens the ability-benefit switch for the Hero form, this fails and tells us the fork veto
+// in AI_ShouldKeepTransformedFormIn is once again the only thing holding the line. That veto is
+// still strictly broader than upstream's fix - it blocks *every* voluntary switch of the Hero
+// form, not just the Zero to Hero one - so the flag continues to matter for other switch reasons.
+AI_SINGLE_BATTLE_TEST("Smart species AI: upstream also keeps Palafin-Hero in on the same bad matchup")
 {
     GIVEN {
         AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES | AI_FLAG_OMNISCIENT);
@@ -57,6 +68,6 @@ AI_SINGLE_BATTLE_TEST("Smart species AI: without the flag Palafin pivots out of 
         OPPONENT(SPECIES_PALAFIN_HERO) { MaxHP(500); HP(500); Moves(MOVE_WATER_GUN); }
         OPPONENT(SPECIES_GOLEM) { Moves(MOVE_TACKLE); }
     } WHEN {
-        TURN { MOVE(player, MOVE_THUNDERBOLT); EXPECT_SWITCH(opponent, 1); }
+        TURN { MOVE(player, MOVE_THUNDERBOLT); EXPECT_MOVE(opponent, MOVE_WATER_GUN); }
     }
 }
