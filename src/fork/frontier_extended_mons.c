@@ -884,7 +884,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_SOFT_BOILED
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -904,7 +904,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_ICY_WIND
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -924,7 +924,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONLIGHT,
             MOVE_LUNAR_DANCE
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1352,7 +1352,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PERSIAN_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Technician fast attacker
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -1360,7 +1360,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1372,7 +1372,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PERSIAN_ALOLA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Fur Coat physical wall + support
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_FOUL_PLAY,
@@ -1380,7 +1380,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_TAUNT
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -1400,7 +1400,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SNARL,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_DARK_AURA, // chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1414,7 +1414,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PERSIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SILK_SCARF, // Technician Fake Out
+        .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -1422,7 +1422,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_DARK_PULSE
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1442,7 +1442,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FAKE_OUT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1956,7 +1956,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_POISON_TOUCH, // chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1976,7 +1976,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_POISON_TOUCH, // chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1990,7 +1990,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TENTACRUEL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky spinner / hazards
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -1998,7 +1998,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_HAZE
         },
-        .ability = ABILITY_WATER_ABSORB, // Clear Body / Liquid Ooze / Rain Dish all innate; chosen Water Absorb (override)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2010,7 +2010,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TENTACRUEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Rain Dish / offensive
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -2018,7 +2018,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // Clear Body / Liquid Ooze / Rain Dish all innate; chosen Water Absorb (override)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2306,7 +2306,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2326,7 +2326,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLARE_BLITZ,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2346,7 +2346,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_HEALING_WISH
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -2368,7 +2368,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_STORM_DRAIN, // chosen Storm Drain
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2388,7 +2388,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_TELEPORT
         },
-        .ability = ABILITY_STORM_DRAIN, // chosen Storm Drain
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2400,7 +2400,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWBRO,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker (0 Spe IV)
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -2408,7 +2408,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CHILLING_WATER,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_STORM_DRAIN, // chosen Storm Drain
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2423,7 +2423,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWBRO_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // mixed tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_SHELL_SIDE_ARM,
@@ -2431,7 +2431,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_POISON_TOUCH, // Quick Draw/Own Tempo/Regenerator ALL now innate; chosen Poison Touch (fork override, slot 2) stays observable
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -2507,7 +2507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DODRIO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // fast band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -2515,7 +2515,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -2535,7 +2535,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DOUBLE_EDGE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3027,7 +3027,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_WISH
         },
-        .ability = ABILITY_SYNCHRONIZE, // chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3047,7 +3047,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPNOSIS,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_SYNCHRONIZE, // chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3068,7 +3068,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHTMARE,
             MOVE_FOUL_PLAY
         },
-        .ability = ABILITY_SYNCHRONIZE, // chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3102,7 +3102,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KINGLER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SCOPE_LENS, // Guaranteed crit claw
+        .heldItem = ITEM_SCOPE_LENS,
         .moves =
         {
             MOVE_CRABHAMMER,
@@ -3110,7 +3110,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SHEER_FORCE, // Hyper Cutter now innate (Shell Armor too); chosen Sheer Force powers its coverage
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3164,7 +3164,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ELECTRODE_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_MAGNET, // boosts STAB Electric
+        .heldItem = ITEM_MAGNET,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -3184,7 +3184,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ELECTRODE_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // fast Thunder Wave support
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -3206,7 +3206,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ELECTRODE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MAGNET, // Blazing speed
+        .heldItem = ITEM_MAGNET,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -3226,7 +3226,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ELECTRODE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Screens setter
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_REFLECT,
@@ -3248,7 +3248,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXEGGUTOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -3256,7 +3256,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SAP_SIPPER, // Chlorophyll + Harvest now innate; chosen Sap Sipper (override, empty slot 1)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3268,7 +3268,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXEGGUTOR,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -3276,7 +3276,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_SAP_SIPPER, // Chlorophyll + Harvest now innate; chosen Sap Sipper (override, empty slot 1)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3291,7 +3291,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXEGGUTOR_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Trick Room sweeper (0 Speed IVs)
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -3299,7 +3299,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_HAMMER,
             MOVE_WOOD_HAMMER
         },
-        .ability = ABILITY_SAP_SIPPER, // Frisk + Harvest now innate; chosen Sap Sipper (override, empty slot 1); innate Harvest still recycles the berry
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3312,7 +3312,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXEGGUTOR_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // Harvest bulky mixed attacker
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_DRAGON_HAMMER,
@@ -3320,7 +3320,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_SAP_SIPPER, // Frisk + Harvest now innate; chosen Sap Sipper (override, empty slot 1); innate Harvest still recycles the berry
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3335,7 +3335,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAROWAK,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_THICK_CLUB, // doubles up Attack; Trick Room sweeper
+        .heldItem = ITEM_THICK_CLUB,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -3343,7 +3343,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_BONEMERANG
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Rock Head now innate; chosen Lightning Rod draws in Electric moves
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3356,7 +3356,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAROWAK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_THICK_CLUB, // SD physical sweeper
+        .heldItem = ITEM_THICK_CLUB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -3378,7 +3378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAROWAK_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_THICK_CLUB, // iconic Thick Club + Rock Head Flare Blitz
+        .heldItem = ITEM_THICK_CLUB,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -3386,7 +3386,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BONEMERANG,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Rock Head now innate; chosen Lightning Rod is its signature
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -3398,7 +3398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAROWAK_ALOLA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_THICK_CLUB, // Lightning Rod redirection bruiser
+        .heldItem = ITEM_THICK_CLUB,
         .moves =
         {
             MOVE_SHADOW_BONE,
@@ -3420,7 +3420,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HITMONLEE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_QUICK_CLAW, // Reckless / Unburden sweeper
+        .heldItem = ITEM_QUICK_CLAW,
         .moves =
         {
             MOVE_HIGH_JUMP_KICK,
@@ -3428,7 +3428,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_STONE_EDGE
         },
-        // Limber/Reckless/Unburden all now innate; chosen No Guard makes its kicks never miss (fork override).
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
@@ -3441,7 +3440,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HITMONLEE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FIGHTING_GEM, // one-shot Fighting burst nuke
+        .heldItem = ITEM_FIGHTING_GEM,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -3449,7 +3448,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_BLAZE_KICK
         },
-        .ability = ABILITY_NO_GUARD, // Limber/Reckless/Unburden now innate; chosen No Guard (kicks never miss)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3463,7 +3462,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HITMONCHAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Iron Fist bulky attacker
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -3471,7 +3470,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_PUNCH,
             MOVE_MACH_PUNCH
         },
-        .ability = ABILITY_NO_GUARD, // Keen Eye/Iron Fist/Inner Focus ALL now innate; chosen No Guard (fork override, slot 2) makes its punches never miss
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3491,7 +3490,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_MACH_PUNCH
         },
-        .ability = ABILITY_NO_GUARD, // Keen Eye/Iron Fist/Inner Focus ALL now innate; chosen No Guard (fork override, slot 2) makes its punches never miss
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3505,7 +3504,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WEEZING,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Levitate phys wall
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -3547,7 +3546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WEEZING_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // defensive wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STRANGE_STEAM,
@@ -3567,7 +3566,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WEEZING_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // hazard control & Neutralizing Gas
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -3587,7 +3586,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WEEZING_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Misty Surge support
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STRANGE_STEAM,
@@ -3609,7 +3608,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHANSEY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_EVIOLITE, // special wall
+        .heldItem = ITEM_EVIOLITE,
         .moves =
         {
             MOVE_SEISMIC_TOSS,
@@ -3617,7 +3616,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_HEAL_BELL
         },
-        .ability = ABILITY_FLUFFY, // all real abilities innate; chosen Fluffy
+        .ability = ABILITY_FLUFFY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3631,7 +3630,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KANGASKHAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SILK_SCARF, // Mega Kangaskhan (Parental Bond); boosts its Normal double-hits
+        .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -3639,7 +3638,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_POWER_UP_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3651,7 +3650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KANGASKHAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SILK_SCARF, // no-mega Scrappy attacker
+        .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -3659,7 +3658,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3673,7 +3672,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SEAKING,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_MYSTIC_WATER, // Lightning Rod draw
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_WATERFALL,
@@ -3693,7 +3692,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SEAKING,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LUM_BERRY, // Swift Swim sweep
+        .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -3701,7 +3700,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AGILITY,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Swift Swim now innate; chosen Lightning Rod
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3715,7 +3714,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STARMIE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // fast special pivot
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -3723,7 +3722,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3735,7 +3734,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STARMIE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Natural Cure spinner
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -3743,7 +3742,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3755,7 +3754,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STARMIE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -3763,7 +3762,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3777,7 +3776,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MR_MIME,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Screens support
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_REFLECT,
@@ -3785,7 +3784,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_FOLLOW_ME
         },
-        .ability = ABILITY_SOUNDPROOF, // Filter now innate; chosen Soundproof shrugs off spread sound moves (doubles support)
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3797,7 +3796,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MR_MIME,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_TWISTED_SPOON, // Technician special
+        .heldItem = ITEM_TWISTED_SPOON,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -3805,7 +3804,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICY_WIND,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_SOUNDPROOF, // Filter + Technician now innate; chosen Soundproof blanks sound moves on the special pivot
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3819,7 +3818,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JYNX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Lovely Kiss lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_LOVELY_KISS,
@@ -3839,7 +3838,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JYNX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ICE_GEM, // one-shot Ice burst nuke
+        .heldItem = ITEM_ICE_GEM,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -3861,7 +3860,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PINSIR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHARP_BEAK, // Mega Pinsir (Aerilate); boosts its -ate Flying moves
+        .heldItem = ITEM_SHARP_BEAK,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -3869,7 +3868,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_AERILATE, // chosen Aerilate
+        .ability = ABILITY_AERILATE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3881,7 +3880,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PINSIR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SCARF, // Moxie revenge (no mega)
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_X_SCISSOR,
@@ -3889,7 +3888,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_AERILATE, // chosen Aerilate
+        .ability = ABILITY_AERILATE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3903,7 +3902,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAUROS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sheer Force band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -3923,7 +3922,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAUROS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Intimidate lure
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BODY_SLAM,
@@ -3931,7 +3930,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (real slot 2)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3945,7 +3944,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAUROS_PALDEA_COMBAT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // chip + Intimidate pivot
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_RAGING_BULL,
@@ -3953,7 +3952,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 1)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3965,7 +3964,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAUROS_PALDEA_COMBAT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -3973,7 +3972,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3987,7 +3986,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAUROS_PALDEA_BLAZE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-immune attacker
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_RAGING_BULL,
@@ -3995,7 +3994,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLARE_BLITZ,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 1)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4009,7 +4008,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAUROS_PALDEA_AQUA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_MYSTIC_WATER, // boosts Raging Bull (Water)
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_RAGING_BULL,
@@ -4017,7 +4016,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WAVE_CRASH,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 1)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4031,7 +4030,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GYARADOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LUM_BERRY, // Mega Gyarados (Mold Breaker); status insurance for the Dragon Dance sweeper
+        .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -4039,7 +4038,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Intimidate now innate; chosen Motor Drive (slot 1)
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4051,7 +4050,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GYARADOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // no-mega DD sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -4059,7 +4058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Intimidate now innate; chosen Motor Drive (slot 1)
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4071,7 +4070,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GYARADOS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst after Dragon Dance
+        .heldItem = ITEM_FLYING_GEM,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -4079,7 +4078,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATERFALL,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOTOR_DRIVE, // all real abilities innate; chosen Motor Drive (non-redundant)
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4093,7 +4092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LAPRAS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Water Absorb tank
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FREEZE_DRY,
@@ -4113,7 +4112,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LAPRAS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // extends the screens for the Aurora Veil setter
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_AURORA_VEIL,
@@ -4135,7 +4134,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DITTO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SCARF, // outspeed copied foe
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_TRANSFORM,
@@ -4157,7 +4156,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VAPOREON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Wish pivot wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -4199,7 +4198,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JOLTEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
+        .heldItem = ITEM_ELECTRIC_GEM,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -4219,7 +4218,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JOLTEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // fast breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -4241,7 +4240,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLAREON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Flash Fire / Guts band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -4261,7 +4260,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLAREON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLAME_ORB, // Guts breaker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -4269,7 +4268,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_FLASH_FIRE, // Guts now innate; Flash Fire adds a Fire immunity
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4283,7 +4282,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OMASTAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Shell Smash sweeper
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -4303,7 +4302,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OMASTAR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HARD_STONE, // Rain abuser
+        .heldItem = ITEM_HARD_STONE,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -4311,7 +4310,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_WEAK_ARMOR, // Swift Swim & Shell Armor now innate; chosen Weak Armor banks Speed when hit
+        .ability = ABILITY_WEAK_ARMOR,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -4325,7 +4324,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KABUTOPS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LUM_BERRY, // Battle Armor blade
+        .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -4333,7 +4332,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_WEAK_ARMOR, // Battle Armor & Swift Swim now innate; chosen Weak Armor banks Speed when hit
+        .ability = ABILITY_WEAK_ARMOR,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4345,7 +4344,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KABUTOPS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Weak Armor sweep
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_AQUA_JET,
@@ -4365,7 +4364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JOLTEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_KINGS_ROCK, // outspeeds almost everything; its first Thunderbolt (no innate flinch) flinches via King's Rock, stealing a turn
+        .heldItem = ITEM_KINGS_ROCK,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -4395,7 +4394,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_AQUA_TAIL
         },
-        .ability = ABILITY_HUSTLE, // Rock Head + Pressure now innate; chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4406,15 +4405,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
 
     // 0143
-    // EXCLUSION: Snorlax's three real abilities (Immunity, Thick Fat, Gluttony) are ALL now innate, but
-    // ALL THREE slots are test-pinned -- Immunity (immunity.c / synchronize.c / corrosion.c / check_bad_move.c /
-    // deterministic_abilities.c / hit_switch_target.c), Thick Fat (thick_fat.c), Gluttony (the innate test's
-    // Ability(ABILITY_GLUTTONY) chosen-differs exemplar) -- so it keeps chosen Gluttony (redundant-but-correct),
-    // like Clefable (W2) / Excadrill & Tinkaton (W3). Do NOT free it.
     {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Curse setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BODY_SLAM,
@@ -4422,8 +4416,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        // Thick Fat (and Immunity) now innate; chosen Gluttony fills the slot.
-        .ability = ABILITY_SAP_SIPPER, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4435,7 +4428,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BODY_SLAM,
@@ -4443,8 +4436,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_SELF_DESTRUCT
         },
-        // Thick Fat (and Immunity) now innate; chosen Gluttony fills the slot.
-        .ability = ABILITY_SAP_SIPPER, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 132,
@@ -4456,7 +4448,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_NORMAL_GEM, // one-shot Normal burst for the Giga Impact set
+        .heldItem = ITEM_NORMAL_GEM,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -4464,7 +4456,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_SAP_SIPPER, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4478,7 +4470,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARTICUNO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky special wall
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FREEZE_DRY,
@@ -4486,7 +4478,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_HAZE
         },
-        .ability = ABILITY_SNOW_WARNING, // Pressure + Snow Cloak now innate; chosen Snow Warning (override) sets snow for Snow Cloak
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4506,7 +4498,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_ROOST
         },
-        .ability = ABILITY_SNOW_WARNING, // Pressure + Snow Cloak now innate; chosen Snow Warning (override)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4520,7 +4512,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARTICUNO_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind setup
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FREEZING_GLARE,
@@ -4528,7 +4520,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_ROOST
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4540,7 +4532,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARTICUNO_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TWISTED_SPOON, // immediate special attacker
+        .heldItem = ITEM_TWISTED_SPOON,
         .moves =
         {
             MOVE_FREEZING_GLARE,
@@ -4548,7 +4540,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_RECOVER
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4562,7 +4554,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZAPDOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -4582,7 +4574,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZAPDOS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // defensive sub-roost
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -4604,7 +4596,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZAPDOS_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // physical breaker
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_THUNDEROUS_KICK,
@@ -4612,7 +4604,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BRAVE_BIRD,
             MOVE_U_TURN
         },
-        .ability = ABILITY_HUSTLE, // chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4624,7 +4616,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZAPDOS_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_THUNDEROUS_KICK,
@@ -4632,7 +4624,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BULK_UP,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_HUSTLE, // chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4646,7 +4638,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MOLTRES,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -4666,7 +4658,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MOLTRES,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -4688,7 +4680,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MOLTRES_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FIERY_WRATH,
@@ -4696,7 +4688,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NASTY_PLOT,
             MOVE_AGILITY
         },
-        .ability = ABILITY_DARK_AURA, // chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4708,7 +4700,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MOLTRES_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Berserk + WP snowball
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_FIERY_WRATH,
@@ -4716,7 +4708,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NASTY_PLOT,
             MOVE_HURRICANE
         },
-        .ability = ABILITY_DARK_AURA, // chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4738,7 +4730,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_AERILATE, // chosen Aerilate
+        .ability = ABILITY_AERILATE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4752,7 +4744,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEWTWO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Mewtwo Y (Insomnia); power for the special nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYSTRIKE,
@@ -4760,7 +4752,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_SYNCHRONIZE, // all real abilities innate; chosen Synchronize (non-redundant)
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4772,7 +4764,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEWTWO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MUSCLE_BAND, // Mega Mewtwo X (Steadfast); physical boost
+        .heldItem = ITEM_MUSCLE_BAND,
         .moves =
         {
             MOVE_BULK_UP,
@@ -4780,7 +4772,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SYNCHRONIZE, // all real abilities innate; chosen Synchronize (non-redundant)
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4792,7 +4784,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEWTWO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // no-mega all-out attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYSTRIKE,
@@ -4800,7 +4792,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_SYNCHRONIZE, // all real abilities innate; chosen Synchronize (non-redundant)
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4814,7 +4806,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed nasty plot
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -4834,7 +4826,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEW,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // utility lead
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -4854,7 +4846,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // physical pivot
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -4880,7 +4872,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEGANIUM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky defensive pivot / cleric
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -4888,7 +4880,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AROMATHERAPY,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard now innate; chosen Grassy Surge (override) sets healing terrain
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4900,7 +4892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEGANIUM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MIRACLE_SEED, // dragon dance physical attacker
+        .heldItem = ITEM_MIRACLE_SEED,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -4908,7 +4900,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard now innate; chosen Grassy Surge (override) sets healing terrain
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4920,7 +4912,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEGANIUM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // defensive spreader with hazards
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -4928,7 +4920,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_SYNTHESIS
         },
-        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard now innate; chosen Grassy Surge (override) sets healing terrain
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4942,7 +4934,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYPHLOSION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -4950,7 +4942,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_SOLAR_BEAM
         },
-        .ability = ABILITY_FLASH_FIRE, // Blaze now innate (latched); chosen Flash Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4962,7 +4954,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYPHLOSION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // nasty plot sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -4970,7 +4962,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_FLASH_FIRE, // Blaze now innate (latched); chosen Flash Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -4982,7 +4974,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYPHLOSION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAT_ROCK, // sun setter for the team
+        .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
             MOVE_SUNNY_DAY,
@@ -4990,7 +4982,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SOLAR_BEAM,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_FLASH_FIRE, // Blaze now innate (latched); chosen Flash Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5004,7 +4996,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYPHLOSION_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Frisk Ghost/Fire breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -5012,7 +5004,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_INFERNAL_PARADE
         },
-        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5024,7 +5016,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYPHLOSION_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot Hex sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -5032,7 +5024,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5046,7 +5038,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FERALIGATR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // dragon dance physical sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -5054,7 +5046,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Torrent now innate (latched); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5066,7 +5058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FERALIGATR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band wallbreaker with priority
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -5074,7 +5066,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_SHEER_FORCE, // Torrent now innate (latched); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5086,7 +5078,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FERALIGATR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky belly-drum sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -5094,7 +5086,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Torrent now innate (latched); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5108,7 +5100,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FURRET,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHELL_BELL, // scrappy U-turn pivot
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -5116,7 +5108,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SUPER_FANG
         },
-        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -5130,7 +5122,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NOCTOWL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Tinted Lens special
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_AIR_SLASH,
@@ -5138,7 +5130,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5150,7 +5142,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NOCTOWL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Insomnia staller
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HURRICANE,
@@ -5158,7 +5150,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5172,7 +5164,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LEDIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_EXPERT_BELT, // Iron Fist mixed
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_AIR_SLASH,
@@ -5180,7 +5172,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_ROOST
         },
-        .ability = ABILITY_VICTORY_STAR, // all real abilities innate; chosen Victory Star
+        .ability = ABILITY_VICTORY_STAR,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -5194,7 +5186,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARIADOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Web setter
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_STICKY_WEB,
@@ -5202,7 +5194,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5214,7 +5206,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARIADOS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SCOPE_LENS, // Sniper jabs
+        .heldItem = ITEM_SCOPE_LENS,
         .moves =
         {
             MOVE_MEGAHORN,
@@ -5222,7 +5214,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_LEECH_LIFE
         },
-        .ability = ABILITY_POISON_POINT, // all real abilities innate; chosen Poison Point (non-redundant)
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5236,7 +5228,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CROBAT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // fast physical attacker / pivot
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -5244,7 +5236,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_POISON_TOUCH, // Inner Focus + Infiltrator now innate; chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5256,7 +5248,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CROBAT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // defensive defogger / status
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -5264,7 +5256,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TAUNT
         },
-        .ability = ABILITY_POISON_TOUCH, // Inner Focus + Infiltrator now innate; chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5276,7 +5268,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CROBAT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band pivot wallbreaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -5284,7 +5276,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_POISON_TOUCH, // Inner Focus + Infiltrator now innate; chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5298,7 +5290,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LANTURN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky Volt Absorb pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_VOLT_SWITCH,
@@ -5318,7 +5310,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LANTURN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -5340,7 +5332,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_XATU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Magic Bounce support
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_ROOST,
@@ -5348,7 +5340,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Bounce now innate (Tier 5.8); chosen Synchronize (:x: stable, its real slot 0) is the freed complementary ability
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5360,7 +5352,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_XATU,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_TWISTED_SPOON, // Tailwind setter
+        .heldItem = ITEM_TWISTED_SPOON,
         .moves =
         {
             MOVE_TAILWIND,
@@ -5382,7 +5374,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMPHAROS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MAGNET, // Mega Ampharos (Mold Breaker); Electric STAB boost
+        .heldItem = ITEM_MAGNET,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -5402,7 +5394,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMPHAROS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker (no mega)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -5422,7 +5414,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMPHAROS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // bulky special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -5444,7 +5436,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BELLOSSOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // chlorophyll sun sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -5452,7 +5444,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (shared override); sun Sp.Atk w/ innate Chlorophyll
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5464,7 +5456,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BELLOSSOM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // defensive quiver dance + sleep
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -5472,7 +5464,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_SOLAR_POWER, // moved off Effect Spore (redundant deterministic sleep vs Sleep Powder); sun Sp.Atk w/ innate Chlorophyll
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5506,7 +5498,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AZUMARILL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Huge Power band breaker w/ priority
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -5514,7 +5506,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SAP_SIPPER, // Huge Power now innate; chosen Sap Sipper adds a Grass immunity + Atk boost
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 92,
@@ -5526,7 +5518,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AZUMARILL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // belly drum + aqua jet sweeper
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -5534,7 +5526,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_LIQUIDATION
         },
-        .ability = ABILITY_SAP_SIPPER, // Huge Power now innate; chosen Sap Sipper adds a Grass immunity + Atk boost
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 92,
@@ -5546,7 +5538,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AZUMARILL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -5554,7 +5546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_LIQUIDATION
         },
-        .ability = ABILITY_SAP_SIPPER, // Huge Power now innate; chosen Sap Sipper adds a Grass immunity + Atk boost
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5568,7 +5560,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUDOWOODO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Rock Head reckless band attacker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HEAD_SMASH,
@@ -5576,7 +5568,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WOOD_HAMMER,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_ILLUSION, // Sturdy + Rock Head now innate; chosen Illusion
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -5588,7 +5580,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUDOWOODO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // sturdy physical wall w/ rocks
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -5596,7 +5588,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_ILLUSION, // Sturdy + Rock Head now innate; chosen Illusion
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5610,7 +5602,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLITOED,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DAMP_ROCK, // Drizzle rain setter
+        .heldItem = ITEM_DAMP_ROCK,
         .moves =
         {
             MOVE_RAIN_DANCE,
@@ -5630,7 +5622,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLITOED,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky water with utility
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -5650,7 +5642,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLITOED,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // rain-boosted special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -5672,7 +5664,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JUMPLUFF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // fast sleep + leech seed staller
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SLEEP_POWDER,
@@ -5680,7 +5672,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUBSTITUTE,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Leaf Guard + Infiltrator now innate; chosen Effect Spore
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5692,7 +5684,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JUMPLUFF,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLYING_GEM, // chlorophyll offensive utility
+        .heldItem = ITEM_FLYING_GEM,
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -5700,7 +5692,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_EFFECT_SPORE, // Chlorophyll + Leaf Guard + Infiltrator now innate; chosen Effect Spore
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5714,7 +5706,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUNFLORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Chlorophyll sun nuke
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -5722,7 +5714,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WEATHER_BALL,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_SOLAR_POWER, // Chlorophyll now innate; chosen Solar Power (sun synergy)
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5734,7 +5726,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUNFLORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // growth sun sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_GROWTH,
@@ -5742,7 +5734,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WEATHER_BALL,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_SOLAR_POWER, // Chlorophyll now innate; chosen Solar Power (sun synergy)
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5756,7 +5748,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_QUAGSIRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware physical wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -5764,7 +5756,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_TOXIC
         },
-        .ability = ABILITY_WATER_ABSORB, // Unaware now innate; chosen Water Absorb adds a Water immunity + heal
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5776,7 +5768,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_QUAGSIRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // mixed bulk water absorber
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -5798,7 +5790,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ESPEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Magic Bounce special sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -5806,7 +5798,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Bounce now innate (Tier 5.8); chosen Synchronize (:x: stable, its real slot 0) is the freed complementary ability
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5818,7 +5810,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ESPEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // hazard-bouncing special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -5826,7 +5818,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_TRICK
         },
-        .ability = ABILITY_SYNCHRONIZE, // Magic Bounce now innate (Tier 5.8); chosen Synchronize (:x: stable, its real slot 0) is the freed complementary ability
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5840,7 +5832,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_UMBREON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // wish-passing special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_FOUL_PLAY,
@@ -5860,7 +5852,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_UMBREON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // physically defensive cleric
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_FOUL_PLAY,
@@ -5902,7 +5894,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // bulky special attacker
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -5910,7 +5902,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_WATER_ABSORB, // Oblivious/Own Tempo/Regenerator ALL now innate; chosen Water Absorb (fork override, slot 2) stays observable
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5922,7 +5914,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TWISTED_SPOON, // calm mind sweeper
+        .heldItem = ITEM_TWISTED_SPOON,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -5984,7 +5976,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWKING_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_SLUDGE, // Nasty Plot wallbreaker
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -5992,7 +5984,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_CHILLY_RECEPTION
         },
-        .ability = ABILITY_CURIOUS_MEDICINE, // Own Tempo now innate; chosen Curious Medicine (real slot) for doubles support
+        .ability = ABILITY_CURIOUS_MEDICINE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6006,7 +5998,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WOBBUFFET,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Shadow Tag trapper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_COUNTER,
@@ -6014,7 +6006,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENCORE,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_SYNCHRONIZE, // all real abilities innate; chosen Synchronize (non-redundant)
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6028,7 +6020,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FORRETRESS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // hazard setter / spinner
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -6036,7 +6028,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_GYRO_BALL
         },
-        .ability = ABILITY_BULLETPROOF, // Overcoat now innate; chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6049,7 +6041,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FORRETRESS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // physical wall with Volt Switch pivot
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_GYRO_BALL,
@@ -6057,7 +6049,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_BULLETPROOF, // Overcoat now innate; chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6072,7 +6064,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STEELIX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // Mega Steelix (Sand Force); chips the physical attackers it walls
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -6080,7 +6072,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_SHEER_FORCE, // Rock Head + Sturdy now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6092,7 +6084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STEELIX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Sturdy hazard tank (no mega)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -6100,7 +6092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SHEER_FORCE, // Rock Head + Sturdy now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6112,7 +6104,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STEELIX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band trapper-style breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -6134,7 +6126,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRANBULL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Intimidate band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -6142,7 +6134,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_STATIC, // Intimidate now innate; chosen Static (slot 2)
+        .ability = ABILITY_STATIC,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6154,7 +6146,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRANBULL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot with status
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -6162,7 +6154,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_HEAL_BELL
         },
-        .ability = ABILITY_STATIC, // Intimidate now innate; chosen Static (slot 2)
+        .ability = ABILITY_STATIC,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6176,7 +6168,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_QWILFISH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Intimidate hazard setter
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SPIKES,
@@ -6184,7 +6176,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_HAZE
         },
-        .ability = ABILITY_POISON_POINT, // Intimidate now innate; chosen Poison Point (real slot 0)
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6196,7 +6188,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_QWILFISH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // swift swim rain attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -6204,7 +6196,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_POISON_POINT, // Swift Swim + Intimidate now innate; chosen Poison Point (real slot 0)
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6218,7 +6210,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCIZOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_METAL_COAT, // Mega Scizor (Technician); Steel STAB boost for Bullet Punch
+        .heldItem = ITEM_METAL_COAT,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -6226,7 +6218,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Swarm + Technician + Light Metal now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6238,7 +6230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCIZOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Technician band breaker w/ priority
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BULLET_PUNCH,
@@ -6246,7 +6238,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Swarm + Technician + Light Metal now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6258,7 +6250,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCIZOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // defensive defogger / pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULLET_PUNCH,
@@ -6266,7 +6258,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Swarm + Technician + Light Metal now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6280,7 +6272,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHUCKLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MENTAL_HERB, // anti-Taunt support
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_STICKY_WEB,
@@ -6288,7 +6280,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_TOXIC
         },
-        .ability = ABILITY_CONTRARY, // Sturdy now innate; chosen Contrary turns stat drops into boosts on this staller
+        .ability = ABILITY_CONTRARY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6302,7 +6294,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HERACROSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_BELT, // Mega Heracross (Skill Link); Fighting STAB boost for the multi-hit breaker
+        .heldItem = ITEM_BLACK_BELT,
         .moves =
         {
             MOVE_PIN_MISSILE,
@@ -6310,7 +6302,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BULLET_SEED,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6322,7 +6314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HERACROSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Guts band breaker (no mega)
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -6330,7 +6322,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6342,7 +6334,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HERACROSS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLAME_ORB, // Guts self-status breaker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -6350,7 +6342,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MEGAHORN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6364,7 +6356,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSARING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Guts Facade wallbreaker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -6372,7 +6364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6384,7 +6376,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSARING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band breaker with coverage
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -6392,7 +6384,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6406,7 +6398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGCARGO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Shell Smash + WP payoff
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -6426,7 +6418,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGCARGO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // hazard setter
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -6448,7 +6440,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CORSOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_RECOVER,
@@ -6456,7 +6448,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_GEM,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_HUSTLE, // Regen + Natural Cure both innate; Hustle is the only other real slot (inert on this special set)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6468,7 +6460,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CORSOLA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Natural Cure pivot
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_RECOVER,
@@ -6476,7 +6468,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_GEM,
             MOVE_TOXIC
         },
-        .ability = ABILITY_HUSTLE, // Regen + Natural Cure both innate; Hustle is the only other real slot (inert on this special set)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6490,7 +6482,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OCTILLERY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Sniper / special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -6498,7 +6490,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_MOODY, // Sniper now innate; chosen Moody (real slot 2)
+        .ability = ABILITY_MOODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6510,7 +6502,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OCTILLERY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sniper Life Orb attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -6518,7 +6510,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_MOODY, // Sniper now innate; chosen Moody (real slot 2)
+        .ability = ABILITY_MOODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6532,7 +6524,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DELIBIRD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // Pure flavor
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_ICE_SPINNER,
@@ -6554,7 +6546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANTINE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky defogger / special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -6574,7 +6566,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANTINE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -6596,7 +6588,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SKARMORY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // hazard setter physical wall
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -6604,7 +6596,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_BULLETPROOF, // Sturdy + Keen Eye now both innate; chosen Bulletproof (fork override) blocks ball/bomb moves on this wall
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6616,7 +6608,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SKARMORY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // defogger pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -6624,7 +6616,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_WHIRLWIND
         },
-        .ability = ABILITY_BULLETPROOF, // Sturdy + Keen Eye now both innate; chosen Bulletproof (fork override) shields this defogger from Focus Blast/Sludge Bomb
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6638,7 +6630,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HOUNDOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHARCOAL, // Mega Houndoom (Solar Power); Fire STAB boost
+        .heldItem = ITEM_CHARCOAL,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -6658,7 +6650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HOUNDOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Flash Fire special breaker (no mega)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -6678,7 +6670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HOUNDOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -6700,7 +6692,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KINGDRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -6708,7 +6700,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
+        .ability = ABILITY_DAMP,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6720,7 +6712,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KINGDRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // dragon dance physical sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -6728,7 +6720,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
+        .ability = ABILITY_DAMP,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6740,7 +6732,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KINGDRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // specs special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -6748,7 +6740,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_DAMP, // Swift Swim & Sniper now innate; chosen Damp (real slot 2)
+        .ability = ABILITY_DAMP,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -6762,7 +6754,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DONPHAN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Sturdy hazard setter / spinner
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -6770,7 +6762,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_SAND_STREAM, // Sturdy + Sand Veil now innate; chosen Sand Stream (override) sets sand for Sand Veil
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6782,7 +6774,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DONPHAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band breaker with priority
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -6790,7 +6782,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SAND_STREAM, // Sturdy + Sand Veil now innate; chosen Sand Stream (override)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6802,7 +6794,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DONPHAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // mixed bulk pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -6810,7 +6802,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SAND_STREAM, // Sturdy + Sand Veil now innate; chosen Sand Stream (override) sets sand for Sand Veil
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6820,11 +6812,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0233 (Eviolite NFE niche: Porygon-Z is a glass cannon, Porygon2 the bulky tank)
+    // 0233
     {
         .species = SPECIES_PORYGON2,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_EVIOLITE, // Trace bulky tank / recovery (Porygon2 NFE niche)
+        .heldItem = ITEM_EVIOLITE,
         .moves =
         {
             MOVE_TRI_ATTACK,
@@ -6844,7 +6836,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PORYGON2,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_EVIOLITE, // Download offensive Eviolite pivot (Download now innate)
+        .heldItem = ITEM_EVIOLITE,
         .moves =
         {
             MOVE_TRI_ATTACK,
@@ -6852,7 +6844,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_RECOVER
         },
-        .ability = ABILITY_TRACE, // Download & Analytic now innate; chosen Trace copies a foe ability
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6866,7 +6858,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SMEARGLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // suicide lead, hazards + sleep (sash = one-shot guard)
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SPORE,
@@ -6874,7 +6866,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIKES,
             MOVE_WHIRLWIND
         },
-        .ability = ABILITY_MOODY, // Own Tempo + Technician now innate; chosen Moody (real slot 2, :x: never-innate) stays observable
+        .ability = ABILITY_MOODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6886,7 +6878,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SMEARGLE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // doubles support lead (Spore + Fake Out)
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
             MOVE_SPORE,
@@ -6908,7 +6900,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HITMONTOP,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Intimidate doubles support attacker
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -6916,7 +6908,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRIPLE_AXEL,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_NO_GUARD, // Intimidate now innate; chosen No Guard (slot 2)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6928,7 +6920,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HITMONTOP,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Technician spinner / pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_RAPID_SPIN,
@@ -6936,7 +6928,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_TRIPLE_AXEL
         },
-        .ability = ABILITY_NO_GUARD, // Technician + Intimidate now innate; chosen No Guard (slot 2)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6950,7 +6942,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MILTANK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky physical wall / cleric
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BODY_SLAM,
@@ -6958,7 +6950,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAL_BELL,
             MOVE_STEALTH_ROCK
         },
-        // Thick Fat now innate; chosen Sap Sipper (HA) absorbs Grass moves for an Attack boost.
         .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
@@ -6971,7 +6962,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MILTANK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Scrappy band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -6979,7 +6970,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SAP_SIPPER, // Thick Fat & Scrappy now innate; chosen Sap Sipper (its real HA) turns Grass hits into Attack boosts
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -6993,7 +6984,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLISSEY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // special wall / cleric
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SEISMIC_TOSS,
@@ -7001,7 +6992,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAL_BELL,
             MOVE_TOXIC
         },
-        .ability = ABILITY_FLUFFY, // all real abilities innate; chosen Fluffy
+        .ability = ABILITY_FLUFFY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -7013,7 +7004,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLISSEY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // stallbreaker support with hazards
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_SEISMIC_TOSS,
@@ -7021,7 +7012,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_FLUFFY, // all real abilities innate; chosen Fluffy
+        .ability = ABILITY_FLUFFY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -7035,7 +7026,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAIKOU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // calm mind special sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -7043,7 +7034,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Inner Focus now innate; chosen Lightning Rod (override) draws Electric + SpA
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7055,7 +7046,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAIKOU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // specs special breaker / pivot
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -7063,7 +7054,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Inner Focus now innate; chosen Lightning Rod (override) draws Electric + SpA
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7075,7 +7066,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAIKOU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -7083,7 +7074,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Inner Focus now innate; chosen Lightning Rod (override) draws Electric + SpA
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7097,7 +7088,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ENTEI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sacred Fire band breaker w/ priority
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_SACRED_FIRE,
@@ -7105,7 +7096,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_FLARE_BLITZ
         },
-        .ability = ABILITY_FLAME_BODY, // Inner Focus now innate; chosen Flame Body (override) burns contact attackers
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7117,7 +7108,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ENTEI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // scarf revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_SACRED_FIRE,
@@ -7125,7 +7116,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_BULLDOZE
         },
-        .ability = ABILITY_FLAME_BODY, // Inner Focus now innate; chosen Flame Body (override) burns contact attackers
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7137,7 +7128,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ENTEI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SACRED_FIRE,
@@ -7145,7 +7136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_MORNING_SUN
         },
-        .ability = ABILITY_FLAME_BODY, // Inner Focus now innate; chosen Flame Body (override) burns contact attackers
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7159,7 +7150,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUICUNE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // calm mind bulky sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -7167,7 +7158,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_REST
         },
-        .ability = ABILITY_WATER_ABSORB, // Inner Focus now innate; chosen Water Absorb (override) heals on Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7179,7 +7170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUICUNE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // offensive calm mind sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -7187,7 +7178,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_WATER_ABSORB, // Inner Focus now innate; chosen Water Absorb (override) heals on Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7199,7 +7190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUICUNE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // bulky defogger / wall
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -7207,7 +7198,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST,
             MOVE_SLEEP_TALK
         },
-        .ability = ABILITY_WATER_ABSORB, // Inner Focus now innate; chosen Water Absorb (override) heals on Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7221,7 +7212,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SMOOTH_ROCK, // Mega Tyranitar (Sand Stream); extends its own sandstorm
+        .heldItem = ITEM_SMOOTH_ROCK,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -7241,7 +7232,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sand Stream band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_STONE_EDGE,
@@ -7261,7 +7252,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // sand tank with hazards
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -7281,7 +7272,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANITAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank in sand
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_STONE_EDGE,
@@ -7303,7 +7294,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUGIA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Multiscale physical wall / defogger
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_AEROBLAST,
@@ -7311,7 +7302,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_TOXIC
         },
-        .ability = ABILITY_STORM_DRAIN, // Multiscale now innate; chosen Storm Drain (override) gives the sea guardian a Water immunity + SpA boost
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7323,7 +7314,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUGIA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -7345,7 +7336,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HO_OH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sacred Fire band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_SACRED_FIRE,
@@ -7353,7 +7344,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_EXTREME_SPEED
         },
-        .ability = ABILITY_FLAME_BODY, // Pressure + Regenerator both now innate; chosen Flame Body burns on contact (slot-1 override)
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7365,7 +7356,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HO_OH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot / cleric
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SACRED_FIRE,
@@ -7373,7 +7364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_WHIRLWIND
         },
-        .ability = ABILITY_FLAME_BODY, // Pressure + Regenerator both now innate; chosen Flame Body burns on contact (slot-1 override)
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7383,11 +7374,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FIRE,
     },
 
-    // 0251 (innate Levitate — Ground immune, never give an Air Balloon)
+    // 0251
     {
         .species = SPECIES_CELEBI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // nasty plot special sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -7395,7 +7386,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_GRASSY_SURGE, // Natural Cure now innate; chosen Grassy Surge via override (forest guardian: heals + boosts Grass)
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7407,7 +7398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CELEBI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot with utility
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -7415,7 +7406,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_U_TURN
         },
-        .ability = ABILITY_GRASSY_SURGE, // Natural Cure now innate; chosen Grassy Surge via override (forest guardian: heals + boosts Grass)
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7427,7 +7418,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CELEBI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // calm mind bulky sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -7435,7 +7426,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_RECOVER
         },
-        .ability = ABILITY_GRASSY_SURGE, // Natural Cure now innate; chosen Grassy Surge via override (forest guardian: heals + boosts Grass)
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7453,7 +7444,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MIRACLE_SEED, // Mega Sceptile (Lightning Rod); Grass STAB boost
+        .heldItem = ITEM_MIRACLE_SEED,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -7461,7 +7452,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Overgrow now innate (latched); chosen Lightning Rod via override (matches its Mega's ability)
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7473,7 +7464,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // physical Swords Dance sweeper (no mega)
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -7481,7 +7472,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_DRAGON_CLAW
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Overgrow now innate (latched); chosen Lightning Rod via override (its Mega's ability)
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7493,7 +7484,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Overgrow special revenge killer
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -7501,7 +7492,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Overgrow now innate (latched); chosen Lightning Rod via override (its Mega's ability)
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7515,7 +7506,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) snowballing sweeper; chosen Sheer Force adds power
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -7523,7 +7514,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_JUMP_KICK,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Blaze + Speed Boost both now innate; chosen Sheer Force (override)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7535,7 +7526,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) mixed wallbreaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -7543,7 +7534,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SHEER_FORCE, // Blaze + Speed Boost both now innate; chosen Sheer Force (override)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7555,7 +7546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLAZIKEN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND, // immediate banded breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -7563,7 +7554,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Blaze + Speed Boost both now innate; chosen Sheer Force (override)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7577,7 +7568,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWAMPERT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MYSTIC_WATER, // Mega Swampert (Swift Swim); Water STAB boost for the rain sweeper
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_WATERFALL,
@@ -7585,7 +7576,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_DAMP, // Torrent now innate (latched); chosen Damp
+        .ability = ABILITY_DAMP,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7597,7 +7588,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWAMPERT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky hazard setter
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -7605,7 +7596,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_DAMP, // Torrent now innate (latched); chosen Damp
+        .ability = ABILITY_DAMP,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7617,7 +7608,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWAMPERT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // mixed-tank pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_FLIP_TURN,
@@ -7625,7 +7616,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_POWER_GEM
         },
-        .ability = ABILITY_DAMP, // Torrent now innate (latched); chosen Damp
+        .ability = ABILITY_DAMP,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7639,7 +7630,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIGHTYENA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLAME_ORB, // Quick Feet status-fueled attacker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -7647,7 +7638,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_SHEER_FORCE, // Quick Feet + Moxie now innate; chosen Sheer Force (slot 2)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7659,7 +7650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIGHTYENA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Intimidate hit-and-run band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CRUNCH,
@@ -7667,7 +7658,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 2)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7681,7 +7672,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LINOONE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Gluttony Belly Drum + Extreme Speed sweeper
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -7689,8 +7680,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SEED_BOMB,
             MOVE_KNOCK_OFF
         },
-        // Pickup/Gluttony/Quick Feet all now innate; chosen Scrappy lets its Normal STAB hit Ghosts (fork override).
-        .ability = ABILITY_HUSTLE, // chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7702,7 +7692,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LINOONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Quick Feet Flame Orb priority breaker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -7710,7 +7700,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SEED_BOMB
         },
-        .ability = ABILITY_HUSTLE, // Pickup/Gluttony/Quick Feet now innate; chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7724,7 +7714,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BEAUTIFLY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // Quiver Dance flavor sweeper
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -7732,7 +7722,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_ROOST
         },
-        .ability = ABILITY_RIVALRY, // Swarm now innate (latched); chosen Rivalry
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -7746,7 +7736,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUSTOX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // bulky flavor wall
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -7754,7 +7744,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_POISON_POINT, // Shield Dust & Compound Eyes now innate; chosen Poison Point (empty-slot override) poisons the contact Rocky Helmet punishes
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7768,7 +7758,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUDICOLO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -7776,7 +7766,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_STORM_DRAIN, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7788,7 +7778,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUDICOLO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Rain Dish bulky pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -7796,7 +7786,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_RAIN_DANCE
         },
-        .ability = ABILITY_STORM_DRAIN, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7808,7 +7798,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUDICOLO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MYSTIC_WATER, // Water STAB boost for the rain sweeper
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -7816,7 +7806,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_RAIN_DANCE
         },
-        .ability = ABILITY_STORM_DRAIN, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -7830,7 +7820,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHIFTRY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -7838,7 +7828,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_HEAT_WAVE
         },
-        .ability = ABILITY_WIND_RIDER, // Chlorophyll now innate; chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7850,7 +7840,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHIFTRY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Sticky Web lead, sash = one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STICKY_WEB,
@@ -7858,7 +7848,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_DEFOG
         },
-        .ability = ABILITY_WIND_RIDER, // Chlorophyll now innate; chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7870,7 +7860,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHIFTRY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Swords-less band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -7878,7 +7868,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_X_SCISSOR
         },
-        .ability = ABILITY_WIND_RIDER, // Chlorophyll now innate; chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7892,7 +7882,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWELLOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TOXIC_ORB, // Guts Facade sweeper
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -7900,7 +7890,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_WIND_RIDER, // Guts & Scrappy now innate; chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7912,7 +7902,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWELLOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Scrappy-less band hit-and-run
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -7920,7 +7910,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STEEL_WING
         },
-        .ability = ABILITY_WIND_RIDER, // Guts & Scrappy now innate; chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -7934,7 +7924,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PELIPPER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DAMP_ROCK, // Drizzle rain setter
+        .heldItem = ITEM_DAMP_ROCK,
         .moves =
         {
             MOVE_HURRICANE,
@@ -7954,7 +7944,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PELIPPER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Defog pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -7976,7 +7966,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARDEVOIR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_THROAT_SPRAY, // Mega Gardevoir (Pixilate); Hyper Voice is a sound move -> +SpAtk
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -7996,7 +7986,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARDEVOIR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Trace revenge killer (no mega)
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -8016,7 +8006,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARDEVOIR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Calm Mind setup sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -8038,7 +8028,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MASQUERAIN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Quiver Dance sweeper, sash = one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -8046,7 +8036,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_HYDRO_PUMP
         },
-        .ability = ABILITY_STORM_DRAIN, // Intimidate now innate; chosen Storm Drain (slot 1)
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -8060,7 +8050,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRELOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Technician-less Spore + priority breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SPORE,
@@ -8068,7 +8058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_ROCK_TOMB
         },
-        .ability = ABILITY_HUSTLE, // moved off Effect Spore (redundant deterministic sleep vs Spore); +50% Atk, Poison Heal/Technician still innate
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8080,7 +8070,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRELOOM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_TOXIC_ORB, // Poison Heal Sub-Punch staller
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_SPORE,
@@ -8088,7 +8078,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_PUNCH,
             MOVE_SEED_BOMB
         },
-        .ability = ABILITY_HUSTLE, // moved off Effect Spore (redundant deterministic sleep vs Spore); +50% Atk, Poison Heal still innate (Toxic Orb)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 236,
@@ -8100,7 +8090,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRELOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // Spore lead, sash = one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SPORE,
@@ -8108,7 +8098,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_HUSTLE, // moved off Effect Spore (redundant deterministic sleep vs Spore); +50% Atk, Poison Heal/Technician still innate
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8122,7 +8112,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLAKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Truant banded wallbreaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_RETURN,
@@ -8142,7 +8132,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLAKING,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // coverage breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -8162,7 +8152,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLAKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHELL_BELL, // monstrous Attack -> each hit banks a big 1/4 heal, and offsets Double-Edge recoil on the Truant loaf turn
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -8184,7 +8174,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NINJASK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) fast sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -8192,7 +8182,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AERIAL_ACE,
             MOVE_DIG
         },
-        .ability = ABILITY_HUSTLE, // Speed Boost + Infiltrator now innate; chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8204,7 +8194,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NINJASK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // baton-pass-style speed control lead (Speed Boost now innate)
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -8212,7 +8202,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_PROTECT
         },
-        .ability = ABILITY_HUSTLE, // Speed Boost + Infiltrator now innate; chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8226,7 +8216,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHEDINJA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Wonder Guard sweeper (boots dodge hazards)
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -8248,7 +8238,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXPLOUD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Boomburst spam breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_BOOMBURST,
@@ -8256,7 +8246,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_SOUNDPROOF, // Scrappy now innate; chosen Soundproof (its real slot 0) blocks opposing sound moves
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -8268,7 +8258,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXPLOUD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed sound attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BOOMBURST,
@@ -8276,7 +8266,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SURF,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_SOUNDPROOF, // Scrappy now innate; chosen Soundproof
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -8290,7 +8280,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HARIYAMA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Guts status-fueled bruiser
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -8298,7 +8288,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_FAKE_OUT
         },
-        .ability = ABILITY_SHEER_FORCE, // Guts + Thick Fat now innate; Sheer Force powers its moves
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8310,7 +8300,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HARIYAMA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Thick Fat special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -8318,7 +8308,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_BULLET_PUNCH
         },
-        // Thick Fat now innate; chosen Sheer Force (HA) powers up this Assault Vest attacker.
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
@@ -8333,7 +8322,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DELCATTY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SILK_SCARF, // Normalized everything
+        .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -8355,7 +8344,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SABLEYE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Mega Sableye (Magic Bounce); recovery for the defensive pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -8363,7 +8352,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_WANDERING_SPIRIT, // chosen Wandering Spirit
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8375,7 +8364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SABLEYE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Prankster utility staller (no mega)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_WILL_O_WISP,
@@ -8383,7 +8372,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_TAUNT
         },
-        .ability = ABILITY_WANDERING_SPIRIT, // chosen Wandering Spirit
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8397,7 +8386,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAWILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FAIRY_FEATHER, // Mega Mawile (Huge Power); Fairy STAB boost for Play Rough
+        .heldItem = ITEM_FAIRY_FEATHER,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -8405,7 +8394,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (real slot 2)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8417,7 +8406,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAWILE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Intimidate utility setter (no mega)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -8425,7 +8414,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (real slot 2)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8439,7 +8428,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Mega Aggron (Filter); chips the physical attackers it walls
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_HEAVY_SLAM,
@@ -8447,7 +8436,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_ROAR
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Sturdy + Rock Head + Heavy Metal now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8459,7 +8448,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Rock Head band breaker (no mega)
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HEAD_SMASH,
@@ -8467,7 +8456,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_AVALANCHE
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Sturdy + Rock Head + Heavy Metal now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8479,7 +8468,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Sturdy bait setup tank (no mega)
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_AUTOTOMIZE,
@@ -8487,7 +8476,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Sturdy + Rock Head + Heavy Metal now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8501,7 +8490,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEDICHAM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_BELT, // Mega Medicham (Pure Power); Fighting STAB boost
+        .heldItem = ITEM_BLACK_BELT,
         .moves =
         {
             MOVE_HIGH_JUMP_KICK,
@@ -8509,7 +8498,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_FAKE_OUT
         },
-        .ability = ABILITY_SHEER_FORCE, // Pure Power now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8521,7 +8510,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEDICHAM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SCARF, // Pure Power revenge killer (no mega)
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_HIGH_JUMP_KICK,
@@ -8529,7 +8518,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_TRICK
         },
-        .ability = ABILITY_SHEER_FORCE, // Pure Power now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8543,7 +8532,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANECTRIC,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MAGNET, // Mega Manectric (Intimidate); Electric STAB boost
+        .heldItem = ITEM_MAGNET,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -8563,7 +8552,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANECTRIC,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Lightning Rod special breaker (no mega)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -8581,11 +8570,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
 
-    // 0311 (doubles support)
+    // 0311
     {
         .species = SPECIES_PLUSLE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // Plus partner special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -8603,11 +8592,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
 
-    // 0312 (doubles support)
+    // 0312
     {
         .species = SPECIES_MINUN,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS, // Minus support pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -8625,11 +8614,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
 
-    // 0313 (doubles support)
+    // 0313
     {
         .species = SPECIES_VOLBEAT,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_DAMP_ROCK, // Prankster Tailwind/Rain support
+        .heldItem = ITEM_DAMP_ROCK,
         .moves =
         {
             MOVE_TAILWIND,
@@ -8637,7 +8626,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_VICTORY_STAR, // Illuminate + Prankster + Swarm now all innate; chosen Victory Star (fork override) boosts ally accuracy for this doubles supporter
+        .ability = ABILITY_VICTORY_STAR,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -8647,11 +8636,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_BUG,
     },
 
-    // 0314 (doubles support)
+    // 0314
     {
         .species = SPECIES_ILLUMISE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_MENTAL_HERB, // Prankster utility setter
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_TAILWIND,
@@ -8659,7 +8648,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_BUG_BUZZ
         },
-        .ability = ABILITY_LINGERING_AROMA, // all real abilities innate; chosen Lingering Aroma
+        .ability = ABILITY_LINGERING_AROMA,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -8673,7 +8662,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWALOT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Sticky Hold status tank
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -8681,7 +8670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PAIN_SPLIT,
             MOVE_ENCORE
         },
-        .ability = ABILITY_POISON_TOUCH, // Liquid Ooze / Sticky Hold / Gluttony all innate; chosen Poison Touch (override)
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8695,7 +8684,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Mega Sharpedo (Strong Jaw); Dark STAB boost (Speed Boost now innate)
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_PROTECT,
@@ -8703,7 +8692,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATERFALL,
             MOVE_PSYCHIC_FANGS
         },
-        .ability = ABILITY_SHEER_FORCE, // Rough Skin & Speed Boost now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8715,7 +8704,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) wallbreaker (no mega)
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CRUNCH,
@@ -8723,7 +8712,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_SHEER_FORCE, // Rough Skin & Speed Boost now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8735,7 +8724,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SCARF, // rough-skin revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_CRUNCH,
@@ -8743,7 +8732,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_SHEER_FORCE, // Rough Skin & Speed Boost now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8757,7 +8746,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WAILORD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Water Spout cannon
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_WATER_SPOUT,
@@ -8765,7 +8754,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_DRIZZLE, // all real abilities innate; chosen Drizzle (non-redundant)
+        .ability = ABILITY_DRIZZLE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -8779,7 +8768,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CAMERUPT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Camerupt (Sheer Force); Sheer Force negates the Life Orb recoil
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_ERUPTION,
@@ -8787,7 +8776,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ANCIENT_POWER
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8800,7 +8789,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CAMERUPT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Solid Rock special wall (no mega)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LAVA_PLUME,
@@ -8808,7 +8797,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8822,7 +8811,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORKOAL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAT_ROCK, // Drought sun setter
+        .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
             MOVE_ERUPTION,
@@ -8843,7 +8832,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORKOAL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // White Smoke defensive setter
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LAVA_PLUME,
@@ -8851,7 +8840,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_YAWN
         },
-        .ability = ABILITY_DROUGHT, // White Smoke now innate (Shell Armor too); chosen Drought sets the sun
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8865,7 +8854,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRUMPIG,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Thick Fat Calm Mind tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -8873,7 +8862,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_REST
         },
-        // Thick Fat/Own Tempo/Gluttony ALL now innate; chosen Synchronize (fork override, slot 1) stays observable.
         .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
@@ -8888,7 +8876,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SPINDA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Contrary Superpower flavor
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_SUPERPOWER,
@@ -8906,11 +8894,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_NORMAL,
     },
 
-    // 0330 (INNATE LEVITATE — no Air Balloon)
+    // 0330
     {
         .species = SPECIES_FLYGON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Levitate banded pivot
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -8918,7 +8906,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SAND_STREAM, // Levitate now innate; chosen Sand Stream (desert spirit; Ground-type takes no sand chip)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8930,7 +8918,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLYGON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // fast revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -8938,7 +8926,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_SAND_STREAM, // Levitate now innate; chosen Sand Stream (desert spirit; Ground-type takes no sand chip)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8950,7 +8938,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLYGON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SOFT_SAND, // Dragon Dance setup sweeper
+        .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -8958,7 +8946,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_SAND_STREAM, // Levitate now innate; chosen Sand Stream (desert spirit; Ground-type takes no sand chip)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8970,7 +8958,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLYGON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // defensive Defog pivot (innate/native Levitate)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DEFOG,
@@ -8978,7 +8966,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SAND_STREAM, // Levitate now innate; chosen Sand Stream (desert spirit; Ground-type takes no sand chip)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8992,7 +8980,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CACTURNE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance priority breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -9012,7 +9000,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CACTURNE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Spikes + Destiny Bond lead, sash = one-shot guard
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SPIKES,
@@ -9030,11 +9018,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GRASS,
     },
 
-    // 0334 (Swablu line)
+    // 0334
     {
         .species = SPECIES_ALTARIA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FAIRY_FEATHER, // Mega Altaria (Pixilate); boosts its -ate Fairy moves
+        .heldItem = ITEM_FAIRY_FEATHER,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -9042,7 +9030,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
-        .ability = ABILITY_CLOUD_NINE, // Natural Cure now innate; chosen Cloud Nine (real slot 2; becomes Pixilate on Mega)
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9054,7 +9042,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ALTARIA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Natural Cure defensive pivot (no mega)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRAGON_PULSE,
@@ -9062,7 +9050,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_HEAL_BELL
         },
-        .ability = ABILITY_CLOUD_NINE, // Natural Cure now innate; chosen Cloud Nine (real slot 2) negates weather
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -9076,7 +9064,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZANGOOSE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TOXIC_ORB, // Toxic Boost Facade breaker
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -9084,7 +9072,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_SHEER_FORCE, // Toxic Boost now innate; chosen Sheer Force (override) powers its coverage
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9096,7 +9084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZANGOOSE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -9104,7 +9092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SHEER_FORCE, // Toxic Boost now innate; chosen Sheer Force (override) skips Life Orb recoil
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9118,7 +9106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SEVIPER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // mixed special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_SLUDGE_WAVE,
@@ -9126,7 +9114,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_DARK_PULSE
         },
-        .ability = ABILITY_POISON_POINT, // Infiltrator now innate; chosen Poison Point punishes contact (override)
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -9136,11 +9124,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_POISON,
     },
 
-    // 0337 (INNATE LEVITATE — no Air Balloon)
+    // 0337
     {
         .species = SPECIES_LUNATONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Levitate Cosmic Power / Trick Room attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -9160,7 +9148,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUNATONE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Trick Room setter / Cosmic Power tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -9179,11 +9167,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
     },
 
-    // 0338 (INNATE LEVITATE — no Air Balloon)
+    // 0338
     {
         .species = SPECIES_SOLROCK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Levitate physical setup attacker
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_ROCK_POLISH,
@@ -9191,7 +9179,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ZEN_HEADBUTT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_DROUGHT, // Levitate now innate; chosen Drought (sun meteorite)
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9203,7 +9191,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SOLROCK,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // doubles support / Trick Room
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -9211,7 +9199,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_DROUGHT, // Levitate now innate; chosen Drought (sun meteorite)
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9226,7 +9214,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WHISCASH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Dragon Dance bulky sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -9234,7 +9222,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ZEN_HEADBUTT
         },
-        .ability = ABILITY_STORM_DRAIN, // Oblivious + Anticipation + Hydration all innate; chosen Storm Drain (override, slot 2)
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9248,7 +9236,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRAWDAUNT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Adaptability wallbreaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -9256,7 +9244,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SHEER_FORCE, // Hyper Cutter now innate (Shell Armor/Adaptability too); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9268,7 +9256,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRAWDAUNT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Adaptability band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -9276,7 +9264,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_SHEER_FORCE, // Hyper Cutter now innate (Shell Armor/Adaptability too); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9288,7 +9276,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRAWDAUNT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHELL_BELL, // Adaptability Crabhammer hits enormously hard; the 1/4 heal patches its glassy bulk between swings
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -9296,7 +9284,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SHEER_FORCE, // Hyper Cutter now innate (Shell Armor/Adaptability too); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9306,11 +9294,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
     },
 
-    // 0344 (INNATE LEVITATE — no Air Balloon)
+    // 0344
     {
         .species = SPECIES_CLAYDOL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Levitate hazard setter / spinner
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -9318,7 +9306,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_SAND_STREAM, // Levitate now innate; chosen Sand Stream (ancient desert clay; Ground-type takes no sand chip)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9332,7 +9320,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRADILY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Storm Drain Curse setup tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CURSE,
@@ -9354,7 +9342,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARMALDO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -9362,7 +9350,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_AQUA_TAIL
         },
-        .ability = ABILITY_WATER_ABSORB, // Battle Armor & Swift Swim now innate; chosen Water Absorb (override) heals off Water
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9374,7 +9362,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARMALDO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // defensive Rapid Spin + Stealth Rock
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -9382,7 +9370,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_WATER_ABSORB, // Battle Armor & Swift Swim now innate; chosen Water Absorb (override) heals off Water
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9396,7 +9384,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MILOTIC,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Marvel Scale defensive pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -9404,7 +9392,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_HAZE
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -9416,7 +9404,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MILOTIC,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Marvel Scale flame-orb tank
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -9424,7 +9412,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -9434,11 +9422,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
     },
 
-    // 0351 (INNATE LEVITATE — no Air Balloon)
+    // 0351
     {
         .species = SPECIES_CASTFORM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Forecast Weather Ball attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_WEATHER_BALL,
@@ -9460,7 +9448,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KECLEON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Color Change special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -9478,11 +9466,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GHOST,
     },
 
-    // 0354 (INNATE LEVITATE — no Air Balloon)
+    // 0354
     {
         .species = SPECIES_BANETTE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SPELL_TAG, // Mega Banette (Prankster); Ghost STAB boost for the disruptor
+        .heldItem = ITEM_SPELL_TAG,
         .moves =
         {
             MOVE_SHADOW_CLAW,
@@ -9490,7 +9478,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_WANDERING_SPIRIT, // Insomnia / Frisk / Cursed Body all innate; chosen Wandering Spirit (override)
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9502,7 +9490,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BANETTE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Destiny Bond trapper (no mega)
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SHADOW_CLAW,
@@ -9510,7 +9498,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DESTINY_BOND,
             MOVE_TAUNT
         },
-        .ability = ABILITY_WANDERING_SPIRIT, // Insomnia / Frisk / Cursed Body all innate; chosen Wandering Spirit (override)
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9520,11 +9508,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GHOST,
     },
 
-    // 0356 (Eviolite NFE wall — INNATE LEVITATE; Dusknoir intentionally omitted)
+    // 0356
     {
         .species = SPECIES_DUSCLOPS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_EVIOLITE, // Eviolite physical/special wall
+        .heldItem = ITEM_EVIOLITE,
         .moves =
         {
             MOVE_WILL_O_WISP,
@@ -9532,7 +9520,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PAIN_SPLIT,
             MOVE_HEX
         },
-        .ability = ABILITY_MUMMY, // all real abilities innate; chosen Mummy (non-redundant)
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9546,7 +9534,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TROPIUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Harvest Sitrus staller
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LEECH_SEED,
@@ -9554,7 +9542,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SOLAR_POWER, // Chlorophyll + Harvest now innate; chosen Solar Power (its real slot-1 HA, :x:)
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9564,11 +9552,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GRASS,
     },
 
-    // 0358 (INNATE LEVITATE — no Air Balloon)
+    // 0358
     {
         .species = SPECIES_CHIMECHO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Levitate Calm Mind tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -9590,7 +9578,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ABSOL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Absol (Magic Bounce); power for the Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -9598,7 +9586,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9610,7 +9598,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ABSOL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Super Luck band breaker (no mega)
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -9618,7 +9606,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_PSYCHO_CUT
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9630,7 +9618,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ABSOL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SCOPE_LENS, // Super Luck guaranteed-crit attacker
+        .heldItem = ITEM_SCOPE_LENS,
         .moves =
         {
             MOVE_NIGHT_SLASH,
@@ -9638,7 +9626,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9648,11 +9636,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DARK,
     },
 
-    // 0362 (Gen III mega OK — INNATE LEVITATE — no Air Balloon)
+    // 0362
     {
         .species = SPECIES_GLALIE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_NEVER_MELT_ICE, // Mega Glalie (Refrigerate); boosts its -ate Ice Return
+        .heldItem = ITEM_NEVER_MELT_ICE,
         .moves =
         {
             MOVE_RETURN,
@@ -9660,7 +9648,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_FREEZE_DRY
         },
-        .ability = ABILITY_MOODY, // Inner Focus + Ice Body now innate; chosen Moody (real slot 2, :x: never-innate) stays observable
+        .ability = ABILITY_MOODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9672,7 +9660,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLALIE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Spikes + Explosion lead (no mega)
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SPIKES,
@@ -9680,7 +9668,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_MOODY, // Inner Focus + Ice Body now innate; chosen Moody (real slot 2, :x: never-innate) stays observable
+        .ability = ABILITY_MOODY,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -9694,7 +9682,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WALREIN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Thick Fat defensive staller
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SURF,
@@ -9702,8 +9690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_PROTECT
         },
-        // Thick Fat (and Oblivious) now innate; chosen Ice Body heals 1/16 HP each turn in snow.
-        .ability = ABILITY_WATER_ABSORB, // Thick Fat + Ice Body + Oblivious all innate; chosen Water Absorb (override, slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9715,7 +9702,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WALREIN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Thick Fat special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_SURF,
@@ -9723,8 +9710,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_BODY_SLAM
         },
-        // Thick Fat (and Oblivious) now innate; chosen Ice Body heals 1/16 HP each turn in snow.
-        .ability = ABILITY_WATER_ABSORB, // Thick Fat + Ice Body + Oblivious all innate; chosen Water Absorb (override, slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9734,11 +9720,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ICE,
     },
 
-    // 0367 (Clamperl line)
+    // 0367
     {
         .species = SPECIES_HUNTAIL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WHITE_HERB, // Shell Smash physical sweeper
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -9746,7 +9732,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_WATER_ABSORB, // Water Veil now innate; chosen Water Absorb (override) heals on Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9756,11 +9742,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
     },
 
-    // 0368 (Clamperl line)
+    // 0368
     {
         .species = SPECIES_GOREBYSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WHITE_HERB, // Shell Smash special sweeper
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -9768,7 +9754,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Hydration now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -9782,7 +9768,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RELICANTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Rock Head Rock Polish setup tank
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_ROCK_POLISH,
@@ -9790,7 +9776,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATERFALL,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Rock Head + Sturdy now innate; chosen Water Absorb for bulk (override)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9802,7 +9788,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RELICANTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Sturdy defensive rocker + Yawn
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -9810,7 +9796,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATERFALL,
             MOVE_TOXIC
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Rock Head + Sturdy now innate; chosen Water Absorb for bulk (override)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9824,7 +9810,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUVDISC,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // pure flavor pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SURF,
@@ -9832,7 +9818,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWEET_KISS,
             MOVE_SOAK
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Hydration now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9843,11 +9829,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_LOVE,
     },
 
-    // 0373 (Bagon line)
+    // 0373
     {
         .species = SPECIES_SALAMENCE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Salamence (Aerilate); power for the Dragon Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -9855,7 +9841,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
-        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (slot 1)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9867,7 +9853,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SALAMENCE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Intimidate revenge killer (no mega)
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_OUTRAGE,
@@ -9875,7 +9861,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (slot 1)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9887,7 +9873,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SALAMENCE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed Draco breaker (no mega)
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -9895,7 +9881,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
-        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (slot 1)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -9905,11 +9891,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DRAGON,
     },
 
-    // 0376 (Beldum line — INNATE LEVITATE — no Air Balloon)
+    // 0376
     {
         .species = SPECIES_METAGROSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Metagross (Tough Claws); power for the fast physical breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_METEOR_MASH,
@@ -9917,7 +9903,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Clear Body now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9929,7 +9915,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_METAGROSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Clear Body band breaker (no mega)
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_METEOR_MASH,
@@ -9937,7 +9923,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_SHEER_FORCE, // Clear Body now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9949,7 +9935,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_METAGROSS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Agility setup / utility tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_AGILITY,
@@ -9957,7 +9943,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_SHEER_FORCE, // Clear Body now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -9971,7 +9957,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGIROCK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Clear Body Curse setup wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CURSE,
@@ -9979,7 +9965,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_SAND_STREAM, // Clear Body now innate (Sturdy too); chosen Sand Stream
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -9991,7 +9977,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGIROCK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Sturdy bait setup tank
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_ROCK_POLISH,
@@ -9999,7 +9985,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_HAMMER_ARM
         },
-        .ability = ABILITY_SAND_STREAM, // Clear Body now innate (Sturdy too); chosen Sand Stream
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10013,7 +9999,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGICE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Clear Body special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_ICE_BEAM,
@@ -10021,7 +10007,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_REST
         },
-        .ability = ABILITY_SNOW_WARNING, // Clear Body now innate; chosen Snow Warning
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10033,7 +10019,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGICE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_ICE_BEAM,
@@ -10041,7 +10027,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_FLASH_CANNON
         },
-        .ability = ABILITY_SNOW_WARNING, // Clear Body now innate; chosen Snow Warning
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10055,7 +10041,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGISTEEL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Clear Body Curse setup wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CURSE,
@@ -10063,7 +10049,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_REST
         },
-        .ability = ABILITY_BULLETPROOF, // Clear Body now innate; chosen Bulletproof via override deflects ball/bomb moves
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10075,7 +10061,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGISTEEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // defensive setter / pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -10083,7 +10069,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_BULLETPROOF, // Clear Body now innate; chosen Bulletproof via override deflects ball/bomb moves
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10093,11 +10079,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0380 (INNATE LEVITATE — no Air Balloon)
+    // 0380
     {
         .species = SPECIES_LATIAS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Mega Latias; recovery for the bulky Calm Mind sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -10105,7 +10091,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_PULSE,
             MOVE_ROOST
         },
-        .ability = ABILITY_ILLUSION, // Levitate now innate; chosen Illusion (the Eon refracts light to vanish)
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10117,7 +10103,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LATIAS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // defensive Levitate pivot (no mega)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRAGON_PULSE,
@@ -10125,7 +10111,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_HEALING_WISH
         },
-        .ability = ABILITY_ILLUSION, // Levitate now innate; chosen Illusion (the Eon refracts light to vanish)
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10135,11 +10121,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DRAGON,
     },
 
-    // 0381 (INNATE LEVITATE — no Air Balloon)
+    // 0381
     {
         .species = SPECIES_LATIOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DRAGON_FANG, // Mega Latios; Dragon STAB boost for the fast special sweeper
+        .heldItem = ITEM_DRAGON_FANG,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -10147,7 +10133,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_ROOST
         },
-        .ability = ABILITY_ILLUSION, // Levitate now innate; chosen Illusion (the Eon refracts light to vanish)
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10159,7 +10145,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LATIOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Levitate special breaker (no mega)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -10167,7 +10153,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_TRICK
         },
-        .ability = ABILITY_ILLUSION, // Levitate now innate; chosen Illusion (the Eon refracts light to vanish)
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10181,7 +10167,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYOGRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLUE_ORB, // Primal Kyogre (Primordial Sea) — rain nuke
+        .heldItem = ITEM_BLUE_ORB,
         .moves =
         {
             MOVE_WATER_SPOUT,
@@ -10201,7 +10187,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYOGRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Drizzle revenge killer (no primal)
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_WATER_SPOUT,
@@ -10221,7 +10207,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYOGRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind + Rest (rain, no primal)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -10243,7 +10229,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GROUDON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_RED_ORB, // Primal Groudon (Desolate Land) — sun breaker
+        .heldItem = ITEM_RED_ORB,
         .moves =
         {
             MOVE_PRECIPICE_BLADES,
@@ -10263,7 +10249,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GROUDON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Drought bulky setter (no primal)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -10281,11 +10267,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GROUND,
     },
 
-    // 0384 (Mega via Dragon Ascent + no item)
+    // 0384
     {
         .species = SPECIES_RAYQUAZA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_NONE, // Mega Rayquaza (Delta Stream, via Dragon Ascent) — Dragon Dance sweeper
+        .heldItem = ITEM_NONE,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -10305,7 +10291,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAYQUAZA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed Draco breaker (no Dragon Ascent / no mega)
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -10323,11 +10309,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DRAGON,
     },
 
-    // 0385 (INNATE LEVITATE — no Air Balloon)
+    // 0385
     {
         .species = SPECIES_JIRACHI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Serene Grace flinch revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_IRON_HEAD,
@@ -10335,7 +10321,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_VICTORY_STAR, // Serene Grace now innate; chosen Victory Star (override, real slot empty)
+        .ability = ABILITY_VICTORY_STAR,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10347,7 +10333,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JIRACHI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Serene Grace Wish support / Iron Head flinch
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_WISH,
@@ -10355,7 +10341,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_VICTORY_STAR, // Serene Grace now innate; chosen Victory Star (override, real slot empty)
+        .ability = ABILITY_VICTORY_STAR,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10367,7 +10353,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JIRACHI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Calm Mind special setup sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -10375,7 +10361,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_VICTORY_STAR, // Serene Grace now innate; chosen Victory Star (override, real slot empty)
+        .ability = ABILITY_VICTORY_STAR,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10385,11 +10371,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0386 (INNATE LEVITATE — no Air Balloon)
+    // 0386
     {
         .species = SPECIES_DEOXYS_ATTACK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // glass-cannon mixed attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYCHO_BOOST,
@@ -10397,7 +10383,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_TRACE, // Pressure now innate; chosen Trace copies the foe's ability (slot-1 override)
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 128,
@@ -10409,7 +10395,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DEOXYS_ATTACK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // sash glass cannon, one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_PSYCHO_BOOST,
@@ -10417,7 +10403,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_TRACE, // Pressure now innate; chosen Trace copies the foe's ability (slot-1 override)
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10427,11 +10413,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
     },
 
-    // 0386 (INNATE LEVITATE — no Air Balloon)
+    // 0386
     {
         .species = SPECIES_DEOXYS_SPEED,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // hyper-offense hazard lead, one-shot entry guard
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -10439,7 +10425,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_PSYCHO_BOOST
         },
-        .ability = ABILITY_TRACE, // Pressure now innate; chosen Trace copies the foe's ability (slot-1 override)
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10451,7 +10437,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DEOXYS_SPEED,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // fast Nasty Plot sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -10459,7 +10445,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_TRACE, // Pressure now innate; chosen Trace copies the foe's ability (slot-1 override)
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10469,11 +10455,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
     },
 
-    // 0386 (INNATE LEVITATE — no Air Balloon)
+    // 0386
     {
         .species = SPECIES_DEOXYS_DEFENSE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky hazard / status wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -10481,7 +10467,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_RECOVER
         },
-        .ability = ABILITY_TRACE, // Pressure now innate; chosen Trace copies the foe's ability (slot-1 override)
+        .ability = ABILITY_TRACE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10499,7 +10485,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORTERRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky Rock Polish / Shell Smash setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_ROCK_POLISH,
@@ -10507,7 +10493,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SAND_STREAM, // Overgrow & Shell Armor now innate; chosen Sand Stream (override)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -10519,7 +10505,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORTERRA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // bulky hazards + Synthesis
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -10527,7 +10513,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SYNTHESIS
         },
-        .ability = ABILITY_SAND_STREAM, // Overgrow & Shell Armor now innate; chosen Sand Stream (override)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10541,7 +10527,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INFERNAPE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed wallbreaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -10549,7 +10535,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10561,7 +10547,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INFERNAPE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_SASH, // fast suicide lead
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -10569,7 +10555,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10581,7 +10567,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INFERNAPE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_OVERHEAT,
@@ -10589,7 +10575,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10603,7 +10589,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EMPOLEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky special pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -10611,7 +10597,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_DEFOG
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10622,7 +10608,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EMPOLEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Torrent special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -10630,7 +10616,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10644,7 +10630,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STARAPTOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Reckless band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -10652,7 +10638,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_HUSTLE, // Reckless + Intimidate now innate; chosen Hustle (slot 1)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10664,7 +10650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STARAPTOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLYING_GEM, // one-shot Flying burst nuke
+        .heldItem = ITEM_FLYING_GEM,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -10672,7 +10658,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUICK_ATTACK,
             MOVE_DOUBLE_EDGE
         },
-        .ability = ABILITY_HUSTLE, // Reckless + Intimidate now innate; chosen Hustle (slot 1)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10686,7 +10672,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BIBAREL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_WATERFALL,
@@ -10694,7 +10680,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_YAWN,
             MOVE_ROOST
         },
-        .ability = ABILITY_MOODY, // Unaware now innate; chosen Moody slowly snowballs the bulky wall
+        .ability = ABILITY_MOODY,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10709,7 +10695,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KRICKETUNE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WIDE_LENS, // Technician Fury Cutter ramp
+        .heldItem = ITEM_WIDE_LENS,
         .moves =
         {
             MOVE_FURY_CUTTER,
@@ -10717,7 +10703,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POUNCE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SHEER_FORCE, // Swarm + Technician now innate; chosen Sheer Force (override) powers Pounce
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -10732,7 +10718,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUXRAY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Intimidate physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_WILD_CHARGE,
@@ -10740,7 +10726,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (real slot 0)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10752,7 +10738,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUXRAY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Guts band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_WILD_CHARGE,
@@ -10760,7 +10746,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_RIVALRY, // Guts + Intimidate now innate; chosen Rivalry (real slot 0)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10774,7 +10760,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROSERADE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -10782,7 +10768,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_POISON_POINT, // Natural Cure now innate; chosen Poison Point (real slot 1) chips contact attackers
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -10794,7 +10780,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROSERADE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Technician status spreader
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -10802,7 +10788,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIKES,
             MOVE_TOXIC_SPIKES
         },
-        .ability = ABILITY_POISON_POINT, // Natural Cure + Technician now innate; chosen Poison Point punishes contact on the status spreader
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10816,7 +10802,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAMPARDOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Mold Breaker glass cannon
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_HEAD_SMASH,
@@ -10824,7 +10810,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_ZEN_HEADBUTT
         },
-        .ability = ABILITY_SHEER_FORCE, // Mold Breaker now innate; chosen Sheer Force (its real HA, :x: stable) powers this glass cannon's coverage
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10836,7 +10822,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAMPARDOS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCK_GEM, // Sheer Force Swords Dance nuke
+        .heldItem = ITEM_ROCK_GEM,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -10858,7 +10844,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BASTIODON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // physically defensive wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -10880,7 +10866,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VESPIQUEN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Pressure stall / defensive pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_ROOST,
@@ -10888,7 +10874,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_WATER_ABSORB, // moved off Effect Spore (deterministic sleep pre-empted its Toxic); Water immunity + recovery for the staller
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -10902,7 +10888,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PACHIRISU,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Follow Me redirection support
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_FOLLOW_ME,
@@ -10924,7 +10910,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLOATZEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swift Swim / fast attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -10932,7 +10918,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_WATER_ABSORB, // Water Veil now innate; chosen Water Absorb (override) heals on Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10944,7 +10930,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLOATZEL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND, // Water Veil band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_WAVE_CRASH,
@@ -10952,7 +10938,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // Water Veil now innate; chosen Water Absorb (override) heals on Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10966,7 +10952,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GASTRODON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Storm Drain special tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -10986,7 +10972,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GASTRODON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Sticky Hold special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -10994,7 +10980,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_CLEAR_SMOG
         },
-        .ability = ABILITY_STORM_DRAIN, // Sticky Hold + Sand Force now innate; chosen Storm Drain is its signature
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11008,7 +10994,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMBIPOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SILK_SCARF, // Technician Fake Out pivot
+        .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -11016,7 +11002,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE, // Technician + Skill Link + Prankster now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11028,7 +11014,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMBIPOM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND, // band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_DOUBLE_HIT,
@@ -11036,7 +11022,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LOW_KICK,
             MOVE_TRIPLE_AXEL
         },
-        .ability = ABILITY_SHEER_FORCE, // Technician + Skill Link + Prankster now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11050,7 +11036,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRIFBLIM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_QUICK_CLAW, // Unburden sweeper
+        .heldItem = ITEM_QUICK_CLAW,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -11058,7 +11044,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_CLOUD_NINE, // Aftermath/Unburden/Flare Boost all now innate; chosen Cloud Nine
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11070,7 +11056,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRIFBLIM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Flare Boost special attacker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -11078,7 +11064,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEX,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_CLOUD_NINE, // Aftermath/Flare Boost/Unburden all now innate; chosen Cloud Nine
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11092,7 +11078,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LOPUNNY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Lopunny (Scrappy); power for the fast breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -11100,7 +11086,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RETURN,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Cute Charm + Limber now both innate; chosen Sheer Force (override) powers Fake Out / Ice Punch
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11112,7 +11098,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LOPUNNY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_TOXIC_ORB, // Klutz Switcheroo / status spreader
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -11134,7 +11120,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MISMAGIUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot special sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -11142,7 +11128,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_MYSTICAL_FIRE
         },
-        .ability = ABILITY_WANDERING_SPIRIT, // Levitate now innate; chosen Wandering Spirit (roaming ghost swaps abilities on contact)
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11154,7 +11140,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MISMAGIUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_COLBUR_BERRY, // utility / Taunt + Will-O-Wisp
+        .heldItem = ITEM_COLBUR_BERRY,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -11162,7 +11148,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_PAIN_SPLIT
         },
-        .ability = ABILITY_WANDERING_SPIRIT, // Levitate now innate; chosen Wandering Spirit (roaming ghost swaps abilities on contact)
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11176,7 +11162,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HONCHKROW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Moxie sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SUCKER_PUNCH,
@@ -11184,7 +11170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11196,7 +11182,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HONCHKROW,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND, // Super Luck band (guaranteed crits on crit moves)
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -11204,7 +11190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHT_SLASH,
             MOVE_PSYCHO_CUT
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11218,7 +11204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PURUGLY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SILK_SCARF, // Fake Out + Facade attacker
+        .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -11226,8 +11212,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_PLAY_ROUGH
         },
-        // Thick Fat now innate; chosen Defiant (HA) punishes stat drops with a +2 Attack boost.
-        .ability = ABILITY_HUSTLE, // all real abilities innate; chosen Hustle (non-redundant)
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -11241,7 +11226,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SKUNTANK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Aftermath pivot
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_GUNK_SHOT,
@@ -11249,7 +11234,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_PURSUIT
         },
-        .ability = ABILITY_POISON_TOUCH, // Aftermath/Stench/Keen Eye all now innate; chosen Poison Touch (slot-1 override) poisons via Gunk Shot
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11263,7 +11248,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRONZONG,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // dual-screen / Trick Room setter
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -11271,7 +11256,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GYRO_BALL,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_SOUNDPROOF, // Heatproof (+ Levitate) now innate; chosen Soundproof (override) makes the bell immune to sound moves
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11284,7 +11269,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRONZONG,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Heatproof screens wall
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_LIGHT_SCREEN,
@@ -11306,7 +11291,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHATOT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_THROAT_SPRAY, // Boomburst spam
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_BOOMBURST,
@@ -11314,7 +11299,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_AERILATE, // Big Pecks now innate (Keen Eye/Tangled Feet too); chosen Aerilate
+        .ability = ABILITY_AERILATE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -11328,7 +11313,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SPIRITOMB,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Infiltrator Calm Mind wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -11336,7 +11321,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_REST
         },
-        .ability = ABILITY_MUMMY, // Pressure + Infiltrator now innate; chosen Mummy
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11348,7 +11333,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SPIRITOMB,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Pressure / Pursuit trapper
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_SUCKER_PUNCH,
@@ -11356,7 +11341,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_MUMMY, // Pressure + Infiltrator now innate; chosen Mummy
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11370,7 +11355,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SOFT_SAND, // Mega Garchomp (Sand Force); Ground STAB boost
+        .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -11378,7 +11363,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SAND_STREAM, // Rough Skin & Sand Veil now innate; chosen Sand Stream (slot-1 override) turns on innate Sand Veil
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11390,7 +11375,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -11398,7 +11383,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_SAND_STREAM, // Rough Skin & Sand Veil now innate; chosen Sand Stream (slot-1 override) turns on innate Sand Veil
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11410,7 +11395,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Rough Skin hazards lead
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -11418,7 +11403,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_TAIL,
             MOVE_SPIKES
         },
-        .ability = ABILITY_SAND_STREAM, // Rough Skin & Sand Veil now innate; chosen Sand Stream (slot-1 override) turns on innate Sand Veil
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11432,7 +11417,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUCARIO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Lucario (Adaptability); power for the mixed breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -11440,7 +11425,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_BULLET_PUNCH
         },
-        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11452,7 +11437,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUCARIO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot special
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -11460,7 +11445,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_VACUUM_WAVE
         },
-        .ability = ABILITY_SHEER_FORCE, // Inner Focus + Justified now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11472,7 +11457,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUCARIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FIGHTING_GEM, // one-shot Fighting burst after Swords Dance
+        .heldItem = ITEM_FIGHTING_GEM,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -11480,7 +11465,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BULLET_PUNCH,
             MOVE_EXTREME_SPEED
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11494,7 +11479,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HIPPOWDON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Sand Stream physical wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -11514,7 +11499,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HIPPOWDON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SMOOTH_ROCK, // sand setter + Slack Off
+        .heldItem = ITEM_SMOOTH_ROCK,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -11536,7 +11521,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAPION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Sniper / Knock Off pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -11544,7 +11529,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TAUNT
         },
-        .ability = ABILITY_POISON_TOUCH, // all real abilities innate; chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11556,7 +11541,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAPION,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Swords Dance sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -11564,7 +11549,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_AQUA_TAIL
         },
-        .ability = ABILITY_POISON_TOUCH, // all real abilities innate; chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11578,7 +11563,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXICROAK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Dry Skin rain sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -11598,7 +11583,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXICROAK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Poison Touch bulk
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_GUNK_SHOT,
@@ -11620,7 +11605,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CARNIVINE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance grass attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -11628,7 +11613,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SEED_SOWER, // chosen Seed Sower
+        .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11642,7 +11627,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUMINEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Defog/U-turn utility
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -11665,7 +11650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ABOMASNOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ICY_ROCK, // Mega Abomasnow (Snow Warning); extends its own snow
+        .heldItem = ITEM_ICY_ROCK,
         .moves =
         {
             MOVE_BLIZZARD,
@@ -11685,7 +11670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ABOMASNOW,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ICY_ROCK, // extends its own snow for Aurora Veil + Blizzard
+        .heldItem = ITEM_ICY_ROCK,
         .moves =
         {
             MOVE_AURORA_VEIL,
@@ -11715,7 +11700,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_DARK_AURA, // chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11729,7 +11714,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGNEZONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Magnet Pull trapper
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -11737,7 +11722,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Magnet Pull/Levitate/Sturdy/Analytic now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11747,11 +11732,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FAIRY,
     },
     {
-        // Innate Levitate already dodges Ground, so no Air Balloon needed — run a
-        // bulky Analytic special tank instead.
         .species = SPECIES_MAGNEZONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Analytic special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -11759,7 +11742,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Magnet Pull/Levitate/Sturdy/Analytic now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11773,7 +11756,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LICKILICKY,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Own Tempo Trick Room support
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -11781,7 +11764,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EXPLOSION,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_CLOUD_NINE, // Own Tempo now innate; chosen Cloud Nine (real slot) negates weather
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11794,7 +11777,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LICKILICKY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Wish + Protect cleric wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_WISH,
@@ -11816,7 +11799,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RHYPERIOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky Lightning Rod rocker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -11836,7 +11819,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RHYPERIOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Solid Rock + WP sweeper
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -11844,7 +11827,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_MEGAHORN
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Solid Rock now innate; chosen Lightning Rod redirects Electric + SpA boost
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11858,7 +11841,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TANGROWTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -11866,7 +11849,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SAP_SIPPER, // Regenerator now innate; chosen Sap Sipper (vine tangle drinks Grass energy for +Atk)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11878,7 +11861,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TANGROWTH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Regenerator physical tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_POWER_WHIP,
@@ -11886,7 +11869,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_SAP_SIPPER, // Regenerator now innate; chosen Sap Sipper (vine tangle drinks Grass energy for +Atk)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11900,7 +11883,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ELECTIVIRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Motor Drive mixed sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_WILD_CHARGE,
@@ -11920,7 +11903,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ELECTIVIRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // bulky Vital Spirit pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_WILD_CHARGE,
@@ -11928,7 +11911,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Vital Spirit now innate; chosen Motor Drive
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 112,
@@ -11942,7 +11925,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGMORTAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Vital Spirit special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -11950,7 +11933,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_OVERHEAT
         },
-        .ability = ABILITY_FLAME_BODY, // Vital Spirit now innate; chosen Flame Body
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11962,7 +11945,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGMORTAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Vital Spirit revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -11970,7 +11953,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_FLAME_BODY, // Vital Spirit now innate; chosen Flame Body
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11984,7 +11967,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOGEKISS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Serene Grace flinch / Nasty Plot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -11992,7 +11975,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12004,7 +11987,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOGEKISS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // doubles support (Follow Me + Tailwind)
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_FOLLOW_ME,
@@ -12012,7 +11995,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12026,7 +12009,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_YANMEGA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Tinted Lens breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -12034,7 +12017,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_PROTECT
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12046,7 +12029,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_YANMEGA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Speed Boost (now innate) sweeper
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -12054,7 +12037,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ANCIENT_POWER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12068,7 +12051,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LEAFEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll / Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -12076,7 +12059,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_X_SCISSOR
         },
-        .ability = ABILITY_SAP_SIPPER, // Leaf Guard (x2) + Chlorophyll ALL now innate; chosen Sap Sipper (fork override, dup slot 1) stays observable
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12090,7 +12073,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLACEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_BLIZZARD,
@@ -12098,7 +12081,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATER_PULSE,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_SNOW_WARNING, // Snow Cloak + Ice Body all innate; chosen Snow Warning (override, slot 2) feeds innate Snow Cloak/Ice Body
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12112,7 +12095,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLISCOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_TOXIC_ORB, // Poison Heal stall
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -12120,7 +12103,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_POISON_TOUCH, // chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 244,
@@ -12132,7 +12115,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLISCOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TOXIC_ORB, // Poison Heal Swords Dance sweeper
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -12140,7 +12123,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ROOST
         },
-        .ability = ABILITY_POISON_TOUCH, // chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 244,
@@ -12154,7 +12137,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAMOSWINE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Thick Fat physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -12162,8 +12145,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_KNOCK_OFF
         },
-        // All three real abilities (Oblivious/Snow Cloak/Thick Fat) now innate; chosen Snow Warning
-        // (fork override) sets the snow that turns on its own innate Snow Cloak evasion.
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
@@ -12176,7 +12157,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAMOSWINE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND, // band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -12184,8 +12165,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_SUPERPOWER
         },
-        // All three real abilities (Oblivious/Snow Cloak/Thick Fat) now innate; chosen Snow Warning
-        // (fork override) sets the snow that turns on its own innate Snow Cloak evasion.
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
@@ -12198,7 +12177,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAMOSWINE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Thick Fat tank rocker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -12206,8 +12185,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_KNOCK_OFF
         },
-        // All three real abilities (Oblivious/Snow Cloak/Thick Fat) now innate; chosen Snow Warning
-        // (fork override) sets the snow that turns on its own innate Snow Cloak evasion.
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
@@ -12222,7 +12199,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PORYGON_Z,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Adaptability Nasty Plot nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -12230,7 +12207,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_SIMPLE, // Adaptability/Download/Analytic all now innate; slot-2 Analytic repurposed to chosen Simple (Nasty Plot synergy), innate Download intact
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12242,7 +12219,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PORYGON_Z,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Download breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_TRI_ATTACK,
@@ -12250,7 +12227,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_TRICK
         },
-        .ability = ABILITY_SIMPLE, // Adaptability/Download/Analytic all now innate; slot-2 Analytic repurposed to chosen Simple (Nasty Plot synergy), innate Download intact
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12264,7 +12241,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GALLADE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Gallade (Inner Focus); power for the Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -12272,7 +12249,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_CUT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SIMPLE, // all real abilities innate; chosen Simple
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12284,7 +12261,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GALLADE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Sharpness slicer
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -12292,7 +12269,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_CUT,
             MOVE_LEAF_BLADE
         },
-        .ability = ABILITY_SIMPLE, // all real abilities innate; chosen Simple
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12306,7 +12283,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PROBOPASS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Magnet Pull steel trapper / hazards
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -12314,7 +12291,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Magnet Pull/Sturdy/Sand Force now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk on this special wall
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12328,7 +12305,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUSKNOIR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky utility / Pain Split
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_POLTERGEIST,
@@ -12336,7 +12313,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PAIN_SPLIT,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_MUMMY, // all real abilities innate; chosen Mummy (non-redundant)
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12348,7 +12325,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUSKNOIR,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Trick Room attacker
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -12356,7 +12333,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_MUMMY, // all real abilities innate; chosen Mummy (non-redundant)
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12371,7 +12348,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FROSLASS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast spikes / Destiny Bond lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SPIKES,
@@ -12379,7 +12356,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_SNOW_WARNING, // Snow Cloak / Cursed Body both innate; chosen Snow Warning (override)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12391,7 +12368,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FROSLASS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Snow Cloak offensive
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_ICE_BEAM,
@@ -12399,7 +12376,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_TAUNT
         },
-        .ability = ABILITY_SNOW_WARNING, // Snow Cloak / Cursed Body both innate; chosen Snow Warning (override)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12413,7 +12390,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROTOM_HEAT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // fire/electric breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_OVERHEAT,
@@ -12433,7 +12410,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROTOM_HEAT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_OVERHEAT,
@@ -12455,7 +12432,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROTOM_WASH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky water/electric pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -12475,7 +12452,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROTOM_WASH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge pivot
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -12497,7 +12474,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROTOM_MOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // grass/electric attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -12519,7 +12496,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROTOM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Levitate, no Air Balloon
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -12541,7 +12518,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROTOM_FROST,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Levitate, no Air Balloon
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -12563,7 +12540,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROTOM_FAN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Levitate, no Air Balloon
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -12585,7 +12562,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_UXIE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // dual-screen / hazards wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -12593,7 +12570,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_YAWN,
             MOVE_U_TURN
         },
-        .ability = ABILITY_TRACE, // Levitate now innate; chosen Trace (Being of Knowledge reads/copies the foe)
+        .ability = ABILITY_TRACE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12607,7 +12584,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MESPRIT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed pivot
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -12615,7 +12592,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_MOODY, // Levitate now innate; chosen Moody (Being of Emotion's volatile moods)
+        .ability = ABILITY_MOODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12629,7 +12606,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AZELF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast suicide lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -12637,7 +12614,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_VICTORY_STAR, // Levitate now innate; chosen Victory Star (Being of Willpower: will to win)
+        .ability = ABILITY_VICTORY_STAR,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 4,
@@ -12649,7 +12626,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AZELF,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -12657,7 +12634,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_VICTORY_STAR, // Levitate now innate; chosen Victory Star (Being of Willpower: will to win)
+        .ability = ABILITY_VICTORY_STAR,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12671,7 +12648,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIALGA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky special legend
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -12679,7 +12656,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_BULLETPROOF, // Pressure + Telepathy both now innate; chosen Bulletproof (fork override) deflects Focus Blast at its Fighting weakness
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12691,7 +12668,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIALGA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Roar of Time breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -12699,7 +12676,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ROAR_OF_TIME
         },
-        .ability = ABILITY_BULLETPROOF, // Pressure + Telepathy both now innate; chosen Bulletproof (fork override) for the armored Steel legend
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12713,7 +12690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIALGA_ORIGIN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ADAMANT_CRYSTAL, // forme-locked item
+        .heldItem = ITEM_ADAMANT_CRYSTAL,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -12721,7 +12698,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_BULLETPROOF, // Pressure + Telepathy both now innate; chosen Bulletproof (fork override) for the armored Steel legend
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12735,7 +12712,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PALKIA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // fast special legend
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SPACIAL_REND,
@@ -12743,7 +12720,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_WATER_ABSORB, // Pressure + Telepathy both now innate; chosen Water Absorb (fork override) heals off Water for the space legend
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12755,7 +12732,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PALKIA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge legend
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_SPACIAL_REND,
@@ -12763,7 +12740,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_WATER_ABSORB, // Pressure + Telepathy both now innate; chosen Water Absorb (fork override) for the space legend
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -12777,7 +12754,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PALKIA_ORIGIN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LUSTROUS_GLOBE, // forme-locked item
+        .heldItem = ITEM_LUSTROUS_GLOBE,
         .moves =
         {
             MOVE_SPACIAL_REND,
@@ -12785,7 +12762,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_WATER_ABSORB, // Pressure + Telepathy both now innate; chosen Water Absorb (fork override) for the space legend
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12799,7 +12776,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HEATRAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Flash Fire pivot / hazards
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_MAGMA_STORM,
@@ -12819,7 +12796,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HEATRAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_MAGMA_STORM,
@@ -12841,7 +12818,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGIGIGAS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Slow Start sit-out with Substitute
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SUBSTITUTE,
@@ -12863,7 +12840,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GIRATINA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Will-O / Defog wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRAGON_TAIL,
@@ -12871,7 +12848,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST,
             MOVE_DEFOG
         },
-        .ability = ABILITY_WANDERING_SPIRIT, // Pressure + Telepathy both now innate; chosen Wandering Spirit
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12885,7 +12862,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GIRATINA_ORIGIN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GRISEOUS_ORB, // Origin forme nuke
+        .heldItem = ITEM_GRISEOUS_ORB,
         .moves =
         {
             MOVE_SHADOW_FORCE,
@@ -12893,7 +12870,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_DRAGON_CLAW
         },
-        .ability = ABILITY_SHEER_FORCE, // Levitate now innate (Origin forme); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12907,7 +12884,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRESSELIA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -12915,7 +12892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYSHOCK,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_CLOUD_NINE, // Levitate now innate; chosen Cloud Nine (serene lunar presence stills the weather)
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12927,7 +12904,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRESSELIA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // doubles support
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -12935,7 +12912,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICY_WIND,
             MOVE_MOONBLAST
         },
-        .ability = ABILITY_CLOUD_NINE, // Levitate now innate; chosen Cloud Nine (serene lunar presence stills the weather)
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12949,7 +12926,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PHIONE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind staller
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -12957,7 +12934,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_REST
         },
-        .ability = ABILITY_WATER_ABSORB, // Hydration now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12971,7 +12948,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANAPHY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Tail Glow sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_TAIL_GLOW,
@@ -12979,7 +12956,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_WATER_ABSORB, // Hydration now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -12991,7 +12968,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANAPHY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_MYSTIC_WATER, // hard-hitting setup
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_TAIL_GLOW,
@@ -12999,7 +12976,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_SURF
         },
-        .ability = ABILITY_WATER_ABSORB, // Hydration now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -13013,7 +12990,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DARKRAI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot / Dark Void sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -13021,7 +12998,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_SHEER_FORCE, // Bad Dreams now innate; chosen Sheer Force (override, empty slot 1)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -13057,7 +13034,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHAYMIN_SKY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Serene Grace Air Slash flincher
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SEED_FLARE,
@@ -13079,7 +13056,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCEUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Extreme Speed Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -13099,7 +13076,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCEUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind special sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -13125,7 +13102,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VICTINI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHARCOAL, // V-create physical wallbreaker
+        .heldItem = ITEM_CHARCOAL,
         .moves =
         {
             MOVE_V_CREATE,
@@ -13145,7 +13122,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VICTINI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_EXPERT_BELT, // special mixed coverage
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_BLUE_FLARE,
@@ -13167,7 +13144,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SERPERIOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Contrary Leaf Storm sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -13187,7 +13164,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SERPERIOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Sub + Glare pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -13209,7 +13186,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EMBOAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Reckless wallbreaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -13217,7 +13194,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILD_CHARGE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13229,7 +13206,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EMBOAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -13237,7 +13214,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_FLASH_FIRE, // all real abilities innate; chosen Flash Fire (non-redundant)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13251,7 +13228,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAMUROTT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed Swords Dance attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -13259,7 +13236,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SACRED_SWORD,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_WATER_ABSORB, // Torrent & Shell Armor now innate; chosen Water Absorb (override) heals off Water
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13271,7 +13248,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAMUROTT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -13279,7 +13256,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_WATER_ABSORB, // Torrent & Shell Armor now innate; chosen Water Absorb (override) heals off Water
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13293,7 +13270,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAMUROTT_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // Sharpness Ceaseless Edge lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_CEASELESS_EDGE,
@@ -13301,7 +13278,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13313,7 +13290,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAMUROTT_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sharpness Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -13321,7 +13298,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13335,7 +13312,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WATCHOG,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_EXPERT_BELT, // Analytic coverage
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -13343,7 +13320,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -13357,7 +13334,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STOUTLAND,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sand Rush band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_RETURN,
@@ -13365,7 +13342,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_SHEER_FORCE, // Sand Rush + Intimidate now innate; chosen Sheer Force (slot 2)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13377,7 +13354,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STOUTLAND,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Intimidate physical wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BODY_SLAM,
@@ -13385,7 +13362,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROAR,
             MOVE_REST
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate; chosen Sheer Force (slot 2)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13399,7 +13376,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LIEPARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // prankster support
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_THUNDER_WAVE,
@@ -13407,7 +13384,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_ILLUSION, // Limber/Unburden/Prankster now innate; chosen Illusion
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13421,7 +13398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIMISAGE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Nasty Plot mixed
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -13429,7 +13406,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_GRASSY_SURGE, // Overgrow + Gluttony now innate; chosen Grassy Surge
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .def = 4,
@@ -13443,7 +13420,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIMISEAR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHARCOAL, // Nasty Plot fire
+        .heldItem = ITEM_CHARCOAL,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -13451,7 +13428,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_FLASH_FIRE, // Blaze + Gluttony now innate; chosen Flash Fire (override, empty slot 1)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -13465,7 +13442,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIMIPOUR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_MYSTIC_WATER, // Nasty Plot water
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -13473,7 +13450,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_WATER_ABSORB, // Torrent + Gluttony now innate; chosen Water Absorb (override, empty slot 1)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -13487,7 +13464,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUSHARNA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -13507,7 +13484,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUSHARNA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_MENTAL_HERB, // Telepathy Trick Room setter
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -13515,7 +13492,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_HELPING_HAND
         },
-        .ability = ABILITY_SYNCHRONIZE, // Telepathy now innate; chosen Synchronize (:x:, never an innate -> stable) shares status back
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13530,7 +13507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_UNFEZANT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SCOPE_LENS, // Super Luck guaranteed crits
+        .heldItem = ITEM_SCOPE_LENS,
         .moves =
         {
             MOVE_AIR_SLASH,
@@ -13538,7 +13515,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_ROOST
         },
-        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13552,7 +13529,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZEBSTRIKA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_EXPERT_BELT, // fast Motor Drive attacker
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_WILD_CHARGE,
@@ -13574,7 +13551,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GIGALITH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // sand setter
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -13594,7 +13571,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GIGALITH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HARD_STONE, // Sand Force hitter
+        .heldItem = ITEM_HARD_STONE,
         .moves =
         {
             MOVE_STONE_EDGE,
@@ -13602,7 +13579,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_SAND_STREAM, // Sturdy & Sand Force now innate; chosen Sand Stream sets the sand they thrive in
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13616,7 +13593,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWOOBAT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Simple Calm Mind + Stored Power
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -13638,7 +13615,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXCADRILL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sand Rush sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -13646,7 +13623,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_SAND_STREAM, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13658,7 +13635,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXCADRILL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Mold Breaker hazard lead + spinner
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -13666,7 +13643,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_SAND_STREAM, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13678,7 +13655,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EXCADRILL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -13686,7 +13663,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_HIGH_HORSEPOWER
         },
-        .ability = ABILITY_SAND_STREAM, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13700,7 +13677,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AUDINO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator cleric wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_WISH,
@@ -13708,7 +13685,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_HEAL_BELL
         },
-        .ability = ABILITY_SYNCHRONIZE, // Regenerator now innate; chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13722,7 +13699,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CONKELDURR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Guts bulk-up tank
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_BULK_UP,
@@ -13730,7 +13707,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SHEER_FORCE, // Guts + Iron Fist now innate; Sheer Force powers its moves
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13742,7 +13719,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CONKELDURR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Sheer Force mixed tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_DRAIN_PUNCH,
@@ -13764,7 +13741,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SEISMITOAD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swift Swim rain sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -13772,7 +13749,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_WAVE,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim now innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -13784,7 +13761,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SEISMITOAD,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -13806,7 +13783,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_THROH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Guts Bulk Up tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -13814,7 +13791,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_REST
         },
-        .ability = ABILITY_SIMPLE, // Guts/Inner Focus/Mold Breaker ALL now innate; chosen Simple (fork override, slot 1) doubles Bulk Up on this tank
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13828,7 +13805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAWK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Mold Breaker revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -13836,7 +13813,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SHEER_FORCE, // Sturdy/Inner Focus/Mold Breaker all now innate; fork override frees slot 1 to a chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13848,7 +13825,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAWK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sturdy breaker band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -13856,7 +13833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_POISON_JAB
         },
-        .ability = ABILITY_SHEER_FORCE, // Sturdy/Inner Focus/Mold Breaker all now innate; fork override frees slot 1 to a chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13870,7 +13847,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LEAVANNY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -13878,7 +13855,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_HUSTLE, // Swarm/Chlorophyll/Overcoat ALL now innate; chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13890,7 +13867,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LEAVANNY,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND, // Sticky Web lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STICKY_WEB,
@@ -13898,7 +13875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_X_SCISSOR
         },
-        .ability = ABILITY_HUSTLE, // Swarm/Chlorophyll/Overcoat ALL now innate; chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13912,7 +13889,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Speed Boost (now innate) sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -13920,7 +13897,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_POISON_POINT, // Swarm + Speed Boost both now innate; chosen Poison Point
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -13932,7 +13909,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS, // Tailwind support (Speed Boost now innate)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_TAILWIND,
@@ -13940,7 +13917,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_MEGAHORN
         },
-        .ability = ABILITY_POISON_POINT, // Swarm + Speed Boost both now innate; chosen Poison Point
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13954,7 +13931,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WHIMSICOTT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Prankster utility pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -13962,7 +13939,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENCORE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_COTTON_DOWN, // Prankster + Infiltrator + Chlorophyll now innate; chosen Cotton Down
+        .ability = ABILITY_COTTON_DOWN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13974,7 +13951,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WHIMSICOTT,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND, // Prankster Tailwind + redirect support
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_TAILWIND,
@@ -13982,7 +13959,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_ENCORE
         },
-        .ability = ABILITY_COTTON_DOWN, // Prankster + Infiltrator + Chlorophyll now innate; chosen Cotton Down
+        .ability = ABILITY_COTTON_DOWN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13996,7 +13973,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LILLIGANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Quiver Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -14004,7 +13981,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_GRASSY_SURGE, // Chlorophyll/Own Tempo/Leaf Guard ALL now innate; chosen Grassy Surge (fork override, slot 2) stays observable
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14016,7 +13993,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LILLIGANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Chlorophyll sun sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -14024,7 +14001,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_GRASSY_SURGE, // Chlorophyll/Own Tempo/Leaf Guard ALL now innate; chosen Grassy Surge (fork override, slot 2) stays observable
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14038,7 +14015,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LILLIGANT_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll Victory Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_VICTORY_DANCE,
@@ -14046,7 +14023,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_TRIPLE_AXEL
         },
-        .ability = ABILITY_HUSTLE, // Chlorophyll + Leaf Guard now innate; chosen Hustle (real slot 1, :x: never-innate) powers this physical sweeper
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14058,7 +14035,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LILLIGANT_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // sash setup sweeper
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_VICTORY_DANCE,
@@ -14066,7 +14043,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_ICE_SPINNER
         },
-        .ability = ABILITY_HUSTLE, // Chlorophyll + Leaf Guard now innate; chosen Hustle (real slot 1, :x: never-innate) powers this physical sweeper
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14080,7 +14057,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KROOKODILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Moxie band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -14088,7 +14065,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_SAND_STREAM, // Moxie now innate; chosen Sand Stream (slot 2)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14100,7 +14077,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KROOKODILE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Intimidate bulky hazard lead
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -14108,7 +14085,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TAUNT
         },
-        .ability = ABILITY_SAND_STREAM, // Intimidate now innate; chosen Sand Stream (slot 2)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14122,7 +14099,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DARMANITAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Sheer Force revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -14142,7 +14119,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DARMANITAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sheer Force band wallbreaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -14162,7 +14139,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DARMANITAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHELL_BELL, // Sheer Force Flare Blitz hits huge but Sheer Force does not strip its recoil; the 1/4 heal pays that recoil back
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -14184,7 +14161,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DARMANITAN_GALAR_STANDARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Gorilla Tactics revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_ICICLE_CRASH,
@@ -14204,7 +14181,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DARMANITAN_GALAR_STANDARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // wallbreaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ICICLE_CRASH,
@@ -14226,7 +14203,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MARACTUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll sun sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_GROWTH,
@@ -14234,7 +14211,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_STORM_DRAIN, // Chlorophyll now innate; chosen Storm Drain
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14248,7 +14225,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRUSTLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -14270,7 +14247,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCRAFTY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up Moxie sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -14278,7 +14255,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_RIVALRY, // Moxie now innate; chosen Rivalry (slot 1)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14290,7 +14267,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCRAFTY,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Intimidate Fake Out support tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -14298,7 +14275,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_RIVALRY, // Intimidate now innate; chosen Rivalry (slot 1)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14312,7 +14289,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIGILYPH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Simple Cosmic Power stallbreaker (innate Magic Guard voids Life Orb recoil)
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_COSMIC_POWER,
@@ -14320,7 +14297,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_PSYCHO_SHIFT
         },
-        .ability = ABILITY_SIMPLE, // Wonder Skin/Magic Guard/Tinted Lens all innate now (Tier 5.4); chosen Simple doubles Cosmic Power
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14332,7 +14309,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIGILYPH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // special attacker
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_AIR_SLASH,
@@ -14340,7 +14317,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_ROOST
         },
-        .ability = ABILITY_SIMPLE, // Wonder Skin/Tinted Lens/Magic Guard all innate now (Tier 5.4); chosen Simple observable atop them
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14354,7 +14331,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COFAGRIGUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Mummy bulky special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -14374,7 +14351,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COFAGRIGUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Nasty Plot Trick Room attacker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -14397,7 +14374,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CARRACOSTA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WHITE_HERB, // Solid Rock Shell Smash sweeper
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -14405,7 +14382,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_WATER_ABSORB, // Solid Rock (+ Sturdy + Swift Swim) now innate; chosen Water Absorb (override) heals the shell turtle
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14419,7 +14396,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCHEOPS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLYING_GEM, // glass cannon (Defeatist drawback)
+        .heldItem = ITEM_FLYING_GEM,
         .moves =
         {
             MOVE_ACROBATICS,
@@ -14439,7 +14416,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCHEOPS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast hazard lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -14461,7 +14438,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARBODOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Aftermath hazard setter
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_TOXIC_SPIKES,
@@ -14469,7 +14446,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_PAIN_SPLIT
         },
-        .ability = ABILITY_POISON_TOUCH, // Aftermath now innate (Weak Armor is a wall drawback); chosen Poison Touch (slot-2 override) poisons via Gunk Shot
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14481,7 +14458,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARBODOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Weak Armor attacker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_GUNK_SHOT,
@@ -14503,7 +14480,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZOROARK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Illusion mixed attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -14523,7 +14500,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZOROARK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Illusion special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DARK_PULSE,
@@ -14545,7 +14522,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZOROARK_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Illusion Normal/Ghost breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -14565,7 +14542,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZOROARK_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -14587,7 +14564,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CINCCINO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Skill Link multi-hit sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_TAIL_SLAP,
@@ -14595,7 +14572,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_BLAST,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_HUSTLE, // Cute Charm + Technician + Skill Link now innate; chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14607,7 +14584,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CINCCINO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Skill Link band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_TAIL_SLAP,
@@ -14615,7 +14592,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_BLAST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_HUSTLE, // Cute Charm + Technician + Skill Link now innate; chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14629,7 +14606,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOTHITELLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Shadow Tag Calm Mind trapper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -14637,7 +14614,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_REST
         },
-        .ability = ABILITY_SYNCHRONIZE, // Shadow Tag now innate; chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14651,7 +14628,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REUNICLUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind tank (innate Magic Guard); chosen No Guard makes Focus Blast reliable
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -14659,7 +14636,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_RECOVER
         },
-        .ability = ABILITY_NO_GUARD, // Overcoat/Magic Guard/Regenerator all innate now (Tier 5.4); chosen No Guard = sure-hit Focus Blast
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14671,7 +14648,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REUNICLUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Trick Room attacker (innate Magic Guard voids Life Orb recoil); No Guard = sure-hit Focus Blast
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -14679,7 +14656,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_NO_GUARD, // Overcoat/Magic Guard/Regenerator all innate now (Tier 5.4); chosen No Guard
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14694,7 +14671,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SWANNA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // hydration / offensive pivot
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HURRICANE,
@@ -14702,7 +14679,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_STORM_DRAIN, // Keen Eye + Big Pecks + Hydration all innate; chosen Storm Drain (override, slot 2)
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14716,7 +14693,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VANILLUXE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Snow Warning special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_AUTOTOMIZE,
@@ -14738,7 +14715,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAWSBUCK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -14746,7 +14723,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DOUBLE_EDGE,
             MOVE_JUMP_KICK
         },
-        .ability = ABILITY_SAP_SIPPER, // Chlorophyll now innate; chosen Sap Sipper
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14758,7 +14735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAWSBUCK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sap Sipper band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HORN_LEECH,
@@ -14780,7 +14757,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EMOLGA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND, // doubles support glider
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_NUZZLE,
@@ -14802,7 +14779,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ESCAVALIER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Swarm band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_MEGAHORN,
@@ -14810,7 +14787,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_SHEER_FORCE, // Swarm/Shell Armor/Overcoat ALL now innate; chosen Sheer Force (fork override, slot 2) boosts Iron Head
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14822,7 +14799,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ESCAVALIER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Overcoat bulky tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_MEGAHORN,
@@ -14830,7 +14807,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SHEER_FORCE, // Swarm/Shell Armor/Overcoat ALL now innate; chosen Sheer Force (fork override, slot 2) boosts Iron Head
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14844,7 +14821,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMOONGUSS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Regenerator Rage Powder redirect
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_RAGE_POWDER,
@@ -14852,7 +14829,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_WATER_ABSORB, // moved off Effect Spore (redundant deterministic sleep vs Spore); defensive pivot
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14864,7 +14841,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMOONGUSS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator status wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SPORE,
@@ -14872,7 +14849,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLEAR_SMOG,
             MOVE_TOXIC
         },
-        .ability = ABILITY_WATER_ABSORB, // moved off Effect Spore (deterministic sleep pre-empted its Toxic); defensive pivot
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14886,7 +14863,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JELLICENT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky spinblocker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -14906,7 +14883,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JELLICENT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Cursed Body special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -14914,7 +14891,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_TAUNT
         },
-        .ability = ABILITY_WATER_ABSORB, // Cursed Body now innate; chosen Water Absorb soaks Water hits + heals
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14928,7 +14905,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ALOMOMOLA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator Wish wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_WISH,
@@ -14950,7 +14927,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GALVANTULA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Compound Eyes Sticky Web lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STICKY_WEB,
@@ -14958,7 +14935,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_STATIC, // all real abilities innate; chosen Static (non-redundant)
+        .ability = ABILITY_STATIC,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14970,7 +14947,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GALVANTULA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_THUNDER,
@@ -14978,7 +14955,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_STATIC, // all real abilities innate; chosen Static (non-redundant)
+        .ability = ABILITY_STATIC,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -14992,7 +14969,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FERROTHORN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Iron Barbs hazard wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -15000,7 +14977,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_POWER_WHIP
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Iron Barbs now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15013,7 +14990,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FERROTHORN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // Iron Barbs + Helmet contact punisher
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_GYRO_BALL,
@@ -15021,7 +14998,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Iron Barbs now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15036,7 +15013,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KLINKLANG,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Clear Body Shift Gear sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SHIFT_GEAR,
@@ -15044,7 +15021,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUBSTITUTE,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Clear Body now innate; chosen Motor Drive via override (Electric immunity + Speed)
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15058,7 +15035,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EELEKTROSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Levitate mixed tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -15078,7 +15055,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EELEKTROSS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Coil physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_COIL,
@@ -15100,7 +15077,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BEHEEYEM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Trick Room attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -15108,7 +15085,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_SYNCHRONIZE, // Analytic now innate; chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15123,7 +15100,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHANDELURE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Infiltrator revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -15131,7 +15108,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_TRICK
         },
-        .ability = ABILITY_FLASH_FIRE, // Infiltrator now innate; chosen Flash Fire grants a Fire immunity
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15143,7 +15120,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHANDELURE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Flash Fire Calm Mind sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -15163,7 +15140,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHANDELURE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // Trick Room wallbreaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -15186,7 +15163,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HAXORUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mold Breaker Dragon Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -15194,7 +15171,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_POISON_JAB
         },
-        .ability = ABILITY_RIVALRY, // Mold Breaker + Unnerve now innate; repointed to its real slot-0 Rivalry (:x:, no override needed)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15206,7 +15183,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HAXORUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Mold Breaker band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_OUTRAGE,
@@ -15214,7 +15191,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_FIRST_IMPRESSION
         },
-        .ability = ABILITY_RIVALRY, // Mold Breaker + Unnerve now innate; repointed to its real slot-0 Rivalry (:x:, no override needed)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15228,7 +15205,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BEARTIC,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swift Swim Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -15236,7 +15213,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SNOW_WARNING, // Snow Cloak + Slush Rush + Swift Swim all now innate; chosen Snow Warning (override) sets snow
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15250,7 +15227,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRYOGONAL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Levitate special wall + Rapid Spin
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_FREEZE_DRY,
@@ -15258,7 +15235,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SNOW_WARNING, // Levitate now innate; chosen Snow Warning (ice-crystal being; Ice-type gets +Def in snow, no chip)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15272,7 +15249,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ACCELGOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // fast lead, survives one hit
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -15280,7 +15257,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_SPIKES
         },
-        .ability = ABILITY_SHEER_FORCE, // Hydration/Sticky Hold/Unburden now all innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15293,7 +15270,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ACCELGOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // disruptive Yawn/Encore lead
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_YAWN,
@@ -15301,7 +15278,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_SHEER_FORCE, // Sticky Hold now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -15316,7 +15293,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STUNFISK_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // defensive trapper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SNAP_TRAP,
@@ -15336,7 +15313,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STUNFISK_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // bulky utility
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -15358,7 +15335,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STUNFISK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky Ground/Electric pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -15380,7 +15357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIENSHAO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Regenerator revenge killer / pivot
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -15388,7 +15365,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_NO_GUARD, // Inner Focus/Regenerator/Reckless ALL now innate; chosen No Guard (fork override, slot 2) makes High Jump Kick never miss
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15400,7 +15377,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIENSHAO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Reckless wallbreaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HIGH_JUMP_KICK,
@@ -15408,7 +15385,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_U_TURN
         },
-        .ability = ABILITY_NO_GUARD, // Inner Focus/Regenerator/Reckless ALL now innate; chosen No Guard (fork override, slot 2) makes High Jump Kick never miss
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15422,7 +15399,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRUDDIGON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Rough Skin bulky pivot
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -15430,7 +15407,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GLARE,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Rough Skin now innate; chosen Sheer Force (real slot 1, :x: stable) powers Fire Punch / Dragon Claw
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15442,7 +15419,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRUDDIGON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sheer Force band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_OUTRAGE,
@@ -15464,7 +15441,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOLURK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // No Guard band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -15484,7 +15461,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOLURK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Iron Fist bulky hazard lead
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -15492,7 +15469,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POLTERGEIST,
             MOVE_TOXIC
         },
-        .ability = ABILITY_NO_GUARD, // Iron Fist now innate; chosen No Guard
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15506,7 +15483,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BOUFFALANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Reckless head-charge band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HEAD_CHARGE,
@@ -15514,7 +15491,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_ZEN_HEADBUTT
         },
-        .ability = ABILITY_SAP_SIPPER, // Reckless now innate; chosen Sap Sipper
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15528,7 +15505,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRAVIARY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Defiant band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -15536,7 +15513,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15548,7 +15525,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRAVIARY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Sheer Force Bulk Up sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BULK_UP,
@@ -15570,7 +15547,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRAVIARY_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Tinted Lens special attacker
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_HURRICANE,
@@ -15578,7 +15555,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE, // Keen Eye & Tinted Lens now innate; chosen Sheer Force powers up Hurricane / Psychic / Heat Wave
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15590,7 +15567,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRAVIARY_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Calm Mind sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -15598,7 +15575,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_SHEER_FORCE, // Keen Eye & Tinted Lens now innate; chosen Sheer Force (also skips Life Orb recoil on boosted moves)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15612,7 +15589,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANDIBUZZ,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Overcoat defensive Defog pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FOUL_PLAY,
@@ -15620,7 +15597,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_TOXIC
         },
-        .ability = ABILITY_WIND_RIDER, // Big Pecks + Overcoat now innate; chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15632,7 +15609,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MANDIBUZZ,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Weak Armor physical wall
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_FOUL_PLAY,
@@ -15640,7 +15617,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_TAUNT
         },
-        .ability = ABILITY_WIND_RIDER, // Big Pecks + Overcoat now innate; chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15654,7 +15631,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HEATMOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // White Smoke mixed attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -15676,7 +15653,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DURANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Hustle band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_IRON_HEAD,
@@ -15696,7 +15673,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DURANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swarm Hone Claws sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HONE_CLAWS,
@@ -15704,7 +15681,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_HUSTLE, // Swarm now innate (latched); chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15718,7 +15695,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HYDREIGON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Levitate revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_DARK_PULSE,
@@ -15738,7 +15715,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HYDREIGON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -15758,7 +15735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HYDREIGON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Defog pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -15780,7 +15757,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VOLCARONA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Quiver Dance sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -15800,7 +15777,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VOLCARONA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Quiver Dance + Roost
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -15822,7 +15799,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COBALION,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Justified Swords Dance setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -15830,7 +15807,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_BULLETPROOF, // chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15842,7 +15819,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COBALION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer / pivot
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -15850,7 +15827,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_BULLETPROOF, // chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15864,7 +15841,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TERRAKION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Justified band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -15872,7 +15849,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_SAND_STREAM, // chosen Sand Stream
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15884,7 +15861,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TERRAKION,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Swords Dance / hazard lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -15892,7 +15869,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_SAND_STREAM, // chosen Sand Stream
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15906,7 +15883,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VIRIZION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -15914,7 +15891,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SAP_SIPPER, // chosen Sap Sipper
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -15926,7 +15903,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VIRIZION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Calm Mind special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -15934,7 +15911,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_VACUUM_WAVE
         },
-        .ability = ABILITY_SAP_SIPPER, // chosen Sap Sipper
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15948,7 +15925,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORNADUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Prankster offensive pivot
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HURRICANE,
@@ -15956,7 +15933,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_CLOUD_NINE, // all real abilities innate; chosen Cloud Nine (non-redundant)
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15968,7 +15945,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORNADUS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND, // Prankster Tailwind support
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_TAILWIND,
@@ -15976,7 +15953,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_RAIN_DANCE
         },
-        .ability = ABILITY_CLOUD_NINE, // all real abilities innate; chosen Cloud Nine (non-redundant)
+        .ability = ABILITY_CLOUD_NINE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -15990,7 +15967,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORNADUS_THERIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Regenerator special pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_HURRICANE,
@@ -15998,7 +15975,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_U_TURN
         },
-        .ability = ABILITY_WIND_RIDER, // chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16012,7 +15989,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_THUNDURUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Prankster mixed attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -16020,7 +15997,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_VOLT_ABSORB, // all real abilities innate; chosen Volt Absorb (non-redundant)
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16032,7 +16009,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_THUNDURUS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND, // Prankster Thunder Wave support
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_THUNDER_WAVE,
@@ -16040,7 +16017,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_VOLT_ABSORB, // all real abilities innate; chosen Volt Absorb (non-redundant)
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16054,7 +16031,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_THUNDURUS_THERIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Volt Absorb revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -16076,7 +16053,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RESHIRAM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Turboblaze special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_BLUE_FLARE,
@@ -16084,7 +16061,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_FLASH_FIRE, // Turboblaze now innate (fork override, Flash Fire slot 1); chosen Flash Fire shrugs off Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16096,7 +16073,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RESHIRAM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Roost attacker
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_BLUE_FLARE,
@@ -16104,7 +16081,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_FLASH_FIRE, // Turboblaze now innate (fork override, Flash Fire slot 1); chosen Flash Fire shrugs off Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16118,7 +16095,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZEKROM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Teravolt Dragon Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -16126,7 +16103,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Teravolt now innate (fork override, Motor Drive slot 1); chosen Motor Drive draws Electric + Speed
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16138,7 +16115,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZEKROM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Teravolt band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BOLT_STRIKE,
@@ -16146,7 +16123,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Teravolt now innate (fork override, Motor Drive slot 1); chosen Motor Drive draws Electric + Speed
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16160,7 +16137,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LANDORUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sheer Force special nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -16182,7 +16159,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LANDORUS_THERIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Intimidate revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -16190,7 +16167,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate (fork override, Sheer Force slot 1); chosen Sheer Force powers Stone Edge/EQ
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16202,7 +16179,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LANDORUS_THERIAN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Intimidate bulky hazard pivot
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -16210,7 +16187,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate now innate (fork override, Sheer Force slot 1); chosen Sheer Force is dead on this set but keeps the slot valid
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16224,7 +16201,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYUREM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Pressure special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_ICE_BEAM,
@@ -16232,7 +16209,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_SNOW_WARNING, // Pressure now innate; chosen Snow Warning summons snow (slot-1 override)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16244,7 +16221,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYUREM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Sub-Roost stallbreaker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SUBSTITUTE,
@@ -16252,7 +16229,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_SNOW_WARNING, // Pressure now innate; chosen Snow Warning summons snow (slot-1 override)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16266,7 +16243,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYUREM_BLACK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Teravolt physical breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ICICLE_CRASH,
@@ -16274,7 +16251,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Teravolt now innate (fork override, Motor Drive slot 1); chosen Motor Drive draws Electric + Speed
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16286,7 +16263,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYUREM_BLACK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Dragon Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -16294,7 +16271,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FUSION_BOLT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Teravolt now innate (fork override, Motor Drive slot 1); chosen Motor Drive draws Electric + Speed
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16308,7 +16285,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYUREM_WHITE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Turboblaze special nuke
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_ICE_BEAM,
@@ -16316,7 +16293,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_FLASH_FIRE, // Turboblaze now innate (fork override, Flash Fire slot 1); chosen Flash Fire shrugs off Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16330,7 +16307,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KELDEO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Justified special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -16338,7 +16315,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VACUUM_WAVE,
             MOVE_ICY_WIND
         },
-        .ability = ABILITY_STORM_DRAIN, // chosen Storm Drain
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16350,7 +16327,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KELDEO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -16358,7 +16335,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TERA_BLAST,
             MOVE_ICY_WIND
         },
-        .ability = ABILITY_STORM_DRAIN, // chosen Storm Drain
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16372,7 +16349,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MELOETTA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Serene Grace Calm Mind attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -16380,7 +16357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_PIXILATE, // Serene Grace now innate; chosen Pixilate
+        .ability = ABILITY_PIXILATE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16392,7 +16369,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MELOETTA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // bulky special pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -16400,7 +16377,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_PIXILATE, // Serene Grace now innate; chosen Pixilate
+        .ability = ABILITY_PIXILATE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16414,7 +16391,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENESECT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Download revenge killer / pivot
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_U_TURN,
@@ -16422,7 +16399,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_SHEER_FORCE, // sole real ability Download now innate; empty slot 1 filled with chosen Sheer Force, innate Download intact
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 4,
@@ -16434,7 +16411,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENESECT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Download Techno Blast attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_TECHNO_BLAST,
@@ -16442,7 +16419,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_SHEER_FORCE, // sole real ability Download now innate; empty slot 1 filled with chosen Sheer Force, innate Download intact
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16460,7 +16437,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHESNAUGHT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Spikes / pivot wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SPIKES,
@@ -16480,7 +16457,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHESNAUGHT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // mixed bulky attacker
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_WOOD_HAMMER,
@@ -16500,7 +16477,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHESNAUGHT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -16508,7 +16485,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_BULLETPROOF, // Overgrow now innate (latched); chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16522,7 +16499,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DELPHOX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -16530,7 +16507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_FLASH_FIRE, // Blaze / Magician both innate; chosen Flash Fire (override)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16542,7 +16519,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DELPHOX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -16550,7 +16527,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_MYSTICAL_FIRE
         },
-        .ability = ABILITY_FLASH_FIRE, // Blaze / Magician both innate; chosen Flash Fire (override)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16562,7 +16539,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DELPHOX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sub stallbreaker
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SUBSTITUTE,
@@ -16570,7 +16547,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_PSYSHOCK
         },
-        .ability = ABILITY_FLASH_FIRE, // Blaze / Magician both innate; chosen Flash Fire (override)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16584,7 +16561,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRENINJA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Protean wallbreaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -16604,7 +16581,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRENINJA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // suicide hazard lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SPIKES,
@@ -16624,7 +16601,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRENINJA_BATTLE_BOND,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Battle Bond revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -16646,7 +16623,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIGGERSBY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Huge Power band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -16654,7 +16631,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUICK_ATTACK,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_EARTH_EATER, // Huge Power now innate; chosen Earth Eater
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16666,7 +16643,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIGGERSBY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -16674,7 +16651,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RETURN,
             MOVE_QUICK_ATTACK
         },
-        .ability = ABILITY_EARTH_EATER, // Huge Power now innate; chosen Earth Eater
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16688,7 +16665,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TALONFLAME,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Gale Wings priority sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -16696,7 +16673,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_FLAME_BODY, // Gale Wings now innate; chosen Flame Body burns contact attackers
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16708,7 +16685,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TALONFLAME,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Roost / hazard control
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -16728,7 +16705,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TALONFLAME,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SHARP_BEAK, // Tailwind setter + priority
+        .heldItem = ITEM_SHARP_BEAK,
         .moves =
         {
             MOVE_TAILWIND,
@@ -16736,7 +16713,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLARE_BLITZ,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_FLAME_BODY, // Gale Wings now innate; chosen Flame Body burns contact attackers
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16750,7 +16727,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PYROAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -16758,7 +16735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_SOLAR_BEAM
         },
-        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16770,7 +16747,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PYROAR,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_THROAT_SPRAY, // Hyper Voice spread attacker
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -16778,7 +16755,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SNARL,
             MOVE_PROTECT
         },
-        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16792,7 +16769,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLORGES,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind cleric wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -16800,7 +16777,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SYNTHESIS,
             MOVE_AROMATHERAPY
         },
-        .ability = ABILITY_SYMBIOSIS, // Flower Veil now innate; chosen Symbiosis (:x:, never an innate -> stable) passes its item to the ally
+        .ability = ABILITY_SYMBIOSIS,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16812,7 +16789,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLORGES,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Pixilate breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -16834,7 +16811,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOGOAT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up Sap Sipper tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -16854,7 +16831,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOGOAT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HORN_LEECH,
@@ -16862,7 +16839,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_BULK_UP
         },
-        .ability = ABILITY_SAP_SIPPER, // Grass Pelt now innate; chosen Sap Sipper (real slot 0) grants Grass immunity + Atk boost
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16876,7 +16853,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PANGORO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Iron Fist / Scrappy band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -16884,7 +16861,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16896,7 +16873,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PANGORO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -16904,7 +16881,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -16918,7 +16895,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSTIC,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Prankster screens/support
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_REFLECT,
@@ -16926,7 +16903,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FAKE_OUT,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_SYNCHRONIZE, // Keen Eye + Infiltrator + Prankster now innate; chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16938,7 +16915,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSTIC,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_MENTAL_HERB, // Prankster disruption support
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_FOLLOW_ME,
@@ -16946,7 +16923,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_SYNCHRONIZE, // Keen Eye + Infiltrator + Prankster now innate; chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16960,7 +16937,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSTIC_F,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Competitive special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -16968,7 +16945,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16980,7 +16957,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSTIC_F,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Competitive breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -16988,7 +16965,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17002,7 +16979,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AEGISLASH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // King's Shield stance tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_KINGS_SHIELD,
@@ -17022,7 +16999,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AEGISLASH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Weakness Policy sweeper
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_KINGS_SHIELD,
@@ -17042,7 +17019,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AEGISLASH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance / Spectral Thief
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -17064,7 +17041,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AROMATISSE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Trick Room cleric (innate Aroma Veil / Healer)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -17072,7 +17049,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AROMATHERAPY,
             MOVE_WISH
         },
-        .ability = ABILITY_MISTY_SURGE, // Healer + Aroma Veil both now innate; chosen Misty Surge (fork override) sets terrain support for the Fairy cleric
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17087,7 +17064,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLURPUFF,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // Unburden Belly Drum sweeper
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -17095,7 +17072,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_FACADE
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Sweet Veil/Unburden now innate (Unburden still doubles Speed once Sitrus is eaten); chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17107,7 +17084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLURPUFF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -17115,7 +17092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_DRAINING_KISS
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Sweet Veil now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17129,7 +17106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MALAMAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Contrary Superpower sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SUPERPOWER,
@@ -17149,7 +17126,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MALAMAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Superpower + priority
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SUPERPOWER,
@@ -17171,7 +17148,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BARBARACLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WHITE_HERB, // Shell Smash sweeper
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -17179,7 +17156,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_CROSS_CHOP
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17191,7 +17168,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BARBARACLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // physical Tough Claws attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -17199,7 +17176,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_CLAW
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17213,7 +17190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAGALGE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Adaptability special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -17221,7 +17198,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_POISON_TOUCH, // Adaptability now innate; chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17233,7 +17210,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAGALGE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // bulky Toxic Spikes pivot
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_TOXIC_SPIKES,
@@ -17255,7 +17232,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLAWITZER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Mega Launcher breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DARK_PULSE,
@@ -17263,7 +17240,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_DRAGON_PULSE
         },
-        .ability = ABILITY_WATER_ABSORB, // Mega Launcher now innate; chosen Water Absorb (override)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17275,7 +17252,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLAWITZER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // bulky special pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -17283,7 +17260,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_AURA_SPHERE
         },
-        .ability = ABILITY_WATER_ABSORB, // Mega Launcher now innate; chosen Water Absorb (override)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17297,7 +17274,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HELIOLISK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Dry Skin fast special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -17317,7 +17294,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HELIOLISK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -17339,7 +17316,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANTRUM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Strong Jaw band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HEAD_SMASH,
@@ -17347,7 +17324,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Strong Jaw + Rock Head now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17359,7 +17336,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANTRUM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Dragon Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -17367,7 +17344,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAD_SMASH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SHEER_FORCE, // Strong Jaw + Rock Head now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17379,7 +17356,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANTRUM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SCARF, // Strong Jaw revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_PSYCHIC_FANGS,
@@ -17387,7 +17364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_SHEER_FORCE, // Strong Jaw + Rock Head now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17401,7 +17378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AURORUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Refrigerate bulky attacker / Aurora Veil
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -17421,7 +17398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AURORUS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Snow Warning Aurora Veil setter
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_AURORA_VEIL,
@@ -17443,7 +17420,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SYLVEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Pixilate Hyper Voice breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -17463,7 +17440,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SYLVEON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind cleric wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -17483,7 +17460,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SYLVEON,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_THROAT_SPRAY, // Hyper Voice spread support
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -17505,7 +17482,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HAWLUCHA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_QUICK_CLAW, // Unburden Swords Dance sweeper
+        .heldItem = ITEM_QUICK_CLAW,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -17513,7 +17490,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_HUSTLE, // chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17525,7 +17502,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HAWLUCHA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND, // Mold Breaker physical attacker
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_ACROBATICS,
@@ -17533,7 +17510,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_PROTECT
         },
-        .ability = ABILITY_HUSTLE, // chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17547,7 +17524,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DEDENNE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Cheek Pouch / screens support
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_NUZZLE,
@@ -17555,7 +17532,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIGHT_SCREEN,
             MOVE_DAZZLING_GLEAM
         },
-        // Cheek Pouch + Pickup now innate; chosen Plus (real slot 2) is the Electric mouse's doubles Sp. Atk gimmick.
         .ability = ABILITY_PLUS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
@@ -17570,7 +17546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CARBINK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Sturdy dual-screens / hazards wall
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -17578,7 +17554,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REFLECT,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_BULLETPROOF, // Clear Body now innate (Sturdy too); chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17590,7 +17566,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CARBINK,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Trick Room screens setter
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -17598,7 +17574,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REFLECT,
             MOVE_MOONBLAST
         },
-        .ability = ABILITY_BULLETPROOF, // Clear Body now innate (Sturdy too); chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17613,7 +17589,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOODRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Sap Sipper special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -17633,7 +17609,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOODRA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Gooey bulky pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRAGON_PULSE,
@@ -17641,7 +17617,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_REST
         },
-        .ability = ABILITY_SAP_SIPPER, // Gooey now innate; chosen Sap Sipper (real slot 0, :x: stable) grants a Grass immunity + Attack boost
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17653,7 +17629,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOODRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Hydration breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -17661,7 +17637,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_SAP_SIPPER, // Hydration now innate (rain-cures); chosen Sap Sipper adds a Grass immunity
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17675,7 +17651,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOODRA_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Sap Sipper special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -17695,7 +17671,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOODRA_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Shell Armor bulky setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_IRON_DEFENSE,
@@ -17703,7 +17679,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_RECOVER
         },
-        .ability = ABILITY_SAP_SIPPER, // Shell Armor now innate; chosen Sap Sipper walls Grass
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17717,7 +17693,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KLEFKI,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Prankster screens + Spikes
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_REFLECT,
@@ -17725,7 +17701,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_SPIKES
         },
-        .ability = ABILITY_BULLETPROOF, // Prankster / Magician both innate; chosen Bulletproof (override)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17737,7 +17713,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KLEFKI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Prankster annoyer wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SPIKES,
@@ -17745,7 +17721,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOUL_PLAY,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_BULLETPROOF, // Prankster / Magician both innate; chosen Bulletproof (override)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17759,7 +17735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TREVENANT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Harvest Sitrus stall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HORN_LEECH,
@@ -17767,7 +17743,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_SAP_SIPPER, // Natural Cure + Frisk + Harvest all innate; chosen Sap Sipper (override, slot 2)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17779,7 +17755,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TREVENANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Natural Cure trick-room-friendly breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_POLTERGEIST,
@@ -17787,7 +17763,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_SAP_SIPPER, // Natural Cure + Frisk + Harvest all innate; chosen Sap Sipper (override, slot 2)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17802,7 +17778,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOURGEIST_SUPER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // physically defensive WoW wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_WILL_O_WISP,
@@ -17810,7 +17786,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_SYNTHESIS
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // all real abilities innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17822,7 +17798,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOURGEIST_SUPER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Trick Room band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_POLTERGEIST,
@@ -17830,7 +17806,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // all real abilities innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17845,7 +17821,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AVALUGG,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Sturdy physical wall / Rapid Spin
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_RECOVER,
@@ -17853,7 +17829,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_WATER_ABSORB, // Own Tempo/Ice Body/Sturdy ALL now innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17865,7 +17841,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AVALUGG,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // Ice Body chip wall
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_AVALANCHE,
@@ -17873,7 +17849,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_WATER_ABSORB, // Own Tempo/Ice Body/Sturdy ALL now innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17888,7 +17864,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AVALUGG_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Strong Jaw bulky setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_RECOVER,
@@ -17896,7 +17872,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_WATER_ABSORB, // Strong Jaw + Ice Body + Sturdy all innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17908,7 +17884,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AVALUGG_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Strong Jaw band attacker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ICE_FANG,
@@ -17916,7 +17892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_WATER_ABSORB, // Strong Jaw + Ice Body + Sturdy all innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17930,7 +17906,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NOIVERN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Infiltrator special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -17938,7 +17914,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SOUNDPROOF, // Infiltrator now innate; chosen Soundproof
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17950,7 +17926,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NOIVERN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // defensive Defog pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_HURRICANE,
@@ -17958,7 +17934,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SOUNDPROOF, // Infiltrator now innate; chosen Soundproof
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17970,7 +17946,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NOIVERN,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // Tailwind setter
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_TAILWIND,
@@ -17978,7 +17954,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_HEAT_WAVE
         },
-        .ability = ABILITY_SOUNDPROOF, // all real abilities innate; chosen Soundproof
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17992,7 +17968,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_XERNEAS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_POWER_HERB, // Geomancy sweeper
+        .heldItem = ITEM_POWER_HERB,
         .moves =
         {
             MOVE_GEOMANCY,
@@ -18012,7 +17988,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_XERNEAS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // physical Swords Dance variant
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -18034,7 +18010,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_YVELTAL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Dark Aura mixed attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DARK_PULSE,
@@ -18054,7 +18030,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_YVELTAL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Roost pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FOUL_PLAY,
@@ -18076,7 +18052,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZYGARDE_50_POWER_CONSTRUCT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // 50% Dragon Dance bulky sweeper; Power Construct -> Complete at <=50% HP
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -18096,7 +18072,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZYGARDE_10_POWER_CONSTRUCT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // 10% fast Dragon Dance sweeper; Power Construct -> Complete at <=50% HP
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -18118,7 +18094,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIANCIE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Mega Diancie (Magic Bounce); power for the glass cannon
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DIAMOND_STORM,
@@ -18126,7 +18102,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_PROTECT
         },
-        .ability = ABILITY_MISTY_SURGE, // Clear Body now innate; chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 4,
@@ -18138,7 +18114,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIANCIE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Clear Body hazards / dual-screens wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -18146,7 +18122,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_REFLECT
         },
-        .ability = ABILITY_MISTY_SURGE, // Clear Body now innate; chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18160,7 +18136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HOOPA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Magician special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -18168,7 +18144,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_SHEER_FORCE, // Magician innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18182,7 +18158,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HOOPA_UNBOUND,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed Magician wallbreaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_HYPERSPACE_FURY,
@@ -18190,7 +18166,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Magician innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18202,7 +18178,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HOOPA_UNBOUND,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank breaker
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -18210,7 +18186,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_GUNK_SHOT
         },
-        .ability = ABILITY_SHEER_FORCE, // Magician innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18225,7 +18201,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VOLCANION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Water Absorb special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_STEAM_ERUPTION,
@@ -18245,7 +18221,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VOLCANION,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Substitute pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SUBSTITUTE,
@@ -18265,7 +18241,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VOLCANION,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // spread special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_HEAT_WAVE,
@@ -18291,7 +18267,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DECIDUEYE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SPELL_TAG, // Ghost STAB boost for the Spirit Shackle attacker
+        .heldItem = ITEM_SPELL_TAG,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -18299,7 +18275,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_BRAVE_BIRD
         },
-        .ability = ABILITY_SOUNDPROOF, // Overgrow + Long Reach now innate; chosen Soundproof
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18311,7 +18287,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DECIDUEYE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Long Reach trap-shooter
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SPIRIT_SHACKLE,
@@ -18319,7 +18295,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_ROOST
         },
-        .ability = ABILITY_SOUNDPROOF, // Overgrow + Long Reach now innate; chosen Soundproof
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18331,7 +18307,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DECIDUEYE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LEAF_BLADE,
@@ -18339,7 +18315,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SOUNDPROOF, // Overgrow + Long Reach now innate; chosen Soundproof
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18353,7 +18329,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DECIDUEYE_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Scrappy Triple Arrows attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_TRIPLE_ARROWS,
@@ -18361,7 +18337,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Overgrow (latched) & Scrappy now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18373,7 +18349,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DECIDUEYE_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Swords Dance bulky setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -18381,7 +18357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_ROOST
         },
-        .ability = ABILITY_SHEER_FORCE, // Overgrow (latched) & Scrappy now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -18395,7 +18371,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INCINEROAR,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Intimidate pivot, Fake Out support
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -18403,7 +18379,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARKEST_LARIAT,
             MOVE_PARTING_SHOT
         },
-        .ability = ABILITY_FLAME_BODY, // Blaze + Intimidate now innate; chosen Flame Body
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18415,7 +18391,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INCINEROAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Dark STAB boost for the Darkest Lariat attacker
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -18423,7 +18399,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARKEST_LARIAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_FLAME_BODY, // Blaze + Intimidate now innate; chosen Flame Body
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18435,7 +18411,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INCINEROAR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Intimidate pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -18443,7 +18419,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_U_TURN
         },
-        .ability = ABILITY_FLAME_BODY, // Blaze + Intimidate now innate; chosen Flame Body
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18457,7 +18433,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PRIMARINA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Liquid Voice special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_SPARKLING_ARIA,
@@ -18477,7 +18453,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PRIMARINA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -18485,7 +18461,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_REST
         },
-        .ability = ABILITY_LIQUID_VOICE, // Torrent now innate (latched); chosen Liquid Voice
+        .ability = ABILITY_LIQUID_VOICE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18497,7 +18473,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PRIMARINA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_THROAT_SPRAY, // Sparkling Aria is a sound move -> +SpAtk
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -18505,7 +18481,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_LIQUID_VOICE, // Torrent now innate (latched); chosen Liquid Voice
+        .ability = ABILITY_LIQUID_VOICE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18519,7 +18495,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOUCANNON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Skill Link Bullet Seed band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BEAK_BLAST,
@@ -18527,7 +18503,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_BLAST,
             MOVE_BRAVE_BIRD
         },
-        .ability = ABILITY_SHEER_FORCE, // Keen Eye + Skill Link now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18539,7 +18515,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOUCANNON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Skill Link already maxes multi-hit; Life Orb adds power
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BULLET_SEED,
@@ -18547,7 +18523,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BRAVE_BIRD,
             MOVE_BEAK_BLAST
         },
-        .ability = ABILITY_SHEER_FORCE, // Keen Eye + Skill Link now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18561,7 +18537,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GUMSHOOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // Stakeout switch punisher
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_BODY_SLAM,
@@ -18569,7 +18545,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18583,7 +18559,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VIKAVOLT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_BUG_BUZZ,
@@ -18591,7 +18567,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Levitate now innate; chosen Motor Drive (electromagnetic beetle banks electricity into Speed)
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18603,7 +18579,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VIKAVOLT,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Trick Room special attacker
+        .heldItem = ITEM_ASSAULT_VEST,
         .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
@@ -18612,7 +18588,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Levitate now innate; chosen Motor Drive (electromagnetic beetle banks electricity into Speed)
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18626,7 +18602,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRABOMINABLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Iron Fist punch band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -18634,7 +18610,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_HAMMER
         },
-        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18646,7 +18622,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRABOMINABLE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Trick Room bruiser
+        .heldItem = ITEM_ASSAULT_VEST,
         .iv = IVS(SPE, 0),
         .moves =
         {
@@ -18655,7 +18631,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18669,7 +18645,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ORICORIO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Dancer Fire/Flying special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_REVELATION_DANCE,
@@ -18677,7 +18653,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_FLASH_FIRE, // Dancer now innate (Tier 5.9); chosen Flash Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18689,7 +18665,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ORICORIO_PAU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Psychic/Flying pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_REVELATION_DANCE,
@@ -18697,7 +18673,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SYNCHRONIZE, // Dancer now innate (Tier 5.9); chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18711,7 +18687,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RIBOMBEE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast Sticky Web lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STICKY_WEB,
@@ -18719,7 +18695,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_STUN_SPORE
         },
-        .ability = ABILITY_EFFECT_SPORE, // all real abilities innate; chosen Effect Spore
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18731,7 +18707,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RIBOMBEE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Quiver Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -18739,7 +18715,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_POLLEN_PUFF
         },
-        .ability = ABILITY_EFFECT_SPORE, // all real abilities innate; chosen Effect Spore
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -18753,7 +18729,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LYCANROC,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sand Rush attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_STONE_EDGE,
@@ -18761,7 +18737,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_PSYCHIC_FANGS
         },
-        .ability = ABILITY_SAND_STREAM, // all real abilities innate; chosen Sand Stream (non-redundant)
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18773,7 +18749,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LYCANROC_DUSK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // power for the Tough Claws Stone Edge attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -18781,7 +18757,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ACCELEROCK,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_SAND_STREAM, // Tough Claws now innate; chosen Sand Stream
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -18793,7 +18769,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LYCANROC_MIDNIGHT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // No Guard band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_STONE_EDGE,
@@ -18815,7 +18791,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WISHIWASHI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Schooling special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -18835,7 +18811,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WISHIWASHI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -18857,7 +18833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXAPEX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Regenerator wall
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -18865,7 +18841,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_HAZE
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18877,7 +18853,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXAPEX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // physically defensive Banded Bunker stall
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_BANEFUL_BUNKER,
@@ -18885,7 +18861,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_CHILLING_WATER
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18897,7 +18873,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXAPEX,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Merciless redirect support
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_CHILLING_WATER,
@@ -18905,7 +18881,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_HAZE
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18919,7 +18895,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUDSDALE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Stamina physical wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HIGH_HORSEPOWER,
@@ -18927,7 +18903,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_ROAR
         },
-        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18939,7 +18915,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUDSDALE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // Stamina hazard tank
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_HIGH_HORSEPOWER,
@@ -18947,7 +18923,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
         },
-        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18961,7 +18937,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARAQUANID,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Water Bubble bulky attacker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -18969,7 +18945,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MIRROR_COAT,
             MOVE_TOXIC
         },
-        .ability = ABILITY_WATER_ABSORB, // Water Bubble now innate; chosen Water Absorb heals the water spider on Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -18981,7 +18957,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARAQUANID,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Trick Room Water Bubble nuke
+        .heldItem = ITEM_ASSAULT_VEST,
         .iv = IVS(SPE, 0),
         .moves =
         {
@@ -19004,7 +18980,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LURANTIS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Contrary Leaf Storm attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -19024,7 +19000,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LURANTIS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky support
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LEAF_BLADE,
@@ -19032,7 +19008,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SYNTHESIS,
             MOVE_TOXIC
         },
-        .ability = ABILITY_CONTRARY, // Leaf Guard now innate; chosen Contrary (real slot) inverts stat drops
+        .ability = ABILITY_CONTRARY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19046,7 +19022,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHIINOTIC,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Spore + Strength Sap support
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SPORE,
@@ -19054,7 +19030,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_MYCELIUM_MIGHT, // chosen Mycelium Might
+        .ability = ABILITY_MYCELIUM_MIGHT,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19068,7 +19044,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SALAZZLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // Corrosion toxic staller
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_TOXIC,
@@ -19076,7 +19052,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PROTECT,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_FLAME_BODY, // Corrosion + Oblivious now innate; chosen Flame Body punishes contact (override)
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19088,7 +19064,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SALAZZLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Nasty Plot sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -19096,7 +19072,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_WAVE,
             MOVE_DRAGON_PULSE
         },
-        .ability = ABILITY_FLAME_BODY, // Corrosion + Oblivious now innate; chosen Flame Body punishes contact (override)
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19110,7 +19086,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BEWEAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Fluffy / Force band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_DOUBLE_EDGE,
@@ -19130,7 +19106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BEWEAR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Fluffy bulky setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -19152,7 +19128,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TSAREENA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Queenly Majesty attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_POWER_WHIP,
@@ -19160,7 +19136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard/Queenly Majesty/Sweet Veil ALL now innate; chosen Grassy Surge (fork override, slot 2) powers its Grass STAB
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19172,7 +19148,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TSAREENA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky priority-block pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_POWER_WHIP,
@@ -19180,7 +19156,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SYNTHESIS,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard/Queenly Majesty/Sweet Veil ALL now innate; chosen Grassy Surge (fork override, slot 2) powers its Grass STAB
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19190,11 +19166,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0764 (innate Levitate + Triage)
+    // 0764
     {
         .species = SPECIES_COMFEY,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS, // Triage priority healer
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_FLORAL_HEALING,
@@ -19202,7 +19178,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_GRASSY_SURGE, // Triage now innate; chosen Grassy Surge
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19214,7 +19190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COMFEY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Triage Calm Mind sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -19222,7 +19198,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_PSYCHIC
         },
-        .ability = ABILITY_GRASSY_SURGE, // Triage now innate; chosen Grassy Surge
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19236,7 +19212,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ORANGURU,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS, // Trick Room setter / Instruct support
+        .heldItem = ITEM_LEFTOVERS,
         .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
@@ -19245,7 +19221,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_FOUL_PLAY
         },
-        .ability = ABILITY_SYMBIOSIS, // Inner Focus now innate; chosen Symbiosis (real slot) passes items in doubles
+        .ability = ABILITY_SYMBIOSIS,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19257,7 +19233,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ORANGURU,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -19265,7 +19241,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_SYMBIOSIS, // Telepathy now innate; chosen Symbiosis (:x:, never an innate -> stable) passes its item to the ally
+        .ability = ABILITY_SYMBIOSIS,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19279,7 +19255,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PASSIMIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Defiant revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -19287,7 +19263,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_GUNK_SHOT
         },
-        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19299,7 +19275,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PASSIMIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // physical breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -19307,7 +19283,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_RIVALRY, // all real abilities innate; chosen Rivalry (non-redundant)
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19321,7 +19297,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOLISOPOD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Emergency Exit First Impression band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FIRST_IMPRESSION,
@@ -19341,7 +19317,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOLISOPOD,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_FIRST_IMPRESSION,
@@ -19363,7 +19339,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PALOSSAND,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Water Compaction defensive trapper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -19371,7 +19347,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_SHORE_UP
         },
-        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19383,7 +19359,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PALOSSAND,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // recovery for the defensive Ghost/Ground trapper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -19391,7 +19367,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_SHORE_UP
         },
-        .ability = ABILITY_EARTH_EATER, // all real abilities innate; chosen Earth Eater (non-redundant)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19405,7 +19381,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PYUKUMUKU,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware Counter/Toxic staller
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_COUNTER,
@@ -19413,7 +19389,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_SOAK
         },
-        .ability = ABILITY_WATER_ABSORB, // Innards Out/Unaware both now innate; chosen Water Absorb (slot-1 override) heals the Counter staller off Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19427,7 +19403,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SILVALLY_DRAGON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DRAGON_MEMORY, // RKS System Dragon pivot
+        .heldItem = ITEM_DRAGON_MEMORY,
         .moves =
         {
             MOVE_MULTI_ATTACK,
@@ -19447,7 +19423,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SILVALLY_FAIRY,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FAIRY_MEMORY, // defensive pivot
+        .heldItem = ITEM_FAIRY_MEMORY,
         .moves =
         {
             MOVE_MULTI_ATTACK,
@@ -19467,7 +19443,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SILVALLY_STEEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_STEEL_MEMORY, // Steel attacker
+        .heldItem = ITEM_STEEL_MEMORY,
         .moves =
         {
             MOVE_MULTI_ATTACK,
@@ -19489,7 +19465,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MINIOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // Shields Down Shell Smash sweeper
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -19509,7 +19485,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MINIOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WHITE_HERB, // Shell Smash, White Herb restores drops
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -19531,7 +19507,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KOMALA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // innate Comatose keeps it status-immune; chosen Sticky Hold keeps its Choice Band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_RETURN,
@@ -19539,7 +19515,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_HUSTLE, // chosen Hustle
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19553,7 +19529,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TURTONATOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Shell Trap defensive attacker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SHELL_TRAP,
@@ -19561,7 +19537,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_PULSE,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_FLAME_BODY, // Shell Armor now innate; chosen Flame Body (override) burns on contact
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19573,7 +19549,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TURTONATOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Fire/Dragon special attacker
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -19581,7 +19557,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_FLASH_CANNON
         },
-        .ability = ABILITY_FLAME_BODY, // Shell Armor now innate; chosen Flame Body (override) burns on contact
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19595,7 +19571,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOGEDEMARU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Iron Barbs / Lightning Rod attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_ZING_ZAP,
@@ -19603,7 +19579,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_NUZZLE
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Iron Barbs now innate; chosen Lightning Rod (real slot 1, :x: stable) draws in Electric moves
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19615,7 +19591,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOGEDEMARU,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_SASH, // Lightning Rod redirect support
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
             MOVE_FAKE_OUT,
@@ -19637,7 +19613,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIMIKYU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // power for the Disguise attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -19657,7 +19633,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIMIKYU,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Disguise sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -19677,7 +19653,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIMIKYU,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LUM_BERRY, // Disguise disruptor
+        .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -19699,7 +19675,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRUXISH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Strong Jaw attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PSYCHIC_FANGS,
@@ -19707,7 +19683,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_SHEER_FORCE, // Strong Jaw + Dazzling now innate; chosen Sheer Force (slot-1 override) powers up the fangs
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19719,7 +19695,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRUXISH,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_CHOICE_SCARF, // Wonder Skin / disruption pivot
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_PSYCHIC_FANGS,
@@ -19727,7 +19703,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_SHEER_FORCE, // Strong Jaw + Dazzling now innate; chosen Sheer Force (slot-1 override) powers up the fangs
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19741,7 +19717,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAMPA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Berserk special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -19749,7 +19725,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SAP_SIPPER, // all real abilities innate; chosen Sap Sipper (non-redundant)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19761,7 +19737,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAMPA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Berserk Roost staller
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HYPER_VOICE,
@@ -19769,7 +19745,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_GLARE
         },
-        .ability = ABILITY_SAP_SIPPER, // all real abilities innate; chosen Sap Sipper (non-redundant)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19783,7 +19759,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DHELMISE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Steelworker Anchor Shot band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ANCHOR_SHOT,
@@ -19791,7 +19767,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SHADOW_CLAW
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -19803,7 +19779,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DHELMISE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Trick Room trapper
+        .heldItem = ITEM_ASSAULT_VEST,
         .iv = IVS(SPE, 0),
         .moves =
         {
@@ -19812,7 +19788,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_CLAW,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19826,7 +19802,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KOMMO_O,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DRAGON_GEM, // one-shot Dragon burst after Clangorous setup
+        .heldItem = ITEM_DRAGON_GEM,
         .moves =
         {
             MOVE_CLANGING_SCALES,
@@ -19846,7 +19822,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KOMMO_O,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up / Body Press setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -19866,7 +19842,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KOMMO_O,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LOADED_DICE, // Dragon Dance physical sweeper
+        .heldItem = ITEM_LOADED_DICE,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -19874,7 +19850,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_POISON_JAB
         },
-        .ability = ABILITY_BULLETPROOF, // Overcoat now innate; chosen Bulletproof (real slot) deflects ball/bomb moves
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -19884,11 +19860,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DRAGON,
     },
 
-    // 0785 (innate Levitate)
+    // 0785
     {
         .species = SPECIES_TAPU_KOKO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
+        .heldItem = ITEM_ELECTRIC_GEM,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -19908,7 +19884,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_KOKO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Electric Surge breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -19928,7 +19904,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_KOKO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Electric Terrain sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -19946,11 +19922,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
 
-    // 0786 (innate Levitate)
+    // 0786
     {
         .species = SPECIES_TAPU_LELE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Psychic Surge breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -19970,7 +19946,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_LELE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_PSYCHIC_SEED, // Calm Mind sweeper, terrain-boosted SpD
+        .heldItem = ITEM_PSYCHIC_SEED,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -19990,7 +19966,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_LELE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PSYCHIC_GEM, // one-shot Psychic burst nuke
+        .heldItem = ITEM_PSYCHIC_GEM,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -20008,11 +19984,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
     },
 
-    // 0787 (innate Levitate)
+    // 0787
     {
         .species = SPECIES_TAPU_BULU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Grassy Surge band
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_WOOD_HAMMER,
@@ -20032,7 +20008,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_BULU,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_GRASSY_SEED, // Swords Dance bulky setup
+        .heldItem = ITEM_GRASSY_SEED,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -20050,11 +20026,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GRASS,
     },
 
-    // 0788 (innate Levitate)
+    // 0788
     {
         .species = SPECIES_TAPU_FINI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Misty Surge Calm Mind wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -20074,7 +20050,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_FINI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -20094,7 +20070,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_FINI,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_MISTY_SEED, // bulky support, terrain-boosted SpD
+        .heldItem = ITEM_MISTY_SEED,
         .moves =
         {
             MOVE_MUDDY_WATER,
@@ -20116,7 +20092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SOLGALEO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Full Metal Body physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SUNSTEEL_STRIKE,
@@ -20124,7 +20100,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_FLARE_BLITZ
         },
-        .ability = ABILITY_DROUGHT, // Full Metal Body now innate; chosen Drought
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20136,7 +20112,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SOLGALEO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky setup pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SUNSTEEL_STRIKE,
@@ -20144,7 +20120,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_DROUGHT, // Full Metal Body now innate; chosen Drought
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20158,7 +20134,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUNALA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst nuke
+        .heldItem = ITEM_GHOST_GEM,
         .moves =
         {
             MOVE_MOONGEIST_BEAM,
@@ -20166,7 +20142,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Shadow Shield now innate; chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20178,7 +20154,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LUNALA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Shadow Shield Calm Mind tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -20186,7 +20162,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYSHOCK,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Shadow Shield now innate; chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20196,11 +20172,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
     },
 
-    // 0793 (innate Beast Boost + Levitate)
+    // 0793
     {
         .species = SPECIES_NIHILEGO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Beast Boost special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_SLUDGE_WAVE,
@@ -20208,7 +20184,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_TOXIC_DEBRIS, // Beast Boost now innate (Y7); chosen Toxic Debris
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20220,7 +20196,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIHILEGO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // special wall / status spreader
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_SLUDGE_WAVE,
@@ -20228,7 +20204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_TOXIC_DEBRIS, // Beast Boost now innate (Y7); chosen Toxic Debris
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20238,11 +20214,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_POISON,
     },
 
-    // 0794 (innate Beast Boost)
+    // 0794
     {
         .species = SPECIES_BUZZWOLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Beast Boost physical breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -20250,7 +20226,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_POISON_TOUCH, // Beast Boost now innate (Y7); chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20262,7 +20238,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BUZZWOLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up bulky setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -20270,7 +20246,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_LIFE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_POISON_TOUCH, // Beast Boost now innate (Y7); chosen Poison Touch
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20280,11 +20256,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FIGHTING,
     },
 
-    // 0795 (innate Beast Boost)
+    // 0795
     {
         .species = SPECIES_PHEROMOSA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Beast Boost glass cannon
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -20292,7 +20268,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_U_TURN
         },
-        .ability = ABILITY_LINGERING_AROMA, // Beast Boost now innate (Y7); chosen Lingering Aroma
+        .ability = ABILITY_LINGERING_AROMA,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20304,7 +20280,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PHEROMOSA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // fast lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -20312,7 +20288,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_LINGERING_AROMA, // Beast Boost now innate (Y7); chosen Lingering Aroma
+        .ability = ABILITY_LINGERING_AROMA,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20322,11 +20298,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ICE,
     },
 
-    // 0796 (innate Beast Boost + Levitate)
+    // 0796
     {
         .species = SPECIES_XURKITREE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst nuke
+        .heldItem = ITEM_ELECTRIC_GEM,
         .moves =
         {
             MOVE_TAIL_GLOW,
@@ -20334,7 +20310,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Beast Boost now innate (Y7); chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20346,7 +20322,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_XURKITREE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Beast Boost revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -20354,7 +20330,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Beast Boost now innate (Y7); chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20364,11 +20340,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
 
-    // 0797 (innate Beast Boost)
+    // 0797
     {
         .species = SPECIES_CELESTEELA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Beast Boost defensive wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LEECH_SEED,
@@ -20376,7 +20352,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_HEAVY_SLAM
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Beast Boost now innate (Y7); chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20388,7 +20364,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CELESTEELA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Autotomize sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_AUTOTOMIZE,
@@ -20396,7 +20372,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Beast Boost now innate (Y7); chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20418,7 +20394,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SMART_STRIKE,
             MOVE_AERIAL_ACE
         },
-        .ability = ABILITY_BULLETPROOF, // chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20428,11 +20404,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GRASS,
     },
 
-    // 0799 (innate Beast Boost)
+    // 0799
     {
         .species = SPECIES_GUZZLORD,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // massive HP mixed tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_KNOCK_OFF,
@@ -20440,7 +20416,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_REST
         },
-        .ability = ABILITY_EARTH_EATER, // Beast Boost now innate (Y7); chosen Earth Eater
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20452,7 +20428,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GUZZLORD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank attacker
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -20460,7 +20436,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_EARTH_EATER, // Beast Boost now innate (Y7); chosen Earth Eater
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20470,11 +20446,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DARK,
     },
 
-    // 0800 (innate Levitate)
+    // 0800
     {
         .species = SPECIES_NECROZMA_DUSK_MANE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance physical sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -20482,7 +20458,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_PHOTON_GEYSER
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Prism Armor now innate; chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20494,7 +20470,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NECROZMA_DAWN_WINGS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Calm Mind special sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -20502,7 +20478,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PHOTON_GEYSER,
             MOVE_AURA_SPHERE
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Prism Armor now innate; chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20514,7 +20490,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NECROZMA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_PSYCHIC_GEM, // Psychic burst for the Calm Mind sweeper
+        .heldItem = ITEM_PSYCHIC_GEM,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -20522,7 +20498,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Prism Armor now innate; chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20532,11 +20508,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
     },
 
-    // 0801 (innate Levitate)
+    // 0801
     {
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Soul-Heart Calm Mind sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -20544,7 +20520,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_AURA_SPHERE
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20556,7 +20532,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_FLEUR_CANNON,
@@ -20564,7 +20540,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_AURA_SPHERE
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20576,7 +20552,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGEARNA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FAIRY_GEM, // one-shot Fairy burst for the Trick Room nuke
+        .heldItem = ITEM_FAIRY_GEM,
         .iv = IVS(ATK, 0, SPE, 0),
         .moves =
         {
@@ -20585,7 +20561,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_MISTY_SURGE, // chosen Misty Surge
+        .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20599,7 +20575,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MARSHADOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GHOST_GEM, // one-shot Ghost burst for the Spectral Thief nuke
+        .heldItem = ITEM_GHOST_GEM,
         .moves =
         {
             MOVE_SPECTRAL_THIEF,
@@ -20607,7 +20583,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_SNEAK,
             MOVE_BULK_UP
         },
-        .ability = ABILITY_ILLUSION, // Technician now innate; chosen Illusion (override) disguises the shadow
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20619,7 +20595,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MARSHADOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Technician priority sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BULK_UP,
@@ -20627,7 +20603,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_ILLUSION, // Technician now innate; chosen Illusion (override) disguises the shadow
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -20637,11 +20613,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FIGHTING,
     },
 
-    // 0804 (innate Beast Boost)
+    // 0804
     {
         .species = SPECIES_NAGANADEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Beast Boost Nasty Plot sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -20649,7 +20625,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_DRACO_METEOR
         },
-        .ability = ABILITY_SHEER_FORCE, // Beast Boost now innate (Y7); chosen Sheer Force (override) powers its Nasty Plot sweeper
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20661,7 +20637,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NAGANADEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_SLUDGE_WAVE,
@@ -20669,7 +20645,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE, // Beast Boost now innate (Y7); chosen Sheer Force (override) powers Sludge Wave/Fire Blast/Draco Meteor
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20679,11 +20655,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DRAGON,
     },
 
-    // 0805 (innate Beast Boost)
+    // 0805
     {
         .species = SPECIES_STAKATAKA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Trick Room Beast Boost wallbreaker
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .iv = IVS(SPE, 0),
         .moves =
         {
@@ -20692,7 +20668,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TRICK_ROOM
         },
-        .ability = ABILITY_BULLETPROOF, // Beast Boost now innate (Y7); chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20704,7 +20680,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STAKATAKA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // physical wall / hazard setter
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -20712,7 +20688,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_TRICK_ROOM
         },
-        .ability = ABILITY_BULLETPROOF, // Beast Boost now innate (Y7); chosen Bulletproof
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20722,11 +20698,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
 
-    // 0806 (innate Beast Boost + Levitate)
+    // 0806
     {
         .species = SPECIES_BLACEPHALON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Beast Boost revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -20734,7 +20710,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_TRICK
         },
-        .ability = ABILITY_FLASH_FIRE, // Beast Boost now innate (Y7); chosen Flash Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20746,7 +20722,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLACEPHALON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FIRE_GEM, // one-shot Fire burst nuke
+        .heldItem = ITEM_FIRE_GEM,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -20754,7 +20730,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_FLASH_FIRE, // Beast Boost now innate (Y7); chosen Flash Fire
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -20768,7 +20744,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZERAORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Volt Absorb fast physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PLASMA_FISTS,
@@ -20788,7 +20764,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZERAORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIC_GEM, // one-shot Electric burst after Bulk Up
+        .heldItem = ITEM_ELECTRIC_GEM,
         .moves =
         {
             MOVE_BULK_UP,
@@ -20810,7 +20786,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MELMETAL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Iron Fist breaker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_DOUBLE_IRON_BASH,
@@ -20818,7 +20794,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Iron Fist now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20830,7 +20806,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MELMETAL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // special bulk tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_DOUBLE_IRON_BASH,
@@ -20838,7 +20814,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_WELL_BAKED_BODY, // Iron Fist now innate; chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -20856,7 +20832,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RILLABOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Grassy Surge band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_GRASSY_GLIDE,
@@ -20876,7 +20852,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RILLABOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance terrain sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -20896,7 +20872,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RILLABOOM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Grassy Terrain pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_GRASSY_GLIDE,
@@ -20918,7 +20894,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CINDERACE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Libero offensive pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_PYRO_BALL,
@@ -20938,7 +20914,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CINDERACE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Libero band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_PYRO_BALL,
@@ -20958,7 +20934,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CINDERACE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB, // Court Change utility sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_PYRO_BALL,
@@ -20980,7 +20956,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INTELEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Sniper special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -20988,7 +20964,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21000,7 +20976,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INTELEON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SCOPE_LENS, // Sniper guaranteed-crit Snipe Shot
+        .heldItem = ITEM_SCOPE_LENS,
         .moves =
         {
             MOVE_SNIPE_SHOT,
@@ -21008,7 +20984,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21020,7 +20996,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INTELEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -21028,7 +21004,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_DARK_PULSE
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21042,7 +21018,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GREEDENT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // Cheek Pouch heal loop
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_BODY_SLAM,
@@ -21050,7 +21026,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_BULLET_SEED
         },
-        .ability = ABILITY_SHEER_FORCE, // Cheek Pouch + Gluttony now innate (Cheek Pouch still runs the heal loop); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21064,7 +21040,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CORVIKNIGHT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Pressure Defog wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BODY_PRESS,
@@ -21072,7 +21048,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_IRON_DEFENSE
         },
-        .ability = ABILITY_BULLETPROOF, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Bulletproof (fork override) observable + frees the redundant slot
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21084,7 +21060,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CORVIKNIGHT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // Mirror Armor physical wall
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -21092,7 +21068,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_BULLETPROOF, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Bulletproof (fork override) observable + frees the redundant slot
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21104,7 +21080,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CORVIKNIGHT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky offensive pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -21112,7 +21088,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_BULLETPROOF, // Pressure / Unnerve / Mirror Armor all now innate (Tier 5.7); chosen Bulletproof (fork override) observable + frees the redundant slot
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21126,7 +21102,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ORBEETLE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // dual screens support
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_LIGHT_SCREEN,
@@ -21134,7 +21110,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_STICKY_WEB
         },
-        .ability = ABILITY_SYNCHRONIZE, // Swarm/Frisk/Telepathy all now innate; chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21147,7 +21123,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ORBEETLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -21155,7 +21131,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_ROOST
         },
-        .ability = ABILITY_SYNCHRONIZE, // Swarm/Frisk/Telepathy all now innate; chosen Synchronize
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21170,7 +21146,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_THIEVUL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Nasty Plot special sweeper
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -21178,7 +21154,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_FOUL_PLAY
         },
-        .ability = ABILITY_RUN_AWAY, // Unburden + Stakeout now innate; Run Away is its only stable non-innate real slot
+        .ability = ABILITY_RUN_AWAY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -21192,7 +21168,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ELDEGOSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator support pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LEECH_SEED,
@@ -21214,7 +21190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUBWOOL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Cotton Guard Body Press wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_COTTON_GUARD,
@@ -21236,7 +21212,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DREDNAW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LUM_BERRY, // status insurance for setup
+        .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -21244,7 +21220,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21256,7 +21232,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DREDNAW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HARD_STONE, // jaw-boosted Crunch bite set
+        .heldItem = ITEM_HARD_STONE,
         .moves =
         {
             MOVE_CRUNCH,
@@ -21264,7 +21240,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -21279,7 +21255,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BOLTUND,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MAGNET, // Strong Jaw Bolt Beak
+        .heldItem = ITEM_MAGNET,
         .moves =
         {
             MOVE_BOLT_BEAK,
@@ -21287,7 +21263,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_LIGHTNING_ROD, // all real abilities innate; chosen Lightning Rod (non-redundant)
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21301,7 +21277,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COALOSSAL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Steam Engine bulky hazards
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -21321,7 +21297,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COALOSSAL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Steam Engine sweeper
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_FLAMETHROWER,
@@ -21329,7 +21305,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_HEAT_CRASH
         },
-        .ability = ABILITY_FLASH_FIRE, // Steam Engine now innate; chosen Flash Fire adds Fire immunity + a Fire-power boost
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21343,7 +21319,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLAPPLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Hustle physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_GRAV_APPLE,
@@ -21363,7 +21339,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLAPPLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_APPLE_ACID,
@@ -21385,7 +21361,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_APPLETUN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Thick Fat bulky special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_APPLE_ACID,
@@ -21393,8 +21369,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_LEECH_SEED
         },
-        // Ripen/Gluttony/Thick Fat all now innate; chosen Filter blunts its 4x Ice weakness (fork override).
-        .ability = ABILITY_WELL_BAKED_BODY, // chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -21406,7 +21381,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_APPLETUN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_APPLE_ACID,
@@ -21414,8 +21389,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_EARTH_POWER
         },
-        // Ripen/Gluttony/Thick Fat all now innate; chosen Filter blunts its 4x Ice weakness (fork override).
-        .ability = ABILITY_WELL_BAKED_BODY, // chosen Well-Baked Body
+        .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21429,7 +21403,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SANDACONDA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Sand Spit Coil wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_COIL,
@@ -21437,7 +21411,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_GLARE
         },
-        .ability = ABILITY_SAND_SPIT, // Shed Skin now innate (30% self-cure); chosen Sand Spit summons sand (feeds innate Sand Veil)
+        .ability = ABILITY_SAND_SPIT,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21449,7 +21423,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SANDACONDA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // bulky hazard lead
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -21471,7 +21445,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRAMORANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Gulp Missile spam
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SURF,
@@ -21494,7 +21468,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BARRASKEWDA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Swift Swim band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -21502,7 +21476,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Propeller Tail now innate; chosen Water Absorb (override) heals off Water
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21514,7 +21488,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BARRASKEWDA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // fast revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -21522,7 +21496,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim + Propeller Tail now innate; chosen Water Absorb (override) heals off Water
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21536,7 +21510,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXTRICITY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_THROAT_SPRAY, // Punk Rock Boomburst nuke (Amped)
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_BOOMBURST,
@@ -21544,7 +21518,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_WAVE,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_VOLT_ABSORB, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21556,7 +21530,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXTRICITY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Punk Rock special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_OVERDRIVE,
@@ -21564,7 +21538,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_VOLT_ABSORB, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21576,7 +21550,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOXTRICITY_LOW_KEY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Low Key revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_OVERDRIVE,
@@ -21584,7 +21558,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_BOOMBURST
         },
-        .ability = ABILITY_VOLT_ABSORB, // all real abilities innate; chosen Volt Absorb (non-redundant)
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21598,7 +21572,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CENTISKORCH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Flash Fire bulky attacker
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FIERY_DANCE,
@@ -21618,7 +21592,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CENTISKORCH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_THROAT_SPRAY, // Fiery Dance / Coil setup
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_COIL,
@@ -21626,7 +21600,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_FLASH_FIRE, // White Smoke now innate; chosen Flash Fire powers its Fire STAB
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21640,7 +21614,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRAPPLOCT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Technician punches + Bulk Up
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_OCTOLOCK,
@@ -21648,7 +21622,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_BULK_UP
         },
-        .ability = ABILITY_WATER_ABSORB, // Limber + Technician now innate; chosen Water Absorb (override) heals off Water moves
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21661,7 +21635,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRAPPLOCT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // priority Mach Punch attacker
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_MACH_PUNCH,
@@ -21669,7 +21643,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_WATER_ABSORB, // Limber + Technician now innate; chosen Water Absorb (override) heals off Water moves
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 160,
@@ -21679,11 +21653,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ICE,
     },
 
-    // 0855 (innate Levitate)
+    // 0855
     {
         .species = SPECIES_POLTEAGEIST,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Shell Smash Stored Power sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -21691,7 +21665,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_WEAK_ARMOR, // Cursed Body now innate; chosen Weak Armor adds Speed on a physical hit
+        .ability = ABILITY_WEAK_ARMOR,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -21703,7 +21677,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLTEAGEIST,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // Shell Smash sash sweeper
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SHELL_SMASH,
@@ -21721,11 +21695,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GHOST,
     },
 
-    // 0858 (innate Magic Bounce)
+    // 0858
     {
         .species = SPECIES_HATTERENE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Magic Bounce Calm Mind wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -21733,7 +21707,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_DRAIN_PUNCH
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Healer / Anticipation / Magic Bounce all now innate (Tier 5.8); chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21745,7 +21719,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HATTERENE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // Psychic Terrain breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EXPANDING_FORCE,
@@ -21753,7 +21727,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_PROTECT
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Healer / Anticipation / Magic Bounce all now innate (Tier 5.8); chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21765,7 +21739,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HATTERENE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -21773,7 +21747,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_POWER_WHIP
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Healer / Anticipation / Magic Bounce all now innate (Tier 5.8); chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21787,7 +21761,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRIMMSNARL,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIGHT_CLAY, // Prankster dual screens lead
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_REFLECT,
@@ -21795,7 +21769,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIRIT_BREAK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_ILLUSION, // Prankster / Frisk / Pickpocket all innate; chosen Illusion
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21807,7 +21781,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRIMMSNARL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Bulk Up physical sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BULK_UP,
@@ -21815,7 +21789,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_DRAIN_PUNCH
         },
-        .ability = ABILITY_ILLUSION, // Prankster / Frisk / Pickpocket all innate; chosen Illusion
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21827,7 +21801,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRIMMSNARL,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_MENTAL_HERB, // Prankster support / Taunt-proof
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_SPIRIT_BREAK,
@@ -21835,7 +21809,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT,
             MOVE_PARTING_SHOT
         },
-        .ability = ABILITY_ILLUSION, // Prankster / Frisk / Pickpocket all innate; chosen Illusion
+        .ability = ABILITY_ILLUSION,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21849,7 +21823,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OBSTAGOON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Guts Facade breaker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -21857,7 +21831,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21869,7 +21843,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OBSTAGOON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up Guts wall-breaker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -21877,7 +21851,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_DARK_AURA, // all real abilities innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21891,7 +21865,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PERRSERKER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Steely Spirit band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_IRON_HEAD,
@@ -21899,7 +21873,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_U_TURN
         },
-        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21911,7 +21885,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PERRSERKER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Swords Dance
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -21919,7 +21893,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -21950,11 +21924,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
     },
 
-    // 0864 (innate Perish Body)
+    // 0864
     {
         .species = SPECIES_CURSOLA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Perish Body bulky special attacker
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -21974,7 +21948,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CURSOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // glass cannon
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -22058,7 +22032,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MR_RIME,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIGHT_CLAY, // Aurora Veil support
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_AURORA_VEIL,
@@ -22078,7 +22052,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MR_RIME,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // bulky Nasty Plot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -22086,7 +22060,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_SCREEN_CLEANER, // Ice Body now innate (snow heal); chosen Screen Cleaner wipes foe screens on entry
+        .ability = ABILITY_SCREEN_CLEANER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22096,11 +22070,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
     },
 
-    // 0867 (innate Levitate)
+    // 0867
     {
         .species = SPECIES_RUNERIGUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // Wandering Spirit bulky hazards
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -22120,7 +22094,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RUNERIGUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Iron Defense Body Press wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_IRON_DEFENSE,
@@ -22142,7 +22116,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FALINKS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // No Retreat setup sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_NO_RETREAT,
@@ -22150,7 +22124,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22162,7 +22136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FALINKS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WHITE_HERB, // No Retreat sweeper with herb reset
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_NO_RETREAT,
@@ -22170,7 +22144,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_NO_GUARD, // all real abilities innate; chosen No Guard (non-redundant)
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22184,7 +22158,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PINCURCHIN,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS, // terrain setter
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_RISING_VOLTAGE,
@@ -22208,7 +22182,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FROSMOTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Quiver Dance sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -22216,7 +22190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SNOW_WARNING, // Shield Dust & Ice Scales now innate; chosen Snow Warning (empty-slot override) — the frost moth heralds snow (Ice-type Def boost)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22228,7 +22202,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FROSMOTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Ice Scales special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -22236,7 +22210,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_SNOW_WARNING, // Shield Dust & Ice Scales now innate; chosen Snow Warning (empty-slot override)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22250,7 +22224,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_STONJOURNER,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Power Spot ally booster
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -22258,7 +22232,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_HEAVY_SLAM
         },
-        .ability = ABILITY_SAND_STREAM, // Power Spot (doubles-only) now innate; chosen Sand Stream
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22272,7 +22246,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EISCUE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Ice Face Belly Drum sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -22292,7 +22266,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EISCUE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Ice Face band attacker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ICICLE_CRASH,
@@ -22314,7 +22288,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INDEEDEE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // Psychic Surge attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EXPANDING_FORCE,
@@ -22334,7 +22308,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INDEEDEE_F,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS, // Healer redirect support (Indeedee-F)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_FOLLOW_ME,
@@ -22356,7 +22330,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MORPEKO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Hunger Switch Aura Wheel attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_AURA_WHEEL,
@@ -22378,7 +22352,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COPPERAJAH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sheer Force Heavy Slam breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HEAVY_SLAM,
@@ -22398,7 +22372,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COPPERAJAH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky hazard setter
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -22406,7 +22380,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_HORSEPOWER,
             MOVE_WHIRLWIND
         },
-        .ability = ABILITY_SHEER_FORCE, // Heavy Metal now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22420,7 +22394,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRACOZOLT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Hustle Bolt Beak nuke
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BOLT_BEAK,
@@ -22440,7 +22414,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRACOZOLT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Sand Rush sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BOLT_BEAK,
@@ -22448,7 +22422,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ROCK_SLIDE
         },
-        .ability = ABILITY_VOLT_ABSORB, // Sand Rush now innate; chosen Volt Absorb
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22462,7 +22436,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCTOZOLT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Slush Rush Bolt Beak nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BOLT_BEAK,
@@ -22470,7 +22444,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LOW_KICK,
             MOVE_BLIZZARD
         },
-        .ability = ABILITY_VOLT_ABSORB, // Slush Rush now innate; chosen Volt Absorb
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22482,7 +22456,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCTOZOLT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Static special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_BOLT_BEAK,
@@ -22504,7 +22478,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRACOVISH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Strong Jaw Fishious Rend nuke
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_FISHIOUS_REND,
@@ -22512,7 +22486,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_WATER_ABSORB, // Sand Rush & Strong Jaw now innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22524,7 +22498,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRACOVISH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sand Rush band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FISHIOUS_REND,
@@ -22532,7 +22506,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_WATER_ABSORB, // Sand Rush & Strong Jaw now innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22546,7 +22520,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCTOVISH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND, // Slush Rush Fishious Rend
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FISHIOUS_REND,
@@ -22554,7 +22528,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_WATER_ABSORB, // Slush Rush & Ice Body now innate; chosen Water Absorb heals off Water moves
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22566,7 +22540,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCTOVISH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Water Absorb bulky pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_FREEZE_DRY,
@@ -22584,11 +22558,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
     },
 
-    // 0887 (innate Levitate)
+    // 0887
     {
         .species = SPECIES_DRAGAPULT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Draco/Shadow Ball breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -22596,7 +22570,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE, // Clear Body + Infiltrator now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22608,7 +22582,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAGAPULT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Dragon Darts band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_DRAGON_DARTS,
@@ -22616,7 +22590,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // Clear Body + Infiltrator now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22628,7 +22602,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DRAGAPULT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Dragon Dance physical sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -22636,7 +22610,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PHANTOM_FORCE,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_SHEER_FORCE, // Clear Body + Infiltrator now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22650,7 +22624,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZACIAN_CROWNED,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_RUSTED_SWORD, // Intrepid Sword Behemoth Blade
+        .heldItem = ITEM_RUSTED_SWORD,
         .moves =
         {
             MOVE_BEHEMOTH_BLADE,
@@ -22658,7 +22632,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SWORD_OF_RUIN, // FORK: innate Intrepid Sword; chosen Sword of Ruin
+        .ability = ABILITY_SWORD_OF_RUIN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22670,7 +22644,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZACIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // base Zacian band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -22678,7 +22652,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_SWORD_OF_RUIN, // FORK: innate Intrepid Sword; chosen Sword of Ruin
+        .ability = ABILITY_SWORD_OF_RUIN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22692,7 +22666,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZAMAZENTA_CROWNED,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_RUSTED_SHIELD, // Dauntless Shield Body Press wall
+        .heldItem = ITEM_RUSTED_SHIELD,
         .moves =
         {
             MOVE_BEHEMOTH_BASH,
@@ -22700,7 +22674,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_DEFENSE,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_TABLETS_OF_RUIN, // FORK: innate Dauntless Shield; chosen Tablets of Ruin
+        .ability = ABILITY_TABLETS_OF_RUIN,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22712,7 +22686,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZAMAZENTA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // base Zamazenta bulky setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_IRON_DEFENSE,
@@ -22720,7 +22694,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_TABLETS_OF_RUIN, // FORK: innate Dauntless Shield; chosen Tablets of Ruin
+        .ability = ABILITY_TABLETS_OF_RUIN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22734,7 +22708,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ETERNATUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Pressure special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DYNAMAX_CANNON,
@@ -22742,7 +22716,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_DRACO_METEOR
         },
-        .ability = ABILITY_POISON_TOUCH, // Pressure now innate; chosen Poison Touch poisons on contact (slot-1 override)
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22754,7 +22728,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ETERNATUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_SLUDGE, // bulky Toxic Spikes / Cosmic Power
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_DYNAMAX_CANNON,
@@ -22762,7 +22736,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_RECOVER
         },
-        .ability = ABILITY_POISON_TOUCH, // Pressure now innate; chosen Poison Touch poisons on contact (slot-1 override)
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22776,7 +22750,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSHIFU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Unseen Fist Wicked Blow breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_WICKED_BLOW,
@@ -22784,7 +22758,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_DARK_AURA, // Unseen Fist now innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22796,7 +22770,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSHIFU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -22804,7 +22778,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_DARK_AURA, // Unseen Fist now innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22818,7 +22792,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSHIFU_RAPID_STRIKE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Surging Strikes always-crit breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_SURGING_STRIKES,
@@ -22826,7 +22800,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_U_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // Unseen Fist now innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22838,7 +22812,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSHIFU_RAPID_STRIKE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -22846,7 +22820,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_WATER_ABSORB, // Unseen Fist now innate; chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22860,7 +22834,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZARUDE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Swords Dance + recovery
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -22868,7 +22842,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARKEST_LARIAT,
             MOVE_JUNGLE_HEALING
         },
-        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard now innate; chosen Grassy Surge
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22880,7 +22854,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZARUDE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_GLASSES, // Dark-boosted pivot
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_POWER_WHIP,
@@ -22888,7 +22862,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_U_TURN
         },
-        .ability = ABILITY_GRASSY_SURGE, // Leaf Guard now innate; chosen Grassy Surge
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22898,11 +22872,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DARK,
     },
 
-    // 0894 (innate Transistor + Levitate; chosen Lightning Rod override)
+    // 0894
     {
         .species = SPECIES_REGIELEKI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // innate-Transistor electric nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -22910,7 +22884,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RISING_VOLTAGE,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Transistor now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22922,7 +22896,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGIELEKI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIGHT_CLAY, // screens lead
+        .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
             MOVE_REFLECT,
@@ -22930,7 +22904,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_LIGHTNING_ROD, // Transistor now innate; chosen Lightning Rod (override) draws Electric for immunity + Sp. Atk
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22940,11 +22914,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
 
-    // 0895 (innate Dragon's Maw; chosen Adaptability override)
+    // 0895
     {
         .species = SPECIES_REGIDRAGO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // innate-Dragon's-Maw + Adaptability Dragon Energy breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_DRAGON_CLAW,
@@ -22952,7 +22926,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_SHEER_FORCE, // Dragon's Maw now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22964,7 +22938,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGIDRAGO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special Dragon Energy breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -22972,7 +22946,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_SHEER_FORCE, // Dragon's Maw now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -22986,7 +22960,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLASTRIER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Chilling Neigh band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ICICLE_CRASH,
@@ -22994,7 +22968,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_HEAVY_SLAM
         },
-        .ability = ABILITY_SNOW_WARNING, // Chilling Neigh now innate; chosen Snow Warning sets snow (Ice-type Def)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23006,7 +22980,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLASTRIER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Swords Dance
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -23014,7 +22988,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_HORSEPOWER,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_SNOW_WARNING, // Chilling Neigh now innate; chosen Snow Warning sets snow (Ice-type Def)
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23024,11 +22998,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ICE,
     },
 
-    // 0897 (innate Levitate-tier)
+    // 0897
     {
         .species = SPECIES_SPECTRIER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Grim Neigh special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -23036,7 +23010,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_DRAINING_KISS
         },
-        .ability = ABILITY_SHEER_FORCE, // Grim Neigh now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23048,7 +23022,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SPECTRIER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Nasty Plot snowball sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -23056,7 +23030,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_SHEER_FORCE, // Grim Neigh now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23070,7 +23044,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CALYREX_ICE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // As One Glacial Lance breaker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_GLACIAL_LANCE,
@@ -23091,7 +23065,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CALYREX_ICE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Chilling Neigh band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_GLACIAL_LANCE,
@@ -23113,7 +23087,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CALYREX_SHADOW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Grim Neigh Astral Barrage nuke
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_ASTRAL_BARRAGE,
@@ -23133,7 +23107,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CALYREX_SHADOW,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Nasty Plot Substitute sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -23155,7 +23129,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CALYREX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind bulky setup
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -23163,7 +23137,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_GRASSY_SURGE, // chosen Grassy Surge
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23175,7 +23149,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CALYREX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // Trick Room utility
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -23183,7 +23157,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POLLEN_PUFF,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_GRASSY_SURGE, // chosen Grassy Surge
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23198,7 +23172,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WYRDEER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sap Sipper band attacker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_PSYCHIC_FANGS,
@@ -23218,7 +23192,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WYRDEER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Intimidate special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -23226,7 +23200,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_SAP_SIPPER, // Intimidate + Frisk now innate; chosen Sap Sipper (real slot 2)
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23240,7 +23214,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KLEAVOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sharpness Stone Axe breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_STONE_AXE,
@@ -23248,7 +23222,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE, // Swarm & Sharpness now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23260,7 +23234,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KLEAVOR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Stone Axe hazard lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STONE_AXE,
@@ -23268,7 +23242,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_DEFOG
         },
-        .ability = ABILITY_SHEER_FORCE, // Swarm & Sharpness now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23282,7 +23256,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSALUNA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // Guts Facade wallbreaker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -23290,7 +23264,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_BULLETPROOF, // Guts now innate; Bulletproof blocks ball/bomb moves
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23303,7 +23277,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSALUNA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Swords Dance Bulk Up bruiser
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -23311,7 +23285,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_PROTECT
         },
-        .ability = ABILITY_BULLETPROOF, // Guts now innate; Bulletproof blocks ball/bomb moves
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23325,7 +23299,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSALUNA_BLOODMOON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // special tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BLOOD_MOON,
@@ -23333,7 +23307,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_EARTH_EATER, // Mind's Eye now innate; chosen Earth Eater
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23347,7 +23321,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BASCULEGION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Adaptability Wave Crash breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_WAVE_CRASH,
@@ -23355,7 +23329,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim/Adaptability/Mold Breaker all now innate; fork override frees slot 1 to a chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23367,7 +23341,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BASCULEGION_F,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special Basculegion-F breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -23375,7 +23349,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // Swift Swim/Adaptability/Mold Breaker all now innate; fork override frees slot 1 to a chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23431,7 +23405,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OVERQWIL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Intimidate Toxic Spikes pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BARB_BARRAGE,
@@ -23439,7 +23413,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_POISON_POINT, // Intimidate + Swift Swim now innate; chosen Poison Point (real slot 0)
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23451,7 +23425,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OVERQWIL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -23473,7 +23447,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ENAMORUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Cute Charm special attacker (Incarnate)
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -23481,7 +23455,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_MYSTICAL_FIRE
         },
-        .ability = ABILITY_CONTRARY, // Cute Charm now innate; chosen Contrary (its real HA)
+        .ability = ABILITY_CONTRARY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -23493,7 +23467,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ENAMORUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind setup
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -23513,7 +23487,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ENAMORUS_THERIAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Overcoat Therian physical breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -23521,7 +23495,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPRINGTIDE_STORM,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE, // Overcoat now innate; chosen Sheer Force (override) powers Play Rough/Springtide
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23539,7 +23513,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSCARADA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Protean physical attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_FLOWER_TRICK,
@@ -23559,7 +23533,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSCARADA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // hit-and-run wallbreaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FLOWER_TRICK,
@@ -23579,7 +23553,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSCARADA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast lead / spike support
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SPIKES,
@@ -23587,7 +23561,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_TAUNT
         },
-        .ability = ABILITY_PROTEAN, // Overgrow now innate (latched); chosen Protean
+        .ability = ABILITY_PROTEAN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23601,7 +23575,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SKELEDIRGE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Torch Song bulky setup pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_TORCH_SONG,
@@ -23609,7 +23583,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_MUMMY, // Blaze+Unaware both innate; chosen Mummy via species_ability_overrides (curse spreads on contact)
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23621,7 +23595,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SKELEDIRGE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware special wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_TORCH_SONG,
@@ -23629,7 +23603,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_MUMMY, // Blaze+Unaware both innate; chosen Mummy via species_ability_overrides (curse spreads on contact)
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23641,7 +23615,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SKELEDIRGE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_THROAT_SPRAY, // Torch Song snowball sweeper
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_TORCH_SONG,
@@ -23649,7 +23623,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_MUMMY, // Blaze+Unaware both innate; chosen Mummy via species_ability_overrides (curse spreads on contact)
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23663,7 +23637,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_QUAQUAVAL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Aqua Step setup sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_AQUA_STEP,
@@ -23671,7 +23645,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SPINNER,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23683,7 +23657,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_QUAQUAVAL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Moxie band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_AQUA_STEP,
@@ -23691,7 +23665,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRIPLE_AXEL,
             MOVE_U_TURN
         },
-        .ability = ABILITY_WATER_ABSORB, // all real abilities innate; chosen Water Absorb (non-redundant)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23705,7 +23679,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SPIDOPS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // hazard setter
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STICKY_WEB,
@@ -23713,7 +23687,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_CIRCLE_THROW
         },
-        .ability = ABILITY_TOXIC_DEBRIS, // all real abilities innate; chosen Toxic Debris
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23727,7 +23701,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LOKIX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND, // priority bug
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_FIRST_IMPRESSION,
@@ -23735,7 +23709,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_LIFE,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_DARK_AURA, // Swarm & Tinted Lens now innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23747,7 +23721,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LOKIX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SILK_SCARF, // SD wallbreaker
+        .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -23755,7 +23729,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_DARK_AURA, // Swarm & Tinted Lens now innate; chosen Dark Aura
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23769,7 +23743,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PAWMOT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // pivot/punch
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_DOUBLE_SHOCK,
@@ -23777,7 +23751,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MACH_PUNCH,
             MOVE_NUZZLE
         },
-        .ability = ABILITY_VOLT_ABSORB, // Natural Cure & Iron Fist now innate; chosen Volt Absorb
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23789,7 +23763,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PAWMOT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_EXPERT_BELT, // coverage pivot
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_VOLT_SWITCH,
@@ -23797,7 +23771,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NUZZLE,
             MOVE_MACH_PUNCH
         },
-        .ability = ABILITY_VOLT_ABSORB, // Natural Cure & Iron Fist now innate; chosen Volt Absorb
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23811,7 +23785,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAUSHOLD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LOADED_DICE, // Technician sweeper; Loaded Dice guarantees Population Bomb's full 10 hits (and Bullet Seed's 5)
+        .heldItem = ITEM_LOADED_DICE,
         .moves =
         {
             MOVE_POPULATION_BOMB,
@@ -23819,7 +23793,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TIDY_UP,
             MOVE_ENCORE
         },
-        .ability = ABILITY_NO_GUARD, // Friend Guard (+ Technician) now innate; chosen No Guard (override) lands Population Bomb / Beat Up reliably
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23831,7 +23805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAUSHOLD,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND, // Friend Guard support lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_FOLLOW_ME,
@@ -23853,7 +23827,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DACHSBUN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // baked bread wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -23875,7 +23849,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARBOLIVA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky grass
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_ENERGY_BALL,
@@ -23898,7 +23872,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SQUAWKABILLY_GREEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB, // guts attacker
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -23906,7 +23880,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_DOUBLE_EDGE
         },
-        .ability = ABILITY_HUSTLE, // Intimidate + Guts now innate; chosen Hustle (real slot 1) powers its Facade attacker
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -23920,7 +23894,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARGANACL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Purifying Salt physical wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SALT_CURE,
@@ -23928,7 +23902,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_EARTH_EATER, // Purifying Salt / Sturdy / Clear Body all now innate; chosen Earth Eater
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23940,7 +23914,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARGANACL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Iron Defense + Body Press sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_IRON_DEFENSE,
@@ -23948,7 +23922,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SALT_CURE,
             MOVE_RECOVER
         },
-        .ability = ABILITY_EARTH_EATER, // Purifying Salt / Sturdy / Clear Body all now innate; chosen Earth Eater
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23960,7 +23934,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARGANACL,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ROCKY_HELMET, // doubles Salt Cure chip + Wide Guard
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_SALT_CURE,
@@ -23968,7 +23942,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_EARTH_EATER, // Purifying Salt / Sturdy / Clear Body all now innate; chosen Earth Eater
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23982,7 +23956,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARMAROUGE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WEAKNESS_POLICY, // Armor Cannon special sweeper
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_ARMOR_CANNON,
@@ -24002,7 +23976,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARMAROUGE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // Expanding Force Trick Room attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EXPANDING_FORCE,
@@ -24025,7 +23999,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CERULEDGE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Bitter Blade Swords Dance sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -24045,7 +24019,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CERULEDGE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Bulk Up bulky setup
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -24067,7 +24041,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BELLIBOLT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky frog
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_VOLT_SWITCH,
@@ -24075,7 +24049,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_TOXIC
         },
-        .ability = ABILITY_STATIC, // Electromorphosis now innate; chosen Static paralyzes contact attackers (its doubles set already runs Static)
+        .ability = ABILITY_STATIC,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24088,7 +24062,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BELLIBOLT,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // special wall
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_PARABOLIC_CHARGE,
@@ -24111,7 +24085,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KILOWATTREL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // fast special
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -24133,7 +24107,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MABOSSTIFF,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SITRUS_BERRY, // guard dog mauler
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_CRUNCH,
@@ -24141,7 +24115,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_SHEER_FORCE, // Guard Dog + Stakeout now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -24153,7 +24127,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MABOSSTIFF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // intimidate punish
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_COMEUPPANCE,
@@ -24161,7 +24135,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_SHEER_FORCE, // Intimidate + Guard Dog + Stakeout now innate; chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24175,7 +24149,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GRAFAIAI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // prankster status
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_TOXIC,
@@ -24183,7 +24157,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_POISON_TOUCH, // Prankster now innate; chosen Poison Touch poisons on contact (Gunk Shot/Knock Off)
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24197,7 +24171,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRAMBLEGHAST,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Wind Rider spin / hazard control
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_POWER_WHIP,
@@ -24217,7 +24191,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRAMBLEGHAST,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // physical breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_POWER_WHIP,
@@ -24239,7 +24213,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOEDSCRUEL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Mycelium Might hazard control
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SPORE,
@@ -24259,7 +24233,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TOEDSCRUEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // fast special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_ENERGY_BALL,
@@ -24281,7 +24255,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KLAWF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // rock setter
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_STONE_EDGE,
@@ -24301,7 +24275,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KLAWF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WEAKNESS_POLICY, // anger shell sweep
+        .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -24323,7 +24297,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCOVILLAIN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Chlorophyll mixed sun attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_GROWTH,
@@ -24331,7 +24305,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_SHEER_FORCE, // Chlorophyll & Insomnia now innate; chosen Sheer Force (fork override)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -24345,7 +24319,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RABSCA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MENTAL_HERB, // trick room setter
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -24353,7 +24327,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_SYNCHRONIZE, // Telepathy now innate; chosen Synchronize (:x:, never an innate -> stable) shares status back
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24368,7 +24342,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ESPATHRA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Opportunist Calm Mind sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -24376,7 +24350,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Opportunist / Frisk / Speed Boost all now innate; chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24388,7 +24362,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ESPATHRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // fast special breaker (Speed Boost now innate)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_PSYSHOCK,
@@ -24396,7 +24370,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_TERA_BLAST
         },
-        .ability = ABILITY_PSYCHIC_SURGE, // Opportunist / Frisk / Speed Boost all now innate; chosen Psychic Surge
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -24410,7 +24384,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TINKATON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_AIR_BALLOON, // Gigaton Hammer + hazards utility
+        .heldItem = ITEM_AIR_BALLOON,
         .moves =
         {
             MOVE_GIGATON_HAMMER,
@@ -24418,7 +24392,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24430,7 +24404,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TINKATON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Gigaton Hammer band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_GIGATON_HAMMER,
@@ -24438,7 +24412,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ICE_HAMMER
         },
-        .ability = ABILITY_SHEER_FORCE, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24452,7 +24426,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WUGTRIO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_MYSTIC_WATER, // priority eel
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_WAVE_CRASH,
@@ -24460,7 +24434,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AQUA_JET,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_WATER_ABSORB, // Gooey & Sand Veil now innate; chosen Water Absorb (slot-0 override, :x: stable) heals on Water hits
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -24475,7 +24449,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BOMBIRDIER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Big Pecks hazard / utility pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -24483,7 +24457,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BRAVE_BIRD,
             MOVE_ROOST
         },
-        .ability = ABILITY_WIND_RIDER, // Big Pecks now innate (Keen Eye/Rocky Payload too); chosen Wind Rider
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24494,13 +24468,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
 
     // 0964
-    // Enter in Zero form; Zero to Hero transforms it to Hero after its first switch-out
-    // (the form table has no FORM_CHANGE_BEGIN_BATTLE, so naming the Hero form here would
-    //  wrongly start it transformed).
     {
         .species = SPECIES_PALAFIN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Zero to Hero band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_JET_PUNCH,
@@ -24520,7 +24491,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PALAFIN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Bulk Up Hero sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BULK_UP,
@@ -24542,7 +24513,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REVAVROOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Filter Shift Gear sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SHIFT_GEAR,
@@ -24550,7 +24521,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_HIGH_HORSEPOWER
         },
-        .ability = ABILITY_SHEER_FORCE, // Overcoat now innate; chosen Sheer Force (override) powers Gunk Shot/Iron Head
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24562,7 +24533,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REVAVROOM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET, // bulky pivot / hazard support
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_GUNK_SHOT,
@@ -24570,7 +24541,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_HIGH_HORSEPOWER
         },
-        .ability = ABILITY_SHEER_FORCE, // Overcoat now innate; chosen Sheer Force (override) powers Gunk Shot/Iron Head
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24584,7 +24555,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CYCLIZAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Regenerator Shed Tail pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SHED_TAIL,
@@ -24592,7 +24563,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OVERHEAT,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Shed Skin + Regenerator now innate; chosen Motor Drive (override, empty slot 1)
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24604,7 +24575,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CYCLIZAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // fast U-turn pivot
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_DRAGON_CLAW,
@@ -24612,7 +24583,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_MOTOR_DRIVE, // Shed Skin + Regenerator now innate; chosen Motor Drive (override, empty slot 1)
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24626,7 +24597,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ORTHWORM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Earth Eater Iron Defense + Body Press wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_IRON_DEFENSE,
@@ -24646,7 +24617,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ORTHWORM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ROCKY_HELMET, // Shed Tail pivot
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_SHED_TAIL,
@@ -24668,7 +24639,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLIMMORA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND, // Toxic Debris hazard lead
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -24688,7 +24659,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GLIMMORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_POWER_GEM,
@@ -24710,7 +24681,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HOUNDSTONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sand Rush Last Respects sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_LAST_RESPECTS,
@@ -24718,7 +24689,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_FLUFFY, // Sand Rush now innate; chosen Fluffy
+        .ability = ABILITY_FLUFFY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24732,7 +24703,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLAMIGO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // scrappy bird
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_BRAVE_BIRD,
@@ -24740,7 +24711,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THROAT_CHOP,
             MOVE_U_TURN
         },
-        .ability = ABILITY_COSTAR, // Scrappy & Tangled Feet now innate; chosen Costar (its real HA) copies the ally's stat changes in doubles
+        .ability = ABILITY_COSTAR,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24752,7 +24723,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLAMIGO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // SD sweeper
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -24760,7 +24731,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_COSTAR, // Scrappy & Tangled Feet now innate; chosen Costar
+        .ability = ABILITY_COSTAR,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -24774,7 +24745,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CETITAN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_NEVER_MELT_ICE, // belly drum whale
+        .heldItem = ITEM_NEVER_MELT_ICE,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -24782,7 +24753,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_ICE_SHARD
         },
-        // Thick Fat (and Slush Rush) now innate; chosen Sheer Force (HA) powers up this Ice attacker.
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
@@ -24796,7 +24766,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CETITAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // sheer force tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_ICICLE_CRASH,
@@ -24819,7 +24789,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VELUZA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MYSTIC_WATER, // sharpness slicer
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_AQUA_CUTTER,
@@ -24827,7 +24797,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHT_SLASH,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_WATER_ABSORB, // Mold Breaker + Sharpness now innate; fork override fills empty slot 1 with a chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24840,7 +24810,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VELUZA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY, // fillet away sweep
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_FILLET_AWAY,
@@ -24848,7 +24818,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_CUT,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_WATER_ABSORB, // Mold Breaker + Sharpness now innate; fork override fills empty slot 1 with a chosen Water Absorb
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -24863,7 +24833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DONDOZO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware Curse physical wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CURSE,
@@ -24871,7 +24841,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST,
             MOVE_SLEEP_TALK
         },
-        .ability = ABILITY_WATER_ABSORB, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24883,7 +24853,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DONDOZO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Order Up / bulky pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_WAVE_CRASH,
@@ -24891,7 +24861,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_WATER_ABSORB, // chosen via fork override (species_ability_overrides.c)
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24905,7 +24875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TATSUGIRI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_THROAT_SPRAY, // SpA boost off spread move
+        .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -24927,7 +24897,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ANNIHILAPE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Bulk Up + Rage Fist snowball
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -24935,7 +24905,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_TAUNT
         },
-        .ability = ABILITY_ANGER_SHELL, // all real abilities innate; chosen Anger Shell
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24947,7 +24917,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ANNIHILAPE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF, // Defiant revenge killer
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_RAGE_FIST,
@@ -24955,7 +24925,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_ANGER_SHELL, // all real abilities innate; chosen Anger Shell
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24969,7 +24939,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLODSIRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Unaware special wall / status spreader
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_TOXIC,
@@ -24977,7 +24947,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_TOXIC_SPIKES
         },
-        .ability = ABILITY_WATER_ABSORB, // Unaware now innate; chosen Water Absorb adds a Water immunity to the special wall
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24989,7 +24959,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLODSIRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Water Absorb stall pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_RECOVER,
@@ -25011,7 +24981,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FARIGIRAF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Armor Tail Calm Mind wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -25019,7 +24989,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_REST
         },
-        .ability = ABILITY_SAP_SIPPER, // Armor Tail now innate; chosen Sap Sipper (real HA) adds a Grass immunity + Attack boost
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25031,7 +25001,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FARIGIRAF,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Trick Room support tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -25039,7 +25009,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_SAP_SIPPER, // Armor Tail now innate; chosen Sap Sipper (real HA) adds a Grass immunity + Attack boost
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25054,7 +25024,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUDUNSPARCE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Serene Grace Coil + flinch / status
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_COIL,
@@ -25062,7 +25032,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SIMPLE, // all real abilities innate; chosen Simple (non-redundant)
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25074,7 +25044,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DUDUNSPARCE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind + Boomburst special
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -25082,7 +25052,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ROOST
         },
-        .ability = ABILITY_SIMPLE, // all real abilities innate; chosen Simple (non-redundant)
+        .ability = ABILITY_SIMPLE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25096,7 +25066,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KINGAMBIT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Supreme Overlord Swords Dance sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -25104,7 +25074,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 112,
@@ -25116,7 +25086,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KINGAMBIT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_GLASSES, // Defiant pivot punisher
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_KOWTOW_CLEAVE,
@@ -25124,7 +25094,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 112,
@@ -25136,7 +25106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KINGAMBIT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ASSAULT_VEST, // bulky special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_KOWTOW_CLEAVE,
@@ -25144,7 +25114,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_SHEER_FORCE, // all real abilities innate; chosen Sheer Force (non-redundant)
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25158,7 +25128,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GREAT_TUSK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis hazard control sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_HEADLONG_RUSH,
@@ -25178,7 +25148,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GREAT_TUSK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Bulk Up physical wall / spinner
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -25200,7 +25170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCREAM_TAIL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Protosynthesis utility wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_WISH,
@@ -25220,7 +25190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCREAM_TAIL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // fast support pivot
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -25242,7 +25212,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRUTE_BONNET,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis bulky breaker
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_SUCKER_PUNCH,
@@ -25264,7 +25234,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special sweeper (innate Levitate)
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -25284,7 +25254,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS, // special nuke (innate Levitate)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -25304,7 +25274,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND, // fast Perish Trap / utility (innate Levitate)
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -25326,7 +25296,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLITHER_WING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis bulky attacker
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
@@ -25348,7 +25318,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SANDY_SHOCKS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special attacker (innate Levitate)
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -25368,7 +25338,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SANDY_SHOCKS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard lead (innate Levitate)
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -25390,7 +25360,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_TREADS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive hazard control sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_EARTHQUAKE,
@@ -25410,7 +25380,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_TREADS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky hazard lead
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -25432,7 +25402,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_BUNDLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive fast special attacker
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -25452,7 +25422,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_BUNDLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS, // hydro specs nuke
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -25474,7 +25444,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_HANDS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Quark Drive bulky attacker
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_DRAIN_PUNCH,
@@ -25494,7 +25464,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_HANDS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Belly Drum + Drain Punch sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -25516,7 +25486,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_JUGULIS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive fast special attacker
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_DARK_PULSE,
@@ -25538,7 +25508,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_MOTH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive special sweeper (innate Levitate)
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_FIERY_DANCE,
@@ -25558,7 +25528,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_MOTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Toxic Spikes / special pivot (innate Levitate)
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_FLAMETHROWER,
@@ -25580,7 +25550,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_THORNS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Dragon Dance sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -25602,7 +25572,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BAXCALIBUR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LOADED_DICE, // Dragon Dance + Icicle Spear sweeper
+        .heldItem = ITEM_LOADED_DICE,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -25610,7 +25580,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GLAIVE_RUSH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SNOW_WARNING, // Thermal Exchange (+ Ice Body) now innate; chosen Snow Warning (fork override, empty slot 1) sets snow -> innate Ice Body heals
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -25622,7 +25592,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BAXCALIBUR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // mixed Dragon Dance breaker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -25630,7 +25600,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GLAIVE_RUSH,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_SNOW_WARNING, // Thermal Exchange (+ Ice Body) now innate; chosen Snow Warning (fork override, empty slot 1) sets snow -> innate Ice Body heals
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -25644,7 +25614,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GHOLDENGO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Nasty Plot + Make It Rain sweeper (innate Levitate)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -25652,7 +25622,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_RECOVER
         },
-        .ability = ABILITY_SHEER_FORCE, // Good as Gold now innate (still blocks status moves); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25664,7 +25634,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GHOLDENGO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Good as Gold status blocker / pivot (innate Levitate)
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_MAKE_IT_RAIN,
@@ -25672,7 +25642,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECOVER,
             MOVE_THUNDER_WAVE
         },
-        .ability = ABILITY_SHEER_FORCE, // Good as Gold now innate (still blocks status moves); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -25684,7 +25654,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GHOLDENGO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // special nuke (innate Levitate)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_MAKE_IT_RAIN,
@@ -25692,7 +25662,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_TRICK
         },
-        .ability = ABILITY_SHEER_FORCE, // Good as Gold now innate (still blocks status moves); chosen Sheer Force
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -25706,7 +25676,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WO_CHIEN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Tablets of Ruin defensive status spreader
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LEECH_SEED,
@@ -25726,7 +25696,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WO_CHIEN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Tablets stall wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_LEECH_SEED,
@@ -25748,7 +25718,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHIEN_PAO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Sword of Ruin Swords Dance sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -25768,7 +25738,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHIEN_PAO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Sword of Ruin band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ICE_SPINNER,
@@ -25790,7 +25760,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TING_LU,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Vessel of Ruin physical wall / hazards
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -25810,7 +25780,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TING_LU,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Ruination staller
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_RUINATION,
@@ -25832,7 +25802,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHI_YU,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Beads of Ruin special sweeper
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -25852,7 +25822,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHI_YU,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS, // Beads of Ruin nuke
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_FIRE_BLAST,
@@ -25874,7 +25844,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROARING_MOON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -25894,7 +25864,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROARING_MOON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // Dragon's Maw band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_OUTRAGE,
@@ -25916,7 +25886,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_VALIANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive mixed Swords Dance sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -25936,7 +25906,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_VALIANT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS, // special breaker
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -25958,7 +25928,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KORAIDON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Orichalcum Pulse sun sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_COLLISION_COURSE,
@@ -25978,7 +25948,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KORAIDON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND, // band breaker
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_COLLISION_COURSE,
@@ -26000,7 +25970,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIRAIDON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS, // Hadron Engine special nuke (innate Levitate)
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_ELECTRO_DRIFT,
@@ -26020,7 +25990,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIRAIDON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Calm Mind sweeper (innate Levitate)
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -26042,7 +26012,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WALKING_WAKE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis special attacker
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_HYDRO_STEAM,
@@ -26062,7 +26032,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WALKING_WAKE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS, // Draco specs nuke
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -26084,7 +26054,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_LEAVES,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Swords Dance sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -26106,7 +26076,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SINISTCHA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Calm Mind Matcha Gotcha wall (innate Levitate)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -26114,7 +26084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_FLASH_FIRE, // Heatproof now innate; chosen Flash Fire (override) turns the hot tea's Fire weakness into an immunity
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26126,7 +26096,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SINISTCHA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST, // Hospitality support tank (innate Hospitality / Heatproof / Levitate)
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_MATCHA_GOTCHA,
@@ -26134,7 +26104,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_TRICK_ROOM
         },
-        .ability = ABILITY_FLASH_FIRE, // Hospitality + Heatproof now innate; chosen Flash Fire (override) turns the hot tea's Fire weakness into an immunity
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26149,7 +26119,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OKIDOGI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Toxic Chain Bulk Up sweeper
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BULK_UP,
@@ -26169,7 +26139,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OKIDOGI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Guard Dog Bulk Up wall breaker
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_BULK_UP,
@@ -26177,7 +26147,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_PSYCHIC_FANGS
         },
-        .ability = ABILITY_TOXIC_CHAIN, // Guard Dog now innate; chosen Toxic Chain is its signature
+        .ability = ABILITY_TOXIC_CHAIN,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26191,7 +26161,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUNKIDORI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB, // Toxic Chain special attacker
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -26211,7 +26181,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUNKIDORI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Toxic Chain defensive pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SLUDGE_BOMB,
@@ -26233,7 +26203,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FEZANDIPITI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Toxic Chain utility pivot
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_ROOST,
@@ -26253,7 +26223,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FEZANDIPITI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // Calm Mind special pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -26261,7 +26231,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_ROOST
         },
-        .ability = ABILITY_TOXIC_CHAIN, // Technician now innate; chosen Toxic Chain may badly poison on hit
+        .ability = ABILITY_TOXIC_CHAIN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26275,7 +26245,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OGERPON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Defiant Swords Dance sweeper
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -26283,7 +26253,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SEED_SOWER, // chosen Seed Sower
+        .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -26297,7 +26267,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OGERPON_WELLSPRING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WELLSPRING_MASK, // Water Absorb Swords Dance sweeper
+        .heldItem = ITEM_WELLSPRING_MASK,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -26319,7 +26289,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OGERPON_HEARTHFLAME,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEARTHFLAME_MASK, // Mold Breaker Swords Dance sweeper
+        .heldItem = ITEM_HEARTHFLAME_MASK,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -26327,7 +26297,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_HORN_LEECH
         },
-        .ability = ABILITY_FLASH_FIRE, // Mold Breaker now innate (sole ability); fork override fills empty slot 1 with a chosen Flash Fire (Fire immunity + Fire-power boost)
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -26341,7 +26311,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OGERPON_CORNERSTONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CORNERSTONE_MASK, // Sturdy Swords Dance sweeper
+        .heldItem = ITEM_CORNERSTONE_MASK,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -26349,7 +26319,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_EARTH_EATER, // Sturdy now innate (sole ability); fork override gives a chosen Earth Eater (Ground immunity+heal covers its Rock weakness)
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -26363,7 +26333,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OGERPON_TEAL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // hazard-immune Defiant pivot
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_IVY_CUDGEL,
@@ -26371,7 +26341,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SEED_SOWER, // chosen Seed Sower
+        .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -26385,7 +26355,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCHALUDON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // Electro Shot special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_ELECTRO_SHOT,
@@ -26393,7 +26363,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26405,7 +26375,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCHALUDON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Stamina Body Press wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_IRON_DEFENSE,
@@ -26413,7 +26383,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_TAIL,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26425,7 +26395,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCHALUDON,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB, // rain Electro Shot nuke
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_ELECTRO_SHOT,
@@ -26433,7 +26403,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_PROTECT
         },
-        .ability = ABILITY_BULLETPROOF, // all real abilities innate; chosen Bulletproof (non-redundant)
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -26447,7 +26417,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HYDRAPPLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Regenerator bulky special tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_FICKLE_BEAM,
@@ -26455,7 +26425,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NASTY_PLOT,
             MOVE_RECOVER
         },
-        .ability = ABILITY_GRASSY_SURGE, // Regenerator + Sticky Hold now innate; chosen Grassy Surge powers Grass STAB and heals (override)
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26467,7 +26437,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HYDRAPPLE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank pivot
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_FICKLE_BEAM,
@@ -26475,7 +26445,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_EARTH_POWER
         },
-        .ability = ABILITY_GRASSY_SURGE, // Regenerator + Sticky Hold now innate; chosen Grassy Surge powers Grass STAB and heals (override)
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26489,7 +26459,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOUGING_FIRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Dragon Dance sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -26509,7 +26479,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOUGING_FIRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS, // bulky Morning Sun setup
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -26531,7 +26501,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAGING_BOLT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Protosynthesis Calm Mind special sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -26551,7 +26521,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAGING_BOLT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // bulky Calm Mind wall
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -26573,7 +26543,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_BOULDER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Mighty Cleave sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -26595,7 +26565,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_CROWN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BOOSTER_ENERGY, // Quark Drive Calm Mind special sweeper
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -26617,7 +26587,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TERAPAGOS_TERASTAL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Tera Shell Calm Mind tank
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -26637,7 +26607,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TERAPAGOS_TERASTAL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST, // special tank
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_TERA_STARSTORM,
@@ -26659,7 +26629,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PECHARUNT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS, // Poison Puppeteer Nasty Plot tank (innate Levitate)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -26679,7 +26649,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PECHARUNT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS, // Malignant Chain status tank (innate Levitate)
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_MALIGNANT_CHAIN,
