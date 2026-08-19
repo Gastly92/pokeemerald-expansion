@@ -21,12 +21,25 @@ runs:
     # failures (it periodically trickles the packages too slowly to finish
     # inside any sane timeout). Keyed on this action file, so editing the
     # package list automatically busts the cache.
+    #
+    # restore-keys is what makes that bust survivable. The exact key hashes the
+    # WHOLE file, so any edit here — even to these comments — misses it, and a
+    # cold /tmp/apt-debs means every job downloads 110 MB from the same flaky
+    # mirror at once. That is not hypothetical: it is how this very action's
+    # first CI run failed (2 of 5 jobs died at the 360s install timeout, one
+    # stalled 5.5 min on a single 49 MB .deb). The prefix fallback restores the
+    # most recent previous cache instead, so apt finds the .debs already there
+    # and downloads only what genuinely changed; the post step still saves under
+    # the new exact key. Caches from the default branch are visible to PR
+    # branches, so this covers merges to master too.
     - name: Cache apt toolchain packages
       id: apt-cache
       uses: actions/cache@v5
       with:
         path: /tmp/apt-debs
         key: apt-binutils-${{ runner.os }}-${{ hashFiles('.github/actions/install-binutils/action.yml') }}
+        restore-keys: |
+          apt-binutils-${{ runner.os }}-
 
     - name: Install binutils
       shell: bash
@@ -63,7 +76,6 @@ runs:
       # hit, and fall back to the update+install loop if anything is missing.
       env:
         DEBIAN_FRONTEND: noninteractive
-        CACHE_HIT: ${{ steps.apt-cache.outputs.cache-hit }}
       run: |
         set -u
         packages=(binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev python3)
@@ -82,9 +94,13 @@ runs:
           -o APT::Keep-Downloaded-Packages=true
         )
         # Fast path: cached .debs + the image's existing indexes, no mirror.
-        if [ "${CACHE_HIT:-}" = "true" ] && \
+        # Gate on the .debs actually being on disk rather than on the cache step's
+        # `cache-hit`, which is only true for an EXACT key match -- a restore-keys
+        # fallback restores a perfectly usable /tmp/apt-debs while reporting false.
+        if compgen -G '/tmp/apt-debs/*.deb' >/dev/null && \
            sudo timeout -k 10 120 apt-get install -y --no-install-recommends \
              "${apt_opts[@]}" "${packages[@]}"; then
+          sudo chmod -R a+rX /tmp/apt-debs || true
           echo "binutils toolchain installed from cached .debs (no apt-get update)"
           exit 0
         fi
