@@ -1290,7 +1290,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONBLAST
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5664,7 +5664,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5684,7 +5684,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5699,12 +5699,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
-            MOVE_SUNNY_DAY,
             MOVE_SOLAR_BEAM,
             MOVE_WEATHER_BALL,
-            MOVE_POLLEN_PUFF
+            MOVE_POLLEN_PUFF,
+            MOVE_PROTECT
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5934,7 +5934,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WEATHER_BALL,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -9805,7 +9805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

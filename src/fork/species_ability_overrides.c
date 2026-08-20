@@ -209,7 +209,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0045
         SPECIES_VILEPLUME, 1,
-        ABILITY_SOLAR_POWER
+        ABILITY_POISON_POINT
     },
     { // 0049
         SPECIES_VENOMOTH, 2,
@@ -413,7 +413,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0182
         SPECIES_BELLOSSOM, 1,
-        ABILITY_SOLAR_POWER
+        ABILITY_DROUGHT
     },
     { // 0185
         SPECIES_SUDOWOODO, 1,

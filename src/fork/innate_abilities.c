@@ -572,6 +572,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0044
         SPECIES_GLOOM,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_STENCH
@@ -580,6 +581,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0045
         SPECIES_VILEPLUME,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_STENCH
