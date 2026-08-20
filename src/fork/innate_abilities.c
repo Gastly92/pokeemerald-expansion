@@ -255,23 +255,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BIG_PECKS,
             ABILITY_KEEN_EYE,
-            ABILITY_TANGLED_FEET
+            ABILITY_TANGLED_FEET,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0018
         SPECIES_PIDGEOT,
         INNATES(
             ABILITY_BIG_PECKS,
+            ABILITY_CUTE_CHARM,
             ABILITY_KEEN_EYE,
-            ABILITY_TANGLED_FEET
+            ABILITY_TANGLED_FEET,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0018
         SPECIES_PIDGEOT_MEGA,
         INNATES(
             ABILITY_BIG_PECKS,
+            ABILITY_CUTE_CHARM,
             ABILITY_KEEN_EYE,
-            ABILITY_TANGLED_FEET
+            ABILITY_TANGLED_FEET,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0019
