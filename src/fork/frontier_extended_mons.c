@@ -1239,6 +1239,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_WIGGLYTUFF,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BIG_ROOT,
+        .moves =
+        {
+            MOVE_SING,
+            MOVE_DREAM_EATER,
+            MOVE_HYPER_VOICE,
+            MOVE_MOONLIGHT
+        },
+        .ability = ABILITY_HALO,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_COVERT_CLOAK,
         .moves =
