@@ -1326,7 +1326,7 @@ added. Frontier roster sets that hardcoded Technician are freed (Step 3.5): Pers
 Persian → Unnerve, Mr. Mime → Soundproof, Scizor → Light Metal, Hitmontop → Intimidate, Breloom → Effect Spore,
 Roserade → Poison Point, Ambipom → Skill Link, Maushold → Friend Guard, Fezandipiti → Toxic Chain; and the
 three species whose every real ability is now innate take a fork-owned chosen-ability override
-(`species_ability_overrides.c`): Marshadow (sole Technician) → Illusion, Kricketune (Swarm + Technician) →
+(`species_ability_overrides.c`): Marshadow (sole Technician) → Trace, Kricketune (Swarm + Technician) →
 Sheer Force, Grapploct (Limber + Technician) → Water Absorb.
 
 ### ABILITY_IRON_FIST / ABILITY_RECKLESS / ABILITY_STRONG_JAW / ABILITY_TOUGH_CLAWS / ABILITY_SHARPNESS / ABILITY_MEGA_LAUNCHER / ABILITY_STEELWORKER / ABILITY_STEELY_SPIRIT / ABILITY_ROCKY_PAYLOAD / ABILITY_SAND_FORCE / ABILITY_ANALYTIC / ABILITY_ADAPTABILITY / ABILITY_PUNK_ROCK / ABILITY_STAKEOUT

@@ -51,6 +51,12 @@ struct SpeciesAbilityOverride
 // LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
 // *implemented* :white_check_mark: innate — that's the row's whole premise.)
 //
+// ILLUSION IS RESERVED FOR THE ZORUA/ZOROARK LINE. It is a never-an-innate ability, so the CI gate
+// above would accept it, but the disguise is that line's identity and the roster's Illusion handling
+// (IllusionMonRejectsSlot in src/fork/frontier_draft.c, the INFO viewer's disguise-safe species read)
+// is written for it. Eight rows once borrowed it for their concealment flavor (Gengar, Sudowoodo, the
+// Eon duo, Liepard, Marshadow, Grimmsnarl); they were re-pointed at ordinary picks. Don't reintroduce it.
+//
 // MIGRATION COMPLETE — every row below conforms. The legacy rows that predated this rule (123 of
 // them, roughly a third of the table) were converted in one sweep, and TEST("Innate abilities: no
 // ability override or frontier set names an innate-capable ability") in
@@ -284,11 +290,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0094
         SPECIES_GENGAR, 1,
-        ABILITY_ILLUSION
+        ABILITY_MUMMY
     },
     {
         SPECIES_GENGAR_GMAX, 1,
-        ABILITY_ILLUSION
+        ABILITY_MUMMY
     },
     { // 0097
         SPECIES_HYPNO, 1,
@@ -408,7 +414,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0185
         SPECIES_SUDOWOODO, 1,
-        ABILITY_ILLUSION
+        ABILITY_SAP_SIPPER
     },
     { // 0189
         SPECIES_JUMPLUFF, 1,
@@ -664,11 +670,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0380
         SPECIES_LATIAS, 1,
-        ABILITY_ILLUSION
+        ABILITY_SYNCHRONIZE
     },
     { // 0381
         SPECIES_LATIOS, 1,
-        ABILITY_ILLUSION
+        ABILITY_SYNCHRONIZE
     },
     { // 0385
         SPECIES_JIRACHI, 1,
@@ -952,7 +958,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0510
         SPECIES_LIEPARD, 1,
-        ABILITY_ILLUSION
+        ABILITY_CONTRARY
     },
     { // 0512
         SPECIES_SIMISAGE, 1,
@@ -1359,7 +1365,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0802
         SPECIES_MARSHADOW, 1,
-        ABILITY_ILLUSION
+        ABILITY_TRACE
     },
     { // 0793
         SPECIES_NIHILEGO, 1,
@@ -1459,7 +1465,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0861
         SPECIES_GRIMMSNARL, 2,
-        ABILITY_ILLUSION
+        ABILITY_FLUFFY
     },
     { // 0862
         SPECIES_OBSTAGOON, 0,

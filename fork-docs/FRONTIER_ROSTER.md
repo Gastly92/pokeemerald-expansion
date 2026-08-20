@@ -171,8 +171,9 @@ special mon's party position is randomized rather than always landing last.
 
 ### Illusion stays functional
 
-A drafted Illusion mon (Zoroark, the Eon duo) is never placed in the team's **last**
-slot. There it would have no party member behind it to disguise as —
+A drafted Illusion mon — the Zorua/Zoroark line, the only species the fork gives
+Illusion — is never placed in the team's **last** slot. There it would have no
+party member behind it to disguise as —
 `GetIllusionMonPartyId` bails on a last-slot Illusion mon, so the disguise silently
 never forms. `IllusionMonRejectsSlot` rejects such a candidate from `partySize - 1`.
 
