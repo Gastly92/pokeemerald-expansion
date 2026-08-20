@@ -625,6 +625,18 @@ static void GenerateInitialRentalMons(void)
         // mythicals and at most one pseudo (every slot is a normal slot here).
         if (TierRejectsCandidate(TIER_NORMAL, GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
             continue;
+
+        // Keep Illusion mons out of the last slot, where the disguise can't form
+        // (same rule the opponent and Brain draft loops apply). In the 6v6 sandbox
+        // these PARTY_SIZE rentals ARE the player's party, in generated order:
+        // AutoRentFullParty rents all of them and SetPlayerAndOpponentParties
+        // rebuilds the party from that same order before every battle, so
+        // PARTY_SIZE - 1 is a genuine last party slot. With the 3v3 select screen
+        // they are only six *candidates* and the party order is the player's pick
+        // order, so there is no last slot to guard here and the rule is skipped.
+        if (B_FRONTIER_PARTY_SIZE_6V6
+         && IllusionMonRejectsSlot(i, PARTY_SIZE, &gFacilityTrainerMons[monId]))
+            continue;
     #endif
 
         gSaveBlock2Ptr->frontier.rentalMons[i].monId = monId;

@@ -176,7 +176,11 @@ slot. There it would have no party member behind it to disguise as —
 `GetIllusionMonPartyId` bails on a last-slot Illusion mon, so the disguise silently
 never forms. `IllusionMonRejectsSlot` rejects such a candidate from `partySize - 1`.
 
-Applied to Factory opponents, the Frontier Brain, and Tower opponents; covered by
+Applied to Factory opponents, the Frontier Brain, Tower opponents, and the player's
+own Factory rentals. The rental case only matters in the 6v6 sandbox, where the
+generated rentals *are* the party in generated order (`AutoRentFullParty`); with the
+3v3 select screen they are candidates and the party order is the player's pick order,
+so there is no last slot to guard at generation time. Covered by
 `test/fork/frontier_draft.c`.
 
 ## Gimmick readiness at draft time
