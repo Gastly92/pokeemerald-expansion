@@ -5352,6 +5352,111 @@ TEST("Innate abilities: no ability override or frontier set names an innate-capa
     EXPECT_EQ(offenders, 0);
 }
 
+// (7) Reserved abilities: an ability welded to one species line, which the fork's own data may
+// never hand to anybody else. This is a SEPARATE gate from (6) — a reserved ability is typically
+// never-an-innate, so (6) is perfectly happy with it; what disqualifies it is identity, not
+// mechanics. An override row may never name one at all (a canon carrier already holds it in
+// gSpeciesInfo, so it has no use for an override), and a frontier set may name one only for a
+// species whose VANILLA gSpeciesInfo already grants it — which keeps the exemption self-maintaining
+// as forms are added, instead of hardcoding a carrier list here.
+//
+// ILLUSION is the first entry. Eight override rows once borrowed it for their concealment flavor
+// (Gengar and its G-Max, Sudowoodo, Latias, Latios, Liepard, Marshadow, Grimmsnarl); the disguise
+// is the Zorua/Zoroark line's identity, and the roster machinery written around it assumes that
+// (IllusionMonRejectsSlot in src/fork/frontier_draft.c keeps an Illusion mon out of the last party
+// slot, and the INFO viewer reads the disguise species so a foe never leaks). Those rows were
+// repointed at ordinary picks; this test keeps them repointed.
+//
+// To reserve another ability: add it here and give the reason in the header comment of
+// src/fork/species_ability_overrides.c. To un-reserve one, delete it here.
+static const enum Ability sReservedAbilities[] =
+{
+    ABILITY_ILLUSION,
+};
+
+static bool32 IsReservedAbility(enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sReservedAbilities); i++)
+    {
+        if (ability == sReservedAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// The vanilla slots, read straight off gSpeciesInfo — NOT GetSpeciesAbility(), which would fold the
+// override table back in and let a banned row exempt itself.
+static bool32 SpeciesHasVanillaAbility(u16 species, enum Ability ability)
+{
+    u32 slot;
+
+    for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+    {
+        if (gSpeciesInfo[species].abilities[slot] == ability)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+TEST("Innate abilities: no ability override or frontier set names a reserved ability")
+{
+    u32 species, slot, i;
+    u32 offenders = 0;
+
+    // GetSpeciesAbilityOverride returns ABILITY_NONE for every species while the flag is off
+    // (TestInitConfigData force-disables it), which would make the override sweep vacuous.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    // The sweeps below can only fail if these hold, so assert them rather than pass vacuously.
+    EXPECT(IsReservedAbility(ABILITY_ILLUSION));
+    EXPECT(!IsReservedAbility(ABILITY_MUMMY));
+    EXPECT(SpeciesHasVanillaAbility(SPECIES_ZOROARK, ABILITY_ILLUSION)); // the canon-carrier exemption is live
+    EXPECT(!SpeciesHasVanillaAbility(SPECIES_GENGAR, ABILITY_ILLUSION));
+
+    for (i = 0; i < ARRAY_COUNT(sReservedAbilities); i++)
+    {
+        if (!IsImplementedInnate(sReservedAbilities[i]))
+            continue;
+
+        offenders++;
+        Test_MgbaPrintf("reserved %S is also on sImplementedInnates[] -- a reserved ability belongs to one line, so it cannot be an innate anything else can be given",
+                        gAbilitiesInfo[sReservedAbilities[i]].name);
+    }
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability ability = GetSpeciesAbilityOverride(species, slot);
+
+            if (ability == ABILITY_NONE || !IsReservedAbility(ability))
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("override %S slot %d: %S is reserved to its canon line -- pick another never-an-innate ability",
+                            gSpeciesInfo[species].speciesName, slot, gAbilitiesInfo[ability].name);
+        }
+    }
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        if (set->ability == ABILITY_NONE || !IsReservedAbility(set->ability))
+            continue;
+        if (SpeciesHasVanillaAbility(set->species, set->ability)) // a canon carrier keeps its own ability
+            continue;
+
+        offenders++;
+        Test_MgbaPrintf("roster[%d] %S: chosen %S is reserved to its canon line -- repoint the set",
+                        i, gSpeciesInfo[set->species].speciesName, gAbilitiesInfo[set->ability].name);
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
 // ===== Status-condition immunities (Magma Armor / Water Veil / Own Tempo /
 // Inner Focus / Leaf Guard / Overcoat) =====
 // All 1:1 clean-upside copies of the real ability, wired at the shared trait chokepoints

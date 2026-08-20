@@ -129,8 +129,12 @@ applies **per line**, at the same depth.
   frontier set names an innate-capable ability")` is a **real CI gate** — a
   non-conforming pick fails the build. Wiring a new innate can still invalidate an
   existing row, so treat converting the line you touch as in-scope for Step 2. See
-  `fork-docs/INNATE_ABILITIES.md` ("Direction"). Only repurpose a *real* slot
-  that's redundant and not test-pinned; filling an empty slot is always safe.
+  `fork-docs/INNATE_ABILITIES.md` ("Direction"). Separately, an ability on
+  `sReservedAbilities[]` (Illusion, welded to Zorua/Zoroark) is banned outright even
+  though it *is* never-an-innate, under its own gate `TEST("Innate abilities: no
+  ability override or frontier set names a reserved ability")`. Only repurpose a
+  *real* slot that's redundant and not test-pinned; filling an empty slot is always
+  safe.
 - **Pre-evolutions get no override rows and no frontier sets.** An override exists
   to be selected by a set, and a pre-evo set is drafted against fully-evolved mons
   and loses — so both are dead data on a Vulpix or an Ivysaur. Spend them on the
