@@ -472,7 +472,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
-            ABILITY_MAGIC_GUARD
+            ABILITY_MAGIC_GUARD,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0036
@@ -481,6 +482,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
             ABILITY_MAGIC_GUARD,
+            ABILITY_SERENE_GRACE,
             ABILITY_UNAWARE
         )
     },
@@ -491,6 +493,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRIEND_GUARD,
             ABILITY_MAGIC_BOUNCE,
             ABILITY_MAGIC_GUARD,
+            ABILITY_SERENE_GRACE,
             ABILITY_UNAWARE
         )
     },
@@ -1904,7 +1907,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
-            ABILITY_MAGIC_GUARD
+            ABILITY_MAGIC_GUARD,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0174
