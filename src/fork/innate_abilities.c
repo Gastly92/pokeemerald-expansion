@@ -349,11 +349,43 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_UNNERVE
         )
     },
+    { // 0025
+        SPECIES_PIKACHU,
+        INNATES(
+            ABILITY_CHEEK_POUCH
+        )
+    },
+    { // 0025
+        SPECIES_PIKACHU_GMAX,
+        INNATES(
+            ABILITY_CHEEK_POUCH
+        )
+    },
+    { // 0026
+        SPECIES_RAICHU,
+        INNATES(
+            ABILITY_CHEEK_POUCH
+        )
+    },
     { // 0026
         SPECIES_RAICHU_ALOLA,
         INNATES(
+            ABILITY_CHEEK_POUCH,
             ABILITY_LEVITATE,
-            ABILITY_SURGE_SURFER
+            ABILITY_SURGE_SURFER,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0026
+        SPECIES_RAICHU_MEGA_X,
+        INNATES(
+            ABILITY_CHEEK_POUCH
+        )
+    },
+    { // 0026
+        SPECIES_RAICHU_MEGA_Y,
+        INNATES(
+            ABILITY_CHEEK_POUCH
         )
     },
     { // 0027
@@ -1807,6 +1839,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LANTURN,
         INNATES(
             ABILITY_ILLUMINATE
+        )
+    },
+    { // 0172
+        SPECIES_PICHU,
+        INNATES(
+            ABILITY_CHEEK_POUCH,
+            ABILITY_RATTLED
         )
     },
     { // 0173
