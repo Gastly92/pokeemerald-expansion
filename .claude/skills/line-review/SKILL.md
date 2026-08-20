@@ -1,6 +1,6 @@
 ---
 name: line-review
-description: Review and enhance one Pokémon evolutionary line's fork data — innates, ability overrides, and Battle Factory movesets. Triggers when the user asks to look at / review / update / enhance a species "line" (e.g. "let's look at the Venusaur line for updates and enhancements", "review the Gengar line", "any additions for the Dragonite line?"). For this fork's three fork-owned data files only.
+description: Review and enhance Pokémon evolutionary lines' fork data — innates, ability overrides, and Battle Factory movesets — one line, or a batch of lines given as a dex-number range. Triggers when the user asks to look at / review / update / enhance a species "line" (e.g. "let's look at the Venusaur line for updates and enhancements", "review the Gengar line", "any additions for the Dragonite line?") or a range of them ("let's review the lines from number 0 to 25", "lines 26-50", "the next ten lines"). For this fork's three fork-owned data files only.
 ---
 
 # Line review
@@ -9,6 +9,11 @@ Run a structured updates-and-enhancements pass over one Pokémon evolutionary
 **line** (base + all evolutions + all forms: Mega, G-Max, regional) across the
 three fork-owned data files. Flavor and fun come first; competitive power is
 welcome but not required.
+
+A request can name **one line** ("review the Gengar line") or a **batch** — a
+range of National Dex numbers ("the lines from number 0 to 25"). A batch is the
+same review run once per line, packaged as one branch, one commit per line and
+one PR; see "Batch mode" below and the rubric's "Batch reviews" section.
 
 ## Do this
 
@@ -37,6 +42,36 @@ welcome but not required.
    resolved yourself. Expect changes to be requested — that's the process working.
    Apply review feedback on the **same branch**, re-deriving forward through the
    steps when a rejected innate invalidates a later pick.
+
+## Batch mode (a dex-number range)
+
+When the request names a range instead of a line — *"the lines from number 0 to
+25"* — the numbers are **National Dex numbers** (`0` just means "from the
+start"). Everything in "Do this" still applies **per line**, at the same depth.
+
+1. **Resolve the range to a list of lines first.** Walk each number in the range,
+   map it to the line that species belongs to, and dedupe. The **whole line comes
+   along even where members fall outside the range** (#25 Pikachu pulls in Pichu
+   #172, Raichu #26, Alolan Raichu, G-Max), and that line does **not** come back
+   in a later batch. State the resolved list back, ordered by ascending dex, then
+   start — a range is an instruction, not a proposal, so don't wait for a yes.
+2. **One line at a time, start to finish, then commit.** Steps 1 → 2 → 3 for a
+   line, then its commit, then the next. Never batch a step across lines ("all the
+   innates first") — the step coupling is per line.
+3. **Commit and push after every line**, one commit per line, subject
+   `Line review: <Line> line — <what changed>`. The container is ephemeral: a lost
+   session should cost one line, not the batch.
+4. **Watch for cross-line collisions** the batch makes visible — several lines
+   converging on the same held item (item scarcity is per drafted team) or the
+   same borrowed ability. Spread them.
+5. **Verify once at the end**, not per line — the two filtered `make check` runs
+   are a build each, and CI runs the full suite on the PR.
+6. **One branch `claude/lines-<first>-<last>-review`, one PR** for the batch, with
+   **a section per line** in the body carrying everything a single-line PR body
+   would (per-step reasoning, flavor evidence with recall flagged, Part A verdicts
+   including *keep as-is*, rejections, open questions). Lines that came out **no
+   changes** still get a section saying what was checked. If the batch can't be
+   finished, open the PR with what's done plus a **remaining** list.
 
 ## Hard constraints (see the rubric for detail)
 
@@ -180,4 +215,6 @@ After applying changes: `make check TESTS="Frontier extended roster"` and
 `make check TESTS="Innate"` (filtered — let CI run the full suite on the PR).
 Keep rows in dex order. Update `fork-docs/FORK.md` only if the change warrants an
 index entry. Then commit to a `claude/<line>-line-review` branch, push, and open a
-PR against the fork's `master` with the body described above — one line per PR.
+PR against the fork's `master` with the body described above — one line per PR,
+or one PR per **batch** with a commit and a body section per line (see "Batch
+mode").

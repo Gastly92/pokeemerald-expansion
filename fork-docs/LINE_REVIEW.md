@@ -53,6 +53,73 @@ Directional feedback the maintainer volunteers mid-review ("a Body Slam set woul
 suit the Alolan one") is a hint to spec properly **when its step comes up** —
 carry it into that step and act on it there, rather than bolting it onto the step
 you are currently on.
+---
+
+## Batch reviews — a range of dex numbers in one pass
+
+A review can be asked for as a **batch**: *"let's review the lines from number 0
+to 25"*, *"lines 26-50"*, *"the next ten lines."* A batch changes the
+**packaging** (one branch, one commit per line, one PR) and nothing else — every
+line in it still gets the full three-step review at the same depth, with the same
+evidence and the same hard constraints.
+
+### Resolving the range to a list of lines
+
+Numbers are **National Dex numbers** (`0 to 25` just means "from the start
+through #25"). Walk each number in the range, map it to the evolutionary line
+that species belongs to, and **dedupe** — a line is reviewed once no matter how
+many of its members the range covers.
+
+- **The whole line comes along, including members outside the range.** #25
+  Pikachu pulls in Pichu (#172) and Raichu (#26) plus Alolan Raichu and the
+  G-Max form; all of them are reviewed here, and the line does **not** come back
+  when a later batch reaches #26.
+- **Order the batch by ascending dex**, on each line's lowest in-range number.
+- **Write the resolved list down before starting any work.** It is the batch's
+  table of contents, the PR's section list, and the record of what a later batch
+  can skip. State it back to the maintainer, then start — a range is an
+  instruction, not a proposal, so don't stop for confirmation on the list.
+
+### Working the batch
+
+- **One line at a time, start to finish.** Steps 1 → 2 → 3 (Part A → Part B) for
+  a line, then its commit, then the next line. Don't interleave lines and don't
+  batch the steps across lines ("all the innates first") — the step coupling in
+  "How a review runs" is per line, and working them across lines re-derives every
+  line at once.
+- **Cross-line coupling is real, so keep the batch in view.** Two lines in one
+  batch can reach for the same held item or the same borrowed ability. A batch is
+  the one vantage point where item crowding is visible — if three of the batch's
+  sets are converging on Leftovers, spread them (see the scarcity note in Step 3).
+- **Commit and push after every line.** One commit per line, scoped to that
+  line's rows, subject `Line review: <Line> line — <what changed>` — the subject
+  a single-line PR would have carried. The container is ephemeral: a lost session
+  should cost one line, not ten.
+- **Verify once, at the end of the batch.** `make check TESTS="Frontier extended
+  roster"` and `make check TESTS="Innate"` are a build each; running them per
+  line burns the budget for no extra signal, and CI runs the full suite on the PR.
+- **Budget context deliberately.** Ten lines is a lot of reading. Grep for the
+  line's rows and read around the hits (per `CLAUDE.md`); don't re-read this
+  rubric or a whole data file once per line.
+
+### Shipping the batch
+
+- **Branch `claude/lines-<first>-<last>-review`; one PR for the whole batch**,
+  opened when the last line is committed.
+- **The PR body gets one section per line**, and each section carries exactly what
+  a single-line PR body carries (per-step changes and reasoning, flavor evidence
+  with recall flagged as recall, Part A verdicts including *keep as-is*, rejected
+  candidates, open questions). Above them, a short batch header listing the
+  resolved lines and flagging the ones that came out **no changes** — which is a
+  legitimate result for a line, but still gets a section saying what was checked.
+- **If the batch can't be finished** (context, time, a blocker), open the PR
+  anyway with the lines that are done and a **remaining** list naming the rest.
+  Half a batch shipped beats ten lines lost with the session.
+- **Review feedback is per line.** Apply it on the same branch, as a new commit
+  naming the line it fixes, and re-derive forward through *that* line's steps —
+  a rejection in one line only touches another if they shared a resource (the
+  same item, the same borrowed ability), which is worth checking and usually
+  isn't the case.
 
 ---
 
@@ -785,13 +852,16 @@ filtered tests, and move to the wrap-up.
   innate/override/roster features already have rows; a per-line data tweak rarely
   needs a new row, but note anything with a known limitation).
 - **One line per branch/PR** unless the maintainer says otherwise. Branch as
-  `claude/<line>-line-review`; PR against the fork's `master`.
+  `claude/<line>-line-review`; PR against the fork's `master`. A **batch** is the
+  standing exception: one branch `claude/lines-<first>-<last>-review`, one commit
+  per line, one PR — see "Batch reviews" above.
 
 ### 2. Write the PR body — it is the review surface
 
 Nothing was approved mid-session, so the PR body is where the maintainer sees the
 reasoning for the first time. It has to stand on its own; a diff of ability
-constants and move slots does not. Structure it by step:
+constants and move slots does not. Structure it by step (in a batch, by line
+first, then by step within each line's section):
 
 - **Per step (innates / overrides / frontier sets), what changed and why.** For
   each pick, the flavor evidence that carries it: the repo's `.description` quoted
