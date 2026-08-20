@@ -892,7 +892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIDOQUEEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_EARTH_POWER,
