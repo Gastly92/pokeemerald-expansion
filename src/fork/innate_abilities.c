@@ -606,6 +606,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VENONAT,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
     },
