@@ -209,6 +209,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIRE,
     },
+    {
+        .species = SPECIES_CHARIZARD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_CHARCOAL,
+        .moves =
+        {
+            MOVE_HEAT_WAVE,
+            MOVE_HURRICANE,
+            MOVE_TAILWIND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
+        .species = SPECIES_CHARIZARD,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_THROAT_SPRAY,
+        .moves =
+        {
+            MOVE_NOBLE_ROAR,
+            MOVE_FIRE_BLAST,
+            MOVE_DRAGON_PULSE,
+            MOVE_ROOST
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DRAGON,
+    },
 
     // 0009
     {
@@ -333,6 +373,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_PSYCHIC,
     },
+    {
+        .species = SPECIES_BUTTERFREE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SAFETY_GOGGLES,
+        .moves =
+        {
+            MOVE_RAGE_POWDER,
+            MOVE_SLEEP_POWDER,
+            MOVE_TAILWIND,
+            MOVE_POLLEN_PUFF
+        },
+        .ability = ABILITY_PSYCHIC_AFFINITY,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
 
     // 0015
     {
@@ -375,6 +435,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    {
+        .species = SPECIES_BEEDRILL,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LOADED_DICE,
+        .moves =
+        {
+            MOVE_PIN_MISSILE,
+            MOVE_FIRST_IMPRESSION,
+            MOVE_POISON_JAB,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0018
     {
@@ -415,7 +495,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_STEEL,
+        .teraType = TYPE_FLYING,
     },
 
     // 0020
@@ -460,9 +540,29 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_NORMAL,
     },
     {
+        .species = SPECIES_RATICATE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_BAND,
+        .moves =
+        {
+            MOVE_ENDEAVOR,
+            MOVE_QUICK_ATTACK,
+            MOVE_SUPER_FANG,
+            MOVE_CRUNCH
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
         .species = SPECIES_RATICATE_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_BODY_SLAM,
@@ -539,7 +639,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spe = 252
         ),
-        .teraType = TYPE_STEEL,
+        .teraType = TYPE_FLYING,
     },
 
     // 0024
@@ -641,6 +741,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .spa = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_RAICHU_ALOLA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MAGNET,
+        .moves =
+        {
+            MOVE_THUNDERBOLT,
+            MOVE_DAZZLING_GLEAM,
+            MOVE_HELPING_HAND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
