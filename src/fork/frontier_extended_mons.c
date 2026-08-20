@@ -828,6 +828,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DARK,
     },
     {
+        .species = SPECIES_SANDSLASH,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SMOOTH_ROCK,
+        .moves =
+        {
+            MOVE_ROCK_SLIDE,
+            MOVE_DRILL_RUN,
+            MOVE_SWORDS_DANCE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
         .species = SPECIES_SANDSLASH_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,

@@ -391,6 +391,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0027
         SPECIES_SANDSHREW,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_SAND_RUSH,
             ABILITY_SAND_VEIL
         )
@@ -398,6 +399,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0027
         SPECIES_SANDSHREW_ALOLA,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_ICE_BODY,
             ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK
         )
@@ -405,6 +408,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0028
         SPECIES_SANDSLASH,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_SAND_RUSH,
             ABILITY_SAND_VEIL
         )
@@ -412,6 +416,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0028
         SPECIES_SANDSLASH_ALOLA,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_HYPER_CUTTER,
+            ABILITY_ICE_BODY,
             ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK
         )
