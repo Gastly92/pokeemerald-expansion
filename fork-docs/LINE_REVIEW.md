@@ -347,6 +347,15 @@ line:
      longer `KNOWN_FAILING`**: it is a real CI gate, so a non-conforming pick now
      fails the build. New picks must be `:x:`.
 
+   - **A RESERVED ABILITY IS BANNED OUTRIGHT, never-an-innate or not.** A handful
+     of abilities are welded to one species line, listed in `sReservedAbilities[]`
+     (`test/fork/innate_abilities.c`) — **Illusion** (Zorua/Zoroark) is the first.
+     They are `:x:` abilities, so the innate-capable gate above waves them through;
+     the second gate, `TEST("Innate abilities: no ability override or frontier set
+     names a reserved ability")`, is what rejects them. A set may name one only for
+     a species whose vanilla `gSpeciesInfo` already grants it. See
+     [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#reserved-abilities-welded-to-one-line-banned-everywhere-else).
+
    - **A CONVERSION CAN STILL LAND IN A REVIEW.** Wiring a new innate makes that
      ability innate-capable, which can retroactively invalidate an existing
      override row or set that names it. When that happens on the line you are

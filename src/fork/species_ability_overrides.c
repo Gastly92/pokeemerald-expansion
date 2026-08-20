@@ -51,11 +51,14 @@ struct SpeciesAbilityOverride
 // LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
 // *implemented* :white_check_mark: innate — that's the row's whole premise.)
 //
-// ILLUSION IS RESERVED FOR THE ZORUA/ZOROARK LINE. It is a never-an-innate ability, so the CI gate
-// above would accept it, but the disguise is that line's identity and the roster's Illusion handling
-// (IllusionMonRejectsSlot in src/fork/frontier_draft.c, the INFO viewer's disguise-safe species read)
-// is written for it. Eight rows once borrowed it for their concealment flavor (Gengar, Sudowoodo, the
-// Eon duo, Liepard, Marshadow, Grimmsnarl); they were re-pointed at ordinary picks. Don't reintroduce it.
+// SOME ABILITIES ARE RESERVED TO ONE LINE and no row may name them, ILLUSION (Zorua/Zoroark) first.
+// The never-an-innate rule above does not catch these -- Illusion is never-an-innate, so that gate is
+// happy with it; what disqualifies it is identity. The disguise is that line's whole design, and the
+// roster machinery assumes it (IllusionMonRejectsSlot in src/fork/frontier_draft.c, the INFO viewer's
+// disguise-safe species read). Eight rows once borrowed it for their concealment flavor (Gengar,
+// Sudowoodo, the Eon duo, Liepard, Marshadow, Grimmsnarl) and were re-pointed at ordinary picks.
+// Enforced by TEST("Innate abilities: no ability override or frontier set names a reserved ability")
+// in test/fork/innate_abilities.c; extend its sReservedAbilities[] to reserve another ability.
 //
 // MIGRATION COMPLETE — every row below conforms. The legacy rows that predated this rule (123 of
 // them, roughly a third of the table) were converted in one sweep, and TEST("Innate abilities: no

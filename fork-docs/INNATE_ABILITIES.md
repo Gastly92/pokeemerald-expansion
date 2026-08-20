@@ -616,6 +616,45 @@ existing override row or set — so re-run the test after every allowlist additi
 repoint whatever it names. Line reviews follow the same rule for the lines they touch
 (see [`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2).
 
+## Reserved abilities: welded to one line, banned everywhere else
+
+A second, independent restriction on the observable slot. A **reserved** ability is
+one whose whole design belongs to a single species line, so the fork never hands it
+to anyone else — no override row may name it at all, and a frontier set may name it
+only for a species whose *vanilla* `gSpeciesInfo` already grants it (which keeps new
+forms exempt automatically).
+
+This is not the never-an-innate rule wearing a different hat. The two gates catch
+opposite mistakes, and a reserved ability typically sails through the other one:
+
+| | Disqualified because | Example |
+|---|---|---|
+| Innate-capable | mechanics — the trait can be always-on, so it belongs in an `INNATES(...)` row | Technician, Levitate |
+| Reserved | identity — the trait *is* one line's design, and fork code assumes that | Illusion |
+
+**`ABILITY_ILLUSION` is the first entry**, reserved to the **Zorua/Zoroark line**.
+It is never-an-innate, so the innate-capable gate is perfectly happy with it, and
+eight override rows duly borrowed it for their concealment flavor — Gengar and its
+G-Max, Sudowoodo, Latias, Latios, Liepard, Marshadow, Grimmsnarl. Beyond the flavor
+dilution, the roster machinery is written *for* that line:
+`IllusionMonRejectsSlot` (`src/fork/frontier_draft.c`) keeps an Illusion mon out of
+the last party slot so its disguise can form, and the INFO viewer reads the disguise
+species so a foe never leaks. Those rows now carry ordinary picks (Mummy, Sap Sipper,
+Synchronize ×2, Contrary, Trace, Fluffy).
+
+The list lives in `sReservedAbilities[]` in `test/fork/innate_abilities.c`, next to
+the gate that enforces it:
+
+```bash
+make check TESTS="Innate abilities: no ability override"   # runs both gates
+```
+
+To reserve another ability, add it to that array and say why in the header comment
+of `src/fork/species_ability_overrides.c`; the test then names every offending row
+and set. A reserved ability may not be on `sImplementedInnates[]` either — the test
+checks that too, since an innate is by definition something other species can be
+given.
+
 ## Why "mostly automatic" depends on the ability
 
 Steps 1, 2, 4, 5 are mechanical for every ability; Step 3.5 fires whenever a
