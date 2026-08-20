@@ -5934,7 +5934,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WEATHER_BALL,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_DROUGHT,
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -9805,7 +9805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_DROUGHT,
+        .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
