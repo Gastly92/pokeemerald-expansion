@@ -39,8 +39,8 @@ frontier facilities will adopt the same list — the Battle Tower already has (s
 ### Coverage
 
 **Generations I–IX are comprehensively built out — every fully-evolved species has at
-least one build**: 1–2 flavor/utility sets for niche mons, ~2–4 for stronger ones, Mega
-and non-Mega. There is a deliberate **offense/defense balance** — Eviolite / Assault
+least one build**, and that is enforced (see "Coverage is CI-gated" below): 1–2
+flavor/utility sets for niche mons, ~2–4 for stronger ones, Mega and non-Mega. There is a deliberate **offense/defense balance** — Eviolite / Assault
 Vest / Rocky Helmet / Heavy-Duty Boots tanks and hazard/Defog/cleric/Trick-Room support
 sets alongside the sweepers.
 
@@ -54,10 +54,39 @@ Calyrex riders, Ogerpon masks, Bloodmoon Ursaluna, the appliance Rotoms).
 Heavy-Duty Boots, type-boost items and screens/utility items are favored over
 defaulting everything to Choice items and Life Orb.
 
+#### Coverage is CI-gated
+
+`test/fork/frontier_extended_roster.c` sweeps every species in the build and fails if a
+fully-evolved one has no set, so a species arriving with an upstream sync can't sit
+unbuilt unnoticed. Three rules excuse a species mechanically — it's compiled out, it
+still evolves, or it's a temporary in-battle shape (Mega/Primal/Ultra Burst/Gigantamax/
+Tera/Totem, or a forme its own form-change table enters mid-battle like Aegislash-Blade
+or Palafin-Hero). Everything else must be covered or listed.
+
+Coverage is judged per **battle profile** — formes sharing a National Dex number, base
+stat spread and ability set count as one requirement, satisfied by any one of them having
+a set. That's why Vivillon's 19 patterns, Unown's 27 letters and the cap Pikachus are one
+line of work each. Typing is deliberately left out of the profile, so Arceus' plates and
+Silvally's memories are one requirement too; the price is that Tauros' Paldean breeds and
+Urshifu's styles collapse together as well (build them anyway — the test just won't
+insist).
+
+What's left goes in `sCoverageExceptions[]`, one row per profile with a **structural**
+reason — an unrentable event forme like Pikachu-Starter or Floette-Eternal, or a sibling
+profile that stands in, like Gourgeist-Super for the other three sizes. A row is not a
+place to park a species nobody has got to yet: the thirteen genuine gaps the sweep first
+turned up (Unown, Mothim, Cherrim, the three Wormadam cloaks, both Basculin stripes,
+Vivillon, Furfrou, Alcremie and both Oinkolognes) were built rather than excused, and the
+next one should be too. A companion test fails on any row that has stopped excusing
+something, so dead rows can't accumulate and hide the next real gap.
+
 ### Roster rules
 
 - **Only fully-evolved Pokémon appear**, except NFEs with a genuine niche their
-  evolution doesn't dominate (Eviolite Chansey, Light Ball Pikachu).
+  evolution doesn't dominate — currently Eviolite Chansey, Ursaring, Porygon2 and
+  Dusclops. That list (`sNicheNfes[]` in the roster test) is enforced exactly in both
+  directions, so an unlisted NFE in the roster fails: it's almost always a pre-evolution
+  typed in place of its evolution.
 - **Cross-gen evolutions replace their pre-evos** — Magnezone / Electivire / Magmortar /
   Rhyperior / Tangrowth stand in for Magneton / Electabuzz / Magmar / Rhydon / Tangela.
 - **Movesets are not restricted to the species' learnset.** Flavorful and powerful

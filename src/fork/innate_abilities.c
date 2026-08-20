@@ -4030,6 +4030,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_OVERCOAT
         )
     },
+    { // 0414
+        SPECIES_MOTHIM,
+        INNATES(
+            ABILITY_SWARM,
+            ABILITY_TINTED_LENS
+        )
+    },
     { // 0416
         SPECIES_VESPIQUEN,
         INNATES(
