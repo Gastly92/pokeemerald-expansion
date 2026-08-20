@@ -46,27 +46,38 @@ one PR; see "Batch mode" below and the rubric's "Batch reviews" section.
 ## Batch mode (a dex-number range)
 
 When the request names a range instead of a line — *"the lines from number 0 to
-25"* — the numbers are **National Dex numbers** (`0` just means "from the
-start"). Everything in "Do this" still applies **per line**, at the same depth.
+25"* — the numbers are **National Dex numbers**, inclusive of both endpoints
+(`0` is shorthand for the start; there is no #0). Everything in "Do this" still
+applies **per line**, at the same depth.
 
-1. **Resolve the range to a list of lines first.** Walk each number in the range,
-   map it to the line that species belongs to, and dedupe. The **whole line comes
-   along even where members fall outside the range** (#25 Pikachu pulls in Pichu
-   #172, Raichu #26, Alolan Raichu, G-Max), and that line does **not** come back
-   in a later batch. State the resolved list back, ordered by ascending dex, then
-   start — a range is an instruction, not a proposal, so don't wait for a yes.
-2. **One line at a time, start to finish, then commit.** Steps 1 → 2 → 3 for a
+1. **Resolve the range to a list of lines first.** **Both endpoints are
+   inclusive** — `0 to 25` includes #25. Walk each number, map it to the line that
+   species belongs to, and dedupe. The **whole line comes along even where members
+   fall outside the range** (#25 Pikachu pulls in Pichu #172, Raichu #26, Alolan
+   Raichu, G-Max), and that line does **not** come back in a later batch.
+2. **Then drop the lines already reviewed** — inclusive endpoints make `0-25` and
+   `25-50` overlap by one, and much of the early dex is already done.
+   `git log -i --grep='line review' origin/master` is the history (subjects aren't
+   uniform: `Line review: Gengar line …` vs `Machamp line review: …` — search the
+   line's name, and check the species' rows in the three files if unsure). Skip
+   those lines and **report them as skipped with the PR that covered them**; only
+   re-review a line the maintainer names explicitly. State the resolved list back
+   — to-review and skipped — ordered by ascending dex, then start; a range is an
+   instruction, not a proposal, so don't wait for a yes. If the range is mostly or
+   entirely already done, say so with the evidence and name the next range that
+   has real work in it.
+3. **One line at a time, start to finish, then commit.** Steps 1 → 2 → 3 for a
    line, then its commit, then the next. Never batch a step across lines ("all the
    innates first") — the step coupling is per line.
-3. **Commit and push after every line**, one commit per line, subject
+4. **Commit and push after every line**, one commit per line, subject
    `Line review: <Line> line — <what changed>`. The container is ephemeral: a lost
    session should cost one line, not the batch.
-4. **Watch for cross-line collisions** the batch makes visible — several lines
+5. **Watch for cross-line collisions** the batch makes visible — several lines
    converging on the same held item (item scarcity is per drafted team) or the
    same borrowed ability. Spread them.
-5. **Verify once at the end**, not per line — the two filtered `make check` runs
+6. **Verify once at the end**, not per line — the two filtered `make check` runs
    are a build each, and CI runs the full suite on the PR.
-6. **One branch `claude/lines-<first>-<last>-review`, one PR** for the batch, with
+7. **One branch `claude/lines-<first>-<last>-review`, one PR** for the batch, with
    **a section per line** in the body carrying everything a single-line PR body
    would (per-step reasoning, flavor evidence with recall flagged, Part A verdicts
    including *keep as-is*, rejections, open questions). Lines that came out **no

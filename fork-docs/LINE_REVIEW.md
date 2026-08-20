@@ -65,20 +65,37 @@ evidence and the same hard constraints.
 
 ### Resolving the range to a list of lines
 
-Numbers are **National Dex numbers** (`0 to 25` just means "from the start
-through #25"). Walk each number in the range, map it to the evolutionary line
-that species belongs to, and **dedupe** — a line is reviewed once no matter how
-many of its members the range covers.
+Numbers are **National Dex numbers**, and **both endpoints are inclusive** —
+`0 to 25` means "from the start through #25", and #25's line **is** in the batch
+(`0` is just a shorthand for the start; there is no #0). Walk each number in the
+range, map it to the evolutionary line that species belongs to, and **dedupe** —
+a line is reviewed once no matter how many of its members the range covers.
 
 - **The whole line comes along, including members outside the range.** #25
   Pikachu pulls in Pichu (#172) and Raichu (#26) plus Alolan Raichu and the
   G-Max form; all of them are reviewed here, and the line does **not** come back
   when a later batch reaches #26.
+- **Drop lines already reviewed, before doing any work.** Inclusive endpoints
+  mean consecutive batches phrased with a shared number (`0-25`, then `25-50`)
+  overlap by one, and a line can also have been pulled into an earlier batch by
+  an out-of-range member or reviewed on its own months ago. So resolve the list
+  against history, not just against this range:
+  `git log -i --grep='line review' origin/master` lists the past reviews (subjects
+  are not uniform — some read `Line review: Gengar line …`, others
+  `Machamp line review: …` — so search for the *line's* name, and check the
+  species' rows in the three files when the log is ambiguous). A line that has
+  been reviewed is **skipped and reported as skipped**, with the PR number that
+  covered it; it is not re-derived. Re-reviewing is fine when the maintainer asks
+  for that line by name — it is never the default just because a range covers it
+  again.
 - **Order the batch by ascending dex**, on each line's lowest in-range number.
 - **Write the resolved list down before starting any work.** It is the batch's
   table of contents, the PR's section list, and the record of what a later batch
-  can skip. State it back to the maintainer, then start — a range is an
-  instruction, not a proposal, so don't stop for confirmation on the list.
+  can skip. State it back — the lines to review *and* the ones skipped as already
+  done — then start. A range is an instruction, not a proposal, so don't stop for
+  confirmation on the list; if the overlap or the history means there is little or
+  nothing left to do, say so with the evidence and name the next range that has
+  work in it rather than padding the batch.
 
 ### Working the batch
 
