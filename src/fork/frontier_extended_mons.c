@@ -1156,6 +1156,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GHOST,
     },
     {
+        .species = SPECIES_NINETALES,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_CHARCOAL,
+        .moves =
+        {
+            MOVE_HEAT_WAVE,
+            MOVE_WILL_O_WISP,
+            MOVE_ENCORE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
         .species = SPECIES_NINETALES_ALOLA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY,
