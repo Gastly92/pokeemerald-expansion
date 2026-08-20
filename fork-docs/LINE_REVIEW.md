@@ -73,29 +73,37 @@ a line is reviewed once no matter how many of its members the range covers.
 
 - **The whole line comes along, including members outside the range.** #25
   Pikachu pulls in Pichu (#172) and Raichu (#26) plus Alolan Raichu and the
-  G-Max form; all of them are reviewed here, and the line does **not** come back
-  when a later batch reaches #26.
-- **Drop lines already reviewed, before doing any work.** Inclusive endpoints
-  mean consecutive batches phrased with a shared number (`0-25`, then `25-50`)
-  overlap by one, and a line can also have been pulled into an earlier batch by
-  an out-of-range member or reviewed on its own months ago. So resolve the list
-  against history, not just against this range:
-  `git log -i --grep='line review' origin/master` lists the past reviews (subjects
-  are not uniform — some read `Line review: Gengar line …`, others
-  `Machamp line review: …` — so search for the *line's* name, and check the
-  species' rows in the three files when the log is ambiguous). A line that has
-  been reviewed is **skipped and reported as skipped**, with the PR number that
-  covered it; it is not re-derived. Re-reviewing is fine when the maintainer asks
-  for that line by name — it is never the default just because a range covers it
-  again.
+  G-Max form — a range never half-reviews a line, and a number that lands
+  mid-line (#20 Raticate) still pulls in the whole Rattata line.
+- **Every line the range covers gets a pass — a previous review is NOT a skip.**
+  If a species is in the range, its line is reviewed, full stop. Ranges overlap
+  by design (inclusive endpoints make `0-25` and `25-50` share #25; `20-40`
+  re-covers ground on purpose) and the whole dex has already had a first pass, so
+  "already reviewed" would skip nearly everything and make a batch a no-op. A
+  second pass is the point: the rubric has moved, innates have been wired,
+  neighbouring sets have changed. The **only** dedupe is *within* one batch — a
+  line is reviewed once per batch no matter how many of its members the range
+  covers.
+- **Read the previous review first; it changes the depth of the pass, not
+  whether it happens.** `git log -i --grep='line review' origin/master` finds it
+  (subjects are not uniform — `Line review: Gengar line …` vs
+  `Machamp line review: …` — so search the *line's* name), and the PR it points
+  to carries the decisions, the flavor evidence, the rejected candidates and the
+  open questions. Use it: **don't re-propose what a previous review rejected**
+  (if you disagree, say so against its stated reason rather than silently
+  re-raising it), don't re-derive settled picks from scratch, and spend the pass
+  on what is actually new — a settled line re-examines faster than a fresh one.
+- **A re-pass invites churn; refuse it.** "No changes" is the *expected* result
+  for a recently reviewed line, and it still gets its PR section saying what was
+  checked and why it stands. Never rewrite a settled pick to make the batch look
+  productive — a diff that trades one equally good set for another is negative
+  value, and the maintainer already approved the one that is there.
 - **Order the batch by ascending dex**, on each line's lowest in-range number.
 - **Write the resolved list down before starting any work.** It is the batch's
-  table of contents, the PR's section list, and the record of what a later batch
-  can skip. State it back — the lines to review *and* the ones skipped as already
-  done — then start. A range is an instruction, not a proposal, so don't stop for
-  confirmation on the list; if the overlap or the history means there is little or
-  nothing left to do, say so with the evidence and name the next range that has
-  work in it rather than padding the batch.
+  table of contents and the PR's section list. Note against each line whether it
+  has a previous review (with its PR number), since that is what tells you how
+  deep the pass has to go. State it back to the maintainer, then start — a range
+  is an instruction, not a proposal, so don't stop for confirmation on the list.
 
 ### Working the batch
 

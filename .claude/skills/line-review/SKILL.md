@@ -52,20 +52,22 @@ applies **per line**, at the same depth.
 
 1. **Resolve the range to a list of lines first.** **Both endpoints are
    inclusive** — `0 to 25` includes #25. Walk each number, map it to the line that
-   species belongs to, and dedupe. The **whole line comes along even where members
-   fall outside the range** (#25 Pikachu pulls in Pichu #172, Raichu #26, Alolan
-   Raichu, G-Max), and that line does **not** come back in a later batch.
-2. **Then drop the lines already reviewed** — inclusive endpoints make `0-25` and
-   `25-50` overlap by one, and much of the early dex is already done.
-   `git log -i --grep='line review' origin/master` is the history (subjects aren't
+   species belongs to, and dedupe *within this batch*. The **whole line comes
+   along even where members fall outside the range** (#25 Pikachu pulls in Pichu
+   #172, Raichu #26, Alolan Raichu, G-Max), and a number landing mid-line (#20
+   Raticate) still pulls in the whole line.
+2. **Review every line the range covers — a previous review is NOT a skip.** In
+   range means reviewed, full stop; ranges overlap by design and the dex has
+   already had a first pass, so skipping the reviewed ones would make a batch a
+   no-op. Instead **read the previous review and let it set the depth**:
+   `git log -i --grep='line review' origin/master` finds it (subjects aren't
    uniform: `Line review: Gengar line …` vs `Machamp line review: …` — search the
-   line's name, and check the species' rows in the three files if unsure). Skip
-   those lines and **report them as skipped with the PR that covered them**; only
-   re-review a line the maintainer names explicitly. State the resolved list back
-   — to-review and skipped — ordered by ascending dex, then start; a range is an
-   instruction, not a proposal, so don't wait for a yes. If the range is mostly or
-   entirely already done, say so with the evidence and name the next range that
-   has real work in it.
+   line's name), and its PR carries the picks, the rejected candidates and the
+   open questions. Don't re-propose what was rejected, don't re-derive settled
+   picks, and **don't churn** — "no changes" is the expected result for a recently
+   reviewed line and still gets a PR section saying what was checked. State the
+   resolved list back, ascending dex, noting which lines have a prior review, then
+   start; a range is an instruction, not a proposal, so don't wait for a yes.
 3. **One line at a time, start to finish, then commit.** Steps 1 → 2 → 3 for a
    line, then its commit, then the next. Never batch a step across lines ("all the
    innates first") — the step coupling is per line.
