@@ -214,7 +214,6 @@ extern const u8 BattleScript_SelectingNotAllowedMoveChoiceItem[];
 extern const u8 BattleScript_SelectingNotAllowedMoveChoiceItemInPalace[];
 extern const u8 BattleScript_HangedOnMsg[];
 extern const u8 BattleScript_DeterministicHoldEffectConsume[]; // FORK: DETERMINISTIC_HOLD_EFFECTS
-extern const u8 BattleScript_EffectSporeDrowsy[]; // FORK: DETERMINISTIC_ABILITIES
 extern const u8 BattleScript_BerryConfuseHeal[];
 extern const u8 BattleScript_ConsumableItemStatRaise[];
 extern const u8 BattleScript_ConsumableBerryStatRaise[];

@@ -85,7 +85,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Cute Charm infatuates on contact re
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Effect Spore always makes the attacker drowsy on contact")
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Effect Spore always lowers the attacker's accuracy on contact")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
@@ -94,12 +94,55 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Effect Spore always makes the attac
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
         TURN { MOVE(opponent, MOVE_TACKLE); }
-        TURN {}
     } SCENE {
         ABILITY_POPUP(player, ABILITY_EFFECT_SPORE);
-        MESSAGE("The opposing Wobbuffet grew drowsy!");
+        MESSAGE("The opposing Wobbuffet's accuracy fell!");
     } THEN {
-        EXPECT(opponent->status1 & STATUS1_SLEEP);
+        EXPECT_EQ(opponent->statStages[STAT_ACC], DEFAULT_STAT_STAGE - 1);
+        EXPECT_EQ(opponent->status1, STATUS1_NONE);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Effect Spore's accuracy drop stacks with each contact hit")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        ASSUME(MoveMakesContact(MOVE_TACKLE));
+        PLAYER(SPECIES_PARAS) { Ability(ABILITY_EFFECT_SPORE); MaxHP(400); HP(400); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_ACC], DEFAULT_STAT_STAGE - 2);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Effect Spore does not lower accuracy on a non-contact move")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        ASSUME(!MoveMakesContact(MOVE_SWIFT));
+        PLAYER(SPECIES_PARAS) { Ability(ABILITY_EFFECT_SPORE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SWIFT); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_ACC], DEFAULT_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Effect Spore's accuracy drop keeps its powder immunity")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        ASSUME(MoveMakesContact(MOVE_TACKLE));
+        PLAYER(SPECIES_PARAS) { Ability(ABILITY_EFFECT_SPORE); }
+        OPPONENT(SPECIES_ODDISH); // Grass type: immune to powder
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TACKLE); }
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_ACC], DEFAULT_STAT_STAGE);
     }
 }
 
