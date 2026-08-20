@@ -56,18 +56,18 @@ applies **per line**, at the same depth.
    along even where members fall outside the range** (#25 Pikachu pulls in Pichu
    #172, Raichu #26, Alolan Raichu, G-Max), and a number landing mid-line (#20
    Raticate) still pulls in the whole line.
-2. **Review every line the range covers — a previous review is NOT a skip.** In
-   range means reviewed, full stop; ranges overlap by design and the dex has
-   already had a first pass, so skipping the reviewed ones would make a batch a
-   no-op. Instead **read the previous review and let it set the depth**:
-   `git log -i --grep='line review' origin/master` finds it (subjects aren't
-   uniform: `Line review: Gengar line …` vs `Machamp line review: …` — search the
-   line's name), and its PR carries the picks, the rejected candidates and the
-   open questions. Don't re-propose what was rejected, don't re-derive settled
-   picks, and **don't churn** — "no changes" is the expected result for a recently
-   reviewed line and still gets a PR section saying what was checked. State the
-   resolved list back, ascending dex, noting which lines have a prior review, then
-   start; a range is an instruction, not a proposal, so don't wait for a yes.
+2. **Review every line the range covers, and review it FRESH.** In range means
+   reviewed, full stop — a previous review is neither a skip nor an anchor. Don't
+   go digging up the old PR for what was decided or turned down; judge the rows
+   in the three files **today**, on evidence gathered today. A candidate an
+   earlier pass proposed and the maintainer rejected is **fair to raise again** —
+   new information arrives, the rubric moves, minds change, and a re-raise costs
+   one line in the PR body. Only **structural** rejections still bind (the ones
+   written into `fork-docs/` and enforced by CI), which is why they live there.
+   Fresh isn't restless, though: a change needs a reason of its own, so "no
+   changes" stays a legitimate per-line result. State the resolved list back,
+   ascending dex, then start — a range is an instruction, not a proposal, so don't
+   wait for a yes.
 3. **One line at a time, start to finish, then commit.** Steps 1 → 2 → 3 for a
    line, then its commit, then the next. Never batch a step across lines ("all the
    innates first") — the step coupling is per line.

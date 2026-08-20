@@ -84,20 +84,22 @@ a line is reviewed once no matter how many of its members the range covers.
   neighbouring sets have changed. The **only** dedupe is *within* one batch — a
   line is reviewed once per batch no matter how many of its members the range
   covers.
-- **Read the previous review first; it changes the depth of the pass, not
-  whether it happens.** `git log -i --grep='line review' origin/master` finds it
-  (subjects are not uniform — `Line review: Gengar line …` vs
-  `Machamp line review: …` — so search the *line's* name), and the PR it points
-  to carries the decisions, the flavor evidence, the rejected candidates and the
-  open questions. Use it: **don't re-propose what a previous review rejected**
-  (if you disagree, say so against its stated reason rather than silently
-  re-raising it), don't re-derive settled picks from scratch, and spend the pass
-  on what is actually new — a settled line re-examines faster than a fresh one.
-- **A re-pass invites churn; refuse it.** "No changes" is the *expected* result
-  for a recently reviewed line, and it still gets its PR section saying what was
-  checked and why it stands. Never rewrite a settled pick to make the batch look
-  productive — a diff that trades one equally good set for another is negative
-  value, and the maintainer already approved the one that is there.
+- **Review each line FRESH — do not anchor on the previous review.** Don't go
+  reading the old PR to find out what was decided or what was turned down. Judge
+  the rows that are in the three files *today*, on the evidence you gather today.
+  A candidate a previous pass proposed and the maintainer rejected is **fair to
+  propose again**: new information turns up, the rubric moves, and minds change —
+  re-raising it costs one line in the PR body and the maintainer says no again in
+  a second, while suppressing it can bury the right answer forever. The only
+  rejections that still bind are the **structural** ones written into
+  `fork-docs/` and enforced by CI (a transformation ability is out of scope for
+  innates; an innate-capable ability can't be an override) — those are rules, not
+  tastes, and they live in the docs precisely so a fresh pass still meets them.
+- **Fresh does not mean restless.** A change still needs a reason of its own —
+  a set is replaced because it is *worse* than the alternative, never because a
+  re-pass ought to produce a diff. "No changes" stays a legitimate result for a
+  line (Part A's *keep as-is* verdict is the same judgement), and it still earns
+  its PR section saying what was checked and why it stands.
 - **Order the batch by ascending dex**, on each line's lowest in-range number.
 - **Write the resolved list down before starting any work.** It is the batch's
   table of contents and the PR's section list. Note against each line whether it
@@ -897,11 +899,15 @@ first, then by step within each line's section):
 - **Part A verdicts for existing frontier sets**, including the *keep as-is* ones —
   "checked and unchanged" is information; silence reads as "not looked at."
 - **Record what you rejected, and why.** Much of a line review's value is in the
-  candidates considered and dropped — undocumented, they get re-proposed on the next
-  pass. Put them in the PR body; if a pick was rejected on a durable *structural*
-  ground rather than taste (e.g. a transformation ability, which is out of scope for
-  innates entirely — see the "Identity / form / type-transform" bucket in
-  `INNATE_ABILITIES.md`), record it in the relevant doc instead so it sticks.
+  candidates considered and dropped, and the PR body is where that record lives —
+  it is what the maintainer weighs the accepted picks against, and what a future
+  decision about this line is made from. It is a **record, not a veto**: a later
+  pass reviews the line fresh and may well raise a dropped candidate again, which
+  is intended (see "Batch reviews"). The exception is a rejection on a durable
+  *structural* ground rather than taste (e.g. a transformation ability, which is
+  out of scope for innates entirely — see the "Identity / form / type-transform"
+  bucket in `INNATE_ABILITIES.md`): record that in the relevant doc, where it
+  binds every future pass, instead of in a PR body nobody re-reads.
 - **Open questions** — the coin-flip picks you resolved yourself, called out so the
   maintainer can flip them back cheaply.
 - **Note the save-index cost when adding frontier sets.** Sets are inserted at the
@@ -923,6 +929,7 @@ not a failure.
 - **Verify before defending.** When a pick is challenged, go check (canon users, the
   repo's dex text, `deterministic.h`) rather than arguing from memory, and say
   plainly when the evidence supports the maintainer — or, less often, the pick.
-- **A rejected candidate goes into the PR body's rejected list** (or the relevant
-  `fork-docs/` doc if the ground was structural) so the next pass doesn't re-propose
-  it.
+- **A rejected candidate goes into the PR body's rejected list** — as the record
+  of what this review weighed, not as a ban on ever raising it again. If the ground
+  was *structural* rather than taste, put it in the relevant `fork-docs/` doc, which
+  is the only place a rejection binds a later pass.
