@@ -131,6 +131,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
@@ -139,6 +140,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
@@ -147,6 +149,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SNIPER,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
@@ -156,6 +160,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_MEGA_LAUNCHER,
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SNIPER,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
@@ -164,6 +170,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
+            ABILITY_SNIPER,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
