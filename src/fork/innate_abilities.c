@@ -178,7 +178,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0010
         SPECIES_CATERPIE,
         INNATES(
-            ABILITY_SHIELD_DUST
+            ABILITY_GLUTTONY,
+            ABILITY_SHIELD_DUST,
+            ABILITY_STENCH
         )
     },
     { // 0011
