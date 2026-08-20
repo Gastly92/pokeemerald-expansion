@@ -255,13 +255,12 @@ TEST("Frontier extended roster: drafted mon gets the maximum Dynamax Level by de
 // that Tauros' Paldean breeds and Urshifu's styles also collapse into one -- build them
 // anyway, the test just will not insist.
 //
-// Anything still uncovered must be listed in sCoverageExceptions[], one row per profile, with
-// a reason. Two flavors, both kept honest by "no stale coverage exception" below:
-//   * structural -- the forme cannot be rented (unobtainable event formes, battle-only shapes
-//     the derived rules miss) or a sibling profile the roster does build stands in for it
-//     (Gourgeist-Super covers the other three sizes).
-//   * TODO -- a genuine hole, i.e. the roster's build queue. Deleting the row is how you
-//     finish the species, so the list only ever shrinks.
+// Anything still uncovered must be listed in sCoverageExceptions[], one row per profile, with a
+// structural reason: the forme cannot be rented (unobtainable event formes, battle-only shapes
+// the derived rules miss) or a sibling profile the roster does build stands in for it
+// (Gourgeist-Super covers the other three sizes). A row is not a place to park a species you
+// have not got to yet -- the thirteen genuine gaps this sweep first turned up were built, and
+// the next one should be too.
 
 // FORK: NFEs the roster builds on purpose -- Eviolite (and friends) give these a role their
 // evolution does not dominate, so they are roster-required despite still evolving. The list is
@@ -284,7 +283,7 @@ struct RosterCoverageException
 
 static const struct RosterCoverageException sCoverageExceptions[] =
 {
-    // ---- Structural: in the data, but never a rentable Pokémon ----
+    // ---- In the data, but never a rentable Pokémon ----
     { SPECIES_MELTAN,              "no evolution data (its candy evolution is unimplemented), so it reads as fully evolved; it is Melmetal's pre-evo, and Melmetal is built" },
     { SPECIES_PICHU_SPIKY_EARED,   "event-only forme, and a pre-evo besides" },
     { SPECIES_PIKACHU_STARTER,     "LGPE partner-only forme; cannot be obtained or rented" },
@@ -295,7 +294,7 @@ static const struct RosterCoverageException sCoverageExceptions[] =
     { SPECIES_GRENINJA_ASH,        "Battle Bond transformation, entered mid-battle; the roster builds Greninja and Greninja-Battle-Bond" },
     { SPECIES_ZYGARDE_COMPLETE,    "Power Construct shape, entered mid-battle from the 10%/50% formes" },
 
-    // ---- Structural: a sibling profile the roster does build stands in ----
+    // ---- A sibling profile the roster does build stands in ----
     { SPECIES_DEOXYS_NORMAL,       "the Attack/Defense/Speed formes carry Deoxys" },
     { SPECIES_GOURGEIST_AVERAGE,   "Gourgeist-Super carries the size formes" },
     { SPECIES_GOURGEIST_SMALL,     "Gourgeist-Super carries the size formes" },
@@ -304,9 +303,6 @@ static const struct RosterCoverageException sCoverageExceptions[] =
     { SPECIES_ZYGARDE_50,          "Aura Break variant; the roster builds Zygarde-50%-Power-Construct" },
     { SPECIES_ZYGARDE_10_AURA_BREAK, "Aura Break variant; the roster builds Zygarde-10%-Power-Construct" },
     { SPECIES_TERAPAGOS_NORMAL,    "Tera Shift converts it on send-out, so the roster builds Terapagos-Terastal directly" },
-
-    // ---- TODO: genuine holes. Delete the row when the profile gets a build. ----
-    // (empty -- every fully-evolved profile in the build now has at least one set)
 };
 
 enum RosterCoverage
@@ -513,8 +509,8 @@ TEST("Frontier extended roster: every fully-evolved species has at least one set
 // FORK: an exception row promises a profile genuinely cannot be, or need not be, built. Rows rot
 // silently in three ways: the profile gets a set (the row now excuses nothing), a derived rule
 // grows to cover the species (an upstream sync flags the forme Tera, say), or a second row lands
-// on the same profile. Dead rows are worse than no rows -- they hide the next real gap, and the
-// TODO rows exist precisely to shrink -- so each one has to justify itself every run.
+// on the same profile. Dead rows are worse than no rows -- they hide the next real gap -- so each
+// one has to justify itself every run.
 TEST("Frontier extended roster: no stale coverage exception")
 {
     u32 stale = 0;

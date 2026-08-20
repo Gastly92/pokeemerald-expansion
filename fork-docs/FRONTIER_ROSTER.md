@@ -71,14 +71,14 @@ Silvally's memories are one requirement too; the price is that Tauros' Paldean b
 Urshifu's styles collapse together as well (build them anyway — the test just won't
 insist).
 
-What's left goes in `sCoverageExceptions[]`, one row per profile with a reason: either
-**structural** (unrentable event formes like Pikachu-Starter and Floette-Eternal, or a
-sibling profile that stands in, like Gourgeist-Super for the other three sizes) or a
-**TODO** — a genuine hole, which is the roster's build queue. A companion test deletes
-dead rows for you by failing on them, so the TODO list can only shrink. **It is
-currently empty**: the thirteen profiles the sweep first turned up (Unown, Mothim,
-Cherrim, the three Wormadam cloaks, both Basculin stripes, Vivillon, Furfrou, Alcremie
-and both Oinkolognes) were built rather than excused.
+What's left goes in `sCoverageExceptions[]`, one row per profile with a **structural**
+reason — an unrentable event forme like Pikachu-Starter or Floette-Eternal, or a sibling
+profile that stands in, like Gourgeist-Super for the other three sizes. A row is not a
+place to park a species nobody has got to yet: the thirteen genuine gaps the sweep first
+turned up (Unown, Mothim, Cherrim, the three Wormadam cloaks, both Basculin stripes,
+Vivillon, Furfrou, Alcremie and both Oinkolognes) were built rather than excused, and the
+next one should be too. A companion test fails on any row that has stopped excusing
+something, so dead rows can't accumulate and hide the next real gap.
 
 ### Roster rules
 
