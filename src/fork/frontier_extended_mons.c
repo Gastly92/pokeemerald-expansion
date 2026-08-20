@@ -1352,7 +1352,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_X_SCISSOR,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_DRY_SKIN,
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1372,7 +1372,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_LIFE,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_DRY_SKIN,
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1392,7 +1392,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_SEED_BOMB
         },
-        .ability = ABILITY_DRY_SKIN,
+        .ability = ABILITY_EFFECT_SPORE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
