@@ -828,6 +828,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_DARK,
     },
     {
+        .species = SPECIES_SANDSLASH,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SMOOTH_ROCK,
+        .moves =
+        {
+            MOVE_ROCK_SLIDE,
+            MOVE_DRILL_RUN,
+            MOVE_SWORDS_DANCE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
         .species = SPECIES_SANDSLASH_ALOLA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -872,7 +892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIDOQUEEN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -954,7 +974,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIDOKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -990,6 +1010,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_NIDOKING,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_POISON_BARB,
+        .moves =
+        {
+            MOVE_MEGAHORN,
+            MOVE_HEAD_SMASH,
+            MOVE_EARTHQUAKE,
+            MOVE_POISON_JAB
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_NIDOKING,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_ROCK_SLIDE,
+            MOVE_POISON_JAB,
+            MOVE_DRILL_RUN,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_POISON_POINT,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0036
@@ -1096,6 +1156,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GHOST,
     },
     {
+        .species = SPECIES_NINETALES,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_CHARCOAL,
+        .moves =
+        {
+            MOVE_HEAT_WAVE,
+            MOVE_WILL_O_WISP,
+            MOVE_ENCORE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
         .species = SPECIES_NINETALES_ALOLA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIGHT_CLAY,
@@ -1159,6 +1239,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_WIGGLYTUFF,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BIG_ROOT,
+        .moves =
+        {
+            MOVE_SING,
+            MOVE_DREAM_EATER,
+            MOVE_HYPER_VOICE,
+            MOVE_MOONLIGHT
+        },
+        .ability = ABILITY_HALO,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_WIGGLYTUFF,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_COVERT_CLOAK,
         .moves =
@@ -1190,7 +1290,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONBLAST
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1449,14 +1549,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DUGTRIO_ALOLA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
             MOVE_IRON_HEAD,
             MOVE_SWORDS_DANCE,
-            MOVE_STONE_EDGE
+            MOVE_PROTECT
         },
         .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -5347,23 +5447,23 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0169
     {
         .species = SPECIES_CROBAT,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
-            MOVE_BRAVE_BIRD,
-            MOVE_GUNK_SHOT,
-            MOVE_CLOSE_COMBAT,
-            MOVE_U_TURN
+            MOVE_TAILWIND,
+            MOVE_LEECH_LIFE,
+            MOVE_POISON_FANG,
+            MOVE_PROTECT
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
-            .atk = 252,
-            .spd = 4,
+            .hp = 252,
+            .atk = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FLYING,
+        .teraType = TYPE_POISON,
     },
     {
         .species = SPECIES_CROBAT,
@@ -5564,7 +5664,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_WEATHER_BALL
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -5584,7 +5684,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5599,12 +5699,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
-            MOVE_SUNNY_DAY,
             MOVE_SOLAR_BEAM,
             MOVE_WEATHER_BALL,
-            MOVE_POLLEN_PUFF
+            MOVE_POLLEN_PUFF,
+            MOVE_PROTECT
         },
-        .ability = ABILITY_SOLAR_POWER,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
