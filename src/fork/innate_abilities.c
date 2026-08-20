@@ -316,6 +316,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0021
         SPECIES_SPEAROW,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_KEEN_EYE,
             ABILITY_SNIPER
         )
@@ -323,6 +324,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0022
         SPECIES_FEAROW,
         INNATES(
+            ABILITY_ANTICIPATION,
+            ABILITY_BIG_PECKS,
             ABILITY_KEEN_EYE,
             ABILITY_SNIPER
         )
