@@ -282,6 +282,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0019
         SPECIES_RATTATA,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_GUTS
         )
     },
@@ -289,19 +290,26 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RATTATA_ALOLA,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_INFILTRATOR,
+            ABILITY_PICKPOCKET,
+            ABILITY_STRONG_JAW,
             ABILITY_THICK_FAT
         )
     },
     { // 0020
         SPECIES_RATICATE,
         INNATES(
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0020
         SPECIES_RATICATE_ALOLA,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_INFILTRATOR,
+            ABILITY_PICKPOCKET,
+            ABILITY_STRONG_JAW,
             ABILITY_THICK_FAT
         )
     },

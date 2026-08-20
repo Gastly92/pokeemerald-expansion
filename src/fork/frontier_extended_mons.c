@@ -540,9 +540,29 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_NORMAL,
     },
     {
+        .species = SPECIES_RATICATE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_BAND,
+        .moves =
+        {
+            MOVE_ENDEAVOR,
+            MOVE_QUICK_ATTACK,
+            MOVE_SUPER_FANG,
+            MOVE_CRUNCH
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
         .species = SPECIES_RATICATE_ALOLA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_BODY_SLAM,
