@@ -39,9 +39,8 @@ frontier facilities will adopt the same list — the Battle Tower already has (s
 ### Coverage
 
 **Generations I–IX are comprehensively built out — every fully-evolved species has at
-least one build**, bar a short, test-tracked TODO list (see "Coverage is CI-gated"
-below): 1–2 flavor/utility sets for niche mons, ~2–4 for stronger ones, Mega and
-non-Mega. There is a deliberate **offense/defense balance** — Eviolite / Assault
+least one build**, and that is enforced (see "Coverage is CI-gated" below): 1–2
+flavor/utility sets for niche mons, ~2–4 for stronger ones, Mega and non-Mega. There is a deliberate **offense/defense balance** — Eviolite / Assault
 Vest / Rocky Helmet / Heavy-Duty Boots tanks and hazard/Defog/cleric/Trick-Room support
 sets alongside the sweepers.
 
@@ -76,9 +75,10 @@ What's left goes in `sCoverageExceptions[]`, one row per profile with a reason: 
 **structural** (unrentable event formes like Pikachu-Starter and Floette-Eternal, or a
 sibling profile that stands in, like Gourgeist-Super for the other three sizes) or a
 **TODO** — a genuine hole, which is the roster's build queue. A companion test deletes
-dead rows for you by failing on them, so the TODO list can only shrink. It currently
-holds Unown, Mothim, Cherrim, the three Wormadams, both Basculin stripes, Vivillon,
-Furfrou, Alcremie and both Oinkolognes.
+dead rows for you by failing on them, so the TODO list can only shrink. **It is
+currently empty**: the thirteen profiles the sweep first turned up (Unown, Mothim,
+Cherrim, the three Wormadam cloaks, both Basculin stripes, Vivillon, Furfrou, Alcremie
+and both Oinkolognes) were built rather than excused.
 
 ### Roster rules
 

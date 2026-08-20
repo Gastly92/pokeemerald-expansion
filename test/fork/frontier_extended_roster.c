@@ -306,19 +306,7 @@ static const struct RosterCoverageException sCoverageExceptions[] =
     { SPECIES_TERAPAGOS_NORMAL,    "Tera Shift converts it on send-out, so the roster builds Terapagos-Terastal directly" },
 
     // ---- TODO: genuine holes. Delete the row when the profile gets a build. ----
-    { SPECIES_UNOWN,               "TODO: no build yet" },
-    { SPECIES_MOTHIM,              "TODO: no build yet" },
-    { SPECIES_CHERRIM,             "TODO: no build yet" },
-    { SPECIES_WORMADAM_PLANT,      "TODO: no build yet" },
-    { SPECIES_WORMADAM_SANDY,      "TODO: no build yet" },
-    { SPECIES_WORMADAM_TRASH,      "TODO: no build yet" },
-    { SPECIES_BASCULIN_RED_STRIPED,  "TODO: no build yet" },
-    { SPECIES_BASCULIN_BLUE_STRIPED, "TODO: no build yet" },
-    { SPECIES_VIVILLON_ICY_SNOW,   "TODO: no build yet (one row covers all 20 patterns)" },
-    { SPECIES_FURFROU,             "TODO: no build yet (one row covers all 10 trims)" },
-    { SPECIES_ALCREMIE_STRAWBERRY_VANILLA_CREAM, "TODO: no build yet (one row covers all 63 decorations)" },
-    { SPECIES_OINKOLOGNE_M,        "TODO: no build yet" },
-    { SPECIES_OINKOLOGNE_F,        "TODO: no build yet" },
+    // (empty -- every fully-evolved profile in the build now has at least one set)
 };
 
 enum RosterCoverage

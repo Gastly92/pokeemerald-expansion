@@ -418,6 +418,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SLOWKING, 2,
         ABILITY_WATER_ABSORB
     },
+    { // 0201
+        SPECIES_UNOWN, 1,
+        ABILITY_NEUTRALIZING_GAS
+    },
     { // 0202
         SPECIES_WOBBUFFET, 1,
         ABILITY_SYNCHRONIZE
@@ -702,6 +706,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_KRICKETUNE, 1,
         ABILITY_SHEER_FORCE
     },
+    { // 0413
+        SPECIES_WORMADAM_PLANT, 1,
+        ABILITY_SAP_SIPPER
+    },
+    {
+        SPECIES_WORMADAM_SANDY, 1,
+        ABILITY_SAND_STREAM
+    },
+    {
+        SPECIES_WORMADAM_TRASH, 1,
+        ABILITY_TOXIC_DEBRIS
+    },
+    { // 0414
+        SPECIES_MOTHIM, 1,
+        ABILITY_WIND_RIDER
+    },
     { // 0416
         SPECIES_VESPIQUEN, 1,
         ABILITY_WATER_ABSORB
@@ -974,6 +994,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LILLIGANT, 2,
         ABILITY_GRASSY_SURGE
     },
+    { // 0550
+        SPECIES_BASCULIN_RED_STRIPED, 1,
+        ABILITY_ANGER_SHELL
+    },
+    {
+        SPECIES_BASCULIN_BLUE_STRIPED, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0553
         SPECIES_KROOKODILE, 2,
         ABILITY_SAND_STREAM
@@ -1129,9 +1157,17 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DIGGERSBY, 2,
         ABILITY_EARTH_EATER
     },
+    { // 0666
+        SPECIES_VIVILLON, 1,
+        ABILITY_EFFECT_SPORE
+    },
     { // 0675
         SPECIES_PANGORO, 0,
         ABILITY_SHEER_FORCE
+    },
+    { // 0676
+        SPECIES_FURFROU, 1,
+        ABILITY_FLUFFY
     },
     { // 0678
         SPECIES_MEOWSTIC_M, 1,
@@ -1437,6 +1473,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SIRFETCHD, 1,
         ABILITY_BULLETPROOF
     },
+    { // 0869
+        SPECIES_ALCREMIE, 1,
+        ABILITY_PIXILATE
+    },
+    {
+        SPECIES_ALCREMIE_GMAX, 1,
+        ABILITY_PIXILATE
+    },
     { // 0870
         SPECIES_FALINKS, 1,
         ABILITY_NO_GUARD
@@ -1528,6 +1572,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0914
         SPECIES_QUAQUAVAL, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0916
+        SPECIES_OINKOLOGNE_F, 1,
+        ABILITY_MISTY_SURGE
     },
     { // 0918
         SPECIES_SPIDOPS, 1,
