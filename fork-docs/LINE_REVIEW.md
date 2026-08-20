@@ -53,6 +53,100 @@ Directional feedback the maintainer volunteers mid-review ("a Body Slam set woul
 suit the Alolan one") is a hint to spec properly **when its step comes up** —
 carry it into that step and act on it there, rather than bolting it onto the step
 you are currently on.
+---
+
+## Batch reviews — a range of dex numbers in one pass
+
+A review can be asked for as a **batch**: *"let's review the lines from number 0
+to 25"*, *"lines 26-50"*, *"the next ten lines."* A batch changes the
+**packaging** (one branch, one commit per line, one PR) and nothing else — every
+line in it still gets the full three-step review at the same depth, with the same
+evidence and the same hard constraints.
+
+### Resolving the range to a list of lines
+
+Numbers are **National Dex numbers**, and **both endpoints are inclusive** —
+`0 to 25` means "from the start through #25", and #25's line **is** in the batch
+(`0` is just a shorthand for the start; there is no #0). Walk each number in the
+range, map it to the evolutionary line that species belongs to, and **dedupe** —
+a line is reviewed once no matter how many of its members the range covers.
+
+- **The whole line comes along, including members outside the range.** #25
+  Pikachu pulls in Pichu (#172) and Raichu (#26) plus Alolan Raichu and the
+  G-Max form — a range never half-reviews a line, and a number that lands
+  mid-line (#20 Raticate) still pulls in the whole Rattata line.
+- **Every line the range covers gets a pass — a previous review is NOT a skip.**
+  If a species is in the range, its line is reviewed, full stop. Ranges overlap
+  by design (inclusive endpoints make `0-25` and `25-50` share #25; `20-40`
+  re-covers ground on purpose) and the whole dex has already had a first pass, so
+  "already reviewed" would skip nearly everything and make a batch a no-op. A
+  second pass is the point: the rubric has moved, innates have been wired,
+  neighbouring sets have changed. The **only** dedupe is *within* one batch — a
+  line is reviewed once per batch no matter how many of its members the range
+  covers.
+- **Review each line FRESH — do not anchor on the previous review.** Don't go
+  reading the old PR to find out what was decided or what was turned down. Judge
+  the rows that are in the three files *today*, on the evidence you gather today.
+  A candidate a previous pass proposed and the maintainer rejected is **fair to
+  propose again**: new information turns up, the rubric moves, and minds change —
+  re-raising it costs one line in the PR body and the maintainer says no again in
+  a second, while suppressing it can bury the right answer forever. The only
+  rejections that still bind are the **structural** ones written into
+  `fork-docs/` and enforced by CI (a transformation ability is out of scope for
+  innates; an innate-capable ability can't be an override) — those are rules, not
+  tastes, and they live in the docs precisely so a fresh pass still meets them.
+- **Fresh does not mean restless.** A change still needs a reason of its own —
+  a set is replaced because it is *worse* than the alternative, never because a
+  re-pass ought to produce a diff. "No changes" stays a legitimate result for a
+  line (Part A's *keep as-is* verdict is the same judgement), and it still earns
+  its PR section saying what was checked and why it stands.
+- **Order the batch by ascending dex**, on each line's lowest in-range number.
+- **Write the resolved list down before starting any work.** It is the batch's
+  table of contents and the PR's section list. Note against each line whether it
+  has a previous review (with its PR number), since that is what tells you how
+  deep the pass has to go. State it back to the maintainer, then start — a range
+  is an instruction, not a proposal, so don't stop for confirmation on the list.
+
+### Working the batch
+
+- **One line at a time, start to finish.** Steps 1 → 2 → 3 (Part A → Part B) for
+  a line, then its commit, then the next line. Don't interleave lines and don't
+  batch the steps across lines ("all the innates first") — the step coupling in
+  "How a review runs" is per line, and working them across lines re-derives every
+  line at once.
+- **Cross-line coupling is real, so keep the batch in view.** Two lines in one
+  batch can reach for the same held item or the same borrowed ability. A batch is
+  the one vantage point where item crowding is visible — if three of the batch's
+  sets are converging on Leftovers, spread them (see the scarcity note in Step 3).
+- **Commit and push after every line.** One commit per line, scoped to that
+  line's rows, subject `Line review: <Line> line — <what changed>` — the subject
+  a single-line PR would have carried. The container is ephemeral: a lost session
+  should cost one line, not ten.
+- **Verify once, at the end of the batch.** `make check TESTS="Frontier extended
+  roster"` and `make check TESTS="Innate"` are a build each; running them per
+  line burns the budget for no extra signal, and CI runs the full suite on the PR.
+- **Budget context deliberately.** Ten lines is a lot of reading. Grep for the
+  line's rows and read around the hits (per `CLAUDE.md`); don't re-read this
+  rubric or a whole data file once per line.
+
+### Shipping the batch
+
+- **Branch `claude/lines-<first>-<last>-review`; one PR for the whole batch**,
+  opened when the last line is committed.
+- **The PR body gets one section per line**, and each section carries exactly what
+  a single-line PR body carries (per-step changes and reasoning, flavor evidence
+  with recall flagged as recall, Part A verdicts including *keep as-is*, rejected
+  candidates, open questions). Above them, a short batch header listing the
+  resolved lines and flagging the ones that came out **no changes** — which is a
+  legitimate result for a line, but still gets a section saying what was checked.
+- **If the batch can't be finished** (context, time, a blocker), open the PR
+  anyway with the lines that are done and a **remaining** list naming the rest.
+  Half a batch shipped beats ten lines lost with the session.
+- **Review feedback is per line.** Apply it on the same branch, as a new commit
+  naming the line it fixes, and re-derive forward through *that* line's steps —
+  a rejection in one line only touches another if they shared a resource (the
+  same item, the same borrowed ability), which is worth checking and usually
+  isn't the case.
 
 ---
 
@@ -785,13 +879,16 @@ filtered tests, and move to the wrap-up.
   innate/override/roster features already have rows; a per-line data tweak rarely
   needs a new row, but note anything with a known limitation).
 - **One line per branch/PR** unless the maintainer says otherwise. Branch as
-  `claude/<line>-line-review`; PR against the fork's `master`.
+  `claude/<line>-line-review`; PR against the fork's `master`. A **batch** is the
+  standing exception: one branch `claude/lines-<first>-<last>-review`, one commit
+  per line, one PR — see "Batch reviews" above.
 
 ### 2. Write the PR body — it is the review surface
 
 Nothing was approved mid-session, so the PR body is where the maintainer sees the
 reasoning for the first time. It has to stand on its own; a diff of ability
-constants and move slots does not. Structure it by step:
+constants and move slots does not. Structure it by step (in a batch, by line
+first, then by step within each line's section):
 
 - **Per step (innates / overrides / frontier sets), what changed and why.** For
   each pick, the flavor evidence that carries it: the repo's `.description` quoted
@@ -802,11 +899,15 @@ constants and move slots does not. Structure it by step:
 - **Part A verdicts for existing frontier sets**, including the *keep as-is* ones —
   "checked and unchanged" is information; silence reads as "not looked at."
 - **Record what you rejected, and why.** Much of a line review's value is in the
-  candidates considered and dropped — undocumented, they get re-proposed on the next
-  pass. Put them in the PR body; if a pick was rejected on a durable *structural*
-  ground rather than taste (e.g. a transformation ability, which is out of scope for
-  innates entirely — see the "Identity / form / type-transform" bucket in
-  `INNATE_ABILITIES.md`), record it in the relevant doc instead so it sticks.
+  candidates considered and dropped, and the PR body is where that record lives —
+  it is what the maintainer weighs the accepted picks against, and what a future
+  decision about this line is made from. It is a **record, not a veto**: a later
+  pass reviews the line fresh and may well raise a dropped candidate again, which
+  is intended (see "Batch reviews"). The exception is a rejection on a durable
+  *structural* ground rather than taste (e.g. a transformation ability, which is
+  out of scope for innates entirely — see the "Identity / form / type-transform"
+  bucket in `INNATE_ABILITIES.md`): record that in the relevant doc, where it
+  binds every future pass, instead of in a PR body nobody re-reads.
 - **Open questions** — the coin-flip picks you resolved yourself, called out so the
   maintainer can flip them back cheaply.
 - **Note the save-index cost when adding frontier sets.** Sets are inserted at the
@@ -828,6 +929,7 @@ not a failure.
 - **Verify before defending.** When a pick is challenged, go check (canon users, the
   repo's dex text, `deterministic.h`) rather than arguing from memory, and say
   plainly when the evidence supports the maintainer — or, less often, the pick.
-- **A rejected candidate goes into the PR body's rejected list** (or the relevant
-  `fork-docs/` doc if the ground was structural) so the next pass doesn't re-propose
-  it.
+- **A rejected candidate goes into the PR body's rejected list** — as the record
+  of what this review weighed, not as a ban on ever raising it again. If the ground
+  was *structural* rather than taste, put it in the relevant `fork-docs/` doc, which
+  is the only place a rejection binds a later pass.
