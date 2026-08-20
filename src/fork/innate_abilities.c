@@ -444,6 +444,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ROUGH_SKIN
         )
     },
+    { // 0032
+        SPECIES_NIDORAN_M,
+        INNATES(
+            ABILITY_ANTICIPATION,
+            ABILITY_ROUGH_SKIN
+        )
+    },
+    { // 0033
+        SPECIES_NIDORINO,
+        INNATES(
+            ABILITY_ANTICIPATION,
+            ABILITY_ROCK_HEAD,
+            ABILITY_ROUGH_SKIN
+        )
+    },
+    { // 0034
+        SPECIES_NIDOKING,
+        INNATES(
+            ABILITY_MOLD_BREAKER,
+            ABILITY_ROCK_HEAD,
+            ABILITY_ROUGH_SKIN
+        )
+    },
     { // 0035
         SPECIES_CLEFAIRY,
         INNATES(

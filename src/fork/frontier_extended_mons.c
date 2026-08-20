@@ -974,7 +974,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIDOKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -1010,6 +1010,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_NIDOKING,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_POISON_BARB,
+        .moves =
+        {
+            MOVE_MEGAHORN,
+            MOVE_HEAD_SMASH,
+            MOVE_EARTHQUAKE,
+            MOVE_POISON_JAB
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_NIDOKING,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_ROCK_SLIDE,
+            MOVE_POISON_JAB,
+            MOVE_DRILL_RUN,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_POISON_POINT,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0036
