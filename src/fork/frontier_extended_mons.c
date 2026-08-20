@@ -209,6 +209,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIRE,
     },
+    {
+        .species = SPECIES_CHARIZARD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_CHARCOAL,
+        .moves =
+        {
+            MOVE_HEAT_WAVE,
+            MOVE_HURRICANE,
+            MOVE_TAILWIND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
+        .species = SPECIES_CHARIZARD,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_THROAT_SPRAY,
+        .moves =
+        {
+            MOVE_NOBLE_ROAR,
+            MOVE_FIRE_BLAST,
+            MOVE_DRAGON_PULSE,
+            MOVE_ROOST
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DRAGON,
+    },
 
     // 0009
     {

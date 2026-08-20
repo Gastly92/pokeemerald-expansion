@@ -94,13 +94,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0005
         SPECIES_CHARMELEON,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0006
         SPECIES_CHARIZARD,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0006
@@ -113,13 +115,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0006
         SPECIES_CHARIZARD_MEGA_Y,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0006
         SPECIES_CHARIZARD_GMAX,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0007
