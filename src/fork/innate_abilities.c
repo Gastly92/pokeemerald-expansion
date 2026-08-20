@@ -42,6 +42,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BULBASAUR,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD,
             ABILITY_OVERGROW
         )
     },
