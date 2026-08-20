@@ -5447,23 +5447,23 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0169
     {
         .species = SPECIES_CROBAT,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
-            MOVE_BRAVE_BIRD,
-            MOVE_GUNK_SHOT,
-            MOVE_CLOSE_COMBAT,
-            MOVE_U_TURN
+            MOVE_TAILWIND,
+            MOVE_LEECH_LIFE,
+            MOVE_POISON_FANG,
+            MOVE_PROTECT
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
-            .atk = 252,
-            .spd = 4,
+            .hp = 252,
+            .atk = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FLYING,
+        .teraType = TYPE_POISON,
     },
     {
         .species = SPECIES_CROBAT,

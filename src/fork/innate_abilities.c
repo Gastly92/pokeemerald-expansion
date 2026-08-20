@@ -557,7 +557,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOLBAT,
         INNATES(
             ABILITY_INFILTRATOR,
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0043
@@ -1893,7 +1894,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CROBAT,
         INNATES(
             ABILITY_INFILTRATOR,
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_STRONG_JAW,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0170
