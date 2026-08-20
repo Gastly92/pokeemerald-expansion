@@ -645,17 +645,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ARENA_TRAP,
             ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH,
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_TELEPATHY
         )
     },
     { // 0051
         SPECIES_DUGTRIO_ALOLA,
         INNATES(
             ABILITY_ARENA_TRAP,
+            ABILITY_BATTLE_ARMOR,
             ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH,
             ABILITY_SAND_VEIL,
-            ABILITY_TANGLING_HAIR
+            ABILITY_TANGLING_HAIR,
+            ABILITY_TELEPATHY
         )
     },
     { // 0052

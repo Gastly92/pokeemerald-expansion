@@ -1549,14 +1549,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DUGTRIO_ALOLA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
             MOVE_EARTHQUAKE,
             MOVE_IRON_HEAD,
             MOVE_SWORDS_DANCE,
-            MOVE_STONE_EDGE
+            MOVE_PROTECT
         },
         .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
