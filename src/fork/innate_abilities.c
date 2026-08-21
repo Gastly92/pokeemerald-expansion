@@ -928,6 +928,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MACHOP,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_IRON_FIST,
             ABILITY_STEADFAST
         )
     },
@@ -935,6 +936,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MACHOKE,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_IRON_FIST,
             ABILITY_STEADFAST
         )
     },
@@ -942,6 +944,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MACHAMP,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_IRON_FIST,
+            ABILITY_SCRAPPY,
             ABILITY_STEADFAST
         )
     },
@@ -949,6 +953,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MACHAMP_GMAX,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_IRON_FIST,
+            ABILITY_SCRAPPY,
             ABILITY_STEADFAST
         )
     },
