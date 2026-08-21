@@ -1321,15 +1321,21 @@ static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, 
 
     // FORK: innate Cute Charm (FEATURE_INNATE_ABILITIES) — when the defender carries Cute Charm
     // innately but its chosen ability differs, the switch above misses it, yet making contact still
-    // risks infatuation, so treat it as a downside too. (Static / Flame Body / Poison Point / Effect
-    // Spore are never innates, so only Cute Charm needs this; BattlerHasAbility is a no-op with the
-    // feature off.)
+    // risks infatuation, so treat it as a downside too. (Static / Flame Body / Poison Point are never
+    // innates, so only Cute Charm needs this among the status set; BattlerHasAbility is a no-op with
+    // the feature off.)
     if (abilityDef != ABILITY_CUTE_CHARM && BattlerHasAbility(battlerDef, ABILITY_CUTE_CHARM))
         return !gBattleMons[battlerAtk].volatiles.infatuation
             && abilityAtk != ABILITY_OBLIVIOUS
             && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
             && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL)
             && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // FORK: innate Aroma Veil on the attacker's side (Batch U)
+
+    // FORK: innate Effect Spore (Tier 5.10) — same shape as the Cute Charm clause above. The switch
+    // keys off the chosen ability, so a holder whose Effect Spore is innate-only would be missed,
+    // yet contact still guarantees the accuracy drop. IsInnateActive supplies the usual suppression.
+    if (abilityDef != ABILITY_EFFECT_SPORE && IsInnateActive(battlerDef, ABILITY_EFFECT_SPORE))
+        return CanLowerStat(battlerDef, battlerAtk, gAiLogicData, STAT_ACC);
 
     return FALSE;
 }

@@ -5166,6 +5166,7 @@ static const enum Ability sImplementedInnates[] =
         ABILITY_MIRROR_ARMOR,
         ABILITY_MAGIC_BOUNCE,
         ABILITY_DANCER,
+        ABILITY_EFFECT_SPORE,
 };
 
 static bool32 IsImplementedInnate(enum Ability ability)
@@ -9978,5 +9979,100 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate D
         NOT ABILITY_POPUP(opponent, ABILITY_DANCER); // innate suppressed -> the dance is not copied
     } THEN {
         EXPECT_EQ(opponent->statStages[STAT_SPEED], DEFAULT_STAT_STAGE); // did not copy the foe's Quiver Dance
+    }
+}
+
+// ===== Tier 5.10 — Effect Spore ============================================================
+// The first ability promoted OUT of the :x: set. The PR-1 re-spec made Effect Spore lower the
+// contact attacker's accuracy instead of applying a non-volatile status, which removes the
+// mutual-exclusion objection that had permanently excluded it. It reuses the Batch K on-hit
+// driver (TryActivateInnateOnHitEffects -> IsActiveOnHitInnate) and delegates to the upstream
+// ABILITYEFFECT_MOVE_END case, so the stat drop / script / pop-up match the real ability.
+
+// The accuracy drop lands even when Effect Spore is the holder's INNATE (chosen ability differs).
+// Vileplume carries innate Effect Spore (chosen Chlorophyll); Ribombee likewise (chosen Shield
+// Dust). The feature-off leg proves the drop comes only from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Effect Spore lowers a contact attacker's accuracy")
+{
+    u32 species;
+    enum Ability chosen;
+    bool32 enabled;
+    PARAMETRIZE { species = SPECIES_VILEPLUME; chosen = ABILITY_CHLOROPHYLL; enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_VILEPLUME; chosen = ABILITY_CHLOROPHYLL; enabled = FALSE; }
+    PARAMETRIZE { species = SPECIES_RIBOMBEE;  chosen = ABILITY_SHIELD_DUST; enabled = TRUE; }
+    PARAMETRIZE { species = SPECIES_RIBOMBEE;  chosen = ABILITY_SHIELD_DUST; enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(species, ABILITY_EFFECT_SPORE));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(species) { Ability(chosen); } // chosen ability is NOT Effect Spore
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(opponent, ABILITY_EFFECT_SPORE); // pop-up shows the innate, not the chosen ability
+            MESSAGE("Wobbuffet's accuracy fell!");
+        } else {
+            NONE_OF { ABILITY_POPUP(opponent, ABILITY_EFFECT_SPORE); }
+        }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], enabled ? DEFAULT_STAT_STAGE - 1 : DEFAULT_STAT_STAGE);
+    }
+}
+
+// A REAL Effect Spore still drops accuracy exactly once with the feature on — the driver skips an
+// innate equal to the chosen ability, so it never double-fires beside the chosen-ability block.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a chosen Effect Spore drops accuracy once, not twice, with innates on")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VILEPLUME, ABILITY_EFFECT_SPORE));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_VILEPLUME) { Ability(ABILITY_EFFECT_SPORE); } // chosen == innate
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        ABILITY_POPUP(opponent, ABILITY_EFFECT_SPORE);
+        MESSAGE("Wobbuffet's accuracy fell!");
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], DEFAULT_STAT_STAGE - 1); // one drop, not two
+    }
+}
+
+// Parity: a non-contact move never triggers the innate drop (routes through CanBattlerAvoidContactEffects).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Effect Spore does not lower a non-contact attacker's accuracy")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VILEPLUME, ABILITY_EFFECT_SPORE));
+        ASSUME(!MoveMakesContact(MOVE_SWIFT));
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_VILEPLUME) { Ability(ABILITY_CHLOROPHYLL); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SWIFT); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], DEFAULT_STAT_STAGE);
+    }
+}
+
+// Parity: the innate keeps the real ability's powder gating — a Grass-type attacker is immune.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Effect Spore keeps its powder immunity")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VILEPLUME, ABILITY_EFFECT_SPORE));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_ODDISH); // Grass type: immune to powder
+        OPPONENT(SPECIES_VILEPLUME) { Ability(ABILITY_CHLOROPHYLL); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ACC], DEFAULT_STAT_STAGE);
     }
 }

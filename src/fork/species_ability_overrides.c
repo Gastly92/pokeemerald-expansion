@@ -421,7 +421,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0189
         SPECIES_JUMPLUFF, 1,
-        ABILITY_EFFECT_SPORE
+        ABILITY_COTTON_DOWN
     },
     { // 0199
         SPECIES_SLOWKING, 2,
@@ -1168,7 +1168,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0666
         SPECIES_VIVILLON, 1,
-        ABILITY_EFFECT_SPORE
+        ABILITY_WIND_RIDER
     },
     { // 0675
         SPECIES_PANGORO, 0,
@@ -1276,7 +1276,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0743
         SPECIES_RIBOMBEE, 0,
-        ABILITY_EFFECT_SPORE
+        ABILITY_FLUFFY
     },
     { // 0745
         SPECIES_LYCANROC_DUSK, 1,

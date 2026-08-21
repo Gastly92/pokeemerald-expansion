@@ -1310,7 +1310,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -1330,7 +1330,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5892,7 +5892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUBSTITUTE,
             MOVE_GIGA_DRAIN
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_COTTON_DOWN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -5912,7 +5912,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_COTTON_DOWN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17290,7 +17290,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_SLEEP_POWDER
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -17310,7 +17310,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_POWDER
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19334,7 +19334,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_STUN_SPORE
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_FLUFFY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19354,7 +19354,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_POLLEN_PUFF
         },
-        .ability = ABILITY_EFFECT_SPORE,
+        .ability = ABILITY_FLUFFY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

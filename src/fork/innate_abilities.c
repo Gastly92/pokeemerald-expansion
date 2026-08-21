@@ -583,6 +583,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_LEAF_GUARD,
             ABILITY_STENCH
         )
@@ -2023,6 +2024,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_JUMPLUFF,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_INFILTRATOR,
             ABILITY_LEAF_GUARD
         )
@@ -6156,6 +6158,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VIVILLON,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST
         )
     },
@@ -6945,6 +6948,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0743
         SPECIES_RIBOMBEE,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST,
             ABILITY_SWEET_VEIL
         )
@@ -9024,7 +9028,7 @@ bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index)
 // Gooey / Tangling Hair; on-faint retaliation: Aftermath / Innards Out, which fire from the
 // same ABILITYEFFECT_MOVE_END step after the holder faints; on-hit stat/charge: Steam Engine /
 // Thermal Exchange / Wind Power; move-disable: Cursed Body; on-hit stat boosts: Justified /
-// Stamina / Water Compaction / Anger Point). The driver
+// Stamina / Water Compaction / Anger Point; contact-accuracy-drop: Effect Spore). The driver
 // (TryActivateInnateOnHitEffects) is re-entrant, so a battler may carry more than one and each
 // fires in turn. Each delegates to the existing upstream ABILITYEFFECT_MOVE_END case, so the
 // recoil / retaliation damage / stat drop / script / pop-up matches the real ability for free
@@ -9052,6 +9056,7 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_WATER_COMPACTION: // raises Defense +2 when hit by a Water move
     case ABILITY_ANGER_POINT:   // maxes Attack when the holder takes a critical hit
     case ABILITY_RATTLED:       // raises Speed +1 when hit by a Dark/Ghost/Bug move
+    case ABILITY_EFFECT_SPORE:  // lowers a contact attacker's accuracy by 1 (powder-gated)
         return TRUE;
     default:
         return FALSE;
