@@ -705,7 +705,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH,
             ABILITY_SAND_VEIL,
-            ABILITY_TANGLING_HAIR
+            ABILITY_TANGLING_HAIR,
+            ABILITY_TELEPATHY
         )
     },
     { // 0051
@@ -715,7 +716,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH,
             ABILITY_SAND_VEIL,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0051
