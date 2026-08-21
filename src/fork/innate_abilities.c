@@ -1176,7 +1176,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0083
         SPECIES_FARFETCHD_GALAR,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_SCRAPPY,
+            ABILITY_SHARPNESS,
             ABILITY_STEADFAST
         )
     },
@@ -8022,7 +8024,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0865
         SPECIES_SIRFETCHD,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_SCRAPPY,
+            ABILITY_SHARPNESS,
             ABILITY_STEADFAST
         )
     },
