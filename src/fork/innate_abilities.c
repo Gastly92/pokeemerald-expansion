@@ -1205,6 +1205,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HYDRATION,
             ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH,
             ABILITY_THICK_FAT
         )
     },
@@ -1213,6 +1214,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HYDRATION,
             ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH,
             ABILITY_THICK_FAT
         )
     },

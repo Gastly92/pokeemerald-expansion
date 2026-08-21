@@ -2919,7 +2919,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ICE_BEAM,
             MOVE_SURF,
-            MOVE_ICY_WIND,
+            MOVE_SHEER_COLD,
             MOVE_PROTECT
         },
         .ability = ABILITY_SNOW_WARNING,
