@@ -635,6 +635,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL,
             ABILITY_EFFECT_SPORE,
             ABILITY_LEAF_GUARD,
+            ABILITY_LIQUID_OOZE,
             ABILITY_STENCH
         )
     },
@@ -645,6 +646,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL,
             ABILITY_EFFECT_SPORE,
             ABILITY_LEAF_GUARD,
+            ABILITY_LIQUID_OOZE,
             ABILITY_STENCH
         )
     },
