@@ -312,6 +312,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MUMMY
     },
     {
+        SPECIES_GENGAR_MEGA, 0,
+        ABILITY_MUMMY
+    },
+    {
+        SPECIES_GENGAR_MEGA, 1,
+        ABILITY_MUMMY
+    },
+    {
+        SPECIES_GENGAR_MEGA, 2,
+        ABILITY_MUMMY
+    },
+    {
         SPECIES_GENGAR_GMAX, 1,
         ABILITY_MUMMY
     },
