@@ -867,19 +867,25 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0060
         SPECIES_POLIWAG,
         INNATES(
+            ABILITY_LIMBER,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0061
         SPECIES_POLIWHIRL,
         INNATES(
+            ABILITY_GOOEY,
+            ABILITY_LIMBER,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0062
         SPECIES_POLIWRATH,
         INNATES(
-            ABILITY_SWIFT_SWIM
+            ABILITY_GOOEY,
+            ABILITY_LIMBER,
+            ABILITY_SWIFT_SWIM,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0063
@@ -2085,6 +2091,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_RATTLED,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
+        )
+    },
+    { // 0186
+        SPECIES_POLITOED,
+        INNATES(
+            ABILITY_LIMBER,
+            ABILITY_RAIN_DISH
         )
     },
     { // 0187

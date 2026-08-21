@@ -5930,7 +5930,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_DAMP_ROCK,
         .moves =
         {
-            MOVE_RAIN_DANCE,
+            MOVE_WEATHER_BALL,
             MOVE_HYDRO_PUMP,
             MOVE_ICE_BEAM,
             MOVE_ENCORE
