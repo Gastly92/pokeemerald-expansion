@@ -200,6 +200,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_METAPOD,
         INNATES(
             ABILITY_SHED_SKIN,
+            ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
     },
@@ -208,6 +209,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPOUND_EYES,
             ABILITY_EFFECT_SPORE,
+            ABILITY_FRISK,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
@@ -217,6 +219,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPOUND_EYES,
             ABILITY_EFFECT_SPORE,
+            ABILITY_FRISK,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
