@@ -245,6 +245,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_MERCILESS,
             ABILITY_SNIPER,
+            ABILITY_STAKEOUT,
             ABILITY_SWARM,
             ABILITY_TECHNICIAN
         )
@@ -255,7 +256,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ADAPTABILITY,
             ABILITY_LEVITATE,
             ABILITY_MERCILESS,
+            ABILITY_SKILL_LINK,
             ABILITY_SNIPER,
+            ABILITY_STAKEOUT,
             ABILITY_SWARM,
             ABILITY_TECHNICIAN
         )
