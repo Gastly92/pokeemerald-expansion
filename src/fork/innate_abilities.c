@@ -587,7 +587,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_COMPETITIVE,
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
-            ABILITY_INSOMNIA
+            ABILITY_INSOMNIA,
+            ABILITY_THICK_FAT
         )
     },
     { // 0040
@@ -597,7 +598,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
             ABILITY_FRISK,
-            ABILITY_INSOMNIA
+            ABILITY_INSOMNIA,
+            ABILITY_THICK_FAT
         )
     },
     { // 0041
@@ -2002,7 +2004,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_COMPETITIVE,
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
-            ABILITY_INSOMNIA
+            ABILITY_INSOMNIA,
+            ABILITY_THICK_FAT
         )
     },
     { // 0175

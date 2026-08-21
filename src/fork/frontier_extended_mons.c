@@ -1357,7 +1357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .teraType = TYPE_WATER,
+        .teraType = TYPE_PSYCHIC,
     },
     {
         .species = SPECIES_WIGGLYTUFF,
