@@ -1160,7 +1160,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANALYTIC,
             ABILITY_LEVITATE,
             ABILITY_MAGNET_PULL,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_TELEPATHY
         )
     },
     { // 0083
@@ -4684,7 +4685,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANALYTIC,
             ABILITY_LEVITATE,
             ABILITY_MAGNET_PULL,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_TELEPATHY
         )
     },
     { // 0463
