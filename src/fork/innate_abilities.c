@@ -654,6 +654,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PARAS,
         INNATES(
             ABILITY_EFFECT_SPORE,
+            ABILITY_HEALER,
             ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
@@ -662,6 +663,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PARASECT,
         INNATES(
             ABILITY_EFFECT_SPORE,
+            ABILITY_HEALER,
             ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR,
             ABILITY_SWARM
