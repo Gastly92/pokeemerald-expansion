@@ -3435,7 +3435,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -3455,7 +3455,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRABHAMMER,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3475,7 +3475,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRABHAMMER,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

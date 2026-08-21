@@ -1357,21 +1357,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KRABBY,
         INNATES(
             ABILITY_HYPER_CUTTER,
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STURDY,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0099
         SPECIES_KINGLER,
         INNATES(
             ABILITY_HYPER_CUTTER,
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STURDY,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0099
         SPECIES_KINGLER_GMAX,
         INNATES(
             ABILITY_HYPER_CUTTER,
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STURDY,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0100

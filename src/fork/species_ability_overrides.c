@@ -331,6 +331,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HYPNO, 1,
         ABILITY_SYNCHRONIZE
     },
+    { // 0099
+        SPECIES_KINGLER, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_KINGLER_GMAX, 1,
+        ABILITY_WATER_ABSORB
+    },
     { // 0103
         SPECIES_EXEGGUTOR, 1,
         ABILITY_SAP_SIPPER
