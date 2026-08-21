@@ -225,11 +225,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0053
         SPECIES_PERSIAN, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_TRACE
     },
     { // 0053
         SPECIES_PERSIAN_ALOLA, 2,
         ABILITY_DARK_AURA
+    },
+    { // 0055
+        SPECIES_GOLDUCK, 2,
+        ABILITY_PSYCHIC_AFFINITY
     },
     { // 0065
         SPECIES_ALAKAZAM, 1,
@@ -271,6 +275,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SLOWBRO, 1,
         ABILITY_STORM_DRAIN
     },
+    {
+        SPECIES_SLOWBRO_MEGA, 0,
+        ABILITY_STORM_DRAIN
+    },
+    {
+        SPECIES_SLOWBRO_MEGA, 1,
+        ABILITY_STORM_DRAIN
+    },
+    {
+        SPECIES_SLOWBRO_MEGA, 2,
+        ABILITY_STORM_DRAIN
+    },
     { // 0080
         SPECIES_SLOWBRO_GALAR, 2,
         ABILITY_POISON_TOUCH
@@ -296,12 +312,40 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MUMMY
     },
     {
+        SPECIES_GENGAR_MEGA, 0,
+        ABILITY_MUMMY
+    },
+    {
+        SPECIES_GENGAR_MEGA, 1,
+        ABILITY_MUMMY
+    },
+    {
+        SPECIES_GENGAR_MEGA, 2,
+        ABILITY_MUMMY
+    },
+    {
         SPECIES_GENGAR_GMAX, 1,
         ABILITY_MUMMY
     },
     { // 0097
         SPECIES_HYPNO, 1,
         ABILITY_SYNCHRONIZE
+    },
+    { // 0099
+        SPECIES_KINGLER, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_KINGLER_GMAX, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0101
+        SPECIES_ELECTRODE, 2,
+        ABILITY_VOLT_ABSORB
+    },
+    {
+        SPECIES_ELECTRODE_HISUI, 2,
+        ABILITY_VOLT_ABSORB
     },
     { // 0103
         SPECIES_EXEGGUTOR, 1,
@@ -438,6 +482,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0205
         SPECIES_FORRETRESS, 1,
         ABILITY_BULLETPROOF
+    },
+    { // 0208
+        SPECIES_STEELIX, 1,
+        ABILITY_SAND_STREAM
+    },
+    {
+        SPECIES_STEELIX_MEGA, 0,
+        ABILITY_SAND_STREAM
+    },
+    {
+        SPECIES_STEELIX_MEGA, 1,
+        ABILITY_SAND_STREAM
+    },
+    {
+        SPECIES_STEELIX_MEGA, 2,
+        ABILITY_SAND_STREAM
     },
     { // 0210
         SPECIES_GRANBULL, 2,

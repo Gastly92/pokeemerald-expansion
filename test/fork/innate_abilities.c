@@ -1950,8 +1950,12 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Technician boosts a base-po
     }
 }
 
-// Technician only touches moves of base power <= 60: an 85-BP Body Slam is unchanged whether or not
-// the innate is active.
+// Technician only touches moves of base power <= 60: a 90-BP Hyper Voice is unchanged whether or not
+// the innate is active. The move must be NON-CONTACT: this test measures total damage with every one
+// of Persian's innates switched on, and Persian also carries Tough Claws, which would boost a contact
+// move by 1.3x and make the two results differ for a reason that has nothing to do with Technician.
+// Hyper Voice is the >60 BP counterpart to the Swift test above -- same type, same category, also
+// non-contact -- so base power is the only thing that varies between the pair.
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Technician does not boost a move over base power 60", s16 damage)
 {
     bool32 enabled;
@@ -1959,12 +1963,13 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Technician does not boost a
     PARAMETRIZE { enabled = TRUE; }
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_PERSIAN, ABILITY_TECHNICIAN));
-        ASSUME(GetMovePower(MOVE_BODY_SLAM) > 60);
+        ASSUME(GetMovePower(MOVE_HYPER_VOICE) > 60);
+        ASSUME(!MoveMakesContact(MOVE_HYPER_VOICE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_PERSIAN) { Moves(MOVE_BODY_SLAM); }
+        PLAYER(SPECIES_PERSIAN) { Moves(MOVE_HYPER_VOICE); }
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
-        TURN { MOVE(player, MOVE_BODY_SLAM); }
+        TURN { MOVE(player, MOVE_HYPER_VOICE); }
     } SCENE {
         HP_BAR(opponent, captureDamage: &results[i].damage);
     } FINALLY {
