@@ -548,13 +548,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0037
         SPECIES_VULPIX,
         INNATES(
-            ABILITY_CURSED_BODY
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR
         )
     },
     { // 0037
         SPECIES_VULPIX_ALOLA,
         INNATES(
             ABILITY_FRIEND_GUARD,
+            ABILITY_HEATPROOF,
             ABILITY_ICE_BODY,
             ABILITY_SNOW_CLOAK
         )
@@ -563,6 +565,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NINETALES,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_SHADOW_TAG
         )
     },
@@ -571,7 +575,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CURSED_BODY,
             ABILITY_FRIEND_GUARD,
+            ABILITY_HEATPROOF,
             ABILITY_ICE_BODY,
+            ABILITY_JUSTIFIED,
             ABILITY_SNOW_CLOAK
         )
     },
