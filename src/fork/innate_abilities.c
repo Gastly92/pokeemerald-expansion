@@ -1383,25 +1383,31 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0100
         SPECIES_VOLTORB,
         INNATES(
-            ABILITY_AFTERMATH
+            ABILITY_AFTERMATH,
+            ABILITY_OVERCOAT
         )
     },
     { // 0100
         SPECIES_VOLTORB_HISUI,
         INNATES(
-            ABILITY_AFTERMATH
+            ABILITY_AFTERMATH,
+            ABILITY_HARVEST,
+            ABILITY_OVERCOAT
         )
     },
     { // 0101
         SPECIES_ELECTRODE,
         INNATES(
-            ABILITY_AFTERMATH
+            ABILITY_AFTERMATH,
+            ABILITY_OVERCOAT
         )
     },
     { // 0101
         SPECIES_ELECTRODE_HISUI,
         INNATES(
-            ABILITY_AFTERMATH
+            ABILITY_AFTERMATH,
+            ABILITY_HARVEST,
+            ABILITY_OVERCOAT
         )
     },
     { // 0102

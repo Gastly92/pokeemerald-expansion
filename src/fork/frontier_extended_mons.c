@@ -3539,7 +3539,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_TAUNT
         },
-        .ability = ABILITY_STATIC,
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
