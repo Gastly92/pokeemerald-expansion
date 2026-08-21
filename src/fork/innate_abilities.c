@@ -1114,6 +1114,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SLOWPOKE_GALAR,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_OBLIVIOUS,
             ABILITY_OWN_TEMPO,
             ABILITY_REGENERATOR
         )
@@ -1129,6 +1130,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0080
         SPECIES_SLOWBRO_MEGA,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_OWN_TEMPO,
             ABILITY_REGENERATOR,
             ABILITY_SHELL_ARMOR
@@ -1137,6 +1139,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0080
         SPECIES_SLOWBRO_GALAR,
         INNATES(
+            ABILITY_OBLIVIOUS,
             ABILITY_OWN_TEMPO,
             ABILITY_QUICK_DRAW,
             ABILITY_REGENERATOR
@@ -2228,6 +2231,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0199
         SPECIES_SLOWKING,
         INNATES(
+            ABILITY_ANALYTIC,
             ABILITY_OBLIVIOUS,
             ABILITY_OWN_TEMPO,
             ABILITY_REGENERATOR
@@ -2236,6 +2240,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0199
         SPECIES_SLOWKING_GALAR,
         INNATES(
+            ABILITY_ANALYTIC,
             ABILITY_OWN_TEMPO,
             ABILITY_REGENERATOR
         )

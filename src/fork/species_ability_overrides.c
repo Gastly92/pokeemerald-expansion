@@ -275,6 +275,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SLOWBRO, 1,
         ABILITY_STORM_DRAIN
     },
+    {
+        SPECIES_SLOWBRO_MEGA, 0,
+        ABILITY_STORM_DRAIN
+    },
+    {
+        SPECIES_SLOWBRO_MEGA, 1,
+        ABILITY_STORM_DRAIN
+    },
+    {
+        SPECIES_SLOWBRO_MEGA, 2,
+        ABILITY_STORM_DRAIN
+    },
     { // 0080
         SPECIES_SLOWBRO_GALAR, 2,
         ABILITY_POISON_TOUCH
