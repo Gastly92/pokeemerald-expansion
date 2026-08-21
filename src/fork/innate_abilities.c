@@ -59,6 +59,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_LEAF_GUARD,
             ABILITY_OVERGROW,
             ABILITY_REGENERATOR
@@ -69,6 +70,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_LEAF_GUARD,
             ABILITY_OVERGROW,
             ABILITY_REGENERATOR,
@@ -80,6 +82,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_LEAF_GUARD,
             ABILITY_OVERGROW,
             ABILITY_REGENERATOR
