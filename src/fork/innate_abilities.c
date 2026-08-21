@@ -431,6 +431,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SANDSHREW,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH,
             ABILITY_SAND_VEIL
         )
@@ -448,6 +449,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SANDSLASH,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_HEATPROOF,
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_RUSH,
             ABILITY_SAND_VEIL
         )
