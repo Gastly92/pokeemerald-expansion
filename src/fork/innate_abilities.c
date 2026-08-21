@@ -276,6 +276,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BIG_PECKS,
             ABILITY_KEEN_EYE,
+            ABILITY_STAKEOUT,
             ABILITY_TANGLED_FEET,
             ABILITY_TOUGH_CLAWS
         )
@@ -286,6 +287,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BIG_PECKS,
             ABILITY_CUTE_CHARM,
             ABILITY_KEEN_EYE,
+            ABILITY_STAKEOUT,
             ABILITY_TANGLED_FEET,
             ABILITY_TOUGH_CLAWS
         )
@@ -296,8 +298,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BIG_PECKS,
             ABILITY_CUTE_CHARM,
             ABILITY_KEEN_EYE,
+            ABILITY_STAKEOUT,
             ABILITY_TANGLED_FEET,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_TOUGH_CLAWS,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0019
