@@ -356,6 +356,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_BIG_PECKS,
             ABILITY_KEEN_EYE,
+            ABILITY_MOXIE,
             ABILITY_SNIPER
         )
     },
