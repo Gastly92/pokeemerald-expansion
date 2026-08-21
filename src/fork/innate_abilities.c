@@ -739,6 +739,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PICKPOCKET,
             ABILITY_PICKUP,
             ABILITY_TECHNICIAN,
+            ABILITY_TOUGH_CLAWS,
             ABILITY_UNNERVE
         )
     },
@@ -768,15 +769,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PICKPOCKET,
             ABILITY_PICKUP,
             ABILITY_TECHNICIAN,
+            ABILITY_TOUGH_CLAWS,
             ABILITY_UNNERVE
         )
     },
     { // 0053
         SPECIES_PERSIAN,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_LIMBER,
             ABILITY_PICKPOCKET,
             ABILITY_TECHNICIAN,
+            ABILITY_TOUGH_CLAWS,
             ABILITY_UNNERVE
         )
     },
@@ -785,7 +789,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FUR_COAT,
             ABILITY_RATTLED,
-            ABILITY_TECHNICIAN
+            ABILITY_TECHNICIAN,
+            ABILITY_UNNERVE
         )
     },
     { // 0054

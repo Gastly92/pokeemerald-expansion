@@ -1747,7 +1747,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_DARK_PULSE
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -1767,7 +1767,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FAKE_OUT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

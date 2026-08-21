@@ -225,7 +225,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0053
         SPECIES_PERSIAN, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_TRACE
     },
     { // 0053
         SPECIES_PERSIAN_ALOLA, 2,
