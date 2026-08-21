@@ -1266,16 +1266,19 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_OVERCOAT,
             ABILITY_SHELL_ARMOR,
             ABILITY_SKILL_LINK,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0091
         SPECIES_CLOYSTER,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_OVERCOAT,
             ABILITY_SHELL_ARMOR,
             ABILITY_SKILL_LINK,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0092
