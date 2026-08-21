@@ -130,7 +130,12 @@ ability sits in exactly one):
   mutually exclusive, so it can *block the holder's own* status move (an innate
   Static paralyses a target you wanted to Toxic). Not a pure boon — unlike the
   *volatile* Cute Charm (infatuation), which **is** wired. Static, Flame Body, Poison
-  Point, Effect Spore, Poison Touch, Toxic Chain, Poison Puppeteer, Spicy Spray.
+  Point, Poison Touch, Toxic Chain, Poison Puppeteer, Spicy Spray.
+  **Effect Spore was promoted out of this bucket** — the fork re-specced it to lower the
+  contact attacker's accuracy instead of applying a status, which removes the
+  mutual-exclusion objection entirely. See [`### ABILITY_EFFECT_SPORE`](#ability_effect_spore).
+  It is the precedent for the rest: re-spec the ability so the disqualifying half is gone,
+  *then* wire it — never wire one of these as-is.
 - **On-hit field / hazard setters** — reactive global-field effects. Sand Spit, Seed
   Sower, Toxic Debris, Cotton Down, Screen Cleaner, Curious Medicine.
 - **Hidden type / move / immunity stacking** — a hidden immunity layered on the
@@ -2485,7 +2490,8 @@ takes effect on its side. All three `canon only so far` (no flavor picks).
   `IsActiveOnHitInnate`** (`src/fork/innate_abilities.c`), delegating to the upstream case so the stat change /
   charge / script / pop-up match the real ability. Effect sites are in `src/battle_util.c` (Steam Engine's
   `BattleScript_AbilityStatChange` Speed +6, Thermal Exchange's Attack +1, Wind Power's `BattleScript_WindPowerActivates`).
-  These trigger at 100% on the right hit — **no RNG / `DETERMINISTIC_*` surface** (unlike Effect Spore's roll).
+  These trigger at 100% on the right hit — **no RNG / `DETERMINISTIC_*` surface** (unlike Effect Spore, whose
+  vanilla roll is replaced wholesale under `DETERMINISTIC_ABILITIES`).
 - **The pop-up.** Each effect site sets `gBattleScripting.abilityPopupOverwrite` to the innate **only when the
   chosen ability differs** (the Speed Boost / Rough Skin precedent), so a real ability stays byte-for-byte
   unchanged. Wind Power's shared `case` with Electromorphosis is guarded by `GetBattlerAbility != gLastUsedAbility`,
@@ -4224,3 +4230,53 @@ script execution). This fix only closes the in-battle script-execution gap.
 **Companion.** The redirection / side-form `jumpifability` cases were already innate-aware
 (the Aroma Veil `IsInnateOnSide` path). The remaining cross-slot script read of interest belongs to
 **Mold Breaker (Tier 5.5)**, which pokes the same machinery from the *attacker* side and is done next.
+
+### ABILITY_EFFECT_SPORE
+
+**Tier 5.10 — the first ability promoted *out* of the `:x:` set.** Effect Spore was permanently
+excluded as [non-volatile status-on-contact](#why-some-abilities-are-never-wired-the-x-set): auto-applying a
+*major* status is mutually exclusive, so an innate one could block the holder's own status move. The fork
+removed that objection at the source rather than working around it — under `DETERMINISTIC_ABILITIES` (the
+shipping default) Effect Spore no longer rolls poison/paralysis/sleep at all; it **lowers the contact
+attacker's accuracy by 1 stage**. What remains only ever hurts the attacker, so it is a plain **1:1
+clean-upside copy**. `canon only so far` (no flavor picks).
+
+**This is the pattern for the rest of that bucket:** re-spec the ability so the disqualifying half is gone,
+*then* wire it. Wiring one of them as-is is still wrong.
+
+- **Reuses the Batch K on-hit driver** — no new infra. Effect Spore fires from the **same** upstream
+  `ABILITYEFFECT_MOVE_END` case as the contact reactions, so it is a **one-line addition to
+  `IsActiveOnHitInnate`** (`src/fork/innate_abilities.c`), delegating to the upstream case so the stat drop /
+  script / pop-up match the real ability for free.
+- **The effect site** (`src/battle_util.c`) mirrors the Gooey / Tangling Hair handler on `STAT_ACC` instead of
+  `STAT_SPEED` — same `TryStatChange` precheck, same innate-Mirror-Armor allowance, and it sets
+  `gBattleScripting.abilityPopupOverwrite` to the innate **only when the chosen ability differs** (the Speed
+  Boost / Rough Skin precedent), so a real Effect Spore stays byte-for-byte unchanged.
+- **What the accuracy stage buys.** Because `DETERMINISTIC_ACCURACY_EVASION` means moves never miss, the stage
+  is spent in the [PP economy](DETERMINISM.md#deterministic_accuracy_evasion) instead: each stack costs the
+  attacker **1 extra PP per move**. The innate taxes PP; it does not create miss chance.
+- **Powder gating is unchanged** — the enclosing condition still runs `IsAffectedByPowderMove`, so a Grass
+  type, Overcoat holder or Safety Goggles holder is immune to the innate exactly as to the real ability.
+- **AI.** `AI_DeterministicContactAbilityPunishes` (`src/battle_ai_util.c`) scores the drop via
+  `CanLowerStat(battlerDef, battlerAtk, gAiLogicData, STAT_ACC)` — note the reversed roles, the *defender* is
+  the one lowering — and a second clause credits an innate Effect Spore whose chosen ability differs, the same
+  shape as the Cute Charm clause beside it. So the AI still steers contact moves away from a holder whose
+  Effect Spore is innate-only.
+
+Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); it is not
+`breakable`, so Mold Breaker never touches it.
+
+**Known limitation (accepted).** The re-spec lives in the `DETERMINISTIC_ABILITIES` branch only, so with that
+flag **off** an innate Effect Spore reverts to the vanilla 30% 3-way status roll — precisely the behaviour the
+`:x:` bucket excludes, and the effect site's pop-up overwrite does not cover that path either. The flag ships
+`TRUE` and is never turned off in this fork, so this is a documented dormant edge, not a live one. If the flag
+is ever made switchable, narrow the innate in the flag-off case before relying on it.
+
+**Species.** No new carriers — this wiring **converts** the four species that already had Effect Spore as a
+*chosen* ability, which CI gate (6) ("no ability override or frontier set names an innate-capable ability")
+forces in the same edit: **Vileplume, Jumpluff, Vivillon, Ribombee**, each merged into its existing innate row.
+Step 3.5 accordingly freed all eight of their frontier sets and three override rows for never-an-innate picks:
+Vileplume -> its **existing** Poison Point override slot (no new row needed), Jumpluff -> **Cotton Down** (it is
+made of cotton spores), Vivillon -> **Wind Rider** (a butterfly riding the Tailwind), Ribombee -> **Fluffy**
+(replacing the no-op Honey Gather in slot 0). Flavor picks for the wider line sweep are deliberately left to a
+follow-up.
