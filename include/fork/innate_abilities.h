@@ -250,7 +250,7 @@
 //   tight dance-themed set that lacks the real ability — Ludicolo, Bellossom, the Lilligant lines, Meloetta (both
 //   formes) and Maractus. Step 3.5: the two Oricorio frontier sets keep their now-redundant chosen Dancer
 //   (Oricorio has no other real ability), deferred to Batch W.
-//   EFFECT_SPORE (Tier 5.10 — promoted out of the :x: set, a 1:1 clean-upside copy, canon only so far):
+//   EFFECT_SPORE (Tier 5.10 — promoted out of the :x: set, a 1:1 clean-upside copy):
 //   when a contact attacker hits the holder, its accuracy drops 1 stage. It was permanently excluded as
 //   "non-volatile status-on-contact" until the fork re-specced it: under DETERMINISTIC_ABILITIES (the
 //   shipping default) it no longer rolls poison/paralysis/sleep at all, so the mutual-exclusion problem
@@ -259,10 +259,14 @@
 //   case, with the pop-up overwritten to the innate when the chosen ability differs. Powder-gated exactly
 //   like the real ability (a Grass type / Overcoat / Safety Goggles attacker is immune); not breakable,
 //   suppressible by Gastro Acid / Neutralizing Gas. The AI's contact-downside read
-//   (AI_DeterministicContactAbilityPunishes) is innate-aware. Carriers: its four chosen-ability users
-//   converted to innate — Vileplume, Jumpluff, Vivillon, Ribombee — each freeing its frontier set and
-//   override slot for a never-an-innate pick (Vileplume -> its existing Poison Point, Jumpluff -> Cotton
-//   Down, Vivillon -> Wind Rider, Ribombee -> Fluffy).
+//   (AI_DeterministicContactAbilityPunishes) is innate-aware. Carriers: every canon user (the Paras,
+//   Shroomish/Breloom, Foongus/Amoonguss, Morelull/Shiinotic and Gossifleur/Eldegoss lines, plus
+//   Vileplume), whose four chosen-ability users were converted to innate — Vileplume, Jumpluff, Vivillon,
+//   Ribombee — each freeing its frontier set and override slot for a never-an-innate pick (Vileplume ->
+//   its existing Poison Point, Jumpluff -> Cotton Down, Vivillon -> Wind Rider, Ribombee -> Fluffy); plus
+//   a tight spore/powder flavor set — the canon carriers' line-mates (Oddish/Gloom, Hoppip/Skiploom,
+//   Scatterbug/Spewpa, Cutiefly) and the powder/fungus identities Butterfree (+ Gmax, whose G-Max Befuddle
+//   applies MOVE_EFFECT_EFFECT_SPORE_SIDE), Venonat/Venomoth and Toedscool/Toedscruel.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

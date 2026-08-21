@@ -10076,3 +10076,64 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Effect Spore keeps its powd
         EXPECT_EQ(player->statStages[STAT_ACC], DEFAULT_STAT_STAGE);
     }
 }
+
+// Canon parity: EVERY species whose vanilla ability slots grant Effect Spore must also carry it
+// innately. Reads gSpeciesInfo directly (not GetSpeciesAbility) so a fork override can't exempt a
+// species from the sweep, and it is self-maintaining — a future form or species that ships with
+// Effect Spore fails here until it is given the innate row.
+TEST("Innate abilities: every canon Effect Spore carrier has it as an innate")
+{
+    u32 species;
+    u32 offenders = 0;
+
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    // The sweep can only fail if this holds, so assert it rather than pass vacuously.
+    EXPECT(SpeciesHasVanillaAbility(SPECIES_AMOONGUSS, ABILITY_EFFECT_SPORE));
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (!SpeciesHasVanillaAbility(species, ABILITY_EFFECT_SPORE))
+            continue;
+        if (SpeciesHasInnate(species, ABILITY_EFFECT_SPORE))
+            continue;
+
+        offenders++;
+        Test_MgbaPrintf("%S has vanilla Effect Spore but not the innate -- add it to its INNATES(...) row",
+                        gSpeciesInfo[species].speciesName);
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
+// The flavor picks: spore/powder/fungus identities that lack the real ability. Pinned so the set
+// is recorded somewhere a reader can find it, and so a row is never dropped by accident.
+TEST("Innate abilities: the Effect Spore flavor picks carry the innate")
+{
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    // Line-mates of a canon carrier (their evolution has it in gSpeciesInfo).
+    EXPECT(SpeciesHasInnate(SPECIES_ODDISH, ABILITY_EFFECT_SPORE));     // -> Vileplume
+    EXPECT(SpeciesHasInnate(SPECIES_GLOOM, ABILITY_EFFECT_SPORE));      // -> Vileplume
+    EXPECT(SpeciesHasInnate(SPECIES_HOPPIP, ABILITY_EFFECT_SPORE));     // -> Jumpluff
+    EXPECT(SpeciesHasInnate(SPECIES_SKIPLOOM, ABILITY_EFFECT_SPORE));   // -> Jumpluff
+    EXPECT(SpeciesHasInnate(SPECIES_SCATTERBUG, ABILITY_EFFECT_SPORE)); // -> Vivillon
+    EXPECT(SpeciesHasInnate(SPECIES_SPEWPA, ABILITY_EFFECT_SPORE));     // -> Vivillon
+    EXPECT(SpeciesHasInnate(SPECIES_CUTIEFLY, ABILITY_EFFECT_SPORE));   // -> Ribombee
+
+    // Powder / fungus identities with no canon carrier in the line.
+    EXPECT(SpeciesHasInnate(SPECIES_BUTTERFREE, ABILITY_EFFECT_SPORE));      // G-Max Befuddle IS Effect Spore
+    EXPECT(SpeciesHasInnate(SPECIES_BUTTERFREE_GMAX, ABILITY_EFFECT_SPORE)); // form mirrors the base
+    EXPECT(SpeciesHasInnate(SPECIES_VENONAT, ABILITY_EFFECT_SPORE));
+    EXPECT(SpeciesHasInnate(SPECIES_VENOMOTH, ABILITY_EFFECT_SPORE));
+    EXPECT(SpeciesHasInnate(SPECIES_TOEDSCOOL, ABILITY_EFFECT_SPORE));
+    EXPECT(SpeciesHasInnate(SPECIES_TOEDSCRUEL, ABILITY_EFFECT_SPORE));
+
+    // Deliberately NOT given it: their identity is not powder. Bellossom is a dancer, the
+    // Victreebel line is a carnivorous pitcher plant, the Roselia line is thorns-and-poison,
+    // and the Cottonee line is wind mischief (Gossifleur/Eldegoss already cover cotton canonically).
+    EXPECT(!SpeciesHasInnate(SPECIES_BELLOSSOM, ABILITY_EFFECT_SPORE));
+    EXPECT(!SpeciesHasInnate(SPECIES_VICTREEBEL, ABILITY_EFFECT_SPORE));
+    EXPECT(!SpeciesHasInnate(SPECIES_ROSERADE, ABILITY_EFFECT_SPORE));
+    EXPECT(!SpeciesHasInnate(SPECIES_WHIMSICOTT, ABILITY_EFFECT_SPORE));
+}
