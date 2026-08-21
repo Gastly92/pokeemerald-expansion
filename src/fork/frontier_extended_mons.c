@@ -2648,7 +2648,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_PLAY_ROUGH,
             MOVE_HIGH_HORSEPOWER,
-            MOVE_FLARE_BLITZ,
+            MOVE_PSYCHO_CUT,
             MOVE_SWORDS_DANCE
         },
         .ability = ABILITY_MISTY_SURGE,

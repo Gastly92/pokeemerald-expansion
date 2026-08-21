@@ -1072,6 +1072,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0077
         SPECIES_PONYTA,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_SPEED_BOOST
         )
     },
@@ -1087,6 +1088,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0078
         SPECIES_RAPIDASH,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_SPEED_BOOST
         )
     },
@@ -1096,6 +1098,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_HEALER,
             ABILITY_PASTEL_VEIL,
+            ABILITY_SHARPNESS,
             ABILITY_SPEED_BOOST
         )
     },
