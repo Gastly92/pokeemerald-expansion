@@ -1019,6 +1019,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GEODUDE,
         INNATES(
             ABILITY_ROCK_HEAD,
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL,
             ABILITY_STURDY
         )
@@ -1027,13 +1028,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GEODUDE_ALOLA,
         INNATES(
             ABILITY_MAGNET_PULL,
+            ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
     },
     { // 0075
         SPECIES_GRAVELER,
         INNATES(
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL,
             ABILITY_STURDY
         )
@@ -1042,14 +1046,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GRAVELER_ALOLA,
         INNATES(
             ABILITY_MAGNET_PULL,
+            ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
     },
     { // 0076
         SPECIES_GOLEM,
         INNATES(
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL,
+            ABILITY_SHED_SKIN,
             ABILITY_STURDY
         )
     },
@@ -1057,6 +1065,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOLEM_ALOLA,
         INNATES(
             ABILITY_MAGNET_PULL,
+            ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
     },
