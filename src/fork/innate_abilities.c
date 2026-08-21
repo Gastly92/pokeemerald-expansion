@@ -824,6 +824,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANGER_POINT,
             ABILITY_DEFIANT,
+            ABILITY_UNAWARE,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -8777,8 +8778,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0979
         SPECIES_ANNIHILAPE,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_DEFIANT,
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0980
