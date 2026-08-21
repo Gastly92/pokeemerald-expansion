@@ -467,6 +467,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_FORRETRESS, 1,
         ABILITY_BULLETPROOF
     },
+    { // 0208
+        SPECIES_STEELIX, 1,
+        ABILITY_SAND_STREAM
+    },
+    {
+        SPECIES_STEELIX_MEGA, 0,
+        ABILITY_SAND_STREAM
+    },
+    {
+        SPECIES_STEELIX_MEGA, 1,
+        ABILITY_SAND_STREAM
+    },
+    {
+        SPECIES_STEELIX_MEGA, 2,
+        ABILITY_SAND_STREAM
+    },
     { // 0210
         SPECIES_GRANBULL, 2,
         ABILITY_STATIC

@@ -1329,6 +1329,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ONIX,
         INNATES(
             ABILITY_ROCK_HEAD,
+            ABILITY_SAND_FORCE,
             ABILITY_STURDY
         )
     },
@@ -2668,13 +2669,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0208
         SPECIES_STEELIX,
         INNATES(
+            ABILITY_HEATPROOF,
             ABILITY_ROCK_HEAD,
+            ABILITY_SAND_FORCE,
             ABILITY_STURDY
         )
     },
     { // 0208
         SPECIES_STEELIX_MEGA,
         INNATES(
+            ABILITY_HEATPROOF,
             ABILITY_ROCK_HEAD,
             ABILITY_SAND_FORCE,
             ABILITY_STURDY
