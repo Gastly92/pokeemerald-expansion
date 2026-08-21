@@ -909,6 +909,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
+            ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
