@@ -1185,6 +1185,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0084
         SPECIES_DODUO,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_EARLY_BIRD,
             ABILITY_SPEED_BOOST,
             ABILITY_TANGLED_FEET
@@ -1193,6 +1194,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0085
         SPECIES_DODRIO,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_EARLY_BIRD,
             ABILITY_SPEED_BOOST,
             ABILITY_TANGLED_FEET

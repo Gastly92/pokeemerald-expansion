@@ -2881,10 +2881,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF
         },
         .ability = ABILITY_HUSTLE,
-        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .nature = NATURE(SPE_UP, DEF_DOWN),
         .ev = EVS(
             .atk = 252,
-            .spd = 4,
+            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
