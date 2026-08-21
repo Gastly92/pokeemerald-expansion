@@ -4511,19 +4511,53 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             {
                 u32 poison, paralysis, sleep;
 
-                // FORK: under DETERMINISTIC_ABILITIES, Effect Spore drops both the
-                // trigger roll and the 3-way status pick and always attempts to make
-                // the attacker drowsy (Yawn) via BattleScript_EffectSporeDrowsy.
+                // FORK: under DETERMINISTIC_ABILITIES, Effect Spore drops both the trigger
+                // roll and the 3-way poison/paralysis/sleep pick, and instead always lowers
+                // the contact attacker's accuracy by one stage — the Gooey / Tangling Hair
+                // shape, on STAT_ACC instead of STAT_SPEED. Note what that stage buys under
+                // DETERMINISTIC_ACCURACY_EVASION: moves never miss there, so the accuracy
+                // stage is the PP economy's currency (GetAccEvasionStageDelta) and the spores
+                // tax the attacker 1 extra PP per move rather than making it whiff. Effect
+                // Spore's own contact + powder gating is the enclosing condition, so a Grass
+                // type / Overcoat / Safety Goggles attacker is already excluded here.
                 if (GetConfig(DETERMINISTIC_ABILITIES))
                 {
-                    if (gBattleMons[gBattlerAttacker].volatiles.yawn == 0
-                     && CanBeSlept(gBattlerTarget, gBattlerAttacker, abilityAtk, NOT_BLOCKED_BY_SLEEP_CLAUSE))
+                    struct BattleCalcValues cv = {
+                        .battlerAtk = gBattlerTarget,
+                        .battlerDef = gBattlerAttacker,
+                        .move = MOVE_NONE,
+                    };
+
+                    struct StatChange st = {
+                        .onlyChecking = TRUE,
+                    };
+
+                    struct StatStages change = {
+                        .stat = STAT_ACC,
+                        .stage = -1,
+                    };
+
+                    cv.abilities[gBattlerAttacker] = abilityAtk;
+                    cv.abilities[gBattlerTarget] = ability;
+                    cv.holdEffects[gBattlerAttacker] = holdEffectAtk;
+                    cv.holdEffects[gBattlerTarget] = GetBattlerHoldEffect(gBattlerTarget);
+
+                    st.statStageQueue = &change;
+                    st.statStageAmount = 1;
+
+                    // BattlerHasAbility credits an innate Mirror Armor on the attacker, so the
+                    // accuracy drop it just reflected back at the holder still runs the script
+                    // (the Gooey / Tangling Hair precedent right above).
+                    if (TryStatChange(&cv, &st) == STAT_CHANGE_WORKED || BattlerHasAbility(gBattlerAttacker, ABILITY_MIRROR_ARMOR))
                     {
-                        gEffectBattler = gBattlerAttacker;
-                        gBattleScripting.battler = gBattlerTarget;
-                        gBattleMons[gBattlerAttacker].volatiles.yawn = 2;
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptCall(BattleScript_EffectSporeDrowsy);
+                        gEffectBattler = gBattlerAbility = gBattlerTarget;
+                        // FORK: innate Effect Spore — show the innate in the pop-up, not the
+                        // chosen ability, only when they differ (Speed Boost precedent).
+                        // `ability` is the one being processed (EFFECT_SPORE).
+                        if (GetBattlerAbility(gBattlerTarget) != ability)
+                            gBattleScripting.abilityPopupOverwrite = ability;
+                        SetStatChange(gBattlerAttacker, STAT_ACC, -1);
+                        BattleScriptCall(BattleScript_AbilityStatChange);
                         effect++;
                     }
                     break;

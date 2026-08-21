@@ -283,9 +283,15 @@ Poison Point & Poison Touch (poison), Flame Body (burn), Cute Charm (infatuation
 and the opposite-gender requirement is dropped, attempts regardless of gender),
 Toxic Chain (bad poison; roll in `SetToxicChainPriority`,
 `src/battle_script_commands.c`), Cursed Body (disable the used move). **Effect
-Spore** drops the trigger roll *and* the 3-way poison/paralysis/sleep pick and
-always attempts drowsiness/Yawn (`BattleScript_EffectSporeDrowsy`, new
-`STRINGID_EFFECTSPOREDROWSY` keyed to the attacker). **Stench** only attempts its
+Spore** stops being a status ability altogether: it drops the trigger roll *and*
+the 3-way poison/paralysis/sleep pick and instead always lowers the **contact
+attacker's accuracy by one stage** (the Gooey / Tangling Hair shape, on
+`STAT_ACC`; `BattleScript_AbilityStatChange`). Its powder gating is unchanged, so
+a Grass type, Overcoat or Safety Goggles attacker is still immune. Because
+`DETERMINISTIC_ACCURACY_EVASION` means moves never miss, that stage is spent in
+the [PP economy](#deterministic_accuracy_evasion) instead — each stack costs the
+attacker 1 extra PP per move — so the spores tax PP rather than causing whiffs.
+**Stench** only attempts its
 flinch on the holder's first turn out (`IsBattlersFirstTurn`) but then always
 does, resolving at `MOVEEND_ABILITIES_ATTACKER` (before attacker hold items, so it
 precedes a King's Rock flinch). **End-of-turn:** Shed Skin always cures status,
@@ -305,8 +311,10 @@ instead of gender (+25% sharing a type, −25% sharing none). **AI awareness:** 
 Rivalry damage mod rides the shared `GetBattlerAbility` path so the AI's damage
 prediction tracks it for free; and `AI_DeterministicContactAbilityPunishes`
 (`src/battle_ai_util.c`) teaches the AI to treat a contact move into a known
-Static/Flame Body/Poison Point/Effect Spore/Cute Charm holder as a guaranteed
-downside (when its attacker can actually receive the status), so among
+Static/Flame Body/Poison Point/Cute Charm holder as a guaranteed
+downside (when its attacker can actually receive the status) — and likewise a
+contact move into an Effect Spore holder whose accuracy drop can actually land
+(`CanLowerStat(..., STAT_ACC)`), so among
 equal-damage moves it prefers a non-contact one (via
 `AI_IsMoveEffectInMinus`/`CompareMoveEffects`, mirroring the Rough Skin/Iron Barbs
 handling). `AI_WhoStrikesFirst` (`src/battle_ai_util.c`) also models Quick Draw's

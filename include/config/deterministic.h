@@ -250,12 +250,18 @@
 // unless noted):
 //   - Contact status/effect abilities always *attempt* their effect (the usual
 //     immunity/substitute/contact checks still gate it): Static (paralysis),
-//     Poison Point and Poison Touch (poison), Flame Body (burn), Effect Spore
-//     (always drowsiness/Yawn instead of the 3-way poison/paralysis/sleep pick),
+//     Poison Point and Poison Touch (poison), Flame Body (burn),
 //     Cute Charm (infatuation — and the opposite-gender requirement is dropped, so
 //     it attempts regardless of gender), Toxic Chain (bad poison; the roll in
 //     SetToxicChainPriority in src/battle_script_commands.c), Cursed Body (disable
 //     the used move).
+//   - Effect Spore stops being a status ability entirely: instead of the 30% roll and
+//     the 3-way poison/paralysis/sleep pick it always lowers the CONTACT ATTACKER's
+//     accuracy by one stage. Its powder gating is unchanged, so a Grass type, Overcoat
+//     or Safety Goggles attacker is still immune. Under DETERMINISTIC_ACCURACY_EVASION
+//     moves never miss, so that stage is spent in the PP economy — each stack costs the
+//     attacker 1 extra PP per move against the holder's side — so the spores tax the
+//     attacker's PP rather than making it whiff.
 //   - Stench only attempts its flinch on the holder's first turn on the field
 //     (IsBattlersFirstTurn), but then always does. It resolves at
 //     MOVEEND_ABILITIES_ATTACKER, before attacker hold items, so it lands before a

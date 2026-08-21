@@ -1304,7 +1304,11 @@ static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, 
     case ABILITY_POISON_POINT:
         return CanBePoisoned(battlerDef, battlerAtk, abilityDef, abilityAtk);
     case ABILITY_EFFECT_SPORE:
-        return CanBeSlept(battlerDef, battlerAtk, abilityAtk, NOT_BLOCKED_BY_SLEEP_CLAUSE);
+        // FORK: Effect Spore no longer applies a status under this flag — it lowers the
+        // contact attacker's accuracy by one stage. Roles are reversed versus the usual
+        // CanLowerStat() call: the DEFENDER (the Effect Spore holder) is the one doing the
+        // lowering, so it is passed as the first argument.
+        return CanLowerStat(battlerDef, battlerAtk, gAiLogicData, STAT_ACC);
     case ABILITY_CUTE_CHARM:
         return !gBattleMons[battlerAtk].volatiles.infatuation
             && abilityAtk != ABILITY_OBLIVIOUS

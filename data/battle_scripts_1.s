@@ -2637,13 +2637,6 @@ BattleScript_MoveEffectYawnFoe::
 
 @ FORK: DETERMINISTIC_ABILITIES — Effect Spore always makes the attacker drowsy
 @ (Yawn) on contact; the volatile is set in AbilityBattleEffects.
-BattleScript_EffectSporeDrowsy::
-	waitstate
-	call BattleScript_AbilityPopUp
-	printstring STRINGID_EFFECTSPOREDROWSY
-	waitmessage B_WAIT_TIME_LONG
-	return
-
 BattleScript_PrintAbilityMadeIneffective::
 	pause B_WAIT_TIME_SHORT
 	call BattleScript_AbilityPopUp
