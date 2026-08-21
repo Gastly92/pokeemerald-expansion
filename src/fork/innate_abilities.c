@@ -194,6 +194,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
@@ -202,6 +203,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE_GMAX,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
@@ -565,6 +567,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ODDISH,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_LEAF_GUARD,
             ABILITY_STENCH
         )
@@ -574,6 +577,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_LEAF_GUARD,
             ABILITY_STENCH
         )
@@ -591,6 +595,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0046
         SPECIES_PARAS,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR
         )
@@ -598,6 +603,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0047
         SPECIES_PARASECT,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_POISON_HEAL,
             ABILITY_REGENERATOR,
             ABILITY_SWARM
@@ -607,6 +613,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VENONAT,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
@@ -615,6 +622,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VENOMOTH,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_EFFECT_SPORE,
             ABILITY_LEVITATE,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS,
@@ -2008,6 +2016,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HOPPIP,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_INFILTRATOR,
             ABILITY_LEAF_GUARD
         )
@@ -2016,6 +2025,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SKIPLOOM,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_INFILTRATOR,
             ABILITY_LEAF_GUARD
         )
@@ -2212,12 +2222,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0755
         SPECIES_MORELULL,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_RAIN_DISH
         )
     },
     { // 0756
         SPECIES_SHIINOTIC,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_RAIN_DISH
         )
     },
@@ -3159,6 +3171,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0285
         SPECIES_SHROOMISH,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_POISON_HEAL,
             ABILITY_QUICK_FEET
         )
@@ -3166,6 +3179,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0286
         SPECIES_BRELOOM,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_POISON_HEAL,
             ABILITY_TECHNICIAN
         )
@@ -5589,12 +5603,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0590
         SPECIES_FOONGUS,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_REGENERATOR
         )
     },
     { // 0591
         SPECIES_AMOONGUSS,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_REGENERATOR
         )
     },
@@ -6151,7 +6167,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SCATTERBUG,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST
+        )
+    },
+    { // 0665
+        SPECIES_SPEWPA,
+        INNATES(
+            ABILITY_EFFECT_SPORE
         )
     },
     { // 0666
@@ -6941,6 +6964,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0742
         SPECIES_CUTIEFLY,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST,
             ABILITY_SWEET_VEIL
         )
@@ -7572,12 +7596,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0829
         SPECIES_GOSSIFLEUR,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_REGENERATOR
         )
     },
     { // 0830
         SPECIES_ELDEGOSS,
         INNATES(
+            ABILITY_EFFECT_SPORE,
             ABILITY_REGENERATOR
         )
     },
@@ -8473,6 +8499,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BRAMBLEGHAST,
         INNATES(
             ABILITY_INFILTRATOR
+        )
+    },
+    { // 0948
+        SPECIES_TOEDSCOOL,
+        INNATES(
+            ABILITY_EFFECT_SPORE
+        )
+    },
+    { // 0949
+        SPECIES_TOEDSCRUEL,
+        INNATES(
+            ABILITY_EFFECT_SPORE
         )
     },
     { // 0950

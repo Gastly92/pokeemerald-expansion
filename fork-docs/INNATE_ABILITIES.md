@@ -4239,7 +4239,7 @@ excluded as [non-volatile status-on-contact](#why-some-abilities-are-never-wired
 removed that objection at the source rather than working around it — under `DETERMINISTIC_ABILITIES` (the
 shipping default) Effect Spore no longer rolls poison/paralysis/sleep at all; it **lowers the contact
 attacker's accuracy by 1 stage**. What remains only ever hurts the attacker, so it is a plain **1:1
-clean-upside copy**. `canon only so far` (no flavor picks).
+clean-upside copy**. Canon carriers **plus a spore/powder flavor set** (see Species below).
 
 **This is the pattern for the rest of that bucket:** re-spec the ability so the disqualifying half is gone,
 *then* wire it. Wiring one of them as-is is still wrong.
@@ -4272,11 +4272,31 @@ flag **off** an innate Effect Spore reverts to the vanilla 30% 3-way status roll
 `TRUE` and is never turned off in this fork, so this is a documented dormant edge, not a live one. If the flag
 is ever made switchable, narrow the innate in the flag-off case before relying on it.
 
-**Species.** No new carriers — this wiring **converts** the four species that already had Effect Spore as a
-*chosen* ability, which CI gate (6) ("no ability override or frontier set names an innate-capable ability")
-forces in the same edit: **Vileplume, Jumpluff, Vivillon, Ribombee**, each merged into its existing innate row.
-Step 3.5 accordingly freed all eight of their frontier sets and three override rows for never-an-innate picks:
-Vileplume -> its **existing** Poison Point override slot (no new row needed), Jumpluff -> **Cotton Down** (it is
-made of cotton spores), Vivillon -> **Wind Rider** (a butterfly riding the Tailwind), Ribombee -> **Fluffy**
-(replacing the no-op Honey Gather in slot 0). Flavor picks for the wider line sweep are deliberately left to a
-follow-up.
+**Species — the conversions (wiring PR).** The four species that already had Effect Spore as a *chosen*
+ability had to be converted in the same edit, because CI gate (6) ("no ability override or frontier set names
+an innate-capable ability") fires the moment the ability joins `sImplementedInnates[]`: **Vileplume, Jumpluff,
+Vivillon, Ribombee**. Step 3.5 freed all eight of their frontier sets and three override rows for
+never-an-innate picks: Vileplume -> its **existing** Poison Point override slot (no new row needed),
+Jumpluff -> **Cotton Down** (it is made of cotton spores), Vivillon -> **Wind Rider** (a butterfly riding the
+Tailwind), Ribombee -> **Fluffy** (replacing the no-op Honey Gather in slot 0).
+
+**Species — canon carriers.** Every species whose vanilla slots grant Effect Spore now carries it innately:
+the **Paras**, **Shroomish/Breloom**, **Foongus/Amoonguss**, **Morelull/Shiinotic** and
+**Gossifleur/Eldegoss** lines, plus Vileplume above. A test enforces this both ways round
+(`every canon Effect Spore carrier has it as an innate`), so a future species that ships with the ability
+fails CI until it gets a row. None of their frontier sets or override rows needed freeing — every one already
+named a never-an-innate pick (Dry Skin, Hustle, Water Absorb, Mycelium Might, Cotton Down, Psychic Affinity).
+
+**Species — flavor picks.** A deliberately tight set, all spore/powder/fungus identities:
+- **Line-mates of a canon carrier**, so a line is not half-spored: **Oddish / Gloom** (-> Vileplume),
+  **Hoppip / Skiploom** (-> Jumpluff), **Scatterbug / Spewpa** (-> Vivillon), **Cutiefly** (-> Ribombee).
+- **Powder identities with no canon carrier in the line**: **Butterfree** (+ its G-Max — *G-Max Befuddle
+  literally applies `MOVE_EFFECT_EFFECT_SPORE_SIDE`*, so this is closer to canon than flavor), **Venonat /
+  Venomoth** (the powder trio plus poisonous scales), and **Toedscool / Toedscruel** (mushroom Pokémon whose
+  only real ability, Mycelium Might, is a never-an-innate drawback).
+
+Deliberately **not** given it, though a wider net would have caught them: **Bellossom** (a dancer, not a
+spore-scatterer), the **Victreebel** line (a carnivorous pitcher plant), the **Roselia** line (thorns and
+poison — Poison Point is its contact reaction) and the **Cottonee** line (wind mischief; Gossifleur/Eldegoss
+already cover the cotton-plant niche canonically). Those exclusions are pinned by test so the boundary is
+recorded rather than re-litigated.
