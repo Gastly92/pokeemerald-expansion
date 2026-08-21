@@ -831,6 +831,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0058
         SPECIES_GROWLITHE,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
             ABILITY_JUSTIFIED
@@ -847,9 +848,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0059
         SPECIES_ARCANINE,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0059
@@ -857,7 +860,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
-            ABILITY_ROCK_HEAD
+            ABILITY_ROCK_HEAD,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0060
