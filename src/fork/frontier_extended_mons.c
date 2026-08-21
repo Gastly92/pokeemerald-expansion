@@ -744,6 +744,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_POISON,
     },
 
+    // 0025
+    {
+        .species = SPECIES_PIKACHU,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves =
+        {
+            MOVE_VOLT_TACKLE,
+            MOVE_IRON_TAIL,
+            MOVE_SURF,
+            MOVE_QUICK_ATTACK
+        },
+        .ability = ABILITY_STATIC,
+        .nature = NATURE(SPE_UP, SPD_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spa = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+
     // 0026
     {
         .species = SPECIES_RAICHU,

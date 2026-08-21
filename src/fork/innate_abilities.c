@@ -383,19 +383,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0025
         SPECIES_PIKACHU,
         INNATES(
-            ABILITY_CHEEK_POUCH
+            ABILITY_CHEEK_POUCH,
+            ABILITY_CUTE_CHARM,
+            ABILITY_RECKLESS
         )
     },
     { // 0025
         SPECIES_PIKACHU_GMAX,
         INNATES(
-            ABILITY_CHEEK_POUCH
+            ABILITY_CHEEK_POUCH,
+            ABILITY_CUTE_CHARM,
+            ABILITY_RECKLESS
         )
     },
     { // 0026
         SPECIES_RAICHU,
         INNATES(
-            ABILITY_CHEEK_POUCH
+            ABILITY_CHEEK_POUCH,
+            ABILITY_RECKLESS
         )
     },
     { // 0026
@@ -410,13 +415,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0026
         SPECIES_RAICHU_MEGA_X,
         INNATES(
-            ABILITY_CHEEK_POUCH
+            ABILITY_CHEEK_POUCH,
+            ABILITY_LEVITATE,
+            ABILITY_RECKLESS
         )
     },
     { // 0026
         SPECIES_RAICHU_MEGA_Y,
         INNATES(
-            ABILITY_CHEEK_POUCH
+            ABILITY_CHEEK_POUCH,
+            ABILITY_SNIPER
         )
     },
     { // 0027
@@ -1960,6 +1968,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PICHU,
         INNATES(
             ABILITY_CHEEK_POUCH,
+            ABILITY_CUTE_CHARM,
             ABILITY_RATTLED
         )
     },
