@@ -1337,6 +1337,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DROWZEE,
         INNATES(
             ABILITY_FOREWARN,
+            ABILITY_INFILTRATOR,
             ABILITY_INNER_FOCUS,
             ABILITY_INSOMNIA,
             ABILITY_TELEPATHY
@@ -1346,6 +1347,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HYPNO,
         INNATES(
             ABILITY_FOREWARN,
+            ABILITY_INFILTRATOR,
             ABILITY_INNER_FOCUS,
             ABILITY_INSOMNIA,
             ABILITY_TELEPATHY
