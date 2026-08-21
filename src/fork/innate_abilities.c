@@ -491,6 +491,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NIDORAN_M,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_FRISK,
             ABILITY_ROUGH_SKIN
         )
     },
@@ -498,6 +499,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NIDORINO,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
             ABILITY_ROUGH_SKIN
         )
@@ -506,6 +508,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NIDOKING,
         INNATES(
             ABILITY_MOLD_BREAKER,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
             ABILITY_ROUGH_SKIN
         )
