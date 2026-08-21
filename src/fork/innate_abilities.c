@@ -962,21 +962,26 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BELLSPROUT,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_LIQUID_OOZE
         )
     },
     { // 0070
         SPECIES_WEEPINBELL,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_LIQUID_OOZE,
+            ABILITY_SUCTION_CUPS
         )
     },
     { // 0071
         SPECIES_VICTREEBEL,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_LIQUID_OOZE,
+            ABILITY_STAKEOUT
         )
     },
     { // 0071
@@ -984,7 +989,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_GLUTTONY,
-            ABILITY_INNARDS_OUT
+            ABILITY_INNARDS_OUT,
+            ABILITY_LIQUID_OOZE,
+            ABILITY_STAKEOUT
         )
     },
     { // 0072

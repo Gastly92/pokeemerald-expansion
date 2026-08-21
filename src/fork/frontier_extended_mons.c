@@ -2276,7 +2276,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_SOLAR_BLADE,
+            MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF,
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
@@ -2299,7 +2299,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB,
-            MOVE_WEATHER_BALL
+            MOVE_EARTH_POWER
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPA_UP, ATK_DOWN),
