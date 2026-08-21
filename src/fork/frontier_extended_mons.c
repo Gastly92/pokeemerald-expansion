@@ -1789,7 +1789,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAIN_DANCE,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_DAMP,
+        .ability = ABILITY_PSYCHIC_AFFINITY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
