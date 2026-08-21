@@ -525,7 +525,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_BODY_SLAM,
+            MOVE_HYPER_FANG,
             MOVE_DRILL_RUN,
             MOVE_KNOCK_OFF,
             MOVE_QUICK_ATTACK
