@@ -1221,6 +1221,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0088
         SPECIES_GRIMER,
         INNATES(
+            ABILITY_AFTERMATH,
+            ABILITY_GLUTTONY,
             ABILITY_GOOEY,
             ABILITY_LIQUID_OOZE,
             ABILITY_STENCH,
@@ -1230,6 +1232,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0088
         SPECIES_GRIMER_ALOLA,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_GLUTTONY,
             ABILITY_GOOEY,
             ABILITY_LIQUID_OOZE,
@@ -1239,6 +1242,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0089
         SPECIES_MUK,
         INNATES(
+            ABILITY_AFTERMATH,
+            ABILITY_GLUTTONY,
             ABILITY_GOOEY,
             ABILITY_LIQUID_OOZE,
             ABILITY_STENCH,
@@ -1248,6 +1253,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0089
         SPECIES_MUK_ALOLA,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_GLUTTONY,
             ABILITY_GOOEY,
             ABILITY_LIQUID_OOZE,

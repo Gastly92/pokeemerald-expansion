@@ -3002,7 +3002,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POISON_JAB,
             MOVE_KNOCK_OFF,
             MOVE_DRAIN_PUNCH,
-            MOVE_TOXIC
+            MOVE_ACID_ARMOR
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -3039,7 +3039,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
-            MOVE_CORROSIVE_GAS,
+            MOVE_PROTECT,
             MOVE_CLEAR_SMOG,
             MOVE_POISON_JAB,
             MOVE_DRAIN_PUNCH
