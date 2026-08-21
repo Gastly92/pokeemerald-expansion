@@ -273,6 +273,7 @@ static const u16 sNicheNfes[] =
     SPECIES_URSARING,  // Eviolite Guts attacker; Ursaluna is slower and Peat-Block-locked.
     SPECIES_PORYGON2,  // Eviolite Trace/Download tank; Porygon-Z is the frail nuke instead.
     SPECIES_DUSCLOPS,  // Eviolite Ghost wall; Dusknoir gains offense but loses the item.
+    SPECIES_PIKACHU,   // Light Ball doubles both attacking stats, putting it above Raichu's.
 };
 
 struct RosterCoverageException
@@ -287,7 +288,6 @@ static const struct RosterCoverageException sCoverageExceptions[] =
     { SPECIES_MELTAN,              "no evolution data (its candy evolution is unimplemented), so it reads as fully evolved; it is Melmetal's pre-evo, and Melmetal is built" },
     { SPECIES_PICHU_SPIKY_EARED,   "event-only forme, and a pre-evo besides" },
     { SPECIES_PIKACHU_STARTER,     "LGPE partner-only forme; cannot be obtained or rented" },
-    { SPECIES_PIKACHU_COSPLAY,     "the cap/cosplay Pikachus read as fully evolved only because the evolution data hangs off base Pikachu, a pre-evolution the roster does not build; one row covers all 15" },
     { SPECIES_EEVEE_STARTER,       "LGPE partner-only forme; cannot be obtained or rented" },
     { SPECIES_FLOETTE_ETERNAL,     "unreleased event forme; cannot be obtained or rented" },
     { SPECIES_ETERNATUS_ETERNAMAX, "battle-only shape with no legal encounter; its stats are not balanceable against anything" },
