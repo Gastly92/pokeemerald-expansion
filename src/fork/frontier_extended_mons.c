@@ -1195,6 +1195,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_CLEFABLE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_WEAKNESS_POLICY,
+        .moves =
+        {
+            MOVE_COSMIC_POWER,
+            MOVE_STORED_POWER,
+            MOVE_MOONBLAST,
+            MOVE_MOONLIGHT
+        },
+        .ability = ABILITY_MISTY_SURGE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spa = 4
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
 
     // 0038
     {
