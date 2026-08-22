@@ -265,8 +265,35 @@ bool32 HasMonUsedGimmick(enum BattlerId battler)
 #define tBattler    data[0]
 #define tHide       data[1]
 
+// FORK: whether triggerSpriteId still names a live gimmick trigger sprite.
+//
+// Upstream only ever compared the id against 0xFF, which is safe while the sprite is
+// created once per move menu and torn down by its own slide-out. FEATURE_FREE_GIMMICKS
+// breaks that assumption: RefreshGimmickTriggerSprite destroys and recreates the sprite
+// on every Start press (each gimmick has its own sheet under one shared tile tag), so the
+// id changes mid-menu and can outlive the sprite it names. A stale id is not merely
+// wrong - sprite slots are recycled, so 0xFF indexes ~190 entries past gSprites[] and any
+// other value can name a live healthbox or Pokemon sprite, which DestroySprite would then
+// delete out from under the battle controller waiting on its callback.
+//
+// Checking the callback identifies the sprite as ours: only sSpriteTemplate_GimmickTrigger
+// installs SpriteCb_GimmickTrigger, so a recycled slot never passes.
+static bool32 IsTriggerSpriteIdValid(u32 spriteId)
+{
+    return spriteId < MAX_SPRITES
+        && gSprites[spriteId].inUse
+        && gSprites[spriteId].callback == SpriteCb_GimmickTrigger;
+}
+
 void ChangeGimmickTriggerSprite(u32 spriteId, u32 animId)
 {
+    // FORK: no-op on an id that no longer names a trigger sprite. Two upstream callers in
+    // HandleMoveInputChooseMove pass triggerSpriteId unchecked (the B-button exit out of the
+    // Z-Move preview, and the legacy single-gimmick Start toggle); guarding here rather than
+    // at those call sites keeps their lines byte-identical to upstream.
+    if (!IsTriggerSpriteIdValid(spriteId))
+        return;
+
     StartSpriteAnim(&gSprites[spriteId], animId);
 }
 
@@ -287,8 +314,12 @@ void CreateGimmickTriggerSprite(enum BattlerId battler)
     if (GetSpriteTileStartByTag(TAG_GIMMICK_TRIGGER_TILE) == 0xFFFF)
         LoadSpriteSheet(gimmick->triggerSheet);
 
-    if (gBattleStruct->gimmick.triggerSpriteId == 0xFF)
+    // FORK: a stale id (the sprite was destroyed, or its slot recycled) counts as "none",
+    // so a fresh sprite is made instead of reconfiguring whatever now sits in that slot.
+    if (!IsTriggerSpriteIdValid(gBattleStruct->gimmick.triggerSpriteId))
     {
+        gBattleStruct->gimmick.triggerSpriteId = 0xFF;
+
         if (GetBattlerCoordsIndex(battler) == BATTLE_COORDS_DOUBLES)
             gBattleStruct->gimmick.triggerSpriteId = CreateSprite(gimmick->triggerTemplate,
                                                                   gSprites[gHealthboxSpriteIds[battler]].x - DOUBLES_GIMMICK_TRIGGER_POS_X_SLIDE,
@@ -297,6 +328,14 @@ void CreateGimmickTriggerSprite(enum BattlerId battler)
             gBattleStruct->gimmick.triggerSpriteId = CreateSprite(gimmick->triggerTemplate,
                                                                   gSprites[gHealthboxSpriteIds[battler]].x - SINGLES_GIMMICK_TRIGGER_POS_X_SLIDE,
                                                                   gSprites[gHealthboxSpriteIds[battler]].y - SINGLES_GIMMICK_TRIGGER_POS_Y_DIFF, 0);
+
+        // FORK: CreateSprite returns MAX_SPRITES when the table is full. That is the dummy
+        // slot, not a usable sprite, so record "no trigger" rather than configuring it.
+        if (gBattleStruct->gimmick.triggerSpriteId >= MAX_SPRITES)
+        {
+            gBattleStruct->gimmick.triggerSpriteId = 0xFF;
+            return;
+        }
     }
 
     gSprites[gBattleStruct->gimmick.triggerSpriteId].tBattler = battler;
@@ -307,7 +346,12 @@ void CreateGimmickTriggerSprite(enum BattlerId battler)
 
 bool32 IsGimmickTriggerSpriteActive(void)
 {
-    if (GetSpriteTileStartByTag(TAG_GIMMICK_TRIGGER_TILE) == 0xFFFF)
+    // FORK: also require a live sprite. PlayerHandleChooseMove treats a FALSE here as
+    // "forget the id", which is the one place a stale triggerSpriteId gets reset - so the
+    // loaded graphics tags must not be enough on their own to claim the sprite is there.
+    if (!IsTriggerSpriteIdValid(gBattleStruct->gimmick.triggerSpriteId))
+        return FALSE;
+    else if (GetSpriteTileStartByTag(TAG_GIMMICK_TRIGGER_TILE) == 0xFFFF)
         return FALSE;
     else if (IndexOfSpritePaletteTag(TAG_GIMMICK_TRIGGER_PAL) != 0xFF)
         return TRUE;
@@ -317,6 +361,10 @@ bool32 IsGimmickTriggerSpriteActive(void)
 
 bool32 IsGimmickTriggerSpriteMatchingBattler(enum BattlerId battler)
 {
+    // FORK: without this, a triggerSpriteId of 0xFF reads gSprites[255], ~190 entries past
+    // the end of the array.
+    if (!IsTriggerSpriteIdValid(gBattleStruct->gimmick.triggerSpriteId))
+        return FALSE;
     if (battler == gSprites[gBattleStruct->gimmick.triggerSpriteId].tBattler)
         return TRUE;
     return FALSE;
@@ -324,7 +372,8 @@ bool32 IsGimmickTriggerSpriteMatchingBattler(enum BattlerId battler)
 
 void HideGimmickTriggerSprite(void)
 {
-    if (gBattleStruct->gimmick.triggerSpriteId != 0xFF)
+    // FORK: validity, not just != 0xFF - see IsTriggerSpriteIdValid.
+    if (IsTriggerSpriteIdValid(gBattleStruct->gimmick.triggerSpriteId))
     {
         ChangeGimmickTriggerSprite(gBattleStruct->gimmick.triggerSpriteId, 0);
         gSprites[gBattleStruct->gimmick.triggerSpriteId].tHide = TRUE;
@@ -335,7 +384,10 @@ void DestroyGimmickTriggerSprite(void)
 {
     FreeSpritePaletteByTag(TAG_GIMMICK_TRIGGER_PAL);
     FreeSpriteTilesByTag(TAG_GIMMICK_TRIGGER_TILE);
-    if (gBattleStruct->gimmick.triggerSpriteId != 0xFF)
+    // FORK: validity, not just != 0xFF. This is the dangerous one: RefreshGimmickTriggerSprite
+    // calls it on every Start press, so a stale id here deletes whatever sprite now occupies
+    // that slot - a healthbox or a Pokemon sprite the battle controller is waiting on.
+    if (IsTriggerSpriteIdValid(gBattleStruct->gimmick.triggerSpriteId))
         DestroySprite(&gSprites[gBattleStruct->gimmick.triggerSpriteId]);
     gBattleStruct->gimmick.triggerSpriteId = 0xFF;
 }
@@ -373,7 +425,11 @@ static void SpriteCb_GimmickTrigger(struct Sprite *sprite)
 
         sprite->y = gSprites[gHealthboxSpriteIds[sprite->tBattler]].y - yDiff;
         sprite->y2 = gSprites[gHealthboxSpriteIds[sprite->tBattler]].y2 - yDiff;
-        if (sprite->x == xHealthbox - xSlide)
+        // FORK: >= rather than ==. The target tracks the healthbox, which slides around
+        // during a switch-in or a Dynamax animation; if it moves past the sprite while the
+        // sprite is stepping toward it, an equality test never fires and the trigger is
+        // never destroyed, leaking the sprite and its graphics tags into the next menu.
+        if (sprite->x >= xHealthbox - xSlide)
             DestroyGimmickTriggerSprite();
     }
     else
