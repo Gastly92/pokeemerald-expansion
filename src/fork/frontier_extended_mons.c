@@ -4297,7 +4297,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4317,7 +4317,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4339,11 +4339,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLARE_BLITZ,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_TAUROS_PALDEA_BLAZE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_CHARCOAL,
+        .moves =
+        {
+            MOVE_FLARE_BLITZ,
+            MOVE_CLOSE_COMBAT,
+            MOVE_ROCK_SLIDE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
@@ -4361,11 +4381,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WAVE_CRASH,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_TAUROS_PALDEA_AQUA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MUSCLE_BAND,
+        .moves =
+        {
+            MOVE_WAVE_CRASH,
+            MOVE_CLOSE_COMBAT,
+            MOVE_AQUA_JET,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_WATER,

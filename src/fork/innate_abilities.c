@@ -1701,7 +1701,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TAUROS,
         INNATES(
             ABILITY_ANGER_POINT,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_RECKLESS,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0128
@@ -1709,7 +1711,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANGER_POINT,
             ABILITY_CUD_CHEW,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_RECKLESS,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0128
@@ -1717,7 +1721,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANGER_POINT,
             ABILITY_CUD_CHEW,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_RECKLESS,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0128
@@ -1725,7 +1731,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANGER_POINT,
             ABILITY_CUD_CHEW,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_RECKLESS,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0129

@@ -405,15 +405,15 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_COMBAT, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_BLAZE, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_FLASH_FIRE
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_AQUA, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_WATER_ABSORB
     },
     { // 0130
         SPECIES_GYARADOS, 1,
