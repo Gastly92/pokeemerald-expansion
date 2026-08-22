@@ -532,6 +532,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_GRASSY_SURGE
     },
     { // 0157
+        SPECIES_TYPHLOSION, 1,
+        ABILITY_DROUGHT
+    },
+    {
         SPECIES_TYPHLOSION_HISUI, 1,
         ABILITY_FLASH_FIRE
     },
