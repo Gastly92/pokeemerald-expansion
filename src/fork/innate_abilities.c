@@ -2239,6 +2239,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NATU,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_FOREWARN,
             ABILITY_MAGIC_BOUNCE
         )
     },
@@ -2246,6 +2247,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_XATU,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_FOREWARN,
             ABILITY_MAGIC_BOUNCE
         )
     },

@@ -5892,7 +5892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spe = 252
         ),
-        .teraType = TYPE_PSYCHIC,
+        .teraType = TYPE_STEEL,
     },
     {
         .species = SPECIES_XATU,
