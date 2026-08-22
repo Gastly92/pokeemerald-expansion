@@ -4230,7 +4230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_X_SCISSOR,
             MOVE_CLOSE_COMBAT,
-            MOVE_EARTHQUAKE,
+            MOVE_DOUBLE_EDGE,
             MOVE_STONE_EDGE
         },
         .ability = ABILITY_AERILATE,
