@@ -4183,7 +4183,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_JYNX,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ICE_GEM,
+        .heldItem = ITEM_NEVER_MELT_ICE,
         .moves =
         {
             MOVE_NASTY_PLOT,

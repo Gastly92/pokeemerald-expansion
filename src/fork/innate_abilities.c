@@ -1659,6 +1659,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0124
         SPECIES_JYNX,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_FOREWARN,
             ABILITY_OBLIVIOUS
         )
