@@ -3611,6 +3611,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .iv = IVS(SPE, 0),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_EXEGGUTOR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BEAM,
+            MOVE_PSYCHIC,
+            MOVE_MORNING_SUN
+        },
+        .ability = ABILITY_SOLAR_POWER,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
 
     // 0103
     {

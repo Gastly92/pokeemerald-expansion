@@ -348,6 +348,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_VOLT_ABSORB
     },
     { // 0103
+        SPECIES_EXEGGUTOR, 0,
+        ABILITY_SOLAR_POWER
+    },
+    {
         SPECIES_EXEGGUTOR, 1,
         ABILITY_SAP_SIPPER
     },

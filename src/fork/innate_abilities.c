@@ -1414,21 +1414,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_EXEGGCUTE,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_HARVEST
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
+            ABILITY_REGENERATOR
         )
     },
     { // 0103
         SPECIES_EXEGGUTOR,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_HARVEST
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
+            ABILITY_REGENERATOR
         )
     },
     { // 0103
         SPECIES_EXEGGUTOR_ALOLA,
         INNATES(
             ABILITY_FRISK,
-            ABILITY_HARVEST
+            ABILITY_HARVEST,
+            ABILITY_LEAF_GUARD,
+            ABILITY_REGENERATOR
         )
     },
     { // 0104
