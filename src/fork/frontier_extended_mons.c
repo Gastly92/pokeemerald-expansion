@@ -7259,7 +7259,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spa = 4
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_NORMAL,
     },
     {
         .species = SPECIES_PORYGON2,
