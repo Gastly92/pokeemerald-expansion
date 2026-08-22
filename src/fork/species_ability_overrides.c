@@ -405,22 +405,46 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_COMBAT, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_BLAZE, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_FLASH_FIRE
     },
     { // 0128
         SPECIES_TAUROS_PALDEA_AQUA, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_WATER_ABSORB
     },
     { // 0130
         SPECIES_GYARADOS, 1,
         ABILITY_MOTOR_DRIVE
     },
+    {
+        SPECIES_GYARADOS_MEGA, 0,
+        ABILITY_MOTOR_DRIVE
+    },
+    {
+        SPECIES_GYARADOS_MEGA, 1,
+        ABILITY_MOTOR_DRIVE
+    },
+    {
+        SPECIES_GYARADOS_MEGA, 2,
+        ABILITY_MOTOR_DRIVE
+    },
     { // 0142
         SPECIES_AERODACTYL, 2,
+        ABILITY_HUSTLE
+    },
+    {
+        SPECIES_AERODACTYL_MEGA, 0,
+        ABILITY_HUSTLE
+    },
+    {
+        SPECIES_AERODACTYL_MEGA, 1,
+        ABILITY_HUSTLE
+    },
+    {
+        SPECIES_AERODACTYL_MEGA, 2,
         ABILITY_HUSTLE
     },
     { // 0143
@@ -436,6 +460,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PSYCHIC_SURGE
     },
     { // 0145
+        SPECIES_ZAPDOS, 1,
+        ABILITY_VOLT_ABSORB
+    },
+    { // 0145
         SPECIES_ZAPDOS_GALAR, 1,
         ABILITY_HUSTLE
     },
@@ -447,8 +475,44 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DRAGONITE, 1,
         ABILITY_AERILATE
     },
+    {
+        SPECIES_DRAGONITE_MEGA, 0,
+        ABILITY_AERILATE
+    },
+    {
+        SPECIES_DRAGONITE_MEGA, 1,
+        ABILITY_AERILATE
+    },
+    {
+        SPECIES_DRAGONITE_MEGA, 2,
+        ABILITY_AERILATE
+    },
     { // 0150
         SPECIES_MEWTWO, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_X, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_X, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_X, 2,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_Y, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_Y, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_Y, 2,
         ABILITY_SYNCHRONIZE
     },
     { // 0154
@@ -918,6 +982,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0466
         SPECIES_ELECTIVIRE, 1,
         ABILITY_ELECTRIC_SURGE
+    },
+    { // 0467
+        SPECIES_MAGMORTAR, 1,
+        ABILITY_DROUGHT
     },
     { // 0468
         SPECIES_TOGEKISS, 1,
