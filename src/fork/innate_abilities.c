@@ -1590,6 +1590,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0118
         SPECIES_GOLDEEN,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
@@ -1597,6 +1598,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0119
         SPECIES_SEAKING,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )

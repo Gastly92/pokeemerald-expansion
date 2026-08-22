@@ -4043,7 +4043,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_MEGAHORN,
             MOVE_AGILITY,
-            MOVE_ICE_BEAM
+            MOVE_ICICLE_CRASH
         },
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
