@@ -1480,6 +1480,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0107
         SPECIES_HITMONCHAN,
         INNATES(
+            ABILITY_GUTS,
             ABILITY_INNER_FOCUS,
             ABILITY_IRON_FIST,
             ABILITY_KEEN_EYE

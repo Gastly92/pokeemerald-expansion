@@ -3822,12 +3822,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spe = 4
         ),
-        .teraType = TYPE_FIGHTING,
+        .teraType = TYPE_STEEL,
     },
     {
         .species = SPECIES_HITMONCHAN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_PUNCHING_GLOVE,
         .moves =
         {
             MOVE_BULK_UP,
