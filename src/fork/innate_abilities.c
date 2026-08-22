@@ -2361,14 +2361,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SUNKERN,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_LEAF_GUARD
         )
     },
     { // 0192
         SPECIES_SUNFLORA,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_EARLY_BIRD
+            ABILITY_EARLY_BIRD,
+            ABILITY_LEAF_GUARD
         )
     },
     { // 0193

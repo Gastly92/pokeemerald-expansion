@@ -6256,25 +6256,25 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_LEAF_STORM,
             MOVE_EARTH_POWER,
-            MOVE_WEATHER_BALL,
+            MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB
         },
         .ability = ABILITY_SOLAR_POWER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_GRASS,
     },
     {
         .species = SPECIES_SUNFLORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
-            MOVE_GROWTH,
+            MOVE_SUNNY_DAY,
             MOVE_GIGA_DRAIN,
             MOVE_WEATHER_BALL,
             MOVE_EARTH_POWER
