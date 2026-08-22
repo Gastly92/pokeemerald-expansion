@@ -2294,6 +2294,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MARILL,
         INNATES(
             ABILITY_HUGE_POWER,
+            ABILITY_SWIFT_SWIM,
             ABILITY_THICK_FAT
         )
     },
@@ -2301,6 +2302,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_AZUMARILL,
         INNATES(
             ABILITY_HUGE_POWER,
+            ABILITY_SWIFT_SWIM,
             ABILITY_THICK_FAT
         )
     },
@@ -3564,6 +3566,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_AZURILL,
         INNATES(
             ABILITY_HUGE_POWER,
+            ABILITY_SWIFT_SWIM,
             ABILITY_THICK_FAT
         )
     },
