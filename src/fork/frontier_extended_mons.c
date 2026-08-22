@@ -4788,6 +4788,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ROCK,
     },
+    {
+        .species = SPECIES_AERODACTYL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HARD_STONE,
+        .moves =
+        {
+            MOVE_STEALTH_ROCK,
+            MOVE_TAUNT,
+            MOVE_HEAD_SMASH,
+            MOVE_DUAL_WINGBEAT
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ROCK,
+    },
 
     // 0143
     {

@@ -435,6 +435,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_AERODACTYL, 2,
         ABILITY_HUSTLE
     },
+    {
+        SPECIES_AERODACTYL_MEGA, 0,
+        ABILITY_HUSTLE
+    },
+    {
+        SPECIES_AERODACTYL_MEGA, 1,
+        ABILITY_HUSTLE
+    },
+    {
+        SPECIES_AERODACTYL_MEGA, 2,
+        ABILITY_HUSTLE
+    },
     { // 0143
         SPECIES_SNORLAX, 1,
         ABILITY_SAP_SIPPER
