@@ -12474,7 +12474,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spa = 4
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_STEEL,
     },
     {
         .species = SPECIES_TANGROWTH,

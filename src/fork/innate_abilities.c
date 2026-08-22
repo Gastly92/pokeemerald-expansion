@@ -1553,7 +1553,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_SHED_SKIN
         )
     },
     { // 0115
@@ -4772,7 +4773,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_SHED_SKIN
         )
     },
     { // 0466
