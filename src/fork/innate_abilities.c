@@ -1971,13 +1971,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MEWTWO_MEGA_X,
         INNATES(
             ABILITY_PRESSURE,
+            ABILITY_STEADFAST,
             ABILITY_UNNERVE
         )
     },
     { // 0150
         SPECIES_MEWTWO_MEGA_Y,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
+            ABILITY_PRESSURE,
             ABILITY_UNNERVE
         )
     },

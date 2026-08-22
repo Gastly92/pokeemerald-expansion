@@ -491,6 +491,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MEWTWO, 1,
         ABILITY_SYNCHRONIZE
     },
+    {
+        SPECIES_MEWTWO_MEGA_X, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_X, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_X, 2,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_Y, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_Y, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_MEWTWO_MEGA_Y, 2,
+        ABILITY_SYNCHRONIZE
+    },
     { // 0154
         SPECIES_MEGANIUM, 1,
         ABILITY_GRASSY_SURGE
