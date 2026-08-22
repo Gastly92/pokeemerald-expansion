@@ -1839,6 +1839,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KABUTO,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_SOLID_ROCK,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -1846,6 +1847,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KABUTOPS,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_SHARPNESS,
+            ABILITY_SOLID_ROCK,
             ABILITY_SWIFT_SWIM
         )
     },
