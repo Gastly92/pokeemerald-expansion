@@ -6228,23 +6228,23 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_JUMPLUFF,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLYING_GEM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
-            MOVE_GIGA_DRAIN,
-            MOVE_ACROBATICS,
+            MOVE_RAGE_POWDER,
             MOVE_SLEEP_POWDER,
-            MOVE_STRENGTH_SAP
+            MOVE_STRENGTH_SAP,
+            MOVE_TAILWIND
         },
         .ability = ABILITY_COTTON_DOWN,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
-        .teraType = TYPE_FLYING,
+        .teraType = TYPE_STEEL,
     },
 
     // 0192
