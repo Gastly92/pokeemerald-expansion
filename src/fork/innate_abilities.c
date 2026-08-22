@@ -1994,6 +1994,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0152
         SPECIES_CHIKORITA,
         INNATES(
+            ABILITY_AROMA_VEIL,
+            ABILITY_HEALER,
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW
@@ -2002,6 +2004,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0153
         SPECIES_BAYLEEF,
         INNATES(
+            ABILITY_AROMA_VEIL,
+            ABILITY_HEALER,
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW
@@ -2010,6 +2014,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0154
         SPECIES_MEGANIUM,
         INNATES(
+            ABILITY_AROMA_VEIL,
+            ABILITY_HEALER,
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
@@ -2019,6 +2025,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0154
         SPECIES_MEGANIUM_MEGA,
         INNATES(
+            ABILITY_AROMA_VEIL,
+            ABILITY_HEALER,
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,

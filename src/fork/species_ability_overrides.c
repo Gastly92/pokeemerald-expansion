@@ -519,6 +519,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MEGANIUM, 1,
         ABILITY_GRASSY_SURGE
     },
+    {
+        SPECIES_MEGANIUM_MEGA, 0,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_MEGANIUM_MEGA, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_MEGANIUM_MEGA, 2,
+        ABILITY_GRASSY_SURGE
+    },
     { // 0157
         SPECIES_TYPHLOSION_HISUI, 1,
         ABILITY_FLASH_FIRE
