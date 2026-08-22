@@ -2351,6 +2351,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0190
         SPECIES_AIPOM,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PICKUP,
             ABILITY_PRANKSTER,
             ABILITY_SKILL_LINK
@@ -4585,6 +4586,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0424
         SPECIES_AMBIPOM,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PICKUP,
             ABILITY_PRANKSTER,
             ABILITY_SKILL_LINK,
