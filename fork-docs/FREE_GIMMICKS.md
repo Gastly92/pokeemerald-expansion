@@ -64,6 +64,15 @@ Two menu-state rules the picker depends on:
 - **It always opens unarmed, on the base moves.** `PlayerHandleChooseMove` clears
   `playerSelect` before the initial move-name paint, so a stale armed selection — e.g.
   Dynamax's Max-move names — cannot leak into a fresh menu.
+- **A stale trigger-sprite id can never touch a sprite that isn't ours.** Cycling means
+  the trigger sprite is destroyed and recreated on every Start press (each gimmick has its
+  own sheet under one shared tile tag), so `gimmick.triggerSpriteId` changes mid-menu and
+  can outlive the sprite it names. Upstream only ever tested it against `0xFF`, which was
+  safe when the sprite was created once per menu. Every read now goes through
+  `IsTriggerSpriteIdValid` (`src/battle_gimmick.c`), which requires the slot to be in
+  range, in use, and running `SpriteCb_GimmickTrigger` - so a recycled slot holding a
+  healthbox or Pokemon sprite is never hidden, re-animated, or destroyed.
+
 - **The last-move cursor survives a Dynamax.** The begin animation reuses the switch-in
   animation for its shrink/grow visual (the same mon re-entering, passed as
   `dontClearTransform = TRUE`), which reset the action/move cursors to the first slot.
