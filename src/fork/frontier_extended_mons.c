@@ -4839,7 +4839,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_SLAM,
             MOVE_HIGH_HORSEPOWER,
             MOVE_CRUNCH,
-            MOVE_SELF_DESTRUCT
+            MOVE_HEAVY_SLAM
         },
         .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -4853,7 +4853,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SNORLAX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_NORMAL_GEM,
+        .heldItem = ITEM_FIGY_BERRY,
         .moves =
         {
             MOVE_BELLY_DRUM,
