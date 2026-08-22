@@ -1625,6 +1625,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_STARMIE_MEGA,
         INNATES(
             ABILITY_ANALYTIC,
+            ABILITY_HUGE_POWER,
+            ABILITY_ILLUMINATE,
             ABILITY_NATURAL_CURE,
             ABILITY_REGENERATOR
         )

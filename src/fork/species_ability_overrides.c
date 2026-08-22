@@ -387,6 +387,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_STARMIE, 1,
         ABILITY_WATER_ABSORB
     },
+    {
+        SPECIES_STARMIE_MEGA, 0,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_STARMIE_MEGA, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_STARMIE_MEGA, 2,
+        ABILITY_WATER_ABSORB
+    },
     { // 0127
         SPECIES_PINSIR, 0,
         ABILITY_AERILATE
