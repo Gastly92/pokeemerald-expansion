@@ -828,7 +828,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_ELECTRIC,
     },
     {
         .species = SPECIES_RAICHU_ALOLA,
