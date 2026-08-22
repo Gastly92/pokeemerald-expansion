@@ -915,6 +915,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TANGROWTH, 2,
         ABILITY_SAP_SIPPER
     },
+    { // 0466
+        SPECIES_ELECTIVIRE, 1,
+        ABILITY_ELECTRIC_SURGE
+    },
     { // 0468
         SPECIES_TOGEKISS, 1,
         ABILITY_SHEER_FORCE

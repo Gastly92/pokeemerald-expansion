@@ -12509,7 +12509,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_CROSS_CHOP
         },
-        .ability = ABILITY_MOTOR_DRIVE,
+        .ability = ABILITY_ELECTRIC_SURGE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
