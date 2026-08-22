@@ -531,6 +531,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SCIZOR, 1,
         ABILITY_WELL_BAKED_BODY
     },
+    {
+        SPECIES_SCIZOR_MEGA, 0,
+        ABILITY_WELL_BAKED_BODY
+    },
+    {
+        SPECIES_SCIZOR_MEGA, 1,
+        ABILITY_WELL_BAKED_BODY
+    },
+    {
+        SPECIES_SCIZOR_MEGA, 2,
+        ABILITY_WELL_BAKED_BODY
+    },
     { // 0214
         SPECIES_HERACROSS, 2,
         ABILITY_NO_GUARD
@@ -1653,6 +1665,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0898
         SPECIES_CALYREX, 1,
         ABILITY_GRASSY_SURGE
+    },
+    { // 0900
+        SPECIES_KLEAVOR, 0,
+        ABILITY_HUSTLE
     },
     { // 0901
         SPECIES_URSALUNA_BLOODMOON, 1,

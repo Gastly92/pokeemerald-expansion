@@ -24048,7 +24048,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -24068,7 +24068,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_DEFOG
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

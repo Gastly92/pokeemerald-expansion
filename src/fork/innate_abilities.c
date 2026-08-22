@@ -1650,6 +1650,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0123
         SPECIES_SCYTHER,
         INNATES(
+            ABILITY_SHARPNESS,
             ABILITY_STEADFAST,
             ABILITY_SWARM,
             ABILITY_TECHNICIAN
@@ -8355,7 +8356,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0900
         SPECIES_KLEAVOR,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_SHARPNESS,
+            ABILITY_SOLID_ROCK,
             ABILITY_SWARM
         )
     },
