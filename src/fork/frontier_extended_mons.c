@@ -3983,7 +3983,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_POWER_UP_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4003,7 +4003,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
