@@ -9062,6 +9062,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0980
         SPECIES_CLODSIRE,
         INNATES(
+            ABILITY_IRON_BARBS,
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
         )

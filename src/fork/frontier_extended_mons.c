@@ -26107,22 +26107,22 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLODSIRE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
+            MOVE_CURSE,
             MOVE_RECOVER,
             MOVE_EARTHQUAKE,
-            MOVE_TOXIC,
-            MOVE_STEALTH_ROCK
+            MOVE_POISON_JAB
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
             .def = 252,
-            .spa = 4
+            .spd = 4
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_WATER,
     },
 
     // 0981
