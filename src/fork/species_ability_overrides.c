@@ -348,12 +348,20 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_VOLT_ABSORB
     },
     { // 0103
+        SPECIES_EXEGGUTOR, 0,
+        ABILITY_SOLAR_POWER
+    },
+    {
         SPECIES_EXEGGUTOR, 1,
         ABILITY_SAP_SIPPER
     },
     { // 0103
         SPECIES_EXEGGUTOR_ALOLA, 1,
         ABILITY_SAP_SIPPER
+    },
+    { // 0105
+        SPECIES_MAROWAK, 0,
+        ABILITY_MUMMY
     },
     { // 0106
         SPECIES_HITMONLEE, 2,
@@ -363,16 +371,32 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HITMONCHAN, 2,
         ABILITY_NO_GUARD
     },
+    { // 0110
+        SPECIES_WEEZING, 2,
+        ABILITY_POISON_POINT
+    },
     { // 0113
         SPECIES_CHANSEY, 1,
         ABILITY_FLUFFY
     },
     { // 0115
         SPECIES_KANGASKHAN, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_ANGER_SHELL
     },
     { // 0121
         SPECIES_STARMIE, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_STARMIE_MEGA, 0,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_STARMIE_MEGA, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_STARMIE_MEGA, 2,
         ABILITY_WATER_ABSORB
     },
     { // 0127
@@ -507,6 +531,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SCIZOR, 1,
         ABILITY_WELL_BAKED_BODY
     },
+    {
+        SPECIES_SCIZOR_MEGA, 0,
+        ABILITY_WELL_BAKED_BODY
+    },
+    {
+        SPECIES_SCIZOR_MEGA, 1,
+        ABILITY_WELL_BAKED_BODY
+    },
+    {
+        SPECIES_SCIZOR_MEGA, 2,
+        ABILITY_WELL_BAKED_BODY
+    },
     { // 0214
         SPECIES_HERACROSS, 2,
         ABILITY_NO_GUARD
@@ -518,6 +554,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0227
         SPECIES_SKARMORY, 1,
         ABILITY_BULLETPROOF
+    },
+    { // 0230
+        SPECIES_KINGDRA, 0,
+        ABILITY_DRIZZLE
     },
     { // 0232
         SPECIES_DONPHAN, 1,
@@ -867,9 +907,17 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MAGNEZONE, 2,
         ABILITY_LIGHTNING_ROD
     },
+    { // 0464
+        SPECIES_RHYPERIOR, 1,
+        ABILITY_BULLETPROOF
+    },
     { // 0465
         SPECIES_TANGROWTH, 2,
         ABILITY_SAP_SIPPER
+    },
+    { // 0466
+        SPECIES_ELECTIVIRE, 1,
+        ABILITY_ELECTRIC_SURGE
     },
     { // 0468
         SPECIES_TOGEKISS, 1,
@@ -1542,6 +1590,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SIRFETCHD, 1,
         ABILITY_BULLETPROOF
     },
+    { // 0866
+        SPECIES_MR_RIME, 2,
+        ABILITY_SNOW_WARNING
+    },
     { // 0869
         SPECIES_ALCREMIE, 1,
         ABILITY_PIXILATE
@@ -1617,6 +1669,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0898
         SPECIES_CALYREX, 1,
         ABILITY_GRASSY_SURGE
+    },
+    { // 0900
+        SPECIES_KLEAVOR, 2,
+        ABILITY_HUSTLE
     },
     { // 0901
         SPECIES_URSALUNA_BLOODMOON, 1,
