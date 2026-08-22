@@ -1525,14 +1525,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RHYHORN,
         INNATES(
             ABILITY_RECKLESS,
-            ABILITY_ROCK_HEAD
+            ABILITY_ROCK_HEAD,
+            ABILITY_SOLID_ROCK
         )
     },
     { // 0112
         SPECIES_RHYDON,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_RECKLESS,
-            ABILITY_ROCK_HEAD
+            ABILITY_ROCK_HEAD,
+            ABILITY_SOLID_ROCK
         )
     },
     { // 0113
@@ -4755,7 +4758,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0464
         SPECIES_RHYPERIOR,
         INNATES(
+            ABILITY_MOLD_BREAKER,
             ABILITY_RECKLESS,
+            ABILITY_ROCK_HEAD,
             ABILITY_SOLID_ROCK
         )
     },
