@@ -11969,7 +11969,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER
         },
         .ability = ABILITY_DARK_AURA,
-        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,

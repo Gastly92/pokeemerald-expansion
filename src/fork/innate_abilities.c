@@ -2435,6 +2435,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MURKROW,
         INNATES(
             ABILITY_INSOMNIA,
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
             ABILITY_SUPER_LUCK
         )
