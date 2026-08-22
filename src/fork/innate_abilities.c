@@ -1822,6 +1822,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OMANYTE,
         INNATES(
             ABILITY_SHELL_ARMOR,
+            ABILITY_SOLID_ROCK,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -1829,6 +1830,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OMASTAR,
         INNATES(
             ABILITY_SHELL_ARMOR,
+            ABILITY_SOLID_ROCK,
+            ABILITY_SUCTION_CUPS,
             ABILITY_SWIFT_SWIM
         )
     },
