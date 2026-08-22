@@ -1920,6 +1920,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0146
         SPECIES_MOLTRES,
         INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_REGENERATOR
+        )
+    },
+    { // 0146
+        SPECIES_MOLTRES_GALAR,
+        INNATES(
+            ABILITY_BERSERK,
             ABILITY_PRESSURE
         )
     },
