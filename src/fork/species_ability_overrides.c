@@ -419,6 +419,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GYARADOS, 1,
         ABILITY_MOTOR_DRIVE
     },
+    {
+        SPECIES_GYARADOS_MEGA, 0,
+        ABILITY_MOTOR_DRIVE
+    },
+    {
+        SPECIES_GYARADOS_MEGA, 1,
+        ABILITY_MOTOR_DRIVE
+    },
+    {
+        SPECIES_GYARADOS_MEGA, 2,
+        ABILITY_MOTOR_DRIVE
+    },
     { // 0142
         SPECIES_AERODACTYL, 2,
         ABILITY_HUSTLE

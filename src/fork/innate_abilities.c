@@ -1747,14 +1747,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GYARADOS,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE
+            ABILITY_MOXIE,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0130
         SPECIES_GYARADOS_MEGA,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE
+            ABILITY_MOLD_BREAKER,
+            ABILITY_MOXIE,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0131
