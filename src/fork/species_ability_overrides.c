@@ -207,6 +207,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_WIGGLYTUFF, 0,
         ABILITY_HALO
     },
+    {
+        SPECIES_WIGGLYTUFF, 1,
+        ABILITY_FLUFFY
+    },
     { // 0045
         SPECIES_VILEPLUME, 1,
         ABILITY_POISON_POINT
