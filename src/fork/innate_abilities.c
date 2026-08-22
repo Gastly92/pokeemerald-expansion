@@ -2460,7 +2460,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0200
         SPECIES_MISDREAVUS,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0401
@@ -4649,7 +4651,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0429
         SPECIES_MISMAGIUS,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0430
