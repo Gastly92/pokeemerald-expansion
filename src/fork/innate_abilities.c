@@ -1441,6 +1441,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CUBONE,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_INNER_FOCUS,
             ABILITY_ROCK_HEAD
         )
     },
@@ -1448,6 +1449,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MAROWAK,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_INNER_FOCUS,
             ABILITY_ROCK_HEAD
         )
     },
@@ -1455,12 +1457,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MAROWAK_ALOLA,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_INNER_FOCUS,
             ABILITY_ROCK_HEAD
         )
     },
     { // 0105
         SPECIES_MAROWAK_ALOLA_TOTEM,
         INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_INNER_FOCUS,
             ABILITY_ROCK_HEAD
         )
     },

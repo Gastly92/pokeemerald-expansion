@@ -359,6 +359,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_EXEGGUTOR_ALOLA, 1,
         ABILITY_SAP_SIPPER
     },
+    { // 0105
+        SPECIES_MAROWAK, 0,
+        ABILITY_MUMMY
+    },
     { // 0106
         SPECIES_HITMONLEE, 2,
         ABILITY_NO_GUARD

@@ -3709,7 +3709,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_MUMMY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
