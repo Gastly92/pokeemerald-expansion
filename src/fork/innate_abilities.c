@@ -2115,16 +2115,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0163
         SPECIES_HOOTHOOT,
         INNATES(
+            ABILITY_INFILTRATOR,
             ABILITY_INSOMNIA,
             ABILITY_KEEN_EYE,
+            ABILITY_STAKEOUT,
             ABILITY_TINTED_LENS
         )
     },
     { // 0164
         SPECIES_NOCTOWL,
         INNATES(
+            ABILITY_INFILTRATOR,
             ABILITY_INSOMNIA,
             ABILITY_KEEN_EYE,
+            ABILITY_STAKEOUT,
             ABILITY_TINTED_LENS
         )
     },
