@@ -2,7 +2,9 @@
 #include "battle.h"
 #include "battle_ai_util.h"
 #include "battle_controllers.h" // BattlerHasAi, GetBattlerTrainer
+#include "battle_dynamax.h"
 #include "battle_gimmick.h"
+#include "battle_z_move.h"
 #include "config/feature.h"
 #include "constants/config_changes.h"
 #include "test_runner.h"
@@ -117,4 +119,46 @@ void AI_SelectGimmicksForTurn(void)
         if (IsBattlerAlive(battler) && BattlerHasAi(battler))
             AI_SelectBestGimmick(battler);
     }
+}
+
+// FORK: resolve a chosen move to the move the engine will actually execute for it, given
+// the attacker's *active* gimmick. Mirrors the conversion HandleAction_UseMove performs
+// right before the move runs (Z-Move / Max Move), and returns `move` untouched when
+// nothing converts.
+//
+// The AI needs this because a converted move keeps the base move's *type* but none of its
+// type-matchup quirks - Freeze-Dry's bonus against Water, Flying Press's second Flying
+// pass, Thousand Arrows' grounding of Flying-types, Synchronoise's same-type-only rule.
+// Subzero Slammer and Max Hailstorm are plain Ice moves, so a Freeze-Dry the AI reads as
+// 2x is 0.5x once it upgrades: a 4x error in the wrong direction, which is exactly what
+// made the AI upgrade into resists.
+//
+// Keyed off GetActiveGimmick rather than usableGimmick so it is also right for a battler
+// that is already Dynamaxed - those use Max Moves whether or not this calc is simulating
+// a gimmick.
+enum Move AI_GetGimmickExecutedMove(enum BattlerId battlerAtk, enum Move move)
+{
+    switch (GetActiveGimmick(battlerAtk))
+    {
+    case GIMMICK_Z_MOVE:
+        // Status moves are not converted; they run as themselves and apply a Z effect.
+        if (!IsBattleMoveStatus(move) && !IsZMove(move))
+        {
+            enum Move zMove = GetUsableZMove(battlerAtk, move);
+            if (zMove != MOVE_NONE)
+                return zMove;
+        }
+        break;
+    case GIMMICK_DYNAMAX:
+    {
+        enum Move maxMove = GetMaxMove(battlerAtk, move);
+        if (maxMove != MOVE_NONE)
+            return maxMove;
+        break;
+    }
+    default:
+        break;
+    }
+
+    return move;
 }

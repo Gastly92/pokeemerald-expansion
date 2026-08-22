@@ -28,4 +28,9 @@
 
 void AI_SelectGimmicksForTurn(void);
 
+// FORK: the move the engine will really execute for `move`, given battlerAtk's *active*
+// gimmick. Returns `move` unchanged when nothing converts. See the comment on the
+// definition for why the AI needs it.
+enum Move AI_GetGimmickExecutedMove(enum BattlerId battlerAtk, enum Move move);
+
 #endif // GUARD_FORK_BATTLE_AI_GIMMICK_H

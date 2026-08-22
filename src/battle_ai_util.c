@@ -7,6 +7,7 @@
 #include "battle_ai_util.h"
 #include "battle_ai_main.h"
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
+#include "fork/battle_ai_gimmick.h" // FORK: AI_GetGimmickExecutedMove
 #include "fork/battle_ai_zmove.h" // FORK: AI_FLAG_SMART_Z_MOVE
 #include "battle_stat_change.h"
 #include "battle_controllers.h"
@@ -1025,7 +1026,26 @@ struct SimulatedDamage AI_CalcDamage(enum Move move, enum BattlerId battlerAtk, 
     // DamageCalc set the flag before their crit roll), and the AI's damage *modifiers* still see innates because
     // CalculateMoveDamageVars -> DoMoveDamageCalcVars sets ctx.innatesEnabled before the modifier passes below.
     ctx.isCrit = ShouldCalcCritDamage(&ctx);
+    // FORK: score the type matchup of the move the engine will actually execute, not of the
+    // move that was chosen. With a gimmick active the chosen move is converted right before
+    // it runs (Freeze-Dry -> Subzero Slammer / Max Hailstorm), and the converted move keeps
+    // the base move's type but none of its matchup quirks: Freeze-Dry's bonus vs Water,
+    // Flying Press's second Flying pass, Thousand Arrows' grounding, Synchronoise's
+    // same-type-only rule. Reading the base move's matchup here made the AI both
+    // over-predict its damage (2x where the real hit is 0.5x) and hand every downstream
+    // score check - including "don't Z into a resist" - the wrong effectiveness.
+    // Only ctx.move is swapped, and only across this one call: base power still derives
+    // from ctx.baseMove (see CalcMoveBasePower's gimmick branches), and every other
+    // consumer of ctx.move below keeps reading the chosen move.
+    // On conflict: port upstream's change onto the CalcTypeEffectivenessMultiplier call
+    // rather than dropping the swap.
+    // The guard keeps the overwhelmingly common no-gimmick calc at one extra read: AI
+    // thinking time is budgeted per turn (test/battle/ai/ai_thinking_time.c) and this runs
+    // once per move x target x switch-in candidate.
+    if (GetActiveGimmick(battlerAtk) != GIMMICK_NONE)
+        ctx.move = AI_GetGimmickExecutedMove(battlerAtk, move);
     ctx.typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(&ctx);
+    ctx.move = move;
 
 
     u32 movePower = GetMovePower(move);
@@ -5696,11 +5716,17 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
         // the most visible symptom of eager Z-Move use. Unconditional (not behind
         // AI_FLAG_SMART_Z_MOVE) because Z-ing into a resist is never the better play:
         // any other damaging move in the moveset would spend the resource better.
-        if (!IsBattleMoveStatus(chosenMove) && effectiveness < UQ_4_12(1.0))
+        //
+        // The resist test has to be the *Z-Move's* matchup, not the chosen move's: a
+        // Z-Move keeps its base move's type but not its matchup quirks, so Freeze-Dry
+        // reads 2x against a Water-type while Subzero Slammer really lands for 0.5x.
+        // Gating on the plain move's effectiveness let exactly those cases through.
+        if (!IsBattleMoveStatus(chosenMove))
         {
-            struct SimulatedDamage resistedZDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &effectiveness, USE_GIMMICK, NO_GIMMICK);
+            uq4_12_t zEffectiveness;
+            struct SimulatedDamage zDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &zEffectiveness, USE_GIMMICK, NO_GIMMICK);
 
-            if (resistedZDmg.minimum < gBattleMons[battlerDef].hp)
+            if (zEffectiveness < UQ_4_12(1.0) && zDmg.minimum < gBattleMons[battlerDef].hp)
                 return FALSE;
         }
 
