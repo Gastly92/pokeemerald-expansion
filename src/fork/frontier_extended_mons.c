@@ -5742,9 +5742,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_POISON_POINT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_BUG,
     },
