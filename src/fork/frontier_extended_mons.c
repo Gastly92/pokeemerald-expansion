@@ -7086,9 +7086,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYDRO_PUMP,
             MOVE_DRACO_METEOR,
             MOVE_ICE_BEAM,
-            MOVE_FLIP_TURN
+            MOVE_DRAGON_PULSE
         },
-        .ability = ABILITY_DAMP,
+        .ability = ABILITY_DRIZZLE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

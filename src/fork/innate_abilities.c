@@ -1583,7 +1583,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0117
         SPECIES_SEADRA,
         INNATES(
-            ABILITY_SNIPER
+            ABILITY_SNIPER,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0118
@@ -2929,6 +2930,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0230
         SPECIES_KINGDRA,
         INNATES(
+            ABILITY_MARVEL_SCALE,
             ABILITY_SNIPER,
             ABILITY_SWIFT_SWIM
         )
