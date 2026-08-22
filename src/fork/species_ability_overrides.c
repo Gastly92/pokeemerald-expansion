@@ -567,6 +567,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LANTURN, 1,
         ABILITY_STORM_DRAIN
     },
+    { // 0181
+        SPECIES_AMPHAROS, 1,
+        ABILITY_VOLT_ABSORB
+    },
+    {
+        SPECIES_AMPHAROS_MEGA, 0,
+        ABILITY_STATIC
+    },
+    {
+        SPECIES_AMPHAROS_MEGA, 1,
+        ABILITY_STATIC
+    },
+    {
+        SPECIES_AMPHAROS_MEGA, 2,
+        ABILITY_STATIC
+    },
     { // 0182
         SPECIES_BELLOSSOM, 1,
         ABILITY_DROUGHT

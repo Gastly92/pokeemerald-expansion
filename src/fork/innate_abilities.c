@@ -2251,6 +2251,35 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_MAGIC_BOUNCE
         )
     },
+    { // 0179
+        SPECIES_MAREEP,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0180
+        SPECIES_FLAAFFY,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0181
+        SPECIES_AMPHAROS,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0181
+        SPECIES_AMPHAROS_MEGA,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_MOLD_BREAKER,
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0182
         SPECIES_BELLOSSOM,
         INNATES(

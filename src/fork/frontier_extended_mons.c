@@ -5925,7 +5925,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_DRAGON_PULSE,
             MOVE_FOCUS_BLAST,
-            MOVE_VOLT_SWITCH
+            MOVE_THUNDER_WAVE
         },
         .ability = ABILITY_STATIC,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -5964,10 +5964,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_THUNDERBOLT,
             MOVE_DRAGON_PULSE,
-            MOVE_POWER_WHIP,
+            MOVE_ENERGY_BALL,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_STATIC,
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
