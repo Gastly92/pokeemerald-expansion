@@ -6527,7 +6527,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NASTY_PLOT,
             MOVE_SLUDGE_BOMB,
             MOVE_PSYCHIC,
-            MOVE_CHILLY_RECEPTION
+            MOVE_FLAMETHROWER
         },
         .ability = ABILITY_CURIOUS_MEDICINE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
