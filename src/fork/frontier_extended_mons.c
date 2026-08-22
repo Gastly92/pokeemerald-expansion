@@ -3857,7 +3857,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PAIN_SPLIT,
             MOVE_TOXIC_SPIKES
         },
-        .ability = ABILITY_NEUTRALIZING_GAS,
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3896,7 +3896,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STRANGE_STEAM,
             MOVE_SLUDGE_BOMB,
-            MOVE_WILL_O_WISP,
+            MOVE_PROTECT,
             MOVE_PAIN_SPLIT
         },
         .ability = ABILITY_MISTY_SURGE,
@@ -3915,7 +3915,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SLUDGE_BOMB,
-            MOVE_DEFOG,
+            MOVE_WILL_O_WISP,
             MOVE_TOXIC_SPIKES,
             MOVE_PAIN_SPLIT
         },
@@ -3936,7 +3936,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STRANGE_STEAM,
             MOVE_SLUDGE_BOMB,
-            MOVE_WILL_O_WISP,
+            MOVE_HAZE,
             MOVE_DEFOG
         },
         .ability = ABILITY_MISTY_SURGE,

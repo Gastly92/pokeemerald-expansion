@@ -1498,6 +1498,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0109
         SPECIES_KOFFING,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_LEVITATE,
             ABILITY_STENCH
         )
@@ -1505,6 +1506,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0110
         SPECIES_WEEZING,
         INNATES(
+            ABILITY_AFTERMATH,
+            ABILITY_GLUTTONY,
             ABILITY_LEVITATE,
             ABILITY_STENCH
         )
@@ -1512,7 +1515,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0110
         SPECIES_WEEZING_GALAR,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_AFTERMATH,
+            ABILITY_GLUTTONY,
+            ABILITY_LEVITATE,
+            ABILITY_OVERCOAT
         )
     },
     { // 0111
