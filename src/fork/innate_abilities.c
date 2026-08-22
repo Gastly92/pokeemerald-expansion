@@ -1910,6 +1910,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRESSURE
         )
     },
+    { // 0145
+        SPECIES_ZAPDOS_GALAR,
+        INNATES(
+            ABILITY_DEFIANT,
+            ABILITY_PRESSURE
+        )
+    },
     { // 0146
         SPECIES_MOLTRES,
         INNATES(

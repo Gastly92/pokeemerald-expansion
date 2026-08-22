@@ -460,6 +460,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_PSYCHIC_SURGE
     },
     { // 0145
+        SPECIES_ZAPDOS, 1,
+        ABILITY_VOLT_ABSORB
+    },
+    { // 0145
         SPECIES_ZAPDOS_GALAR, 1,
         ABILITY_HUSTLE
     },
