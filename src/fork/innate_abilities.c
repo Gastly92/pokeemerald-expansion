@@ -2136,6 +2136,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LEDYBA,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_FRIEND_GUARD,
             ABILITY_RATTLED,
             ABILITY_SWARM
         )
@@ -2144,6 +2145,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LEDIAN,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_FRIEND_GUARD,
             ABILITY_IRON_FIST,
             ABILITY_SWARM
         )
