@@ -5523,7 +5523,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FERALIGATR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_BELLY_DRUM,

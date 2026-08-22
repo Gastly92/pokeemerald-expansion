@@ -2065,24 +2065,32 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0158
         SPECIES_TOTODILE,
         INNATES(
+            ABILITY_INTIMIDATE,
+            ABILITY_STRONG_JAW,
             ABILITY_TORRENT
         )
     },
     { // 0159
         SPECIES_CROCONAW,
         INNATES(
+            ABILITY_INTIMIDATE,
+            ABILITY_STRONG_JAW,
             ABILITY_TORRENT
         )
     },
     { // 0160
         SPECIES_FERALIGATR,
         INNATES(
+            ABILITY_INTIMIDATE,
+            ABILITY_STRONG_JAW,
             ABILITY_TORRENT
         )
     },
     { // 0160
         SPECIES_FERALIGATR_MEGA,
         INNATES(
+            ABILITY_INTIMIDATE,
+            ABILITY_STRONG_JAW,
             ABILITY_TORRENT
         )
     },
