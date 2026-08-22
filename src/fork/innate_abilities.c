@@ -1792,18 +1792,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0134
         SPECIES_VAPOREON,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_HYDRATION
         )
     },
     { // 0135
         SPECIES_JOLTEON,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_QUICK_FEET
         )
     },
     { // 0136
         SPECIES_FLAREON,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_GUTS
         )
     },
@@ -2295,12 +2298,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0196
         SPECIES_ESPEON,
         INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_FOREWARN,
             ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0197
         SPECIES_UMBREON,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_INNER_FOCUS
         )
     },
@@ -4841,6 +4847,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0470
         SPECIES_LEAFEON,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD
         )
@@ -4848,6 +4855,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0471
         SPECIES_GLACEON,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_ICE_BODY,
             ABILITY_SNOW_CLOAK
         )
@@ -6770,6 +6778,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0700
         SPECIES_SYLVEON,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_CUTE_CHARM
         )
     },

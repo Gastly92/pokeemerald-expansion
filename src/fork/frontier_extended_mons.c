@@ -4645,7 +4645,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLAREON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLAME_ORB,
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -4755,7 +4755,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_VOLT_SWITCH,
             MOVE_SHADOW_BALL,
-            MOVE_ALLURING_VOICE
+            MOVE_SUBSTITUTE
         },
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -12726,6 +12726,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_LEAFEON,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BIG_ROOT,
+        .moves =
+        {
+            MOVE_LEECH_SEED,
+            MOVE_SYNTHESIS,
+            MOVE_LEAF_BLADE,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_SAP_SIPPER,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0471
     {
@@ -12745,6 +12765,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_ICE,
+    },
+    {
+        .species = SPECIES_GLACEON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY,
+        .moves =
+        {
+            MOVE_AURORA_VEIL,
+            MOVE_FREEZE_DRY,
+            MOVE_ICE_BEAM,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
         ),
         .teraType = TYPE_ICE,
     },
