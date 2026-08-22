@@ -1544,6 +1544,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRIEND_GUARD,
             ABILITY_HEALER,
             ABILITY_NATURAL_CURE,
+            ABILITY_REGENERATOR,
             ABILITY_SERENE_GRACE
         )
     },
@@ -3016,6 +3017,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRIEND_GUARD,
             ABILITY_HEALER,
             ABILITY_NATURAL_CURE,
+            ABILITY_REGENERATOR,
             ABILITY_SERENE_GRACE
         )
     },
@@ -4571,6 +4573,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FRIEND_GUARD,
             ABILITY_NATURAL_CURE,
+            ABILITY_REGENERATOR,
             ABILITY_SERENE_GRACE
         )
     },
