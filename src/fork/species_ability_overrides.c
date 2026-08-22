@@ -1574,6 +1574,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SIRFETCHD, 1,
         ABILITY_BULLETPROOF
     },
+    { // 0866
+        SPECIES_MR_RIME, 2,
+        ABILITY_SNOW_WARNING
+    },
     { // 0869
         SPECIES_ALCREMIE, 1,
         ABILITY_PIXILATE

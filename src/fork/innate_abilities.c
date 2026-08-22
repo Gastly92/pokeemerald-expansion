@@ -1635,6 +1635,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MR_MIME,
         INNATES(
             ABILITY_FILTER,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_TECHNICIAN
         )
     },
@@ -1642,6 +1643,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MR_MIME_GALAR,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -4572,6 +4574,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MIME_JR,
         INNATES(
             ABILITY_FILTER,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_TECHNICIAN
         )
     },
@@ -8104,6 +8107,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MR_RIME,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH,
             ABILITY_TANGLED_FEET
         )
     },

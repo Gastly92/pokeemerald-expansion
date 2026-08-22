@@ -22824,7 +22824,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_SCREEN_CLEANER,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
