@@ -1987,6 +1987,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0151
         SPECIES_MEW,
         INNATES(
+            ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
         )
     },
