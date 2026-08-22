@@ -5142,7 +5142,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spe = 252
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_DRAGONITE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .moves =
+        {
+            MOVE_ROOST,
+            MOVE_DRAGON_TAIL,
+            MOVE_EXTREME_SPEED,
+            MOVE_EARTHQUAKE
+        },
+        .ability = ABILITY_AERILATE,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0150

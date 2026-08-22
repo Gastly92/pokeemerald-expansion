@@ -475,6 +475,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DRAGONITE, 1,
         ABILITY_AERILATE
     },
+    {
+        SPECIES_DRAGONITE_MEGA, 0,
+        ABILITY_AERILATE
+    },
+    {
+        SPECIES_DRAGONITE_MEGA, 1,
+        ABILITY_AERILATE
+    },
+    {
+        SPECIES_DRAGONITE_MEGA, 2,
+        ABILITY_AERILATE
+    },
     { // 0150
         SPECIES_MEWTWO, 1,
         ABILITY_SYNCHRONIZE
