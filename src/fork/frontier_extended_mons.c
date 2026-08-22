@@ -12549,9 +12549,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_FOCUS_BLAST,
             MOVE_THUNDERBOLT,
-            MOVE_OVERHEAT
+            MOVE_SOLAR_BEAM
         },
-        .ability = ABILITY_FLAME_BODY,
+        .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
