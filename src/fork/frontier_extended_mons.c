@@ -6116,9 +6116,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .def = 4,
-            .spe = 252
+            .def = 4
         ),
         .teraType = TYPE_ROCK,
     },
