@@ -1789,16 +1789,21 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate F
     PARAMETRIZE { gastro = FALSE; }
     PARAMETRIZE { gastro = TRUE; }
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_MR_MIME, ABILITY_FILTER));
-        ASSUME(gTypeEffectivenessTable[TYPE_POISON][TYPE_FAIRY] > UQ_4_12(1.0));
+        // NOT Mr. Mime, which also carries an innate Magic Bounce and would simply reflect the
+        // Gastro Acid (Magic Bounce is breakable, but Wobbuffet cannot legally hold Mold Breaker).
+        // Revavroom is the other innate-Filter carrier, and its chosen slot 0 is Overcoat, so the
+        // damage reduction here is attributable solely to the innate.
+        ASSUME(SpeciesHasInnate(SPECIES_REVAVROOM, ABILITY_FILTER));
+        ASSUME(gSpeciesInfo[SPECIES_REVAVROOM].abilities[0] != ABILITY_FILTER);
+        ASSUME(gTypeEffectivenessTable[TYPE_GROUND][TYPE_STEEL] > UQ_4_12(1.0));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_MR_MIME);
-        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_POISON_JAB, MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
+        PLAYER(SPECIES_REVAVROOM);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_EARTHQUAKE, MOVE_GASTRO_ACID, MOVE_CELEBRATE); }
     } WHEN {
         TURN { if (gastro) MOVE(opponent, MOVE_GASTRO_ACID); else MOVE(opponent, MOVE_CELEBRATE); }
-        TURN { MOVE(opponent, MOVE_POISON_JAB); }
+        TURN { MOVE(opponent, MOVE_EARTHQUAKE); }
     } SCENE {
-        ANIMATION(ANIM_TYPE_MOVE, MOVE_POISON_JAB, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_EARTHQUAKE, opponent);
         HP_BAR(player, captureDamage: &results[i].damage);
     } FINALLY {
         EXPECT_MUL_EQ(results[1].damage, Q_4_12(0.75), results[0].damage); // suppressed: full; active: 0.75x

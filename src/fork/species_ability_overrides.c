@@ -1671,7 +1671,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_GRASSY_SURGE
     },
     { // 0900
-        SPECIES_KLEAVOR, 0,
+        SPECIES_KLEAVOR, 2,
         ABILITY_HUSTLE
     },
     { // 0901
