@@ -1490,7 +1490,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LICKITUNG,
         INNATES(
             ABILITY_OBLIVIOUS,
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_STICKY_HOLD,
+            ABILITY_UNAWARE
         )
     },
     { // 0109
@@ -4739,7 +4741,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LICKILICKY,
         INNATES(
             ABILITY_OBLIVIOUS,
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_STICKY_HOLD,
+            ABILITY_UNAWARE
         )
     },
     { // 0464

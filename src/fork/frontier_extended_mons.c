@@ -12379,7 +12379,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_TRICK_ROOM,
             MOVE_BODY_SLAM,
-            MOVE_EXPLOSION,
+            MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF
         },
         .ability = ABILITY_CLOUD_NINE,
