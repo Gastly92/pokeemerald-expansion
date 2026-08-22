@@ -2181,12 +2181,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0170
         SPECIES_CHINCHOU,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_ILLUMINATE
         )
     },
     { // 0171
         SPECIES_LANTURN,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_ILLUMINATE
         )
     },
