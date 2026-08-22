@@ -4500,10 +4500,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
+            MOVE_SNOWSCAPE,
             MOVE_AURORA_VEIL,
             MOVE_FREEZE_DRY,
-            MOVE_SURF,
-            MOVE_PROTECT
+            MOVE_SURF
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),

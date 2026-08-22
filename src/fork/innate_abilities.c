@@ -1764,6 +1764,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LAPRAS,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_ICE_BODY,
             ABILITY_SHELL_ARMOR
         )
     },
@@ -1771,6 +1772,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LAPRAS_GMAX,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_ICE_BODY,
             ABILITY_SHELL_ARMOR
         )
     },
