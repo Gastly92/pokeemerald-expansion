@@ -1892,8 +1892,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0144
         SPECIES_ARTICUNO,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_PRESSURE,
             ABILITY_SNOW_CLOAK
+        )
+    },
+    { // 0144
+        SPECIES_ARTICUNO_GALAR,
+        INNATES(
+            ABILITY_COMPETITIVE,
+            ABILITY_PRESSURE
         )
     },
     { // 0145
