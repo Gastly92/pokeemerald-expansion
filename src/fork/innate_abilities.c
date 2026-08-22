@@ -1783,6 +1783,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0133
+        SPECIES_EEVEE,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION
+        )
+    },
+    { // 0133
+        SPECIES_EEVEE_GMAX,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION
+        )
+    },
+    { // 0133
         SPECIES_EEVEE_STARTER,
         INNATES(
             ABILITY_ADAPTABILITY,

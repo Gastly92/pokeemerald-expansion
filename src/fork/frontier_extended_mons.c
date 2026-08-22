@@ -6396,13 +6396,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_UMBREON,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_FOUL_PLAY,
-            MOVE_HEAL_BELL,
-            MOVE_WISH,
+            MOVE_SNARL,
+            MOVE_HELPING_HAND,
             MOVE_PROTECT
         },
         .ability = ABILITY_SYNCHRONIZE,
