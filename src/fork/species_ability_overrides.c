@@ -924,7 +924,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0344
-        SPECIES_CLAYDOL, 1, 
+        SPECIES_CLAYDOL, 1,
         ABILITY_SAND_STREAM
     },
     { // 0348

@@ -10363,6 +10363,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        .species = SPECIES_CLAYDOL,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY,
+        .moves =
+        {
+            MOVE_REFLECT,
+            MOVE_LIGHT_SCREEN,
+            MOVE_TRICK_ROOM,
+            MOVE_EARTH_POWER
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
 
     // 0346
     {
