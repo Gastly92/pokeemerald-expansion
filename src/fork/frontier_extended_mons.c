@@ -13828,7 +13828,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_TRICK_ROOM,
             MOVE_POLTERGEIST,
-            MOVE_EARTHQUAKE,
+            MOVE_DRAIN_PUNCH,
             MOVE_SHADOW_SNEAK
         },
         .ability = ABILITY_MUMMY,

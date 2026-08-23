@@ -4284,6 +4284,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DUSKULL,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_INTIMIDATE,
             ABILITY_LEVITATE,
             ABILITY_SOUL_HEART
         )
@@ -4292,6 +4293,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DUSCLOPS,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_INTIMIDATE,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
             ABILITY_SOUL_HEART
@@ -5287,6 +5289,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DUSKNOIR,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_INTIMIDATE,
             ABILITY_PRESSURE,
             ABILITY_SOUL_HEART
         )
