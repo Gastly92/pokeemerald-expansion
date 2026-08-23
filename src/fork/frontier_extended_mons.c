@@ -9961,7 +9961,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 196,
             .spe = 60
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_STEEL,
     },
 
     // 0332

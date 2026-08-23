@@ -4009,19 +4009,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TRAPINCH,
         INNATES(
             ABILITY_ARENA_TRAP,
-            ABILITY_HYPER_CUTTER
+            ABILITY_HYPER_CUTTER,
+            ABILITY_SAND_FORCE,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0329
         SPECIES_VIBRAVA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SAND_FORCE
         )
     },
     { // 0330
         SPECIES_FLYGON,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SAND_FORCE
         )
     },
     { // 0331
