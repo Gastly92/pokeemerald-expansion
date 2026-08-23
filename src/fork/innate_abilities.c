@@ -4550,13 +4550,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0380
         SPECIES_LATIAS,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_ANTICIPATION,
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0380
         SPECIES_LATIAS_MEGA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_ANTICIPATION,
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0381
