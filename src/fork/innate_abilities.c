@@ -4419,12 +4419,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLAMPERL,
         INNATES(
             ABILITY_RATTLED,
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0367
         SPECIES_HUNTAIL,
         INNATES(
+            ABILITY_STRONG_JAW,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
