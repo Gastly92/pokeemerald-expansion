@@ -6922,7 +6922,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HERACROSS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BLACK_BELT,
+        .heldItem = ITEM_LOADED_DICE,
         .moves =
         {
             MOVE_PIN_MISSILE,
