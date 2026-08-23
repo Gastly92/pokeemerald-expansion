@@ -629,7 +629,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0210
         SPECIES_GRANBULL, 2,
-        ABILITY_STATIC
+        ABILITY_HUSTLE
     },
     { // 0212
         SPECIES_SCIZOR, 1,
@@ -654,6 +654,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0217
         SPECIES_URSARING, 1,
         ABILITY_HUSTLE
+    },
+    { // 0222
+        SPECIES_CORSOLA, 1,
+        ABILITY_STORM_DRAIN
+    },
+    { // 0224
+        SPECIES_OCTILLERY, 0,
+        ABILITY_WATER_ABSORB
     },
     { // 0227
         SPECIES_SKARMORY, 1,
