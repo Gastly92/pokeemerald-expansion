@@ -6742,7 +6742,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_STATIC,
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -6759,10 +6759,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_PLAY_ROUGH,
             MOVE_KNOCK_OFF,
-            MOVE_THUNDER_WAVE,
+            MOVE_ROAR,
             MOVE_HEAL_BELL
         },
-        .ability = ABILITY_STATIC,
+        .ability = ABILITY_HUSTLE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

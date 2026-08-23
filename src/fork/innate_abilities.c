@@ -2918,7 +2918,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SNUBBULL,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_RATTLED
+            ABILITY_RATTLED,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0210
@@ -2926,7 +2927,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_QUICK_FEET,
-            ABILITY_RATTLED
+            ABILITY_RATTLED,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0211
