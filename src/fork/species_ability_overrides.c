@@ -1244,6 +1244,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MUMMY
     },
     { // 0478
+        SPECIES_GLALIE, 0,
+        ABILITY_SNOW_WARNING
+    },
+    {
         SPECIES_FROSLASS, 1,
         ABILITY_SNOW_WARNING
     },

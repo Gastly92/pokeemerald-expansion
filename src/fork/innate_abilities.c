@@ -4368,7 +4368,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SNORUNT,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_SLUSH_RUSH
         )
     },
     { // 0362
@@ -4376,14 +4377,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ICE_BODY,
             ABILITY_INNER_FOCUS,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SLUSH_RUSH
         )
     },
     { // 0362
         SPECIES_GLALIE_MEGA,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_INNER_FOCUS,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SLUSH_RUSH
         )
     },
     { // 0363

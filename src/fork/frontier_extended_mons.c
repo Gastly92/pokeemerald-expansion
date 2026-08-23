@@ -10853,10 +10853,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_RETURN,
             MOVE_ICICLE_CRASH,
-            MOVE_EARTHQUAKE,
-            MOVE_FREEZE_DRY
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_ICE_SHARD
         },
-        .ability = ABILITY_MOODY,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10876,7 +10876,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_MOODY,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .spa = 252,
