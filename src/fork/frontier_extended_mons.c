@@ -9660,14 +9660,34 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATER_SPOUT,
             MOVE_HYDRO_PUMP,
             MOVE_ICE_BEAM,
-            MOVE_HYPER_VOICE
+            MOVE_THUNDER
         },
         .ability = ABILITY_DRIZZLE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 4,
+            .hp = 252,
             .spa = 252,
-            .spe = 252
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_WAILORD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_WATER_SPOUT,
+            MOVE_ICE_BEAM,
+            MOVE_HYPER_VOICE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_DRY_SKIN,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
         ),
         .teraType = TYPE_WATER,
     },
