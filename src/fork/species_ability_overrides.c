@@ -939,6 +939,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BANETTE, 2,
         ABILITY_WANDERING_SPIRIT
     },
+    {
+        SPECIES_BANETTE_MEGA, 0,
+        ABILITY_WANDERING_SPIRIT
+    },
+    {
+        SPECIES_BANETTE_MEGA, 1,
+        ABILITY_WANDERING_SPIRIT
+    },
+    {
+        SPECIES_BANETTE_MEGA, 2,
+        ABILITY_WANDERING_SPIRIT
+    },
     { // 0356
         SPECIES_DUSCLOPS, 1,
         ABILITY_MUMMY

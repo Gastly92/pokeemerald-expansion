@@ -10641,8 +10641,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SPELL_TAG,
         .moves =
         {
-            MOVE_SHADOW_CLAW,
-            MOVE_KNOCK_OFF,
+            MOVE_POLTERGEIST,
+            MOVE_SUCKER_PUNCH,
             MOVE_WILL_O_WISP,
             MOVE_DESTINY_BOND
         },
@@ -10661,7 +10661,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
-            MOVE_SHADOW_CLAW,
+            MOVE_POLTERGEIST,
             MOVE_SUCKER_PUNCH,
             MOVE_DESTINY_BOND,
             MOVE_TAUNT

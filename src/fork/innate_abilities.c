@@ -4276,7 +4276,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CURSED_BODY,
             ABILITY_FRISK,
             ABILITY_INSOMNIA,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0355
