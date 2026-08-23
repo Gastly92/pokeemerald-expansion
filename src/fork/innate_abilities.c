@@ -4303,6 +4303,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TROPIUS,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_EFFECT_SPORE,
             ABILITY_HARVEST
         )
     },

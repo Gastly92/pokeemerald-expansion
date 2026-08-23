@@ -10702,7 +10702,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TROPIUS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_LEECH_SEED,
@@ -10716,6 +10716,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .def = 4,
             .spd = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_TROPIUS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_GROWTH,
+            MOVE_SOLAR_BEAM,
+            MOVE_AIR_SLASH
+        },
+        .ability = ABILITY_SOLAR_POWER,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
         ),
         .teraType = TYPE_GRASS,
     },
