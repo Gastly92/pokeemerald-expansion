@@ -7929,11 +7929,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SAND_STREAM,
-        .nature = NATURE(SPD_UP, SPE_DOWN),
+        .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
-            .atk = 4,
-            .spd = 252
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_ROCK,
     },

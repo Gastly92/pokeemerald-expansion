@@ -3272,15 +3272,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SAND_VEIL
         )
     },
+    { // 0247
+        SPECIES_PUPITAR,
+        INNATES(
+            ABILITY_SAND_VEIL,
+            ABILITY_SHED_SKIN
+        )
+    },
     { // 0248
         SPECIES_TYRANITAR,
         INNATES(
+            ABILITY_SAND_VEIL,
             ABILITY_UNNERVE
         )
     },
     { // 0248
         SPECIES_TYRANITAR_MEGA,
         INNATES(
+            ABILITY_SAND_VEIL,
             ABILITY_UNNERVE
         )
     },
