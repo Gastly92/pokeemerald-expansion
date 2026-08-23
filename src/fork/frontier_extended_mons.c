@@ -24442,6 +24442,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        .species = SPECIES_URSALUNA_BLOODMOON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ASSAULT_VEST,
+        .moves =
+        {
+            MOVE_BLOOD_MOON,
+            MOVE_EARTH_POWER,
+            MOVE_HYPER_VOICE,
+            MOVE_MOONBLAST
+        },
+        .ability = ABILITY_EARTH_EATER,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
+    },
 
     // 0902
     {
