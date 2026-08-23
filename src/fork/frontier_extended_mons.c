@@ -6897,6 +6897,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    {
+        .species = SPECIES_SHUCKLE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_POWER_TRICK,
+            MOVE_SUPERPOWER,
+            MOVE_GYRO_BALL,
+            MOVE_REST
+        },
+        .ability = ABILITY_CONTRARY,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0214
     {

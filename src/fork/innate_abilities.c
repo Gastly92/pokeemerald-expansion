@@ -2970,6 +2970,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHUCKLE,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
+            ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
     },
