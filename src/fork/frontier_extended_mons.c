@@ -9029,20 +9029,40 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0301
     {
         .species = SPECIES_DELCATTY,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
-            MOVE_HYPER_VOICE,
             MOVE_FAKE_OUT,
-            MOVE_THUNDERBOLT,
-            MOVE_ICE_BEAM
+            MOVE_HYPER_VOICE,
+            MOVE_HELPING_HAND,
+            MOVE_PROTECT
         },
         .ability = ABILITY_NORMALIZE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
             .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_DELCATTY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_THUNDER_WAVE,
+            MOVE_SING,
+            MOVE_HYPER_VOICE,
+            MOVE_WISH
+        },
+        .ability = ABILITY_NORMALIZE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
