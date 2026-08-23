@@ -4542,7 +4542,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGISTEEL,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_LIGHT_METAL
+            ABILITY_LIGHT_METAL,
+            ABILITY_LIMBER,
+            ABILITY_STURDY
         )
     },
     { // 0380
