@@ -4105,7 +4105,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BARBOACH,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_GLUTTONY,
             ABILITY_HYDRATION,
+            ABILITY_IMMUNITY,
             ABILITY_OBLIVIOUS
         )
     },
@@ -4113,7 +4115,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WHISCASH,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_GLUTTONY,
             ABILITY_HYDRATION,
+            ABILITY_IMMUNITY,
             ABILITY_OBLIVIOUS
         )
     },
