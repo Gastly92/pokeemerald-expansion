@@ -2891,6 +2891,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GLIGAR,
         INNATES(
             ABILITY_HYPER_CUTTER,
+            ABILITY_INFILTRATOR,
             ABILITY_IMMUNITY,
             ABILITY_SAND_VEIL
         )
@@ -5026,6 +5027,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GLISCOR,
         INNATES(
             ABILITY_HYPER_CUTTER,
+            ABILITY_INFILTRATOR,
             ABILITY_POISON_HEAL,
             ABILITY_SAND_VEIL
         )
