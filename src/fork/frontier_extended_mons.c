@@ -9432,14 +9432,34 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_MINUS,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
             .spa = 252,
             .spe = 4
         ),
         .teraType = TYPE_ELECTRIC,
+    },
+    {
+        .species = SPECIES_MINUN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_WISH,
+            MOVE_PROTECT,
+            MOVE_ENCORE,
+            MOVE_THUNDERBOLT
+        },
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0313

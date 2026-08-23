@@ -3846,6 +3846,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRIEND_GUARD
         )
     },
+    { // 0312
+        SPECIES_MINUN,
+        INNATES(
+            ABILITY_FRIEND_GUARD,
+            ABILITY_HEALER
+        )
+    },
     { // 0313
         SPECIES_VOLBEAT,
         INNATES(
