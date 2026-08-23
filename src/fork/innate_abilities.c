@@ -4047,18 +4047,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0333
         SPECIES_SWABLU,
         INNATES(
+            ABILITY_HEALER,
+            ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE
         )
     },
     { // 0334
         SPECIES_ALTARIA,
         INNATES(
+            ABILITY_HEALER,
+            ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE
         )
     },
     { // 0334
         SPECIES_ALTARIA_MEGA,
         INNATES(
+            ABILITY_HEALER,
+            ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE
         )
     },

@@ -10034,7 +10034,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_DRAGON_DANCE,
-            MOVE_RETURN,
+            MOVE_PLAY_ROUGH,
             MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
@@ -10065,7 +10065,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 8,
             .spd = 252
         ),
-        .teraType = TYPE_DRAGON,
+        .teraType = TYPE_FAIRY,
     },
 
     // 0335
