@@ -4071,6 +4071,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0335
         SPECIES_ZANGOOSE,
         INNATES(
+            ABILITY_QUICK_FEET,
+            ABILITY_SCRAPPY,
             ABILITY_TOXIC_BOOST
         )
     },
