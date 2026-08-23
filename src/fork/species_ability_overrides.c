@@ -207,6 +207,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_WIGGLYTUFF, 0,
         ABILITY_HALO
     },
+    {
+        SPECIES_WIGGLYTUFF, 1,
+        ABILITY_FLUFFY
+    },
     { // 0045
         SPECIES_VILEPLUME, 1,
         ABILITY_POISON_POINT
@@ -519,7 +523,23 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MEGANIUM, 1,
         ABILITY_GRASSY_SURGE
     },
+    {
+        SPECIES_MEGANIUM_MEGA, 0,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_MEGANIUM_MEGA, 1,
+        ABILITY_GRASSY_SURGE
+    },
+    {
+        SPECIES_MEGANIUM_MEGA, 2,
+        ABILITY_GRASSY_SURGE
+    },
     { // 0157
+        SPECIES_TYPHLOSION, 1,
+        ABILITY_DROUGHT
+    },
+    {
         SPECIES_TYPHLOSION_HISUI, 1,
         ABILITY_FLASH_FIRE
     },
@@ -542,6 +562,26 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0169
         SPECIES_CROBAT, 1,
         ABILITY_POISON_TOUCH
+    },
+    { // 0171
+        SPECIES_LANTURN, 1,
+        ABILITY_STORM_DRAIN
+    },
+    { // 0181
+        SPECIES_AMPHAROS, 1,
+        ABILITY_VOLT_ABSORB
+    },
+    {
+        SPECIES_AMPHAROS_MEGA, 0,
+        ABILITY_STATIC
+    },
+    {
+        SPECIES_AMPHAROS_MEGA, 1,
+        ABILITY_STATIC
+    },
+    {
+        SPECIES_AMPHAROS_MEGA, 2,
+        ABILITY_STATIC
     },
     { // 0182
         SPECIES_BELLOSSOM, 1,
@@ -905,7 +945,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0424
         SPECIES_AMBIPOM, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_HUSTLE
     },
     { // 0426
         SPECIES_DRIFBLIM, 0,
@@ -989,7 +1029,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0468
         SPECIES_TOGEKISS, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_HALO
     },
     { // 0469
         SPECIES_YANMEGA, 1,
