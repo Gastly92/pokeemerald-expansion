@@ -2851,6 +2851,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0202
         SPECIES_WOBBUFFET,
         INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
             ABILITY_SHADOW_TAG,
             ABILITY_TELEPATHY
         )
@@ -4356,6 +4358,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0360
         SPECIES_WYNAUT,
         INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
             ABILITY_SHADOW_TAG,
             ABILITY_TELEPATHY
         )
