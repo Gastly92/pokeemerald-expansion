@@ -3881,6 +3881,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0316
         SPECIES_GULPIN,
         INNATES(
+            ABILITY_CORROSION,
             ABILITY_GLUTTONY,
             ABILITY_LIQUID_OOZE,
             ABILITY_STENCH,
@@ -3890,6 +3891,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0317
         SPECIES_SWALOT,
         INNATES(
+            ABILITY_CORROSION,
             ABILITY_GLUTTONY,
             ABILITY_LIQUID_OOZE,
             ABILITY_STENCH,

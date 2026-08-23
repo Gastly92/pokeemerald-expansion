@@ -9567,6 +9567,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_POISON,
     },
+    {
+        .species = SPECIES_SWALOT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_STOCKPILE,
+            MOVE_SWALLOW,
+            MOVE_BODY_SLAM,
+            MOVE_GUNK_SHOT
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_POISON,
+    },
 
     // 0319
     {
