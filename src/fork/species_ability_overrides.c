@@ -713,7 +713,35 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0257
         SPECIES_BLAZIKEN, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_FLAME_BODY
+    },
+    {
+        SPECIES_BLAZIKEN_MEGA, 0,
+        ABILITY_FLAME_BODY
+    },
+    {
+        SPECIES_BLAZIKEN_MEGA, 1,
+        ABILITY_FLAME_BODY
+    },
+    {
+        SPECIES_BLAZIKEN_MEGA, 2,
+        ABILITY_FLAME_BODY
+    },
+    { // 0260
+        SPECIES_SWAMPERT, 1,
+        ABILITY_DRY_SKIN
+    },
+    {
+        SPECIES_SWAMPERT_MEGA, 0,
+        ABILITY_DRY_SKIN
+    },
+    {
+        SPECIES_SWAMPERT_MEGA, 1,
+        ABILITY_DRY_SKIN
+    },
+    {
+        SPECIES_SWAMPERT_MEGA, 2,
+        ABILITY_DRY_SKIN
     },
     { // 0262
         SPECIES_MIGHTYENA, 2,
@@ -1065,6 +1093,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0475
         SPECIES_GALLADE, 0,
+        ABILITY_SIMPLE
+    },
+    {
+        SPECIES_GALLADE_MEGA, 0,
+        ABILITY_SIMPLE
+    },
+    {
+        SPECIES_GALLADE_MEGA, 1,
+        ABILITY_SIMPLE
+    },
+    {
+        SPECIES_GALLADE_MEGA, 2,
         ABILITY_SIMPLE
     },
     { // 0476
