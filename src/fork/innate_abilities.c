@@ -4245,6 +4245,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0352
+        SPECIES_KECLEON,
+        INNATES(
+            ABILITY_ANALYTIC,
+            ABILITY_KEEN_EYE
+        )
+    },
     { // 0353
         SPECIES_SHUPPET,
         INNATES(
