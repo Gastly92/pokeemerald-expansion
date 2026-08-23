@@ -24503,10 +24503,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .atk = 4,
-            .spe = 252
+            .atk = 252,
+            .spe = 4
         ),
-        .teraType = TYPE_DARK,
+        .teraType = TYPE_FLYING,
     },
     {
         .species = SPECIES_OVERQWIL,
