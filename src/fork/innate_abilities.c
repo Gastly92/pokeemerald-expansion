@@ -3044,6 +3044,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SWINUB,
         INNATES(
             ABILITY_OBLIVIOUS,
+            ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK,
             ABILITY_THICK_FAT
         )
@@ -3052,6 +3053,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PILOSWINE,
         INNATES(
             ABILITY_OBLIVIOUS,
+            ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK,
             ABILITY_THICK_FAT
         )
@@ -5051,6 +5053,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MAMOSWINE,
         INNATES(
             ABILITY_OBLIVIOUS,
+            ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK,
             ABILITY_THICK_FAT
         )
