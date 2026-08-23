@@ -9817,6 +9817,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spd = 252
         ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_GRUMPIG,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_PSYCHIC,
+            MOVE_SHADOW_BALL,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
         .teraType = TYPE_PSYCHIC,
     },
 
