@@ -10441,9 +10441,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_ROCK,
     },
@@ -10465,7 +10465,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 4,
             .def = 252
         ),
-        .teraType = TYPE_ROCK,
+        .teraType = TYPE_STEEL,
     },
 
     // 0350

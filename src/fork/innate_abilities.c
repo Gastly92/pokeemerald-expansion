@@ -4173,6 +4173,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ANORITH,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_SHARPNESS,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -4180,6 +4181,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARMALDO,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_SHARPNESS,
             ABILITY_SWIFT_SWIM
         )
     },
