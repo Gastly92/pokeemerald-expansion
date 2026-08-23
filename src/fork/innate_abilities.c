@@ -3036,7 +3036,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0219
         SPECIES_MAGCARGO,
         INNATES(
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_SOLID_ROCK
         )
     },
     { // 0220
