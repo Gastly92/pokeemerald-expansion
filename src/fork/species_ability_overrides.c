@@ -863,6 +863,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SHARPEDO, 1,
         ABILITY_SHEER_FORCE
     },
+    {
+        SPECIES_SHARPEDO_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_SHARPEDO_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_SHARPEDO_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0321
         SPECIES_WAILORD, 2,
         ABILITY_DRIZZLE

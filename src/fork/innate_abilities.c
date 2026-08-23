@@ -3901,23 +3901,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0318
         SPECIES_CARVANHA,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_ROUGH_SKIN,
-            ABILITY_SPEED_BOOST
+            ABILITY_SPEED_BOOST,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0319
         SPECIES_SHARPEDO,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_ROUGH_SKIN,
-            ABILITY_SPEED_BOOST
+            ABILITY_SPEED_BOOST,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0319
         SPECIES_SHARPEDO_MEGA,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST,
-            ABILITY_STRONG_JAW
+            ABILITY_STRONG_JAW,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0320

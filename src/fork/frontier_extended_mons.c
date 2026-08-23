@@ -9632,7 +9632,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHARPEDO,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SCARF,
+        .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_CRUNCH,
