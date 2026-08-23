@@ -3821,6 +3821,25 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TELEPATHY
         )
     },
+    { // 0309
+        SPECIES_ELECTRIKE,
+        INNATES(
+            ABILITY_QUICK_FEET
+        )
+    },
+    { // 0310
+        SPECIES_MANECTRIC,
+        INNATES(
+            ABILITY_QUICK_FEET
+        )
+    },
+    { // 0310
+        SPECIES_MANECTRIC_MEGA,
+        INNATES(
+            ABILITY_INTIMIDATE,
+            ABILITY_QUICK_FEET
+        )
+    },
     { // 0313
         SPECIES_VOLBEAT,
         INNATES(

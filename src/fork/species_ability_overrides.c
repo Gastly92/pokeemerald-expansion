@@ -835,6 +835,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MEDICHAM_MEGA, 2,
         ABILITY_SHEER_FORCE
     },
+    { // 0310
+        SPECIES_MANECTRIC_MEGA, 0,
+        ABILITY_LIGHTNING_ROD
+    },
+    {
+        SPECIES_MANECTRIC_MEGA, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    {
+        SPECIES_MANECTRIC_MEGA, 2,
+        ABILITY_LIGHTNING_ROD
+    },
     { // 0313
         SPECIES_VOLBEAT, 1,
         ABILITY_VICTORY_STAR
