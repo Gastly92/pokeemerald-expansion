@@ -779,6 +779,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SABLEYE, 1,
         ABILITY_WANDERING_SPIRIT
     },
+    {
+        SPECIES_SABLEYE_MEGA, 0,
+        ABILITY_WANDERING_SPIRIT
+    },
+    {
+        SPECIES_SABLEYE_MEGA, 1,
+        ABILITY_WANDERING_SPIRIT
+    },
+    {
+        SPECIES_SABLEYE_MEGA, 2,
+        ABILITY_WANDERING_SPIRIT
+    },
     { // 0306
         SPECIES_AGGRON, 1,
         ABILITY_WELL_BAKED_BODY

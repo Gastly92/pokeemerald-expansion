@@ -3729,6 +3729,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SABLEYE,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
     },
@@ -3736,6 +3737,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SABLEYE_MEGA,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
             ABILITY_MAGIC_BOUNCE
         )

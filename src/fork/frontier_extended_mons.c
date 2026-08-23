@@ -9092,7 +9092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SABLEYE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_WILL_O_WISP,
@@ -9102,6 +9102,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         },
         .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_SABLEYE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_FAKE_OUT,
+            MOVE_WILL_O_WISP,
+            MOVE_FOUL_PLAY
+        },
+        .ability = ABILITY_WANDERING_SPIRIT,
+        .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
             .def = 252,
