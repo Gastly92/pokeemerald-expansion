@@ -2997,7 +2997,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INNER_FOCUS,
             ABILITY_KEEN_EYE,
-            ABILITY_PICKPOCKET
+            ABILITY_PICKPOCKET,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0215
@@ -3005,7 +3006,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INNER_FOCUS,
             ABILITY_KEEN_EYE,
-            ABILITY_PICKPOCKET
+            ABILITY_PICKPOCKET,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0216
@@ -4945,7 +4947,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WEAVILE,
         INNATES(
             ABILITY_PICKPOCKET,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0462
@@ -8601,6 +8604,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SNEASLER,
         INNATES(
             ABILITY_PRESSURE,
+            ABILITY_TOUGH_CLAWS,
             ABILITY_UNBURDEN
         )
     },
