@@ -7720,7 +7720,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_VOLT_SWITCH,
             MOVE_AURA_SPHERE,
-            MOVE_WEATHER_BALL
+            MOVE_SNARL
         },
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
