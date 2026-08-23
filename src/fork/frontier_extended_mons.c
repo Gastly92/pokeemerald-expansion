@@ -11189,7 +11189,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_METEOR_MASH,
             MOVE_ZEN_HEADBUTT,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -11209,7 +11209,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_METEOR_MASH,
             MOVE_BULLET_PUNCH,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_EXPLOSION
         },
         .ability = ABILITY_SHEER_FORCE,

@@ -4487,29 +4487,37 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0374
         SPECIES_BELDUM,
         INNATES(
+            ABILITY_ANALYTIC,
             ABILITY_CLEAR_BODY,
-            ABILITY_LIGHT_METAL
+            ABILITY_LIGHT_METAL,
+            ABILITY_TELEPATHY
         )
     },
     { // 0375
         SPECIES_METANG,
         INNATES(
+            ABILITY_ANALYTIC,
             ABILITY_CLEAR_BODY,
-            ABILITY_LIGHT_METAL
+            ABILITY_LIGHT_METAL,
+            ABILITY_TELEPATHY
         )
     },
     { // 0376
         SPECIES_METAGROSS,
         INNATES(
+            ABILITY_ANALYTIC,
             ABILITY_CLEAR_BODY,
-            ABILITY_LIGHT_METAL
+            ABILITY_LIGHT_METAL,
+            ABILITY_TELEPATHY
         )
     },
     { // 0376
         SPECIES_METAGROSS_MEGA,
         INNATES(
+            ABILITY_ANALYTIC,
             ABILITY_CLEAR_BODY,
             ABILITY_LIGHT_METAL,
+            ABILITY_TELEPATHY,
             ABILITY_TOUGH_CLAWS
         )
     },

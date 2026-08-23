@@ -1027,6 +1027,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_METAGROSS, 1,
         ABILITY_SHEER_FORCE
     },
+    {
+        SPECIES_METAGROSS_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_METAGROSS_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_METAGROSS_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0377
         SPECIES_REGIROCK, 1,
         ABILITY_SAND_STREAM
