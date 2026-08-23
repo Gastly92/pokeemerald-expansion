@@ -4031,12 +4031,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0331
         SPECIES_CACNEA,
         INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_IRON_BARBS,
             ABILITY_SAND_VEIL
         )
     },
     { // 0332
         SPECIES_CACTURNE,
         INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_IRON_BARBS,
             ABILITY_SAND_VEIL
         )
     },

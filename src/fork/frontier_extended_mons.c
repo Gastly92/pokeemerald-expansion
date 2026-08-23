@@ -9979,9 +9979,29 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
+        ),
+        .teraType = TYPE_DARK,
+    },
+    {
+        .species = SPECIES_CACTURNE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BLACK_GLASSES,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_DARK_PULSE,
+            MOVE_GIGA_DRAIN,
+            MOVE_FOCUS_BLAST
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
         ),
         .teraType = TYPE_DARK,
     },
