@@ -715,6 +715,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BLAZIKEN, 1,
         ABILITY_FLAME_BODY
     },
+    {
+        SPECIES_BLAZIKEN_MEGA, 0,
+        ABILITY_FLAME_BODY
+    },
+    {
+        SPECIES_BLAZIKEN_MEGA, 1,
+        ABILITY_FLAME_BODY
+    },
+    {
+        SPECIES_BLAZIKEN_MEGA, 2,
+        ABILITY_FLAME_BODY
+    },
     { // 0262
         SPECIES_MIGHTYENA, 2,
         ABILITY_SHEER_FORCE
