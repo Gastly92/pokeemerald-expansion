@@ -9284,7 +9284,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_JUMP_KICK,
             MOVE_ZEN_HEADBUTT,
             MOVE_ICE_PUNCH,
-            MOVE_FAKE_OUT
+            MOVE_BULLET_PUNCH
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -9312,6 +9312,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spd = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_FIGHTING,
+    },
+    {
+        .species = SPECIES_MEDICHAM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_PUNCHING_GLOVE,
+        .moves =
+        {
+            MOVE_DRAIN_PUNCH,
+            MOVE_POISON_JAB,
+            MOVE_THUNDER_PUNCH,
+            MOVE_FIRE_PUNCH
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
     },

@@ -3797,6 +3797,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0307
         SPECIES_MEDITITE,
         INNATES(
+            ABILITY_INNER_FOCUS,
+            ABILITY_LEVITATE,
             ABILITY_PURE_POWER,
             ABILITY_TELEPATHY
         )
@@ -3804,6 +3806,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0308
         SPECIES_MEDICHAM,
         INNATES(
+            ABILITY_INNER_FOCUS,
+            ABILITY_LEVITATE,
             ABILITY_PURE_POWER,
             ABILITY_TELEPATHY
         )
@@ -3811,6 +3815,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0308
         SPECIES_MEDICHAM_MEGA,
         INNATES(
+            ABILITY_INNER_FOCUS,
+            ABILITY_LEVITATE,
+            ABILITY_PURE_POWER,
             ABILITY_TELEPATHY
         )
     },
