@@ -4096,7 +4096,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0338
         SPECIES_SOLROCK,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_STURDY,
+            ABILITY_TELEPATHY
         )
     },
     { // 0339
