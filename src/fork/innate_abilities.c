@@ -4001,7 +4001,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0327
         SPECIES_SPINDA,
         INNATES(
-            ABILITY_OWN_TEMPO,
             ABILITY_TANGLED_FEET
         )
     },
