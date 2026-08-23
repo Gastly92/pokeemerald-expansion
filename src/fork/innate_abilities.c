@@ -4310,13 +4310,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0358
         SPECIES_CHIMECHO,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0358
         SPECIES_CHIMECHO_MEGA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0359
@@ -4925,7 +4927,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0433
         SPECIES_CHINGLING,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0434

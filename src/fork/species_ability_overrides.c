@@ -959,6 +959,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CHIMECHO, 1,
         ABILITY_SOUNDPROOF
     },
+    {
+        SPECIES_CHIMECHO_MEGA, 0,
+        ABILITY_SOUNDPROOF
+    },
+    {
+        SPECIES_CHIMECHO_MEGA, 1,
+        ABILITY_SOUNDPROOF
+    },
+    {
+        SPECIES_CHIMECHO_MEGA, 2,
+        ABILITY_SOUNDPROOF
+    },
     { // 0359
         SPECIES_ABSOL, 2,
         ABILITY_DARK_AURA
