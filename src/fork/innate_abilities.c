@@ -3096,6 +3096,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DELIBIRD,
         INNATES(
             ABILITY_INSOMNIA,
+            ABILITY_PICKUP,
             ABILITY_VITAL_SPIRIT
         )
     },

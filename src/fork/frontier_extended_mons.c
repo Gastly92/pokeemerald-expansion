@@ -7152,7 +7152,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DELIBIRD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND,
+        .heldItem = ITEM_LOADED_DICE,
         .moves =
         {
             MOVE_ICE_SPINNER,
@@ -7165,6 +7165,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .atk = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ICE,
+    },
+    {
+        .species = SPECIES_DELIBIRD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_ICY_WIND,
+            MOVE_ICE_SHARD,
+            MOVE_RAPID_SPIN
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
             .spe = 252
         ),
         .teraType = TYPE_ICE,
