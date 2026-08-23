@@ -2865,14 +2865,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0204
         SPECIES_PINECO,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_OVERCOAT,
+            ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
     },
     { // 0205
         SPECIES_FORRETRESS,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_OVERCOAT,
+            ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
     },
