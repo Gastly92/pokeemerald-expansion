@@ -4410,6 +4410,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WALREIN,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_INTIMIDATE,
             ABILITY_OBLIVIOUS,
             ABILITY_THICK_FAT
         )

@@ -10913,10 +10913,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
-            MOVE_SURF,
+            MOVE_MUDDY_WATER,
             MOVE_ICE_BEAM,
             MOVE_FREEZE_DRY,
-            MOVE_BODY_SLAM
+            MOVE_EARTH_POWER
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -10925,7 +10925,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_WATER,
     },
 
     // 0367
