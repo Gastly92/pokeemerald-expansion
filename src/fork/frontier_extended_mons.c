@@ -8278,7 +8278,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIGHTYENA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLAME_ORB,
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_FACADE,
