@@ -10235,7 +10235,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .iv = IVS(SPE, 0),
-        .teraType = TYPE_ROCK,
+        .teraType = TYPE_NORMAL,
     },
 
     // 0340
