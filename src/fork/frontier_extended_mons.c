@@ -8340,7 +8340,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LINOONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FLAME_ORB,
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_FACADE,
@@ -22951,7 +22951,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_BULK_UP,
-            MOVE_FACADE,
+            MOVE_DOUBLE_EDGE,
             MOVE_KNOCK_OFF,
             MOVE_OBSTRUCT
         },
@@ -22959,8 +22959,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .atk = 4,
-            .spe = 252
+            .atk = 252,
+            .spe = 4
         ),
         .teraType = TYPE_DARK,
     },
