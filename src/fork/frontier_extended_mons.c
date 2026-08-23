@@ -8512,15 +8512,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_LEAF_STORM,
-            MOVE_KNOCK_OFF,
-            MOVE_SUCKER_PUNCH,
-            MOVE_HEAT_WAVE
+            MOVE_HEAT_WAVE,
+            MOVE_DARK_PULSE,
+            MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_WIND_RIDER,
-        .nature = NATURE(ATK_UP, SPD_DOWN),
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
-            .atk = 252,
-            .spa = 4,
+            .spa = 252,
+            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_DARK,
