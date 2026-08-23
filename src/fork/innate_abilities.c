@@ -3071,6 +3071,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CURSED_BODY
         )
     },
+    { // 0864
+        SPECIES_CURSOLA,
+        INNATES(
+            ABILITY_CURSED_BODY
+        )
+    },
     { // 0223
         SPECIES_REMORAID,
         INNATES(

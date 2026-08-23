@@ -7076,7 +7076,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_GEM,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_HUSTLE,
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7096,7 +7096,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_GEM,
             MOVE_TOXIC
         },
-        .ability = ABILITY_HUSTLE,
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
