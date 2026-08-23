@@ -9849,7 +9849,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SUPERPOWER,
             MOVE_BODY_SLAM,
-            MOVE_FACADE,
+            MOVE_KNOCK_OFF,
             MOVE_ENCORE
         },
         .ability = ABILITY_CONTRARY,
@@ -9859,7 +9859,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spe = 4
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_FIGHTING,
+    },
+    {
+        .species = SPECIES_SPINDA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_OVERHEAT,
+            MOVE_LEAF_STORM,
+            MOVE_DRACO_METEOR,
+            MOVE_ENCORE
+        },
+        .ability = ABILITY_CONTRARY,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_FIRE,
     },
 
     // 0330
