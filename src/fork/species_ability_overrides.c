@@ -659,6 +659,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CORSOLA, 1,
         ABILITY_STORM_DRAIN
     },
+    { // 0224
+        SPECIES_OCTILLERY, 0,
+        ABILITY_WATER_ABSORB
+    },
     { // 0227
         SPECIES_SKARMORY, 1,
         ABILITY_BULLETPROOF

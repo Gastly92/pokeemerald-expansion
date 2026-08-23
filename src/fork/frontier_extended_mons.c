@@ -7118,32 +7118,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_ENERGY_BALL
         },
-        .ability = ABILITY_MOODY,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_OCTILLERY,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
-            MOVE_ICE_BEAM,
-            MOVE_GUNK_SHOT,
-            MOVE_ENERGY_BALL
+            MOVE_MUDDY_WATER,
+            MOVE_SLUDGE_BOMB,
+            MOVE_ENERGY_BALL,
+            MOVE_PROTECT
         },
-        .ability = ABILITY_MOODY,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_WATER,
     },

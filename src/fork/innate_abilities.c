@@ -3080,12 +3080,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0223
         SPECIES_REMORAID,
         INNATES(
+            ABILITY_ANALYTIC,
             ABILITY_SNIPER
         )
     },
     { // 0224
         SPECIES_OCTILLERY,
         INNATES(
+            ABILITY_ANALYTIC,
             ABILITY_SNIPER,
             ABILITY_SUCTION_CUPS
         )
