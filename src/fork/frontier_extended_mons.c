@@ -8945,7 +8945,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0295
     {
         .species = SPECIES_EXPLOUD,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
@@ -8965,14 +8965,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_EXPLOUD,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_BOOMBURST,
-            MOVE_OVERHEAT,
-            MOVE_SURF,
-            MOVE_FOCUS_BLAST
+            MOVE_HYPER_VOICE,
+            MOVE_FIRE_BLAST,
+            MOVE_FOCUS_BLAST,
+            MOVE_PROTECT
         },
         .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
