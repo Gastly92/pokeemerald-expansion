@@ -9516,14 +9516,34 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_BUG_BUZZ
         },
-        .ability = ABILITY_LINGERING_AROMA,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ability = ABILITY_STORM_DRAIN,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
             .def = 8,
             .spd = 252
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_ILLUMISE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LUM_BERRY,
+        .moves =
+        {
+            MOVE_QUIVER_DANCE,
+            MOVE_BUG_BUZZ,
+            MOVE_MOONBLAST,
+            MOVE_BATON_PASS
+        },
+        .ability = ABILITY_STORM_DRAIN,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0317
