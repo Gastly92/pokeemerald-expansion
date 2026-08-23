@@ -3947,6 +3947,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0322
         SPECIES_NUMEL,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_OBLIVIOUS,
             ABILITY_OWN_TEMPO,
             ABILITY_UNAWARE

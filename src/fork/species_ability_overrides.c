@@ -884,6 +884,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_DRIZZLE
     },
     { // 0323
+        SPECIES_CAMERUPT, 0,
+        ABILITY_FLAME_BODY
+    },
+    {
         SPECIES_CAMERUPT, 2,
         ABILITY_SHEER_FORCE
     },
