@@ -2857,6 +2857,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0203
         SPECIES_GIRAFARIG,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_EARLY_BIRD,
             ABILITY_INNER_FOCUS
         )
@@ -9118,7 +9119,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FARIGIRAF,
         INNATES(
             ABILITY_ARMOR_TAIL,
-            ABILITY_CUD_CHEW
+            ABILITY_CUD_CHEW,
+            ABILITY_INNER_FOCUS
         )
     },
     { // 0982

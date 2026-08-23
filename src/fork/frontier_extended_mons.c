@@ -26164,12 +26164,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spd = 252
         ),
-        .teraType = TYPE_DARK,
+        .teraType = TYPE_FAIRY,
     },
     {
         .species = SPECIES_FARIGIRAF,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST,
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_TRICK_ROOM,
