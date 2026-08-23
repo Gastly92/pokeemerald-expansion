@@ -11081,16 +11081,37 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
-            MOVE_SURF,
+            MOVE_SOAK,
+            MOVE_TOXIC,
             MOVE_ICE_BEAM,
-            MOVE_SWEET_KISS,
-            MOVE_SOAK
+            MOVE_PROTECT
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
             .spa = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+        .ball = BALL_LOVE,
+    },
+    {
+        .species = SPECIES_LUVDISC,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_HEAL_PULSE,
+            MOVE_HELPING_HAND,
+            MOVE_ICY_WIND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
             .spe = 252
         ),
         .teraType = TYPE_WATER,
