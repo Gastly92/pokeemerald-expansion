@@ -779,21 +779,81 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SABLEYE, 1,
         ABILITY_WANDERING_SPIRIT
     },
+    {
+        SPECIES_SABLEYE_MEGA, 0,
+        ABILITY_WANDERING_SPIRIT
+    },
+    {
+        SPECIES_SABLEYE_MEGA, 1,
+        ABILITY_WANDERING_SPIRIT
+    },
+    {
+        SPECIES_SABLEYE_MEGA, 2,
+        ABILITY_WANDERING_SPIRIT
+    },
+    { // 0303
+        SPECIES_MAWILE_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_MAWILE_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_MAWILE_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0306
         SPECIES_AGGRON, 1,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_BULLETPROOF
+    },
+    {
+        SPECIES_AGGRON_MEGA, 0,
+        ABILITY_BULLETPROOF
+    },
+    {
+        SPECIES_AGGRON_MEGA, 1,
+        ABILITY_BULLETPROOF
+    },
+    {
+        SPECIES_AGGRON_MEGA, 2,
+        ABILITY_BULLETPROOF
     },
     { // 0308
         SPECIES_MEDICHAM, 1,
         ABILITY_SHEER_FORCE
     },
+    {
+        SPECIES_MEDICHAM_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_MEDICHAM_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_MEDICHAM_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0310
+        SPECIES_MANECTRIC_MEGA, 0,
+        ABILITY_LIGHTNING_ROD
+    },
+    {
+        SPECIES_MANECTRIC_MEGA, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    {
+        SPECIES_MANECTRIC_MEGA, 2,
+        ABILITY_LIGHTNING_ROD
+    },
     { // 0313
         SPECIES_VOLBEAT, 1,
-        ABILITY_VICTORY_STAR
+        ABILITY_WATER_ABSORB
     },
     { // 0314
         SPECIES_ILLUMISE, 0,
-        ABILITY_LINGERING_AROMA
+        ABILITY_STORM_DRAIN
     },
     { // 0317
         SPECIES_SWALOT, 2,
@@ -803,11 +863,31 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SHARPEDO, 1,
         ABILITY_SHEER_FORCE
     },
+    {
+        SPECIES_SHARPEDO_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_SHARPEDO_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_SHARPEDO_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0321
+        SPECIES_WAILORD, 0,
+        ABILITY_DRY_SKIN
+    },
+    {
         SPECIES_WAILORD, 2,
         ABILITY_DRIZZLE
     },
     { // 0323
+        SPECIES_CAMERUPT, 0,
+        ABILITY_FLAME_BODY
+    },
+    {
         SPECIES_CAMERUPT, 2,
         ABILITY_SHEER_FORCE
     },
@@ -844,7 +924,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0344
-        SPECIES_CLAYDOL, 1, 
+        SPECIES_CLAYDOL, 1,
         ABILITY_SAND_STREAM
     },
     { // 0348
