@@ -11668,7 +11668,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ROSERADE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_BLACK_SLUDGE,
         .moves =
         {
             MOVE_GIGA_DRAIN,
@@ -11683,7 +11683,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_ROSERADE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_RAGE_POWDER,
+            MOVE_SLEEP_POWDER,
+            MOVE_SLUDGE_BOMB,
+            MOVE_MAGICAL_LEAF
+        },
+        .ability = ABILITY_POISON_POINT,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spa = 252
+        ),
+        .teraType = TYPE_POISON,
     },
 
     // 0409

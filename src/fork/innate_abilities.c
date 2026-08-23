@@ -3872,6 +3872,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0315
         SPECIES_ROSELIA,
         INNATES(
+            ABILITY_AROMA_VEIL,
+            ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE
         )
@@ -4622,6 +4624,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0406
         SPECIES_BUDEW,
         INNATES(
+            ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE
         )
@@ -4629,6 +4632,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0407
         SPECIES_ROSERADE,
         INNATES(
+            ABILITY_AROMA_VEIL,
+            ABILITY_CHLOROPHYLL,
             ABILITY_NATURAL_CURE,
             ABILITY_TECHNICIAN
         )
