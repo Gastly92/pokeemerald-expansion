@@ -4081,6 +4081,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INFILTRATOR,
             ABILITY_LIMBER,
+            ABILITY_SHARPNESS,
             ABILITY_SHED_SKIN
         )
     },
