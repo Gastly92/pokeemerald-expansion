@@ -10534,13 +10534,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CASTFORM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
+            MOVE_SUNNY_DAY,
             MOVE_WEATHER_BALL,
-            MOVE_THUNDERBOLT,
-            MOVE_ICE_BEAM,
-            MOVE_SUNNY_DAY
+            MOVE_SOLAR_BEAM,
+            MOVE_ICE_BEAM
         },
         .ability = ABILITY_FORECAST,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -10549,7 +10549,47 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_CASTFORM,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_DAMP_ROCK,
+        .moves =
+        {
+            MOVE_RAIN_DANCE,
+            MOVE_WEATHER_BALL,
+            MOVE_THUNDER,
+            MOVE_HURRICANE
+        },
+        .ability = ABILITY_FORECAST,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_CASTFORM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ICY_ROCK,
+        .moves =
+        {
+            MOVE_SNOWSCAPE,
+            MOVE_AURORA_VEIL,
+            MOVE_WEATHER_BALL,
+            MOVE_ICY_WIND
+        },
+        .ability = ABILITY_FORECAST,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_ICE,
     },
 
     // 0352

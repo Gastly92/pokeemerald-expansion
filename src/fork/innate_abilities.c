@@ -4204,25 +4204,45 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0351
         SPECIES_CASTFORM,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CHLOROPHYLL,
+            ABILITY_ICE_BODY,
+            ABILITY_LEVITATE,
+            ABILITY_RAIN_DISH,
+            ABILITY_SLUSH_RUSH,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0351
         SPECIES_CASTFORM_SUNNY,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CHLOROPHYLL,
+            ABILITY_ICE_BODY,
+            ABILITY_LEVITATE,
+            ABILITY_RAIN_DISH,
+            ABILITY_SLUSH_RUSH,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0351
         SPECIES_CASTFORM_RAINY,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CHLOROPHYLL,
+            ABILITY_ICE_BODY,
+            ABILITY_LEVITATE,
+            ABILITY_RAIN_DISH,
+            ABILITY_SLUSH_RUSH,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0351
         SPECIES_CASTFORM_SNOWY,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CHLOROPHYLL,
+            ABILITY_ICE_BODY,
+            ABILITY_LEVITATE,
+            ABILITY_RAIN_DISH,
+            ABILITY_SLUSH_RUSH,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0353
