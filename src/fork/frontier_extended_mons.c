@@ -10487,6 +10487,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 8
         ),
+        .teraType = TYPE_DRAGON,
+    },
+    {
+        .species = SPECIES_MILOTIC,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MYSTIC_WATER,
+        .moves =
+        {
+            MOVE_CALM_MIND,
+            MOVE_SCALD,
+            MOVE_ICE_BEAM,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
         .teraType = TYPE_WATER,
     },
     {
@@ -10507,7 +10527,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 8
         ),
-        .teraType = TYPE_WATER,
+        .teraType = TYPE_DRAGON,
     },
 
     // 0351
