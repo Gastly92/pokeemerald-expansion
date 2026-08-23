@@ -849,7 +849,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0313
         SPECIES_VOLBEAT, 1,
-        ABILITY_VICTORY_STAR
+        ABILITY_WATER_ABSORB
     },
     { // 0314
         SPECIES_ILLUMISE, 0,

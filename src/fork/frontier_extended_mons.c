@@ -9474,14 +9474,34 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_VICTORY_STAR,
-        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
             .spd = 252,
             .spe = 8
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_VOLBEAT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_MOONLIGHT,
+            MOVE_ENCORE,
+            MOVE_THUNDER_WAVE,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPD_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 248,
+            .def = 8,
+            .spd = 252
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0314
