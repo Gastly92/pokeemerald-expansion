@@ -1071,6 +1071,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LATIOS, 1,
         ABILITY_SYNCHRONIZE
     },
+    {
+        SPECIES_LATIOS_MEGA, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_LATIOS_MEGA, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_LATIOS_MEGA, 2,
+        ABILITY_SYNCHRONIZE
+    },
     { // 0385
         SPECIES_JIRACHI, 1,
         ABILITY_VICTORY_STAR

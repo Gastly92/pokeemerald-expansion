@@ -11419,7 +11419,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CALM_MIND,
             MOVE_PSYSHOCK,
-            MOVE_DRACO_METEOR,
+            MOVE_DRAGON_PULSE,
             MOVE_ROOST
         },
         .ability = ABILITY_SYNCHRONIZE,
