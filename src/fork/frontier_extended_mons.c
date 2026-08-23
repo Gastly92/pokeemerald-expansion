@@ -7321,10 +7321,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
-            MOVE_FIRE_BLAST,
+            MOVE_HEAT_WAVE,
             MOVE_DARK_PULSE,
             MOVE_SLUDGE_BOMB,
-            MOVE_OVERHEAT
+            MOVE_FIRE_BLAST
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
