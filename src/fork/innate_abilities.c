@@ -3378,18 +3378,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0258
         SPECIES_MUDKIP,
         INNATES(
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
     { // 0259
         SPECIES_MARSHTOMP,
         INNATES(
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
     { // 0260
         SPECIES_SWAMPERT,
         INNATES(
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },

@@ -8224,7 +8224,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_DAMP,
+        .ability = ABILITY_DRY_SKIN,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -8244,7 +8244,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_DAMP,
+        .ability = ABILITY_DRY_SKIN,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -8264,7 +8264,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_POWER_GEM
         },
-        .ability = ABILITY_DAMP,
+        .ability = ABILITY_DRY_SKIN,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
