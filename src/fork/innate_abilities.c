@@ -4472,14 +4472,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SALAMENCE,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE
+            ABILITY_MOXIE,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0373
         SPECIES_SALAMENCE_MEGA,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE
+            ABILITY_MOXIE,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0374

@@ -11127,7 +11127,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRAGON_DANCE,
             MOVE_DOUBLE_EDGE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_ROOST
         },
         .ability = ABILITY_RIVALRY,
@@ -11146,7 +11146,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_OUTRAGE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_DRAGON_CLAW,
             MOVE_FIRE_BLAST
         },
@@ -11167,7 +11167,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRACO_METEOR,
             MOVE_FIRE_BLAST,
-            MOVE_EARTHQUAKE,
+            MOVE_EARTH_POWER,
             MOVE_ROOST
         },
         .ability = ABILITY_RIVALRY,
