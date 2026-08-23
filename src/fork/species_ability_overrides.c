@@ -805,7 +805,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0306
         SPECIES_AGGRON, 1,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_BULLETPROOF
+    },
+    {
+        SPECIES_AGGRON_MEGA, 0,
+        ABILITY_BULLETPROOF
+    },
+    {
+        SPECIES_AGGRON_MEGA, 1,
+        ABILITY_BULLETPROOF
+    },
+    {
+        SPECIES_AGGRON_MEGA, 2,
+        ABILITY_BULLETPROOF
     },
     { // 0308
         SPECIES_MEDICHAM, 1,

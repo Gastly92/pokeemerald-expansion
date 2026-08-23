@@ -3760,6 +3760,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0304
         SPECIES_ARON,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_HEAVY_METAL,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
@@ -3768,6 +3769,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0305
         SPECIES_LAIRON,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_HEAVY_METAL,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
@@ -3776,6 +3778,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0306
         SPECIES_AGGRON,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_HEAVY_METAL,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
@@ -3784,6 +3787,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0306
         SPECIES_AGGRON_MEGA,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_FILTER,
             ABILITY_HEAVY_METAL,
             ABILITY_ROCK_HEAD,
