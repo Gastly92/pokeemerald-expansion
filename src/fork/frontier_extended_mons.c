@@ -8379,6 +8379,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    {
+        .species = SPECIES_BEAUTIFLY,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_POLLEN_PUFF,
+            MOVE_BUG_BUZZ,
+            MOVE_AIR_SLASH
+        },
+        .ability = ABILITY_RIVALRY,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
 
     // 0269
     {
@@ -8397,6 +8417,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 252,
             .spa = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_DUSTOX,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BLACK_SLUDGE,
+        .moves =
+        {
+            MOVE_TOXIC_SPIKES,
+            MOVE_STRUGGLE_BUG,
+            MOVE_SLUDGE_BOMB,
+            MOVE_ROOST
+        },
+        .ability = ABILITY_POISON_POINT,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
             .spd = 252
         ),
         .teraType = TYPE_POISON,

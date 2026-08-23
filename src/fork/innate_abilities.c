@@ -3455,6 +3455,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SHIELD_DUST
         )
     },
+    { // 0266
+        SPECIES_SILCOON,
+        INNATES(
+            ABILITY_SHED_SKIN,
+            ABILITY_SHIELD_DUST
+        )
+    },
+    { // 0268
+        SPECIES_CASCOON,
+        INNATES(
+            ABILITY_SHED_SKIN,
+            ABILITY_SHIELD_DUST
+        )
+    },
     { // 0267
         SPECIES_BEAUTIFLY,
         INNATES(
@@ -3465,6 +3479,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DUSTOX,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_INSOMNIA,
             ABILITY_SHIELD_DUST
         )
     },
