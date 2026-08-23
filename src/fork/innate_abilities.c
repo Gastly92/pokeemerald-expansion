@@ -3622,10 +3622,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TECHNICIAN
         )
     },
+    { // 0287
+        SPECIES_SLAKOTH,
+        INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0288
         SPECIES_VIGOROTH,
         INNATES(
             ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0289
+        SPECIES_SLAKING,
+        INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_THICK_FAT
         )
     },
     { // 0290
