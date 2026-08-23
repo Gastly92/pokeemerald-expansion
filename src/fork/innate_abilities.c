@@ -4324,16 +4324,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0359
         SPECIES_ABSOL,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
+            ABILITY_SHARPNESS,
             ABILITY_SUPER_LUCK
         )
     },
     { // 0359
         SPECIES_ABSOL_MEGA,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
+            ABILITY_SHARPNESS,
             ABILITY_SUPER_LUCK,
             ABILITY_MAGIC_BOUNCE
         )
@@ -4341,7 +4345,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0359
         SPECIES_ABSOL_MEGA_Z,
         INNATES(
+            ABILITY_FOREWARN,
+            ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
+            ABILITY_SHARPNESS,
             ABILITY_SUPER_LUCK,
             ABILITY_MAGIC_BOUNCE
         )

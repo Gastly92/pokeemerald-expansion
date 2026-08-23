@@ -975,6 +975,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ABSOL, 2,
         ABILITY_DARK_AURA
     },
+    {
+        SPECIES_ABSOL_MEGA, 0,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA, 1,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA, 2,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA_Z, 0,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA_Z, 1,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA_Z, 2,
+        ABILITY_DARK_AURA
+    },
     { // 0365
         SPECIES_WALREIN, 1,
         ABILITY_WATER_ABSORB
