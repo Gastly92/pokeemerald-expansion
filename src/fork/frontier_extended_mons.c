@@ -8092,13 +8092,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCEPTILE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_MIRACLE_SEED,
+        .heldItem = ITEM_PETAYA_BERRY,
         .moves =
         {
-            MOVE_LEAF_STORM,
+            MOVE_SUBSTITUTE,
+            MOVE_GIGA_DRAIN,
             MOVE_DRAGON_PULSE,
-            MOVE_FOCUS_BLAST,
-            MOVE_GIGA_DRAIN
+            MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
