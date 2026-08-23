@@ -9390,11 +9390,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_PLUS,
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
+    {
+        .species = SPECIES_PLUSLE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MAGNET,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_SUBSTITUTE,
+            MOVE_THUNDERBOLT,
+            MOVE_BATON_PASS
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
