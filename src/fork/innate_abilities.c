@@ -4126,6 +4126,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ADAPTABILITY,
             ABILITY_HYPER_CUTTER,
+            ABILITY_MOXIE,
             ABILITY_SHELL_ARMOR
         )
     },
@@ -4134,6 +4135,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ADAPTABILITY,
             ABILITY_HYPER_CUTTER,
+            ABILITY_MOXIE,
             ABILITY_SHELL_ARMOR
         )
     },

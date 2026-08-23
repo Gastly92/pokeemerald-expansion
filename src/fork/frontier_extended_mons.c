@@ -10295,9 +10295,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_DARK,
     },
@@ -10315,9 +10315,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_WATER,
     },
@@ -10327,9 +10327,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
-            MOVE_SWORDS_DANCE,
-            MOVE_CRABHAMMER,
-            MOVE_KNOCK_OFF,
+            MOVE_DRAGON_DANCE,
+            MOVE_LIQUIDATION,
+            MOVE_CRUNCH,
             MOVE_AQUA_JET
         },
         .ability = ABILITY_SHEER_FORCE,
