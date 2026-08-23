@@ -9795,7 +9795,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_WATER,
     },
 
     // 0326
