@@ -4158,12 +4158,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0345
         SPECIES_LILEEP,
         INNATES(
+            ABILITY_RAIN_DISH,
             ABILITY_SUCTION_CUPS
         )
     },
     { // 0346
         SPECIES_CRADILY,
         INNATES(
+            ABILITY_RAIN_DISH,
             ABILITY_SUCTION_CUPS
         )
     },
