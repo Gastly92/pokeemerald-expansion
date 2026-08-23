@@ -4525,6 +4525,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGIROCK,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_REGENERATOR,
+            ABILITY_SAND_FORCE,
             ABILITY_STURDY
         )
     },

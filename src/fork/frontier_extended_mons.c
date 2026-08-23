@@ -11271,8 +11271,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ROCK_POLISH,
             MOVE_STONE_EDGE,
-            MOVE_EARTHQUAKE,
-            MOVE_HAMMER_ARM
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_BODY_PRESS
         },
         .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
