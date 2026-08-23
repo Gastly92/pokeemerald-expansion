@@ -3752,6 +3752,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0303
         SPECIES_MAWILE_MEGA,
         INNATES(
+            ABILITY_HUGE_POWER,
             ABILITY_HYPER_CUTTER,
             ABILITY_INTIMIDATE
         )

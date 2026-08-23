@@ -9169,7 +9169,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .teraType = TYPE_STEEL,
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_MAWILE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_CRUNCH,
+            MOVE_FIRE_FANG,
+            MOVE_THUNDER_FANG,
+            MOVE_ICE_FANG
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_DARK,
     },
 
     // 0306
