@@ -8594,7 +8594,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_BRAVE_BIRD,
-            MOVE_FACADE,
+            MOVE_DOUBLE_EDGE,
             MOVE_U_TURN,
             MOVE_STEEL_WING
         },
