@@ -3347,6 +3347,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TORCHIC,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_IRON_FIST,
             ABILITY_SPEED_BOOST
         )
     },
@@ -3354,6 +3355,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_COMBUSKEN,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_IRON_FIST,
             ABILITY_SPEED_BOOST
         )
     },
@@ -3361,12 +3363,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BLAZIKEN,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_IRON_FIST,
             ABILITY_SPEED_BOOST
         )
     },
     { // 0257
         SPECIES_BLAZIKEN_MEGA,
         INNATES(
+            ABILITY_BLAZE,
+            ABILITY_IRON_FIST,
             ABILITY_SPEED_BOOST
         )
     },
