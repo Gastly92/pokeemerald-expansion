@@ -11303,7 +11303,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spd = 252
         ),
-        .teraType = TYPE_ICE,
+        .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_REGICE,

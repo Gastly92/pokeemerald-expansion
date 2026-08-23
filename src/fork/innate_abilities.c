@@ -4534,7 +4534,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGICE,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_ICE_BODY
+            ABILITY_ICE_BODY,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0379
