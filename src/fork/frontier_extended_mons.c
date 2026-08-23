@@ -13239,13 +13239,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GALLADE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_SWORDS_DANCE,
             MOVE_SACRED_SWORD,
             MOVE_PSYCHO_CUT,
-            MOVE_LEAF_BLADE
+            MOVE_LEAF_BLADE,
+            MOVE_NIGHT_SLASH
         },
         .ability = ABILITY_SIMPLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),

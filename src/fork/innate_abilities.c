@@ -3579,6 +3579,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0282
         SPECIES_GARDEVOIR,
         INNATES(
+            ABILITY_LEVITATE,
             ABILITY_SERENE_GRACE,
             ABILITY_TELEPATHY
         )
@@ -3586,6 +3587,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0282
         SPECIES_GARDEVOIR_MEGA,
         INNATES(
+            ABILITY_LEVITATE,
             ABILITY_SERENE_GRACE,
             ABILITY_TELEPATHY
         )
@@ -5117,15 +5119,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_JUSTIFIED,
             ABILITY_SHARPNESS,
-            ABILITY_STEADFAST
+            ABILITY_STEADFAST,
+            ABILITY_TELEPATHY
         )
     },
     { // 0475
         SPECIES_GALLADE_MEGA,
         INNATES(
+            ABILITY_INNER_FOCUS,
             ABILITY_JUSTIFIED,
             ABILITY_SHARPNESS,
-            ABILITY_STEADFAST
+            ABILITY_STEADFAST,
+            ABILITY_TELEPATHY
         )
     },
     { // 0476

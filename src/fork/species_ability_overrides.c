@@ -1095,6 +1095,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GALLADE, 0,
         ABILITY_SIMPLE
     },
+    {
+        SPECIES_GALLADE_MEGA, 0,
+        ABILITY_SIMPLE
+    },
+    {
+        SPECIES_GALLADE_MEGA, 1,
+        ABILITY_SIMPLE
+    },
+    {
+        SPECIES_GALLADE_MEGA, 2,
+        ABILITY_SIMPLE
+    },
     { // 0476
         SPECIES_PROBOPASS, 1,
         ABILITY_LIGHTNING_ROD
