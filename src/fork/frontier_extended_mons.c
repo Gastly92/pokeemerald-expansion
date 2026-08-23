@@ -9045,7 +9045,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spe = 252
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_GHOST,
     },
     {
         .species = SPECIES_DELCATTY,
@@ -9053,19 +9053,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
-            MOVE_THUNDER_WAVE,
+            MOVE_CHARM,
             MOVE_SING,
             MOVE_HYPER_VOICE,
             MOVE_WISH
         },
         .ability = ABILITY_NORMALIZE,
-        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spa = 4,
+            .def = 4,
             .spe = 252
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_GHOST,
     },
 
     // 0302

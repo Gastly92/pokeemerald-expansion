@@ -3713,6 +3713,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SKITTY,
         INNATES(
             ABILITY_CUTE_CHARM,
+            ABILITY_LIMBER,
             ABILITY_WONDER_SKIN
         )
     },
@@ -3720,6 +3721,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DELCATTY,
         INNATES(
             ABILITY_CUTE_CHARM,
+            ABILITY_LIMBER,
             ABILITY_WONDER_SKIN
         )
     },
