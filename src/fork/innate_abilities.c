@@ -7938,25 +7938,25 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0801
         SPECIES_MAGEARNA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0801
         SPECIES_MAGEARNA_ORIGINAL,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0801
         SPECIES_MAGEARNA_MEGA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0801
         SPECIES_MAGEARNA_ORIGINAL_MEGA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0802
