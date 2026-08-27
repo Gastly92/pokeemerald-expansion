@@ -12085,15 +12085,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KRICKETUNE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_WIDE_LENS,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
-            MOVE_FURY_CUTTER,
+            MOVE_SWORDS_DANCE,
             MOVE_BUG_BITE,
-            MOVE_POUNCE,
-            MOVE_SWORDS_DANCE
+            MOVE_AERIAL_ACE,
+            MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -12101,6 +12101,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_BUG,
+        .ball = BALL_NET,
+    },
+    {
+        .species = SPECIES_KRICKETUNE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_PERISH_SONG,
+            MOVE_SUBSTITUTE,
+            MOVE_PROTECT,
+            MOVE_BUG_BITE
+        },
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
         .ball = BALL_NET,
     },
 
