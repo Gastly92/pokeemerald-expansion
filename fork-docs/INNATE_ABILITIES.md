@@ -177,6 +177,19 @@ out.
   as identity. Trace, Skill Swap, Role Play, the ability pop-up, and
   `RecordAbilityBattle` all keep reading only the primary slot
   (`GetBattlerAbility`). Do **not** change that.
+- **Message text names the innate, not the chosen ability**
+  (`ApplyInnateMessageAbilities()`, `src/fork/innate_abilities.c`). The
+  `{B_ATK_ABILITY}` / `{B_DEF_ABILITY}` / `{B_SCR_ACTIVE_ABILITY}` / `{B_EFF_ABILITY}`
+  placeholders read a per-battler snapshot of the *chosen* ability taken when the string
+  is queued, so an innate's own message used to name the wrong ability (an innate Ice Body
+  heal on Alolan Ninetales printed "…'s **Snow Warning** healed it a little bit!" while the
+  pop-up correctly said Ice Body). One hook in `BtlController_EmitPrintString` /
+  `…EmitPrintSelectionString` (`src/battle_controllers.c`) now substitutes the innate into
+  that snapshot whenever `gLastUsedAbility` — the ability being processed — is an innate of
+  that battler. This covers **every** ability-flavored string for free; a newly wired innate
+  needs no per-message work. Note the pop-up's own override
+  (`gBattleScripting.abilityPopupOverwrite`) can't be reused for text: `BattleScript_AbilityPopUp`
+  clears it before the script's `printstring` runs.
 
 ## Recipe: "add ability X as an innate for species A/B/C"
 
