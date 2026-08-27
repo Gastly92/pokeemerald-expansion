@@ -10147,3 +10147,163 @@ TEST("Innate abilities: the Effect Spore flavor picks carry the innate")
     EXPECT(!SpeciesHasInnate(SPECIES_ROSERADE, ABILITY_EFFECT_SPORE));
     EXPECT(!SpeciesHasInnate(SPECIES_WHIMSICOTT, ABILITY_EFFECT_SPORE));
 }
+
+// ===== Coverage ratchet — every reviewed species has an innate row =========================
+//
+// FORK: innates are a species' always-on identity, so a species the roster can draft ought to
+// have a row. Three whole lines were found with none at all during the /line-review sweep of
+// Gen 1-3 -- Kecleon, the Manectric line, and the entire weather trio (Kyogre, Groudon,
+// Rayquaza plus their Primal and Mega forms). The cause is structural rather than careless, and
+// it will recur: each of those species' *only* canon abilities are never-an-innate (Color Change
+// and Protean; Static, Lightning Rod and Minus; Drizzle, Drought and Air Lock), so there was
+// nothing to seed a row from and they were skipped.
+//
+// The gate is a RATCHET rather than a blanket rule. Gens 4-9 have not been line-reviewed yet and
+// carry dozens of genuine gaps; failing on those would just wedge CI. Instead the sweep covers
+// every species at or below sInnateRowsReviewedThroughDex, which each /line-review batch bumps as
+// it lands. Raising it is the last step of a batch: set it to the batch's final dex number, run
+// this test, and fill whatever it names.
+static const u16 sInnateRowsReviewedThroughDex = NATIONAL_DEX_DEOXYS; // Gen 1-3 reviewed; Gen 4 next.
+
+static bool32 SpeciesHasAnyInnate(u16 species)
+{
+    return GetSpeciesInnate(species, 0) != ABILITY_NONE;
+}
+
+static bool32 RosterBuildsSpecies(u16 species)
+{
+    u32 i;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        if (gFrontierExtendedMons[i].species == species)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+TEST("Innate abilities: every reviewed species with a frontier set has an innate row")
+{
+    u32 species;
+    u32 checked = 0;
+    u32 missing = 0;
+
+    // A species the roster drafts is one you meet in battle, so its identity has to be defined.
+    // Species ids are used rather than names so form aliases (SPECIES_DUDUNSPARCE and
+    // SPECIES_DUDUNSPARCE_TWO_SEGMENT, SPECIES_OGERPON and SPECIES_OGERPON_TEAL) collapse.
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (!IsSpeciesEnabled(species))
+            continue;
+        if (SpeciesToNationalPokedexNum(species) > sInnateRowsReviewedThroughDex)
+            continue;
+        if (!RosterBuildsSpecies(species))
+            continue;
+
+        checked++;
+        if (SpeciesHasAnyInnate(species))
+            continue;
+
+        missing++;
+        Test_MgbaPrintf("no innate row: %S (species %d) has a frontier set but no entry in gSpeciesInnates -- give the line its always-on identity, or raise sInnateRowsReviewedThroughDex only after reviewing it",
+                        gSpeciesInfo[species].speciesName, species);
+    }
+
+    // Guard against a vacuous pass if the dex bound or the roster accessor ever breaks.
+    EXPECT_GT(checked, 200);
+    EXPECT_EQ(missing, 0);
+}
+
+// FORK: innates cover the WHOLE line, pre-evolutions included (fork-docs/LINE_REVIEW.md, Step 1) --
+// an innate is identity a Ralts carries whether or not anything drafts it. So a species whose
+// evolution has a row must have one too. This is the check that catches the *second* kind of gap
+// the sweep found: Electrike had no row because Manectric had none, and once Manectric was given
+// one its pre-evolution would have been left behind silently.
+TEST("Innate abilities: every reviewed pre-evolution of a species with innates has a row")
+{
+    u32 species;
+    u32 checked = 0;
+    u32 missing = 0;
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        enum Species preEvo;
+
+        if (!IsSpeciesEnabled(species))
+            continue;
+        if (SpeciesToNationalPokedexNum(species) > sInnateRowsReviewedThroughDex)
+            continue;
+        if (!SpeciesHasAnyInnate(species))
+            continue;
+
+        preEvo = GetSpeciesPreEvolution(species);
+        if (preEvo == SPECIES_NONE || !IsSpeciesEnabled(preEvo))
+            continue;
+        if (SpeciesToNationalPokedexNum(preEvo) > sInnateRowsReviewedThroughDex)
+            continue;
+
+        checked++;
+        if (SpeciesHasAnyInnate(preEvo))
+            continue;
+
+        missing++;
+        Test_MgbaPrintf("no innate row: %S (species %d) is the pre-evolution of %S, which has innates -- innates cover the whole line",
+                        gSpeciesInfo[preEvo].speciesName, preEvo, gSpeciesInfo[species].speciesName);
+    }
+
+    EXPECT_GT(checked, 100);
+    EXPECT_EQ(missing, 0);
+}
+
+// FORK: a species needs at least one ability slot that can hold its *observable* ability -- one
+// whose post-override value is never-an-innate. When every real slot is innate-capable, no set can
+// legally name an ability for that species at all, because a set's chosen ability may not be one of
+// that species' own innates. This is exactly the shape of the missing half of the Venusaur pattern:
+// Mega Sableye carried Magic Bounce as an innate AND on all three of its slots, so a Sableye that
+// Mega Evolved lost its chosen ability to a duplicate of an innate. The fix is the override half --
+// point every slot of the Mega at the base form's chosen ability.
+TEST("Innate abilities: every reviewed species the roster drafts has a legal observable slot")
+{
+    u32 species;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    // GetSpeciesAbilityOverride is inert while the feature flag is off, which would make this sweep
+    // read the upstream slots only.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        u32 slot;
+        bool32 hasObservable = FALSE;
+
+        if (!IsSpeciesEnabled(species))
+            continue;
+        if (SpeciesToNationalPokedexNum(species) > sInnateRowsReviewedThroughDex)
+            continue;
+        if (!RosterBuildsSpecies(species))
+            continue;
+
+        checked++;
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability ability = GetSpeciesAbility(species, slot);
+
+            if (ability != ABILITY_NONE && !IsImplementedInnate(ability))
+            {
+                hasObservable = TRUE;
+                break;
+            }
+        }
+
+        if (hasObservable)
+            continue;
+
+        offenders++;
+        Test_MgbaPrintf("no legal observable: every ability slot of %S (species %d) is innate-capable, so no set can name one -- add a species ability override on a redundant slot",
+                        gSpeciesInfo[species].speciesName, species);
+    }
+
+    EXPECT_GT(checked, 200);
+    EXPECT_EQ(offenders, 0);
+}
