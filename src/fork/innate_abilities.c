@@ -4631,28 +4631,32 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DEOXYS,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0386
         SPECIES_DEOXYS_ATTACK,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0386
         SPECIES_DEOXYS_DEFENSE,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0386
         SPECIES_DEOXYS_SPEED,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0387

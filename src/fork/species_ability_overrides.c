@@ -1096,7 +1096,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_TRACE
     },
     { // 0386
-        SPECIES_DEOXYS_SPEED, 1, 
+        SPECIES_DEOXYS_SPEED, 1,
         ABILITY_TRACE
     },
     { // 0389

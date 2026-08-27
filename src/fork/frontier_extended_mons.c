@@ -11690,7 +11690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHO_BOOST,
             MOVE_THUNDERBOLT,
             MOVE_ICE_BEAM,
-            MOVE_SUPERPOWER
+            MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -11755,6 +11755,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIKES,
             MOVE_TOXIC,
             MOVE_RECOVER
+        },
+        .ability = ABILITY_TRACE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_DEOXYS_DEFENSE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY,
+        .moves =
+        {
+            MOVE_REFLECT,
+            MOVE_LIGHT_SCREEN,
+            MOVE_TAUNT,
+            MOVE_PSYCHIC
         },
         .ability = ABILITY_TRACE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
