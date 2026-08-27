@@ -78,7 +78,15 @@ applies **per line**, at the same depth.
    converging on the same held item (item scarcity is per drafted team) or the
    same borrowed ability. Spread them.
 6. **Verify once at the end**, not per line — the two filtered `make check` runs
-   are a build each, and CI runs the full suite on the PR.
+   are a build each, and CI runs the full suite on the PR. **Raise the review
+   ratchet as part of that verify.** Five gates are bounded by a
+   "reviewed through this dex number" constant —
+   `sInnateRowsReviewedThroughDex` (`test/fork/innate_abilities.c`) and
+   `sSetShapeReviewedThroughDex` (`test/fork/frontier_extended_roster.c`), kept in
+   sync. Set both to the batch's last dex number, rerun the filtered checks, and
+   fix whatever they name; that is the batch's real completion criterion. They
+   catch what a per-line reading cannot — the first bump found 55 ally-hitting
+   spread moves in territory already swept.
 7. **One branch `claude/lines-<first>-<last>-review`, one PR** for the batch, with
    **a section per line** in the body carrying everything a single-line PR body
    would (per-step reasoning, flavor evidence with recall flagged, Part A verdicts
@@ -96,7 +104,11 @@ applies **per line**, at the same depth.
   `#define`, or in the PR body.
 - **Innates:** only *already-implemented* abilities (the `sImplementedInnates[]`
   allowlist in `test/fork/innate_abilities.c`) — an unwired pick fails CI. Don't
-  wire new abilities in a line review.
+  wire new abilities in a line review. **A species with no row at all is a bug**,
+  and it happens for a structural reason: when every one of a species' canon
+  abilities is never-an-innate there is nothing to seed a row from, so it gets
+  skipped (Kecleon, the Manectric line, the whole weather trio). Build the row
+  from the rest of the dex entry instead.
 - **Flavor test — count the canon users first** (group `.abilities` across
   `src/data/pokemon/species_info/*.h`). **One user = a signature**, welded to that
   creature's design; giving it away is inventing, not borrowing (Berserk→Drampa,
@@ -150,6 +162,13 @@ applies **per line**, at the same depth.
   override ability, so the base's observable trait carries through the
   transformation (the Venusaur pattern: base → Grassy Surge override; Mega →
   Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
+- **Two set shapes are CI-gated, so check them in Part A.** A
+  `TARGET_FOES_AND_ALLY` move (Earthquake, **Surf**, Sludge Wave, Discharge, Lava
+  Plume, Boomburst …) on a `FORMAT_DOUBLES`/`FORMAT_BOTH` set damages the holder's
+  own partner — swap for the single-target twin (Earthquake → High Horsepower,
+  Surf → Muddy Water, or Earth Power on a special set); Explosion and its two
+  siblings are exempt. And a Choice item never coexists with a status move except
+  Trick, Switcheroo or Transform.
 - **Frontier sets run in two parts: Part A audits the EXISTING sets, Part B
   writes new ones** — Part A first, finished before Part B starts. Part A walks each existing
   set field by field: **Tera type** (what is it *for*? — a tactical immunity beats
