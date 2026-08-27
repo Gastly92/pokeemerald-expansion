@@ -147,6 +147,16 @@ a line is reviewed once no matter how many of its members the range covers.
   a rejection in one line only touches another if they shared a resource (the
   same item, the same borrowed ability), which is worth checking and usually
   isn't the case.
+- **Raise the review ratchet as the last step of the batch.** Five CI gates are
+  bounded by a "reviewed through this dex number" constant, so they hold
+  everything already swept and stay quiet about the generations still to come:
+  `sInnateRowsReviewedThroughDex` in `test/fork/innate_abilities.c` and
+  `sSetShapeReviewedThroughDex` in `test/fork/frontier_extended_roster.c` (keep
+  the two in sync). Set both to the batch's last dex number, run the filtered
+  checks, and fix whatever they name — that is the batch's real completion
+  criterion, and it catches the class of defect a per-line reading misses. The
+  first time this was done it found **55 ally-hitting spread moves inside
+  territory the sweep had already been through**.
 
 ---
 
@@ -183,7 +193,10 @@ a line is reviewed once no matter how many of its members the range covers.
   rather than arguing from memory — the evidence usually settles it in the
   maintainer's favor, and occasionally it will support the pick, which is worth
   saying plainly.
-- **Two CI tests gate the ability data** — keep them green (see each step).
+- **Seven CI tests gate this data** — keep them green (see each step). Two are
+  absolute (an override or set naming an innate-capable or reserved ability); five
+  are **review ratchets** bounded by a "reviewed through this dex number" constant
+  that each batch raises as it lands. See "Shipping the batch" above.
 
 ---
 
@@ -309,7 +322,22 @@ For each species/form in the line:
    - **Watch grounded forms:** a form that shouldn't float must not inherit
      `LEVITATE` (see the Mega Gengar / Mega Mewtwo X notes in the file header).
 
-**Verify:** `make check TESTS="Innate"` (the innate test rejects unwired picks).
+**A species with NO row at all is a bug, and the reason it happens is
+structural.** Twenty-two were found by hand across the Gen 1-3 sweep. The cause
+is always the same: when every one of a species' canon abilities is
+*never-an-innate*, there is nothing to seed a row from and it gets skipped
+entirely. Kecleon (Color Change, Protean), the Manectric line (Static, Lightning
+Rod, Minus) and the whole weather trio (Drizzle, Drought, Air Lock) all landed
+this way. **The row still has to exist** — build it from the rest of the dex
+entry and the design instead. Two consequences worth knowing before you start a
+line: a species like this will *never* suggest its own innates, and its
+observable slot is forced to hold whatever never-an-innate ability is left over,
+which is often somebody's signature (see Step 2).
+
+**Verify:** `make check TESTS="Innate"` — five tests, three of them the coverage
+ratchets: every reviewed species with a set has a row, every reviewed
+pre-evolution of one does too, and every reviewed species the roster drafts has
+at least one slot that can legally hold an observable ability.
 
 **Before Step 2:** settle the innate list. Which slots Step 2 may repurpose is
 determined by the innates you have actually decided on, so don't start Step 2
@@ -396,6 +424,28 @@ line:
 
 2. **Consider adding a row** if the line lacks one and a species' chosen slot is a
    redundant innate (or empty) — pick a stable, flavorful non-innate ability.
+
+   **Check the pick is not inert under the fork's flags before anything else.**
+   An override is the species' one observable trait, so an ability that does
+   nothing here is worse than a plain one. Two were shipped and had to be
+   replaced: **Victory Star** on Volbeat and again on Jirachi — an accuracy boost
+   in a fork where `DETERMINISTIC_ACCURACY_EVASION` has removed accuracy from the
+   game — and **Moody** on Glalie, which is not merely inert but actively lowers
+   the stat the set was built on. Also watch for an override that is live in
+   principle but dead on *this line's sets*: Solar Power with no Sunny Day,
+   Poison Touch with no contact move, Storm Drain's Special Attack boost on a
+   purely physical set. That is a weaker objection — a set can be added to use it
+   — but it belongs in the PR body either way.
+
+   **The structural bind, worth recognising rather than fighting.** For several
+   species the ability the dex actually describes turns out to be innate-capable,
+   which makes it *illegal* as an override — so it goes on the innate row and the
+   observable slot has to be filled by whatever never-an-innate ability is left,
+   which is often somebody's signature. Absol is the clearest case: its dex is
+   "senses even subtle changes in the sky and the land to predict natural
+   disasters", which is Forewarn exactly, and Forewarn is innate-capable. Forewarn
+   became its innate; the observable slot still holds Yveltal's Dark Aura. When
+   this happens, say so in the PR body rather than reaching for a worse pick.
 3. **Don't override a base form to hand it its Mega's ability.** Under
    `FEATURE_FREE_GIMMICKS` a base Factory set Mega Evolves on its own (see the
    free-gimmicks note in Step 3) and *becomes* the Mega, gaining the Mega's real
@@ -418,6 +468,21 @@ line:
    one, and *still* shows Grassy Surge — now with Thick Fat live on top. (Contrast
    point 3: that's about not handing a *base* form its Mega's ability; this is
    handing the *Mega* the base's ability so the observable trait carries over.)
+
+   **This is the most-missed rule in the file** — about twenty Megas were found
+   with the innate half done and the override half absent, across every batch of
+   the Gen 1-3 sweep. CI now catches it: "every reviewed species the roster drafts
+   has a legal observable slot" fails when all of a form's slots hold
+   innate-capable abilities, which is exactly this bug's signature. **The
+   three outcomes, so you can tell at a glance which applies:**
+   - Mega's ability is on `sImplementedInnates[]` → **innate + override all
+     slots** (Venusaur, Sableye, Mawile, Aggron, Medicham, Banette, Metagross,
+     Latias, Latios, Chimecho, Manectric).
+   - Mega's ability is **never-an-innate** → **the Mega keeps it, no rows at all**
+     (Gardevoir/Pixilate, Tyranitar/Sand Stream, Salamence/Aerilate,
+     Rayquaza/Delta Stream, Glalie/Refrigerate, and both Primals).
+   - Mega's ability already equals the base's override → **nothing to do**
+     (Sceptile/Lightning Rod, Pinsir/Aerilate, Camerupt/Sheer Force).
 5. **Pre-evolutions don't need an override row.** An override earns its keep by
    letting a *Factory set* run a real second trait alongside the innates — so a
    species with no sets has nothing to spend it on, and a row there is dead data.
@@ -587,6 +652,21 @@ than one whose existing set is about to be rewritten.
       `DETERMINISTIC_*` section — never build on a secondary landing against a
       neutral target), missing STAB, no answer to a common immunity, or four
       attacking moves where one utility slot would do more.
+
+      Also check for **moves that fight each other inside one set** — four turned
+      up in Gen 1-3: Rock Polish beside Hammer Arm (which lowers the Speed the
+      Polish just raised); Calm Mind beside Draco Meteor (which drops the Special
+      Attack the Calm Minds raised — Draco Meteor belongs on a Choice set, where
+      you switch out after firing it); Knock Off beside Poltergeist (Knock Off
+      disarms the target Poltergeist needs); and Sunny Day on a set whose ability
+      is Solar Power, which then drains 1/8 HP a turn from a staller.
+
+      **Two format-specific move facts worth knowing.** `Poltergeist` is close to
+      unconditional here: every set in the roster specifies a `heldItem`, so every
+      drafted opponent is holding one — which makes it a 110 BP Ghost STAB rather
+      than a gamble, and strictly better than Shadow Claw's 70. And a **rental's
+      friendship is `MAX_FRIENDSHIP`** (`src/battle_frontier.c`), so `Return` is
+      always at full 102 BP while `Frustration` is always at its floor.
    c. **Held item — is it still doing anything, and is it too crowded?** Re-check
       it against the set's moves and ability, and against the fork's changes
       (`BUFF_*`, `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently
@@ -597,7 +677,27 @@ than one whose existing set is about to be rewritten.
       sitting on a default Leftovers is a prime candidate to move off it.
    d. **Nature, EVs, IVs — does the spread match what the set actually does?**
       A nature dropping a stat the set uses, EVs invested in an unused attacking
-      stat, or a Speed investment that reaches no relevant benchmark. On IVs:
+      stat, or a Speed investment that reaches no relevant benchmark.
+
+      **The three recurring shapes**, all found repeatedly in the Gen 1-3 sweep:
+      (i) a **damaging move on the category the set did not build** — Glalie ran
+      a special Freeze-Dry on a Jolly 252-Attack spread, Walrein a physical Body
+      Slam on a Modest 252-Special-Attack one; (ii) a **nature boosting a stat
+      with 4 EVs in it** (Delcatty's Modest over 4 SpA, Minun's Timid over 4 Spe);
+      (iii) **252 Speed on a species that cannot use it** — below roughly base 60
+      the investment reaches nothing, and a set carrying priority (Aqua Jet,
+      Sucker Punch, Ice Shard) has already conceded it moves second, so those EVs
+      belong in HP. Speed *is* earned when a move doubles it: Dragon Dance, Rock
+      Polish, Agility, Autotomize, Shell Smash, or a Swift Swim / Chlorophyll
+      innate the set turns on itself.
+
+      **Do not turn (i) into a mechanical rule** — it was tried, and a category-
+      versus-nature sweep returns 133 hits of which most are correct by design.
+      Foul Play attacks off the *target's* Attack; Body Press off Defence; Seismic
+      Toss and Night Shade are fixed damage; Counter and Mirror Coat return what
+      they took; and U-turn, Flip Turn, Rapid Spin, Fake Out, Knock Off and Icy
+      Wind are drafted for their effect, not their damage. This one is a
+      judgement call, which is why it is here and not in CI. On IVs:
       only ~42 of 1200+ sets set `.iv` at all, and `CreateFacilityMon` applies it
       only `if (fmon->iv)`, so leaving it unset means "facility default" and is
       normal — the usual reason to set one is minimum Speed for Trick Room.
@@ -609,6 +709,34 @@ than one whose existing set is about to be rewritten.
       enforces legal-and-non-innate; this is the flavor//usefulness question).
    f. **Format tag** — does a `FORMAT_BOTH` set genuinely hold up in both, and is
       the line's coverage across singles/doubles balanced?
+
+      **Spread moves that hit your own ally are the single most common defect in
+      this file, and CI now gates it.** A `TARGET_FOES_AND_ALLY` move damages the
+      holder's partner every time it is clicked, so it is wrong on any
+      `FORMAT_DOUBLES` or `FORMAT_BOTH` set. Nineteen moves are in this class:
+      Earthquake, Bulldoze, Magnitude, **Surf**, Sludge Wave, Discharge, Lava
+      Plume, Petal Blizzard, Boomburst, Sparkling Aria, Searing Shot, Mind Blown,
+      Brutal Swing, Corrosive Gas, Parabolic Charge, Synchronoise, Teeter Dance,
+      and the self-KO pair. **Surf is the one that hides**: its source line reads
+      `B_UPDATED_MOVE_DATA >= GEN_4 ? TARGET_FOES_AND_ALLY : TARGET_BOTH`, so a
+      text search for the constant misses it while the build resolves to the
+      ally-hitting branch. Do not trust a grep — ask `GetMoveTarget`.
+      Usual repairs: **Earthquake → High Horsepower** (same coverage,
+      single-target, −5 BP), **Surf → Muddy Water** (both 90 BP; Muddy Water is
+      `TARGET_BOTH`, foes only), **Sludge Wave → Sludge Bomb**, **Discharge →
+      Thunderbolt**, **Boomburst → Hyper Voice**; on a *special* set the Ground
+      slot usually wants **Earth Power**, which fixes the stat mismatch at the
+      same time. The alternative repair — retagging to `FORMAT_SINGLES` — is
+      legitimate but shrinks the doubles pool, so prefer the move swap.
+      **Exempt:** Explosion, Self-Destruct and Misty Explosion. Hitting everything
+      adjacent is what they are, and pressing one is a deliberate last act.
+
+      **A Choice item and a status move do not coexist.** The lock makes the
+      status move either unreachable (you clicked something else) or a dead end
+      (you clicked it and are stuck). Sharpedo shipped Choice Scarf beside Destiny
+      Bond. Only three exceptions, all cases where the lock costs nothing: Trick
+      and Switcheroo (handing the item over *is* the payload) and Transform
+      (Ditto's set is four copies of it). Also gated by CI.
    g. **Base-form viability** — re-check the set against the base stat line per
       the free-gimmicks rule below.
 
@@ -750,6 +878,23 @@ identical bytes. They replace positional `TRAINER_PARTY_EVS` and raw `NATURE_BOL
 constants specifically so a set can be read and edited on a phone without counting
 argument positions or recalling that Bold is +Def/−Atk. All three are defined in
 `include/fork/frontier_extended_mons.h`.
+
+### Easy to get backwards — check these before writing the reasoning
+
+Every row below was got *wrong* at least once during the Gen 1-3 sweep, in a PR
+body, and had to be corrected afterwards. The rubric already said most of them;
+saying them again in one table is cheaper than another correction.
+
+| Claim that feels right | What is actually true |
+|---|---|
+| "High-crit moves are dead under `DETERMINISTIC_CRITICAL_HITS`" | **They are live, and better than in vanilla.** A move with any high crit ratio always crits through the strong-hit gate. Slash, Night Slash, Cross Poison, Stone Edge, **Crabhammer** and **Shadow Claw** are picks, not filler. The dead route is crit *stage stacking*. |
+| "Terastallizing into your own type is a no-op" | It changes no typing, but it **upgrades that type's STAB from 1.5x to 2.0x** — a real 1.33x on every STAB move. Say "no *typing* change", and weigh the STAB gain against what a different Tera would buy. |
+| "Moody is inert" | **It is actively harmful.** `DETERMINISTIC_ABILITIES` has it raise the lowest raw stat by two stages and *lower the highest by one*, so on a 252/252 spread it reliably lowers a stat the set was built on. |
+| "Tangled Feet / Sand Veil / Snow Cloak are dead, evasion is gone" | Evasion is **converted, not deleted**: an evasion source on the target becomes a **+1 PP tax on the attacker** (`GetDeterministicMoveTargetPPTax`). A test pins this for Spinda. Beware the corollary — giving such a species Own Tempo makes it unconfusable and silently kills its own Tangled Feet. |
+| "Harvest recovers a berry half the time outside sun" | **It always recovers one** here (`deterministic.h`, Harvest). A Sitrus Berry on a Harvest species is renewable healing, which beats Leftovers on any large-HP body. |
+| "Serene Grace doubles a secondary's odds" | It **bypasses the strong-hit gate entirely**, so the effect is *certain*. Jirachi's innate Serene Grace makes Iron Head's flinch, Zen Headbutt's flinch and Ice Punch's freeze land every single time. |
+| "Sheer Force means always take the stronger move" | Sheer Force cancels **Life Orb recoil** on any move it boosts, so a *weaker* move with a secondary can beat a stronger one without: Ancient Power at 60 BP x1.3 and no recoil ties an 80 BP Power Gem that pays it. |
+| "Surf hits both foes" | Surf is `TARGET_FOES_AND_ALLY` at this fork's `B_UPDATED_MOVE_DATA` — it hits your **own partner**. The source reads `TARGET_BOTH` in a ternary, so grepping for the constant misses it. See the spread-move checklist in Step 3. |
 
 ### The `DETERMINISTIC_*` regime — what actually changes for set-building
 
