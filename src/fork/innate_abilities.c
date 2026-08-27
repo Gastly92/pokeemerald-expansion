@@ -4662,22 +4662,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0387
         SPECIES_TURTWIG,
         INNATES(
+            ABILITY_HARVEST,
             ABILITY_OVERGROW,
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_SOLID_ROCK
         )
     },
     { // 0388
         SPECIES_GROTLE,
         INNATES(
+            ABILITY_HARVEST,
             ABILITY_OVERGROW,
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_SOLID_ROCK
         )
     },
     { // 0389
         SPECIES_TORTERRA,
         INNATES(
+            ABILITY_HARVEST,
             ABILITY_OVERGROW,
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_SOLID_ROCK
         )
     },
     { // 0390

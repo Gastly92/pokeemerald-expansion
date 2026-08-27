@@ -1101,7 +1101,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0389
         SPECIES_TORTERRA, 1,
-        ABILITY_SAND_STREAM
+        ABILITY_GRASSY_SURGE
     },
     { // 0392
         SPECIES_INFERNAPE, 1,

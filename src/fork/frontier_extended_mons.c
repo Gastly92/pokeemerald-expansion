@@ -11794,15 +11794,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TORTERRA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_MUSCLE_BAND,
         .moves =
         {
             MOVE_ROCK_POLISH,
             MOVE_WOOD_HAMMER,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_STONE_EDGE
         },
-        .ability = ABILITY_SAND_STREAM,
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -11819,10 +11819,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STEALTH_ROCK,
             MOVE_WOOD_HAMMER,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_SYNTHESIS
         },
-        .ability = ABILITY_SAND_STREAM,
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 4,
+            .def = 252
+        ),
+        .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_TORTERRA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_GRASSY_SEED,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_HELPING_HAND,
+            MOVE_WOOD_HAMMER,
+            MOVE_HIGH_HORSEPOWER
+        },
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
