@@ -12049,7 +12049,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_YAWN,
             MOVE_ROOST
         },
-        .ability = ABILITY_MOODY,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -12057,6 +12057,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
+    },
+    {
+        .species = SPECIES_BIBAREL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_CURSE,
+            MOVE_WATERFALL,
+            MOVE_BODY_SLAM,
+            MOVE_AQUA_JET
+        },
+        .ability = ABILITY_SIMPLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_NORMAL,
         .ball = BALL_DIVE,
     },
 

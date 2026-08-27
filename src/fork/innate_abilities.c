@@ -4776,12 +4776,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0399
         SPECIES_BIDOOF,
         INNATES(
+            ABILITY_STRONG_JAW,
             ABILITY_UNAWARE
         )
     },
     { // 0400
         SPECIES_BIBAREL,
         INNATES(
+            ABILITY_STRONG_JAW,
+            ABILITY_SWIFT_SWIM,
             ABILITY_UNAWARE
         )
     },
