@@ -4801,21 +4801,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHINX,
         INNATES(
             ABILITY_GUTS,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_KEEN_EYE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0404
         SPECIES_LUXIO,
         INNATES(
             ABILITY_GUTS,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_KEEN_EYE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0405
         SPECIES_LUXRAY,
         INNATES(
             ABILITY_GUTS,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_KEEN_EYE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0406

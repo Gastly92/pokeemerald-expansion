@@ -12137,14 +12137,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_ICE_FANG
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ELECTRIC,
+        .teraType = TYPE_DARK,
     },
     {
         .species = SPECIES_LUXRAY,
@@ -12157,7 +12157,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUPERPOWER,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -12165,6 +12165,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
+    },
+    {
+        .species = SPECIES_LUXRAY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FLAME_ORB,
+        .moves =
+        {
+            MOVE_FACADE,
+            MOVE_WILD_CHARGE,
+            MOVE_CRUNCH,
+            MOVE_SUPERPOWER
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_NORMAL,
     },
 
     // 0407
