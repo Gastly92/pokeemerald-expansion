@@ -6131,13 +6131,22 @@ enum Type GetDynamicMoveType(struct Pokemon *mon, enum Move move, enum BattlerId
     {
         return TYPE_DARK;
     }
+    // FORK: upstream also excluded GIMMICK_DYNAMAX from this condition, which left a
+    // Max Move on the base move's *unconverted* type. That desynced the move menu from
+    // the engine: the gimmick is only armed (not yet active) while the menu is open, so
+    // the preview applied -ate and showed Pixilate Sylveon's Hyper Voice as Max Starfall,
+    // but the executed move resolved with Dynamax active and came out Max Strike.
+    // -ate abilities do convert Max Moves ("If Max Strike is selected with Pixilate, it
+    // will turn into Max Starfall when used"), so only the ateBoost is suppressed under
+    // Dynamax - exactly how the ABILITY_NORMALIZE branch just below already behaves.
+    // On conflict: keep the GIMMICK_Z_MOVE exclusion (Z-Moves genuinely ignore -ate,
+    // see test/battle/gimmick/zmove.c) and re-drop only the Dynamax one.
     else if (moveType == TYPE_NORMAL
           && ability != ABILITY_NORMALIZE
-          && gimmick != GIMMICK_DYNAMAX
           && gimmick != GIMMICK_Z_MOVE)
     {
         u32 ateType = TrySetAteType(move, battler, ability);
-        if (ateType != TYPE_NONE && state == MON_IN_BATTLE)
+        if (ateType != TYPE_NONE && state == MON_IN_BATTLE && gimmick != GIMMICK_DYNAMAX)
             gBattleStruct->battlerState[battler].ateBoost = TRUE;
         return ateType;
     }
