@@ -11926,7 +11926,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_DEFOG
         },
-        .ability = ABILITY_WATER_ABSORB,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -11945,7 +11945,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_WATER_ABSORB,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11953,6 +11953,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_EMPOLEON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_MUDDY_WATER,
+            MOVE_ICY_WIND,
+            MOVE_FLASH_CANNON,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_ICE,
     },
 
     // 0398

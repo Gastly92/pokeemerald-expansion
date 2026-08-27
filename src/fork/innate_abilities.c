@@ -4717,6 +4717,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PIPLUP,
         INNATES(
             ABILITY_COMPETITIVE,
+            ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH,
             ABILITY_TORRENT
         )
     },
@@ -4724,6 +4726,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PRINPLUP,
         INNATES(
             ABILITY_COMPETITIVE,
+            ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH,
             ABILITY_TORRENT
         )
     },
@@ -4731,6 +4735,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_EMPOLEON,
         INNATES(
             ABILITY_COMPETITIVE,
+            ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH,
             ABILITY_TORRENT
         )
     },

@@ -1109,7 +1109,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0395
         SPECIES_EMPOLEON, 1,
-        ABILITY_WATER_ABSORB
+        ABILITY_SNOW_WARNING
     },
     { // 0398
         SPECIES_STARAPTOR, 1,
