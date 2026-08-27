@@ -8,6 +8,9 @@
 #include "fork/species_ability_overrides.h"
 #include "constants/abilities.h"
 #include "constants/species.h"
+#include "constants/items.h"
+#include "move.h"
+#include "battle.h"
 
 // FORK: guards the fork-owned competitive Battle Factory roster
 // (gFrontierExtendedMons, src/frontier_extended_mons.c). A set's .ability is
@@ -600,4 +603,120 @@ TEST("Frontier extended roster: the roster's NFEs are exactly the niche NFEs")
     }
 
     EXPECT_EQ(mismatches, 0);
+}
+
+// ===== Line-review ratchets ===============================================================
+//
+// FORK: two set-shape gates the /line-review sweep of Gen 1-3 turned into recurring findings.
+// Both are RATCHETS, matching the innate-row gates in test/fork/innate_abilities.c: Gens 4-9 have
+// not been line-reviewed and carry well over a hundred instances between them, so failing on those
+// would only wedge CI. Each batch raises this bound as it lands, and the gate holds everything
+// already reviewed.
+//
+// KEEP IN SYNC with sInnateRowsReviewedThroughDex in test/fork/innate_abilities.c -- the two
+// constants track the same sweep and should be bumped together.
+static const u16 sSetShapeReviewedThroughDex = NATIONAL_DEX_DEOXYS; // Gen 1-3 reviewed; Gen 4 next.
+
+static bool32 SetIsDoublesCapable(const struct TrainerMon *set)
+{
+    return set->tags == FORMAT_DOUBLES || set->tags == FORMAT_BOTH;
+}
+
+// FORK: TARGET_FOES_AND_ALLY moves hit the holder's own partner. Nine sets were carrying one on a
+// doubles-tagged build in Gen 3 alone -- Earthquake mostly, plus Surf and Sludge Wave -- every one
+// of them damaging its own teammate for the whole format the tag exists to cover. The fix is
+// usually a single-target twin (Earthquake -> High Horsepower, Surf -> Muddy Water) or, on a
+// special set, the move on the right stat (-> Earth Power).
+//
+// The self-KO moves are exempt: hitting everything adjacent is what they are, and pressing one is a
+// deliberate last act rather than an oversight.
+static bool32 IsDeliberateSelfKoMove(enum Move move)
+{
+    return move == MOVE_EXPLOSION || move == MOVE_SELF_DESTRUCT || move == MOVE_MISTY_EXPLOSION;
+}
+
+TEST("Frontier extended roster: no reviewed doubles set carries a move that hits its own ally")
+{
+    u32 i;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        u32 slot;
+
+        if (SpeciesToNationalPokedexNum(set->species) > sSetShapeReviewedThroughDex)
+            continue;
+        if (!SetIsDoublesCapable(set))
+            continue;
+
+        checked++;
+        for (slot = 0; slot < MAX_MON_MOVES; slot++)
+        {
+            enum Move move = set->moves[slot];
+
+            if (move == MOVE_NONE || IsDeliberateSelfKoMove(move))
+                continue;
+            if (GetMoveTarget(move) != TARGET_FOES_AND_ALLY)
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: %S hits the holder's own partner (TARGET_FOES_AND_ALLY) on a doubles-capable set -- use a single-target twin (Earthquake -> High Horsepower, Surf -> Muddy Water) or retag to FORMAT_SINGLES",
+                            i, gSpeciesInfo[set->species].speciesName, GetMoveName(move));
+        }
+    }
+
+    // Guard against a vacuous pass if the dex bound or the format tags ever change shape.
+    EXPECT_GT(checked, 100);
+    EXPECT_EQ(offenders, 0);
+}
+
+// FORK: a Choice item locks the holder into the first move it uses, so a status move on a Choice set
+// is either never reachable or a trap that ends the set's usefulness. Sharpedo shipped a Choice
+// Scarf build with Destiny Bond, which can never be both chosen and followed up.
+//
+// Three exemptions, all of them cases where the lock costs nothing:
+//   Trick / Switcheroo -- handing the Choice item away IS the payload.
+//   Transform -- Ditto's set is four copies of it, so there is nothing else to be locked out of.
+static bool32 IsChoiceLockSafeStatusMove(enum Move move)
+{
+    return move == MOVE_TRICK || move == MOVE_SWITCHEROO || move == MOVE_TRANSFORM;
+}
+
+TEST("Frontier extended roster: no reviewed Choice set carries a status move the lock would strand")
+{
+    u32 i;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        u32 slot;
+
+        if (SpeciesToNationalPokedexNum(set->species) > sSetShapeReviewedThroughDex)
+            continue;
+        if (set->heldItem != ITEM_CHOICE_BAND && set->heldItem != ITEM_CHOICE_SPECS
+         && set->heldItem != ITEM_CHOICE_SCARF)
+            continue;
+
+        checked++;
+        for (slot = 0; slot < MAX_MON_MOVES; slot++)
+        {
+            enum Move move = set->moves[slot];
+
+            if (move == MOVE_NONE || IsChoiceLockSafeStatusMove(move))
+                continue;
+            if (!IsBattleMoveStatus(move))
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: %S is a status move on a Choice set -- the lock makes it unreachable or a dead end; drop the item or drop the move",
+                            i, gSpeciesInfo[set->species].speciesName, GetMoveName(move));
+        }
+    }
+
+    EXPECT_GT(checked, 10);
+    EXPECT_EQ(offenders, 0);
 }
