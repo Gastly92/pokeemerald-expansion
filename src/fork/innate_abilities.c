@@ -4593,6 +4593,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0383
+        SPECIES_GROUDON,
+        INNATES(
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_SAND_FORCE
+        )
+    },
+    { // 0383
+        SPECIES_GROUDON_PRIMAL,
+        INNATES(
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_SAND_FORCE
+        )
+    },
     { // 0385
         SPECIES_JIRACHI,
         INNATES(
