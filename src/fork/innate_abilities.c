@@ -4751,6 +4751,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_STARAVIA,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_KEEN_EYE,
             ABILITY_RECKLESS
         )
     },
@@ -4758,12 +4759,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_STARAPTOR,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_KEEN_EYE,
+            ABILITY_MOXIE,
             ABILITY_RECKLESS
         )
     },
     { // 0398
         SPECIES_STARAPTOR_MEGA,
         INNATES(
+            ABILITY_INTIMIDATE,
+            ABILITY_KEEN_EYE,
+            ABILITY_MOXIE,
             ABILITY_RECKLESS
         )
     },
