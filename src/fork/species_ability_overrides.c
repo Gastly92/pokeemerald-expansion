@@ -939,6 +939,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BANETTE, 2,
         ABILITY_WANDERING_SPIRIT
     },
+    {
+        SPECIES_BANETTE_MEGA, 0,
+        ABILITY_WANDERING_SPIRIT
+    },
+    {
+        SPECIES_BANETTE_MEGA, 1,
+        ABILITY_WANDERING_SPIRIT
+    },
+    {
+        SPECIES_BANETTE_MEGA, 2,
+        ABILITY_WANDERING_SPIRIT
+    },
     { // 0356
         SPECIES_DUSCLOPS, 1,
         ABILITY_MUMMY
@@ -947,8 +959,44 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CHIMECHO, 1,
         ABILITY_SOUNDPROOF
     },
+    {
+        SPECIES_CHIMECHO_MEGA, 0,
+        ABILITY_SOUNDPROOF
+    },
+    {
+        SPECIES_CHIMECHO_MEGA, 1,
+        ABILITY_SOUNDPROOF
+    },
+    {
+        SPECIES_CHIMECHO_MEGA, 2,
+        ABILITY_SOUNDPROOF
+    },
     { // 0359
         SPECIES_ABSOL, 2,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA, 0,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA, 1,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA, 2,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA_Z, 0,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA_Z, 1,
+        ABILITY_DARK_AURA
+    },
+    {
+        SPECIES_ABSOL_MEGA_Z, 2,
         ABILITY_DARK_AURA
     },
     { // 0365
@@ -979,6 +1027,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_METAGROSS, 1,
         ABILITY_SHEER_FORCE
     },
+    {
+        SPECIES_METAGROSS_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_METAGROSS_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_METAGROSS_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0377
         SPECIES_REGIROCK, 1,
         ABILITY_SAND_STREAM
@@ -995,13 +1055,37 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LATIAS, 1,
         ABILITY_SYNCHRONIZE
     },
+    {
+        SPECIES_LATIAS_MEGA, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_LATIAS_MEGA, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_LATIAS_MEGA, 2,
+        ABILITY_SYNCHRONIZE
+    },
     { // 0381
         SPECIES_LATIOS, 1,
         ABILITY_SYNCHRONIZE
     },
+    {
+        SPECIES_LATIOS_MEGA, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_LATIOS_MEGA, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_LATIOS_MEGA, 2,
+        ABILITY_SYNCHRONIZE
+    },
     { // 0385
         SPECIES_JIRACHI, 1,
-        ABILITY_VICTORY_STAR
+        ABILITY_BULLETPROOF
     },
     { // 0386
         SPECIES_DEOXYS_ATTACK, 1,
@@ -1012,7 +1096,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_TRACE
     },
     { // 0386
-        SPECIES_DEOXYS_SPEED, 1, 
+        SPECIES_DEOXYS_SPEED, 1,
         ABILITY_TRACE
     },
     { // 0389
@@ -1196,6 +1280,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MUMMY
     },
     { // 0478
+        SPECIES_GLALIE, 0,
+        ABILITY_SNOW_WARNING
+    },
+    {
         SPECIES_FROSLASS, 1,
         ABILITY_SNOW_WARNING
     },
