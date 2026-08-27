@@ -11560,12 +11560,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAYQUAZA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_NONE,
+        .heldItem = ITEM_SHARP_BEAK,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_DRAGON_ASCENT,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_EXTREME_SPEED
         },
         .ability = ABILITY_AIR_LOCK,
@@ -11585,7 +11585,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRACO_METEOR,
             MOVE_FIRE_BLAST,
-            MOVE_EARTHQUAKE,
+            MOVE_EARTH_POWER,
             MOVE_EXTREME_SPEED
         },
         .ability = ABILITY_AIR_LOCK,

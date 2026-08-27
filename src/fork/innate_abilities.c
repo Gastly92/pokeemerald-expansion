@@ -4607,6 +4607,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SAND_FORCE
         )
     },
+    { // 0384
+        SPECIES_RAYQUAZA,
+        INNATES(
+            ABILITY_LEVITATE
+        )
+    },
+    { // 0384
+        SPECIES_RAYQUAZA_MEGA,
+        INNATES(
+            ABILITY_LEVITATE
+        )
+    },
     { // 0385
         SPECIES_JIRACHI,
         INNATES(
