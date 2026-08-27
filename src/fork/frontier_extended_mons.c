@@ -11856,19 +11856,19 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_INFERNAPE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_FLARE_BLITZ,
             MOVE_CLOSE_COMBAT,
             MOVE_GUNK_SHOT,
-            MOVE_GRASS_KNOT
+            MOVE_THUNDER_PUNCH
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
@@ -11882,16 +11882,16 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_FAKE_OUT,
             MOVE_CLOSE_COMBAT,
-            MOVE_FIRE_BLAST
+            MOVE_FLARE_BLITZ
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spa = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_FIGHTING,
     },
     {
         .species = SPECIES_INFERNAPE,
@@ -11900,15 +11900,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_OVERHEAT,
-            MOVE_CLOSE_COMBAT,
+            MOVE_AURA_SPHERE,
             MOVE_U_TURN,
             MOVE_GRASS_KNOT
         },
         .ability = ABILITY_FLASH_FIRE,
-        .nature = NATURE(SPE_UP, SPD_DOWN),
+        .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .atk = 252,
-            .spa = 4,
+            .hp = 4,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_FIRE,

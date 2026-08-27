@@ -4690,21 +4690,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHIMCHAR,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_IRON_FIST
+            ABILITY_INNER_FOCUS,
+            ABILITY_IRON_FIST,
+            ABILITY_LIMBER
         )
     },
     { // 0391
         SPECIES_MONFERNO,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_IRON_FIST
+            ABILITY_INNER_FOCUS,
+            ABILITY_IRON_FIST,
+            ABILITY_LIMBER
         )
     },
     { // 0392
         SPECIES_INFERNAPE,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_IRON_FIST
+            ABILITY_INNER_FOCUS,
+            ABILITY_IRON_FIST,
+            ABILITY_LIMBER
         )
     },
     { // 0393
