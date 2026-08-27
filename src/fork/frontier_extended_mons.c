@@ -1059,7 +1059,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIDOKING,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHELL_BELL,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_EARTH_POWER,
@@ -10324,7 +10324,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRAWDAUNT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHELL_BELL,
+        .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -15659,7 +15659,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DARMANITAN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SHELL_BELL,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_FLARE_BLITZ,
