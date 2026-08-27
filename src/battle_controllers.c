@@ -9,6 +9,7 @@
 #include "battle_interface.h"
 #include "battle_message.h"
 #include "battle_setup.h"
+#include "fork/innate_abilities.h" // FORK: innate-aware ability names in battle text (ApplyInnateMessageAbilities)
 #include "battle_tv.h"
 #include "cable_club.h"
 #include "event_data.h"
@@ -1021,6 +1022,7 @@ void BtlController_EmitPrintString(enum BattlerId battler, u32 bufferId, enum St
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
         stringInfo->abilities[i] = gBattleMons[i].ability;
+    ApplyInnateMessageAbilities(stringInfo->abilities); // FORK: a firing innate names itself in {B_ATK_ABILITY} & co.
     for (i = 0; i < TEXT_BUFF_ARRAY_COUNT; i++)
     {
         stringInfo->textBuffs[0][i] = gBattleTextBuff1[i];
@@ -1050,6 +1052,7 @@ void BtlController_EmitPrintSelectionString(enum BattlerId battler, u32 bufferId
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
         stringInfo->abilities[i] = gBattleMons[i].ability;
+    ApplyInnateMessageAbilities(stringInfo->abilities); // FORK: a firing innate names itself in {B_ATK_ABILITY} & co.
     for (i = 0; i < TEXT_BUFF_ARRAY_COUNT; i++)
     {
         stringInfo->textBuffs[0][i] = gBattleTextBuff1[i];

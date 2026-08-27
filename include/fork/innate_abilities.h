@@ -362,4 +362,14 @@ bool32 TryActivateInnateOnDamageEffects(enum BattlerId battler, u32 *index);
 // / pop-up match the real ability.
 bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool32 shouldTrigger, enum AbilityEffect abilityEffect);
 
+// FORK: innate-aware ability names in battle text. Rewrites the per-battler ability snapshot the
+// {B_ATK_ABILITY} / {B_DEF_ABILITY} / {B_SCR_ACTIVE_ABILITY} / {B_EFF_ABILITY} placeholders read
+// (stringInfo->abilities[], filled from gBattleMons[].ability) so that a battler whose *innate* is
+// the ability currently being processed (gLastUsedAbility) is named by that innate instead of by
+// its chosen ability. Hooked from BtlController_EmitPrintString / EmitPrintSelectionString
+// (src/battle_controllers.c) right after the snapshot is taken. `abilities` is an array of
+// MAX_BATTLERS_COUNT entries. No-op when the feature is off. See the definition in
+// src/fork/innate_abilities.c for why gLastUsedAbility (and not abilityPopupOverwrite) is the signal.
+void ApplyInnateMessageAbilities(enum Ability *abilities);
+
 #endif // GUARD_INNATE_ABILITIES_H

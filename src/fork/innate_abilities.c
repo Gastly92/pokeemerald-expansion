@@ -9930,3 +9930,46 @@ bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool
 
     return FALSE;
 }
+
+// FORK: innate-aware ability names in battle text (FEATURE_INNATE_ABILITIES).
+//
+// The ability-name placeholders — {B_ATK_ABILITY}, {B_DEF_ABILITY}, {B_SCR_ACTIVE_ABILITY},
+// {B_EFF_ABILITY} — do NOT read a live global: they read a per-battler snapshot of
+// gBattleMons[].ability taken when the string is queued (stringInfo->abilities[] in
+// BtlController_EmitPrintString, src/battle_controllers.c), i.e. always the CHOSEN ability. An
+// innate's own message therefore named the wrong ability: an innate Ice Body heal on an Alolan
+// Ninetales printed "<mon>'s Snow Warning healed it a little bit!" while the pop-up — which has
+// its own override — correctly said Ice Body.
+//
+// The pop-up's fix (gBattleScripting.abilityPopupOverwrite) can't be reused here, because
+// BattleScript_AbilityPopUp clears it immediately after `showabilitypopup`, before the script
+// reaches its `printstring`. gLastUsedAbility is the ability currently being processed
+// (AbilityBattleEffects sets it to whichever ability it was handed, so the fork's innate drivers
+// put the innate there) and is still live at emit time, so it is the signal used here: when it
+// differs from a battler's chosen ability and that battler's species declares it as an innate,
+// the message is about the innate — snapshot the innate for that battler.
+//
+// Same predicate as RecordAbilityBattle's witnessedIsInnate (src/battle_ai_record.c), and
+// deliberately NOT IsInnateActive(): the effect has already fired, so its message must name it
+// even if the innate would read as suppressed (Mold Breaker, Ability Shield) by the time the text
+// is drawn. A battler whose chosen ability is the one being processed is left untouched, so stock
+// text is byte-for-byte unchanged and the feature flag being off is a no-op.
+//
+// Caveat: a battler that carries innate X can have a message about its *chosen* ability rendered
+// as X if gLastUsedAbility is still a stale X. In practice every ability that produces such a
+// message sets gLastUsedAbility to itself first (that is how the message system already resolves
+// the right name), so the stale window is not reachable from the scripted paths.
+void ApplyInnateMessageAbilities(enum Ability *abilities)
+{
+    if (!GetConfig(FEATURE_INNATE_ABILITIES) || gLastUsedAbility == ABILITY_NONE)
+        return;
+
+    for (u32 battler = 0; battler < MAX_BATTLERS_COUNT; battler++)
+    {
+        if (abilities[battler] == gLastUsedAbility) // this battler's chosen ability is the one firing
+            continue;
+        if (!SpeciesHasInnate(gBattleMons[battler].species, gLastUsedAbility))
+            continue;
+        abilities[battler] = gLastUsedAbility;
+    }
+}

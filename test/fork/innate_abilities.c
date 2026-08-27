@@ -6122,6 +6122,28 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Ice Body heals 1/16 max HP 
     }
 }
 
+// Regression: when the chosen ability is itself an ability that shows a pop-up earlier in the
+// turn (Snow Warning setting the snow), the innate Ice Body heal must still name Ice Body.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Ice Body's pop-up names Ice Body, not the chosen Snow Warning")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_NINETALES_ALOLA, ABILITY_ICE_BODY));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_NINETALES_ALOLA) { Ability(ABILITY_SNOW_WARNING); HP(1); MaxHP(160); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_SNOW_WARNING);
+        ABILITY_POPUP(player, ABILITY_ICE_BODY);
+        HP_BAR(player, damage: -(160 / 16));
+        // The heal message reads its ability name from a per-battler snapshot of the CHOSEN
+        // ability, so before ApplyInnateMessageAbilities() this said "Snow Warning" even though
+        // the pop-up above correctly said Ice Body.
+        MESSAGE("Ninetales's Ice Body healed it a little bit!");
+    }
+}
+
 // ----- Shed Skin (cures a status at end of turn; always under DETERMINISTIC_ABILITIES) -----
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Shed Skin cures status")
 {
