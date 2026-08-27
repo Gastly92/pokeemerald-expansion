@@ -1085,7 +1085,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0385
         SPECIES_JIRACHI, 1,
-        ABILITY_VICTORY_STAR
+        ABILITY_BULLETPROOF
     },
     { // 0386
         SPECIES_DEOXYS_ATTACK, 1,

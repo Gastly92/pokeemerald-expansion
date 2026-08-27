@@ -4622,6 +4622,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0385
         SPECIES_JIRACHI,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_LEVITATE,
             ABILITY_SERENE_GRACE
         )
