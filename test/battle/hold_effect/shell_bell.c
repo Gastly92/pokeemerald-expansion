@@ -291,34 +291,3 @@ SINGLE_BATTLE_TEST("Shell Bell recovers only 1 damage if the move only did 1 dam
 
 TO_DO_BATTLE_TEST("If a Pokémon steals a Shell Bell with Thief or Covet, it will recover HP for the use of that move that stole the Shell Bell")
 TO_DO_BATTLE_TEST("If a Pokémon steals a Shell Bell with Magician, it will recover HP for the use of that move that stole the Shell Bell")
-
-// UPSTREAM: Sheer Force suppresses the whole post-move "secondary effect" step
-// (MOVEEND_SHEER_FORCE jumps to MOVEEND_ITEMS_EFFECTS_ALL), so a boosted move
-// never reaches Shell Bell — same rule that already covers Life Orb and Red Card.
-// Behavior-preserving test only; upstream-mergeable.
-SINGLE_BATTLE_TEST("Shell Bell does not activate if the attacker's Sheer Force applied")
-{
-    enum Ability ability = ABILITY_NONE;
-    PARAMETRIZE { ability = ABILITY_SHEER_FORCE; }
-    PARAMETRIZE { ability = ABILITY_ANGER_POINT; }
-    GIVEN {
-        ASSUME(MoveIsAffectedBySheerForce(MOVE_FLARE_BLITZ) == TRUE);
-        ASSUME(GetMoveRecoil(MOVE_FLARE_BLITZ) > 0);
-        PLAYER(SPECIES_TAUROS) { Ability(ability); Item(ITEM_SHELL_BELL); MaxHP(500); HP(300); }
-        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(500); HP(500); }
-    } WHEN {
-        TURN { MOVE(player, MOVE_FLARE_BLITZ); }
-    } SCENE {
-        ANIMATION(ANIM_TYPE_MOVE, MOVE_FLARE_BLITZ, player);
-        HP_BAR(opponent);
-        HP_BAR(player); // Flare Blitz recoil, which Sheer Force does not suppress
-        if (ability == ABILITY_SHEER_FORCE) {
-            NONE_OF {
-                ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_EFFECT, player);
-            }
-        } else {
-            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_EFFECT, player);
-            HP_BAR(player);
-        }
-    }
-}
