@@ -4579,6 +4579,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TELEPATHY
         )
     },
+    { // 0382
+        SPECIES_KYOGRE,
+        INNATES(
+            ABILITY_HYDRATION,
+            ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0382
+        SPECIES_KYOGRE_PRIMAL,
+        INNATES(
+            ABILITY_HYDRATION,
+            ABILITY_SWIFT_SWIM
+        )
+    },
     { // 0385
         SPECIES_JIRACHI,
         INNATES(

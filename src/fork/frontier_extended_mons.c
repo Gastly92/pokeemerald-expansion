@@ -11476,7 +11476,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_KYOGRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF,
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_WATER_SPOUT,
