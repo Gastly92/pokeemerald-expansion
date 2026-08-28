@@ -14598,7 +14598,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_EXPLOSION
         },
-        .ability = ABILITY_VICTORY_STAR,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 4,
@@ -14618,7 +14618,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_VICTORY_STAR,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
