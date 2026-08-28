@@ -1239,6 +1239,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LUCARIO, 2,
         ABILITY_SHEER_FORCE
     },
+    { // 0448
+        SPECIES_LUCARIO_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA_Z, 0,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA_Z, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA_Z, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0452
         SPECIES_DRAPION, 1,
         ABILITY_POISON_TOUCH

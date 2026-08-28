@@ -5241,7 +5241,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RIOLU,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_STEADFAST
         )
     },
     { // 0448
@@ -5249,21 +5250,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ADAPTABILITY,
             ABILITY_INNER_FOCUS,
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_STEADFAST
         )
     },
     { // 0448
         SPECIES_LUCARIO,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_STEADFAST
         )
     },
     { // 0448
         SPECIES_LUCARIO_MEGA_Z,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_STEADFAST
         )
     },
     { // 0449
