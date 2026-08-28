@@ -15886,6 +15886,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIGHTING,
     },
+    {
+        .species = SPECIES_THROH,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MUSCLE_BAND,
+        .moves =
+        {
+            MOVE_STORM_THROW,
+            MOVE_CIRCLE_THROW,
+            MOVE_KNOCK_OFF,
+            MOVE_ROCK_SLIDE
+        },
+        .ability = ABILITY_SIMPLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIGHTING,
+    },
 
     // 0539
     {
@@ -15897,7 +15917,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF,
             MOVE_STONE_EDGE,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
