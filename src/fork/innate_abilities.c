@@ -5696,19 +5696,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0495
         SPECIES_SNIVY,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SHED_SKIN
         )
     },
     { // 0496
         SPECIES_SERVINE,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SHED_SKIN
         )
     },
     { // 0497
         SPECIES_SERPERIOR,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SHED_SKIN
         )
     },
     { // 0498
