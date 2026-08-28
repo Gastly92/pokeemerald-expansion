@@ -13368,8 +13368,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_KNOCK_OFF,
-            MOVE_POISON_JAB,
-            MOVE_EARTHQUAKE,
+            MOVE_CROSS_POISON,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_TAUNT
         },
         .ability = ABILITY_POISON_TOUCH,
@@ -13389,7 +13389,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SWORDS_DANCE,
             MOVE_KNOCK_OFF,
-            MOVE_POISON_JAB,
+            MOVE_CROSS_POISON,
             MOVE_AQUA_TAIL
         },
         .ability = ABILITY_POISON_TOUCH,

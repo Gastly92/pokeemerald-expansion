@@ -5287,6 +5287,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0451
         SPECIES_SKORUPI,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_KEEN_EYE,
             ABILITY_SNIPER
         )
@@ -5294,6 +5295,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0452
         SPECIES_DRAPION,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_KEEN_EYE,
             ABILITY_SNIPER
         )
