@@ -15066,7 +15066,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SWORDS_DANCE,
             MOVE_EXTREME_SPEED,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_SHADOW_CLAW
         },
         .ability = ABILITY_MULTITYPE,

@@ -5684,6 +5684,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SERENE_GRACE
         )
     },
+    { // 0493
+        SPECIES_ARCEUS_NORMAL,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
     { // 0495
         SPECIES_SNIVY,
         INNATES(
