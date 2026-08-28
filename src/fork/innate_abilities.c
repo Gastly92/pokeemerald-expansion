@@ -5367,6 +5367,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0461
         SPECIES_WEAVILE,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_PICKPOCKET,
             ABILITY_PRESSURE,
             ABILITY_TOUGH_CLAWS
@@ -9031,6 +9032,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0903
         SPECIES_SNEASLER,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_PRESSURE,
             ABILITY_TOUGH_CLAWS,
             ABILITY_UNBURDEN
