@@ -6215,6 +6215,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS
         )
     },
+    { // 0555
+        SPECIES_DARMANITAN,
+        INNATES(
+            ABILITY_INNER_FOCUS
+        )
+    },
+    { // 0555
+        SPECIES_DARMANITAN_ZEN,
+        INNATES(
+            ABILITY_INNER_FOCUS
+        )
+    },
+    { // 0555
+        SPECIES_DARMANITAN_GALAR_STANDARD,
+        INNATES(
+            ABILITY_INNER_FOCUS
+        )
+    },
+    { // 0555
+        SPECIES_DARMANITAN_GALAR_ZEN,
+        INNATES(
+            ABILITY_INNER_FOCUS
+        )
+    },
     { // 0556
         SPECIES_MARACTUS,
         INNATES(
