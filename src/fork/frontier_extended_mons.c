@@ -15538,7 +15538,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND
         },
         .ability = ABILITY_SYNCHRONIZE,
-        .nature = NATURE(SPA_UP, SPE_DOWN),
+        .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
             .def = 252,
