@@ -12821,7 +12821,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
-            MOVE_SHADOW_BALL,
+            MOVE_PAIN_SPLIT,
             MOVE_AIR_SLASH,
             MOVE_HEX,
             MOVE_WILL_O_WISP

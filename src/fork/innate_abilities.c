@@ -5033,6 +5033,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DRIFLOON,
         INNATES(
             ABILITY_AFTERMATH,
+            ABILITY_CURSED_BODY,
             ABILITY_FLARE_BOOST,
             ABILITY_UNBURDEN
         )
@@ -5041,6 +5042,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DRIFBLIM,
         INNATES(
             ABILITY_AFTERMATH,
+            ABILITY_CURSED_BODY,
             ABILITY_FLARE_BOOST,
             ABILITY_UNBURDEN
         )
