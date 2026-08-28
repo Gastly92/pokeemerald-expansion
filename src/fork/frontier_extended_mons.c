@@ -16594,7 +16594,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0),
         .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_GHOST,
     },
@@ -16932,7 +16931,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0),
         .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
@@ -17355,7 +17353,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .iv = IVS(SPE, 0),
         .iv = IVS(SPE, 0),
         .teraType = TYPE_GRASS,
     },
