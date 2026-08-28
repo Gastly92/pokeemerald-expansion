@@ -6898,16 +6898,53 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWARM
         )
     },
+    { // 0633
+        SPECIES_DEINO,
+        INNATES(
+            ABILITY_GLUTTONY
+        )
+    },
+    { // 0634
+        SPECIES_ZWEILOUS,
+        INNATES(
+            ABILITY_GLUTTONY
+        )
+    },
     { // 0635
         SPECIES_HYDREIGON,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_LEVITATE
+        )
+    },
+    { // 0636
+        SPECIES_LARVESTA,
+        INNATES(
+            ABILITY_SWARM
         )
     },
     { // 0637
         SPECIES_VOLCARONA,
         INNATES(
             ABILITY_SWARM
+        )
+    },
+    { // 0638
+        SPECIES_COBALION,
+        INNATES(
+            ABILITY_JUSTIFIED
+        )
+    },
+    { // 0639
+        SPECIES_TERRAKION,
+        INNATES(
+            ABILITY_JUSTIFIED
+        )
+    },
+    { // 0640
+        SPECIES_VIRIZION,
+        INNATES(
+            ABILITY_JUSTIFIED
         )
     },
     { // 0641
