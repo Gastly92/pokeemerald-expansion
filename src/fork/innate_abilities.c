@@ -6271,9 +6271,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0561
         SPECIES_SIGILYPH,
         INNATES(
+            ABILITY_MAGIC_GUARD,
             ABILITY_TINTED_LENS,
-            ABILITY_WONDER_SKIN,
-            ABILITY_MAGIC_GUARD
+            ABILITY_WONDER_SKIN
         )
     },
     { // 0562
@@ -6308,6 +6308,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SOLID_ROCK,
             ABILITY_STURDY,
             ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0566
+        SPECIES_ARCHEN,
+        INNATES(
+            ABILITY_KEEN_EYE
+        )
+    },
+    { // 0567
+        SPECIES_ARCHEOPS,
+        INNATES(
+            ABILITY_KEEN_EYE
         )
     },
     { // 0568

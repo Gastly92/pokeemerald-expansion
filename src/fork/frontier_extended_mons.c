@@ -16537,7 +16537,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SIGILYPH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_AIR_SLASH,
@@ -16578,7 +16578,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_COFAGRIGUS,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
@@ -16594,6 +16594,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
+        .iv = IVS(SPE, 0),
         .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_GHOST,
     },
@@ -16619,6 +16620,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_CARRACOSTA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_LIQUIDATION,
+            MOVE_ROCK_SLIDE,
+            MOVE_AQUA_JET
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0567
     {
@@ -16629,7 +16650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ACROBATICS,
             MOVE_STONE_EDGE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_U_TURN
         },
         .ability = ABILITY_DEFEATIST,
@@ -16644,12 +16665,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCHEOPS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND,
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_STEALTH_ROCK,
             MOVE_STONE_EDGE,
-            MOVE_ACROBATICS,
+            MOVE_DUAL_WINGBEAT,
             MOVE_TAUNT
         },
         .ability = ABILITY_DEFEATIST,
