@@ -5343,6 +5343,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_WATER_VEIL
         )
     },
+    { // 0459
+        SPECIES_SNOVER,
+        INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_SNOW_CLOAK
+        )
+    },
+    { // 0460
+        SPECIES_ABOMASNOW,
+        INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_SNOW_CLOAK
+        )
+    },
+    { // 0460
+        SPECIES_ABOMASNOW_MEGA,
+        INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_SNOW_CLOAK
+        )
+    },
     { // 0461
         SPECIES_WEAVILE,
         INNATES(
