@@ -6967,6 +6967,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRANKSTER
         )
     },
+    { // 0642
+        SPECIES_THUNDURUS_THERIAN,
+        INNATES(
+            ABILITY_DEFIANT
+        )
+    },
     { // 0643
         SPECIES_RESHIRAM,
         INNATES(

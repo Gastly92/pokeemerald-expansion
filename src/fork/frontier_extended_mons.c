@@ -18453,6 +18453,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FLYING,
     },
+    {
+        .species = SPECIES_TORNADUS_THERIAN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_BLEAKWIND_STORM,
+            MOVE_TAUNT,
+            MOVE_ROOST,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_WIND_RIDER,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0642
     {
@@ -18505,11 +18525,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_THUNDERBOLT,
             MOVE_FOCUS_BLAST,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_VOLT_SWITCH
         },
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
+    {
+        .species = SPECIES_THUNDURUS_THERIAN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LIFE_ORB,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_WILDBOLT_STORM,
+            MOVE_SLUDGE_BOMB,
+            MOVE_FOCUS_BLAST
+        },
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
@@ -18570,7 +18610,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_BOLT_STRIKE,
             MOVE_OUTRAGE,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -18589,7 +18629,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_BOLT_STRIKE,
             MOVE_OUTRAGE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_VOLT_SWITCH
         },
         .ability = ABILITY_MOTOR_DRIVE,
@@ -18610,7 +18650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_EARTH_POWER,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_FOCUS_BLAST,
             MOVE_PSYCHIC
         },
@@ -18623,6 +18663,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        .species = SPECIES_LANDORUS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_ROCK_POLISH,
+            MOVE_SANDSEAR_STORM,
+            MOVE_EARTH_POWER,
+            MOVE_FOCUS_BLAST
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0645
     {
@@ -18631,7 +18691,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_STONE_EDGE,
             MOVE_U_TURN,
             MOVE_KNOCK_OFF
