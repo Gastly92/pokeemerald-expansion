@@ -5914,6 +5914,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SUPER_LUCK
         )
     },
+    { // 0522
+        SPECIES_BLITZLE,
+        INNATES(
+            ABILITY_QUICK_FEET
+        )
+    },
+    { // 0523
+        SPECIES_ZEBSTRIKA,
+        INNATES(
+            ABILITY_QUICK_FEET
+        )
+    },
     { // 0524
         SPECIES_ROGGENROLA,
         INNATES(

@@ -15577,15 +15577,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
-            MOVE_WILD_CHARGE,
+            MOVE_THUNDERBOLT,
             MOVE_HEAT_WAVE,
             MOVE_VOLT_SWITCH,
             MOVE_OVERHEAT
         },
         .ability = ABILITY_MOTOR_DRIVE,
-        .nature = NATURE(SPE_UP, DEF_DOWN),
+        .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .atk = 4,
+            .hp = 4,
             .spa = 252,
             .spe = 252
         ),
