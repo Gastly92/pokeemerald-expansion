@@ -13454,14 +13454,34 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_CARNIVINE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BIG_ROOT,
+        .moves =
+        {
+            MOVE_LEECH_SEED,
+            MOVE_SUBSTITUTE,
+            MOVE_GIGA_DRAIN,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SEED_SOWER,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spa = 4
         ),
         .teraType = TYPE_GRASS,
     },
