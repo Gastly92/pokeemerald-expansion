@@ -15452,7 +15452,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF
         },
         .ability = ABILITY_GRASSY_SURGE,
-        .nature = NATURE(SPE_UP, SPD_DOWN),
+        .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
             .spa = 252,
