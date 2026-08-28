@@ -5050,12 +5050,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0427
         SPECIES_BUNEARY,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_LIMBER
         )
     },
     { // 0428
         SPECIES_LOPUNNY,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_CUTE_CHARM,
             ABILITY_LIMBER
         )
@@ -5063,8 +5065,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0428
         SPECIES_LOPUNNY_MEGA,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_CUTE_CHARM,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_SCRAPPY
         )
     },
     { // 0429
