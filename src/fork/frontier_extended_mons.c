@@ -14992,6 +14992,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_DARK,
     },
+    {
+        .species = SPECIES_DARKRAI,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_DARK_VOID,
+            MOVE_DARK_PULSE,
+            MOVE_ICE_BEAM,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
 
     // 0492
     {
