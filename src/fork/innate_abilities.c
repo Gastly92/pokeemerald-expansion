@@ -5804,7 +5804,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_SAND_RUSH,
-            ABILITY_SCRAPPY
+            ABILITY_SCRAPPY,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0508
@@ -5812,7 +5813,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_SAND_RUSH,
-            ABILITY_SCRAPPY
+            ABILITY_SCRAPPY,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0509
