@@ -16872,6 +16872,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_PSYCHIC,
     },
+    {
+        .species = SPECIES_GOTHITELLE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_SPECS,
+        .moves =
+        {
+            MOVE_TRICK,
+            MOVE_PSYCHIC,
+            MOVE_SHADOW_BALL,
+            MOVE_DAZZLING_GLEAM
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
+    },
 
     // 0579
     {
@@ -16896,7 +16916,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_REUNICLUS,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
@@ -16912,6 +16932,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
+        .iv = IVS(SPE, 0),
         .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
@@ -16937,6 +16958,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FLYING,
     },
+    {
+        .species = SPECIES_SWANNA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_HURRICANE,
+            MOVE_ICY_WIND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_STORM_DRAIN,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GROUND,
+    },
 
     // 0584
     {
@@ -16958,6 +16999,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
+    },
+    {
+        .species = SPECIES_VANILLUXE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ICY_ROCK,
+        .moves =
+        {
+            MOVE_AURORA_VEIL,
+            MOVE_ICE_BEAM,
+            MOVE_FREEZE_DRY,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0586

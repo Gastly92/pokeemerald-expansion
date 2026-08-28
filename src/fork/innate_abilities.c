@@ -6414,27 +6414,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SOLOSIS,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_OVERCOAT,
-            ABILITY_REGENERATOR,
-            ABILITY_MAGIC_GUARD
+            ABILITY_REGENERATOR
         )
     },
     { // 0578
         SPECIES_DUOSION,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_OVERCOAT,
-            ABILITY_REGENERATOR,
-            ABILITY_MAGIC_GUARD
+            ABILITY_REGENERATOR
         )
     },
     { // 0579
         SPECIES_REUNICLUS,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_OVERCOAT,
-            ABILITY_REGENERATOR,
-            ABILITY_MAGIC_GUARD
+            ABILITY_REGENERATOR
         )
     },
     { // 0580
@@ -6473,7 +6473,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VANILLUXE,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 0585
