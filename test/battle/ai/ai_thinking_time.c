@@ -6,7 +6,7 @@
 #define AI_FRAME_CEILING_DOUBLES_NO_FLAGS                       25 // +1: Batch Y6 innate switch-in stat sims (Intrepid Sword/Dauntless Shield) in SetBattlerStatStagesForSwitchin; +2: Batch Y8 Teravolt/Turboblaze add two IsInnateActive checks to IsMoldBreakerTypeAbility, which the AI runs
 #define AI_FRAME_CEILING_DOUBLES_SMART_TRAINER                  42 // +1: Tier 5.1 innate Mega Sol adds an IsInnateActive check to GetAttackerWeather, which the AI's shared damage calc runs; +1: Tier 5.5 innate Mold Breaker adds an IsInnateActive check to IsMoldBreakerTypeAbility, which the AI runs; +1: Batch Y8 Teravolt/Turboblaze add two more IsInnateActive checks there; +1: upstream sync through 1.16.3, chiefly #10542 replacing the BATTLE_PARTNER XOR macro with the GetPartnerBattler() call chain (see note below)
 #define AI_FRAME_CEILING_STEVEN_MULTI                           30 // +1: Tier 5.5 innate Mold Breaker adds an IsInnateActive check to IsMoldBreakerTypeAbility, which the AI runs; +1: Batch Y8 Teravolt/Turboblaze add two more IsInnateActive checks there; +1: upstream sync through 1.16.3 (see note below)
-#define AI_FRAME_CEILING_STEVEN_MULTI_SMART_TRAINER             34 // +1: Batch S innate AI reads (Infiltrator/Skill Link/etc.); +1: Batch U side-wide AI reads (Aroma Veil/Flower Veil/Telepathy); +1: Tier 5.5 innate Mold Breaker adds an IsInnateActive check to IsMoldBreakerTypeAbility, which the AI runs; +1: upstream sync through 1.16.3 (see note below). (Batch W2 gave GetSpeciesAbility's species_ability_overrides lookup an O(1) bitmap fast-path, so the growing override table no longer taxes this scenario -- it stays flat despite W2's added rows, and future Batch W growth is free.)
+#define AI_FRAME_CEILING_STEVEN_MULTI_SMART_TRAINER             35 // +1: Batch S innate AI reads (Infiltrator/Skill Link/etc.); +1: Batch U side-wide AI reads (Aroma Veil/Flower Veil/Telepathy); +1: Tier 5.5 innate Mold Breaker adds an IsInnateActive check to IsMoldBreakerTypeAbility, which the AI runs; +1: upstream sync through 1.16.3 (see note below); +1: REGISTERING a config tag (BUFF_ACCURACY_ITEMS_REVEAL) -- see the config-tag note below. (Batch W2 gave GetSpeciesAbility's species_ability_overrides lookup an O(1) bitmap fast-path, so the growing override table no longer taxes this scenario -- it stays flat despite W2's added rows, and future Batch W growth is free.)
 // FORK note on the 1.16.3 sync +1s: upstream #10542 removed the BATTLE_PARTNER/BATTLE_OPPOSITE XOR macros in
 // favour of GetPartnerBattler()/GetOppositeBattler(), which resolve through
 // GetBattlerAtPosition(GetPartnerPosition(GetBattlerPosition(b))) -- three calls where there used to be one XOR.
@@ -15,6 +15,19 @@
 // IsInnateOnSide, the innate partner-ability scoring block in battle_ai_main.c) were hoisted to locals first;
 // that trims real work but does not recover a whole frame, hence the +1. Singles and doubles-no-flags are
 // unaffected, so this is the refactor's fixed cost, not an AI-logic explosion.
+// FORK: the config-tag note. The last +1 above is NOT the AI doing more work -- it is the cost of
+// the runtime config table growing by one entry. Verified by bisection: with the whole
+// BUFF_ACCURACY_ITEMS_REVEAL feature compiled in but its F(...) line removed from
+// BUFF_CONFIG_DEFINITIONS (and the flag read hardcoded), this scenario drops back under the old
+// ceiling; putting the registration back pushes it over. The mechanism is GetConfigInternal
+// (src/config_changes.c): every registered tag adds a case to its switch, and the AI calls
+// GetConfig() constantly while scoring moves. A TESTING build pays this twice over -- it carries
+// BOTH the gConfigChangesTestOverride switch and the production one, plus the null-check that
+// picks between them -- so the measured cost here overstates what the shipped ROM pays.
+// Consequence worth knowing before the next flag: this ceiling will drift upward roughly per
+// registered config tag, independent of any AI change. A fork flag that never needs per-test
+// WITH_CONFIG toggling can avoid the cost entirely by living in config/fork.h as a plain
+// compile-time #if instead of being registered (see CLAUDE.md, "Define our *own* config flags").
 #define AI_FRAME_CEILING_CHECK                                  FALSE // If TRUE, forces all thinking time tests to fail. Useful for printing all actual frame times to console by running the tests
 
 AI_SINGLE_BATTLE_TEST("AI thinking time doesn't explode (singles, no flags)")
