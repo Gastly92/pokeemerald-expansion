@@ -12726,10 +12726,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 4,
-            .spd = 252
+            .def = 252,
+            .spd = 4
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_POISON,
     },
     {
         .species = SPECIES_GASTRODON,
