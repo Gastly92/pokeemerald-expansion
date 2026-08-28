@@ -12970,12 +12970,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FAKE_OUT,
-            MOVE_FACADE,
+            MOVE_RETURN,
             MOVE_KNOCK_OFF,
             MOVE_PLAY_ROUGH
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_PURUGLY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_BAND,
+        .moves =
+        {
+            MOVE_RETURN,
+            MOVE_KNOCK_OFF,
+            MOVE_PLAY_ROUGH,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
             .atk = 252,

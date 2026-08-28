@@ -5100,6 +5100,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PURUGLY,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_INTIMIDATE,
             ABILITY_OWN_TEMPO,
             ABILITY_THICK_FAT
         )
