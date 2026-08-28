@@ -12320,7 +12320,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_STEALTH_ROCK,
-            MOVE_IRON_HEAD,
+            MOVE_BODY_PRESS,
             MOVE_ROAR,
             MOVE_TOXIC
         },
@@ -12329,7 +12329,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 252,
             .def = 252,
-            .spa = 4
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_BASTIODON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_IRON_DEFENSE,
+            MOVE_BODY_PRESS,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
         ),
         .teraType = TYPE_STEEL,
     },
