@@ -1535,6 +1535,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LEAVANNY, 2,
         ABILITY_HUSTLE
     },
+    { // 0545
+        SPECIES_SCOLIPEDE_MEGA, 0,
+        ABILITY_POISON_POINT
+    },
+    { // 0545
+        SPECIES_SCOLIPEDE_MEGA, 1,
+        ABILITY_POISON_POINT
+    },
+    { // 0545
+        SPECIES_SCOLIPEDE_MEGA, 2,
+        ABILITY_POISON_POINT
+    },
     { // 0547
         SPECIES_WHIMSICOTT, 2,
         ABILITY_COTTON_DOWN

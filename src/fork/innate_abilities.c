@@ -6106,7 +6106,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0545
         SPECIES_SCOLIPEDE_MEGA,
         INNATES(
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_SPEED_BOOST,
+            ABILITY_SWARM
         )
     },
     { // 0546

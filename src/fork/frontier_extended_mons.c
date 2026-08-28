@@ -16001,7 +16001,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_MEGAHORN,
             MOVE_POISON_JAB,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
