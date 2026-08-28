@@ -36,4 +36,22 @@ bool32 MoveGainsDeterministicRecharge(enum Move move);
 // scaling charges them for the whole drawback the flag removes.
 u32 DeterministicEffectiveAccuracy(enum Move move);
 
+// BUFF_ACCURACY_ITEMS: how far the ATTACKER's accuracy hold item neutralises the
+// DETERMINISTIC_ACCURACY_EVASION PP economy against one target. Wide Lens cancels the flat
+// evasion taxes; Zoom Lens cancels those AND the whole stat-stage half -- the target's
+// evasion boosts and the holder's own accuracy drops alike -- but only on turns its holder
+// moves second. Ordered so that a caller can test `>= ACCURACY_ITEM_RELIEF_TAXES` for
+// "cancels the flat taxes".
+enum AccuracyItemRelief
+{
+    ACCURACY_ITEM_RELIEF_NONE = 0, // no accuracy item, or Zoom Lens outside its window
+    ACCURACY_ITEM_RELIEF_TAXES,    // Wide Lens: flat item/ability evasion taxes only
+    ACCURACY_ITEM_RELIEF_FULL,     // Zoom Lens (moving second): taxes + BOTH stat-stage halves
+};
+
+// BUFF_ACCURACY_ITEMS: the relief `battlerAtk`'s held accuracy item grants against
+// `battlerDef` this turn. Returns ACCURACY_ITEM_RELIEF_NONE whenever BUFF_ACCURACY_ITEMS or
+// DETERMINISTIC_ACCURACY_EVASION is off, so stock behavior is untouched.
+u32 GetAccuracyItemRelief(enum BattlerId battlerAtk, enum BattlerId battlerDef);
+
 #endif // GUARD_FORK_DETERMINISTIC_MOVES_H

@@ -3,10 +3,12 @@
 #include "data.h"
 #include "battle_frontier.h"
 #include "config_changes.h"
+#include "item.h" // FORK: gItemsInfo (accuracy-item redundancy test)
 #include "fork/frontier_extended_mons.h"
 #include "fork/innate_abilities.h"
 #include "fork/species_ability_overrides.h"
 #include "constants/abilities.h"
+#include "constants/items.h" // FORK: ITEM_WIDE_LENS / ITEM_ZOOM_LENS
 #include "constants/species.h"
 #include "constants/items.h"
 #include "move.h"
@@ -172,6 +174,110 @@ TEST("Frontier extended roster: no species ability override duplicates a species
 // behind FEATURE_INNATE_ABILITIES fixed that (the override is invisible to flag-off upstream tests),
 // so the escape hatch is gone. This test bans ABILITY_NONE outright and fails loudly if a new set
 // reintroduces it -- give the set a fork override (src/fork/species_ability_overrides.c) instead.
+// FORK: BUFF_ACCURACY_ITEMS (config/buff.h) gives Wide Lens and Zoom Lens a job inside the
+// DETERMINISTIC_ACCURACY_EVASION PP economy: Wide Lens cancels the flat evasion taxes a target
+// imposes (BrightPowder / Lax Incense, Sand Veil in sand, Snow Cloak in snow, Tangled Feet while
+// confused, Wonder Skin vs a status move), and Zoom Lens cancels those AND the whole stat-stage
+// half while its holder moves second.
+//
+// Some abilities already do that job for free, which makes THAT HALF of the item worthless -- the
+// same authoring trap as handing an innate-Levitate mon an Air Balloon. Two distinct wastes exist,
+// and this test fails on both:
+//
+//   1. NO GUARD kills both items outright. GetDeterministicMoveTargetPPTax() returns 0 outright
+//      for a No Guard attacker, and GetAccEvasionStageDelta() forces its ignorePenalties path, so
+//      there is no penalty left for either lens to cancel. The item does literally nothing.
+//   2. An ability that already ignores the target's EVASION STAGES -- Compound Eyes, Keen Eye,
+//      Mind's Eye, Unaware, Victory Star, and (at B_ILLUMINATE_EFFECT >= GEN_9) Illuminate --
+//      covers exactly Zoom Lens's differentiator. Zoom Lens then relieves nothing Wide Lens
+//      would not, while still being restricted to the turns its holder moves second, so it is
+//      strictly worse than Wide Lens on that mon and the set should just hold Wide Lens.
+//
+// Both the set's CHOSEN ability and the species' always-on innates count, since either grants
+// the effect in battle. Rule 2 deliberately does not fire on Wide Lens: the flat-tax half is
+// still live for a Compound Eyes holder, so Wide Lens there is a real (if narrow) pick.
+//
+// SCOPE -- why this only runs with BUFF_ACCURACY_ITEMS_REVEAL off. That flag gives the lenses a
+// SECOND, ability-independent job: feeding the INFO viewer's reveal bits (Wide Lens = every seen
+// foe's held item, Zoom Lens = a watched foe's ability and full moveset). No ability neutralises
+// that, so with the reveal on a lens ALWAYS does something and neither rule below is a real
+// error any more -- a No Guard mon holding one still gets the reveal, and Zoom Lens still buys
+// depth where Wide Lens buys breadth, so it is not "strictly worse" either. Failing those sets
+// would reject legitimate authoring, so the sweep is scoped to the configuration where the PP
+// relief is the item's whole job. It stays a live guard if the reveal is ever turned off, and
+// documents exactly what the reveal is carrying. Do not widen it back without re-checking that
+// premise.
+TEST("Frontier extended roster: no set holds an accuracy item its ability already makes redundant")
+{
+    static const enum Ability sEvasionStageIgnorers[] =
+    {
+        ABILITY_COMPOUND_EYES,
+        ABILITY_KEEN_EYE,
+        ABILITY_MINDS_EYE,
+        ABILITY_UNAWARE,
+        ABILITY_VICTORY_STAR,
+    };
+
+    u32 i, j;
+    u32 wasted = 0;
+
+    // The innate layer is gated by FEATURE_INNATE_ABILITIES, which TestInitConfigData
+    // force-disables by default; the real frontier runs with it on, so opt in.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+    // Judge the roster as if the PP relief were the lenses' only job -- see SCOPE above.
+    SetConfig(CONFIG_BUFF_ACCURACY_ITEMS_REVEAL, FALSE);
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        bool32 isWideLens = (set->heldItem == ITEM_WIDE_LENS);
+        bool32 isZoomLens = (set->heldItem == ITEM_ZOOM_LENS);
+        bool32 ignoresStages = FALSE;
+
+        if (!isWideLens && !isZoomLens)
+            continue;
+
+        // Rule 1: No Guard leaves neither lens anything to cancel.
+        if (set->ability == ABILITY_NO_GUARD || SpeciesHasInnate(set->species, ABILITY_NO_GUARD))
+        {
+            wasted++;
+            Test_MgbaPrintf("roster[%d] %S: %S buys no PP relief next to No Guard (no accuracy penalty is ever charged) -- pick another item",
+                            i,
+                            gSpeciesInfo[set->species].speciesName,
+                            gItemsInfo[set->heldItem].name);
+            continue;
+        }
+
+        if (!isZoomLens)
+            continue;
+
+        // Rule 2: Zoom Lens's stage half, already covered by an ability.
+        for (j = 0; j < ARRAY_COUNT(sEvasionStageIgnorers); j++)
+        {
+            if (set->ability == sEvasionStageIgnorers[j] || SpeciesHasInnate(set->species, sEvasionStageIgnorers[j]))
+            {
+                ignoresStages = TRUE;
+                break;
+            }
+        }
+        // Illuminate only ignores evasion from Gen 9 on; below that it is not in this club.
+        if (!ignoresStages
+         && GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9
+         && (set->ability == ABILITY_ILLUMINATE || SpeciesHasInnate(set->species, ABILITY_ILLUMINATE)))
+            ignoresStages = TRUE;
+
+        if (ignoresStages)
+        {
+            wasted++;
+            Test_MgbaPrintf("roster[%d] %S: Zoom Lens is strictly worse than Wide Lens here -- its ability already ignores the target's evasion stages, so only the flat-tax half is left and Zoom Lens pays a moving-second condition for it",
+                            i,
+                            gSpeciesInfo[set->species].speciesName);
+        }
+    }
+
+    EXPECT_EQ(wasted, 0);
+}
+
 TEST("Frontier extended roster: no set uses ABILITY_NONE (every set names a real chosen ability)")
 {
     u32 i;

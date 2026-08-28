@@ -1155,7 +1155,13 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
                 if (singleTargetFoe && t != cv->battlerDef)
                     continue;
                 enum Ability defAbility = GetBattlerAbility(t);
-                s32 delta = GetAccEvasionStageDelta(cv->battlerAtk, t, cv->move, atkAbility, defAbility, micleActive);
+                // FORK: BUFF_ACCURACY_ITEMS -- a Zoom Lens holder moving second also ignores the
+                // target's evasion stage boosts, the same ignorePenalties treatment Micle Berry
+                // and No Guard get. Wide Lens stops at the flat taxes (handled inside the tax
+                // helper below), so it deliberately does NOT reach this line.
+                bool32 ignorePenalties = micleActive
+                                      || GetAccuracyItemRelief(cv->battlerAtk, t) == ACCURACY_ITEM_RELIEF_FULL;
+                s32 delta = GetAccEvasionStageDelta(cv->battlerAtk, t, cv->move, atkAbility, defAbility, ignorePenalties);
                 if (delta > 0)
                     deterministicPpRefund += delta;
                 else

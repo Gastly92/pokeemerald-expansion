@@ -21,4 +21,10 @@ void CB2_FrontierBattleInfo(void);
 // in-battle action menu (INFO slot) and the in-battle party menu (SELECT).
 void OpenFrontierBattleInfo(void (*returnCallback)(void));
 
+// FORK: BUFF_ACCURACY_ITEMS_REVEAL -- writes the reveal bits the player's held Wide Lens
+// (every seen foe's item) and Zoom Lens (the ability and full moveset of a foe that has used
+// a move) can see. Called when the viewer is opened; exposed so test/fork/buff_accuracy_items.c
+// can assert the bits directly rather than driving the UI.
+void ApplyAccuracyItemReveals(void);
+
 #endif // GUARD_FRONTIER_BATTLE_INFO_H
