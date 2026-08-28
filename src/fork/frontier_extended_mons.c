@@ -17252,6 +17252,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_ALOMOMOLA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_LIFE_DEW,
+            MOVE_HELPING_HAND,
+            MOVE_ICY_WIND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0596
     {
@@ -17335,6 +17355,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
+        .iv = IVS(SPE, 0),
         .iv = IVS(SPE, 0),
         .teraType = TYPE_GRASS,
     },
