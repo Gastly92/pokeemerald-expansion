@@ -2894,8 +2894,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GLIGAR,
         INNATES(
             ABILITY_HYPER_CUTTER,
-            ABILITY_INFILTRATOR,
             ABILITY_IMMUNITY,
+            ABILITY_INFILTRATOR,
             ABILITY_SAND_VEIL
         )
     },
