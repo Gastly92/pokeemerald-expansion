@@ -6069,13 +6069,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
-            ABILITY_OVERCOAT
+            ABILITY_OVERCOAT,
+            ABILITY_SWARM
         )
     },
     { // 0542
         SPECIES_LEAVANNY,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD,
             ABILITY_OVERCOAT,
             ABILITY_SWARM
         )
