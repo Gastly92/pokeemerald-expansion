@@ -15663,7 +15663,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_IRON_HEAD,
             MOVE_ROCK_SLIDE,
             MOVE_RAPID_SPIN
@@ -15703,7 +15703,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_DRILL_RUN,
             MOVE_IRON_HEAD,
             MOVE_ROCK_SLIDE,
             MOVE_HIGH_HORSEPOWER

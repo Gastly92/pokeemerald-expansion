@@ -1495,6 +1495,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_EXCADRILL, 2,
         ABILITY_SAND_STREAM
     },
+    { // 0530
+        SPECIES_EXCADRILL_MEGA, 0,
+        ABILITY_SAND_STREAM
+    },
+    { // 0530
+        SPECIES_EXCADRILL_MEGA, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0530
+        SPECIES_EXCADRILL_MEGA, 2,
+        ABILITY_SAND_STREAM
+    },
     { // 0531
         SPECIES_AUDINO, 1,
         ABILITY_SYNCHRONIZE
