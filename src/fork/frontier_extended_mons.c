@@ -13812,7 +13812,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_WILD_CHARGE,
             MOVE_ICE_PUNCH,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_CROSS_CHOP
         },
         .ability = ABILITY_ELECTRIC_SURGE,
@@ -13832,7 +13832,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_WILD_CHARGE,
             MOVE_ICE_PUNCH,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_VOLT_SWITCH
         },
         .ability = ABILITY_MOTOR_DRIVE,
