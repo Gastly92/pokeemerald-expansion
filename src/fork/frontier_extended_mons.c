@@ -25673,6 +25673,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
     },
     {
+        .species = SPECIES_BASCULEGION,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SPELL_TAG,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_LAST_RESPECTS,
+            MOVE_WAVE_CRASH,
+            MOVE_AQUA_JET
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
         .species = SPECIES_BASCULEGION_F,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS,
@@ -25689,6 +25709,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_BASCULEGION_F,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MYSTIC_WATER,
+        .moves =
+        {
+            MOVE_MUDDY_WATER,
+            MOVE_SHADOW_BALL,
+            MOVE_ICY_WIND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
         ),
         .teraType = TYPE_WATER,
     },
