@@ -66,11 +66,13 @@
 //   - Wide Lens (HOLD_EFFECT_WIDE_LENS): the holder's moves stop paying the flat evasion
 //     taxes -- a target's BrightPowder / Lax Incense, Sand Veil in sand, Snow Cloak in
 //     snow, Tangled Feet while confused, Wonder Skin against a status move.
-//   - Zoom Lens (HOLD_EFFECT_ZOOM_LENS): the same, AND the target's evasion stat-stage
-//     boosts are ignored (the ignorePenalties treatment No Guard and Micle Berry already
-//     get) -- but only on turns the holder moves second, its stock condition, lifted
-//     verbatim from GetTotalAccuracy(). Stronger in a narrower window, mirroring its
-//     bigger stock boost (holdEffectParam 20 vs Wide Lens's 10).
+//   - Zoom Lens (HOLD_EFFECT_ZOOM_LENS): the same, AND the whole stat-stage half of the
+//     axis is ignored -- BOTH the target's evasion boosts and the holder's OWN accuracy
+//     drops (e.g. from Sand Attack). That is the entire ignorePenalties treatment No Guard
+//     and Micle Berry already get, reused wholesale rather than reimplemented, which is why
+//     the accuracy-drop half comes along. Only on turns the holder moves second, its stock
+//     condition, lifted verbatim from GetTotalAccuracy(). Stronger in a narrower window,
+//     mirroring its bigger stock boost (holdEffectParam 20 vs Wide Lens's 10).
 // PURE BOON, like every other accuracy source in the PP economy: these only ever cancel a
 // penalty, never turn into a refund, so an accuracy item can reduce a move's cost to the
 // base 1 PP but never below it. Against a target with no evasion trick at all they do

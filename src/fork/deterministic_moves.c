@@ -159,6 +159,12 @@ u32 DeterministicEffectiveAccuracy(enum Move move)
 // PURE BOON: the caller only ever uses this to cancel a penalty, never to grant a refund, so
 // an accuracy item can bring a move back to its base 1 PP but never below. Against a target
 // with no evasion trick there is nothing to cancel and the item does nothing.
+//
+// Note what ACCURACY_ITEM_RELIEF_FULL buys: the caller feeds it to GetAccEvasionStageDelta's
+// ignorePenalties, which zeroes BOTH stat-stage penalties -- the target's evasion boosts and
+// the holder's own accuracy drops. That is deliberate (it is the same switch No Guard and
+// Micle Berry flip, reused rather than reimplemented), so Zoom Lens shrugs off a Sand Attack
+// as well as a Double Team. Wide Lens stops at ACCURACY_ITEM_RELIEF_TAXES and gets neither.
 u32 GetAccuracyItemRelief(enum BattlerId battlerAtk, enum BattlerId battlerDef)
 {
     // Both gates matter: the buff is meaningless without the PP economy it plugs into, and
