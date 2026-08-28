@@ -13726,13 +13726,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_STONE_EDGE,
             MOVE_STEALTH_ROCK,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_LIGHTNING_ROD,
-        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
             .atk = 4,
@@ -13748,7 +13748,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SWORDS_DANCE,
             MOVE_EARTHQUAKE,
-            MOVE_STONE_EDGE,
+            MOVE_HEAD_SMASH,
             MOVE_MEGAHORN
         },
         .ability = ABILITY_BULLETPROOF,
