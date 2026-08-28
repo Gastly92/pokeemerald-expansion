@@ -12083,6 +12083,13 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
     if (defAbility == ABILITY_NO_GUARD || GetBattlerAbility(battlerAtk) == ABILITY_NO_GUARD)
         return 0;
 
+    // FORK: BUFF_ACCURACY_ITEMS -- the attacker's Wide Lens (always) or Zoom Lens (on turns it
+    // moves second) cancels the flat evasion taxes below, restoring the attacker's half of the
+    // accuracy axis that DETERMINISTIC_ACCURACY_EVASION otherwise dropped. Returns
+    // ACCURACY_ITEM_RELIEF_NONE with either flag off, so stock behavior is untouched.
+    if (GetAccuracyItemRelief(battlerAtk, battlerDef) >= ACCURACY_ITEM_RELIEF_TAXES)
+        return 0;
+
     if (IsBattleMoveStatus(move))
     {
         if (defAbility == ABILITY_WONDER_SKIN || IsInnateActive(battlerDef, ABILITY_WONDER_SKIN)) // FORK: credit an innate Wonder Skin too
@@ -12172,7 +12179,12 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
                 if (singleTargetFoe && t != primaryDef)
                     continue;
                 enum Ability defAbility = GetBattlerAbility(t);
-                s32 delta = GetAccEvasionStageDelta(battlerAtk, t, move, atkAbility, defAbility, micleActive);
+                // FORK: BUFF_ACCURACY_ITEMS -- mirrors CancelerPPDeduction. Zoom Lens's window
+                // depends on turn order, which is not decided yet at move-select time, so this
+                // projection reads it as closed and under-promises rather than over-promises.
+                bool32 ignorePenalties = micleActive
+                                      || GetAccuracyItemRelief(battlerAtk, t) == ACCURACY_ITEM_RELIEF_FULL;
+                s32 delta = GetAccEvasionStageDelta(battlerAtk, t, move, atkAbility, defAbility, ignorePenalties);
                 if (delta > 0)
                     refund += delta;
                 else

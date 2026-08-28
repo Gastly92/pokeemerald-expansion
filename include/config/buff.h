@@ -54,4 +54,29 @@
 // by default - the buff is the stacking + immediate re-drain, not a bigger tick.
 #define BUFF_LEECH_SEED_DENOMINATOR 8
 
+// When TRUE, the two accuracy-boosting hold items get a purpose again under
+// DETERMINISTIC_ACCURACY_EVASION. That flag removes accuracy as a hit/miss axis and
+// replaces it with a PP economy, but it only carried the DEFENDER's half across:
+// BrightPowder / Lax Incense still tax the attacker a PP (GetDeterministicMoveTargetPPTax),
+// while Wide Lens and Zoom Lens kept multiplying an accuracy figure that nothing reads --
+// DoesMoveMissTarget() returns FALSE before it ever calls GetTotalAccuracy(). Both items
+// are therefore completely dead in a shipped build, exactly the hole Blunder Policy was in.
+// This flag closes it from the attacker's side, mirroring how the fork repurposed the
+// accuracy-boosting ABILITIES (Compound Eyes / Keen Eye / Illuminate) into evasion-ignore:
+//   - Wide Lens (HOLD_EFFECT_WIDE_LENS): the holder's moves stop paying the flat evasion
+//     taxes -- a target's BrightPowder / Lax Incense, Sand Veil in sand, Snow Cloak in
+//     snow, Tangled Feet while confused, Wonder Skin against a status move.
+//   - Zoom Lens (HOLD_EFFECT_ZOOM_LENS): the same, AND the target's evasion stat-stage
+//     boosts are ignored (the ignorePenalties treatment No Guard and Micle Berry already
+//     get) -- but only on turns the holder moves second, its stock condition, lifted
+//     verbatim from GetTotalAccuracy(). Stronger in a narrower window, mirroring its
+//     bigger stock boost (holdEffectParam 20 vs Wide Lens's 10).
+// PURE BOON, like every other accuracy source in the PP economy: these only ever cancel a
+// penalty, never turn into a refund, so an accuracy item can reduce a move's cost to the
+// base 1 PP but never below it. Against a target with no evasion trick at all they do
+// nothing. See GetAccuracyItemRelief() in src/fork/deterministic_moves.c, and its two
+// consumers -- CancelerPPDeduction() in src/battle_move_resolution.c and the move-info
+// projection GetProjectedMovePPCost() in src/battle_util.c.
+#define BUFF_ACCURACY_ITEMS TRUE
+
 #endif // GUARD_CONFIG_BUFF_H

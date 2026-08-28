@@ -1,6 +1,7 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_util.h"
+#include "battle_script_commands.h" // FORK: HasBattlerActedThisTurn (Zoom Lens's moving-second window)
 #include "config_changes.h"
 #include "move.h"
 #include "random.h"
@@ -141,4 +142,42 @@ u32 DeterministicEffectiveAccuracy(enum Move move)
         accuracy = (accuracy * DETERMINISTIC_EXTRA_MISS_COST_PERCENT) / 100;
 
     return accuracy;
+}
+
+// BUFF_ACCURACY_ITEMS — how far the attacker's held accuracy item neutralises the
+// DETERMINISTIC_ACCURACY_EVASION PP economy against one target.
+//
+// That flag turned accuracy/evasion from a hit/miss roll into a PP surcharge, but only the
+// DEFENDER's half came across: a target's BrightPowder / Sand Veil / Snow Cloak still taxes
+// the attacker a PP (GetDeterministicMoveTargetPPTax), while Wide Lens and Zoom Lens were
+// left multiplying an accuracy figure nothing reads (DoesMoveMissTarget returns FALSE before
+// GetTotalAccuracy is ever called), leaving both items completely inert. This restores the
+// attacker's half in the same currency, following how the fork already repurposed the
+// accuracy-boosting ABILITIES -- Compound Eyes / Keen Eye / Illuminate became evasion-ignore
+// in GetAccEvasionStageDelta rather than an accuracy multiplier.
+//
+// PURE BOON: the caller only ever uses this to cancel a penalty, never to grant a refund, so
+// an accuracy item can bring a move back to its base 1 PP but never below. Against a target
+// with no evasion trick there is nothing to cancel and the item does nothing.
+u32 GetAccuracyItemRelief(enum BattlerId battlerAtk, enum BattlerId battlerDef)
+{
+    // Both gates matter: the buff is meaningless without the PP economy it plugs into, and
+    // with BUFF_ACCURACY_ITEMS off the items keep their (stock) accuracy multiplier instead.
+    if (!GetConfig(BUFF_ACCURACY_ITEMS) || !GetConfig(DETERMINISTIC_ACCURACY_EVASION))
+        return ACCURACY_ITEM_RELIEF_NONE;
+
+    switch (GetBattlerHoldEffect(battlerAtk))
+    {
+    case HOLD_EFFECT_WIDE_LENS:
+        return ACCURACY_ITEM_RELIEF_TAXES;
+    case HOLD_EFFECT_ZOOM_LENS:
+        // Zoom Lens's stock condition, lifted verbatim from GetTotalAccuracy() so the item
+        // keeps its "I move second" identity: the target must already have acted this turn,
+        // and not be on its switch-in turn (isFirstTurn == 2), which doesn't count as acting.
+        if (HasBattlerActedThisTurn(battlerDef) && gBattleStruct->battlerState[battlerDef].isFirstTurn != 2)
+            return ACCURACY_ITEM_RELIEF_FULL;
+        return ACCURACY_ITEM_RELIEF_NONE;
+    default:
+        return ACCURACY_ITEM_RELIEF_NONE;
+    }
 }

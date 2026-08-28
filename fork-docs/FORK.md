@@ -98,6 +98,7 @@ in `config/buff.h` (`FALSE` = stock). Both below are enabled.
 |---|---|---|---|
 | Shell Bell buff | `BUFF_SHELL_BELL` (+ `…_DENOMINATOR`) | ✅ | Recovery from 1/8 of damage dealt to 1/`BUFF_SHELL_BELL_DENOMINATOR` (1/4 by default) in `TryShellBell()`. `test/fork/buff_shell_bell.c` |
 | Leech Seed buff | `BUFF_LEECH_SEED` (+ `…_DENOMINATOR`) | ✅ | Two changes: seeds **stack** (several battlers can seed one target, each draining independently), and re-using Leech Seed on a foe you already seed deals an **immediate 1/8 drain** instead of failing. The tick fraction stays at vanilla 1/8 — the buff is the stacking, not a bigger tick. Storage is additive: upstream's single-seeder `leechSeed` volatile stays the "primary", with a fork `leechSeededBy` bitmask holding the full set. `test/fork/buff_leech_seed.c` |
+| Accuracy items buff | `BUFF_ACCURACY_ITEMS` | ✅ | `DETERMINISTIC_ACCURACY_EVASION` left Wide Lens and Zoom Lens completely inert — they only scale an accuracy figure `DoesMoveMissTarget()` no longer reads — while the defender's BrightPowder half kept working. They now cancel the attacker's accuracy-axis PP penalty instead: Wide Lens the flat evasion taxes, Zoom Lens those plus the target's evasion stages while it moves second. Pure boon — never refunds below the base 1 PP. `GetAccuracyItemRelief()` in `src/fork/deterministic_moves.c`; `test/fork/buff_accuracy_items.c`, plus a roster test that fails if a set holds a lens its own ability makes redundant. |
 
 ## Abilities, types & gimmicks
 
