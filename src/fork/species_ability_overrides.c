@@ -1193,7 +1193,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0437
         SPECIES_BRONZONG, 2,
-        ABILITY_SOUNDPROOF
+        ABILITY_DRIZZLE
     },
     { // 0441
         SPECIES_CHATOT, 1,

@@ -5133,7 +5133,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HEATPROOF,
             ABILITY_HEAVY_METAL,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0437
@@ -5141,7 +5142,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HEATPROOF,
             ABILITY_HEAVY_METAL,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0438

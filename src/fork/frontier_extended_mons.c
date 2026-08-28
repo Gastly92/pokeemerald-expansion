@@ -13058,12 +13058,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GYRO_BALL,
             MOVE_BODY_PRESS
         },
-        .ability = ABILITY_SOUNDPROOF,
-        .nature = NATURE(SPD_UP, SPE_DOWN),
+        .ability = ABILITY_DRIZZLE,
+        .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 4,
-            .spd = 252
+            .def = 252,
+            .spd = 4
         ),
         .iv = IVS(SPE, 0),
         .teraType = TYPE_STEEL,
@@ -13076,16 +13076,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_LIGHT_SCREEN,
             MOVE_REFLECT,
-            MOVE_PSYCHIC,
+            MOVE_GYRO_BALL,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SOUNDPROOF,
+        .ability = ABILITY_DRIZZLE,
         .nature = NATURE(SPD_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
             .def = 4,
             .spd = 252
         ),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_STEEL,
     },
 
