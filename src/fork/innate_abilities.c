@@ -6709,7 +6709,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHANDELURE_MEGA,
         INNATES(
             ABILITY_INFILTRATOR,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SHADOW_TAG
         )
     },
     { // 0610
@@ -6744,6 +6745,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0614
         SPECIES_BEARTIC,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK,
             ABILITY_SWIFT_SWIM

@@ -1643,6 +1643,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_EELEKTROSS, 1,
         ABILITY_LIGHTNING_ROD
     },
+    { // 0609
+        SPECIES_CHANDELURE_MEGA, 0,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0609
+        SPECIES_CHANDELURE_MEGA, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0609
+        SPECIES_CHANDELURE_MEGA, 2,
+        ABILITY_FLASH_FIRE
+    },
     { // 0614
         SPECIES_BEARTIC, 1,
         ABILITY_SNOW_WARNING
