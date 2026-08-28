@@ -1595,6 +1595,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GARBODOR, 2,
         ABILITY_POISON_TOUCH
     },
+    { // 0569
+        SPECIES_GARBODOR_GMAX, 2,
+        ABILITY_POISON_TOUCH
+    },
     { // 0573
         SPECIES_CINCCINO, 1,
         ABILITY_HUSTLE

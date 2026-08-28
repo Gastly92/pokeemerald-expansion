@@ -6334,14 +6334,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GARBODOR,
         INNATES(
             ABILITY_AFTERMATH,
-            ABILITY_STENCH
+            ABILITY_STENCH,
+            ABILITY_STICKY_HOLD
         )
     },
     { // 0569
         SPECIES_GARBODOR_GMAX,
         INNATES(
             ABILITY_AFTERMATH,
-            ABILITY_STENCH
+            ABILITY_STENCH,
+            ABILITY_STICKY_HOLD
         )
     },
     { // 0570
@@ -6354,6 +6356,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ZOROARK,
         INNATES(
             ABILITY_PRANKSTER
+        )
+    },
+    { // 0570
+        SPECIES_ZORUA_HISUI,
+        INNATES(
+            ABILITY_CURSED_BODY
+        )
+    },
+    { // 0571
+        SPECIES_ZOROARK_HISUI,
+        INNATES(
+            ABILITY_CURSED_BODY
         )
     },
     { // 0572
