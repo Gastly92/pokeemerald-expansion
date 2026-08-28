@@ -4957,6 +4957,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0418
         SPECIES_BUIZEL,
         INNATES(
+            ABILITY_HEALER,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
@@ -4964,6 +4965,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0419
         SPECIES_FLOATZEL,
         INNATES(
+            ABILITY_HEALER,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
