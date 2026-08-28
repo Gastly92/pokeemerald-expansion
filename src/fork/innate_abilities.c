@@ -1675,7 +1675,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0126
         SPECIES_MAGMAR,
         INNATES(
-            ABILITY_INTIMIDATE,
             ABILITY_IRON_FIST,
             ABILITY_VITAL_SPIRIT
         )
@@ -5421,6 +5420,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0467
         SPECIES_MAGMORTAR,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_IRON_FIST,
             ABILITY_VITAL_SPIRIT
         )
