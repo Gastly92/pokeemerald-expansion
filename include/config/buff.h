@@ -81,4 +81,32 @@
 // projection GetProjectedMovePPCost() in src/battle_util.c.
 #define BUFF_ACCURACY_ITEMS TRUE
 
+// When TRUE, Wide Lens and Zoom Lens additionally act as what a lens actually is -- an
+// instrument for SEEING. They feed the B_FRONTIER_BATTLE_INFO viewer's reveal bits
+// (fork-docs/BATTLE_INFO.md, "Reveal gating"), which normally only fill in as the player
+// genuinely witnesses something, so an unseen foe's item/ability/moves read "?".
+//   - Wide Lens -- BREADTH. Reveals the HELD ITEM of every foe the player has seen. Shallow,
+//     unconditional, and across the whole opposing team, so it maps out items that never
+//     announce themselves (Choice items, Assault Vest, Heavy-Duty Boots, type items) and
+//     would otherwise stay "?" for the whole battle.
+//   - Zoom Lens -- DEPTH. Reveals a single foe's CHOSEN ABILITY and FULL MOVESET, but only
+//     once that foe has actually used a move: you learn it by watching it act. That is the
+//     same "observe, then know" identity its moving-second PP window has, generalised from
+//     one turn to the battle.
+// Why this is worth an item slot HERE specifically: the roster deliberately carries several
+// builds per species so a foe's set can't be read off its species (fork-docs/FRONTIER_ROSTER.md),
+// and the Factory AI runs AI_FLAG_OMNISCIENT (via AI_FLAG_SMART_TRAINER in
+// B_FRONTIER_HARD_AI_FLAGS) -- it already knows the player's moves, abilities and items. So the
+// lenses are the player's way of closing exactly that gap. A lens on an AI mon does nothing,
+// which is the point rather than an oversight.
+// The lens does NOT see through Illusion: reveals are skipped for a foe whose Illusion is
+// currently ON, since the viewer is showing the disguise and revealing the real ability or
+// moveset would leak the Zoroark. Illusion is a projection, not concealment.
+// Requires B_FRONTIER_BATTLE_INFO (Frontier facilities bar the Pyramid); outside the viewer
+// there is nothing to reveal into. Implemented entirely in the fork-owned viewer --
+// ApplyAccuracyItemReveals() in src/fork/frontier_battle_info.c, run when the player opens
+// INFO -- so no upstream file is touched. Independent of BUFF_ACCURACY_ITEMS (the PP relief);
+// either can ship without the other.
+#define BUFF_ACCURACY_ITEMS_REVEAL TRUE
+
 #endif // GUARD_CONFIG_BUFF_H

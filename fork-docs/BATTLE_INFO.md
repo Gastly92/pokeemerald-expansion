@@ -141,6 +141,40 @@ watched activate or leave reads as its name or `None`, never `?`:
 - The `Cmd_removeitem` destruction path (Fling / Corrosive Gas / Incinerate).
 - Steals, via `StealTargetItem`.
 
+### Held-item and depth reveals from a lens (`BUFF_ACCURACY_ITEMS_REVEAL`)
+
+Wide Lens and Zoom Lens write reveal bits directly, as the one thing in the game that
+sells *information* rather than damage or survival — see the flag comment in
+`include/config/buff.h`. `ApplyAccuracyItemReveals()` runs from
+`OpenFrontierBattleInfo()`, so the reveal is exactly what the lens can see at the moment
+the player looks; nothing is latched per turn.
+
+| Lens | Reveals | Condition |
+|---|---|---|
+| **Wide Lens** (breadth) | Held item of **every seen foe** | none — the holder is on the field |
+| **Zoom Lens** (depth) | **One foe's chosen ability + full moveset** | that foe has used a move (`infoUsedMoves != 0`) |
+
+Wide Lens earns its slot on the items that never announce themselves — Choice items,
+Assault Vest, Heavy-Duty Boots, type items — which otherwise read `?` all battle. Zoom
+Lens's "must have watched it act" is the same observe-then-know identity as its
+moving-second PP window, widened from one turn to the battle.
+
+Three gating rules the lens obeys, and must keep obeying:
+
+- **Only `sentOut` foes.** A lens sharpens what is on the field and in the record; it
+  never conjures a mon the player has not met.
+- **It does not pierce Illusion.** Every reveal is skipped for a foe whose Illusion is
+  currently `ON`, since the page is showing the disguise and writing the real ability or
+  moveset would leak the Zoroark. (An Illusion is a projection, not concealment.)
+- **The ability written is the CHOSEN one**, read straight from the party. Unlike
+  `RecordAbilityBattle` — which reveals only what was *witnessed* and has to dodge innate
+  pop-ups — the lens reads the mon directly, so there is no witnessed/chosen split.
+
+The asymmetry is deliberate: the Factory AI runs `AI_FLAG_OMNISCIENT` (via
+`AI_FLAG_SMART_TRAINER` in `B_FRONTIER_HARD_AI_FLAGS`) and already knows the player's
+moves, abilities and items, so a lens on an AI mon does nothing. The lenses are the
+player's way of closing exactly that gap.
+
 ### Illusion safety
 
 A foe whose Illusion (Zoroark/Zorua) is currently `ILLUSION_ON` shows the **disguise**

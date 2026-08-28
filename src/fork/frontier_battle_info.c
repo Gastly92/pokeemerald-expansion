@@ -1114,9 +1114,91 @@ static void VBlankCB(void)
 // FORK: open the read-only viewer, returning to returnCallback when the player
 // closes it. Lets the same viewer be reached from the battle action menu (return
 // to the battle screen) and the in-battle party menu (return to the party menu).
+// FORK: BUFF_ACCURACY_ITEMS_REVEAL (config/buff.h) -- Wide Lens and Zoom Lens as instruments
+// for SEEING, feeding this viewer's reveal bits from the player's held items.
+//
+//   - Wide Lens is BREADTH: the held item of every foe the player has seen. Shallow and
+//     unconditional, but across the whole opposing team -- it maps out the items that never
+//     announce themselves (Choice items, Assault Vest, Heavy-Duty Boots, type items) and so
+//     would otherwise read "?" for the entire battle.
+//   - Zoom Lens is DEPTH: one foe's chosen ability and full moveset, but only once that foe
+//     has actually used a move (infoUsedMoves != 0 -- the player has watched it act). That is
+//     the same "observe, then know" identity as its moving-second PP window, widened from a
+//     single turn to the battle.
+//
+// Run when the player OPENS the viewer rather than from a battle hook, which keeps the whole
+// feature inside this fork-owned file (no upstream edit) and needs no per-turn latch: every
+// input it reads -- who is holding what, who has been sent out, who has used a move -- is
+// already durable battle state. The reveal is therefore exactly "what the lens can see at the
+// moment the player looks".
+//
+// Reveal-gating rules this obeys (see the doc's "Reveal gating"):
+//   - Only foes already marked sentOut. The lens sharpens what is on the field and in the
+//     record; it does not conjure mons the player has never met.
+//   - Nothing is revealed for a foe whose Illusion is currently ON: the page is showing the
+//     disguise, so writing the real ability or moveset would leak the Zoroark. A lens does not
+//     pierce an Illusion -- that is a projection, not concealment.
+//   - The ability written is the mon's CHOSEN ability, read straight from the party. Unlike
+//     RecordAbilityBattle -- which reveals only what was witnessed and must dodge innate
+//     pop-ups -- the lens reads the mon directly, so there is no witnessed/chosen split to
+//     resolve. Innates are not reveal-gated at all (they are a public property of the species).
+void ApplyAccuracyItemReveals(void)
+{
+    bool32 wide = FALSE;
+    bool32 zoom = FALSE;
+    struct Pokemon *foeParty;
+
+    if (!GetConfig(BUFF_ACCURACY_ITEMS_REVEAL))
+        return;
+
+    // A lens only sees while its holder is on the field looking through it.
+    for (u32 i = 0; i < gBattlersCount; i++)
+    {
+        if (!IsOnPlayerSide(i) || !IsBattlerAlive(i))
+            continue;
+        switch (GetBattlerHoldEffect(i))
+        {
+        case HOLD_EFFECT_WIDE_LENS:
+            wide = TRUE;
+            break;
+        case HOLD_EFFECT_ZOOM_LENS:
+            zoom = TRUE;
+            break;
+        default:
+            break;
+        }
+    }
+
+    if (!wide && !zoom)
+        return;
+
+    foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+
+    for (u32 foeIndex = 0; foeIndex < PARTY_SIZE; foeIndex++)
+    {
+        if (!gBattleStruct->partyState[B_TRAINER_OPPONENT_A][foeIndex].sentOut)
+            continue;
+        // Illusion safety: the page shows the disguise for this slot, so reveal nothing.
+        if (GetFoeDisplayMon(foeParty, foeIndex) != &foeParty[foeIndex])
+            continue;
+
+        if (wide)
+            gBattleStruct->infoItemRevealed[B_SIDE_OPPONENT] |= 1u << foeIndex;
+
+        // Depth needs an observation to build on: the foe must have used a move.
+        if (zoom && gBattleStruct->infoUsedMoves[B_SIDE_OPPONENT][foeIndex] != 0)
+        {
+            gBattleStruct->infoUsedMoves[B_SIDE_OPPONENT][foeIndex] = (1u << MAX_MON_MOVES) - 1;
+            gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] |= 1u << foeIndex;
+            gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][foeIndex] = GetMonAbility(&foeParty[foeIndex]);
+        }
+    }
+}
+
 void OpenFrontierBattleInfo(MainCallback returnCallback)
 {
     sInfoExitCallback = returnCallback;
+    ApplyAccuracyItemReveals(); // FORK: BUFF_ACCURACY_ITEMS_REVEAL -- the lenses fill in what they can see
     SetMainCallback2(CB2_FrontierBattleInfo);
 }
 
