@@ -13790,7 +13790,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_ROCK_SLIDE
         },
         .ability = ABILITY_SAP_SIPPER,
