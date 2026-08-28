@@ -16099,7 +16099,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LILLIGANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .heldItem = ITEM_BIG_ROOT,
         .moves =
         {
             MOVE_QUIVER_DANCE,
