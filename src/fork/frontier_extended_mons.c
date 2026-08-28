@@ -13663,7 +13663,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_IRON_DEFENSE,
             MOVE_BODY_PRESS,
-            MOVE_FLASH_CANNON,
+            MOVE_THUNDER_WAVE,
             MOVE_THUNDERBOLT
         },
         .ability = ABILITY_LIGHTNING_ROD,
