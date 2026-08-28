@@ -6036,6 +6036,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0537
         SPECIES_SEISMITOAD,
         INNATES(
+            ABILITY_HYDRATION,
             ABILITY_SWIFT_SWIM
         )
     },

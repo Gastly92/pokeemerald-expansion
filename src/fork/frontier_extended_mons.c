@@ -15832,7 +15832,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HYDRO_PUMP,
             MOVE_EARTH_POWER,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_ICE_BEAM
         },
         .ability = ABILITY_WATER_ABSORB,
