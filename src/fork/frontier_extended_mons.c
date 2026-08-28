@@ -14851,7 +14851,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SHADOW_FORCE,
             MOVE_DRACO_METEOR,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_DRAGON_CLAW
         },
         .ability = ABILITY_SHEER_FORCE,
