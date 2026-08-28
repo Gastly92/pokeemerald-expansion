@@ -4917,6 +4917,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0414
         SPECIES_MOTHIM,
         INNATES(
+            ABILITY_MAGICIAN,
+            ABILITY_SWARM,
+            ABILITY_TINTED_LENS
+        )
+    },
+    { // 0414
+        SPECIES_MOTHIM_SANDY,
+        INNATES(
+            ABILITY_MAGICIAN,
+            ABILITY_SWARM,
+            ABILITY_TINTED_LENS
+        )
+    },
+    { // 0414
+        SPECIES_MOTHIM_TRASH,
+        INNATES(
+            ABILITY_MAGICIAN,
             ABILITY_SWARM,
             ABILITY_TINTED_LENS
         )

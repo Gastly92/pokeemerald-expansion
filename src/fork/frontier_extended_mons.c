@@ -12405,7 +12405,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_DEFENSE,
             MOVE_BODY_PRESS,
             MOVE_EARTHQUAKE,
-            MOVE_STONE_EDGE
+            MOVE_TOXIC
         },
         .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(DEF_UP, SPA_DOWN),
@@ -12435,7 +12435,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .iv = IVS(SPE, 0),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_GROUND,
     },
     {
         .species = SPECIES_WORMADAM_TRASH,
@@ -12504,7 +12504,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MOTHIM,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SHARP_BEAK,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
             MOVE_TAILWIND,
