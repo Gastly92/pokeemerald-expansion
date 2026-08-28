@@ -121,11 +121,27 @@ ability sits in exactly one):
   disposition step).
 - **Pure drawback (no boon to extract)** — strip the cost and nothing remains.
   Truant, Slow Start, Defeatist, Stall, Klutz, Gorilla Tactics, Mycelium Might.
-- **Double-edged (upside welded to downside)** — Simple, Contrary, Moody, No Guard,
-  Fluffy, Anger Shell, Dry Skin, Rivalry, Hustle (Atk +50% welded to accuracy −20%),
+- **Double-edged (upside welded to downside)** — Simple, Contrary, Moody,
+  Fluffy, Anger Shell, Dry Skin, Rivalry, Hustle (Atk +50% welded to a **+1 PP tax
+  on the user's physical moves** — `DETERMINISTIC_ACCURACY_EVASION` converts its
+  accuracy −20% into that, it is not a miss chance here),
   Weak Armor (Speed +2 welded to Def −1 on being hit), Perish Body (the attacker's
   perish is welded to the holder's *own* perish — strip the self-faint and the
   reactive on-contact effect left over is a bespoke auto-KO, not a clean boon).
+  **No Guard** sits here too, but *not* for the vanilla reason, and the vanilla
+  reason is worth saying out loud because it is wrong here: "the foe also never
+  misses you" costs nothing under `DETERMINISTIC_ACCURACY_EVASION`, where nothing
+  ever misses anyone. On the PP axis it is a **pure boon** — a move used by *or
+  against* a No Guard battler pays no accuracy/evasion stage tax and no flat tax at
+  all (`GetDeterministicMoveTargetPPTax` returns 0 outright; see
+  [Mechanics](DETERMINISM.md#deterministic_accuracy_evasion)). What is still welded
+  on is the *rest* of that symmetry: it also zeroes the holder's **own** evasion
+  taxes, so a Sand Veil / Snow Cloak / BrightPowder holder stops taxing its
+  attackers, and it lets foes hit through the holder's own Fly / Dig / Dive /
+  Bounce / Phantom Force turns
+  (`CanBreakThroughSemiInvulnerablityInternal` exempts either side). Small, but
+  real, and symmetric — hence still `:x:` as an innate. It remains a perfectly good
+  **chosen** ability, and the fork uses it as one (Maushold, Lucario).
 - **Non-volatile status-on-contact/hit** — auto-applies a *major* status, which is
   mutually exclusive, so it can *block the holder's own* status move (an innate
   Static paralyses a target you wanted to Toxic). Not a pure boon — unlike the

@@ -1207,12 +1207,60 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GARCHOMP, 1,
         ABILITY_SAND_STREAM
     },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA, 0,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA, 2,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA_Z, 0,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA_Z, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA_Z, 2,
+        ABILITY_SAND_STREAM
+    },
     { // 0448
         SPECIES_LUCARIO, 1,
         ABILITY_NO_GUARD
     },
     { // 0448
         SPECIES_LUCARIO, 2,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA_Z, 0,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA_Z, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0448
+        SPECIES_LUCARIO_MEGA_Z, 2,
         ABILITY_SHEER_FORCE
     },
     { // 0452
@@ -1316,19 +1364,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MOTOR_DRIVE
     },
     { // 0479
-        SPECIES_ROTOM_WASH, 1, 
+        SPECIES_ROTOM_WASH, 1,
         ABILITY_MOTOR_DRIVE
     },
     { // 0479
-        SPECIES_ROTOM_FROST, 1, 
+        SPECIES_ROTOM_FROST, 1,
         ABILITY_MOTOR_DRIVE
     },
     { // 0479
-        SPECIES_ROTOM_FAN, 1, 
+        SPECIES_ROTOM_FAN, 1,
         ABILITY_MOTOR_DRIVE
     },
     { // 0479
-        SPECIES_ROTOM_MOW, 1, 
+        SPECIES_ROTOM_MOW, 1,
         ABILITY_MOTOR_DRIVE
     },
     { // 0480
@@ -1337,11 +1385,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0481
         SPECIES_MESPRIT, 1,
-        ABILITY_MOODY
+        ABILITY_SYNCHRONIZE
     },
     { // 0482
         SPECIES_AZELF, 1,
-        ABILITY_VICTORY_STAR
+        ABILITY_SHEER_FORCE
     },
     { // 0483
         SPECIES_DIALGA, 1,
@@ -1548,7 +1596,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WIND_RIDER
     },
     { // 0635
-        SPECIES_HYDREIGON, 1, 
+        SPECIES_HYDREIGON, 1,
         ABILITY_SHEER_FORCE },
     { // 0638
         SPECIES_COBALION, 1,
