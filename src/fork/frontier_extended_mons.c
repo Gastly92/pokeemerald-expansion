@@ -13201,16 +13201,16 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_DRAGON_CLAW,
-            MOVE_FIRE_BLAST,
+            MOVE_IRON_HEAD,
             MOVE_STONE_EDGE
         },
         .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPD_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
@@ -13222,7 +13222,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SWORDS_DANCE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_OUTRAGE,
             MOVE_FIRE_FANG
         },

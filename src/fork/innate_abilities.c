@@ -5191,21 +5191,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GIBLE,
         INNATES(
             ABILITY_ROUGH_SKIN,
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0444
         SPECIES_GABITE,
         INNATES(
             ABILITY_ROUGH_SKIN,
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0445
         SPECIES_GARCHOMP,
         INNATES(
             ABILITY_ROUGH_SKIN,
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0445
@@ -5213,14 +5216,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ROUGH_SKIN,
             ABILITY_SAND_FORCE,
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0445
         SPECIES_GARCHOMP_MEGA_Z,
         INNATES(
             ABILITY_ROUGH_SKIN,
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0446

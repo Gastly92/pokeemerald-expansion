@@ -1207,6 +1207,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GARCHOMP, 1,
         ABILITY_SAND_STREAM
     },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA, 0,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA, 2,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA_Z, 0,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA_Z, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0445
+        SPECIES_GARCHOMP_MEGA_Z, 2,
+        ABILITY_SAND_STREAM
+    },
     { // 0448
         SPECIES_LUCARIO, 1,
         ABILITY_NO_GUARD
