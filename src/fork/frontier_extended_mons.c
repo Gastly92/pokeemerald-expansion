@@ -13180,7 +13180,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SUCKER_PUNCH,
-            MOVE_FOUL_PLAY,
+            MOVE_POLTERGEIST,
             MOVE_WILL_O_WISP,
             MOVE_SHADOW_SNEAK
         },
