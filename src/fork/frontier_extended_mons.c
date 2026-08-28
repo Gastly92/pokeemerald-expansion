@@ -18778,7 +18778,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICICLE_CRASH,
             MOVE_FUSION_BOLT,
             MOVE_OUTRAGE,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -18798,7 +18798,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_ICICLE_CRASH,
             MOVE_FUSION_BOLT,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -18830,6 +18830,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ICE,
+    },
+    {
+        .species = SPECIES_KYUREM_WHITE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves =
+        {
+            MOVE_CALM_MIND,
+            MOVE_ICE_BEAM,
+            MOVE_FUSION_FLARE,
+            MOVE_ROOST
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0647

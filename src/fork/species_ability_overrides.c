@@ -1742,12 +1742,36 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_KELDEO, 1,
         ABILITY_STORM_DRAIN
     },
+    { // 0647
+        SPECIES_KELDEO_RESOLUTE, 1,
+        ABILITY_STORM_DRAIN
+    },
     { // 0648
         SPECIES_MELOETTA, 1,
         ABILITY_PIXILATE
     },
+    { // 0648
+        SPECIES_MELOETTA_PIROUETTE, 1,
+        ABILITY_PIXILATE
+    },
     { // 0649
         SPECIES_GENESECT, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0649
+        SPECIES_GENESECT_DOUSE, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0649
+        SPECIES_GENESECT_SHOCK, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0649
+        SPECIES_GENESECT_BURN, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0649
+        SPECIES_GENESECT_CHILL, 1,
         ABILITY_SHEER_FORCE
     },
     { // 0655

@@ -7006,13 +7006,27 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1104
         SPECIES_KYUREM_WHITE,
         INNATES(
+            ABILITY_PRESSURE,
             ABILITY_TURBOBLAZE
         )
     },
     { // 1105
         SPECIES_KYUREM_BLACK,
         INNATES(
+            ABILITY_PRESSURE,
             ABILITY_TERAVOLT
+        )
+    },
+    { // 0647
+        SPECIES_KELDEO_ORDINARY,
+        INNATES(
+            ABILITY_JUSTIFIED
+        )
+    },
+    { // 0647
+        SPECIES_KELDEO_RESOLUTE,
+        INNATES(
+            ABILITY_JUSTIFIED
         )
     },
     { // 0648
