@@ -1385,7 +1385,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0481
         SPECIES_MESPRIT, 1,
-        ABILITY_MOODY
+        ABILITY_SYNCHRONIZE
     },
     { // 0482
         SPECIES_AZELF, 1,

@@ -14576,7 +14576,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_STEALTH_ROCK
         },
-        .ability = ABILITY_MOODY,
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
