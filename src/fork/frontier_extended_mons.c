@@ -17378,6 +17378,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_STEEL,
     },
+    {
+        .species = SPECIES_KLINKLANG,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_BAND,
+        .moves =
+        {
+            MOVE_GEAR_GRIND,
+            MOVE_WILD_CHARGE,
+            MOVE_KNOCK_OFF,
+            MOVE_TRICK
+        },
+        .ability = ABILITY_MOTOR_DRIVE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
 
     // 0604
     {
@@ -17442,6 +17462,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_BEHEEYEM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_ALLY_SWITCH,
+            MOVE_PSYCHIC,
+            MOVE_SHADOW_BALL
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(SPA_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .iv = IVS(ATK, 0, SPE, 0),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0609
