@@ -2033,7 +2033,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_MEGA_SOL // flavor: the Solar Beam-cannon flower's base form; observable (chosen Overgrow differs)
+            ABILITY_MEGA_SOL
         )
     },
     { // 0154
@@ -2044,7 +2044,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_MEGA_SOL // canon: Mega Meganium's sole ability, persisted as an innate
+            ABILITY_MEGA_SOL
         )
     },
     { // 0155
@@ -3504,7 +3504,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0272
         SPECIES_LUDICOLO,
         INNATES(
-            ABILITY_DANCER, // flavor: the iconic carefree dancer (its folk-dance motif)
+            ABILITY_DANCER,
             ABILITY_OWN_TEMPO,
             ABILITY_RAIN_DISH,
             ABILITY_SWIFT_SWIM
@@ -6136,7 +6136,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LILLIGANT,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_DANCER, // flavor: a dancer-motif flower (its graceful Petal/Teeter Dance)
+            ABILITY_DANCER,
             ABILITY_LEAF_GUARD,
             ABILITY_OWN_TEMPO
         )
@@ -6145,7 +6145,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LILLIGANT_HISUI,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_DANCER, // flavor: its whirling martial dance
+            ABILITY_DANCER,
             ABILITY_LEAF_GUARD
         )
     },
@@ -6213,7 +6213,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MARACTUS,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_DANCER // flavor: it dances rhythmically to scare off bird Pokemon
+            ABILITY_DANCER
         )
     },
     { // 0557
@@ -6894,14 +6894,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0648
         SPECIES_MELOETTA,
         INNATES(
-            ABILITY_DANCER, // flavor: the melody/dance mythical (its Pirouette dance forme)
+            ABILITY_DANCER,
             ABILITY_SERENE_GRACE
         )
     },
     { // 0648
         SPECIES_MELOETTA_PIROUETTE,
         INNATES(
-            ABILITY_DANCER, // flavor: its Pirouette dance forme
+            ABILITY_DANCER,
             ABILITY_SERENE_GRACE
         )
     },
@@ -8061,7 +8061,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KOMALA,
         INNATES(
             ABILITY_UNAWARE,
-            ABILITY_COMATOSE // canon: Komala's sole ability, persisted as an innate (status immunity + sleep-move synergy)
+            ABILITY_COMATOSE
         )
     },
     { // 0776
