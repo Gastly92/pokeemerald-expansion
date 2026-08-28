@@ -13899,7 +13899,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ROOST
         },
-        .ability = ABILITY_HUSTLE,
+        .ability = ABILITY_HALO,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
