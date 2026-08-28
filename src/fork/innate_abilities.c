@@ -5748,6 +5748,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0501
         SPECIES_OSHAWOTT,
         INNATES(
+            ABILITY_SHARPNESS,
             ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
@@ -5755,6 +5756,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0502
         SPECIES_DEWOTT,
         INNATES(
+            ABILITY_SHARPNESS,
             ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
@@ -5762,6 +5764,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0503
         SPECIES_SAMUROTT,
         INNATES(
+            ABILITY_SHARPNESS,
             ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
@@ -5770,6 +5773,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SAMUROTT_HISUI,
         INNATES(
             ABILITY_SHARPNESS,
+            ABILITY_SHELL_ARMOR,
             ABILITY_TORRENT
         )
     },
