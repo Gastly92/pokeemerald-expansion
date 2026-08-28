@@ -1511,6 +1511,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_AUDINO, 1,
         ABILITY_SYNCHRONIZE
     },
+    { // 0531
+        SPECIES_AUDINO_MEGA, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    { // 0531
+        SPECIES_AUDINO_MEGA, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    { // 0531
+        SPECIES_AUDINO_MEGA, 2,
+        ABILITY_SYNCHRONIZE
+    },
     { // 0538
         SPECIES_THROH, 1,
         ABILITY_SIMPLE

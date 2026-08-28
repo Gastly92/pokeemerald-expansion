@@ -15739,6 +15739,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_NORMAL,
     },
+    {
+        .species = SPECIES_AUDINO,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_HELPING_HAND,
+            MOVE_WISH,
+            MOVE_PROTECT,
+            MOVE_DAZZLING_GLEAM
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 128,
+            .spd = 128
+        ),
+        .teraType = TYPE_NORMAL,
+    },
 
     // 0534
     {

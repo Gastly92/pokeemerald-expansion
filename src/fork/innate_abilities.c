@@ -5994,6 +5994,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0531
         SPECIES_AUDINO_MEGA,
         INNATES(
+            ABILITY_HEALER,
             ABILITY_REGENERATOR
         )
     },
