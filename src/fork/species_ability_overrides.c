@@ -1101,7 +1101,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0389
         SPECIES_TORTERRA, 1,
-        ABILITY_SAND_STREAM
+        ABILITY_GRASSY_SURGE
     },
     { // 0392
         SPECIES_INFERNAPE, 1,
@@ -1109,14 +1109,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0395
         SPECIES_EMPOLEON, 1,
-        ABILITY_WATER_ABSORB
+        ABILITY_SNOW_WARNING
     },
     { // 0398
         SPECIES_STARAPTOR, 1,
         ABILITY_HUSTLE
     },
-    { // 0401
+    { // 0400
+        SPECIES_BIBAREL, 2,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0402
         SPECIES_KRICKETUNE, 1,
+        ABILITY_SOUNDPROOF
+    },
+    { // 0405
+        SPECIES_LUXRAY, 1,
         ABILITY_SHEER_FORCE
     },
     { // 0413
@@ -1155,6 +1163,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LOPUNNY, 2,
         ABILITY_SHEER_FORCE
     },
+    { // 0428
+        SPECIES_LOPUNNY_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0428
+        SPECIES_LOPUNNY_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0428
+        SPECIES_LOPUNNY_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0429
         SPECIES_MISMAGIUS, 1,
         ABILITY_WANDERING_SPIRIT
@@ -1173,7 +1193,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0437
         SPECIES_BRONZONG, 2,
-        ABILITY_SOUNDPROOF
+        ABILITY_DRIZZLE
     },
     { // 0441
         SPECIES_CHATOT, 1,

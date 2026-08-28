@@ -895,6 +895,9 @@ saying them again in one table is cheaper than another correction.
 | "Serene Grace doubles a secondary's odds" | It **bypasses the strong-hit gate entirely**, so the effect is *certain*. Jirachi's innate Serene Grace makes Iron Head's flinch, Zen Headbutt's flinch and Ice Punch's freeze land every single time. |
 | "Sheer Force means always take the stronger move" | Sheer Force cancels **Life Orb recoil** on any move it boosts, so a *weaker* move with a secondary can beat a stronger one without: Ancient Power at 60 BP x1.3 and no recoil ties an 80 BP Power Gem that pays it. |
 | "Surf hits both foes" | Surf is `TARGET_FOES_AND_ALLY` at this fork's `B_UPDATED_MOVE_DATA` — it hits your **own partner**. The source reads `TARGET_BOTH` in a ternary, so grepping for the constant misses it. See the spread-move checklist in Step 3. |
+| "Sheer Force only trades away *chance-based* secondaries" | `MoveIsAffectedBySheerForce` tests `chance > 0`, so it **strips 100% effects too** — Fake Out's flinch, Chilling Water's Attack drop, Pounce's Speed drop. Never put Fake Out on a set that names Sheer Force. |
+| "Wide Lens / Zoom Lens still do something" | **Inert.** Their only code path is `GetTotalAccuracy()`, which `DETERMINISTIC_ACCURACY_EVASION` bypasses, and they are not among the items converted into the PP-tax economy (BrightPowder, Lax Incense, Wonder Skin, Hustle and Micle Berry are). BrightPowder *is* live — it taxes attackers a PP. |
+| "A form's ability slot is free to override if the ability is redundant" | Check `form_change_tables.h` first. Cherrim's Overcast ↔ Sunshine change is gated on `ABILITY_FLOWER_GIFT` under `B_WEATHER_FORMS >= GEN_5` (the shipped config), so overriding that slot would strand it in one form for the whole battle. |
 
 ### The `DETERMINISTIC_*` regime — what actually changes for set-building
 

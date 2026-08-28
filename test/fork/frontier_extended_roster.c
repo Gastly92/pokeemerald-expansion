@@ -615,7 +615,7 @@ TEST("Frontier extended roster: the roster's NFEs are exactly the niche NFEs")
 //
 // KEEP IN SYNC with sInnateRowsReviewedThroughDex in test/fork/innate_abilities.c -- the two
 // constants track the same sweep and should be bumped together.
-static const u16 sSetShapeReviewedThroughDex = NATIONAL_DEX_DEOXYS; // Gen 1-3 reviewed; Gen 4 next.
+static const u16 sSetShapeReviewedThroughDex = NATIONAL_DEX_HAPPINY; // Gen 1-3 and Gen 4 up to #440 reviewed; #441 next. KEEP IN SYNC with the twin in test/fork/innate_abilities.c
 
 static bool32 SetIsDoublesCapable(const struct TrainerMon *set)
 {
