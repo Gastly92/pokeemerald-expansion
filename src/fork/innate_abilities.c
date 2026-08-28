@@ -5620,6 +5620,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TELEPATHY
         )
     },
+    { // 0485
+        SPECIES_HEATRAN,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
+    { // 0486
+        SPECIES_REGIGIGAS,
+        INNATES(
+            ABILITY_CLEAR_BODY
+        )
+    },
     { // 0487
         SPECIES_GIRATINA_ALTERED,
         INNATES(

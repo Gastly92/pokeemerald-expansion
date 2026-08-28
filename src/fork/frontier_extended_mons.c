@@ -14658,7 +14658,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_FLASH_CANNON,
             MOVE_FIRE_BLAST,
-            MOVE_ROAR_OF_TIME
+            MOVE_EARTH_POWER
         },
         .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
