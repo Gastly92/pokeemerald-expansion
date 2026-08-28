@@ -10185,7 +10185,7 @@ TEST("Innate abilities: the Effect Spore flavor picks carry the innate")
 // every species at or below sInnateRowsReviewedThroughDex, which each /line-review batch bumps as
 // it lands. Raising it is the last step of a batch: set it to the batch's final dex number, run
 // this test, and fill whatever it names.
-static const u16 sInnateRowsReviewedThroughDex = NATIONAL_DEX_HAPPINY; // Gen 1-3 and Gen 4 up to #440 reviewed; #441 next.
+static const u16 sInnateRowsReviewedThroughDex = NATIONAL_DEX_ARCEUS; // Gen 1-4 reviewed; Gen 5 next.
 
 static bool32 SpeciesHasAnyInnate(u16 species)
 {
