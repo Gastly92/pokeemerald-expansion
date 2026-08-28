@@ -13716,7 +13716,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 4,
             .def = 252
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_GHOST,
     },
 
     // 0464
