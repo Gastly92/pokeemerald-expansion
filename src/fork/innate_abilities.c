@@ -5273,12 +5273,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0449
         SPECIES_HIPPOPOTAS,
         INNATES(
+            ABILITY_OVERCOAT,
             ABILITY_SAND_FORCE
         )
     },
     { // 0450
         SPECIES_HIPPOWDON,
         INNATES(
+            ABILITY_OVERCOAT,
             ABILITY_SAND_FORCE
         )
     },
