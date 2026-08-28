@@ -9722,6 +9722,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KINGAMBIT,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_INNER_FOCUS,
             ABILITY_PRESSURE,
             ABILITY_SUPREME_OVERLORD
         )

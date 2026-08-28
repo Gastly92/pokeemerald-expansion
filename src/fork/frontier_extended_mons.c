@@ -17916,7 +17916,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_HEAD_CHARGE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_SUPERPOWER,
             MOVE_ZEN_HEADBUTT
         },
@@ -17928,6 +17928,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_BOUFFALANT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LUM_BERRY,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_HEAD_CHARGE,
+            MOVE_EARTHQUAKE,
+            MOVE_MEGAHORN
+        },
+        .ability = ABILITY_SAP_SIPPER,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
     },
 
     // 0628
@@ -18076,6 +18096,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_HEATMOR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FIGY_BERRY,
+        .moves =
+        {
+            MOVE_FIRE_LASH,
+            MOVE_KNOCK_OFF,
+            MOVE_SUCKER_PUNCH,
+            MOVE_SUPERPOWER
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_DARK,
     },
 
     // 0632
