@@ -12760,7 +12760,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FAKE_OUT,
-            MOVE_DOUBLE_HIT,
+            MOVE_TAIL_SLAP,
             MOVE_KNOCK_OFF,
             MOVE_U_TURN
         },
@@ -12779,7 +12779,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_DOUBLE_HIT,
+            MOVE_TAIL_SLAP,
             MOVE_KNOCK_OFF,
             MOVE_LOW_KICK,
             MOVE_TRIPLE_AXEL
