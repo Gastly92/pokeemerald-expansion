@@ -5524,6 +5524,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FROSLASS,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_ICE_BODY,
             ABILITY_LEVITATE,
             ABILITY_SNOW_CLOAK
         )
@@ -5532,6 +5533,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FROSLASS_MEGA,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_ICE_BODY,
             ABILITY_LEVITATE,
             ABILITY_SNOW_CLOAK
         )
