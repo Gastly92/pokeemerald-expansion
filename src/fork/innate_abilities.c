@@ -5732,14 +5732,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_EMBOAR,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_RECKLESS
+            ABILITY_RECKLESS,
+            ABILITY_THICK_FAT
         )
     },
     { // 0500
         SPECIES_EMBOAR_MEGA,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_RECKLESS
+            ABILITY_MOLD_BREAKER,
+            ABILITY_RECKLESS,
+            ABILITY_THICK_FAT
         )
     },
     { // 0501

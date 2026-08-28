@@ -1443,6 +1443,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_EMBOAR, 1,
         ABILITY_FLASH_FIRE
     },
+    { // 0500
+        SPECIES_EMBOAR_MEGA, 0,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0500
+        SPECIES_EMBOAR_MEGA, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0500
+        SPECIES_EMBOAR_MEGA, 2,
+        ABILITY_FLASH_FIRE
+    },
     { // 0503
         SPECIES_SAMUROTT, 1,
         ABILITY_WATER_ABSORB

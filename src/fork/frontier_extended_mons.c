@@ -15236,14 +15236,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_FLARE_BLITZ,
             MOVE_CLOSE_COMBAT,
-            MOVE_HEAT_WAVE,
-            MOVE_GRASS_KNOT
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_WILD_CHARGE
         },
         .ability = ABILITY_FLASH_FIRE,
-        .nature = NATURE(ATK_UP, SPD_DOWN),
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
