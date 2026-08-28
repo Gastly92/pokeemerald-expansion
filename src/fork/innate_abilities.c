@@ -6533,6 +6533,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SERENE_GRACE
         )
     },
+    { // 0587
+        SPECIES_EMOLGA,
+        INNATES(
+            ABILITY_CHEEK_POUCH
+        )
+    },
     { // 0588
         SPECIES_KARRABLAST,
         INNATES(
@@ -6544,6 +6550,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ESCAVALIER,
         INNATES(
             ABILITY_OVERCOAT,
+            ABILITY_SHED_SKIN,
             ABILITY_SHELL_ARMOR,
             ABILITY_SWARM
         )
@@ -6760,6 +6767,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ACCELGOR,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_OVERCOAT,
             ABILITY_STICKY_HOLD,
             ABILITY_UNBURDEN
         )
