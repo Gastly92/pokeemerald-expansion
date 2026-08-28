@@ -13508,6 +13508,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
         .ball = BALL_DIVE,
     },
+    {
+        .species = SPECIES_LUMINEON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_DAMP_ROCK,
+        .moves =
+        {
+            MOVE_RAIN_DANCE,
+            MOVE_TAILWIND,
+            MOVE_MUDDY_WATER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_STORM_DRAIN,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
+    },
 
     // 0460
     {
