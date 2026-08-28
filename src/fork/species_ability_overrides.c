@@ -1364,19 +1364,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_MOTOR_DRIVE
     },
     { // 0479
-        SPECIES_ROTOM_WASH, 1, 
+        SPECIES_ROTOM_WASH, 1,
         ABILITY_MOTOR_DRIVE
     },
     { // 0479
-        SPECIES_ROTOM_FROST, 1, 
+        SPECIES_ROTOM_FROST, 1,
         ABILITY_MOTOR_DRIVE
     },
     { // 0479
-        SPECIES_ROTOM_FAN, 1, 
+        SPECIES_ROTOM_FAN, 1,
         ABILITY_MOTOR_DRIVE
     },
     { // 0479
-        SPECIES_ROTOM_MOW, 1, 
+        SPECIES_ROTOM_MOW, 1,
         ABILITY_MOTOR_DRIVE
     },
     { // 0480
@@ -1596,7 +1596,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WIND_RIDER
     },
     { // 0635
-        SPECIES_HYDREIGON, 1, 
+        SPECIES_HYDREIGON, 1,
         ABILITY_SHEER_FORCE },
     { // 0638
         SPECIES_COBALION, 1,
