@@ -13013,8 +13013,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_GUNK_SHOT,
             MOVE_CRUNCH,
-            MOVE_FIRE_BLAST,
-            MOVE_PURSUIT
+            MOVE_FIRE_FANG,
+            MOVE_SUCKER_PUNCH
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -13022,6 +13022,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spd = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_SKUNTANK,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BLACK_SLUDGE,
+        .moves =
+        {
+            MOVE_TAUNT,
+            MOVE_TOXIC,
+            MOVE_CRUNCH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
         .teraType = TYPE_POISON,
     },
