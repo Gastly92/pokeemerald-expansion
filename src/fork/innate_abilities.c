@@ -4973,7 +4973,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0420
         SPECIES_CHERUBI,
         INNATES(
-            ABILITY_CHLOROPHYLL
+            ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD
+        )
+    },
+    { // 0421
+        SPECIES_CHERRIM_OVERCAST,
+        INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD
+        )
+    },
+    { // 0421
+        SPECIES_CHERRIM_SUNSHINE,
+        INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD
         )
     },
     { // 0422
