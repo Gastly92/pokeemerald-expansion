@@ -15144,6 +15144,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIRE,
     },
+    {
+        .species = SPECIES_VICTINI,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_V_CREATE,
+            MOVE_ZEN_HEADBUTT,
+            MOVE_U_TURN,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_VICTORY_STAR,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
 
     // 0497
     {
