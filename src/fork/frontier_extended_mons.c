@@ -4153,8 +4153,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 4,
-            .spa = 252
+            .def = 252,
+            .spa = 4
         ),
         .teraType = TYPE_FAIRY,
     },
@@ -24136,7 +24136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spe = 4
         ),
-        .teraType = TYPE_PSYCHIC,
+        .teraType = TYPE_FIGHTING,
     },
 
     // 0867
