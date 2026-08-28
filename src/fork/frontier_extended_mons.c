@@ -12929,11 +12929,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SUCKER_PUNCH,
             MOVE_BRAVE_BIRD,
-            MOVE_HEAT_WAVE,
+            MOVE_IRON_HEAD,
             MOVE_SUPERPOWER
         },
         .ability = ABILITY_DARK_AURA,
-        .nature = NATURE(ATK_UP, SPD_DOWN),
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
