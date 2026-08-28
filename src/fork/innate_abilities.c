@@ -4845,13 +4845,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0408
         SPECIES_CRANIDOS,
         INNATES(
-            ABILITY_MOLD_BREAKER
+            ABILITY_MOLD_BREAKER,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0409
         SPECIES_RAMPARDOS,
         INNATES(
-            ABILITY_MOLD_BREAKER
+            ABILITY_MOLD_BREAKER,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0410

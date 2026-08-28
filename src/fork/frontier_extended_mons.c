@@ -12257,7 +12257,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_HEAD_SMASH,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_CLOSE_COMBAT,
             MOVE_ZEN_HEADBUTT
         },
@@ -12284,10 +12284,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
+        .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_RAMPARDOS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_HEAD_SMASH,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_ROCK_SLIDE
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_ROCK,
     },
 
