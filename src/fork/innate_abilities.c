@@ -5303,13 +5303,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0453
         SPECIES_CROAGUNK,
         INNATES(
-            ABILITY_ANTICIPATION
+            ABILITY_ANTICIPATION,
+            ABILITY_LIMBER
         )
     },
     { // 0454
         SPECIES_TOXICROAK,
         INNATES(
-            ABILITY_ANTICIPATION
+            ABILITY_ANTICIPATION,
+            ABILITY_LIMBER
         )
     },
     { // 0455
