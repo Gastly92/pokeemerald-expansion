@@ -12532,7 +12532,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_DEFOG,
             MOVE_TOXIC,
-            MOVE_AIR_SLASH
+            MOVE_ATTACK_ORDER
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPD_UP, SPA_DOWN),
@@ -12540,6 +12540,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 248,
             .def = 8,
             .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_VESPIQUEN,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_ATTACK_ORDER,
+            MOVE_HEAL_ORDER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
         ),
         .teraType = TYPE_STEEL,
     },

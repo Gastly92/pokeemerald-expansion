@@ -4938,10 +4938,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TINTED_LENS
         )
     },
+    { // 0415
+        SPECIES_COMBEE,
+        INNATES(
+            ABILITY_SWARM
+        )
+    },
     { // 0416
         SPECIES_VESPIQUEN,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_PRESSURE,
+            ABILITY_SWARM,
             ABILITY_UNNERVE
         )
     },
