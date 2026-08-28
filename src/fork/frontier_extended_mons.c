@@ -16408,6 +16408,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_MARACTUS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BEAM,
+            MOVE_WEATHER_BALL,
+            MOVE_EARTH_POWER
+        },
+        .ability = ABILITY_STORM_DRAIN,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GRASS,
+    },
 
     // 0558
     {
@@ -16419,7 +16439,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHELL_SMASH,
             MOVE_STONE_EDGE,
             MOVE_X_SCISSOR,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_WEAK_ARMOR,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -16429,6 +16449,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_CRUSTLE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_STEALTH_ROCK,
+            MOVE_SPIKES,
+            MOVE_KNOCK_OFF,
+            MOVE_STONE_EDGE
+        },
+        .ability = ABILITY_WEAK_ARMOR,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 4,
+            .def = 252
+        ),
+        .teraType = TYPE_GHOST,
     },
 
     // 0560

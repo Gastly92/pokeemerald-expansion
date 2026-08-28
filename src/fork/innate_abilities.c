@@ -2506,6 +2506,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SHED_SKIN
         )
     },
+    { // 0560
+        SPECIES_SCRAFTY_MEGA,
+        INNATES(
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE,
+            ABILITY_SHED_SKIN
+        )
+    },
     { // 0665
         SPECIES_SCATTERBUG_POKEBALL,
         INNATES(

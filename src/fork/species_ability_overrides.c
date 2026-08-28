@@ -1571,6 +1571,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SCRAFTY, 1,
         ABILITY_RIVALRY
     },
+    { // 0560
+        SPECIES_SCRAFTY_MEGA, 0,
+        ABILITY_RIVALRY
+    },
+    { // 0560
+        SPECIES_SCRAFTY_MEGA, 1,
+        ABILITY_RIVALRY
+    },
+    { // 0560
+        SPECIES_SCRAFTY_MEGA, 2,
+        ABILITY_RIVALRY
+    },
     { // 0561
         SPECIES_SIGILYPH, 2,
         ABILITY_SIMPLE
