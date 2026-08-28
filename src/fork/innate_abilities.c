@@ -2475,6 +2475,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0417
         SPECIES_PACHIRISU,
         INNATES(
+            ABILITY_CHEEK_POUCH,
             ABILITY_PICKUP
         )
     },

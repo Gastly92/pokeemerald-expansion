@@ -12583,7 +12583,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 128,
             .spd = 128
         ),
-        .teraType = TYPE_ELECTRIC,
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_PACHIRISU,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves =
+        {
+            MOVE_SUBSTITUTE,
+            MOVE_NUZZLE,
+            MOVE_SUPER_FANG,
+            MOVE_TOXIC
+        },
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0419
