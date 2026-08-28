@@ -6781,6 +6781,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SAND_VEIL
         )
     },
+    { // 0618
+        SPECIES_STUNFISK_GALAR,
+        INNATES(
+            ABILITY_SAND_VEIL
+        )
+    },
     { // 0619
         SPECIES_MIENFOO,
         INNATES(

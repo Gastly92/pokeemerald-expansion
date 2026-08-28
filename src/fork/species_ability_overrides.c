@@ -1671,6 +1671,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MIENSHAO, 2,
         ABILITY_NO_GUARD
     },
+    { // 0623
+        SPECIES_GOLURK_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    { // 0623
+        SPECIES_GOLURK_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    { // 0623
+        SPECIES_GOLURK_MEGA, 2,
+        ABILITY_NO_GUARD
+    },
     { // 0630
         SPECIES_MANDIBUZZ, 2,
         ABILITY_WIND_RIDER

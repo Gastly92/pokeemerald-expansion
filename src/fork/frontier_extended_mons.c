@@ -17726,7 +17726,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SNAP_TRAP,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_STEALTH_ROCK,
             MOVE_PAIN_SPLIT
         },
@@ -17745,7 +17745,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_STONE_EDGE,
             MOVE_YAWN,
             MOVE_FOUL_PLAY
@@ -17768,7 +17768,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_STEALTH_ROCK,
-            MOVE_DISCHARGE,
+            MOVE_THUNDERBOLT,
             MOVE_EARTH_POWER,
             MOVE_PAIN_SPLIT
         },
@@ -17852,7 +17852,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_OUTRAGE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_FIRE_PUNCH,
             MOVE_SUCKER_PUNCH
         },
@@ -17873,7 +17873,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_POLTERGEIST,
             MOVE_DYNAMIC_PUNCH,
             MOVE_ICE_PUNCH
@@ -17902,8 +17902,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .atk = 4,
-            .spe = 252
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_GROUND,
     },
