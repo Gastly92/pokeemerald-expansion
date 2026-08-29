@@ -22013,7 +22013,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_CLOSE_COMBAT,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_ROCK_SLIDE,
             MOVE_KNOCK_OFF
         },
