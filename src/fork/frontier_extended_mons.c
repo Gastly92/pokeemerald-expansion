@@ -20176,7 +20176,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HAWLUCHA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND,
+        .heldItem = ITEM_FLYING_GEM,
         .moves =
         {
             MOVE_ACROBATICS,

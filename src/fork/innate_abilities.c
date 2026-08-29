@@ -7687,6 +7687,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CUTE_CHARM
         )
     },
+    { // 0698
+        SPECIES_AMAURA,
+        INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_SNOW_CLOAK
+        )
+    },
+    { // 0699
+        SPECIES_AURORUS,
+        INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_SNOW_CLOAK
+        )
+    },
     { // 0701
         SPECIES_HAWLUCHA,
         INNATES(
@@ -7699,7 +7713,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HAWLUCHA_MEGA,
         INNATES(
             ABILITY_LIMBER,
-            ABILITY_MOLD_BREAKER
+            ABILITY_MOLD_BREAKER,
+            ABILITY_UNBURDEN
         )
     },
     { // 0703
