@@ -8334,6 +8334,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TSAREENA,
         INNATES(
             ABILITY_LEAF_GUARD,
+            ABILITY_OBLIVIOUS,
             ABILITY_QUEENLY_MAJESTY,
             ABILITY_SWEET_VEIL
         )
