@@ -230,11 +230,14 @@ For each species/form in the line:
    **Count the canon users before proposing. It is cheap and it is the whole test.**
    (Walk `.abilities` across `src/data/pokemon/species_info/*.h` and group by
    ability.) The count tells you what kind of pick you are holding:
-   - **1 user → it is a signature, not an ability.** Berserk belongs to Drampa
-     alone; Dragon's Maw to Regidrago alone. Each is welded to one creature's
-     specific design — Dragon's Maw is *named for* Regidrago being a giant maw — so
-     giving it to another species is **inventing**, not borrowing. Reject on sight
-     unless the species is that creature's close relative.
+   - **1 user → it is a signature.** Berserk belongs to Drampa alone; Dragon's Maw
+     to Regidrago alone. That is the strongest possible statement about how the
+     ability *reads* — it reads as that creature — so borrowing one needs a flavor
+     case good enough to survive the comparison, and the PR body should name who it
+     is borrowed from. It is **not a veto**. The maintainer settled this in Aug 2026
+     after four batches of raising it: the rows that prompted the question (Dancer,
+     Cotton Down, Mummy, Wandering Spirit, Well-Baked Body, Victory Star and the
+     rest) stand, and a new borrow is judged on flavor like any other pick.
    - **Many users → read the family, then check the species actually belongs.**
      Moxie's 16 (Krookodile, Scrafty, Gyarados, Pinsir, Honchkrow, Heracross …) are
      uniformly swaggering predators, so it misreads on a creature whose dex says it
@@ -243,6 +246,12 @@ For each species/form in the line:
      **ballistics, not eyesight**. Conversely the check can *support* a pick that
      looks wrong: Swift Swim's users include Carracosta, a heavy armored shelled
      turtle, so it is not the speedster-only ability it appears to be.
+
+   **Legendaries and mythicals are judged exactly like anything else.** Earlier
+   batches held them to a minimal row out of caution — filling one only where a CI
+   gate demanded it, and arguing only from the species' own canon family. That is
+   not the rule (maintainer decision, Aug 2026): be as generous with a legendary as
+   the flavor honestly supports, the same way you would with a Rattata.
 
    **Derive the pick from the creature; never reverse-engineer it from mechanics.**
    The failure mode is choosing an ability because it is strong or synergises with
@@ -578,7 +587,10 @@ enhance the analysis. Three limits, because it is describing a different game:
   at by a more respectable route. Generate from the creature first (dex, design, other
   media), *then* let Smogon critique what you built. Never let it bound the move pool.
 - **This fork's mechanics are not vanilla, so a competitive claim can be flatly wrong
-  here.** Blizzard's max PP is scaled to 3 by `DETERMINISTIC_ACCURACY_EVASION`;
+  here.** Blizzard's max PP is scaled by `DETERMINISTIC_ACCURACY_EVASION` (5 base
+  x 70 accuracy = 3) and then raised back to **4** by the facility's max PP Ups
+  (`B_FRONTIER_MAX_PP`, `src/battle_frontier.c`) — quote the in-battle number, not
+  the scaled base, for any move you are pricing;
   secondaries fire only on super-effective hits; paralysis loses full-para and the Speed
   drop; high-crit moves always crit through the strong-hit gate; Shell Bell and Leech
   Seed are buffed. Re-check any Smogon-derived claim against
@@ -896,7 +908,7 @@ saying them again in one table is cheaper than another correction.
 | "Sheer Force means always take the stronger move" | Sheer Force cancels **Life Orb recoil** on any move it boosts, so a *weaker* move with a secondary can beat a stronger one without: Ancient Power at 60 BP x1.3 and no recoil ties an 80 BP Power Gem that pays it. |
 | "Surf hits both foes" | Surf is `TARGET_FOES_AND_ALLY` at this fork's `B_UPDATED_MOVE_DATA` — it hits your **own partner**. The source reads `TARGET_BOTH` in a ternary, so grepping for the constant misses it. See the spread-move checklist in Step 3. |
 | "Sheer Force only trades away *chance-based* secondaries" | `MoveIsAffectedBySheerForce` tests `chance > 0`, so it **strips 100% effects too** — Fake Out's flinch, Chilling Water's Attack drop, Pounce's Speed drop. Never put Fake Out on a set that names Sheer Force. |
-| "Wide Lens / Zoom Lens still do something" | **Inert.** Their only code path is `GetTotalAccuracy()`, which `DETERMINISTIC_ACCURACY_EVASION` bypasses, and they are not among the items converted into the PP-tax economy (BrightPowder, Lax Incense, Wonder Skin, Hustle and Micle Berry are). BrightPowder *is* live — it taxes attackers a PP. |
+| "Wide Lens / Zoom Lens are inert" | **Not any more** — `BUFF_ACCURACY_ITEMS` gave both a job. They cancel the *attacker's* side of the PP economy: Wide Lens the flat evasion taxes, Zoom Lens those **plus** the whole stat-stage half (the target's evasion boosts *and* the holder's own accuracy drops) while it moves second. Pure boon — never refunds below the base 1 PP. Both also feed the INFO viewer: Wide Lens reveals every seen foe's held item, Zoom Lens one foe's ability and full moveset. `GetAccuracyItemRelief()` in `src/fork/deterministic_moves.c`; a roster test fails a set holding a lens its own ability already makes redundant. BrightPowder is live too — it taxes attackers a PP. |
 | "A form's ability slot is free to override if the ability is redundant" | Check `form_change_tables.h` first. Cherrim's Overcast ↔ Sunshine change is gated on `ABILITY_FLOWER_GIFT` under `B_WEATHER_FORMS >= GEN_5` (the shipped config), so overriding that slot would strand it in one form for the whole battle. |
 | "No Guard is inert — every move hits anyway" | **Live, and good.** Semi-invulnerability is resolved *before* the accuracy gate (see the `FORK:` comment in `DoesMoveMissTarget`), and `CanBreakThroughSemiInvulnerablityInternal` returns TRUE for No Guard on either side — so it hits through Fly, Dig, Dive, Bounce and Phantom Force. It also zeroes the evasion PP tax outright (`GetDeterministicMoveTargetPPTax`). |
 | "This canon ability is missing from the row, so it is a gap" | Check the rest of the row first: **another innate may make its trigger impossible.** Inner Focus never flinches, so an innate Steadfast can never fire (Riolu line); Own Tempo is never confused, so it kills its own Tangled Feet (Spinda). Both are deliberate omissions with tests pinning them — and an added innate does not *fail* such a test, it invalidates its `ASSUME` and silently turns a pass into `ASSUMPTIONS_FAILED`, so watch the passed count, not just the red count. |
