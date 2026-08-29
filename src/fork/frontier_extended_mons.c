@@ -20836,7 +20836,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_SHADOW_BALL,
             MOVE_FOCUS_BLAST,
-            MOVE_NASTY_PLOT
+            MOVE_TRICK
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
