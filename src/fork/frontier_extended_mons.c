@@ -20429,7 +20429,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TREVENANT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_HORN_LEECH,
@@ -20454,7 +20454,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_POLTERGEIST,
             MOVE_WOOD_HAMMER,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_SHADOW_SNEAK
         },
         .ability = ABILITY_SAP_SIPPER,
