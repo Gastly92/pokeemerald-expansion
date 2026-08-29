@@ -2515,32 +2515,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0664
-        SPECIES_SCATTERBUG,
-        INNATES(
-            ABILITY_COMPOUND_EYES,
-            ABILITY_FRIEND_GUARD,
-            ABILITY_SHIELD_DUST
-        )
-    },
-    { // 0664
         SPECIES_SCATTERBUG_POKEBALL,
         INNATES(
             ABILITY_SHED_SKIN
-        )
-    },
-    { // 0665
-        SPECIES_SPEWPA,
-        INNATES(
-            ABILITY_FRIEND_GUARD,
-            ABILITY_SHED_SKIN
-        )
-    },
-    { // 0666
-        SPECIES_VIVILLON,
-        INNATES(
-            ABILITY_COMPOUND_EYES,
-            ABILITY_FRIEND_GUARD,
-            ABILITY_SHIELD_DUST
         )
     },
     { // 0682
@@ -7547,12 +7524,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
-    { // 0681
-        SPECIES_AEGISLASH_SHIELD,
-        INNATES(
-            ABILITY_LEVITATE
-        )
-    },
     { // 0684
         SPECIES_SWIRLIX,
         INNATES(
@@ -7915,6 +7886,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0718
         SPECIES_ZYGARDE_10,
+        INNATES(
+            ABILITY_REGENERATOR
+        )
+    },
+    { // 0718
+        SPECIES_ZYGARDE_10_POWER_CONSTRUCT,
+        INNATES(
+            ABILITY_REGENERATOR
+        )
+    },
+    { // 0718
+        SPECIES_ZYGARDE_50_POWER_CONSTRUCT,
         INNATES(
             ABILITY_REGENERATOR
         )
