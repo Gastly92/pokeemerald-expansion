@@ -711,17 +711,13 @@ TEST("Frontier extended roster: the roster's NFEs are exactly the niche NFEs")
     EXPECT_EQ(mismatches, 0);
 }
 
-// ===== Line-review ratchets ===============================================================
+// ===== Line-review set-shape gates ========================================================
 //
-// FORK: two set-shape gates the /line-review sweep of Gen 1-3 turned into recurring findings.
-// Both are RATCHETS, matching the innate-row gates in test/fork/innate_abilities.c: Gens 4-9 have
-// not been line-reviewed and carry well over a hundred instances between them, so failing on those
-// would only wedge CI. Each batch raises this bound as it lands, and the gate holds everything
-// already reviewed.
-//
-// KEEP IN SYNC with sInnateRowsReviewedThroughDex in test/fork/innate_abilities.c -- the two
-// constants track the same sweep and should be bumped together.
-static const u16 sSetShapeReviewedThroughDex = NATIONAL_DEX_PECHARUNT; // the whole dex is reviewed; this is now the last entry. KEEP IN SYNC with the twin in test/fork/innate_abilities.c
+// FORK: two set-shape gates the /line-review sweep turned into recurring findings. Both were
+// RATCHETS while the sweep ran, matching the innate-row gates in test/fork/innate_abilities.c --
+// bounded by a reviewed-through-dex constant each batch raised as it landed, so the unreviewed
+// generations could not wedge CI. The sweep finished at Pecharunt and both bounds were retired;
+// these gates now hold for the whole roster, unconditionally.
 
 static bool32 SetIsDoublesCapable(const struct TrainerMon *set)
 {
@@ -741,7 +737,7 @@ static bool32 IsDeliberateSelfKoMove(enum Move move)
     return move == MOVE_EXPLOSION || move == MOVE_SELF_DESTRUCT || move == MOVE_MISTY_EXPLOSION;
 }
 
-TEST("Frontier extended roster: no reviewed doubles set carries a move that hits its own ally")
+TEST("Frontier extended roster: no doubles set carries a move that hits its own ally")
 {
     u32 i;
     u32 checked = 0;
@@ -752,8 +748,6 @@ TEST("Frontier extended roster: no reviewed doubles set carries a move that hits
         const struct TrainerMon *set = &gFrontierExtendedMons[i];
         u32 slot;
 
-        if (SpeciesToNationalPokedexNum(set->species) > sSetShapeReviewedThroughDex)
-            continue;
         if (!SetIsDoublesCapable(set))
             continue;
 
@@ -790,7 +784,7 @@ static bool32 IsChoiceLockSafeStatusMove(enum Move move)
     return move == MOVE_TRICK || move == MOVE_SWITCHEROO || move == MOVE_TRANSFORM;
 }
 
-TEST("Frontier extended roster: no reviewed Choice set carries a status move the lock would strand")
+TEST("Frontier extended roster: no Choice set carries a status move the lock would strand")
 {
     u32 i;
     u32 checked = 0;
@@ -801,8 +795,6 @@ TEST("Frontier extended roster: no reviewed Choice set carries a status move the
         const struct TrainerMon *set = &gFrontierExtendedMons[i];
         u32 slot;
 
-        if (SpeciesToNationalPokedexNum(set->species) > sSetShapeReviewedThroughDex)
-            continue;
         if (set->heldItem != ITEM_CHOICE_BAND && set->heldItem != ITEM_CHOICE_SPECS
          && set->heldItem != ITEM_CHOICE_SCARF)
             continue;

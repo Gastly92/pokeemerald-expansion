@@ -147,16 +147,21 @@ a line is reviewed once no matter how many of its members the range covers.
   a rejection in one line only touches another if they shared a resource (the
   same item, the same borrowed ability), which is worth checking and usually
   isn't the case.
-- **Raise the review ratchet as the last step of the batch.** Five CI gates are
-  bounded by a "reviewed through this dex number" constant, so they hold
-  everything already swept and stay quiet about the generations still to come:
-  `sInnateRowsReviewedThroughDex` in `test/fork/innate_abilities.c` and
-  `sSetShapeReviewedThroughDex` in `test/fork/frontier_extended_roster.c` (keep
-  the two in sync). Set both to the batch's last dex number, run the filtered
-  checks, and fix whatever they name — that is the batch's real completion
-  criterion, and it catches the class of defect a per-line reading misses. The
-  first time this was done it found **55 ally-hitting spread moves inside
-  territory the sweep had already been through**.
+- **Run the filtered checks as the last step of the batch.** Five CI gates cover
+  the whole dex unconditionally: innate-row coverage, pre-evolution coverage, a
+  legal observable slot per drafted species, no ally-hitting spread move on a
+  doubles set, and no status move stranded under a Choice item. Run
+  `make check TESTS="Innate"` and `TESTS="Frontier extended roster"` and fix
+  whatever they name — that is the batch's real completion criterion, and it
+  catches the class of defect a per-line reading misses.
+
+  These five were **review ratchets** while the sweep ran, bounded by a
+  "reviewed through this dex number" constant each batch raised as it landed.
+  The sweep finished at Pecharunt and both constants were retired, so the gates
+  now simply hold. The bumps earned their keep on the way: the first found **55
+  ally-hitting spread moves inside territory the sweep had already been through**,
+  and the last three each caught missing rows or ally-hitting moves the per-line
+  pass had walked straight past.
 
 ---
 
@@ -193,10 +198,11 @@ a line is reviewed once no matter how many of its members the range covers.
   rather than arguing from memory — the evidence usually settles it in the
   maintainer's favor, and occasionally it will support the pick, which is worth
   saying plainly.
-- **Seven CI tests gate this data** — keep them green (see each step). Two are
-  absolute (an override or set naming an innate-capable or reserved ability); five
-  are **review ratchets** bounded by a "reviewed through this dex number" constant
-  that each batch raises as it lands. See "Shipping the batch" above.
+- **Seven CI tests gate this data** — keep them green (see each step). All seven
+  are absolute now: two on abilities (an override or set naming an innate-capable
+  or reserved ability) and five on coverage and set shape. The latter five were
+  review ratchets during the sweep and lost their dex bound when it finished. See
+  "Shipping the batch" above.
 
 ---
 
@@ -344,9 +350,9 @@ observable slot is forced to hold whatever never-an-innate ability is left over,
 which is often somebody's signature (see Step 2).
 
 **Verify:** `make check TESTS="Innate"` — five tests, three of them the coverage
-ratchets: every reviewed species with a set has a row, every reviewed
-pre-evolution of one does too, and every reviewed species the roster drafts has
-at least one slot that can legally hold an observable ability.
+gates: every species with a set has a row, every pre-evolution of one does too,
+and every species the roster drafts has at least one slot that can legally hold
+an observable ability.
 
 **Before Step 2:** settle the innate list. Which slots Step 2 may repurpose is
 determined by the innates you have actually decided on, so don't start Step 2
@@ -909,7 +915,7 @@ saying them again in one table is cheaper than another correction.
 | "Surf hits both foes" | Surf is `TARGET_FOES_AND_ALLY` at this fork's `B_UPDATED_MOVE_DATA` — it hits your **own partner**. The source reads `TARGET_BOTH` in a ternary, so grepping for the constant misses it. See the spread-move checklist in Step 3. |
 | "Sheer Force only trades away *chance-based* secondaries" | `MoveIsAffectedBySheerForce` tests `chance > 0`, so it **strips 100% effects too** — Fake Out's flinch, Chilling Water's Attack drop, Pounce's Speed drop. Never put Fake Out on a set that names Sheer Force. |
 | "Wide Lens / Zoom Lens are inert" | **Not any more** — `BUFF_ACCURACY_ITEMS` gave both a job. They cancel the *attacker's* side of the PP economy: Wide Lens the flat evasion taxes, Zoom Lens those **plus** the whole stat-stage half (the target's evasion boosts *and* the holder's own accuracy drops) while it moves second. Pure boon — never refunds below the base 1 PP. Both also feed the INFO viewer: Wide Lens reveals every seen foe's held item, Zoom Lens one foe's ability and full moveset. `GetAccuracyItemRelief()` in `src/fork/deterministic_moves.c`; a roster test fails a set holding a lens its own ability already makes redundant. BrightPowder is live too — it taxes attackers a PP. |
-| "This species has no innate row / no sets" | **Resolve the constant to a species id before believing it.** Rows and sets are frequently keyed on a form constant that the bare name aliases to — `SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_SCATTERBUG` → `_ICY_SNOW`, `SPECIES_ZYGARDE` → `_50`, and `SPECIES_GOURGEIST` → `_AVERAGE` while the roster actually drafts `_SUPER`. **Minior chains two hops** (`SPECIES_MINIOR` → `_METEOR` → `_METEOR_RED`), so one substitution is not enough. Grepping `SPECIES_X_` with a trailing underscore misses a bare `SPECIES_X`; grepping the bare name misses the form rows. The Gen 6 batch added four duplicate innate rows this way (shadowing real ones and breaking the Effect Spore test) and missed an entire Hoopa set — the gates caught both, but only at the ratchet bump. |
+| "This species has no innate row / no sets" | **Resolve the constant to a species id before believing it.** Rows and sets are frequently keyed on a form constant that the bare name aliases to — `SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_SCATTERBUG` → `_ICY_SNOW`, `SPECIES_ZYGARDE` → `_50`, and `SPECIES_GOURGEIST` → `_AVERAGE` while the roster actually drafts `_SUPER`. **Minior chains two hops** (`SPECIES_MINIOR` → `_METEOR` → `_METEOR_RED`), so one substitution is not enough. Grepping `SPECIES_X_` with a trailing underscore misses a bare `SPECIES_X`; grepping the bare name misses the form rows. The Gen 6 batch added four duplicate innate rows this way (shadowing real ones and breaking the Effect Spore test) and missed an entire Hoopa set — the gates caught both, but only at the end-of-batch check rather than during the per-line pass. |
 | "A form's ability slot is free to override if the ability is redundant" | Check `form_change_tables.h` first. Cherrim's Overcast ↔ Sunshine change is gated on `ABILITY_FLOWER_GIFT` under `B_WEATHER_FORMS >= GEN_5` (the shipped config), so overriding that slot would strand it in one form for the whole battle. |
 | "No Guard is inert — every move hits anyway" | **Live, and good.** Semi-invulnerability is resolved *before* the accuracy gate (see the `FORK:` comment in `DoesMoveMissTarget`), and `CanBreakThroughSemiInvulnerablityInternal` returns TRUE for No Guard on either side — so it hits through Fly, Dig, Dive, Bounce and Phantom Force. It also zeroes the evasion PP tax outright (`GetDeterministicMoveTargetPPTax`). |
 | "This canon ability is missing from the row, so it is a gap" | Check the rest of the row first: **another innate may make its trigger impossible.** Inner Focus never flinches, so an innate Steadfast can never fire (Riolu line); Own Tempo is never confused, so it kills its own Tangled Feet (Spinda). Both are deliberate omissions with tests pinning them — and an added innate does not *fail* such a test, it invalidates its `ASSUME` and silently turns a pass into `ASSUMPTIONS_FAILED`, so watch the passed count, not just the red count. |

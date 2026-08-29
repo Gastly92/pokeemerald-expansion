@@ -78,15 +78,14 @@ applies **per line**, at the same depth.
    converging on the same held item (item scarcity is per drafted team) or the
    same borrowed ability. Spread them.
 6. **Verify once at the end**, not per line — the two filtered `make check` runs
-   are a build each, and CI runs the full suite on the PR. **Raise the review
-   ratchet as part of that verify.** Five gates are bounded by a
-   "reviewed through this dex number" constant —
-   `sInnateRowsReviewedThroughDex` (`test/fork/innate_abilities.c`) and
-   `sSetShapeReviewedThroughDex` (`test/fork/frontier_extended_roster.c`), kept in
-   sync. Set both to the batch's last dex number, rerun the filtered checks, and
-   fix whatever they name; that is the batch's real completion criterion. They
-   catch what a per-line reading cannot — the first bump found 55 ally-hitting
-   spread moves in territory already swept.
+   are a build each, and CI runs the full suite on the PR. Five gates cover the
+   whole dex unconditionally (innate-row coverage, pre-evolution coverage, a legal
+   observable slot per drafted species, no ally-hitting spread move on a doubles
+   set, no status move stranded under a Choice item). Running them and fixing
+   whatever they name is the batch's real completion criterion — they catch what a
+   per-line reading cannot. These were ratchets bounded by a reviewed-through-dex
+   constant while the sweep ran; the sweep finished and the bound was retired, so
+   there is no longer anything to bump.
 7. **One branch `claude/lines-<first>-<last>-review`, one PR** for the batch, with
    **a section per line** in the body carrying everything a single-line PR body
    would (per-step reasoning, flavor evidence with recall flagged, Part A verdicts
