@@ -227,7 +227,7 @@ applies **per line**, at the same depth.
   re-imports the very gate the moveset rule above removes (generate from the creature
   first, then let Smogon critique it — never let it bound the move pool); this fork's
   **mechanics aren't vanilla**, so re-check any claim against `deterministic.h` /
-  `buff.h` (Blizzard is 3 PP here, secondaries need a super-effective hit, paralysis
+  `buff.h` (Blizzard is 4 PP here, secondaries need a super-effective hit, paralysis
   is weaker, high-crit moves always crit through the gate); and the **format differs**
   (Factory drafting, item scarcity, no teambuilding or team preview, AI opponents).
   **Flavor still governs** — a Smogon-optimal set that reads as nothing is a worse

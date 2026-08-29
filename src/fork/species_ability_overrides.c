@@ -1778,6 +1778,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DELPHOX, 1,
         ABILITY_FLASH_FIRE
     },
+    { // 0655
+        SPECIES_DELPHOX_MEGA, 0,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0655
+        SPECIES_DELPHOX_MEGA, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0655
+        SPECIES_DELPHOX_MEGA, 2,
+        ABILITY_FLASH_FIRE
+    },
     { // 0660
         SPECIES_DIGGERSBY, 2,
         ABILITY_EARTH_EATER
@@ -1785,6 +1797,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0666
         SPECIES_VIVILLON, 1,
         ABILITY_WIND_RIDER
+    },
+    { // 0668
+        SPECIES_PYROAR, 0,
+        ABILITY_DROUGHT
     },
     { // 0675
         SPECIES_PANGORO, 0,
@@ -1813,6 +1829,30 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0689
         SPECIES_BARBARACLE, 1,
         ABILITY_WATER_ABSORB
+    },
+    { // 0689
+        SPECIES_BARBARACLE_MEGA, 0,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0689
+        SPECIES_BARBARACLE_MEGA, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0689
+        SPECIES_BARBARACLE_MEGA, 2,
+        ABILITY_WATER_ABSORB
+    },
+    { // 0691
+        SPECIES_DRAGALGE_MEGA, 0,
+        ABILITY_POISON_POINT
+    },
+    { // 0691
+        SPECIES_DRAGALGE_MEGA, 1,
+        ABILITY_POISON_POINT
+    },
+    { // 0691
+        SPECIES_DRAGALGE_MEGA, 2,
+        ABILITY_POISON_POINT
     },
     { // 0693
         SPECIES_CLAWITZER, 1,
@@ -1856,6 +1896,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0719
         SPECIES_DIANCIE, 1,
+        ABILITY_MISTY_SURGE
+    },
+    { // 0719
+        SPECIES_DIANCIE_MEGA, 0,
+        ABILITY_MISTY_SURGE
+    },
+    { // 0719
+        SPECIES_DIANCIE_MEGA, 1,
+        ABILITY_MISTY_SURGE
+    },
+    { // 0719
+        SPECIES_DIANCIE_MEGA, 2,
         ABILITY_MISTY_SURGE
     },
     { // 0720
