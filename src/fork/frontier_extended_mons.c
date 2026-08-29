@@ -28845,7 +28845,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_IRON_HEAD,
             MOVE_RAPID_SPIN,
             MOVE_ICE_SPINNER
@@ -28994,7 +28994,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FIERY_DANCE,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_ENERGY_BALL,
             MOVE_TERA_BLAST
         },
@@ -29037,7 +29037,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRAGON_DANCE,
             MOVE_STONE_EDGE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_THUNDER_PUNCH
         },
         .ability = ABILITY_QUARK_DRIVE,
