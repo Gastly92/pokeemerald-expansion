@@ -10062,6 +10062,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0954
         SPECIES_RABSCA,
         INNATES(
+            ABILITY_COMPOUND_EYES,
+            ABILITY_SHED_SKIN,
             ABILITY_TELEPATHY
         )
     },
@@ -10076,8 +10078,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0956
         SPECIES_ESPATHRA,
         INNATES(
-            ABILITY_OPPORTUNIST,
+            ABILITY_ANTICIPATION,
             ABILITY_FRISK,
+            ABILITY_OPPORTUNIST,
             ABILITY_SPEED_BOOST
         )
     },
@@ -10136,6 +10139,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_OVERCOAT
         )
     },
+    { // 0963
+        SPECIES_FINIZEN,
+        INNATES(
+            ABILITY_WATER_VEIL
+        )
+    },
+    { // 0964
+        SPECIES_PALAFIN_ZERO,
+        INNATES(
+            ABILITY_WATER_VEIL
+        )
+    },
+    { // 0964
+        SPECIES_PALAFIN_HERO,
+        INNATES(
+            ABILITY_WATER_VEIL
+        )
+    },
     { // 0965
         SPECIES_VAROOM,
         INNATES(
@@ -10152,7 +10173,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0968
         SPECIES_ORTHWORM,
         INNATES(
-            ABILITY_SAND_VEIL
+            ABILITY_SAND_VEIL,
+            ABILITY_SHED_SKIN
         )
     },
     { // 0969
@@ -10164,7 +10186,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0970
         SPECIES_GLIMMORA_MEGA,
         INNATES(
-            ABILITY_ADAPTABILITY
+            ABILITY_ADAPTABILITY,
+            ABILITY_CORROSION
         )
     },
     { // 0970
@@ -10176,6 +10199,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0972
         SPECIES_HOUNDSTONE,
         INNATES(
+            ABILITY_PICKUP,
             ABILITY_SAND_RUSH
         )
     },
@@ -10197,6 +10221,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CETITAN,
         INNATES(
             ABILITY_SLUSH_RUSH,
+            ABILITY_SNOW_CLOAK,
             ABILITY_THICK_FAT
         )
     },
@@ -10213,6 +10238,48 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_OBLIVIOUS,
             ABILITY_UNAWARE,
             ABILITY_WATER_VEIL
+        )
+    },
+    { // 0978
+        SPECIES_TATSUGIRI,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0978
+        SPECIES_TATSUGIRI_DROOPY,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0978
+        SPECIES_TATSUGIRI_STRETCHY,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0978
+        SPECIES_TATSUGIRI_CURLY_MEGA,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0978
+        SPECIES_TATSUGIRI_DROOPY_MEGA,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0978
+        SPECIES_TATSUGIRI_STRETCHY_MEGA,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0979
