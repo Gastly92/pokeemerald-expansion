@@ -8390,7 +8390,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_ROOST
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -8410,7 +8410,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BUG_BUZZ,
             MOVE_AIR_SLASH
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -11150,7 +11150,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_HORSEPOWER,
             MOVE_ROOST
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11170,7 +11170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11190,7 +11190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ROOST
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -16483,7 +16483,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_FLUFFY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -16503,7 +16503,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAIN_PUNCH,
             MOVE_ICE_PUNCH
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_FLUFFY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17560,7 +17560,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_HORSEPOWER,
             MOVE_POISON_JAB
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17580,7 +17580,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_FIRST_IMPRESSION
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21957,7 +21957,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_GUNK_SHOT
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_RECEIVER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -21977,7 +21977,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROCK_SLIDE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_RIVALRY,
+        .ability = ABILITY_RECEIVER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

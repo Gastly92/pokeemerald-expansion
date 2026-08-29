@@ -751,6 +751,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LINOONE, 1,
         ABILITY_HUSTLE
     },
+    { // 0267
+        SPECIES_BEAUTIFLY, 2,
+        ABILITY_GRASSY_SURGE
+    },
     { // 0269
         SPECIES_DUSTOX, 1,
         ABILITY_POISON_POINT
@@ -1021,7 +1025,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0373
         SPECIES_SALAMENCE, 1,
-        ABILITY_RIVALRY
+        ABILITY_ANGER_SHELL
     },
     { // 0376
         SPECIES_METAGROSS, 1,
@@ -1569,19 +1573,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0560
         SPECIES_SCRAFTY, 1,
-        ABILITY_RIVALRY
+        ABILITY_FLUFFY
     },
     { // 0560
         SPECIES_SCRAFTY_MEGA, 0,
-        ABILITY_RIVALRY
+        ABILITY_FLUFFY
     },
     { // 0560
         SPECIES_SCRAFTY_MEGA, 1,
-        ABILITY_RIVALRY
+        ABILITY_FLUFFY
     },
     { // 0560
         SPECIES_SCRAFTY_MEGA, 2,
-        ABILITY_RIVALRY
+        ABILITY_FLUFFY
     },
     { // 0561
         SPECIES_SIGILYPH, 2,
@@ -1654,6 +1658,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0609
         SPECIES_CHANDELURE_MEGA, 2,
         ABILITY_FLASH_FIRE
+    },
+    { // 0610
+        SPECIES_HAXORUS, 0,
+        ABILITY_ANGER_SHELL
     },
     { // 0614
         SPECIES_BEARTIC, 1,
@@ -1973,10 +1981,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0764
         SPECIES_COMFEY, 2,
         ABILITY_GRASSY_SURGE
-    },
-    { // 0766
-        SPECIES_PASSIMIAN, 1,
-        ABILITY_RIVALRY
     },
     { // 0770
         SPECIES_PALOSSAND, 1,
