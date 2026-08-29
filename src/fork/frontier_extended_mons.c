@@ -24359,7 +24359,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0845
     {
         .species = SPECIES_CRAMORANT,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
@@ -24376,6 +24376,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
+        .ball = BALL_DIVE,
+    },
+    {
+        .species = SPECIES_CRAMORANT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_HURRICANE,
+            MOVE_ICE_BEAM,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_GULP_MISSILE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GROUND,
         .ball = BALL_DIVE,
     },
 

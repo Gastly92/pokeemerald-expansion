@@ -9083,6 +9083,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SHED_SKIN
         )
     },
+    { // 0845
+        SPECIES_CRAMORANT,
+        INNATES(
+            ABILITY_KEEN_EYE,
+            ABILITY_OBLIVIOUS
+        )
+    },
     { // 0846
         SPECIES_ARROKUDA,
         INNATES(
