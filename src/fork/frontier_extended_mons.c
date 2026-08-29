@@ -455,6 +455,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_BEEDRILL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_POISON_BARB,
+        .moves =
+        {
+            MOVE_TOXIC_SPIKES,
+            MOVE_ATTACK_ORDER,
+            MOVE_CROSS_POISON,
+            MOVE_BANEFUL_BUNKER
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_POISON,
+    },
 
     // 0018
     {

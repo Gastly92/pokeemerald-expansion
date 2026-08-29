@@ -184,6 +184,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
             ABILITY_SKILL_LINK,
+            ABILITY_SNIPER,
             ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
@@ -210,6 +211,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_COMPOUND_EYES,
             ABILITY_EFFECT_SPORE,
             ABILITY_FRISK,
+            ABILITY_GLUTTONY,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
@@ -220,6 +222,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_COMPOUND_EYES,
             ABILITY_EFFECT_SPORE,
             ABILITY_FRISK,
+            ABILITY_GLUTTONY,
             ABILITY_SHIELD_DUST,
             ABILITY_TINTED_LENS
         )
