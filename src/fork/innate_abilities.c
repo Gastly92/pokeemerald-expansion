@@ -7076,25 +7076,33 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0650
         SPECIES_CHESPIN,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_LEAF_GUARD,
+            ABILITY_OVERGROW,
+            ABILITY_STURDY
         )
     },
     { // 0651
         SPECIES_QUILLADIN,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_LEAF_GUARD,
+            ABILITY_OVERGROW,
+            ABILITY_STURDY
         )
     },
     { // 0652
         SPECIES_CHESNAUGHT,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_LEAF_GUARD,
+            ABILITY_OVERGROW,
+            ABILITY_STURDY
         )
     },
     { // 0652
         SPECIES_CHESNAUGHT_MEGA,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_LEAF_GUARD,
+            ABILITY_OVERGROW,
+            ABILITY_STURDY
         )
     },
     { // 0653
