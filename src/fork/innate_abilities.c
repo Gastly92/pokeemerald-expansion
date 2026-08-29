@@ -7999,18 +7999,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0728
         SPECIES_POPPLIO,
         INNATES(
+            ABILITY_DANCER,
+            ABILITY_PUNK_ROCK,
             ABILITY_TORRENT
         )
     },
     { // 0729
         SPECIES_BRIONNE,
         INNATES(
+            ABILITY_DANCER,
+            ABILITY_PUNK_ROCK,
             ABILITY_TORRENT
         )
     },
     { // 0730
         SPECIES_PRIMARINA,
         INNATES(
+            ABILITY_DANCER,
+            ABILITY_PUNK_ROCK,
             ABILITY_TORRENT
         )
     },

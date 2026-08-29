@@ -21130,7 +21130,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
-            MOVE_SPARKLING_ARIA,
+            MOVE_HYPER_VOICE,
             MOVE_MOONBLAST,
             MOVE_PSYCHIC,
             MOVE_FLIP_TURN
@@ -21170,7 +21170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_HYPER_VOICE,
             MOVE_MOONBLAST,
             MOVE_ENERGY_BALL,
             MOVE_PSYCHIC
