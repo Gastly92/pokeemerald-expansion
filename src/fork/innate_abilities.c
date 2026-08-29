@@ -9318,7 +9318,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0870
         SPECIES_FALINKS_MEGA,
         INNATES(
-            ABILITY_BATTLE_ARMOR
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_DEFIANT
         )
     },
     { // 0872
