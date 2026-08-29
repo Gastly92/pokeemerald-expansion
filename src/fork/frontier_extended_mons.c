@@ -24092,7 +24092,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_LIQUIDATION,
             MOVE_STONE_EDGE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_SWORDS_DANCE
         },
         .ability = ABILITY_WATER_ABSORB,
