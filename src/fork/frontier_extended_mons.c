@@ -23157,6 +23157,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_KARTANA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_LEAF_BLADE,
+            MOVE_SACRED_SWORD,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_BULLETPROOF,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0799
     {
@@ -23254,6 +23274,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         },
         .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_NECROZMA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_WEAKNESS_POLICY,
+        .moves =
+        {
+            MOVE_PHOTON_GEYSER,
+            MOVE_HEAT_WAVE,
+            MOVE_EARTH_POWER,
+            MOVE_DARK_PULSE
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
