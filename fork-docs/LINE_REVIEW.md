@@ -55,13 +55,40 @@ carry it into that step and act on it there, rather than bolting it onto the ste
 you are currently on.
 ---
 
-## Batch reviews — a range of dex numbers in one pass
+## Batch reviews — a range of lines in one pass
 
 A review can be asked for as a **batch**: *"let's review the lines from number 0
-to 25"*, *"lines 26-50"*, *"the next ten lines."* A batch changes the
-**packaging** (one branch, one commit per line, one PR) and nothing else — every
-line in it still gets the full three-step review at the same depth, with the same
-evidence and the same hard constraints.
+to 25"*, *"lines 26-50"*, *"the next ten lines"* — or **a whole generation**,
+*"let's do all of Gen 5."* A batch changes the **packaging** (one branch, commits
+grouped by line, one PR) and nothing else — every line in it still gets the full
+three-step review at the same depth, with the same evidence and the same hard
+constraints.
+
+### Generations are a range, and the natural batch size
+
+A generation is the unit the full sweep actually ran in, and it is the one to
+reach for by default. The dex boundaries:
+
+| Gen | Range | Gen | Range |
+|---|---|---|---|
+| I | #1–151 | VI | #650–721 |
+| II | #152–251 | VII | #722–809 |
+| III | #252–386 | VIII | #810–905 |
+| IV | #387–493 | IX | #906–1025 |
+| V | #494–649 | | |
+
+Two things to know before quoting a line count from those numbers:
+
+- **A generation pulls in earlier-generation lines through cross-evolutions**, and
+  they are part of the batch. Gen 9 dragged in seven — Mankey→Annihilape,
+  Wooper→Clodsire, Girafarig→Farigiraf, Dunsparce→Dudunsparce,
+  Pawniard→Kingambit, plus the Applin and Duraludon lines through Dipplin,
+  Hydrapple and Archaludon. Gen 8 pulled Zigzagoon, Meowth, Corsola, Farfetch'd,
+  Mr. Mime and Yamask back in through their Galarian evolutions.
+- **The line count is much lower than the number count**, because a line is one
+  unit no matter how many members it has: Gen 7's 88 numbers were 55 lines, Gen
+  8's 96 were 60, Gen 9's 120 were 78. Sixty to eighty lines is a long batch but a
+  workable one; it is what the last three ran at.
 
 ### Resolving the range to a list of lines
 
@@ -101,11 +128,83 @@ a line is reviewed once no matter how many of its members the range covers.
   line (Part A's *keep as-is* verdict is the same judgement), and it still earns
   its PR section saying what was checked and why it stands.
 - **Order the batch by ascending dex**, on each line's lowest in-range number.
+- **Derive the list from the repo, not from memory, and check it covers the
+  range.** Recalling which species evolve into which does not survive a
+  sixty-line batch. `python3 .claude/skills/line-review/tools/lines.py <first>
+  <last>` walks `.natDexNum` and `.evolutions` in
+  `src/data/pokemon/species_info/*.h`, unioning species that share a dex number so
+  a creature's forms collapse into one line. Then **verify every number in the
+  range is accounted for by some line** — the Gen 9 pass built exactly this script
+  and *still* dropped Ogerpon, which surfaced only on a later manual pass, because
+  nothing checked the output for holes.
+- **Resolve every species name to an id before believing anything about it.** This
+  is the single most expensive recurring mistake in the sweep's history, and it is
+  the first step of working any line, not a troubleshooting note. See "Resolve the
+  constant first" below.
 - **Write the resolved list down before starting any work.** It is the batch's
   table of contents and the PR's section list. Note against each line whether it
   has a previous review (with its PR number), since that is what tells you how
   deep the pass has to go. State it back to the maintainer, then start — a range
   is an instruction, not a proposal, so don't stop for confirmation on the list.
+
+### Resolve the constant first — the sweep's most expensive recurring bug
+
+Rows and sets are routinely keyed on a **form constant that a bare species name
+aliases to**, so grepping the name you have in mind and finding nothing means
+nothing. `SPECIES_AEGISLASH` is `_SHIELD`; `SPECIES_ZYGARDE` is `_50`;
+`SPECIES_GOURGEIST` is `_AVERAGE` while the roster drafts `_SUPER`;
+`SPECIES_MINIOR` chains **two** hops to `_METEOR_RED`. It runs the other way too:
+Alcremie's row is under `SPECIES_ALCREMIE_STRAWBERRY_VANILLA_CREAM`, and Ogerpon
+has sets under both `SPECIES_OGERPON` and `SPECIES_OGERPON_TEAL`, which are the
+same species.
+
+**Before concluding a species has no row or no set, resolve its name against
+`include/constants/species.h`** and check every constant that resolves to the same
+id, plus every form constant sharing its prefix.
+
+```bash
+python3 .claude/skills/line-review/tools/forms.py MINIOR AEGISLASH
+```
+
+which prints every constant sharing the name's id or prefix, and says
+`NO SUCH CONSTANT` for a name that does not exist — which is how a row written
+against a made-up constant gets caught before it reaches the compiler.
+
+This doc carried a *paragraph* warning about the trap for three batches running
+and it went on biting anyway. What actually stopped it was making the resolution
+step mechanical. The damage it did while it was only advice:
+
+- **Gen 6** — four duplicate innate rows written against bare aliases, shadowing
+  real rows and breaking the Effect Spore test, plus an entire Hoopa set missed.
+- **Gen 7** — a duplicate Oricorio row, caught only by the end-of-batch gate run.
+- **Gen 8** — a row written for `SPECIES_TOXTRICITY_GMAX`, **a constant that does
+  not exist** (the real ones are `_AMPED_GMAX` and `_LOW_KEY_GMAX`). That one
+  would have failed the build.
+- **Gen 9** — seven false "no row" alarms in one batch (Alcremie, Indeedee,
+  Sinistea, Polteageist, Zacian, Zamazenta, Urshifu), every one of which already
+  had a row under a name the query missed.
+
+A comment sitting after the constant defeats the same greps: the Dudunsparce row
+read as missing for exactly that reason until the annotation was stripped. That is
+one more argument for the no-comments rule in the golden rules above.
+
+### The helper scripts
+
+`.claude/skills/line-review/tools/` holds the queries this review keeps needing.
+They are committed rather than rewritten per session, because the two rules most
+worth mechanising — resolve the constant first, derive the line list from the repo
+— are worth nothing if the thing that does them dies with the container. Run them
+from the repo root; each carries its usage in a docstring.
+
+| Script | What it answers |
+|---|---|
+| `forms.py NAME…` | every constant sharing that name's id or prefix — **run before believing a row is missing** |
+| `lines.py FIRST LAST` | the evolutionary lines a dex range covers |
+| `line.py NAME…` | the innate row, override rows and every frontier set for a species |
+| `dex.py NAME…` | types, base stats, canon abilities and the `.description` to quote |
+| `users.py ABILITY…` | the canon users of an ability — the Step 1 signature gate |
+| `inn.py SPECIES… ABILITY…` | add innates to existing rows, keeping them alphabetical |
+| `addset.py NAME` | insert a new frontier set after that species' last one |
 
 ### Working the batch
 
@@ -118,10 +217,16 @@ a line is reviewed once no matter how many of its members the range covers.
   batch can reach for the same held item or the same borrowed ability. A batch is
   the one vantage point where item crowding is visible — if three of the batch's
   sets are converging on Leftovers, spread them (see the scarcity note in Step 3).
-- **Commit and push after every line.** One commit per line, scoped to that
-  line's rows, subject `Line review: <Line> line — <what changed>` — the subject
-  a single-line PR would have carried. The container is ephemeral: a lost session
-  should cost one line, not ten.
+- **Commit and push after every line — or after each adjacent group sharing a
+  cause.** One commit per line, scoped to that line's rows, subject
+  `Line review: <Line> line — <what changed>` — the subject a single-line PR would
+  have carried. The container is ephemeral: a lost session should cost one line,
+  not ten. On a long batch, a run of adjacent lines whose changes land in the same
+  files for the same reason may share one commit with a subject naming the range
+  (`Line review: Pincurchin through Copperajah (#871-879)`) and a body enumerating
+  each line — the last three batches did this repeatedly and nothing was lost by
+  it. What is **not** optional is the per-line section in the PR body: commits may
+  group, the review record may not.
 - **Verify once, at the end of the batch.** `make check TESTS="Frontier extended
   roster"` and `make check TESTS="Innate"` are a build each; running them per
   line burns the budget for no extra signal, and CI runs the full suite on the PR.
@@ -147,21 +252,29 @@ a line is reviewed once no matter how many of its members the range covers.
   a rejection in one line only touches another if they shared a resource (the
   same item, the same borrowed ability), which is worth checking and usually
   isn't the case.
-- **Run the filtered checks as the last step of the batch.** Five CI gates cover
-  the whole dex unconditionally: innate-row coverage, pre-evolution coverage, a
-  legal observable slot per drafted species, no ally-hitting spread move on a
-  doubles set, and no status move stranded under a Choice item. Run
-  `make check TESTS="Innate"` and `TESTS="Frontier extended roster"` and fix
-  whatever they name — that is the batch's real completion criterion, and it
-  catches the class of defect a per-line reading misses.
+- **Run the filtered checks as the last step of the batch — you will have missed
+  something.** Five CI gates cover the whole dex unconditionally: innate-row
+  coverage, pre-evolution coverage, a legal observable slot per drafted species, no
+  ally-hitting spread move on a doubles set, and no status move stranded under a
+  Choice item. Run `make check TESTS="Innate"` and
+  `TESTS="Frontier extended roster"` and fix whatever they name. That is the
+  batch's real completion criterion.
 
-  These five were **review ratchets** while the sweep ran, bounded by a
-  "reviewed through this dex number" constant each batch raised as it landed.
-  The sweep finished at Pecharunt and both constants were retired, so the gates
-  now simply hold. The bumps earned their keep on the way: the first found **55
-  ally-hitting spread moves inside territory the sweep had already been through**,
-  and the last three each caught missing rows or ally-hitting moves the per-line
-  pass had walked straight past.
+  Treat it as a certainty rather than a formality. **Every single run of this step
+  across the whole sweep found something the per-line pass had walked straight
+  past** — 55 ally-hitting spread moves the first time, inside territory already
+  reviewed; four items in Gen 6; four in Gen 7; four in Gen 8; three in Gen 9,
+  where the Paradox mons' sets went unchecked because the pass had just finished
+  writing their innate rows and moved on. The five gates used to be **ratchets**
+  bounded by a reviewed-through-dex constant that each batch raised; the sweep
+  finished at Pecharunt and both constants were retired, so there is nothing left
+  to bump — but the *reason* to run them is unchanged and is not going away.
+
+  A batch that touches many sets should also run one filtered check **early**,
+  after the first two or three lines, rather than only at the end. A systematic
+  mistake caught on line 3 costs one fix; the same mistake caught on line 60 costs
+  sixty. Batch 12 added a duplicate `.iv` designator to three sets before anything
+  compiled and only found out at the end.
 
 ---
 
@@ -192,15 +305,28 @@ a line is reviewed once no matter how many of its members the range covers.
   step. When two picks are genuinely a coin-flip on taste, take one, ship it, and
   name it in the PR body as an open question — an unresolved question is a line in
   the PR, not a reason to stop the review.
+- **Read mechanics and canon from source at the moment you write the claim.**
+  Not from memory, not from a previous session's summary. Ability lists come from
+  `.abilities` in `src/data/pokemon/species_info/*.h`; fork mechanics come from
+  `include/config/deterministic.h`, `include/config/buff.h` and the engine code
+  the flag names. This has gone wrong twice in ways the maintainer had to catch:
+  Rivalry was described as a gender coin-flip in two separate sessions before
+  anyone opened `src/battle_util.c` and found the fork rewrites it to key off
+  shared **type**; and a Gen 8 commit message asserted a canon ability for
+  Galarian Yamask that the species does not have. Both were recall presented with
+  the confidence of a lookup. A claim about what an ability *does* or what a
+  species *has* is one grep away — take it.
 - **Expect to be wrong about flavor, and check before defending.** Many picks get
   rejected in review; that is the process working, not a failure. When a pick is
   challenged on the PR, go and verify (canon users, the repo's dex text, the engine)
   rather than arguing from memory — the evidence usually settles it in the
   maintainer's favor, and occasionally it will support the pick, which is worth
   saying plainly.
-- **Seven CI tests gate this data** — keep them green (see each step). All seven
+- **Ten CI tests gate this data** — keep them green (see each step). All ten
   are absolute now: two on abilities (an override or set naming an innate-capable
-  or reserved ability) and five on coverage and set shape. The latter five were
+  or reserved ability), five on coverage and set shape, and three added after the
+  sweep (a damaging move on the stat the set dumped, two sets on one species that
+  are the same set, and an item none of the set's moves can activate). The latter five were
   review ratchets during the sweep and lost their dex bound when it finished. See
   "Shipping the batch" above.
 
@@ -306,22 +432,97 @@ For each species/form in the line:
    tell that it has: media cited only to *reject* a candidate (the direction where
    being wrong costs nothing) and never to generate one.
 
+   **The enforcement lives in the PR template, not in this paragraph.** Everything
+   above has been in this doc, in these words, through the whole sweep — and the
+   pass was still skipped on the large majority of lines in Gens 7, 8 and 9, which
+   the PR bodies say plainly. More emphasis here will not fix that, because the
+   failure is not disagreement, it is that an omission leaves no trace. So the
+   media note is a **required field in every per-line PR section** (see "Write the
+   PR body"), with *"no usable media evidence"* as a legal value. A section without
+   one is an incomplete section, and that is visible in the artifact the maintainer
+   actually reads.
+
+   **You are proposing, not asserting — the maintainer is the verifier.** That is
+   the point the honesty requirement obscures. Flagging recall does not put you on
+   the hook for being right about an episode; it hands a checkable claim to someone
+   who can check it. A media pick that turns out to be misremembered costs one line
+   of review; a media pass never run costs every flavor pick it would have found.
+   Offer it.
+
    The canon-user count (above) is still the gate. Media evidence tells you *which*
    ability expresses the creature; it never licenses a 1-user signature.
-3. **Keep the line consistent by default, but differentiate by form when
+3. **A line with NO row has a signature — check it before hunting.** Nearly every
+   missing row the sweep found had the same cause, and it is structural rather than
+   careless: **the species' only canon abilities are all never-an-innate**, so
+   there was nothing to seed a row from and it was skipped. Kecleon (Color Change,
+   Protean), the Manectric line, the weather trio, Mimikyu (Disguise), Minior
+   (Shields Down), Silvally (RKS System), Cramorant (Gulp Missile), Wishiwashi
+   (Schooling), Eiscue (Ice Face), Morpeko (Hunger Switch), Palafin (Zero to Hero),
+   Tatsugiri (Commander), Terapagos (Tera Shift), and all twenty-five Gen 9 cases
+   are one pattern. Recognising it saves the wasted search for a canon ability that
+   was never there, and tells you immediately that this row must be built from
+   **flavor**, not from canon.
+
+   Those signature abilities usually *must* stay never-an-innate, because they gate
+   a form change — Disguise, Shields Down, Schooling, Ice Face, Hunger Switch, Zero
+   to Hero, Tera Shift and Commander all drive transformations that break if the
+   ability is duplicated as an always-on innate. Do not "fix" the gap by wiring one
+   of them.
+
+4. **When there is nothing to seed from, ask what the species is a version OF.**
+   Free invention is the last resort, not the first. Many species are a variation
+   on another creature, and inheriting that creature's row is both better grounded
+   and more consistent than a fresh guess:
+   - **Paradox mons echo a species** — Great Tusk and Iron Treads are Donphan, Iron
+     Hands is Hariyama, Roaring Moon is Salamence, Walking Wake is Suicune. Twenty
+     Gen 9 rows were built this way, and it is the one thing that whole group
+     genuinely shares.
+   - **Regional forms, Megas and G-Max forms have a base form** whose row they
+     should carry (see the Venusaur pattern in Step 2).
+   - **Fusions take from both halves** — Calyrex's riders take the half of the
+     fusion that As One does *not* already grant, so the row does real work instead
+     of duplicating the observable.
+
+   Trim rather than copy wholesale: the counterpart's row is a starting point, not
+   a transplant. No Pickup on the machine that echoes Delibird, no Levitate on a
+   Ground-type Sandy Shocks, no Rock Head on a Roaring Moon whose sets run no
+   recoil move.
+
+5. **Restoration — put back what canon takes away on evolution.** This is the
+   highest-yield check in Step 1 and it is almost entirely mechanical: compare a
+   species' row against its **pre-evolution's**, and where the pre-evo carries an
+   innate the evolution does not, the evolution has silently lost a trait. Canon
+   swaps abilities on evolution constantly; the fork's innates are identity and
+   should not evaporate. Over forty lines across the sweep changed on this check
+   alone — Obstagoon had lost *all three* of Galarian Linoone's abilities;
+   Toucannon lost Pickup, Boltund lost Rattled, Perrserker lost Pickup and
+   Unnerve, Hydrapple lost Gluttony, Rabsca lost both of Rellor's.
+
+   The same applies across a form split (both Palafin forms, both Eiscue forms,
+   both Toxtricity styles) — **write the innate on every form**, or it vanishes the
+   moment the creature transforms. That is the Meloetta-Pirouette lesson: an
+   innate on only the base form is gone the instant the form changes.
+
+   Two limits. A trait *gained* on evolution stays gained — nothing needs pushing
+   back down the line. And restoration yields to mechanics when the result would
+   be incoherent: Duraludon canonically has both Light Metal and Heavy Metal, but
+   innates are simultaneous, so a row carrying both would halve and double the same
+   weight at once. Take one and say why.
+
+6. **Keep the line consistent by default, but differentiate by form when
    morphology/temperament justifies it.** The three base rows usually carry the
    *same* list — but they need not be identical: a wingless pre-evo shouldn't
    carry a flight ability its winged final stage earns, a placid pre-evo shouldn't
    carry a rage ability its vicious evolution earns. Escalate the list up the line
    where the creature changes.
-4. **HARD CONSTRAINT — only allowlisted abilities.** An innate must be one whose
+7. **HARD CONSTRAINT — only allowlisted abilities.** An innate must be one whose
    behavior is actually *wired* at an effect site. The CI source of truth is
    `sImplementedInnates[]` in `test/fork/innate_abilities.c`, mirrored by the
    SCOPE list in `include/fork/innate_abilities.h`. **Naming an unwired ability
    fails the build.** A line review adds *already-implemented* innates to a
    species — it does **not** wire brand-new abilities (that's a separate, much
    larger task with its own doc updates).
-5. **Forms:**
+8. **Forms:**
    - A form gets innates **only if it has its own row** — add/maintain rows for
      `_MEGA`, `_GMAX`, regional forms, etc.
    - **Megas are a pure boon:** mirror the base's list so the creature's traits
@@ -758,6 +959,44 @@ than one whose existing set is about to be rewritten.
    g. **Base-form viability** — re-check the set against the base stat line per
       the free-gimmicks rule below.
 
+   **The five defects the full sweep actually found.** The field-by-field audit
+   above is the method; these are the specific things it keeps catching, and none
+   of them is a matter of taste — each is a set that is objectively not doing what
+   it was written to do. Check for all five explicitly, because four of them are
+   invisible field by field and only appear when the set is read **as a whole**.
+
+   1. **A move on the wrong stat.** The commonest defect by far, and now **CI-gated**. Celesteela ran
+      Heavy Slam, its main STAB, on two sets with an Attack-lowering nature and
+      zero Attack EVs. Pheromosa ran Ice Beam *and* Thunderbolt off 4 Sp. Attack
+      on a 252-Attack spread. Arctozolt ran Blizzard on a 252-Attack physical
+      build; Melmetal's Assault Vest set had **4 Attack EVs** under an
+      Attack-boosting nature with four physical moves. Read the nature and the EV
+      spread first, then check every move's damage category against it.
+   2. **An item that can never trigger**, now **CI-gated** for the statically
+      decidable cases. Popplio's Throat Spray set carried Hydro
+      Pump, Moonblast, Energy Ball and Psychic — not one a sound move, so the item
+      did nothing for the entire set. Ask what makes each item fire and find the
+      move or condition that does it.
+   3. **An ability that can never fire.** Flapple's Hustle on a 252 Sp. Attack
+      set (Hustle boosts physical Attack). Sheer Force on a set with no
+      chance-based secondary to trade away. Magician on a set that holds an item,
+      when it only triggers with an empty slot. Sometimes this is unavoidable —
+      when every other slot is innate-capable the species has only one legal
+      observable — but then **say so in the PR body** rather than leaving it to
+      look like an oversight.
+   4. **Two sets that are one set**, now **CI-gated**. Same four moves, same ability,
+      differing only by item — which wastes a Factory draw, since the drafter picks
+      among a species' sets. Inteleon's Choice Specs and Choice Scarf sets were
+      each other with the moves reordered; Barraskewda's two Choice sets differed
+      by one move; Polteageist's two sets were identical bar item and format;
+      Kingambit had two. The fix is to repurpose one — usually into the format the
+      line is missing. Not every near-pair is a duplicate: Dracovish's Scarf and
+      Band sets share three moves but are genuinely different plans (guaranteed
+      first Fishious Rend vs. raw power), so they both stay. The test is whether
+      you would draft them differently.
+   5. **An untyped Hidden Power**, which is a 60 BP **Normal** move — the worst
+      slot on any set, and it was sitting on a Grass special attacker (Lurantis).
+
    Note what niche each surviving set fills, so Part B adds variety rather than
    duplicating.
 
@@ -765,7 +1004,13 @@ than one whose existing set is about to be rewritten.
    on which existing sets survived and in what shape.
 
 2. **PART B — write the new sets. Aim for at least 2 quality sets per species** — that is the bar, not a
-   quota to fill. Each should occupy a distinct niche so the Factory has real
+   quota to fill. Read it as **two sets a drafter would play differently**, not
+   two rows: a species at "two sets" that are the same set twice is at one (see
+   defect 4 above), and the sweep found five such pairs plus nine species genuinely
+   sitting at one set. When adding the second, prefer the format the line is
+   missing — but only where the species has a real job in it. Arctovish was left at
+   two singles sets precisely because it has no doubles identity to build around,
+   and a set nobody would draft is worse than no set. Each should occupy a distinct niche so the Factory has real
    variety to draw among: a signature-move set, a gimmick (Trick Room, weather,
    Baton Pass, status spreader), a lore set, a defensive staller, an offensive
    sweeper. More than two is welcome when each new set genuinely earns its place;
@@ -915,7 +1160,7 @@ saying them again in one table is cheaper than another correction.
 | "Surf hits both foes" | Surf is `TARGET_FOES_AND_ALLY` at this fork's `B_UPDATED_MOVE_DATA` — it hits your **own partner**. The source reads `TARGET_BOTH` in a ternary, so grepping for the constant misses it. See the spread-move checklist in Step 3. |
 | "Sheer Force only trades away *chance-based* secondaries" | `MoveIsAffectedBySheerForce` tests `chance > 0`, so it **strips 100% effects too** — Fake Out's flinch, Chilling Water's Attack drop, Pounce's Speed drop. Never put Fake Out on a set that names Sheer Force. |
 | "Wide Lens / Zoom Lens are inert" | **Not any more** — `BUFF_ACCURACY_ITEMS` gave both a job. They cancel the *attacker's* side of the PP economy: Wide Lens the flat evasion taxes, Zoom Lens those **plus** the whole stat-stage half (the target's evasion boosts *and* the holder's own accuracy drops) while it moves second. Pure boon — never refunds below the base 1 PP. Both also feed the INFO viewer: Wide Lens reveals every seen foe's held item, Zoom Lens one foe's ability and full moveset. `GetAccuracyItemRelief()` in `src/fork/deterministic_moves.c`; a roster test fails a set holding a lens its own ability already makes redundant. BrightPowder is live too — it taxes attackers a PP. |
-| "This species has no innate row / no sets" | **Resolve the constant to a species id before believing it.** Rows and sets are frequently keyed on a form constant that the bare name aliases to — `SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_SCATTERBUG` → `_ICY_SNOW`, `SPECIES_ZYGARDE` → `_50`, and `SPECIES_GOURGEIST` → `_AVERAGE` while the roster actually drafts `_SUPER`. **Minior chains two hops** (`SPECIES_MINIOR` → `_METEOR` → `_METEOR_RED`), so one substitution is not enough. Grepping `SPECIES_X_` with a trailing underscore misses a bare `SPECIES_X`; grepping the bare name misses the form rows. The Gen 6 batch added four duplicate innate rows this way (shadowing real ones and breaking the Effect Spore test) and missed an entire Hoopa set — the gates caught both, but only at the end-of-batch check rather than during the per-line pass. |
+| "This species has no innate row / no sets" | **Resolve the constant to a species id before believing it — see "Resolve the constant first" in Batch reviews, which is the full procedure.** Rows and sets are frequently keyed on a form constant that the bare name aliases to — `SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_SCATTERBUG` → `_ICY_SNOW`, `SPECIES_ZYGARDE` → `_50`, and `SPECIES_GOURGEIST` → `_AVERAGE` while the roster actually drafts `_SUPER`. **Minior chains two hops** (`SPECIES_MINIOR` → `_METEOR` → `_METEOR_RED`), so one substitution is not enough. Grepping `SPECIES_X_` with a trailing underscore misses a bare `SPECIES_X`; grepping the bare name misses the form rows. The Gen 6 batch added four duplicate innate rows this way (shadowing real ones and breaking the Effect Spore test) and missed an entire Hoopa set — the gates caught both, but only at the end-of-batch check rather than during the per-line pass. |
 | "A form's ability slot is free to override if the ability is redundant" | Check `form_change_tables.h` first. Cherrim's Overcast ↔ Sunshine change is gated on `ABILITY_FLOWER_GIFT` under `B_WEATHER_FORMS >= GEN_5` (the shipped config), so overriding that slot would strand it in one form for the whole battle. |
 | "No Guard is inert — every move hits anyway" | **Live, and good.** Semi-invulnerability is resolved *before* the accuracy gate (see the `FORK:` comment in `DoesMoveMissTarget`), and `CanBreakThroughSemiInvulnerablityInternal` returns TRUE for No Guard on either side — so it hits through Fly, Dig, Dive, Bounce and Phantom Force. It also zeroes the evasion PP tax outright (`GetDeterministicMoveTargetPPTax`). |
 | "This canon ability is missing from the row, so it is a gap" | Check the rest of the row first: **another innate may make its trigger impossible.** Inner Focus never flinches, so an innate Steadfast can never fire (Riolu line); Own Tempo is never confused, so it kills its own Tangled Feet (Spinda). Both are deliberate omissions with tests pinning them — and an added innate does not *fail* such a test, it invalidates its `ASSUME` and silently turns a pass into `ASSUMPTIONS_FAILED`, so watch the passed count, not just the red count. |
@@ -929,7 +1174,7 @@ what to look at, not a replacement for it. Where a proposal turns on a mechanic,
 cite the header (or the effect site it names) rather than stock Pokémon knowledge
 — several rules here inverted a "well-known" interaction.
 
-**The three traps, in the order they bite:**
+**The four traps, in the order they bite:**
 
 **First, the concept that unifies several of these: the "strong hit" gate.** The
 fork replaces a number of separate random rolls with one shared condition,
@@ -974,7 +1219,35 @@ that used to be a percentage, the first question is whether it now rides this ga
    runs the crit calc before type effectiveness is known, so it does *not* foresee
    these crits. That is deliberate (thinking-time budget), and it means a
    high-crit-ratio move is quietly better against the AI than the AI expects.
-3. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
+3. **Accuracy and evasion were TRANSFORMED, not deleted — they are a PP
+   economy now.** This is the one that keeps being summarised wrongly, so state it
+   the right way round: it is not "accuracy stopped mattering", it is "accuracy
+   stopped being a coin flip and became a **price**". Yes, every move that reaches
+   the accuracy roll hits — but a move's max PP is scaled by its base accuracy
+   (`CalculatePPWithBonus`, `src/pokemon.c`), and accuracy/evasion *stages* shift
+   the PP each use costs. Hydro Pump is reliable and Focus Blast is reliable; both
+   are also short. A 100%-accuracy move is still strictly cheaper to spam than a
+   70% one, which is exactly what accuracy always bought — just paid in a
+   different currency.
+
+   The corollary is what gets missed: **everything keyed on accuracy is still
+   live.** No Guard pierces semi-invulnerability and zeroes the evasion tax. Keen
+   Eye, Compound Eyes and Illuminate make the holder ignore an evasive foe's tax.
+   Evasion items and Effect Spore (which now lowers the contact attacker's
+   accuracy) tax the attacker's PP. OHKO moves deal 40% max HP and keep their
+   immunities. Zap Cannon and Inferno gained a recharge turn to pay for becoming
+   certain.
+
+   **The general rule, and the one worth carrying: `DETERMINISTIC_*` flags CONVERT
+   probabilistic mechanics into deterministic ones. They rarely delete them.**
+   Before concluding that anything is dead under one of these flags, go and look
+   for what it was rebuilt into — the answer is usually in the flag's own comment.
+   Blunder Policy was rearmed onto Protect and immunities rather than left inert;
+   Focus Band became a Sash; Quick Claw became a consumed one-shot that turns on
+   Unburden; Starf raises the highest stat instead of a random one; paralysis
+   traded its coin flips for a PP and priority tax. "This flag makes X impossible,
+   so Y is dead" has been wrong nearly every time it has been said.
+4. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
    *and* the Speed drop, replacing them with a PP and priority tax — so paralysis
    is far weaker here, not stronger. `DETERMINISTIC_STATUS` turns confusion into a
    single self-hit that a status move shakes off for free. Check the direction of
@@ -990,7 +1263,7 @@ that used to be a percentage, the first question is whether it now rides this ga
 | `DETERMINISTIC_MOVE_RESULTS` | 2–5 hit moves always hit **3** times — **5** with Loaded Dice or Skill Link (Population Bomb: 5, or 10). **Protect-family always fails on consecutive turns.** Binding moves last 4 turns, 7 with Grip Claw. Rampage 2 turns. Speed ties resolve on a fixed ladder. Roar/Whirlwind/Dragon Tail drag the next party member **in slot order**. |
 | `DETERMINISTIC_STATUS` | Sleep is a fixed `DETERMINISTIC_SLEEP_TURNS` (3) — but the wake-up turn is still an acting turn, so N costs the target **N−1** actions. Rest is exempt. Confusion = one 40-BP self-hit on the next attacking move, then clears; a status move shakes it off free. Infatuation lasts 2 actions and halves damage instead of blocking it. |
 | `DETERMINISTIC_PARALYSIS` | **No full-paralysis and no Speed drop.** Paralysis costs +1 PP per move and −1 priority. Quick Feet is exempt from both. |
-| `DETERMINISTIC_ACCURACY_EVASION` | Every move that reaches the accuracy roll hits, so Hydro Pump / Focus Blast / Stone Edge are reliable — paid for as a **PP economy** (low-accuracy moves get reduced max PP; accuracy/evasion stages shift per-use PP cost). OHKO moves deal 40% max HP and keep their immunities. Formerly-50% moves (Zap Cannon, Inferno) now need a recharge turn. |
+| `DETERMINISTIC_ACCURACY_EVASION` | Accuracy is a **PP economy**, not a coin flip — it was transformed, not deleted. Max PP is scaled by base accuracy and accuracy/evasion stages shift per-use PP cost, so Hydro Pump / Focus Blast / Stone Edge are reliable but *short*. Everything keyed on accuracy stays live: No Guard, Keen Eye / Compound Eyes / Illuminate, evasion items, Effect Spore's accuracy drop. OHKO moves deal 40% max HP and keep their immunities. Formerly-50% moves (Zap Cannon, Inferno) gained a recharge turn. |
 | `DETERMINISTIC_DAMAGE` | Damage roll is fixed at 92% on turn 1 and **+1% per turn, uncapped** — so it passes 100% from turn 9. Rewards sets that survive to snowball. |
 
 ### Free gimmicks — a set *may* Mega, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
@@ -1068,6 +1341,20 @@ reasoning for the first time. It has to stand on its own; a diff of ability
 constants and move slots does not. Structure it by step (in a batch, by line
 first, then by step within each line's section):
 
+**Every per-line section carries these four fields.** They are required, and
+*"nothing"* is a legal value for any of them — what is not legal is leaving one
+out, because an absent field and a field that was never considered look identical
+to the reader. This is the enforcement mechanism for the media rule in Step 1,
+which prose alone did not achieve across the whole sweep:
+
+```
+## #NNN–NNN <Line name>
+Innates:  <what changed, or "no changes" and why the row stands>
+Override: <what changed, or "no changes">
+Sets:     <Part A verdicts incl. keep-as-is, then Part B additions>
+Media:    <medium + specific action, flagged as recall — or "no usable media evidence">
+```
+
 - **Per step (innates / overrides / frontier sets), what changed and why.** For
   each pick, the flavor evidence that carries it: the repo's `.description` quoted
   verbatim, the canon-user count for an ability, and any wider-media evidence
@@ -1086,6 +1373,16 @@ first, then by step within each line's section):
   out of scope for innates entirely — see the "Identity / form / type-transform"
   bucket in `INNATE_ABILITIES.md`): record that in the relevant doc, where it
   binds every future pass, instead of in a PR body nobody re-reads.
+- **Collapse the "no changes" lines into a table on a long batch.** They still
+  need a record — what was checked, and why the rows stand — but thirty-seven
+  prose paragraphs each saying "row complete, legal observable, no gated set
+  shape" bury the lines that actually changed. A table row per unchanged line, with
+  the changed lines kept as full sections, keeps the record and the signal. Gen 9's
+  body was 37 unchanged lines around 41 changed ones.
+- **Open the batch with the numbers.** Lines changed vs. unchanged, and a count of
+  each defect class found (missing rows, restorations, ally-hitting moves,
+  duplicate sets, one-set species). It is the fastest way for the maintainer to see
+  what kind of batch it was, and it makes trends across batches visible.
 - **Open questions** — the coin-flip picks you resolved yourself, called out so the
   maintainer can flip them back cheaply.
 - **Note the save-index cost when adding frontier sets.** Sets are inserted at the
@@ -1111,3 +1408,92 @@ not a failure.
   of what this review weighed, not as a ban on ever raising it again. If the ground
   was *structural* rather than taste, put it in the relevant `fork-docs/` doc, which
   is the only place a rejection binds a later pass.
+
+---
+
+## What the full sweep taught — and what stopped being prose
+
+Gens I–IX have each had a complete pass (batches 1–16, PRs up to #481), so the
+review's failure modes are now known from evidence rather than guessed at.
+
+**Prose does not stop a mechanical mistake.** The alias trap had an emphatic
+paragraph in this doc for three batches and kept biting until the fix became a
+*step* ("resolve the constant first"). The media rule has been maximally emphatic —
+"silence counts as skipping it" — for the whole sweep, and was still skipped on
+most lines of Gens 7–9; what changes that is the required field in the PR
+template, not another sentence here. When a rule keeps being missed, the next
+version of it should be a procedure or a test, not a stronger adjective.
+
+### Three of the recurring defects are now CI gates
+
+Part A defects 1, 2 and 4 stopped being advice and became tests in
+`test/fork/frontier_extended_roster.c`. Both found real defects the human passes
+had missed, which is the argument for them:
+
+| Gate | Found on first run |
+|---|---|
+| **`no set carries an attacking move on the stat it dumped`** | 16 sets — Groudon, Unfezant, Greninja, Centiskorch, Hatterene ×2, Arctozolt, Brambleghast, Silvally ×3, Minior, Solgaleo, Dragapult, Regieleki, Enamorus |
+| **`no species carries two sets that are the same set`** | 6 pairs — Kyogre, Galarian Darmanitan, Toucannon, Dhelmise, Iron Bundle, Ogerpon |
+| **`no set holds an item none of its moves can activate`** | 2 sets — Centiskorch and Tatsugiri, both holding Throat Spray with no sound move (Centiskorch's twice over: that set is physical, and Throat Spray raises Sp. Attack) |
+
+The wrong-stat gate needs two exclusion lists to be usable, and they are the
+interesting part. A naive "physical move on a special set" rule fires on **78**
+sets, essentially all of them correct: a special attacker running U-turn to pivot,
+Icy Wind for speed control or Fake Out to flinch is doing the right thing, because
+those moves are picked for their *effect* and the damage is incidental. So the
+gate carries a 70 base-power floor plus a list of effect-first moves, and a second
+list of moves that never scale with the holder's attacking stat at all (Body
+Press, Foul Play, fixed damage, the pick-the-higher-stat moves). Sets naming
+Contrary are skipped outright — Lurantis runs Superpower on a special set for the
+inverted +1 Attack and +1 Defence, which is deliberate.
+
+The dead-item gate only covers what a table can actually decide: Throat Spray
+without a sound move. Weakness Policy and Sitrus need battle state, so they stay a
+reviewer's job.
+
+It very nearly shipped with a **wrong** second entry. Blunder Policy looks dead
+here — its stock trigger is the holder's move missing, and nothing misses under
+`DETERMINISTIC_ACCURACY_EVASION` — so a gate was written asserting exactly that,
+and it would have failed the build on a legitimate set. The fork **rebuilt** the
+item rather than leaving it broken: it arms on the deterministic blunders instead
+(Protect, a semi-invulnerable target, Wide/Quick/Crafty Guard, Psychic Terrain, a
+type immunity, a blocking ability, an Air Balloon). That is written in
+`deterministic.h`'s own flag comment, in the `DETERMINISTIC_HOLD_EFFECTS` row of
+the table above, and in `test/fork/deterministic_hold_effects.c`. Three places,
+none of them read, because the claim felt obvious. See "these flags convert; they
+rarely delete" in the regime section — that is the rule this violated.
+
+The duplicate gate compares the move *set* and the ability while ignoring order,
+item, spread, tera and format. Ignoring order is what catches Inteleon (the same
+four moves listed differently); ignoring the rest is what leaves Dracovish alone,
+whose two Choice sets share three moves but are genuinely different plans. It
+compares species **ids**, which is how it caught Ogerpon carrying the same set
+twice under `SPECIES_OGERPON` and `SPECIES_OGERPON_TEAL`.
+
+### Restoration cannot be a gate — and that is worth knowing
+
+The third candidate was the restoration check (Step 1 point 5), and it looked like
+the best of the three: no judgement, just compare a row against its
+pre-evolution's. **It does not work as a hard gate.** Run as an invariant it flags
+**91 evolutions**; narrowed to "canon dropped the ability and it is innate-capable"
+it still flags **70**. The overwhelming majority are deliberate:
+
+- Metapod's Shed Skin and Shell Armor not carrying to Butterfree, or Kakuna's to
+  Beedrill — a cocoon's armour is exactly what a line *should* shed.
+- Magikarp's Rattled not carrying to Gyarados: a timid fish becomes a rampaging
+  serpent.
+- Tyrogue's Steadfast, Guts and Vital Spirit split deliberately across the three
+  Hitmons.
+- Duraludon's Light Metal not carrying to Archaludon, which this doc documents as
+  a mechanics-driven exception.
+
+Those are Step 1 point 6 working as intended ("differentiate by form when
+morphology or temperament justifies it"). A gate would need an exception list
+roughly as long as its finding list, and it would freeze judgements the doc
+explicitly leaves to the reviewer.
+
+**So restoration stays a prose rule and stays the highest-yield one** — it changed
+over forty lines across the sweep. The distinction worth carrying forward: a check
+becomes a test when its violations are *always* wrong, and stays prose when it is a
+strong heuristic with principled exceptions. Confirm which by dry-running the rule
+over the data before writing the test, not after.
