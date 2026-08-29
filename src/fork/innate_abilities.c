@@ -8629,25 +8629,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0801
         SPECIES_MAGEARNA,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_SOUL_HEART
         )
     },
     { // 0801
         SPECIES_MAGEARNA_ORIGINAL,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_SOUL_HEART
         )
     },
     { // 0801
         SPECIES_MAGEARNA_MEGA,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_SOUL_HEART
         )
     },
     { // 0801
         SPECIES_MAGEARNA_ORIGINAL_MEGA,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_SOUL_HEART
         )
     },
     { // 0802
@@ -8659,13 +8663,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0803
         SPECIES_POIPOLE,
         INNATES(
+            ABILITY_BEAST_BOOST,
             ABILITY_LEVITATE
         )
     },
     { // 0804
         SPECIES_NAGANADEL,
         INNATES(
-            ABILITY_BEAST_BOOST
+            ABILITY_BEAST_BOOST,
+            ABILITY_LEVITATE
         )
     },
     { // 0805
@@ -8681,16 +8687,31 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0807
+        SPECIES_ZERAORA,
+        INNATES(
+            ABILITY_IRON_FIST,
+            ABILITY_LIMBER
+        )
+    },
+    { // 0808
+        SPECIES_MELTAN,
+        INNATES(
+            ABILITY_MAGNET_PULL
+        )
+    },
     { // 0809
         SPECIES_MELMETAL,
         INNATES(
-            ABILITY_IRON_FIST
+            ABILITY_IRON_FIST,
+            ABILITY_MAGNET_PULL
         )
     },
     { // 0809
         SPECIES_MELMETAL_GMAX,
         INNATES(
-            ABILITY_IRON_FIST
+            ABILITY_IRON_FIST,
+            ABILITY_MAGNET_PULL
         )
     },
     { // 0810

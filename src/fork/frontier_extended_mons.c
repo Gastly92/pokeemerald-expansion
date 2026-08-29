@@ -23415,7 +23415,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_NASTY_PLOT,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_FIRE_BLAST,
             MOVE_DRACO_METEOR
         },
@@ -23434,7 +23434,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_DRACO_METEOR,
             MOVE_FIRE_BLAST,
             MOVE_U_TURN
@@ -23459,7 +23459,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_GYRO_BALL,
             MOVE_ROCK_SLIDE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_TRICK_ROOM
         },
         .ability = ABILITY_BULLETPROOF,
@@ -23612,8 +23612,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .atk = 4,
-            .spd = 252
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_STEEL,
     },
