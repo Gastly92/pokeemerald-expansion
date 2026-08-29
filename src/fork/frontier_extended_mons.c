@@ -25047,6 +25047,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GHOST,
     },
+    {
+        .species = SPECIES_RUNERIGUS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .iv = IVS(SPE, 0),
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_BODY_PRESS,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_WILL_O_WISP
+        },
+        .ability = ABILITY_WANDERING_SPIRIT,
+        .nature = NATURE(DEF_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0869
     {

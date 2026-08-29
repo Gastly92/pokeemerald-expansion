@@ -6287,6 +6287,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0562
         SPECIES_YAMASK_GALAR,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
@@ -9282,6 +9283,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0867
         SPECIES_RUNERIGUS,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
