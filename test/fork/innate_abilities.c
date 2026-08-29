@@ -10170,7 +10170,7 @@ TEST("Innate abilities: the Effect Spore flavor picks carry the innate")
     EXPECT(!SpeciesHasInnate(SPECIES_WHIMSICOTT, ABILITY_EFFECT_SPORE));
 }
 
-// ===== Coverage ratchet — every reviewed species has an innate row =========================
+// ===== Coverage gates — every species has an innate row ===================================
 //
 // FORK: innates are a species' always-on identity, so a species the roster can draft ought to
 // have a row. Three whole lines were found with none at all during the /line-review sweep of
@@ -10180,12 +10180,11 @@ TEST("Innate abilities: the Effect Spore flavor picks carry the innate")
 // and Protean; Static, Lightning Rod and Minus; Drizzle, Drought and Air Lock), so there was
 // nothing to seed a row from and they were skipped.
 //
-// The gate is a RATCHET rather than a blanket rule. Gens 4-9 have not been line-reviewed yet and
-// carry dozens of genuine gaps; failing on those would just wedge CI. Instead the sweep covers
-// every species at or below sInnateRowsReviewedThroughDex, which each /line-review batch bumps as
-// it lands. Raising it is the last step of a batch: set it to the batch's final dex number, run
-// this test, and fill whatever it names.
-static const u16 sInnateRowsReviewedThroughDex = NATIONAL_DEX_ENAMORUS; // Gen 1-8 reviewed; Gen 9 next.
+// This was a RATCHET while the /line-review sweep ran: it covered only species at or below a
+// reviewed-through-dex bound, which each batch raised as it landed, so the unreviewed generations
+// could not wedge CI. The sweep finished at Pecharunt and the bound was retired -- the gate now
+// holds for the whole dex, unconditionally. A species added from here on needs a row like any
+// other.
 
 static bool32 SpeciesHasAnyInnate(u16 species)
 {
@@ -10204,7 +10203,7 @@ static bool32 RosterBuildsSpecies(u16 species)
     return FALSE;
 }
 
-TEST("Innate abilities: every reviewed species with a frontier set has an innate row")
+TEST("Innate abilities: every species with a frontier set has an innate row")
 {
     u32 species;
     u32 checked = 0;
@@ -10217,8 +10216,6 @@ TEST("Innate abilities: every reviewed species with a frontier set has an innate
     {
         if (!IsSpeciesEnabled(species))
             continue;
-        if (SpeciesToNationalPokedexNum(species) > sInnateRowsReviewedThroughDex)
-            continue;
         if (!RosterBuildsSpecies(species))
             continue;
 
@@ -10227,11 +10224,11 @@ TEST("Innate abilities: every reviewed species with a frontier set has an innate
             continue;
 
         missing++;
-        Test_MgbaPrintf("no innate row: %S (species %d) has a frontier set but no entry in gSpeciesInnates -- give the line its always-on identity, or raise sInnateRowsReviewedThroughDex only after reviewing it",
+        Test_MgbaPrintf("no innate row: %S (species %d) has a frontier set but no entry in gSpeciesInnates -- give the line its always-on identity",
                         gSpeciesInfo[species].speciesName, species);
     }
 
-    // Guard against a vacuous pass if the dex bound or the roster accessor ever breaks.
+    // Guard against a vacuous pass if the roster accessor ever breaks.
     EXPECT_GT(checked, 200);
     EXPECT_EQ(missing, 0);
 }
@@ -10241,7 +10238,7 @@ TEST("Innate abilities: every reviewed species with a frontier set has an innate
 // evolution has a row must have one too. This is the check that catches the *second* kind of gap
 // the sweep found: Electrike had no row because Manectric had none, and once Manectric was given
 // one its pre-evolution would have been left behind silently.
-TEST("Innate abilities: every reviewed pre-evolution of a species with innates has a row")
+TEST("Innate abilities: every pre-evolution of a species with innates has a row")
 {
     u32 species;
     u32 checked = 0;
@@ -10253,15 +10250,11 @@ TEST("Innate abilities: every reviewed pre-evolution of a species with innates h
 
         if (!IsSpeciesEnabled(species))
             continue;
-        if (SpeciesToNationalPokedexNum(species) > sInnateRowsReviewedThroughDex)
-            continue;
         if (!SpeciesHasAnyInnate(species))
             continue;
 
         preEvo = GetSpeciesPreEvolution(species);
         if (preEvo == SPECIES_NONE || !IsSpeciesEnabled(preEvo))
-            continue;
-        if (SpeciesToNationalPokedexNum(preEvo) > sInnateRowsReviewedThroughDex)
             continue;
 
         checked++;
@@ -10284,7 +10277,7 @@ TEST("Innate abilities: every reviewed pre-evolution of a species with innates h
 // Mega Sableye carried Magic Bounce as an innate AND on all three of its slots, so a Sableye that
 // Mega Evolved lost its chosen ability to a duplicate of an innate. The fix is the override half --
 // point every slot of the Mega at the base form's chosen ability.
-TEST("Innate abilities: every reviewed species the roster drafts has a legal observable slot")
+TEST("Innate abilities: every species the roster drafts has a legal observable slot")
 {
     u32 species;
     u32 checked = 0;
@@ -10300,8 +10293,6 @@ TEST("Innate abilities: every reviewed species the roster drafts has a legal obs
         bool32 hasObservable = FALSE;
 
         if (!IsSpeciesEnabled(species))
-            continue;
-        if (SpeciesToNationalPokedexNum(species) > sInnateRowsReviewedThroughDex)
             continue;
         if (!RosterBuildsSpecies(species))
             continue;
