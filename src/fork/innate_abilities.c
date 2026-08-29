@@ -9827,7 +9827,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PICKUP
         )
     },
-    { // 0925 (SPECIES_MAUSHOLD aliases SPECIES_MAUSHOLD_THREE — the default three-member form)
+    { // 0925
         SPECIES_MAUSHOLD,
         INNATES(
             ABILITY_CHEEK_POUCH,
@@ -10184,6 +10184,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANGER_POINT,
             ABILITY_DEFIANT,
             ABILITY_INNER_FOCUS,
+            ABILITY_UNAWARE,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -10200,11 +10201,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ARMOR_TAIL,
             ABILITY_CUD_CHEW,
+            ABILITY_EARLY_BIRD,
             ABILITY_INNER_FOCUS
         )
     },
     { // 0982
-        SPECIES_DUDUNSPARCE, // == SPECIES_DUDUNSPARCE_TWO_SEGMENT (the default form alias)
+        SPECIES_DUDUNSPARCE,
         INNATES(
             ABILITY_RATTLED,
             ABILITY_SERENE_GRACE

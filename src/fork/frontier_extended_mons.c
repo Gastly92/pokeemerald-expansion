@@ -28347,14 +28347,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_KINGAMBIT,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_KOWTOW_CLEAVE,
             MOVE_IRON_HEAD,
             MOVE_SUCKER_PUNCH,
-            MOVE_LOW_KICK
+            MOVE_PROTECT
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
