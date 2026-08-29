@@ -2613,18 +2613,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0928
         SPECIES_SMOLIV,
         INNATES(
+            ABILITY_EARLY_BIRD,
             ABILITY_HARVEST
         )
     },
     { // 0929
         SPECIES_DOLLIV,
         INNATES(
+            ABILITY_EARLY_BIRD,
             ABILITY_HARVEST
         )
     },
     { // 0930
         SPECIES_ARBOLIVA,
         INNATES(
+            ABILITY_EARLY_BIRD,
             ABILITY_HARVEST
         )
     },
@@ -9863,7 +9866,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0927
         SPECIES_DACHSBUN,
         INNATES(
-            ABILITY_AROMA_VEIL
+            ABILITY_AROMA_VEIL,
+            ABILITY_OWN_TEMPO
         )
     },
     { // 0931
@@ -9898,24 +9902,44 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NACLI,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_STURDY,
-            ABILITY_PURIFYING_SALT
+            ABILITY_PURIFYING_SALT,
+            ABILITY_STURDY
         )
     },
     { // 0933
         SPECIES_NACLSTACK,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_STURDY,
-            ABILITY_PURIFYING_SALT
+            ABILITY_PURIFYING_SALT,
+            ABILITY_STURDY
         )
     },
     { // 0934
         SPECIES_GARGANACL,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_STURDY,
-            ABILITY_PURIFYING_SALT
+            ABILITY_PURIFYING_SALT,
+            ABILITY_STURDY
+        )
+    },
+    { // 0935
+        SPECIES_CHARCADET,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0936
+        SPECIES_ARMAROUGE,
+        INNATES(
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_MEGA_LAUNCHER
+        )
+    },
+    { // 0937
+        SPECIES_CERULEDGE,
+        INNATES(
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_SHARPNESS
         )
     },
     { // 0938
@@ -9927,7 +9951,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0939
         SPECIES_BELLIBOLT,
         INNATES(
-            ABILITY_ELECTROMORPHOSIS
+            ABILITY_ELECTROMORPHOSIS,
+            ABILITY_OWN_TEMPO
         )
     },
     { // 0940
@@ -9970,6 +9995,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0945
         SPECIES_GRAFAIAI,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
             ABILITY_UNBURDEN
         )
