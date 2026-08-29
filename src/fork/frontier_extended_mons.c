@@ -29351,7 +29351,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_OUTRAGE,
             MOVE_KNOCK_OFF,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_U_TURN
         },
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -29647,7 +29647,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_NASTY_PLOT,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_PSYCHIC,
             MOVE_DARK_PULSE
         },
@@ -29947,7 +29947,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_HEAT_CRASH,
             MOVE_DRAGON_CLAW,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_PROTOSYNTHESIS,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -30030,7 +30030,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SWORDS_DANCE,
             MOVE_MIGHTY_CLEAVE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_ZEN_HEADBUTT
         },
         .ability = ABILITY_QUARK_DRIVE,

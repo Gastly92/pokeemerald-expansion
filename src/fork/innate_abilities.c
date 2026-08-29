@@ -10436,10 +10436,71 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_RATTLED
         )
     },
+    { // 1001
+        SPECIES_WO_CHIEN,
+        INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 1002
+        SPECIES_CHIEN_PAO,
+        INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_SHARPNESS
+        )
+    },
+    { // 1003
+        SPECIES_TING_LU,
+        INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_STAMINA
+        )
+    },
+    { // 1004
+        SPECIES_CHI_YU,
+        INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_LEVITATE
+        )
+    },
+    { // 1005
+        SPECIES_ROARING_MOON,
+        INNATES(
+            ABILITY_INTIMIDATE,
+            ABILITY_MOXIE
+        )
+    },
+    { // 1006
+        SPECIES_IRON_VALIANT,
+        INNATES(
+            ABILITY_SHARPNESS,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 1007
+        SPECIES_KORAIDON,
+        INNATES(
+            ABILITY_INTIMIDATE
+        )
+    },
     { // 1008
         SPECIES_MIRAIDON,
         INNATES(
             ABILITY_LEVITATE
+        )
+    },
+    { // 1009
+        SPECIES_WALKING_WAKE,
+        INNATES(
+            ABILITY_INNER_FOCUS,
+            ABILITY_PRESSURE
+        )
+    },
+    { // 1010
+        SPECIES_IRON_LEAVES,
+        INNATES(
+            ABILITY_JUSTIFIED
         )
     },
     { // 1011
@@ -10503,13 +10564,53 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1017
         SPECIES_OGERPON_CORNERSTONE,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_STURDY
         )
     },
     { // 1017
         SPECIES_OGERPON_HEARTHFLAME,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_MOLD_BREAKER
+        )
+    },
+    { // 1017
+        SPECIES_OGERPON,
+        INNATES(
+            ABILITY_DEFIANT
+        )
+    },
+    { // 1017
+        SPECIES_OGERPON_WELLSPRING,
+        INNATES(
+            ABILITY_DEFIANT
+        )
+    },
+    { // 1017
+        SPECIES_OGERPON_TEAL_TERA,
+        INNATES(
+            ABILITY_DEFIANT
+        )
+    },
+    { // 1017
+        SPECIES_OGERPON_WELLSPRING_TERA,
+        INNATES(
+            ABILITY_DEFIANT
+        )
+    },
+    { // 1017
+        SPECIES_OGERPON_HEARTHFLAME_TERA,
+        INNATES(
+            ABILITY_DEFIANT,
+            ABILITY_MOLD_BREAKER
+        )
+    },
+    { // 1017
+        SPECIES_OGERPON_CORNERSTONE_TERA,
+        INNATES(
+            ABILITY_DEFIANT,
+            ABILITY_STURDY
         )
     },
     { // 1018
@@ -10527,6 +10628,50 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_REGENERATOR,
             ABILITY_STICKY_HOLD,
             ABILITY_SUPERSWEET_SYRUP
+        )
+    },
+    { // 1020
+        SPECIES_GOUGING_FIRE,
+        INNATES(
+            ABILITY_INNER_FOCUS,
+            ABILITY_PRESSURE
+        )
+    },
+    { // 1021
+        SPECIES_RAGING_BOLT,
+        INNATES(
+            ABILITY_INNER_FOCUS,
+            ABILITY_PRESSURE
+        )
+    },
+    { // 1022
+        SPECIES_IRON_BOULDER,
+        INNATES(
+            ABILITY_JUSTIFIED
+        )
+    },
+    { // 1023
+        SPECIES_IRON_CROWN,
+        INNATES(
+            ABILITY_JUSTIFIED
+        )
+    },
+    { // 1024
+        SPECIES_TERAPAGOS_NORMAL,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 1024
+        SPECIES_TERAPAGOS_TERASTAL,
+        INNATES(
+            ABILITY_SHELL_ARMOR
+        )
+    },
+    { // 1024
+        SPECIES_TERAPAGOS_STELLAR,
+        INNATES(
+            ABILITY_SHELL_ARMOR
         )
     },
     { // 1025
