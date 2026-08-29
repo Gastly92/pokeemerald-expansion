@@ -24528,7 +24528,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CENTISKORCH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_THROAT_SPRAY,
+        .heldItem = ITEM_CHARCOAL,
         .moves =
         {
             MOVE_COIL,
@@ -28357,7 +28357,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TATSUGIRI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_THROAT_SPRAY,
+        .heldItem = ITEM_DRAGON_FANG,
         .moves =
         {
             MOVE_NASTY_PLOT,

@@ -997,3 +997,60 @@ TEST("Frontier extended roster: no species carries two sets that are the same se
     EXPECT_GT(checked, 1000);
     EXPECT_EQ(offenders, 0);
 }
+
+// FORK: some items can only ever fire if the set carries a move that meets their precondition,
+// so holding one without that move is a slot spent on nothing for the whole battle. Popplio
+// shipped a Throat Spray set whose four moves were Hydro Pump, Moonblast, Energy Ball and
+// Psychic -- not one of them a sound move -- and Centiskorch and Tatsugiri were still doing the
+// same thing after the full /line-review sweep, which is what prompted this gate.
+//
+// Only statically decidable cases belong here. Weakness Policy needs to be hit super
+// effectively and Sitrus needs to drop below half, neither of which a table can know; the
+// entries below are true from the set alone.
+static bool32 SetHasSoundMove(const struct TrainerMon *set)
+{
+    u32 i;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (set->moves[i] != MOVE_NONE && IsSoundMove(set->moves[i]))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+TEST("Frontier extended roster: no set holds an item none of its moves can activate")
+{
+    u32 i;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        checked++;
+
+        // Throat Spray raises Sp. Attack when the holder uses a SOUND move, and does nothing at
+        // all otherwise.
+        if (set->heldItem == ITEM_THROAT_SPRAY && !SetHasSoundMove(set))
+        {
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: holds Throat Spray but carries no sound move, so the item can never fire -- give it a sound move or give it a different item",
+                            i, gSpeciesInfo[set->species].speciesName);
+        }
+
+        // Blunder Policy triggers when a move MISSES. Under DETERMINISTIC_ACCURACY_EVASION
+        // (include/config/deterministic.h) accuracy never decides hit or miss, so nothing in this
+        // fork can ever miss and the item is dead on every set, whatever its moves are.
+        if (set->heldItem == ITEM_BLUNDER_POLICY)
+        {
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: holds Blunder Policy, which is dead in this fork -- DETERMINISTIC_ACCURACY_EVASION means moves never miss, so it can never trigger",
+                            i, gSpeciesInfo[set->species].speciesName);
+        }
+    }
+
+    EXPECT_GT(checked, 1000);
+    EXPECT_EQ(offenders, 0);
+}

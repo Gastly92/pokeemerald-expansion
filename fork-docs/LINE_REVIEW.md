@@ -130,7 +130,8 @@ a line is reviewed once no matter how many of its members the range covers.
 - **Order the batch by ascending dex**, on each line's lowest in-range number.
 - **Derive the list from the repo, not from memory, and check it covers the
   range.** Recalling which species evolve into which does not survive a
-  sixty-line batch. Build the list by walking `.natDexNum` and `.evolutions` in
+  sixty-line batch. `python3 .claude/skills/line-review/tools/lines.py <first>
+  <last>` walks `.natDexNum` and `.evolutions` in
   `src/data/pokemon/species_info/*.h`, unioning species that share a dex number so
   a creature's forms collapse into one line. Then **verify every number in the
   range is accounted for by some line** — the Gen 9 pass built exactly this script
@@ -162,8 +163,12 @@ same species.
 id, plus every form constant sharing its prefix.
 
 ```bash
-grep -n "SPECIES_<NAME>" include/constants/species.h   # aliases and form constants, with ids
+python3 .claude/skills/line-review/tools/forms.py MINIOR AEGISLASH
 ```
+
+which prints every constant sharing the name's id or prefix, and says
+`NO SUCH CONSTANT` for a name that does not exist — which is how a row written
+against a made-up constant gets caught before it reaches the compiler.
 
 This doc carried a *paragraph* warning about the trap for three batches running
 and it went on biting anyway. What actually stopped it was making the resolution
@@ -182,6 +187,24 @@ step mechanical. The damage it did while it was only advice:
 A comment sitting after the constant defeats the same greps: the Dudunsparce row
 read as missing for exactly that reason until the annotation was stripped. That is
 one more argument for the no-comments rule in the golden rules above.
+
+### The helper scripts
+
+`.claude/skills/line-review/tools/` holds the queries this review keeps needing.
+They are committed rather than rewritten per session, because the two rules most
+worth mechanising — resolve the constant first, derive the line list from the repo
+— are worth nothing if the thing that does them dies with the container. Run them
+from the repo root; each carries its usage in a docstring.
+
+| Script | What it answers |
+|---|---|
+| `forms.py NAME…` | every constant sharing that name's id or prefix — **run before believing a row is missing** |
+| `lines.py FIRST LAST` | the evolutionary lines a dex range covers |
+| `line.py NAME…` | the innate row, override rows and every frontier set for a species |
+| `dex.py NAME…` | types, base stats, canon abilities and the `.description` to quote |
+| `users.py ABILITY…` | the canon users of an ability — the Step 1 signature gate |
+| `inn.py SPECIES… ABILITY…` | add innates to existing rows, keeping them alphabetical |
+| `addset.py NAME` | insert a new frontier set after that species' last one |
 
 ### Working the batch
 
@@ -299,11 +322,11 @@ one more argument for the no-comments rule in the golden rules above.
   rather than arguing from memory — the evidence usually settles it in the
   maintainer's favor, and occasionally it will support the pick, which is worth
   saying plainly.
-- **Nine CI tests gate this data** — keep them green (see each step). All nine
+- **Ten CI tests gate this data** — keep them green (see each step). All ten
   are absolute now: two on abilities (an override or set naming an innate-capable
-  or reserved ability), five on coverage and set shape, and two added after the
-  sweep (a damaging move on the stat the set dumped, and two sets on one species
-  that are the same set). The latter five were
+  or reserved ability), five on coverage and set shape, and three added after the
+  sweep (a damaging move on the stat the set dumped, two sets on one species that
+  are the same set, and an item none of the set's moves can activate). The latter five were
   review ratchets during the sweep and lost their dex bound when it finished. See
   "Shipping the batch" above.
 
@@ -949,7 +972,8 @@ than one whose existing set is about to be rewritten.
       build; Melmetal's Assault Vest set had **4 Attack EVs** under an
       Attack-boosting nature with four physical moves. Read the nature and the EV
       spread first, then check every move's damage category against it.
-   2. **An item that can never trigger.** Popplio's Throat Spray set carried Hydro
+   2. **An item that can never trigger**, now **CI-gated** for the statically
+      decidable cases. Popplio's Throat Spray set carried Hydro
       Pump, Moonblast, Energy Ball and Psychic — not one a sound move, so the item
       did nothing for the entire set. Ask what makes each item fire and find the
       move or condition that does it.
@@ -1372,9 +1396,9 @@ most lines of Gens 7–9; what changes that is the required field in the PR
 template, not another sentence here. When a rule keeps being missed, the next
 version of it should be a procedure or a test, not a stronger adjective.
 
-### Two of the recurring defects are now CI gates
+### Three of the recurring defects are now CI gates
 
-Part A defects 1 and 4 stopped being advice and became tests in
+Part A defects 1, 2 and 4 stopped being advice and became tests in
 `test/fork/frontier_extended_roster.c`. Both found real defects the human passes
 had missed, which is the argument for them:
 
@@ -1382,6 +1406,7 @@ had missed, which is the argument for them:
 |---|---|
 | **`no set carries an attacking move on the stat it dumped`** | 16 sets — Groudon, Unfezant, Greninja, Centiskorch, Hatterene ×2, Arctozolt, Brambleghast, Silvally ×3, Minior, Solgaleo, Dragapult, Regieleki, Enamorus |
 | **`no species carries two sets that are the same set`** | 6 pairs — Kyogre, Galarian Darmanitan, Toucannon, Dhelmise, Iron Bundle, Ogerpon |
+| **`no set holds an item none of its moves can activate`** | 2 sets — Centiskorch and Tatsugiri, both holding Throat Spray with no sound move |
 
 The wrong-stat gate needs two exclusion lists to be usable, and they are the
 interesting part. A naive "physical move on a special set" rule fires on **78**
@@ -1393,6 +1418,11 @@ list of moves that never scale with the holder's attacking stat at all (Body
 Press, Foul Play, fixed damage, the pick-the-higher-stat moves). Sets naming
 Contrary are skipped outright — Lurantis runs Superpower on a special set for the
 inverted +1 Attack and +1 Defence, which is deliberate.
+
+The dead-item gate only covers what a table can actually decide: Throat Spray
+without a sound move, and Blunder Policy, which is dead on **every** set in this
+fork because `DETERMINISTIC_ACCURACY_EVASION` means nothing ever misses. Weakness
+Policy and Sitrus need battle state, so they stay a reviewer's job.
 
 The duplicate gate compares the move *set* and the ability while ignoring order,
 item, spread, tera and format. Ignoring order is what catches Inteleon (the same

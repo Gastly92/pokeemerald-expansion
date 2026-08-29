@@ -68,7 +68,12 @@ numbers were 55 lines, Gen 9's 120 were 78.
 
 Everything in "Do this" still applies **per line**, at the same depth.
 
-0. **Resolve every species name to an id before believing anything about it.**
+0. **Resolve every species name to an id before believing anything about it** —
+   `python3 .claude/skills/line-review/tools/forms.py <NAME>`, run from the repo
+   root. That directory also holds `lines.py` (the lines a dex range covers),
+   `line.py` (a species' rows and sets), `dex.py`, `users.py` (canon ability
+   users), and the `inn.py`/`addset.py` editors; each carries its usage in a
+   docstring.
    Rows and sets are routinely keyed on a form constant a bare name aliases to
    (`SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_MINIOR` → `_METEOR_RED` in two hops)
    and the reverse (`SPECIES_ALCREMIE` is `_STRAWBERRY_VANILLA_CREAM`). Grep
@@ -200,7 +205,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
   Trick, Switcheroo or Transform.
 - **Five set defects the full sweep kept finding — check all five explicitly.**
   None is a matter of taste, and four are invisible field-by-field, appearing only
-  when the set is read as a whole. **(1) and (4) are now CI gates**, so they fail
+  when the set is read as a whole. **(1), (2) and (4) are now CI gates**, so they fail
   the build rather than needing to be spotted: (1) **a move on the wrong stat** (Celesteela's
   Heavy Slam on a 0-Attack spread, Pheromosa's Ice Beam off 4 Sp. Atk, Melmetal's
   4 Attack EVs) — read the nature and spread first, then every move's category
@@ -306,7 +311,8 @@ the first time, and three or four items in each of the last four batches. Five
 gates cover the whole dex unconditionally (they were ratchets bounded by a
 reviewed-through-dex constant until the sweep finished; both constants are gone,
 so there is nothing to bump), plus two added after it: a damaging move on the stat
-a set dumped, and two sets on one species that are the same set. On a batch that touches many sets, run one filtered
+a set dumped, two sets on one species that are the same set, and an item none of
+the set's moves can activate. On a batch that touches many sets, run one filtered
 check **early**, after two or three lines — a systematic mistake caught on line 3
 costs one fix, the same mistake caught on line 60 costs sixty.
 Keep rows in dex order. Update `fork-docs/FORK.md` only if the change warrants an
