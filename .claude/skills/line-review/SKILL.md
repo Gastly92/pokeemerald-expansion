@@ -200,7 +200,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
   Trick, Switcheroo or Transform.
 - **Five set defects the full sweep kept finding — check all five explicitly.**
   None is a matter of taste, and four are invisible field-by-field, appearing only
-  when the set is read as a whole: (1) **a move on the wrong stat** (Celesteela's
+  when the set is read as a whole. **(1) and (4) are now CI gates**, so they fail
+  the build rather than needing to be spotted: (1) **a move on the wrong stat** (Celesteela's
   Heavy Slam on a 0-Attack spread, Pheromosa's Ice Beam off 4 Sp. Atk, Melmetal's
   4 Attack EVs) — read the nature and spread first, then every move's category
   against it; (2) **an item that can never trigger** (Popplio's Throat Spray with
@@ -304,7 +305,8 @@ caught a defect the per-line pass had walked past — 55 ally-hitting spread mov
 the first time, and three or four items in each of the last four batches. Five
 gates cover the whole dex unconditionally (they were ratchets bounded by a
 reviewed-through-dex constant until the sweep finished; both constants are gone,
-so there is nothing to bump). On a batch that touches many sets, run one filtered
+so there is nothing to bump), plus two added after it: a damaging move on the stat
+a set dumped, and two sets on one species that are the same set. On a batch that touches many sets, run one filtered
 check **early**, after two or three lines — a systematic mistake caught on line 3
 costs one fix, the same mistake caught on line 60 costs sixty.
 Keep rows in dex order. Update `fork-docs/FORK.md` only if the change warrants an

@@ -299,9 +299,11 @@ one more argument for the no-comments rule in the golden rules above.
   rather than arguing from memory — the evidence usually settles it in the
   maintainer's favor, and occasionally it will support the pick, which is worth
   saying plainly.
-- **Seven CI tests gate this data** — keep them green (see each step). All seven
+- **Nine CI tests gate this data** — keep them green (see each step). All nine
   are absolute now: two on abilities (an override or set naming an innate-capable
-  or reserved ability) and five on coverage and set shape. The latter five were
+  or reserved ability), five on coverage and set shape, and two added after the
+  sweep (a damaging move on the stat the set dumped, and two sets on one species
+  that are the same set). The latter five were
   review ratchets during the sweep and lost their dex bound when it finished. See
   "Shipping the batch" above.
 
@@ -940,7 +942,7 @@ than one whose existing set is about to be rewritten.
    it was written to do. Check for all five explicitly, because four of them are
    invisible field by field and only appear when the set is read **as a whole**.
 
-   1. **A move on the wrong stat.** The commonest defect by far. Celesteela ran
+   1. **A move on the wrong stat.** The commonest defect by far, and now **CI-gated**. Celesteela ran
       Heavy Slam, its main STAB, on two sets with an Attack-lowering nature and
       zero Attack EVs. Pheromosa ran Ice Beam *and* Thunderbolt off 4 Sp. Attack
       on a 252-Attack spread. Arctozolt ran Blizzard on a 252-Attack physical
@@ -958,7 +960,7 @@ than one whose existing set is about to be rewritten.
       when every other slot is innate-capable the species has only one legal
       observable — but then **say so in the PR body** rather than leaving it to
       look like an oversight.
-   4. **Two sets that are one set.** Same four moves, same spread, same ability,
+   4. **Two sets that are one set**, now **CI-gated**. Same four moves, same ability,
       differing only by item — which wastes a Factory draw, since the drafter picks
       among a species' sets. Inteleon's Choice Specs and Choice Scarf sets were
       each other with the moves reordered; Barraskewda's two Choice sets differed
@@ -1357,11 +1359,10 @@ not a failure.
 
 ---
 
-## What the full sweep taught — and what should stop being prose
+## What the full sweep taught — and what stopped being prose
 
 Gens I–IX have each had a complete pass (batches 1–16, PRs up to #481), so the
-review's failure modes are now known from evidence rather than guessed at. Two
-conclusions worth keeping in front of whoever runs the next batch.
+review's failure modes are now known from evidence rather than guessed at.
 
 **Prose does not stop a mechanical mistake.** The alias trap had an emphatic
 paragraph in this doc for three batches and kept biting until the fix became a
@@ -1371,16 +1372,59 @@ most lines of Gens 7–9; what changes that is the required field in the PR
 template, not another sentence here. When a rule keeps being missed, the next
 version of it should be a procedure or a test, not a stronger adjective.
 
-**Several of the recurring defects are mechanically checkable and should become CI
-gates.** They are listed here so the work is not lost; each is a test that would
-retire a paragraph of this doc:
+### Two of the recurring defects are now CI gates
 
-| Candidate gate | What it would catch | Evidence from the sweep |
-|---|---|---|
-| **Wrong-stat move** — a physical move on a set with an Attack-lowering nature and ≤4 Attack EVs, or the special mirror | Part A defect 1 | 5 sets across Gens VII–IX (Celesteela ×2, Pheromosa ×2, Arctozolt, Melmetal) |
-| **Duplicate sets** — two sets on one species with the same four moves and the same ability | Part A defect 4 | 5 pairs (Inteleon, Barraskewda, Polteageist, Kingambit, and Dracovish as the deliberate exception a test would need to allow) |
-| **Restoration** — a species missing an innate its pre-evolution carries | Step 1 point 5 | 40+ lines across the sweep; the single highest-yield check, and pure mechanism |
+Part A defects 1 and 4 stopped being advice and became tests in
+`test/fork/frontier_extended_roster.c`. Both found real defects the human passes
+had missed, which is the argument for them:
 
-The restoration check is the strongest candidate: it needs no judgement at all,
-just a comparison of a row against its pre-evolution's, and it found more changes
-than any other rule in this document.
+| Gate | Found on first run |
+|---|---|
+| **`no set carries an attacking move on the stat it dumped`** | 16 sets — Groudon, Unfezant, Greninja, Centiskorch, Hatterene ×2, Arctozolt, Brambleghast, Silvally ×3, Minior, Solgaleo, Dragapult, Regieleki, Enamorus |
+| **`no species carries two sets that are the same set`** | 6 pairs — Kyogre, Galarian Darmanitan, Toucannon, Dhelmise, Iron Bundle, Ogerpon |
+
+The wrong-stat gate needs two exclusion lists to be usable, and they are the
+interesting part. A naive "physical move on a special set" rule fires on **78**
+sets, essentially all of them correct: a special attacker running U-turn to pivot,
+Icy Wind for speed control or Fake Out to flinch is doing the right thing, because
+those moves are picked for their *effect* and the damage is incidental. So the
+gate carries a 70 base-power floor plus a list of effect-first moves, and a second
+list of moves that never scale with the holder's attacking stat at all (Body
+Press, Foul Play, fixed damage, the pick-the-higher-stat moves). Sets naming
+Contrary are skipped outright — Lurantis runs Superpower on a special set for the
+inverted +1 Attack and +1 Defence, which is deliberate.
+
+The duplicate gate compares the move *set* and the ability while ignoring order,
+item, spread, tera and format. Ignoring order is what catches Inteleon (the same
+four moves listed differently); ignoring the rest is what leaves Dracovish alone,
+whose two Choice sets share three moves but are genuinely different plans. It
+compares species **ids**, which is how it caught Ogerpon carrying the same set
+twice under `SPECIES_OGERPON` and `SPECIES_OGERPON_TEAL`.
+
+### Restoration cannot be a gate — and that is worth knowing
+
+The third candidate was the restoration check (Step 1 point 5), and it looked like
+the best of the three: no judgement, just compare a row against its
+pre-evolution's. **It does not work as a hard gate.** Run as an invariant it flags
+**91 evolutions**; narrowed to "canon dropped the ability and it is innate-capable"
+it still flags **70**. The overwhelming majority are deliberate:
+
+- Metapod's Shed Skin and Shell Armor not carrying to Butterfree, or Kakuna's to
+  Beedrill — a cocoon's armour is exactly what a line *should* shed.
+- Magikarp's Rattled not carrying to Gyarados: a timid fish becomes a rampaging
+  serpent.
+- Tyrogue's Steadfast, Guts and Vital Spirit split deliberately across the three
+  Hitmons.
+- Duraludon's Light Metal not carrying to Archaludon, which this doc documents as
+  a mechanics-driven exception.
+
+Those are Step 1 point 6 working as intended ("differentiate by form when
+morphology or temperament justifies it"). A gate would need an exception list
+roughly as long as its finding list, and it would freeze judgements the doc
+explicitly leaves to the reviewer.
+
+**So restoration stays a prose rule and stays the highest-yield one** — it changed
+over forty lines across the sweep. The distinction worth carrying forward: a check
+becomes a test when its violations are *always* wrong, and stays prose when it is a
+strong heuristic with principled exceptions. Confirm which by dry-running the rule
+over the data before writing the test, not after.

@@ -818,3 +818,182 @@ TEST("Frontier extended roster: no Choice set carries a status move the lock wou
     EXPECT_GT(checked, 10);
     EXPECT_EQ(offenders, 0);
 }
+
+// FORK: a damaging move only scales with the stat the set actually invests in, so a set that
+// lowers a stat with its nature AND leaves it uninvested should not be carrying a real attacking
+// move on that side. Five of these shipped before the gate existed -- Celesteela ran Heavy Slam,
+// its main STAB, on two sets with an Attack-lowering nature and zero Attack EVs; Pheromosa ran
+// Ice Beam AND Thunderbolt off 4 Sp. Attack; Melmetal's Assault Vest set had 4 Attack EVs under
+// an Attack-boosting nature and four physical moves. Seven more were found when this test was
+// written (Groudon, Unfezant, Greninja, Centiskorch, Hatterene, Arctozolt, Brambleghast).
+//
+// Two exclusions keep it honest, because the naive rule fires on ~78 sets that are all correct:
+//
+//  - UTILITY MOVES ARE PICKED FOR THEIR EFFECT, NOT THEIR DAMAGE. A special attacker running
+//    U-turn to pivot, Icy Wind for speed control, Snarl to drop Sp. Attack or Fake Out to flinch
+//    is doing the right thing; the damage is incidental. Hence the power floor plus the list
+//    below, rather than "any move on the wrong side".
+//  - MOVES THAT DO NOT SCALE WITH THE HOLDER'S ATTACKING STAT AT ALL: Body Press (Defence),
+//    Foul Play (the target's Attack), the fixed-damage moves, and the ones that pick the higher
+//    stat themselves. A Body Press wall with 4 Attack EVs is the intended build, not a defect.
+#define WRONG_STAT_POWER_FLOOR 70
+
+static bool32 MoveIsPickedForItsEffect(enum Move move)
+{
+    switch (move)
+    {
+    case MOVE_U_TURN:      case MOVE_VOLT_SWITCH:  case MOVE_FLIP_TURN:
+    case MOVE_FAKE_OUT:    case MOVE_ICY_WIND:     case MOVE_SNARL:
+    case MOVE_NUZZLE:      case MOVE_CLEAR_SMOG:   case MOVE_POLLEN_PUFF:
+    case MOVE_ELECTROWEB:  case MOVE_BULLDOZE:     case MOVE_ROCK_TOMB:
+    case MOVE_LOW_SWEEP:   case MOVE_MUD_SHOT:     case MOVE_INFESTATION:
+    case MOVE_KNOCK_OFF:   case MOVE_SCALD:        case MOVE_CHILLING_WATER:
+    case MOVE_MORTAL_SPIN: case MOVE_RAPID_SPIN:   case MOVE_SUCKER_PUNCH:
+    // The self-KO moves are pressed to clear the slot, not for the damage roll -- the same
+    // reasoning that exempts them from the ally-hitting gate above.
+    case MOVE_EXPLOSION:   case MOVE_SELF_DESTRUCT: case MOVE_MISTY_EXPLOSION:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+static bool32 MoveIgnoresTheHoldersAttackingStat(enum Move move)
+{
+    switch (move)
+    {
+    case MOVE_BODY_PRESS:                                  // uses Defence
+    case MOVE_FOUL_PLAY:                                   // uses the target's Attack
+    case MOVE_PHOTON_GEYSER: case MOVE_SHELL_SIDE_ARM:     // pick the higher stat themselves
+    case MOVE_TERA_BLAST:
+    case MOVE_SEISMIC_TOSS:  case MOVE_NIGHT_SHADE:        // fixed damage
+    case MOVE_DRAGON_RAGE:   case MOVE_ENDEAVOR:
+    case MOVE_FINAL_GAMBIT:  case MOVE_SUPER_FANG:
+    case MOVE_COUNTER:       case MOVE_MIRROR_COAT:        // return the damage taken
+    case MOVE_METAL_BURST:   case MOVE_COMEUPPANCE:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+TEST("Frontier extended roster: no set carries an attacking move on the stat it dumped")
+{
+    u32 i;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        enum Stat lowered = gNaturesInfo[set->nature].statDown;
+        u32 slot;
+        u32 atkEvs, spaEvs;
+
+        // TrainerMon.ev is a 6-byte array in [hp, atk, def, spatk, spdef, speed] order.
+        atkEvs = (set->ev != NULL) ? set->ev[1] : 0;
+        spaEvs = (set->ev != NULL) ? set->ev[3] : 0;
+
+        // Contrary inverts a move's own stat drops, so a move that looks like a bad attack can be
+        // a deliberate setup move -- Lurantis runs Superpower on a special set for the +1 Attack
+        // and +1 Defence the inversion gives it.
+        if (set->ability == ABILITY_CONTRARY)
+            continue;
+
+        checked++;
+        for (slot = 0; slot < MAX_MON_MOVES; slot++)
+        {
+            enum Move move = set->moves[slot];
+            enum DamageCategory category;
+
+            if (move == MOVE_NONE || IsBattleMoveStatus(move))
+                continue;
+            if (GetMovePower(move) < WRONG_STAT_POWER_FLOOR)
+                continue;
+            if (MoveIsPickedForItsEffect(move) || MoveIgnoresTheHoldersAttackingStat(move))
+                continue;
+
+            category = GetMoveCategory(move);
+            if (category == DAMAGE_CATEGORY_PHYSICAL && lowered == STAT_ATK && atkEvs <= 4)
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: %S is physical on a set with an Attack-lowering nature and %d Attack EVs -- use the move on the stat this set invests in, or fix the spread",
+                                i, gSpeciesInfo[set->species].speciesName, GetMoveName(move), atkEvs);
+            }
+            else if (category == DAMAGE_CATEGORY_SPECIAL && lowered == STAT_SPATK && spaEvs <= 4)
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: %S is special on a set with a Sp. Attack-lowering nature and %d Sp. Attack EVs -- use the move on the stat this set invests in, or fix the spread",
+                                i, gSpeciesInfo[set->species].speciesName, GetMoveName(move), spaEvs);
+            }
+        }
+    }
+
+    EXPECT_GT(checked, 1000);
+    EXPECT_EQ(offenders, 0);
+}
+
+// FORK: the Factory drafts by picking among a species' sets, so two sets that play identically
+// cost a draw for nothing -- the species is half as varied as its row count suggests. Five such
+// pairs were live when this test was written (Kyogre, Galarian Darmanitan, Toucannon, Dhelmise,
+// Iron Bundle), on top of the four the /line-review sweep found by eye.
+//
+// The comparison is on the MOVE SET and the ability, deliberately ignoring move order: Inteleon's
+// two Choice sets were the same four moves listed in a different order. It ignores item, spread,
+// tera and format just as deliberately -- those are what a legitimate near-pair varies. Dracovish
+// keeps two Choice sets sharing three moves because the fourth differs and the items make them
+// different plans (a guaranteed first Fishious Rend against raw power); this test does not fire
+// on that, and should not be made to.
+static bool32 SetsHaveTheSameMoves(const struct TrainerMon *a, const struct TrainerMon *b)
+{
+    u32 i, j;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        bool32 found = FALSE;
+
+        if (a->moves[i] == MOVE_NONE)
+            continue;
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            if (a->moves[i] == b->moves[j])
+            {
+                found = TRUE;
+                break;
+            }
+        }
+        if (!found)
+            return FALSE;
+    }
+    return TRUE;
+}
+
+TEST("Frontier extended roster: no species carries two sets that are the same set")
+{
+    u32 i, j;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *a = &gFrontierExtendedMons[i];
+
+        checked++;
+        for (j = i + 1; j < gFrontierExtendedMonsCount; j++)
+        {
+            const struct TrainerMon *b = &gFrontierExtendedMons[j];
+
+            if (a->species != b->species || a->ability != b->ability)
+                continue;
+            if (!SetsHaveTheSameMoves(a, b) || !SetsHaveTheSameMoves(b, a))
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("roster[%d] and roster[%d] %S: same four moves and the same ability -- one of them is a wasted Factory draw, so give it a different plan or drop it",
+                            i, j, gSpeciesInfo[a->species].speciesName);
+        }
+    }
+
+    EXPECT_GT(checked, 1000);
+    EXPECT_EQ(offenders, 0);
+}
