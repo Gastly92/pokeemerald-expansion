@@ -19712,6 +19712,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FAIRY,
         .iv = IVS(SPE, 0),
     },
+    {
+        .species = SPECIES_AROMATISSE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BIG_ROOT,
+        .moves =
+        {
+            MOVE_HELPING_HAND,
+            MOVE_DRAINING_KISS,
+            MOVE_MOONBLAST,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_MISTY_SURGE,
+        .nature = NATURE(SPD_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
+        .iv = IVS(SPE, 0),
+    },
 
     // 0685
     {
