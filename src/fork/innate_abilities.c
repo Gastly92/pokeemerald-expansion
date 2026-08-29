@@ -10216,6 +10216,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1019
         SPECIES_HYDRAPPLE,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_REGENERATOR,
             ABILITY_STICKY_HOLD,
             ABILITY_SUPERSWEET_SYRUP
