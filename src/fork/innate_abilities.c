@@ -7878,6 +7878,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TELEPATHY
         )
     },
+    { // 0716
+        SPECIES_XERNEAS_NEUTRAL,
+        INNATES(
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HEALER,
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0716
+        SPECIES_XERNEAS_ACTIVE,
+        INNATES(
+            ABILITY_FLOWER_VEIL,
+            ABILITY_HEALER,
+            ABILITY_PRESSURE
+        )
+    },
+    { // 0717
+        SPECIES_YVELTAL,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_UNNERVE
+        )
+    },
     { // 0718
         SPECIES_ZYGARDE,
         INNATES(
@@ -7931,6 +7954,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_MAGICIAN,
             ABILITY_PRANKSTER
+        )
+    },
+    { // 0721
+        SPECIES_VOLCANION,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_STEAM_ENGINE
         )
     },
     { // 0722
