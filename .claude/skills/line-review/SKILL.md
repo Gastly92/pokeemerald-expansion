@@ -1,6 +1,6 @@
 ---
 name: line-review
-description: Review and enhance Pokémon evolutionary lines' fork data — innates, ability overrides, and Battle Factory movesets — one line, or a batch of lines given as a dex-number range. Triggers when the user asks to look at / review / update / enhance a species "line" (e.g. "let's look at the Venusaur line for updates and enhancements", "review the Gengar line", "any additions for the Dragonite line?") or a range of them ("let's review the lines from number 0 to 25", "lines 26-50", "the next ten lines"). For this fork's three fork-owned data files only.
+description: Review and enhance Pokémon evolutionary lines' fork data — innates, ability overrides, and Battle Factory movesets — one line, or a batch of lines given as a dex-number range or a whole generation. Triggers when the user asks to look at / review / update / enhance a species "line" (e.g. "let's look at the Venusaur line for updates and enhancements", "review the Gengar line", "any additions for the Dragonite line?") or a range of them ("let's review the lines from number 0 to 25", "lines 26-50", "the next ten lines", "all of Gen 5"). For this fork's three fork-owned data files only.
 ---
 
 # Line review
@@ -11,9 +11,14 @@ three fork-owned data files. Flavor and fun come first; competitive power is
 welcome but not required.
 
 A request can name **one line** ("review the Gengar line") or a **batch** — a
-range of National Dex numbers ("the lines from number 0 to 25"). A batch is the
-same review run once per line, packaged as one branch, one commit per line and
-one PR; see "Batch mode" below and the rubric's "Batch reviews" section.
+range of National Dex numbers ("the lines from number 0 to 25") or a whole
+generation ("all of Gen 5"), which is the default batch size. A batch is the same
+review run once per line, packaged as one branch, commits grouped by line and one
+PR; see "Batch mode" below and the rubric's "Batch reviews" section.
+
+Gens I-IX have each had a complete pass (batches 1-16). A batch is now always a
+*re-review*: judge the rows that are there today, and expect the finds to be the
+recurring defect classes below rather than empty rows.
 
 ## Do this
 
@@ -33,7 +38,13 @@ one PR; see "Batch mode" below and the rubric's "Batch reviews" section.
    line has to be re-derived.
 4. **For each step, per the rubric:** report what's already there, whether it makes
    flavorful sense — citing both the repo `.description` **and** a wider-media
-   check — and the concrete additions/changes you're making.
+   check — and the concrete additions/changes you're making. **The media note is a
+   required field in every per-line PR section**, with *"no usable media evidence"*
+   as a legal value. The rubric has said "silence counts as skipping it" for the
+   whole sweep and the pass was still skipped on most lines of Gens 7-9; the field
+   exists because an omission otherwise leaves no trace. Flagging recall is not a
+   liability — you are proposing something the maintainer can check, not asserting
+   a fact the repo confirms.
 5. **Then apply the edits, verify, and open a PR — the PR is where approval
    happens.** Flavor picks are still the maintainer's call; they make it on the PR
    after seeing the whole line. So the PR body must carry the per-step reasoning,
@@ -43,14 +54,34 @@ one PR; see "Batch mode" below and the rubric's "Batch reviews" section.
    Apply review feedback on the **same branch**, re-deriving forward through the
    steps when a rejected innate invalidates a later pick.
 
-## Batch mode (a dex-number range)
+## Batch mode (a dex-number range, or a whole generation)
 
 When the request names a range instead of a line — *"the lines from number 0 to
 25"* — the numbers are **National Dex numbers**, inclusive of both endpoints
-(`0` is shorthand for the start; there is no #0). Everything in "Do this" still
-applies **per line**, at the same depth.
+(`0` is shorthand for the start; there is no #0). A request for **a whole
+generation** (*"let's do all of Gen 5"*) is the same thing and is the default
+batch size: I #1-151, II #152-251, III #252-386, IV #387-493, V #494-649,
+VI #650-721, VII #722-809, VIII #810-905, IX #906-1025. A generation drags in
+earlier-gen lines through cross-evolutions (Gen 9 pulled seven, Gen 8 six), and
+those are part of the batch. Line counts run well below number counts — Gen 7's 88
+numbers were 55 lines, Gen 9's 120 were 78.
 
-1. **Resolve the range to a list of lines first.** **Both endpoints are
+Everything in "Do this" still applies **per line**, at the same depth.
+
+0. **Resolve every species name to an id before believing anything about it.**
+   Rows and sets are routinely keyed on a form constant a bare name aliases to
+   (`SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_MINIOR` → `_METEOR_RED` in two hops)
+   and the reverse (`SPECIES_ALCREMIE` is `_STRAWBERRY_VANILLA_CREAM`). Grep
+   `include/constants/species.h` for the name and check every constant sharing its
+   id or prefix **before** concluding a row is missing. This is the sweep's most
+   expensive recurring bug: four duplicate rows in Gen 6, one in Gen 7, a row for
+   the non-existent `SPECIES_TOXTRICITY_GMAX` in Gen 8 that would have failed the
+   build, and seven false "no row" alarms in Gen 9.
+1. **Resolve the range to a list of lines first.** Derive it from the repo
+   (`.natDexNum` and `.evolutions` in `src/data/pokemon/species_info/*.h`, unioning
+   species that share a dex number), then **check every number in the range is
+   covered by some line** — the Gen 9 pass wrote exactly this script and still
+   dropped Ogerpon, because nothing checked the output for holes. **Both endpoints are
    inclusive** — `0 to 25` includes #25. Walk each number, map it to the line that
    species belongs to, and dedupe *within this batch*. The **whole line comes
    along even where members fall outside the range** (#25 Pikachu pulls in Pichu
@@ -73,19 +104,18 @@ applies **per line**, at the same depth.
    innates first") — the step coupling is per line.
 4. **Commit and push after every line**, one commit per line, subject
    `Line review: <Line> line — <what changed>`. The container is ephemeral: a lost
-   session should cost one line, not the batch.
+   session should cost one line, not the batch. On a long batch, adjacent lines
+   whose changes land in the same files for the same reason may share one commit
+   naming the range, with a body enumerating each line. The **per-line section in
+   the PR body is not optional** either way: commits may group, the review record
+   may not.
 5. **Watch for cross-line collisions** the batch makes visible — several lines
    converging on the same held item (item scarcity is per drafted team) or the
    same borrowed ability. Spread them.
 6. **Verify once at the end**, not per line — the two filtered `make check` runs
-   are a build each, and CI runs the full suite on the PR. Five gates cover the
-   whole dex unconditionally (innate-row coverage, pre-evolution coverage, a legal
-   observable slot per drafted species, no ally-hitting spread move on a doubles
-   set, no status move stranded under a Choice item). Running them and fixing
-   whatever they name is the batch's real completion criterion — they catch what a
-   per-line reading cannot. These were ratchets bounded by a reviewed-through-dex
-   constant while the sweep ran; the sweep finished and the bound was retired, so
-   there is no longer anything to bump.
+   are a build each, and CI runs the full suite on the PR. Running them and fixing
+   whatever they name is the batch's real completion criterion; see "Verify and
+   ship" below for what the five gates cover and why they always find something.
 7. **One branch `claude/lines-<first>-<last>-review`, one PR** for the batch, with
    **a section per line** in the body carrying everything a single-line PR body
    would (per-step reasoning, flavor evidence with recall flagged, Part A verdicts
@@ -168,6 +198,27 @@ applies **per line**, at the same depth.
   Surf → Muddy Water, or Earth Power on a special set); Explosion and its two
   siblings are exempt. And a Choice item never coexists with a status move except
   Trick, Switcheroo or Transform.
+- **Five set defects the full sweep kept finding — check all five explicitly.**
+  None is a matter of taste, and four are invisible field-by-field, appearing only
+  when the set is read as a whole: (1) **a move on the wrong stat** (Celesteela's
+  Heavy Slam on a 0-Attack spread, Pheromosa's Ice Beam off 4 Sp. Atk, Melmetal's
+  4 Attack EVs) — read the nature and spread first, then every move's category
+  against it; (2) **an item that can never trigger** (Popplio's Throat Spray with
+  no sound move); (3) **an ability that can never fire** (Flapple's Hustle on a
+  special set) — sometimes forced, but then say so in the PR; (4) **two sets that
+  are one set**, same moves/spread/ability differing only by item, which wastes a
+  Factory draw (Inteleon, Barraskewda, Polteageist, Kingambit); (5) **an untyped
+  Hidden Power**, which is a 60 BP *Normal* move.
+- **A line with no innate row has a signature** — its only canon abilities are all
+  never-an-innate, so there was nothing to seed from. That is structural, not
+  careless, and it means the row must be built from flavor. When there is nothing
+  to seed from, ask **what the species is a version of**: Paradox mons echo a
+  species, regional forms and Megas have a base, fusions take from both halves.
+  Trim rather than transplant.
+- **Restoration is the highest-yield check and is pure mechanism**: compare a row
+  against its **pre-evolution's**, and put back what canon takes away on evolution.
+  Over forty lines changed on this alone. Write a restored innate on **every form**,
+  or it vanishes when the creature transforms.
 - **Frontier sets run in two parts: Part A audits the EXISTING sets, Part B
   writes new ones** — Part A first, finished before Part B starts. Part A walks each existing
   set field by field: **Tera type** (what is it *for*? — a tactical immunity beats
@@ -248,6 +299,14 @@ applies **per line**, at the same depth.
 
 After applying changes: `make check TESTS="Frontier extended roster"` and
 `make check TESTS="Innate"` (filtered — let CI run the full suite on the PR).
+**Expect these to find something.** Every run of this step across the whole sweep
+caught a defect the per-line pass had walked past — 55 ally-hitting spread moves
+the first time, and three or four items in each of the last four batches. Five
+gates cover the whole dex unconditionally (they were ratchets bounded by a
+reviewed-through-dex constant until the sweep finished; both constants are gone,
+so there is nothing to bump). On a batch that touches many sets, run one filtered
+check **early**, after two or three lines — a systematic mistake caught on line 3
+costs one fix, the same mistake caught on line 60 costs sixty.
 Keep rows in dex order. Update `fork-docs/FORK.md` only if the change warrants an
 index entry. Then commit to a `claude/<line>-line-review` branch, push, and open a
 PR against the fork's `master` with the body described above — one line per PR,
