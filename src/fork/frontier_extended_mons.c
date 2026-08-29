@@ -26958,6 +26958,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    {
+        .species = SPECIES_SPIDOPS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_STICKY_WEB,
+            MOVE_SILK_TRAP,
+            MOVE_KNOCK_OFF,
+            MOVE_BUG_BITE
+        },
+        .ability = ABILITY_TOXIC_DEBRIS,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0920
     {
@@ -27063,6 +27083,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_MAUSHOLD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_FOLLOW_ME,
+            MOVE_HELPING_HAND,
+            MOVE_POPULATION_BOMB,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_NO_GUARD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
     },
     {
         .species = SPECIES_MAUSHOLD,

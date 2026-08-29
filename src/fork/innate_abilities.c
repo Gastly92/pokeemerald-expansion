@@ -9691,18 +9691,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0906
         SPECIES_SPRIGATITO,
         INNATES(
+            ABILITY_LIMBER,
+            ABILITY_MAGICIAN,
             ABILITY_OVERGROW
         )
     },
     { // 0907
         SPECIES_FLORAGATO,
         INNATES(
+            ABILITY_LIMBER,
+            ABILITY_MAGICIAN,
             ABILITY_OVERGROW
         )
     },
     { // 0908
         SPECIES_MEOWSCARADA,
         INNATES(
+            ABILITY_LIMBER,
+            ABILITY_MAGICIAN,
             ABILITY_OVERGROW
         )
     },
@@ -9759,6 +9765,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0916
         SPECIES_OINKOLOGNE_M,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_GLUTTONY,
             ABILITY_THICK_FAT
         )
@@ -9832,6 +9839,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHEEK_POUCH,
             ABILITY_FRIEND_GUARD,
+            ABILITY_OWN_TEMPO,
+            ABILITY_PICKUP,
             ABILITY_TECHNICIAN
         )
     },
@@ -9840,6 +9849,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHEEK_POUCH,
             ABILITY_FRIEND_GUARD,
+            ABILITY_OWN_TEMPO,
+            ABILITY_PICKUP,
             ABILITY_TECHNICIAN
         )
     },
