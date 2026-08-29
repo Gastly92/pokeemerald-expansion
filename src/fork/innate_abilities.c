@@ -7208,12 +7208,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0662
         SPECIES_FLETCHINDER,
         INNATES(
+            ABILITY_BIG_PECKS,
             ABILITY_GALE_WINGS
         )
     },
     { // 0663
         SPECIES_TALONFLAME,
         INNATES(
+            ABILITY_BIG_PECKS,
             ABILITY_GALE_WINGS
         )
     },
