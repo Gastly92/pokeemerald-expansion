@@ -8523,26 +8523,34 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0789
         SPECIES_COSMOG,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_UNAWARE
         )
     },
     { // 0790
         SPECIES_COSMOEM,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_STURDY,
+            ABILITY_UNAWARE
         )
     },
     { // 0791
         SPECIES_SOLGALEO,
         INNATES(
-            ABILITY_FULL_METAL_BODY
+            ABILITY_FULL_METAL_BODY,
+            ABILITY_LEVITATE,
+            ABILITY_STURDY,
+            ABILITY_UNAWARE
         )
     },
     { // 0792
         SPECIES_LUNALA,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_SHADOW_SHIELD
+            ABILITY_SHADOW_SHIELD,
+            ABILITY_STURDY,
+            ABILITY_UNAWARE
         )
     },
     { // 0793

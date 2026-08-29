@@ -22810,7 +22810,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYDRO_PUMP,
             MOVE_MOONBLAST,
             MOVE_ICE_BEAM,
-            MOVE_SURF
+            MOVE_MUDDY_WATER
         },
         .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -22851,7 +22851,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SUNSTEEL_STRIKE,
             MOVE_CLOSE_COMBAT,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_FLARE_BLITZ
         },
         .ability = ABILITY_DROUGHT,
