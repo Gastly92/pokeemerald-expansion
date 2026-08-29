@@ -9504,24 +9504,48 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0890
         SPECIES_ETERNATUS,
         INNATES(
+            ABILITY_LEVITATE,
             ABILITY_PRESSURE
         )
     },
     { // 0890
         SPECIES_ETERNATUS_ETERNAMAX,
         INNATES(
+            ABILITY_LEVITATE,
             ABILITY_PRESSURE
+        )
+    },
+    { // 0891
+        SPECIES_KUBFU,
+        INNATES(
+            ABILITY_INNER_FOCUS
         )
     },
     { // 0892
         SPECIES_URSHIFU,
         INNATES(
+            ABILITY_INNER_FOCUS,
             ABILITY_UNSEEN_FIST
         )
     },
     { // 0892
         SPECIES_URSHIFU_RAPID_STRIKE,
         INNATES(
+            ABILITY_INNER_FOCUS,
+            ABILITY_UNSEEN_FIST
+        )
+    },
+    { // 0892
+        SPECIES_URSHIFU_SINGLE_STRIKE_GMAX,
+        INNATES(
+            ABILITY_INNER_FOCUS,
+            ABILITY_UNSEEN_FIST
+        )
+    },
+    { // 0892
+        SPECIES_URSHIFU_RAPID_STRIKE_GMAX,
+        INNATES(
+            ABILITY_INNER_FOCUS,
             ABILITY_UNSEEN_FIST
         )
     },
