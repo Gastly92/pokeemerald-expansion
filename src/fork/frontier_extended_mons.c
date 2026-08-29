@@ -23978,6 +23978,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_DARK,
     },
+    {
+        .species = SPECIES_THIEVUL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SCARF,
+        .moves =
+        {
+            MOVE_SWITCHEROO,
+            MOVE_DARK_PULSE,
+            MOVE_SNARL,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_RUN_AWAY,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 0830
     {

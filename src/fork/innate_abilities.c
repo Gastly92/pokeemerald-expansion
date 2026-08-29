@@ -8910,6 +8910,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0827
         SPECIES_NICKIT,
         INNATES(
+            ABILITY_PRANKSTER,
             ABILITY_STAKEOUT,
             ABILITY_UNBURDEN
         )
@@ -8917,6 +8918,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0828
         SPECIES_THIEVUL,
         INNATES(
+            ABILITY_PRANKSTER,
             ABILITY_STAKEOUT,
             ABILITY_UNBURDEN
         )
