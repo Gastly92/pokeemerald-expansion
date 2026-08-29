@@ -21825,7 +21825,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DOUBLE_EDGE,
             MOVE_CLOSE_COMBAT,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_FLUFFY,
