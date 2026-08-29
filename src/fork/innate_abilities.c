@@ -8195,6 +8195,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_VITAL_SPIRIT
         )
     },
+    { // 0746
+        SPECIES_WISHIWASHI_SOLO,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SWIFT_SWIM
+        )
+    },
+    { // 0746
+        SPECIES_WISHIWASHI_SCHOOL,
+        INNATES(
+            ABILITY_RATTLED,
+            ABILITY_SWIFT_SWIM
+        )
+    },
     { // 0747
         SPECIES_MAREANIE,
         INNATES(
@@ -8230,12 +8244,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0751
         SPECIES_DEWPIDER,
         INNATES(
+            ABILITY_OVERCOAT,
+            ABILITY_SWIFT_SWIM,
             ABILITY_WATER_BUBBLE
         )
     },
     { // 0752
         SPECIES_ARAQUANID,
         INNATES(
+            ABILITY_OVERCOAT,
+            ABILITY_SWIFT_SWIM,
             ABILITY_WATER_BUBBLE
         )
     },
