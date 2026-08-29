@@ -7970,6 +7970,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0724
         SPECIES_DECIDUEYE_HISUI,
         INNATES(
+            ABILITY_LONG_REACH,
             ABILITY_OVERGROW,
             ABILITY_SCRAPPY
         )
