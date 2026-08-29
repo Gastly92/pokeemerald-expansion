@@ -8388,11 +8388,41 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BATTLE_ARMOR
         )
     },
+    { // 0773
+        SPECIES_SILVALLY_NORMAL,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_DRAGON,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_FAIRY,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_STEEL,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
     { // 0775
         SPECIES_KOMALA,
         INNATES(
-            ABILITY_UNAWARE,
-            ABILITY_COMATOSE
+            ABILITY_COMATOSE,
+            ABILITY_UNAWARE
         )
     },
     { // 0776

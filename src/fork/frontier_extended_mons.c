@@ -22205,7 +22205,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHELL_SMASH,
             MOVE_ACROBATICS,
             MOVE_POWER_GEM,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_SHIELDS_DOWN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -22246,7 +22246,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_RETURN,
             MOVE_KNOCK_OFF,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_SUPERPOWER
         },
         .ability = ABILITY_HUSTLE,
