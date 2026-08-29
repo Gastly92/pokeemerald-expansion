@@ -8438,6 +8438,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0778
+        SPECIES_MIMIKYU_DISGUISED,
+        INNATES(
+            ABILITY_CURSED_BODY
+        )
+    },
+    { // 0778
+        SPECIES_MIMIKYU_BUSTED,
+        INNATES(
+            ABILITY_CURSED_BODY
+        )
+    },
     { // 0779
         SPECIES_BRUXISH,
         INNATES(
@@ -8462,19 +8474,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0782
         SPECIES_JANGMO_O,
         INNATES(
-            ABILITY_OVERCOAT
+            ABILITY_OVERCOAT,
+            ABILITY_PUNK_ROCK
         )
     },
     { // 0783
         SPECIES_HAKAMO_O,
         INNATES(
-            ABILITY_OVERCOAT
+            ABILITY_OVERCOAT,
+            ABILITY_PUNK_ROCK
         )
     },
     { // 0784
         SPECIES_KOMMO_O,
         INNATES(
-            ABILITY_OVERCOAT
+            ABILITY_OVERCOAT,
+            ABILITY_PUNK_ROCK
         )
     },
     { // 0785

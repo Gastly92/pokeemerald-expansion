@@ -22518,7 +22518,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ANCHOR_SHOT,
             MOVE_POWER_WHIP,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_SHADOW_CLAW
         },
         .ability = ABILITY_WATER_ABSORB,
@@ -22540,7 +22540,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ANCHOR_SHOT,
             MOVE_POWER_WHIP,
             MOVE_SHADOW_CLAW,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPE_DOWN),
