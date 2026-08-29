@@ -9297,13 +9297,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0869
         SPECIES_ALCREMIE_STRAWBERRY_VANILLA_CREAM,
         INNATES(
-            ABILITY_AROMA_VEIL
+            ABILITY_AROMA_VEIL,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0869
         SPECIES_ALCREMIE_GMAX,
         INNATES(
-            ABILITY_AROMA_VEIL
+            ABILITY_AROMA_VEIL,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0870
