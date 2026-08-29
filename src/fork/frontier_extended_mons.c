@@ -20900,7 +20900,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STEAM_ERUPTION,
             MOVE_FLAMETHROWER,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_EARTH_POWER
         },
         .ability = ABILITY_WATER_ABSORB,
@@ -20941,7 +20941,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_STEAM_ERUPTION,
             MOVE_EARTH_POWER,
-            MOVE_SLUDGE_WAVE
+            MOVE_SLUDGE_BOMB
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
