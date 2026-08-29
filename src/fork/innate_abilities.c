@@ -2637,6 +2637,76 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PICKUP
         )
     },
+    { // 0984
+        SPECIES_GREAT_TUSK,
+        INNATES(
+            ABILITY_SOLID_ROCK,
+            ABILITY_STURDY
+        )
+    },
+    { // 0985
+        SPECIES_SCREAM_TAIL,
+        INNATES(
+            ABILITY_CUTE_CHARM,
+            ABILITY_FRIEND_GUARD,
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0986
+        SPECIES_BRUTE_BONNET,
+        INNATES(
+            ABILITY_EFFECT_SPORE,
+            ABILITY_REGENERATOR
+        )
+    },
+    { // 0988
+        SPECIES_SLITHER_WING,
+        INNATES(
+            ABILITY_SWARM
+        )
+    },
+    { // 0989
+        SPECIES_SANDY_SHOCKS,
+        INNATES(
+            ABILITY_ANALYTIC,
+            ABILITY_MAGNET_PULL,
+            ABILITY_STURDY
+        )
+    },
+    { // 0990
+        SPECIES_IRON_TREADS,
+        INNATES(
+            ABILITY_SOLID_ROCK,
+            ABILITY_STURDY
+        )
+    },
+    { // 0991
+        SPECIES_IRON_BUNDLE,
+        INNATES(
+            ABILITY_INSOMNIA
+        )
+    },
+    { // 0992
+        SPECIES_IRON_HANDS,
+        INNATES(
+            ABILITY_GUTS,
+            ABILITY_IRON_FIST,
+            ABILITY_THICK_FAT
+        )
+    },
+    { // 0993
+        SPECIES_IRON_JUGULIS,
+        INNATES(
+            ABILITY_LEVITATE
+        )
+    },
+    { // 0995
+        SPECIES_IRON_THORNS,
+        INNATES(
+            ABILITY_SAND_VEIL,
+            ABILITY_UNNERVE
+        )
+    },
     { // 0996
         SPECIES_FRIGIBAX,
         INNATES(
@@ -10335,25 +10405,35 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0987
         SPECIES_FLUTTER_MANE,
         INNATES(
+            ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
         )
     },
     { // 0994
         SPECIES_IRON_MOTH,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SWARM
+        )
+    },
+    { // 0999
+        SPECIES_GIMMIGHOUL,
+        INNATES(
+            ABILITY_RATTLED
         )
     },
     { // 0999
         SPECIES_GIMMIGHOUL_ROAMING,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_RATTLED
         )
     },
     { // 1000
         SPECIES_GHOLDENGO,
         INNATES(
-            ABILITY_GOOD_AS_GOLD
+            ABILITY_GOOD_AS_GOLD,
+            ABILITY_RATTLED
         )
     },
     { // 1008

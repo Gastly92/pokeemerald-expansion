@@ -29060,7 +29060,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_ICICLE_SPEAR,
             MOVE_GLAIVE_RUSH,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, SPA_DOWN),
