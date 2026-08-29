@@ -24062,6 +24062,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIGHTING,
     },
+    {
+        .species = SPECIES_DUBWOOL,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MUSCLE_BAND,
+        .moves =
+        {
+            MOVE_HELPING_HAND,
+            MOVE_BODY_SLAM,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_PLAY_ROUGH
+        },
+        .ability = ABILITY_FLUFFY,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 0834
     {

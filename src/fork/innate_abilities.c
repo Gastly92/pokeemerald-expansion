@@ -8963,10 +8963,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SWIFT_SWIM
         )
     },
+    { // 0831
+        SPECIES_WOOLOO,
+        INNATES(
+            ABILITY_STEADFAST,
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0832
         SPECIES_DUBWOOL,
         INNATES(
-            ABILITY_STEADFAST
+            ABILITY_STEADFAST,
+            ABILITY_THICK_FAT
         )
     },
     { // 0835
