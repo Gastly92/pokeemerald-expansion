@@ -1778,6 +1778,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DELPHOX, 1,
         ABILITY_FLASH_FIRE
     },
+    { // 0655
+        SPECIES_DELPHOX_MEGA, 0,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0655
+        SPECIES_DELPHOX_MEGA, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0655
+        SPECIES_DELPHOX_MEGA, 2,
+        ABILITY_FLASH_FIRE
+    },
     { // 0660
         SPECIES_DIGGERSBY, 2,
         ABILITY_EARTH_EATER

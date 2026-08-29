@@ -7129,6 +7129,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0655
         SPECIES_DELPHOX_MEGA,
         INNATES(
+            ABILITY_BLAZE,
             ABILITY_LEVITATE,
             ABILITY_MAGICIAN
         )

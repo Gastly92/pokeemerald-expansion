@@ -19074,7 +19074,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NASTY_PLOT,
             MOVE_FIRE_BLAST,
             MOVE_PSYCHIC,
-            MOVE_MYSTICAL_FIRE
+            MOVE_DAZZLING_GLEAM
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
