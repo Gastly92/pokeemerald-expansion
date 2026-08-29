@@ -7547,6 +7547,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE
         )
     },
+    { // 0681
+        SPECIES_AEGISLASH_SHIELD,
+        INNATES(
+            ABILITY_LEVITATE
+        )
+    },
     { // 0684
         SPECIES_SWIRLIX,
         INNATES(
