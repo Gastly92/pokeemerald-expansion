@@ -8732,54 +8732,67 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0810
         SPECIES_GROOKEY,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SCRAPPY
         )
     },
     { // 0811
         SPECIES_THWACKEY,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SCRAPPY
         )
     },
     { // 0812
         SPECIES_RILLABOOM,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SCRAPPY
         )
     },
     { // 0812
         SPECIES_RILLABOOM_GMAX,
         INNATES(
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SCRAPPY
         )
     },
     { // 0813
         SPECIES_SCORBUNNY,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_SPEED_BOOST,
+            ABILITY_THICK_FAT
         )
     },
     { // 0814
         SPECIES_RABOOT,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_SPEED_BOOST,
+            ABILITY_THICK_FAT
         )
     },
     { // 0815
         SPECIES_CINDERACE,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_SPEED_BOOST,
+            ABILITY_THICK_FAT
         )
     },
     { // 0815
         SPECIES_CINDERACE_GMAX,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_SPEED_BOOST,
+            ABILITY_THICK_FAT
         )
     },
     { // 0816
         SPECIES_SOBBLE,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_SNIPER,
             ABILITY_TORRENT
         )
@@ -8787,6 +8800,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0817
         SPECIES_DRIZZILE,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_SNIPER,
             ABILITY_TORRENT
         )
@@ -8794,6 +8808,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0818
         SPECIES_INTELEON,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_SNIPER,
             ABILITY_TORRENT
         )
@@ -8801,6 +8816,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0818
         SPECIES_INTELEON_GMAX,
         INNATES(
+            ABILITY_KEEN_EYE,
             ABILITY_SNIPER,
             ABILITY_TORRENT
         )

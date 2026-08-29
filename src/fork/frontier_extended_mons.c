@@ -23789,17 +23789,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_INTELEON,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
-            MOVE_ICE_BEAM,
-            MOVE_U_TURN,
-            MOVE_DARK_PULSE
+            MOVE_SNIPE_SHOT,
+            MOVE_ICY_WIND,
+            MOVE_DARK_PULSE,
+            MOVE_PROTECT
         },
         .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
