@@ -19744,7 +19744,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BELLY_DRUM,
             MOVE_PLAY_ROUGH,
             MOVE_DRAIN_PUNCH,
-            MOVE_FACADE
+            MOVE_FIRE_FANG
         },
         .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
