@@ -20215,6 +20215,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
+    {
+        .species = SPECIES_DEDENNE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_NUZZLE,
+            MOVE_SUPER_FANG,
+            MOVE_THUNDERBOLT,
+            MOVE_RECYCLE
+        },
+        .ability = ABILITY_PLUS,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
 
     // 0703
     {
