@@ -8980,6 +8980,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0835
         SPECIES_YAMPER,
         INNATES(
+            ABILITY_QUICK_FEET,
             ABILITY_RATTLED
         )
     },
@@ -8987,6 +8988,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BOLTUND,
         INNATES(
             ABILITY_COMPETITIVE,
+            ABILITY_QUICK_FEET,
+            ABILITY_RATTLED,
             ABILITY_STRONG_JAW
         )
     },
