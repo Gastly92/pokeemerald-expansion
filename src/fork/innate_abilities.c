@@ -8118,12 +8118,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0741
-        SPECIES_ORICORIO, // == ORICORIO_BAILE; canon Dancer (its sole ability)
-        INNATES(
-            ABILITY_DANCER
-        )
-    },
-    { // 0741
         SPECIES_ORICORIO_BAILE,
         INNATES(
             ABILITY_DANCER
@@ -8165,6 +8159,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
     { // 0744
         SPECIES_ROCKRUFF,
+        INNATES(
+            ABILITY_KEEN_EYE,
+            ABILITY_STEADFAST,
+            ABILITY_VITAL_SPIRIT
+        )
+    },
+    { // 0744
+        SPECIES_ROCKRUFF_OWN_TEMPO,
         INNATES(
             ABILITY_KEEN_EYE,
             ABILITY_STEADFAST,
@@ -8359,6 +8361,19 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PASSIMIAN,
         INNATES(
             ABILITY_DEFIANT
+        )
+    },
+    { // 0767
+        SPECIES_WIMPOD,
+        INNATES(
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0768
+        SPECIES_GOLISOPOD,
+        INNATES(
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0769
