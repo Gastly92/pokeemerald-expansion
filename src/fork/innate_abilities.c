@@ -9552,7 +9552,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0893
         SPECIES_ZARUDE,
         INNATES(
-            ABILITY_LEAF_GUARD
+            ABILITY_LEAF_GUARD,
+            ABILITY_TOUGH_CLAWS
+        )
+    },
+    { // 0893
+        SPECIES_ZARUDE_DADA,
+        INNATES(
+            ABILITY_LEAF_GUARD,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0894
@@ -9571,13 +9579,35 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0896
         SPECIES_GLASTRIER,
         INNATES(
-            ABILITY_CHILLING_NEIGH
+            ABILITY_CHILLING_NEIGH,
+            ABILITY_ICE_BODY
         )
     },
     { // 0897
         SPECIES_SPECTRIER,
         INNATES(
-            ABILITY_GRIM_NEIGH
+            ABILITY_GRIM_NEIGH,
+            ABILITY_INFILTRATOR
+        )
+    },
+    { // 0898
+        SPECIES_CALYREX,
+        INNATES(
+            ABILITY_UNNERVE
+        )
+    },
+    { // 0898
+        SPECIES_CALYREX_ICE,
+        INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_UNNERVE
+        )
+    },
+    { // 0898
+        SPECIES_CALYREX_SHADOW,
+        INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_UNNERVE
         )
     },
     { // 0899
@@ -9647,12 +9677,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0905
         SPECIES_ENAMORUS_INCARNATE,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_HEALER
         )
     },
     { // 0905
         SPECIES_ENAMORUS_THERIAN,
         INNATES(
+            ABILITY_HEALER,
             ABILITY_OVERCOAT
         )
     },
