@@ -7729,6 +7729,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SLIGGOO_HISUI,
         INNATES(
             ABILITY_GOOEY,
+            ABILITY_HYDRATION,
             ABILITY_SHELL_ARMOR
         )
     },
@@ -7736,6 +7737,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOODRA_HISUI,
         INNATES(
             ABILITY_GOOEY,
+            ABILITY_HYDRATION,
             ABILITY_SHELL_ARMOR
         )
     },

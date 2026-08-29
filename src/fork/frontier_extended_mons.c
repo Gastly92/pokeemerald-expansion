@@ -20327,7 +20327,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_DRACO_METEOR,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_FIRE_BLAST,
             MOVE_THUNDERBOLT
         },
