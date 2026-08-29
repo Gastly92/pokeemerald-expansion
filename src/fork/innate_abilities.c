@@ -8122,6 +8122,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0741
+        SPECIES_ORICORIO_BAILE,
+        INNATES(
+            ABILITY_DANCER
+        )
+    },
+    { // 0741
         SPECIES_ORICORIO_POM_POM,
         INNATES(
             ABILITY_DANCER
