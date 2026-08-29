@@ -1443,6 +1443,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_EMBOAR, 1,
         ABILITY_FLASH_FIRE
     },
+    { // 0500
+        SPECIES_EMBOAR_MEGA, 0,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0500
+        SPECIES_EMBOAR_MEGA, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0500
+        SPECIES_EMBOAR_MEGA, 2,
+        ABILITY_FLASH_FIRE
+    },
     { // 0503
         SPECIES_SAMUROTT, 1,
         ABILITY_WATER_ABSORB
@@ -1475,12 +1487,40 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SIMIPOUR, 1,
         ABILITY_WATER_ABSORB
     },
+    { // 0521
+        SPECIES_UNFEZANT, 1,
+        ABILITY_SHEER_FORCE
+    },
     { // 0530
         SPECIES_EXCADRILL, 2,
         ABILITY_SAND_STREAM
     },
+    { // 0530
+        SPECIES_EXCADRILL_MEGA, 0,
+        ABILITY_SAND_STREAM
+    },
+    { // 0530
+        SPECIES_EXCADRILL_MEGA, 1,
+        ABILITY_SAND_STREAM
+    },
+    { // 0530
+        SPECIES_EXCADRILL_MEGA, 2,
+        ABILITY_SAND_STREAM
+    },
     { // 0531
         SPECIES_AUDINO, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    { // 0531
+        SPECIES_AUDINO_MEGA, 0,
+        ABILITY_SYNCHRONIZE
+    },
+    { // 0531
+        SPECIES_AUDINO_MEGA, 1,
+        ABILITY_SYNCHRONIZE
+    },
+    { // 0531
+        SPECIES_AUDINO_MEGA, 2,
         ABILITY_SYNCHRONIZE
     },
     { // 0538
@@ -1494,6 +1534,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0542
         SPECIES_LEAVANNY, 2,
         ABILITY_HUSTLE
+    },
+    { // 0545
+        SPECIES_SCOLIPEDE_MEGA, 0,
+        ABILITY_POISON_POINT
+    },
+    { // 0545
+        SPECIES_SCOLIPEDE_MEGA, 1,
+        ABILITY_POISON_POINT
+    },
+    { // 0545
+        SPECIES_SCOLIPEDE_MEGA, 2,
+        ABILITY_POISON_POINT
     },
     { // 0547
         SPECIES_WHIMSICOTT, 2,
@@ -1519,6 +1571,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SCRAFTY, 1,
         ABILITY_RIVALRY
     },
+    { // 0560
+        SPECIES_SCRAFTY_MEGA, 0,
+        ABILITY_RIVALRY
+    },
+    { // 0560
+        SPECIES_SCRAFTY_MEGA, 1,
+        ABILITY_RIVALRY
+    },
+    { // 0560
+        SPECIES_SCRAFTY_MEGA, 2,
+        ABILITY_RIVALRY
+    },
     { // 0561
         SPECIES_SIGILYPH, 2,
         ABILITY_SIMPLE
@@ -1529,6 +1593,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0569
         SPECIES_GARBODOR, 2,
+        ABILITY_POISON_TOUCH
+    },
+    { // 0569
+        SPECIES_GARBODOR_GMAX, 2,
         ABILITY_POISON_TOUCH
     },
     { // 0573
@@ -1575,6 +1643,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_EELEKTROSS, 1,
         ABILITY_LIGHTNING_ROD
     },
+    { // 0609
+        SPECIES_CHANDELURE_MEGA, 0,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0609
+        SPECIES_CHANDELURE_MEGA, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 0609
+        SPECIES_CHANDELURE_MEGA, 2,
+        ABILITY_FLASH_FIRE
+    },
     { // 0614
         SPECIES_BEARTIC, 1,
         ABILITY_SNOW_WARNING
@@ -1589,6 +1669,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0620
         SPECIES_MIENSHAO, 2,
+        ABILITY_NO_GUARD
+    },
+    { // 0623
+        SPECIES_GOLURK_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    { // 0623
+        SPECIES_GOLURK_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    { // 0623
+        SPECIES_GOLURK_MEGA, 2,
         ABILITY_NO_GUARD
     },
     { // 0630
@@ -1650,12 +1742,36 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_KELDEO, 1,
         ABILITY_STORM_DRAIN
     },
+    { // 0647
+        SPECIES_KELDEO_RESOLUTE, 1,
+        ABILITY_STORM_DRAIN
+    },
     { // 0648
         SPECIES_MELOETTA, 1,
         ABILITY_PIXILATE
     },
+    { // 0648
+        SPECIES_MELOETTA_PIROUETTE, 1,
+        ABILITY_PIXILATE
+    },
     { // 0649
         SPECIES_GENESECT, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0649
+        SPECIES_GENESECT_DOUSE, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0649
+        SPECIES_GENESECT_SHOCK, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0649
+        SPECIES_GENESECT_BURN, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0649
+        SPECIES_GENESECT_CHILL, 1,
         ABILITY_SHEER_FORCE
     },
     { // 0655
