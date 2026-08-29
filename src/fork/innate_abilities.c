@@ -8040,6 +8040,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TOUCANNON,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_PICKUP,
             ABILITY_SKILL_LINK
         )
     },
