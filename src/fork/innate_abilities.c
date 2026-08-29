@@ -483,6 +483,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0029
         SPECIES_NIDORAN_F,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_ROUGH_SKIN
         )
     },
@@ -514,6 +515,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NIDORINO,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_FRISK,
             ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
             ABILITY_ROUGH_SKIN
@@ -522,6 +524,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0034
         SPECIES_NIDOKING,
         INNATES(
+            ABILITY_ANTICIPATION,
+            ABILITY_FRISK,
             ABILITY_MOLD_BREAKER,
             ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
@@ -794,6 +798,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_LIMBER,
             ABILITY_PICKPOCKET,
+            ABILITY_PICKUP,
             ABILITY_TECHNICIAN,
             ABILITY_TOUGH_CLAWS,
             ABILITY_UNNERVE
@@ -803,6 +808,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PERSIAN_ALOLA,
         INNATES(
             ABILITY_FUR_COAT,
+            ABILITY_MOXIE,
+            ABILITY_PICKPOCKET,
+            ABILITY_PICKUP,
             ABILITY_RATTLED,
             ABILITY_TECHNICIAN,
             ABILITY_UNNERVE
