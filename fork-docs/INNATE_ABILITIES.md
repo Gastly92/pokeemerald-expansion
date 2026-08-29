@@ -4281,7 +4281,7 @@ clean-upside copy**. Canon carriers **plus a spore/powder flavor set** (see Spec
   `STAT_SPEED` — same `TryStatChange` precheck, same innate-Mirror-Armor allowance, and it sets
   `gBattleScripting.abilityPopupOverwrite` to the innate **only when the chosen ability differs** (the Speed
   Boost / Rough Skin precedent), so a real Effect Spore stays byte-for-byte unchanged.
-- **What the accuracy stage buys.** Because `DETERMINISTIC_ACCURACY_EVASION` means moves never miss, the stage
+- **What the accuracy stage buys.** Because `DETERMINISTIC_ACCURACY_EVASION` prices accuracy as PP rather than rolling for a hit, the stage
   is spent in the [PP economy](DETERMINISM.md#deterministic_accuracy_evasion) instead: each stack costs the
   attacker **1 extra PP per move**. The innate taxes PP; it does not create miss chance.
 - **Powder gating is unchanged** — the enclosing condition still runs `IsAffectedByPowderMove`, so a Grass

@@ -269,7 +269,14 @@ Everything in "Do this" still applies **per line**, at the same depth.
   **deterministic does NOT mean "always happens"**: secondary effects land only on
   a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while
   crit *items* give one guaranteed crit, and paralysis loses full-para and the
-  Speed drop entirely. Read the "`DETERMINISTIC_*` regime" section of the rubric —
+  Speed drop entirely. **These flags CONVERT probabilistic mechanics into deterministic
+  ones; they rarely delete them** — before concluding anything is dead under one,
+  go find what it was rebuilt into (Blunder Policy rearmed onto Protect and
+  immunities, Focus Band into a Sash, Quick Claw into a consumed one-shot). In
+  particular accuracy/evasion became a **PP economy**, not a nullity: moves hit,
+  but max PP is scaled by base accuracy and stages shift per-use cost, so No
+  Guard, Keen Eye, Compound Eyes and evasion items are all still live.
+  Read the "`DETERMINISTIC_*` regime" section of the rubric —
   and `include/config/deterministic.h` itself, which is the source of truth —
   before building a set around any mechanic. The set's `.ability` must resolve to a real
   slot and not be an innate of **that** species — the duplicate-innate tests are scoped

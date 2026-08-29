@@ -1174,7 +1174,7 @@ what to look at, not a replacement for it. Where a proposal turns on a mechanic,
 cite the header (or the effect site it names) rather than stock Pokémon knowledge
 — several rules here inverted a "well-known" interaction.
 
-**The three traps, in the order they bite:**
+**The four traps, in the order they bite:**
 
 **First, the concept that unifies several of these: the "strong hit" gate.** The
 fork replaces a number of separate random rolls with one shared condition,
@@ -1219,7 +1219,35 @@ that used to be a percentage, the first question is whether it now rides this ga
    runs the crit calc before type effectiveness is known, so it does *not* foresee
    these crits. That is deliberate (thinking-time budget), and it means a
    high-crit-ratio move is quietly better against the AI than the AI expects.
-3. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
+3. **Accuracy and evasion were TRANSFORMED, not deleted — they are a PP
+   economy now.** This is the one that keeps being summarised wrongly, so state it
+   the right way round: it is not "accuracy stopped mattering", it is "accuracy
+   stopped being a coin flip and became a **price**". Yes, every move that reaches
+   the accuracy roll hits — but a move's max PP is scaled by its base accuracy
+   (`CalculatePPWithBonus`, `src/pokemon.c`), and accuracy/evasion *stages* shift
+   the PP each use costs. Hydro Pump is reliable and Focus Blast is reliable; both
+   are also short. A 100%-accuracy move is still strictly cheaper to spam than a
+   70% one, which is exactly what accuracy always bought — just paid in a
+   different currency.
+
+   The corollary is what gets missed: **everything keyed on accuracy is still
+   live.** No Guard pierces semi-invulnerability and zeroes the evasion tax. Keen
+   Eye, Compound Eyes and Illuminate make the holder ignore an evasive foe's tax.
+   Evasion items and Effect Spore (which now lowers the contact attacker's
+   accuracy) tax the attacker's PP. OHKO moves deal 40% max HP and keep their
+   immunities. Zap Cannon and Inferno gained a recharge turn to pay for becoming
+   certain.
+
+   **The general rule, and the one worth carrying: `DETERMINISTIC_*` flags CONVERT
+   probabilistic mechanics into deterministic ones. They rarely delete them.**
+   Before concluding that anything is dead under one of these flags, go and look
+   for what it was rebuilt into — the answer is usually in the flag's own comment.
+   Blunder Policy was rearmed onto Protect and immunities rather than left inert;
+   Focus Band became a Sash; Quick Claw became a consumed one-shot that turns on
+   Unburden; Starf raises the highest stat instead of a random one; paralysis
+   traded its coin flips for a PP and priority tax. "This flag makes X impossible,
+   so Y is dead" has been wrong nearly every time it has been said.
+4. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
    *and* the Speed drop, replacing them with a PP and priority tax — so paralysis
    is far weaker here, not stronger. `DETERMINISTIC_STATUS` turns confusion into a
    single self-hit that a status move shakes off for free. Check the direction of
@@ -1235,7 +1263,7 @@ that used to be a percentage, the first question is whether it now rides this ga
 | `DETERMINISTIC_MOVE_RESULTS` | 2–5 hit moves always hit **3** times — **5** with Loaded Dice or Skill Link (Population Bomb: 5, or 10). **Protect-family always fails on consecutive turns.** Binding moves last 4 turns, 7 with Grip Claw. Rampage 2 turns. Speed ties resolve on a fixed ladder. Roar/Whirlwind/Dragon Tail drag the next party member **in slot order**. |
 | `DETERMINISTIC_STATUS` | Sleep is a fixed `DETERMINISTIC_SLEEP_TURNS` (3) — but the wake-up turn is still an acting turn, so N costs the target **N−1** actions. Rest is exempt. Confusion = one 40-BP self-hit on the next attacking move, then clears; a status move shakes it off free. Infatuation lasts 2 actions and halves damage instead of blocking it. |
 | `DETERMINISTIC_PARALYSIS` | **No full-paralysis and no Speed drop.** Paralysis costs +1 PP per move and −1 priority. Quick Feet is exempt from both. |
-| `DETERMINISTIC_ACCURACY_EVASION` | Every move that reaches the accuracy roll hits, so Hydro Pump / Focus Blast / Stone Edge are reliable — paid for as a **PP economy** (low-accuracy moves get reduced max PP; accuracy/evasion stages shift per-use PP cost). OHKO moves deal 40% max HP and keep their immunities. Formerly-50% moves (Zap Cannon, Inferno) now need a recharge turn. |
+| `DETERMINISTIC_ACCURACY_EVASION` | Accuracy is a **PP economy**, not a coin flip — it was transformed, not deleted. Max PP is scaled by base accuracy and accuracy/evasion stages shift per-use PP cost, so Hydro Pump / Focus Blast / Stone Edge are reliable but *short*. Everything keyed on accuracy stays live: No Guard, Keen Eye / Compound Eyes / Illuminate, evasion items, Effect Spore's accuracy drop. OHKO moves deal 40% max HP and keep their immunities. Formerly-50% moves (Zap Cannon, Inferno) gained a recharge turn. |
 | `DETERMINISTIC_DAMAGE` | Damage roll is fixed at 92% on turn 1 and **+1% per turn, uncapped** — so it passes 100% from turn 9. Rewards sets that survive to snowball. |
 
 ### Free gimmicks — a set *may* Mega, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
@@ -1406,7 +1434,7 @@ had missed, which is the argument for them:
 |---|---|
 | **`no set carries an attacking move on the stat it dumped`** | 16 sets — Groudon, Unfezant, Greninja, Centiskorch, Hatterene ×2, Arctozolt, Brambleghast, Silvally ×3, Minior, Solgaleo, Dragapult, Regieleki, Enamorus |
 | **`no species carries two sets that are the same set`** | 6 pairs — Kyogre, Galarian Darmanitan, Toucannon, Dhelmise, Iron Bundle, Ogerpon |
-| **`no set holds an item none of its moves can activate`** | 2 sets — Centiskorch and Tatsugiri, both holding Throat Spray with no sound move |
+| **`no set holds an item none of its moves can activate`** | 2 sets — Centiskorch and Tatsugiri, both holding Throat Spray with no sound move (Centiskorch's twice over: that set is physical, and Throat Spray raises Sp. Attack) |
 
 The wrong-stat gate needs two exclusion lists to be usable, and they are the
 interesting part. A naive "physical move on a special set" rule fires on **78**
@@ -1420,9 +1448,20 @@ Contrary are skipped outright — Lurantis runs Superpower on a special set for 
 inverted +1 Attack and +1 Defence, which is deliberate.
 
 The dead-item gate only covers what a table can actually decide: Throat Spray
-without a sound move, and Blunder Policy, which is dead on **every** set in this
-fork because `DETERMINISTIC_ACCURACY_EVASION` means nothing ever misses. Weakness
-Policy and Sitrus need battle state, so they stay a reviewer's job.
+without a sound move. Weakness Policy and Sitrus need battle state, so they stay a
+reviewer's job.
+
+It very nearly shipped with a **wrong** second entry. Blunder Policy looks dead
+here — its stock trigger is the holder's move missing, and nothing misses under
+`DETERMINISTIC_ACCURACY_EVASION` — so a gate was written asserting exactly that,
+and it would have failed the build on a legitimate set. The fork **rebuilt** the
+item rather than leaving it broken: it arms on the deterministic blunders instead
+(Protect, a semi-invulnerable target, Wide/Quick/Crafty Guard, Psychic Terrain, a
+type immunity, a blocking ability, an Air Balloon). That is written in
+`deterministic.h`'s own flag comment, in the `DETERMINISTIC_HOLD_EFFECTS` row of
+the table above, and in `test/fork/deterministic_hold_effects.c`. Three places,
+none of them read, because the claim felt obvious. See "these flags convert; they
+rarely delete" in the regime section — that is the rule this violated.
 
 The duplicate gate compares the move *set* and the ability while ignoring order,
 item, spread, tera and format. Ignoring order is what catches Inteleon (the same

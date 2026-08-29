@@ -1007,6 +1007,15 @@ TEST("Frontier extended roster: no species carries two sets that are the same se
 // Only statically decidable cases belong here. Weakness Policy needs to be hit super
 // effectively and Sitrus needs to drop below half, neither of which a table can know; the
 // entries below are true from the set alone.
+//
+// Do NOT add Blunder Policy. It looks dead here -- its stock trigger is the holder's move
+// missing, and nothing misses under DETERMINISTIC_ACCURACY_EVASION -- but the fork rebuilt it
+// rather than leaving it broken: it arms on the deterministic blunders instead (Protect, a
+// semi-invulnerable target, Wide/Quick/Crafty Guard, Psychic Terrain, a type immunity, a
+// blocking ability, an Air Balloon), and in doubles any one avoiding target arms it. See
+// CancelerTargetFailure() in src/battle_move_resolution.c and the flag comment in
+// include/config/deterministic.h. This is the general shape of that flag: it converts
+// probabilistic mechanics into deterministic ones, and only rarely deletes them.
 static bool32 SetHasSoundMove(const struct TrainerMon *set)
 {
     u32 i;
@@ -1037,16 +1046,6 @@ TEST("Frontier extended roster: no set holds an item none of its moves can activ
         {
             offenders++;
             Test_MgbaPrintf("roster[%d] %S: holds Throat Spray but carries no sound move, so the item can never fire -- give it a sound move or give it a different item",
-                            i, gSpeciesInfo[set->species].speciesName);
-        }
-
-        // Blunder Policy triggers when a move MISSES. Under DETERMINISTIC_ACCURACY_EVASION
-        // (include/config/deterministic.h) accuracy never decides hit or miss, so nothing in this
-        // fork can ever miss and the item is dead on every set, whatever its moves are.
-        if (set->heldItem == ITEM_BLUNDER_POLICY)
-        {
-            offenders++;
-            Test_MgbaPrintf("roster[%d] %S: holds Blunder Policy, which is dead in this fork -- DETERMINISTIC_ACCURACY_EVASION means moves never miss, so it can never trigger",
                             i, gSpeciesInfo[set->species].speciesName);
         }
     }
