@@ -19167,6 +19167,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_GRENINJA_BATTLE_BOND,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_WATER_SHURIKEN,
+            MOVE_HYDRO_PUMP,
+            MOVE_DARK_PULSE,
+            MOVE_ICE_BEAM
+        },
+        .ability = ABILITY_BATTLE_BOND,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0660
     {

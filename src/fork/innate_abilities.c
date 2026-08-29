@@ -7137,24 +7137,48 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0656
         SPECIES_FROAKIE,
         INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_TECHNICIAN,
             ABILITY_TORRENT
         )
     },
     { // 0657
         SPECIES_FROGADIER,
         INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_TECHNICIAN,
             ABILITY_TORRENT
         )
     },
     { // 0658
         SPECIES_GRENINJA,
         INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_TECHNICIAN,
+            ABILITY_TORRENT
+        )
+    },
+    { // 0658
+        SPECIES_GRENINJA_ASH,
+        INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_TECHNICIAN,
+            ABILITY_TORRENT
+        )
+    },
+    { // 0658
+        SPECIES_GRENINJA_BATTLE_BOND,
+        INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_TECHNICIAN,
             ABILITY_TORRENT
         )
     },
     { // 0658
         SPECIES_GRENINJA_MEGA,
         INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_TECHNICIAN,
             ABILITY_TORRENT
         )
     },
