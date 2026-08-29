@@ -8892,6 +8892,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0826
         SPECIES_ORBEETLE,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_FRISK,
             ABILITY_SWARM,
             ABILITY_TELEPATHY
@@ -8900,6 +8901,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0826
         SPECIES_ORBEETLE_GMAX,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_FRISK,
             ABILITY_SWARM,
             ABILITY_TELEPATHY
