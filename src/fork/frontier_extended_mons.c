@@ -21236,7 +21236,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_BODY_SLAM,
             MOVE_CRUNCH,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_U_TURN
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -21247,6 +21247,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 4
         ),
         .teraType = TYPE_GROUND,
+    },
+    {
+        .species = SPECIES_GUMSHOOS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_CHOICE_BAND,
+        .moves =
+        {
+            MOVE_CRUNCH,
+            MOVE_FIRE_FANG,
+            MOVE_ICE_FANG,
+            MOVE_PSYCHIC_FANGS
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
     },
 
     // 0738
