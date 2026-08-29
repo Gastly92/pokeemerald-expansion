@@ -21699,7 +21699,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_LEAF_STORM,
             MOVE_SUPERPOWER,
-            MOVE_HIDDEN_POWER,
+            MOVE_FOCUS_BLAST,
             MOVE_SYNTHESIS
         },
         .ability = ABILITY_CONTRARY,

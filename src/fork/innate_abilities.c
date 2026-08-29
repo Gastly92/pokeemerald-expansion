@@ -8266,13 +8266,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0753
         SPECIES_FOMANTIS,
         INNATES(
-            ABILITY_LEAF_GUARD
+            ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD,
+            ABILITY_SHARPNESS
         )
     },
     { // 0754
         SPECIES_LURANTIS,
         INNATES(
-            ABILITY_LEAF_GUARD
+            ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD,
+            ABILITY_SHARPNESS
         )
     },
     { // 0757
