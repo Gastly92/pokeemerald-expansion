@@ -22933,7 +22933,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_POWER_GEM,
             MOVE_THUNDERBOLT,
             MOVE_GRASS_KNOT
@@ -23019,7 +23019,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_TRIPLE_AXEL,
-            MOVE_BUG_BUZZ,
+            MOVE_LEECH_LIFE,
             MOVE_U_TURN
         },
         .ability = ABILITY_LINGERING_AROMA,
@@ -23038,8 +23038,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_CLOSE_COMBAT,
-            MOVE_ICE_BEAM,
-            MOVE_THUNDERBOLT,
+            MOVE_TRIPLE_AXEL,
+            MOVE_POISON_JAB,
             MOVE_RAPID_SPIN
         },
         .ability = ABILITY_LINGERING_AROMA,
@@ -23104,7 +23104,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_PROTECT,
             MOVE_FLAMETHROWER,
-            MOVE_HEAVY_SLAM
+            MOVE_FLASH_CANNON
         },
         .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
@@ -23122,7 +23122,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_AUTOTOMIZE,
-            MOVE_HEAVY_SLAM,
+            MOVE_FLASH_CANNON,
             MOVE_FLAMETHROWER,
             MOVE_AIR_SLASH
         },
