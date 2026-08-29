@@ -19344,7 +19344,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_HYPER_VOICE,
             MOVE_DARK_PULSE,
-            MOVE_SOLAR_BEAM
+            MOVE_ENERGY_BALL
         },
         .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPA_UP, ATK_DOWN),

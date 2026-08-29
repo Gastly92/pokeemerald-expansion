@@ -7278,6 +7278,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_UNNERVE
         )
     },
+    { // 0668
+        SPECIES_PYROAR_MEGA,
+        INNATES(
+            ABILITY_MOXIE,
+            ABILITY_UNNERVE
+        )
+    },
     { // 0669
         SPECIES_FLABEBE_RED,
         INNATES(
