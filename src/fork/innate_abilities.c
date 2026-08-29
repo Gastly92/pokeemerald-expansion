@@ -7857,6 +7857,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_AVALUGG_HISUI,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_OWN_TEMPO,
             ABILITY_STRONG_JAW,
             ABILITY_STURDY
         )
