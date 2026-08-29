@@ -2566,6 +2566,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MORELULL,
         INNATES(
             ABILITY_EFFECT_SPORE,
+            ABILITY_ILLUMINATE,
             ABILITY_RAIN_DISH
         )
     },
@@ -2573,6 +2574,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHIINOTIC,
         INNATES(
             ABILITY_EFFECT_SPORE,
+            ABILITY_ILLUMINATE,
             ABILITY_RAIN_DISH
         )
     },
