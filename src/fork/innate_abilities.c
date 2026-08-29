@@ -9166,6 +9166,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0852
         SPECIES_CLOBBOPUS,
         INNATES(
+            ABILITY_IRON_FIST,
             ABILITY_LIMBER,
             ABILITY_TECHNICIAN
         )
@@ -9173,6 +9174,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0853
         SPECIES_GRAPPLOCT,
         INNATES(
+            ABILITY_IRON_FIST,
             ABILITY_LIMBER,
             ABILITY_TECHNICIAN
         )
