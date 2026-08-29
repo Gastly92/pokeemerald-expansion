@@ -19195,7 +19195,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_RETURN,
             MOVE_QUICK_ATTACK,
             MOVE_WILD_CHARGE
@@ -19216,7 +19216,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SWORDS_DANCE,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_RETURN,
             MOVE_QUICK_ATTACK
         },
