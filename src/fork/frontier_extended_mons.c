@@ -19954,7 +19954,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_HYPER_VOICE,
             MOVE_VOLT_SWITCH,
-            MOVE_SURF
+            MOVE_GRASS_KNOT
         },
         .ability = ABILITY_DRY_SKIN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
