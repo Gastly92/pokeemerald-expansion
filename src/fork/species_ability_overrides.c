@@ -1898,6 +1898,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DIANCIE, 1,
         ABILITY_MISTY_SURGE
     },
+    { // 0719
+        SPECIES_DIANCIE_MEGA, 0,
+        ABILITY_MISTY_SURGE
+    },
+    { // 0719
+        SPECIES_DIANCIE_MEGA, 1,
+        ABILITY_MISTY_SURGE
+    },
+    { // 0719
+        SPECIES_DIANCIE_MEGA, 2,
+        ABILITY_MISTY_SURGE
+    },
     { // 0720
         SPECIES_HOOPA, 1,
         ABILITY_SHEER_FORCE

@@ -20791,7 +20791,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_DIAMOND_STORM,
+            MOVE_POWER_GEM,
             MOVE_MOONBLAST,
             MOVE_EARTH_POWER,
             MOVE_PROTECT
@@ -20812,7 +20812,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_STEALTH_ROCK,
-            MOVE_DIAMOND_STORM,
+            MOVE_BODY_PRESS,
             MOVE_MOONBLAST,
             MOVE_REFLECT
         },
