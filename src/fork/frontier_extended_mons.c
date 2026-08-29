@@ -24612,23 +24612,23 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_POLTEAGEIST,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
-            MOVE_SHELL_SMASH,
+            MOVE_NASTY_PLOT,
             MOVE_SHADOW_BALL,
-            MOVE_GIGA_DRAIN,
-            MOVE_STORED_POWER
+            MOVE_SCALD,
+            MOVE_PROTECT
         },
         .ability = ABILITY_WEAK_ARMOR,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GHOST,
+        .teraType = TYPE_FAIRY,
     },
 
     // 0858
