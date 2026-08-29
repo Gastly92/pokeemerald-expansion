@@ -22132,6 +22132,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_PYUKUMUKU,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_HELPING_HAND,
+            MOVE_PURIFY,
+            MOVE_RECOVER,
+            MOVE_TOXIC
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0773
     {
