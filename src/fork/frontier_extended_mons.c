@@ -24445,7 +24445,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0849
     {
         .species = SPECIES_TOXTRICITY,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
@@ -24470,7 +24470,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_OVERDRIVE,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_VOLT_SWITCH,
             MOVE_FOCUS_BLAST
         },
@@ -24490,9 +24490,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_OVERDRIVE,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_VOLT_SWITCH,
-            MOVE_BOOMBURST
+            MOVE_HYPER_VOICE
         },
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),

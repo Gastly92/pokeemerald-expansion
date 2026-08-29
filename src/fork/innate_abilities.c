@@ -9114,6 +9114,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TOXTRICITY,
         INNATES(
             ABILITY_PUNK_ROCK,
+            ABILITY_RATTLED,
             ABILITY_TECHNICIAN
         )
     },
@@ -9121,6 +9122,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TOXTRICITY_AMPED_GMAX,
         INNATES(
             ABILITY_PUNK_ROCK,
+            ABILITY_RATTLED,
             ABILITY_TECHNICIAN
         )
     },
@@ -9128,6 +9130,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TOXTRICITY_LOW_KEY,
         INNATES(
             ABILITY_PUNK_ROCK,
+            ABILITY_RATTLED,
             ABILITY_TECHNICIAN
         )
     },
@@ -9135,6 +9138,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TOXTRICITY_LOW_KEY_GMAX,
         INNATES(
             ABILITY_PUNK_ROCK,
+            ABILITY_RATTLED,
             ABILITY_TECHNICIAN
         )
     },
