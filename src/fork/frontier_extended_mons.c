@@ -20856,7 +20856,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_HYPERSPACE_FURY,
-            MOVE_PSYCHIC,
+            MOVE_ZEN_HEADBUTT,
             MOVE_GUNK_SHOT,
             MOVE_FIRE_PUNCH
         },
@@ -20878,7 +20878,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_DARK_PULSE,
             MOVE_FOCUS_BLAST,
-            MOVE_GUNK_SHOT
+            MOVE_SLUDGE_BOMB
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
