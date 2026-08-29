@@ -8075,13 +8075,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0737
         SPECIES_CHARJABUG,
         INNATES(
-            ABILITY_BATTERY
+            ABILITY_BATTERY,
+            ABILITY_SWARM
         )
     },
     { // 0738
         SPECIES_VIKAVOLT,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_BATTERY,
+            ABILITY_LEVITATE,
+            ABILITY_SWARM
         )
     },
     { // 0738
