@@ -24423,14 +24423,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_BARRASKEWDA,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_LIQUIDATION,
             MOVE_CLOSE_COMBAT,
             MOVE_AQUA_JET,
-            MOVE_FLIP_TURN
+            MOVE_PROTECT
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
