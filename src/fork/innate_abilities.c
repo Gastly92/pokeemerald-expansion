@@ -9322,6 +9322,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_DEFIANT
         )
     },
+    { // 0871
+        SPECIES_PINCURCHIN,
+        INNATES(
+            ABILITY_ROUGH_SKIN
+        )
+    },
     { // 0872
         SPECIES_SNOM,
         INNATES(
@@ -9339,7 +9345,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0874
         SPECIES_STONJOURNER,
         INNATES(
-            ABILITY_POWER_SPOT
+            ABILITY_POWER_SPOT,
+            ABILITY_STURDY
+        )
+    },
+    { // 0875
+        SPECIES_EISCUE_ICE,
+        INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH
+        )
+    },
+    { // 0875
+        SPECIES_EISCUE_NOICE,
+        INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH
         )
     },
     { // 0876
@@ -9354,22 +9375,39 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS
         )
     },
+    { // 0877
+        SPECIES_MORPEKO_FULL_BELLY,
+        INNATES(
+            ABILITY_CHEEK_POUCH,
+            ABILITY_GLUTTONY
+        )
+    },
+    { // 0877
+        SPECIES_MORPEKO_HANGRY,
+        INNATES(
+            ABILITY_CHEEK_POUCH,
+            ABILITY_GLUTTONY
+        )
+    },
     { // 0878
         SPECIES_CUFANT,
         INNATES(
-            ABILITY_HEAVY_METAL
+            ABILITY_HEAVY_METAL,
+            ABILITY_STURDY
         )
     },
     { // 0879
         SPECIES_COPPERAJAH,
         INNATES(
-            ABILITY_HEAVY_METAL
+            ABILITY_HEAVY_METAL,
+            ABILITY_STURDY
         )
     },
     { // 0879
         SPECIES_COPPERAJAH_GMAX,
         INNATES(
-            ABILITY_HEAVY_METAL
+            ABILITY_HEAVY_METAL,
+            ABILITY_STURDY
         )
     },
     { // 0880
