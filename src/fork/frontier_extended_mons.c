@@ -21803,7 +21803,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_NASTY_PLOT,
             MOVE_FIRE_BLAST,
-            MOVE_SLUDGE_WAVE,
+            MOVE_SLUDGE_BOMB,
             MOVE_DRAGON_PULSE
         },
         .ability = ABILITY_FLAME_BODY,
