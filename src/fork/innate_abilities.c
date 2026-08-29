@@ -7390,13 +7390,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0672
         SPECIES_SKIDDO,
         INNATES(
-            ABILITY_GRASS_PELT
+            ABILITY_CHLOROPHYLL,
+            ABILITY_GRASS_PELT,
+            ABILITY_OVERCOAT
         )
     },
     { // 0673
         SPECIES_GOGOAT,
         INNATES(
-            ABILITY_GRASS_PELT
+            ABILITY_CHLOROPHYLL,
+            ABILITY_GRASS_PELT,
+            ABILITY_OVERCOAT
         )
     },
     { // 0674

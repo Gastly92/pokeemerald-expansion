@@ -19446,7 +19446,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_HORN_LEECH,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_ROCK_SLIDE,
             MOVE_BULK_UP
         },
