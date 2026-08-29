@@ -7676,7 +7676,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TYRANTRUM,
         INNATES(
             ABILITY_ROCK_HEAD,
-            ABILITY_STRONG_JAW
+            ABILITY_STRONG_JAW,
+            ABILITY_STURDY
         )
     },
     { // 0700

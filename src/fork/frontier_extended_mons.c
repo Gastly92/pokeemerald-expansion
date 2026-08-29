@@ -19995,7 +19995,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HEAD_SMASH,
             MOVE_DRAGON_CLAW,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_CRUNCH
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -20016,7 +20016,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_OUTRAGE,
             MOVE_HEAD_SMASH,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
