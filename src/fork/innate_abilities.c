@@ -7610,6 +7610,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0689
         SPECIES_BARBARACLE_MEGA,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_SNIPER,
             ABILITY_TOUGH_CLAWS
         )
