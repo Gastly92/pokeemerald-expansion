@@ -7492,12 +7492,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INFILTRATOR,
             ABILITY_KEEN_EYE,
+            ABILITY_OWN_TEMPO,
             ABILITY_PRANKSTER
         )
     },
     { // 0678
         SPECIES_MEOWSTIC_M_MEGA,
         INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_KEEN_EYE,
+            ABILITY_OWN_TEMPO,
             ABILITY_PRANKSTER
         )
     },
@@ -7506,7 +7510,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPETITIVE,
             ABILITY_INFILTRATOR,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_OWN_TEMPO
+        )
+    },
+    { // 0678
+        SPECIES_MEOWSTIC_F_MEGA,
+        INNATES(
+            ABILITY_COMPETITIVE,
+            ABILITY_INFILTRATOR,
+            ABILITY_KEEN_EYE,
+            ABILITY_OWN_TEMPO
         )
     },
     { // 0679
