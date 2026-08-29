@@ -7579,6 +7579,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MALAMAR,
         INNATES(
             ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
+            ABILITY_SUCTION_CUPS
+        )
+    },
+    { // 0687
+        SPECIES_MALAMAR_MEGA,
+        INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
             ABILITY_SUCTION_CUPS
         )
     },
