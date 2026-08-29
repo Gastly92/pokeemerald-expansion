@@ -8825,14 +8825,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SKWOVET,
         INNATES(
             ABILITY_CHEEK_POUCH,
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_HARVEST
         )
     },
     { // 0820
         SPECIES_GREEDENT,
         INNATES(
             ABILITY_CHEEK_POUCH,
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_HARVEST
         )
     },
     { // 0821

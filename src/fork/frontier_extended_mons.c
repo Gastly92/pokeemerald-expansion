@@ -23816,7 +23816,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_BODY_SLAM,
-            MOVE_EARTHQUAKE,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_SWORDS_DANCE,
             MOVE_BULLET_SEED
         },
@@ -23828,6 +23828,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4
         ),
         .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_GREEDENT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .iv = IVS(SPE, 0),
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_STUFF_CHEEKS,
+            MOVE_BODY_SLAM,
+            MOVE_CRUNCH
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_GHOST,
     },
 
     // 0823
