@@ -9145,18 +9145,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0850
         SPECIES_SIZZLIPEDE,
         INNATES(
+            ABILITY_SWARM,
             ABILITY_WHITE_SMOKE
         )
     },
     { // 0851
         SPECIES_CENTISKORCH,
         INNATES(
+            ABILITY_SWARM,
             ABILITY_WHITE_SMOKE
         )
     },
     { // 0851
         SPECIES_CENTISKORCH_GMAX,
         INNATES(
+            ABILITY_SWARM,
             ABILITY_WHITE_SMOKE
         )
     },
