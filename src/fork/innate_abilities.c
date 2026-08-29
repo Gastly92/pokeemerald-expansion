@@ -7640,13 +7640,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0692
         SPECIES_CLAUNCHER,
         INNATES(
-            ABILITY_MEGA_LAUNCHER
+            ABILITY_MEGA_LAUNCHER,
+            ABILITY_SNIPER,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0693
         SPECIES_CLAWITZER,
         INNATES(
-            ABILITY_MEGA_LAUNCHER
+            ABILITY_MEGA_LAUNCHER,
+            ABILITY_SNIPER,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0694
