@@ -779,14 +779,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_STATIC,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
-            .hp = 252,
             .atk = 252,
-            .def = 252,
-            .spa = 252,
-            .spd = 252,
+            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_PIKACHU,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves =
+        {
+            MOVE_THUNDERBOLT,
+            MOVE_GRASS_KNOT,
+            MOVE_HELPING_HAND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
     },
 
     // 0026

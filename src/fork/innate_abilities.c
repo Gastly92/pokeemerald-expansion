@@ -345,6 +345,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_THICK_FAT
         )
     },
+    { // 0020
+        SPECIES_RATICATE_ALOLA_TOTEM,
+        INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_INFILTRATOR,
+            ABILITY_INTIMIDATE,
+            ABILITY_PICKPOCKET,
+            ABILITY_STRONG_JAW,
+            ABILITY_THICK_FAT
+        )
+    },
     { // 0021
         SPECIES_SPEAROW,
         INNATES(
@@ -427,6 +438,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RAICHU_MEGA_Y,
         INNATES(
             ABILITY_CHEEK_POUCH,
+            ABILITY_RECKLESS,
             ABILITY_SNIPER
         )
     },
