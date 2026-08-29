@@ -7351,6 +7351,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FLOWER_VEIL
         )
     },
+    { // 0670
+        SPECIES_FLOETTE_MEGA,
+        INNATES(
+            ABILITY_FLOWER_VEIL
+        )
+    },
     { // 0671
         SPECIES_FLORGES_RED,
         INNATES(
