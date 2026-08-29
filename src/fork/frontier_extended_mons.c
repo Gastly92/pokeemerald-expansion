@@ -24020,6 +24020,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_ELDEGOSS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_RAGE_POWDER,
+            MOVE_POLLEN_PUFF,
+            MOVE_SLEEP_POWDER,
+            MOVE_COTTON_SPORE
+        },
+        .ability = ABILITY_COTTON_DOWN,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 128,
+            .spd = 128
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0832
     {

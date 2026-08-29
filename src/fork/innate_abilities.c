@@ -8926,6 +8926,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0829
         SPECIES_GOSSIFLEUR,
         INNATES(
+            ABILITY_CHLOROPHYLL,
             ABILITY_EFFECT_SPORE,
             ABILITY_REGENERATOR
         )
@@ -8933,6 +8934,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0830
         SPECIES_ELDEGOSS,
         INNATES(
+            ABILITY_CHLOROPHYLL,
             ABILITY_EFFECT_SPORE,
             ABILITY_REGENERATOR
         )
