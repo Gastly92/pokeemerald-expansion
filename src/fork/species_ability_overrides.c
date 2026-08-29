@@ -1842,6 +1842,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BARBARACLE_MEGA, 2,
         ABILITY_WATER_ABSORB
     },
+    { // 0691
+        SPECIES_DRAGALGE_MEGA, 0,
+        ABILITY_POISON_POINT
+    },
+    { // 0691
+        SPECIES_DRAGALGE_MEGA, 1,
+        ABILITY_POISON_POINT
+    },
+    { // 0691
+        SPECIES_DRAGALGE_MEGA, 2,
+        ABILITY_POISON_POINT
+    },
     { // 0693
         SPECIES_CLAWITZER, 1,
         ABILITY_WATER_ABSORB

@@ -7618,19 +7618,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0690
         SPECIES_SKRELP,
         INNATES(
-            ABILITY_ADAPTABILITY
+            ABILITY_ADAPTABILITY,
+            ABILITY_LIQUID_OOZE
         )
     },
     { // 0691
         SPECIES_DRAGALGE,
         INNATES(
-            ABILITY_ADAPTABILITY
+            ABILITY_ADAPTABILITY,
+            ABILITY_LIQUID_OOZE
         )
     },
     { // 0691
         SPECIES_DRAGALGE_MEGA,
         INNATES(
-            ABILITY_ADAPTABILITY
+            ABILITY_ADAPTABILITY,
+            ABILITY_LIQUID_OOZE,
+            ABILITY_REGENERATOR
         )
     },
     { // 0692
