@@ -1619,6 +1619,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0117
         SPECIES_SEADRA,
         INNATES(
+            ABILITY_ROUGH_SKIN,
             ABILITY_SNIPER,
             ABILITY_SWIFT_SWIM
         )
@@ -1678,6 +1679,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0122
         SPECIES_MR_MIME_GALAR,
         INNATES(
+            ABILITY_FILTER,
             ABILITY_ICE_BODY,
             ABILITY_SLUSH_RUSH,
             ABILITY_VITAL_SPIRIT
@@ -9388,6 +9390,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0866
         SPECIES_MR_RIME,
         INNATES(
+            ABILITY_FILTER,
             ABILITY_ICE_BODY,
             ABILITY_SLUSH_RUSH,
             ABILITY_TANGLED_FEET,
