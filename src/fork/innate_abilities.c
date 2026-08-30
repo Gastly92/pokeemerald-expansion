@@ -1698,6 +1698,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_JYNX,
         INNATES(
             ABILITY_CUTE_CHARM,
+            ABILITY_DANCER,
             ABILITY_FOREWARN,
             ABILITY_OBLIVIOUS
         )
@@ -1712,6 +1713,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0126
         SPECIES_MAGMAR,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_IRON_FIST,
             ABILITY_VITAL_SPIRIT
         )
@@ -3079,6 +3081,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SCIZOR,
         INNATES(
             ABILITY_LIGHT_METAL,
+            ABILITY_STEADFAST,
             ABILITY_SWARM,
             ABILITY_TECHNICIAN
         )
@@ -3087,6 +3090,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SCIZOR_MEGA,
         INNATES(
             ABILITY_LIGHT_METAL,
+            ABILITY_STEADFAST,
             ABILITY_SWARM,
             ABILITY_TECHNICIAN
         )
@@ -9740,6 +9744,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INTIMIDATE,
             ABILITY_SHARPNESS,
             ABILITY_SOLID_ROCK,
+            ABILITY_STEADFAST,
             ABILITY_SWARM
         )
     },
