@@ -1589,7 +1589,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_REGENERATOR,
-            ABILITY_SHED_SKIN
+            ABILITY_SHED_SKIN,
+            ABILITY_TANGLING_HAIR
         )
     },
     { // 0115
@@ -5524,7 +5525,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
             ABILITY_REGENERATOR,
-            ABILITY_SHED_SKIN
+            ABILITY_SHED_SKIN,
+            ABILITY_TANGLING_HAIR
         )
     },
     { // 0466

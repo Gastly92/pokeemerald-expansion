@@ -4071,14 +4071,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0115
     {
         .species = SPECIES_KANGASKHAN,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_SILK_SCARF,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
-            MOVE_DOUBLE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_REVERSAL,
             MOVE_SUCKER_PUNCH,
-            MOVE_POWER_UP_PUNCH
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_ICE_PUNCH
         },
         .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -4087,7 +4087,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_NORMAL,
+        .teraType = TYPE_FIGHTING,
     },
     {
         .species = SPECIES_KANGASKHAN,
