@@ -243,6 +243,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ALAKAZAM, 1,
         ABILITY_PSYCHIC_SURGE
     },
+    {
+        SPECIES_ALAKAZAM_MEGA, 0,
+        ABILITY_PSYCHIC_SURGE
+    },
+    {
+        SPECIES_ALAKAZAM_MEGA, 1,
+        ABILITY_PSYCHIC_SURGE
+    },
+    {
+        SPECIES_ALAKAZAM_MEGA, 2,
+        ABILITY_PSYCHIC_SURGE
+    },
     { // 0071
         SPECIES_VICTREEBEL, 1,
         ABILITY_POISON_TOUCH

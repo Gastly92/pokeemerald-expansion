@@ -944,7 +944,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS,
             ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_TRACE
         )
     },
     { // 0066
@@ -1069,6 +1070,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GRAVELER_ALOLA,
         INNATES(
             ABILITY_MAGNET_PULL,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
@@ -1088,6 +1090,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOLEM_ALOLA,
         INNATES(
             ABILITY_MAGNET_PULL,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
@@ -2354,8 +2357,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0186
         SPECIES_POLITOED,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_LIMBER,
-            ABILITY_RAIN_DISH
+            ABILITY_RAIN_DISH,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0187

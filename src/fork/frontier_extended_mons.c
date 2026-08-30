@@ -2387,6 +2387,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_VICTREEBEL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_GROWTH,
+            MOVE_POWER_WHIP,
+            MOVE_POISON_JAB
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0073
     {
