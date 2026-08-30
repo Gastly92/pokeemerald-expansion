@@ -1165,6 +1165,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0080
         SPECIES_SLOWBRO_GALAR,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_OBLIVIOUS,
             ABILITY_OWN_TEMPO,
             ABILITY_QUICK_DRAW,
@@ -2481,6 +2482,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SLOWKING_GALAR,
         INNATES(
             ABILITY_ANALYTIC,
+            ABILITY_GLUTTONY,
             ABILITY_OWN_TEMPO,
             ABILITY_REGENERATOR
         )

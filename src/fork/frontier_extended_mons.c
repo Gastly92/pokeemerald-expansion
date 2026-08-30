@@ -13701,7 +13701,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_FLASH_CANNON,
             MOVE_VOLT_SWITCH,
-            MOVE_TERA_BLAST
+            MOVE_FLAMETHROWER
         },
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -13735,7 +13735,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGNEZONE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_METAL_COAT,
+        .heldItem = ITEM_SHUCA_BERRY,
         .moves =
         {
             MOVE_IRON_DEFENSE,
