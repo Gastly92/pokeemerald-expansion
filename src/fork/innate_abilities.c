@@ -1855,14 +1855,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_JOLTEON,
         INNATES(
             ABILITY_ADAPTABILITY,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_ROUGH_SKIN
         )
     },
     { // 0136
         SPECIES_FLAREON,
         INNATES(
             ABILITY_ADAPTABILITY,
-            ABILITY_GUTS
+            ABILITY_GUTS,
+            ABILITY_MAGMA_ARMOR
         )
     },
     { // 0137
@@ -2471,6 +2473,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UMBREON,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION,
             ABILITY_INNER_FOCUS
         )
     },
@@ -7780,7 +7783,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SYLVEON,
         INNATES(
             ABILITY_ADAPTABILITY,
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_STAKEOUT
         )
     },
     { // 0698

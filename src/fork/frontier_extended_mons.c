@@ -4679,20 +4679,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0135
     {
         .species = SPECIES_JOLTEON,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIC_GEM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
+            MOVE_ELECTROWEB,
             MOVE_THUNDERBOLT,
-            MOVE_VOLT_SWITCH,
-            MOVE_SHADOW_BALL,
-            MOVE_HYPER_VOICE
+            MOVE_HELPING_HAND,
+            MOVE_PROTECT
         },
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 4,
             .spa = 252,
-            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
@@ -20177,7 +20177,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYPER_VOICE,
             MOVE_PSYSHOCK,
             MOVE_MYSTICAL_FIRE,
-            MOVE_QUICK_ATTACK
+            MOVE_DRAINING_KISS
         },
         .ability = ABILITY_PIXILATE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
