@@ -1933,6 +1933,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GLUTTONY,
             ABILITY_IMMUNITY,
+            ABILITY_PICKUP,
             ABILITY_THICK_FAT,
             ABILITY_UNAWARE
         )
@@ -1942,6 +1943,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GLUTTONY,
             ABILITY_IMMUNITY,
+            ABILITY_PICKUP,
             ABILITY_THICK_FAT,
             ABILITY_UNAWARE
         )
@@ -2005,15 +2007,19 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0149
         SPECIES_DRAGONITE,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_INNER_FOCUS,
-            ABILITY_MULTISCALE
+            ABILITY_MULTISCALE,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0149
         SPECIES_DRAGONITE_MEGA,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_INNER_FOCUS,
-            ABILITY_MULTISCALE
+            ABILITY_MULTISCALE,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0150

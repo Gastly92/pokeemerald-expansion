@@ -4809,7 +4809,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
-            MOVE_LIQUIDATION,
+            MOVE_AQUA_CUTTER,
             MOVE_STONE_EDGE,
             MOVE_KNOCK_OFF,
             MOVE_SWORDS_DANCE
@@ -5305,20 +5305,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_MEWTWO,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
+            MOVE_CALM_MIND,
             MOVE_PSYSTRIKE,
             MOVE_AURA_SPHERE,
-            MOVE_FIRE_BLAST,
-            MOVE_CALM_MIND
+            MOVE_RECOVER
         },
         .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 4,
             .spa = 252,
-            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
