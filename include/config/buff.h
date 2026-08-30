@@ -109,4 +109,39 @@
 // either can ship without the other.
 #define BUFF_ACCURACY_ITEMS_REVEAL TRUE
 
+// When TRUE, the type-boosting hold items hit harder: instead of the stock +20%
+// they multiply matching-type moves by 1 + BUFF_TYPE_BOOST_PERCENT/100 (+40% by
+// default). This covers both item classes that share the effect site -- the 23
+// generic HOLD_EFFECT_TYPE_POWER items (Charcoal, Mystic Water, Magnet, Black
+// Glasses, Silk Scarf, Sharp Beak, ...) and the 17 HOLD_EFFECT_PLATE items, which
+// are Arceus's version of the same thing. Silvally's memories and Genesect's drives
+// are a different hold effect and are untouched.
+//
+// Why: at the stock +20% these items are dominated by every other damage item in
+// the slot, so nothing has a reason to hold one. Choice Band/Specs give 1.5x for a
+// move lock, Life Orb 1.3x for 10% recoil, and Expert Belt gives the *same* 1.2x on
+// any super-effective move rather than on one type -- so a type item was a strictly
+// narrower Expert Belt, and lost to Life Orb outright on any set that is not a pure
+// mono-attacker. At +40% the item has a real identity: better than Life Orb when a
+// set's damage is concentrated in one type, still worse than it on a coverage set,
+// and still short of Choice Band, which keeps the Choice items' niche intact.
+//
+// The magnitude mirrors BUFF_SHELL_BELL's shape -- a registered toggle plus a plain
+// compile-time constant for the number -- and the +20% -> +40% jump is the same
+// "double the bonus" move that flag made with 1/8 -> 1/4.
+//
+// Note the buffed path uses BUFF_TYPE_BOOST_PERCENT directly rather than scaling the
+// item's own holdEffectParam, so it also overrides the pre-Gen-4 +10% that
+// I_TYPE_BOOST_POWER would otherwise select. Stock behavior (flag off) reads the
+// param as usual. Only the attacker's side of CalcDamage is touched, so the AI's
+// damage prediction picks the change up for free -- it runs the same calc. See the
+// HOLD_EFFECT_TYPE_POWER case in CalcDamage(), src/battle_util.c.
+#define BUFF_TYPE_BOOST_ITEMS TRUE
+
+// Power bonus applied to matching-type moves when BUFF_TYPE_BOOST_ITEMS is on, as a
+// percentage: 40 -> 1.4x. Stock behavior (flag off) instead uses the item's own
+// holdEffectParam (TYPE_BOOST_PARAM, 20 -> 1.2x). Higher = more damage. Ignored when
+// BUFF_TYPE_BOOST_ITEMS is FALSE.
+#define BUFF_TYPE_BOOST_PERCENT 40
+
 #endif // GUARD_CONFIG_BUFF_H
