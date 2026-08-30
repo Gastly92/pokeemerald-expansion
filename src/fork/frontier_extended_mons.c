@@ -3738,8 +3738,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRACO_METEOR,
             MOVE_LEAF_STORM,
-            MOVE_DRAGON_HAMMER,
-            MOVE_WOOD_HAMMER
+            MOVE_DRAGON_PULSE,
+            MOVE_FLAMETHROWER
         },
         .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPA_UP, SPE_DOWN),

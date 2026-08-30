@@ -1459,6 +1459,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0103
         SPECIES_EXEGGUTOR_ALOLA,
         INNATES(
+            ABILITY_CHLOROPHYLL,
             ABILITY_FRISK,
             ABILITY_HARVEST,
             ABILITY_LEAF_GUARD,
