@@ -802,8 +802,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 4,
+            .hp = 252,
+            .atk = 252,
+            .def = 252,
             .spa = 252,
+            .spd = 252,
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
