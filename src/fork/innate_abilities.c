@@ -1485,6 +1485,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0105
         SPECIES_MAROWAK_ALOLA,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_CURSED_BODY,
             ABILITY_INNER_FOCUS,
             ABILITY_ROCK_HEAD
@@ -1493,6 +1494,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0105
         SPECIES_MAROWAK_ALOLA_TOTEM,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_CURSED_BODY,
             ABILITY_INNER_FOCUS,
             ABILITY_ROCK_HEAD
@@ -1501,9 +1503,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0106
         SPECIES_HITMONLEE,
         INNATES(
+            ABILITY_GUTS,
             ABILITY_LIMBER,
             ABILITY_RECKLESS,
-            ABILITY_UNBURDEN
+            ABILITY_STEADFAST,
+            ABILITY_UNBURDEN,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0107
@@ -1512,7 +1517,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_GUTS,
             ABILITY_INNER_FOCUS,
             ABILITY_IRON_FIST,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0108
@@ -3315,9 +3321,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0237
         SPECIES_HITMONTOP,
         INNATES(
+            ABILITY_GUTS,
             ABILITY_INTIMIDATE,
             ABILITY_STEADFAST,
-            ABILITY_TECHNICIAN
+            ABILITY_TECHNICIAN,
+            ABILITY_VITAL_SPIRIT
         )
     },
     { // 0238
