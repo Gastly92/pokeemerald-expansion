@@ -4531,23 +4531,23 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_GYARADOS,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_DAMP_ROCK,
         .moves =
         {
-            MOVE_DRAGON_DANCE,
+            MOVE_RAIN_DANCE,
             MOVE_WATERFALL,
-            MOVE_POWER_WHIP,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_ICE_FANG,
+            MOVE_PROTECT
         },
         .ability = ABILITY_MOTOR_DRIVE,
-        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 4,
+            .hp = 252,
             .atk = 252,
-            .spe = 252
+            .def = 4
         ),
-        .teraType = TYPE_GROUND,
+        .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_GYARADOS,
@@ -4580,7 +4580,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FREEZE_DRY,
             MOVE_MUDDY_WATER,
             MOVE_THUNDERBOLT,
-            MOVE_ICE_SHARD
+            MOVE_SING
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
