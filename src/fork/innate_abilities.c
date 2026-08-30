@@ -944,8 +944,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS,
             ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
-            ABILITY_TELEPATHY,
-            ABILITY_TRACE
+            ABILITY_TELEPATHY
         )
     },
     { // 0066
