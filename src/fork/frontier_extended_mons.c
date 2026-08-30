@@ -2972,16 +2972,16 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
-            MOVE_TRI_ATTACK,
+            MOVE_JUMP_KICK,
             MOVE_DOUBLE_EDGE,
             MOVE_BRAVE_BIRD,
             MOVE_KNOCK_OFF
         },
         .ability = ABILITY_HUSTLE,
-        .nature = NATURE(SPE_UP, DEF_DOWN),
+        .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
@@ -3071,7 +3071,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DEWGONG,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_THROAT_SPRAY,
+        .heldItem = ITEM_ICY_ROCK,
         .moves =
         {
             MOVE_SING,

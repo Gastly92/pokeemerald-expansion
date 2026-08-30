@@ -1223,7 +1223,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_EARLY_BIRD,
             ABILITY_SPEED_BOOST,
-            ABILITY_TANGLED_FEET
+            ABILITY_TANGLED_FEET,
+            ABILITY_TELEPATHY
         )
     },
     { // 0086
