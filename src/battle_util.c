@@ -7628,7 +7628,14 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
     case HOLD_EFFECT_TYPE_POWER:
     case HOLD_EFFECT_PLATE:
         if (moveType == GetItemSecondaryId(gBattleMons[battlerAtk].item))
-            modifier = uq4_12_multiply(modifier, holdEffectModifier);
+        {
+            // FORK: BUFF_TYPE_BOOST_ITEMS raises these from the stock +20% to
+            // +BUFF_TYPE_BOOST_PERCENT, ignoring the item's own param. See config/buff.h.
+            if (GetConfig(BUFF_TYPE_BOOST_ITEMS))
+                modifier = uq4_12_multiply(modifier, PercentToUQ4_12AddOne(BUFF_TYPE_BOOST_PERCENT));
+            else
+                modifier = uq4_12_multiply(modifier, holdEffectModifier);
+        }
         break;
     case HOLD_EFFECT_PUNCHING_GLOVE:
         if (IsPunchingMove(move))
