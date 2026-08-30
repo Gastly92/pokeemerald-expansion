@@ -462,7 +462,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_TOXIC_SPIKES,
-            MOVE_ATTACK_ORDER,
+            MOVE_LUNGE,
             MOVE_CROSS_POISON,
             MOVE_BANEFUL_BUNKER
         },
