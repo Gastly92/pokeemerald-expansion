@@ -2489,6 +2489,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0194
         SPECIES_WOOPER,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
         )
@@ -2496,6 +2497,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0194
         SPECIES_WOOPER_PALDEA,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
         )
@@ -2503,6 +2505,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0195
         SPECIES_QUAGSIRE,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
         )
@@ -2553,6 +2556,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0200
         SPECIES_MISDREAVUS,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
             ABILITY_PRANKSTER
@@ -5253,6 +5257,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0429
         SPECIES_MISMAGIUS,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
             ABILITY_PRANKSTER
@@ -10470,6 +10475,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLODSIRE,
         INNATES(
             ABILITY_IRON_BARBS,
+            ABILITY_LIQUID_OOZE,
             ABILITY_REGENERATOR,
             ABILITY_UNAWARE
         )

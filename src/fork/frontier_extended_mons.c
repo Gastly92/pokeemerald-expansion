@@ -13177,6 +13177,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
+    {
+        .species = SPECIES_MISMAGIUS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_PERISH_SONG,
+            MOVE_WILL_O_WISP,
+            MOVE_SHADOW_BALL,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WANDERING_SPIRIT,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
 
     // 0430
     {
@@ -13206,7 +13226,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_BRAVE_BIRD,
-            MOVE_SUCKER_PUNCH,
+            MOVE_U_TURN,
             MOVE_NIGHT_SLASH,
             MOVE_PSYCHO_CUT
         },
@@ -13215,6 +13235,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .atk = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
+    {
+        .species = SPECIES_HONCHKROW,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BLACK_GLASSES,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_BRAVE_BIRD,
+            MOVE_SUCKER_PUNCH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_DARK_AURA,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_DARK,
@@ -28714,7 +28754,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .teraType = TYPE_WATER,
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_CLODSIRE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BLACK_SLUDGE,
+        .moves =
+        {
+            MOVE_TOXIC_SPIKES,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_RECOVER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPD_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_POISON,
     },
 
     // 0981
