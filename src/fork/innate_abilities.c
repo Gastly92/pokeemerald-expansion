@@ -2174,7 +2174,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_FRISK,
             ABILITY_INSOMNIA,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_LIMBER
         )
     },
     { // 0162
@@ -2182,8 +2183,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANTICIPATION,
             ABILITY_FRISK,
+            ABILITY_INFILTRATOR,
             ABILITY_INSOMNIA,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_LIMBER
         )
     },
     { // 0163
@@ -2209,6 +2212,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0165
         SPECIES_LEDYBA,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_EARLY_BIRD,
             ABILITY_FRIEND_GUARD,
             ABILITY_RATTLED,
@@ -2218,6 +2222,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0166
         SPECIES_LEDIAN,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_EARLY_BIRD,
             ABILITY_FRIEND_GUARD,
             ABILITY_IRON_FIST,
@@ -2239,7 +2244,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INSOMNIA,
             ABILITY_SNIPER,
             ABILITY_STAKEOUT,
-            ABILITY_SWARM
+            ABILITY_SWARM,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0169
@@ -2256,6 +2262,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHINCHOU,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_BATTERY,
             ABILITY_ILLUMINATE
         )
     },
@@ -2263,6 +2270,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LANTURN,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_BATTERY,
             ABILITY_ILLUMINATE
         )
     },

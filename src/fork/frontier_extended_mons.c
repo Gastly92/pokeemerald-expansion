@@ -759,11 +759,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_STATIC,
         .nature = NATURE(SPE_UP, SPD_DOWN),
         .ev = EVS(
-            .hp = 252,
             .atk = 252,
-            .def = 252,
-            .spa = 252,
-            .spd = 252,
+            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
@@ -782,11 +779,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .atk = 252,
-            .def = 252,
+            .hp = 4,
             .spa = 252,
-            .spd = 252,
             .spe = 252
         ),
         .teraType = TYPE_ELECTRIC,
@@ -5871,6 +5865,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    {
+        .species = SPECIES_ARIADOS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_TOXIC_THREAD,
+            MOVE_POISON_JAB,
+            MOVE_SUCKER_PUNCH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_POISON_POINT,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_DARK,
+    },
 
     // 0169
     {
@@ -5899,7 +5913,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_BRAVE_BIRD,
+            MOVE_CROSS_POISON,
             MOVE_DEFOG,
             MOVE_ROOST,
             MOVE_TAUNT
