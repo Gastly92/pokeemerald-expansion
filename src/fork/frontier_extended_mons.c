@@ -6573,7 +6573,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ESPEON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS,
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_PSYCHIC,
@@ -6586,6 +6586,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .spa = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_ESPEON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIGHT_CLAY,
+        .moves =
+        {
+            MOVE_REFLECT,
+            MOVE_LIGHT_SCREEN,
+            MOVE_PSYCHIC,
+            MOVE_HELPING_HAND
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
             .spe = 252
         ),
         .teraType = TYPE_FAIRY,
