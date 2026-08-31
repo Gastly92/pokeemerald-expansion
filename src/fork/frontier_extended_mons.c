@@ -5611,7 +5611,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRAGON_DANCE,
             MOVE_LIQUIDATION,
-            MOVE_ICE_PUNCH,
+            MOVE_ICE_FANG,
             MOVE_CRUNCH
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -5631,7 +5631,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_LIQUIDATION,
             MOVE_AQUA_JET,
-            MOVE_ICE_PUNCH,
+            MOVE_ICE_FANG,
             MOVE_CLOSE_COMBAT
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -5652,7 +5652,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BELLY_DRUM,
             MOVE_LIQUIDATION,
             MOVE_AQUA_JET,
-            MOVE_ICE_PUNCH
+            MOVE_ICE_FANG
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -5660,6 +5660,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .atk = 252,
             .spe = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_FERALIGATR,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MUSCLE_BAND,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_LIQUIDATION,
+            MOVE_ICE_FANG,
+            MOVE_AQUA_JET
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
         ),
         .teraType = TYPE_WATER,
     },

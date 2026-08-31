@@ -2145,6 +2145,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CROCONAW,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_MOXIE,
             ABILITY_STRONG_JAW,
             ABILITY_TORRENT
         )
@@ -2153,6 +2154,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FERALIGATR,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_MOXIE,
             ABILITY_STRONG_JAW,
             ABILITY_TORRENT
         )
@@ -2161,6 +2163,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FERALIGATR_MEGA,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_MOXIE,
             ABILITY_STRONG_JAW,
             ABILITY_TORRENT
         )
