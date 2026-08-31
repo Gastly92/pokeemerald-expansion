@@ -536,6 +536,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFAIRY,
         INNATES(
             ABILITY_CUTE_CHARM,
+            ABILITY_DANCER,
             ABILITY_FRIEND_GUARD,
             ABILITY_MAGIC_GUARD,
             ABILITY_SERENE_GRACE
@@ -545,6 +546,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFABLE,
         INNATES(
             ABILITY_CUTE_CHARM,
+            ABILITY_DANCER,
             ABILITY_FRIEND_GUARD,
             ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
@@ -556,6 +558,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFABLE_MEGA,
         INNATES(
             ABILITY_CUTE_CHARM,
+            ABILITY_DANCER,
             ABILITY_FRIEND_GUARD,
             ABILITY_LEVITATE,
             ABILITY_MAGIC_BOUNCE,
@@ -607,6 +610,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
             ABILITY_INSOMNIA,
+            ABILITY_PUNK_ROCK,
             ABILITY_THICK_FAT
         )
     },
@@ -618,6 +622,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRIEND_GUARD,
             ABILITY_FRISK,
             ABILITY_INSOMNIA,
+            ABILITY_PUNK_ROCK,
             ABILITY_THICK_FAT
         )
     },
@@ -2286,6 +2291,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CLEFFA,
         INNATES(
             ABILITY_CUTE_CHARM,
+            ABILITY_DANCER,
             ABILITY_FRIEND_GUARD,
             ABILITY_MAGIC_GUARD,
             ABILITY_SERENE_GRACE
@@ -2298,6 +2304,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
             ABILITY_INSOMNIA,
+            ABILITY_PUNK_ROCK,
             ABILITY_THICK_FAT
         )
     },
