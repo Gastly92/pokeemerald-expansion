@@ -6133,6 +6133,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_AMPHAROS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_THUNDERBOLT,
+            MOVE_DRAGON_PULSE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE(SPA_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .iv = TRAINER_PARTY_IVS(31, 31, 31, 0, 31, 31),
+        .teraType = TYPE_ELECTRIC,
+    },
 
     // 0182
     {

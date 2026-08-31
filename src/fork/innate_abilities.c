@@ -2347,6 +2347,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0179
         SPECIES_MAREEP,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_ILLUMINATE,
             ABILITY_THICK_FAT
         )
@@ -2354,6 +2355,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0180
         SPECIES_FLAAFFY,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_ILLUMINATE,
             ABILITY_THICK_FAT
         )
@@ -2361,6 +2363,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0181
         SPECIES_AMPHAROS,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_ILLUMINATE,
             ABILITY_THICK_FAT
         )
@@ -2368,6 +2371,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0181
         SPECIES_AMPHAROS_MEGA,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_ILLUMINATE,
             ABILITY_MOLD_BREAKER,
             ABILITY_THICK_FAT
