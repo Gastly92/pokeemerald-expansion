@@ -2104,29 +2104,33 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CYNDAQUIL,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_QUICK_FEET
         )
     },
     { // 0156
         SPECIES_QUILAVA,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_QUICK_FEET
         )
     },
     { // 0157
         SPECIES_TYPHLOSION,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_QUICK_FEET
         )
     },
     { // 0157
         SPECIES_TYPHLOSION_HISUI,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_FRISK,
             ABILITY_INTIMIDATE,
-            ABILITY_FRISK
+            ABILITY_QUICK_FEET
         )
     },
     { // 0158

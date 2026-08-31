@@ -5519,6 +5519,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIRE,
     },
+    {
+        .species = SPECIES_TYPHLOSION,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_PETAYA_BERRY,
+        .moves =
+        {
+            MOVE_SUBSTITUTE,
+            MOVE_NASTY_PLOT,
+            MOVE_FIRE_BLAST,
+            MOVE_EARTH_POWER
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
 
     // 0157
     {
@@ -5560,6 +5580,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_TYPHLOSION_HISUI,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SPELL_TAG,
+        .moves =
+        {
+            MOVE_WILL_O_WISP,
+            MOVE_INFERNAL_PARADE,
+            MOVE_HEAT_WAVE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLASH_FIRE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0160
