@@ -911,6 +911,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_POLIWRATH,
         INNATES(
             ABILITY_GOOEY,
+            ABILITY_IRON_FIST,
             ABILITY_LIMBER,
             ABILITY_SWIFT_SWIM,
             ABILITY_VITAL_SPIRIT
@@ -2417,6 +2418,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GOOEY,
             ABILITY_LIMBER,
+            ABILITY_QUEENLY_MAJESTY,
             ABILITY_RAIN_DISH,
             ABILITY_SWIFT_SWIM
         )
@@ -2426,6 +2428,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_EFFECT_SPORE,
+            ABILITY_FRIEND_GUARD,
             ABILITY_INFILTRATOR,
             ABILITY_LEAF_GUARD
         )
@@ -2435,6 +2438,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_EFFECT_SPORE,
+            ABILITY_FRIEND_GUARD,
             ABILITY_INFILTRATOR,
             ABILITY_LEAF_GUARD
         )
@@ -2444,6 +2448,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_EFFECT_SPORE,
+            ABILITY_FRIEND_GUARD,
             ABILITY_INFILTRATOR,
             ABILITY_LEAF_GUARD
         )
