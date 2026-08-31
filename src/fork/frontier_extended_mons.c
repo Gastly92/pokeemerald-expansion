@@ -6051,6 +6051,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FLYING,
     },
+    {
+        .species = SPECIES_XATU,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_FUTURE_SIGHT,
+            MOVE_AIR_SLASH,
+            MOVE_HEAT_WAVE,
+            MOVE_ROOST
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
 
     // 0181
     {
@@ -14064,6 +14084,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_TOGEKISS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .moves =
+        {
+            MOVE_WISH,
+            MOVE_PROTECT,
+            MOVE_AIR_SLASH,
+            MOVE_THUNDER_WAVE
+        },
+        .ability = ABILITY_HALO,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0469

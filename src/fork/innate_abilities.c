@@ -2311,6 +2311,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0175
         SPECIES_TOGEPI,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_HEALER,
             ABILITY_SERENE_GRACE,
             ABILITY_SUPER_LUCK
@@ -2319,6 +2320,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0176
         SPECIES_TOGETIC,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_HEALER,
             ABILITY_SERENE_GRACE,
             ABILITY_SUPER_LUCK
@@ -2329,6 +2331,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_EARLY_BIRD,
             ABILITY_FOREWARN,
+            ABILITY_KEEN_EYE,
             ABILITY_MAGIC_BOUNCE
         )
     },
@@ -2337,6 +2340,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_EARLY_BIRD,
             ABILITY_FOREWARN,
+            ABILITY_KEEN_EYE,
             ABILITY_MAGIC_BOUNCE
         )
     },
@@ -5591,6 +5595,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0468
         SPECIES_TOGEKISS,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_HEALER,
             ABILITY_SERENE_GRACE,
             ABILITY_SUPER_LUCK
