@@ -5443,7 +5443,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_TERRAIN_EXTENDER,
         .moves =
         {
-            MOVE_GRASSY_GLIDE,
+            MOVE_RAGE_POWDER,
             MOVE_HELPING_HAND,
             MOVE_BODY_PRESS,
             MOVE_PROTECT

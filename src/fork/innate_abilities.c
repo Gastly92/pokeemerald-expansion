@@ -2061,7 +2061,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_HEALER,
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0153
@@ -2071,7 +2072,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_HEALER,
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
-            ABILITY_OVERGROW
+            ABILITY_OVERGROW,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0154
@@ -2080,9 +2082,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_AROMA_VEIL,
             ABILITY_HEALER,
             ABILITY_LEAF_GUARD,
+            ABILITY_MEGA_SOL,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_MEGA_SOL
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0154
@@ -2091,9 +2094,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_AROMA_VEIL,
             ABILITY_HEALER,
             ABILITY_LEAF_GUARD,
+            ABILITY_MEGA_SOL,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
-            ABILITY_MEGA_SOL
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0155
