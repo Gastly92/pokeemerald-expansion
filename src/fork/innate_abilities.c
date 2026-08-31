@@ -5615,6 +5615,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0469
         SPECIES_YANMEGA,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_FRISK,
             ABILITY_SPEED_BOOST,
             ABILITY_TINTED_LENS
