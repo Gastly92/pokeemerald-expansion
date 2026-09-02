@@ -9175,6 +9175,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
+    {
+        .species = SPECIES_GARDEVOIR,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_FOLLOW_ME,
+            MOVE_HYPER_VOICE,
+            MOVE_HELPING_HAND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_TRACE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0284
     {
@@ -9253,9 +9273,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 236,
-            .spd = 236,
-            .spe = 36
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_GRASS,
     },
@@ -9279,6 +9299,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIGHTING,
     },
+    {
+        .species = SPECIES_BRELOOM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_SPORE,
+            MOVE_RAGE_POWDER,
+            MOVE_MACH_PUNCH,
+            MOVE_SEED_BOMB
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0289
     {
@@ -9289,7 +9329,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_RETURN,
             MOVE_HIGH_HORSEPOWER,
-            MOVE_GIGA_IMPACT,
+            MOVE_PLAY_ROUGH,
             MOVE_NIGHT_SLASH
         },
         .ability = ABILITY_TRUANT,
@@ -9383,6 +9423,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    {
+        .species = SPECIES_NINJASK,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_BATON_PASS,
+            MOVE_X_SCISSOR,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0292
     {
@@ -9403,7 +9463,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_SHEDINJA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_BAND,
+        .moves =
+        {
+            MOVE_DESTINY_BOND,
+            MOVE_SHADOW_SNEAK,
+            MOVE_X_SCISSOR,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WONDER_GUARD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
     },
 
     // 0295
@@ -9447,6 +9527,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_NORMAL,
     },
+    {
+        .species = SPECIES_EXPLOUD,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_THROAT_SPRAY,
+        .moves =
+        {
+            MOVE_HYPER_VOICE,
+            MOVE_SNARL,
+            MOVE_FIRE_BLAST,
+            MOVE_FOCUS_BLAST
+        },
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 0297
     {
@@ -9486,6 +9586,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 168,
             .atk = 252,
             .spd = 88
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_HARIYAMA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_BELLY_DRUM,
+            MOVE_CLOSE_COMBAT,
+            MOVE_KNOCK_OFF,
+            MOVE_WIDE_GUARD
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_STEEL,
     },
@@ -14785,6 +14905,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,
+    },
+    {
+        .species = SPECIES_GALLADE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_SACRED_SWORD,
+            MOVE_PSYCHO_CUT,
+            MOVE_WIDE_GUARD
+        },
+        .ability = ABILITY_SIMPLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0476
