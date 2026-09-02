@@ -14182,6 +14182,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ELECTRIC,
     },
+    {
+        .species = SPECIES_ELECTIVIRE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MAGNET,
+        .moves =
+        {
+            MOVE_THUNDER_PUNCH,
+            MOVE_ICE_PUNCH,
+            MOVE_FIRE_PUNCH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
 
     // 0467
     {
@@ -14191,7 +14211,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FIRE_BLAST,
-            MOVE_FOCUS_BLAST,
+            MOVE_AURA_SPHERE,
             MOVE_THUNDERBOLT,
             MOVE_SOLAR_BEAM
         },
@@ -14211,7 +14231,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FIRE_BLAST,
-            MOVE_FOCUS_BLAST,
+            MOVE_AURA_SPHERE,
             MOVE_THUNDERBOLT,
             MOVE_PSYCHIC
         },
