@@ -2550,6 +2550,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANALYTIC,
             ABILITY_GLUTTONY,
+            ABILITY_OBLIVIOUS,
             ABILITY_OWN_TEMPO,
             ABILITY_REGENERATOR
         )
@@ -2837,6 +2838,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2844,6 +2846,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_B,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2851,6 +2854,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_C,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2858,6 +2862,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_D,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2865,6 +2870,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_E,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2872,6 +2878,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_F,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2879,6 +2886,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_G,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2886,6 +2894,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_H,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2893,6 +2902,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_I,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2900,6 +2910,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_J,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2907,6 +2918,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_K,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2914,6 +2926,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_L,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2921,6 +2934,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_M,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2928,6 +2942,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_N,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2935,6 +2950,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_O,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2942,6 +2958,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_P,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2949,6 +2966,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_Q,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2956,6 +2974,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_R,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2963,6 +2982,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_S,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2970,6 +2990,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_T,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2977,6 +2998,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_U,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2984,6 +3006,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_V,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2991,6 +3014,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_W,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -2998,6 +3022,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_X,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -3005,6 +3030,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_Y,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -3012,6 +3038,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_Z,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -3019,6 +3046,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_EXCLAMATION,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
@@ -3026,6 +3054,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_UNOWN_QUESTION,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
     },
