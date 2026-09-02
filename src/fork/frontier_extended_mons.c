@@ -8011,14 +8011,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_RAIKOU,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SCARF,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
+            MOVE_SNARL,
             MOVE_THUNDERBOLT,
-            MOVE_VOLT_SWITCH,
             MOVE_AURA_SPHERE,
-            MOVE_SNARL
+            MOVE_PROTECT
         },
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -8122,7 +8122,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_HYDRO_PUMP,
             MOVE_ICE_BEAM,
-            MOVE_TERA_BLAST
+            MOVE_SUBSTITUTE
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -8131,7 +8131,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_SUICUNE,

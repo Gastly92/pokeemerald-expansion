@@ -3484,6 +3484,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RAIKOU,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_INTIMIDATE,
             ABILITY_PRESSURE
         )
     },
@@ -3491,6 +3492,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ENTEI,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_PRESSURE
         )
     },
@@ -3498,6 +3500,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SUICUNE,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_NATURAL_CURE,
             ABILITY_PRESSURE
         )
     },
