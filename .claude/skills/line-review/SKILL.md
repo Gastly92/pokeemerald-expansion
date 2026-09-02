@@ -84,9 +84,12 @@ Everything in "Do this" still applies **per line**, at the same depth.
    build, and seven false "no row" alarms in Gen 9.
 1. **Resolve the range to a list of lines first.** Derive it from the repo
    (`.natDexNum` and `.evolutions` in `src/data/pokemon/species_info/*.h`, unioning
-   species that share a dex number), then **check every number in the range is
-   covered by some line** — the Gen 9 pass wrote exactly this script and still
-   dropped Ogerpon, because nothing checked the output for holes. **Both endpoints are
+   species that share a dex number). `lines.py` **now checks its own output for
+   holes** and exits non-zero listing any number in the range that belongs to no
+   line — if it prints `UNCOVERED`, a species is being parsed out of existence and
+   the batch does not start until that is empty. (It used to be the reader's job:
+   Gen 9 dropped Ogerpon that way, Gen 2 dropped Unown, and adding the check
+   caught Mothim, Arceus and Minior too.) **Both endpoints are
    inclusive** — `0 to 25` includes #25. Walk each number, map it to the line that
    species belongs to, and dedupe *within this batch*. The **whole line comes
    along even where members fall outside the range** (#25 Pikachu pulls in Pichu
