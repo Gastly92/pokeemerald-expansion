@@ -3353,6 +3353,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HOUNDOUR,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_INTIMIDATE,
             ABILITY_UNNERVE
         )
     },
@@ -3360,6 +3361,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HOUNDOOM,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_INTIMIDATE,
             ABILITY_UNNERVE
         )
     },
@@ -3367,6 +3369,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HOUNDOOM_MEGA,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_INTIMIDATE,
             ABILITY_UNNERVE
         )
     },
@@ -3388,6 +3391,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0232
         SPECIES_DONPHAN,
         INNATES(
+            ABILITY_PICKUP,
             ABILITY_SAND_VEIL,
             ABILITY_SOLID_ROCK,
             ABILITY_STURDY
