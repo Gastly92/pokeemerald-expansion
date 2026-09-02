@@ -4756,13 +4756,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_RATTLED,
             ABILITY_SHELL_ARMOR,
-            ABILITY_STRONG_JAW
+            ABILITY_STRONG_JAW,
+            ABILITY_STURDY
         )
     },
     { // 0367
         SPECIES_HUNTAIL,
         INNATES(
             ABILITY_STRONG_JAW,
+            ABILITY_STURDY,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
@@ -4771,6 +4773,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOREBYSS,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_STURDY,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -4786,6 +4789,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0370
         SPECIES_LUVDISC,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_HEALER,
             ABILITY_HYDRATION,
             ABILITY_SWIFT_SWIM
@@ -4794,6 +4798,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0371
         SPECIES_BAGON,
         INNATES(
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD
         )
     },
@@ -4801,6 +4806,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHELGON,
         INNATES(
             ABILITY_OVERCOAT,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD
         )
     },
@@ -4809,6 +4815,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_MOXIE,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD
         )
     },
@@ -4817,6 +4824,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_MOXIE,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD
         )
     },
@@ -4871,7 +4879,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CLEAR_BODY,
             ABILITY_ICE_BODY,
-            ABILITY_SNOW_CLOAK
+            ABILITY_SNOW_CLOAK,
+            ABILITY_STURDY
         )
     },
     { // 0379
@@ -4887,6 +4896,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LATIAS,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_HEALER,
             ABILITY_LEVITATE,
             ABILITY_TELEPATHY
         )
@@ -4895,6 +4905,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LATIAS_MEGA,
         INNATES(
             ABILITY_ANTICIPATION,
+            ABILITY_HEALER,
             ABILITY_LEVITATE,
             ABILITY_TELEPATHY
         )
