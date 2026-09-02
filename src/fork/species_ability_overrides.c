@@ -1172,13 +1172,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_SHEER_FORCE
     },
     { // 0428
-        // Mirrors the base form's slot 1 (Klutz) instead of Sheer Force. Mega Lopunny's three
-        // slots were all Sheer Force, so EVERY Lopunny came out of a Mega Evolution with it --
-        // including the Klutz/Toxic Orb/Switcheroo set, whose Fake Out then never flinched
-        // (Sheer Force eats the flinch) and whose Toxic Orb was no longer suppressed. Slots 0 and 2
-        // stay Sheer Force: slot 2 is where the deliberate Sheer Force set lives, so that one
-        // keeps its ability through the Mega. Scrappy, the upstream value here, is granted
-        // innately to LOPUNNY_MEGA, which is what frees this slot.
         SPECIES_LOPUNNY_MEGA, 1,
         ABILITY_KLUTZ
     },
