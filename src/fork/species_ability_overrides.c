@@ -683,6 +683,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SKARMORY, 1,
         ABILITY_BULLETPROOF
     },
+    {
+        SPECIES_SKARMORY_MEGA, 0,
+        ABILITY_BULLETPROOF
+    },
+    {
+        SPECIES_SKARMORY_MEGA, 1,
+        ABILITY_BULLETPROOF
+    },
+    {
+        SPECIES_SKARMORY_MEGA, 2,
+        ABILITY_BULLETPROOF
+    },
     { // 0230
         SPECIES_KINGDRA, 0,
         ABILITY_DRIZZLE

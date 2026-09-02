@@ -3289,13 +3289,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0222
         SPECIES_CORSOLA_GALAR,
         INNATES(
-            ABILITY_CURSED_BODY
+            ABILITY_CURSED_BODY,
+            ABILITY_ROUGH_SKIN
         )
     },
     { // 0864
         SPECIES_CURSOLA,
         INNATES(
-            ABILITY_CURSED_BODY
+            ABILITY_CURSED_BODY,
+            ABILITY_ROUGH_SKIN
         )
     },
     { // 0223
@@ -3316,6 +3318,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0225
         SPECIES_DELIBIRD,
         INNATES(
+            ABILITY_HOSPITALITY,
             ABILITY_INSOMNIA,
             ABILITY_PICKUP,
             ABILITY_VITAL_SPIRIT
@@ -3324,6 +3327,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0226
         SPECIES_MANTINE,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
@@ -3339,6 +3343,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0227
         SPECIES_SKARMORY_MEGA,
         INNATES(
+            ABILITY_KEEN_EYE,
+            ABILITY_SHARPNESS,
             ABILITY_STALWART,
             ABILITY_STURDY
         )
@@ -5557,6 +5563,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0458
         SPECIES_MANTYKE,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
