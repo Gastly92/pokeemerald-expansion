@@ -4005,6 +4005,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CUTE_CHARM,
             ABILITY_LIMBER,
+            ABILITY_OWN_TEMPO,
             ABILITY_WONDER_SKIN
         )
     },
@@ -4013,12 +4014,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CUTE_CHARM,
             ABILITY_LIMBER,
+            ABILITY_OWN_TEMPO,
             ABILITY_WONDER_SKIN
         )
     },
     { // 0302
         SPECIES_SABLEYE,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_KEEN_EYE,
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
@@ -4027,17 +4030,19 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0302
         SPECIES_SABLEYE_MEGA,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_KEEN_EYE,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_PICKPOCKET,
-            ABILITY_PRANKSTER,
-            ABILITY_MAGIC_BOUNCE
+            ABILITY_PRANKSTER
         )
     },
     { // 0303
         SPECIES_MAWILE,
         INNATES(
             ABILITY_HYPER_CUTTER,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0303
@@ -4045,7 +4050,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HUGE_POWER,
             ABILITY_HYPER_CUTTER,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0304
@@ -4062,6 +4068,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BATTLE_ARMOR,
             ABILITY_HEAVY_METAL,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
@@ -4071,6 +4078,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BATTLE_ARMOR,
             ABILITY_HEAVY_METAL,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
@@ -4081,6 +4089,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BATTLE_ARMOR,
             ABILITY_FILTER,
             ABILITY_HEAVY_METAL,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD,
             ABILITY_STURDY
         )
@@ -4097,6 +4106,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0308
         SPECIES_MEDICHAM,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
             ABILITY_LEVITATE,
             ABILITY_PURE_POWER,
@@ -4106,6 +4116,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0308
         SPECIES_MEDICHAM_MEGA,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
             ABILITY_LEVITATE,
             ABILITY_PURE_POWER,
@@ -4121,20 +4132,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0310
         SPECIES_MANECTRIC,
         INNATES(
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_UNNERVE
         )
     },
     { // 0310
         SPECIES_MANECTRIC_MEGA,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_UNNERVE
         )
     },
     { // 0311
         SPECIES_PLUSLE,
         INNATES(
-            ABILITY_FRIEND_GUARD
+            ABILITY_FRIEND_GUARD,
+            ABILITY_HEALER
         )
     },
     { // 0312
@@ -4148,6 +4162,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VOLBEAT,
         INNATES(
             ABILITY_ILLUMINATE,
+            ABILITY_INSOMNIA,
             ABILITY_PRANKSTER,
             ABILITY_SWARM
         )
@@ -4155,6 +4170,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0314
         SPECIES_ILLUMISE,
         INNATES(
+            ABILITY_INSOMNIA,
             ABILITY_OBLIVIOUS,
             ABILITY_PRANKSTER,
             ABILITY_TINTED_LENS

@@ -9691,7 +9691,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_DARK,
     },
     {
         .species = SPECIES_SABLEYE,
@@ -9857,6 +9857,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIGHTING,
     },
+    {
+        .species = SPECIES_AGGRON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_METAL_COAT,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_HEAVY_SLAM,
+            MOVE_ROCK_SLIDE,
+            MOVE_HIGH_HORSEPOWER
+        },
+        .ability = ABILITY_BULLETPROOF,
+        .nature = NATURE(ATK_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0308
     {
@@ -9961,6 +9981,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ELECTRIC,
     },
+    {
+        .species = SPECIES_MANECTRIC,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_ELECTROWEB,
+            MOVE_THUNDERBOLT,
+            MOVE_OVERHEAT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
 
     // 0311
     {
@@ -10013,8 +10053,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_THUNDERBOLT,
             MOVE_DAZZLING_GLEAM,
-            MOVE_HELPING_HAND,
-            MOVE_NASTY_PLOT
+            MOVE_HEAL_PULSE,
+            MOVE_PROTECT
         },
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -10084,6 +10124,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 248,
             .def = 8,
             .spd = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_VOLBEAT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_TAIL_GLOW,
+            MOVE_SUBSTITUTE,
+            MOVE_BATON_PASS,
+            MOVE_BUG_BUZZ
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spd = 4,
+            .spe = 252
         ),
         .teraType = TYPE_WATER,
     },
