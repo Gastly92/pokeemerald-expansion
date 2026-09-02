@@ -3408,6 +3408,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0234
         SPECIES_STANTLER,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_FRISK,
             ABILITY_INTIMIDATE
         )
@@ -3416,6 +3417,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SMEARGLE,
         INNATES(
             ABILITY_OWN_TEMPO,
+            ABILITY_PRANKSTER,
             ABILITY_TECHNICIAN
         )
     },
@@ -9843,8 +9845,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0899
         SPECIES_WYRDEER,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_FRISK,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_THICK_FAT
         )
     },
     { // 0900

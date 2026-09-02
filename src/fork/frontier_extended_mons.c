@@ -7772,7 +7772,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPIKES,
             MOVE_WHIRLWIND
         },
-        .ability = ABILITY_MOODY,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7792,7 +7792,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOLLOW_ME,
             MOVE_KINGS_SHIELD
         },
-        .ability = ABILITY_MOODY,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
