@@ -6287,7 +6287,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AZUMARILL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_PLAY_ROUGH,
@@ -6886,6 +6886,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_WOBBUFFET,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_PERISH_SONG,
+            MOVE_PROTECT,
+            MOVE_ENCORE,
+            MOVE_COUNTER
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0205
@@ -8431,7 +8451,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_DRAGON,
     },
     {
         .species = SPECIES_SCEPTILE,
@@ -8442,7 +8462,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_STORM,
             MOVE_DRAGON_PULSE,
             MOVE_FOCUS_BLAST,
-            MOVE_GIGA_DRAIN
+            MOVE_EARTH_POWER
         },
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -8452,6 +8472,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_SCEPTILE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BEAM,
+            MOVE_DRAGON_PULSE,
+            MOVE_FOCUS_BLAST
+        },
+        .ability = ABILITY_LIGHTNING_ROD,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_DRAGON,
     },
 
     // 0257
@@ -8515,6 +8555,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIRE,
     },
+    {
+        .species = SPECIES_BLAZIKEN,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_FLARE_BLITZ,
+            MOVE_CLOSE_COMBAT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLAME_BODY,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
 
     // 0260
     {
@@ -8577,6 +8637,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_SWAMPERT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_DAMP_ROCK,
+        .moves =
+        {
+            MOVE_RAIN_DANCE,
+            MOVE_LIQUIDATION,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_ICE_PUNCH
+        },
+        .ability = ABILITY_DRY_SKIN,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0262
     {
@@ -8618,6 +8698,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DARK,
+    },
+    {
+        .species = SPECIES_MIGHTYENA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BLACK_GLASSES,
+        .moves =
+        {
+            MOVE_HOWL,
+            MOVE_CRUNCH,
+            MOVE_PLAY_ROUGH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0264
