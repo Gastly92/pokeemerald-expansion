@@ -12588,46 +12588,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0386
     {
-        .species = SPECIES_DEOXYS,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_SASH,
-        .moves =
-        {
-            MOVE_PSYCHO_BOOST,
-            MOVE_SUPERPOWER,
-            MOVE_ICE_BEAM,
-            MOVE_EXTREME_SPEED
-        },
-        .ability = ABILITY_TRACE,
-        .nature = NATURE(SPE_UP, SPD_DOWN),
-        .ev = EVS(
-            .atk = 128,
-            .spa = 128,
-            .spe = 252
-        ),
-        .teraType = TYPE_PSYCHIC,
-    },
-    {
-        .species = SPECIES_DEOXYS,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS,
-        .moves =
-        {
-            MOVE_PSYCHO_BOOST,
-            MOVE_THUNDERBOLT,
-            MOVE_ICE_BEAM,
-            MOVE_DARK_PULSE
-        },
-        .ability = ABILITY_TRACE,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_PSYCHIC,
-    },
-    {
         .species = SPECIES_DEOXYS_ATTACK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,

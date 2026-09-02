@@ -1124,10 +1124,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_BULLETPROOF
     },
     { // 0386
-        SPECIES_DEOXYS, 1,
-        ABILITY_TRACE
-    },
-    { // 0386
         SPECIES_DEOXYS_ATTACK, 1,
         ABILITY_TRACE
     },
