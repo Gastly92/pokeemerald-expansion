@@ -655,6 +655,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HERACROSS, 2,
         ABILITY_NO_GUARD
     },
+    {
+        SPECIES_HERACROSS_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    {
+        SPECIES_HERACROSS_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    {
+        SPECIES_HERACROSS_MEGA, 2,
+        ABILITY_NO_GUARD
+    },
     { // 0217
         SPECIES_URSARING, 1,
         ABILITY_HUSTLE

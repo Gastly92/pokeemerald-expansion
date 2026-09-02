@@ -3186,6 +3186,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GLUTTONY,
             ABILITY_HARVEST,
+            ABILITY_RIPEN,
             ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
@@ -3193,6 +3194,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0214
         SPECIES_HERACROSS,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_GUTS,
             ABILITY_MOXIE,
             ABILITY_SWARM
@@ -3201,6 +3203,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0214
         SPECIES_HERACROSS_MEGA,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_GUTS,
             ABILITY_MOXIE,
             ABILITY_SKILL_LINK,
