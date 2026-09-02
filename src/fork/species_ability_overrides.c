@@ -1173,7 +1173,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0428
         SPECIES_LOPUNNY_MEGA, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_KLUTZ
     },
     { // 0428
         SPECIES_LOPUNNY_MEGA, 2,
