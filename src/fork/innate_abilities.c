@@ -4389,6 +4389,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0335
         SPECIES_ZANGOOSE,
         INNATES(
+            ABILITY_HYPER_CUTTER,
             ABILITY_QUICK_FEET,
             ABILITY_SCRAPPY,
             ABILITY_TOXIC_BOOST
@@ -4406,6 +4407,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0337
         SPECIES_LUNATONE,
         INNATES(
+            ABILITY_CLEAR_BODY,
+            ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_STURDY,
             ABILITY_TELEPATHY
@@ -4414,6 +4417,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0338
         SPECIES_SOLROCK,
         INNATES(
+            ABILITY_CLEAR_BODY,
+            ABILITY_ILLUMINATE,
             ABILITY_LEVITATE,
             ABILITY_STURDY,
             ABILITY_TELEPATHY
@@ -4460,6 +4465,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0343
         SPECIES_BALTOY,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_LEVITATE,
             ABILITY_STURDY,
             ABILITY_TELEPATHY
@@ -4468,6 +4474,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0344
         SPECIES_CLAYDOL,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_LEVITATE,
             ABILITY_STURDY,
             ABILITY_TELEPATHY
@@ -4476,14 +4483,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0345
         SPECIES_LILEEP,
         INNATES(
+            ABILITY_HYDRATION,
             ABILITY_RAIN_DISH,
+            ABILITY_STURDY,
             ABILITY_SUCTION_CUPS
         )
     },
     { // 0346
         SPECIES_CRADILY,
         INNATES(
+            ABILITY_HYDRATION,
             ABILITY_RAIN_DISH,
+            ABILITY_STURDY,
             ABILITY_SUCTION_CUPS
         )
     },
@@ -4491,6 +4502,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ANORITH,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_HYPER_CUTTER,
             ABILITY_SHARPNESS,
             ABILITY_SWIFT_SWIM
         )
@@ -4499,6 +4511,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARMALDO,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_HYPER_CUTTER,
             ABILITY_SHARPNESS,
             ABILITY_SWIFT_SWIM
         )
