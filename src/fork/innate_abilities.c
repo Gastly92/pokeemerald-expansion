@@ -3514,6 +3514,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0247
         SPECIES_PUPITAR,
         INNATES(
+            ABILITY_GUTS,
             ABILITY_SAND_VEIL,
             ABILITY_SHED_SKIN
         )
@@ -3521,6 +3522,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0248
         SPECIES_TYRANITAR,
         INNATES(
+            ABILITY_GUTS,
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL,
             ABILITY_UNNERVE
         )
@@ -3528,6 +3531,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0248
         SPECIES_TYRANITAR_MEGA,
         INNATES(
+            ABILITY_GUTS,
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL,
             ABILITY_UNNERVE
         )
@@ -3536,19 +3541,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LUGIA,
         INNATES(
             ABILITY_MULTISCALE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0250
         SPECIES_HO_OH,
         INNATES(
             ABILITY_PRESSURE,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0251
         SPECIES_CELEBI,
         INNATES(
+            ABILITY_FOREWARN,
             ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE,
             ABILITY_REGENERATOR
