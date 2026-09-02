@@ -133,10 +133,25 @@ a line is reviewed once no matter how many of its members the range covers.
   sixty-line batch. `python3 .claude/skills/line-review/tools/lines.py <first>
   <last>` walks `.natDexNum` and `.evolutions` in
   `src/data/pokemon/species_info/*.h`, unioning species that share a dex number so
-  a creature's forms collapse into one line. Then **verify every number in the
-  range is accounted for by some line** — the Gen 9 pass built exactly this script
-  and *still* dropped Ogerpon, which surfaced only on a later manual pass, because
-  nothing checked the output for holes.
+  a creature's forms collapse into one line. **The script now checks its own
+  output for holes** and exits non-zero listing any number in the range that
+  belongs to no line, so a silent drop is no longer possible — if it prints
+  `UNCOVERED`, a species is being parsed out of existence and the batch does not
+  start until that is empty.
+
+  This used to be the reader's job and the reader did not do it: the Gen 9 pass
+  built this script and *still* dropped Ogerpon, which surfaced only on a later
+  manual pass. The Gen 2 batch then found the same class of bug had eaten
+  **Unown**, and adding the check surfaced three more the sweep had never noticed
+  — **Mothim**, **Arceus** and **Minior**, plus Silvally being severed from Type:
+  Null. All five shared one root cause: species blocks whose `[SPECIES_X]` is
+  column-aligned (`[SPECIES_UNOWN]             = ...`) or whose fields live in a
+  macro (`MOTHIM_SPECIES_INFO`, `UNOWN_MISC_INFO(...)`) were not parsed as blocks
+  at all, so they vanished — and worse, their text was absorbed into the
+  *previous* species' body, which could fabricate an evolution edge and merge two
+  unrelated lines. Fixed in the script. This is the rule from the closing section
+  working as intended: when a check keeps being skipped, the next version of it is
+  a procedure or a test, not a stronger adjective.
 - **Resolve every species name to an id before believing anything about it.** This
   is the single most expensive recurring mistake in the sweep's history, and it is
   the first step of working any line, not a troubleshooting note. See "Resolve the
@@ -643,11 +658,27 @@ line:
 
    **Check the pick is not inert under the fork's flags before anything else.**
    An override is the species' one observable trait, so an ability that does
-   nothing here is worse than a plain one. Two were shipped and had to be
-   replaced: **Victory Star** on Volbeat and again on Jirachi — an accuracy boost
-   in a fork where `DETERMINISTIC_ACCURACY_EVASION` has removed accuracy from the
-   game — and **Moody** on Glalie, which is not merely inert but actively lowers
-   the stat the set was built on. Also watch for an override that is live in
+   nothing here is worse than a plain one. The clear case is **Moody** on Glalie,
+   which is not merely inert but actively harmful: under `DETERMINISTIC_ABILITIES`
+   it raises the lowest raw stat by two stages and *lowers the highest by one*, so
+   on a 252/252 spread it reliably cuts the stat the set was built on.
+
+   **But verify inertness at the effect site — do not infer it from a flag name.**
+   This paragraph used to name **Victory Star** as the other example, on the
+   reasoning that `DETERMINISTIC_ACCURACY_EVASION` had "removed accuracy from the
+   game". That is wrong twice over, and the doc contradicts it a few sections
+   later: accuracy was **transformed into a PP economy, not deleted**, and Victory
+   Star was *repurposed* along with it. `GetAccEvasionStageDelta()`
+   (`src/battle_util.c`) makes the holder — and a living partner — ignore the
+   target's evasion stages, which is why `sEvasionStageIgnorers` in
+   `test/fork/frontier_extended_roster.c` lists it beside Compound Eyes and Keen
+   Eye, and why `DETERMINISM.md` describes it as "the repurposed Compound
+   Eyes/Victory Star". Ledian's Victory Star override is live and stands. This is
+   the "these flags CONVERT; they rarely delete" rule from the regime section,
+   failing in the one direction that is expensive: it retires a legal pick and
+   sends a review hunting for a worse one.
+
+   Also watch for an override that is live in
    principle but dead on *this line's sets*: Solar Power with no Sunny Day,
    Poison Touch with no contact move, Storm Drain's Special Attack boost on a
    purely physical set. That is a weaker objection — a set can be added to use it
@@ -924,6 +955,21 @@ than one whose existing set is about to be rewritten.
       **Speed as its 4th argument**, whereas `EVS()` uses named fields in struct
       order (`hp/atk/def/spa/spd/spe`). Reading the IV macro as if it matched the
       EV field order silently zeroes Sp. Atk instead of Speed.
+
+      **The 510 EV cap is not enforced, and one species deliberately breaks it.**
+      `CreateFacilityMon` (`src/battle_frontier.c`) `SetMonData`s each stat with no
+      cap check, so a set that spends more than 510 EVs simply gets the better
+      spread. **Pikachu's two sets carry 252 in all six stats on purpose** — it is
+      frail enough that Light Ball alone does not make it draftable, and the
+      perfect spread is the handicap offset that does. **Do not "fix" it.** The Gen
+      2 pass read 1512 EVs on a 510 budget as an obvious typo and normalised both
+      sets; the maintainer caught it in review. Because the no-comments rule keeps
+      the data files bare, there was nothing at the row to read — so the intent now
+      lives in CI instead: `TEST("Frontier extended roster: only the documented
+      exceptions exceed the EV cap")` fails **both** on a new over-cap set and on a
+      documented exception being normalised away. If you genuinely want another
+      one, add the species to `SpeciesIsADocumentedOverCapException` and say why
+      here; don't widen the test.
    e. **Ability — still the right pick** given the species' innates (CI already
       enforces legal-and-non-innate; this is the flavor//usefulness question).
    f. **Format tag** — does a `FORMAT_BOTH` set genuinely hold up in both, and is
