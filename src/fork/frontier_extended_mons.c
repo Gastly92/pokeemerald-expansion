@@ -4277,6 +4277,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ICE,
     },
+    {
+        .species = SPECIES_JYNX,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_LOVELY_KISS,
+            MOVE_ICY_WIND,
+            MOVE_ICE_BEAM,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_DRY_SKIN,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ICE,
+    },
 
     // 0127
     {
