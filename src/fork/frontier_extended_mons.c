@@ -10231,6 +10231,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_POISON,
     },
+    {
+        .species = SPECIES_SWALOT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_GASTRO_ACID,
+            MOVE_BODY_SLAM,
+            MOVE_GUNK_SHOT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_POISON_TOUCH,
+        .nature = NATURE(ATK_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_POISON,
+    },
 
     // 0319
     {
@@ -10440,6 +10460,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_TORKOAL,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_CHARCOAL,
+        .moves =
+        {
+            MOVE_ERUPTION,
+            MOVE_EARTH_POWER,
+            MOVE_WILL_O_WISP,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_DROUGHT,
+        .nature = NATURE(SPA_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIRE,
     },
 
     // 0326
@@ -10663,9 +10703,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_GRASS,
     },
