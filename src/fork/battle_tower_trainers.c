@@ -276,7 +276,12 @@ static const struct TrainerMon sBossFlannery[TOWER_SPECIAL_TEAM_SIZE] =
 static const struct TrainerMon sBossNorman[TOWER_SPECIAL_TEAM_SIZE] =
 {
     {
-        .species = SPECIES_LOPUNNY, .heldItem = ITEM_LOPUNNITE, .ability = ABILITY_LIMBER,
+        // Klutz, not Limber: Limber is granted innately to Lopunny AND the fork's override table
+        // repurposes the slot that held it (slot 2) for Sheer Force, so `.ability = ABILITY_LIMBER`
+        // resolved to Sheer Force here -- which ate this set's Fake Out flinch, before and after
+        // the Mega. Slot 1 (Klutz) keeps the flinch; Klutz does not block Mega Evolution, which
+        // reads the raw held item rather than the hold effect.
+        .species = SPECIES_LOPUNNY, .heldItem = ITEM_LOPUNNITE, .ability = ABILITY_KLUTZ,
         .nature = NATURE_JOLLY, .ev = TRAINER_PARTY_EVS(0, 252, 0, 252, 0, 4),
         .moves = {MOVE_HIGH_JUMP_KICK, MOVE_RETURN, MOVE_FAKE_OUT, MOVE_ICE_PUNCH},
     },

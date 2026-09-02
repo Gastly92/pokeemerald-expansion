@@ -1758,8 +1758,11 @@ and the accuracy-abilities integrity test pins that exclusion).
 Tinted Lens: Butterfree(+Gmax), Venonat/Venomoth, Hoothoot/Noctowl, Illumise, Yanmega, Sigilyph,
 Braviary-Hisui, Nymble/Lokix. Scrappy: Kangaskhan(+Mega, mirroring the base), Farfetch'd-Galar/
 Sirfetch'd, Miltank, Taillow/Swellow, Loudred/Exploud, Herdier/Stoutland, Pancham/Pangoro,
-Decidueye-Hisui, Flamigo. **Mega Lopunny is deliberately omitted**: its only — and therefore always
-chosen — ability IS Scrappy, so an innate could never be observed (the sole-ability-redundant rule).
+Decidueye-Hisui, Flamigo. **Mega Lopunny carries the innate** rather than being omitted under the
+sole-ability-redundant rule: the override table spends all three of its slots (Sheer Force / Klutz /
+Sheer Force), so its data Scrappy is never the chosen ability and the innate is the only thing that
+grants it. Slot 1 mirrors the base form's Klutz on purpose — it had been Sheer Force, which deleted
+the Fake Out flinch of every Lopunny set that Mega Evolved.
 Wonder Skin: Skitty/Delcatty, Venomoth, Sigilyph, Bruxish. Tangled Feet: the Pidgey line (+Mega
 Pidgeot, mirroring the base), Doduo/Dodrio, Spinda, Chatot, Mr. Rime, Flamigo.
 

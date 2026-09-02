@@ -299,6 +299,87 @@ TEST("Frontier extended roster: no set uses ABILITY_NONE (every set names a real
     EXPECT_EQ(noneCount, 0);
 }
 
+// FORK: Sheer Force deletes a move's additional effect outright. For most moves that is
+// the intended trade (the move keeps 1.3x power instead), but Fake Out is 40 BP: the flinch
+// IS the move, and 52 BP buys nothing back. So a set must never end up holding both.
+//
+// The trap is that a set can ACQUIRE Sheer Force it never asked for. Mega Evolution re-reads
+// the species' ability at the mon's existing slot, so a Mega form whose override row names
+// Sheer Force hands it to every set that resolves to that slot -- whatever it chose as its
+// base ability. That is exactly how the Klutz/Toxic Orb/Switcheroo Lopunny lost its Fake Out
+// flinch: LOPUNNY_MEGA had Sheer Force in all three slots, so Mega Evolving silently swapped
+// Klutz for Sheer Force. Slot 1 now mirrors the base form's Klutz; slot 2 keeps Sheer Force
+// for the set that deliberately runs it (which carries no Fake Out).
+//
+// This sweeps both halves: the set's own chosen ability, and the ability its slot resolves to
+// on every Mega form it can turn into.
+TEST("Frontier extended roster: no Fake Out set is (or Mega Evolves into) Sheer Force")
+{
+    u32 i, slot, f;
+    u32 offenders = 0;
+
+    // The override table is gated by FEATURE_INNATE_ABILITIES, which TestInitConfigData
+    // force-disables; the real frontier runs with it on, so opt in to see the real slots.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        const struct FormChange *formChanges;
+        u32 chosenSlot = NUM_ABILITY_SLOTS;
+        bool32 hasFakeOut = FALSE;
+
+        for (f = 0; f < MAX_MON_MOVES; f++)
+        {
+            if (set->moves[f] == MOVE_FAKE_OUT)
+                hasFakeOut = TRUE;
+        }
+        if (!hasFakeOut)
+            continue;
+
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            if (GetSpeciesAbility(set->species, slot) == set->ability)
+            {
+                chosenSlot = slot;
+                break;
+            }
+        }
+        // An unresolvable ability is already reported by the "every set's ability is legal"
+        // test above; nothing more to say about it here.
+        if (chosenSlot == NUM_ABILITY_SLOTS)
+            continue;
+
+        if (set->ability == ABILITY_SHEER_FORCE)
+        {
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: carries Fake Out with Sheer Force, which deletes its flinch -- repoint the set or drop Fake Out",
+                            i, gSpeciesInfo[set->species].speciesName);
+        }
+
+        formChanges = GetSpeciesFormChanges(set->species);
+        if (formChanges == NULL)
+            continue;
+
+        for (f = 0; formChanges[f].method != FORM_CHANGE_TERMINATOR; f++)
+        {
+            enum Species mega = formChanges[f].targetSpecies;
+
+            if (formChanges[f].method != FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM)
+                continue;
+            if (GetSpeciesAbility(mega, chosenSlot) != ABILITY_SHEER_FORCE)
+                continue;
+
+            offenders++;
+            // gSpeciesInfo names carry no "Mega" prefix, so print the species id too.
+            Test_MgbaPrintf("roster[%d] %S: carries Fake Out and Mega Evolves into species %d, whose slot %d is Sheer Force -- that deletes the flinch; repoint that Mega's override row in species_ability_overrides.c",
+                            i, gSpeciesInfo[set->species].speciesName, mega, chosenSlot);
+        }
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
 // FORK: CreateFacilityMon grants the Gigantamax Factor at draft time to any mon
 // whose species has a G-Max form, so gmax-capable Factory/Tower mons Gigantamax
 // instead of plain Dynamaxing (without annotating each roster entry). A species
