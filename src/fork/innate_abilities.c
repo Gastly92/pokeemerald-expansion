@@ -3693,9 +3693,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0263
         SPECIES_ZIGZAGOON_GALAR,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_GLUTTONY,
             ABILITY_PICKUP,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_RECKLESS
         )
     },
     { // 0264
@@ -3709,20 +3711,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0264
         SPECIES_LINOONE_GALAR,
         INNATES(
+            ABILITY_DEFIANT,
             ABILITY_GLUTTONY,
             ABILITY_PICKUP,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_RECKLESS
         )
     },
     { // 0265
         SPECIES_WURMPLE,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_SHIELD_DUST
         )
     },
     { // 0266
         SPECIES_SILCOON,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_SHED_SKIN,
             ABILITY_SHIELD_DUST
         )
@@ -3730,6 +3736,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0268
         SPECIES_CASCOON,
         INNATES(
+            ABILITY_GOOEY,
             ABILITY_SHED_SKIN,
             ABILITY_SHIELD_DUST
         )
@@ -3737,6 +3744,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0267
         SPECIES_BEAUTIFLY,
         INNATES(
+            ABILITY_SHIELD_DUST,
             ABILITY_SWARM
         )
     },
@@ -3768,6 +3776,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LUDICOLO,
         INNATES(
             ABILITY_DANCER,
+            ABILITY_INNER_FOCUS,
             ABILITY_OWN_TEMPO,
             ABILITY_RAIN_DISH,
             ABILITY_SWIFT_SWIM
@@ -3801,6 +3810,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TAILLOW,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_KEEN_EYE,
             ABILITY_SCRAPPY
         )
     },
@@ -3808,12 +3818,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SWELLOW,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_KEEN_EYE,
             ABILITY_SCRAPPY
         )
     },
     { // 0278
         SPECIES_WINGULL,
         INNATES(
+            ABILITY_BIG_PECKS,
             ABILITY_HYDRATION,
             ABILITY_KEEN_EYE,
             ABILITY_RAIN_DISH
@@ -3822,6 +3834,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0279
         SPECIES_PELIPPER,
         INNATES(
+            ABILITY_BIG_PECKS,
             ABILITY_HYDRATION,
             ABILITY_KEEN_EYE,
             ABILITY_RAIN_DISH
