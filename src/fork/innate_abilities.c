@@ -3096,6 +3096,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0206
         SPECIES_DUNSPARCE,
         INNATES(
+            ABILITY_PIERCING_DRILL,
             ABILITY_RATTLED,
             ABILITY_SERENE_GRACE
         )
@@ -10522,6 +10523,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0982
         SPECIES_DUDUNSPARCE,
         INNATES(
+            ABILITY_PIERCING_DRILL,
             ABILITY_RATTLED,
             ABILITY_SERENE_GRACE
         )
@@ -10529,6 +10531,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0982
         SPECIES_DUDUNSPARCE_THREE_SEGMENT,
         INNATES(
+            ABILITY_PIERCING_DRILL,
             ABILITY_RATTLED,
             ABILITY_SERENE_GRACE
         )
