@@ -955,6 +955,21 @@ than one whose existing set is about to be rewritten.
       **Speed as its 4th argument**, whereas `EVS()` uses named fields in struct
       order (`hp/atk/def/spa/spd/spe`). Reading the IV macro as if it matched the
       EV field order silently zeroes Sp. Atk instead of Speed.
+
+      **The 510 EV cap is not enforced, and one species deliberately breaks it.**
+      `CreateFacilityMon` (`src/battle_frontier.c`) `SetMonData`s each stat with no
+      cap check, so a set that spends more than 510 EVs simply gets the better
+      spread. **Pikachu's two sets carry 252 in all six stats on purpose** — it is
+      frail enough that Light Ball alone does not make it draftable, and the
+      perfect spread is the handicap offset that does. **Do not "fix" it.** The Gen
+      2 pass read 1512 EVs on a 510 budget as an obvious typo and normalised both
+      sets; the maintainer caught it in review. Because the no-comments rule keeps
+      the data files bare, there was nothing at the row to read — so the intent now
+      lives in CI instead: `TEST("Frontier extended roster: only the documented
+      exceptions exceed the EV cap")` fails **both** on a new over-cap set and on a
+      documented exception being normalised away. If you genuinely want another
+      one, add the species to `SpeciesIsADocumentedOverCapException` and say why
+      here; don't widen the test.
    e. **Ability — still the right pick** given the species' innates (CI already
       enforces legal-and-non-innate; this is the flavor//usefulness question).
    f. **Format tag** — does a `FORMAT_BOTH` set genuinely hold up in both, and is

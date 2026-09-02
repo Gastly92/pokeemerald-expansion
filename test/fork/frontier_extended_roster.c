@@ -1053,3 +1053,72 @@ TEST("Frontier extended roster: no set holds an item none of its moves can activ
     EXPECT_GT(checked, 1000);
     EXPECT_EQ(offenders, 0);
 }
+
+// FORK: the frontier applies a set's .ev array straight through SetMonData (src/battle_frontier.c,
+// CreateFacilityMon) with no cap check, so a set CAN exceed the game's 510 EV total and simply gets
+// the better spread. That is a real lever, and it is deliberately used: Pikachu's two sets carry 252
+// in all six stats.
+//
+// This test pins that BOTH WAYS, and the second direction is the point. A line review auditing
+// spreads sees 1512 EVs on a 510 budget, reads it as a typo and "fixes" it -- which is exactly what
+// happened in the Gen 2 pass. Prose could not have stopped that (the no-comments rule keeps the data
+// files bare, so there is nothing to read at the row), so the intent lives here instead: normalising
+// a documented exception fails the build and names the reason.
+//
+// Adding a new over-cap set is a deliberate act. If you want one, put the species in this list and
+// say why in fork-docs/LINE_REVIEW.md -- do not widen the test.
+static bool32 SpeciesIsADocumentedOverCapException(enum Species species)
+{
+    switch (species)
+    {
+    // Pikachu is frail enough that Light Ball alone does not make it draftable; the perfect spread
+    // is the handicap offset that does. Maintainer-confirmed, Gen 2 review (PR #485).
+    case SPECIES_PIKACHU:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+TEST("Frontier extended roster: only the documented exceptions exceed the EV cap")
+{
+    u32 i, stat;
+    u32 checked = 0;
+    u32 offenders = 0;
+    u32 exceptionsSeen = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        u32 total = 0;
+
+        if (set->ev == NULL)
+            continue;
+
+        checked++;
+        for (stat = 0; stat < NUM_STATS; stat++)
+            total += set->ev[stat];
+
+        if (SpeciesIsADocumentedOverCapException(set->species))
+        {
+            // The exception must still BE an exception -- see the header comment.
+            exceptionsSeen++;
+            if (total <= MAX_TOTAL_EVS)
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: this set is a DELIBERATE over-cap spread and has been normalised to %d EVs. It is not a typo -- the frontier applies .ev uncapped and the perfect spread is the point. Restore it, or drop the species from SpeciesIsADocumentedOverCapException if the decision has changed",
+                                i, gSpeciesInfo[set->species].speciesName, total);
+            }
+        }
+        else if (total > MAX_TOTAL_EVS)
+        {
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: spends %d EVs against a %d cap. CreateFacilityMon applies these uncapped, so this silently ships a better-than-legal spread -- fix the spread, or add the species to SpeciesIsADocumentedOverCapException and document why",
+                            i, gSpeciesInfo[set->species].speciesName, total, MAX_TOTAL_EVS);
+        }
+    }
+
+    EXPECT_GT(checked, 1000);
+    EXPECT_GT(exceptionsSeen, 0);
+    EXPECT_EQ(offenders, 0);
+}
