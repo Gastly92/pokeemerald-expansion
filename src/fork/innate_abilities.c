@@ -3240,6 +3240,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_URSARING,
         INNATES(
             ABILITY_GUTS,
+            ABILITY_PICKUP,
             ABILITY_QUICK_FEET,
             ABILITY_THICK_FAT,
             ABILITY_UNNERVE
@@ -3248,14 +3249,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0218
         SPECIES_SLUGMA,
         INNATES(
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_STEAM_ENGINE
         )
     },
     { // 0219
         SPECIES_MAGCARGO,
         INNATES(
             ABILITY_MAGMA_ARMOR,
-            ABILITY_SOLID_ROCK
+            ABILITY_SOLID_ROCK,
+            ABILITY_STEAM_ENGINE
         )
     },
     { // 0220
@@ -9855,7 +9858,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_URSALUNA_BLOODMOON,
         INNATES(
             ABILITY_MINDS_EYE,
-            ABILITY_THICK_FAT
+            ABILITY_THICK_FAT,
+            ABILITY_UNNERVE
         )
     },
     { // 0902
