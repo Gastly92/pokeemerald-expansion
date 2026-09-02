@@ -4930,6 +4930,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KYOGRE,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_RAIN_DISH,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -4937,6 +4938,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KYOGRE_PRIMAL,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_RAIN_DISH,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -4944,32 +4946,39 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GROUDON,
         INNATES(
             ABILITY_MAGMA_ARMOR,
-            ABILITY_SAND_FORCE
+            ABILITY_SAND_FORCE,
+            ABILITY_SOLID_ROCK
         )
     },
     { // 0383
         SPECIES_GROUDON_PRIMAL,
         INNATES(
             ABILITY_MAGMA_ARMOR,
-            ABILITY_SAND_FORCE
+            ABILITY_SAND_FORCE,
+            ABILITY_SOLID_ROCK
         )
     },
     { // 0384
         SPECIES_RAYQUAZA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_INSOMNIA,
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0384
         SPECIES_RAYQUAZA_MEGA,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_INSOMNIA,
+            ABILITY_LEVITATE,
+            ABILITY_PRESSURE
         )
     },
     { // 0385
         SPECIES_JIRACHI,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_HOSPITALITY,
             ABILITY_LEVITATE,
             ABILITY_SERENE_GRACE
         )

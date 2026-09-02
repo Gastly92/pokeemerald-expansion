@@ -12421,6 +12421,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        .species = SPECIES_GROUDON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_PRECIPICE_BLADES,
+            MOVE_FIRE_PUNCH,
+            MOVE_STONE_EDGE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_DROUGHT,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIRE,
+    },
 
     // 0384
     {
@@ -12462,6 +12482,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
+    },
+    {
+        .species = SPECIES_RAYQUAZA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_DRAGON_ASCENT,
+            MOVE_EXTREME_SPEED,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_AIR_LOCK,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0385
@@ -12525,8 +12565,68 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_STEEL,
     },
+    {
+        .species = SPECIES_JIRACHI,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_HELPING_HAND,
+            MOVE_ICY_WIND,
+            MOVE_IRON_HEAD,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_BULLETPROOF,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0386
+    {
+        .species = SPECIES_DEOXYS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_PSYCHO_BOOST,
+            MOVE_SUPERPOWER,
+            MOVE_ICE_BEAM,
+            MOVE_EXTREME_SPEED
+        },
+        .ability = ABILITY_TRACE,
+        .nature = NATURE(SPE_UP, SPD_DOWN),
+        .ev = EVS(
+            .atk = 128,
+            .spa = 128,
+            .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_DEOXYS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SPECS,
+        .moves =
+        {
+            MOVE_PSYCHO_BOOST,
+            MOVE_THUNDERBOLT,
+            MOVE_ICE_BEAM,
+            MOVE_DARK_PULSE
+        },
+        .ability = ABILITY_TRACE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
     {
         .species = SPECIES_DEOXYS_ATTACK,
         .tags = FORMAT_BOTH,
