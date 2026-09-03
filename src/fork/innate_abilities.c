@@ -5216,6 +5216,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRANIDOS,
         INNATES(
             ABILITY_MOLD_BREAKER,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD
         )
     },
@@ -5223,6 +5224,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RAMPARDOS,
         INNATES(
             ABILITY_MOLD_BREAKER,
+            ABILITY_OBLIVIOUS,
+            ABILITY_RECKLESS,
             ABILITY_ROCK_HEAD
         )
     },
@@ -5230,6 +5233,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHIELDON,
         INNATES(
             ABILITY_FILTER,
+            ABILITY_FRIEND_GUARD,
             ABILITY_STAMINA,
             ABILITY_STURDY
         )
@@ -5238,6 +5242,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASTIODON,
         INNATES(
             ABILITY_FILTER,
+            ABILITY_FRIEND_GUARD,
             ABILITY_STAMINA,
             ABILITY_STURDY
         )
@@ -5311,6 +5316,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0415
         SPECIES_COMBEE,
         INNATES(
+            ABILITY_PICKUP,
             ABILITY_SWARM
         )
     },
@@ -5319,6 +5325,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_PRESSURE,
+            ABILITY_QUEENLY_MAJESTY,
             ABILITY_SWARM,
             ABILITY_UNNERVE
         )

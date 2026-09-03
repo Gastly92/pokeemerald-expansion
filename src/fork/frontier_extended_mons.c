@@ -13560,7 +13560,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_ATTACK_ORDER
         },
-        .ability = ABILITY_WATER_ABSORB,
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -13580,7 +13580,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAL_ORDER,
             MOVE_PROTECT
         },
-        .ability = ABILITY_WATER_ABSORB,
+        .ability = ABILITY_POISON_POINT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -15159,7 +15159,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_YANMEGA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SILVER_POWDER,
+        .heldItem = ITEM_SHARP_BEAK,
         .moves =
         {
             MOVE_TAILWIND,
