@@ -3310,6 +3310,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REMORAID,
         INNATES(
             ABILITY_ANALYTIC,
+            ABILITY_MEGA_LAUNCHER,
             ABILITY_SNIPER
         )
     },
@@ -3317,6 +3318,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OCTILLERY,
         INNATES(
             ABILITY_ANALYTIC,
+            ABILITY_MEGA_LAUNCHER,
             ABILITY_SNIPER,
             ABILITY_SUCTION_CUPS
         )

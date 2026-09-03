@@ -1353,7 +1353,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0472
         SPECIES_GLISCOR, 2,
-        ABILITY_POISON_TOUCH
+        ABILITY_TOXIC_CHAIN
     },
     { // 0473
         SPECIES_MAMOSWINE, 2,

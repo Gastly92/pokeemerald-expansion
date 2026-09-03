@@ -7451,6 +7451,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_OCTILLERY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_WISE_GLASSES,
+        .moves =
+        {
+            MOVE_WATER_PULSE,
+            MOVE_DARK_PULSE,
+            MOVE_AURA_SPHERE,
+            MOVE_DRAGON_PULSE
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_DARK,
+    },
 
     // 0225
     {
@@ -13883,7 +13903,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_GHOST,
     },
     {
         .species = SPECIES_MISMAGIUS,
@@ -13903,7 +13923,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_GHOST,
     },
 
     // 0430
@@ -15193,7 +15213,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC,
             MOVE_ROOST
         },
-        .ability = ABILITY_POISON_TOUCH,
+        .ability = ABILITY_TOXIC_CHAIN,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 244,
@@ -15213,7 +15233,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_ROOST
         },
-        .ability = ABILITY_POISON_TOUCH,
+        .ability = ABILITY_TOXIC_CHAIN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 244,
