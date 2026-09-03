@@ -13777,6 +13777,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        .species = SPECIES_GASTRODON,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_MUDDY_WATER,
+            MOVE_EARTH_POWER,
+            MOVE_YAWN,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_STORM_DRAIN,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0424
     {

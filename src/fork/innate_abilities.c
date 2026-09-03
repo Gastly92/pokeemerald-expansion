@@ -2580,6 +2580,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0417
         SPECIES_PACHIRISU,
         INNATES(
+            ABILITY_BATTERY,
             ABILITY_CHEEK_POUCH,
             ABILITY_PICKUP
         )
@@ -5350,6 +5351,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHERUBI,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_HARVEST,
             ABILITY_LEAF_GUARD
         )
     },
@@ -5357,6 +5359,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHERRIM_OVERCAST,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_HARVEST,
             ABILITY_LEAF_GUARD
         )
     },
@@ -5364,12 +5367,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHERRIM_SUNSHINE,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_HARVEST,
             ABILITY_LEAF_GUARD
         )
     },
     { // 0422
         SPECIES_SHELLOS_WEST,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_SAND_FORCE,
             ABILITY_STICKY_HOLD
         )
@@ -5377,6 +5382,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0422
         SPECIES_SHELLOS_EAST,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_SAND_FORCE,
             ABILITY_STICKY_HOLD
         )
@@ -5384,6 +5390,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0423
         SPECIES_GASTRODON_WEST,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_SAND_FORCE,
             ABILITY_STICKY_HOLD
         )
@@ -5391,6 +5398,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0423
         SPECIES_GASTRODON_EAST,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_SAND_FORCE,
             ABILITY_STICKY_HOLD
         )
@@ -5427,7 +5435,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUNEARY,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_RATTLED
         )
     },
     { // 0428
