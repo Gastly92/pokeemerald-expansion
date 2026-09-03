@@ -1453,7 +1453,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0487
         SPECIES_GIRATINA_ORIGIN, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_CONTRARY
     },
     { // 0488
         SPECIES_CRESSELIA, 1,

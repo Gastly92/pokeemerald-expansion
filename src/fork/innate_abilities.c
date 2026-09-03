@@ -2588,13 +2588,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0489
         SPECIES_PHIONE,
         INNATES(
-            ABILITY_HYDRATION
+            ABILITY_HYDRATION,
+            ABILITY_RAIN_DISH
         )
     },
     { // 0490
         SPECIES_MANAPHY,
         INNATES(
-            ABILITY_HYDRATION
+            ABILITY_HYDRATION,
+            ABILITY_RAIN_DISH
         )
     },
     { // 0559
@@ -6021,6 +6023,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0483
         SPECIES_DIALGA,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
         )
@@ -6028,6 +6031,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0483
         SPECIES_DIALGA_ORIGIN,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
         )
@@ -6035,6 +6039,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0484
         SPECIES_PALKIA,
         INNATES(
+            ABILITY_INFILTRATOR,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
         )
@@ -6042,6 +6047,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0484
         SPECIES_PALKIA_ORIGIN,
         INNATES(
+            ABILITY_INFILTRATOR,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
         )
@@ -6049,13 +6055,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0485
         SPECIES_HEATRAN,
         INNATES(
-            ABILITY_STURDY
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_STURDY,
+            ABILITY_SUCTION_CUPS
         )
     },
     { // 0486
         SPECIES_REGIGIGAS,
         INNATES(
-            ABILITY_CLEAR_BODY
+            ABILITY_CLEAR_BODY,
+            ABILITY_STAMINA
         )
     },
     { // 0487
@@ -6077,6 +6086,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0488
         SPECIES_CRESSELIA,
         INNATES(
+            ABILITY_HEALER,
             ABILITY_LEVITATE,
             ABILITY_SERENE_GRACE
         )
@@ -6098,6 +6108,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHAYMIN_LAND,
         INNATES(
             ABILITY_NATURAL_CURE,
+            ABILITY_PASTEL_VEIL,
             ABILITY_REGENERATOR,
             ABILITY_SERENE_GRACE
         )
@@ -6106,6 +6117,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SHAYMIN_SKY,
         INNATES(
             ABILITY_NATURAL_CURE,
+            ABILITY_PASTEL_VEIL,
             ABILITY_REGENERATOR,
             ABILITY_SERENE_GRACE
         )
