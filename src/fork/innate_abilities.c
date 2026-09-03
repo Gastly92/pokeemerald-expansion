@@ -4654,6 +4654,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HEATPROOF,
             ABILITY_LEVITATE,
+            ABILITY_PUNK_ROCK,
             ABILITY_TELEPATHY
         )
     },
@@ -4662,6 +4663,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HEATPROOF,
             ABILITY_LEVITATE,
+            ABILITY_PUNK_ROCK,
             ABILITY_TELEPATHY
         )
     },
@@ -5473,6 +5475,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HEATPROOF,
             ABILITY_LEVITATE,
+            ABILITY_PUNK_ROCK,
             ABILITY_TELEPATHY
         )
     },
@@ -5900,6 +5903,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ICE_BODY,
             ABILITY_INNER_FOCUS,
             ABILITY_LEVITATE,
+            ABILITY_SHADOW_TAG,
             ABILITY_SNOW_CLOAK
         )
     },
