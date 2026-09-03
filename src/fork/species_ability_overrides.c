@@ -1505,7 +1505,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0505
         SPECIES_WATCHOG, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_STATIC
     },
     { // 0508
         SPECIES_STOUTLAND, 2,
@@ -1521,7 +1521,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0514
         SPECIES_SIMISEAR, 1,
-        ABILITY_FLASH_FIRE
+        ABILITY_FLAME_BODY
     },
     { // 0516
         SPECIES_SIMIPOUR, 1,
@@ -1734,6 +1734,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0635
         SPECIES_HYDREIGON, 1,
         ABILITY_SHEER_FORCE },
+    { // 0637
+        SPECIES_VOLCARONA, 1,
+        ABILITY_DROUGHT
+    },
     { // 0638
         SPECIES_COBALION, 1,
         ABILITY_BULLETPROOF
