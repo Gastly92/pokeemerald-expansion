@@ -1181,7 +1181,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0416
         SPECIES_VESPIQUEN, 1,
-        ABILITY_WATER_ABSORB
+        ABILITY_POISON_POINT
     },
     { // 0419
         SPECIES_FLOATZEL, 1,
@@ -1281,7 +1281,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0448
         SPECIES_LUCARIO_MEGA, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     { // 0448
         SPECIES_LUCARIO_MEGA, 2,
@@ -1353,7 +1353,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0472
         SPECIES_GLISCOR, 2,
-        ABILITY_POISON_TOUCH
+        ABILITY_TOXIC_CHAIN
     },
     { // 0473
         SPECIES_MAMOSWINE, 2,
@@ -1453,7 +1453,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0487
         SPECIES_GIRATINA_ORIGIN, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_CONTRARY
     },
     { // 0488
         SPECIES_CRESSELIA, 1,
