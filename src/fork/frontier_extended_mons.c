@@ -19401,9 +19401,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_ELECTRIC,
     },
@@ -19552,6 +19552,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .atk = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_DRAGON,
+    },
+    {
+        .species = SPECIES_HAXORUS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_STONE_AXE,
+            MOVE_DRAGON_CLAW,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_ANGER_SHELL,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
@@ -19748,6 +19768,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ELECTRIC,
     },
+    {
+        .species = SPECIES_STUNFISK,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_YAWN,
+            MOVE_EARTH_POWER,
+            MOVE_THUNDERBOLT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_STATIC,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
 
     // 0620
     {
@@ -19826,9 +19866,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_DRAGON,
     },
@@ -19848,9 +19888,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_GROUND,
     },
