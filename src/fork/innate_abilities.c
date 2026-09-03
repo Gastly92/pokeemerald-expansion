@@ -7483,103 +7483,125 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0626
         SPECIES_BOUFFALANT,
         INNATES(
-            ABILITY_RECKLESS
+            ABILITY_RECKLESS,
+            ABILITY_ROCK_HEAD
         )
     },
     { // 0627
         SPECIES_RUFFLET,
         INNATES(
-            ABILITY_KEEN_EYE
+            ABILITY_BIG_PECKS,
+            ABILITY_KEEN_EYE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0628
         SPECIES_BRAVIARY,
         INNATES(
+            ABILITY_BIG_PECKS,
             ABILITY_DEFIANT,
-            ABILITY_KEEN_EYE
+            ABILITY_KEEN_EYE,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0628
         SPECIES_BRAVIARY_HISUI,
         INNATES(
+            ABILITY_BIG_PECKS,
             ABILITY_KEEN_EYE,
-            ABILITY_TINTED_LENS
+            ABILITY_TINTED_LENS,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0629
         SPECIES_VULLABY,
         INNATES(
             ABILITY_BIG_PECKS,
-            ABILITY_OVERCOAT
+            ABILITY_KEEN_EYE,
+            ABILITY_OVERCOAT,
+            ABILITY_PICKUP
         )
     },
     { // 0630
         SPECIES_MANDIBUZZ,
         INNATES(
             ABILITY_BIG_PECKS,
-            ABILITY_OVERCOAT
+            ABILITY_KEEN_EYE,
+            ABILITY_OVERCOAT,
+            ABILITY_PICKUP
         )
     },
     { // 0631
         SPECIES_HEATMOR,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_WHITE_SMOKE
         )
     },
     { // 0632
         SPECIES_DURANT,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_SWARM
         )
     },
     { // 0633
         SPECIES_DEINO,
         INNATES(
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0634
         SPECIES_ZWEILOUS,
         INNATES(
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0635
         SPECIES_HYDREIGON,
         INNATES(
             ABILITY_GLUTTONY,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0636
         SPECIES_LARVESTA,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_SWARM
         )
     },
     { // 0637
         SPECIES_VOLCARONA,
         INNATES(
+            ABILITY_DANCER,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_SWARM
         )
     },
     { // 0638
         SPECIES_COBALION,
         INNATES(
+            ABILITY_INNER_FOCUS,
             ABILITY_JUSTIFIED
         )
     },
     { // 0639
         SPECIES_TERRAKION,
         INNATES(
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_SAND_FORCE
         )
     },
     { // 0640
         SPECIES_VIRIZION,
         INNATES(
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_SHARPNESS
         )
     },
     { // 0641
@@ -7592,6 +7614,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0641
         SPECIES_TORNADUS_THERIAN,
         INNATES(
+            ABILITY_DEFIANT,
+            ABILITY_PRANKSTER,
             ABILITY_REGENERATOR
         )
     },
@@ -7605,12 +7629,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0642
         SPECIES_THUNDURUS_THERIAN,
         INNATES(
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_PRANKSTER
         )
     },
     { // 0643
         SPECIES_RESHIRAM,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_TURBOBLAZE
         )
     },
@@ -7629,18 +7655,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0645
         SPECIES_LANDORUS_THERIAN,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_SAND_FORCE
         )
     },
     { // 0646
         SPECIES_KYUREM,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_PRESSURE
         )
     },
     { // 1104
         SPECIES_KYUREM_WHITE,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_PRESSURE,
             ABILITY_TURBOBLAZE
         )
@@ -7648,6 +7677,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1105
         SPECIES_KYUREM_BLACK,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_PRESSURE,
             ABILITY_TERAVOLT
         )
@@ -7655,12 +7685,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0647
         SPECIES_KELDEO_ORDINARY,
         INNATES(
+            ABILITY_INNER_FOCUS,
             ABILITY_JUSTIFIED
         )
     },
     { // 0647
         SPECIES_KELDEO_RESOLUTE,
         INNATES(
+            ABILITY_INNER_FOCUS,
             ABILITY_JUSTIFIED
         )
     },
@@ -7668,6 +7700,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MELOETTA,
         INNATES(
             ABILITY_DANCER,
+            ABILITY_HEALER,
             ABILITY_SERENE_GRACE
         )
     },
@@ -7675,37 +7708,48 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MELOETTA_PIROUETTE,
         INNATES(
             ABILITY_DANCER,
+            ABILITY_HEALER,
             ABILITY_SERENE_GRACE
         )
     },
     { // 0649
         SPECIES_GENESECT,
         INNATES(
-            ABILITY_DOWNLOAD
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_DOWNLOAD,
+            ABILITY_STAKEOUT
         )
     },
     { // 0649
         SPECIES_GENESECT_DOUSE,
         INNATES(
-            ABILITY_DOWNLOAD
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_DOWNLOAD,
+            ABILITY_STAKEOUT
         )
     },
     { // 0649
         SPECIES_GENESECT_SHOCK,
         INNATES(
-            ABILITY_DOWNLOAD
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_DOWNLOAD,
+            ABILITY_STAKEOUT
         )
     },
     { // 0649
         SPECIES_GENESECT_BURN,
         INNATES(
-            ABILITY_DOWNLOAD
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_DOWNLOAD,
+            ABILITY_STAKEOUT
         )
     },
     { // 0649
         SPECIES_GENESECT_CHILL,
         INNATES(
-            ABILITY_DOWNLOAD
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_DOWNLOAD,
+            ABILITY_STAKEOUT
         )
     },
     { // 0650
