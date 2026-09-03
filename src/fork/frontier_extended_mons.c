@@ -18398,12 +18398,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_DARK,
     },
+    {
+        .species = SPECIES_SCRAFTY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LUM_BERRY,
+        .moves =
+        {
+            MOVE_DRAGON_DANCE,
+            MOVE_CLOSE_COMBAT,
+            MOVE_CRUNCH,
+            MOVE_ICE_PUNCH
+        },
+        .ability = ABILITY_FLUFFY,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
 
     // 0561
     {
         .species = SPECIES_SIGILYPH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_COSMIC_POWER,
@@ -18465,7 +18485,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_COFAGRIGUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -18618,7 +18638,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_NASTY_PLOT,
-            MOVE_DARK_PULSE,
+            MOVE_NIGHT_DAZE,
             MOVE_FLAMETHROWER,
             MOVE_FOCUS_BLAST
         },
@@ -18680,7 +18700,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_NASTY_PLOT,
-            MOVE_SHADOW_BALL,
+            MOVE_BITTER_MALICE,
             MOVE_HYPER_VOICE,
             MOVE_FOCUS_BLAST
         },
@@ -18717,20 +18737,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CINCCINO,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
+            MOVE_FAKE_OUT,
             MOVE_TAIL_SLAP,
             MOVE_BULLET_SEED,
-            MOVE_ROCK_BLAST,
-            MOVE_U_TURN
+            MOVE_PROTECT
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
