@@ -17264,7 +17264,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND
         },
         .ability = ABILITY_SYNCHRONIZE,
-        .iv = IVS(SPE, 0),
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17620,7 +17619,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WIDE_GUARD
         },
         .ability = ABILITY_SHEER_FORCE,
-        .iv = IVS(SPE, 0),
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
