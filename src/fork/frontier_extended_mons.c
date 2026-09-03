@@ -18212,21 +18212,21 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DARMANITAN,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
+            MOVE_BELLY_DRUM,
             MOVE_FLARE_BLITZ,
             MOVE_HIGH_HORSEPOWER,
-            MOVE_ROCK_SLIDE,
-            MOVE_SUPERPOWER
+            MOVE_PROTECT
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .def = 4
         ),
         .teraType = TYPE_FIRE,
     },
@@ -18268,6 +18268,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .atk = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_DARMANITAN_GALAR_STANDARD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_ICICLE_CRASH,
+            MOVE_FLARE_BLITZ,
+            MOVE_ICE_SHARD,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_ZEN_MODE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_FIRE,

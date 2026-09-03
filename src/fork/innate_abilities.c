@@ -6742,37 +6742,46 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0554
         SPECIES_DARUMAKA,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGMA_ARMOR
         )
     },
     { // 0554
         SPECIES_DARUMAKA_GALAR,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_PICKUP,
+            ABILITY_SLUSH_RUSH
         )
     },
     { // 0555
         SPECIES_DARMANITAN,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGMA_ARMOR
         )
     },
     { // 0555
         SPECIES_DARMANITAN_ZEN,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGMA_ARMOR
         )
     },
     { // 0555
         SPECIES_DARMANITAN_GALAR_STANDARD,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_PICKUP,
+            ABILITY_SLUSH_RUSH
         )
     },
     { // 0555
         SPECIES_DARMANITAN_GALAR_ZEN,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_PICKUP,
+            ABILITY_SLUSH_RUSH
         )
     },
     { // 0556
