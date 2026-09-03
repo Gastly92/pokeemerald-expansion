@@ -6489,7 +6489,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0531
         SPECIES_AUDINO,
         INNATES(
-            ABILITY_FOREWARN,
+            ABILITY_ANTICIPATION,
             ABILITY_FRIEND_GUARD,
             ABILITY_HEALER,
             ABILITY_REGENERATOR
@@ -6498,7 +6498,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0531
         SPECIES_AUDINO_MEGA,
         INNATES(
-            ABILITY_FOREWARN,
+            ABILITY_ANTICIPATION,
             ABILITY_FRIEND_GUARD,
             ABILITY_HEALER,
             ABILITY_REGENERATOR
@@ -6591,14 +6591,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LEAVANNY,
         INNATES(
             ABILITY_CHLOROPHYLL,
+            ABILITY_FRIEND_GUARD,
             ABILITY_LEAF_GUARD,
             ABILITY_OVERCOAT,
+            ABILITY_SHARPNESS,
             ABILITY_SWARM
         )
     },
     { // 0543
         SPECIES_VENIPEDE,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_SPEED_BOOST,
             ABILITY_SWARM
         )
@@ -6606,6 +6609,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0544
         SPECIES_WHIRLIPEDE,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_SPEED_BOOST,
             ABILITY_SWARM
         )
@@ -6613,6 +6617,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0545
         SPECIES_SCOLIPEDE,
         INNATES(
+            ABILITY_ANTICIPATION,
+            ABILITY_MERCILESS,
             ABILITY_SPEED_BOOST,
             ABILITY_SWARM
         )
@@ -6620,6 +6626,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0545
         SPECIES_SCOLIPEDE_MEGA,
         INNATES(
+            ABILITY_ANTICIPATION,
+            ABILITY_MERCILESS,
             ABILITY_SHELL_ARMOR,
             ABILITY_SPEED_BOOST,
             ABILITY_SWARM
@@ -6631,6 +6639,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_OVERCOAT,
             ABILITY_PRANKSTER
         )
     },
@@ -6640,6 +6649,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CHLOROPHYLL,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_OVERCOAT,
             ABILITY_PRANKSTER
         )
     },
@@ -6663,6 +6673,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0549
         SPECIES_LILLIGANT_HISUI,
         INNATES(
+            ABILITY_AROMA_VEIL,
             ABILITY_CHLOROPHYLL,
             ABILITY_DANCER,
             ABILITY_LEAF_GUARD,
@@ -6698,7 +6709,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANGER_POINT,
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE
+            ABILITY_MOXIE,
+            ABILITY_SAND_VEIL,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0552
@@ -6706,7 +6719,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANGER_POINT,
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE
+            ABILITY_KEEN_EYE,
+            ABILITY_MOXIE,
+            ABILITY_SAND_VEIL,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0553
@@ -6714,7 +6730,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANGER_POINT,
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE
+            ABILITY_KEEN_EYE,
+            ABILITY_MOXIE,
+            ABILITY_SAND_VEIL,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0554
@@ -6757,13 +6776,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MARACTUS,
         INNATES(
             ABILITY_CHLOROPHYLL,
-            ABILITY_DANCER
+            ABILITY_DANCER,
+            ABILITY_LEAF_GUARD,
+            ABILITY_SAND_VEIL
         )
     },
     { // 0557
         SPECIES_DWEBBLE,
         INNATES(
             ABILITY_SHELL_ARMOR,
+            ABILITY_SOLID_ROCK,
             ABILITY_STURDY
         )
     },
@@ -6771,6 +6793,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRUSTLE,
         INNATES(
             ABILITY_SHELL_ARMOR,
+            ABILITY_SOLID_ROCK,
             ABILITY_STURDY
         )
     },
@@ -10157,6 +10180,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULEGION_M,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_CURSED_BODY,
             ABILITY_MOLD_BREAKER,
             ABILITY_SWIFT_SWIM
         )
@@ -10165,6 +10189,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BASCULEGION_F,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_CURSED_BODY,
             ABILITY_MOLD_BREAKER,
             ABILITY_SWIFT_SWIM
         )

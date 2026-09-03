@@ -17863,7 +17863,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCOLIPEDE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_MENTAL_HERB,
         .moves =
         {
             MOVE_TAILWIND,
@@ -17880,12 +17880,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_BUG,
     },
+    {
+        .species = SPECIES_SCOLIPEDE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_PROTECT,
+            MOVE_SWORDS_DANCE,
+            MOVE_BATON_PASS,
+            MOVE_MEGAHORN
+        },
+        .ability = ABILITY_POISON_POINT,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_BUG,
+    },
 
     // 0547
     {
         .species = SPECIES_WHIMSICOTT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_BIG_ROOT,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -17988,20 +18008,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_LILLIGANT_HISUI,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
-            MOVE_VICTORY_DANCE,
-            MOVE_CLOSE_COMBAT,
+            MOVE_SLEEP_POWDER,
             MOVE_LEAF_BLADE,
-            MOVE_ICE_SPINNER
+            MOVE_CLOSE_COMBAT,
+            MOVE_PROTECT
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
@@ -18129,6 +18149,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252
         ),
         .teraType = TYPE_GROUND,
+    },
+    {
+        .species = SPECIES_KROOKODILE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_KNOCK_OFF,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_ROCK_SLIDE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_DARK,
     },
 
     // 0555
@@ -28313,7 +28353,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_WAVE_CRASH,
-            MOVE_PHANTOM_FORCE,
+            MOVE_POLTERGEIST,
             MOVE_AQUA_JET,
             MOVE_FLIP_TURN
         },
