@@ -4973,6 +4973,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_NORMAL,
     },
+    {
+        .species = SPECIES_SNORLAX,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_BODY_SLAM,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SAP_SIPPER,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 0144
     {
@@ -15055,6 +15075,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_YANMEGA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SILVER_POWDER,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_BUG_BUZZ,
+            MOVE_AIR_SLASH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0470
@@ -26094,7 +26134,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MR_RIME,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIGHT_CLAY,
+        .heldItem = ITEM_ICY_ROCK,
         .moves =
         {
             MOVE_AURORA_VEIL,
