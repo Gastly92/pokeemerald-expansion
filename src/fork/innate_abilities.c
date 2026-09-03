@@ -2573,6 +2573,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0401
         SPECIES_KRICKETOT,
         INNATES(
+            ABILITY_PUNK_ROCK,
             ABILITY_SHED_SKIN
         )
     },
@@ -5044,6 +5045,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0389
         SPECIES_TORTERRA,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_HARVEST,
             ABILITY_OVERGROW,
             ABILITY_SHELL_ARMOR,
@@ -5155,6 +5157,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0402
         SPECIES_KRICKETUNE,
         INNATES(
+            ABILITY_PUNK_ROCK,
             ABILITY_SHED_SKIN,
             ABILITY_SWARM,
             ABILITY_TECHNICIAN,
@@ -5164,6 +5167,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0403
         SPECIES_SHINX,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_GUTS,
             ABILITY_INTIMIDATE,
             ABILITY_KEEN_EYE,
@@ -5173,6 +5177,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0404
         SPECIES_LUXIO,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_GUTS,
             ABILITY_INTIMIDATE,
             ABILITY_KEEN_EYE,
@@ -5182,6 +5187,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0405
         SPECIES_LUXRAY,
         INNATES(
+            ABILITY_FRISK,
             ABILITY_GUTS,
             ABILITY_INTIMIDATE,
             ABILITY_KEEN_EYE,

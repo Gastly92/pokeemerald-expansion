@@ -13066,6 +13066,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_NORMAL,
         .ball = BALL_DIVE,
     },
+    {
+        .species = SPECIES_BIBAREL,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_CRUNCH,
+            MOVE_PSYCHIC_FANGS,
+            MOVE_LIQUIDATION,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_DARK,
+    },
 
     // 0402
     {
@@ -13109,6 +13129,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
         .ball = BALL_NET,
+    },
+    {
+        .species = SPECIES_KRICKETUNE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_SING,
+            MOVE_FAKE_OUT,
+            MOVE_BUG_BITE,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_BUG,
     },
 
     // 0405
