@@ -1281,7 +1281,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0448
         SPECIES_LUCARIO_MEGA, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     { // 0448
         SPECIES_LUCARIO_MEGA, 2,

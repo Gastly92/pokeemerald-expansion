@@ -5488,6 +5488,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_DEFIANT,
             ABILITY_INTIMIDATE,
+            ABILITY_KEEN_EYE,
             ABILITY_OWN_TEMPO,
             ABILITY_THICK_FAT
         )
@@ -5566,12 +5567,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BIG_PECKS,
             ABILITY_KEEN_EYE,
+            ABILITY_PUNK_ROCK,
             ABILITY_TANGLED_FEET
         )
     },
     { // 0442
         SPECIES_SPIRITOMB,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_PRESSURE,
             ABILITY_SOUL_HEART
@@ -5666,6 +5669,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0450
         SPECIES_HIPPOWDON,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_OVERCOAT,
             ABILITY_SAND_FORCE
         )
@@ -5674,6 +5678,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SKORUPI,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_HYPER_CUTTER,
             ABILITY_KEEN_EYE,
             ABILITY_SNIPER
         )
@@ -5682,6 +5687,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DRAPION,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_HYPER_CUTTER,
             ABILITY_KEEN_EYE,
             ABILITY_SNIPER
         )
@@ -5690,20 +5696,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CROAGUNK,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_MERCILESS
         )
     },
     { // 0454
         SPECIES_TOXICROAK,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_MERCILESS
         )
     },
     { // 0455
         SPECIES_CARNIVINE,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_STRONG_JAW,
+            ABILITY_SUCTION_CUPS
         )
     },
     { // 0456
@@ -5734,21 +5744,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SNOVER,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_SNOW_CLOAK
+            ABILITY_SNOW_CLOAK,
+            ABILITY_THICK_FAT
         )
     },
     { // 0460
         SPECIES_ABOMASNOW,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_SNOW_CLOAK
+            ABILITY_SNOW_CLOAK,
+            ABILITY_THICK_FAT
         )
     },
     { // 0460
         SPECIES_ABOMASNOW_MEGA,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_SNOW_CLOAK
+            ABILITY_SNOW_CLOAK,
+            ABILITY_THICK_FAT
         )
     },
     { // 0461
@@ -5942,55 +5955,67 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0479
         SPECIES_ROTOM,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0479
         SPECIES_ROTOM_HEAT,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0479
         SPECIES_ROTOM_WASH,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0479
         SPECIES_ROTOM_FROST,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0479
         SPECIES_ROTOM_FAN,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0479
         SPECIES_ROTOM_MOW,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_PRANKSTER
         )
     },
     { // 0480
         SPECIES_UXIE,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_FOREWARN,
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0481
         SPECIES_MESPRIT,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0482
         SPECIES_AZELF,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_INNER_FOCUS,
+            ABILITY_LEVITATE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0483
