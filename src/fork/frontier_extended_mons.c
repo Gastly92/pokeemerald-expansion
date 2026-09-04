@@ -18033,7 +18033,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_WAVE_CRASH,
-            MOVE_HEAD_SMASH,
+            MOVE_STONE_EDGE,
             MOVE_DOUBLE_EDGE,
             MOVE_AQUA_JET
         },

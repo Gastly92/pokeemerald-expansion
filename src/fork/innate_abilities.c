@@ -10884,6 +10884,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_DEFIANT,
             ABILITY_GLUTTONY,
             ABILITY_GUTS,
+            ABILITY_INTIMIDATE,
             ABILITY_PICKUP,
             ABILITY_QUICK_FEET,
             ABILITY_RECKLESS
@@ -11297,6 +11298,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ADAPTABILITY,
             ABILITY_CURSED_BODY,
             ABILITY_MOLD_BREAKER,
+            ABILITY_SUPREME_OVERLORD,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -11306,6 +11308,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ADAPTABILITY,
             ABILITY_CURSED_BODY,
             ABILITY_MOLD_BREAKER,
+            ABILITY_SUPREME_OVERLORD,
             ABILITY_SWIFT_SWIM
         )
     },
