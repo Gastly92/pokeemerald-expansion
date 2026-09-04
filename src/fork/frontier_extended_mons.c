@@ -26115,20 +26115,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0802
     {
         .species = SPECIES_MARSHADOW,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GHOST_GEM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
             MOVE_SPECTRAL_THIEF,
             MOVE_CLOSE_COMBAT,
             MOVE_SHADOW_SNEAK,
-            MOVE_BULK_UP
+            MOVE_PROTECT
         },
         .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 4,
             .atk = 252,
-            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
@@ -26263,7 +26263,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BLACEPHALON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FIRE_GEM,
+        .heldItem = ITEM_CHARCOAL,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -26305,7 +26305,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ZERAORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIC_GEM,
+        .heldItem = ITEM_MAGNET,
         .moves =
         {
             MOVE_BULK_UP,
@@ -26346,14 +26346,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_MELMETAL,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_DOUBLE_IRON_BASH,
             MOVE_THUNDER_PUNCH,
             MOVE_SUPERPOWER,
-            MOVE_EARTHQUAKE
+            MOVE_HIGH_HORSEPOWER
         },
         .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),

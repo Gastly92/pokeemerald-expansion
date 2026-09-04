@@ -2154,6 +2154,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MAGEARNA, 1,
         ABILITY_MISTY_SURGE
     },
+    { // 0801
+        SPECIES_MAGEARNA_MEGA, 1,
+        ABILITY_MISTY_SURGE
+    },
     { // 0804
         SPECIES_NAGANADEL, 1,
         ABILITY_SHEER_FORCE

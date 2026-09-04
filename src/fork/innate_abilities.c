@@ -10252,6 +10252,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0801
         SPECIES_MAGEARNA,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_CUTE_CHARM,
             ABILITY_SOUL_HEART
         )
@@ -10259,6 +10260,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0801
         SPECIES_MAGEARNA_ORIGINAL,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_CUTE_CHARM,
             ABILITY_SOUL_HEART
         )
@@ -10266,6 +10268,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0801
         SPECIES_MAGEARNA_MEGA,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_CUTE_CHARM,
             ABILITY_SOUL_HEART
         )
@@ -10273,6 +10276,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0801
         SPECIES_MAGEARNA_ORIGINAL_MEGA,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_CUTE_CHARM,
             ABILITY_SOUL_HEART
         )
@@ -10280,6 +10284,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0802
         SPECIES_MARSHADOW,
         INNATES(
+            ABILITY_INFILTRATOR,
+            ABILITY_RATTLED,
             ABILITY_TECHNICIAN
         )
     },
@@ -10287,25 +10293,30 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_POIPOLE,
         INNATES(
             ABILITY_BEAST_BOOST,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_LIQUID_OOZE
         )
     },
     { // 0804
         SPECIES_NAGANADEL,
         INNATES(
             ABILITY_BEAST_BOOST,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_LIQUID_OOZE
         )
     },
     { // 0805
         SPECIES_STAKATAKA,
         INNATES(
-            ABILITY_BEAST_BOOST
+            ABILITY_BEAST_BOOST,
+            ABILITY_SOLID_ROCK,
+            ABILITY_STURDY
         )
     },
     { // 0806
         SPECIES_BLACEPHALON,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_BEAST_BOOST,
             ABILITY_LEVITATE
         )
@@ -10314,12 +10325,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ZERAORA,
         INNATES(
             ABILITY_IRON_FIST,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_TOUGH_CLAWS
+        )
+    },
+    { // 0807
+        SPECIES_ZERAORA_MEGA,
+        INNATES(
+            ABILITY_IRON_FIST,
+            ABILITY_LIMBER,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 0808
         SPECIES_MELTAN,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_MAGNET_PULL
         )
     },
@@ -10327,6 +10348,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MELMETAL,
         INNATES(
             ABILITY_IRON_FIST,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_MAGNET_PULL
         )
     },
@@ -10334,6 +10356,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MELMETAL_GMAX,
         INNATES(
             ABILITY_IRON_FIST,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_MAGNET_PULL
         )
     },
