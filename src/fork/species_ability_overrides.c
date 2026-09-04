@@ -1994,6 +1994,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CRABOMINABLE, 1,
         ABILITY_NO_GUARD
     },
+    { // 0740
+        SPECIES_CRABOMINABLE_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    { // 0740
+        SPECIES_CRABOMINABLE_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    { // 0740
+        SPECIES_CRABOMINABLE_MEGA, 2,
+        ABILITY_NO_GUARD
+    },
     { // 0743
         SPECIES_RIBOMBEE, 0,
         ABILITY_FLUFFY
@@ -2049,6 +2061,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0741
         SPECIES_ORICORIO_PAU, 1,
         ABILITY_SYNCHRONIZE
+    },
+    { // 0741
+        SPECIES_ORICORIO_POM_POM, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0741
+        SPECIES_ORICORIO_SENSU, 1,
+        ABILITY_PERISH_BODY
     },
     { // 0756
         SPECIES_SHIINOTIC, 2,

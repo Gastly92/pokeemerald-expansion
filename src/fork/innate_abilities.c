@@ -9468,6 +9468,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRABRAWLER,
         INNATES(
             ABILITY_ANGER_POINT,
+            ABILITY_BATTLE_ARMOR,
             ABILITY_HYPER_CUTTER,
             ABILITY_IRON_FIST
         )
@@ -9476,43 +9477,56 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRABOMINABLE,
         INNATES(
             ABILITY_ANGER_POINT,
+            ABILITY_BATTLE_ARMOR,
             ABILITY_HYPER_CUTTER,
-            ABILITY_IRON_FIST
+            ABILITY_ICE_BODY,
+            ABILITY_IRON_FIST,
+            ABILITY_THICK_FAT
         )
     },
     { // 0740
         SPECIES_CRABOMINABLE_MEGA,
         INNATES(
-            ABILITY_IRON_FIST
+            ABILITY_ANGER_POINT,
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_HYPER_CUTTER,
+            ABILITY_ICE_BODY,
+            ABILITY_IRON_FIST,
+            ABILITY_THICK_FAT
         )
     },
     { // 0741
         SPECIES_ORICORIO_BAILE,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_DANCER
         )
     },
     { // 0741
         SPECIES_ORICORIO_POM_POM,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_DANCER
         )
     },
     { // 0741
         SPECIES_ORICORIO_PAU,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_DANCER
         )
     },
     { // 0741
         SPECIES_ORICORIO_SENSU,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_DANCER
         )
     },
     { // 0742
         SPECIES_CUTIEFLY,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST,
             ABILITY_SWEET_VEIL
@@ -9521,6 +9535,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0743
         SPECIES_RIBOMBEE,
         INNATES(
+            ABILITY_COMPOUND_EYES,
+            ABILITY_EFFECT_SPORE,
+            ABILITY_SHIELD_DUST,
+            ABILITY_SWEET_VEIL
+        )
+    },
+    { // 0743
+        SPECIES_RIBOMBEE_TOTEM,
+        INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_EFFECT_SPORE,
             ABILITY_SHIELD_DUST,
             ABILITY_SWEET_VEIL
