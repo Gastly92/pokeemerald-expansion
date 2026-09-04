@@ -780,6 +780,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0052
         SPECIES_MEOWTH_GALAR,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_MOXIE,
             ABILITY_PICKUP,
             ABILITY_TOUGH_CLAWS,
@@ -802,6 +803,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANTICIPATION,
             ABILITY_LIMBER,
+            ABILITY_MOXIE,
             ABILITY_PICKPOCKET,
             ABILITY_PICKUP,
             ABILITY_TECHNICIAN,
