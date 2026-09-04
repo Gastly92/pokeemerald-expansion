@@ -1151,6 +1151,24 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_STARAPTOR, 1,
         ABILITY_HUSTLE
     },
+    // Mega Staraptor's upstream ability is CONTRARY, which INVERTS every stat change applied to
+    // the holder -- including the ones its own innates hand it, so an innate Moxie KO read as
+    // Attack -1 instead of +1. Contrary is never-an-innate (double-edged, fork-docs/INNATE_ABILITIES.md),
+    // so it cannot be re-homed on the innate row; the Venusaur pattern applies instead and every real
+    // slot points at the base form's chosen Hustle, carrying Staraptor's observable trait through the
+    // transformation and leaving the line's innates (Intimidate/Keen Eye/Moxie/Reckless) to work.
+    {
+        SPECIES_STARAPTOR_MEGA, 0,
+        ABILITY_HUSTLE
+    },
+    {
+        SPECIES_STARAPTOR_MEGA, 1,
+        ABILITY_HUSTLE
+    },
+    {
+        SPECIES_STARAPTOR_MEGA, 2,
+        ABILITY_HUSTLE
+    },
     { // 0400
         SPECIES_BIBAREL, 2,
         ABILITY_WATER_ABSORB

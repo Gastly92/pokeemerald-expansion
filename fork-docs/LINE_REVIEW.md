@@ -727,7 +727,15 @@ line:
      Latias, Latios, Chimecho, Manectric).
    - Mega's ability is **never-an-innate** → **the Mega keeps it, no rows at all**
      (Gardevoir/Pixilate, Tyranitar/Sand Stream, Salamence/Aerilate,
-     Rayquaza/Delta Stream, Glalie/Refrigerate, and both Primals).
+     Rayquaza/Delta Stream, Glalie/Refrigerate, and both Primals) — **unless it
+     CONTRADICTS the line's innates**, in which case override every real slot to the
+     base's ability as above. Mega Staraptor is the case that found this: upstream
+     gives it `CONTRARY`, which inverts every stat change applied to the holder, so
+     the line's innate `MOXIE` read as Attack −1 on a KO instead of +1. Contrary is
+     double-edged and therefore never-an-innate, so it cannot be re-homed on the
+     innate row the way a Thick Fat can — the only fix is the override half (Mega
+     Staraptor → base Staraptor's `HUSTLE` on slots 0/1/2). Check this whenever the
+     Mega's ability touches stat stages, immunities or ability suppression.
    - Mega's ability already equals the base's override → **nothing to do**
      (Sceptile/Lightning Rod, Pinsir/Aerilate, Camerupt/Sheer Force).
 5. **Pre-evolutions don't need an override row.** An override earns its keep by
@@ -742,6 +750,11 @@ line:
    it, while an override only exists to be selected by a set.
 6. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
    `// <dex>` comment; forms share the base number and follow it.
+
+**Verify:** `make check TESTS="Innate abilities: no species' chosen ability inverts"`
+gates the contradiction case above — it sweeps every species whose observable ability
+inverts stat changes and fails when that species also carries a self-stat-raising
+innate, so a Mega left on an upstream `CONTRARY` no longer ships silently.
 
 **Verify:** `make check TESTS="Frontier extended roster"` — four tests enforce the
 invariants: "every set's ability is legal for its species" and "no set's chosen

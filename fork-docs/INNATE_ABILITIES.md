@@ -689,6 +689,38 @@ and set. A reserved ability may not be on `sImplementedInnates[]` either — the
 checks that too, since an innate is by definition something other species can be
 given.
 
+## Contradicting abilities: the observable slot may not invert its own innates
+
+A third, independent restriction, and the only one that fires on a slot the fork
+never chose. The first two ask what an override row is *allowed to name*; this one
+asks whether the ability a species already carries **fights the innates on its row**.
+`ABILITY_CONTRARY` inverts every stat change applied to its holder, so a species that
+carries it observably turns each of its own self-stat-raising innates inside out —
+an innate Moxie hands the holder Attack **−1** on a KO instead of +1. Nothing is
+missing and nothing is duplicated, so neither of the gates above notices; the innate
+simply fires backwards.
+
+**Mega Staraptor is the case that found it.** Upstream gives the Mega `CONTRARY` on
+all three slots while the Starly line's innate row carries `MOXIE`, so Mega Evolving
+converted the line's signature payoff into a penalty. Contrary is double-edged and
+therefore never-an-innate, so it cannot be re-homed onto the innate row the way
+Mega Venusaur's Thick Fat is — the fix is the override half of the Venusaur pattern
+on its own: every real slot of `SPECIES_STARAPTOR_MEGA` points at base Staraptor's
+chosen `HUSTLE`. See [`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2, point 4, where this
+is the exception to "a never-an-innate Mega ability stays put".
+
+The gate sweeps every species whose post-override slots hold a stat-inverting ability
+and fails when that species also declares a self-stat-raising innate, naming each
+pair. Its two arrays — `sStatInvertingAbilities[]` (Contrary today) and
+`sSelfStatRaisingInnates[]` — live beside it in `test/fork/innate_abilities.c`:
+
+```bash
+make check TESTS="Innate abilities: no species' chosen ability inverts"
+```
+
+Abilities that move a *foe's* stats are deliberately absent from the second array:
+Contrary sits on the holder, so an innate Intimidate is untouched by it.
+
 ## Why "mostly automatic" depends on the ability
 
 Steps 1, 2, 4, 5 are mechanical for every ability; Step 3.5 fires whenever a

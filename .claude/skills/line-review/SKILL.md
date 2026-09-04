@@ -199,6 +199,12 @@ Everything in "Do this" still applies **per line**, at the same depth.
   override ability, so the base's observable trait carries through the
   transformation (the Venusaur pattern: base → Grassy Surge override; Mega →
   Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
+- **Megas whose ability CONTRADICTS the line's innates** get the override half too,
+  even though a never-an-innate Mega ability normally stays put. Mega Staraptor's
+  upstream `CONTRARY` inverted the line's innate `MOXIE` into Attack −1 on a KO;
+  Contrary is double-edged so it cannot be re-homed as an innate, and the fix was to
+  point every Mega slot at the base's `HUSTLE`. Gated by `TEST("Innate abilities: no
+  species' chosen ability inverts its own stat-raising innates")`.
 - **Two set shapes are CI-gated, so check them in Part A.** A
   `TARGET_FOES_AND_ALLY` move (Earthquake, **Surf**, Sludge Wave, Discharge, Lava
   Plume, Boomburst …) on a `FORMAT_DOUBLES`/`FORMAT_BOTH` set damages the holder's
