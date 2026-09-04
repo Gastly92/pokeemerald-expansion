@@ -10779,6 +10779,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARROKUDA,
         INNATES(
             ABILITY_PROPELLER_TAIL,
+            ABILITY_STRONG_JAW,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -10786,18 +10787,21 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BARRASKEWDA,
         INNATES(
             ABILITY_PROPELLER_TAIL,
+            ABILITY_STRONG_JAW,
             ABILITY_SWIFT_SWIM
         )
     },
     { // 0848
         SPECIES_TOXEL,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_RATTLED
         )
     },
     { // 0849
         SPECIES_TOXTRICITY,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_PUNK_ROCK,
             ABILITY_RATTLED,
             ABILITY_TECHNICIAN
@@ -10806,6 +10810,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0849
         SPECIES_TOXTRICITY_AMPED_GMAX,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_PUNK_ROCK,
             ABILITY_RATTLED,
             ABILITY_TECHNICIAN
@@ -10814,6 +10819,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0849
         SPECIES_TOXTRICITY_LOW_KEY,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_PUNK_ROCK,
             ABILITY_RATTLED,
             ABILITY_TECHNICIAN
@@ -10822,6 +10828,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0849
         SPECIES_TOXTRICITY_LOW_KEY_GMAX,
         INNATES(
+            ABILITY_LIQUID_OOZE,
             ABILITY_PUNK_ROCK,
             ABILITY_RATTLED,
             ABILITY_TECHNICIAN
@@ -10830,6 +10837,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0850
         SPECIES_SIZZLIPEDE,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_SWARM,
             ABILITY_WHITE_SMOKE
         )
@@ -10837,6 +10845,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0851
         SPECIES_CENTISKORCH,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_SWARM,
             ABILITY_WHITE_SMOKE
         )
@@ -10844,6 +10853,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0851
         SPECIES_CENTISKORCH_GMAX,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_SWARM,
             ABILITY_WHITE_SMOKE
         )

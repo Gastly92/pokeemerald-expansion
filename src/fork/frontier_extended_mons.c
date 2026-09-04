@@ -27270,6 +27270,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ELECTRIC,
     },
+    {
+        .species = SPECIES_TOXTRICITY_LOW_KEY,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_THROAT_SPRAY,
+        .moves =
+        {
+            MOVE_OVERDRIVE,
+            MOVE_SNARL,
+            MOVE_SLUDGE_BOMB,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
 
     // 0851
     {
@@ -27279,7 +27299,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FIERY_DANCE,
-            MOVE_OVERHEAT,
+            MOVE_BUG_BUZZ,
             MOVE_GIGA_DRAIN,
             MOVE_KNOCK_OFF
         },

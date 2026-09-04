@@ -2215,7 +2215,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0849
-        SPECIES_TOXTRICITY, 1,
+        SPECIES_TOXTRICITY, 0,
         ABILITY_VOLT_ABSORB
     },
     { // 0849
