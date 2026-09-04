@@ -26947,9 +26947,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_RAPID_SPIN,
             MOVE_FLAMETHROWER,
-            MOVE_STONE_EDGE
+            MOVE_BODY_PRESS
         },
-        .ability = ABILITY_FLASH_FIRE,
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26965,9 +26965,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FLAMETHROWER,
-            MOVE_STONE_EDGE,
+            MOVE_POWER_GEM,
             MOVE_EARTH_POWER,
-            MOVE_HEAT_CRASH
+            MOVE_BODY_PRESS
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
@@ -27155,7 +27155,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_TAILWIND,
             MOVE_HURRICANE,
-            MOVE_ICE_BEAM,
+            MOVE_DIVE,
             MOVE_PROTECT
         },
         .ability = ABILITY_GULP_MISSILE,

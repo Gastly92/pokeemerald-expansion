@@ -10725,6 +10725,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0843
         SPECIES_SILICOBRA,
         INNATES(
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL,
             ABILITY_SHED_SKIN
         )
@@ -10732,6 +10733,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0844
         SPECIES_SANDACONDA,
         INNATES(
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL,
             ABILITY_SHED_SKIN
         )
@@ -10739,6 +10741,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0844
         SPECIES_SANDACONDA_GMAX,
         INNATES(
+            ABILITY_SAND_FORCE,
             ABILITY_SAND_VEIL,
             ABILITY_SHED_SKIN
         )
@@ -10746,6 +10749,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0845
         SPECIES_CRAMORANT,
         INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_KEEN_EYE,
+            ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0845
+        SPECIES_CRAMORANT_GULPING,
+        INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_KEEN_EYE,
+            ABILITY_OBLIVIOUS
+        )
+    },
+    { // 0845
+        SPECIES_CRAMORANT_GORGING,
+        INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_KEEN_EYE,
             ABILITY_OBLIVIOUS
         )
