@@ -25074,11 +25074,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MIMIKYU,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_SWORDS_DANCE,
             MOVE_PLAY_ROUGH,
+            MOVE_SHADOW_CLAW,
             MOVE_SHADOW_SNEAK,
             MOVE_DRAIN_PUNCH
         },
@@ -25220,14 +25220,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DHELMISE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ASSAULT_VEST,
+        .heldItem = ITEM_ROCKY_HELMET,
         .iv = IVS(SPE, 0),
         .moves =
         {
             MOVE_ANCHOR_SHOT,
             MOVE_POWER_WHIP,
             MOVE_POLTERGEIST,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_PROTECT
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPE_DOWN),

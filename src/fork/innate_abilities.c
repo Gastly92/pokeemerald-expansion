@@ -10009,19 +10009,36 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0778
         SPECIES_MIMIKYU_DISGUISED,
         INNATES(
-            ABILITY_CURSED_BODY
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR
         )
     },
     { // 0778
         SPECIES_MIMIKYU_BUSTED,
         INNATES(
-            ABILITY_CURSED_BODY
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR
+        )
+    },
+    { // 0778
+        SPECIES_MIMIKYU_TOTEM_DISGUISED,
+        INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR
+        )
+    },
+    { // 0778
+        SPECIES_MIMIKYU_BUSTED_TOTEM,
+        INNATES(
+            ABILITY_CURSED_BODY,
+            ABILITY_INFILTRATOR
         )
     },
     { // 0779
         SPECIES_BRUXISH,
         INNATES(
             ABILITY_DAZZLING,
+            ABILITY_MOLD_BREAKER,
             ABILITY_STRONG_JAW,
             ABILITY_WONDER_SKIN
         )
@@ -10029,13 +10046,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0780
         SPECIES_DRAMPA,
         INNATES(
-            ABILITY_BERSERK
+            ABILITY_BERSERK,
+            ABILITY_FRIEND_GUARD
+        )
+    },
+    { // 0780
+        SPECIES_DRAMPA_MEGA,
+        INNATES(
+            ABILITY_BERSERK,
+            ABILITY_FRIEND_GUARD
         )
     },
     { // 0781
         SPECIES_DHELMISE,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_REGENERATOR,
             ABILITY_STEELWORKER
         )
     },
@@ -10043,21 +10069,35 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_JANGMO_O,
         INNATES(
             ABILITY_OVERCOAT,
-            ABILITY_PUNK_ROCK
+            ABILITY_PUNK_ROCK,
+            ABILITY_STAMINA
         )
     },
     { // 0783
         SPECIES_HAKAMO_O,
         INNATES(
             ABILITY_OVERCOAT,
-            ABILITY_PUNK_ROCK
+            ABILITY_PUNK_ROCK,
+            ABILITY_SHED_SKIN,
+            ABILITY_STAMINA
         )
     },
     { // 0784
         SPECIES_KOMMO_O,
         INNATES(
             ABILITY_OVERCOAT,
-            ABILITY_PUNK_ROCK
+            ABILITY_PUNK_ROCK,
+            ABILITY_SHED_SKIN,
+            ABILITY_STAMINA
+        )
+    },
+    { // 0784
+        SPECIES_KOMMO_O_TOTEM,
+        INNATES(
+            ABILITY_OVERCOAT,
+            ABILITY_PUNK_ROCK,
+            ABILITY_SHED_SKIN,
+            ABILITY_STAMINA
         )
     },
     { // 0785

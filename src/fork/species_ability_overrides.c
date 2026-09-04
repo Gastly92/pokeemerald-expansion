@@ -2078,6 +2078,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BRUXISH, 1,
         ABILITY_SHEER_FORCE
     },
+    { // 0780
+        SPECIES_DRAMPA_MEGA, 0,
+        ABILITY_SAP_SIPPER
+    },
+    { // 0780
+        SPECIES_DRAMPA_MEGA, 1,
+        ABILITY_SAP_SIPPER
+    },
+    { // 0780
+        SPECIES_DRAMPA_MEGA, 2,
+        ABILITY_SAP_SIPPER
+    },
     { // 0781
         SPECIES_DHELMISE, 1,
         ABILITY_WATER_ABSORB
