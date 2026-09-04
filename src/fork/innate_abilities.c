@@ -9469,7 +9469,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRABRAWLER,
         INNATES(
             ABILITY_ANGER_POINT,
-            ABILITY_BATTLE_ARMOR,
             ABILITY_HYPER_CUTTER,
             ABILITY_IRON_FIST
         )
@@ -9478,7 +9477,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRABOMINABLE,
         INNATES(
             ABILITY_ANGER_POINT,
-            ABILITY_BATTLE_ARMOR,
             ABILITY_HYPER_CUTTER,
             ABILITY_ICE_BODY,
             ABILITY_IRON_FIST,
@@ -9489,7 +9487,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CRABOMINABLE_MEGA,
         INNATES(
             ABILITY_ANGER_POINT,
-            ABILITY_BATTLE_ARMOR,
             ABILITY_HYPER_CUTTER,
             ABILITY_ICE_BODY,
             ABILITY_IRON_FIST,
