@@ -29104,10 +29104,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
+            MOVE_SWORDS_DANCE,
             MOVE_STONE_AXE,
             MOVE_X_SCISSOR,
-            MOVE_CLOSE_COMBAT,
-            MOVE_DEFOG
+            MOVE_CLOSE_COMBAT
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
