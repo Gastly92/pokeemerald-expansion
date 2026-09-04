@@ -2262,6 +2262,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_FALINKS, 1,
         ABILITY_NO_GUARD
     },
+    { // 0870
+        SPECIES_FALINKS_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    { // 0870
+        SPECIES_FALINKS_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    { // 0870
+        SPECIES_FALINKS_MEGA, 2,
+        ABILITY_NO_GUARD
+    },
     { // 0873
         SPECIES_FROSMOTH, 1,
         ABILITY_SNOW_WARNING

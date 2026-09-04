@@ -10919,7 +10919,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FRISK,
             ABILITY_PICKPOCKET,
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_TANGLING_HAIR
         )
     },
     { // 0861
@@ -10927,7 +10928,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FRISK,
             ABILITY_PICKPOCKET,
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_TANGLING_HAIR
         )
     },
     { // 0861
@@ -10935,7 +10937,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FRISK,
             ABILITY_PICKPOCKET,
-            ABILITY_PRANKSTER
+            ABILITY_PRANKSTER,
+            ABILITY_TANGLING_HAIR
         )
     },
     { // 0862
@@ -10993,41 +10996,47 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MILCERY,
         INNATES(
             ABILITY_AROMA_VEIL,
-            ABILITY_SWEET_VEIL
+            ABILITY_SWEET_VEIL,
+            ABILITY_THICK_FAT
         )
     },
     { // 0869
         SPECIES_ALCREMIE_STRAWBERRY_VANILLA_CREAM,
         INNATES(
             ABILITY_AROMA_VEIL,
-            ABILITY_SWEET_VEIL
+            ABILITY_SWEET_VEIL,
+            ABILITY_THICK_FAT
         )
     },
     { // 0869
         SPECIES_ALCREMIE_GMAX,
         INNATES(
             ABILITY_AROMA_VEIL,
-            ABILITY_SWEET_VEIL
+            ABILITY_SWEET_VEIL,
+            ABILITY_THICK_FAT
         )
     },
     { // 0870
         SPECIES_FALINKS,
         INNATES(
             ABILITY_BATTLE_ARMOR,
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_INNER_FOCUS
         )
     },
     { // 0870
         SPECIES_FALINKS_MEGA,
         INNATES(
             ABILITY_BATTLE_ARMOR,
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_INNER_FOCUS
         )
     },
     { // 0871
         SPECIES_PINCURCHIN,
         INNATES(
-            ABILITY_ROUGH_SKIN
+            ABILITY_ROUGH_SKIN,
+            ABILITY_SUCTION_CUPS
         )
     },
     { // 0872
