@@ -3204,6 +3204,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0216
         SPECIES_TEDDIURSA,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_PICKUP,
             ABILITY_QUICK_FEET,
             ABILITY_THICK_FAT
@@ -3212,6 +3213,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0217
         SPECIES_URSARING,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_GUTS,
             ABILITY_PICKUP,
             ABILITY_QUICK_FEET,
@@ -11269,7 +11271,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0901
         SPECIES_URSALUNA,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_GUTS,
+            ABILITY_PICKUP,
             ABILITY_THICK_FAT,
             ABILITY_UNNERVE
         )
@@ -11277,7 +11281,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0901
         SPECIES_URSALUNA_BLOODMOON,
         INNATES(
+            ABILITY_GLUTTONY,
+            ABILITY_GUTS,
             ABILITY_MINDS_EYE,
+            ABILITY_PICKUP,
             ABILITY_THICK_FAT,
             ABILITY_UNNERVE
         )

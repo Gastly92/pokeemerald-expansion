@@ -29144,7 +29144,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_URSALUNA,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_FIGY_BERRY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
