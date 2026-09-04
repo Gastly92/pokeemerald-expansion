@@ -9726,13 +9726,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0759
         SPECIES_STUFFUL,
         INNATES(
-            ABILITY_CUTE_CHARM
+            ABILITY_ANGER_POINT,
+            ABILITY_CUTE_CHARM,
+            ABILITY_THICK_FAT
         )
     },
     { // 0760
         SPECIES_BEWEAR,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_CUTE_CHARM,
+            ABILITY_THICK_FAT,
             ABILITY_UNNERVE
         )
     },
@@ -9747,6 +9751,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0762
         SPECIES_STEENEE,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_LEAF_GUARD,
             ABILITY_OBLIVIOUS,
             ABILITY_SWEET_VEIL
@@ -9755,7 +9760,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0763
         SPECIES_TSAREENA,
         INNATES(
+            ABILITY_BATTLE_ARMOR,
             ABILITY_LEAF_GUARD,
+            ABILITY_MOXIE,
             ABILITY_OBLIVIOUS,
             ABILITY_QUEENLY_MAJESTY,
             ABILITY_SWEET_VEIL
@@ -9765,6 +9772,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_COMFEY,
         INNATES(
             ABILITY_FLOWER_VEIL,
+            ABILITY_HEALER,
             ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE,
             ABILITY_TRIAGE
@@ -9773,6 +9781,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0765
         SPECIES_ORANGURU,
         INNATES(
+            ABILITY_ANALYTIC,
+            ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
             ABILITY_TELEPATHY
         )
@@ -9780,19 +9790,32 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0766
         SPECIES_PASSIMIAN,
         INNATES(
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_FRIEND_GUARD,
+            ABILITY_TECHNICIAN
         )
     },
     { // 0767
         SPECIES_WIMPOD,
         INNATES(
-            ABILITY_BATTLE_ARMOR
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_RATTLED
         )
     },
     { // 0768
         SPECIES_GOLISOPOD,
         INNATES(
             ABILITY_BATTLE_ARMOR,
+            ABILITY_SHARPNESS,
+            ABILITY_TOUGH_CLAWS
+        )
+    },
+    { // 0768
+        SPECIES_GOLISOPOD_MEGA,
+        INNATES(
+            ABILITY_BATTLE_ARMOR,
+            ABILITY_HEAVY_METAL,
+            ABILITY_SHARPNESS,
             ABILITY_TOUGH_CLAWS
         )
     },

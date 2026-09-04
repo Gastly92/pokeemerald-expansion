@@ -24399,8 +24399,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .atk = 4,
-            .spd = 252
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
     },
@@ -24445,6 +24445,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_TSAREENA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_GRASSY_SEED,
+        .moves =
+        {
+            MOVE_POWER_WHIP,
+            MOVE_TRIPLE_AXEL,
+            MOVE_PLAY_ROUGH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_GRASS,
     },
 
     // 0764
@@ -24509,6 +24529,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spd = 252
         ),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
     {
@@ -24520,7 +24541,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC,
             MOVE_FOCUS_BLAST,
             MOVE_THUNDERBOLT,
-            MOVE_NASTY_PLOT
+            MOVE_SHADOW_BALL
         },
         .ability = ABILITY_SYMBIOSIS,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -24573,6 +24594,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIGHTING,
     },
+    {
+        .species = SPECIES_PASSIMIAN,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_CLOSE_COMBAT,
+            MOVE_ROCK_SLIDE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_RECEIVER,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIGHTING,
+    },
 
     // 0768
     {
@@ -24589,9 +24630,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_EMERGENCY_EXIT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_WATER,
     },
@@ -24611,6 +24652,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 252,
             .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_GOLISOPOD,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_FIRST_IMPRESSION,
+            MOVE_AQUA_CUTTER,
+            MOVE_CLOSE_COMBAT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_EMERGENCY_EXIT,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
             .spd = 4
         ),
         .teraType = TYPE_WATER,
