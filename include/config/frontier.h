@@ -60,23 +60,47 @@
 // for now (the IV ramp for other facilities lives elsewhere).
 #define B_FRONTIER_MAX_IVS  TRUE
 
-// If TRUE, every Battle Factory opponent — and the Frontier Brain — always uses
-// the strongest AI preset (B_FRONTIER_HARD_AI_FLAGS below) instead of the
-// vanilla per-challenge scaling, where the first rounds run with little or no
-// AI. Gated in GetAiScriptsInBattleFactory; the Battle Tent (FRONTIER_LVL_TENT)
-// keeps its no-AI behavior. Factory-only for now.
+// If TRUE, Frontier opponents run the fork's two-tier AI presets instead of the
+// vanilla per-challenge scaling (where the first rounds run with little or no
+// AI) and instead of upstream's flat basic preset for the non-Factory
+// facilities. Boss opponents — the Frontier Brain and the Battle Tower's
+// gym-leader bosses — get the strongest preset (B_FRONTIER_HARD_AI_FLAGS);
+// every regular opponent gets one tier below it (B_FRONTIER_REGULAR_AI_FLAGS).
+// The tier choice lives in src/fork/frontier_ai.c, reached from
+// GetAiScriptsInBattleFactory (Factory) and GetAiFlags (every other facility).
+// The Battle Tent (FRONTIER_LVL_TENT) is untouched and keeps its vanilla AI.
 #define B_FRONTIER_HARD_AI  TRUE
 
-// The AI flag set used when B_FRONTIER_HARD_AI is TRUE. Defaults to the
-// expansion's strongest *standard* preset: basic AI + OMNISCIENT (knows the
-// player's moves/abilities/items) + smart switching/mon choices + PP-stall
-// prevention + smart Tera + smart Z-Move (spends the one-per-battle Z-Move only when
-// it secures a KO, instead of burning it turn one). Tweak here to taste — e.g. add AI_FLAG_PREDICTION
-// for a meaner AI, or drop AI_FLAG_OMNISCIENT so it can't see the player's team.
-// Only expanded at the use site (battle_factory.c, which includes
-// constants/battle_ai.h and battle_ai_species_overrides.h), so no extra include
-// is needed here.
+// The BOSS tier used when B_FRONTIER_HARD_AI is TRUE: the Frontier Brain and the
+// Battle Tower's gym-leader bosses. The expansion's strongest *standard* preset:
+// basic AI + OMNISCIENT (knows the player's moves/abilities/items) + smart
+// switching/mon choices + PP-stall prevention + smart Tera + the fork's
+// species-aware overrides + smart Z-Move (spends the one-per-battle Z-Move only
+// when it secures a KO, instead of burning it turn one). Tweak here to taste —
+// e.g. add AI_FLAG_PREDICTION for a meaner AI. Only expanded at the use site
+// (src/fork/frontier_ai.c, which includes constants/battle_ai.h and the two fork
+// AI headers), so no extra include is needed here.
 #define B_FRONTIER_HARD_AI_FLAGS    (AI_FLAG_SMART_TRAINER | AI_FLAG_SMART_SPECIES_LOGIC | AI_FLAG_SMART_Z_MOVE)
+
+// The REGULAR tier used when B_FRONTIER_HARD_AI is TRUE: every non-boss Frontier
+// opponent. Deliberately one notch below B_FRONTIER_HARD_AI_FLAGS — never
+// stronger in any respect — so a boss battle is always the harder fight. What it
+// gives up:
+//   - AI_FLAG_OMNISCIENT, the single biggest lever. Instead of reading the
+//     player's whole team, it gets AI_FLAG_ASSUMPTIONS — upstream's restricted
+//     knowledge set (STAB moves, a chance at certain status moves, ability
+//     prediction weighted by aiRating), so it can still be scouted and baited.
+//     These are the only bits the regular tier holds that the boss tier doesn't,
+//     and they only ever *fill in* unknown player data (RecordMovesBasedOnStab /
+//     RecordStatusMoves), which omniscience already knows outright.
+//   - AI_FLAG_PP_STALL_PREVENTION, so immunity-stalling it is viable again.
+//   - AI_FLAG_SMART_SPECIES_LOGIC, the fork's per-species misplay patches.
+// It keeps the play-competence flags (smart switching/mon choices, randomized
+// switch-ins, smart Tera, smart Z-Move) so regular opponents still play their
+// teams sensibly and don't throw their one gimmick away on turn one.
+#define B_FRONTIER_REGULAR_AI_FLAGS (AI_FLAG_BASIC_TRAINER | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES \
+                                     | AI_FLAG_RANDOMIZE_SWITCHIN | AI_FLAG_SMART_TERA | AI_FLAG_SMART_Z_MOVE \
+                                     | AI_FLAG_ASSUMPTIONS)
 
 // If TRUE, the post-battle Battle Factory rental-swap screen lets the player
 // open a Pokémon summary for the *opponent's* mons too, not just their own.

@@ -9,6 +9,7 @@
 #include "fork/battle_ai_gimmick.h" // FORK: AI picks among its gimmick candidates
 #include "fork/battle_ai_species_overrides.h" // FORK: species-aware AI overrides
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
+#include "fork/frontier_ai.h" // FORK: boss/regular AI tier split for the facilities
 #include "battle_ai_main.h"
 #include "battle_ai_record.h"
 #include "battle_stat_change.h"
@@ -278,6 +279,16 @@ static u64 GetAiFlags(u16 trainerId, enum BattlerId battler)
             flags = AI_FLAG_FIRST_BATTLE;
         else if (gBattleTypeFlags & BATTLE_TYPE_FACTORY)
             flags = GetAiScriptsInBattleFactory();
+        // FORK: the non-Factory facilities (Tower, Dome, Palace, Arena, Pyramid,
+        // Pike) get the fork's role-based AI tiers instead of upstream's flat
+        // basic preset below — the boss tier for the Frontier Brain and the
+        // Tower's gym-leader bosses, the regular tier for everyone else. Kept as
+        // an added branch so upstream's own line stays byte-identical; the Battle
+        // Tent (FRONTIER_LVL_TENT) deliberately falls through to it, as do the
+        // e-Reader / Trainer Hill / Secret Base battles.
+        else if (B_FRONTIER_HARD_AI && (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+              && gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_TENT)
+            flags = GetFrontierAiFlags(trainerId);
         else if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL | BATTLE_TYPE_SECRET_BASE))
             flags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT;
         else
