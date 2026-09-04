@@ -10435,6 +10435,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SOBBLE,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_RATTLED,
             ABILITY_SNIPER,
             ABILITY_TORRENT
         )
