@@ -13,8 +13,7 @@
 #include "fork/species_tiers.h"
 #include "fork/frontier_draft.h" // FORK: shared competitive-draft rules
 #include "constants/battle_ai.h"
-#include "fork/battle_ai_species_overrides.h" // FORK: AI_FLAG_SMART_SPECIES_LOGIC for B_FRONTIER_HARD_AI_FLAGS
-#include "fork/battle_ai_zmove.h" // FORK: AI_FLAG_SMART_Z_MOVE for B_FRONTIER_HARD_AI_FLAGS
+#include "fork/frontier_ai.h" // FORK: boss/regular AI tier split for the facilities
 #include "constants/hold_effects.h"
 #include "constants/battle_factory.h"
 #include "constants/battle_frontier.h"
@@ -1016,11 +1015,13 @@ u64 GetAiScriptsInBattleFactory(void)
     else
     {
 #if B_FRONTIER_HARD_AI
-        // FORK: every Factory opponent (and the Frontier Brain) always uses the
-        // strongest AI preset instead of the vanilla per-challenge scaling. Tune
-        // the exact flags via B_FRONTIER_HARD_AI_FLAGS in config/frontier.h. The
-        // vanilla scaling is preserved in the #else for clean upstream syncs.
-        return B_FRONTIER_HARD_AI_FLAGS;
+        // FORK: the AI preset is picked by opponent role instead of the vanilla
+        // per-challenge scaling — the Frontier Brain gets the boss tier
+        // (B_FRONTIER_HARD_AI_FLAGS), regular opponents the tier below it
+        // (B_FRONTIER_REGULAR_AI_FLAGS). Tune the flag sets in config/frontier.h,
+        // the role split in src/fork/frontier_ai.c. The vanilla scaling is
+        // preserved in the #else for clean upstream syncs.
+        return GetFrontierAiFlags(TRAINER_BATTLE_PARAM.opponentA);
 #else
         int battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
         int challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
