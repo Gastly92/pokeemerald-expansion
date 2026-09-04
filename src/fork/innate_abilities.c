@@ -1682,6 +1682,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0122
         SPECIES_MR_MIME,
         INNATES(
+            ABILITY_DANCER,
             ABILITY_FILTER,
             ABILITY_MAGIC_BOUNCE,
             ABILITY_TECHNICIAN
@@ -5509,6 +5510,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0439
         SPECIES_MIME_JR,
         INNATES(
+            ABILITY_DANCER,
             ABILITY_FILTER,
             ABILITY_MAGIC_BOUNCE,
             ABILITY_TECHNICIAN
