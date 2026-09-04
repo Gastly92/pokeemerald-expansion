@@ -25666,7 +25666,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK
         },
         .ability = ABILITY_TOXIC_DEBRIS,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
             .spd = 252,
@@ -25763,7 +25763,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_XURKITREE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIC_GEM,
+        .heldItem = ITEM_MAGNET,
         .moves =
         {
             MOVE_TAIL_GLOW,
@@ -25949,6 +25949,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
     {
+        .species = SPECIES_NECROZMA_DUSK_MANE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_SUNSTEEL_STRIKE,
+            MOVE_PHOTON_GEYSER,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
         .species = SPECIES_NECROZMA_DAWN_WINGS,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -25964,6 +25984,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .spa = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_NECROZMA_DAWN_WINGS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_MOONGEIST_BEAM,
+            MOVE_PHOTON_GEYSER,
+            MOVE_DARK_PULSE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_GHOST,

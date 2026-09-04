@@ -2114,6 +2114,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_NECROZMA_DAWN_WINGS, 1,
         ABILITY_PSYCHIC_SURGE
     },
+    { // 0800
+        SPECIES_NECROZMA_ULTRA, 1,
+        ABILITY_PSYCHIC_SURGE
+    },
     { // 0802
         SPECIES_MARSHADOW, 1,
         ABILITY_TRACE

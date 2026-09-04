@@ -10170,19 +10170,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NIHILEGO,
         INNATES(
             ABILITY_BEAST_BOOST,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_LIQUID_OOZE,
+            ABILITY_OBLIVIOUS
         )
     },
     { // 0794
         SPECIES_BUZZWOLE,
         INNATES(
-            ABILITY_BEAST_BOOST
+            ABILITY_BEAST_BOOST,
+            ABILITY_INTIMIDATE
         )
     },
     { // 0795
         SPECIES_PHEROMOSA,
         INNATES(
-            ABILITY_BEAST_BOOST
+            ABILITY_BEAST_BOOST,
+            ABILITY_LONG_REACH
         )
     },
     { // 0796
@@ -10195,20 +10199,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0797
         SPECIES_CELESTEELA,
         INNATES(
-            ABILITY_BEAST_BOOST
+            ABILITY_BEAST_BOOST,
+            ABILITY_HEAVY_METAL
         )
     },
     { // 0798
         SPECIES_KARTANA,
         INNATES(
             ABILITY_BEAST_BOOST,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_SHARPNESS
         )
     },
     { // 0799
         SPECIES_GUZZLORD,
         INNATES(
-            ABILITY_BEAST_BOOST
+            ABILITY_BEAST_BOOST,
+            ABILITY_GLUTTONY
         )
     },
     { // 0800
@@ -10221,6 +10228,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0800
         SPECIES_NECROZMA_DUSK_MANE,
         INNATES(
+            ABILITY_FULL_METAL_BODY,
             ABILITY_LEVITATE,
             ABILITY_PRISM_ARMOR
         )
@@ -10229,14 +10237,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NECROZMA_DAWN_WINGS,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_PRISM_ARMOR
+            ABILITY_PRISM_ARMOR,
+            ABILITY_SHADOW_SHIELD
         )
     },
     { // 0800
         SPECIES_NECROZMA_ULTRA,
         INNATES(
             ABILITY_LEVITATE,
-            ABILITY_NEUROFORCE
+            ABILITY_NEUROFORCE,
+            ABILITY_PRISM_ARMOR
         )
     },
     { // 0801
