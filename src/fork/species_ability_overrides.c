@@ -2312,7 +2312,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0890
         SPECIES_ETERNATUS, 1,
-        ABILITY_POISON_TOUCH
+        ABILITY_EARTH_EATER
     },
     { // 0892
         SPECIES_URSHIFU, 1,

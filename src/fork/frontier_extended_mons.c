@@ -28537,7 +28537,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DARTS,
             MOVE_PHANTOM_FORCE,
             MOVE_U_TURN,
-            MOVE_SUCKER_PUNCH
+            MOVE_FIRE_FANG
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -28610,6 +28610,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
+    {
+        .species = SPECIES_ZACIAN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LUM_BERRY,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_SACRED_SWORD,
+            MOVE_PLAY_ROUGH,
+            MOVE_PSYCHIC_FANGS
+        },
+        .ability = ABILITY_SWORD_OF_RUIN,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
 
     // 0889
     {
@@ -28640,7 +28660,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_IRON_DEFENSE,
             MOVE_BODY_PRESS,
-            MOVE_CLOSE_COMBAT,
+            MOVE_PSYCHIC_FANGS,
             MOVE_CRUNCH
         },
         .ability = ABILITY_TABLETS_OF_RUIN,
@@ -28665,7 +28685,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_DRACO_METEOR
         },
-        .ability = ABILITY_POISON_TOUCH,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -28685,7 +28705,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_RECOVER
         },
-        .ability = ABILITY_POISON_TOUCH,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

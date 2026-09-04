@@ -11208,25 +11208,29 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0888
         SPECIES_ZACIAN,
         INNATES(
-            ABILITY_INTREPID_SWORD
+            ABILITY_INTREPID_SWORD,
+            ABILITY_SHARPNESS
         )
     },
     { // 0888
         SPECIES_ZACIAN_CROWNED,
         INNATES(
-            ABILITY_INTREPID_SWORD
+            ABILITY_INTREPID_SWORD,
+            ABILITY_SHARPNESS
         )
     },
     { // 0889
         SPECIES_ZAMAZENTA,
         INNATES(
-            ABILITY_DAUNTLESS_SHIELD
+            ABILITY_DAUNTLESS_SHIELD,
+            ABILITY_FILTER
         )
     },
     { // 0889
         SPECIES_ZAMAZENTA_CROWNED,
         INNATES(
-            ABILITY_DAUNTLESS_SHIELD
+            ABILITY_DAUNTLESS_SHIELD,
+            ABILITY_FILTER
         )
     },
     { // 0890
