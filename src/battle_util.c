@@ -4714,6 +4714,16 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 else if (TryChangeBattleWeather(battler, BATTLE_WEATHER_SANDSTORM, ABILITY_NONE)) // use ability none since it's not a switch in ability weather setter
                 {
                     gBattleScripting.battler = battler;
+                    // FORK: Sand Spit is the only ability that reaches BattleScript_WeatherAbilityActivates
+                    // through TryChangeBattleWeather's ABILITY_NONE path, and that path is the one branch
+                    // that does not set animArg1 — so the script's `playanimation_var BS_BATTLER_0,
+                    // sB_ANIM_ARG1` played whatever animation id was last left in that byte (0 /
+                    // B_ANIM_STATS_CHANGE on the first activation of a battle, the previous weather's
+                    // animation later, and a binding move's id truncated to 8 bits after a Wrap tick —
+                    // which indexes past the 64-entry sBattleAnims_General[] and hangs the battle on a
+                    // garbage script pointer). Pin the sandstorm animation here so it is deterministic.
+                    // On conflict, keep this line rather than dropping it.
+                    gBattleScripting.animArg1 = B_ANIM_SANDSTORM_CONTINUES;
                     BattleScriptCall(BattleScript_WeatherAbilityActivates);
                     effect++;
                 }

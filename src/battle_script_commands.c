@@ -4886,6 +4886,19 @@ static void Cmd_endselectionscript(void)
 
 static void PlayAnimation(enum BattlerId battler, u8 animId, const u16 *argPtr, const u8 *nextInstr)
 {
+    // FORK: general-animation ids reach here as script literals but also, via playanimation_var,
+    // as the raw byte gBattleScripting.animArg1 — which other effects use as plain data (e.g.
+    // HandleEndTurnWrap stores the wrapped move's low byte there). LaunchBattleAnimation indexes
+    // sBattleAnims_General[] with no bounds check, so an id past the table runs a garbage script:
+    // the animation never ends, the controller never clears, and the battle hangs forever. Skip an
+    // out-of-range id instead, exactly like the semi-invulnerable case below. On conflict, keep
+    // this guard.
+    if (animId >= NUM_B_ANIMS_GENERAL)
+    {
+        gBattlescriptCurrInstr = nextInstr;
+        return;
+    }
+
     if (B_TERRAIN_BG_CHANGE == FALSE && animId == B_ANIM_RESTORE_BG)
     {
         // workaround for .if not working
