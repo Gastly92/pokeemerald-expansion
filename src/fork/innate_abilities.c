@@ -9321,27 +9321,32 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LITTEN,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_IRON_FIST
         )
     },
     { // 0726
         SPECIES_TORRACAT,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_IRON_FIST
         )
     },
     { // 0727
         SPECIES_INCINEROAR,
         INNATES(
             ABILITY_BLAZE,
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_IRON_FIST
         )
     },
     { // 0728
         SPECIES_POPPLIO,
         INNATES(
             ABILITY_DANCER,
+            ABILITY_FRIEND_GUARD,
+            ABILITY_HEALER,
             ABILITY_PUNK_ROCK,
             ABILITY_TORRENT
         )
@@ -9350,6 +9355,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BRIONNE,
         INNATES(
             ABILITY_DANCER,
+            ABILITY_FRIEND_GUARD,
+            ABILITY_HEALER,
             ABILITY_PUNK_ROCK,
             ABILITY_TORRENT
         )
@@ -9358,6 +9365,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PRIMARINA,
         INNATES(
             ABILITY_DANCER,
+            ABILITY_FRIEND_GUARD,
+            ABILITY_HEALER,
             ABILITY_PUNK_ROCK,
             ABILITY_TORRENT
         )

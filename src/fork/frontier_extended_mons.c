@@ -23423,9 +23423,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_FIRE,
     },
@@ -23448,6 +23448,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_INCINEROAR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LUM_BERRY,
+        .moves =
+        {
+            MOVE_BULK_UP,
+            MOVE_DRAIN_PUNCH,
+            MOVE_FIRE_PUNCH,
+            MOVE_THROAT_CHOP
+        },
+        .ability = ABILITY_FLAME_BODY,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIRE,
     },
 
     // 0730
@@ -23493,23 +23513,23 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_PRIMARINA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
             MOVE_HYPER_VOICE,
             MOVE_MOONBLAST,
-            MOVE_ENERGY_BALL,
-            MOVE_PSYCHIC
+            MOVE_ICY_WIND,
+            MOVE_PROTECT
         },
         .ability = ABILITY_LIQUID_VOICE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
-        .teraType = TYPE_FAIRY,
+        .teraType = TYPE_WATER,
     },
 
     // 0733
