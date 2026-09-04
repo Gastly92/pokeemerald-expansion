@@ -25305,18 +25305,18 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_KOKO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ELECTRIC_GEM,
+        .heldItem = ITEM_ELECTRIC_SEED,
         .moves =
         {
-            MOVE_THUNDERBOLT,
-            MOVE_DAZZLING_GLEAM,
-            MOVE_VOLT_SWITCH,
+            MOVE_WILD_CHARGE,
+            MOVE_BRAVE_BIRD,
+            MOVE_U_TURN,
             MOVE_NATURES_MADNESS
         },
         .ability = ABILITY_ELECTRIC_SURGE,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
-            .spa = 252,
+            .atk = 252,
             .spd = 4,
             .spe = 252
         ),
@@ -25406,14 +25406,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_TAPU_LELE,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PSYCHIC_GEM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_PSYCHIC,
-            MOVE_MOONBLAST,
+            MOVE_EXPANDING_FORCE,
+            MOVE_DAZZLING_GLEAM,
             MOVE_PSYSHOCK,
-            MOVE_THUNDERBOLT
+            MOVE_PROTECT
         },
         .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -25466,6 +25466,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_TAPU_BULU,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_GRASSY_GLIDE,
+            MOVE_HORN_LEECH,
+            MOVE_PLAY_ROUGH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
 
     // 0788
     {
@@ -25497,7 +25517,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYDRO_PUMP,
             MOVE_MOONBLAST,
             MOVE_ICE_BEAM,
-            MOVE_MUDDY_WATER
+            MOVE_GRASS_KNOT
         },
         .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
