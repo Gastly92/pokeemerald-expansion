@@ -27009,8 +27009,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_HUSTLE,
-        .nature = NATURE(SPE_UP, SPD_DOWN),
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,

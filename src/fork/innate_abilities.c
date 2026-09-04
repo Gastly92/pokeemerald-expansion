@@ -10689,6 +10689,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_APPLIN,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
             ABILITY_RIPEN
         )
     },
@@ -10696,6 +10697,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FLAPPLE,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
             ABILITY_RIPEN
         )
     },
@@ -10703,6 +10705,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FLAPPLE_GMAX,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
             ABILITY_RIPEN
         )
     },
@@ -10710,6 +10713,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_APPLETUN,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
             ABILITY_RIPEN,
             ABILITY_THICK_FAT
         )
@@ -10718,6 +10722,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_APPLETUN_GMAX,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
             ABILITY_RIPEN,
             ABILITY_THICK_FAT
         )
@@ -12138,6 +12143,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DIPPLIN,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
+            ABILITY_RIPEN,
             ABILITY_STICKY_HOLD,
             ABILITY_SUPERSWEET_SYRUP
         )
@@ -12256,7 +12263,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_HYDRAPPLE,
         INNATES(
             ABILITY_GLUTTONY,
+            ABILITY_HARVEST,
             ABILITY_REGENERATOR,
+            ABILITY_RIPEN,
             ABILITY_STICKY_HOLD,
             ABILITY_SUPERSWEET_SYRUP
         )

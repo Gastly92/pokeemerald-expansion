@@ -2202,6 +2202,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BOLTUND, 1,
         ABILITY_LIGHTNING_ROD
     },
+    { // 0841
+        SPECIES_FLAPPLE, 0,
+        ABILITY_SHEER_FORCE
+    },
     { // 0842
         SPECIES_APPLETUN, 2,
         ABILITY_WELL_BAKED_BODY
