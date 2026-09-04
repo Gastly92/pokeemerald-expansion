@@ -6792,7 +6792,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0562
         SPECIES_YAMASK_GALAR,
         INNATES(
-            ABILITY_CURSED_BODY
+            ABILITY_CURSED_BODY,
+            ABILITY_STURDY
         )
     },
     { // 0563
@@ -10385,6 +10386,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0812
         SPECIES_RILLABOOM,
         INNATES(
+            ABILITY_IRON_FIST,
             ABILITY_OVERGROW,
             ABILITY_SCRAPPY
         )
@@ -10392,6 +10394,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0812
         SPECIES_RILLABOOM_GMAX,
         INNATES(
+            ABILITY_IRON_FIST,
             ABILITY_OVERGROW,
             ABILITY_SCRAPPY
         )
@@ -10925,7 +10928,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0867
         SPECIES_RUNERIGUS,
         INNATES(
-            ABILITY_CURSED_BODY
+            ABILITY_CURSED_BODY,
+            ABILITY_STURDY
         )
     },
     { // 0868

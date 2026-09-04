@@ -18520,6 +18520,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
+        .iv = IVS(SPE, 0),
         .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_GHOST,
     },
@@ -26430,6 +26431,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_RILLABOOM,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_GRASSY_GLIDE,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
 
     // 0815
     {
@@ -27854,6 +27875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_STEEL,
     },
 
