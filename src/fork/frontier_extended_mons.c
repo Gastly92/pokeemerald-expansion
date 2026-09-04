@@ -18520,7 +18520,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0),
         .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_GHOST,
     },
@@ -26616,7 +26615,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4
         ),
-        .iv = IVS(SPE, 0),
         .teraType = TYPE_GHOST,
     },
 
@@ -27154,15 +27152,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_TAILWIND,
-            MOVE_HURRICANE,
+            MOVE_BRAVE_BIRD,
             MOVE_DIVE,
             MOVE_PROTECT
         },
         .ability = ABILITY_GULP_MISSILE,
-        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spa = 252,
+            .atk = 252,
             .spd = 4
         ),
         .teraType = TYPE_GROUND,
@@ -27876,7 +27874,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .iv = IVS(SPE, 0),
         .teraType = TYPE_STEEL,
     },
 
