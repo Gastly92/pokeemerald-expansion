@@ -22904,6 +22904,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FLYING,
     },
+    {
+        .species = SPECIES_NOIVERN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_THROAT_SPRAY,
+        .moves =
+        {
+            MOVE_BOOMBURST,
+            MOVE_HURRICANE,
+            MOVE_FLAMETHROWER,
+            MOVE_ROOST
+        },
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
 
     // 0716
     {
@@ -22999,7 +23019,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_THOUSAND_ARROWS,
             MOVE_OUTRAGE,
-            MOVE_COIL
+            MOVE_SUBSTITUTE
         },
         .ability = ABILITY_POWER_CONSTRUCT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -23072,6 +23092,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ROCK,
     },
+    {
+        .species = SPECIES_DIANCIE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_WEAKNESS_POLICY,
+        .moves =
+        {
+            MOVE_DIAMOND_STORM,
+            MOVE_PLAY_ROUGH,
+            MOVE_BODY_PRESS,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_MISTY_SURGE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_ROCK,
+    },
 
     // 0720
     {
@@ -23093,6 +23133,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_HOOPA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_HYPERSPACE_HOLE,
+            MOVE_SHADOW_BALL,
+            MOVE_PSYSHOCK
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
     },
 
     // 0720

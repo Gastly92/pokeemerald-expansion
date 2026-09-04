@@ -9051,6 +9051,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PUMPKABOO,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -9060,6 +9061,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PUMPKABOO_SMALL,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -9069,6 +9071,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PUMPKABOO_LARGE,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -9078,6 +9081,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PUMPKABOO_SUPER,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -9087,6 +9091,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOURGEIST,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -9096,6 +9101,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOURGEIST_SMALL,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -9105,6 +9111,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOURGEIST_LARGE,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -9114,6 +9121,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOURGEIST_SUPER,
         INNATES(
             ABILITY_FRISK,
+            ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
             ABILITY_LEVITATE,
             ABILITY_PICKUP
@@ -9123,6 +9131,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BERGMITE,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_ICE_SCALES,
             ABILITY_OWN_TEMPO,
             ABILITY_STURDY
         )
@@ -9131,6 +9140,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_AVALUGG,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_ICE_SCALES,
             ABILITY_OWN_TEMPO,
             ABILITY_STURDY
         )
@@ -9139,6 +9149,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_AVALUGG_HISUI,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_ICE_SCALES,
             ABILITY_OWN_TEMPO,
             ABILITY_STRONG_JAW,
             ABILITY_STURDY
@@ -9149,6 +9160,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FRISK,
             ABILITY_INFILTRATOR,
+            ABILITY_PUNK_ROCK,
             ABILITY_TELEPATHY
         )
     },
@@ -9157,6 +9169,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FRISK,
             ABILITY_INFILTRATOR,
+            ABILITY_PUNK_ROCK,
             ABILITY_TELEPATHY
         )
     },
@@ -9165,7 +9178,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FLOWER_VEIL,
             ABILITY_HEALER,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_REGENERATOR
         )
     },
     { // 0716
@@ -9173,12 +9187,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FLOWER_VEIL,
             ABILITY_HEALER,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_REGENERATOR
         )
     },
     { // 0717
         SPECIES_YVELTAL,
         INNATES(
+            ABILITY_AFTERMATH,
             ABILITY_PRESSURE,
             ABILITY_UNNERVE
         )
@@ -9223,15 +9239,19 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DIANCIE,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_LEVITATE
+            ABILITY_HEATPROOF,
+            ABILITY_LEVITATE,
+            ABILITY_STURDY
         )
     },
     { // 0719
         SPECIES_DIANCIE_MEGA,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_HEATPROOF,
             ABILITY_LEVITATE,
-            ABILITY_MAGIC_BOUNCE
+            ABILITY_MAGIC_BOUNCE,
+            ABILITY_STURDY
         )
     },
     { // 0720
@@ -9239,6 +9259,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LEVITATE,
             ABILITY_MAGICIAN,
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
     },
@@ -9247,6 +9268,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LEVITATE,
             ABILITY_MAGICIAN,
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER
         )
     },
@@ -9254,7 +9276,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VOLCANION,
         INNATES(
             ABILITY_PRESSURE,
-            ABILITY_STEAM_ENGINE
+            ABILITY_STEAM_ENGINE,
+            ABILITY_THERMAL_EXCHANGE
         )
     },
     { // 0722
