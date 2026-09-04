@@ -9571,6 +9571,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_KEEN_EYE,
             ABILITY_SAND_RUSH,
+            ABILITY_SHARPNESS,
             ABILITY_STEADFAST,
             ABILITY_VITAL_SPIRIT
         )
@@ -9579,6 +9580,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LYCANROC_MIDNIGHT,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_SHARPNESS,
             ABILITY_STEADFAST,
             ABILITY_VITAL_SPIRIT
         )
@@ -9587,6 +9589,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LYCANROC_DUSK,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_SAND_RUSH,
+            ABILITY_SHARPNESS,
             ABILITY_STEADFAST,
             ABILITY_TOUGH_CLAWS,
             ABILITY_VITAL_SPIRIT
@@ -9611,7 +9615,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LIMBER,
             ABILITY_MERCILESS,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_SUCTION_CUPS
         )
     },
     { // 0748
@@ -9619,7 +9624,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LIMBER,
             ABILITY_MERCILESS,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_SUCTION_CUPS
         )
     },
     { // 0749

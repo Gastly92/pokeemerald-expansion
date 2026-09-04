@@ -23908,6 +23908,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ROCK,
     },
     {
+        .species = SPECIES_LYCANROC,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_STONE_AXE,
+            MOVE_PSYCHO_CUT,
+            MOVE_CLOSE_COMBAT,
+            MOVE_ACCELEROCK
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIGHTING,
+    },
+    {
         .species = SPECIES_LYCANROC_DUSK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -23928,6 +23948,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ROCK,
     },
     {
+        .species = SPECIES_LYCANROC_DUSK,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_ROCK_SLIDE,
+            MOVE_CRUNCH,
+            MOVE_CLOSE_COMBAT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
+    {
         .species = SPECIES_LYCANROC_MIDNIGHT,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_BAND,
@@ -23946,6 +23986,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_LYCANROC_MIDNIGHT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_ROCK_SLIDE,
+            MOVE_CLOSE_COMBAT,
+            MOVE_TAUNT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_NO_GUARD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIGHTING,
     },
 
     // 0746
@@ -24039,7 +24099,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CHILLING_WATER,
             MOVE_BANEFUL_BUNKER,
-            MOVE_TOXIC,
+            MOVE_WIDE_GUARD,
             MOVE_HAZE
         },
         .ability = ABILITY_WATER_ABSORB,
