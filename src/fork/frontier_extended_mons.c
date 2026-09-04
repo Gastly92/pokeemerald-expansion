@@ -28312,9 +28312,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_STEEL,
     },
@@ -28393,7 +28393,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LOW_KICK,
             MOVE_IRON_HEAD
         },
-        .ability = ABILITY_VOLT_ABSORB,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -28477,7 +28477,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_CRUNCH
         },
-        .ability = ABILITY_WATER_ABSORB,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

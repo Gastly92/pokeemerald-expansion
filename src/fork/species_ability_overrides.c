@@ -2282,6 +2282,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_STONJOURNER, 1,
         ABILITY_SAND_STREAM
     },
+    { // 0881
+        SPECIES_ARCTOZOLT, 2,
+        ABILITY_SNOW_WARNING
+    },
+    { // 0883
+        SPECIES_ARCTOVISH, 1,
+        ABILITY_SNOW_WARNING
+    },
     { // 0887
         SPECIES_DRAGAPULT, 2,
         ABILITY_SHEER_FORCE

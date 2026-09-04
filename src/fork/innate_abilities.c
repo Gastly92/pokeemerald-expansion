@@ -11115,6 +11115,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CUFANT,
         INNATES(
             ABILITY_HEAVY_METAL,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
@@ -11122,6 +11123,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_COPPERAJAH,
         INNATES(
             ABILITY_HEAVY_METAL,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
@@ -11129,24 +11131,28 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_COPPERAJAH_GMAX,
         INNATES(
             ABILITY_HEAVY_METAL,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
     { // 0880
         SPECIES_DRACOZOLT,
         INNATES(
+            ABILITY_GLUTTONY,
             ABILITY_SAND_RUSH
         )
     },
     { // 0881
         SPECIES_ARCTOZOLT,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_SLUSH_RUSH
         )
     },
     { // 0882
         SPECIES_DRACOVISH,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_SAND_RUSH,
             ABILITY_STRONG_JAW
         )
