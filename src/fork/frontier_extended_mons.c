@@ -21564,6 +21564,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
+    {
+        .species = SPECIES_FLORGES,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_HELPING_HAND,
+            MOVE_MOONBLAST,
+            MOVE_AROMATHERAPY,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SYMBIOSIS,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
 
     // 0673
     {
@@ -21645,6 +21665,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .def = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
+    {
+        .species = SPECIES_PANGORO,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_BLACK_GLASSES,
+        .moves =
+        {
+            MOVE_PARTING_SHOT,
+            MOVE_KNOCK_OFF,
+            MOVE_CLOSE_COMBAT,
+            MOVE_ICE_PUNCH
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
         ),
         .teraType = TYPE_DARK,
     },
@@ -21785,7 +21825,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KINGS_SHIELD,
             MOVE_IRON_HEAD,
             MOVE_SHADOW_SNEAK,
-            MOVE_SHADOW_CLAW
+            MOVE_SACRED_SWORD
         },
         .ability = ABILITY_STANCE_CHANGE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -21905,7 +21945,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLURPUFF,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_AGUAV_BERRY,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -22079,6 +22119,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYDRO_PUMP,
             MOVE_DARK_PULSE,
             MOVE_ICE_BEAM,
+            MOVE_AURA_SPHERE
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_CLAWITZER,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MYSTIC_WATER,
+        .moves =
+        {
+            MOVE_HEAL_PULSE,
+            MOVE_WATER_PULSE,
+            MOVE_DARK_PULSE,
             MOVE_AURA_SPHERE
         },
         .ability = ABILITY_WATER_ABSORB,
