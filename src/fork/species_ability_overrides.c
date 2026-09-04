@@ -1914,6 +1914,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HAWLUCHA, 1,
         ABILITY_HUSTLE
     },
+    { // 0702
+        SPECIES_DEDENNE, 1,
+        ABILITY_LIGHTNING_ROD
+    },
     { // 0703
         SPECIES_CARBINK, 1,
         ABILITY_BULLETPROOF

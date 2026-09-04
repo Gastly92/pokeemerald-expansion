@@ -22192,6 +22192,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ELECTRIC,
     },
+    {
+        .species = SPECIES_HELIOLISK,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EXPERT_BELT,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BEAM,
+            MOVE_THUNDERBOLT,
+            MOVE_WEATHER_BALL
+        },
+        .ability = ABILITY_SOLAR_POWER,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
 
     // 0697
     {
@@ -22413,7 +22433,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIGHT_SCREEN,
             MOVE_DAZZLING_GLEAM
         },
-        .ability = ABILITY_PLUS,
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22433,7 +22453,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_RECYCLE
         },
-        .ability = ABILITY_PLUS,
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -22586,6 +22606,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .spa = 4,
             .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_GOODRA_HISUI,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_DRACO_METEOR,
+            MOVE_FLASH_CANNON,
+            MOVE_THUNDERBOLT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SAP_SIPPER,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
         ),
         .teraType = TYPE_STEEL,
     },
