@@ -9374,6 +9374,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0731
         SPECIES_PIKIPEK,
         INNATES(
+            ABILITY_BIG_PECKS,
+            ABILITY_CHEEK_POUCH,
             ABILITY_KEEN_EYE,
             ABILITY_PICKUP,
             ABILITY_SKILL_LINK
@@ -9382,6 +9384,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0732
         SPECIES_TRUMBEAK,
         INNATES(
+            ABILITY_BIG_PECKS,
+            ABILITY_CHEEK_POUCH,
             ABILITY_KEEN_EYE,
             ABILITY_PICKUP,
             ABILITY_SKILL_LINK
@@ -9390,6 +9394,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0733
         SPECIES_TOUCANNON,
         INNATES(
+            ABILITY_BIG_PECKS,
+            ABILITY_CHEEK_POUCH,
             ABILITY_KEEN_EYE,
             ABILITY_PICKUP,
             ABILITY_SKILL_LINK
@@ -9399,6 +9405,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_YUNGOOS,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_EARLY_BIRD,
+            ABILITY_GLUTTONY,
             ABILITY_STAKEOUT,
             ABILITY_STRONG_JAW
         )
@@ -9407,6 +9415,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GUMSHOOS,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_EARLY_BIRD,
+            ABILITY_FRISK,
+            ABILITY_GLUTTONY,
             ABILITY_STAKEOUT,
             ABILITY_STRONG_JAW
         )
@@ -9414,12 +9425,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0735
         SPECIES_GUMSHOOS_TOTEM,
         INNATES(
-            ABILITY_ADAPTABILITY
+            ABILITY_ADAPTABILITY,
+            ABILITY_EARLY_BIRD,
+            ABILITY_FRISK,
+            ABILITY_GLUTTONY,
+            ABILITY_STAKEOUT,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0736
         SPECIES_GRUBBIN,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_SWARM
         )
     },
@@ -9427,6 +9444,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHARJABUG,
         INNATES(
             ABILITY_BATTERY,
+            ABILITY_STURDY,
             ABILITY_SWARM
         )
     },
@@ -9441,7 +9459,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0738
         SPECIES_VIKAVOLT_TOTEM,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_BATTERY,
+            ABILITY_LEVITATE,
+            ABILITY_SWARM
         )
     },
     { // 0739
