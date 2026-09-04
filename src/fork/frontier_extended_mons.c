@@ -21124,9 +21124,29 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .def = 4,
-            .spe = 252
+            .def = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_CHESNAUGHT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_WIDE_GUARD,
+            MOVE_SPIKY_SHIELD,
+            MOVE_BODY_PRESS,
+            MOVE_WOOD_HAMMER
+        },
+        .ability = ABILITY_BULLETPROOF,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 4,
+            .def = 252
         ),
         .teraType = TYPE_GRASS,
     },
@@ -21316,6 +21336,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        .species = SPECIES_DIGGERSBY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_SUBSTITUTE,
+            MOVE_SWORDS_DANCE,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_RETURN
+        },
+        .ability = ABILITY_EARTH_EATER,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_GROUND,
+    },
 
     // 0663
     {
@@ -21455,6 +21495,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         },
         .ability = ABILITY_DROUGHT,
         .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_PYROAR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_NOBLE_ROAR,
+            MOVE_FIRE_BLAST,
+            MOVE_SOLAR_BEAM,
+            MOVE_HYPER_VOICE
+        },
+        .ability = ABILITY_DROUGHT,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
             .spd = 4,
