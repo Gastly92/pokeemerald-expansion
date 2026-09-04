@@ -11042,6 +11042,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0872
         SPECIES_SNOM,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_ICE_SCALES,
             ABILITY_SHIELD_DUST
         )
@@ -11049,6 +11050,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0873
         SPECIES_FROSMOTH,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_ICE_SCALES,
             ABILITY_SHIELD_DUST
         )
@@ -11056,6 +11058,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0874
         SPECIES_STONJOURNER,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_POWER_SPOT,
             ABILITY_STURDY
         )
@@ -11064,25 +11067,31 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_EISCUE_ICE,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_SLUSH_RUSH
+            ABILITY_SLUSH_RUSH,
+            ABILITY_THICK_FAT
         )
     },
     { // 0875
         SPECIES_EISCUE_NOICE,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_SLUSH_RUSH
+            ABILITY_SLUSH_RUSH,
+            ABILITY_THICK_FAT
         )
     },
     { // 0876
         SPECIES_INDEEDEE_F,
         INNATES(
+            ABILITY_FRIEND_GUARD,
+            ABILITY_HEALER,
             ABILITY_OWN_TEMPO
         )
     },
     { // 0876
         SPECIES_INDEEDEE_M,
         INNATES(
+            ABILITY_FOREWARN,
+            ABILITY_FRIEND_GUARD,
             ABILITY_INNER_FOCUS
         )
     },
@@ -11090,14 +11099,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MORPEKO_FULL_BELLY,
         INNATES(
             ABILITY_CHEEK_POUCH,
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_PICKUP
         )
     },
     { // 0877
         SPECIES_MORPEKO_HANGRY,
         INNATES(
             ABILITY_CHEEK_POUCH,
-            ABILITY_GLUTTONY
+            ABILITY_GLUTTONY,
+            ABILITY_PICKUP
         )
     },
     { // 0878

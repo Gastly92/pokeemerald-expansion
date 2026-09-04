@@ -28134,7 +28134,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EISCUE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_BELLY_DRUM,
@@ -28181,7 +28181,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_EXPANDING_FORCE,
             MOVE_DAZZLING_GLEAM,
-            MOVE_PSYCHIC_TERRAIN,
+            MOVE_HYPER_VOICE,
             MOVE_PROTECT
         },
         .ability = ABILITY_PSYCHIC_SURGE,
@@ -28190,6 +28190,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spa = 252,
             .spd = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_INDEEDEE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SPECS,
+        .moves =
+        {
+            MOVE_EXPANDING_FORCE,
+            MOVE_HYPER_VOICE,
+            MOVE_SHADOW_BALL,
+            MOVE_TRICK
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
     },
@@ -28211,6 +28231,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 4,
             .spd = 252
         ),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_INDEEDEE_F,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_FOLLOW_ME,
+            MOVE_HELPING_HAND,
+            MOVE_DAZZLING_GLEAM
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPD_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
 
