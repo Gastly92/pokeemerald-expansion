@@ -26738,7 +26738,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_FOUL_PLAY
         },
-        .ability = ABILITY_RUN_AWAY,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -26758,7 +26758,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SNARL,
             MOVE_U_TURN
         },
-        .ability = ABILITY_RUN_AWAY,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,

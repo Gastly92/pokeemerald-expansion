@@ -2190,6 +2190,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ORBEETLE, 2,
         ABILITY_SYNCHRONIZE
     },
+    { // 0828
+        SPECIES_THIEVUL, 1,
+        ABILITY_TRACE
+    },
     { // 0834
         SPECIES_DREDNAW, 1,
         ABILITY_WATER_ABSORB

@@ -10524,6 +10524,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BLIPBUG,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_FOREWARN,
             ABILITY_SWARM,
             ABILITY_TELEPATHY
         )
@@ -10532,6 +10533,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DOTTLER,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_FOREWARN,
             ABILITY_SWARM,
             ABILITY_TELEPATHY
         )
@@ -10540,6 +10542,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ORBEETLE,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_FOREWARN,
             ABILITY_FRISK,
             ABILITY_SWARM,
             ABILITY_TELEPATHY
@@ -10549,6 +10552,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ORBEETLE_GMAX,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_FOREWARN,
             ABILITY_FRISK,
             ABILITY_SWARM,
             ABILITY_TELEPATHY
@@ -10557,6 +10561,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0827
         SPECIES_NICKIT,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
             ABILITY_STAKEOUT,
             ABILITY_UNBURDEN
@@ -10565,6 +10570,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0828
         SPECIES_THIEVUL,
         INNATES(
+            ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
             ABILITY_STAKEOUT,
             ABILITY_UNBURDEN
@@ -10583,6 +10589,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_EFFECT_SPORE,
+            ABILITY_HEALER,
             ABILITY_REGENERATOR
         )
     },
