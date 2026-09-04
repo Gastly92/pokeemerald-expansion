@@ -10604,6 +10604,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0834
         SPECIES_DREDNAW,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_SHELL_ARMOR,
             ABILITY_STRONG_JAW,
             ABILITY_SWIFT_SWIM
@@ -10612,6 +10613,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0834
         SPECIES_DREDNAW_GMAX,
         INNATES(
+            ABILITY_MOXIE,
             ABILITY_SHELL_ARMOR,
             ABILITY_STRONG_JAW,
             ABILITY_SWIFT_SWIM
@@ -10620,6 +10622,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0831
         SPECIES_WOOLOO,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_STEADFAST,
             ABILITY_THICK_FAT
         )
@@ -10627,6 +10630,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0832
         SPECIES_DUBWOOL,
         INNATES(
+            ABILITY_CUD_CHEW,
             ABILITY_STEADFAST,
             ABILITY_THICK_FAT
         )
@@ -10634,6 +10638,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0835
         SPECIES_YAMPER,
         INNATES(
+            ABILITY_GUARD_DOG,
             ABILITY_QUICK_FEET,
             ABILITY_RATTLED
         )
@@ -10642,6 +10647,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BOLTUND,
         INNATES(
             ABILITY_COMPETITIVE,
+            ABILITY_GUARD_DOG,
             ABILITY_QUICK_FEET,
             ABILITY_RATTLED,
             ABILITY_STRONG_JAW

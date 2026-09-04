@@ -26875,21 +26875,21 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DREDNAW,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_HARD_STONE,
         .moves =
         {
-            MOVE_CRUNCH,
+            MOVE_ROCK_SLIDE,
             MOVE_LIQUIDATION,
-            MOVE_STONE_EDGE,
-            MOVE_SWORDS_DANCE
+            MOVE_CRUNCH,
+            MOVE_PROTECT
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 4,
+            .hp = 252,
             .atk = 252,
-            .spe = 252
+            .def = 4
         ),
         .teraType = TYPE_ROCK,
         .ball = BALL_DIVE,
