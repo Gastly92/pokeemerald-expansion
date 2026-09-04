@@ -1994,6 +1994,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CRABOMINABLE, 1,
         ABILITY_NO_GUARD
     },
+    { // 0740
+        SPECIES_CRABOMINABLE_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    { // 0740
+        SPECIES_CRABOMINABLE_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    { // 0740
+        SPECIES_CRABOMINABLE_MEGA, 2,
+        ABILITY_NO_GUARD
+    },
     { // 0743
         SPECIES_RIBOMBEE, 0,
         ABILITY_FLUFFY
@@ -2050,6 +2062,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ORICORIO_PAU, 1,
         ABILITY_SYNCHRONIZE
     },
+    { // 0741
+        SPECIES_ORICORIO_POM_POM, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0741
+        SPECIES_ORICORIO_SENSU, 1,
+        ABILITY_PERISH_BODY
+    },
     { // 0756
         SPECIES_SHIINOTIC, 2,
         ABILITY_MYCELIUM_MIGHT
@@ -2057,6 +2077,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0779
         SPECIES_BRUXISH, 1,
         ABILITY_SHEER_FORCE
+    },
+    { // 0780
+        SPECIES_DRAMPA_MEGA, 0,
+        ABILITY_SAP_SIPPER
+    },
+    { // 0780
+        SPECIES_DRAMPA_MEGA, 1,
+        ABILITY_SAP_SIPPER
+    },
+    { // 0780
+        SPECIES_DRAMPA_MEGA, 2,
+        ABILITY_SAP_SIPPER
     },
     { // 0781
         SPECIES_DHELMISE, 1,
@@ -2080,6 +2112,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0800
         SPECIES_NECROZMA_DAWN_WINGS, 1,
+        ABILITY_PSYCHIC_SURGE
+    },
+    { // 0800
+        SPECIES_NECROZMA_ULTRA, 1,
         ABILITY_PSYCHIC_SURGE
     },
     { // 0802
@@ -2116,6 +2152,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0801
         SPECIES_MAGEARNA, 1,
+        ABILITY_MISTY_SURGE
+    },
+    { // 0801
+        SPECIES_MAGEARNA_MEGA, 1,
         ABILITY_MISTY_SURGE
     },
     { // 0804
