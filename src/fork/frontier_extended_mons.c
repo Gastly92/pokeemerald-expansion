@@ -24145,11 +24145,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC
         },
         .ability = ABILITY_EARTH_EATER,
-        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .atk = 4,
-            .def = 252
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_GROUND,
     },
@@ -24185,7 +24185,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_LEECH_LIFE,
             MOVE_ICE_PUNCH,
-            MOVE_BUG_BITE
+            MOVE_CRUNCH
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPE_DOWN),
@@ -24212,9 +24212,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_CONTRARY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_GRASS,
     },
@@ -24235,6 +24235,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .def = 252,
             .spd = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_LURANTIS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BLADE,
+            MOVE_SUPERPOWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_CONTRARY,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
         ),
         .teraType = TYPE_GRASS,
     },
@@ -24318,6 +24338,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .spa = 252,
             .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_SALAZZLE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_HEAT_WAVE,
+            MOVE_SLUDGE_BOMB,
+            MOVE_ENCORE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLAME_BODY,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_FIRE,

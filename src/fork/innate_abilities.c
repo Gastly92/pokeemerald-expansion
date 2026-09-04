@@ -2639,7 +2639,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_EFFECT_SPORE,
             ABILITY_ILLUMINATE,
-            ABILITY_RAIN_DISH
+            ABILITY_RAIN_DISH,
+            ABILITY_SHADOW_TAG
         )
     },
     { // 0856
@@ -9648,6 +9649,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DEWPIDER,
         INNATES(
             ABILITY_OVERCOAT,
+            ABILITY_ROCK_HEAD,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_BUBBLE
         )
@@ -9656,6 +9658,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARAQUANID,
         INNATES(
             ABILITY_OVERCOAT,
+            ABILITY_ROCK_HEAD,
             ABILITY_SWIFT_SWIM,
             ABILITY_WATER_BUBBLE
         )
@@ -9663,6 +9666,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0752
         SPECIES_ARAQUANID_TOTEM,
         INNATES(
+            ABILITY_OVERCOAT,
+            ABILITY_ROCK_HEAD,
+            ABILITY_SWIFT_SWIM,
             ABILITY_WATER_BUBBLE
         )
     },
@@ -9671,7 +9677,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
-            ABILITY_SHARPNESS
+            ABILITY_SHARPNESS,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0754
@@ -9679,13 +9686,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD,
-            ABILITY_SHARPNESS
+            ABILITY_SHARPNESS,
+            ABILITY_SWEET_VEIL
+        )
+    },
+    { // 0754
+        SPECIES_LURANTIS_TOTEM,
+        INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_LEAF_GUARD,
+            ABILITY_SHARPNESS,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0757
         SPECIES_SALANDIT,
         INNATES(
             ABILITY_CORROSION,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_OBLIVIOUS
         )
     },
@@ -9693,13 +9711,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SALAZZLE,
         INNATES(
             ABILITY_CORROSION,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_OBLIVIOUS
         )
     },
     { // 0758
         SPECIES_SALAZZLE_TOTEM,
         INNATES(
-            ABILITY_CORROSION
+            ABILITY_CORROSION,
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_OBLIVIOUS
         )
     },
     { // 0759
