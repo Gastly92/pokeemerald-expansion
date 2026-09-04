@@ -10863,6 +10863,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_IRON_FIST,
             ABILITY_LIMBER,
+            ABILITY_SUCTION_CUPS,
             ABILITY_TECHNICIAN
         )
     },
@@ -10871,6 +10872,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_IRON_FIST,
             ABILITY_LIMBER,
+            ABILITY_SUCTION_CUPS,
             ABILITY_TECHNICIAN
         )
     },
@@ -10892,6 +10894,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_POLTEAGEIST,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
         )
     },
@@ -10899,6 +10902,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_POLTEAGEIST_ANTIQUE,
         INNATES(
             ABILITY_CURSED_BODY,
+            ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
         )
     },

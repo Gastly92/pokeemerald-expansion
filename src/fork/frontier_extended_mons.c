@@ -27380,7 +27380,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLTEAGEIST,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_WHITE_HERB,
         .moves =
         {
             MOVE_SHELL_SMASH,
