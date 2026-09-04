@@ -3258,6 +3258,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CORSOLA,
         INNATES(
             ABILITY_NATURAL_CURE,
+            ABILITY_RAIN_DISH,
             ABILITY_REGENERATOR
         )
     },
@@ -11253,6 +11254,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WYRDEER,
         INNATES(
             ABILITY_CUD_CHEW,
+            ABILITY_FILTER,
             ABILITY_FRISK,
             ABILITY_INTIMIDATE,
             ABILITY_THICK_FAT

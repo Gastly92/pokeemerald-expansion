@@ -27662,10 +27662,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_WEAK_ARMOR,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_CURSOLA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_WILL_O_WISP,
+            MOVE_HEX,
+            MOVE_EARTH_POWER
+        },
+        .ability = ABILITY_PERISH_BODY,
+        .nature = NATURE(SPA_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .iv = IVS(SPE, 0),
         .teraType = TYPE_GHOST,
     },
 
