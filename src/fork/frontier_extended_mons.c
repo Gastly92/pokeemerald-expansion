@@ -2899,7 +2899,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FAKE_OUT,
             MOVE_FOLLOW_ME,
             MOVE_TAILWIND,
-            MOVE_BRAVE_BIRD
+            MOVE_AERIAL_ACE
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),

@@ -1204,6 +1204,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_DEFIANT,
             ABILITY_INNER_FOCUS,
             ABILITY_KEEN_EYE,
+            ABILITY_SHARPNESS,
             ABILITY_SNIPER
         )
     },
