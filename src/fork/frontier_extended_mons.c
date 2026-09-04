@@ -23292,16 +23292,16 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SPIRIT_SHACKLE,
-            MOVE_LEAF_BLADE,
-            MOVE_DEFOG,
-            MOVE_ROOST
+            MOVE_LEECH_SEED,
+            MOVE_ROOST,
+            MOVE_LEAF_BLADE
         },
         .ability = ABILITY_SOUNDPROOF,
-        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spd = 4,
-            .spe = 252
+            .def = 4,
+            .spd = 252
         ),
         .teraType = TYPE_GRASS,
     },
@@ -23324,6 +23324,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_DECIDUEYE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_SOLAR_BLADE,
+            MOVE_SPIRIT_SHACKLE,
+            MOVE_BRAVE_BIRD
+        },
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0724
@@ -23350,7 +23370,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DECIDUEYE_HISUI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
             MOVE_SWORDS_DANCE,

@@ -9283,6 +9283,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0722
         SPECIES_ROWLET,
         INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_KEEN_EYE,
             ABILITY_LONG_REACH,
             ABILITY_OVERGROW
         )
@@ -9290,6 +9292,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0723
         SPECIES_DARTRIX,
         INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_KEEN_EYE,
             ABILITY_LONG_REACH,
             ABILITY_OVERGROW
         )
@@ -9297,6 +9301,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0724
         SPECIES_DECIDUEYE,
         INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_KEEN_EYE,
             ABILITY_LONG_REACH,
             ABILITY_OVERGROW
         )
@@ -9304,6 +9310,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0724
         SPECIES_DECIDUEYE_HISUI,
         INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_KEEN_EYE,
             ABILITY_LONG_REACH,
             ABILITY_OVERGROW,
             ABILITY_SCRAPPY
