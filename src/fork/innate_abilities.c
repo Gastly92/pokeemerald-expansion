@@ -9822,6 +9822,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0769
         SPECIES_SANDYGAST,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_SAND_VEIL,
             ABILITY_WATER_COMPACTION
         )
@@ -9829,6 +9830,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0770
         SPECIES_PALOSSAND,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_SAND_VEIL,
             ABILITY_WATER_COMPACTION
         )
@@ -9837,36 +9839,50 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PYUKUMUKU,
         INNATES(
             ABILITY_INNARDS_OUT,
-            ABILITY_UNAWARE
+            ABILITY_STICKY_HOLD,
+            ABILITY_UNAWARE,
+            ABILITY_WATER_VEIL
         )
     },
     { // 0772
         SPECIES_TYPE_NULL,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_BATTLE_ARMOR
         )
     },
     { // 0773
         SPECIES_SILVALLY_NORMAL,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_BATTLE_ARMOR
         )
     },
     { // 0773
         SPECIES_SILVALLY_DRAGON,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_BATTLE_ARMOR
         )
     },
     { // 0773
         SPECIES_SILVALLY_FAIRY,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_BATTLE_ARMOR
         )
     },
     { // 0773
         SPECIES_SILVALLY_STEEL,
         INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_GROUND,
+        INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_BATTLE_ARMOR
         )
     },
@@ -9876,21 +9892,115 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_STURDY
         )
     },
+    { // 0774
+        SPECIES_MINIOR_METEOR_ORANGE,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_METEOR_YELLOW,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_METEOR_GREEN,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_METEOR_BLUE,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_METEOR_INDIGO,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_METEOR_VIOLET,
+        INNATES(
+            ABILITY_STURDY
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_CORE_RED,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_UNBURDEN
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_CORE_ORANGE,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_UNBURDEN
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_CORE_YELLOW,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_UNBURDEN
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_CORE_GREEN,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_UNBURDEN
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_CORE_BLUE,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_UNBURDEN
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_CORE_INDIGO,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_UNBURDEN
+        )
+    },
+    { // 0774
+        SPECIES_MINIOR_CORE_VIOLET,
+        INNATES(
+            ABILITY_ILLUMINATE,
+            ABILITY_UNBURDEN
+        )
+    },
     { // 0775
         SPECIES_KOMALA,
         INNATES(
             ABILITY_COMATOSE,
+            ABILITY_STICKY_HOLD,
             ABILITY_UNAWARE
         )
     },
     { // 0776
         SPECIES_TURTONATOR,
         INNATES(
+            ABILITY_IRON_BARBS,
             ABILITY_SHELL_ARMOR
         )
     },
     { // 0777
         SPECIES_TOGEDEMARU,
+        INNATES(
+            ABILITY_IRON_BARBS,
+            ABILITY_STURDY
+        )
+    },
+    { // 0777
+        SPECIES_TOGEDEMARU_TOTEM,
         INNATES(
             ABILITY_IRON_BARBS,
             ABILITY_STURDY
