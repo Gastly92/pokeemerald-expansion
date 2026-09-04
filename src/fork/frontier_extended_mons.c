@@ -24529,7 +24529,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 4,
             .spd = 252
         ),
-        .iv = IVS(SPE, 0),
         .teraType = TYPE_PSYCHIC,
     },
     {
