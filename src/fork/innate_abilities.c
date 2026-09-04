@@ -3121,6 +3121,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_QWILFISH,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_LIQUID_OOZE,
             ABILITY_ROUGH_SKIN,
             ABILITY_SWIFT_SWIM
         )
@@ -3129,6 +3130,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_QWILFISH_HISUI,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_LIQUID_OOZE,
             ABILITY_ROUGH_SKIN,
             ABILITY_SWIFT_SWIM
         )
@@ -11311,6 +11313,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OVERQWIL,
         INNATES(
             ABILITY_INTIMIDATE,
+            ABILITY_LIQUID_OOZE,
             ABILITY_ROUGH_SKIN,
             ABILITY_SWIFT_SWIM
         )

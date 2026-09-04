@@ -7100,7 +7100,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_QWILFISH,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_LIQUIDATION,
