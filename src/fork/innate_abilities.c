@@ -11250,13 +11250,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0891
         SPECIES_KUBFU,
         INNATES(
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_IRON_FIST
         )
     },
     { // 0892
         SPECIES_URSHIFU,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_IRON_FIST,
             ABILITY_UNSEEN_FIST
         )
     },
@@ -11264,6 +11266,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_URSHIFU_RAPID_STRIKE,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_IRON_FIST,
             ABILITY_UNSEEN_FIST
         )
     },
@@ -11271,6 +11274,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_URSHIFU_SINGLE_STRIKE_GMAX,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_IRON_FIST,
             ABILITY_UNSEEN_FIST
         )
     },
@@ -11278,12 +11282,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_URSHIFU_RAPID_STRIKE_GMAX,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_IRON_FIST,
             ABILITY_UNSEEN_FIST
         )
     },
     { // 0893
         SPECIES_ZARUDE,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_LEAF_GUARD,
             ABILITY_TOUGH_CLAWS
         )
@@ -11291,6 +11297,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0893
         SPECIES_ZARUDE_DADA,
         INNATES(
+            ABILITY_INTIMIDATE,
             ABILITY_LEAF_GUARD,
             ABILITY_TOUGH_CLAWS
         )
@@ -11298,6 +11305,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0894
         SPECIES_REGIELEKI,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_LEVITATE,
             ABILITY_TRANSISTOR
         )
@@ -11305,7 +11313,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0895
         SPECIES_REGIDRAGO,
         INNATES(
-            ABILITY_DRAGONS_MAW
+            ABILITY_CLEAR_BODY,
+            ABILITY_DRAGONS_MAW,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0896
@@ -11325,12 +11335,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0898
         SPECIES_CALYREX,
         INNATES(
+            ABILITY_HEALER,
             ABILITY_UNNERVE
         )
     },
     { // 0898
         SPECIES_CALYREX_ICE,
         INNATES(
+            ABILITY_HEALER,
             ABILITY_ICE_BODY,
             ABILITY_UNNERVE
         )
@@ -11338,6 +11350,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0898
         SPECIES_CALYREX_SHADOW,
         INNATES(
+            ABILITY_HEALER,
             ABILITY_INFILTRATOR,
             ABILITY_UNNERVE
         )
@@ -11434,6 +11447,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ENAMORUS_THERIAN,
         INNATES(
             ABILITY_HEALER,
+            ABILITY_JUSTIFIED,
             ABILITY_OVERCOAT
         )
     },

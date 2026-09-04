@@ -28870,7 +28870,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_THUNDERBOLT,
             MOVE_VOLT_SWITCH,
-            MOVE_RISING_VOLTAGE,
+            MOVE_ELECTRO_BALL,
             MOVE_TERA_BLAST
         },
         .ability = ABILITY_LIGHTNING_ROD,
@@ -28931,7 +28931,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_DRACO_METEOR,
-            MOVE_DRAGON_PULSE,
+            MOVE_DRAGON_ENERGY,
             MOVE_THUNDERBOLT,
             MOVE_EARTH_POWER
         },
@@ -28960,9 +28960,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_ICE,
     },
@@ -29137,7 +29137,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CALYREX,
-        .tags = FORMAT_SINGLES,
+        .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
@@ -29502,7 +29502,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_EARTH_POWER,
             MOVE_SLUDGE_BOMB,
-            MOVE_MYSTICAL_FIRE
+            MOVE_OVERHEAT
         },
         .ability = ABILITY_CONTRARY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -29519,7 +29519,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
-            MOVE_CALM_MIND,
+            MOVE_SUPERPOWER,
             MOVE_MOONBLAST,
             MOVE_EARTH_POWER,
             MOVE_SUBSTITUTE
