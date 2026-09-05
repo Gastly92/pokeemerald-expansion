@@ -7444,6 +7444,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PAWNIARD,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_GUTS,
             ABILITY_INNER_FOCUS,
             ABILITY_PRESSURE,
             ABILITY_SHARPNESS
@@ -7453,6 +7454,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BISHARP,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_GUTS,
             ABILITY_INNER_FOCUS,
             ABILITY_PRESSURE,
             ABILITY_SHARPNESS
@@ -12095,6 +12097,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KINGAMBIT,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_GUTS,
             ABILITY_INNER_FOCUS,
             ABILITY_PRESSURE,
             ABILITY_SHARPNESS,
