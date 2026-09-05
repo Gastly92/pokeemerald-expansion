@@ -30528,7 +30528,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_POLTERGEIST,
             MOVE_RAPID_SPIN,
-            MOVE_INFERNAL_PARADE
+            MOVE_SHADOW_SNEAK
         },
         .ability = ABILITY_WIND_RIDER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -30555,8 +30555,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_MYCELIUM_MIGHT,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .spa = 4,
+            .hp = 4,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_WATER,
@@ -30623,6 +30623,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ROCK,
     },
+    {
+        .species = SPECIES_KLAWF,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_ROCK_SLIDE,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_KNOCK_OFF,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_ANGER_SHELL,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FLYING,
+    },
 
     // 0952
     {
@@ -30652,7 +30672,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SWORDS_DANCE,
-            MOVE_FLARE_BLITZ,
+            MOVE_FIRE_LASH,
             MOVE_SEED_BOMB,
             MOVE_SUCKER_PUNCH
         },
@@ -30700,11 +30720,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PROTECT
         },
         .ability = ABILITY_SYNCHRONIZE,
-        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spa = 4,
-            .spd = 252
+            .spa = 252,
+            .spd = 4
         ),
         .teraType = TYPE_STEEL,
     },
