@@ -11762,13 +11762,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0938
         SPECIES_TADBULB,
         INNATES(
+            ABILITY_ANTICIPATION,
+            ABILITY_ILLUMINATE,
             ABILITY_OWN_TEMPO
         )
     },
     { // 0939
         SPECIES_BELLIBOLT,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_ELECTROMORPHOSIS,
+            ABILITY_ILLUMINATE,
             ABILITY_OWN_TEMPO
         )
     },
@@ -11776,6 +11780,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WATTREL,
         INNATES(
             ABILITY_COMPETITIVE,
+            ABILITY_KEEN_EYE,
             ABILITY_WIND_POWER
         )
     },
@@ -11783,6 +11788,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KILOWATTREL,
         INNATES(
             ABILITY_COMPETITIVE,
+            ABILITY_KEEN_EYE,
             ABILITY_WIND_POWER
         )
     },
@@ -11790,7 +11796,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MASCHIFF,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_STAKEOUT
+            ABILITY_STAKEOUT,
+            ABILITY_STRONG_JAW,
+            ABILITY_THICK_FAT
         )
     },
     { // 0943
@@ -11798,7 +11806,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
-            ABILITY_STAKEOUT
+            ABILITY_STAKEOUT,
+            ABILITY_STRONG_JAW,
+            ABILITY_THICK_FAT
         )
     },
     { // 0944
@@ -11806,6 +11816,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
+            ABILITY_STENCH,
             ABILITY_UNBURDEN
         )
     },
@@ -11814,6 +11825,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
+            ABILITY_STENCH,
             ABILITY_UNBURDEN
         )
     },
