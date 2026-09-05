@@ -3045,7 +3045,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CUD_CHEW,
             ABILITY_EARLY_BIRD,
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_TELEPATHY
         )
     },
     { // 0204
@@ -12070,7 +12071,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ARMOR_TAIL,
             ABILITY_CUD_CHEW,
             ABILITY_EARLY_BIRD,
-            ABILITY_INNER_FOCUS
+            ABILITY_INNER_FOCUS,
+            ABILITY_TELEPATHY
         )
     },
     { // 0982

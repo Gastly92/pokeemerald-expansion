@@ -31421,14 +31421,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM
         },
         .ability = ABILITY_SAP_SIPPER,
-        .nature = NATURE(SPD_UP, SPE_DOWN),
+        .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spa = 4,
-            .spd = 252
+            .spa = 252,
+            .spd = 4
         ),
         .iv = IVS(ATK, 0, SPE, 0),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_FAIRY,
     },
 
     // 0982
@@ -31471,6 +31471,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_DUDUNSPARCE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SILK_SCARF,
+        .moves =
+        {
+            MOVE_COIL,
+            MOVE_HYPER_DRILL,
+            MOVE_BODY_SLAM,
+            MOVE_HIGH_HORSEPOWER
+        },
+        .ability = ABILITY_SIMPLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0983
