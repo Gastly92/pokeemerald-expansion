@@ -11545,6 +11545,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_GLUTTONY,
+            ABILITY_PICKUP,
             ABILITY_THICK_FAT
         )
     },
@@ -11553,6 +11554,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_GLUTTONY,
+            ABILITY_PICKUP,
             ABILITY_THICK_FAT
         )
     },
@@ -11561,12 +11563,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AROMA_VEIL,
             ABILITY_GLUTTONY,
+            ABILITY_HEALER,
+            ABILITY_PICKUP,
             ABILITY_THICK_FAT
         )
     },
     { // 0917
         SPECIES_TAROUNTULA,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_INSOMNIA,
             ABILITY_STAKEOUT
         )
@@ -11574,6 +11579,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0918
         SPECIES_SPIDOPS,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_INSOMNIA,
             ABILITY_STAKEOUT
         )
@@ -11581,6 +11587,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0919
         SPECIES_NYMBLE,
         INNATES(
+            ABILITY_RATTLED,
             ABILITY_SWARM,
             ABILITY_TINTED_LENS
         )
@@ -11588,6 +11595,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0920
         SPECIES_LOKIX,
         INNATES(
+            ABILITY_STEADFAST,
             ABILITY_SWARM,
             ABILITY_TINTED_LENS
         )

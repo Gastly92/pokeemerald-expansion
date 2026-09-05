@@ -29865,7 +29865,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .def = 252,
             .spd = 4
         ),
-        .teraType = TYPE_BUG,
+        .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_SPIDOPS,
@@ -29912,7 +29912,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LOKIX,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SILK_SCARF,
+        .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_SWORDS_DANCE,
