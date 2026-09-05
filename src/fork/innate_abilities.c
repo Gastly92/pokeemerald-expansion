@@ -2709,6 +2709,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0971
         SPECIES_GREAVARD,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_PICKUP
         )
     },
@@ -12033,6 +12034,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0968
         SPECIES_ORTHWORM,
         INNATES(
+            ABILITY_IRON_FIST,
             ABILITY_SAND_VEIL,
             ABILITY_SHED_SKIN
         )
@@ -12040,6 +12042,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0969
         SPECIES_GLIMMET,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_CORROSION
         )
     },
@@ -12053,12 +12056,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0970
         SPECIES_GLIMMORA,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_CORROSION
         )
     },
     { // 0972
         SPECIES_HOUNDSTONE,
         INNATES(
+            ABILITY_EARLY_BIRD,
+            ABILITY_FRIEND_GUARD,
             ABILITY_PICKUP,
             ABILITY_SAND_RUSH
         )
@@ -12066,6 +12072,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0973
         SPECIES_FLAMIGO,
         INNATES(
+            ABILITY_KEEN_EYE,
+            ABILITY_LIMBER,
             ABILITY_SCRAPPY,
             ABILITY_TANGLED_FEET
         )
@@ -12073,6 +12081,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0974
         SPECIES_CETODDLE,
         INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_OBLIVIOUS,
             ABILITY_SNOW_CLOAK,
             ABILITY_THICK_FAT
         )
@@ -12080,6 +12090,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0975
         SPECIES_CETITAN,
         INNATES(
+            ABILITY_ICE_BODY,
+            ABILITY_OBLIVIOUS,
             ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK,
             ABILITY_THICK_FAT
@@ -12089,13 +12101,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VELUZA,
         INNATES(
             ABILITY_MOLD_BREAKER,
-            ABILITY_SHARPNESS
+            ABILITY_REGENERATOR,
+            ABILITY_SHARPNESS,
+            ABILITY_SHED_SKIN
         )
     },
     { // 0977
         SPECIES_DONDOZO,
         INNATES(
             ABILITY_OBLIVIOUS,
+            ABILITY_THICK_FAT,
             ABILITY_UNAWARE,
             ABILITY_WATER_VEIL
         )
@@ -12103,6 +12118,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0978
         SPECIES_TATSUGIRI,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_RATTLED,
             ABILITY_SWIFT_SWIM
         )
@@ -12110,6 +12126,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0978
         SPECIES_TATSUGIRI_DROOPY,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_RATTLED,
             ABILITY_SWIFT_SWIM
         )
@@ -12117,6 +12134,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0978
         SPECIES_TATSUGIRI_STRETCHY,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_RATTLED,
             ABILITY_SWIFT_SWIM
         )
