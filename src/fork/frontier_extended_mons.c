@@ -30786,8 +30786,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .spd = 4,
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
@@ -30795,7 +30795,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TINKATON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND,
+        .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_GIGATON_HAMMER,
@@ -30821,7 +30821,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_WAVE_CRASH,
-            MOVE_LIQUIDATION,
+            MOVE_HIGH_HORSEPOWER,
             MOVE_AQUA_JET,
             MOVE_SUCKER_PUNCH
         },
@@ -30872,8 +30872,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spd = 4,
-            .spe = 252
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_STEEL,
     },
@@ -30991,7 +30991,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SHED_TAIL,
             MOVE_DRAGON_PULSE,
-            MOVE_OVERHEAT,
+            MOVE_TAUNT,
             MOVE_RAPID_SPIN
         },
         .ability = ABILITY_MOTOR_DRIVE,

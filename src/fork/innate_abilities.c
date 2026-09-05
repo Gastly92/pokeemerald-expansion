@@ -11932,6 +11932,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0957
         SPECIES_TINKATINK,
         INNATES(
+            ABILITY_HUGE_POWER,
             ABILITY_MOLD_BREAKER,
             ABILITY_OWN_TEMPO,
             ABILITY_PICKPOCKET
@@ -11940,6 +11941,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0958
         SPECIES_TINKATUFF,
         INNATES(
+            ABILITY_HUGE_POWER,
             ABILITY_MOLD_BREAKER,
             ABILITY_OWN_TEMPO,
             ABILITY_PICKPOCKET
@@ -11948,6 +11950,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0959
         SPECIES_TINKATON,
         INNATES(
+            ABILITY_HUGE_POWER,
             ABILITY_MOLD_BREAKER,
             ABILITY_OWN_TEMPO,
             ABILITY_PICKPOCKET
@@ -11956,6 +11959,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0960
         SPECIES_WIGLETT,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_GOOEY,
             ABILITY_RATTLED,
             ABILITY_SAND_VEIL
@@ -11964,6 +11968,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0961
         SPECIES_WUGTRIO,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_GOOEY,
             ABILITY_RATTLED,
             ABILITY_SAND_VEIL
@@ -11974,14 +11979,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BIG_PECKS,
             ABILITY_KEEN_EYE,
-            ABILITY_ROCKY_PAYLOAD
+            ABILITY_ROCKY_PAYLOAD,
+            ABILITY_UNBURDEN
         )
     },
     { // 0965
         SPECIES_REVAVROOM,
         INNATES(
             ABILITY_FILTER,
-            ABILITY_OVERCOAT
+            ABILITY_OVERCOAT,
+            ABILITY_STEAM_ENGINE,
+            ABILITY_STENCH
         )
     },
     { // 0963
@@ -11993,26 +12001,33 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0964
         SPECIES_PALAFIN_ZERO,
         INNATES(
+            ABILITY_JUSTIFIED,
+            ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
     },
     { // 0964
         SPECIES_PALAFIN_HERO,
         INNATES(
+            ABILITY_JUSTIFIED,
+            ABILITY_SWIFT_SWIM,
             ABILITY_WATER_VEIL
         )
     },
     { // 0965
         SPECIES_VAROOM,
         INNATES(
-            ABILITY_OVERCOAT
+            ABILITY_OVERCOAT,
+            ABILITY_STEAM_ENGINE,
+            ABILITY_STENCH
         )
     },
     { // 0967
         SPECIES_CYCLIZAR,
         INNATES(
             ABILITY_REGENERATOR,
-            ABILITY_SHED_SKIN
+            ABILITY_SHED_SKIN,
+            ABILITY_STAMINA
         )
     },
     { // 0968
