@@ -2716,6 +2716,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0984
         SPECIES_GREAT_TUSK,
         INNATES(
+            ABILITY_SAND_FORCE,
             ABILITY_SOLID_ROCK,
             ABILITY_STURDY
         )
@@ -2723,6 +2724,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0985
         SPECIES_SCREAM_TAIL,
         INNATES(
+            ABILITY_COMPETITIVE,
             ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
             ABILITY_THICK_FAT
@@ -2732,12 +2734,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BRUTE_BONNET,
         INNATES(
             ABILITY_EFFECT_SPORE,
+            ABILITY_OVERCOAT,
             ABILITY_REGENERATOR
         )
     },
     { // 0988
         SPECIES_SLITHER_WING,
         INNATES(
+            ABILITY_COMPOUND_EYES,
+            ABILITY_GUTS,
             ABILITY_SWARM
         )
     },
@@ -2752,6 +2757,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0990
         SPECIES_IRON_TREADS,
         INNATES(
+            ABILITY_SAND_FORCE,
             ABILITY_SOLID_ROCK,
             ABILITY_STURDY
         )
@@ -2759,6 +2765,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0991
         SPECIES_IRON_BUNDLE,
         INNATES(
+            ABILITY_ICE_BODY,
             ABILITY_INSOMNIA
         )
     },
@@ -2773,12 +2780,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0993
         SPECIES_IRON_JUGULIS,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_KEEN_EYE,
+            ABILITY_LEVITATE,
+            ABILITY_UNNERVE
         )
     },
     { // 0995
         SPECIES_IRON_THORNS,
         INNATES(
+            ABILITY_IRON_BARBS,
             ABILITY_SAND_VEIL,
             ABILITY_UNNERVE
         )
@@ -12221,6 +12231,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0987
         SPECIES_FLUTTER_MANE,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
         )
@@ -12228,6 +12239,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0994
         SPECIES_IRON_MOTH,
         INNATES(
+            ABILITY_COMPOUND_EYES,
             ABILITY_LEVITATE,
             ABILITY_SWARM
         )
