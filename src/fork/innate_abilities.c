@@ -2502,6 +2502,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LIQUID_OOZE,
             ABILITY_REGENERATOR,
+            ABILITY_STICKY_HOLD,
             ABILITY_UNAWARE
         )
     },
@@ -2510,6 +2511,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LIQUID_OOZE,
             ABILITY_REGENERATOR,
+            ABILITY_STICKY_HOLD,
             ABILITY_UNAWARE
         )
     },
@@ -2518,6 +2520,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_LIQUID_OOZE,
             ABILITY_REGENERATOR,
+            ABILITY_STICKY_HOLD,
             ABILITY_UNAWARE
         )
     },
@@ -12057,6 +12060,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_IRON_BARBS,
             ABILITY_LIQUID_OOZE,
             ABILITY_REGENERATOR,
+            ABILITY_STICKY_HOLD,
             ABILITY_UNAWARE
         )
     },
