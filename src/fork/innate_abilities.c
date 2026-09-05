@@ -414,6 +414,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RAICHU,
         INNATES(
             ABILITY_CHEEK_POUCH,
+            ABILITY_CUTE_CHARM,
             ABILITY_RECKLESS
         )
     },
@@ -1608,6 +1609,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KANGASKHAN,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_FRIEND_GUARD,
             ABILITY_INNER_FOCUS,
             ABILITY_SCRAPPY
         )
@@ -1616,6 +1618,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KANGASKHAN_MEGA,
         INNATES(
             ABILITY_EARLY_BIRD,
+            ABILITY_FRIEND_GUARD,
             ABILITY_INNER_FOCUS,
             ABILITY_SCRAPPY
         )
@@ -1720,6 +1723,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0125
         SPECIES_ELECTABUZZ,
         INNATES(
+            ABILITY_ELECTROMORPHOSIS,
             ABILITY_IRON_FIST,
             ABILITY_VITAL_SPIRIT
         )
@@ -1818,6 +1822,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0131
         SPECIES_LAPRAS,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_HYDRATION,
             ABILITY_ICE_BODY,
             ABILITY_SHELL_ARMOR
@@ -1826,6 +1831,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0131
         SPECIES_LAPRAS_GMAX,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_HYDRATION,
             ABILITY_ICE_BODY,
             ABILITY_SHELL_ARMOR
@@ -1981,6 +1987,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0145
         SPECIES_ZAPDOS,
         INNATES(
+            ABILITY_ELECTROMORPHOSIS,
             ABILITY_PRESSURE
         )
     },
@@ -1994,6 +2001,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0146
         SPECIES_MOLTRES,
         INNATES(
+            ABILITY_MAGMA_ARMOR,
             ABILITY_PRESSURE,
             ABILITY_REGENERATOR
         )
@@ -3451,6 +3459,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0239
         SPECIES_ELEKID,
         INNATES(
+            ABILITY_ELECTROMORPHOSIS,
             ABILITY_IRON_FIST,
             ABILITY_VITAL_SPIRIT
         )
@@ -5809,6 +5818,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0466
         SPECIES_ELECTIVIRE,
         INNATES(
+            ABILITY_ELECTROMORPHOSIS,
             ABILITY_INTIMIDATE,
             ABILITY_IRON_FIST,
             ABILITY_VITAL_SPIRIT
