@@ -11175,6 +11175,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0884
         SPECIES_DURALUDON,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_LIGHT_METAL,
             ABILITY_STALWART
         )
@@ -11182,6 +11183,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0884
         SPECIES_DURALUDON_GMAX,
         INNATES(
+            ABILITY_CLEAR_BODY,
             ABILITY_LIGHT_METAL,
             ABILITY_STALWART
         )
@@ -12325,6 +12327,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1018
         SPECIES_ARCHALUDON,
         INNATES(
+            ABILITY_CLEAR_BODY,
+            ABILITY_HEAVY_METAL,
             ABILITY_STALWART,
             ABILITY_STAMINA,
             ABILITY_STURDY
