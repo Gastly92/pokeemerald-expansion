@@ -94,7 +94,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SLUDGE_BOMB,
-            MOVE_EARTH_POWER,
+            MOVE_PROTECT,
             MOVE_LEECH_SEED,
             MOVE_SLEEP_POWDER
         },
@@ -486,13 +486,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FEATHER_DANCE,
             MOVE_ROOST,
             MOVE_TAILWIND,
-            MOVE_AIR_CUTTER
+            MOVE_DEFOG
         },
         .ability = ABILITY_NO_GUARD,
-        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spd = 4,
+            .def = 4,
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
@@ -511,8 +511,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .spa = 4,
+            .hp = 4,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
@@ -983,8 +983,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_IRON_DEFENSE,
             MOVE_BODY_PRESS,
-            MOVE_ICICLE_CRASH,
-            MOVE_EARTHQUAKE
+            MOVE_AURORA_VEIL,
+            MOVE_KNOCK_OFF
         },
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(DEF_UP, SPA_DOWN),
@@ -1025,8 +1025,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC_SPIKES,
-            MOVE_SLUDGE_WAVE,
-            MOVE_EARTH_POWER
+            MOVE_BODY_PRESS,
+            MOVE_SLUDGE_BOMB
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
@@ -1310,7 +1310,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_AURORA_VEIL,
-            MOVE_DAZZLING_GLEAM,
+            MOVE_ENCORE,
             MOVE_FREEZE_DRY,
             MOVE_ICY_WIND
         },
@@ -1605,8 +1605,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_PSYCHIC_AFFINITY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .spa = 4,
+            .hp = 4,
+            .spa = 252,
             .spe = 252
         ),
         .teraType = TYPE_POISON,
@@ -1918,8 +1918,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 4,
-            .spd = 252
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_FIRE,
     },
@@ -2020,8 +2020,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 252,
-            .spd = 4
+            .atk = 252,
+            .def = 4
         ),
         .teraType = TYPE_GRASS,
     },
@@ -2245,9 +2245,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_FIGHTING,
     },
@@ -2265,9 +2265,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
+            .hp = 252,
             .atk = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_NORMAL,
     },
@@ -2362,7 +2362,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLEEP_POWDER,
             MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB,
-            MOVE_EARTH_POWER
+            MOVE_INFESTATION
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -2695,7 +2695,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 252,
+            .atk = 252,
             .def = 4,
             .spe = 252
         ),
@@ -3187,7 +3187,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RECYCLE,
             MOVE_PROTECT,
             MOVE_POISON_JAB,
-            MOVE_CRUNCH
+            MOVE_TOXIC
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(DEF_UP, SPA_DOWN),
@@ -3667,9 +3667,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .spa = 252,
-            .spd = 4,
-            .spe = 252
+            .spd = 4
         ),
         .teraType = TYPE_GRASS,
     },
@@ -3977,7 +3977,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_STRANGE_STEAM,
+            MOVE_CLEAR_SMOG,
             MOVE_SLUDGE_BOMB,
             MOVE_PROTECT,
             MOVE_PAIN_SPLIT
@@ -4017,7 +4017,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_STRANGE_STEAM,
+            MOVE_WILL_O_WISP,
             MOVE_SLUDGE_BOMB,
             MOVE_HAZE,
             MOVE_DEFOG
@@ -4801,9 +4801,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_WEAK_ARMOR,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
+            .hp = 252,
             .def = 4,
-            .spa = 252,
-            .spe = 252
+            .spa = 252
         ),
         .teraType = TYPE_ROCK,
     },
@@ -5002,7 +5002,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FREEZE_DRY,
-            MOVE_HURRICANE,
+            MOVE_SUBSTITUTE,
             MOVE_ROOST,
             MOVE_HAZE
         },
@@ -5282,8 +5282,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .def = 252,
-            .spd = 4
+            .atk = 252,
+            .def = 4
         ),
         .teraType = TYPE_FLYING,
     },
