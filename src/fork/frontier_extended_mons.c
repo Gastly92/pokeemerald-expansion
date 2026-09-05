@@ -29971,12 +29971,32 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FIGHTING,
     },
+    {
+        .species = SPECIES_PAWMOT,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_PUNCHING_GLOVE,
+        .moves =
+        {
+            MOVE_MACH_PUNCH,
+            MOVE_THUNDER_PUNCH,
+            MOVE_CLOSE_COMBAT,
+            MOVE_REVIVAL_BLESSING
+        },
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
 
     // 0925
     {
         .species = SPECIES_MAUSHOLD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LOADED_DICE,
+        .heldItem = ITEM_SILK_SCARF,
         .moves =
         {
             MOVE_POPULATION_BOMB,
@@ -30015,20 +30035,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_MAUSHOLD,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
-            MOVE_FOLLOW_ME,
-            MOVE_BEAT_UP,
-            MOVE_HELPING_HAND,
-            MOVE_PROTECT
+            MOVE_SUPER_FANG,
+            MOVE_POPULATION_BOMB,
+            MOVE_ENCORE,
+            MOVE_U_TURN
         },
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .spd = 4,
+            .hp = 4,
+            .atk = 252,
             .spe = 252
         ),
         .teraType = TYPE_GHOST,

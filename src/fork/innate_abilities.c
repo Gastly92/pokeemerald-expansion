@@ -11604,13 +11604,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PAWMI,
         INNATES(
             ABILITY_IRON_FIST,
-            ABILITY_NATURAL_CURE
+            ABILITY_NATURAL_CURE,
+            ABILITY_TANGLED_FEET
         )
     },
     { // 0922
         SPECIES_PAWMO,
         INNATES(
             ABILITY_IRON_FIST,
+            ABILITY_JUSTIFIED,
             ABILITY_NATURAL_CURE
         )
     },
@@ -11618,14 +11620,17 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PAWMOT,
         INNATES(
             ABILITY_IRON_FIST,
+            ABILITY_JUSTIFIED,
             ABILITY_NATURAL_CURE
         )
     },
     { // 0924
         SPECIES_TANDEMAUS,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_OWN_TEMPO,
-            ABILITY_PICKUP
+            ABILITY_PICKUP,
+            ABILITY_SKILL_LINK
         )
     },
     { // 0925
@@ -11635,6 +11640,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRIEND_GUARD,
             ABILITY_OWN_TEMPO,
             ABILITY_PICKUP,
+            ABILITY_SKILL_LINK,
             ABILITY_TECHNICIAN
         )
     },
@@ -11645,20 +11651,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRIEND_GUARD,
             ABILITY_OWN_TEMPO,
             ABILITY_PICKUP,
+            ABILITY_SKILL_LINK,
             ABILITY_TECHNICIAN
         )
     },
     { // 0926
         SPECIES_FIDOUGH,
         INNATES(
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0927
         SPECIES_DACHSBUN,
         INNATES(
             ABILITY_AROMA_VEIL,
-            ABILITY_OWN_TEMPO
+            ABILITY_OWN_TEMPO,
+            ABILITY_SWEET_VEIL
         )
     },
     { // 0931
