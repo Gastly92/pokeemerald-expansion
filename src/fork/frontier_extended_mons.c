@@ -32783,7 +32783,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252
         ),
         .iv = IVS(ATK, 0, SPE, 0),
-        .iv = IVS(ATK, 0, SPE, 0),
         .teraType = TYPE_FAIRY,
     },
 
