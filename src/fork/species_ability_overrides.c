@@ -2224,8 +2224,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_FLAPPLE, 0,
         ABILITY_SHEER_FORCE
     },
+    { // 0841
+        SPECIES_FLAPPLE_GMAX, 0,
+        ABILITY_SHEER_FORCE
+    },
     { // 0842
         SPECIES_APPLETUN, 2,
+        ABILITY_WELL_BAKED_BODY
+    },
+    { // 0842
+        SPECIES_APPLETUN_GMAX, 2,
         ABILITY_WELL_BAKED_BODY
     },
     { // 0847
@@ -2443,6 +2451,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0967
         SPECIES_CYCLIZAR, 1,
         ABILITY_MOTOR_DRIVE
+    },
+    { // 0973
+        SPECIES_FLAMIGO, 0,
+        ABILITY_WIND_RIDER
     },
     { // 0976
         SPECIES_VELUZA, 1,
