@@ -10502,7 +10502,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CORVIKNIGHT,
         INNATES(
             ABILITY_BIG_PECKS,
-            ABILITY_INTIMIDATE,
             ABILITY_KEEN_EYE,
             ABILITY_MIRROR_ARMOR,
             ABILITY_PRESSURE,
@@ -10513,7 +10512,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CORVIKNIGHT_GMAX,
         INNATES(
             ABILITY_BIG_PECKS,
-            ABILITY_INTIMIDATE,
             ABILITY_KEEN_EYE,
             ABILITY_MIRROR_ARMOR,
             ABILITY_PRESSURE,
