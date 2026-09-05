@@ -2208,6 +2208,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_ORBEETLE, 2,
         ABILITY_SYNCHRONIZE
     },
+    { // 0828
+        SPECIES_THIEVUL, 1,
+        ABILITY_TRACE
+    },
     { // 0834
         SPECIES_DREDNAW, 1,
         ABILITY_WATER_ABSORB
@@ -2215,6 +2219,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0836
         SPECIES_BOLTUND, 1,
         ABILITY_LIGHTNING_ROD
+    },
+    { // 0841
+        SPECIES_FLAPPLE, 0,
+        ABILITY_SHEER_FORCE
     },
     { // 0842
         SPECIES_APPLETUN, 2,
@@ -2225,7 +2233,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         ABILITY_WATER_ABSORB
     },
     { // 0849
-        SPECIES_TOXTRICITY, 1,
+        SPECIES_TOXTRICITY, 0,
         ABILITY_VOLT_ABSORB
     },
     { // 0849
@@ -2272,6 +2280,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_FALINKS, 1,
         ABILITY_NO_GUARD
     },
+    { // 0870
+        SPECIES_FALINKS_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    { // 0870
+        SPECIES_FALINKS_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    { // 0870
+        SPECIES_FALINKS_MEGA, 2,
+        ABILITY_NO_GUARD
+    },
     { // 0873
         SPECIES_FROSMOTH, 1,
         ABILITY_SNOW_WARNING
@@ -2279,6 +2299,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0874
         SPECIES_STONJOURNER, 1,
         ABILITY_SAND_STREAM
+    },
+    { // 0881
+        SPECIES_ARCTOZOLT, 2,
+        ABILITY_SNOW_WARNING
+    },
+    { // 0883
+        SPECIES_ARCTOVISH, 1,
+        ABILITY_SNOW_WARNING
     },
     { // 0887
         SPECIES_DRAGAPULT, 2,
@@ -2302,7 +2330,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0890
         SPECIES_ETERNATUS, 1,
-        ABILITY_POISON_TOUCH
+        ABILITY_EARTH_EATER
     },
     { // 0892
         SPECIES_URSHIFU, 1,
