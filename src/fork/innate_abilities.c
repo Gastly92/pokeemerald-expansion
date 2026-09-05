@@ -2797,6 +2797,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FRIGIBAX,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_SLUSH_RUSH,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -2804,6 +2805,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARCTIBAX,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_SHARPNESS,
+            ABILITY_SLUSH_RUSH,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -2811,6 +2814,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BAXCALIBUR,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_SHARPNESS,
+            ABILITY_SLUSH_RUSH,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -12247,6 +12252,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0999
         SPECIES_GIMMIGHOUL,
         INNATES(
+            ABILITY_PICKUP,
             ABILITY_RATTLED
         )
     },
@@ -12254,6 +12260,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GIMMIGHOUL_ROAMING,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_PICKUP,
             ABILITY_RATTLED
         )
     },
@@ -12261,35 +12268,45 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GHOLDENGO,
         INNATES(
             ABILITY_GOOD_AS_GOLD,
-            ABILITY_RATTLED
+            ABILITY_PICKUP,
+            ABILITY_RATTLED,
+            ABILITY_STURDY
         )
     },
     { // 1001
         SPECIES_WO_CHIEN,
         INNATES(
             ABILITY_CURSED_BODY,
-            ABILITY_SHELL_ARMOR
+            ABILITY_PRESSURE,
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STICKY_HOLD
         )
     },
     { // 1002
         SPECIES_CHIEN_PAO,
         INNATES(
             ABILITY_CURSED_BODY,
-            ABILITY_SHARPNESS
+            ABILITY_PRESSURE,
+            ABILITY_SHARPNESS,
+            ABILITY_SNOW_CLOAK
         )
     },
     { // 1003
         SPECIES_TING_LU,
         INNATES(
             ABILITY_CURSED_BODY,
-            ABILITY_STAMINA
+            ABILITY_PRESSURE,
+            ABILITY_STAMINA,
+            ABILITY_STURDY
         )
     },
     { // 1004
         SPECIES_CHI_YU,
         INNATES(
             ABILITY_CURSED_BODY,
-            ABILITY_LEVITATE
+            ABILITY_LEVITATE,
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_PRESSURE
         )
     },
     { // 1005

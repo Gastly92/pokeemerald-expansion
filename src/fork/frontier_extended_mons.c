@@ -32307,7 +32307,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WO_CHIEN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_BIG_ROOT,
         .moves =
         {
             MOVE_LEECH_SEED,
@@ -32323,6 +32323,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_WO_CHIEN,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_RUINATION,
+            MOVE_FOUL_PLAY,
+            MOVE_POLLEN_PUFF,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_TABLETS_OF_RUIN,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 1002
@@ -32408,6 +32428,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+    {
+        .species = SPECIES_TING_LU,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_RUINATION,
+            MOVE_THROAT_CHOP,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_VESSEL_OF_RUIN,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 1004
     {
@@ -32417,7 +32457,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_NASTY_PLOT,
-            MOVE_OVERHEAT,
+            MOVE_GRASS_KNOT,
             MOVE_DARK_PULSE,
             MOVE_FLAMETHROWER
         },
