@@ -10320,3 +10320,108 @@ TEST("Innate abilities: every species the roster drafts has a legal observable s
     EXPECT_GT(checked, 200);
     EXPECT_EQ(offenders, 0);
 }
+
+// FORK: Mega Staraptor regression. Its upstream ability is CONTRARY, which inverts every stat
+// change applied to the holder -- so the innate Moxie the Starly line carries read as Attack -1 on
+// a KO instead of +1, and the transformation actively punished the trait the base form is built
+// around. Contrary is never-an-innate (double-edged, fork-docs/INNATE_ABILITIES.md), so it cannot be
+// re-homed on the innate row; the fix is the override half of the Venusaur pattern -- every real
+// slot of the Mega points at the base form's chosen Hustle (src/fork/species_ability_overrides.c).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mega Staraptor's innate Moxie raises Attack on a KO")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_STARAPTOR_MEGA, ABILITY_MOXIE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_STARAPTOR_MEGA) { Ability(ABILITY_HUSTLE); Moves(MOVE_TACKLE); } // chosen Hustle, Moxie only as innate
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_ZIGZAGOON); // a second foe, so KOing the first doesn't end the battle
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); } // KOs the first foe; the second replaces it
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_MOXIE);
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1); // +1, NOT the -1 a chosen Contrary would have made of it
+    }
+}
+
+// An ability that inverts stat changes applied to its holder. Contrary is the only one in the game
+// today; the array exists so a future addition is one line rather than a rewritten test.
+static const enum Ability sStatInvertingAbilities[] =
+{
+    ABILITY_CONTRARY,
+};
+
+// Implemented innates whose whole effect is raising the HOLDER'S OWN stat stages. An inverting
+// chosen ability turns each of these from the boon the innate row intended into a penalty, so the
+// two may never sit on the same species. Abilities that move a *foe's* stats (Intimidate) are not
+// listed: Contrary sits on the holder, so it never touches them.
+static const enum Ability sSelfStatRaisingInnates[] =
+{
+    ABILITY_MOXIE, ABILITY_BEAST_BOOST, ABILITY_SOUL_HEART,
+    ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_BERSERK,
+    ABILITY_DEFIANT, ABILITY_COMPETITIVE, ABILITY_ANGER_POINT,
+    ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION,
+    ABILITY_RATTLED, ABILITY_STEADFAST, ABILITY_STEAM_ENGINE,
+    ABILITY_THERMAL_EXCHANGE, ABILITY_DOWNLOAD,
+    ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
+};
+
+// FORK: the gate the Mega Staraptor bug slipped through. Every other data check on this file asks
+// whether an innate is *wired*, *declared* or *selectable*; none asked whether the species' own
+// observable ability CONTRADICTS it. A stat-inverting chosen ability does exactly that, silently --
+// nothing is missing, nothing is duplicated, the innate simply fires backwards. Forms are covered
+// with everything else, which is what matters here: the conflict was introduced by a Mega whose
+// slots were left at upstream's value while the base form carried a clean override.
+TEST("Innate abilities: no species' chosen ability inverts its own stat-raising innates")
+{
+    u32 species;
+    u32 carriers = 0;
+    u32 offenders = 0;
+
+    // GetSpeciesAbilityOverride is inert while the feature flag is off, which would make this sweep
+    // read the upstream slots only.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        u32 slot, i, j;
+        bool32 inverts = FALSE;
+
+        if (!IsSpeciesEnabled(species))
+            continue;
+        if (!SpeciesHasAnyInnate(species))
+            continue;
+
+        for (slot = 0; slot < NUM_ABILITY_SLOTS && !inverts; slot++)
+        {
+            enum Ability ability = GetSpeciesAbility(species, slot);
+
+            for (i = 0; i < ARRAY_COUNT(sStatInvertingAbilities); i++)
+            {
+                if (ability == sStatInvertingAbilities[i])
+                {
+                    inverts = TRUE;
+                    break;
+                }
+            }
+        }
+
+        if (!inverts)
+            continue;
+
+        carriers++;
+        for (j = 0; j < ARRAY_COUNT(sSelfStatRaisingInnates); j++)
+        {
+            if (!SpeciesHasInnate(species, sSelfStatRaisingInnates[j]))
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("inverted innate: %S (species %d) can be sent out with a stat-inverting ability while carrying innate %S, which would fire backwards -- override the slot or drop the innate",
+                            gSpeciesInfo[species].speciesName, species, gAbilitiesInfo[sSelfStatRaisingInnates[j]].name);
+        }
+    }
+
+    // Guard against a vacuous pass if the override hook or the innate accessor ever breaks.
+    EXPECT_GT(carriers, 5);
+    EXPECT_EQ(offenders, 0);
+}
