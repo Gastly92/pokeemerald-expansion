@@ -12369,6 +12369,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1012
         SPECIES_POLTCHAGEIST,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_HEATPROOF,
             ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
@@ -12377,6 +12378,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1012
         SPECIES_POLTCHAGEIST_ARTISAN,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_HEATPROOF,
             ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
@@ -12385,6 +12387,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1013
         SPECIES_SINISTCHA,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_HEATPROOF,
             ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
@@ -12393,6 +12396,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1013
         SPECIES_SINISTCHA_MASTERPIECE,
         INNATES(
+            ABILITY_CURSED_BODY,
             ABILITY_HEATPROOF,
             ABILITY_HOSPITALITY,
             ABILITY_LEVITATE
@@ -12401,18 +12405,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1014
         SPECIES_OKIDOGI,
         INNATES(
-            ABILITY_GUARD_DOG
+            ABILITY_GUARD_DOG,
+            ABILITY_INTIMIDATE,
+            ABILITY_STRONG_JAW
         )
     },
     { // 1015
         SPECIES_MUNKIDORI,
         INNATES(
-            ABILITY_FRISK
+            ABILITY_ANTICIPATION,
+            ABILITY_FRISK,
+            ABILITY_TELEPATHY
         )
     },
     { // 1016
         SPECIES_FEZANDIPITI,
         INNATES(
+            ABILITY_CUTE_CHARM,
+            ABILITY_KEEN_EYE,
             ABILITY_TECHNICIAN
         )
     },
@@ -12420,6 +12430,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OGERPON_CORNERSTONE,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_LIMBER,
             ABILITY_STURDY
         )
     },
@@ -12427,37 +12438,43 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OGERPON_HEARTHFLAME,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_LIMBER,
             ABILITY_MOLD_BREAKER
         )
     },
     { // 1017
         SPECIES_OGERPON,
         INNATES(
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_LIMBER
         )
     },
     { // 1017
         SPECIES_OGERPON_WELLSPRING,
         INNATES(
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_LIMBER
         )
     },
     { // 1017
         SPECIES_OGERPON_TEAL_TERA,
         INNATES(
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_LIMBER
         )
     },
     { // 1017
         SPECIES_OGERPON_WELLSPRING_TERA,
         INNATES(
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_LIMBER
         )
     },
     { // 1017
         SPECIES_OGERPON_HEARTHFLAME_TERA,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_LIMBER,
             ABILITY_MOLD_BREAKER
         )
     },
@@ -12465,6 +12482,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OGERPON_CORNERSTONE_TERA,
         INNATES(
             ABILITY_DEFIANT,
+            ABILITY_LIMBER,
             ABILITY_STURDY
         )
     },
@@ -12507,36 +12525,43 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1022
         SPECIES_IRON_BOULDER,
         INNATES(
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_SHARPNESS
         )
     },
     { // 1023
         SPECIES_IRON_CROWN,
         INNATES(
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_SHARPNESS
         )
     },
     { // 1024
         SPECIES_TERAPAGOS_NORMAL,
         INNATES(
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STURDY
         )
     },
     { // 1024
         SPECIES_TERAPAGOS_TERASTAL,
         INNATES(
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STURDY
         )
     },
     { // 1024
         SPECIES_TERAPAGOS_STELLAR,
         INNATES(
-            ABILITY_SHELL_ARMOR
+            ABILITY_SHELL_ARMOR,
+            ABILITY_STURDY
         )
     },
     { // 1025
         SPECIES_PECHARUNT,
         INNATES(
+            ABILITY_CORROSION,
+            ABILITY_CURSED_BODY,
             ABILITY_LEVITATE
         )
     },
