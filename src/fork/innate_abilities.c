@@ -11464,6 +11464,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0906
         SPECIES_SPRIGATITO,
         INNATES(
+            ABILITY_CHLOROPHYLL,
             ABILITY_LIMBER,
             ABILITY_MAGICIAN,
             ABILITY_OVERGROW
@@ -11472,6 +11473,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0907
         SPECIES_FLORAGATO,
         INNATES(
+            ABILITY_CHLOROPHYLL,
             ABILITY_LIMBER,
             ABILITY_MAGICIAN,
             ABILITY_OVERGROW
@@ -11480,6 +11482,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0908
         SPECIES_MEOWSCARADA,
         INNATES(
+            ABILITY_CHLOROPHYLL,
+            ABILITY_INFILTRATOR,
             ABILITY_LIMBER,
             ABILITY_MAGICIAN,
             ABILITY_OVERGROW
@@ -11489,6 +11493,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FUECOCO,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_UNAWARE
         )
     },
@@ -11496,6 +11501,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CROCALOR,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_UNAWARE
         )
     },
@@ -11503,6 +11509,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SKELEDIRGE,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_HEALER,
+            ABILITY_MAGMA_ARMOR,
             ABILITY_UNAWARE
         )
     },
@@ -11510,20 +11518,25 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_QUAXLY,
         INNATES(
             ABILITY_MOXIE,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
     { // 0913
         SPECIES_QUAXWELL,
         INNATES(
+            ABILITY_DANCER,
             ABILITY_MOXIE,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
     { // 0914
         SPECIES_QUAQUAVAL,
         INNATES(
+            ABILITY_DANCER,
             ABILITY_MOXIE,
+            ABILITY_SWIFT_SWIM,
             ABILITY_TORRENT
         )
     },
