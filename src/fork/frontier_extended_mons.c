@@ -31268,7 +31268,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ANNIHILAPE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_BIG_ROOT,
         .moves =
         {
             MOVE_BULK_UP,
@@ -31277,11 +31277,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAUNT
         },
         .ability = ABILITY_ANGER_SHELL,
-        .nature = NATURE(SPD_UP, SPA_DOWN),
+        .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
-            .atk = 4,
-            .spd = 252
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_FAIRY,
     },
@@ -31304,6 +31304,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_ANNIHILAPE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_RAGE_FIST,
+            MOVE_DRAIN_PUNCH,
+            MOVE_COACHING
+        },
+        .ability = ABILITY_ANGER_SHELL,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0980
