@@ -32646,7 +32646,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CALM_MIND,
             MOVE_ELECTRO_DRIFT,
-            MOVE_DRACO_METEOR,
+            MOVE_DRAGON_PULSE,
             MOVE_DAZZLING_GLEAM
         },
         .ability = ABILITY_HADRON_ENGINE,
@@ -32721,6 +32721,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_IRON_LEAVES,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_PSYBLADE,
+            MOVE_LEAF_BLADE,
+            MOVE_SACRED_SWORD,
+            MOVE_WIDE_GUARD
+        },
+        .ability = ABILITY_QUARK_DRIVE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 1013

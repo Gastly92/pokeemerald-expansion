@@ -12319,20 +12319,26 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1006
         SPECIES_IRON_VALIANT,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_SHARPNESS,
+            ABILITY_STEADFAST,
             ABILITY_TELEPATHY
         )
     },
     { // 1007
         SPECIES_KORAIDON,
         INNATES(
-            ABILITY_INTIMIDATE
+            ABILITY_INTIMIDATE,
+            ABILITY_SHED_SKIN,
+            ABILITY_STAMINA
         )
     },
     { // 1008
         SPECIES_MIRAIDON,
         INNATES(
-            ABILITY_LEVITATE
+            ABILITY_CLEAR_BODY,
+            ABILITY_LEVITATE,
+            ABILITY_STAMINA
         )
     },
     { // 1009
@@ -12345,7 +12351,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1010
         SPECIES_IRON_LEAVES,
         INNATES(
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_SHARPNESS
         )
     },
     { // 1011
