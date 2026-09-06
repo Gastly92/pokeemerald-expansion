@@ -340,6 +340,7 @@ enum __attribute__((packed)) Ability
     ABILITY_FIRE_MANE = 316,
     ABILITY_PSYCHIC_AFFINITY = 317, // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.
     ABILITY_SPICY_SPRAY = 318,
+    ABILITY_WATER_AFFINITY = 319, // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.
     ABILITIES_COUNT_GEN9,
     ABILITIES_COUNT = ABILITIES_COUNT_GEN9,
 };

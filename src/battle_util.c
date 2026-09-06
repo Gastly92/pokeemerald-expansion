@@ -3438,6 +3438,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         // FORK: Affinity family (see src/fork/type_affinity.c). The latent third type is applied
         // passively in GetBattlerTypes(); this only announces it on switch-in (popup + message).
         case ABILITY_PSYCHIC_AFFINITY:
+        case ABILITY_WATER_AFFINITY:
             if (!shouldAbilityTrigger)
                 break;
             PREPARE_TYPE_BUFFER(gBattleTextBuff1, GetAbilityAffinityType(gLastUsedAbility));

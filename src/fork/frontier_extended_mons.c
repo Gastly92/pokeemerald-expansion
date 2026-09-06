@@ -8331,17 +8331,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CALM_MIND,
             MOVE_AEROBLAST,
-            MOVE_PSYCHIC,
+            MOVE_HYDRO_PUMP,
             MOVE_ROOST
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_WATER_AFFINITY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
             .spa = 196,
             .spe = 60
         ),
-        .teraType = TYPE_FLYING,
+        .teraType = TYPE_WATER,
     },
 
     // 0250
@@ -9248,7 +9248,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AIR_SLASH,
             MOVE_HYDRO_PUMP
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_WATER_AFFINITY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -19609,7 +19609,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LIQUIDATION,
             MOVE_AQUA_JET
         },
-        .ability = ABILITY_SNOW_WARNING,
+        .ability = ABILITY_WATER_AFFINITY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -31225,7 +31225,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_HORSEPOWER,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_WATER_AFFINITY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

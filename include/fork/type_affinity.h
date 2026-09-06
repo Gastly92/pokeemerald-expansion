@@ -19,7 +19,10 @@ static inline enum Type GetAbilityAffinityType(enum Ability ability)
     {
     case ABILITY_PSYCHIC_AFFINITY:
         return TYPE_PSYCHIC;
-    // Add a family member here, e.g. `case ABILITY_WATER_AFFINITY: return TYPE_WATER;`
+    case ABILITY_WATER_AFFINITY:
+        return TYPE_WATER;
+    // Add a family member here: one `case` returning the type it grants. Everything else
+    // (the type injection, the switch-in message) is shared by the whole family.
     default:
         return TYPE_MYSTERY;
     }

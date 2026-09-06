@@ -2485,4 +2485,16 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .name = _("Spicy Spray"),
         .description = COMPOUND_STRING("Burns the foe when damaged."),
     },
+
+    // FORK: second member of the "Affinity" family (see ABILITY_PSYCHIC_AFFINITY above for the
+    // family's rationale). Grants a latent Water type on switch-in: Water STAB and its
+    // resistances, plus Electric/Grass weaknesses. Carried by sea-dwelling species that aren't
+    // officially Water -- Lugia, Masquerain, Beartic, Dhelmise, Cursola, Cetitan
+    // (src/fork/species_ability_overrides.c). See fork-docs/NEW_ABILITIES.md.
+    [ABILITY_WATER_AFFINITY] =
+    {
+        .name = _("Water Affinity"),
+        .description = COMPOUND_STRING("Also gains a Water type."),
+        .aiRating = 5,
+    },
 };
