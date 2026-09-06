@@ -5,7 +5,7 @@
 #define AI_FRAME_CEILING_SINGLES_SMART_TRAINER                  10
 #define AI_FRAME_CEILING_DOUBLES_NO_FLAGS                       25 // +1: Batch Y6 innate switch-in stat sims (Intrepid Sword/Dauntless Shield) in SetBattlerStatStagesForSwitchin; +2: Batch Y8 Teravolt/Turboblaze add two IsInnateActive checks to IsMoldBreakerTypeAbility, which the AI runs
 #define AI_FRAME_CEILING_DOUBLES_SMART_TRAINER                  42 // +1: Tier 5.1 innate Mega Sol adds an IsInnateActive check to GetAttackerWeather, which the AI's shared damage calc runs; +1: Tier 5.5 innate Mold Breaker adds an IsInnateActive check to IsMoldBreakerTypeAbility, which the AI runs; +1: Batch Y8 Teravolt/Turboblaze add two more IsInnateActive checks there; +1: upstream sync through 1.16.3, chiefly #10542 replacing the BATTLE_PARTNER XOR macro with the GetPartnerBattler() call chain (see note below)
-#define AI_FRAME_CEILING_STEVEN_MULTI                           30 // +1: Tier 5.5 innate Mold Breaker adds an IsInnateActive check to IsMoldBreakerTypeAbility, which the AI runs; +1: Batch Y8 Teravolt/Turboblaze add two more IsInnateActive checks there; +1: upstream sync through 1.16.3 (see note below)
+#define AI_FRAME_CEILING_STEVEN_MULTI                           31 // +1: Tier 5.5 innate Mold Breaker adds an IsInnateActive check to IsMoldBreakerTypeAbility, which the AI runs; +1: Batch Y8 Teravolt/Turboblaze add two more IsInnateActive checks there; +1: upstream sync through 1.16.3 (see note below); +1: REGISTERING the config tags of #474 (BUFF_ACCURACY_ITEMS, BUFF_ACCURACY_ITEMS_REVEAL) -- see the config-tag note below, and the catch-up note under it
 #define AI_FRAME_CEILING_STEVEN_MULTI_SMART_TRAINER             35 // +1: Batch S innate AI reads (Infiltrator/Skill Link/etc.); +1: Batch U side-wide AI reads (Aroma Veil/Flower Veil/Telepathy); +1: Tier 5.5 innate Mold Breaker adds an IsInnateActive check to IsMoldBreakerTypeAbility, which the AI runs; +1: upstream sync through 1.16.3 (see note below); +1: REGISTERING a config tag (BUFF_ACCURACY_ITEMS_REVEAL) -- see the config-tag note below. (Batch W2 gave GetSpeciesAbility's species_ability_overrides lookup an O(1) bitmap fast-path, so the growing override table no longer taxes this scenario -- it stays flat despite W2's added rows, and future Batch W growth is free.)
 // FORK note on the 1.16.3 sync +1s: upstream #10542 removed the BATTLE_PARTNER/BATTLE_OPPOSITE XOR macros in
 // favour of GetPartnerBattler()/GetOppositeBattler(), which resolve through
@@ -28,6 +28,17 @@
 // registered config tag, independent of any AI change. A fork flag that never needs per-test
 // WITH_CONFIG toggling can avoid the cost entirely by living in config/fork.h as a plain
 // compile-time #if instead of being registered (see CLAUDE.md, "Define our *own* config flags").
+// FORK: catch-up note on this scenario's config-tag +1. #474 registered two config tags, bumped
+// the SMART_TRAINER line above for their cost, and missed that the plain Steven multi scenario
+// crossed the same frame at the same commit -- so master ran one frame over this ceiling from
+// #474 until the bump above. Bisected (git bisect over the 49 commits since this file was
+// written): 1ac5b30a measures 30, its child 2caf047e measures 31, and nothing between there and
+// HEAD moves it again. Notably it is NOT the fork's data tables growing: the line-review sweep
+// roughly doubled both the innate table and the override table over the same window, but
+// IsInnateActive() and GetSpeciesAbilityOverride() both early-out on
+// GetConfig(FEATURE_INNATE_ABILITIES), which TestInitConfigData force-disables, so neither table
+// is walked in this scenario at all. When a bump is needed here, bisect before attributing it --
+// the obvious suspect (more fork data) is the wrong one.
 #define AI_FRAME_CEILING_CHECK                                  FALSE // If TRUE, forces all thinking time tests to fail. Useful for printing all actual frame times to console by running the tests
 
 AI_SINGLE_BATTLE_TEST("AI thinking time doesn't explode (singles, no flags)")
