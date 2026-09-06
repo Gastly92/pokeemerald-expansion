@@ -731,6 +731,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LUGIA, 1,
         ABILITY_STORM_DRAIN
     },
+    {
+        SPECIES_LUGIA, 2,
+        ABILITY_WATER_AFFINITY
+    },
     { // 0250
         SPECIES_HO_OH, 1,
         ABILITY_FLAME_BODY
@@ -802,6 +806,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0284
         SPECIES_MASQUERAIN, 1,
         ABILITY_STORM_DRAIN
+    },
+    {
+        SPECIES_MASQUERAIN, 2,
+        ABILITY_WATER_AFFINITY
     },
     { // 0286
         SPECIES_BRELOOM, 1,
@@ -1721,6 +1729,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_BEARTIC, 1,
         ABILITY_SNOW_WARNING
     },
+    {
+        SPECIES_BEARTIC, 2,
+        ABILITY_WATER_AFFINITY
+    },
     { // 0615
         SPECIES_CRYOGONAL, 1,
         ABILITY_SNOW_WARNING
@@ -2112,6 +2124,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DHELMISE, 1,
         ABILITY_WATER_ABSORB
     },
+    {
+        SPECIES_DHELMISE, 2,
+        ABILITY_WATER_AFFINITY
+    },
     { // 0791
         SPECIES_SOLGALEO, 1,
         ABILITY_DROUGHT
@@ -2267,6 +2283,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0863
         SPECIES_PERRSERKER, 1,
         ABILITY_BULLETPROOF
+    },
+    { // 0864
+        SPECIES_CURSOLA, 1,
+        ABILITY_WATER_AFFINITY
     },
     { // 0865
         SPECIES_SIRFETCHD, 1,
@@ -2455,6 +2475,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0973
         SPECIES_FLAMIGO, 0,
         ABILITY_WIND_RIDER
+    },
+    { // 0975
+        SPECIES_CETITAN, 1,
+        ABILITY_WATER_AFFINITY
     },
     { // 0976
         SPECIES_VELUZA, 1,

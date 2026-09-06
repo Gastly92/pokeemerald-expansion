@@ -8,8 +8,10 @@ hooks in `src/battle_util.c`, `src/fork/type_affinity.c`) stay the source of tru
 semantics.
 
 The worked example throughout is the **Affinity** family — the fork's first custom ability
-mechanic — whose first member is **`Psychic Affinity`** (grants a latent Psychic type in
-battle). It's assigned to **Butterfree**.
+mechanic — whose members are **`Psychic Affinity`** (a latent Psychic type in battle, on
+**Butterfree**) and **`Water Affinity`** (a latent Water type, on **Lugia**). The second member
+cost four lines of engine code: the family's machinery is shared, so [adding
+one](#adding-a-family-member) is a data change.
 
 A second worked example, **`Halo`** (assigned to **Clefable**), is written up in its own
 [case study](#case-study-halo) below. It is worth reading alongside Affinity because it shows
@@ -144,7 +146,7 @@ any limitation).
 An **Affinity** ability grants its holder a **latent third type in battle** — the mon gets
 that type's STAB and resistances, but also its weaknesses. It's the fork's answer to
 "lean a species into a flavour type it isn't officially" (Butterfree → Psychic; Lugia →
-Water, planned).
+Water).
 
 **The engine already supports a third type.** `gBattleMons[battler].types[2]` is a real slot
 (normally `TYPE_MYSTERY`), the same one the moves Trick-or-Treat and Forest's Curse write to.
@@ -170,16 +172,28 @@ ability popup + the message *"{mon}'s affinity awakened its latent {type} type!"
   `GetBattlerAbility`, so a suppressed Affinity ability drops its type too.
 - **In-battle only** — like Trick-or-Treat, it changes battle types, not the Pokédex/summary.
 
-### Adding a family member (e.g. Water Affinity for Lugia)
+### Adding a family member
 
-It's a data-only change once the machinery exists:
+Once the machinery exists a new member is a data change — this is exactly what
+`Water Affinity` did:
 
 1. New constant `ABILITY_WATER_AFFINITY` (Step 1) + data entry (Step 2).
 2. One line in `GetAbilityAffinityType`: `case ABILITY_WATER_AFFINITY: return TYPE_WATER;`.
-3. One case in the `ABILITYEFFECT_ON_SWITCHIN` switch (or fold both abilities into a shared
-   `case`), reusing `BattleScript_TypeAffinityActivates` — the message template already fills
-   the type name from the ability.
-4. Assign it (Step 5) and test it (Step 4).
+3. Fall the new ability into the family's shared `case` in the `ABILITYEFFECT_ON_SWITCHIN`
+   switch, which reuses `BattleScript_TypeAffinityActivates` — the message template fills the
+   type name from the ability, so it needs no new string.
+4. Assign it (Step 5) and test it (Step 4). The family's composition rules (Tera suppression,
+   an already-occupied third slot) are shared, so they're covered once for the family in
+   `test/battle/ability/psychic_affinity.c`; a new member's own test only needs the angles
+   that are specific to *its* type — for Water Affinity, the Water STAB it grants, the
+   Electric weakness and the Ice resistance it adds, and its switch-in message.
+
+**Picking holders.** An Affinity is a trade, so it should land on species whose flavour asks
+for the type *and* whose learnset can cash the STAB — that's what makes the added weaknesses a
+choice rather than a tax. Water Affinity's six holders are all sea-dwellers that aren't
+officially Water: **Lugia** (guardian of the sea), **Masquerain** (Surskit loses its Water half
+on evolution), **Beartic** (swims the frigid seas), **Dhelmise** (a sunken anchor in seaweed),
+**Cursola** (coral) and **Cetitan** (a whale).
 
 ## Scope / known limitations
 
