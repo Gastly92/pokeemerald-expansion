@@ -14,6 +14,11 @@
 // reserved for the Frontier Brain and the Battle Tower's gym-leader bosses;
 // everyone else runs one tier down. These tests pin the role split and the
 // "regular is never stronger than boss" relationship between the two presets.
+//
+// The tier gap is the switching engine first and knowledge second: cutting only
+// the boss's omniscience left regular opponents playing almost as well, because
+// the AI's damage calc runs against the mon actually on the field either way.
+// See the B_FRONTIER_REGULAR_AI_FLAGS comment in config/frontier.h.
 
 TEST("Frontier AI: the Frontier Brain gets the boss tier")
 {
@@ -62,17 +67,45 @@ TEST("Frontier AI: the regular tier drops the boss tier's information advantage"
     EXPECT(!(B_FRONTIER_REGULAR_AI_FLAGS & AI_FLAG_SMART_SPECIES_LOGIC));
 }
 
+TEST("Frontier AI: the regular tier gives up the switching engine")
+{
+    // The biggest lever in a 6-mon format, and the one the first pass left in
+    // place. AI_FLAG_SMART_SWITCHING gates the pivot checks in battle_ai_switch.c;
+    // AI_FLAG_SMART_MON_CHOICES gates GetBestMonIntegrated, the best-matchup
+    // send-in picker. Both are boss-only.
+    EXPECT(B_FRONTIER_HARD_AI_FLAGS & AI_FLAG_SMART_SWITCHING);
+    EXPECT(B_FRONTIER_HARD_AI_FLAGS & AI_FLAG_SMART_MON_CHOICES);
+    EXPECT(!(B_FRONTIER_REGULAR_AI_FLAGS & AI_FLAG_SMART_SWITCHING));
+    EXPECT(!(B_FRONTIER_REGULAR_AI_FLAGS & AI_FLAG_SMART_MON_CHOICES));
+}
+
+TEST("Frontier AI: the regular tier keeps AI_FLAG_RANDOMIZE_SWITCHIN as a handicap")
+{
+    // Counter-intuitive, so pinned: dropping this flag makes the AI pick the
+    // *best* switch-in instead of a random eligible one, which would strengthen
+    // the tier the moment smart mon choices came back. It stays.
+    EXPECT(B_FRONTIER_REGULAR_AI_FLAGS & AI_FLAG_RANDOMIZE_SWITCHIN);
+}
+
 TEST("Frontier AI: the regular tier still plays its team competently")
 {
     // A tier below the boss is not a tier of throwing the battle: regular
-    // opponents keep basic move choice, smart switching, and the gimmick
-    // discipline that stops them burning Tera / their one Z-Move on turn one.
-    u64 competence = AI_FLAG_BASIC_TRAINER | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES
-                   | AI_FLAG_SMART_TERA | AI_FLAG_SMART_Z_MOVE;
+    // opponents keep basic move choice (so they take a KO when they have one and
+    // avoid moves that plainly fail) and the gimmick discipline that stops them
+    // burning Tera / their one Z-Move on turn one.
+    u64 competence = AI_FLAG_BASIC_TRAINER | AI_FLAG_SMART_TERA | AI_FLAG_SMART_Z_MOVE;
 
     EXPECT_EQ(B_FRONTIER_REGULAR_AI_FLAGS & competence, competence);
 
     // ...and every one of those is shared with the boss tier, so the two presets
     // differ only in the boss's favour.
     EXPECT_EQ(B_FRONTIER_HARD_AI_FLAGS & competence, competence);
+}
+
+TEST("Frontier AI: the regular tier holds nothing over the boss but its assumptions")
+{
+    // The exact "never stronger than boss" invariant. AI_FLAG_ASSUMPTIONS is the
+    // only bit the regular tier carries that the boss tier does not, and it is a
+    // restricted stand-in for the omniscience the boss already has outright.
+    EXPECT_EQ(B_FRONTIER_REGULAR_AI_FLAGS & ~B_FRONTIER_HARD_AI_FLAGS, AI_FLAG_ASSUMPTIONS);
 }
