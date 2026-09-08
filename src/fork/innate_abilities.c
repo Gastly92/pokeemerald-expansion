@@ -12577,62 +12577,64 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
 };
 
-// FORK: sublinear species->row lookup. The source table above stays sorted by National
-// Dex number for humans (forms sit beside their base), which is NOT species-id order
-// (form constants live at high ids), so it can't be binary-searched directly. Instead a
-// row-index permutation sorted by species id is built lazily on first lookup (EWRAM bss,
-// ~1 KB) and binary-searched thereafter. This lookup backs every SpeciesHasInnate /
-// IsInnateActive call in the AI-hot battle calcs when the feature is ON, where the old
-// linear walk of the whole table (~500 rows) was a real per-eval cost that CI never
-// measures (tests force the feature off). Insertion sort is near-O(n) here because dex
-// order is nearly species order — only form rows travel. Binary-search "any match" equals
-// the documented "first match" because the "no species appears more than once" integrity
-// test (test/fork/innate_abilities.c) forbids duplicate rows; the "species-keyed lookup
-// matches the raw table" test guards this index against the raw rows.
+// FORK: O(1) species->row lookup. The source table above stays sorted by National Dex
+// number for humans (forms sit beside their base), which is NOT species-id order (form
+// constants live at high ids), so it can't be indexed or searched directly. Instead a
+// species-keyed index is built lazily on first lookup (EWRAM bss, ~3 KB) by one linear
+// pass over the rows, after which every lookup is a single array read. Entries hold
+// row + 1, so 0 -- the value zeroed .bss already holds -- means "this species has no
+// innates" and the build needs no pre-fill. A species is recorded only if it has no
+// entry yet, which preserves the documented "first matching row wins" behaviour should a
+// duplicate species row ever slip in (the "no species appears more than once" integrity
+// test in test/fork/innate_abilities.c forbids them; the "species-keyed lookup matches
+// the raw table" test guards this index against the raw rows).
+//
+// This lookup backs every SpeciesHasInnate / IsInnateActive call in the AI-hot battle
+// calcs when the feature is ON, a cost CI never measures (tests force the feature off).
+// The index used to be a row permutation sorted by species id, built with an insertion
+// sort and binary-searched. That build is quadratic in practice, not the near-linear the
+// old comment claimed: form rows carry high species ids, so every ordinary row after one
+// has to travel back past it, making the cost ~(ordinary rows x form rows). At 1462 rows
+// that was ~230k shift iterations -- a visible hitch on hardware, at whatever moment the
+// first innate lookup of a session happened to land -- and it grew with every line-review
+// batch (~162k at 1250 rows in Aug 2026). The linear pass below is ~1.5k iterations and
+// stays linear as the table grows.
 // EWRAM_DATA is load-bearing: plain C statics' .bss lands in IWRAM (ld_script_modern.ld),
-// where ~1 KB collides with the stack and corrupts memory (heap-magic asserts in malloc.c).
-static EWRAM_DATA u16 sRowIndexSortedBySpecies[ARRAY_COUNT(sSpeciesInnates)] = {0};
-static EWRAM_DATA bool8 sRowIndexBuilt = FALSE;
+// where a multi-KB array collides with the stack and corrupts memory (heap-magic asserts
+// in malloc.c).
+static EWRAM_DATA u16 sRowBySpecies[NUM_SPECIES] = {0};
+static EWRAM_DATA bool8 sRowBySpeciesBuilt = FALSE;
 
-static void BuildRowIndexSortedBySpecies(void)
+static void BuildRowBySpecies(void)
 {
-    u32 i, j;
+    u32 i;
 
     for (i = 0; i < ARRAY_COUNT(sSpeciesInnates); i++)
     {
         u16 species = sSpeciesInnates[i].species;
 
-        for (j = i; j > 0 && sSpeciesInnates[sRowIndexSortedBySpecies[j - 1]].species > species; j--)
-            sRowIndexSortedBySpecies[j] = sRowIndexSortedBySpecies[j - 1];
-        sRowIndexSortedBySpecies[j] = i;
+        if (species < NUM_SPECIES && sRowBySpecies[species] == 0)
+            sRowBySpecies[species] = i + 1;
     }
 
-    sRowIndexBuilt = TRUE;
+    sRowBySpeciesBuilt = TRUE;
 }
 
 static const enum Ability *GetSpeciesInnateList(u16 species)
 {
-    u32 lo, hi;
+    u16 row;
 
-    if (!sRowIndexBuilt)
-        BuildRowIndexSortedBySpecies();
+    if (!sRowBySpeciesBuilt)
+        BuildRowBySpecies();
 
-    lo = 0;
-    hi = ARRAY_COUNT(sSpeciesInnates);
-    while (lo < hi)
-    {
-        u32 mid = (lo + hi) / 2;
-        const struct SpeciesInnates *row = &sSpeciesInnates[sRowIndexSortedBySpecies[mid]];
+    if (species >= NUM_SPECIES)
+        return NULL;
 
-        if (row->species == species)
-            return row->innates;
-        if (row->species < species)
-            lo = mid + 1;
-        else
-            hi = mid;
-    }
+    row = sRowBySpecies[species];
+    if (row == 0)
+        return NULL;
 
-    return NULL;
+    return sSpeciesInnates[row - 1].innates;
 }
 
 bool32 SpeciesHasInnate(u16 species, enum Ability ability)
