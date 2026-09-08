@@ -1775,12 +1775,22 @@ produced three real improvements, kept: (1) the AI's six off-field `SpeciesHasIn
 the feature off — and, worse, credited innates that don't function (a feature-off misprediction bug);
 all six now check `GetConfig(FEATURE_INNATE_ABILITIES)` first. (2) the innate Sniper / Tinted Lens
 clauses in `GetAttackerAbilitiesModifier` now take the cached `ctx->innatesEnabled` instead of calling
-`GetConfig()` per evaluation (the crit-calc caching discipline). (3) `SpeciesHasInnate` is now
-**sublinear**: `GetSpeciesInnateList` binary-searches a lazily built species-sorted row index (~1 KB
-EWRAM bss) instead of walking the ~500-row table linearly — with the feature ON in shipped play, every
-`IsInnateActive` paid that walk on the AI-hot calcs, a cost CI never measures because tests force the
-feature off. The source table stays dex-sorted for humans; the "species-keyed lookup matches the raw
-table" integrity test guards the index.
+`GetConfig()` per evaluation (the crit-calc caching discipline). (3) `SpeciesHasInnate` no longer walks
+the table: `GetSpeciesInnateList` reads a lazily built species-keyed row index instead — with the
+feature ON in shipped play, every `IsInnateActive` paid that walk on the AI-hot calcs, a cost CI never
+measures because tests force the feature off. The source table stays dex-sorted for humans; the
+"species-keyed lookup matches the raw table" integrity test guards the index.
+
+That index was first built as a row permutation sorted by species id, populated with an insertion sort
+and binary-searched. **The sort was the wrong shape and has since been replaced.** It was assumed
+near-O(n) because dex order is nearly species order, but form constants live at high species ids, so
+every ordinary row following a form row has to travel back past it — the cost is roughly
+*(ordinary rows × form rows)*, and it grew with every line-review batch: ~162k shift iterations at 1250
+rows, ~230k at 1462. That is a fifth to a third of a second on hardware, spent in one stall at whatever
+moment the session's first innate lookup happened to land. The index is now a direct
+`species → row + 1` array (`NUM_SPECIES` u16s, ~3 KB EWRAM bss; 0 means "no innates", so zeroed .bss
+needs no pre-fill), built by a single linear pass over the rows. Lookups became O(1) as well, and
+neither the build nor the lookup grows superlinearly as the table does.
 
 **Species (canon only so far, no flavor picks yet):** every species whose ability data carries the ability in any
 slot, in dex order, merged into existing rows where the species already carries an innate. Shield Dust:
