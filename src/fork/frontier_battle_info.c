@@ -254,6 +254,36 @@ static void BuildHazardLine(u8 *dst, u32 side)
         StringCopy(dst, COMPOUND_STRING("None"));
 }
 
+// FORK: the whole-field statuses that belong to neither side and are not weather
+// or terrain - Trick Room above all, which silently inverts turn order and was the
+// one piece of field state this page never showed. Ordered by how often it decides
+// a turn, so the entry that matters most is the one that survives a clipped row.
+static void BuildFieldEffectLine(u8 *dst)
+{
+    u8 *p = dst;
+
+    *p = EOS;
+    if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+        p = AppendTimedEntry(p, COMPOUND_STRING("Trick Room"), gFieldTimers.trickRoomTimer);
+    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        p = AppendTimedEntry(p, COMPOUND_STRING("Gravity"), gFieldTimers.gravityTimer);
+    if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
+        p = AppendTimedEntry(p, COMPOUND_STRING("Magic Room"), gFieldTimers.magicRoomTimer);
+    if (gFieldStatuses & STATUS_FIELD_WONDER_ROOM)
+        p = AppendTimedEntry(p, COMPOUND_STRING("Wonder Room"), gFieldTimers.wonderRoomTimer);
+    if (gFieldStatuses & STATUS_FIELD_MUDSPORT)
+        p = AppendTimedEntry(p, COMPOUND_STRING("Mud Sport"), gFieldTimers.mudSportTimer);
+    if (gFieldStatuses & STATUS_FIELD_WATERSPORT)
+        p = AppendTimedEntry(p, COMPOUND_STRING("Water Sport"), gFieldTimers.waterSportTimer);
+    if (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK)
+        p = AppendTimedEntry(p, COMPOUND_STRING("Fairy Lock"), gFieldTimers.fairyLockTimer);
+    if (gFieldStatuses & STATUS_FIELD_ION_DELUGE)
+        p = AppendTimedEntry(p, COMPOUND_STRING("Ion Deluge"), 0);
+
+    if (p == dst)
+        StringCopy(dst, COMPOUND_STRING("None"));
+}
+
 static void BuildScreenLine(u8 *dst, u32 side)
 {
     u8 *p = dst;
@@ -327,6 +357,23 @@ static void PrintFooter(u8 windowId, const u8 *str)
     PrintLineEx(windowId, str, 0, (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
 }
 
+// FORK: right-aligned "TRICK ROOM" marker on the Speed Tiers title row. The speed
+// glyphs stay a pure number comparison (see AppendSpeedGlyph), so under Trick Room
+// the faster mon is the one that moves LAST - this flags that inversion without
+// costing a body line (the page can already fill its height with 2 player rows and
+// 6 foe rows). The title is 121px wide and the marker 47px in FONT_NARROW, so in a
+// 224px window the two never collide.
+static void PrintTrickRoomMarker(u8 windowId)
+{
+    if (!(gFieldStatuses & STATUS_FIELD_TRICK_ROOM))
+        return;
+
+    const u8 *str = COMPOUND_STRING("TRICK ROOM");
+
+    PrintLineEx(windowId, str, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, str, 0), 0,
+                TEXT_COLOR_RED, TEXT_COLOR_LIGHT_RED);
+}
+
 // FORK: compact "n/N" page counter, right-aligned on the footer row, so the
 // player can see how many pages exist and where they are. Same blue chrome as
 // the footer hint; the two never collide because every footer hint is short
@@ -378,9 +425,11 @@ static void DrawDeterministicDamageLine(u8 windowId, u8 *line, u32 y)
 
 static void DrawFieldPage(u8 windowId)
 {
-    // Large enough to hold a side with every screen/hazard active at once (the
-    // text is clipped to the window width on screen, but the buffer must fit it).
-    u8 line[128];
+    // Large enough to hold the longest row this page can build - a side with every
+    // screen/hazard active at once, or the field row with every whole-field status
+    // up (the text is clipped to the window width on screen, but the buffer must
+    // fit it, so a pile-up truncates visually rather than overrunning).
+    u8 line[160];
     u8 *p;
     u32 y = 0;
 
@@ -401,6 +450,11 @@ static void DrawFieldPage(u8 windowId)
 
     p = StringCopy(line, COMPOUND_STRING("Terrain: "));
     StringAppend(p, GetInfoTerrainName());
+    PrintLine(windowId, line, 0, y);
+    y += LINE_H;
+
+    p = StringCopy(line, COMPOUND_STRING("Field: "));
+    BuildFieldEffectLine(p);
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
@@ -1008,6 +1062,7 @@ static void DrawSpeedPage(u8 windowId)
     bool32 haveRef = FALSE;
 
     PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"));
+    PrintTrickRoomMarker(windowId);
     y += LINE_H;
 
     // The player's active mons: their actual *effective* Speed - everything the
