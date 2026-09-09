@@ -929,6 +929,7 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
     const u16 *paletteData;
     struct Pokemon *monAtk = GetBattlerMon(battlerAtk);
     struct Pokemon *monDef = GetBattlerMon(battlerDef);
+    struct Pokemon *illusionMonAtk = NULL;
     void *dst;
 
     if (IsContest())
@@ -946,6 +947,11 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
     else
     {
         position = GetBattlerPosition(battlerAtk);
+        // Only ILLUSION_ON is tested (rather than calling GetIllusionMonPtr unconditionally) so
+        // this stays side-effect free: GetIllusionMonPtr runs SetIllusionMon on ILLUSION_NOT_SET.
+        if (gBattleStruct->illusion[battlerAtk].state == ILLUSION_ON)
+            illusionMonAtk = GetIllusionMonPtr(battlerAtk);
+
         if (changeType == SPECIES_GFX_CHANGE_TRANSFORM)
         {
             // Get base form if its currently Gigantamax
@@ -964,6 +970,17 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
             // species. Mirror the transform branch below for personality/shininess too.
             targetSpecies = gBattleSpritesDataPtr->battlerData[battlerAtk].transformSpecies;
         }
+        else if (illusionMonAtk != NULL)
+        {
+            // Same for an Illusion that is still up: a form-change-style reload of the
+            // battler's own sprite (Dynamax wearing off, Terastallization) must repaint the
+            // disguise, not the real species. Otherwise the Illusion silently "wore off"
+            // graphically the moment Dynamax ended, even though nothing broke it and the
+            // healthbox still shows the disguised nickname. SPECIES_GFX_CHANGE_ILLUSION_OFF
+            // is the one reload that should show the real species, and it already runs with
+            // the state set to ILLUSION_OFF (see InitAndLaunchChosenStatusAnimation).
+            targetSpecies = GetMonData(illusionMonAtk, MON_DATA_SPECIES);
+        }
         else
         {
             targetSpecies = GetMonData(monAtk, MON_DATA_SPECIES);
@@ -974,6 +991,11 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
         {
             personalityValue = gTransformedPersonalities[battlerAtk];
             isShiny = gTransformedShininess[battlerAtk];
+        }
+        else if (illusionMonAtk != NULL)
+        {
+            personalityValue = GetMonData(illusionMonAtk, MON_DATA_PERSONALITY);
+            isShiny = GetMonData(illusionMonAtk, MON_DATA_IS_SHINY);
         }
         else
         {
