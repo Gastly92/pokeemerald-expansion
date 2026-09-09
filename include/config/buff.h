@@ -38,6 +38,9 @@
 //  - Using Leech Seed on a foe *you already seed* no longer just fails - it deals
 //    an immediate drain (instead of wasting the turn). Seeding a foe that only
 //    *another* battler has seeded stacks your seed on instead of failing.
+//    That immediate drain ignores the victim's Substitute, exactly as the end-turn
+//    tick does - the seed is already on the mon behind it. A *first* seed is still
+//    blocked by a Substitute, as in vanilla.
 // The per-tick (and immediate) drain fraction is 1/BUFF_LEECH_SEED_DENOMINATOR.
 // The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS)
 // so battle tests can flip it per-test; the magnitude lives in the plain

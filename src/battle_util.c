@@ -1784,6 +1784,20 @@ s32 GetDrainedBigRootHp(enum BattlerId battler, s32 hp)
     return hp;
 }
 
+// FORK: BUFF_LEECH_SEED. TRUE when a use of Leech Seed on `victim` is the immediate
+// re-drain (this `seeder` already seeds it) rather than a fresh seed, AND that drain can
+// actually land. Callers use it both to run the re-drain (Cmd_setseeded) and to let it
+// pierce the victim's Substitute (Cmd_jumpifsubstituteblocks) - the seed is attached to
+// the mon itself, so like the end-turn tick the drain ignores a Substitute put up after
+// the seed. A fresh seed is unaffected and still fails against a Substitute, as in vanilla.
+bool32 CanLeechSeedReDrain(enum BattlerId seeder, enum BattlerId victim)
+{
+    return GetConfig(BUFF_LEECH_SEED)
+        && (gBattleMons[victim].volatiles.leechSeededBy & LEECH_SEED_BIT(seeder))
+        && IsBattlerPresent(victim)
+        && !BattlerHasAbility(victim, ABILITY_MAGIC_GUARD); // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
+}
+
 // FORK: BUFF_LEECH_SEED. Computes a single Leech Seed drain of `victim` by
 // `seeder`: stores the passive HP deltas (victim loses, seeder gains - or takes
 // recoil under Liquid Ooze) and the drain message, then returns which drain

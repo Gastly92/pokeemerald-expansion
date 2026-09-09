@@ -133,3 +133,62 @@ SINGLE_BATTLE_TEST("BUFF_LEECH_SEED: Liquid Ooze punishes the immediate re-drain
         HP_BAR(player);
     }
 }
+
+SINGLE_BATTLE_TEST("BUFF_LEECH_SEED: The immediate re-drain goes through the victim's Substitute")
+{
+    s16 tick;
+    s16 drain;
+    s16 heal;
+
+    GIVEN {
+        WITH_CONFIG(BUFF_LEECH_SEED, TRUE);
+        PLAYER(SPECIES_WYNAUT) { HP(1); }
+        OPPONENT(SPECIES_SHELLDER) { Moves(MOVE_SUBSTITUTE, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_LEECH_SEED); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_SUBSTITUTE); }
+        TURN { MOVE(player, MOVE_LEECH_SEED); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        MESSAGE("The opposing Shellder was seeded!");
+        HP_BAR(opponent, captureDamage: &tick);   // end-of-turn 1 tick
+        HP_BAR(player);
+        // Turn 2: the Substitute goes up; the seed keeps ticking through it.
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SUBSTITUTE, opponent);
+        HP_BAR(opponent);                         // the Substitute's HP cost
+        HP_BAR(opponent);                         // end-of-turn 2 tick, through the Substitute
+        HP_BAR(player);
+        // Turn 3: re-seeding still re-drains - the Substitute doesn't block it, just
+        // like it doesn't block the end-turn tick. Only the HP change and the message
+        // show: a general animation on a mon behind a Substitute is suppressed.
+        HP_BAR(opponent, captureDamage: &drain);
+        HP_BAR(player, captureDamage: &heal);
+        MESSAGE("The opposing Shellder's health is sapped by Leech Seed!");
+        HP_BAR(opponent);                         // end-of-turn 3 tick, on top of the re-drain
+        HP_BAR(player);
+    } THEN {
+        u32 substituteHP = opponent->volatiles.substituteHP;
+        EXPECT_EQ(drain, tick);                   // a full extra drain, not a partial one
+        EXPECT_MUL_EQ(drain, Q_4_12(-1), heal);
+        EXPECT_NE(substituteHP, 0);               // it hit the mon, not the Substitute
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_LEECH_SEED: A first seed is still blocked by the target's Substitute")
+{
+    GIVEN {
+        WITH_CONFIG(BUFF_LEECH_SEED, TRUE);
+        PLAYER(SPECIES_WYNAUT);
+        OPPONENT(SPECIES_SHELLDER) { Moves(MOVE_SUBSTITUTE, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_SUBSTITUTE); }
+        TURN { MOVE(player, MOVE_LEECH_SEED); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SUBSTITUTE, opponent);
+        // Nobody seeds this foe yet, so there is no drain to carry through: vanilla failure.
+        MESSAGE("But it failed!");
+        NOT MESSAGE("The opposing Shellder was seeded!");
+    } THEN {
+        u32 seeders = opponent->volatiles.leechSeededBy;
+        EXPECT_EQ(seeders, 0);
+    }
+}
