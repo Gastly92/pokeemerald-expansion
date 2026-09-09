@@ -4,7 +4,7 @@
 #include "fork/innate_abilities.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/species_ability_overrides.h"
-#include "fork/frontier_battle_info.h" // FORK: INFO_MAX_DISPLAYED_INNATES (the viewer's innates-page row budget)
+#include "fork/frontier_battle_info.h" // INFO_MAX_DISPLAYED_INNATES (the viewer's innates-page row budget)
 
 // FORK: coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
 // default off in the test baseline (see TestInitConfigData), so each test that
@@ -10427,7 +10427,7 @@ TEST("Innate abilities: no species' chosen ability inverts its own stat-raising 
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: B_FRONTIER_BATTLE_INFO. The INFO viewer gives each foe's innates a dedicated page, whose
+// B_FRONTIER_BATTLE_INFO. The INFO viewer gives each foe's innates a dedicated page, whose
 // row budget is INFO_MAX_DISPLAYED_INNATES. The Foe page advertises the full count ("+N innates")
 // and the innates page prints the list, so a species declaring more than the page can hold would
 // promise entries it never shows. The list used to be crammed onto the Foe page's Ability row,

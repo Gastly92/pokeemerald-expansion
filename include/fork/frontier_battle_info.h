@@ -15,7 +15,7 @@ extern bool8 gFrontierBattleInfoActive;
 // is off, so callers compile down to vanilla behavior.
 bool32 ShouldReplaceBagWithInfo(void);
 
-// FORK: FEATURE_INNATE_ABILITIES -- how many innates the viewer's dedicated innates page can
+// FEATURE_INNATE_ABILITIES -- how many innates the viewer's dedicated innates page can
 // list for one foe (its row budget, two columns deep). A species declaring more than this would
 // be counted on the Foe page's "+N innates" hint but silently truncated on the page itself, so
 // test/fork/innate_abilities.c guards the table against it.

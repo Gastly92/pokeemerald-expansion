@@ -86,7 +86,7 @@ enum
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
     INFO_PAGE_FOE,
-    // FORK: FEATURE_INNATE_ABILITIES -- the foe's innate list, on its own page (see
+    // FEATURE_INNATE_ABILITIES -- the foe's innate list, on its own page (see
     // DrawInnatesPage). It sits directly after the Foe page and shares tFoeIndex, so
     // L/R steps from a mon's Foe page onto that same mon's innates. It is the LAST
     // page on purpose: with the feature off it simply doesn't exist, which InfoPageCount()
@@ -95,7 +95,7 @@ enum
     INFO_PAGE_COUNT,
 };
 
-// FORK: number of pages that actually exist right now. The innates page is dropped
+// Number of pages that actually exist right now. The innates page is dropped
 // when FEATURE_INNATE_ABILITIES is off (it is runtime-registered, so this can't be a
 // compile-time count), which keeps the L/R cycle and the "n/N" indicator honest instead
 // of parking the player on a permanently empty page.
@@ -506,7 +506,7 @@ static u8 *AppendFoeGimmickLabel(u8 *p, struct Pokemon *foeParty, u32 foeIndex)
     }
 }
 
-// FORK: FEATURE_INNATE_ABILITIES — innate abilities are a *static property of the species*
+// FEATURE_INNATE_ABILITIES — innate abilities are a *static property of the species*
 // (like the type line), fully determined the moment the foe's species is known. So, unlike the
 // genuinely-hidden 1-of-N chosen-ability roll, they are NOT reveal-gated: every innate of the
 // *displayed* species is listed as soon as the mon is seen. Keyed off the Illusion-aware display
@@ -608,7 +608,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     // not from gAiPartyData->ability: the latter is later clobbered by the AI's speculative
     // switch/move evaluation, which would otherwise display the wrong ability.
     //
-    // FORK: FEATURE_INNATE_ABILITIES — the innates themselves live on their own page
+    // FEATURE_INNATE_ABILITIES — the innates themselves live on their own page
     // (INFO_PAGE_INNATES, one L/R step to the right); this line carries only a "+N innates"
     // pointer to it. They used to be spelled out inline here as "(+Levitate, Sturdy)", which
     // a species with a long list blew straight through: eight innates is ~120 characters of
@@ -684,7 +684,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
 }
 
-// FORK: FEATURE_INNATE_ABILITIES — the foe's innates, one per row, on their own page.
+// FEATURE_INNATE_ABILITIES — the foe's innates, one per row, on their own page.
 // They were listed inline on the Foe page's Ability row; species carrying five, six or eight
 // of them overran both the 64-byte line buffer and the 224px window, so they get the space
 // they need here and the Foe row keeps only a "+N innates" pointer.
@@ -1159,7 +1159,7 @@ static void Task_InfoFadeOut(u8 taskId)
     }
 }
 
-// FORK: pages that show a single foe and therefore honour <> to cycle mons. Both the
+// Pages that show a single foe and therefore honour <> to cycle mons. Both the
 // Foe page and its innates page are scoped to tFoeIndex, so they share the same cycling.
 static bool32 IsFoeScopedPage(s16 page)
 {
