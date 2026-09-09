@@ -93,11 +93,16 @@
 // omniscience only ever filled in *unseen* moves/abilities/items and the regular
 // tier still found the same move nearly every turn. What made a routine 6v6 fight
 // feel like a wall was switching, and that is what this tier gives up:
-//   - AI_FLAG_SMART_SWITCHING, which gates roughly fifteen pivot checks in
-//     battle_ai_switch.c (bad odds, hazard survival, absorbing abilities,
-//     trappers, Truant, Wonder Guard, Encore, choice-lock, lowered stats, losing
-//     the 1v1, ...). Without it regular opponents fall back to vanilla's switch
-//     conditions and stop pivoting into the resist every time you commit.
+//   - AI_FLAG_SMART_SWITCHING, which gates most of the ShouldSwitch chain in
+//     battle_ai_switch.c: losing the 1v1, bad odds, trappers, move-absorbing
+//     abilities, an opponent charging or semi-invulnerable, Encore, lowered
+//     attacking stats, Wish passing, all-scores-bad, the Yawn branch of
+//     badly-statused, and the Intimidate / Natural Cure / Regenerator pivot. It
+//     also gates the hazard-survival *veto* at the top of the chain, so without
+//     it the AI will switch a mon into entry hazards that kill it. What still
+//     fires: Wonder Guard, Truant, all-moves-bad, bad choice-lock and Perish
+//     Song — enough that regular opponents react to the obvious, but they stop
+//     pivoting into the resist every time you commit to an attack.
 //   - AI_FLAG_SMART_MON_CHOICES, which gates GetBestMonIntegrated, the
 //     best-matchup send-in picker. Without it the post-KO send-in is vanilla's —
 //     in a 6-mon format, the difference between always answering your sweeper and
@@ -113,9 +118,13 @@
 // that plainly fail, and don't throw their one gimmick away on turn one.
 //
 // AI_FLAG_RANDOMIZE_SWITCHIN is deliberately KEPT, because it is a handicap
-// rather than a strength: without it GetBestMonIntegrated returns the *best* type
-// matchup / defensive / damage mon instead of a random eligible one, so dropping
-// it would make this tier stronger the moment smart mon choices came back.
+// rather than a strength. It still bites on the vanilla path this tier now uses:
+// GetBestMonVanilla routes its Baton Pass and type-matchup pools through
+// GetSwitchinCandidate, which without the flag picks the last eligible mon in
+// party order rather than a random one. And it matters more still if smart mon
+// choices ever came back, since GetBestMonIntegrated then returns the *best* type
+// matchup / defensive / damage mon instead of a random eligible one. Removing it
+// would make this tier stronger, not weaker.
 //
 // Two further levers were considered and rejected, both because they cost
 // determinism or nothing at all. AI_FLAG_CONSERVATIVE ("assume your own moves low

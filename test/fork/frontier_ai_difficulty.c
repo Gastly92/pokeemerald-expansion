@@ -81,9 +81,11 @@ TEST("Frontier AI: the regular tier gives up the switching engine")
 
 TEST("Frontier AI: the regular tier keeps AI_FLAG_RANDOMIZE_SWITCHIN as a handicap")
 {
-    // Counter-intuitive, so pinned: dropping this flag makes the AI pick the
-    // *best* switch-in instead of a random eligible one, which would strengthen
-    // the tier the moment smart mon choices came back. It stays.
+    // Counter-intuitive, so pinned: dropping this flag makes the AI pick a
+    // deterministic candidate instead of a random eligible one — the last mon in
+    // party order on the vanilla path this tier uses, and outright the *best*
+    // matchup if smart mon choices ever came back. Removing it would strengthen
+    // the tier, so it stays.
     EXPECT(B_FRONTIER_REGULAR_AI_FLAGS & AI_FLAG_RANDOMIZE_SWITCHIN);
 }
 
