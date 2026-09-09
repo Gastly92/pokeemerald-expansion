@@ -929,7 +929,7 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
     const u16 *paletteData;
     struct Pokemon *monAtk = GetBattlerMon(battlerAtk);
     struct Pokemon *monDef = GetBattlerMon(battlerDef);
-    struct Pokemon *illusionMonAtk = NULL;
+    struct Pokemon *illusionMonAtk = NULL; // FORK: see the reload-identity note below
     void *dst;
 
     if (IsContest())
@@ -947,8 +947,9 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
     else
     {
         position = GetBattlerPosition(battlerAtk);
-        // Only ILLUSION_ON is tested (rather than calling GetIllusionMonPtr unconditionally) so
-        // this stays side-effect free: GetIllusionMonPtr runs SetIllusionMon on ILLUSION_NOT_SET.
+        // FORK: added. Must stay inside the non-contest branch — gBattleStruct is NULL outside a
+        // battle. Only ILLUSION_ON is tested, rather than calling GetIllusionMonPtr unconditionally,
+        // to keep this side-effect free: GetIllusionMonPtr runs SetIllusionMon on ILLUSION_NOT_SET.
         if (gBattleStruct->illusion[battlerAtk].state == ILLUSION_ON)
             illusionMonAtk = GetIllusionMonPtr(battlerAtk);
 
@@ -962,23 +963,29 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
             else
                 targetSpecies = GetMonData(monDef, MON_DATA_SPECIES);
         }
+        // FORK: upstream's chain is `if (TRANSFORM) ... else <real party species>`; we insert two
+        // extra arms before that final else so a reload of the battler's OWN sprite keeps whatever
+        // identity it is currently wearing. On conflict, keep upstream's TRANSFORM branch and its
+        // final else verbatim and re-insert these two arms between them, in this order — transformed
+        // outranks Illusion, matching BattleLoadMonSpriteGfx and GetBattlerSpriteCoordAttr. The
+        // personality/shininess chain just below has to be extended in lockstep or the sprite and
+        // its palette disagree.
         else if (gBattleMons[battlerAtk].volatiles.transformed)
         {
             // A transformed battler (e.g. a Ditto that copied another Pokémon) must keep
             // its copied appearance through form-change-style gfx reloads such as the
-            // Terastallization animation, instead of reverting to its underlying party
-            // species. Mirror the transform branch below for personality/shininess too.
+            // Terastallization animation, instead of reverting to its underlying party species.
             targetSpecies = gBattleSpritesDataPtr->battlerData[battlerAtk].transformSpecies;
         }
         else if (illusionMonAtk != NULL)
         {
-            // Same for an Illusion that is still up: a form-change-style reload of the
-            // battler's own sprite (Dynamax wearing off, Terastallization) must repaint the
-            // disguise, not the real species. Otherwise the Illusion silently "wore off"
-            // graphically the moment Dynamax ended, even though nothing broke it and the
-            // healthbox still shows the disguised nickname. SPECIES_GFX_CHANGE_ILLUSION_OFF
-            // is the one reload that should show the real species, and it already runs with
-            // the state set to ILLUSION_OFF (see InitAndLaunchChosenStatusAnimation).
+            // Same for an Illusion that is still up: a form-change-style reload (Dynamax wearing
+            // off, Terastallization) must repaint the disguise, not the real species — otherwise
+            // the Illusion silently "wore off" graphically with nothing having broken it, while
+            // the healthbox, which goes through GetIllusionMonPtr, still shows the disguise.
+            // SPECIES_GFX_CHANGE_ILLUSION_OFF is the one reload that *should* show the real
+            // species, and it is unaffected: it already runs with the state set to ILLUSION_OFF
+            // (see InitAndLaunchChosenStatusAnimation), so illusionMonAtk is NULL by then.
             targetSpecies = GetMonData(illusionMonAtk, MON_DATA_SPECIES);
         }
         else
@@ -992,6 +999,10 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
             personalityValue = gTransformedPersonalities[battlerAtk];
             isShiny = gTransformedShininess[battlerAtk];
         }
+        // FORK: two divergences in this chain, both mirroring the species chain above. Upstream's
+        // condition is `changeType == SPECIES_GFX_CHANGE_TRANSFORM` alone (the `|| ...transformed`
+        // is ours), and upstream has no Illusion arm — it goes straight to the final else. On
+        // conflict, re-add the `||` to upstream's condition and re-insert this arm before the else.
         else if (illusionMonAtk != NULL)
         {
             personalityValue = GetMonData(illusionMonAtk, MON_DATA_PERSONALITY);
