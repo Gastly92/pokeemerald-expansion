@@ -58,6 +58,8 @@ static const u16 sLegendarySpecies[] =
     SPECIES_SHAYMIN_SKY,           // 0492
     SPECIES_KYUREM_BLACK,          // 0646
     SPECIES_KYUREM_WHITE,          // 0646
+    SPECIES_MELOETTA,              // 0648
+    SPECIES_PHEROMOSA,             // 0795
     SPECIES_SPECTRIER,             // 0897
 };
 
@@ -95,7 +97,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_LANDORUS_THERIAN,    // 0645
     SPECIES_KYUREM,              // 0646
     SPECIES_KELDEO,              // 0647
-    SPECIES_MELOETTA,            // 0648
     SPECIES_GENESECT,            // 0649
     SPECIES_ZYGARDE_10_POWER_CONSTRUCT, // 0718
     SPECIES_DIANCIE,             // 0719
@@ -109,7 +110,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_TAPU_FINI,           // 0788
     SPECIES_NIHILEGO,            // 0793
     SPECIES_BUZZWOLE,            // 0794
-    SPECIES_PHEROMOSA,           // 0795
     SPECIES_XURKITREE,           // 0796
     SPECIES_CELESTEELA,          // 0797
     SPECIES_KARTANA,             // 0798
