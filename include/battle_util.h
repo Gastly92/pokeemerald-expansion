@@ -216,6 +216,9 @@ enum LeechSeedDrainKind
     LEECH_SEED_DRAIN_HEAL_BLOCK,  // victim loses HP, seeder heals nothing (seeder under Heal Block)
 };
 enum LeechSeedDrainKind SetUpLeechSeedDrain(enum BattlerId victim, enum BattlerId seeder);
+// FORK: BUFF_LEECH_SEED. TRUE when using Leech Seed on `victim` is the immediate re-drain
+// (`seeder` already seeds it) and that drain can actually land.
+bool32 CanLeechSeedReDrain(enum BattlerId seeder, enum BattlerId victim);
 bool32 IsAbilityAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck);
 // FORK: FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord: TRUE if the chosen
 // ability matches (recorded, exactly as upstream) OR an active innate matches (NOT recorded — the

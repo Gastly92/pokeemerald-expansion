@@ -7176,7 +7176,7 @@ static void Cmd_setseeded(void)
         // FORK: BUFF_LEECH_SEED - re-seeding a foe this battler already seeds drains
         // it immediately instead of wasting the turn. If no drain is possible (victim
         // absent or has Magic Guard) fall back to the vanilla "missed" result.
-        if (IsBattlerPresent(victim) && !BattlerHasAbility(victim, ABILITY_MAGIC_GUARD)) // FORK: innate-aware Magic Guard (FEATURE_INNATE_ABILITIES)
+        if (CanLeechSeedReDrain(seeder, victim))
         {
             gBattleScripting.animArg1 = seeder;
             gBattleScripting.animArg2 = victim;
@@ -9791,7 +9791,14 @@ static void Cmd_jumpifsubstituteblocks(void)
 {
     CMD_ARGS(const u8 *jumpInstr);
 
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
+    // FORK: BUFF_LEECH_SEED - a Leech Seed re-drain isn't stopped by the victim's
+    // Substitute. The seed is already on the mon behind it (the end-turn tick drains
+    // through a Substitute too), so an extra drain shouldn't fail just because the
+    // victim put one up afterwards. A fresh seed still fails, as in vanilla.
+    if (GetMoveEffect(gCurrentMove) == EFFECT_LEECH_SEED
+     && CanLeechSeedReDrain(gBattlerAttacker, gBattlerTarget))
+        gBattlescriptCurrInstr = cmd->nextInstr;
+    else if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
         gBattlescriptCurrInstr = cmd->jumpInstr;
     else
         gBattlescriptCurrInstr = cmd->nextInstr;
