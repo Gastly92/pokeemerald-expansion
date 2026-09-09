@@ -104,6 +104,10 @@
 // flinch lands even on a neutral/resisted hit, but still can't be re-applied the
 // next turn, so the boosters can't restore flinch-lock. The AI's valuation is taught the
 // same conditions so it credits an effect exactly when it will actually happen.
+// This flag also covers the one additional effect that rolls its own dice outside
+// that path: G-Max Replenish's berry recovery (a flat 50% coin flip in
+// SetMoveEffect's MOVE_EFFECT_RECYCLE_BERRIES case, because the effect itself is
+// declared with no chance) always restores the allies' eaten berries.
 // See TryTriggerAdditionalEffect() and DeterministicAdditionalEffectApplies() in
 // src/fork/deterministic_moves.c.
 #define DETERMINISTIC_ADDITIONAL_EFFECTS TRUE

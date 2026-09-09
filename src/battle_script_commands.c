@@ -3336,7 +3336,10 @@ void SetMoveEffect(enum BattlerId battlerAtk, enum BattlerId effectBattler, enum
         gBattlescriptCurrInstr = BattleScript_MoveEffectAromatherapy;
         break;
     case MOVE_EFFECT_RECYCLE_BERRIES:
-        if (RandomPercentage(RNG_G_MAX_REPLENISH, 50))
+        // FORK: DETERMINISTIC_ADDITIONAL_EFFECTS — G-Max Replenish's berry recovery is a
+        // flat 50% coin flip upstream; with the flag on it always restores. On conflict,
+        // keep the GetConfig short-circuit in front of upstream's RandomPercentage roll.
+        if (GetConfig(DETERMINISTIC_ADDITIONAL_EFFECTS) || RandomPercentage(RNG_G_MAX_REPLENISH, 50))
         {
             BattleScriptPush(battleScript);
             gBattlescriptCurrInstr = BattleScript_EffectRecycleBerriesAllies;

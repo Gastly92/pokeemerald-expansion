@@ -88,3 +88,33 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ADDITIONAL_EFFECTS: a guaranteed (100%) effect
         STATUS_ICON(opponent, paralysis: TRUE);
     }
 }
+
+DOUBLE_BATTLE_TEST("DETERMINISTIC_ADDITIONAL_EFFECTS: G-Max Replenish always recycles allies' berries")
+{
+    // Upstream rolls a flat 50% for the berry recovery inside SetMoveEffect (the effect
+    // itself is declared with no chance, so it never reaches TryTriggerAdditionalEffect).
+    // With the flag on it always restores, for every value of the tag; the stock coin flip
+    // is still covered by the flag-off tests in test/battle/gimmick/dynamax.c.
+    PASSES_RANDOMLY(2, 2, RNG_G_MAX_REPLENISH);
+    GIVEN {
+        ASSUME(MoveHasAdditionalEffectSelf(MOVE_G_MAX_REPLENISH, MOVE_EFFECT_RECYCLE_BERRIES));
+        ASSUME(GetItemHoldEffect(ITEM_APICOT_BERRY) == HOLD_EFFECT_SP_DEFENSE_UP);
+        WITH_CONFIG(DETERMINISTIC_ADDITIONAL_EFFECTS, TRUE);
+        PLAYER(SPECIES_SNORLAX) { Item(ITEM_APICOT_BERRY); GigantamaxFactor(TRUE); }
+        PLAYER(SPECIES_MUNCHLAX) { Item(ITEM_APICOT_BERRY); Ability(ABILITY_THICK_FAT); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_STUFF_CHEEKS); MOVE(playerRight, MOVE_STUFF_CHEEKS); }
+        TURN { MOVE(playerLeft, MOVE_SCRATCH, target: opponentLeft, gimmick: GIMMICK_DYNAMAX); }
+    } SCENE {
+        // turn 1
+        MESSAGE("The Apicot Berry boosted Snorlax's Sp. Def!");
+        MESSAGE("The Apicot Berry boosted Munchlax's Sp. Def!");
+        // turn 2
+        MESSAGE("Snorlax used G-Max Replenish!");
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_G_MAX_REPLENISH, playerLeft);
+        MESSAGE("Snorlax found one Apicot Berry!");
+        MESSAGE("Munchlax found one Apicot Berry!");
+    }
+}
