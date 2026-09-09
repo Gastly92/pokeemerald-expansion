@@ -104,7 +104,10 @@ holder's effect *certain* — bypassing the gate and always landing (detected as
 "computed chance > base chance" so both sources and their quirks fall out for
 free). This **includes flinch**: a boosted flinch lands even on a neutral/resisted
 hit, but still keeps the anti-lock cap (it just can't be re-applied next turn), so
-the boosters can't restore flinch-lock. Implemented in
+the boosters can't restore flinch-lock. **G-Max Replenish** is folded in here too:
+its berry recovery is a chance-less (primary) effect that rolls its own flat 50%
+inside `SetMoveEffect`'s `MOVE_EFFECT_RECYCLE_BERRIES` case, and under this flag it
+always restores the side's eaten berries. Implemented in
 `TryTriggerAdditionalEffect()` / `DeterministicAdditionalEffectApplies()`
 (`src/fork/deterministic_moves.c`), called from `Cmd_setadditionaleffects`; the AI is taught
 the same condition via `AI_IsAdditionalEffectReliable` (`src/battle_ai_util.c`,
