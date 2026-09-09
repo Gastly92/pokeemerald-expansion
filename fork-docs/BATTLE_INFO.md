@@ -41,15 +41,23 @@ path.
 | Page | Shows |
 |---|---|
 | **Speed Tiers** | Each revealed foe's *possible* Speed range vs. your effective Speed (see below) |
-| **Field** | Weather, terrain, entry hazards and side screens for both sides |
+| **Field** | Weather, terrain, whole-field effects (Trick Room, Gravity, Magic/Wonder Room, the Sports, Fairy Lock, Ion Deluge) with turns left, plus entry hazards and side screens for both sides |
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
 | **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, `FNT` when fainted, moves/PP/ability/held item |
 | **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
 
+The whole-field row (`BuildFieldEffectLine`) lists effects that belong to neither
+side and are neither weather nor terrain, each with its turns left where it has a
+timer. Entries are ordered by how often they decide a turn - **Trick Room first** -
+because the row is a fixed height and clips at the window edge if several stack, so
+the ordering decides what survives.
+
 Under `DETERMINISTIC_DAMAGE` the Field page also prints the current turn and that
 turn's fixed damage multiplier, so the player can read the exact roll
-(`DrawDeterministicDamageLine`).
+(`DrawDeterministicDamageLine`). With that line on, the page is at its full nine
+rows and has no room for a tenth - check the arithmetic against `LINE_H` and the
+footer's `y` before adding one.
 
 **Speed Tiers leads the cycle and is the default page on first open**, because it is
 the page that actually drives a turn decision.
@@ -97,6 +105,13 @@ Two deliberate choices here:
   foe's *possible base* Speed. The foe's range still deliberately ignores its own
   hidden Choice Scarf, paralysis or Speed ability, because the player has not seen
   those.
+
+Because it stays a number comparison, **Trick Room inverts what the glyphs imply** -
+the faster mon moves last. Rather than flipping the glyphs (which would make `▼` mean
+two different things depending on hidden-ish field state), the page prints a
+right-aligned **`TRICK ROOM`** marker on its title row while the room is up
+(`PrintTrickRoomMarker`). It costs no body line, which matters: with two player rows
+and six revealed foes the page is already full. The Field page carries the turn count.
 
 Code: `DrawSpeedPage` / `CalcSpeedBound` / `AppendSpeedGlyph`, mirroring
 `CalculateMonStats`.
