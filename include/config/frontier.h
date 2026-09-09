@@ -84,22 +84,59 @@
 
 // The REGULAR tier used when B_FRONTIER_HARD_AI is TRUE: every non-boss Frontier
 // opponent. Deliberately one notch below B_FRONTIER_HARD_AI_FLAGS — never
-// stronger in any respect — so a boss battle is always the harder fight. What it
-// gives up:
-//   - AI_FLAG_OMNISCIENT, the single biggest lever. Instead of reading the
-//     player's whole team, it gets AI_FLAG_ASSUMPTIONS — upstream's restricted
-//     knowledge set (STAB moves, a chance at certain status moves, ability
-//     prediction weighted by aiRating), so it can still be scouted and baited.
-//     These are the only bits the regular tier holds that the boss tier doesn't,
-//     and they only ever *fill in* unknown player data (RecordMovesBasedOnStab /
-//     RecordStatusMoves), which omniscience already knows outright.
-//   - AI_FLAG_PP_STALL_PREVENTION, so immunity-stalling it is viable again.
-//   - AI_FLAG_SMART_SPECIES_LOGIC, the fork's per-species misplay patches.
-// It keeps the play-competence flags (smart switching/mon choices, randomized
-// switch-ins, smart Tera, smart Z-Move) so regular opponents still play their
-// teams sensibly and don't throw their one gimmick away on turn one.
-#define B_FRONTIER_REGULAR_AI_FLAGS (AI_FLAG_BASIC_TRAINER | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES \
-                                     | AI_FLAG_RANDOMIZE_SWITCHIN | AI_FLAG_SMART_TERA | AI_FLAG_SMART_Z_MOVE \
+// stronger in any respect — so a boss battle is always the harder fight.
+//
+// The lever that matters is the *switching* engine, not knowledge. An earlier
+// pass cut only the boss tier's information advantage (AI_FLAG_OMNISCIENT) and
+// left both decision engines intact, which barely moved the difficulty: the AI's
+// damage calc always runs against the defender actually on the field, so
+// omniscience only ever filled in *unseen* moves/abilities/items and the regular
+// tier still found the same move nearly every turn. What made a routine 6v6 fight
+// feel like a wall was switching, and that is what this tier gives up:
+//   - AI_FLAG_SMART_SWITCHING, which gates most of the ShouldSwitch chain in
+//     battle_ai_switch.c: losing the 1v1, bad odds, trappers, move-absorbing
+//     abilities, an opponent charging or semi-invulnerable, Encore, lowered
+//     attacking stats, Wish passing, all-scores-bad, the Yawn branch of
+//     badly-statused, and the Intimidate / Natural Cure / Regenerator pivot. It
+//     also gates the hazard-survival *veto* at the top of the chain, so without
+//     it the AI will switch a mon into entry hazards that kill it. What still
+//     fires: Wonder Guard, Truant, all-moves-bad, bad choice-lock and Perish
+//     Song — enough that regular opponents react to the obvious, but they stop
+//     pivoting into the resist every time you commit to an attack.
+//   - AI_FLAG_SMART_MON_CHOICES, which gates GetBestMonIntegrated, the
+//     best-matchup send-in picker. Without it the post-KO send-in is vanilla's —
+//     in a 6-mon format, the difference between always answering your sweeper and
+//     often not.
+// It also still gives up AI_FLAG_OMNISCIENT (for AI_FLAG_ASSUMPTIONS, upstream's
+// restricted knowledge set: STAB moves, certain status moves, aiRating-weighted
+// ability prediction), AI_FLAG_PP_STALL_PREVENTION — so immunity-stalling is
+// viable — and AI_FLAG_SMART_SPECIES_LOGIC, the fork's per-species misplay
+// patches.
+//
+// It keeps AI_FLAG_BASIC_TRAINER and the gimmick discipline (smart Tera, smart
+// Z-Move), so regular opponents still take a KO when they have one, avoid moves
+// that plainly fail, and don't throw their one gimmick away on turn one.
+//
+// AI_FLAG_RANDOMIZE_SWITCHIN is deliberately KEPT, because it is a handicap
+// rather than a strength. It still bites on the vanilla path this tier now uses:
+// GetBestMonVanilla routes its Baton Pass and type-matchup pools through
+// GetSwitchinCandidate, which without the flag picks the last eligible mon in
+// party order rather than a random one. And it matters more still if smart mon
+// choices ever came back, since GetBestMonIntegrated then returns the *best* type
+// matchup / defensive / damage mon instead of a random eligible one. Removing it
+// would make this tier stronger, not weaker.
+//
+// Two further levers were considered and rejected, both because they cost
+// determinism or nothing at all. AI_FLAG_CONSERVATIVE ("assume your own moves low
+// roll") is inert here: with DETERMINISTIC_DAMAGE on, the min/median/max rolls
+// collapse to one fixed figure (see the roll helpers in src/battle_ai_util.c), so
+// it changes no decision. Dropping AI_FLAG_CHECK_VIABILITY would weaken move
+// choice sharply, but it leaves most moves tied at AI_SCORE_DEFAULT with the tie
+// broken by RNG_AI_SCORE_TIE_SINGLES — buying difficulty with coin flips, against
+// the grain of the DETERMINISTIC_* project. Prefer cutting an engine to adding a
+// dice roll.
+#define B_FRONTIER_REGULAR_AI_FLAGS (AI_FLAG_BASIC_TRAINER | AI_FLAG_RANDOMIZE_SWITCHIN \
+                                     | AI_FLAG_SMART_TERA | AI_FLAG_SMART_Z_MOVE \
                                      | AI_FLAG_ASSUMPTIONS)
 
 // If TRUE, the post-battle Battle Factory rental-swap screen lets the player
