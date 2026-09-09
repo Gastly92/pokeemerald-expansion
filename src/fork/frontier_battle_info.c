@@ -86,8 +86,23 @@ enum
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
     INFO_PAGE_FOE,
+    // FEATURE_INNATE_ABILITIES -- the foe's innate list, on its own page (see
+    // DrawInnatesPage). It sits directly after the Foe page and shares tFoeIndex, so
+    // L/R steps from a mon's Foe page onto that same mon's innates. It is the LAST
+    // page on purpose: with the feature off it simply doesn't exist, which InfoPageCount()
+    // expresses by returning one less than INFO_PAGE_COUNT.
+    INFO_PAGE_INNATES,
     INFO_PAGE_COUNT,
 };
+
+// Number of pages that actually exist right now. The innates page is dropped
+// when FEATURE_INNATE_ABILITIES is off (it is runtime-registered, so this can't be a
+// compile-time count), which keeps the L/R cycle and the "n/N" indicator honest instead
+// of parking the player on a permanently empty page.
+static u32 InfoPageCount(void)
+{
+    return GetConfig(FEATURE_INNATE_ABILITIES) ? INFO_PAGE_COUNT : INFO_PAGE_COUNT - 1;
+}
 
 // Task data layout.
 #define tWindowId  data[0]
@@ -322,7 +337,7 @@ static void PrintPageIndicator(u8 windowId, u32 page)
     u8 *p = ConvertIntToDecimalStringN(str, page + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
 
     *p++ = CHAR_SLASH;
-    ConvertIntToDecimalStringN(p, INFO_PAGE_COUNT, STR_CONV_MODE_LEFT_ALIGN, 1);
+    ConvertIntToDecimalStringN(p, InfoPageCount(), STR_CONV_MODE_LEFT_ALIGN, 1);
     PrintLineEx(windowId, str, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, str, 0),
                 (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
 }
@@ -491,6 +506,51 @@ static u8 *AppendFoeGimmickLabel(u8 *p, struct Pokemon *foeParty, u32 foeIndex)
     }
 }
 
+// FEATURE_INNATE_ABILITIES — innate abilities are a *static property of the species*
+// (like the type line), fully determined the moment the foe's species is known. So, unlike the
+// genuinely-hidden 1-of-N chosen-ability roll, they are NOT reveal-gated: every innate of the
+// *displayed* species is listed as soon as the mon is seen. Keyed off the Illusion-aware display
+// species, so a disguised Zoroark/Zorua never leaks its real identity through its innate list.
+//
+// An innate that merely duplicates the *revealed* chosen ability (a species that still carries
+// Levitate as its primary) is dropped, so nothing echoes the same name twice. Both the Foe page's
+// "+N innates" hint and the innates page itself go through here, so the count the one advertises
+// can never disagree with the list the other prints.
+//
+// The cap is the innates page's own row budget: a species with more innates than the page can
+// show would otherwise be counted but not listed. Nothing is near it today (the fullest species
+// carry 8), and a table row that passes it is a data problem, not a display one.
+#define INNATE_ROWS            7                    // usable rows between the header and the footer
+#define INNATE_COL_X           112                  // second column's x, once the list needs two
+#define INNATE_COL_INDENT      4
+#define MAX_DISPLAYED_INNATES  INFO_MAX_DISPLAYED_INNATES   // in the header, so the table guard can assert against it
+
+STATIC_ASSERT(MAX_DISPLAYED_INNATES == INNATE_ROWS * 2, InnatePageCapMatchesItsRowBudget);
+
+static u32 CollectDisplayedInnates(enum Species displaySpecies, bool32 abilitySeen, enum Ability seenAbility, enum Ability *out)
+{
+    u32 n = 0;
+
+    for (u32 slot = 0; n < MAX_DISPLAYED_INNATES; slot++)
+    {
+        enum Ability innate = GetSpeciesInnate(displaySpecies, slot);
+
+        if (innate == ABILITY_NONE)
+            break;
+        if (abilitySeen && innate == seenAbility)
+            continue;
+        out[n++] = innate;
+    }
+    return n;
+}
+
+static u32 CountDisplayedInnates(enum Species displaySpecies, bool32 abilitySeen, enum Ability seenAbility)
+{
+    enum Ability innates[MAX_DISPLAYED_INNATES];
+
+    return CollectDisplayedInnates(displaySpecies, abilitySeen, seenAbility, innates);
+}
+
 static void DrawFoePage(u8 windowId, u32 foeIndex)
 {
     u8 line[64];
@@ -548,18 +608,12 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     // not from gAiPartyData->ability: the latter is later clobbered by the AI's speculative
     // switch/move evaluation, which would otherwise display the wrong ability.
     //
-    // FORK: FEATURE_INNATE_ABILITIES — innate abilities are a *static property of the species*
-    // (like the type line above), fully determined the moment the foe's species is known. So,
-    // unlike the genuinely-hidden 1-of-N chosen-ability roll, they are NOT reveal-gated: the
-    // viewer lists every innate of the *displayed* species as soon as the mon is seen. (Keyed
-    // off displaySpecies, the Illusion-aware species, so a disguised Zoroark/Zorua never leaks
-    // its real identity through its innate list.) They share this single line instead of a
-    // separate "Innate:" row, which would push every line below it down by LINE_H and slide the
-    // bottom Moves slot under the navigation bar (the page is at its fixed height); the chosen
-    // ability is listed plainly and the innates follow in "(+Name, ...)" with a leading '+'
-    // marking them as additional passives — e.g. "Magnet Pull (+Levitate, Sturdy)", or
-    // "? (+Levitate, Sturdy)" while the chosen ability is still unseen (passives are public, the
-    // rolled ability stays hidden until witnessed).
+    // FEATURE_INNATE_ABILITIES — the innates themselves live on their own page
+    // (INFO_PAGE_INNATES, one L/R step to the right); this line carries only a "+N innates"
+    // pointer to it. They used to be spelled out inline here as "(+Levitate, Sturdy)", which
+    // a species with a long list blew straight through: eight innates is ~120 characters of
+    // ability names against a 64-byte `line` and a 224px window, so the row both smashed the
+    // stack buffer and ran off the right edge. A count is bounded by construction.
     bool32 abilitySeen = (gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
     enum Ability seenAbility = gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][foeIndex];
     p = StringCopy(line, COMPOUND_STRING("Ability: "));
@@ -569,23 +623,14 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         p = StringCopy(p, COMPOUND_STRING("?"));
     if (GetConfig(FEATURE_INNATE_ABILITIES))
     {
-        bool32 anyInnate = FALSE;
-        for (u32 slot = 0; ; slot++)
+        u32 innateCount = CountDisplayedInnates(displaySpecies, abilitySeen, seenAbility);
+
+        if (innateCount != 0)
         {
-            enum Ability innate = GetSpeciesInnate(displaySpecies, slot);
-            if (innate == ABILITY_NONE)
-                break;
-            // Skip an innate that just duplicates the revealed chosen ability
-            // (e.g. a species that still carries Levitate as its primary), so the
-            // line doesn't echo the same name twice.
-            if (abilitySeen && innate == seenAbility)
-                continue;
-            p = StringCopy(p, anyInnate ? COMPOUND_STRING(", ") : COMPOUND_STRING(" (+"));
-            p = StringCopy(p, gAbilitiesInfo[innate].name);
-            anyInnate = TRUE;
+            p = StringCopy(p, COMPOUND_STRING("  +"));
+            p = ConvertIntToDecimalStringN(p, innateCount, STR_CONV_MODE_LEFT_ALIGN, 2);
+            p = StringCopy(p, innateCount == 1 ? COMPOUND_STRING(" innate") : COMPOUND_STRING(" innates"));
         }
-        if (anyInnate)
-            p = StringCopy(p, COMPOUND_STRING(")"));
     }
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
@@ -634,6 +679,73 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
             PrintLine(windowId, line, 0, y);
         }
         y += LINE_H;
+    }
+
+    PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
+}
+
+// FEATURE_INNATE_ABILITIES — the foe's innates, one per row, on their own page.
+// They were listed inline on the Foe page's Ability row; species carrying five, six or eight
+// of them overran both the 64-byte line buffer and the 224px window, so they get the space
+// they need here and the Foe row keeps only a "+N innates" pointer.
+//
+// The page shares tFoeIndex with the Foe page, so <> cycles mons here too and an L/R step
+// between the two pages stays on the same mon. Its reveal rules are the Foe page's: nothing
+// is shown for a mon that has not been sent out, and the list is keyed off the Illusion-aware
+// display species.
+//
+// Layout: title, species header, then INNATE_ROWS rows. A list that fits stays in one
+// full-width column; only a longer one splits into two, so the common 3-5 innate case reads
+// as a plain list rather than a cramped grid.
+static void DrawInnatesPage(u8 windowId, u32 foeIndex)
+{
+    u8 line[64];
+    u8 *p;
+    u32 y = 0;
+    struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+    u32 count = GetFoePartyCount(foeParty);
+    bool32 seen = gBattleStruct->partyState[B_TRAINER_OPPONENT_A][foeIndex].sentOut;
+
+    p = StringCopy(line, COMPOUND_STRING("BATTLE INFO  -  INNATES "));
+    p = ConvertIntToDecimalStringN(p, foeIndex + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
+    *p++ = CHAR_SLASH;
+    ConvertIntToDecimalStringN(p, count, STR_CONV_MODE_LEFT_ALIGN, 1);
+    PrintTitle(windowId, line);
+    y += LINE_H;
+
+    if (!seen)
+    {
+        PrintLine(windowId, COMPOUND_STRING("Not yet seen."), 0, y);
+        PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
+        return;
+    }
+
+    struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
+    enum Species displaySpecies = GetMonData(displayMon, MON_DATA_SPECIES, NULL);
+    bool32 abilitySeen = (gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & (1u << foeIndex)) != 0;
+    enum Ability seenAbility = gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][foeIndex];
+    enum Ability innates[MAX_DISPLAYED_INNATES];
+    u32 n = CollectDisplayedInnates(displaySpecies, abilitySeen, seenAbility, innates);
+
+    PrintLine(windowId, GetSpeciesName(displaySpecies), 0, y);
+    y += LINE_H;
+
+    if (n == 0)
+    {
+        PrintLine(windowId, COMPOUND_STRING("  No innate abilities."), 0, y);
+    }
+    else
+    {
+        u32 perColumn = (n > INNATE_ROWS) ? (n + 1) / 2 : n;
+
+        for (u32 i = 0; i < n; i++)
+        {
+            u32 column = i / perColumn;
+            u32 row = i % perColumn;
+
+            PrintLine(windowId, gAbilitiesInfo[innates[i]].name,
+                      INNATE_COL_INDENT + (column * INNATE_COL_X), y + (row * LINE_H));
+        }
     }
 
     PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
@@ -1019,6 +1131,9 @@ static void RedrawInfo(u8 taskId)
     case INFO_PAGE_FOE:
         DrawFoePage(windowId, gTasks[taskId].tFoeIndex);
         break;
+    case INFO_PAGE_INNATES:
+        DrawInnatesPage(windowId, gTasks[taskId].tFoeIndex);
+        break;
     case INFO_PAGE_FIELD:
     default:
         DrawFieldPage(windowId);
@@ -1044,6 +1159,13 @@ static void Task_InfoFadeOut(u8 taskId)
     }
 }
 
+// Pages that show a single foe and therefore honour <> to cycle mons. Both the
+// Foe page and its innates page are scoped to tFoeIndex, so they share the same cycling.
+static bool32 IsFoeScopedPage(s16 page)
+{
+    return page == INFO_PAGE_FOE || page == INFO_PAGE_INNATES;
+}
+
 static void Task_InfoProcessInput(u8 taskId)
 {
     u32 count = GetFoePartyCount(GetTrainerParty(B_TRAINER_OPPONENT_A));
@@ -1061,7 +1183,7 @@ static void Task_InfoProcessInput(u8 taskId)
     else if (JOY_NEW(R_BUTTON))
     {
         PlaySE(SE_SELECT);
-        if (++gTasks[taskId].tPage >= INFO_PAGE_COUNT)
+        if (++gTasks[taskId].tPage >= (s16)InfoPageCount())
             gTasks[taskId].tPage = 0;
         RedrawInfo(taskId);
     }
@@ -1069,10 +1191,10 @@ static void Task_InfoProcessInput(u8 taskId)
     {
         PlaySE(SE_SELECT);
         if (--gTasks[taskId].tPage < 0)
-            gTasks[taskId].tPage = INFO_PAGE_COUNT - 1;
+            gTasks[taskId].tPage = InfoPageCount() - 1;
         RedrawInfo(taskId);
     }
-    else if (gTasks[taskId].tPage == INFO_PAGE_FOE && count != 0
+    else if (IsFoeScopedPage(gTasks[taskId].tPage) && count != 0
              && (JOY_NEW(DPAD_RIGHT) || JOY_NEW(DPAD_DOWN)))
     {
         PlaySE(SE_SELECT);
@@ -1080,7 +1202,7 @@ static void Task_InfoProcessInput(u8 taskId)
             gTasks[taskId].tFoeIndex = 0;
         RedrawInfo(taskId);
     }
-    else if (gTasks[taskId].tPage == INFO_PAGE_FOE && count != 0
+    else if (IsFoeScopedPage(gTasks[taskId].tPage) && count != 0
              && (JOY_NEW(DPAD_LEFT) || JOY_NEW(DPAD_UP)))
     {
         PlaySE(SE_SELECT);
@@ -1252,7 +1374,11 @@ void CB2_FrontierBattleInfo(void)
         gTasks[taskId].tWindowId = AddWindow(&sInfoWindowTemplate);
         // Resume on the page/foe last viewed THIS battle (zero-init => Speed Tiers,
         // foe 0 — a fresh battle always starts at the front, never a stale foe tab).
+        // Clamped because FEATURE_INNATE_ABILITIES is runtime-toggleable: a saved
+        // position on the innates page must not survive the feature being turned off.
         gTasks[taskId].tPage = gBattleStruct->infoViewerPage;
+        if (gTasks[taskId].tPage >= (s16)InfoPageCount())
+            gTasks[taskId].tPage = INFO_PAGE_SPEED;
         gTasks[taskId].tFoeIndex = gBattleStruct->infoViewerFoeIndex;
         PutWindowTilemap(gTasks[taskId].tWindowId);
         // FRAME_BG has no window, so give it its own tilemap buffer (heap, like

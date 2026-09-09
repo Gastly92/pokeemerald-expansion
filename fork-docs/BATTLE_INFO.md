@@ -1,9 +1,9 @@
 # The in-battle INFO viewer (`B_FRONTIER_BATTLE_INFO`)
 
 In Frontier facilities the bag is disabled, so its action slot is dead space. This
-fork turns it into **INFO**: a read-only, five-page reference screen showing field
+fork turns it into **INFO**: a read-only, six-page reference screen showing field
 state, both sides' conditions and stat changes, a foe speed-tier comparison, and the
-foe's revealed party data.
+foe's revealed party data and innates.
 
 Its whole design problem is **what the player is allowed to know**. The battle engine
 holds far more about the foe than the player has witnessed, and most of the code here
@@ -33,7 +33,7 @@ menu (`CB2_OpenBattleInfoFromPartyMenu` / `CB2_ReturnToPartyMenuFromBattleInfo` 
 Opening it **does not consume the turn** — it reuses the `B_ACTION_DEBUG` controller
 path.
 
-## The five pages
+## The six pages
 
 **L/R** cycle in both directions, with a right-aligned `n/N` indicator
 (`PrintPageIndicator`).
@@ -45,6 +45,7 @@ path.
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
 | **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, `FNT` when fainted, moves/PP/ability/held item |
+| **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
 
 Under `DETERMINISTIC_DAMAGE` the Field page also prints the current turn and that
 turn's fixed damage multiplier, so the player can read the exact roll
@@ -60,6 +61,10 @@ They live in `gBattleStruct->infoViewerPage` / `infoViewerFoeIndex`, which is
 zero-allocated each battle, specifically so the position resets to Speed Tiers / foe 0
 rather than carrying a stale foe tab forward. A file static did carry it, and could
 land on a previous battle's foe index — showing an unrevealed slot.
+
+The restored page is clamped against `InfoPageCount()` on open, since
+`FEATURE_INNATE_ABILITIES` is runtime-toggleable and a saved position on the Innates
+page must not survive the feature being turned off.
 
 ## The Speed Tiers page
 
@@ -191,19 +196,38 @@ viewer lists every innate of the **displayed** species as soon as the mon is see
 (Illusion-safe via `displaySpecies`, so a disguised Zoroark never leaks its real
 identity through its innate list).
 
-They share the Ability line rather than taking a dedicated `Innate:` row, which would
-push the bottom Moves slot under the nav bar — the page is at its fixed height. The
-chosen ability prints plainly and the innates follow in parentheses:
-
-```
-Magnet Pull (+Levitate, Sturdy)
-? (+Levitate, Sturdy)        <- chosen ability still unseen
-```
-
 Only the *chosen* ability stays gated. `RecordAbilityBattle` will not mark it revealed
 when what the player witnessed was an innate pop-up (`gBattleScripting.abilityPopupOverwrite`,
 an innate Levitate/Sturdy forcing the pop-up to its name) rather than the chosen
 ability — so an innate reveal never leaks the chosen one.
+
+## The Innates page
+
+Innates used to be spelled out inline on the Foe page's Ability row, as
+`Magnet Pull (+Levitate, Sturdy)`. That row could not hold them: species in this fork
+carry up to **eight** innates, which is ~120 characters of ability names against a
+64-byte `line` buffer and a 224px window — so a full list both **smashed the stack
+buffer** and ran off the right edge. It is now its own page.
+
+- **It sits directly after the Foe page and shares `tFoeIndex`**, so `<>` cycles mons
+  here too and one L/R step from a mon's Foe page lands on that same mon's innates.
+- **The Foe page keeps a bounded pointer to it**: `Ability: Magnet Pull  +2 innates`.
+  A count cannot overflow the row the way a list could.
+- **It is the last page, and only exists when the feature is on.**
+  `InfoPageCount()` returns `INFO_PAGE_COUNT - 1` when `FEATURE_INNATE_ABILITIES` is
+  off, which drops it out of the L/R cycle and the `n/N` indicator rather than parking
+  the player on a permanently blank page. The count is computed at runtime because the
+  flag is runtime-registered (per-test `WITH_CONFIG`).
+- **Layout:** title, species header, then up to `INNATE_ROWS` (7) rows. A list that
+  fits stays in one full-width column; only a longer one splits into two, so the common
+  3-5 innate case reads as a plain list rather than a cramped grid.
+- **Both the count and the list come from `CollectDisplayedInnates()`**, so the number
+  the Foe page advertises can never disagree with what this page prints. It drops an
+  innate that merely duplicates the *revealed* chosen ability, so nothing echoes twice.
+- **The page's capacity is a data invariant, not just a display detail.** It is exported
+  as `INFO_MAX_DISPLAYED_INNATES`, and a table guard in `test/fork/innate_abilities.c`
+  fails if any species declares more innates than the page can list — otherwise the
+  count would promise entries the page silently truncates.
 
 ## Styling
 

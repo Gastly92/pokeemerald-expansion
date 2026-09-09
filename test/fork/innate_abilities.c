@@ -4,6 +4,7 @@
 #include "fork/innate_abilities.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/species_ability_overrides.h"
+#include "fork/frontier_battle_info.h" // INFO_MAX_DISPLAYED_INNATES (the viewer's innates-page row budget)
 
 // FORK: coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
 // default off in the test baseline (see TestInitConfigData), so each test that
@@ -10423,5 +10424,40 @@ TEST("Innate abilities: no species' chosen ability inverts its own stat-raising 
 
     // Guard against a vacuous pass if the override hook or the innate accessor ever breaks.
     EXPECT_GT(carriers, 5);
+    EXPECT_EQ(offenders, 0);
+}
+
+// B_FRONTIER_BATTLE_INFO. The INFO viewer gives each foe's innates a dedicated page, whose
+// row budget is INFO_MAX_DISPLAYED_INNATES. The Foe page advertises the full count ("+N innates")
+// and the innates page prints the list, so a species declaring more than the page can hold would
+// promise entries it never shows. The list used to be crammed onto the Foe page's Ability row,
+// where a long one overran both the line buffer and the screen — this guard keeps the table inside
+// what the page that replaced it can actually display.
+TEST("Innate abilities: no species declares more innates than the INFO viewer can list")
+{
+    u32 row, i, count = GetSpeciesInnatesEntryCount();
+    u32 offenders = 0, fullest = 0;
+
+    for (row = 0; row < count; row++)
+    {
+        u16 species;
+        const enum Ability *list = GetSpeciesInnatesEntry(row, &species);
+
+        for (i = 0; list[i] != ABILITY_NONE; i++)
+            ;
+
+        if (i > fullest)
+            fullest = i;
+
+        if (i > INFO_MAX_DISPLAYED_INNATES)
+        {
+            offenders++;
+            Test_MgbaPrintf("%S declares %d innates, more than the INFO viewer's page can list (%d)",
+                            gSpeciesInfo[species].speciesName, i, INFO_MAX_DISPLAYED_INNATES);
+        }
+    }
+
+    // Guard against a vacuous pass if the raw-table accessors ever break.
+    EXPECT_GT(fullest, 1);
     EXPECT_EQ(offenders, 0);
 }
