@@ -22,7 +22,7 @@ lists, and the list *is* the status:
 | --- | --- | --- |
 | `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
 | `sPendingItems[]` | Work outstanding: needs a buff, **or** is mechanically fine and needs a set | No — a pending item may sit at zero sets, which is usually why it is pending |
-| `sIgnoredItems[]` | Unreachable in a frontier battle | Never checked |
+| `sIgnoredItems[]` | Unreachable in a frontier battle | Exempt from the done gates, but **no set may hold one** — a Mega Stone or Z-Crystal in the slot does nothing under `FEATURE_FREE_GIMMICKS`, so the set would be playing an item down with no other symptom |
 
 Graduating an item to `sDoneItems[]` is what **arms** the gates for it. That is the
 failure the tracker exists to catch: Wide Lens, Zoom Lens, Blunder Policy, Razor Fang and

@@ -27,7 +27,9 @@
 //                      mechanically fine and simply needs a set. NOT gated -- a pending
 //                      item is allowed to sit at zero sets, which is usually why it is
 //                      pending. Promote it to sDoneItems[] once both axes are satisfied.
-//   sIgnoredItems[] -- cannot appear in a frontier battle at all. Never checked.
+//   sIgnoredItems[] -- cannot appear in a frontier battle at all. Neither axis means
+//                      anything for these, so they are exempt from the done gates -- but
+//                      no set may hold one, since doing so plays an item down for free.
 //
 // The point of the split is that graduating an item to sDoneItems[] is what ARMS the
 // gates for it. That is the failure this file exists to catch: Wide Lens, Zoom Lens,
@@ -302,7 +304,8 @@ static const enum Item sPendingItems[] =
     ITEM_ZOOM_LENS,
 };
 
-// Cannot appear in a frontier battle, so neither axis means anything. Never checked.
+// Cannot appear in a frontier battle, so neither axis means anything -- but no set may
+// hold one (see the last test).
 // The two big structural classes -- Mega Stones and Z-Crystals, item-free under
 // FEATURE_FREE_GIMMICKS -- are excluded by hold effect in GetItemTrackerList() instead
 // of listed here. What remains is the out-of-battle utility: nothing they do is
@@ -472,6 +475,36 @@ TEST("Held item tracker: every done item appears on at least one set")
             offenders++;
             Test_MgbaPrintf("%S is on the done list but no set holds it, so nothing it does is reachable. Give a set the item, or move it to sPendingItems[] until one does",
                             GetItemName(sDoneItems[i]));
+        }
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
+TEST("Held item tracker: no set holds an ignored item")
+{
+    u32 item;
+    u32 offenders = 0;
+
+    // Swept over every item rather than over sIgnoredItems[], so this covers the two
+    // classes GetItemTrackerList() excludes by hold effect as well as the explicit list.
+    // Those classes are the reason the check is worth having: a Mega Stone or Z-Crystal
+    // in the slot does NOTHING under FEATURE_FREE_GIMMICKS -- the gimmick is item-free --
+    // so the set is silently playing an item down, with no symptom anywhere else. The
+    // out-of-battle entries are the same kind of dead weight.
+    for (item = ITEM_NONE + 1; item < ITEMS_COUNT; item++)
+    {
+        u32 sets;
+
+        if (GetItemTrackerList(item) != TRACKER_IGNORED)
+            continue;
+
+        sets = CountRosterSetsHolding(item);
+        if (sets > 0)
+        {
+            offenders++;
+            Test_MgbaPrintf("%S is on the ignored list but %d set(s) hold it -- an ignored item does nothing in a frontier battle, so those sets are playing an item down. Give them a real item, or move this one off sIgnoredItems[] if it turns out to matter",
+                            GetItemName(item), sets);
         }
     }
 
