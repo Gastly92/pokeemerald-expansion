@@ -383,7 +383,8 @@ We keep our human-facing docs in files we own (so they never conflict on sync).
 live under **`fork-docs/`**. New files in a fork-owned directory never conflict on
 sync. `FORK.md` carries the current doc index; as of now it is `DETERMINISM.md`,
 `INNATE_ABILITIES.md`, `NEW_ABILITIES.md`, `NEW_TYPES.md`, `FRONTIER_ENDLESS.md`,
-`FRONTIER_ROSTER.md`, `FREE_GIMMICKS.md`, `BATTLE_INFO.md` and `LINE_REVIEW.md`.
+`FRONTIER_ROSTER.md`, `HELD_ITEMS.md`, `FREE_GIMMICKS.md`, `BATTLE_INFO.md` and
+`LINE_REVIEW.md`.
 The two top-level docs:
 
 - **`README.md`** (root) — the repo's front page, rewritten as our own (a short
