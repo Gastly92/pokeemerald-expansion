@@ -12,6 +12,34 @@ because "held items are deliberately varied" is a claim worth measuring, and bec
 fixed Shell Bell, Leech Seed, the accuracy lenses and the type-boost items, and the
 question "what next" should be answered from data rather than vibes.
 
+## Status lives in the tracker, not here
+
+`test/fork/held_item_tracker.c` is the **source of truth for where each item stands**,
+and CI gates it. Every item that does something when held sits on exactly one of three
+lists, and the list *is* the status:
+
+| List | Meaning | Gated? |
+| --- | --- | --- |
+| `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
+| `sPendingItems[]` | Work outstanding: needs a buff, **or** is mechanically fine and needs a set | No — a pending item may sit at zero sets, which is usually why it is pending |
+| `sIgnoredItems[]` | Unreachable in a frontier battle | Never checked |
+
+Graduating an item to `sDoneItems[]` is what **arms** the gates for it. That is the
+failure the tracker exists to catch: Wide Lens, Zoom Lens, Blunder Policy, Razor Fang and
+Lansat Berry all received real engine work and then shipped to nobody, because nothing
+connected "we buffed it" to "a set holds it".
+
+The lists are swept for completeness against `gItemsInfo[]`, so an item arriving with an
+upstream sync cannot sit unclassified — and a genuinely new hold effect fails CI until
+someone judges it. Mega Stones and Z-Crystals are excluded by hold effect rather than by
+127 boilerplate rows.
+
+**So: don't record status in this doc.** Two copies drift, and the prose copy is the one
+that goes stale. This doc carries the *reasoning* — why an item is where it is, and the
+buff sketch that would move it. The groups below are that reasoning, not a status board.
+
+Run it with `make check TESTS="Held item tracker"`.
+
 ## Reproducing the audit
 
 ```bash
