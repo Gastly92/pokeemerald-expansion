@@ -23,6 +23,7 @@ doc below. A row records only what neither of those can — status, and the poin
 | [`NEW_TYPES.md`](NEW_TYPES.md) | Re-typing a species |
 | [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md) | Converting a facility to 6v6 + endless; the Factory and Tower as worked examples |
 | [`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md) | The extended roster, the species tier map, and the draft rules |
+| [`HELD_ITEMS.md`](HELD_ITEMS.md) | Held-item usage across the roster, and the `BUFF_*` backlog for the unused ones |
 | [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md) | Item-free Mega/Z/Tera/Dynamax and the gimmick picker |
 | [`BATTLE_INFO.md`](BATTLE_INFO.md) | The in-battle INFO viewer and its reveal-gating rules |
 | [`LINE_REVIEW.md`](LINE_REVIEW.md) | The per-species-line review playbook (innates, overrides, Factory sets), for a single line or a batch given as a dex-number range |
@@ -92,7 +93,9 @@ ten below are enabled.** Full rationale and per-flag mechanics:
 An ongoing project to rebalance items and other functionality, usually as
 compensation for other changes — the `DETERMINISTIC_*` project trades random upsides
 away, so some items get buffed to keep battles balanced. Each tweak gets its own flag
-in `config/buff.h` (`FALSE` = stock). Both below are enabled.
+in `config/buff.h` (`FALSE` = stock). Both below are enabled. What to buff next is
+tracked in [`HELD_ITEMS.md`](HELD_ITEMS.md), which audits every held item against the
+roster and queues the unused ones.
 
 | Feature | Flag(s) | Status | Notes |
 |---|---|---|---|

@@ -1145,9 +1145,16 @@ than one whose existing set is about to be rewritten.
    The distribution is extremely lopsided, so this matters more than it sounds.
    Measure it before picking — `grep -o "\.heldItem = ITEM_[A-Z_0-9]*"
    src/fork/frontier_extended_mons.c | sort | uniq -c | sort -rn` — which as of this
-   writing gives **Leftovers 260 sets (21%) and Life Orb 209 (17%)**, i.e. ~39% of
-   the roster fighting over two item slots, against 87 distinct items total and a
-   long tail used once or twice.
+   writing gives **Leftovers 217 sets (14%) and Life Orb 189 (12%)**, i.e. ~25% of
+   the roster fighting over two item slots, against 102 distinct items total and a
+   long tail of 45 items used once or twice.
+
+   **The tail is far wider than the roster uses.** Of the 239 items in the build with
+   a battle-relevant hold effect, 139 appear on no set at all — including all 17
+   Arceus plates, 14 of the 18 resist berries, and Wide Lens / Zoom Lens / Blunder
+   Policy / Razor Fang / Lansat Berry, every one of which this fork specifically
+   repaired and then shipped to nobody. [`HELD_ITEMS.md`](HELD_ITEMS.md) is the full
+   audit; read its Group A and Group D tables when you need an uncontested item.
 
    Practical rule: when an item is a genuine build-around (Flame Orb on a Guts mon,
    a weather rock, Choice Specs), take it regardless of crowding — the set needs it.
