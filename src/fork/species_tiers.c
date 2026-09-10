@@ -56,11 +56,15 @@ static const u16 sLegendarySpecies[] =
 {
     SPECIES_LATIOS,                // 0381
     SPECIES_SHAYMIN_SKY,           // 0492
+    SPECIES_THUNDURUS_THERIAN,      // 0642
     SPECIES_KYUREM_BLACK,          // 0646
     SPECIES_KYUREM_WHITE,          // 0646
     SPECIES_MELOETTA,              // 0648
     SPECIES_PHEROMOSA,             // 0795
+    SPECIES_DRAGAPULT,             // 0887
     SPECIES_SPECTRIER,             // 0897
+    SPECIES_CHIEN_PAO,             // 1002
+    SPECIES_ROARING_MOON,          // 1005
 };
 
 // Pseudo: at most 1 per frontier draft team
@@ -92,7 +96,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_TORNADUS,            // 0641
     SPECIES_TORNADUS_THERIAN,    // 0641
     SPECIES_THUNDURUS,           // 0642
-    SPECIES_THUNDURUS_THERIAN,   // 0642
     SPECIES_LANDORUS,            // 0645
     SPECIES_LANDORUS_THERIAN,    // 0645
     SPECIES_KYUREM,              // 0646
@@ -123,7 +126,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_ZERAORA,             // 0807
     SPECIES_MELMETAL,            // 0809
     SPECIES_DRACOVISH,           // 0882
-    SPECIES_DRAGAPULT,           // 0887
     SPECIES_URSHIFU,             // 0892
     SPECIES_URSHIFU_RAPID_STRIKE, // 0892
     SPECIES_ZARUDE,              // 0893
@@ -146,9 +148,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_IRON_MOTH,           // 0994
     SPECIES_IRON_THORNS,         // 0995
     SPECIES_BAXCALIBUR,          // 0998
-    SPECIES_CHIEN_PAO,           // 1002
     SPECIES_CHI_YU,              // 1004
-    SPECIES_ROARING_MOON,        // 1005
     SPECIES_IRON_VALIANT,        // 1006
     SPECIES_WALKING_WAKE,        // 1009
     SPECIES_IRON_LEAVES,         // 1010
