@@ -56,7 +56,7 @@ static const u16 sLegendarySpecies[] =
 {
     SPECIES_LATIOS,                // 0381
     SPECIES_SHAYMIN_SKY,           // 0492
-    SPECIES_THUNDURUS_THERIAN,      // 0642
+    SPECIES_THUNDURUS_THERIAN,     // 0642
     SPECIES_KYUREM_BLACK,          // 0646
     SPECIES_KYUREM_WHITE,          // 0646
     SPECIES_MELOETTA,              // 0648
