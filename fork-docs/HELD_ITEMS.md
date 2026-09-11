@@ -147,7 +147,7 @@ them. This is regression collateral, and it is the most defensible buff work ava
 
 | Item(s) | The problem | Sketch of a fix |
 | --- | --- | --- |
-| **11 unused Gems** (Bug, Dark, Electric, Fire, Grass, Ground, Ice, Normal, Poison, Steel, Water) | A gem is **+30%, once, then gone** (`GEM_BOOST_PARAM`). A type item is **+40%, every turn, forever**. The gem is strictly worse on every axis except the Acrobatics/Unburden interaction. The seven used gems are on 1–4 sets each and are mostly there for that interaction. | `BUFF_GEMS`: make the one-shot a genuine nuke rather than a worse Charcoal — e.g. +80% or 2x — restoring the "spend it on the right turn" identity. The magnitude belongs in a `BUFF_GEM_PERCENT` constant, mirroring `BUFF_TYPE_BOOST_PERCENT`. Site: the `gemBoost` branch in `CalcDamage()`, `src/battle_util.c:7311`. |
+| ~~**The 18 Gems**~~ — **shipped as `BUFF_GEMS`** | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done: **+60%** (`BUFF_GEM_PERCENT`), consumption unchanged. A Gem is boost×one turn against boost×every turn, so the break-even against +40% is 1.5 uses — at +60% it wins on a move clicked **once** and loses from two uses on, which makes it the coverage nuke rather than a general damage item. Still pending on the *roster* half: 9 of the 11 gem sets click that type repeatedly and want the type item instead. |
 | **Soul Dew** | +20% on Latios/Latias's Psychic and Dragon moves. Dragon Fang gives them **+40%** on Dragon, Twisted Spoon +40% on Psychic. The signature item loses to a generic one. Confirmed by the roster: Latios holds Dragon Fang and Choice Specs; Latias holds Leftovers, Boots and Light Clay. | Fold the signature two-type items into the buffed scale — a `BUFF_SIGNATURE_TYPE_ITEMS` at, say, +50% on both types would beat a type item on a split-damage set and lose on a mono-attacker, which is the identity they are supposed to have. Site: the `HOLD_EFFECT_SOUL_DEW` case in `CalcDamage()`, `src/battle_util.c:7647`. |
 | **Adamant Orb, Lustrous Orb, Griseous Core** | Same shape: +20% on two types for one species. A type item at +40% on one type ties them on a perfectly split set and beats them on any concentrated one, so they are *weakly dominated everywhere*. The roster uses the Origin-forme versions (Adamant Crystal, Lustrous Globe, Griseous Orb) — but for the **form change**, not the boost. | Same flag as Soul Dew. Sites: `src/battle_util.c:7635`–`7645`. |
 | **13 unused Memories** and **all 4 Drives** | Silvally's memory and Genesect's drive change the holder's type / signature-move type and give **no damage multiplier at all** — `HOLD_EFFECT_MEMORY` and `HOLD_EFFECT_DRIVE` have no case in `CalcDamage()`. Arceus's plate, which is the same idea for a different species, gets the full +40%. That asymmetry is now much wider than upstream intended it to be. `buff.h` names this exclusion explicitly ("Silvally's memories and Genesect's drives are a different hold effect and are untouched"), so it is a known, deliberate gap — not an oversight to be surprised by. | Extend `BUFF_TYPE_BOOST_ITEMS` (or a sibling flag) to give `HOLD_EFFECT_MEMORY` and `HOLD_EFFECT_DRIVE` the same `BUFF_TYPE_BOOST_PERCENT` on the type they set. Cheap: two extra labels on the existing `HOLD_EFFECT_TYPE_POWER` / `HOLD_EFFECT_PLATE` case. Note the Rusted Sword/Shield and the Ogerpon masks sit in the same family and should be checked for consistency at the same time. |
@@ -183,10 +183,11 @@ do. This is the largest single win in the audit and it is pure roster work.
    already-buffed-but-undrafted items (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang,
    Lansat) are the most embarrassing subset: shipped work reaching no one.
 2. **Group B's memories/drives extension.** Smallest code change with the clearest
-   justification — it closes an asymmetry our own buff opened.
-3. **Group B's gems and signature orbs.** Needs a magnitude decision, so it wants the
-   same treatment `BUFF_TYPE_BOOST_PERCENT` got: a registered toggle plus a plain
-   compile-time constant.
+   justification — it closes an asymmetry our own buff opened. **Now the top code item**,
+   since the Gems shipped.
+3. **Group B's signature orbs** (Soul Dew, Adamant/Lustrous Orb, Griseous Core). Needs a
+   magnitude decision, so it wants the treatment `BUFF_GEM_PERCENT` just got: a registered
+   toggle plus a plain compile-time constant. ~~Gems~~ — shipped as `BUFF_GEMS` at +60%.
 4. **Group C.** Lowest value; the flat-HP items are a small fix and the rest is roster
    work gated on coverage decisions.
 

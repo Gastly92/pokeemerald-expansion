@@ -1174,6 +1174,10 @@ than one whose existing set is about to be rewritten.
      heals 1/4 of damage dealt (up from 1/8), and Leech Seed stacks across seeders
      and re-drains instead of failing — both make those build-arounds far stronger
      than vanilla, so a Shell Bell bruiser or a Leech Seed staller is a live plan.
+     **Gems are +60%** (`BUFF_GEMS`), still one-shot. That makes a Gem the *coverage
+     nuke* — it beats a type item only on a move the set clicks **once**, and loses
+     from two uses on — so put one on a coverage slot, never on a set's main STAB.
+     A mono-attacker still wants Charcoal/Mystic Water/etc. at their permanent +40%.
 6. **Propose new sets** that are fun or flavorful and cover the niches above;
    Multiple sets per species are fine; the Factory draws among them.
 7. **Fields of `struct TrainerMon`** (authoring helpers in
