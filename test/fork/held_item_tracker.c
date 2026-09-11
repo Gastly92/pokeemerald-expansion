@@ -54,7 +54,7 @@
 // The done list never shrinks. Bump this when items graduate; a drop means an item was
 // demoted to pending, which is a real regression and should be a deliberate, reviewed act
 // rather than a quiet way to dodge one of the gates above.
-#define HELD_ITEM_DONE_FLOOR 75
+#define HELD_ITEM_DONE_FLOOR 76
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -113,6 +113,7 @@ static const enum Item sDoneItems[] =
     ITEM_POISON_BARB,
     ITEM_PUNCHING_GLOVE,
     ITEM_QUICK_CLAW,
+    ITEM_RAZOR_CLAW,
     ITEM_RED_ORB,
     ITEM_ROCKY_HELMET,
     ITEM_RUSTED_SHIELD,
@@ -226,7 +227,6 @@ static const enum Item sPendingItems[] =
     ITEM_PASSHO_BERRY,
     ITEM_POWER_HERB,
     ITEM_PSYCHIC_SEED,
-    ITEM_RAZOR_CLAW,
     ITEM_SAFETY_GOGGLES,
     ITEM_SALAC_BERRY,
     ITEM_SHUCA_BERRY,
