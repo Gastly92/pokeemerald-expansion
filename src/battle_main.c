@@ -6197,6 +6197,12 @@ void SetTypeBeforeUsingMove(enum Move move, enum BattlerId battler)
         && effect != EFFECT_OHKO)
     {
         gSpecialStatuses[battler].gemParam = GetBattlerHoldEffectParam(battler);
+        // FORK: BUFF_GEMS overrides the item's own param with BUFF_GEM_PERCENT, the same
+        // way BUFF_TYPE_BOOST_ITEMS ignores TYPE_BOOST_PARAM. Latched here rather than at
+        // the CalcDamage read site so every consumer, the AI included, sees one value.
+        // See config/buff.h.
+        if (GetConfig(BUFF_GEMS))
+            gSpecialStatuses[battler].gemParam = BUFF_GEM_PERCENT;
         gSpecialStatuses[battler].gemBoost = TRUE;
     }
 }

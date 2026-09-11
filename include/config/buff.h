@@ -147,4 +147,47 @@
 // BUFF_TYPE_BOOST_ITEMS is FALSE.
 #define BUFF_TYPE_BOOST_PERCENT 40
 
+// When TRUE, the one-shot Gems are raised from the stock +30% to +BUFF_GEM_PERCENT
+// (+60% by default) on the matching-type move they are spent on. The Gem is still
+// consumed on use -- the magnitude is the only thing that changes.
+//
+// Why: BUFF_TYPE_BOOST_ITEMS raised the generic type items to +40% for good reasons, and
+// knocked the Gems over as collateral. A Gem restricts by type in exactly the same way a
+// Charcoal does, so at +30% it was a strictly worse Charcoal: less damage, on one move,
+// and then gone. The roster shows it -- 9 of the 11 sets holding a Gem are straight damage
+// sets that would hit harder today with the type item instead, and the other 2 are on
+// Acrobatics, where CONSUMING the item is the actual point.
+//
+// Why +60% rather than a bigger number: a Gem is (boost x 1 turn) against a type item's
+// (boost x every turn), so the break-even against +40% is 1.5 uses. At +60% the Gem wins
+// when its type is clicked ONCE, ties at one and a half, and loses from two uses on --
+// and it loses to Life Orb's +30%-on-everything from two attacks on. That makes it the
+// one-turn nuke for a coverage move rather than a general damage item, which is a niche
+// nothing else in the slot owns: every alternative takes back over the moment the holder
+// attacks twice. A bigger number would start dominating the permanent items instead of
+// sitting beside them, which is the mistake this flag exists to undo.
+//
+// Consequence for set authors: a Gem belongs on a COVERAGE move, not on a set's main
+// STAB. A mono-attacker clicking one type all battle still wants the type item. See
+// fork-docs/LINE_REVIEW.md.
+//
+// The Acrobatics / Unburden sets are unaffected in kind -- consumption is unchanged, and
+// they simply hit harder on the turn they spend the Gem.
+//
+// The magnitude mirrors BUFF_SHELL_BELL and BUFF_TYPE_BOOST_ITEMS -- a registered toggle
+// plus a plain compile-time constant for the number -- and +30% -> +60% is the same
+// "double the bonus" move those two made with 1/8 -> 1/4 and +20% -> +40%.
+//
+// Implemented where the boost is ARMED rather than where it is applied: gemParam is
+// latched once in SetTypeBeforeUsingMove() (src/battle_main.c) and read later by
+// CalcDamage(), so overriding it at the single assignment site covers every consumer --
+// including the AI, which runs the same damage calc and picks the change up for free.
+#define BUFF_GEMS TRUE
+
+// Power bonus a Gem gives when BUFF_GEMS is on, as a percentage: 60 -> 1.6x on the move
+// it is spent on. Stock behavior (flag off) instead uses the item's own holdEffectParam
+// (GEM_BOOST_PARAM, 30 in Gen 6+ and 50 before it). Higher = more damage. Ignored when
+// BUFF_GEMS is FALSE.
+#define BUFF_GEM_PERCENT 60
+
 #endif // GUARD_CONFIG_BUFF_H

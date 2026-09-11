@@ -140,8 +140,12 @@ static const enum Item sDoneItems[] =
 static const enum Item sPendingItems[] =
 {
     // ---- Needs a BUFF: dominated or underpowered as shipped. --------------------
-    // Gems: +30% once, then gone, against a type item's +40% every turn since
-    // BUFF_TYPE_BOOST_ITEMS. Strictly worse outside the Acrobatics/Unburden trick.
+    // Gems are BUFFED but still listed here: BUFF_GEMS took them to +60%, which beats a
+    // type item on a move clicked once and loses from two uses on, so the balance half is
+    // settled. They stay pending on the ROSTER half -- 9 of the 11 sets holding a Gem
+    // click that type repeatedly and want the type item instead, so the sets have to be
+    // re-itemed before any Gem can honestly graduate. Promoting them now would arm the
+    // one-set gate on items whose only sets are about to be rebuilt.
     // Memories and Drives: set a type and grant NO multiplier, while Arceus's plates --
     // the same idea for a different species -- carry the full +40%.
     // Soul Dew and the plain signature orbs: +20% across two types, which ties a type
