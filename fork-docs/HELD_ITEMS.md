@@ -21,8 +21,14 @@ lists, and the list *is* the status:
 | List | Meaning | Gated? |
 | --- | --- | --- |
 | `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
-| `sPendingItems[]` | Work outstanding: needs a buff, **or** is mechanically fine and needs a set | No — a pending item may sit at zero sets, which is usually why it is pending |
+| `sPendingItems[]` | Work outstanding: needs a buff, is mechanically fine and needs a set, or is **thinly drafted** (on one set, which with one-item-per-team is a roll away from never appearing) | No — a pending item may sit at zero sets, which is usually why it is pending |
 | `sIgnoredItems[]` | Unreachable in a frontier battle | Exempt from the done gates, but **no set may hold one** — a Mega Stone or Z-Crystal in the slot does nothing under `FEATURE_FREE_GIMMICKS`, so the set would be playing an item down with no other symptom |
+
+A **one-set count is not automatically a shortfall.** The form-change enablers — Adamant
+Crystal, Lustrous Globe, Griseous Orb, Red/Blue Orb, Rusted Sword and Shield, the three
+Ogerpon masks — each unlock exactly one forme on exactly one species, so one is the
+ceiling rather than a gap. They stay done so the one-set gate keeps watching them: delete
+the Giratina-Origin set and CI should notice.
 
 Graduating an item to `sDoneItems[]` is what **arms** the gates for it. That is the
 failure the tracker exists to catch: Wide Lens, Zoom Lens, Blunder Policy, Razor Fang and

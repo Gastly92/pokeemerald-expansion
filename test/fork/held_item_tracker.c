@@ -23,8 +23,9 @@
 //   sDoneItems[]    -- balance is right AND it is live in the roster. Gated both ways:
 //                      at least one set holds it, and it does not exceed
 //                      HELD_ITEM_MAX_ROSTER_SHARE_PERCENT of the roster.
-//   sPendingItems[] -- work outstanding, of either kind: it needs a buff, or it is
-//                      mechanically fine and simply needs a set. NOT gated -- a pending
+//   sPendingItems[] -- work outstanding, of any kind: it needs a buff, it is mechanically
+//                      fine and simply needs a set, or it is drafted so thinly that the
+//                      count is itself the signal. NOT gated -- a pending
 //                      item is allowed to sit at zero sets, which is usually why it is
 //                      pending. Promote it to sDoneItems[] once both axes are satisfied.
 //   sIgnoredItems[] -- cannot appear in a frontier battle at all. Neither axis means
@@ -53,14 +54,13 @@
 // The done list never shrinks. Bump this when items graduate; a drop means an item was
 // demoted to pending, which is a real regression and should be a deliberate, reviewed act
 // rather than a quiet way to dodge one of the gates above.
-#define HELD_ITEM_DONE_FLOOR 91
+#define HELD_ITEM_DONE_FLOOR 75
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
 {
     ITEM_ADAMANT_CRYSTAL,
     ITEM_AGUAV_BERRY,
-    ITEM_AIR_BALLOON,
     ITEM_ASSAULT_VEST,
     ITEM_BIG_ROOT,
     ITEM_BLACK_BELT,
@@ -68,20 +68,15 @@ static const enum Item sDoneItems[] =
     ITEM_BLACK_SLUDGE,
     ITEM_BLUE_ORB,
     ITEM_BOOSTER_ENERGY,
-    ITEM_BRIGHT_POWDER,
     ITEM_CHARCOAL,
     ITEM_CHESTO_BERRY,
     ITEM_CHOICE_BAND,
     ITEM_CHOICE_SCARF,
     ITEM_CHOICE_SPECS,
-    ITEM_CHOPLE_BERRY,
-    ITEM_COLBUR_BERRY,
     ITEM_CORNERSTONE_MASK,
     ITEM_COVERT_CLOAK,
-    ITEM_CUSTAP_BERRY,
     ITEM_DAMP_ROCK,
     ITEM_DRAGON_FANG,
-    ITEM_ELECTRIC_SEED,
     ITEM_EVIOLITE,
     ITEM_EXPERT_BELT,
     ITEM_FAIRY_FEATHER,
@@ -110,32 +105,22 @@ static const enum Item sDoneItems[] =
     ITEM_MAGNET,
     ITEM_MENTAL_HERB,
     ITEM_METAL_COAT,
-    ITEM_MIRACLE_SEED,
-    ITEM_MIRROR_HERB,
     ITEM_MISTY_SEED,
     ITEM_MUSCLE_BAND,
     ITEM_MYSTIC_WATER,
     ITEM_NEVER_MELT_ICE,
-    ITEM_PASSHO_BERRY,
     ITEM_PETAYA_BERRY,
     ITEM_POISON_BARB,
-    ITEM_POWER_HERB,
-    ITEM_PSYCHIC_SEED,
     ITEM_PUNCHING_GLOVE,
     ITEM_QUICK_CLAW,
-    ITEM_RAZOR_CLAW,
     ITEM_RED_ORB,
     ITEM_ROCKY_HELMET,
     ITEM_RUSTED_SHIELD,
     ITEM_RUSTED_SWORD,
-    ITEM_SAFETY_GOGGLES,
-    ITEM_SALAC_BERRY,
     ITEM_SCOPE_LENS,
     ITEM_SHARP_BEAK,
     ITEM_SHELL_BELL,
-    ITEM_SHUCA_BERRY,
     ITEM_SILK_SCARF,
-    ITEM_SILVER_POWDER,
     ITEM_SITRUS_BERRY,
     ITEM_SMOOTH_ROCK,
     ITEM_SOFT_SAND,
@@ -208,6 +193,40 @@ static const enum Item sPendingItems[] =
     ITEM_STEEL_MEMORY,
     ITEM_WATER_GEM,
     ITEM_WATER_MEMORY,
+
+
+    // ---- Thinly drafted: on exactly one set, and the count is itself the signal. ----
+    // Demoted from done because one set is close enough to zero that the item is barely
+    // reachable -- with only one of each item allowed per team, a single set carrying it
+    // is one roll away from never appearing. Some of these want a buff (Safety Goggles,
+    // Power Herb, Mirror Herb, Custap Berry); some are mechanically fine and want a
+    // SECOND set (the type items, the terrain seeds, Razor Claw). Either way the work is
+    // outstanding. Moving the four resist berries and Salac Berry here also makes those
+    // two classes whole -- their siblings were already pending, and a class split across
+    // two lists reads as an oversight rather than a judgement.
+    //
+    // Note what is deliberately NOT here: the form-change enablers that also sit at one
+    // set (Adamant Crystal, Lustrous Globe, Griseous Orb, Red/Blue Orb, Rusted Sword and
+    // Shield, the three Ogerpon masks). For those, one is the CEILING rather than a
+    // shortfall -- each unlocks exactly one forme on exactly one species, so there is no
+    // buff to write and no second set to want. They stay done precisely so the one-set
+    // gate keeps watching them: delete that Giratina-Origin set and CI should notice.
+    ITEM_AIR_BALLOON,
+    ITEM_BRIGHT_POWDER,
+    ITEM_CHOPLE_BERRY,
+    ITEM_COLBUR_BERRY,
+    ITEM_CUSTAP_BERRY,
+    ITEM_ELECTRIC_SEED,
+    ITEM_MIRACLE_SEED,
+    ITEM_MIRROR_HERB,
+    ITEM_PASSHO_BERRY,
+    ITEM_POWER_HERB,
+    ITEM_PSYCHIC_SEED,
+    ITEM_RAZOR_CLAW,
+    ITEM_SAFETY_GOGGLES,
+    ITEM_SALAC_BERRY,
+    ITEM_SHUCA_BERRY,
+    ITEM_SILVER_POWDER,
 
     // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
     // Includes the five items this fork specifically repaired and then shipped to
