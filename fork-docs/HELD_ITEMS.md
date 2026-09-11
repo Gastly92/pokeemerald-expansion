@@ -71,8 +71,8 @@ The distribution is heavily top-loaded:
 
 | Item | Sets | Share |
 | --- | --- | --- |
-| Leftovers | 217 | 13.6% |
-| Life Orb | 189 | 11.8% |
+| Leftovers | 216 | 13.5% |
+| Life Orb | 186 | 11.7% |
 | Choice Band | 110 | 6.9% |
 | Sitrus Berry | 105 | 6.6% |
 | Rocky Helmet | 87 | 5.5% |
