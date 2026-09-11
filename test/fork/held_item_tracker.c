@@ -54,7 +54,7 @@
 // The done list never shrinks. Bump this when items graduate; a drop means an item was
 // demoted to pending, which is a real regression and should be a deliberate, reviewed act
 // rather than a quiet way to dodge one of the gates above.
-#define HELD_ITEM_DONE_FLOOR 76
+#define HELD_ITEM_DONE_FLOOR 77
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -82,6 +82,7 @@ static const enum Item sDoneItems[] =
     ITEM_FAIRY_FEATHER,
     ITEM_FIGY_BERRY,
     ITEM_FLAME_ORB,
+    ITEM_FLYING_GEM,
     ITEM_FOCUS_BAND,
     ITEM_FOCUS_SASH,
     ITEM_GRASSY_SEED,
@@ -141,12 +142,6 @@ static const enum Item sDoneItems[] =
 static const enum Item sPendingItems[] =
 {
     // ---- Needs a BUFF: dominated or underpowered as shipped. --------------------
-    // Gems are BUFFED but still listed here: BUFF_GEMS took them to +60%, which beats a
-    // type item on a move clicked once and loses from two uses on, so the balance half is
-    // settled. They stay pending on the ROSTER half -- 9 of the 11 sets holding a Gem
-    // click that type repeatedly and want the type item instead, so the sets have to be
-    // re-itemed before any Gem can honestly graduate. Promoting them now would arm the
-    // one-set gate on items whose only sets are about to be rebuilt.
     // Memories and Drives: set a type and grant NO multiplier, while Arceus's plates --
     // the same idea for a different species -- carry the full +40%.
     // Soul Dew and the plain signature orbs: +20% across two types, which ties a type
@@ -155,48 +150,30 @@ static const enum Item sPendingItems[] =
     // against Sitrus Berry's 25% on 105 sets.
     ITEM_ADAMANT_ORB,
     ITEM_BERRY_JUICE,
-    ITEM_BUG_GEM,
     ITEM_BUG_MEMORY,
     ITEM_BURN_DRIVE,
     ITEM_CHILL_DRIVE,
-    ITEM_DARK_GEM,
     ITEM_DARK_MEMORY,
     ITEM_DOUSE_DRIVE,
-    ITEM_DRAGON_GEM,
     ITEM_DRAGON_MEMORY,
-    ITEM_ELECTRIC_GEM,
     ITEM_ELECTRIC_MEMORY,
-    ITEM_FAIRY_GEM,
     ITEM_FAIRY_MEMORY,
-    ITEM_FIGHTING_GEM,
     ITEM_FIGHTING_MEMORY,
-    ITEM_FIRE_GEM,
     ITEM_FIRE_MEMORY,
-    ITEM_FLYING_GEM,
     ITEM_FLYING_MEMORY,
-    ITEM_GHOST_GEM,
     ITEM_GHOST_MEMORY,
-    ITEM_GRASS_GEM,
     ITEM_GRASS_MEMORY,
     ITEM_GRISEOUS_CORE,
-    ITEM_GROUND_GEM,
     ITEM_GROUND_MEMORY,
-    ITEM_ICE_GEM,
     ITEM_ICE_MEMORY,
     ITEM_LUSTROUS_ORB,
-    ITEM_NORMAL_GEM,
     ITEM_ORAN_BERRY,
-    ITEM_POISON_GEM,
     ITEM_POISON_MEMORY,
-    ITEM_PSYCHIC_GEM,
     ITEM_PSYCHIC_MEMORY,
-    ITEM_ROCK_GEM,
     ITEM_ROCK_MEMORY,
     ITEM_SHOCK_DRIVE,
     ITEM_SOUL_DEW,
-    ITEM_STEEL_GEM,
     ITEM_STEEL_MEMORY,
-    ITEM_WATER_GEM,
     ITEM_WATER_MEMORY,
 
 
@@ -216,23 +193,37 @@ static const enum Item sPendingItems[] =
     // shortfall -- each unlocks exactly one forme on exactly one species, so there is no
     // buff to write and no second set to want. They stay done precisely so the one-set
     // gate keeps watching them: delete that Giratina-Origin set and CI should notice.
+
+    // The six Gems here are the same story one notch along: BUFF_GEMS settled their
+    // balance and the roster now spends them correctly, but each sits on a single set.
+    // One set is one set whoever placed it -- only Flying Gem, at three, cleared the bar.
     ITEM_AIR_BALLOON,
     ITEM_BRIGHT_POWDER,
     ITEM_CHOPLE_BERRY,
     ITEM_COLBUR_BERRY,
     ITEM_CUSTAP_BERRY,
+    ITEM_DRAGON_GEM,
     ITEM_ELECTRIC_SEED,
+    ITEM_FAIRY_GEM,
+    ITEM_FIRE_GEM,
+    ITEM_GRASS_GEM,
     ITEM_MIRACLE_SEED,
     ITEM_MIRROR_HERB,
     ITEM_PASSHO_BERRY,
     ITEM_POWER_HERB,
+    ITEM_PSYCHIC_GEM,
     ITEM_PSYCHIC_SEED,
     ITEM_SAFETY_GOGGLES,
     ITEM_SALAC_BERRY,
     ITEM_SHUCA_BERRY,
     ITEM_SILVER_POWDER,
-
+    ITEM_STEEL_GEM,
     // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
+    // The 11 Gems here are DONE on balance -- BUFF_GEMS took the class to +60% and the
+    // roster now spends them correctly -- and pending only because no set holds these
+    // particular types yet. Their 7 siblings graduated. A Gem wants a move the set fires
+    // ONCE (a self-debuffing nuke like Overheat or Make It Rain, an Acrobatics set, or
+    // true coverage), never a move it clicks every turn; see fork-docs/LINE_REVIEW.md.
     // Includes the five items this fork specifically repaired and then shipped to
     // nobody (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat Berry), all 17
     // Arceus plates (already carrying the +40% buff), and the wide uncontested tails --
@@ -246,12 +237,14 @@ static const enum Item sPendingItems[] =
     ITEM_BERSERK_GENE,
     ITEM_BINDING_BAND,
     ITEM_BLUNDER_POLICY,
+    ITEM_BUG_GEM,
     ITEM_CELL_BATTERY,
     ITEM_CHARTI_BERRY,
     ITEM_CHERI_BERRY,
     ITEM_CHILAN_BERRY,
     ITEM_CLEAR_AMULET,
     ITEM_COBA_BERRY,
+    ITEM_DARK_GEM,
     ITEM_DEEP_SEA_SCALE,
     ITEM_DEEP_SEA_TOOTH,
     ITEM_DRACO_PLATE,
@@ -259,14 +252,19 @@ static const enum Item sPendingItems[] =
     ITEM_EARTH_PLATE,
     ITEM_EJECT_BUTTON,
     ITEM_EJECT_PACK,
+    ITEM_ELECTRIC_GEM,
     ITEM_ENIGMA_BERRY,
+    ITEM_FIGHTING_GEM,
     ITEM_FIST_PLATE,
     ITEM_FLAME_PLATE,
     ITEM_FLOAT_STONE,
     ITEM_FULL_INCENSE,
     ITEM_GANLON_BERRY,
+    ITEM_GHOST_GEM,
+    ITEM_GROUND_GEM,
     ITEM_HABAN_BERRY,
     ITEM_IAPAPA_BERRY,
+    ITEM_ICE_GEM,
     ITEM_ICICLE_PLATE,
     ITEM_INSECT_PLATE,
     ITEM_IRON_PLATE,
@@ -288,12 +286,14 @@ static const enum Item sPendingItems[] =
     ITEM_METRONOME,
     ITEM_MICLE_BERRY,
     ITEM_MIND_PLATE,
+    ITEM_NORMAL_GEM,
     ITEM_OCCA_BERRY,
     ITEM_ODD_INCENSE,
     ITEM_PAYAPA_BERRY,
     ITEM_PECHA_BERRY,
     ITEM_PERSIM_BERRY,
     ITEM_PIXIE_PLATE,
+    ITEM_POISON_GEM,
     ITEM_PROTECTIVE_PADS,
     ITEM_QUICK_POWDER,
     ITEM_RAWST_BERRY,
@@ -301,6 +301,7 @@ static const enum Item sPendingItems[] =
     ITEM_RED_CARD,
     ITEM_RINDO_BERRY,
     ITEM_RING_TARGET,
+    ITEM_ROCK_GEM,
     ITEM_ROCK_INCENSE,
     ITEM_ROOM_SERVICE,
     ITEM_ROSELI_BERRY,
@@ -319,6 +320,7 @@ static const enum Item sPendingItems[] =
     ITEM_TOXIC_PLATE,
     ITEM_UTILITY_UMBRELLA,
     ITEM_WACAN_BERRY,
+    ITEM_WATER_GEM,
     ITEM_WAVE_INCENSE,
     ITEM_WIDE_LENS,
     ITEM_WIKI_BERRY,

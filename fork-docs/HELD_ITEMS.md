@@ -12,6 +12,10 @@ because "held items are deliberately varied" is a claim worth measuring, and bec
 fixed Shell Bell, Leech Seed, the accuracy lenses and the type-boost items, and the
 question "what next" should be answered from data rather than vibes.
 
+> **Picking up this work fresh?** Jump to [Processing a batch](#processing-a-batch) — it
+> is written to make "process the next batch of pending held items" a complete
+> instruction, including the decisions already settled so they don't get re-argued.
+
 ## Status lives in the tracker, not here
 
 `test/fork/held_item_tracker.c` is the **source of truth for where each item stands**,
@@ -81,7 +85,7 @@ The distribution is heavily top-loaded:
 | Focus Band | 52 | 3.3% |
 | Choice Scarf | 44 | 2.8% |
 
-The top two alone are **25% of the roster**, and the tail is long and thin: **45 items
+The top two alone are **25% of the roster**, and the tail is long and thin: **44 items
 appear on one or two sets**.
 
 ### Why the concentration matters more than it looks
@@ -147,7 +151,7 @@ them. This is regression collateral, and it is the most defensible buff work ava
 
 | Item(s) | The problem | Sketch of a fix |
 | --- | --- | --- |
-| ~~**The 18 Gems**~~ — **shipped as `BUFF_GEMS`** | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done: **+60%** (`BUFF_GEM_PERCENT`), consumption unchanged. A Gem is boost×one turn against boost×every turn, so the break-even against +40% is 1.5 uses — at +60% it wins on a move clicked **once** and loses from two uses on, which makes it the coverage nuke rather than a general damage item. Still pending on the *roster* half: 9 of the 11 gem sets click that type repeatedly and want the type item instead. |
+| ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and the roster re-itemed the 7 sets where a Gem sat on a repeat-clicked move. Flying Gem is on the done list; six more sit on one set each and are tracked as thinly drafted; 11 types still want a first set. |
 | **Soul Dew** | +20% on Latios/Latias's Psychic and Dragon moves. Dragon Fang gives them **+40%** on Dragon, Twisted Spoon +40% on Psychic. The signature item loses to a generic one. Confirmed by the roster: Latios holds Dragon Fang and Choice Specs; Latias holds Leftovers, Boots and Light Clay. | Fold the signature two-type items into the buffed scale — a `BUFF_SIGNATURE_TYPE_ITEMS` at, say, +50% on both types would beat a type item on a split-damage set and lose on a mono-attacker, which is the identity they are supposed to have. Site: the `HOLD_EFFECT_SOUL_DEW` case in `CalcDamage()`, `src/battle_util.c:7647`. |
 | **Adamant Orb, Lustrous Orb, Griseous Core** | Same shape: +20% on two types for one species. A type item at +40% on one type ties them on a perfectly split set and beats them on any concentrated one, so they are *weakly dominated everywhere*. The roster uses the Origin-forme versions (Adamant Crystal, Lustrous Globe, Griseous Orb) — but for the **form change**, not the boost. | Same flag as Soul Dew. Sites: `src/battle_util.c:7635`–`7645`. |
 | **13 unused Memories** and **all 4 Drives** | Silvally's memory and Genesect's drive change the holder's type / signature-move type and give **no damage multiplier at all** — `HOLD_EFFECT_MEMORY` and `HOLD_EFFECT_DRIVE` have no case in `CalcDamage()`. Arceus's plate, which is the same idea for a different species, gets the full +40%. That asymmetry is now much wider than upstream intended it to be. `buff.h` names this exclusion explicitly ("Silvally's memories and Genesect's drives are a different hold effect and are untouched"), so it is a known, deliberate gap — not an oversight to be surprised by. | Extend `BUFF_TYPE_BOOST_ITEMS` (or a sibling flag) to give `HOLD_EFFECT_MEMORY` and `HOLD_EFFECT_DRIVE` the same `BUFF_TYPE_BOOST_PERCENT` on the type they set. Cheap: two extra labels on the existing `HOLD_EFFECT_TYPE_POWER` / `HOLD_EFFECT_PLATE` case. Note the Rusted Sword/Shield and the Ogerpon masks sit in the same family and should be checked for consistency at the same time. |
@@ -183,13 +187,87 @@ do. This is the largest single win in the audit and it is pure roster work.
    already-buffed-but-undrafted items (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang,
    Lansat) are the most embarrassing subset: shipped work reaching no one.
 2. **Group B's memories/drives extension.** Smallest code change with the clearest
-   justification — it closes an asymmetry our own buff opened. **Now the top code item**,
-   since the Gems shipped.
+   justification — it closes an asymmetry our own buff opened. **The top code item.**
 3. **Group B's signature orbs** (Soul Dew, Adamant/Lustrous Orb, Griseous Core). Needs a
-   magnitude decision, so it wants the treatment `BUFF_GEM_PERCENT` just got: a registered
-   toggle plus a plain compile-time constant. ~~Gems~~ — shipped as `BUFF_GEMS` at +60%.
+   magnitude decision, so it wants the treatment `BUFF_GEM_PERCENT` got: a registered
+   toggle plus a plain compile-time constant. ~~Gems~~ — shipped, both halves.
 4. **Group C.** Lowest value; the flat-HP items are a small fix and the rest is roster
    work gated on coverage decisions.
+
+## Processing a batch
+
+This section exists so "process the next batch of pending held items" is a complete
+instruction. Work it top to bottom.
+
+### 1. Read the current state
+
+```bash
+make check TESTS="Held item tracker"     # the five gates; green means the lists are honest
+```
+
+`test/fork/held_item_tracker.c` is the status. Read its three lists and the comment
+blocks inside `sPendingItems[]` — they are grouped by *what kind of work is outstanding*:
+**needs a buff**, **thinly drafted** (on one set), **needs a set** (on none). Re-measure
+usage before trusting any count in this doc:
+
+```bash
+grep -oP '\.heldItem = \KITEM_\w+' src/fork/frontier_extended_mons.c | sort | uniq -c | sort -rn
+```
+
+### 2. Pick the batch
+
+**One PR does one kind of work.** A buff PR ships one `BUFF_*` flag; a roster PR moves
+items onto sets. Don't mix them — the Gems took two PRs on purpose (#510 balance, #511
+roster), and that split is what let each be reviewed on its own merits.
+
+Order of value: the **Priority** section above. In short — roster work first, since it
+costs no engine risk, then the memories/drives extension, then the signature orbs.
+
+A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
+get hard to review; smaller ones waste a CI cycle.
+
+### 3. Decisions already settled — do not re-litigate
+
+- **A Gem is burst, not defense.** Making Gems grant type *immunity* was considered and
+  rejected: it obsoletes Air Balloon outright and out-classes all 18 resist berries, both
+  already pending. Fixing 18 items by breaking 19 is not a fix.
+- **+60% was chosen deliberately.** A Gem is boost×one turn against a type item's
+  boost×every turn, so the break-even is 1.5 uses. Bigger numbers start dominating the
+  permanent items, which is the mistake the flag exists to undo.
+- **A Gem goes on a move the set fires ONCE** — a self-debuffing nuke (Overheat, Leaf
+  Storm, Make It Rain, Psycho Boost, Fleur Cannon), an Acrobatics set, or true coverage.
+  Never a set's main STAB. **Contrary users are excluded**: Contrary turns the self-debuff
+  into a boost, so they spam the nuke and want a permanent item.
+- **Prefer re-iteming an existing set to appending a new one.** Saved rentals key on array
+  index and the roster is kept in dex order, so a new set is a mid-list insertion that
+  invalidates an in-progress rented team ([`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md),
+  "Save compatibility"). Re-iteming shifts no index *and* pulls down the Leftovers / Life
+  Orb concentration, which is the point of the audit. Append only when the roster genuinely
+  needs a new build.
+- **One set is one set, whoever placed it.** A freshly, deliberately placed single set is
+  still thinly drafted. The one exception is a **form-change enabler** (Adamant Crystal,
+  Rusted Sword, an Ogerpon mask…), where one is the *ceiling* rather than a shortfall.
+
+### 4. Graduate what you finished
+
+An item joins `sDoneItems[]` only when **both** halves are true: balance is right **and**
+the roster uses it on more than one set. Graduating is what arms the gates for it, so a
+premature promotion is worse than leaving it pending. Bump `HELD_ITEM_DONE_FLOOR` by
+however many you promoted — the ratchet is meant to make a demotion a visible, reviewed
+edit rather than a quiet way to go green.
+
+### 5. Verify and ship
+
+```bash
+make check TESTS="Held item tracker"        # always
+make check TESTS="Frontier extended roster" # if you touched the roster
+make check                                  # before pushing
+UNUSED_ERROR=1 DEPRECATED_ERROR=1 make -j$(nproc) -O all   # if you touched engine code
+```
+
+Branch `claude/<short-description>`, PR against our `master`, squash merge. Update this
+doc's reasoning and `FORK.md`'s balance row in the same PR — but **status goes in the
+tracker, never here.**
 
 ## Adding one of these buffs
 
