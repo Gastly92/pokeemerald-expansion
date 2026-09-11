@@ -12,6 +12,40 @@ because "held items are deliberately varied" is a claim worth measuring, and bec
 fixed Shell Bell, Leech Seed, the accuracy lenses and the type-boost items, and the
 question "what next" should be answered from data rather than vibes.
 
+## Status lives in the tracker, not here
+
+`test/fork/held_item_tracker.c` is the **source of truth for where each item stands**,
+and CI gates it. Every item that does something when held sits on exactly one of three
+lists, and the list *is* the status:
+
+| List | Meaning | Gated? |
+| --- | --- | --- |
+| `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
+| `sPendingItems[]` | Work outstanding: needs a buff, is mechanically fine and needs a set, or is **thinly drafted** (on one set, which with one-item-per-team is a roll away from never appearing) | No — a pending item may sit at zero sets, which is usually why it is pending |
+| `sIgnoredItems[]` | Unreachable in a frontier battle | Exempt from the done gates, but **no set may hold one** — a Mega Stone or Z-Crystal in the slot does nothing under `FEATURE_FREE_GIMMICKS`, so the set would be playing an item down with no other symptom |
+
+A **one-set count is not automatically a shortfall.** The form-change enablers — Adamant
+Crystal, Lustrous Globe, Griseous Orb, Red/Blue Orb, Rusted Sword and Shield, the three
+Ogerpon masks — each unlock exactly one forme on exactly one species, so one is the
+ceiling rather than a gap. They stay done so the one-set gate keeps watching them: delete
+the Giratina-Origin set and CI should notice.
+
+Graduating an item to `sDoneItems[]` is what **arms** the gates for it. That is the
+failure the tracker exists to catch: Wide Lens, Zoom Lens, Blunder Policy, Razor Fang and
+Lansat Berry all received real engine work and then shipped to nobody, because nothing
+connected "we buffed it" to "a set holds it".
+
+The lists are swept for completeness against `gItemsInfo[]`, so an item arriving with an
+upstream sync cannot sit unclassified — and a genuinely new hold effect fails CI until
+someone judges it. Mega Stones and Z-Crystals are excluded by hold effect rather than by
+127 boilerplate rows.
+
+**So: don't record status in this doc.** Two copies drift, and the prose copy is the one
+that goes stale. This doc carries the *reasoning* — why an item is where it is, and the
+buff sketch that would move it. The groups below are that reasoning, not a status board.
+
+Run it with `make check TESTS="Held item tracker"`.
+
 ## Reproducing the audit
 
 ```bash
