@@ -7245,6 +7245,43 @@ static inline u32 CalcMoveBasePower(struct DamageContext *ctx)
     return basePower;
 }
 
+// FORK: BUFF_SIGNATURE_TYPE_ITEMS -- a species-signature type item boosts only its own
+// owner. Two different stock baselines meet here, so the flag reads differently per class:
+// a Plate boosts ANY holder in stock and the flag only LOCKS it to Arceus, while a Memory
+// or Drive has no multiplier in stock at all and the flag is what grants one. Returning
+// TRUE means "apply the shared type-item math below". See config/buff.h.
+static bool32 SignatureTypeItemAllowed(enum HoldEffect holdEffect, u16 species)
+{
+    switch (holdEffect)
+    {
+    case HOLD_EFFECT_PLATE:
+        return !GetConfig(BUFF_SIGNATURE_TYPE_ITEMS)
+            || GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS;
+    case HOLD_EFFECT_MEMORY:
+        return GetConfig(BUFF_SIGNATURE_TYPE_ITEMS)
+            && GET_BASE_SPECIES_ID(species) == SPECIES_SILVALLY;
+    case HOLD_EFFECT_DRIVE:
+        return GetConfig(BUFF_SIGNATURE_TYPE_ITEMS)
+            && GET_BASE_SPECIES_ID(species) == SPECIES_GENESECT;
+    default:
+        return TRUE;
+    }
+}
+
+// FORK: BUFF_SIGNATURE_TYPE_ITEMS -- the already-species-locked signature orbs (Soul Dew,
+// Adamant/Lustrous/Griseous) keep their upstream gate and only change magnitude, moving off
+// the stock +20% onto the same scale as the generic type items. See config/buff.h.
+static uq4_12_t SignatureOrbModifier(uq4_12_t stockModifier)
+{
+    // Tracks the generic scale rather than setting its own: with BUFF_TYPE_BOOST_ITEMS off
+    // the generic items are back at stock, so a signature item matching them means stock
+    // too. Keeps the orbs consistent with the Memory/Drive half, which reaches the shared
+    // body below and reads the same flag.
+    if (GetConfig(BUFF_SIGNATURE_TYPE_ITEMS) && GetConfig(BUFF_TYPE_BOOST_ITEMS))
+        return PercentToUQ4_12AddOne(BUFF_TYPE_BOOST_PERCENT);
+    return stockModifier;
+}
+
 static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
 {
     u32 holdEffectParamAtk;
@@ -7634,25 +7671,28 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         break;
     case HOLD_EFFECT_LUSTROUS_ORB:
         if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PALKIA && (moveType == TYPE_WATER || moveType == TYPE_DRAGON))
-            modifier = uq4_12_multiply(modifier, holdEffectModifier);
+            modifier = uq4_12_multiply(modifier, SignatureOrbModifier(holdEffectModifier)); // FORK: BUFF_SIGNATURE_TYPE_ITEMS
         break;
     case HOLD_EFFECT_ADAMANT_ORB:
         if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_DIALGA && (moveType == TYPE_STEEL || moveType == TYPE_DRAGON))
-            modifier = uq4_12_multiply(modifier, holdEffectModifier);
+            modifier = uq4_12_multiply(modifier, SignatureOrbModifier(holdEffectModifier)); // FORK: BUFF_SIGNATURE_TYPE_ITEMS
         break;
     case HOLD_EFFECT_GRISEOUS_ORB:
         if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_GIRATINA && (moveType == TYPE_GHOST || moveType == TYPE_DRAGON))
-            modifier = uq4_12_multiply(modifier, holdEffectModifier);
+            modifier = uq4_12_multiply(modifier, SignatureOrbModifier(holdEffectModifier)); // FORK: BUFF_SIGNATURE_TYPE_ITEMS
         break;
     case HOLD_EFFECT_SOUL_DEW:
         if ((gBattleMons[battlerAtk].species == SPECIES_LATIAS || gBattleMons[battlerAtk].species == SPECIES_LATIOS)
             && ((B_SOUL_DEW_BOOST >= GEN_7 && (moveType == TYPE_PSYCHIC || moveType == TYPE_DRAGON))
              || (B_SOUL_DEW_BOOST < GEN_7 && !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) && IsBattleMoveSpecial(move))))
-            modifier = uq4_12_multiply(modifier, holdEffectModifier);
+            modifier = uq4_12_multiply(modifier, SignatureOrbModifier(holdEffectModifier)); // FORK: BUFF_SIGNATURE_TYPE_ITEMS
         break;
     case HOLD_EFFECT_TYPE_POWER:
     case HOLD_EFFECT_PLATE:
-        if (moveType == GetItemSecondaryId(gBattleMons[battlerAtk].item))
+    case HOLD_EFFECT_MEMORY: // FORK: BUFF_SIGNATURE_TYPE_ITEMS -- Silvally's Memory carries
+    case HOLD_EFFECT_DRIVE:  // FORK: and Genesect's Drive the same secondaryId a Plate does.
+        if (moveType == GetItemSecondaryId(gBattleMons[battlerAtk].item)
+         && SignatureTypeItemAllowed(ctx->holdEffects[ctx->battlerAtk], gBattleMons[battlerAtk].species)) // FORK
         {
             // FORK: BUFF_TYPE_BOOST_ITEMS raises these from the stock +20% to
             // +BUFF_TYPE_BOOST_PERCENT, ignoring the item's own param. See config/buff.h.

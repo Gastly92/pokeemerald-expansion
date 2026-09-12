@@ -190,4 +190,45 @@
 // BUFF_GEMS is FALSE.
 #define BUFF_GEM_PERCENT 60
 
+// When TRUE, the species-signature type items are locked to their own species AND put on
+// the same scale as the generic type items (+BUFF_TYPE_BOOST_PERCENT, +40% by default).
+// Two halves of one rule:
+//
+//   Arceus's 17 Plates      -- stock lets ANY holder take the boost; this locks it to Arceus.
+//   Silvally's 17 Memories  -- stock gives NO multiplier at all; this grants one.
+//   Genesect's 4 Drives     -- stock gives NO multiplier at all; this grants one.
+//   Soul Dew, Adamant Orb, Lustrous Orb, Griseous Orb/Core -- already species-locked
+//                              upstream; this only raises them off the stock +20%.
+//
+// Why the boost: BUFF_TYPE_BOOST_ITEMS took the generic items (Charcoal, Mystic Water, ...)
+// to +40% and left these behind, which inverted the point of a signature item. A Memory or
+// Drive gives no damage bonus whatever, and Silvally cannot even decline one -- its forme is
+// FORM_CHANGE_ITEM_HOLD, so dropping the Memory reverts it to Normal. That made every
+// Silvally set a set playing a permanent item down. The orbs were beaten by a generic item
+// on their own signature types: Latios hits harder with Dragon Fang (+40% Dragon) than with
+// Soul Dew (+20% Dragon AND Psychic), which is why the roster gave it Dragon Fang.
+//
+// Why one number for both the one-type and two-type items: each of these boosts exactly its
+// holder's STAB package and nothing else. Arceus is mono-typed, so its Plate covers its whole
+// identity; Latios is Dragon/Psychic and Dialga Steel/Dragon, so Soul Dew and Adamant Orb
+// cover theirs. "One type" and "two types" are the same rule read on different mons, so there
+// is no second magnitude to pick.
+//
+// Why the lock: without it the boost hands out 21 more Charcoal-clones to the whole roster,
+// which is a capacity change dressed up as a fix -- and it costs Arceus, Silvally and Genesect
+// the one thing that makes their item theirs. Note Genesect is the odd member: a Drive re-types
+// Techno Blast but NOT Genesect, which stays Bug/Steel on every forme, so a Drive is +40% on a
+// non-STAB type where a Memory is +40% on top of STAB.
+//
+// Depends on BUFF_TYPE_BOOST_ITEMS for its magnitude: this flag says signature items sit on
+// the same scale as the generic ones, so with BUFF_TYPE_BOOST_ITEMS off they follow the generic
+// items back down to stock (and a Memory/Drive, which has no stock multiplier, gives nothing).
+// The species LOCK half applies either way. Both on is the shipping configuration.
+//
+// Site: the attacker's hold-effect switch in CalcDamage(), src/battle_util.c -- Memory and
+// Drive join the shared HOLD_EFFECT_TYPE_POWER / HOLD_EFFECT_PLATE body, which the
+// SignatureTypeItemAllowed() helper guards. Only the attacker's side is touched, so the AI's
+// damage prediction picks the change up for free; it runs the same calc.
+#define BUFF_SIGNATURE_TYPE_ITEMS TRUE
+
 #endif // GUARD_CONFIG_BUFF_H

@@ -54,7 +54,7 @@
 // The done list never shrinks. Bump this when items graduate; a drop means an item was
 // demoted to pending, which is a real regression and should be a deliberate, reviewed act
 // rather than a quiet way to dodge one of the gates above.
-#define HELD_ITEM_DONE_FLOOR 77
+#define HELD_ITEM_DONE_FLOOR 81
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -77,9 +77,11 @@ static const enum Item sDoneItems[] =
     ITEM_COVERT_CLOAK,
     ITEM_DAMP_ROCK,
     ITEM_DRAGON_FANG,
+    ITEM_DRAGON_MEMORY,
     ITEM_EVIOLITE,
     ITEM_EXPERT_BELT,
     ITEM_FAIRY_FEATHER,
+    ITEM_FAIRY_MEMORY,
     ITEM_FIGY_BERRY,
     ITEM_FLAME_ORB,
     ITEM_FLYING_GEM,
@@ -88,6 +90,7 @@ static const enum Item sDoneItems[] =
     ITEM_GRASSY_SEED,
     ITEM_GRIP_CLAW,
     ITEM_GRISEOUS_ORB,
+    ITEM_GROUND_MEMORY,
     ITEM_HARD_STONE,
     ITEM_HEARTHFLAME_MASK,
     ITEM_HEAT_ROCK,
@@ -127,6 +130,7 @@ static const enum Item sDoneItems[] =
     ITEM_SMOOTH_ROCK,
     ITEM_SOFT_SAND,
     ITEM_SPELL_TAG,
+    ITEM_STEEL_MEMORY,
     ITEM_TERRAIN_EXTENDER,
     ITEM_THICK_CLUB,
     ITEM_THROAT_SPRAY,
@@ -142,39 +146,15 @@ static const enum Item sDoneItems[] =
 static const enum Item sPendingItems[] =
 {
     // ---- Needs a BUFF: dominated or underpowered as shipped. --------------------
-    // Memories and Drives: set a type and grant NO multiplier, while Arceus's plates --
-    // the same idea for a different species -- carry the full +40%.
-    // Soul Dew and the plain signature orbs: +20% across two types, which ties a type
-    // item on a perfectly split set and loses on any concentrated one.
     // Oran Berry and Berry Juice: a flat 20 HP does not survive the jump to Level 50,
     // against Sitrus Berry's 25% on 105 sets.
-    ITEM_ADAMANT_ORB,
+    //
+    // The Memories, Drives, Soul Dew and the signature orbs used to sit here. They were
+    // settled by BUFF_SIGNATURE_TYPE_ITEMS, which put the whole signature class on the
+    // generic type items' scale and locked each one to its own species; the four Memories
+    // the roster already holds graduated with it. The rest moved down to "needs a SET".
     ITEM_BERRY_JUICE,
-    ITEM_BUG_MEMORY,
-    ITEM_BURN_DRIVE,
-    ITEM_CHILL_DRIVE,
-    ITEM_DARK_MEMORY,
-    ITEM_DOUSE_DRIVE,
-    ITEM_DRAGON_MEMORY,
-    ITEM_ELECTRIC_MEMORY,
-    ITEM_FAIRY_MEMORY,
-    ITEM_FIGHTING_MEMORY,
-    ITEM_FIRE_MEMORY,
-    ITEM_FLYING_MEMORY,
-    ITEM_GHOST_MEMORY,
-    ITEM_GRASS_MEMORY,
-    ITEM_GRISEOUS_CORE,
-    ITEM_GROUND_MEMORY,
-    ITEM_ICE_MEMORY,
-    ITEM_LUSTROUS_ORB,
     ITEM_ORAN_BERRY,
-    ITEM_POISON_MEMORY,
-    ITEM_PSYCHIC_MEMORY,
-    ITEM_ROCK_MEMORY,
-    ITEM_SHOCK_DRIVE,
-    ITEM_SOUL_DEW,
-    ITEM_STEEL_MEMORY,
-    ITEM_WATER_MEMORY,
 
 
     // ---- Thinly drafted: on exactly one set, and the count is itself the signal. ----
@@ -189,10 +169,16 @@ static const enum Item sPendingItems[] =
     //
     // Note what is deliberately NOT here: the form-change enablers that also sit at one
     // set (Adamant Crystal, Lustrous Globe, Griseous Orb, Red/Blue Orb, Rusted Sword and
-    // Shield, the three Ogerpon masks). For those, one is the CEILING rather than a
-    // shortfall -- each unlocks exactly one forme on exactly one species, so there is no
-    // buff to write and no second set to want. They stay done precisely so the one-set
-    // gate keeps watching them: delete that Giratina-Origin set and CI should notice.
+    // Shield, the three Ogerpon masks, and now the four Memories the roster holds). For
+    // those, one is the CEILING rather than a shortfall -- each unlocks exactly one forme
+    // on exactly one species, so there is no buff to write and no second set to want.
+    // They stay done precisely so the one-set gate keeps watching them: delete that
+    // Giratina-Origin set and CI should notice.
+    //
+    // A Memory qualifies on the same reading: FORM_CHANGE_ITEM_HOLD means Dragon Memory
+    // unlocks Silvally-Dragon and nothing else, so Silvally-Dragon's one set is the item's
+    // whole reach. That it now also carries a damage boost does not change this -- the
+    // Ogerpon masks have carried one all along and sit in this exception already.
 
     // The six Gems here are the same story one notch along: BUFF_GEMS settled their
     // balance and the roster now spends them correctly, but each sits on a single set.
@@ -228,8 +214,16 @@ static const enum Item sPendingItems[] =
     // nobody (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat Berry), all 17
     // Arceus plates (already carrying the +40% buff), and the wide uncontested tails --
     // 14 of the 18 resist berries, the five type-boost incenses, Lax Incense.
+    //
+    // The signature type items settled by BUFF_SIGNATURE_TYPE_ITEMS are here too: 13
+    // Memories, all 4 Drives, Soul Dew and the three plain orbs. Each is now locked to
+    // one species, so each wants a set on THAT species and nowhere else -- a Memory needs
+    // its Silvally forme, a Drive needs a Genesect, Soul Dew a Lati@s. Note Arceus and
+    // Genesect are TIER_MYTHICAL, so their sets are reachable only through a reserved
+    // forced-tier slot; Silvally is TIER_NORMAL and rentable.
     ITEM_ABILITY_SHIELD,
     ITEM_ABSORB_BULB,
+    ITEM_ADAMANT_ORB,
     ITEM_ADRENALINE_ORB,
     ITEM_APICOT_BERRY,
     ITEM_ASPEAR_BERRY,
@@ -238,33 +232,46 @@ static const enum Item sPendingItems[] =
     ITEM_BINDING_BAND,
     ITEM_BLUNDER_POLICY,
     ITEM_BUG_GEM,
+    ITEM_BUG_MEMORY,
+    ITEM_BURN_DRIVE,
     ITEM_CELL_BATTERY,
     ITEM_CHARTI_BERRY,
     ITEM_CHERI_BERRY,
     ITEM_CHILAN_BERRY,
+    ITEM_CHILL_DRIVE,
     ITEM_CLEAR_AMULET,
     ITEM_COBA_BERRY,
     ITEM_DARK_GEM,
+    ITEM_DARK_MEMORY,
     ITEM_DEEP_SEA_SCALE,
     ITEM_DEEP_SEA_TOOTH,
+    ITEM_DOUSE_DRIVE,
     ITEM_DRACO_PLATE,
     ITEM_DREAD_PLATE,
     ITEM_EARTH_PLATE,
     ITEM_EJECT_BUTTON,
     ITEM_EJECT_PACK,
     ITEM_ELECTRIC_GEM,
+    ITEM_ELECTRIC_MEMORY,
     ITEM_ENIGMA_BERRY,
     ITEM_FIGHTING_GEM,
+    ITEM_FIGHTING_MEMORY,
+    ITEM_FIRE_MEMORY,
     ITEM_FIST_PLATE,
     ITEM_FLAME_PLATE,
     ITEM_FLOAT_STONE,
+    ITEM_FLYING_MEMORY,
     ITEM_FULL_INCENSE,
     ITEM_GANLON_BERRY,
     ITEM_GHOST_GEM,
+    ITEM_GHOST_MEMORY,
+    ITEM_GRASS_MEMORY,
+    ITEM_GRISEOUS_CORE,
     ITEM_GROUND_GEM,
     ITEM_HABAN_BERRY,
     ITEM_IAPAPA_BERRY,
     ITEM_ICE_GEM,
+    ITEM_ICE_MEMORY,
     ITEM_ICICLE_PLATE,
     ITEM_INSECT_PLATE,
     ITEM_IRON_PLATE,
@@ -279,6 +286,7 @@ static const enum Item sPendingItems[] =
     ITEM_LIECHI_BERRY,
     ITEM_LUCKY_PUNCH,
     ITEM_LUMINOUS_MOSS,
+    ITEM_LUSTROUS_ORB,
     ITEM_MAGO_BERRY,
     ITEM_MARANGA_BERRY,
     ITEM_MEADOW_PLATE,
@@ -294,7 +302,9 @@ static const enum Item sPendingItems[] =
     ITEM_PERSIM_BERRY,
     ITEM_PIXIE_PLATE,
     ITEM_POISON_GEM,
+    ITEM_POISON_MEMORY,
     ITEM_PROTECTIVE_PADS,
+    ITEM_PSYCHIC_MEMORY,
     ITEM_QUICK_POWDER,
     ITEM_RAWST_BERRY,
     ITEM_RAZOR_FANG,
@@ -303,14 +313,17 @@ static const enum Item sPendingItems[] =
     ITEM_RING_TARGET,
     ITEM_ROCK_GEM,
     ITEM_ROCK_INCENSE,
+    ITEM_ROCK_MEMORY,
     ITEM_ROOM_SERVICE,
     ITEM_ROSELI_BERRY,
     ITEM_ROSE_INCENSE,
     ITEM_ROWAP_BERRY,
     ITEM_SEA_INCENSE,
     ITEM_SHED_SHELL,
+    ITEM_SHOCK_DRIVE,
     ITEM_SKY_PLATE,
     ITEM_SNOWBALL,
+    ITEM_SOUL_DEW,
     ITEM_SPLASH_PLATE,
     ITEM_SPOOKY_PLATE,
     ITEM_STARF_BERRY,
@@ -321,6 +334,7 @@ static const enum Item sPendingItems[] =
     ITEM_UTILITY_UMBRELLA,
     ITEM_WACAN_BERRY,
     ITEM_WATER_GEM,
+    ITEM_WATER_MEMORY,
     ITEM_WAVE_INCENSE,
     ITEM_WIDE_LENS,
     ITEM_WIKI_BERRY,
