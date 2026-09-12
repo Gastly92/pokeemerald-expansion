@@ -152,9 +152,9 @@ them. This is regression collateral, and it is the most defensible buff work ava
 | Item(s) | The problem | Sketch of a fix |
 | --- | --- | --- |
 | ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and the roster re-itemed the 7 sets where a Gem sat on a repeat-clicked move. Flying Gem is on the done list; six more sit on one set each and are tracked as thinly drafted; 11 types still want a first set. |
-| **Soul Dew** | +20% on Latios/Latias's Psychic and Dragon moves. Dragon Fang gives them **+40%** on Dragon, Twisted Spoon +40% on Psychic. The signature item loses to a generic one. Confirmed by the roster: Latios holds Dragon Fang and Choice Specs; Latias holds Leftovers, Boots and Light Clay. | Fold the signature two-type items into the buffed scale — a `BUFF_SIGNATURE_TYPE_ITEMS` at, say, +50% on both types would beat a type item on a split-damage set and lose on a mono-attacker, which is the identity they are supposed to have. Site: the `HOLD_EFFECT_SOUL_DEW` case in `CalcDamage()`, `src/battle_util.c:7647`. |
-| **Adamant Orb, Lustrous Orb, Griseous Core** | Same shape: +20% on two types for one species. A type item at +40% on one type ties them on a perfectly split set and beats them on any concentrated one, so they are *weakly dominated everywhere*. The roster uses the Origin-forme versions (Adamant Crystal, Lustrous Globe, Griseous Orb) — but for the **form change**, not the boost. | Same flag as Soul Dew. Sites: `src/battle_util.c:7635`–`7645`. |
-| **13 unused Memories** and **all 4 Drives** | Silvally's memory and Genesect's drive change the holder's type / signature-move type and give **no damage multiplier at all** — `HOLD_EFFECT_MEMORY` and `HOLD_EFFECT_DRIVE` have no case in `CalcDamage()`. Arceus's plate, which is the same idea for a different species, gets the full +40%. That asymmetry is now much wider than upstream intended it to be. `buff.h` names this exclusion explicitly ("Silvally's memories and Genesect's drives are a different hold effect and are untouched"), so it is a known, deliberate gap — not an oversight to be surprised by. | Extend `BUFF_TYPE_BOOST_ITEMS` (or a sibling flag) to give `HOLD_EFFECT_MEMORY` and `HOLD_EFFECT_DRIVE` the same `BUFF_TYPE_BOOST_PERCENT` on the type they set. Cheap: two extra labels on the existing `HOLD_EFFECT_TYPE_POWER` / `HOLD_EFFECT_PLATE` case. Note the Rusted Sword/Shield and the Ogerpon masks sit in the same family and should be checked for consistency at the same time. |
+| ~~**Soul Dew**~~ — **shipped** | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package: Arceus is mono-typed, Latios is Dragon/Psychic. |
+| ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. |
+| ~~**13 unused Memories** and **all 4 Drives**~~ — **shipped** | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally could not decline it either: `FORM_CHANGE_ITEM_HOLD` means dropping the Memory reverts the forme, so all four Silvally sets were compelled to hold a dead item. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` put the whole signature class on `BUFF_TYPE_BOOST_PERCENT` and locked each item to its own species. The four Memories the roster holds graduated; 13 Memories and all 4 Drives now want a set. |
 
 ### Group C — weak in stock, still weak here (needs code)
 
@@ -168,31 +168,51 @@ Not caused by us; just never worth a slot.
 
 ### Group D — the 17 Plates
 
-Worth its own heading because it is the single largest fully-unused group with a
-**shipped buff attached**.
-
 All 17 plates are `HOLD_EFFECT_PLATE`, so `BUFF_TYPE_BOOST_ITEMS` already gives them
 +40% — *and* a plate changes Arceus's type, so it is a type item and a STAB rewrite in
-one slot. The roster's two Arceus sets hold Life Orb and Leftovers, so the entire class
-is idle and Arceus only ever appears as Normal.
+one slot. `BUFF_SIGNATURE_TYPE_ITEMS` has since locked that boost to Arceus, which is
+what makes the plate a signature item rather than a Charcoal clone. The roster's two
+Arceus sets are both Arceus-Normal (Life Orb, Leftovers), which correctly hold no plate,
+so the entire class is idle.
 
-There is no code to write. Arceus with a plate is 17 distinct, mutually exclusive,
-completely uncontested draft slots, and it is the most flavor-accurate thing Arceus can
-do. This is the largest single win in the audit and it is pure roster work.
+There is no code to write. But **this is not 17 uncontested draft slots**, and an earlier
+version of this doc called it "the largest single win in the audit" on exactly that
+mistake. Three facts cap it:
+
+- **Arceus is `TIER_MYTHICAL`** (`src/fork/species_tiers.c`). `TierRejectsCandidate()`
+  bans legendaries and mythicals from every normal slot — the player's rental pool
+  (`src/battle_factory.c:625`) and ordinary Tower opponents (`src/battle_frontier.c:320`)
+  alike. Arceus is reachable only through a *reserved forced-tier slot* on Factory
+  opponents, plus fixed boss teams. **The player can never rent one fresh.**
+- **The draft rejects duplicate species**, so one Arceus per team means **one plate per
+  team, ever** — the 17 are mutually exclusive, not additive.
+- **The draw is uniform over sets** (`GetRandomFrontierExtendedMonId()`), so set count
+  scales appearance rate directly. The mythical pool is ~67 sets across 34 species;
+  adding 17 Arceus sets puts Arceus at roughly **a fifth of every mythical slot**.
+
+That share was reviewed and **accepted**, on the grounds that it is a *different* Arceus
+each time: 17 formes share no typing, no moveset and no item, so the variety the audit
+cares about is preserved even though one species' rate goes up. Author the sets — just
+don't file this under "free capacity", and don't repeat the error of counting
+species-locked items as though they were generic ones.
 
 ## Priority
 
-1. **Group A and Group D first.** No engine risk, no new flag, no test surface — a line
-   review that spends its item picks out of the tail instead of on Leftovers. The
-   already-buffed-but-undrafted items (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang,
-   Lansat) are the most embarrassing subset: shipped work reaching no one.
-2. **Group B's memories/drives extension.** Smallest code change with the clearest
-   justification — it closes an asymmetry our own buff opened. **The top code item.**
-3. **Group B's signature orbs** (Soul Dew, Adamant/Lustrous Orb, Griseous Core). Needs a
-   magnitude decision, so it wants the treatment `BUFF_GEM_PERCENT` got: a registered
-   toggle plus a plain compile-time constant. ~~Gems~~ — shipped, both halves.
-4. **Group C.** Lowest value; the flat-HP items are a small fix and the rest is roster
-   work gated on coverage decisions.
+Group B is now empty apart from the flat-HP items in Group C — `BUFF_SIGNATURE_TYPE_ITEMS`
+closed the memories, drives, Soul Dew and the orbs in one flag, and `BUFF_GEMS` closed the
+Gems before it. What is left is overwhelmingly **roster work**.
+
+1. **The signature sets the new flag just unlocked.** Each item is now locked to one
+   species, so each wants a set on *that* species: 13 Silvally formes, 4 Genesect drives,
+   17 Arceus plates, a Soul Dew Lati@s. Silvally is `TIER_NORMAL` and rentable, so it is
+   the cheapest and most visible of the three; Arceus and Genesect are mythical-gated (see
+   Group D). This is the largest block of outstanding work and it needs no engine changes.
+2. **Group A.** No engine risk, no new flag, no test surface — a line review that spends
+   its item picks out of the tail instead of on Leftovers. The already-buffed-but-undrafted
+   items (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat) are the most
+   embarrassing subset: shipped work reaching no one.
+3. **Group C.** Lowest value; `BUFF_FLAT_HP_ITEMS` for Oran Berry and Berry Juice is the
+   only code left in the backlog, and the rest is roster work gated on coverage decisions.
 
 ## Processing a batch
 
@@ -244,6 +264,16 @@ get hard to review; smaller ones waste a CI cycle.
   "Save compatibility"). Re-iteming shifts no index *and* pulls down the Leftovers / Life
   Orb concentration, which is the point of the audit. Append only when the roster genuinely
   needs a new build.
+- **A signature type item is locked to its own species.** `BUFF_SIGNATURE_TYPE_ITEMS`
+  settled this: a Plate boosts only Arceus, a Memory only Silvally, a Drive only Genesect.
+  The ungated alternative — letting anyone hold a Bug Memory as a 40% Bug item — was
+  considered and rejected: it hands the roster 21 more Charcoal-clones, which is a capacity
+  change dressed as a fix, and it costs the three species the one thing that makes their
+  item theirs. Consequence for set authors: these items have exactly one legal home each.
+- **One number covers the one-type and two-type signature items.** Each boosts exactly its
+  holder's STAB package — Arceus is mono-typed, Latios is Dragon/Psychic, Dialga
+  Steel/Dragon — so "+40% on one type" and "+40% on two" are the same rule on different
+  mons. There is no second magnitude to argue about.
 - **One set is one set, whoever placed it.** A freshly, deliberately placed single set is
   still thinly drafted. The one exception is a **form-change enabler** (Adamant Crystal,
   Rusted Sword, an Ogerpon mask…), where one is the *ceiling* rather than a shortfall.

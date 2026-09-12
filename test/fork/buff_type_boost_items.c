@@ -37,6 +37,11 @@ SINGLE_BATTLE_TEST("BUFF_TYPE_BOOST_ITEMS: a type-boosting item raises its type'
     }
 }
 
+// Wobbuffet holds the Plate here to isolate the multiplier from the forme change a Plate
+// causes on Arceus. That is stock behaviour, so BUFF_SIGNATURE_TYPE_ITEMS is pinned off
+// explicitly rather than left to the baseline: in the SHIPPING config it is on and a Plate
+// boosts only Arceus. The locked path, and the STAB the forme change brings with it, are
+// covered in test/fork/buff_signature_type_items.c.
 SINGLE_BATTLE_TEST("BUFF_TYPE_BOOST_ITEMS: a Plate gets the same 40% as the generic items", s16 damage)
 {
     u32 item;
@@ -46,6 +51,7 @@ SINGLE_BATTLE_TEST("BUFF_TYPE_BOOST_ITEMS: a Plate gets the same 40% as the gene
 
     GIVEN {
         WITH_CONFIG(BUFF_TYPE_BOOST_ITEMS, TRUE);
+        WITH_CONFIG(BUFF_SIGNATURE_TYPE_ITEMS, FALSE);
         PLAYER(SPECIES_WOBBUFFET) { Item(item); }
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
