@@ -66,16 +66,16 @@ here will drift.
 
 ## What the roster uses today
 
-**1609 sets. 115 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
+**1626 sets. 133 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
 set). Against the **239 items in the build that have a battle-relevant hold effect**
-(excluding Mega Stones and Z-Crystals — see "Never expected" below), that is **115 used,
-124 unused**.
+(excluding Mega Stones and Z-Crystals — see "Never expected" below), that is **133 used,
+106 unused**.
 
 The distribution is heavily top-loaded:
 
 | Item | Sets | Share |
 | --- | --- | --- |
-| Leftovers | 216 | 13.4% |
+| Leftovers | 216 | 13.3% |
 | Life Orb | 186 | 11.7% |
 | Choice Band | 110 | 6.9% |
 | Sitrus Berry | 105 | 6.6% |
@@ -166,35 +166,39 @@ Not caused by us; just never worth a slot.
 | **Deep Sea Tooth, Deep Sea Scale** | Both are **2x** — enormous — but locked to Clamperl, which has no set at all (it evolves, so the coverage test excuses it). | No engine work. Needs a Clamperl set, which the coverage rules currently do not ask for. Worth one deliberately-built NFE entry: a 2x Sp. Atk Clamperl on an uncontested item is a genuinely interesting rental. |
 | **Lucky Punch, Metal Powder, Quick Powder** | Species-locked to Chansey and Ditto, both of which have sets that hold something better (Chansey: Eviolite; Ditto: Choice Scarf). Lucky Punch was *also* repaired by `DETERMINISTIC_HOLD_EFFECTS` (guaranteed first-attack crit) and ships to nobody. | No engine work; a second Chansey and a second Ditto set. Chansey with Eviolite *and* a guaranteed crit are different sets, and the roster deliberately carries several builds per species. |
 
-### Group D — the 17 Plates
+### Group D — the 17 Plates — **shipped**
 
-All 17 plates are `HOLD_EFFECT_PLATE`, so `BUFF_TYPE_BOOST_ITEMS` already gives them
-+40% — *and* a plate changes Arceus's type, so it is a type item and a STAB rewrite in
-one slot. `BUFF_SIGNATURE_TYPE_ITEMS` has since locked that boost to Arceus, which is
-what makes the plate a signature item rather than a Charcoal clone. The roster's two
-Arceus sets are both Arceus-Normal (Life Orb, Leftovers), which correctly hold no plate,
-so the entire class is idle.
+All 17 plates are `HOLD_EFFECT_PLATE`, so `BUFF_TYPE_BOOST_ITEMS` gives them +40%, and
+`BUFF_SIGNATURE_TYPE_ITEMS` then locked that boost to Arceus — which is what makes a plate
+a signature item rather than a Charcoal clone. A plate also changes Arceus's type, so it is
+a type item and a STAB rewrite in one slot. The roster now carries **all 17 plate formes**,
+each on exactly one set, plus the two original Arceus-Normal sets (Life Orb, Leftovers),
+which correctly hold no plate.
 
-There is no code to write. But **this is not 17 uncontested draft slots**, and an earlier
-version of this doc called it "the largest single win in the audit" on exactly that
-mistake. Three facts cap it:
+**This was never 17 uncontested draft slots**, and an earlier version of this doc called it
+"the largest single win in the audit" on exactly that mistake. Three facts cap it, and they
+are worth keeping here so the error is not repeated for some other species-locked class:
 
-- **Arceus is `TIER_MYTHICAL`** (`src/fork/species_tiers.c`). `TierRejectsCandidate()`
-  bans legendaries and mythicals from every normal slot — the player's rental pool
+- **Arceus is `TIER_MYTHICAL`** (`src/fork/species_tiers.c`). `TierRejectsCandidate()` bans
+  legendaries and mythicals from every normal slot — the player's rental pool
   (`src/battle_factory.c:625`) and ordinary Tower opponents (`src/battle_frontier.c:320`)
   alike. Arceus is reachable only through a *reserved forced-tier slot* on Factory
   opponents, plus fixed boss teams. **The player can never rent one fresh.**
 - **The draft rejects duplicate species**, so one Arceus per team means **one plate per
   team, ever** — the 17 are mutually exclusive, not additive.
 - **The draw is uniform over sets** (`GetRandomFrontierExtendedMonId()`), so set count
-  scales appearance rate directly. The mythical pool is ~67 sets across 34 species;
-  adding 17 Arceus sets puts Arceus at roughly **a fifth of every mythical slot**.
+  scales appearance rate directly. Measured after the batch landed: **19 Arceus sets against
+  an 84-set mythical pool, 22.6%.**
 
-That share was reviewed and **accepted**, on the grounds that it is a *different* Arceus
-each time: 17 formes share no typing, no moveset and no item, so the variety the audit
-cares about is preserved even though one species' rate goes up. Author the sets — just
-don't file this under "free capacity", and don't repeat the error of counting
-species-locked items as though they were generic ones.
+That share was reviewed and **accepted**, on the grounds that it is a *different* Arceus each
+time — 17 formes sharing no typing, no moveset and no item — so the variety the audit cares
+about is preserved even though one species' rate goes up. Recorded here as a deliberate call,
+not free capacity.
+
+The sets deliberately mix special and physical builds, because a plate boosts **any** move of
+its type rather than only Judgment: Arceus-Dark runs Knock Off, Arceus-Fighting runs Close
+Combat, and Arceus-Ground runs a Cosmic Power / High Horsepower stall build, all collecting
+the same +40% a Judgment set gets.
 
 ## Priority
 
@@ -203,10 +207,9 @@ closed the memories, drives, Soul Dew and the orbs in one flag, and `BUFF_GEMS` 
 Gems before it. What is left is overwhelmingly **roster work**.
 
 1. **The signature sets the flag unlocked.** Each item is locked to one species, so each
-   wants a set on *that* species. **Silvally is done** — all 17 formes are on the roster and
-   all 17 Memories have graduated. What remains is **4 Genesect drives**, **17 Arceus
-   plates** and **a Soul Dew Lati@s**; all three are mythical-gated, so they are reachable
-   only through a reserved forced-tier slot (see Group D). No engine changes needed.
+   wants a set on *that* species. **Silvally and Arceus are done** — all 17 Memories and all
+   17 Plates are drafted and graduated. What remains is small: **4 Genesect drives** and **a
+   Soul Dew Lati@s**, both mythical-gated (see Group D). No engine changes needed.
 2. **Group A.** No engine risk, no new flag, no test surface — a line review that spends
    its item picks out of the tail instead of on Leftovers. The already-buffed-but-undrafted
    items (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat) are the most
