@@ -6129,6 +6129,125 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_TELEPATHY
         )
     },
+    { // 0493
+        SPECIES_ARCEUS_FIGHTING,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_FLYING,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_POISON,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_ROCK,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_GROUND,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_BUG,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_GHOST,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_STEEL,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_FIRE,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_WATER,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_GRASS,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_ELECTRIC,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_PSYCHIC,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_ICE,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_DRAGON,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_DARK,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
+    { // 0493
+        SPECIES_ARCEUS_FAIRY,
+        INNATES(
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
+        )
+    },
     { // 0494
         SPECIES_VICTINI,
         INNATES(

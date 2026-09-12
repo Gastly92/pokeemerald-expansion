@@ -54,7 +54,7 @@
 // The done list never shrinks. Bump this when items graduate; a drop means an item was
 // demoted to pending, which is a real regression and should be a deliberate, reviewed act
 // rather than a quiet way to dodge one of the gates above.
-#define HELD_ITEM_DONE_FLOOR 94
+#define HELD_ITEM_DONE_FLOOR 116
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -69,8 +69,10 @@ static const enum Item sDoneItems[] =
     ITEM_BLUE_ORB,
     ITEM_BOOSTER_ENERGY,
     ITEM_BUG_MEMORY,
+    ITEM_BURN_DRIVE,
     ITEM_CHARCOAL,
     ITEM_CHESTO_BERRY,
+    ITEM_CHILL_DRIVE,
     ITEM_CHOICE_BAND,
     ITEM_CHOICE_SCARF,
     ITEM_CHOICE_SPECS,
@@ -78,8 +80,12 @@ static const enum Item sDoneItems[] =
     ITEM_COVERT_CLOAK,
     ITEM_DAMP_ROCK,
     ITEM_DARK_MEMORY,
+    ITEM_DOUSE_DRIVE,
+    ITEM_DRACO_PLATE,
     ITEM_DRAGON_FANG,
     ITEM_DRAGON_MEMORY,
+    ITEM_DREAD_PLATE,
+    ITEM_EARTH_PLATE,
     ITEM_ELECTRIC_MEMORY,
     ITEM_EVIOLITE,
     ITEM_EXPERT_BELT,
@@ -88,7 +94,9 @@ static const enum Item sDoneItems[] =
     ITEM_FIGHTING_MEMORY,
     ITEM_FIGY_BERRY,
     ITEM_FIRE_MEMORY,
+    ITEM_FIST_PLATE,
     ITEM_FLAME_ORB,
+    ITEM_FLAME_PLATE,
     ITEM_FLYING_GEM,
     ITEM_FLYING_MEMORY,
     ITEM_FOCUS_BAND,
@@ -104,8 +112,11 @@ static const enum Item sDoneItems[] =
     ITEM_HEAT_ROCK,
     ITEM_HEAVY_DUTY_BOOTS,
     ITEM_ICE_MEMORY,
+    ITEM_ICICLE_PLATE,
     ITEM_ICY_ROCK,
+    ITEM_INSECT_PLATE,
     ITEM_IRON_BALL,
+    ITEM_IRON_PLATE,
     ITEM_KINGS_ROCK,
     ITEM_LEEK,
     ITEM_LEFTOVERS,
@@ -116,13 +127,16 @@ static const enum Item sDoneItems[] =
     ITEM_LUM_BERRY,
     ITEM_LUSTROUS_GLOBE,
     ITEM_MAGNET,
+    ITEM_MEADOW_PLATE,
     ITEM_MENTAL_HERB,
     ITEM_METAL_COAT,
+    ITEM_MIND_PLATE,
     ITEM_MISTY_SEED,
     ITEM_MUSCLE_BAND,
     ITEM_MYSTIC_WATER,
     ITEM_NEVER_MELT_ICE,
     ITEM_PETAYA_BERRY,
+    ITEM_PIXIE_PLATE,
     ITEM_POISON_BARB,
     ITEM_POISON_MEMORY,
     ITEM_PSYCHIC_MEMORY,
@@ -137,22 +151,30 @@ static const enum Item sDoneItems[] =
     ITEM_SCOPE_LENS,
     ITEM_SHARP_BEAK,
     ITEM_SHELL_BELL,
+    ITEM_SHOCK_DRIVE,
     ITEM_SILK_SCARF,
     ITEM_SITRUS_BERRY,
+    ITEM_SKY_PLATE,
     ITEM_SMOOTH_ROCK,
     ITEM_SOFT_SAND,
+    ITEM_SOUL_DEW,
     ITEM_SPELL_TAG,
+    ITEM_SPLASH_PLATE,
+    ITEM_SPOOKY_PLATE,
     ITEM_STEEL_MEMORY,
+    ITEM_STONE_PLATE,
     ITEM_TERRAIN_EXTENDER,
     ITEM_THICK_CLUB,
     ITEM_THROAT_SPRAY,
     ITEM_TOXIC_ORB,
+    ITEM_TOXIC_PLATE,
     ITEM_TWISTED_SPOON,
     ITEM_WATER_MEMORY,
     ITEM_WEAKNESS_POLICY,
     ITEM_WELLSPRING_MASK,
     ITEM_WHITE_HERB,
     ITEM_WISE_GLASSES,
+    ITEM_ZAP_PLATE,
 };
 
 // Work outstanding. Not gated -- these are allowed to sit at zero sets.
@@ -228,12 +250,22 @@ static const enum Item sPendingItems[] =
     // Arceus plates (already carrying the +40% buff), and the wide uncontested tails --
     // 14 of the 18 resist berries, the five type-boost incenses, Lax Incense.
     //
-    // The signature type items settled by BUFF_SIGNATURE_TYPE_ITEMS: all 4 Drives, Soul Dew
-    // and the three plain orbs are still here. Each is locked to one species, so each wants
-    // a set on THAT species and nowhere else -- a Drive needs a Genesect, Soul Dew a Lati@s,
-    // a Plate an Arceus. Note Arceus and Genesect are TIER_MYTHICAL, so their sets are
-    // reachable only through a reserved forced-tier slot. The 17 Memories are done: Silvally
-    // is TIER_NORMAL and rentable, and the roster now carries all 17 formes.
+    // The signature type items settled by BUFF_SIGNATURE_TYPE_ITEMS are ALL done now: 17
+    // Memories (Silvally), 17 Plates (Arceus), 4 Drives (Genesect) and Soul Dew (Lati@s).
+    // The form-change enablers among them each carry exactly one set, which for an item that
+    // unlocks one forme on one species is the ceiling rather than a shortfall.
+    //
+    // Soul Dew is the one that is NOT a form-change enabler -- it changes no forme, so the
+    // one-set ceiling that excuses a Memory or a Plate does not apply to it, and a single set
+    // would be an ordinary thinly-drafted count. It therefore carries TWO: the Latios and the
+    // Latias Calm Mind / Psyshock / Dragon Pulse sets, both of which split their damage across
+    // the two types Soul Dew boosts. The Latios one is the exact set that used to hold a Dragon
+    // Fang because the generic item beat the signature one.
+    //
+    // Note Arceus and Genesect are TIER_MYTHICAL, so their sets are reachable only through a
+    // reserved forced-tier slot; Silvally is TIER_NORMAL and rentable. The Arceus share of the
+    // mythical draw that the 17 plate sets buy was reviewed and accepted -- see Group D in
+    // fork-docs/HELD_ITEMS.md for the numbers and the reasoning.
     ITEM_ABILITY_SHIELD,
     ITEM_ABSORB_BULB,
     ITEM_ADAMANT_ORB,
@@ -245,28 +277,20 @@ static const enum Item sPendingItems[] =
     ITEM_BINDING_BAND,
     ITEM_BLUNDER_POLICY,
     ITEM_BUG_GEM,
-    ITEM_BURN_DRIVE,
     ITEM_CELL_BATTERY,
     ITEM_CHARTI_BERRY,
     ITEM_CHERI_BERRY,
     ITEM_CHILAN_BERRY,
-    ITEM_CHILL_DRIVE,
     ITEM_CLEAR_AMULET,
     ITEM_COBA_BERRY,
     ITEM_DARK_GEM,
     ITEM_DEEP_SEA_SCALE,
     ITEM_DEEP_SEA_TOOTH,
-    ITEM_DOUSE_DRIVE,
-    ITEM_DRACO_PLATE,
-    ITEM_DREAD_PLATE,
-    ITEM_EARTH_PLATE,
     ITEM_EJECT_BUTTON,
     ITEM_EJECT_PACK,
     ITEM_ELECTRIC_GEM,
     ITEM_ENIGMA_BERRY,
     ITEM_FIGHTING_GEM,
-    ITEM_FIST_PLATE,
-    ITEM_FLAME_PLATE,
     ITEM_FLOAT_STONE,
     ITEM_FULL_INCENSE,
     ITEM_GANLON_BERRY,
@@ -276,9 +300,6 @@ static const enum Item sPendingItems[] =
     ITEM_HABAN_BERRY,
     ITEM_IAPAPA_BERRY,
     ITEM_ICE_GEM,
-    ITEM_ICICLE_PLATE,
-    ITEM_INSECT_PLATE,
-    ITEM_IRON_PLATE,
     ITEM_JABOCA_BERRY,
     ITEM_KASIB_BERRY,
     ITEM_KEBIA_BERRY,
@@ -293,18 +314,15 @@ static const enum Item sPendingItems[] =
     ITEM_LUSTROUS_ORB,
     ITEM_MAGO_BERRY,
     ITEM_MARANGA_BERRY,
-    ITEM_MEADOW_PLATE,
     ITEM_METAL_POWDER,
     ITEM_METRONOME,
     ITEM_MICLE_BERRY,
-    ITEM_MIND_PLATE,
     ITEM_NORMAL_GEM,
     ITEM_OCCA_BERRY,
     ITEM_ODD_INCENSE,
     ITEM_PAYAPA_BERRY,
     ITEM_PECHA_BERRY,
     ITEM_PERSIM_BERRY,
-    ITEM_PIXIE_PLATE,
     ITEM_POISON_GEM,
     ITEM_PROTECTIVE_PADS,
     ITEM_QUICK_POWDER,
@@ -321,17 +339,10 @@ static const enum Item sPendingItems[] =
     ITEM_ROWAP_BERRY,
     ITEM_SEA_INCENSE,
     ITEM_SHED_SHELL,
-    ITEM_SHOCK_DRIVE,
-    ITEM_SKY_PLATE,
     ITEM_SNOWBALL,
-    ITEM_SOUL_DEW,
-    ITEM_SPLASH_PLATE,
-    ITEM_SPOOKY_PLATE,
     ITEM_STARF_BERRY,
     ITEM_STICKY_BARB,
-    ITEM_STONE_PLATE,
     ITEM_TANGA_BERRY,
-    ITEM_TOXIC_PLATE,
     ITEM_UTILITY_UMBRELLA,
     ITEM_WACAN_BERRY,
     ITEM_WATER_GEM,
@@ -339,7 +350,6 @@ static const enum Item sPendingItems[] =
     ITEM_WIDE_LENS,
     ITEM_WIKI_BERRY,
     ITEM_YACHE_BERRY,
-    ITEM_ZAP_PLATE,
     ITEM_ZOOM_LENS,
 };
 

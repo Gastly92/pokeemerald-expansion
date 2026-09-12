@@ -12278,7 +12278,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LATIAS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_SOUL_DEW,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -12340,7 +12340,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LATIOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DRAGON_FANG,
+        .heldItem = ITEM_SOUL_DEW,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -16663,6 +16663,346 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_ARCEUS_FIGHTING,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FIST_PLATE,
+        .moves =
+        {
+            MOVE_CLOSE_COMBAT,
+            MOVE_EXTREME_SPEED,
+            MOVE_STONE_EDGE,
+            MOVE_SWORDS_DANCE
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIGHTING,
+    },
+    {
+        .species = SPECIES_ARCEUS_FLYING,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SKY_PLATE,
+        .moves =
+        {
+            MOVE_BRAVE_BIRD,
+            MOVE_EXTREME_SPEED,
+            MOVE_SWORDS_DANCE,
+            MOVE_ROOST
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_ARCEUS_POISON,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_TOXIC_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_TOXIC,
+            MOVE_CALM_MIND,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_ARCEUS_ROCK,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_STONE_PLATE,
+        .moves =
+        {
+            MOVE_STONE_EDGE,
+            MOVE_EARTHQUAKE,
+            MOVE_EXTREME_SPEED,
+            MOVE_SWORDS_DANCE
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_ARCEUS_GROUND,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EARTH_PLATE,
+        .moves =
+        {
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_EXTREME_SPEED,
+            MOVE_COSMIC_POWER,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
+        .species = SPECIES_ARCEUS_BUG,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_INSECT_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_ICE_BEAM,
+            MOVE_THUNDERBOLT,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_BUG,
+    },
+    {
+        .species = SPECIES_ARCEUS_GHOST,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SPOOKY_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_WILL_O_WISP,
+            MOVE_PROTECT,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_ARCEUS_STEEL,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_IRON_PLATE,
+        .moves =
+        {
+            MOVE_IRON_HEAD,
+            MOVE_EXTREME_SPEED,
+            MOVE_SWORDS_DANCE,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_ARCEUS_FIRE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FLAME_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_EARTH_POWER,
+            MOVE_CALM_MIND,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_ARCEUS_WATER,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SPLASH_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_ICE_BEAM,
+            MOVE_DEFOG,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_ARCEUS_GRASS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MEADOW_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_EARTH_POWER,
+            MOVE_LEECH_SEED,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_ARCEUS_ELECTRIC,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ZAP_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_ICE_BEAM,
+            MOVE_THUNDER_WAVE,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
+    {
+        .species = SPECIES_ARCEUS_PSYCHIC,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MIND_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_SHADOW_BALL,
+            MOVE_CALM_MIND,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_ARCEUS_ICE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ICICLE_PLATE,
+        .moves =
+        {
+            MOVE_ICICLE_CRASH,
+            MOVE_EXTREME_SPEED,
+            MOVE_SWORDS_DANCE,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ICE,
+    },
+    {
+        .species = SPECIES_ARCEUS_DRAGON,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_DRACO_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_FIRE_BLAST,
+            MOVE_CALM_MIND,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DRAGON,
+    },
+    {
+        .species = SPECIES_ARCEUS_DARK,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_DREAD_PLATE,
+        .moves =
+        {
+            MOVE_KNOCK_OFF,
+            MOVE_EXTREME_SPEED,
+            MOVE_SWORDS_DANCE,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
+    {
+        .species = SPECIES_ARCEUS_FAIRY,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_PIXIE_PLATE,
+        .moves =
+        {
+            MOVE_JUDGMENT,
+            MOVE_FLAMETHROWER,
+            MOVE_PROTECT,
+            MOVE_RECOVER
+        },
+        .ability = ABILITY_MULTITYPE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // ====================================
@@ -21045,15 +21385,75 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
     {
-        .species = SPECIES_GENESECT,
+        .species = SPECIES_GENESECT_SHOCK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_SHOCK_DRIVE,
         .moves =
         {
             MOVE_TECHNO_BLAST,
             MOVE_FLASH_CANNON,
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_GENESECT_DOUSE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_DOUSE_DRIVE,
+        .moves =
+        {
+            MOVE_TECHNO_BLAST,
+            MOVE_BUG_BUZZ,
+            MOVE_FLAMETHROWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_GENESECT_BURN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BURN_DRIVE,
+        .moves =
+        {
+            MOVE_TECHNO_BLAST,
+            MOVE_BUG_BUZZ,
+            MOVE_THUNDERBOLT,
+            MOVE_FLASH_CANNON
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_GENESECT_CHILL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHILL_DRIVE,
+        .moves =
+        {
+            MOVE_TECHNO_BLAST,
+            MOVE_FLAMETHROWER,
+            MOVE_FLASH_CANNON,
+            MOVE_THUNDER_WAVE
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),

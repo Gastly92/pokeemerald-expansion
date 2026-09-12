@@ -7682,7 +7682,15 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
             modifier = uq4_12_multiply(modifier, SignatureOrbModifier(holdEffectModifier)); // FORK: BUFF_SIGNATURE_TYPE_ITEMS
         break;
     case HOLD_EFFECT_SOUL_DEW:
-        if ((gBattleMons[battlerAtk].species == SPECIES_LATIAS || gBattleMons[battlerAtk].species == SPECIES_LATIOS)
+        if ((gBattleMons[battlerAtk].species == SPECIES_LATIAS || gBattleMons[battlerAtk].species == SPECIES_LATIOS
+             // FORK: Mega Latias/Latios keep the Soul Dew boost. Upstream's exact-species test is
+             // safe upstream, where holding a Mega Stone and Soul Dew at once is impossible -- but
+             // FEATURE_FREE_GIMMICKS drops the stone requirement, so a Soul Dew Lati@s can Mega
+             // Evolve and silently lose its own item mid-battle. Reads the holder the way the three
+             // signature orbs beside this case already do (GET_BASE_SPECIES_ID, which covers their
+             // Origin formes). On conflict, keep both the upstream test and these two lines.
+             || GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_LATIAS
+             || GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_LATIOS)
             && ((B_SOUL_DEW_BOOST >= GEN_7 && (moveType == TYPE_PSYCHIC || moveType == TYPE_DRAGON))
              || (B_SOUL_DEW_BOOST < GEN_7 && !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) && IsBattleMoveSpecial(move))))
             modifier = uq4_12_multiply(modifier, SignatureOrbModifier(holdEffectModifier)); // FORK: BUFF_SIGNATURE_TYPE_ITEMS

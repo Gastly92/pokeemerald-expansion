@@ -197,3 +197,29 @@ SINGLE_BATTLE_TEST("BUFF_SIGNATURE_TYPE_ITEMS: Soul Dew moves off the stock 20% 
         EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.4 / 1.2), results[0].damage);
     }
 }
+
+// FORK: the Soul Dew gate reads the holder by BASE species, so a Mega Latias/Latios keeps the
+// boost. Upstream's exact-species test is unreachable-safe there (a Mega Stone and Soul Dew
+// cannot share the slot), but FEATURE_FREE_GIMMICKS drops the stone requirement and makes the
+// case live: without this, a Soul Dew Latios that Mega Evolves silently loses its own item.
+SINGLE_BATTLE_TEST("BUFF_SIGNATURE_TYPE_ITEMS: Mega Latios keeps the Soul Dew boost", s16 damage)
+{
+    u32 item;
+
+    PARAMETRIZE { item = ITEM_SOUL_DEW; }
+    PARAMETRIZE { item = ITEM_NONE; }
+
+    GIVEN {
+        ASSUME(B_SOUL_DEW_BOOST >= GEN_7);
+        WITH_CONFIG(BUFF_SIGNATURE_TYPE_ITEMS, TRUE);
+        WITH_CONFIG(BUFF_TYPE_BOOST_ITEMS, TRUE);
+        PLAYER(SPECIES_LATIOS_MEGA) { Item(item); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_DRAGON_BREATH); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(1.4), results[0].damage);
+    }
+}
