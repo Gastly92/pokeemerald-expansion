@@ -255,10 +255,12 @@ static const enum Item sPendingItems[] =
     // The form-change enablers among them each carry exactly one set, which for an item that
     // unlocks one forme on one species is the ceiling rather than a shortfall.
     //
-    // Soul Dew is the one that is NOT a form-change enabler -- it changes no forme, so its
-    // one set is an ordinary one-set count. It sits on Latios's Calm Mind / Psyshock /
-    // Dragon Pulse set, which splits its damage across both boosted types and is the exact
-    // set that used to hold a Dragon Fang because the signature item was worse.
+    // Soul Dew is the one that is NOT a form-change enabler -- it changes no forme, so the
+    // one-set ceiling that excuses a Memory or a Plate does not apply to it, and a single set
+    // would be an ordinary thinly-drafted count. It therefore carries TWO: the Latios and the
+    // Latias Calm Mind / Psyshock / Dragon Pulse sets, both of which split their damage across
+    // the two types Soul Dew boosts. The Latios one is the exact set that used to hold a Dragon
+    // Fang because the generic item beat the signature one.
     //
     // Note Arceus and Genesect are TIER_MYTHICAL, so their sets are reachable only through a
     // reserved forced-tier slot; Silvally is TIER_NORMAL and rentable. The Arceus share of the

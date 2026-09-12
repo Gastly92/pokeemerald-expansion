@@ -12278,7 +12278,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LATIAS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_SOUL_DEW,
         .moves =
         {
             MOVE_CALM_MIND,

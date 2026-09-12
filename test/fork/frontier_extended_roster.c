@@ -1203,3 +1203,81 @@ TEST("Frontier extended roster: only the documented exceptions exceed the EV cap
     EXPECT_GT(exceptionsSeen, 0);
     EXPECT_EQ(offenders, 0);
 }
+
+// FORK: BUFF_SIGNATURE_TYPE_ITEMS (config/buff.h) locks each signature type item to one species,
+// so a Plate on anything but an Arceus -- or a Memory off Silvally, a Drive off Genesect, Soul Dew
+// off a Lati@s, an orb off its own legendary -- grants NOTHING. The set silently plays an item
+// down, with no other symptom in battle.
+//
+// This is a failure mode the flag CREATED. Before it, a Plate was a legal Charcoal-equivalent for
+// any holder, so "Tyranitar with a Stone Plate" was a reasonable set and is now a dead one -- and
+// a line reviewer working from pre-flag instincts, or from competitive analysis of a game where
+// plates are not locked, will reach for exactly that. Nothing else catches it: the
+// "item none of its moves can activate" test above only knows Throat Spray, and the held-item
+// tracker's ignored-item gate does not cover items sitting on its DONE list, which all of these
+// now are.
+//
+// Keyed on hold effect rather than on 40-odd item ids, so an item added by an upstream sync is
+// covered the moment it carries one of these effects. See fork-docs/LINE_REVIEW.md, Step 3.
+static enum Species SignatureTypeItemOwner(enum HoldEffect holdEffect)
+{
+    switch (holdEffect)
+    {
+    case HOLD_EFFECT_PLATE:        return SPECIES_ARCEUS;
+    case HOLD_EFFECT_MEMORY:       return SPECIES_SILVALLY;
+    case HOLD_EFFECT_DRIVE:        return SPECIES_GENESECT;
+    case HOLD_EFFECT_ADAMANT_ORB:  return SPECIES_DIALGA;
+    case HOLD_EFFECT_LUSTROUS_ORB: return SPECIES_PALKIA;
+    case HOLD_EFFECT_GRISEOUS_ORB: return SPECIES_GIRATINA;
+    // Soul Dew has two legal owners, so it is handled separately below.
+    default:                       return SPECIES_NONE;
+    }
+}
+
+TEST("Frontier extended roster: no set holds a signature type item its species cannot use")
+{
+    u32 i;
+    u32 checked = 0;
+    u32 signatureHolders = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        enum HoldEffect holdEffect = GetItemHoldEffect(set->heldItem);
+        enum Species base = GET_BASE_SPECIES_ID(set->species);
+        enum Species owner;
+
+        checked++;
+
+        if (holdEffect == HOLD_EFFECT_SOUL_DEW)
+        {
+            signatureHolders++;
+            if (base != SPECIES_LATIAS && base != SPECIES_LATIOS)
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: holds Soul Dew, which only Latias and Latios can use -- the item does nothing here, so the set is an item down. Give it a real item",
+                                i, gSpeciesInfo[set->species].speciesName);
+            }
+            continue;
+        }
+
+        owner = SignatureTypeItemOwner(holdEffect);
+        if (owner == SPECIES_NONE)
+            continue;
+
+        signatureHolders++;
+        if (base != owner)
+        {
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: holds %S, a signature item locked to %S -- it grants nothing to this species, so the set is silently an item down. Give it a real item, or move the set onto %S",
+                            i, gSpeciesInfo[set->species].speciesName, GetItemName(set->heldItem),
+                            gSpeciesInfo[owner].speciesName, gSpeciesInfo[owner].speciesName);
+        }
+    }
+
+    EXPECT_GT(checked, 1000);
+    // Guard against a vacuous pass if the roster ever stops carrying these items at all.
+    EXPECT_GT(signatureHolders, 30);
+    EXPECT_EQ(offenders, 0);
+}

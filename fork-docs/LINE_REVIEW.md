@@ -1336,6 +1336,43 @@ that used to be a percentage, the first question is whether it now rides this ga
 | `DETERMINISTIC_ACCURACY_EVASION` | Accuracy is a **PP economy**, not a coin flip — it was transformed, not deleted. Max PP is scaled by base accuracy and accuracy/evasion stages shift per-use PP cost, so Hydro Pump / Focus Blast / Stone Edge are reliable but *short*. Everything keyed on accuracy stays live: No Guard, Keen Eye / Compound Eyes / Illuminate, evasion items, Effect Spore's accuracy drop. OHKO moves deal 40% max HP and keep their immunities. Formerly-50% moves (Zap Cannon, Inferno) gained a recharge turn. |
 | `DETERMINISTIC_DAMAGE` | Damage roll is fixed at 92% on turn 1 and **+1% per turn, uncapped** — so it passes 100% from turn 9. Rewards sets that survive to snowball. |
 
+### Signature type items — locked to one species (`BUFF_SIGNATURE_TYPE_ITEMS`)
+
+A class of items boosts its type by `BUFF_TYPE_BOOST_PERCENT` (+40%) **only for the one
+species it belongs to**. Off that species it does *nothing at all*.
+
+| Item class | Only works on |
+| --- | --- |
+| The 17 Plates | Arceus |
+| The 17 Memories | Silvally |
+| The 4 Drives | Genesect |
+| Soul Dew | Latias, Latios |
+| Adamant Orb / Crystal, Lustrous Orb / Globe, Griseous Orb / Core | Dialga, Palkia, Giratina |
+
+This cuts **both** ways, and both are easy to get wrong:
+
+- **Never give one to another species.** A Stone Plate on a Tyranitar reads fine — before
+  the flag a Plate *was* a legal Charcoal-equivalent for any holder — but it is now a dead
+  slot, and the set silently plays an item down with no other symptom. Competitive analysis
+  will happily suggest it, because it is describing a game where plates are not locked. CI
+  catches this ("no set holds a signature type item its species cannot use"), but know the
+  rule so you do not spend a review cycle on it.
+- **Do give it to the species it belongs to.** The generic type items used to be *better*
+  than the signature ones — Dragon Fang's +40% on one type beat Soul Dew's +20% on two —
+  and the roster reflected that: Latios sat on a **Dragon Fang** for exactly that reason.
+  That is fixed, and the calculus is now inverted for any set splitting its damage across
+  both boosted types. Both Lati@s Calm Mind sets hold Soul Dew today.
+
+Two practical notes when you add one of these sets:
+
+- **A forme set needs an innate row too.** `gSpeciesInnates` is keyed per forme, and a
+  roster gate requires every drafted species to have one — so `SPECIES_SILVALLY_BUG` needs
+  its own row in `src/fork/innate_abilities.c` carrying the line's identity, not just a
+  roster entry. Targeted tests miss this; only the full `make check` catches it.
+- **A Drive does not re-type Genesect.** It re-types Techno Blast, but every Genesect forme
+  stays Bug/Steel, so a Drive is +40% *off*-STAB. A Memory and a Plate re-type their holder,
+  so those are +40% *on top of* STAB. Do not price them the same.
+
 ### Free gimmicks — a set *may* Mega, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
 
 This fork drops the held-item requirement for battle transformations, so **any
@@ -1494,17 +1531,19 @@ most lines of Gens 7–9; what changes that is the required field in the PR
 template, not another sentence here. When a rule keeps being missed, the next
 version of it should be a procedure or a test, not a stronger adjective.
 
-### Three of the recurring defects are now CI gates
+### Four of the recurring defects are now CI gates
 
 Part A defects 1, 2 and 4 stopped being advice and became tests in
-`test/fork/frontier_extended_roster.c`. Both found real defects the human passes
-had missed, which is the argument for them:
+`test/fork/frontier_extended_roster.c`, joined later by the signature-item gate.
+Both of the original pair found real defects the human passes had missed, which is
+the argument for them:
 
 | Gate | Found on first run |
 |---|---|
 | **`no set carries an attacking move on the stat it dumped`** | 16 sets — Groudon, Unfezant, Greninja, Centiskorch, Hatterene ×2, Arctozolt, Brambleghast, Silvally ×3, Minior, Solgaleo, Dragapult, Regieleki, Enamorus |
 | **`no species carries two sets that are the same set`** | 6 pairs — Kyogre, Galarian Darmanitan, Toucannon, Dhelmise, Iron Bundle, Ogerpon |
 | **`no set holds an item none of its moves can activate`** | 2 sets — Centiskorch and Tatsugiri, both holding Throat Spray with no sound move (Centiskorch's twice over: that set is physical, and Throat Spray raises Sp. Attack) |
+| **`no set holds a signature type item its species cannot use`** | 0 — added *with* the change that created the hazard (`BUFF_SIGNATURE_TYPE_ITEMS` locking Plates/Memories/Drives/orbs to one species), so it is the one gate written before the defect rather than after it |
 
 The wrong-stat gate needs two exclusion lists to be usable, and they are the
 interesting part. A naive "physical move on a special set" rule fires on **78**
@@ -1519,7 +1558,11 @@ inverted +1 Attack and +1 Defence, which is deliberate.
 
 The dead-item gate only covers what a table can actually decide: Throat Spray
 without a sound move. Weakness Policy and Sitrus need battle state, so they stay a
-reviewer's job.
+reviewer's job. The **signature-item** gate is a second kind of dead item, and it is
+decidable from the table alone — species versus hold effect, no battle state — which
+is why it is a gate and not a paragraph. It is keyed on hold effect rather than on
+40-odd item ids, so an item arriving with an upstream sync is covered the moment it
+carries one of those effects.
 
 It very nearly shipped with a **wrong** second entry. Blunder Policy looks dead
 here — its stock trigger is the holder's move missing, and nothing misses under
