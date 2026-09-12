@@ -6349,7 +6349,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUDOWOODO,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND,
+        .heldItem = ITEM_ZOOM_LENS,
         .moves =
         {
             MOVE_HEAD_SMASH,
@@ -6932,7 +6932,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FORRETRESS,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_ZOOM_LENS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -10400,7 +10400,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CAMERUPT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_LEPPA_BERRY,
         .moves =
         {
             MOVE_ERUPTION,
@@ -14010,7 +14010,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HONCHKROW,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_LANSAT_BERRY,
         .moves =
         {
             MOVE_SUCKER_PUNCH,
@@ -15912,7 +15912,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_UXIE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_WIDE_LENS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -17157,7 +17157,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_EMBOAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_LANSAT_BERRY,
         .moves =
         {
             MOVE_FLARE_BLITZ,
@@ -17323,7 +17323,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WATCHOG,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY,
+        .heldItem = ITEM_WIDE_LENS,
         .moves =
         {
             MOVE_SUPER_FANG,
@@ -21719,7 +21719,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIGGERSBY,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_BLUNDER_POLICY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -24330,7 +24330,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LYCANROC_DUSK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_RAZOR_FANG,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -24601,7 +24601,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LURANTIS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_LEPPA_BERRY,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -27831,7 +27831,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BARRASKEWDA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND,
+        .heldItem = ITEM_RAZOR_FANG,
         .moves =
         {
             MOVE_LIQUIDATION,
@@ -31182,7 +31182,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRAMBLEGHAST,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND,
+        .heldItem = ITEM_BLUNDER_POLICY,
         .moves =
         {
             MOVE_POWER_WHIP,

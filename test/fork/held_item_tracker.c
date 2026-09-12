@@ -35,7 +35,9 @@
 // The point of the split is that graduating an item to sDoneItems[] is what ARMS the
 // gates for it. That is the failure this file exists to catch: Wide Lens, Zoom Lens,
 // Blunder Policy, Razor Fang and Lansat Berry all received real engine work and then
-// shipped to nobody, because nothing connected "we buffed it" to "a set holds it".
+// shipped to nobody, because nothing connected "we buffed it" to "a set holds it". All
+// five are drafted and gated now, so they are this file's worked example rather than an
+// open bug -- but the hole they fell through is still the reason the split exists.
 //
 // The lists are swept for completeness against gItemsInfo[] (see the first test), so an
 // item arriving with an upstream sync cannot sit unclassified. Two whole hold-effect
@@ -54,7 +56,7 @@
 // The done list never shrinks. Bump this when items graduate; a drop means an item was
 // demoted to pending, which is a real regression and should be a deliberate, reviewed act
 // rather than a quiet way to dodge one of the gates above.
-#define HELD_ITEM_DONE_FLOOR 116
+#define HELD_ITEM_DONE_FLOOR 122
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -67,6 +69,7 @@ static const enum Item sDoneItems[] =
     ITEM_BLACK_GLASSES,
     ITEM_BLACK_SLUDGE,
     ITEM_BLUE_ORB,
+    ITEM_BLUNDER_POLICY,
     ITEM_BOOSTER_ENERGY,
     ITEM_BUG_MEMORY,
     ITEM_BURN_DRIVE,
@@ -118,8 +121,10 @@ static const enum Item sDoneItems[] =
     ITEM_IRON_BALL,
     ITEM_IRON_PLATE,
     ITEM_KINGS_ROCK,
+    ITEM_LANSAT_BERRY,
     ITEM_LEEK,
     ITEM_LEFTOVERS,
+    ITEM_LEPPA_BERRY,
     ITEM_LIFE_ORB,
     ITEM_LIGHT_BALL,
     ITEM_LIGHT_CLAY,
@@ -143,6 +148,7 @@ static const enum Item sDoneItems[] =
     ITEM_PUNCHING_GLOVE,
     ITEM_QUICK_CLAW,
     ITEM_RAZOR_CLAW,
+    ITEM_RAZOR_FANG,
     ITEM_RED_ORB,
     ITEM_ROCKY_HELMET,
     ITEM_ROCK_MEMORY,
@@ -173,8 +179,10 @@ static const enum Item sDoneItems[] =
     ITEM_WEAKNESS_POLICY,
     ITEM_WELLSPRING_MASK,
     ITEM_WHITE_HERB,
+    ITEM_WIDE_LENS,
     ITEM_WISE_GLASSES,
     ITEM_ZAP_PLATE,
+    ITEM_ZOOM_LENS,
 };
 
 // Work outstanding. Not gated -- these are allowed to sit at zero sets.
@@ -245,10 +253,8 @@ static const enum Item sPendingItems[] =
     // particular types yet. Their 7 siblings graduated. A Gem wants a move the set fires
     // ONCE (a self-debuffing nuke like Overheat or Make It Rain, an Acrobatics set, or
     // true coverage), never a move it clicks every turn; see fork-docs/LINE_REVIEW.md.
-    // Includes the five items this fork specifically repaired and then shipped to
-    // nobody (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat Berry), all 17
-    // Arceus plates (already carrying the +40% buff), and the wide uncontested tails --
-    // 14 of the 18 resist berries, the five type-boost incenses, Lax Incense.
+    // What remains here is the wide uncontested tail -- 14 of the 18 resist berries, the
+    // five type-boost incenses, Lax Incense -- plus the ordinary situational items.
     //
     // The signature type items settled by BUFF_SIGNATURE_TYPE_ITEMS are ALL done now: 17
     // Memories (Silvally), 17 Plates (Arceus), 4 Drives (Genesect) and Soul Dew (Lati@s).
@@ -275,7 +281,6 @@ static const enum Item sPendingItems[] =
     ITEM_BABIRI_BERRY,
     ITEM_BERSERK_GENE,
     ITEM_BINDING_BAND,
-    ITEM_BLUNDER_POLICY,
     ITEM_BUG_GEM,
     ITEM_CELL_BATTERY,
     ITEM_CHARTI_BERRY,
@@ -305,9 +310,7 @@ static const enum Item sPendingItems[] =
     ITEM_KEBIA_BERRY,
     ITEM_KEE_BERRY,
     ITEM_LAGGING_TAIL,
-    ITEM_LANSAT_BERRY,
     ITEM_LAX_INCENSE,
-    ITEM_LEPPA_BERRY,
     ITEM_LIECHI_BERRY,
     ITEM_LUCKY_PUNCH,
     ITEM_LUMINOUS_MOSS,
@@ -327,7 +330,6 @@ static const enum Item sPendingItems[] =
     ITEM_PROTECTIVE_PADS,
     ITEM_QUICK_POWDER,
     ITEM_RAWST_BERRY,
-    ITEM_RAZOR_FANG,
     ITEM_RED_CARD,
     ITEM_RINDO_BERRY,
     ITEM_RING_TARGET,
@@ -347,10 +349,8 @@ static const enum Item sPendingItems[] =
     ITEM_WACAN_BERRY,
     ITEM_WATER_GEM,
     ITEM_WAVE_INCENSE,
-    ITEM_WIDE_LENS,
     ITEM_WIKI_BERRY,
     ITEM_YACHE_BERRY,
-    ITEM_ZOOM_LENS,
 };
 
 // Cannot appear in a frontier battle, so neither axis means anything -- but no set may

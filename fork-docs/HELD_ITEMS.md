@@ -66,27 +66,28 @@ here will drift.
 
 ## What the roster uses today
 
-**1629 sets. 138 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
-set). Against the **239 items in the build that have a battle-relevant hold effect**
-(excluding Mega Stones and Z-Crystals — see "Never expected" below), that is **138 used,
-101 unused**.
+**1629 sets. 143 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
+set). The tracker classifies **241** items that do something when held, of which **17** are
+unreachable in a frontier battle (`sIgnoredItems[]` — see "Never expected" below), leaving a
+live universe of **224**. Against that, the roster is at **143 used, 81 unused**.
 
 The distribution is heavily top-loaded:
 
 | Item | Sets | Share |
 | --- | --- | --- |
-| Leftovers | 216 | 13.3% |
-| Life Orb | 186 | 11.7% |
-| Choice Band | 110 | 6.9% |
-| Sitrus Berry | 105 | 6.6% |
-| Rocky Helmet | 87 | 5.5% |
+| Leftovers | 213 | 13.1% |
+| Life Orb | 179 | 11.0% |
+| Choice Band | 108 | 6.6% |
+| Sitrus Berry | 103 | 6.3% |
+| Rocky Helmet | 87 | 5.3% |
 | Heavy-Duty Boots / Choice Specs | 71 each | 4.4% each |
-| Assault Vest | 60 | 3.8% |
-| Focus Band | 52 | 3.3% |
-| Choice Scarf | 44 | 2.8% |
+| Assault Vest | 60 | 3.7% |
+| Focus Band | 52 | 3.2% |
+| Choice Scarf | 44 | 2.7% |
 
-The top two alone are **25% of the roster**, and the tail is long and thin: **44 items
-appear on one or two sets**.
+The top two alone are **24% of the roster**, and the tail is long and thin: **86 items
+appear on one or two sets** — most of them the species-locked signature items, where one
+set is the ceiling rather than a gap.
 
 ### Why the concentration matters more than it looks
 
@@ -96,7 +97,7 @@ duplicate" — a non-`ITEM_NONE` match makes the draft skip that mon and roll ag
 **Only one of each item can appear per team**, for the player's rentals and for each
 opponent alike.
 
-So item concentration is a *draft-rate tax*: the 217 Leftovers sets are competing for a
+So item concentration is a *draft-rate tax*: the 213 Leftovers sets are competing for a
 single team slot, and each one loses every roll where another mon already took it.
 Moving a set off a crowded item onto an uncrowded one makes that set appear more often
 at no balance cost. That is the real prize in this audit — unused items are unused
@@ -115,7 +116,7 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | Z-Crystals | 35 | Same flag: Z-Moves derive from species + move with no crystal. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **122 unused items that are live in battle** — the actual backlog.
+That leaves **81 unused items that are live in battle** — the actual backlog.
 
 ## The backlog
 
@@ -123,17 +124,18 @@ Four groups, in the order they are worth working on.
 
 ### Group A — already fixed, just not drafted (no code, roster work)
 
-These items are good, or were *specifically repaired by this fork*, and nothing holds
-them. Zero engine work; they need a line review to pick them up. This is the
-highest-value group precisely because it costs nothing.
+These items are good, or were *specifically repaired by this fork*. Zero engine work; they
+need a line review to pick them up. This is the highest-value group precisely because it
+costs nothing. The first five rows — the six fork-repaired items — have now shipped; the
+rest of the group is still open.
 
 | Item(s) | Status | Note |
 | --- | --- | --- |
-| **Wide Lens, Zoom Lens** | Buffed twice, held by **zero** sets | `BUFF_ACCURACY_ITEMS` gave both a job in the PP economy and `BUFF_ACCURACY_ITEMS_REVEAL` made them INFO-viewer instruments. Both buffs currently ship to nobody. Note the lens reveals only work for the **player**, so these belong on sets the player will want to *rent*. |
-| **Blunder Policy** | Rebuilt, held by **zero** sets | `DETERMINISTIC_HOLD_EFFECTS` re-armed it on the deterministic blunders (Protect, semi-invulnerability, Wide/Quick/Crafty Guard, Psychic Terrain, a type immunity, a blocking ability, an Air Balloon). In doubles any one avoiding target arms it. |
-| **Razor Fang** | Buffed, held by **zero** sets | The flinch items became guaranteed one-shots under `DETERMINISTIC_HOLD_EFFECTS`. King's Rock, the identical twin, is on 4 sets. |
-| **Lansat Berry** | Buffed, held by **zero** sets | Rebuilt into a guaranteed-crit trigger (it borrows Laser Focus's volatile rather than a crit-stage boost that determinism made dead). |
-| **Leppa Berry** | Quietly much stronger, held by **zero** sets | `DETERMINISTIC_ACCURACY_EVASION` turned PP into the *currency accuracy is paid in*. Restoring 10 PP is worth materially more here than in stock, and no set exploits it. |
+| ~~**Wide Lens, Zoom Lens**~~ — **shipped** | Buffed twice, now **2 sets each** | `BUFF_ACCURACY_ITEMS` gave both a job in the PP economy and `BUFF_ACCURACY_ITEMS_REVEAL` made them INFO-viewer instruments. The reveals only work for the **player**, so both went on rentable (`TIER_NORMAL`) sets: **Wide Lens** on Watchog and Uxie, breadth on two scout leads, and Uxie's innate Forewarn already peeks at one foe's strongest move, so the lens extends an instinct the species has; **Zoom Lens** on Forretress and Sudowoodo, both of which move second as a matter of course (Forretress is `SPE_DOWN` with a Gyro Ball, Sudowoodo has 30 base Speed) — that is the only window Zoom Lens's relief opens in. Watchog's innate Keen Eye/Illuminate is *not* a duplicate of its own item: those cancel the evasion **stage** half (`GetAccEvasionStageDelta`), while a lens cancels the **flat** taxes (`GetDeterministicMoveTargetPPTax`, which only the lenses and No Guard clear), so the two halves compose into a fully evasion-proof attacker. |
+| ~~**Blunder Policy**~~ — **shipped** | Rebuilt, now **2 sets** | `DETERMINISTIC_HOLD_EFFECTS` re-armed it on the deterministic blunders (Protect, semi-invulnerability, Wide/Quick/Crafty Guard, Psychic Terrain, a type immunity, a blocking ability, an Air Balloon). In doubles any one avoiding target arms it. Placed on two sets whose **own STAB carries a hard immunity**, so the trigger is a matter of course rather than luck: Diggersby (Return and Quick Attack blanked by Ghost, High Horsepower by Flying/Levitate — and it is a Swords Dance set at 78 Speed, so the blundered turn becomes the sweep window) and Brambleghast (Poltergeist and Shadow Sneak blanked by Normal, and its Choice Band was locking a set that carries Rapid Spin). Note the doubles spread-move idea does **not** apply here: the roster deliberately runs no Earthquake on a doubles set, since it hits the ally. |
+| ~~**Razor Fang**~~ — **shipped** | Buffed, now **2 sets** | The flinch items became guaranteed one-shots under `DETERMINISTIC_HOLD_EFFECTS`. King's Rock, the identical twin, is on 4 sets, so this was pure scarcity relief on a proven shape. Both homes are fast physical attackers, which is what converts a one-shot flinch into a free turn: Barraskewda (136 Speed, the fastest physical attacker in the rentable pool — and its Choice Band was locking a set that carries Flip Turn) and Lycanroc-Dusk, where the free turn is a Swords Dance. |
+| ~~**Lansat Berry**~~ — **shipped** | Buffed, now **2 sets** | Rebuilt into a guaranteed-crit trigger (it borrows Laser Focus's volatile rather than a crit-stage boost that determinism made dead). Needs a holder that actually *reaches* the threshold, so both homes self-chip: Honchkrow (Brave Bird recoil on a 52/52 defensive frame — and its innate **Super Luck** is exactly the crit-stage ability determinism killed, so the berry is that ability's repair) and Emboar (Flare Blitz *and* Wild Charge, innate Reckless, no Rock Head to cancel the recoil). Emboar's innate **Gluttony** also moves the trigger from 1/4 to 1/2 max HP (`HasEnoughHpToEatBerry`), making it the more reliable of the two. |
+| ~~**Leppa Berry**~~ — **shipped** | Quietly much stronger, now **2 sets** | `DETERMINISTIC_ACCURACY_EVASION` turned PP into the *currency accuracy is paid in*, and it also **scales max PP down by accuracy**, so the sets that feel it are the ones whose moves are already short. Leppa restores a move that hits 0 PP, so it went to the two lowest-total-PP rentable sets in the roster: Lurantis (17 effective PP across four moves — Focus Blast is scaled to **3**) and Camerupt (24, with Eruption and Fire Blast at 5 and 4). Camerupt gains twice over, since Life Orb chip was working against Eruption's HP scaling. |
 | **Odd / Rock / Rose / Sea / Wave Incense** | Free scarcity relief | All five are `HOLD_EFFECT_TYPE_POWER`, so `BUFF_TYPE_BOOST_ITEMS` gives them the same **+40%** as Twisted Spoon, Hard Stone, Miracle Seed and Mystic Water. They are exact mechanical duplicates on an uncontested draft slot. Sea/Wave Incense in particular duplicate Mystic Water, the most-used type item (16 sets). |
 | **Lax Incense** | Free scarcity relief | Under the PP economy, `HOLD_EFFECT_EVASION_UP` is a **flat +1 PP tax** on the attacker (`src/battle_util.c:12133`) — the item's own param is never read. Lax Incense and Bright Powder are therefore *identical*, and Bright Powder is on 1 set while Lax Incense is on none. |
 | **14 resist berries** | Fine as-is | Babiri, Charti, Chilan, Coba, Haban, Kasib, Kebia, Occa, Payapa, Rindo, Roseli, Tanga, Wacan, Yache. Determinism does not touch them. Only Shuca, Passho, Colbur and Chople are used, one set each. Eighteen uncontested draft slots sitting idle. |
@@ -209,9 +211,19 @@ on Arceus formes, 4 Drives on Genesect formes, and Soul Dew on Latios. Group B i
 What is left is Group A and Group C, and it is overwhelmingly **roster work**:
 
 1. **Group A.** No engine risk, no new flag, no test surface — a line review that spends its item
-   picks out of the tail instead of on Leftovers. The already-buffed-but-undrafted items (Wide
-   Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat) are the most embarrassing subset: shipped
-   work reaching no one. **This is now the top item in the backlog.**
+   picks out of the tail instead of on Leftovers. The embarrassing subset is now closed: Wide Lens,
+   Zoom Lens, Blunder Policy, Razor Fang, Lansat **and** Leppa each carry two sets and are gated,
+   so no fork-repaired item ships to nobody any more. What is left in the group is pure uncontested
+   capacity, and it is still the top of the backlog:
+   - **Free scarcity relief, zero balance question.** The five type-boost incenses (Odd, Rock, Rose,
+     Sea, Wave) and Lax Incense are all on **zero** sets while being exact mechanical duplicates of
+     items the roster leans on — the incenses get the same +40% as Charcoal and friends, and Lax
+     Incense is byte-identical to Bright Powder under the PP economy. Six items, no judgement calls.
+   - **The resist berries.** 14 of 18 unused, the other 4 on one set each — eighteen
+     uncontested slots, barely touched.
+   - **The Gems.** Balance is settled; 11 types still want a first set (Normal, Water, Electric, Ice,
+     Fighting, Poison, Ground, Bug, Rock, Ghost, Dark) and 6 more sit at one. Remember the settled
+     rule — a Gem goes on a move the set fires **once**, never its main STAB.
 2. **Group C.** `BUFF_FLAT_HP_ITEMS` for Oran Berry and Berry Juice is the only code left in the
    whole backlog; the rest is roster work gated on coverage decisions (a Clamperl set, a second
    Chansey and Ditto).
@@ -260,6 +272,17 @@ get hard to review; smaller ones waste a CI cycle.
   Storm, Make It Rain, Psycho Boost, Fleur Cannon), an Acrobatics set, or true coverage.
   Never a set's main STAB. **Contrary users are excluded**: Contrary turns the self-debuff
   into a boost, so they spam the nuke and want a permanent item.
+- **Check `src/fork/innate_abilities.c` before taking a berry off a set.** A berry innate can
+  make the berry worth several times its face value, and the raw item count cannot see it.
+  **Harvest and Ripen are the blocking ones** — they turn a one-shot Sitrus into a recurring
+  or oversized one, so the berry is the set's engine. This cost Alolan Exeggutor a Zoom Lens
+  in this batch: innate Harvest made its Sitrus worth more than the lens, and the pick moved
+  to Sudowoodo. **Gluttony and Cheek Pouch are weaker claims** — a threshold shift and a
+  one-off extra heal — and can be outbid: Watchog has Cheek Pouch and still gave up its
+  Sitrus, because it is the one species whose innate Keen Eye/Illuminate composes with a lens
+  into total evasion immunity. The check also cuts the other way and is worth exploiting:
+  Emboar's innate Gluttony moves a Lansat Berry's trigger from 1/4 to 1/2 max HP, which is
+  why Emboar got one.
 - **Prefer re-iteming an existing set to appending a new one.** Saved rentals key on array
   index and the roster is kept in dex order, so a new set is a mid-list insertion that
   invalidates an in-progress rented team ([`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md),
