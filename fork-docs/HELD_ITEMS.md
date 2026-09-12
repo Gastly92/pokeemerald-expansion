@@ -66,16 +66,16 @@ here will drift.
 
 ## What the roster uses today
 
-**1596 sets. 102 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
+**1609 sets. 115 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
 set). Against the **239 items in the build that have a battle-relevant hold effect**
-(excluding Mega Stones and Z-Crystals — see "Never expected" below), that is **100 used,
-139 unused**.
+(excluding Mega Stones and Z-Crystals — see "Never expected" below), that is **115 used,
+124 unused**.
 
 The distribution is heavily top-loaded:
 
 | Item | Sets | Share |
 | --- | --- | --- |
-| Leftovers | 216 | 13.5% |
+| Leftovers | 216 | 13.4% |
 | Life Orb | 186 | 11.7% |
 | Choice Band | 110 | 6.9% |
 | Sitrus Berry | 105 | 6.6% |
@@ -154,7 +154,7 @@ them. This is regression collateral, and it is the most defensible buff work ava
 | ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and the roster re-itemed the 7 sets where a Gem sat on a repeat-clicked move. Flying Gem is on the done list; six more sit on one set each and are tracked as thinly drafted; 11 types still want a first set. |
 | ~~**Soul Dew**~~ — **shipped** | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package: Arceus is mono-typed, Latios is Dragon/Psychic. |
 | ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. |
-| ~~**13 unused Memories** and **all 4 Drives**~~ — **shipped** | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally could not decline it either: `FORM_CHANGE_ITEM_HOLD` means dropping the Memory reverts the forme, so all four Silvally sets were compelled to hold a dead item. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` put the whole signature class on `BUFF_TYPE_BOOST_PERCENT` and locked each item to its own species. The four Memories the roster holds graduated; 13 Memories and all 4 Drives now want a set. |
+| ~~**13 unused Memories** and **all 4 Drives**~~ — **shipped** (balance + roster) | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally could not decline it either: `FORM_CHANGE_ITEM_HOLD` means dropping the Memory reverts the forme, so all four Silvally sets were compelled to hold a dead item. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` fixed the balance and locked each item to its own species; the roster then added the 13 missing Silvally formes, so **all 17 Memories are drafted and done**. The 4 Drives still want a Genesect set each. |
 
 ### Group C — weak in stock, still weak here (needs code)
 
@@ -202,11 +202,11 @@ Group B is now empty apart from the flat-HP items in Group C — `BUFF_SIGNATURE
 closed the memories, drives, Soul Dew and the orbs in one flag, and `BUFF_GEMS` closed the
 Gems before it. What is left is overwhelmingly **roster work**.
 
-1. **The signature sets the new flag just unlocked.** Each item is now locked to one
-   species, so each wants a set on *that* species: 13 Silvally formes, 4 Genesect drives,
-   17 Arceus plates, a Soul Dew Lati@s. Silvally is `TIER_NORMAL` and rentable, so it is
-   the cheapest and most visible of the three; Arceus and Genesect are mythical-gated (see
-   Group D). This is the largest block of outstanding work and it needs no engine changes.
+1. **The signature sets the flag unlocked.** Each item is locked to one species, so each
+   wants a set on *that* species. **Silvally is done** — all 17 formes are on the roster and
+   all 17 Memories have graduated. What remains is **4 Genesect drives**, **17 Arceus
+   plates** and **a Soul Dew Lati@s**; all three are mythical-gated, so they are reachable
+   only through a reserved forced-tier slot (see Group D). No engine changes needed.
 2. **Group A.** No engine risk, no new flag, no test surface — a line review that spends
    its item picks out of the tail instead of on Leftovers. The already-buffed-but-undrafted
    items (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat) are the most

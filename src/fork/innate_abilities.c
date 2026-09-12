@@ -9930,6 +9930,97 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BATTLE_ARMOR
         )
     },
+    { // 0773
+        SPECIES_SILVALLY_BUG,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_DARK,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_ELECTRIC,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_FIGHTING,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_FIRE,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_FLYING,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_GHOST,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_GRASS,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_ICE,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_POISON,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_PSYCHIC,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_ROCK,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
+    { // 0773
+        SPECIES_SILVALLY_WATER,
+        INNATES(
+            ABILITY_ADAPTABILITY,
+            ABILITY_BATTLE_ARMOR
+        )
+    },
     { // 0774
         SPECIES_MINIOR,
         INNATES(

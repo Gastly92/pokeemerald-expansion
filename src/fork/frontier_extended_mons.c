@@ -24861,6 +24861,266 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        .species = SPECIES_SILVALLY_BUG,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BUG_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_FIRST_IMPRESSION,
+            MOVE_CRUNCH,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_BUG,
+    },
+    {
+        .species = SPECIES_SILVALLY_DARK,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_DARK_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_PSYCHIC_FANGS,
+            MOVE_FIRE_FANG,
+            MOVE_SWORDS_DANCE
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
+    {
+        .species = SPECIES_SILVALLY_ELECTRIC,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ELECTRIC_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_ICE_FANG,
+            MOVE_THUNDER_WAVE,
+            MOVE_PARTING_SHOT
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
+    {
+        .species = SPECIES_SILVALLY_FIGHTING,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FIGHTING_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_CRUNCH,
+            MOVE_ROCK_SLIDE,
+            MOVE_BULK_UP
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_FIGHTING,
+    },
+    {
+        .species = SPECIES_SILVALLY_FIRE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_FIRE_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_THUNDER_FANG,
+            MOVE_IRON_HEAD,
+            MOVE_FLAME_CHARGE
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_SILVALLY_FLYING,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FLYING_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_FIRE_FANG,
+            MOVE_CRUNCH,
+            MOVE_DEFOG
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_SILVALLY_GHOST,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_GHOST_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_CRUNCH,
+            MOVE_WILL_O_WISP,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_SILVALLY_GRASS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_GRASS_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_FIRE_FANG,
+            MOVE_CRUNCH,
+            MOVE_LEECH_SEED
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_SILVALLY_ICE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_ICE_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_FIRE_FANG,
+            MOVE_THUNDER_FANG,
+            MOVE_SWORDS_DANCE
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ICE,
+    },
+    {
+        .species = SPECIES_SILVALLY_POISON,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_POISON_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_PSYCHIC_FANGS,
+            MOVE_FIRE_FANG,
+            MOVE_TOXIC
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_SILVALLY_PSYCHIC,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_PSYCHIC_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_X_SCISSOR,
+            MOVE_FIRE_FANG,
+            MOVE_SWORDS_DANCE
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_SILVALLY_ROCK,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROCK_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_ICE_FANG,
+            MOVE_CRUNCH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .def = 4
+        ),
+        .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_SILVALLY_WATER,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_WATER_MEMORY,
+        .moves =
+        {
+            MOVE_MULTI_ATTACK,
+            MOVE_ICE_FANG,
+            MOVE_CRUNCH,
+            MOVE_SWORDS_DANCE
+        },
+        .ability = ABILITY_RKS_SYSTEM,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
 
     // 0774
     {
