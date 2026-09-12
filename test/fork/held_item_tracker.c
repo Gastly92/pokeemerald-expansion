@@ -54,7 +54,7 @@
 // The done list never shrinks. Bump this when items graduate; a drop means an item was
 // demoted to pending, which is a real regression and should be a deliberate, reviewed act
 // rather than a quiet way to dodge one of the gates above.
-#define HELD_ITEM_DONE_FLOOR 111
+#define HELD_ITEM_DONE_FLOOR 116
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -69,8 +69,10 @@ static const enum Item sDoneItems[] =
     ITEM_BLUE_ORB,
     ITEM_BOOSTER_ENERGY,
     ITEM_BUG_MEMORY,
+    ITEM_BURN_DRIVE,
     ITEM_CHARCOAL,
     ITEM_CHESTO_BERRY,
+    ITEM_CHILL_DRIVE,
     ITEM_CHOICE_BAND,
     ITEM_CHOICE_SCARF,
     ITEM_CHOICE_SPECS,
@@ -78,6 +80,7 @@ static const enum Item sDoneItems[] =
     ITEM_COVERT_CLOAK,
     ITEM_DAMP_ROCK,
     ITEM_DARK_MEMORY,
+    ITEM_DOUSE_DRIVE,
     ITEM_DRACO_PLATE,
     ITEM_DRAGON_FANG,
     ITEM_DRAGON_MEMORY,
@@ -148,11 +151,13 @@ static const enum Item sDoneItems[] =
     ITEM_SCOPE_LENS,
     ITEM_SHARP_BEAK,
     ITEM_SHELL_BELL,
+    ITEM_SHOCK_DRIVE,
     ITEM_SILK_SCARF,
     ITEM_SITRUS_BERRY,
     ITEM_SKY_PLATE,
     ITEM_SMOOTH_ROCK,
     ITEM_SOFT_SAND,
+    ITEM_SOUL_DEW,
     ITEM_SPELL_TAG,
     ITEM_SPLASH_PLATE,
     ITEM_SPOOKY_PLATE,
@@ -245,11 +250,15 @@ static const enum Item sPendingItems[] =
     // Arceus plates (already carrying the +40% buff), and the wide uncontested tails --
     // 14 of the 18 resist berries, the five type-boost incenses, Lax Incense.
     //
-    // The signature type items settled by BUFF_SIGNATURE_TYPE_ITEMS: the 4 Drives and Soul Dew
-    // are what is left. Each is locked to one species, so each wants a set on THAT species and
-    // nowhere else -- a Drive needs a Genesect, Soul Dew a Lati@s. Both the Memories (17, on
-    // Silvally) and the Plates (17, on Arceus) are done, each forme carrying exactly one set,
-    // which for a form-change enabler is the ceiling rather than a shortfall.
+    // The signature type items settled by BUFF_SIGNATURE_TYPE_ITEMS are ALL done now: 17
+    // Memories (Silvally), 17 Plates (Arceus), 4 Drives (Genesect) and Soul Dew (Lati@s).
+    // The form-change enablers among them each carry exactly one set, which for an item that
+    // unlocks one forme on one species is the ceiling rather than a shortfall.
+    //
+    // Soul Dew is the one that is NOT a form-change enabler -- it changes no forme, so its
+    // one set is an ordinary one-set count. It sits on Latios's Calm Mind / Psyshock /
+    // Dragon Pulse set, which splits its damage across both boosted types and is the exact
+    // set that used to hold a Dragon Fang because the signature item was worse.
     //
     // Note Arceus and Genesect are TIER_MYTHICAL, so their sets are reachable only through a
     // reserved forced-tier slot; Silvally is TIER_NORMAL and rentable. The Arceus share of the
@@ -266,18 +275,15 @@ static const enum Item sPendingItems[] =
     ITEM_BINDING_BAND,
     ITEM_BLUNDER_POLICY,
     ITEM_BUG_GEM,
-    ITEM_BURN_DRIVE,
     ITEM_CELL_BATTERY,
     ITEM_CHARTI_BERRY,
     ITEM_CHERI_BERRY,
     ITEM_CHILAN_BERRY,
-    ITEM_CHILL_DRIVE,
     ITEM_CLEAR_AMULET,
     ITEM_COBA_BERRY,
     ITEM_DARK_GEM,
     ITEM_DEEP_SEA_SCALE,
     ITEM_DEEP_SEA_TOOTH,
-    ITEM_DOUSE_DRIVE,
     ITEM_EJECT_BUTTON,
     ITEM_EJECT_PACK,
     ITEM_ELECTRIC_GEM,
@@ -331,9 +337,7 @@ static const enum Item sPendingItems[] =
     ITEM_ROWAP_BERRY,
     ITEM_SEA_INCENSE,
     ITEM_SHED_SHELL,
-    ITEM_SHOCK_DRIVE,
     ITEM_SNOWBALL,
-    ITEM_SOUL_DEW,
     ITEM_STARF_BERRY,
     ITEM_STICKY_BARB,
     ITEM_TANGA_BERRY,

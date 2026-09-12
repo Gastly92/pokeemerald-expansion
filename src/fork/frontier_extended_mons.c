@@ -12340,7 +12340,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LATIOS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_DRAGON_FANG,
+        .heldItem = ITEM_SOUL_DEW,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -21385,15 +21385,75 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_STEEL,
     },
     {
-        .species = SPECIES_GENESECT,
+        .species = SPECIES_GENESECT_SHOCK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_SHOCK_DRIVE,
         .moves =
         {
             MOVE_TECHNO_BLAST,
             MOVE_FLASH_CANNON,
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_GENESECT_DOUSE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_DOUSE_DRIVE,
+        .moves =
+        {
+            MOVE_TECHNO_BLAST,
+            MOVE_BUG_BUZZ,
+            MOVE_FLAMETHROWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_GENESECT_BURN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BURN_DRIVE,
+        .moves =
+        {
+            MOVE_TECHNO_BLAST,
+            MOVE_BUG_BUZZ,
+            MOVE_THUNDERBOLT,
+            MOVE_FLASH_CANNON
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_GENESECT_CHILL,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHILL_DRIVE,
+        .moves =
+        {
+            MOVE_TECHNO_BLAST,
+            MOVE_FLAMETHROWER,
+            MOVE_FLASH_CANNON,
+            MOVE_THUNDER_WAVE
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
