@@ -28,14 +28,12 @@
 //                      count is itself the signal. NOT gated -- a pending
 //                      item is allowed to sit at zero sets, which is usually why it is
 //                      pending. Promote it to sDoneItems[] once both axes are satisfied.
-//   sDeclinedItems[] -- works fine and is reachable, but the only set that could carry it
-//                      is one the roster does not want. A deliberate "won't do", so it is
-//                      NOT outstanding work and does not belong on the pending list.
-//                      Exempt from the done gates; reversing the verdict is a one-line
-//                      move back to sPendingItems[].
-//   sIgnoredItems[] -- cannot appear in a frontier battle at all. Neither axis means
-//                      anything for these, so they are exempt from the done gates -- but
-//                      no set may hold one, since doing so plays an item down for free.
+//   sIgnoredItems[] -- nothing it does is reachable in a frontier battle, either because
+//                      the effect cannot happen there (Exp. Share) or because its only
+//                      legal holder cannot use the effect it has (Lucky Punch on Chansey).
+//                      Neither axis means anything for these, so they are exempt from the
+//                      done gates -- but no set may hold one, since doing so plays an item
+//                      down for free.
 //
 // The point of the split is that graduating an item to sDoneItems[] is what ARMS the
 // gates for it. That is the failure this file exists to catch: Wide Lens, Zoom Lens,
@@ -273,10 +271,14 @@ static const enum Item sPendingItems[] =
     // the two types Soul Dew boosts. The Latios one is the exact set that used to hold a Dragon
     // Fang because the generic item beat the signature one.
     //
-    // Five species-locked items that used to sit here -- Deep Sea Tooth/Scale (Clamperl),
-    // Lucky Punch (Chansey), Metal/Quick Powder (Ditto) -- moved to sDeclinedItems[]: each
-    // needs a holder the roster has decided not to build, so they were counting as
-    // outstanding work nobody was ever going to pick up.
+    // Deep Sea Tooth and Deep Sea Scale are PARKED rather than worked: both are 2x, both
+    // work, and both are locked to Clamperl, which has no set (it evolves, so the coverage
+    // test excuses it). The price is what stalls them -- graduating takes two sets each, so
+    // drafting the pair means FOUR Clamperl entries, a 35/64/85/74/55/32 NFE four times over
+    // in a uniform draw, while Huntail and Gorebyss already carry four sets between them.
+    // Left here rather than on the ignored list because the items are not dead, so a line
+    // review that wants an NFE gimmick can just pick them up; don't count them when sizing
+    // a batch.
     //
     // Note Arceus and Genesect are TIER_MYTHICAL, so their sets are reachable only through a
     // reserved forced-tier slot; Silvally is TIER_NORMAL and rentable. The Arceus share of the
@@ -299,6 +301,8 @@ static const enum Item sPendingItems[] =
     ITEM_CLEAR_AMULET,
     ITEM_COBA_BERRY,
     ITEM_DARK_GEM,
+    ITEM_DEEP_SEA_SCALE,
+    ITEM_DEEP_SEA_TOOTH,
     ITEM_EJECT_BUTTON,
     ITEM_EJECT_PACK,
     ITEM_ELECTRIC_GEM,
@@ -358,46 +362,20 @@ static const enum Item sPendingItems[] =
     ITEM_YACHE_BERRY,
 };
 
-// Reachable, balanced, and deliberately NEVER drafted: the set that would carry the item
-// is not one the roster wants. This bucket exists so the pending list means "work
-// outstanding" rather than "work outstanding, plus a few we already decided against" --
-// the batch count read off sPendingItems[] should be work someone can actually pick up.
-//
-// Every entry is species-locked, which is what makes a verdict here safe rather than
-// premature: the item has exactly one legal holder, so "we are not building that holder"
-// settles the item completely. Nothing general-purpose belongs on this list.
-//
-//   Lucky Punch     -- +2 crit stage, which DETERMINISTIC_HOLD_EFFECTS upgrades to a
-//                      guaranteed first-attack crit (IsCriticalHit, src/battle_util.c).
-//                      Both are dead on Chansey, its only holder: 5 base Attack, 35 base
-//                      Sp. Atk, and the roster's Chansey attacks with Seismic Toss, whose
-//                      fixed damage a crit does not scale. The item is repaired; the
-//                      holder cannot use the repair.
-//   Metal Powder    -- 2x Def / 2x Speed for an UNTRANSFORMED Ditto (note the
-//   Quick Powder       !volatiles.transformed gate in src/battle_util.c and
-//                      src/battle_main.c). The roster's Ditto runs Imposter, which
-//                      transforms on switch-in, so neither item is ever live. Only a
-//                      deliberately worse Ditto -- Limber plus a Transform move -- would
-//                      see them, and then for a single turn.
-//   Deep Sea Tooth  -- 2x Sp. Atk / 2x Sp. Def, genuinely enormous, and locked to Clamperl,
-//   Deep Sea Scale     which has no set at all (it evolves, so the coverage test excuses
-//                      it). The price is what fails, not the item: graduating takes two
-//                      sets each, so drafting both means FOUR Clamperl entries -- a
-//                      35/64/85/74/55/32 NFE, four times, in a uniform draw -- while
-//                      Huntail and Gorebyss already carry four sets between them. This is
-//                      the one taste call here rather than a dead mechanic; a future line
-//                      review that wants an NFE gimmick can move them back to pending.
-static const enum Item sDeclinedItems[] =
-{
-    ITEM_DEEP_SEA_SCALE,
-    ITEM_DEEP_SEA_TOOTH,
-    ITEM_LUCKY_PUNCH,
-    ITEM_METAL_POWDER,
-    ITEM_QUICK_POWDER,
-};
-
-// Cannot appear in a frontier battle, so neither axis means anything -- but no set may
-// hold one (see the last test).
+// Nothing these do is reachable in a frontier battle, so neither axis means anything --
+// but no set may hold one (see the last test). Note the test is "does it do anything
+// here", not "can it exist here": Exp. Share is perfectly obtainable, it just has no
+// battle effect. Three species-locked items fail the same test from the other direction --
+// the effect is real, but the one holder allowed to have it cannot use it:
+//   Lucky Punch  -- Chansey only. +2 crit stage, which DETERMINISTIC_HOLD_EFFECTS upgrades
+//                   to a guaranteed first-attack crit (IsCriticalHit, src/battle_util.c).
+//                   Chansey has 5 base Attack and 35 base Sp. Atk, and attacks with Seismic
+//                   Toss, whose fixed damage a crit does not scale -- so the crit lands and
+//                   changes nothing.
+//   Metal Powder -- Ditto only, and both gate on an UNTRANSFORMED Ditto (the
+//   Quick Powder    !volatiles.transformed checks in src/battle_util.c and src/battle_main.c).
+//                   The roster's Ditto runs Imposter, which transforms on switch-in, so
+//                   neither item is ever live for even one turn.
 // The two big structural classes -- Mega Stones and Z-Crystals, item-free under
 // FEATURE_FREE_GIMMICKS -- are excluded by hold effect in GetItemTrackerList() instead
 // of listed here. What remains is the out-of-battle utility: nothing they do is
@@ -411,8 +389,10 @@ static const enum Item sIgnoredItems[] =
     ITEM_EVERSTONE,
     ITEM_EXP_SHARE,
     ITEM_LUCKY_EGG,
+    ITEM_LUCKY_PUNCH,
     ITEM_LUCK_INCENSE,
     ITEM_MACHO_BRACE,
+    ITEM_METAL_POWDER,
     ITEM_POWER_ANKLET,
     ITEM_POWER_BAND,
     ITEM_POWER_BELT,
@@ -420,6 +400,7 @@ static const enum Item sIgnoredItems[] =
     ITEM_POWER_LENS,
     ITEM_POWER_WEIGHT,
     ITEM_PURE_INCENSE,
+    ITEM_QUICK_POWDER,
     ITEM_SMOKE_BALL,
     ITEM_SOOTHE_BELL,
 };
@@ -429,7 +410,6 @@ enum ItemTrackerList
     TRACKER_UNLISTED,
     TRACKER_DONE,
     TRACKER_PENDING,
-    TRACKER_DECLINED,
     TRACKER_IGNORED,
 };
 
@@ -467,8 +447,6 @@ static enum ItemTrackerList GetItemTrackerList(enum Item item)
         return TRACKER_DONE;
     if (ItemIsInList(sPendingItems, ARRAY_COUNT(sPendingItems), item))
         return TRACKER_PENDING;
-    if (ItemIsInList(sDeclinedItems, ARRAY_COUNT(sDeclinedItems), item))
-        return TRACKER_DECLINED;
     if (ItemIsInList(sIgnoredItems, ARRAY_COUNT(sIgnoredItems), item))
         return TRACKER_IGNORED;
     return TRACKER_UNLISTED;
@@ -514,8 +492,6 @@ TEST("Held item tracker: every held item is on exactly one tracker list")
             listed++;
         if (ItemIsInList(sPendingItems, ARRAY_COUNT(sPendingItems), item))
             listed++;
-        if (ItemIsInList(sDeclinedItems, ARRAY_COUNT(sDeclinedItems), item))
-            listed++;
         if (ItemIsInList(sIgnoredItems, ARRAY_COUNT(sIgnoredItems), item))
             listed++;
 
@@ -528,7 +504,7 @@ TEST("Held item tracker: every held item is on exactly one tracker list")
         else if (listed == 0 && GetItemTrackerList(item) == TRACKER_UNLISTED)
         {
             unlisted++;
-            Test_MgbaPrintf("%S does something when held but is on no tracker list. Add it to sDoneItems[] (balance is right and a set holds it), sPendingItems[] (needs a buff, or needs a set), sDeclinedItems[] (works, but its only possible holder is one the roster declines to build), or sIgnoredItems[] (unreachable in a frontier battle) in test/fork/held_item_tracker.c",
+            Test_MgbaPrintf("%S does something when held but is on no tracker list. Add it to sDoneItems[] (balance is right and a set holds it), sPendingItems[] (needs a buff, or needs a set), or sIgnoredItems[] (nothing it does is reachable in a frontier battle) in test/fork/held_item_tracker.c",
                             GetItemName(item));
         }
     }
@@ -602,32 +578,6 @@ TEST("Held item tracker: no set holds an ignored item")
             offenders++;
             Test_MgbaPrintf("%S is on the ignored list but %d set(s) hold it -- an ignored item does nothing in a frontier battle, so those sets are playing an item down. Give them a real item, or move this one off sIgnoredItems[] if it turns out to matter",
                             GetItemName(item), sets);
-        }
-    }
-
-    EXPECT_EQ(offenders, 0);
-}
-
-TEST("Held item tracker: no set holds a declined item")
-{
-    u32 i;
-    u32 offenders = 0;
-
-    // Not the same failure as the ignored check above: a declined item WORKS, so a set
-    // holding one is not playing an item down -- it means the verdict was reversed in
-    // practice while the list still says otherwise. Either outcome is fine, but the list
-    // has to say which, so this makes the reversal an explicit edit rather than a silent
-    // drift. Fix by moving the item to sPendingItems[] (one set) or sDoneItems[] (two or
-    // more), not by deleting the set.
-    for (i = 0; i < ARRAY_COUNT(sDeclinedItems); i++)
-    {
-        u32 sets = CountRosterSetsHolding(sDeclinedItems[i]);
-
-        if (sets > 0)
-        {
-            offenders++;
-            Test_MgbaPrintf("%S is on the declined list but %d set(s) hold it -- declining an item means we are not building its holder, and one now exists. Move it to sPendingItems[] (one set) or sDoneItems[] (two or more) in test/fork/held_item_tracker.c, and record why in fork-docs/HELD_ITEMS.md",
-                            GetItemName(sDeclinedItems[i]), sets);
         }
     }
 
