@@ -28,9 +28,12 @@
 //                      count is itself the signal. NOT gated -- a pending
 //                      item is allowed to sit at zero sets, which is usually why it is
 //                      pending. Promote it to sDoneItems[] once both axes are satisfied.
-//   sIgnoredItems[] -- cannot appear in a frontier battle at all. Neither axis means
-//                      anything for these, so they are exempt from the done gates -- but
-//                      no set may hold one, since doing so plays an item down for free.
+//   sIgnoredItems[] -- nothing it does is reachable in a frontier battle, either because
+//                      the effect cannot happen there (Exp. Share) or because its only
+//                      legal holder cannot use the effect it has (Lucky Punch on Chansey).
+//                      Neither axis means anything for these, so they are exempt from the
+//                      done gates -- but no set may hold one, since doing so plays an item
+//                      down for free.
 //
 // The point of the split is that graduating an item to sDoneItems[] is what ARMS the
 // gates for it. That is the failure this file exists to catch: Wide Lens, Zoom Lens,
@@ -268,6 +271,15 @@ static const enum Item sPendingItems[] =
     // the two types Soul Dew boosts. The Latios one is the exact set that used to hold a Dragon
     // Fang because the generic item beat the signature one.
     //
+    // Deep Sea Tooth and Deep Sea Scale are PARKED rather than worked: both are 2x, both
+    // work, and both are locked to Clamperl, which has no set (it evolves, so the coverage
+    // test excuses it). The price is what stalls them -- graduating takes two sets each, so
+    // drafting the pair means FOUR Clamperl entries, a 35/64/85/74/55/32 NFE four times over
+    // in a uniform draw, while Huntail and Gorebyss already carry four sets between them.
+    // Left here rather than on the ignored list because the items are not dead, so a line
+    // review that wants an NFE gimmick can just pick them up; don't count them when sizing
+    // a batch.
+    //
     // Note Arceus and Genesect are TIER_MYTHICAL, so their sets are reachable only through a
     // reserved forced-tier slot; Silvally is TIER_NORMAL and rentable. The Arceus share of the
     // mythical draw that the 17 plate sets buy was reviewed and accepted -- see Group D in
@@ -312,12 +324,10 @@ static const enum Item sPendingItems[] =
     ITEM_LAGGING_TAIL,
     ITEM_LAX_INCENSE,
     ITEM_LIECHI_BERRY,
-    ITEM_LUCKY_PUNCH,
     ITEM_LUMINOUS_MOSS,
     ITEM_LUSTROUS_ORB,
     ITEM_MAGO_BERRY,
     ITEM_MARANGA_BERRY,
-    ITEM_METAL_POWDER,
     ITEM_METRONOME,
     ITEM_MICLE_BERRY,
     ITEM_NORMAL_GEM,
@@ -328,7 +338,6 @@ static const enum Item sPendingItems[] =
     ITEM_PERSIM_BERRY,
     ITEM_POISON_GEM,
     ITEM_PROTECTIVE_PADS,
-    ITEM_QUICK_POWDER,
     ITEM_RAWST_BERRY,
     ITEM_RED_CARD,
     ITEM_RINDO_BERRY,
@@ -353,8 +362,20 @@ static const enum Item sPendingItems[] =
     ITEM_YACHE_BERRY,
 };
 
-// Cannot appear in a frontier battle, so neither axis means anything -- but no set may
-// hold one (see the last test).
+// Nothing these do is reachable in a frontier battle, so neither axis means anything --
+// but no set may hold one (see the last test). Note the test is "does it do anything
+// here", not "can it exist here": Exp. Share is perfectly obtainable, it just has no
+// battle effect. Three species-locked items fail the same test from the other direction --
+// the effect is real, but the one holder allowed to have it cannot use it:
+//   Lucky Punch  -- Chansey only. +2 crit stage, which DETERMINISTIC_HOLD_EFFECTS upgrades
+//                   to a guaranteed first-attack crit (IsCriticalHit, src/battle_util.c).
+//                   Chansey has 5 base Attack and 35 base Sp. Atk, and attacks with Seismic
+//                   Toss, whose fixed damage a crit does not scale -- so the crit lands and
+//                   changes nothing.
+//   Metal Powder -- Ditto only, and both gate on an UNTRANSFORMED Ditto (the
+//   Quick Powder    !volatiles.transformed checks in src/battle_util.c and src/battle_main.c).
+//                   The roster's Ditto runs Imposter, which transforms on switch-in, so
+//                   neither item is ever live for even one turn.
 // The two big structural classes -- Mega Stones and Z-Crystals, item-free under
 // FEATURE_FREE_GIMMICKS -- are excluded by hold effect in GetItemTrackerList() instead
 // of listed here. What remains is the out-of-battle utility: nothing they do is
@@ -368,8 +389,10 @@ static const enum Item sIgnoredItems[] =
     ITEM_EVERSTONE,
     ITEM_EXP_SHARE,
     ITEM_LUCKY_EGG,
+    ITEM_LUCKY_PUNCH,
     ITEM_LUCK_INCENSE,
     ITEM_MACHO_BRACE,
+    ITEM_METAL_POWDER,
     ITEM_POWER_ANKLET,
     ITEM_POWER_BAND,
     ITEM_POWER_BELT,
@@ -377,6 +400,7 @@ static const enum Item sIgnoredItems[] =
     ITEM_POWER_LENS,
     ITEM_POWER_WEIGHT,
     ITEM_PURE_INCENSE,
+    ITEM_QUICK_POWDER,
     ITEM_SMOKE_BALL,
     ITEM_SOOTHE_BELL,
 };
@@ -480,7 +504,7 @@ TEST("Held item tracker: every held item is on exactly one tracker list")
         else if (listed == 0 && GetItemTrackerList(item) == TRACKER_UNLISTED)
         {
             unlisted++;
-            Test_MgbaPrintf("%S does something when held but is on no tracker list. Add it to sDoneItems[] (balance is right and a set holds it), sPendingItems[] (needs a buff, or needs a set), or sIgnoredItems[] (unreachable in a frontier battle) in test/fork/held_item_tracker.c",
+            Test_MgbaPrintf("%S does something when held but is on no tracker list. Add it to sDoneItems[] (balance is right and a set holds it), sPendingItems[] (needs a buff, or needs a set), or sIgnoredItems[] (nothing it does is reachable in a frontier battle) in test/fork/held_item_tracker.c",
                             GetItemName(item));
         }
     }

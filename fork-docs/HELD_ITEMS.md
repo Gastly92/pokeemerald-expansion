@@ -26,7 +26,7 @@ lists, and the list *is* the status:
 | --- | --- | --- |
 | `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
 | `sPendingItems[]` | Work outstanding: needs a buff, is mechanically fine and needs a set, or is **thinly drafted** (on one set, which with one-item-per-team is a roll away from never appearing) | No — a pending item may sit at zero sets, which is usually why it is pending |
-| `sIgnoredItems[]` | Unreachable in a frontier battle | Exempt from the done gates, but **no set may hold one** — a Mega Stone or Z-Crystal in the slot does nothing under `FEATURE_FREE_GIMMICKS`, so the set would be playing an item down with no other symptom |
+| `sIgnoredItems[]` | Nothing it does is reachable in a frontier battle — the effect can't happen here, **or** its only legal holder can't use the effect it has | Exempt from the done gates, but **no set may hold one** — a Mega Stone or Z-Crystal in the slot does nothing under `FEATURE_FREE_GIMMICKS`, so the set would be playing an item down with no other symptom |
 
 A **one-set count is not automatically a shortfall.** The form-change enablers — Adamant
 Crystal, Lustrous Globe, Griseous Orb, Red/Blue Orb, Rusted Sword and Shield, the three
@@ -67,9 +67,9 @@ here will drift.
 ## What the roster uses today
 
 **1629 sets. 143 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
-set). The tracker classifies **241** items that do something when held, of which **17** are
-unreachable in a frontier battle (`sIgnoredItems[]` — see "Never expected" below), leaving a
-live universe of **224**. Against that, the roster is at **143 used, 81 unused**.
+set). The tracker classifies **241** items that do something when held, of which **20** do nothing
+reachable in a frontier battle (`sIgnoredItems[]` — see "Never expected" below), leaving a live
+universe of **221**. Against that, the roster is at **143 used, 78 unused**.
 
 The distribution is heavily top-loaded:
 
@@ -114,9 +114,11 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | --- | --- | --- |
 | Mega Stones | 92 | `FEATURE_FREE_GIMMICKS` drops the item requirement entirely — Megas are picked from the trigger, and X/Y is chosen from the battler's stats. See [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md). A stone in the slot would be a wasted item, not an enabler. |
 | Z-Crystals | 35 | Same flag: Z-Moves derive from species + move with no crystal. |
+| Species-locked but inert | 3 | **Lucky Punch** (Chansey only) is repaired twice over — +2 crit stage, which `DETERMINISTIC_HOLD_EFFECTS` upgrades to a guaranteed first-attack crit — but Chansey has **5 base Attack** and attacks with Seismic Toss, whose fixed damage a crit does not scale, so the crit lands and changes nothing. **Metal Powder / Quick Powder** (Ditto only) both gate on an *untransformed* Ditto, and the roster's Ditto runs Imposter, which transforms on switch-in. The effect is real in each case; the one holder allowed to have it cannot use it. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **81 unused items that are live in battle** — the actual backlog.
+That leaves **78 unused items that are live in battle** — the actual backlog (two of them the
+parked Clamperl pair, below).
 
 ## The backlog
 
@@ -160,13 +162,22 @@ them. This is regression collateral, and it is the most defensible buff work ava
 
 ### Group C — weak in stock, still weak here (needs code)
 
-Not caused by us; just never worth a slot.
+Not caused by us; just never worth a slot. This is the last engine work left in the backlog.
 
 | Item(s) | The problem | Sketch of a fix |
 | --- | --- | --- |
 | **Oran Berry, Berry Juice** | Flat 20 HP at ≤1/2 HP. At the frontier's Level 50 that is roughly 10–13% of a typical HP pool, against Sitrus Berry's 25% — and Sitrus is on 105 sets. A flat number does not survive the jump to level 50. | `BUFF_FLAT_HP_ITEMS`: convert both to a fraction of max HP (Oran ~1/6, Berry Juice ~1/3, giving Berry Juice a real identity as the bigger, rarer Sitrus). Site: `HOLD_EFFECT_RESTORE_HP` in `src/battle_hold_effects.c`. |
-| **Deep Sea Tooth, Deep Sea Scale** | Both are **2x** — enormous — but locked to Clamperl, which has no set at all (it evolves, so the coverage test excuses it). | No engine work. Needs a Clamperl set, which the coverage rules currently do not ask for. Worth one deliberately-built NFE entry: a 2x Sp. Atk Clamperl on an uncontested item is a genuinely interesting rental. |
-| **Lucky Punch, Metal Powder, Quick Powder** | Species-locked to Chansey and Ditto, both of which have sets that hold something better (Chansey: Eviolite; Ditto: Choice Scarf). Lucky Punch was *also* repaired by `DETERMINISTIC_HOLD_EFFECTS` (guaranteed first-attack crit) and ships to nobody. | No engine work; a second Chansey and a second Ditto set. Chansey with Eviolite *and* a guaranteed crit are different sets, and the roster deliberately carries several builds per species. |
+
+#### Parked: the item works, the holder costs too much
+
+| Item(s) | Why it is parked |
+| --- | --- |
+| **Deep Sea Tooth, Deep Sea Scale** | Both are **2x**, genuinely enormous, and locked to Clamperl, which has no set (it evolves, so the coverage test excuses it). The price is what stalls them, not the item: graduation takes two sets each, so drafting both means **four Clamperl entries** — a 35/64/85/74/55/32 NFE, four times, in a uniform draw — while Huntail and Gorebyss already carry four sets between them. They stay **pending**, not ignored, because nothing about them is dead: a line review that wants an NFE gimmick can pick them up without any code or list change. Just don't count them when sizing a batch. |
+
+The other three species-locked strays — **Lucky Punch**, **Metal Powder** and **Quick
+Powder** — are not parked but *ignored*, because their effects genuinely cannot land on
+the only holder allowed to have them. See
+[Never expected](#never-expected--the-structural-exclusions).
 
 ### Group D — the 17 Plates — **shipped**
 
@@ -225,8 +236,12 @@ What is left is Group A and Group C, and it is overwhelmingly **roster work**:
      Fighting, Poison, Ground, Bug, Rock, Ghost, Dark) and 6 more sit at one. Remember the settled
      rule — a Gem goes on a move the set fires **once**, never its main STAB.
 2. **Group C.** `BUFF_FLAT_HP_ITEMS` for Oran Berry and Berry Juice is the only code left in the
-   whole backlog; the rest is roster work gated on coverage decisions (a Clamperl set, a second
-   Chansey and Ditto).
+   whole backlog — two items, one flag, one batch.
+
+**The five species-locked strays are not backlog.** Lucky Punch, Metal Powder and Quick Powder
+are on `sIgnoredItems[]` — the effect is real but the only legal holder cannot use it — and the
+Clamperl pair (Deep Sea Tooth/Scale) is parked in pending at a price of four NFE sets. Don't
+count any of them when sizing what is left.
 
 ## Processing a batch
 
@@ -259,6 +274,13 @@ costs no engine risk, then the memories/drives extension, then the signature orb
 
 A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
 get hard to review; smaller ones waste a CI cycle.
+
+**How much is left** (re-measure, don't trust this after a line review): 99 pending items — 78
+on zero sets, 21 on one — and graduation needs **two sets per item**, so 78×2 + 21×1 = **177
+set-placements** (two of those items are the parked Clamperl pair, so really 173). At 8–15 a batch that is **roughly 14 batches**, of which exactly one
+(`BUFF_FLAT_HP_ITEMS`) is engine work and the rest is roster work. The cheapest batch to take
+first is the six incenses: five type-boost incenses plus Lax Incense, all on zero sets, all
+exact mechanical duplicates of items the roster already leans on, no judgement calls.
 
 ### 3. Decisions already settled — do not re-litigate
 
