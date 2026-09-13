@@ -95,8 +95,8 @@ compensation for other changes — the `DETERMINISTIC_*` project trades random u
 away, so some items get buffed to keep battles balanced. Each tweak gets its own flag
 in `config/buff.h` (`FALSE` = stock). Both below are enabled. What to buff next is
 tracked in `test/fork/held_item_tracker.c`, which sorts every held item into done /
-pending / ignored and fails CI if a *done* item is unclassified, unheld by any set, or
-over 20% of the roster; [`HELD_ITEMS.md`](HELD_ITEMS.md) carries the reasoning behind
+pending / declined / ignored and fails CI if a *done* item is unclassified, unheld by any
+set, or over 20% of the roster; [`HELD_ITEMS.md`](HELD_ITEMS.md) carries the reasoning behind
 each verdict.
 
 | Feature | Flag(s) | Status | Notes |
