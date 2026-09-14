@@ -112,18 +112,29 @@
 // got a second one, and Oran Berry and Berry Juice were drafted for the first time now that
 // BUFF_FLAT_HP_ITEMS put them on Sitrus Berry's number. Nothing is left in this tracker between
 // "held by nobody" and "done" -- every remaining pending item is at zero sets.
-#define HELD_ITEM_DONE_FLOOR 176
+// 176 -> 215 finishes the audit. Every held item that is live in a frontier battle and not
+// parked now sits on at least two sets, so sPendingItems[] holds only the six parked entries
+// and nothing else. A new name appearing on it from here means either an upstream sync added
+// an item or a done item lost a set -- both of which the gates below will say out loud.
+#define HELD_ITEM_DONE_FLOOR 215
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
 {
+    ITEM_ABILITY_SHIELD,
+    ITEM_ABSORB_BULB,
     ITEM_ADAMANT_CRYSTAL,
+    ITEM_ADRENALINE_ORB,
     ITEM_AGUAV_BERRY,
     ITEM_AIR_BALLOON,
+    ITEM_APICOT_BERRY,
+    ITEM_ASPEAR_BERRY,
     ITEM_ASSAULT_VEST,
     ITEM_BABIRI_BERRY,
     ITEM_BERRY_JUICE,
+    ITEM_BERSERK_GENE,
     ITEM_BIG_ROOT,
+    ITEM_BINDING_BAND,
     ITEM_BLACK_BELT,
     ITEM_BLACK_GLASSES,
     ITEM_BLACK_SLUDGE,
@@ -134,8 +145,10 @@ static const enum Item sDoneItems[] =
     ITEM_BUG_GEM,
     ITEM_BUG_MEMORY,
     ITEM_BURN_DRIVE,
+    ITEM_CELL_BATTERY,
     ITEM_CHARCOAL,
     ITEM_CHARTI_BERRY,
+    ITEM_CHERI_BERRY,
     ITEM_CHESTO_BERRY,
     ITEM_CHILAN_BERRY,
     ITEM_CHILL_DRIVE,
@@ -143,6 +156,7 @@ static const enum Item sDoneItems[] =
     ITEM_CHOICE_SCARF,
     ITEM_CHOICE_SPECS,
     ITEM_CHOPLE_BERRY,
+    ITEM_CLEAR_AMULET,
     ITEM_COBA_BERRY,
     ITEM_COLBUR_BERRY,
     ITEM_CORNERSTONE_MASK,
@@ -158,9 +172,12 @@ static const enum Item sDoneItems[] =
     ITEM_DRAGON_MEMORY,
     ITEM_DREAD_PLATE,
     ITEM_EARTH_PLATE,
+    ITEM_EJECT_BUTTON,
+    ITEM_EJECT_PACK,
     ITEM_ELECTRIC_GEM,
     ITEM_ELECTRIC_MEMORY,
     ITEM_ELECTRIC_SEED,
+    ITEM_ENIGMA_BERRY,
     ITEM_EVIOLITE,
     ITEM_EXPERT_BELT,
     ITEM_FAIRY_FEATHER,
@@ -174,10 +191,13 @@ static const enum Item sDoneItems[] =
     ITEM_FIST_PLATE,
     ITEM_FLAME_ORB,
     ITEM_FLAME_PLATE,
+    ITEM_FLOAT_STONE,
     ITEM_FLYING_GEM,
     ITEM_FLYING_MEMORY,
     ITEM_FOCUS_BAND,
     ITEM_FOCUS_SASH,
+    ITEM_FULL_INCENSE,
+    ITEM_GANLON_BERRY,
     ITEM_GHOST_GEM,
     ITEM_GHOST_MEMORY,
     ITEM_GRASSY_SEED,
@@ -192,6 +212,7 @@ static const enum Item sDoneItems[] =
     ITEM_HEARTHFLAME_MASK,
     ITEM_HEAT_ROCK,
     ITEM_HEAVY_DUTY_BOOTS,
+    ITEM_IAPAPA_BERRY,
     ITEM_ICE_GEM,
     ITEM_ICE_MEMORY,
     ITEM_ICICLE_PLATE,
@@ -199,24 +220,33 @@ static const enum Item sDoneItems[] =
     ITEM_INSECT_PLATE,
     ITEM_IRON_BALL,
     ITEM_IRON_PLATE,
+    ITEM_JABOCA_BERRY,
     ITEM_KASIB_BERRY,
     ITEM_KEBIA_BERRY,
+    ITEM_KEE_BERRY,
     ITEM_KINGS_ROCK,
+    ITEM_LAGGING_TAIL,
     ITEM_LANSAT_BERRY,
     ITEM_LAX_INCENSE,
     ITEM_LEEK,
     ITEM_LEFTOVERS,
     ITEM_LEPPA_BERRY,
+    ITEM_LIECHI_BERRY,
     ITEM_LIFE_ORB,
     ITEM_LIGHT_BALL,
     ITEM_LIGHT_CLAY,
     ITEM_LOADED_DICE,
+    ITEM_LUMINOUS_MOSS,
     ITEM_LUM_BERRY,
     ITEM_LUSTROUS_GLOBE,
     ITEM_MAGNET,
+    ITEM_MAGO_BERRY,
+    ITEM_MARANGA_BERRY,
     ITEM_MEADOW_PLATE,
     ITEM_MENTAL_HERB,
     ITEM_METAL_COAT,
+    ITEM_METRONOME,
+    ITEM_MICLE_BERRY,
     ITEM_MIND_PLATE,
     ITEM_MIRACLE_SEED,
     ITEM_MIRROR_HERB,
@@ -230,27 +260,34 @@ static const enum Item sDoneItems[] =
     ITEM_ORAN_BERRY,
     ITEM_PASSHO_BERRY,
     ITEM_PAYAPA_BERRY,
+    ITEM_PECHA_BERRY,
+    ITEM_PERSIM_BERRY,
     ITEM_PETAYA_BERRY,
     ITEM_PIXIE_PLATE,
     ITEM_POISON_BARB,
     ITEM_POISON_GEM,
     ITEM_POISON_MEMORY,
     ITEM_POWER_HERB,
+    ITEM_PROTECTIVE_PADS,
     ITEM_PSYCHIC_GEM,
     ITEM_PSYCHIC_MEMORY,
     ITEM_PSYCHIC_SEED,
     ITEM_PUNCHING_GLOVE,
     ITEM_QUICK_CLAW,
+    ITEM_RAWST_BERRY,
     ITEM_RAZOR_CLAW,
     ITEM_RAZOR_FANG,
+    ITEM_RED_CARD,
     ITEM_RED_ORB,
     ITEM_RINDO_BERRY,
     ITEM_ROCKY_HELMET,
     ITEM_ROCK_GEM,
     ITEM_ROCK_INCENSE,
     ITEM_ROCK_MEMORY,
+    ITEM_ROOM_SERVICE,
     ITEM_ROSELI_BERRY,
     ITEM_ROSE_INCENSE,
+    ITEM_ROWAP_BERRY,
     ITEM_RUSTED_SHIELD,
     ITEM_RUSTED_SWORD,
     ITEM_SAFETY_GOGGLES,
@@ -258,6 +295,7 @@ static const enum Item sDoneItems[] =
     ITEM_SCOPE_LENS,
     ITEM_SEA_INCENSE,
     ITEM_SHARP_BEAK,
+    ITEM_SHED_SHELL,
     ITEM_SHELL_BELL,
     ITEM_SHOCK_DRIVE,
     ITEM_SHUCA_BERRY,
@@ -266,13 +304,16 @@ static const enum Item sDoneItems[] =
     ITEM_SITRUS_BERRY,
     ITEM_SKY_PLATE,
     ITEM_SMOOTH_ROCK,
+    ITEM_SNOWBALL,
     ITEM_SOFT_SAND,
     ITEM_SOUL_DEW,
     ITEM_SPELL_TAG,
     ITEM_SPLASH_PLATE,
     ITEM_SPOOKY_PLATE,
+    ITEM_STARF_BERRY,
     ITEM_STEEL_GEM,
     ITEM_STEEL_MEMORY,
+    ITEM_STICKY_BARB,
     ITEM_STONE_PLATE,
     ITEM_TANGA_BERRY,
     ITEM_TERRAIN_EXTENDER,
@@ -281,6 +322,7 @@ static const enum Item sDoneItems[] =
     ITEM_TOXIC_ORB,
     ITEM_TOXIC_PLATE,
     ITEM_TWISTED_SPOON,
+    ITEM_UTILITY_UMBRELLA,
     ITEM_WACAN_BERRY,
     ITEM_WATER_GEM,
     ITEM_WATER_MEMORY,
@@ -289,6 +331,7 @@ static const enum Item sDoneItems[] =
     ITEM_WELLSPRING_MASK,
     ITEM_WHITE_HERB,
     ITEM_WIDE_LENS,
+    ITEM_WIKI_BERRY,
     ITEM_WISE_GLASSES,
     ITEM_YACHE_BERRY,
     ITEM_ZAP_PLATE,
@@ -331,95 +374,29 @@ static const enum Item sPendingItems[] =
     // no second set to want. They stay done so the zero-set gate keeps watching them.
 
     // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
-    // Everything still pending is here -- the classes that had a placement rule (the Gems,
-    // the resist berries, the incenses, the signature type items) have all shipped, so what
-    // is left is the situational tail, where each item wants a set built AROUND it rather
-    // than an item slotted onto an existing set.
+    // Down to the SIX PARKED items and nothing else -- every other held item that is live in
+    // a frontier battle now sits on at least two sets. These six are not a backlog; each was
+    // examined and deliberately left undrafted. They stay here rather than on sIgnoredItems[]
+    // because the ignored list means the effect CANNOT HAPPEN, which is a different claim.
+    // See the "Parked" section of fork-docs/HELD_ITEMS.md for the arithmetic behind each.
     //
-    // SIX of these are PARKED and should not be counted when sizing a batch. They stay here
-    // rather than on sIgnoredItems[] because nothing about them is dead -- the ignored list
-    // means the effect cannot happen, which is a different claim. See the "Parked" section
-    // of fork-docs/HELD_ITEMS.md for the arithmetic behind each:
-    //
-    //   Deep Sea Tooth, Deep Sea Scale  -- locked to Clamperl; graduating both costs four
-    //                                      NFE sets in a uniform draw.
-    //   Adamant Orb, Lustrous Orb,      -- species-locked, and the holder pool is too small:
+    //   Deep Sea Tooth, Deep Sea Scale  -- locked to Clamperl; graduating both costs four NFE
+    //                                      sets in a uniform draw.
+    //   Adamant Orb, Lustrous Orb,      -- species-locked with too small a holder pool:
     //   Griseous Core                      Adamant Orb has THREE legal sets, so reaching two
     //                                      means both Dialga sets holding it, which adds no
     //                                      reach under one-species-per-team.
-    //   Ring Target                     -- the one item here whose effect is a pure drawback
-    //                                      to its own holder (it deletes its type immunities).
+    //   Ring Target                     -- the one item whose effect is a pure drawback to its
+    //                                      own holder (it deletes its type immunities).
     //
-    // The signature type items settled by BUFF_SIGNATURE_TYPE_ITEMS are ALL done now: 17
-    // Memories (Silvally), 17 Plates (Arceus), 4 Drives (Genesect) and Soul Dew (Lati@s).
-    // The form-change enablers among them each carry exactly one set, which for an item that
-    // unlocks one forme on one species is the ceiling rather than a shortfall.
-    //
-    // Soul Dew is the one that is NOT a form-change enabler -- it changes no forme, so the
-    // one-set ceiling that excuses a Memory or a Plate does not apply to it, and a single set
-    // would be an ordinary thinly-drafted count. It therefore carries TWO: the Latios and the
-    // Latias Calm Mind / Psyshock / Dragon Pulse sets, both of which split their damage across
-    // the two types Soul Dew boosts. The Latios one is the exact set that used to hold a Dragon
-    // Fang because the generic item beat the signature one.
-    //
-    // Deep Sea Tooth and Deep Sea Scale are PARKED rather than worked: both are 2x, both
-    // work, and both are locked to Clamperl, which has no set (it evolves, so the coverage
-    // test excuses it). The price is what stalls them -- graduating takes two sets each, so
-    // drafting the pair means FOUR Clamperl entries, a 35/64/85/74/55/32 NFE four times over
-    // in a uniform draw, while Huntail and Gorebyss already carry four sets between them.
-    // Left here rather than on the ignored list because the items are not dead, so a line
-    // review that wants an NFE gimmick can just pick them up; don't count them when sizing
-    // a batch.
-    //
-    // Note Arceus and Genesect are TIER_MYTHICAL, so their sets are reachable only through a
-    // reserved forced-tier slot; Silvally is TIER_NORMAL and rentable. The Arceus share of the
-    // mythical draw that the 17 plate sets buy was reviewed and accepted -- see Group D in
-    // fork-docs/HELD_ITEMS.md for the numbers and the reasoning.
-    ITEM_ABILITY_SHIELD,
-    ITEM_ABSORB_BULB,
+    // A NEW name here means an upstream sync added an item, or a done item lost a set. Both
+    // are worth a look rather than a reflexive re-draft.
     ITEM_ADAMANT_ORB,
-    ITEM_ADRENALINE_ORB,
-    ITEM_APICOT_BERRY,
-    ITEM_ASPEAR_BERRY,
-    ITEM_BERSERK_GENE,
-    ITEM_BINDING_BAND,
-    ITEM_CELL_BATTERY,
-    ITEM_CHERI_BERRY,
-    ITEM_CLEAR_AMULET,
     ITEM_DEEP_SEA_SCALE,
     ITEM_DEEP_SEA_TOOTH,
-    ITEM_EJECT_BUTTON,
-    ITEM_EJECT_PACK,
-    ITEM_ENIGMA_BERRY,
-    ITEM_FLOAT_STONE,
-    ITEM_FULL_INCENSE,
-    ITEM_GANLON_BERRY,
     ITEM_GRISEOUS_CORE,
-    ITEM_IAPAPA_BERRY,
-    ITEM_JABOCA_BERRY,
-    ITEM_KEE_BERRY,
-    ITEM_LAGGING_TAIL,
-    ITEM_LIECHI_BERRY,
-    ITEM_LUMINOUS_MOSS,
     ITEM_LUSTROUS_ORB,
-    ITEM_MAGO_BERRY,
-    ITEM_MARANGA_BERRY,
-    ITEM_METRONOME,
-    ITEM_MICLE_BERRY,
-    ITEM_PECHA_BERRY,
-    ITEM_PERSIM_BERRY,
-    ITEM_PROTECTIVE_PADS,
-    ITEM_RAWST_BERRY,
-    ITEM_RED_CARD,
     ITEM_RING_TARGET,
-    ITEM_ROOM_SERVICE,
-    ITEM_ROWAP_BERRY,
-    ITEM_SHED_SHELL,
-    ITEM_SNOWBALL,
-    ITEM_STARF_BERRY,
-    ITEM_STICKY_BARB,
-    ITEM_UTILITY_UMBRELLA,
-    ITEM_WIKI_BERRY,
 };
 
 // Nothing these do is reachable in a frontier battle, so neither axis means anything --
