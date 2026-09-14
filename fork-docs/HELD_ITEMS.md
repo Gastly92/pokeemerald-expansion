@@ -194,13 +194,14 @@ them. This is regression collateral, and it is the most defensible buff work ava
 | ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. |
 | ~~**The 17 Memories and 4 Drives**~~ — **shipped** (balance + roster) | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally could not decline it either: `FORM_CHANGE_ITEM_HOLD` means dropping the Memory reverts the forme, so all four Silvally sets were compelled to hold a dead item. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` fixed the balance and locked each item to its own species; the roster then drafted **all 17 Memories** (Silvally formes) and **all 4 Drives** (Genesect formes). The Drive sets run Techno Blast, which the Drive re-types — note it does **not** re-type Genesect, which stays Bug/Steel, so a Drive is +40% off-STAB where a Memory is +40% on top of STAB. |
 
-### Group C — weak in stock, still weak here (needs code)
+### Group C — weak in stock, still weak here — **shipped**
 
-Not caused by us; just never worth a slot. This is the last engine work left in the backlog.
+Not caused by us; just never worth a slot. **This group is now empty, and with it the whole
+balance half of the backlog**: every remaining pending item is a placement problem.
 
-| Item(s) | The problem | Sketch of a fix |
+| Item(s) | The problem | Fix |
 | --- | --- | --- |
-| **Oran Berry, Berry Juice** | Flat 20 HP at ≤1/2 HP. At the frontier's Level 50 that is roughly 10–13% of a typical HP pool, against Sitrus Berry's 25% — and Sitrus is on 105 sets. A flat number does not survive the jump to level 50. | `BUFF_FLAT_HP_ITEMS`: convert both to a fraction of max HP (Oran ~1/6, Berry Juice ~1/3, giving Berry Juice a real identity as the bigger, rarer Sitrus). Site: `HOLD_EFFECT_RESTORE_HP` in `src/battle_hold_effects.c`. |
+| ~~**Oran Berry, Berry Juice**~~ — **shipped** | Flat 10 and 20 HP at ≤1/2 HP. At the frontier's Level 50 that is roughly 5–7% and 10–13% of a typical HP pool, against Sitrus Berry's 25% in the same slot — a flat number does not survive the jump to Level 50, and the roster held neither on a single set. | `BUFF_FLAT_HP_ITEMS` scales both to a fraction of max HP: Oran `maxHP/6`, Berry Juice `maxHP/3`. The two denominators give Berry Juice a real identity for the first time — at 1/3 it out-heals even Sitrus, which is what a once-per-battle item found in one place should be. Keyed on the two **items**, not on `HOLD_EFFECT_RESTORE_HP`, because Sitrus shares that hold effect whenever `I_SITRUS_BERRY_HEAL < GEN_4`. Site: `ItemHealHp()` in `src/battle_hold_effects.c`; `test/fork/buff_flat_hp_items.c`. |
 
 #### Parked: the item works, the holder costs too much
 
@@ -282,8 +283,9 @@ What is left is Group A and Group C, and it is overwhelmingly **roster work**:
    - ~~**The six incenses.**~~ **Shipped** — two sets each, no balance question, no engine work.
    - ~~**The resist berries.**~~ **Shipped** — all 18 carry two sets each.
    - ~~**The Gems.**~~ **Shipped** — all 18 types carry two or more sets.
-2. **Group C.** `BUFF_FLAT_HP_ITEMS` for Oran Berry and Berry Juice is the only code left in the
-   whole backlog — two items, one flag, one batch.
+2. ~~**Group C.**~~ **Shipped.** `BUFF_FLAT_HP_ITEMS` was the last engine work in the backlog.
+   **There is no balance work left** — every pending item now needs a set, not a flag. Oran and
+   Berry Juice are themselves the next obvious roster picks, since both are still on zero sets.
 
 **The five species-locked strays are not backlog.** Lucky Punch, Metal Powder and Quick Powder
 are on `sIgnoredItems[]` — the effect is real but the only legal holder cannot use it — and the
@@ -325,10 +327,9 @@ get hard to review; smaller ones waste a CI cycle.
 **How much is left** (re-measure, don't trust this after a line review): 60 pending items — 47
 on zero sets, 13 on one — and graduation needs **two sets per item**, so 47×2 + 13×1 = **107
 set-placements** (two of those items are the parked Clamperl pair, so really 103). At 8–15 a
-batch that is **roughly 9 batches**, of which exactly one (`BUFF_FLAT_HP_ITEMS`) is engine
-work and the rest is roster work — a split now confirmed rather than assumed, since the four
-items the tracker called buff candidates were assessed and all four rejected (see
-[Assessed and rejected as buff candidates](#assessed-and-rejected-as-buff-candidates)).
+batch that is **roughly 9 batches**, and after `BUFF_FLAT_HP_ITEMS` shipped **all of it is
+roster work** — there is no engine work left in the backlog at all.
+
 What is left is the **long situational tail** — Absorb Bulb, Cell Battery, Eject Button, Red
 Card, Room Service, Berserk Gene, Metronome, the Wiki/Mago/Iapapa berries, the narrow status
 berries, and the rest of Group A's last row. No class rule covers these; each wants a set

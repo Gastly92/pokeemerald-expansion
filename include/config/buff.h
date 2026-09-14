@@ -231,4 +231,37 @@
 // damage prediction picks the change up for free; it runs the same calc.
 #define BUFF_SIGNATURE_TYPE_ITEMS TRUE
 
+// When TRUE, the two FLAT-healing hold items are converted to a fraction of the holder's
+// max HP: Oran Berry heals maxHP/BUFF_FLAT_HP_ORAN_DENOMINATOR and Berry Juice heals
+// maxHP/BUFF_FLAT_HP_BERRY_JUICE_DENOMINATOR, instead of the stock flat 10 and 20 HP.
+//
+// Why: a flat number does not survive the jump to the frontier's Level 50. Ten HP is
+// roughly 5-7% of a typical Level 50 HP pool and twenty is 10-13%, against Sitrus Berry's
+// 25% in the same slot -- so both were strictly worse Sitrus Berries and the roster held
+// neither on a single set. Scaling them fixes the level-dependence at the root rather than
+// picking a bigger flat number that would break again at another level. The two
+// denominators also give Berry Juice a real identity for the first time: at 1/3 it is the
+// biggest single heal in the game's item list, well above Sitrus, which is what a
+// once-per-battle item found in one place should be, while Oran at 1/6 stays the small
+// cheap one it has always been.
+//
+// Keyed on the two ITEMS rather than on HOLD_EFFECT_RESTORE_HP, deliberately. Sitrus shares
+// that hold effect whenever I_SITRUS_BERRY_HEAL < GEN_4 (config/item.h), and this build only
+// escapes that because it sits at GEN_LATEST, which routes Sitrus through
+// HOLD_EFFECT_RESTORE_PCT_HP instead. Keying on the hold effect would mean silently
+// rebalancing Sitrus -- the roster's third most-used item -- if that config ever moved.
+//
+// Innate Ripen still doubles the result for Oran, which is a Berry; Berry Juice is in
+// POCKET_ITEMS and is not a Berry, so Ripen does not touch it. That asymmetry is stock
+// behavior and is preserved.
+//
+// Site: ItemHealHp() in src/battle_hold_effects.c, the FIXED_HEAL_AMOUNT branch.
+#define BUFF_FLAT_HP_ITEMS TRUE
+
+// Heal divisors used when BUFF_FLAT_HP_ITEMS is on: HP recovered = max HP / denominator.
+// Lower = more healing. Both must be non-zero. Ignored when BUFF_FLAT_HP_ITEMS is FALSE,
+// which restores the items' own flat holdEffectParam (10 and 20).
+#define BUFF_FLAT_HP_ORAN_DENOMINATOR 6
+#define BUFF_FLAT_HP_BERRY_JUICE_DENOMINATOR 3
+
 #endif // GUARD_CONFIG_BUFF_H

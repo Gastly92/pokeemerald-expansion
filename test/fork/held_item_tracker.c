@@ -280,15 +280,14 @@ static const enum Item sDoneItems[] =
 static const enum Item sPendingItems[] =
 {
     // ---- Needs a BUFF: dominated or underpowered as shipped. --------------------
-    // Oran Berry and Berry Juice: a flat 20 HP does not survive the jump to Level 50,
-    // against Sitrus Berry's 25% on 105 sets.
-    //
-    // The Memories, Drives, Soul Dew and the signature orbs used to sit here. They were
-    // settled by BUFF_SIGNATURE_TYPE_ITEMS, which put the whole signature class on the
-    // generic type items' scale and locked each one to its own species; the four Memories
-    // the roster already holds graduated with it. The rest moved down to "needs a SET".
-    ITEM_BERRY_JUICE,
-    ITEM_ORAN_BERRY,
+    // EMPTY, and that is the milestone: every balance complaint in the backlog has now
+    // shipped a flag. Oran Berry and Berry Juice were the last two, settled by
+    // BUFF_FLAT_HP_ITEMS, which scales them to maxHP/6 and maxHP/3 so a flat 10/20 HP stops
+    // being meaningless at Level 50; both moved down to "needs a SET". Before them, the
+    // Memories, Drives, Soul Dew and the signature orbs sat here and were settled by
+    // BUFF_SIGNATURE_TYPE_ITEMS. Everything still pending is a placement problem, not a
+    // balance one -- so a new entry here means a genuinely new balance finding, not a
+    // leftover.
 
 
     // ---- Thinly drafted: on exactly one set, and the count is itself the signal. ----
@@ -375,6 +374,7 @@ static const enum Item sPendingItems[] =
     ITEM_ADRENALINE_ORB,
     ITEM_APICOT_BERRY,
     ITEM_ASPEAR_BERRY,
+    ITEM_BERRY_JUICE,
     ITEM_BERSERK_GENE,
     ITEM_BINDING_BAND,
     ITEM_CELL_BATTERY,
@@ -400,6 +400,7 @@ static const enum Item sPendingItems[] =
     ITEM_MARANGA_BERRY,
     ITEM_METRONOME,
     ITEM_MICLE_BERRY,
+    ITEM_ORAN_BERRY,
     ITEM_PECHA_BERRY,
     ITEM_PERSIM_BERRY,
     ITEM_PROTECTIVE_PADS,
