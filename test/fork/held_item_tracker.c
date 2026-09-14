@@ -108,15 +108,21 @@
 // its Galvanize turns Explosion Electric, so the Gem would never have fired; plain Golem
 // took it instead. Check Galvanize, Pixilate, Refrigerate, Aerilate and Normalize -- on
 // innates as well as the chosen ability -- before putting a Gem on a Normal move.
-#define HELD_ITEM_DONE_FLOOR 161
+// 161 -> 176 clears the thinly-drafted block entirely: all 13 items that sat at a single set
+// got a second one, and Oran Berry and Berry Juice were drafted for the first time now that
+// BUFF_FLAT_HP_ITEMS put them on Sitrus Berry's number. Nothing is left in this tracker between
+// "held by nobody" and "done" -- every remaining pending item is at zero sets.
+#define HELD_ITEM_DONE_FLOOR 176
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
 {
     ITEM_ADAMANT_CRYSTAL,
     ITEM_AGUAV_BERRY,
+    ITEM_AIR_BALLOON,
     ITEM_ASSAULT_VEST,
     ITEM_BABIRI_BERRY,
+    ITEM_BERRY_JUICE,
     ITEM_BIG_ROOT,
     ITEM_BLACK_BELT,
     ITEM_BLACK_GLASSES,
@@ -124,6 +130,7 @@ static const enum Item sDoneItems[] =
     ITEM_BLUE_ORB,
     ITEM_BLUNDER_POLICY,
     ITEM_BOOSTER_ENERGY,
+    ITEM_BRIGHT_POWDER,
     ITEM_BUG_GEM,
     ITEM_BUG_MEMORY,
     ITEM_BURN_DRIVE,
@@ -140,17 +147,20 @@ static const enum Item sDoneItems[] =
     ITEM_COLBUR_BERRY,
     ITEM_CORNERSTONE_MASK,
     ITEM_COVERT_CLOAK,
+    ITEM_CUSTAP_BERRY,
     ITEM_DAMP_ROCK,
     ITEM_DARK_GEM,
     ITEM_DARK_MEMORY,
     ITEM_DOUSE_DRIVE,
     ITEM_DRACO_PLATE,
+    ITEM_DRAGON_FANG,
     ITEM_DRAGON_GEM,
     ITEM_DRAGON_MEMORY,
     ITEM_DREAD_PLATE,
     ITEM_EARTH_PLATE,
     ITEM_ELECTRIC_GEM,
     ITEM_ELECTRIC_MEMORY,
+    ITEM_ELECTRIC_SEED,
     ITEM_EVIOLITE,
     ITEM_EXPERT_BELT,
     ITEM_FAIRY_FEATHER,
@@ -174,6 +184,7 @@ static const enum Item sDoneItems[] =
     ITEM_GRASS_GEM,
     ITEM_GRASS_MEMORY,
     ITEM_GRIP_CLAW,
+    ITEM_GRISEOUS_ORB,
     ITEM_GROUND_GEM,
     ITEM_GROUND_MEMORY,
     ITEM_HABAN_BERRY,
@@ -207,6 +218,8 @@ static const enum Item sDoneItems[] =
     ITEM_MENTAL_HERB,
     ITEM_METAL_COAT,
     ITEM_MIND_PLATE,
+    ITEM_MIRACLE_SEED,
+    ITEM_MIRROR_HERB,
     ITEM_MISTY_SEED,
     ITEM_MUSCLE_BAND,
     ITEM_MYSTIC_WATER,
@@ -214,6 +227,7 @@ static const enum Item sDoneItems[] =
     ITEM_NORMAL_GEM,
     ITEM_OCCA_BERRY,
     ITEM_ODD_INCENSE,
+    ITEM_ORAN_BERRY,
     ITEM_PASSHO_BERRY,
     ITEM_PAYAPA_BERRY,
     ITEM_PETAYA_BERRY,
@@ -221,8 +235,10 @@ static const enum Item sDoneItems[] =
     ITEM_POISON_BARB,
     ITEM_POISON_GEM,
     ITEM_POISON_MEMORY,
+    ITEM_POWER_HERB,
     ITEM_PSYCHIC_GEM,
     ITEM_PSYCHIC_MEMORY,
+    ITEM_PSYCHIC_SEED,
     ITEM_PUNCHING_GLOVE,
     ITEM_QUICK_CLAW,
     ITEM_RAZOR_CLAW,
@@ -237,6 +253,8 @@ static const enum Item sDoneItems[] =
     ITEM_ROSE_INCENSE,
     ITEM_RUSTED_SHIELD,
     ITEM_RUSTED_SWORD,
+    ITEM_SAFETY_GOGGLES,
+    ITEM_SALAC_BERRY,
     ITEM_SCOPE_LENS,
     ITEM_SEA_INCENSE,
     ITEM_SHARP_BEAK,
@@ -244,6 +262,7 @@ static const enum Item sDoneItems[] =
     ITEM_SHOCK_DRIVE,
     ITEM_SHUCA_BERRY,
     ITEM_SILK_SCARF,
+    ITEM_SILVER_POWDER,
     ITEM_SITRUS_BERRY,
     ITEM_SKY_PLATE,
     ITEM_SMOOTH_ROCK,
@@ -291,49 +310,26 @@ static const enum Item sPendingItems[] =
 
 
     // ---- Thinly drafted: on exactly one set, and the count is itself the signal. ----
-    // Demoted from done because one set is close enough to zero that the item is barely
-    // reachable -- with only one of each item allowed per team, a single set carrying it
-    // is one roll away from never appearing. Every item here is mechanically fine and wants
-    // exactly one thing: a SECOND set. No entry on this list needs engine work.
+    // EMPTY. One set is close enough to zero that an item is barely reachable -- with only
+    // one of each allowed per team, a single set carrying it is one roll away from never
+    // appearing -- so this block held the items that needed a SECOND set. All 13 have one,
+    // and the tracker now has nothing between "held by nobody" and "done": every item still
+    // pending sits at zero sets.
     //
     // An earlier version of this comment named Safety Goggles, Power Herb, Mirror Herb and
     // Custap Berry as wanting a buff. That was an unexamined aside from this file's first
     // commit, and assessing it found all four claims false -- see fork-docs/HELD_ITEMS.md,
     // "Assessed and rejected as buff candidates", before re-proposing any of them.
     //
-    // Moving the four resist berries and Salac Berry here also makes those two classes
-    // whole -- their siblings were already pending, and a class split across two lists
-    // reads as an oversight rather than a judgement.
+    // A new entry here means a done item LOST a set, which the single-set gate catches --
+    // demote it and lower HELD_ITEM_DONE_FLOOR, or give it a replacement set.
     //
-    // Note what is deliberately NOT here: the form-change enablers that also sit at one
-    // set (Adamant Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and
-    // Shield, the three Ogerpon masks, and now the four Memories the roster holds). For
-    // those, one is the CEILING rather than a shortfall -- each unlocks exactly one forme
-    // on exactly one species, so there is no buff to write and no second set to want.
-    // They stay done precisely so the one-set gate keeps watching them: delete that
-    // Giratina-Origin set and CI should notice.
-    //
-    // A Memory qualifies on the same reading: FORM_CHANGE_ITEM_HOLD means Dragon Memory
-    // unlocks Silvally-Dragon and nothing else, so Silvally-Dragon's one set is the item's
-    // whole reach. That it now also carries a damage boost does not change this -- the
-    // Ogerpon masks have carried one all along and sit in this exception already.
+    // Note what deliberately never appears here: the form-change enablers that also sit at
+    // one set (Adamant Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and
+    // Shield, the three Ogerpon masks, the Memories). For those, one is the CEILING rather
+    // than a shortfall -- each unlocks exactly one forme on exactly one species, so there is
+    // no second set to want. They stay done so the zero-set gate keeps watching them.
 
-    // The six Gems here are the same story one notch along: BUFF_GEMS settled their
-    // balance and the roster now spends them correctly, but each sits on a single set.
-    // One set is one set whoever placed it -- only Flying Gem, at three, cleared the bar.
-    ITEM_AIR_BALLOON,
-    ITEM_BRIGHT_POWDER,
-    ITEM_CUSTAP_BERRY,
-    ITEM_DRAGON_FANG,
-    ITEM_ELECTRIC_SEED,
-    ITEM_GRISEOUS_ORB,
-    ITEM_MIRACLE_SEED,
-    ITEM_MIRROR_HERB,
-    ITEM_POWER_HERB,
-    ITEM_PSYCHIC_SEED,
-    ITEM_SAFETY_GOGGLES,
-    ITEM_SALAC_BERRY,
-    ITEM_SILVER_POWDER,
     // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
     // The 11 Gems here are DONE on balance -- BUFF_GEMS took the class to +60% and the
     // roster now spends them correctly -- and pending only because no set holds these
@@ -374,7 +370,6 @@ static const enum Item sPendingItems[] =
     ITEM_ADRENALINE_ORB,
     ITEM_APICOT_BERRY,
     ITEM_ASPEAR_BERRY,
-    ITEM_BERRY_JUICE,
     ITEM_BERSERK_GENE,
     ITEM_BINDING_BAND,
     ITEM_CELL_BATTERY,
@@ -400,7 +395,6 @@ static const enum Item sPendingItems[] =
     ITEM_MARANGA_BERRY,
     ITEM_METRONOME,
     ITEM_MICLE_BERRY,
-    ITEM_ORAN_BERRY,
     ITEM_PECHA_BERRY,
     ITEM_PERSIM_BERRY,
     ITEM_PROTECTIVE_PADS,

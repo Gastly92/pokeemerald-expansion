@@ -97,20 +97,20 @@ here will drift.
 
 ## What the roster uses today
 
-**1629 sets. 174 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
+**1629 sets. 176 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
 set). The tracker classifies **241** items that do something when held, of which **20** do nothing
 reachable in a frontier battle (`sIgnoredItems[]` — see "Never expected" below), leaving a live
-universe of **221**. Against that, the roster is at **174 used, 47 unused**.
+universe of **221**. Against that, the roster is at **176 used, 45 unused**.
 
 The distribution is heavily top-loaded:
 
 | Item | Sets | Share |
 | --- | --- | --- |
 | Leftovers | 182 | 11.2% |
-| Life Orb | 157 | 9.6% |
-| Sitrus Berry | 102 | 6.3% |
-| Choice Band | 101 | 6.2% |
-| Rocky Helmet | 79 | 4.8% |
+| Life Orb | 154 | 9.5% |
+| Choice Band | 100 | 6.1% |
+| Sitrus Berry | 98 | 6.0% |
+| Rocky Helmet | 74 | 4.5% |
 | Heavy-Duty Boots | 71 | 4.4% |
 | Choice Specs | 69 | 4.2% |
 | Assault Vest | 60 | 3.7% |
@@ -149,7 +149,7 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | Species-locked but inert | 3 | **Lucky Punch** (Chansey only) is repaired twice over — +2 crit stage, which `DETERMINISTIC_HOLD_EFFECTS` upgrades to a guaranteed first-attack crit — but Chansey has **5 base Attack** and attacks with Seismic Toss, whose fixed damage a crit does not scale, so the crit lands and changes nothing. **Metal Powder / Quick Powder** (Ditto only) both gate on an *untransformed* Ditto, and the roster's Ditto runs Imposter, which transforms on switch-in. The effect is real in each case; the one holder allowed to have it cannot use it. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **47 unused items that are live in battle** — the actual backlog (two of them the
+That leaves **45 unused items that are live in battle** — the actual backlog (two of them the
 parked Clamperl pair, below).
 
 ## The backlog
@@ -324,10 +324,11 @@ costs no engine risk, then the memories/drives extension, then the signature orb
 A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
 get hard to review; smaller ones waste a CI cycle.
 
-**How much is left** (re-measure, don't trust this after a line review): 60 pending items — 47
-on zero sets, 13 on one — and graduation needs **two sets per item**, so 47×2 + 13×1 = **107
-set-placements** (two of those items are the parked Clamperl pair, so really 103). At 8–15 a
-batch that is **roughly 9 batches**, and after `BUFF_FLAT_HP_ITEMS` shipped **all of it is
+**How much is left** (re-measure, don't trust this after a line review): 45 pending items, **all
+of them at zero sets** — the thinly-drafted middle is now empty — and graduation needs **two sets
+per item**, so 45×2 = **90 set-placements** (two of those items are the parked Clamperl pair, so
+really 86). At 8–15 a
+batch that is **roughly 8 batches**, and after `BUFF_FLAT_HP_ITEMS` shipped **all of it is
 roster work** — there is no engine work left in the backlog at all.
 
 What is left is the **long situational tail** — Absorb Bulb, Cell Battery, Eject Button, Red
@@ -355,6 +356,16 @@ built around what it actually does, so they are best taken in small themed group
   Storm, Make It Rain, Psycho Boost, Fleur Cannon), an Acrobatics set, or true coverage.
   Never a set's main STAB. **Contrary users are excluded**: Contrary turns the self-debuff
   into a boost, so they spam the nuke and want a permanent item.
+- **A terrain seed wants a holder that sets its own terrain.** Electric Seed and Psychic Seed
+  only fire while the matching terrain is up, and the frontier draft is random, so a holder
+  that depends on drawing a partner surge-setter is a holder the item usually does nothing
+  for. Both of this fork's seed sets are on species that set the terrain themselves — Tapu
+  Koko and Pincurchin for Electric, Tapu Lele and Galarian Articuno for Psychic — which makes
+  the seed fire on switch-in every time.
+- **Power Herb is dead on a sun team.** Solar Beam already skips its charge turn in sun, so a
+  Power Herb next to Drought, Sunny Day or a Heat Rock buys nothing. Every Solar Beam set in
+  this roster is a sun set, which is why Power Herb's homes are Geomancy (Xerneas) and
+  Electro Shot (Archaludon) instead.
 - **A defensive item must be able to fire at all.** Before placing a type-conditional item,
   check the holder is not *immune* to the type it keys on — by its chosen ability **or by an
   innate**, since innates are always on. An immune holder can never take the hit the item
