@@ -80,7 +80,14 @@
 // same +40% as Charcoal), and Lax Incense is byte-identical to Bright Powder under the PP
 // economy -- GetDeterministicMoveTargetPPTax() only does tax++ for HOLD_EFFECT_EVASION_UP
 // and never reads the item's param. No balance question in the batch, only placement.
-#define HELD_ITEM_DONE_FLOOR 126
+// 126 -> 135: nine resist berries, two sets each. Every home is a genuine 4x weakness the
+// berry halves back to 2x, screened against the two ways such a placement ships dead -- a
+// set ability or an INNATE making the holder immune to the berry's own type (this cost
+// Scizor and Ferrothorn their Occa Berry: both run Well-Baked Body, so a Fire hit never
+// lands to be resisted), and a move that makes the old item the point of the set. The
+// Yache pair is the standout: Appletun and Flapple are Grass/Dragon with innate RIPEN,
+// which doubles the reduction to 0.25x, so a 4x Ice hit comes through fully neutral.
+#define HELD_ITEM_DONE_FLOOR 135
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -88,6 +95,7 @@ static const enum Item sDoneItems[] =
     ITEM_ADAMANT_CRYSTAL,
     ITEM_AGUAV_BERRY,
     ITEM_ASSAULT_VEST,
+    ITEM_BABIRI_BERRY,
     ITEM_BIG_ROOT,
     ITEM_BLACK_BELT,
     ITEM_BLACK_GLASSES,
@@ -98,11 +106,15 @@ static const enum Item sDoneItems[] =
     ITEM_BUG_MEMORY,
     ITEM_BURN_DRIVE,
     ITEM_CHARCOAL,
+    ITEM_CHARTI_BERRY,
     ITEM_CHESTO_BERRY,
     ITEM_CHILL_DRIVE,
     ITEM_CHOICE_BAND,
     ITEM_CHOICE_SCARF,
     ITEM_CHOICE_SPECS,
+    ITEM_CHOPLE_BERRY,
+    ITEM_COBA_BERRY,
+    ITEM_COLBUR_BERRY,
     ITEM_CORNERSTONE_MASK,
     ITEM_COVERT_CLOAK,
     ITEM_DAMP_ROCK,
@@ -163,7 +175,9 @@ static const enum Item sDoneItems[] =
     ITEM_MUSCLE_BAND,
     ITEM_MYSTIC_WATER,
     ITEM_NEVER_MELT_ICE,
+    ITEM_OCCA_BERRY,
     ITEM_ODD_INCENSE,
+    ITEM_PASSHO_BERRY,
     ITEM_PETAYA_BERRY,
     ITEM_PIXIE_PLATE,
     ITEM_POISON_BARB,
@@ -185,6 +199,7 @@ static const enum Item sDoneItems[] =
     ITEM_SHARP_BEAK,
     ITEM_SHELL_BELL,
     ITEM_SHOCK_DRIVE,
+    ITEM_SHUCA_BERRY,
     ITEM_SILK_SCARF,
     ITEM_SITRUS_BERRY,
     ITEM_SKY_PLATE,
@@ -209,6 +224,7 @@ static const enum Item sDoneItems[] =
     ITEM_WHITE_HERB,
     ITEM_WIDE_LENS,
     ITEM_WISE_GLASSES,
+    ITEM_YACHE_BERRY,
     ITEM_ZAP_PLATE,
     ITEM_ZOOM_LENS,
 };
@@ -261,8 +277,6 @@ static const enum Item sPendingItems[] =
     // One set is one set whoever placed it -- only Flying Gem, at three, cleared the bar.
     ITEM_AIR_BALLOON,
     ITEM_BRIGHT_POWDER,
-    ITEM_CHOPLE_BERRY,
-    ITEM_COLBUR_BERRY,
     ITEM_CUSTAP_BERRY,
     ITEM_DRAGON_FANG,
     ITEM_DRAGON_GEM,
@@ -273,13 +287,11 @@ static const enum Item sPendingItems[] =
     ITEM_GRISEOUS_ORB,
     ITEM_MIRACLE_SEED,
     ITEM_MIRROR_HERB,
-    ITEM_PASSHO_BERRY,
     ITEM_POWER_HERB,
     ITEM_PSYCHIC_GEM,
     ITEM_PSYCHIC_SEED,
     ITEM_SAFETY_GOGGLES,
     ITEM_SALAC_BERRY,
-    ITEM_SHUCA_BERRY,
     ITEM_SILVER_POWDER,
     ITEM_STEEL_GEM,
     // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
@@ -322,16 +334,13 @@ static const enum Item sPendingItems[] =
     ITEM_ADRENALINE_ORB,
     ITEM_APICOT_BERRY,
     ITEM_ASPEAR_BERRY,
-    ITEM_BABIRI_BERRY,
     ITEM_BERSERK_GENE,
     ITEM_BINDING_BAND,
     ITEM_BUG_GEM,
     ITEM_CELL_BATTERY,
-    ITEM_CHARTI_BERRY,
     ITEM_CHERI_BERRY,
     ITEM_CHILAN_BERRY,
     ITEM_CLEAR_AMULET,
-    ITEM_COBA_BERRY,
     ITEM_DARK_GEM,
     ITEM_DEEP_SEA_SCALE,
     ITEM_DEEP_SEA_TOOTH,
@@ -362,7 +371,6 @@ static const enum Item sPendingItems[] =
     ITEM_METRONOME,
     ITEM_MICLE_BERRY,
     ITEM_NORMAL_GEM,
-    ITEM_OCCA_BERRY,
     ITEM_PAYAPA_BERRY,
     ITEM_PECHA_BERRY,
     ITEM_PERSIM_BERRY,
@@ -385,7 +393,6 @@ static const enum Item sPendingItems[] =
     ITEM_WACAN_BERRY,
     ITEM_WATER_GEM,
     ITEM_WIKI_BERRY,
-    ITEM_YACHE_BERRY,
 };
 
 // Nothing these do is reachable in a frontier battle, so neither axis means anything --
