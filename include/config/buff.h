@@ -231,4 +231,45 @@
 // damage prediction picks the change up for free; it runs the same calc.
 #define BUFF_SIGNATURE_TYPE_ITEMS TRUE
 
+// When TRUE, the two FLAT-healing hold items heal maxHP/BUFF_FLAT_HP_DENOMINATOR instead of
+// the stock flat 10 HP (Oran Berry) and 20 HP (Berry Juice).
+//
+// Why: a flat number does not survive the jump to the frontier's Level 50. Ten HP is roughly
+// 5-7% of a typical Level 50 pool and twenty is 10-13%, against Sitrus Berry's 25% in the same
+// slot -- so both were strictly worse Sitrus Berries, and the roster held neither on a single
+// set. Scaling fixes the level-dependence at the root rather than picking a bigger flat number
+// that breaks again at another level.
+//
+// Why the SAME denominator as Sitrus, rather than a smaller one for Oran and a bigger one for
+// Berry Juice: because a duplicate is the point. Only one of each item can appear per team
+// (src/battle_frontier.c), so an item on many sets is drafted LESS often -- and Sitrus sits on
+// 103 sets, the third most crowded item in the roster. Two more items that heal exactly what
+// Sitrus heals are two more uncontested draft slots its sets can move onto, which is the same
+// reasoning that put Sea and Wave Incense on the roster as Mystic Water clones and Lax Incense
+// as a byte-identical Bright Powder.
+//
+// Giving Berry Juice a BIGGER heal was considered and rejected. The drawback that would have
+// paid for it -- that Ripen cannot double it and Harvest cannot regrow it -- applies to 34 of
+// the 1492 species carrying innates, 2.3%. For the other 97.7% a bigger Berry Juice is simply
+// a strictly better Sitrus, which is power creep against a 103-set staple rather than an
+// identity. At an equal number it keeps a real identity for free, because it is not a Berry:
+// innate Unnerve (44 species) blocks Sitrus but not Berry Juice, while innate Ripen/Harvest
+// (34 species) amplify Sitrus but not Berry Juice. Same power, opposite matchups -- a
+// sidegrade rather than an upgrade.
+//
+// Keyed on the two ITEMS rather than on HOLD_EFFECT_RESTORE_HP, deliberately. Sitrus shares
+// that hold effect whenever I_SITRUS_BERRY_HEAL < GEN_4 (config/item.h), and this build only
+// escapes that because it sits at GEN_LATEST, which routes Sitrus through
+// HOLD_EFFECT_RESTORE_PCT_HP instead. Keying on the hold effect would mean silently
+// rebalancing Sitrus -- the roster's third most-used item -- if that config ever moved.
+//
+// Site: ItemHealHp() in src/battle_hold_effects.c, the FIXED_HEAL_AMOUNT branch.
+#define BUFF_FLAT_HP_ITEMS TRUE
+
+// Heal divisor used when BUFF_FLAT_HP_ITEMS is on: HP recovered = max HP / this. 4 matches
+// Sitrus Berry's 25% on purpose -- see the note above on why a duplicate is the goal. Lower =
+// more healing; must be non-zero. Ignored when BUFF_FLAT_HP_ITEMS is FALSE, which restores the
+// items' own flat holdEffectParam (10 and 20).
+#define BUFF_FLAT_HP_DENOMINATOR 4
+
 #endif // GUARD_CONFIG_BUFF_H

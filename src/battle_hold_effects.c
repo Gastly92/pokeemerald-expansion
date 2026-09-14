@@ -902,6 +902,13 @@ static u32 ItemHealHp(enum BattlerId battler, enum Item itemId, enum HealAmount 
         s32 healAmount = 0;
         if (percentHeal == PERCENT_HEAL_AMOUNT)
             healAmount = (GetNonDynamaxMaxHP(battler) * GetItemHoldEffectParam(itemId) / 100);
+        // FORK: BUFF_FLAT_HP_ITEMS scales the two flat healers to a fraction of max HP, since a
+        // flat 10/20 HP does not survive the jump to Level 50 (config/buff.h). Keyed on the ITEMS
+        // rather than on HOLD_EFFECT_RESTORE_HP on purpose: Sitrus Berry shares that hold effect
+        // whenever I_SITRUS_BERRY_HEAL < GEN_4, and rebalancing Sitrus here would be silent.
+        // Clamped to at least 1 so a small max HP cannot round the heal away entirely.
+        else if (GetConfig(BUFF_FLAT_HP_ITEMS) && (itemId == ITEM_ORAN_BERRY || itemId == ITEM_BERRY_JUICE))
+            healAmount = max(1, GetNonDynamaxMaxHP(battler) / BUFF_FLAT_HP_DENOMINATOR);
         else
             healAmount = GetItemHoldEffectParam(itemId);
 
