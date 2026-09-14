@@ -1204,7 +1204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_LAX_INCENSE,
         .moves =
         {
             MOVE_FOLLOW_ME,
@@ -2418,7 +2418,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TENTACRUEL,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_WAVE_INCENSE,
         .moves =
         {
             MOVE_HYDRO_PUMP,
@@ -6515,7 +6515,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SUNFLORA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS,
+        .heldItem = ITEM_ROSE_INCENSE,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -11089,7 +11089,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CRAWDAUNT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_SEA_INCENSE,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -11962,7 +11962,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RELICANTH,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_ROCK_INCENSE,
         .moves =
         {
             MOVE_WIDE_GUARD,
@@ -13319,7 +13319,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_RAMPARDOS,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY,
+        .heldItem = ITEM_ROCK_INCENSE,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -13656,7 +13656,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLOATZEL,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND,
+        .heldItem = ITEM_SEA_INCENSE,
         .moves =
         {
             MOVE_WAVE_CRASH,
@@ -14971,7 +14971,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TANGROWTH,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_LAX_INCENSE,
         .moves =
         {
             MOVE_RAGE_POWDER,
@@ -17095,7 +17095,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SERPERIOR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_ROSE_INCENSE,
         .moves =
         {
             MOVE_LEAF_STORM,
@@ -26067,7 +26067,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TAPU_LELE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_ODD_INCENSE,
         .moves =
         {
             MOVE_EXPANDING_FORCE,
@@ -29990,7 +29990,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BASCULEGION,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND,
+        .heldItem = ITEM_WAVE_INCENSE,
         .moves =
         {
             MOVE_WAVE_CRASH,
@@ -33512,7 +33512,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MUNKIDORI,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_ODD_INCENSE,
         .moves =
         {
             MOVE_SLUDGE_BOMB,

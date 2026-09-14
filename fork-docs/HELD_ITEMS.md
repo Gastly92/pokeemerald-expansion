@@ -75,21 +75,22 @@ here will drift.
 
 ## What the roster uses today
 
-**1629 sets. 143 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
+**1629 sets. 149 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
 set). The tracker classifies **241** items that do something when held, of which **20** do nothing
 reachable in a frontier battle (`sIgnoredItems[]` — see "Never expected" below), leaving a live
-universe of **221**. Against that, the roster is at **143 used, 78 unused**.
+universe of **221**. Against that, the roster is at **149 used, 72 unused**.
 
 The distribution is heavily top-loaded:
 
 | Item | Sets | Share |
 | --- | --- | --- |
-| Leftovers | 213 | 13.1% |
-| Life Orb | 179 | 11.0% |
-| Choice Band | 108 | 6.6% |
+| Leftovers | 212 | 13.0% |
+| Life Orb | 175 | 10.7% |
+| Choice Band | 105 | 6.4% |
 | Sitrus Berry | 103 | 6.3% |
-| Rocky Helmet | 87 | 5.3% |
-| Heavy-Duty Boots / Choice Specs | 71 each | 4.4% each |
+| Rocky Helmet | 84 | 5.2% |
+| Heavy-Duty Boots | 71 | 4.4% |
+| Choice Specs | 70 | 4.3% |
 | Assault Vest | 60 | 3.7% |
 | Focus Band | 52 | 3.2% |
 | Choice Scarf | 44 | 2.7% |
@@ -126,7 +127,7 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | Species-locked but inert | 3 | **Lucky Punch** (Chansey only) is repaired twice over — +2 crit stage, which `DETERMINISTIC_HOLD_EFFECTS` upgrades to a guaranteed first-attack crit — but Chansey has **5 base Attack** and attacks with Seismic Toss, whose fixed damage a crit does not scale, so the crit lands and changes nothing. **Metal Powder / Quick Powder** (Ditto only) both gate on an *untransformed* Ditto, and the roster's Ditto runs Imposter, which transforms on switch-in. The effect is real in each case; the one holder allowed to have it cannot use it. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **78 unused items that are live in battle** — the actual backlog (two of them the
+That leaves **72 unused items that are live in battle** — the actual backlog (two of them the
 parked Clamperl pair, below).
 
 ## The backlog
@@ -147,7 +148,8 @@ rest of the group is still open.
 | ~~**Razor Fang**~~ — **shipped** | Buffed, now **2 sets** | The flinch items became guaranteed one-shots under `DETERMINISTIC_HOLD_EFFECTS`. King's Rock, the identical twin, is on 4 sets, so this was pure scarcity relief on a proven shape. Both homes are fast physical attackers, which is what converts a one-shot flinch into a free turn: Barraskewda (136 Speed, the fastest physical attacker in the rentable pool — and its Choice Band was locking a set that carries Flip Turn) and Lycanroc-Dusk, where the free turn is a Swords Dance. |
 | ~~**Lansat Berry**~~ — **shipped** | Buffed, now **2 sets** | Rebuilt into a guaranteed-crit trigger (it borrows Laser Focus's volatile rather than a crit-stage boost that determinism made dead). Needs a holder that actually *reaches* the threshold, so both homes self-chip: Honchkrow (Brave Bird recoil on a 52/52 defensive frame — and its innate **Super Luck** is exactly the crit-stage ability determinism killed, so the berry is that ability's repair) and Emboar (Flare Blitz *and* Wild Charge, innate Reckless, no Rock Head to cancel the recoil). Emboar's innate **Gluttony** also moves the trigger from 1/4 to 1/2 max HP (`HasEnoughHpToEatBerry`), making it the more reliable of the two. |
 | ~~**Leppa Berry**~~ — **shipped** | Quietly much stronger, now **2 sets** | `DETERMINISTIC_ACCURACY_EVASION` turned PP into the *currency accuracy is paid in*, and it also **scales max PP down by accuracy**, so the sets that feel it are the ones whose moves are already short. Leppa restores a move that hits 0 PP, so it went to the two lowest-total-PP rentable sets in the roster: Lurantis (17 effective PP across four moves — Focus Blast is scaled to **3**) and Camerupt (24, with Eruption and Fire Blast at 5 and 4). Camerupt gains twice over, since Life Orb chip was working against Eruption's HP scaling. |
-| **Odd / Rock / Rose / Sea / Wave Incense** | Free scarcity relief | All five are `HOLD_EFFECT_TYPE_POWER`, so `BUFF_TYPE_BOOST_ITEMS` gives them the same **+40%** as Twisted Spoon, Hard Stone, Miracle Seed and Mystic Water. They are exact mechanical duplicates on an uncontested draft slot. Sea/Wave Incense in particular duplicate Mystic Water, the most-used type item (16 sets). |
+| ~~**Odd / Rock / Rose / Sea / Wave Incense**~~ — **shipped** | Drafted, **2 sets each** | All five are `HOLD_EFFECT_TYPE_POWER`, so `BUFF_TYPE_BOOST_ITEMS` already gave them the same **+40%** as Twisted Spoon, Hard Stone, Miracle Seed and Mystic Water — pure placement, no balance question. Each went to a set whose damage is genuinely concentrated in that type, off a crowded item: **Odd** on Munkidori and Tapu Lele (Psychic Surge makes Expanding Force the boosted move), **Rock** on Relicanth and Rampardos — both innate **Rock Head**, so Head Smash is 150 BP with no recoil and the incense boosts it and Rock Slide — **Rose** on Serperior (innate-free **Contrary**, which spams Leaf Storm, exactly the repeat-clicked move a permanent type item wants and a Gem does not) and Sunflora (Choice Specs was locking it into a SpA-dropping Leaf Storm), and **Sea/Wave** on Floatzel, Crawdaunt, Basculegion and Tentacruel. |
+| ~~**Lax Incense**~~ — **shipped** | Drafted, **2 sets** | Byte-identical to Bright Powder under the PP economy: `HOLD_EFFECT_EVASION_UP` is a flat `tax++` on the attacker (`src/battle_util.c`) and the item's own param is never read. Both homes are bulky doubles redirectors that already plan to be attacked repeatedly, so the tax compounds — Clefable (Follow Me + Moonlight) and Tangrowth (Rage Powder + Giga Drain). Unlike the Rocky Helmet each gave up, the tax also applies to non-contact and special attackers. |
 | **Lax Incense** | Free scarcity relief | Under the PP economy, `HOLD_EFFECT_EVASION_UP` is a **flat +1 PP tax** on the attacker (`src/battle_util.c:12133`) — the item's own param is never read. Lax Incense and Bright Powder are therefore *identical*, and Bright Powder is on 1 set while Lax Incense is on none. |
 | **14 resist berries** | Fine as-is | Babiri, Charti, Chilan, Coba, Haban, Kasib, Kebia, Occa, Payapa, Rindo, Roseli, Tanga, Wacan, Yache. Determinism does not touch them. Only Shuca, Passho, Colbur and Chople are used, one set each. Eighteen uncontested draft slots sitting idle. |
 | **Wiki, Mago, Iapapa Berry** | Fine as-is | Mechanically identical to Figy (6 sets) and Aguav (3 sets) — the only difference is which nature dislikes the flavor. Pure arbitrary selection. |
@@ -254,12 +256,9 @@ What is left is Group A and Group C, and it is overwhelmingly **roster work**:
    Zoom Lens, Blunder Policy, Razor Fang, Lansat **and** Leppa each carry two sets and are gated,
    so no fork-repaired item ships to nobody any more. What is left in the group is pure uncontested
    capacity, and it is still the top of the backlog:
-   - **Free scarcity relief, zero balance question.** The five type-boost incenses (Odd, Rock, Rose,
-     Sea, Wave) and Lax Incense are all on **zero** sets while being exact mechanical duplicates of
-     items the roster leans on — the incenses get the same +40% as Charcoal and friends, and Lax
-     Incense is byte-identical to Bright Powder under the PP economy. Six items, no judgement calls.
+   - ~~**The six incenses.**~~ **Shipped** — two sets each, no balance question, no engine work.
    - **The resist berries.** 14 of 18 unused, the other 4 on one set each — eighteen
-     uncontested slots, barely touched.
+     uncontested slots, barely touched. **This is now the cheapest batch left.**
    - **The Gems.** Balance is settled; 11 types still want a first set (Normal, Water, Electric, Ice,
      Fighting, Poison, Ground, Bug, Rock, Ghost, Dark) and 6 more sit at one. Remember the settled
      rule — a Gem goes on a move the set fires **once**, never its main STAB.
@@ -303,16 +302,16 @@ costs no engine risk, then the memories/drives extension, then the signature orb
 A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
 get hard to review; smaller ones waste a CI cycle.
 
-**How much is left** (re-measure, don't trust this after a line review): 101 pending items — 78
-on zero sets, 23 on one — and graduation needs **two sets per item**, so 78×2 + 23×1 = **179
-set-placements** (two of those items are the parked Clamperl pair, so really 175). At 8–15 a
-batch that is **roughly 14 batches**, of which exactly one (`BUFF_FLAT_HP_ITEMS`) is engine
+**How much is left** (re-measure, don't trust this after a line review): 95 pending items — 72
+on zero sets, 23 on one — and graduation needs **two sets per item**, so 72×2 + 23×1 = **167
+set-placements** (two of those items are the parked Clamperl pair, so really 163). At 8–15 a
+batch that is **roughly 13 batches**, of which exactly one (`BUFF_FLAT_HP_ITEMS`) is engine
 work and the rest is roster work — a split now confirmed rather than assumed, since the four
 items the tracker called buff candidates were assessed and all four rejected (see
 [Assessed and rejected as buff candidates](#assessed-and-rejected-as-buff-candidates)).
-The cheapest batch to take first is the six incenses: five type-boost incenses plus Lax
-Incense, all on zero sets, all exact mechanical duplicates of items the roster already
-leans on, no judgement calls.
+The cheapest batch left is the **resist berries**: 14 of the 18 on zero sets and the other
+four on one, all mechanically fine, all on uncontested draft slots. The six incenses that
+used to hold this spot have shipped.
 
 ### 3. Decisions already settled — do not re-litigate
 
@@ -326,6 +325,17 @@ leans on, no judgement calls.
   Storm, Make It Rain, Psycho Boost, Fleur Cannon), an Acrobatics set, or true coverage.
   Never a set's main STAB. **Contrary users are excluded**: Contrary turns the self-debuff
   into a boost, so they spam the nuke and want a permanent item.
+- **Check whether the item IS the set before re-iteming it.** The innate check below is one
+  case of a wider rule: some sets are built *around* their item, and swapping it silently
+  deletes the build. Three picks were rejected on this in the incense batch, and they are the
+  shapes to look for — a **`MOVE_TRICK` set** (Alakazam: the Choice item is the payload it
+  throws at a wall, so a replacement item makes Trick pointless), a **`MOVE_BELLY_DRUM` set**
+  (Feraligatr: Belly Drum halves HP and the Sitrus Berry is what pays for it), and a
+  **Sheer Force set on Life Orb** (Sheer Force cancels Life Orb's recoil on moves with a
+  secondary effect). The first two are hard vetoes. The third is only a partial synergy —
+  it holds for Liquidation but not Knock Off or Aqua Jet — so Crawdaunt was still re-itemed,
+  on the grounds that a Swords Dance sweeper taking real chip from two of its four moves
+  would rather have the clean boost. Say which of the three you concluded, and why.
 - **Check `src/fork/innate_abilities.c` before taking a berry off a set.** A berry innate can
   make the berry worth several times its face value, and the raw item count cannot see it.
   **Harvest and Ripen are the blocking ones** — they turn a one-shot Sitrus into a recurring

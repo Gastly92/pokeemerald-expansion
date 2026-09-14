@@ -75,7 +75,12 @@
 // That makes the Orb a plain signature type item whose real class-mates are Adamant Orb and
 // Lustrous Orb, both pending at zero sets. The roster's Giratina-Origin set still works --
 // it names SPECIES_GIRATINA_ORIGIN directly, so the item was never what got it there.
-#define HELD_ITEM_DONE_FLOOR 120
+// 120 -> 126: the six incenses, drafted two sets each. Five are HOLD_EFFECT_TYPE_POWER
+// duplicates of items the roster already leans on (BUFF_TYPE_BOOST_ITEMS gives them the
+// same +40% as Charcoal), and Lax Incense is byte-identical to Bright Powder under the PP
+// economy -- GetDeterministicMoveTargetPPTax() only does tax++ for HOLD_EFFECT_EVASION_UP
+// and never reads the item's param. No balance question in the batch, only placement.
+#define HELD_ITEM_DONE_FLOOR 126
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -139,6 +144,7 @@ static const enum Item sDoneItems[] =
     ITEM_IRON_PLATE,
     ITEM_KINGS_ROCK,
     ITEM_LANSAT_BERRY,
+    ITEM_LAX_INCENSE,
     ITEM_LEEK,
     ITEM_LEFTOVERS,
     ITEM_LEPPA_BERRY,
@@ -157,6 +163,7 @@ static const enum Item sDoneItems[] =
     ITEM_MUSCLE_BAND,
     ITEM_MYSTIC_WATER,
     ITEM_NEVER_MELT_ICE,
+    ITEM_ODD_INCENSE,
     ITEM_PETAYA_BERRY,
     ITEM_PIXIE_PLATE,
     ITEM_POISON_BARB,
@@ -168,10 +175,13 @@ static const enum Item sDoneItems[] =
     ITEM_RAZOR_FANG,
     ITEM_RED_ORB,
     ITEM_ROCKY_HELMET,
+    ITEM_ROCK_INCENSE,
     ITEM_ROCK_MEMORY,
+    ITEM_ROSE_INCENSE,
     ITEM_RUSTED_SHIELD,
     ITEM_RUSTED_SWORD,
     ITEM_SCOPE_LENS,
+    ITEM_SEA_INCENSE,
     ITEM_SHARP_BEAK,
     ITEM_SHELL_BELL,
     ITEM_SHOCK_DRIVE,
@@ -193,6 +203,7 @@ static const enum Item sDoneItems[] =
     ITEM_TOXIC_PLATE,
     ITEM_TWISTED_SPOON,
     ITEM_WATER_MEMORY,
+    ITEM_WAVE_INCENSE,
     ITEM_WEAKNESS_POLICY,
     ITEM_WELLSPRING_MASK,
     ITEM_WHITE_HERB,
@@ -343,7 +354,6 @@ static const enum Item sPendingItems[] =
     ITEM_KEBIA_BERRY,
     ITEM_KEE_BERRY,
     ITEM_LAGGING_TAIL,
-    ITEM_LAX_INCENSE,
     ITEM_LIECHI_BERRY,
     ITEM_LUMINOUS_MOSS,
     ITEM_LUSTROUS_ORB,
@@ -353,7 +363,6 @@ static const enum Item sPendingItems[] =
     ITEM_MICLE_BERRY,
     ITEM_NORMAL_GEM,
     ITEM_OCCA_BERRY,
-    ITEM_ODD_INCENSE,
     ITEM_PAYAPA_BERRY,
     ITEM_PECHA_BERRY,
     ITEM_PERSIM_BERRY,
@@ -364,12 +373,9 @@ static const enum Item sPendingItems[] =
     ITEM_RINDO_BERRY,
     ITEM_RING_TARGET,
     ITEM_ROCK_GEM,
-    ITEM_ROCK_INCENSE,
     ITEM_ROOM_SERVICE,
     ITEM_ROSELI_BERRY,
-    ITEM_ROSE_INCENSE,
     ITEM_ROWAP_BERRY,
-    ITEM_SEA_INCENSE,
     ITEM_SHED_SHELL,
     ITEM_SNOWBALL,
     ITEM_STARF_BERRY,
@@ -378,7 +384,6 @@ static const enum Item sPendingItems[] =
     ITEM_UTILITY_UMBRELLA,
     ITEM_WACAN_BERRY,
     ITEM_WATER_GEM,
-    ITEM_WAVE_INCENSE,
     ITEM_WIKI_BERRY,
     ITEM_YACHE_BERRY,
 };
