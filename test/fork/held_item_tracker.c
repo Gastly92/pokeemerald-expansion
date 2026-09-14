@@ -87,7 +87,16 @@
 // lands to be resisted), and a move that makes the old item the point of the set. The
 // Yache pair is the standout: Appletun and Flapple are Grass/Dragon with innate RIPEN,
 // which doubles the reduction to 0.25x, so a 4x Ice hit comes through fully neutral.
-#define HELD_ITEM_DONE_FLOOR 135
+//
+// 135 -> 144 finishes the class, and the last two berries could not use the 4x rule at all.
+// Nothing in the game is 4x weak to Dragon, so HABAN's ceiling is a 2x Dragon-type holder
+// (Goodra, Kingdra). CHILAN is the mirror image: no type is weak to Normal either, but its
+// trigger is special-cased to fire on ANY Normal hit (moveType == TYPE_NORMAL in
+// GetDefenderItemsModifier), so it wants a holder that expects Normal damage rather than a
+// weakness -- and the screen still bites, because a Ghost type is Normal-IMMUNE and would
+// make it dead. Blissey is the case the item could have been written for: 255 base HP
+// behind 10 base Defense, against a roster carrying 126 physical-Normal move instances.
+#define HELD_ITEM_DONE_FLOOR 144
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -108,6 +117,7 @@ static const enum Item sDoneItems[] =
     ITEM_CHARCOAL,
     ITEM_CHARTI_BERRY,
     ITEM_CHESTO_BERRY,
+    ITEM_CHILAN_BERRY,
     ITEM_CHILL_DRIVE,
     ITEM_CHOICE_BAND,
     ITEM_CHOICE_SCARF,
@@ -144,6 +154,7 @@ static const enum Item sDoneItems[] =
     ITEM_GRASS_MEMORY,
     ITEM_GRIP_CLAW,
     ITEM_GROUND_MEMORY,
+    ITEM_HABAN_BERRY,
     ITEM_HARD_STONE,
     ITEM_HEARTHFLAME_MASK,
     ITEM_HEAT_ROCK,
@@ -154,6 +165,8 @@ static const enum Item sDoneItems[] =
     ITEM_INSECT_PLATE,
     ITEM_IRON_BALL,
     ITEM_IRON_PLATE,
+    ITEM_KASIB_BERRY,
+    ITEM_KEBIA_BERRY,
     ITEM_KINGS_ROCK,
     ITEM_LANSAT_BERRY,
     ITEM_LAX_INCENSE,
@@ -178,6 +191,7 @@ static const enum Item sDoneItems[] =
     ITEM_OCCA_BERRY,
     ITEM_ODD_INCENSE,
     ITEM_PASSHO_BERRY,
+    ITEM_PAYAPA_BERRY,
     ITEM_PETAYA_BERRY,
     ITEM_PIXIE_PLATE,
     ITEM_POISON_BARB,
@@ -188,9 +202,11 @@ static const enum Item sDoneItems[] =
     ITEM_RAZOR_CLAW,
     ITEM_RAZOR_FANG,
     ITEM_RED_ORB,
+    ITEM_RINDO_BERRY,
     ITEM_ROCKY_HELMET,
     ITEM_ROCK_INCENSE,
     ITEM_ROCK_MEMORY,
+    ITEM_ROSELI_BERRY,
     ITEM_ROSE_INCENSE,
     ITEM_RUSTED_SHIELD,
     ITEM_RUSTED_SWORD,
@@ -211,12 +227,14 @@ static const enum Item sDoneItems[] =
     ITEM_SPOOKY_PLATE,
     ITEM_STEEL_MEMORY,
     ITEM_STONE_PLATE,
+    ITEM_TANGA_BERRY,
     ITEM_TERRAIN_EXTENDER,
     ITEM_THICK_CLUB,
     ITEM_THROAT_SPRAY,
     ITEM_TOXIC_ORB,
     ITEM_TOXIC_PLATE,
     ITEM_TWISTED_SPOON,
+    ITEM_WACAN_BERRY,
     ITEM_WATER_MEMORY,
     ITEM_WAVE_INCENSE,
     ITEM_WEAKNESS_POLICY,
@@ -339,7 +357,6 @@ static const enum Item sPendingItems[] =
     ITEM_BUG_GEM,
     ITEM_CELL_BATTERY,
     ITEM_CHERI_BERRY,
-    ITEM_CHILAN_BERRY,
     ITEM_CLEAR_AMULET,
     ITEM_DARK_GEM,
     ITEM_DEEP_SEA_SCALE,
@@ -355,12 +372,9 @@ static const enum Item sPendingItems[] =
     ITEM_GHOST_GEM,
     ITEM_GRISEOUS_CORE,
     ITEM_GROUND_GEM,
-    ITEM_HABAN_BERRY,
     ITEM_IAPAPA_BERRY,
     ITEM_ICE_GEM,
     ITEM_JABOCA_BERRY,
-    ITEM_KASIB_BERRY,
-    ITEM_KEBIA_BERRY,
     ITEM_KEE_BERRY,
     ITEM_LAGGING_TAIL,
     ITEM_LIECHI_BERRY,
@@ -371,26 +385,21 @@ static const enum Item sPendingItems[] =
     ITEM_METRONOME,
     ITEM_MICLE_BERRY,
     ITEM_NORMAL_GEM,
-    ITEM_PAYAPA_BERRY,
     ITEM_PECHA_BERRY,
     ITEM_PERSIM_BERRY,
     ITEM_POISON_GEM,
     ITEM_PROTECTIVE_PADS,
     ITEM_RAWST_BERRY,
     ITEM_RED_CARD,
-    ITEM_RINDO_BERRY,
     ITEM_RING_TARGET,
     ITEM_ROCK_GEM,
     ITEM_ROOM_SERVICE,
-    ITEM_ROSELI_BERRY,
     ITEM_ROWAP_BERRY,
     ITEM_SHED_SHELL,
     ITEM_SNOWBALL,
     ITEM_STARF_BERRY,
     ITEM_STICKY_BARB,
-    ITEM_TANGA_BERRY,
     ITEM_UTILITY_UMBRELLA,
-    ITEM_WACAN_BERRY,
     ITEM_WATER_GEM,
     ITEM_WIKI_BERRY,
 };
