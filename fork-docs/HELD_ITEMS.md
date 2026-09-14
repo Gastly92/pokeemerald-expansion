@@ -156,7 +156,7 @@ them. This is regression collateral, and it is the most defensible buff work ava
 | Item(s) | The problem | Sketch of a fix |
 | --- | --- | --- |
 | ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and the roster re-itemed the 7 sets where a Gem sat on a repeat-clicked move. Flying Gem is on the done list; six more sit on one set each and are tracked as thinly drafted; 11 types still want a first set. |
-| ~~**Soul Dew**~~ — **shipped** (balance + roster) | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package. The roster moved **that same Dragon Fang set** onto Soul Dew — Calm Mind / Psyshock / Dragon Pulse splits its damage across both boosted types, which is the shape the item exists for. The gate also had to start reading the holder by **base** species, or a Soul Dew Lati@s that Mega Evolved under `FEATURE_FREE_GIMMICKS` silently lost its own item. |
+| ~~**Soul Dew**~~ — **shipped** (balance + roster) | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package. The roster moved **that same Dragon Fang set** onto Soul Dew — Calm Mind / Psyshock / Dragon Pulse splits its damage across both boosted types, which is the shape the item exists for. The gate also had to start reading the holder by **base** species, or a Soul Dew Lati@s that Mega Evolved under `FEATURE_FREE_GIMMICKS` silently lost its own item. **Collateral, fixed later:** that Latios set was Dragon Fang's *second* home, so re-iteming it quietly left Dragon Fang on one set while it sat on the done list. It has since been demoted to pending. |
 | ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. |
 | ~~**The 17 Memories and 4 Drives**~~ — **shipped** (balance + roster) | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally could not decline it either: `FORM_CHANGE_ITEM_HOLD` means dropping the Memory reverts the forme, so all four Silvally sets were compelled to hold a dead item. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` fixed the balance and locked each item to its own species; the roster then drafted **all 17 Memories** (Silvally formes) and **all 4 Drives** (Genesect formes). The Drive sets run Techno Blast, which the Drive re-types — note it does **not** re-type Genesect, which stays Bug/Steel, so a Drive is +40% off-STAB where a Memory is +40% on top of STAB. |
 
@@ -178,6 +178,25 @@ The other three species-locked strays — **Lucky Punch**, **Metal Powder** and 
 Powder** — are not parked but *ignored*, because their effects genuinely cannot land on
 the only holder allowed to have them. See
 [Never expected](#never-expected--the-structural-exclusions).
+
+#### Assessed and rejected as buff candidates
+
+`held_item_tracker.c`'s thin-list comment used to name **Safety Goggles, Power Herb, Mirror
+Herb and Custap Berry** as wanting a buff. That was an aside in the tracker's first commit
+(#509), written before the Gems and the signature items and never revisited — and it is
+**wrong on all four**. Recorded here so it is not re-proposed; each needs a second set, not a
+number.
+
+| Item | The claim | Why it fails |
+| --- | --- | --- |
+| **Safety Goggles** | Underpowered | Backwards — the fork already buffed it, hard. `DETERMINISTIC_ACCURACY_EVASION` makes Sleep Powder (75% in stock) **never miss**, and Goggles is the hard immunity to it. The roster holds **59** powder/spore instances (24 Sleep Powder, 16 Spore, 16 Rage Powder, 3 others) plus **52** sand-chip sources. Note the 45 Snow Warning sets do *not* count: only `BATTLE_WEATHER_HAIL` chips, `BATTLE_WEATHER_SNOW` falls through (`src/battle_end_turn.c`). |
+| **Power Herb** | Underpowered | Narrow, not weak. Of 27 charge-move instances, 16 are Solar Beam (free in sun anyway) and 6 are semi-invulnerable moves where skipping the charge **discards the invulnerability** — the Power Herb branch clears `semiInvulnerable = STATE_NONE` (`src/battle_move_resolution.c`), so it fires the move immediately and throws away the turn the move was taken for. Power Herb is actively wrong there. The real surface is Geomancy, Electro Shot, Solar Blade and off-sun Solar Beam, and on Geomancy the skipped turn is worth +2/+2/+2. Few legal homes, correct price. |
+| **Mirror Herb** | Underpowered | Reactive, but well fed: **365** setup-move instances across the roster, so roughly a fifth of sets carry something for it to copy. |
+| **Custap Berry** | Underpowered | Rests on a misreading. Custap sits in the *same `if`* as Quick Claw (`src/battle_main.c`), and `DETERMINISTIC_HOLD_EFFECTS` rewrote only the Quick Claw half — but correctly: Quick Claw was a **random roll**, Custap was **already** a plain HP threshold (`HasEnoughHpToEatBerry`, fraction 4). Nothing to repair. Innate **Gluttony** also moves it to 1/2 max HP for free, the same lever that earned Emboar its Lansat Berry. |
+
+The general lesson, and the reason this is written down: **determinism silently re-prices items
+nobody touched.** An item whose job is to block a move that used to miss got stronger without
+a line of code. Re-measure against the current flags before calling anything underpowered.
 
 ### Group D — the 17 Plates — **shipped**
 
@@ -275,12 +294,16 @@ costs no engine risk, then the memories/drives extension, then the signature orb
 A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
 get hard to review; smaller ones waste a CI cycle.
 
-**How much is left** (re-measure, don't trust this after a line review): 99 pending items — 78
-on zero sets, 21 on one — and graduation needs **two sets per item**, so 78×2 + 21×1 = **177
-set-placements** (two of those items are the parked Clamperl pair, so really 173). At 8–15 a batch that is **roughly 14 batches**, of which exactly one
-(`BUFF_FLAT_HP_ITEMS`) is engine work and the rest is roster work. The cheapest batch to take
-first is the six incenses: five type-boost incenses plus Lax Incense, all on zero sets, all
-exact mechanical duplicates of items the roster already leans on, no judgement calls.
+**How much is left** (re-measure, don't trust this after a line review): 100 pending items — 78
+on zero sets, 22 on one — and graduation needs **two sets per item**, so 78×2 + 22×1 = **178
+set-placements** (two of those items are the parked Clamperl pair, so really 174). At 8–15 a
+batch that is **roughly 14 batches**, of which exactly one (`BUFF_FLAT_HP_ITEMS`) is engine
+work and the rest is roster work — a split now confirmed rather than assumed, since the four
+items the tracker called buff candidates were assessed and all four rejected (see
+[Assessed and rejected as buff candidates](#assessed-and-rejected-as-buff-candidates)).
+The cheapest batch to take first is the six incenses: five type-boost incenses plus Lax
+Incense, all on zero sets, all exact mechanical duplicates of items the roster already
+leans on, no judgement calls.
 
 ### 3. Decisions already settled — do not re-litigate
 
@@ -321,6 +344,11 @@ exact mechanical duplicates of items the roster already leans on, no judgement c
   holder's STAB package — Arceus is mono-typed, Latios is Dragon/Psychic, Dialga
   Steel/Dragon — so "+40% on one type" and "+40% on two" are the same rule on different
   mons. There is no second magnitude to argue about.
+- **Re-iteming a set can demote the item it left.** Moving a set onto a new item subtracts
+  one from the old item's count, and if that takes a *done* item to one set, no gate fires:
+  "every done item appears on at least one set" only requires one. This is how Dragon Fang
+  sat on the done list at a single set after the Soul Dew batch took its second. After any
+  roster batch, re-measure the items you moved **off**, not just the ones you moved onto.
 - **One set is one set, whoever placed it.** A freshly, deliberately placed single set is
   still thinly drafted. The one exception is a **form-change enabler** (Adamant Crystal,
   Rusted Sword, an Ogerpon mask…), where one is the *ceiling* rather than a shortfall.

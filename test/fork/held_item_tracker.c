@@ -59,7 +59,13 @@
 // The done list never shrinks. Bump this when items graduate; a drop means an item was
 // demoted to pending, which is a real regression and should be a deliberate, reviewed act
 // rather than a quiet way to dodge one of the gates above.
-#define HELD_ITEM_DONE_FLOOR 122
+//
+// 122 -> 121 is one such reviewed demotion: Dragon Fang. Drafting Soul Dew took the Latios
+// set that was Dragon Fang's SECOND home, leaving it at one -- the gates did not catch it
+// because "every done item appears on at least one set" only requires one. Its class-mates
+// Miracle Seed and Silver Powder are already pending at one set, so this puts the generic
+// type items back on one reading. Re-graduate it with the second set, not by raising this.
+#define HELD_ITEM_DONE_FLOOR 121
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -88,7 +94,6 @@ static const enum Item sDoneItems[] =
     ITEM_DARK_MEMORY,
     ITEM_DOUSE_DRIVE,
     ITEM_DRACO_PLATE,
-    ITEM_DRAGON_FANG,
     ITEM_DRAGON_MEMORY,
     ITEM_DREAD_PLATE,
     ITEM_EARTH_PLATE,
@@ -206,12 +211,17 @@ static const enum Item sPendingItems[] =
     // ---- Thinly drafted: on exactly one set, and the count is itself the signal. ----
     // Demoted from done because one set is close enough to zero that the item is barely
     // reachable -- with only one of each item allowed per team, a single set carrying it
-    // is one roll away from never appearing. Some of these want a buff (Safety Goggles,
-    // Power Herb, Mirror Herb, Custap Berry); some are mechanically fine and want a
-    // SECOND set (the type items, the terrain seeds, Razor Claw). Either way the work is
-    // outstanding. Moving the four resist berries and Salac Berry here also makes those
-    // two classes whole -- their siblings were already pending, and a class split across
-    // two lists reads as an oversight rather than a judgement.
+    // is one roll away from never appearing. Every item here is mechanically fine and wants
+    // exactly one thing: a SECOND set. No entry on this list needs engine work.
+    //
+    // An earlier version of this comment named Safety Goggles, Power Herb, Mirror Herb and
+    // Custap Berry as wanting a buff. That was an unexamined aside from this file's first
+    // commit, and assessing it found all four claims false -- see fork-docs/HELD_ITEMS.md,
+    // "Assessed and rejected as buff candidates", before re-proposing any of them.
+    //
+    // Moving the four resist berries and Salac Berry here also makes those two classes
+    // whole -- their siblings were already pending, and a class split across two lists
+    // reads as an oversight rather than a judgement.
     //
     // Note what is deliberately NOT here: the form-change enablers that also sit at one
     // set (Adamant Crystal, Lustrous Globe, Griseous Orb, Red/Blue Orb, Rusted Sword and
@@ -234,6 +244,7 @@ static const enum Item sPendingItems[] =
     ITEM_CHOPLE_BERRY,
     ITEM_COLBUR_BERRY,
     ITEM_CUSTAP_BERRY,
+    ITEM_DRAGON_FANG,
     ITEM_DRAGON_GEM,
     ITEM_ELECTRIC_SEED,
     ITEM_FAIRY_GEM,
