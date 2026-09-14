@@ -1,8 +1,10 @@
 #include "global.h"
 #include "test/test.h"
 #include "item.h"
+#include "pokemon.h"
 #include "fork/frontier_extended_mons.h"
 #include "constants/items.h"
+#include "constants/form_change_types.h"
 
 // FORK: the held-item progress tracker. Two things are worth tracking about a held item,
 // and this file gates both:
@@ -65,7 +67,15 @@
 // because "every done item appears on at least one set" only requires one. Its class-mates
 // Miracle Seed and Silver Powder are already pending at one set, so this puts the generic
 // type items back on one reading. Re-graduate it with the second set, not by raising this.
-#define HELD_ITEM_DONE_FLOOR 121
+//
+// 121 -> 120 is the second: Griseous Orb, found by the single-set gate below on its first
+// run. It had been filed with the form-change enablers, but it only changes Giratina's
+// forme when I_GRISEOUS_ORB_FORM_CHANGE < GEN_9 and this build sets GEN_LATEST, so that
+// entry is compiled out of sGiratinaFormChangeTable and GRISEOUS_CORE is the enabler here.
+// That makes the Orb a plain signature type item whose real class-mates are Adamant Orb and
+// Lustrous Orb, both pending at zero sets. The roster's Giratina-Origin set still works --
+// it names SPECIES_GIRATINA_ORIGIN directly, so the item was never what got it there.
+#define HELD_ITEM_DONE_FLOOR 120
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -116,7 +126,6 @@ static const enum Item sDoneItems[] =
     ITEM_GRASSY_SEED,
     ITEM_GRASS_MEMORY,
     ITEM_GRIP_CLAW,
-    ITEM_GRISEOUS_ORB,
     ITEM_GROUND_MEMORY,
     ITEM_HARD_STONE,
     ITEM_HEARTHFLAME_MASK,
@@ -224,7 +233,7 @@ static const enum Item sPendingItems[] =
     // reads as an oversight rather than a judgement.
     //
     // Note what is deliberately NOT here: the form-change enablers that also sit at one
-    // set (Adamant Crystal, Lustrous Globe, Griseous Orb, Red/Blue Orb, Rusted Sword and
+    // set (Adamant Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and
     // Shield, the three Ogerpon masks, and now the four Memories the roster holds). For
     // those, one is the CEILING rather than a shortfall -- each unlocks exactly one forme
     // on exactly one species, so there is no buff to write and no second set to want.
@@ -250,6 +259,7 @@ static const enum Item sPendingItems[] =
     ITEM_FAIRY_GEM,
     ITEM_FIRE_GEM,
     ITEM_GRASS_GEM,
+    ITEM_GRISEOUS_ORB,
     ITEM_MIRACLE_SEED,
     ITEM_MIRROR_HERB,
     ITEM_PASSHO_BERRY,
@@ -485,6 +495,61 @@ static bool32 ItemNeedsTracking(enum Item item)
     return GetItemHoldEffect(item) != HOLD_EFFECT_NONE || CountRosterSetsHolding(item) > 0;
 }
 
+// An item whose whole reach is ONE forme on ONE species. A second set cannot exist to
+// want -- the item unlocks exactly one thing -- so for these one set is the CEILING
+// rather than a shortfall, and the single-set gate below has to let them through.
+//
+// Derived from the form change tables rather than listed, so the 49 such items the roster
+// holds (17 Plates, 17 Memories, 4 Drives, the 3 Ogerpon masks, Adamant Crystal, Lustrous
+// Globe, Griseous Core, Red and Blue Orb, Rusted Sword and Shield) need no maintenance
+// here, and one arriving with an upstream sync exempts itself instead of failing CI.
+//
+// Four methods carry a held item in param1, and all four are needed: restricting this to
+// FORM_CHANGE_ITEM_HOLD -- the obvious one, and the only one the Plates/Memories/Drives
+// use -- would MISS Rusted Sword and Shield, which form-change through
+// FORM_CHANGE_BEGIN_BATTLE (the same reason they have no hold effect at all), and the
+// Red/Blue Orb, which use FORM_CHANGE_BATTLE_PRIMAL_REVERSION. param1 is documented
+// optional on the battle-boundary methods and every table names its base forme with
+// ITEM_NONE, so a NONE param1 must not match or every item would look exempt.
+static bool32 ItemUnlocksExactlyOneForme(enum Item item)
+{
+    enum Species species;
+
+    if (item == ITEM_NONE)
+        return FALSE;
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        const struct FormChange *formChanges;
+        u32 i;
+
+        // Species whose family is switched off by a P_FAMILY_* config are still inside
+        // NUM_SPECIES but have no data, and GetSpeciesFormChanges() asserts on them
+        // ("disabled species", src/pokemon.c) rather than returning NULL.
+        if (!IsSpeciesEnabled(species))
+            continue;
+
+        formChanges = GetSpeciesFormChanges(species);
+
+        for (i = 0; formChanges != NULL && formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+        {
+            switch (formChanges[i].method)
+            {
+            case FORM_CHANGE_ITEM_HOLD:
+            case FORM_CHANGE_BEGIN_BATTLE:
+            case FORM_CHANGE_END_BATTLE:
+            case FORM_CHANGE_BATTLE_PRIMAL_REVERSION:
+                if (formChanges[i].param1 == item)
+                    return TRUE;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    return FALSE;
+}
+
 TEST("Held item tracker: every held item is on exactly one tracker list")
 {
     u32 item;
@@ -558,6 +623,36 @@ TEST("Held item tracker: every done item appears on at least one set")
         {
             offenders++;
             Test_MgbaPrintf("%S is on the done list but no set holds it, so nothing it does is reachable. Give a set the item, or move it to sPendingItems[] until one does",
+                            GetItemName(sDoneItems[i]));
+        }
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
+// The gap the gate above leaves open, and the reason it is worth a second sweep: an item
+// graduates on TWO sets but that gate only asks for one, so a done item dropping 2 -> 1
+// passes silently. That is exactly how Dragon Fang drifted -- drafting Soul Dew re-itemed
+// the Latios set that was its second home, and nothing noticed until a manual audit.
+// Every roster batch moves sets OFF items as well as onto them, so without this the same
+// drift recurs on every batch.
+TEST("Held item tracker: no done item sits on a single set")
+{
+    u32 i;
+    u32 offenders = 0;
+
+    for (i = 0; i < ARRAY_COUNT(sDoneItems); i++)
+    {
+        // One forme on one species IS the whole reach of a form-change enabler, so one
+        // set is its ceiling. They stay on the done list precisely so the zero-set gate
+        // keeps watching them: delete that Giratina-Origin set and CI should still notice.
+        if (ItemUnlocksExactlyOneForme(sDoneItems[i]))
+            continue;
+
+        if (CountRosterSetsHolding(sDoneItems[i]) == 1)
+        {
+            offenders++;
+            Test_MgbaPrintf("%S is on the done list but only one set holds it, and with one of each item per team that is a roll away from never appearing. Graduation takes TWO sets: give it a second one, or move it to the thinly-drafted block of sPendingItems[] and lower HELD_ITEM_DONE_FLOOR",
                             GetItemName(sDoneItems[i]));
         }
     }

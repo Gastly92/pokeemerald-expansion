@@ -24,15 +24,24 @@ lists, and the list *is* the status:
 
 | List | Meaning | Gated? |
 | --- | --- | --- |
-| `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
+| `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, **more than one** unless it is a form-change enabler, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
 | `sPendingItems[]` | Work outstanding: needs a buff, is mechanically fine and needs a set, or is **thinly drafted** (on one set, which with one-item-per-team is a roll away from never appearing) | No — a pending item may sit at zero sets, which is usually why it is pending |
 | `sIgnoredItems[]` | Nothing it does is reachable in a frontier battle — the effect can't happen here, **or** its only legal holder can't use the effect it has | Exempt from the done gates, but **no set may hold one** — a Mega Stone or Z-Crystal in the slot does nothing under `FEATURE_FREE_GIMMICKS`, so the set would be playing an item down with no other symptom |
 
 A **one-set count is not automatically a shortfall.** The form-change enablers — Adamant
-Crystal, Lustrous Globe, Griseous Orb, Red/Blue Orb, Rusted Sword and Shield, the three
+Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and Shield, the three
 Ogerpon masks — each unlock exactly one forme on exactly one species, so one is the
-ceiling rather than a gap. They stay done so the one-set gate keeps watching them: delete
+ceiling rather than a gap. They stay done so the zero-set gate keeps watching them: delete
 the Giratina-Origin set and CI should notice.
+
+The single-set gate derives that exemption from the form change tables rather than a list,
+so it stays correct on its own — but note it is **config-dependent**, which is what caught
+Griseous Orb. The Orb only changes Giratina's forme when `I_GRISEOUS_ORB_FORM_CHANGE <
+GEN_9`, and this build is at `GEN_LATEST`, so that row is compiled out of
+`sGiratinaFormChangeTable` and **Griseous Core** is the enabler here. That makes the Orb an
+ordinary signature type item, class-mates with Adamant Orb and Lustrous Orb (both pending at
+zero), and it is now pending too. The Giratina-Origin set is unaffected — it names
+`SPECIES_GIRATINA_ORIGIN` directly, so the item was never what got it there.
 
 Graduating an item to `sDoneItems[]` is what **arms** the gates for it. That is the
 failure the tracker exists to catch: Wide Lens, Zoom Lens, Blunder Policy, Razor Fang and
@@ -270,7 +279,7 @@ instruction. Work it top to bottom.
 ### 1. Read the current state
 
 ```bash
-make check TESTS="Held item tracker"     # the five gates; green means the lists are honest
+make check TESTS="Held item tracker"     # the six gates; green means the lists are honest
 ```
 
 `test/fork/held_item_tracker.c` is the status. Read its three lists and the comment
@@ -294,9 +303,9 @@ costs no engine risk, then the memories/drives extension, then the signature orb
 A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
 get hard to review; smaller ones waste a CI cycle.
 
-**How much is left** (re-measure, don't trust this after a line review): 100 pending items — 78
-on zero sets, 22 on one — and graduation needs **two sets per item**, so 78×2 + 22×1 = **178
-set-placements** (two of those items are the parked Clamperl pair, so really 174). At 8–15 a
+**How much is left** (re-measure, don't trust this after a line review): 101 pending items — 78
+on zero sets, 23 on one — and graduation needs **two sets per item**, so 78×2 + 23×1 = **179
+set-placements** (two of those items are the parked Clamperl pair, so really 175). At 8–15 a
 batch that is **roughly 14 batches**, of which exactly one (`BUFF_FLAT_HP_ITEMS`) is engine
 work and the rest is roster work — a split now confirmed rather than assumed, since the four
 items the tracker called buff candidates were assessed and all four rejected (see
@@ -345,10 +354,11 @@ leans on, no judgement calls.
   Steel/Dragon — so "+40% on one type" and "+40% on two" are the same rule on different
   mons. There is no second magnitude to argue about.
 - **Re-iteming a set can demote the item it left.** Moving a set onto a new item subtracts
-  one from the old item's count, and if that takes a *done* item to one set, no gate fires:
-  "every done item appears on at least one set" only requires one. This is how Dragon Fang
-  sat on the done list at a single set after the Soul Dew batch took its second. After any
-  roster batch, re-measure the items you moved **off**, not just the ones you moved onto.
+  one from the old item's count, and if that takes a *done* item to one set it is no longer
+  graduated. This is how Dragon Fang sat on the done list at a single set after the Soul Dew
+  batch took its second, with nothing noticing. **"No done item sits on a single set" now
+  gates this**, so a batch that strands an item fails CI rather than drifting — but the fix
+  is still yours to choose: give it a second set, or demote it and lower the floor.
 - **One set is one set, whoever placed it.** A freshly, deliberately placed single set is
   still thinly drafted. The one exception is a **form-change enabler** (Adamant Crystal,
   Rusted Sword, an Ogerpon mask…), where one is the *ceiling* rather than a shortfall.
