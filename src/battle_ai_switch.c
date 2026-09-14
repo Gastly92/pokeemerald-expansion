@@ -1695,9 +1695,7 @@ static u32 GetSwitchinSingleUseItemHealing(enum BattlerId battler, enum BattlerI
             // the AI must estimate the same number -- reading the flat holdEffectParam here
             // would have it value a buffed Oran at 10 HP. See ItemHealHp(), config/buff.h.
             if (GetConfig(BUFF_FLAT_HP_ITEMS) && (aiItem == ITEM_ORAN_BERRY || aiItem == ITEM_BERRY_JUICE))
-                itemHeal = max(1, maxHP / (aiItem == ITEM_BERRY_JUICE
-                                            ? BUFF_FLAT_HP_BERRY_JUICE_DENOMINATOR
-                                            : BUFF_FLAT_HP_ORAN_DENOMINATOR));
+                itemHeal = max(1, maxHP / BUFF_FLAT_HP_DENOMINATOR);
             else
                 itemHeal = GetItemHoldEffectParam(aiItem);
         }

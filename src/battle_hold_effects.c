@@ -908,9 +908,7 @@ static u32 ItemHealHp(enum BattlerId battler, enum Item itemId, enum HealAmount 
         // whenever I_SITRUS_BERRY_HEAL < GEN_4, and rebalancing Sitrus here would be silent.
         // Clamped to at least 1 so a small max HP cannot round the heal away entirely.
         else if (GetConfig(BUFF_FLAT_HP_ITEMS) && (itemId == ITEM_ORAN_BERRY || itemId == ITEM_BERRY_JUICE))
-            healAmount = max(1, GetNonDynamaxMaxHP(battler) / (itemId == ITEM_BERRY_JUICE
-                                                               ? BUFF_FLAT_HP_BERRY_JUICE_DENOMINATOR
-                                                               : BUFF_FLAT_HP_ORAN_DENOMINATOR));
+            healAmount = max(1, GetNonDynamaxMaxHP(battler) / BUFF_FLAT_HP_DENOMINATOR);
         else
             healAmount = GetItemHoldEffectParam(itemId);
 

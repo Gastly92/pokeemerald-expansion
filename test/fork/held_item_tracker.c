@@ -282,7 +282,7 @@ static const enum Item sPendingItems[] =
     // ---- Needs a BUFF: dominated or underpowered as shipped. --------------------
     // EMPTY, and that is the milestone: every balance complaint in the backlog has now
     // shipped a flag. Oran Berry and Berry Juice were the last two, settled by
-    // BUFF_FLAT_HP_ITEMS, which scales them to maxHP/6 and maxHP/3 so a flat 10/20 HP stops
+    // BUFF_FLAT_HP_ITEMS, which heals maxHP/4 for both so a flat 10/20 HP stops
     // being meaningless at Level 50; both moved down to "needs a SET". Before them, the
     // Memories, Drives, Soul Dew and the signature orbs sat here and were settled by
     // BUFF_SIGNATURE_TYPE_ITEMS. Everything still pending is a placement problem, not a

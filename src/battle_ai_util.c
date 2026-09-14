@@ -5054,7 +5054,7 @@ bool32 ShouldRestoreHpBerry(enum BattlerId battlerAtk, enum Item item)
     {
     case ITEM_ORAN_BERRY:
         // FORK: this heuristic exists because a stock Oran is a flat 10 HP, which is only
-        // meaningful on a tiny HP pool. BUFF_FLAT_HP_ITEMS makes it maxHP/6 at every level, so
+        // meaningful on a tiny HP pool. BUFF_FLAT_HP_ITEMS makes it maxHP/4 at every level, so
         // the size check stops applying and the berry is always worth eating -- without this
         // the AI would hold a buffed Oran and never use it at Level 50. See config/buff.h.
         if (GetConfig(BUFF_FLAT_HP_ITEMS))
