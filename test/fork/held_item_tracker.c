@@ -331,13 +331,24 @@ static const enum Item sPendingItems[] =
     // no second set to want. They stay done so the zero-set gate keeps watching them.
 
     // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
-    // The 11 Gems here are DONE on balance -- BUFF_GEMS took the class to +60% and the
-    // roster now spends them correctly -- and pending only because no set holds these
-    // particular types yet. Their 7 siblings graduated. A Gem wants a move the set fires
-    // ONCE (a self-debuffing nuke like Overheat or Make It Rain, an Acrobatics set, or
-    // true coverage), never a move it clicks every turn; see fork-docs/LINE_REVIEW.md.
-    // What remains here is the wide uncontested tail -- 14 of the 18 resist berries, the
-    // five type-boost incenses, Lax Incense -- plus the ordinary situational items.
+    // Everything still pending is here -- the classes that had a placement rule (the Gems,
+    // the resist berries, the incenses, the signature type items) have all shipped, so what
+    // is left is the situational tail, where each item wants a set built AROUND it rather
+    // than an item slotted onto an existing set.
+    //
+    // SIX of these are PARKED and should not be counted when sizing a batch. They stay here
+    // rather than on sIgnoredItems[] because nothing about them is dead -- the ignored list
+    // means the effect cannot happen, which is a different claim. See the "Parked" section
+    // of fork-docs/HELD_ITEMS.md for the arithmetic behind each:
+    //
+    //   Deep Sea Tooth, Deep Sea Scale  -- locked to Clamperl; graduating both costs four
+    //                                      NFE sets in a uniform draw.
+    //   Adamant Orb, Lustrous Orb,      -- species-locked, and the holder pool is too small:
+    //   Griseous Core                      Adamant Orb has THREE legal sets, so reaching two
+    //                                      means both Dialga sets holding it, which adds no
+    //                                      reach under one-species-per-team.
+    //   Ring Target                     -- the one item here whose effect is a pure drawback
+    //                                      to its own holder (it deletes its type immunities).
     //
     // The signature type items settled by BUFF_SIGNATURE_TYPE_ITEMS are ALL done now: 17
     // Memories (Silvally), 17 Plates (Arceus), 4 Drives (Genesect) and Soul Dew (Lati@s).
