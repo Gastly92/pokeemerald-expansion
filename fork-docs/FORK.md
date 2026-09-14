@@ -98,7 +98,9 @@ tracked in `test/fork/held_item_tracker.c`, which sorts every held item into don
 pending / ignored and fails CI if a *done* item is unclassified, unheld by any set, held
 by only one set (unless it is a form-change enabler, where one is the ceiling), or over
 20% of the roster; [`HELD_ITEMS.md`](HELD_ITEMS.md) carries the reasoning behind
-each verdict.
+each verdict. A companion gate in the roster suite ("no set holds an item none of its
+moves can activate") catches the case no tracker gate can see: a conditional item sitting
+on a holder it can never fire for.
 
 | Feature | Flag(s) | Status | Notes |
 |---|---|---|---|

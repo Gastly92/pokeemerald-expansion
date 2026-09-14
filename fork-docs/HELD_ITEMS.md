@@ -59,6 +59,28 @@ buff sketch that would move it. The groups below are that reasoning, not a statu
 
 Run it with `make check TESTS="Held item tracker"`.
 
+### The gate the tracker cannot be: is the item *live* on the set holding it?
+
+Every tracker gate asks whether an item is **on** a set. None can ask whether it **does
+anything there**, and a conditional item on the wrong holder passes all six while being a
+wasted slot — the same "we buffed it and shipped it to nobody" failure the tracker exists to
+catch, in the one form it cannot see. That check lives in the roster suite instead, as
+`Frontier extended roster: no set holds an item none of its moves can activate`, and it now
+covers four classes rather than the one (Throat Spray) it started with:
+
+| Class | The item is dead when… |
+| --- | --- |
+| Type-boost items, plates, Drives, Memories | the set carries no damaging move of the item's own type |
+| Gems | same, **after** an -ate ability is applied — Galvanize turns Explosion Electric, so a Normal Gem on that holder never fires |
+| Resist berries | the holder is immune to the type (by typing *or* ability/innate), or simply **not weak** to it — the berry only fires on a super-effective hit, Chilan excepted |
+| Throat Spray | the set carries no sound move |
+
+Two deliberate limits keep it from crying wolf. Judgment, Techno Blast and Multi-Attack are
+`EFFECT_CHANGE_TYPE_ON_ITEM` — they *become* the held item's type, so they always satisfy it.
+And a set carrying a move whose type is only known at battle time (Weather Ball, Terrain
+Pulse, Hidden Power, Natural Gift, Revelation Dance, Tera Blast, Raging Bull, Ivy Cudgel) is
+**skipped rather than guessed at**: a gate that false-positives is worse than one with a hole.
+
 ## Reproducing the audit
 
 ```bash

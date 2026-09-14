@@ -13,6 +13,10 @@
 #include "constants/items.h"
 #include "move.h"
 #include "battle.h"
+#include "battle_main.h"   // FORK: gTypesInfo (item-activation gate names the type)
+#include "battle_util.h"   // FORK: GetTypeModifier (resist-berry weakness check)
+#include "constants/hold_effects.h"
+#include "constants/battle_move_effects.h"
 
 // FORK: guards the fork-owned competitive Battle Factory roster
 // (gFrontierExtendedMons, src/frontier_extended_mons.c). A set's .ability is
@@ -1109,6 +1113,138 @@ static bool32 SetHasSoundMove(const struct TrainerMon *set)
     return FALSE;
 }
 
+// FORK: an -ate ability rewrites the holder's NORMAL moves to another type, which silently
+// moves them out from under a type-keyed item. Checked on innates as well as the chosen
+// ability, since an innate is always on. Normalize is the reverse and is handled by the
+// caller. Returns TYPE_NONE when no -ate applies.
+static enum Type SetAteType(const struct TrainerMon *set)
+{
+    static const struct { enum Ability ability; enum Type type; } sAteAbilities[] =
+    {
+        { ABILITY_AERILATE,    TYPE_FLYING   },
+        { ABILITY_PIXILATE,    TYPE_FAIRY    },
+        { ABILITY_REFRIGERATE, TYPE_ICE      },
+        { ABILITY_GALVANIZE,   TYPE_ELECTRIC },
+    };
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sAteAbilities); i++)
+    {
+        if (set->ability == sAteAbilities[i].ability
+         || SpeciesHasInnate(set->species, sAteAbilities[i].ability))
+            return sAteAbilities[i].type;
+    }
+    return TYPE_NONE;
+}
+
+// A move whose type is only known at battle time cannot be judged from the roster, so a set
+// carrying one is skipped rather than guessed at -- a gate that false-positives is worse than
+// one with a hole. Judgment, Techno Blast and Multi-Attack are NOT here: EFFECT_CHANGE_TYPE_ON_ITEM
+// takes the held item's own type, so they always match the type item that re-typed them.
+static bool32 MoveTypeIsIndeterminate(enum Move move)
+{
+    switch (GetMoveEffect(move))
+    {
+    case EFFECT_WEATHER_BALL:
+    case EFFECT_TERRAIN_PULSE:
+    case EFFECT_HIDDEN_POWER:
+    case EFFECT_NATURAL_GIFT:
+    case EFFECT_REVELATION_DANCE:
+    case EFFECT_TERA_BLAST:
+    case EFFECT_RAGING_BULL:
+    case EFFECT_IVY_CUDGEL:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+static bool32 SetHasIndeterminateMove(const struct TrainerMon *set)
+{
+    u32 i;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (set->moves[i] != MOVE_NONE && MoveTypeIsIndeterminate(set->moves[i]))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// Does the set carry a DAMAGING move that will actually be `type` when it is used?
+static bool32 SetHasDamagingMoveOfType(const struct TrainerMon *set, enum Type type)
+{
+    enum Type ateType = SetAteType(set);
+    bool32 normalize = (set->ability == ABILITY_NORMALIZE
+                     || SpeciesHasInnate(set->species, ABILITY_NORMALIZE));
+    u32 i;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        enum Move move = set->moves[i];
+        enum Type moveType;
+
+        if (move == MOVE_NONE || GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
+            continue;
+
+        // Judgment / Techno Blast / Multi-Attack become the held item's own type.
+        if (GetMoveEffect(move) == EFFECT_CHANGE_TYPE_ON_ITEM)
+            return TRUE;
+
+        moveType = GetMoveType(move);
+        if (normalize)
+            moveType = TYPE_NORMAL;
+        else if (moveType == TYPE_NORMAL && ateType != TYPE_NONE)
+            moveType = ateType;
+
+        if (moveType == type)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// FORK: an ability (or innate) that makes the holder IMMUNE to a type means a hit of that type
+// never lands, so anything keyed on taking one is dead in the slot.
+static bool32 SetIsImmuneToTypeByAbility(const struct TrainerMon *set, enum Type type)
+{
+    static const struct { enum Type type; enum Ability ability; } sTypeImmunities[] =
+    {
+        { TYPE_FIRE,     ABILITY_FLASH_FIRE      },
+        { TYPE_FIRE,     ABILITY_WELL_BAKED_BODY },
+        { TYPE_WATER,    ABILITY_WATER_ABSORB    },
+        { TYPE_WATER,    ABILITY_STORM_DRAIN     },
+        { TYPE_WATER,    ABILITY_DRY_SKIN        },
+        { TYPE_ELECTRIC, ABILITY_VOLT_ABSORB     },
+        { TYPE_ELECTRIC, ABILITY_LIGHTNING_ROD   },
+        { TYPE_ELECTRIC, ABILITY_MOTOR_DRIVE     },
+        { TYPE_GRASS,    ABILITY_SAP_SIPPER      },
+        { TYPE_GROUND,   ABILITY_LEVITATE        },
+        { TYPE_GROUND,   ABILITY_EARTH_EATER     },
+    };
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sTypeImmunities); i++)
+    {
+        if (sTypeImmunities[i].type != type)
+            continue;
+        if (set->ability == sTypeImmunities[i].ability
+         || SpeciesHasInnate(set->species, sTypeImmunities[i].ability))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// The holder's defensive multiplier against `type`, from its typing alone.
+static uq4_12_t SetTypeEffectiveness(const struct TrainerMon *set, enum Type type)
+{
+    const struct SpeciesInfo *info = &gSpeciesInfo[set->species];
+    uq4_12_t modifier = GetTypeModifier(type, info->types[0]);
+
+    if (info->types[1] != info->types[0])
+        modifier = uq4_12_multiply(modifier, GetTypeModifier(type, info->types[1]));
+    return modifier;
+}
+
 TEST("Frontier extended roster: no set holds an item none of its moves can activate")
 {
     u32 i;
@@ -1119,6 +1255,8 @@ TEST("Frontier extended roster: no set holds an item none of its moves can activ
     {
         const struct TrainerMon *set = &gFrontierExtendedMons[i];
 
+        enum Type itemType;
+
         checked++;
 
         // Throat Spray raises Sp. Attack when the holder uses a SOUND move, and does nothing at
@@ -1128,6 +1266,67 @@ TEST("Frontier extended roster: no set holds an item none of its moves can activ
             offenders++;
             Test_MgbaPrintf("roster[%d] %S: holds Throat Spray but carries no sound move, so the item can never fire -- give it a sound move or give it a different item",
                             i, gSpeciesInfo[set->species].speciesName);
+        }
+
+        itemType = GetItemSecondaryId(set->heldItem);
+
+        switch (GetItemHoldEffect(set->heldItem))
+        {
+        // Type-boost items, the Arceus plates and the Silvally/Genesect signature items all
+        // multiply moves of the item's own type (GetItemSecondaryId, CalcDamage). With no move
+        // of that type the holder is playing an item down.
+        case HOLD_EFFECT_TYPE_POWER:
+        case HOLD_EFFECT_PLATE:
+        case HOLD_EFFECT_DRIVE:
+        case HOLD_EFFECT_MEMORY:
+            if (!SetHasIndeterminateMove(set) && !SetHasDamagingMoveOfType(set, itemType))
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: holds %S, which only boosts %S moves, but carries no damaging %S move -- give it one or give it a different item",
+                                i, gSpeciesInfo[set->species].speciesName, GetItemName(set->heldItem),
+                                gTypesInfo[itemType].name, gTypesInfo[itemType].name);
+            }
+            break;
+        // A Gem is one-shot and fires only on its own type. It is also the class an -ate
+        // ability quietly breaks: Galvanize turns Explosion Electric, so a Normal Gem on a
+        // Galvanize holder never fires at all. SetHasDamagingMoveOfType() applies the
+        // conversion, so that case lands here rather than passing silently.
+        case HOLD_EFFECT_GEMS:
+            if (!SetHasIndeterminateMove(set) && !SetHasDamagingMoveOfType(set, itemType))
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: holds %S but carries no damaging %S move it would fire on -- check for an -ate ability re-typing the move, then give it a %S move or a different item",
+                                i, gSpeciesInfo[set->species].speciesName, GetItemName(set->heldItem),
+                                gTypesInfo[itemType].name, gTypesInfo[itemType].name);
+            }
+            break;
+        // A resist berry halves a hit of its type, but ONLY a super-effective one
+        // (GetDefenderItemsModifier requires >= 2x) -- except the Normal berry, which is
+        // special-cased to fire on any Normal hit. So the holder must actually be weak to the
+        // type, and must not be immune to it by typing or by an ability/innate.
+        case HOLD_EFFECT_RESIST_BERRY:
+        {
+            enum Type berryType = GetItemHoldEffectParam(set->heldItem);
+            uq4_12_t effectiveness = SetTypeEffectiveness(set, berryType);
+
+            if (SetIsImmuneToTypeByAbility(set, berryType) || effectiveness == UQ_4_12(0.0))
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: holds %S but is IMMUNE to %S, so the hit it resists never lands -- the item is dead in the slot",
+                                i, gSpeciesInfo[set->species].speciesName, GetItemName(set->heldItem),
+                                gTypesInfo[berryType].name);
+            }
+            else if (berryType != TYPE_NORMAL && effectiveness < UQ_4_12(2.0))
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: holds %S but is not weak to %S, and a resist berry only fires on a super-effective hit -- put it on a holder that is weak to the type",
+                                i, gSpeciesInfo[set->species].speciesName, GetItemName(set->heldItem),
+                                gTypesInfo[berryType].name);
+            }
+            break;
+        }
+        default:
+            break;
         }
     }
 
