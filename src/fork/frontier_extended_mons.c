@@ -336,7 +336,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BUTTERFREE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FOCUS_BAND,
+        .heldItem = ITEM_SILVER_POWDER,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -1142,7 +1142,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NIDOKING,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_MIRROR_HERB,
         .moves =
         {
             MOVE_ROCK_SLIDE,
@@ -1184,7 +1184,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_SAFETY_GOGGLES,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -1266,7 +1266,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NINETALES,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY,
+        .heldItem = ITEM_ORAN_BERRY,
         .moves =
         {
             MOVE_PERISH_SONG,
@@ -2090,7 +2090,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_POLIWRATH,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_BRIGHT_POWDER,
         .moves =
         {
             MOVE_FOLLOW_ME,
@@ -2808,7 +2808,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SLOWBRO,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY,
+        .heldItem = ITEM_ORAN_BERRY,
         .moves =
         {
             MOVE_TRICK_ROOM,
@@ -3243,7 +3243,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLOYSTER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_CUSTAP_BERRY,
         .moves =
         {
             MOVE_SPIKES,
@@ -3405,7 +3405,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_SITRUS_BERRY,
+        .heldItem = ITEM_BERRY_JUICE,
         .moves =
         {
             MOVE_MEAN_LOOK,
@@ -5060,7 +5060,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARTICUNO_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_TWISTED_SPOON,
+        .heldItem = ITEM_PSYCHIC_SEED,
         .moves =
         {
             MOVE_FREEZING_GLARE,
@@ -6038,7 +6038,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_LANTURN,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY,
+        .heldItem = ITEM_BERRY_JUICE,
         .moves =
         {
             MOVE_THUNDERBOLT,
@@ -6205,7 +6205,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BELLOSSOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_MIRACLE_SEED,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -9820,7 +9820,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_AIR_BALLOON,
         .moves =
         {
             MOVE_HEAVY_SLAM,
@@ -16290,7 +16290,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GIRATINA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SPELL_TAG,
+        .heldItem = ITEM_GRISEOUS_ORB,
         .moves =
         {
             MOVE_WILL_O_WISP,
@@ -19836,7 +19836,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHANDELURE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_SALAC_BERRY,
         .moves =
         {
             MOVE_CALM_MIND,
@@ -19899,7 +19899,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_HAXORUS,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND,
+        .heldItem = ITEM_DRAGON_FANG,
         .moves =
         {
             MOVE_OUTRAGE,
@@ -28667,7 +28667,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PINCURCHIN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_ELECTRIC_SEED,
         .moves =
         {
             MOVE_ZING_ZAP,
@@ -33686,7 +33686,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ARCHALUDON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST,
+        .heldItem = ITEM_POWER_HERB,
         .moves =
         {
             MOVE_ELECTRO_SHOT,
