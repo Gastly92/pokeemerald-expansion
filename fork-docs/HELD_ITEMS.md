@@ -192,7 +192,7 @@ them. This is regression collateral, and it is the most defensible buff work ava
 | ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves, and the roster half is now complete: **all 18 types carry at least two sets**. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and placement followed the settled rule — a self-debuffing nuke (Overheat, Leaf Storm, Draco Meteor, Psycho Boost, Fleur Cannon), a literal one-use move (**Explosion**, the purest case), or true **off-STAB coverage**, which is what gives the eleven types with no nuke of their own a home. One screen is specific to this class: an **-ate ability re-types the move out from under the Gem**. Golem-Alola was the obvious Explosion home for the Normal Gem and its Galvanize turns Explosion Electric, so the Gem would never have fired; plain Golem took it instead. |
 | ~~**Soul Dew**~~ — **shipped** (balance + roster) | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package. The roster moved **that same Dragon Fang set** onto Soul Dew — Calm Mind / Psyshock / Dragon Pulse splits its damage across both boosted types, which is the shape the item exists for. The gate also had to start reading the holder by **base** species, or a Soul Dew Lati@s that Mega Evolved under `FEATURE_FREE_GIMMICKS` silently lost its own item. **Collateral, fixed later:** that Latios set was Dragon Fang's *second* home, so re-iteming it quietly left Dragon Fang on one set while it sat on the done list. It has since been demoted to pending. |
 | ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. |
-| ~~**The 17 Memories and 4 Drives**~~ — **shipped** (balance + roster) | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally could not decline it either: `FORM_CHANGE_ITEM_HOLD` means dropping the Memory reverts the forme, so all four Silvally sets were compelled to hold a dead item. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` fixed the balance and locked each item to its own species; the roster then drafted **all 17 Memories** (Silvally formes) and **all 4 Drives** (Genesect formes). The Drive sets run Techno Blast, which the Drive re-types — note it does **not** re-type Genesect, which stays Bug/Steel, so a Drive is +40% off-STAB where a Memory is +40% on top of STAB. |
+| ~~**The 17 Memories and 4 Drives**~~ — **shipped** (balance + roster) | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally looked compelled to hold it too, though that turned out to be untrue here — see the note below on forme reversion. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` fixed the balance and locked each item to its own species; the roster then drafted **all 17 Memories** (Silvally formes) and **all 4 Drives** (Genesect formes). The Drive sets run Techno Blast, which the Drive re-types — note it does **not** re-type Genesect, which stays Bug/Steel, so a Drive is +40% off-STAB where a Memory is +40% on top of STAB. |
 
 ### Group C — weak in stock, still weak here — **shipped**
 
@@ -209,10 +209,47 @@ balance half of the backlog**: every remaining pending item is a placement probl
 | --- | --- |
 | **Deep Sea Tooth, Deep Sea Scale** | Both are **2x**, genuinely enormous, and locked to Clamperl, which has no set (it evolves, so the coverage test excuses it). The price is what stalls them, not the item: graduation takes two sets each, so drafting both means **four Clamperl entries** — a 35/64/85/74/55/32 NFE, four times, in a uniform draw — while Huntail and Gorebyss already carry four sets between them. They stay **pending**, not ignored, because nothing about them is dead: a line review that wants an NFE gimmick can pick them up without any code or list change. Just don't count them when sizing a batch. |
 
+| **Adamant Orb, Lustrous Orb, Griseous Core** | Species-locked by `BUFF_SIGNATURE_TYPE_ITEMS`, and the arithmetic does not close. Graduation needs **two sets**, but Adamant Orb's only legal holders are **three** sets — two Dialga plus Dialga-Origin, which must keep its Adamant Crystal — so the only way to reach two is to put the orb on **both** Dialga sets. Under one-species-per-team those are mutually exclusive, so the second set adds **zero reach** while stripping Dialga of its Leftovers and Choice Specs. Lustrous Orb and Griseous Core have four legal sets each and the same shape. The item is fine; the holder pool is too small to graduate it honestly. Unparking needs *new* Dialga/Palkia/Giratina sets, not a re-item. |
+| **Ring Target** | The only item in the backlog whose effect is a **pure drawback to its holder**: it turns the holder's type *immunities* into neutral damage (`MulByTypeEffectiveness`, `src/battle_util.c`). There is no upside term — it exists in the retail games to be handed to an opponent via Trick or Fling, which no set here does. Drafting it means deliberately making a set worse. |
+
 The other three species-locked strays — **Lucky Punch**, **Metal Powder** and **Quick
 Powder** — are not parked but *ignored*, because their effects genuinely cannot land on
 the only holder allowed to have them. See
 [Never expected](#never-expected--the-structural-exclusions).
+
+#### A forme set is NOT compelled to hold its item
+
+Worth stating plainly, because an earlier version of this doc asserted the opposite and it
+would needlessly constrain **46 roster sets**. `FORM_CHANGE_ITEM_HOLD` — the method behind the
+Arceus plates, Silvally's Memories, Genesect's Drives, Giratina-Origin and the two Origin
+orbs — is **never invoked from a battle or frontier path**. Its only callers are the party
+menu, the PC and `givemon` (`TryFormChange(mon, FORM_CHANGE_ITEM_HOLD, …)`), all of which are
+overworld actions on the player's own party.
+
+Battle setup calls `FORM_CHANGE_BEGIN_BATTLE` instead (`src/battle_main.c`), which is a
+*different* method — and that is exactly why Zacian and Zamazenta genuinely do need their
+Rusted Sword and Shield, while an item-hold forme does not.
+
+A frontier set naming `SPECIES_GIRATINA_ORIGIN` therefore **stays** Giratina-Origin no matter
+what it holds. Two sets already rely on this and are correct: **Palkia-Origin holds Mystic
+Water** and **Giratina-Origin holds Choice Specs**. So a forme set's item slot is free, and a
+line review may spend it on anything.
+
+The Memories and Drives are still the right items for their holders — they are those species'
+signature type boost under `BUFF_SIGNATURE_TYPE_ITEMS` — but they are chosen, not forced.
+
+#### Measured and NOT parked: the items that only look like drawbacks
+
+Five items read as unusable and are not, so the question does not need reopening. Each was
+measured against the roster rather than judged by feel:
+
+| Item(s) | Why it is draftable |
+| --- | --- |
+| **Adrenaline Orb** | Triggers off the **foe's** Intimidate, which looks dead because **zero** sets choose Intimidate as their ability — but **127 sets** (7.8%) are species carrying it as an *innate*, and innates are always on. The most live of the five. |
+| **Room Service** | Needs Trick Room up; the roster sets Trick Room on **49 sets**. |
+| **Binding Band** | Boosts the holder's *own* binding move, which is a benefit, not a cost. **10 sets** carry one (Infestation, Magma Storm, Whirlpool, Wrap, Bind, Clamp, Snap Trap). |
+| **Lagging Tail, Full Incense** | An exact duplicate pair — both are `HOLD_EFFECT_LAGGING_TAIL`. Moving last is a benefit for **Avalanche, Counter and Mirror Coat**, which is **10 sets**. Note it is *not* a Trick Room synergy: Trick Room already inverts the speed order, and the item forces the holder last regardless, so the two work against each other. |
+| **Sticky Barb** | Chip on the holder, but it **transfers to an attacker on contact**, so it is a trade rather than a pure cost. |
 
 #### Assessed and rejected as buff candidates
 
@@ -325,10 +362,11 @@ A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger ros
 get hard to review; smaller ones waste a CI cycle.
 
 **How much is left** (re-measure, don't trust this after a line review): 45 pending items, **all
-of them at zero sets** — the thinly-drafted middle is now empty — and graduation needs **two sets
-per item**, so 45×2 = **90 set-placements** (two of those items are the parked Clamperl pair, so
-really 86). At 8–15 a
-batch that is **roughly 8 batches**, and after `BUFF_FLAT_HP_ITEMS` shipped **all of it is
+of them at zero sets** — the thinly-drafted middle is now empty. Six of the 45 are **parked** and
+should not be counted: the Clamperl pair, the three signature orbs whose holder pool is too small
+to graduate them, and Ring Target. That leaves **39 items × 2 = 78 set-placements** of real work,
+and no engine work at all. At 8–15 a
+batch that is **roughly 6 batches**, and after `BUFF_FLAT_HP_ITEMS` shipped **all of it is
 roster work** — there is no engine work left in the backlog at all.
 
 What is left is the **long situational tail** — Absorb Bulb, Cell Battery, Eject Button, Red

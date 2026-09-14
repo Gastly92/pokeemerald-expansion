@@ -202,9 +202,12 @@
 //
 // Why the boost: BUFF_TYPE_BOOST_ITEMS took the generic items (Charcoal, Mystic Water, ...)
 // to +40% and left these behind, which inverted the point of a signature item. A Memory or
-// Drive gives no damage bonus whatever, and Silvally cannot even decline one -- its forme is
-// FORM_CHANGE_ITEM_HOLD, so dropping the Memory reverts it to Normal. That made every
-// Silvally set a set playing a permanent item down. The orbs were beaten by a generic item
+// Drive gives no damage bonus whatever, so every Silvally and Genesect set holding one was
+// playing a permanent item down. (An earlier version of this comment added that Silvally
+// "cannot even decline one" because FORM_CHANGE_ITEM_HOLD reverts the forme. That is not true
+// in a frontier battle: nothing on the battle path invokes FORM_CHANGE_ITEM_HOLD -- only the
+// party menu, the PC and givemon do -- so a set naming a forme keeps it whatever it holds.
+// The reason to fix the Memories was the dead item itself, not a forced hold.) The orbs were beaten by a generic item
 // on their own signature types: Latios hits harder with Dragon Fang (+40% Dragon) than with
 // Soul Dew (+20% Dragon AND Psychic), which is why the roster gave it Dragon Fang.
 //
