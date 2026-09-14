@@ -97,28 +97,31 @@ here will drift.
 
 ## What the roster uses today
 
-**1629 sets. 176 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
+**1629 sets. 215 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
 set). The tracker classifies **241** items that do something when held, of which **20** do nothing
 reachable in a frontier battle (`sIgnoredItems[]` — see "Never expected" below), leaving a live
-universe of **221**. Against that, the roster is at **176 used, 45 unused**.
+universe of **221**. Against that, the roster is at **215 used, 6 unused** — and all six
+are deliberately parked.
 
 The distribution is heavily top-loaded:
 
 | Item | Sets | Share |
 | --- | --- | --- |
-| Leftovers | 182 | 11.2% |
-| Life Orb | 154 | 9.5% |
-| Choice Band | 100 | 6.1% |
-| Sitrus Berry | 98 | 6.0% |
-| Rocky Helmet | 74 | 4.5% |
+| Leftovers | 176 | 10.8% |
+| Life Orb | 148 | 9.1% |
+| Choice Band | 95 | 5.8% |
+| Sitrus Berry | 92 | 5.6% |
+| Heavy-Duty Boots | 71 | 4.4% |
+| Rocky Helmet | 69 | 4.2% |
 | Heavy-Duty Boots | 71 | 4.4% |
 | Choice Specs | 69 | 4.2% |
 | Assault Vest | 60 | 3.7% |
 | Focus Band | 52 | 3.2% |
 | Choice Scarf | 44 | 2.7% |
 
-The top two alone are **21% of the roster**, and the tail is long and thin: **86 items
-appear on one or two sets** — most of them the species-locked signature items, where one
+The top two alone are **19.9% of the roster**, down from 24% when this audit opened, and
+the tail is long and thin: **86 items appear on one or two sets** — most of them the
+species-locked signature items, where one
 set is the ceiling rather than a gap.
 
 ### Why the concentration matters more than it looks
@@ -149,7 +152,7 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | Species-locked but inert | 3 | **Lucky Punch** (Chansey only) is repaired twice over — +2 crit stage, which `DETERMINISTIC_HOLD_EFFECTS` upgrades to a guaranteed first-attack crit — but Chansey has **5 base Attack** and attacks with Seismic Toss, whose fixed damage a crit does not scale, so the crit lands and changes nothing. **Metal Powder / Quick Powder** (Ditto only) both gate on an *untransformed* Ditto, and the roster's Ditto runs Imposter, which transforms on switch-in. The effect is real in each case; the one holder allowed to have it cannot use it. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **45 unused items that are live in battle** — the actual backlog (two of them the
+That leaves **6 unused items that are live in battle** — the actual backlog (two of them the
 parked Clamperl pair, below).
 
 ## The backlog
@@ -361,18 +364,25 @@ costs no engine risk, then the memories/drives extension, then the signature orb
 A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
 get hard to review; smaller ones waste a CI cycle.
 
-**How much is left** (re-measure, don't trust this after a line review): 45 pending items, **all
-of them at zero sets** — the thinly-drafted middle is now empty. Six of the 45 are **parked** and
-should not be counted: the Clamperl pair, the three signature orbs whose holder pool is too small
-to graduate them, and Ring Target. That leaves **39 items × 2 = 78 set-placements** of real work,
-and no engine work at all. At 8–15 a
-batch that is **roughly 6 batches**, and after `BUFF_FLAT_HP_ITEMS` shipped **all of it is
-roster work** — there is no engine work left in the backlog at all.
+**How much is left: nothing.** Every held item that is live in a frontier battle and not parked
+now sits on at least two sets. `sPendingItems[]` contains exactly the six parked entries — the
+Clamperl pair, the three signature orbs whose holder pool is too small to graduate them, and Ring
+Target — and nothing else. A new name appearing there means an upstream sync added an item, or a
+done item lost a set; both are worth a look rather than a reflexive re-draft.
 
-What is left is the **long situational tail** — Absorb Bulb, Cell Battery, Eject Button, Red
-Card, Room Service, Berserk Gene, Metronome, the Wiki/Mago/Iapapa berries, the narrow status
-berries, and the rest of Group A's last row. No class rule covers these; each wants a set
-built around what it actually does, so they are best taken in small themed groups.
+**So this section is now maintenance, not a queue.** The batch machinery above stays because
+an upstream sync will eventually add items and the same method applies, but there is no
+standing backlog to work through.
+
+**A caveat on the last batch, which is worth knowing before re-reading its picks.** The final
+78 placements closed out the situational tail — the items with no class rule, where each
+wants a set built *around* what it does. They were placed by an explicit rule per item
+(Eject Pack on a self-lowering nuke, Room Service on a Trick Room set, Lagging Tail on
+Avalanche/Counter/Mirror Coat, the flavor berries screened against the nature that dislikes
+them) and every one was checked to be able to fire at all. But they are **rule-governed, not
+hand-tuned**: the bar was "this item can work here", not "this is the best home in the
+roster". A line review that wants to re-home one of them is improving a set, not fixing a
+bug.
 
 ### 3. Decisions already settled — do not re-litigate
 
