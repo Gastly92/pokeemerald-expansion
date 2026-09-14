@@ -75,19 +75,19 @@ here will drift.
 
 ## What the roster uses today
 
-**1629 sets. 163 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
+**1629 sets. 174 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
 set). The tracker classifies **241** items that do something when held, of which **20** do nothing
 reachable in a frontier battle (`sIgnoredItems[]` — see "Never expected" below), leaving a live
-universe of **221**. Against that, the roster is at **163 used, 58 unused**.
+universe of **221**. Against that, the roster is at **174 used, 47 unused**.
 
 The distribution is heavily top-loaded:
 
 | Item | Sets | Share |
 | --- | --- | --- |
-| Leftovers | 198 | 12.2% |
-| Life Orb | 166 | 10.2% |
-| Choice Band | 103 | 6.3% |
-| Sitrus Berry | 103 | 6.3% |
+| Leftovers | 182 | 11.2% |
+| Life Orb | 157 | 9.6% |
+| Sitrus Berry | 102 | 6.3% |
+| Choice Band | 101 | 6.2% |
 | Rocky Helmet | 79 | 4.8% |
 | Heavy-Duty Boots | 71 | 4.4% |
 | Choice Specs | 69 | 4.2% |
@@ -95,7 +95,7 @@ The distribution is heavily top-loaded:
 | Focus Band | 52 | 3.2% |
 | Choice Scarf | 44 | 2.7% |
 
-The top two alone are **22% of the roster**, and the tail is long and thin: **86 items
+The top two alone are **21% of the roster**, and the tail is long and thin: **86 items
 appear on one or two sets** — most of them the species-locked signature items, where one
 set is the ceiling rather than a gap.
 
@@ -127,7 +127,7 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | Species-locked but inert | 3 | **Lucky Punch** (Chansey only) is repaired twice over — +2 crit stage, which `DETERMINISTIC_HOLD_EFFECTS` upgrades to a guaranteed first-attack crit — but Chansey has **5 base Attack** and attacks with Seismic Toss, whose fixed damage a crit does not scale, so the crit lands and changes nothing. **Metal Powder / Quick Powder** (Ditto only) both gate on an *untransformed* Ditto, and the roster's Ditto runs Imposter, which transforms on switch-in. The effect is real in each case; the one holder allowed to have it cannot use it. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **58 unused items that are live in battle** — the actual backlog (two of them the
+That leaves **47 unused items that are live in battle** — the actual backlog (two of them the
 parked Clamperl pair, below).
 
 ## The backlog
@@ -167,7 +167,7 @@ them. This is regression collateral, and it is the most defensible buff work ava
 
 | Item(s) | The problem | Sketch of a fix |
 | --- | --- | --- |
-| ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and the roster re-itemed the 7 sets where a Gem sat on a repeat-clicked move. Flying Gem is on the done list; six more sit on one set each and are tracked as thinly drafted; 11 types still want a first set. |
+| ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves, and the roster half is now complete: **all 18 types carry at least two sets**. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and placement followed the settled rule — a self-debuffing nuke (Overheat, Leaf Storm, Draco Meteor, Psycho Boost, Fleur Cannon), a literal one-use move (**Explosion**, the purest case), or true **off-STAB coverage**, which is what gives the eleven types with no nuke of their own a home. One screen is specific to this class: an **-ate ability re-types the move out from under the Gem**. Golem-Alola was the obvious Explosion home for the Normal Gem and its Galvanize turns Explosion Electric, so the Gem would never have fired; plain Golem took it instead. |
 | ~~**Soul Dew**~~ — **shipped** (balance + roster) | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package. The roster moved **that same Dragon Fang set** onto Soul Dew — Calm Mind / Psyshock / Dragon Pulse splits its damage across both boosted types, which is the shape the item exists for. The gate also had to start reading the holder by **base** species, or a Soul Dew Lati@s that Mega Evolved under `FEATURE_FREE_GIMMICKS` silently lost its own item. **Collateral, fixed later:** that Latios set was Dragon Fang's *second* home, so re-iteming it quietly left Dragon Fang on one set while it sat on the done list. It has since been demoted to pending. |
 | ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. |
 | ~~**The 17 Memories and 4 Drives**~~ — **shipped** (balance + roster) | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally could not decline it either: `FORM_CHANGE_ITEM_HOLD` means dropping the Memory reverts the forme, so all four Silvally sets were compelled to hold a dead item. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` fixed the balance and locked each item to its own species; the roster then drafted **all 17 Memories** (Silvally formes) and **all 4 Drives** (Genesect formes). The Drive sets run Techno Blast, which the Drive re-types — note it does **not** re-type Genesect, which stays Bug/Steel, so a Drive is +40% off-STAB where a Memory is +40% on top of STAB. |
@@ -259,9 +259,7 @@ What is left is Group A and Group C, and it is overwhelmingly **roster work**:
    capacity, and it is still the top of the backlog:
    - ~~**The six incenses.**~~ **Shipped** — two sets each, no balance question, no engine work.
    - ~~**The resist berries.**~~ **Shipped** — all 18 carry two sets each.
-   - **The Gems.** Balance is settled; 11 types still want a first set (Normal, Water, Electric, Ice,
-     Fighting, Poison, Ground, Bug, Rock, Ghost, Dark) and 6 more sit at one. Remember the settled
-     rule — a Gem goes on a move the set fires **once**, never its main STAB.
+   - ~~**The Gems.**~~ **Shipped** — all 18 types carry two or more sets.
 2. **Group C.** `BUFF_FLAT_HP_ITEMS` for Oran Berry and Berry Juice is the only code left in the
    whole backlog — two items, one flag, one batch.
 
@@ -302,16 +300,17 @@ costs no engine risk, then the memories/drives extension, then the signature orb
 A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
 get hard to review; smaller ones waste a CI cycle.
 
-**How much is left** (re-measure, don't trust this after a line review): 77 pending items — 58
-on zero sets, 19 on one — and graduation needs **two sets per item**, so 58×2 + 19×1 = **135
-set-placements** (two of those items are the parked Clamperl pair, so really 131). At 8–15 a
-batch that is **roughly 11 batches**, of which exactly one (`BUFF_FLAT_HP_ITEMS`) is engine
+**How much is left** (re-measure, don't trust this after a line review): 60 pending items — 47
+on zero sets, 13 on one — and graduation needs **two sets per item**, so 47×2 + 13×1 = **107
+set-placements** (two of those items are the parked Clamperl pair, so really 103). At 8–15 a
+batch that is **roughly 9 batches**, of which exactly one (`BUFF_FLAT_HP_ITEMS`) is engine
 work and the rest is roster work — a split now confirmed rather than assumed, since the four
 items the tracker called buff candidates were assessed and all four rejected (see
 [Assessed and rejected as buff candidates](#assessed-and-rejected-as-buff-candidates)).
-The cheapest batch left is the **Gems** — 11 types still want a first set and 6 sit at one,
-with balance already settled by `BUFF_GEMS`. Remember the rule: a Gem goes on a move the set
-fires **once**, never its main STAB.
+What is left is the **long situational tail** — Absorb Bulb, Cell Battery, Eject Button, Red
+Card, Room Service, Berserk Gene, Metronome, the Wiki/Mago/Iapapa berries, the narrow status
+berries, and the rest of Group A's last row. No class rule covers these; each wants a set
+built around what it actually does, so they are best taken in small themed groups.
 
 ### 3. Decisions already settled — do not re-litigate
 
@@ -321,6 +320,14 @@ fires **once**, never its main STAB.
 - **+60% was chosen deliberately.** A Gem is boost×one turn against a type item's
   boost×every turn, so the break-even is 1.5 uses. Bigger numbers start dominating the
   permanent items, which is the mistake the flag exists to undo.
+- **An -ate ability re-types the move out from under a Gem.** Galvanize, Pixilate,
+  Refrigerate and Aerilate all convert the holder's **Normal** moves to another type, and
+  Normalize converts everything *to* Normal — so a Gem keyed on the move's printed type
+  silently never fires. Check them on innates as well as the chosen ability. This cost
+  Golem-Alola the Normal Gem: Explosion is the purest fire-once move in the game and its
+  Galvanize makes it Electric, so plain Golem took the set instead. Same family of mistake
+  as a resist berry on a holder immune to the berry's type — the item is dead in the slot and
+  nothing downstream notices.
 - **A Gem goes on a move the set fires ONCE** — a self-debuffing nuke (Overheat, Leaf
   Storm, Make It Rain, Psycho Boost, Fleur Cannon), an Acrobatics set, or true coverage.
   Never a set's main STAB. **Contrary users are excluded**: Contrary turns the self-debuff

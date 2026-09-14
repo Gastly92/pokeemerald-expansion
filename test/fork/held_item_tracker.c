@@ -96,7 +96,19 @@
 // weakness -- and the screen still bites, because a Ghost type is Normal-IMMUNE and would
 // make it dead. Blissey is the case the item could have been written for: 255 base HP
 // behind 10 base Defense, against a roster carrying 126 physical-Normal move instances.
-#define HELD_ITEM_DONE_FLOOR 144
+// 144 -> 161 finishes the Gems: every one of the 18 types now has at least two sets.
+// BUFF_GEMS settled the balance at +60% long ago; this was purely the placement half, and
+// the settled rule is that a Gem goes on a move the set fires ONCE -- a self-debuffing nuke
+// (Overheat, Leaf Storm, Draco Meteor, Psycho Boost), a literal one-use move (Explosion), or
+// true off-STAB coverage -- never the set's main STAB, and never a Contrary user, who spams
+// the nuke and wants a permanent item instead.
+//
+// One screen is specific to this class and it drew blood: an -ate ability RE-TYPES the move
+// out from under the Gem. Golem-Alola was the obvious Explosion home for the Normal Gem and
+// its Galvanize turns Explosion Electric, so the Gem would never have fired; plain Golem
+// took it instead. Check Galvanize, Pixilate, Refrigerate, Aerilate and Normalize -- on
+// innates as well as the chosen ability -- before putting a Gem on a Normal move.
+#define HELD_ITEM_DONE_FLOOR 161
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -112,6 +124,7 @@ static const enum Item sDoneItems[] =
     ITEM_BLUE_ORB,
     ITEM_BLUNDER_POLICY,
     ITEM_BOOSTER_ENERGY,
+    ITEM_BUG_GEM,
     ITEM_BUG_MEMORY,
     ITEM_BURN_DRIVE,
     ITEM_CHARCOAL,
@@ -128,19 +141,25 @@ static const enum Item sDoneItems[] =
     ITEM_CORNERSTONE_MASK,
     ITEM_COVERT_CLOAK,
     ITEM_DAMP_ROCK,
+    ITEM_DARK_GEM,
     ITEM_DARK_MEMORY,
     ITEM_DOUSE_DRIVE,
     ITEM_DRACO_PLATE,
+    ITEM_DRAGON_GEM,
     ITEM_DRAGON_MEMORY,
     ITEM_DREAD_PLATE,
     ITEM_EARTH_PLATE,
+    ITEM_ELECTRIC_GEM,
     ITEM_ELECTRIC_MEMORY,
     ITEM_EVIOLITE,
     ITEM_EXPERT_BELT,
     ITEM_FAIRY_FEATHER,
+    ITEM_FAIRY_GEM,
     ITEM_FAIRY_MEMORY,
+    ITEM_FIGHTING_GEM,
     ITEM_FIGHTING_MEMORY,
     ITEM_FIGY_BERRY,
+    ITEM_FIRE_GEM,
     ITEM_FIRE_MEMORY,
     ITEM_FIST_PLATE,
     ITEM_FLAME_ORB,
@@ -149,16 +168,20 @@ static const enum Item sDoneItems[] =
     ITEM_FLYING_MEMORY,
     ITEM_FOCUS_BAND,
     ITEM_FOCUS_SASH,
+    ITEM_GHOST_GEM,
     ITEM_GHOST_MEMORY,
     ITEM_GRASSY_SEED,
+    ITEM_GRASS_GEM,
     ITEM_GRASS_MEMORY,
     ITEM_GRIP_CLAW,
+    ITEM_GROUND_GEM,
     ITEM_GROUND_MEMORY,
     ITEM_HABAN_BERRY,
     ITEM_HARD_STONE,
     ITEM_HEARTHFLAME_MASK,
     ITEM_HEAT_ROCK,
     ITEM_HEAVY_DUTY_BOOTS,
+    ITEM_ICE_GEM,
     ITEM_ICE_MEMORY,
     ITEM_ICICLE_PLATE,
     ITEM_ICY_ROCK,
@@ -188,6 +211,7 @@ static const enum Item sDoneItems[] =
     ITEM_MUSCLE_BAND,
     ITEM_MYSTIC_WATER,
     ITEM_NEVER_MELT_ICE,
+    ITEM_NORMAL_GEM,
     ITEM_OCCA_BERRY,
     ITEM_ODD_INCENSE,
     ITEM_PASSHO_BERRY,
@@ -195,7 +219,9 @@ static const enum Item sDoneItems[] =
     ITEM_PETAYA_BERRY,
     ITEM_PIXIE_PLATE,
     ITEM_POISON_BARB,
+    ITEM_POISON_GEM,
     ITEM_POISON_MEMORY,
+    ITEM_PSYCHIC_GEM,
     ITEM_PSYCHIC_MEMORY,
     ITEM_PUNCHING_GLOVE,
     ITEM_QUICK_CLAW,
@@ -204,6 +230,7 @@ static const enum Item sDoneItems[] =
     ITEM_RED_ORB,
     ITEM_RINDO_BERRY,
     ITEM_ROCKY_HELMET,
+    ITEM_ROCK_GEM,
     ITEM_ROCK_INCENSE,
     ITEM_ROCK_MEMORY,
     ITEM_ROSELI_BERRY,
@@ -225,6 +252,7 @@ static const enum Item sDoneItems[] =
     ITEM_SPELL_TAG,
     ITEM_SPLASH_PLATE,
     ITEM_SPOOKY_PLATE,
+    ITEM_STEEL_GEM,
     ITEM_STEEL_MEMORY,
     ITEM_STONE_PLATE,
     ITEM_TANGA_BERRY,
@@ -235,6 +263,7 @@ static const enum Item sDoneItems[] =
     ITEM_TOXIC_PLATE,
     ITEM_TWISTED_SPOON,
     ITEM_WACAN_BERRY,
+    ITEM_WATER_GEM,
     ITEM_WATER_MEMORY,
     ITEM_WAVE_INCENSE,
     ITEM_WEAKNESS_POLICY,
@@ -297,21 +326,15 @@ static const enum Item sPendingItems[] =
     ITEM_BRIGHT_POWDER,
     ITEM_CUSTAP_BERRY,
     ITEM_DRAGON_FANG,
-    ITEM_DRAGON_GEM,
     ITEM_ELECTRIC_SEED,
-    ITEM_FAIRY_GEM,
-    ITEM_FIRE_GEM,
-    ITEM_GRASS_GEM,
     ITEM_GRISEOUS_ORB,
     ITEM_MIRACLE_SEED,
     ITEM_MIRROR_HERB,
     ITEM_POWER_HERB,
-    ITEM_PSYCHIC_GEM,
     ITEM_PSYCHIC_SEED,
     ITEM_SAFETY_GOGGLES,
     ITEM_SALAC_BERRY,
     ITEM_SILVER_POWDER,
-    ITEM_STEEL_GEM,
     // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
     // The 11 Gems here are DONE on balance -- BUFF_GEMS took the class to +60% and the
     // roster now spends them correctly -- and pending only because no set holds these
@@ -354,26 +377,19 @@ static const enum Item sPendingItems[] =
     ITEM_ASPEAR_BERRY,
     ITEM_BERSERK_GENE,
     ITEM_BINDING_BAND,
-    ITEM_BUG_GEM,
     ITEM_CELL_BATTERY,
     ITEM_CHERI_BERRY,
     ITEM_CLEAR_AMULET,
-    ITEM_DARK_GEM,
     ITEM_DEEP_SEA_SCALE,
     ITEM_DEEP_SEA_TOOTH,
     ITEM_EJECT_BUTTON,
     ITEM_EJECT_PACK,
-    ITEM_ELECTRIC_GEM,
     ITEM_ENIGMA_BERRY,
-    ITEM_FIGHTING_GEM,
     ITEM_FLOAT_STONE,
     ITEM_FULL_INCENSE,
     ITEM_GANLON_BERRY,
-    ITEM_GHOST_GEM,
     ITEM_GRISEOUS_CORE,
-    ITEM_GROUND_GEM,
     ITEM_IAPAPA_BERRY,
-    ITEM_ICE_GEM,
     ITEM_JABOCA_BERRY,
     ITEM_KEE_BERRY,
     ITEM_LAGGING_TAIL,
@@ -384,15 +400,12 @@ static const enum Item sPendingItems[] =
     ITEM_MARANGA_BERRY,
     ITEM_METRONOME,
     ITEM_MICLE_BERRY,
-    ITEM_NORMAL_GEM,
     ITEM_PECHA_BERRY,
     ITEM_PERSIM_BERRY,
-    ITEM_POISON_GEM,
     ITEM_PROTECTIVE_PADS,
     ITEM_RAWST_BERRY,
     ITEM_RED_CARD,
     ITEM_RING_TARGET,
-    ITEM_ROCK_GEM,
     ITEM_ROOM_SERVICE,
     ITEM_ROWAP_BERRY,
     ITEM_SHED_SHELL,
@@ -400,7 +413,6 @@ static const enum Item sPendingItems[] =
     ITEM_STARF_BERRY,
     ITEM_STICKY_BARB,
     ITEM_UTILITY_UMBRELLA,
-    ITEM_WATER_GEM,
     ITEM_WIKI_BERRY,
 };
 
