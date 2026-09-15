@@ -18,8 +18,8 @@
 bool32 AI_ShouldSpendZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move chosenMove)
 {
     uq4_12_t effectiveness;
-    struct SimulatedDamage plainDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &effectiveness, NO_GIMMICK, NO_GIMMICK);
-    struct SimulatedDamage zDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &effectiveness, USE_GIMMICK, NO_GIMMICK);
+    struct SimulatedDamage plainDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &effectiveness, GIMMICK_NONE, GIMMICK_NONE);
+    struct SimulatedDamage zDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &effectiveness, GIMMICK_Z_MOVE, GIMMICK_NONE);
 
     u32 plainHits = GetNoOfHitsToKOBattlerDmg(plainDmg.minimum, battlerDef);
     u32 zHits = GetNoOfHitsToKOBattlerDmg(zDmg.minimum, battlerDef);

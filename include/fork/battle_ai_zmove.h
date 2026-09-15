@@ -12,8 +12,9 @@
 // ("default is to always tera whenever available").
 //
 // Defined here rather than in include/constants/battle_ai.h so upstream edits to that
-// header never conflict with it. Bit 34 is AI_FLAG_SMART_SPECIES_LOGIC.
-#define AI_FLAG_SMART_Z_MOVE ((u64)1 << 35)
+// header never conflict with it. Bit 59 is AI_FLAG_SMART_SPECIES_LOGIC; fork flags are
+// allocated downward from 59 (see that header for why).
+#define AI_FLAG_SMART_Z_MOVE ((u64)1 << 58)
 
 bool32 AI_ShouldSpendZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move chosenMove);
 

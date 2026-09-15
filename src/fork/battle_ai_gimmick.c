@@ -42,7 +42,7 @@ static bool32 GimmickSecuresKO(enum BattlerId battler, enum Gimmick gimmick)
             if (moves[moveIndex] == MOVE_NONE || GetMovePower(moves[moveIndex]) == 0)
                 continue;
 
-            dmg = AI_CalcDamageSaveBattlers(moves[moveIndex], battler, target, &effectiveness, USE_GIMMICK, NO_GIMMICK);
+            dmg = AI_CalcDamageSaveBattlers(moves[moveIndex], battler, target, &effectiveness, gimmick, GIMMICK_NONE);
             if (dmg.minimum >= gBattleMons[target].hp)
             {
                 securesKO = TRUE;

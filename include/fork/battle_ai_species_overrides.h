@@ -12,7 +12,11 @@
 // these overrides. Defined here (not in constants/battle_ai.h) so the definition
 // stays in a fork-owned file and never conflicts on an upstream sync; if upstream
 // ever assigns bit 34, move this to the next free bit.
-#define AI_FLAG_SMART_SPECIES_LOGIC ((u64)1 << 34)
+// Bit 59: fork AI flags are allocated DOWNWARD from 59 (the slot below upstream's 60-63
+// "other" block), because upstream allocates UPWARD and reached bit 36 in 1.17.0. Bit 34
+// collided with upstream's new AI_FLAG_ABILITY_OMNISCIENCE in that sync — silently, since
+// the two headers never touch. Never pick a bit just above upstream's highest.
+#define AI_FLAG_SMART_SPECIES_LOGIC ((u64)1 << 59)
 
 // Switch hook: TRUE means "do not voluntarily switch this mon out".
 bool32 AI_ShouldKeepTransformedFormIn(struct SwitchAiContext *switchContext);

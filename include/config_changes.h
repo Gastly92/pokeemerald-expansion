@@ -26,9 +26,35 @@ struct ConfigChanges
     // ...
 };
 
-#define GetConfig(name) GetConfigInternal(CONFIG_##name)
+#if TESTING
+extern struct ConfigChanges *gConfigChangesTestOverride;
+#define GET_CONFIG_VALUE(_field, _default) (gConfigChangesTestOverride == NULL ? (_default) : gConfigChangesTestOverride->_field)
+#else
+#define GET_CONFIG_VALUE(_field, _default) (_default)
+#endif
 
-u32 GetConfigInternal(enum ConfigTag configTag);
+#define UNPACK_BATTLE_CONFIG_GETTER(_name, _field, ...) static inline u32 GetConfig_##_name(void) { return GET_CONFIG_VALUE(_field, _name); }
+#define UNPACK_POKEMON_CONFIG_GETTER(_name, _field, ...) static inline u32 GetConfig_##_name(void) { return GET_CONFIG_VALUE(_field, P_##_name); }
+
+BATTLE_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER)
+POKEMON_CONFIG_DEFINITIONS(UNPACK_POKEMON_CONFIG_GETTER)
+AI_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER)
+// FORK: the fork's config groups need their GetConfig_* accessors generated too. Upstream replaced
+// the runtime `GetConfig(name) -> GetConfigInternal(CONFIG_##name)` dispatch with these generated
+// inline getters in the 1.17.0 sync; the change merged cleanly and silently left every fork tag
+// without an accessor. Their tag names double as their #define names (like the battle group), so
+// they use UNPACK_BATTLE_CONFIG_GETTER. On conflict, keep these three lines beside upstream's.
+DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER) // FORK
+BUFF_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER) // FORK
+FEATURE_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER) // FORK
+
+#undef UNPACK_BATTLE_CONFIG_GETTER
+#undef UNPACK_POKEMON_CONFIG_GETTER
+#undef GET_CONFIG_VALUE
+
+#define GetConfig(name) GetConfig_##name()
+
+ARM_FUNC u32 GetConfigInternal(enum ConfigTag configTag);
 void SetConfig(enum ConfigTag configTag, u32 value);
 
 #if TESTING

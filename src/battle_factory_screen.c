@@ -1811,8 +1811,6 @@ static void CreateFrontierFactorySelectableMons(u8 firstMonId)
     u32 otId = 0;
     u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
     enum FrontierLevelMode lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
-    // UPSTREAM: replaced a magic 7 with the named FRONTIER_STAGES_PER_CHALLENGE
-    // (behavior-preserving at the vanilla value) — safe to send back upstream.
     u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
     u8 rentalRank = 0;
 
@@ -2874,11 +2872,10 @@ static void Swap_Task_SlideCycleBalls(u8 taskId)
     switch (gTasks[taskId].tState)
     {
     case 0:
-        // UPSTREAM: these loops iterate FRONTIER_PARTY_SIZE rather than upstream's
-        // hardcoded 3 — behavior-preserving at the vanilla size and a candidate to
-        // send upstream. See CLAUDE.md ("Upstream-mergeable cleanups: the UPSTREAM: tag").
         for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+        {
             gTasks[taskId].tBallCycled(i) = FALSE;
+        }
         gTasks[taskId].tState = 1;
         break;
     case 1:

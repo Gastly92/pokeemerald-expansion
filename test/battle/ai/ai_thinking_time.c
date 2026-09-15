@@ -1,6 +1,10 @@
 #include "global.h"
 #include "test/battle.h"
 
+// FORK: upstream lowered its own ceilings in the 1.17.0 sync (2/7/14/28/21/24) after optimising
+// the AI. These are EXPECT_LE ceilings, so the fork's higher numbers below still hold; they were
+// measured against the pre-sync AI and are therefore loose, not wrong. Re-measure with
+// AI_FRAME_CEILING_CHECK and re-tighten as its own change rather than inside a sync.
 #define AI_FRAME_CEILING_SINGLES_NO_FLAGS                       3
 #define AI_FRAME_CEILING_SINGLES_SMART_TRAINER                  10
 #define AI_FRAME_CEILING_DOUBLES_NO_FLAGS                       25 // +1: Batch Y6 innate switch-in stat sims (Intrepid Sword/Dauntless Shield) in SetBattlerStatStagesForSwitchin; +2: Batch Y8 Teravolt/Turboblaze add two IsInnateActive checks to IsMoldBreakerTypeAbility, which the AI runs

@@ -29,14 +29,14 @@ static bool32 IsMirrorArmorReflected(struct BattleCalcValues *cv, struct StatCha
 // Utitily
 static void AdjustStatStage(struct BattleCalcValues *cv, struct StatChange *st);
 static bool32 CanAbilityPreventStatLoss(enum Ability ability);
-static bool32 AbilityPreventsSpecificStatDrop(u32 ability, u32 stat);
-static enum Ability GetInnateStatDropProtector(enum BattlerId battler, u32 stat, bool32 *fullProtection); // FORK: innate-aware stat-drop protection
+static bool32 AbilityPreventsSpecificStatDrop(enum Ability ability, enum Stat stat);
+static enum Ability GetInnateStatDropProtector(enum BattlerId battler, enum Stat stat, bool32 *fullProtection); // FORK: innate-aware stat-drop protection
 static u32 GetNumPositiveStats(struct StatChange *st);
 static u32 GetNumNegativeStats(struct StatChange *st);
 static void SetAdditionalEffectsOnStatChange(struct BattleCalcValues *cv, struct StatChange *st);
-static void MarkStatsAsDone(struct StatChange *st, u32 stat);
+static void MarkStatsAsDone(struct StatChange *st, enum Stat stat);
 
-u32 const sAccurateStatOrder[NUM_BATTLE_STATS] =
+enum Stat const sAccurateStatOrder[NUM_BATTLE_STATS] =
 {
     STAT_HP,
     STAT_ATK,
@@ -295,26 +295,6 @@ enum StatChangeResult TryStatChange(struct BattleCalcValues *cv, struct StatChan
         SetAdditionalEffectsOnStatChange(cv, st);
 
     return result;
-}
-
-enum StatChangeResult TrySingleStatChange(struct BattleCalcValues *cv, struct StatChange *st)
-{
-    AdjustStatStage(cv, st);
-
-    if (st->stage < 0)
-    {
-        if (CanDecreaseStat(cv, st) == STAT_CHANGE_DIDNT_WORK)
-            return STAT_CHANGE_DIDNT_WORK;
-
-        if (DecreaseStat(cv, st) == STAT_CHANGE_WORKED)
-            return STAT_CHANGE_WORKED;
-    }
-    else if (IncreaseStat(cv, st) == STAT_CHANGE_WORKED)
-    {
-        return STAT_CHANGE_WORKED;
-    }
-
-    return STAT_CHANGE_DIDNT_WORK;
 }
 
 static enum StatChangeResult CanDecreaseStat(struct BattleCalcValues *cv, struct StatChange *st)
@@ -971,7 +951,7 @@ static bool32 CanAbilityPreventStatLoss(enum Ability ability)
     }
 }
 
-static bool32 AbilityPreventsSpecificStatDrop(u32 ability, u32 stat)
+static bool32 AbilityPreventsSpecificStatDrop(enum Ability ability, enum Stat stat)
 {
     switch (ability)
     {
@@ -1030,7 +1010,7 @@ bool32 ShouldDefiantCompetitiveActivate(enum BattlerId battler, enum Ability abi
 // IsInnateActive (all are breakable EXCEPT Full Metal Body, whose .breakable = FALSE makes it immune to
 // Mold Breaker for free). Illuminate only protects accuracy in Gen 9+. See IsAbilityBlocked for how this
 // is applied when the chosen ability doesn't already block the drop.
-static enum Ability GetInnateStatDropProtector(enum BattlerId battler, u32 stat, bool32 *fullProtection)
+static enum Ability GetInnateStatDropProtector(enum BattlerId battler, enum Stat stat, bool32 *fullProtection)
 {
     *fullProtection = FALSE;
     if (IsInnateActive(battler, ABILITY_CLEAR_BODY))
@@ -1064,7 +1044,7 @@ static enum Ability GetInnateStatDropProtector(enum BattlerId battler, u32 stat,
     return ABILITY_NONE;
 }
 
-u32 GetStatStage(u32 stat, const struct AdditionalEffect *additionalEffect)
+u32 GetStatStage(enum Stat stat, const struct AdditionalEffect *additionalEffect)
 {
     switch (stat)
     {
@@ -1075,9 +1055,8 @@ u32 GetStatStage(u32 stat, const struct AdditionalEffect *additionalEffect)
     case STAT_SPDEF:   return additionalEffect->spDef;
     case STAT_ACC:     return additionalEffect->accuracy;
     case STAT_EVASION: return additionalEffect->evasion;
+    default:           return 0;
     }
-
-    return 0;
 }
 
 static u32 GetNumPositiveStats(struct StatChange *st)
@@ -1223,7 +1202,7 @@ static void SetAdditionalEffectsOnStatChange(struct BattleCalcValues *cv, struct
         break;
     case EFFECT_AUTOTOMIZE:
         if (gBattleStruct->moveResultFlags[cv->battlerDef] & MOVE_RESULT_STAT_CHANGED
-         && GetBattlerWeight(cv->battlerDef) > 1)
+         && GetBattlerWeight(cv->battlerDef, cv->abilities[cv->battlerDef], cv->holdEffects[cv->battlerDef]) > 1)
         {
             gBattleMons[cv->battlerDef].volatiles.autotomizeCount++;
             st->moveScript = BattleScript_AutotomizeMessage;
@@ -1240,7 +1219,7 @@ static void SetAdditionalEffectsOnStatChange(struct BattleCalcValues *cv, struct
   1. Multiply failure pop ups
   2. Since we don't mark battlers as doesn't affect foe, they still get a stat drop
 */
-static void MarkStatsAsDone(struct StatChange *st, u32 stat)
+static void MarkStatsAsDone(struct StatChange *st, enum Stat stat)
 {
     for (u32 i = 0; i < st->statStageAmount; i++)
     {
