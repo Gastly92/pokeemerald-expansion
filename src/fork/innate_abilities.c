@@ -2,6 +2,7 @@
 #include "battle.h"
 #include "battle_util.h"
 #include "fork/innate_abilities.h"
+#include "fork/species_shorthand.h"
 #include "constants/abilities.h"
 #include "constants/species.h"
 
@@ -9385,13 +9386,13 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         )
     },
     { // 0718
-        SPECIES_ZYGARDE_10_POWER_CONSTRUCT,
+        SPECIES_ZYGARDE_10_PC,
         INNATES(
             ABILITY_REGENERATOR
         )
     },
     { // 0718
-        SPECIES_ZYGARDE_50_POWER_CONSTRUCT,
+        SPECIES_ZYGARDE_50_PC,
         INNATES(
             ABILITY_REGENERATOR
         )

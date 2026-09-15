@@ -32,6 +32,14 @@
 // while its Ice/Shadow riders are TIER_MYTHICAL. List every forme you want
 // classified; anything not listed is TIER_NORMAL.
 //
+// CAVEAT — an omitted forme is not "inherits its base's tier", it is TIER_NORMAL,
+// i.e. draftable into any party slot with no quota. Every forme of a restricted
+// species that the extended roster can draft must therefore appear here in its own
+// right: leaving the 17 Arceus plate formes out let a TIER_MYTHICAL mon into
+// ordinary battles. Deliberate divergences only ever make a forme MORE restricted
+// than its base, so test/fork/species_tiers.c walks the roster and fails on any
+// forme that is less restricted than its base forme.
+//
 // SCOPE: the table currently covers the species/formes used by the extended
 // frontier roster (src/frontier_extended_mons.c). Species not listed return
 // TIER_NORMAL. Add a row to extend coverage.
