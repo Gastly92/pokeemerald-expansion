@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fork/species_shorthand.h"
 #include "fork/species_tiers.h"
 #include "constants/species.h"
 
@@ -52,7 +53,7 @@ static const u16 sMythicalSpecies[] =
     SPECIES_ZEKROM,               // 0644
     SPECIES_XERNEAS,              // 0716
     SPECIES_YVELTAL,              // 0717
-    SPECIES_ZYGARDE_50_POWER_CONSTRUCT, //0718
+    SPECIES_ZYGARDE_50_PC,        // 0718
     SPECIES_SOLGALEO,             // 0791
     SPECIES_LUNALA,               // 0792
     SPECIES_NECROZMA_DAWN_WINGS,  // 0800
@@ -122,7 +123,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_GENESECT_SHOCK,      // 0649
     SPECIES_GENESECT_BURN,       // 0649
     SPECIES_GENESECT_CHILL,      // 0649
-    SPECIES_ZYGARDE_10_POWER_CONSTRUCT, // 0718
+    SPECIES_ZYGARDE_10_PC,       // 0718
     SPECIES_DIANCIE,             // 0719
     SPECIES_HOOPA,               // 0720
     SPECIES_HOOPA_UNBOUND,       // 0720
