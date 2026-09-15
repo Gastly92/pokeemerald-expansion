@@ -116,7 +116,7 @@
 // parked now sits on at least two sets, so sPendingItems[] holds only the six parked entries
 // and nothing else. A new name appearing on it from here means either an upstream sync added
 // an item or a done item lost a set -- both of which the gates below will say out loud.
-#define HELD_ITEM_DONE_FLOOR 215
+#define HELD_ITEM_DONE_FLOOR 218
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
 static const enum Item sDoneItems[] =
@@ -124,6 +124,7 @@ static const enum Item sDoneItems[] =
     ITEM_ABILITY_SHIELD,
     ITEM_ABSORB_BULB,
     ITEM_ADAMANT_CRYSTAL,
+    ITEM_ADAMANT_ORB,
     ITEM_ADRENALINE_ORB,
     ITEM_AGUAV_BERRY,
     ITEM_AIR_BALLOON,
@@ -204,6 +205,7 @@ static const enum Item sDoneItems[] =
     ITEM_GRASS_GEM,
     ITEM_GRASS_MEMORY,
     ITEM_GRIP_CLAW,
+    ITEM_GRISEOUS_CORE,
     ITEM_GRISEOUS_ORB,
     ITEM_GROUND_GEM,
     ITEM_GROUND_MEMORY,
@@ -239,6 +241,7 @@ static const enum Item sDoneItems[] =
     ITEM_LUMINOUS_MOSS,
     ITEM_LUM_BERRY,
     ITEM_LUSTROUS_GLOBE,
+    ITEM_LUSTROUS_ORB,
     ITEM_MAGNET,
     ITEM_MAGO_BERRY,
     ITEM_MARANGA_BERRY,
@@ -367,35 +370,42 @@ static const enum Item sPendingItems[] =
     // A new entry here means a done item LOST a set, which the single-set gate catches --
     // demote it and lower HELD_ITEM_DONE_FLOOR, or give it a replacement set.
     //
-    // Note what deliberately never appears here: the form-change enablers that also sit at
-    // one set (Adamant Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and
-    // Shield, the three Ogerpon masks, the Memories). For those, one is the CEILING rather
-    // than a shortfall -- each unlocks exactly one forme on exactly one species, so there is
-    // no second set to want. They stay done so the zero-set gate keeps watching them.
+    // Note what deliberately never appears here: the items sitting at one set because one IS
+    // their ceiling. Two rules cover them, both derived rather than listed. The form-change
+    // enablers (Adamant Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and
+    // Shield, the three Ogerpon masks, the Plates, Memories and Drives) each unlock exactly one
+    // forme on exactly one species, so there is no second set to want. The three signature
+    // ORBS (Adamant, Lustrous, Griseous) are the same item in battle as the crystal that
+    // unlocks the forme -- same hold effect, same species gate, same boost -- and belong to
+    // the base forme as the crystal belongs to the Origin forme. All of them stay done so the
+    // zero-set gate keeps watching them: delete that Giratina set and CI should still notice.
 
     // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
-    // Down to the SIX PARKED items and nothing else -- every other held item that is live in
-    // a frontier battle now sits on at least two sets. These six are not a backlog; each was
-    // examined and deliberately left undrafted. They stay here rather than on sIgnoredItems[]
-    // because the ignored list means the effect CANNOT HAPPEN, which is a different claim.
+    // Down to the THREE PARKED items and nothing else -- every other held item that is live
+    // in a frontier battle now sits on at least one set, and on two unless it is at a forme
+    // ceiling. These three are not a backlog; each was examined and deliberately left
+    // undrafted. They stay here rather than on sIgnoredItems[] because the ignored list means
+    // the effect CANNOT HAPPEN, which is a different claim -- nothing about these is dead.
     // See the "Parked" section of fork-docs/HELD_ITEMS.md for the arithmetic behind each.
     //
     //   Deep Sea Tooth, Deep Sea Scale  -- locked to Clamperl; graduating both costs four NFE
     //                                      sets in a uniform draw.
-    //   Adamant Orb, Lustrous Orb,      -- species-locked with too small a holder pool:
-    //   Griseous Core                      Adamant Orb has THREE legal sets, so reaching two
-    //                                      means both Dialga sets holding it, which adds no
-    //                                      reach under one-species-per-team.
     //   Ring Target                     -- the one item whose effect is a pure drawback to its
     //                                      own holder (it deletes its type immunities).
     //
+    // Adamant Orb, Lustrous Orb and Griseous Core used to sit here on the claim that their
+    // holder pools were too small to graduate -- that reaching two sets would mean doubling
+    // an orb onto a second set of the same forme "which adds no reach under
+    // one-species-per-team". BOTH HALVES OF THAT WERE WRONG. The draw is uniform over sets,
+    // so a second set does add reach; and the duplicate check compares exact species
+    // (src/battle_frontier.c), so the base forme and the Origin forme were never mutually
+    // exclusive in the first place. Each now holds its own forme's item at the one set that
+    // is its ceiling -- see ItemSharesHoldEffectWithAFormeUnlocker() above.
+    //
     // A NEW name here means an upstream sync added an item, or a done item lost a set. Both
     // are worth a look rather than a reflexive re-draft.
-    ITEM_ADAMANT_ORB,
     ITEM_DEEP_SEA_SCALE,
     ITEM_DEEP_SEA_TOOTH,
-    ITEM_GRISEOUS_CORE,
-    ITEM_LUSTROUS_ORB,
     ITEM_RING_TARGET,
 };
 
@@ -566,6 +576,69 @@ static bool32 ItemUnlocksExactlyOneForme(enum Item item)
     return FALSE;
 }
 
+// The TWIN case the rule above misses, and the reason it has to exist: a signature type
+// item and its Legends-Arceus counterpart are the SAME ITEM in a battle. Adamant Orb and
+// Adamant Crystal both carry HOLD_EFFECT_ADAMANT_ORB, and the one site that reads it
+// (src/battle_util.c, HOLD_EFFECT_ADAMANT_ORB) gives either of them the same
+// BUFF_SIGNATURE_TYPE_ITEMS boost on the same two types to the same species -- it matches
+// the holder with GET_BASE_SPECIES_ID, so the base forme and the Origin forme both qualify
+// with either item. Only the crystal appears in a form change table, so only the crystal
+// was exempt above. That is a gen-config accident, not a difference in behavior: which
+// half of the pair unlocks the forme depends on I_GRISEOUS_ORB_FORM_CHANGE and friends,
+// and at GEN_LATEST it is Griseous CORE rather than Griseous Orb.
+//
+// One set is the ceiling for the orb half too, and the flavor reason is also the
+// mechanical one. The orb belongs to the base forme and the crystal to the Origin forme;
+// each forme has its own sets; and the draft compares EXACT species, not base species
+// (src/battle_frontier.c, "Ensure this Pokemon species isn't a duplicate"), so one team can
+// field Dialga holding the Orb AND Dialga-Origin holding the Crystal at once. Putting an
+// orb on a SECOND set of the same forme would buy appearance rate by spending set variety,
+// on species that get very few slots to begin with -- all six formes are TIER_MYTHICAL
+// (src/fork/species_tiers.c), so they arrive only through a reserved forced-tier slot.
+//
+// HOLD_EFFECT_NONE must not match, or the gate would gut itself: Rusted Sword and Rusted
+// Shield are form-change enablers with NO hold effect at all, so without that guard every
+// effectless item in the build would look twinned with them and sail through.
+static bool32 ItemSharesHoldEffectWithAFormeUnlocker(enum Item item)
+{
+    enum HoldEffect holdEffect = GetItemHoldEffect(item);
+    enum Species species;
+
+    if (item == ITEM_NONE || holdEffect == HOLD_EFFECT_NONE)
+        return FALSE;
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        const struct FormChange *formChanges;
+        u32 i;
+
+        // Same disabled-species guard as ItemUnlocksExactlyOneForme() above.
+        if (!IsSpeciesEnabled(species))
+            continue;
+
+        formChanges = GetSpeciesFormChanges(species);
+
+        for (i = 0; formChanges != NULL && formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+        {
+            switch (formChanges[i].method)
+            {
+            case FORM_CHANGE_ITEM_HOLD:
+            case FORM_CHANGE_BEGIN_BATTLE:
+            case FORM_CHANGE_END_BATTLE:
+            case FORM_CHANGE_BATTLE_PRIMAL_REVERSION:
+                if (formChanges[i].param1 != ITEM_NONE
+                 && formChanges[i].param1 != item
+                 && GetItemHoldEffect(formChanges[i].param1) == holdEffect)
+                    return TRUE;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    return FALSE;
+}
+
 TEST("Held item tracker: every held item is on exactly one tracker list")
 {
     u32 item;
@@ -662,7 +735,11 @@ TEST("Held item tracker: no done item sits on a single set")
         // One forme on one species IS the whole reach of a form-change enabler, so one
         // set is its ceiling. They stay on the done list precisely so the zero-set gate
         // keeps watching them: delete that Giratina-Origin set and CI should still notice.
-        if (ItemUnlocksExactlyOneForme(sDoneItems[i]))
+        // The second test covers the orb half of each signature pair, which is the same
+        // item in battle as the crystal that unlocks the forme -- see the comment on
+        // ItemSharesHoldEffectWithAFormeUnlocker() for why one set is its ceiling too.
+        if (ItemUnlocksExactlyOneForme(sDoneItems[i])
+         || ItemSharesHoldEffectWithAFormeUnlocker(sDoneItems[i]))
             continue;
 
         if (CountRosterSetsHolding(sDoneItems[i]) == 1)
@@ -674,6 +751,44 @@ TEST("Held item tracker: no done item sits on a single set")
     }
 
     EXPECT_EQ(offenders, 0);
+}
+
+// Pins the twin exemption the gate above leans on, because it is the one exemption that can
+// be WIDENED by accident. It keys on a shared hold effect, and hold effects are shared by
+// plenty of things that are not signature items -- so this fixes both what must pass through
+// it and, more importantly, what must not.
+TEST("Held item tracker: the signature orbs are exempt, and nothing else sneaks through")
+{
+    // The three orbs are the point of the rule. Each is the base forme's half of a pair whose
+    // other half unlocks the Origin forme, and in battle they are the same item.
+    EXPECT(ItemSharesHoldEffectWithAFormeUnlocker(ITEM_ADAMANT_ORB));
+    EXPECT(ItemSharesHoldEffectWithAFormeUnlocker(ITEM_LUSTROUS_ORB));
+    EXPECT(ItemSharesHoldEffectWithAFormeUnlocker(ITEM_GRISEOUS_ORB));
+
+    // Their crystals were already exempt the older way, and must stay that way rather than
+    // quietly starting to depend on the new rule.
+    EXPECT(ItemUnlocksExactlyOneForme(ITEM_ADAMANT_CRYSTAL));
+    EXPECT(ItemUnlocksExactlyOneForme(ITEM_LUSTROUS_GLOBE));
+    EXPECT(ItemUnlocksExactlyOneForme(ITEM_GRISEOUS_CORE));
+
+    // THE GUARD THAT MATTERS. Rusted Sword and Rusted Shield are form-change enablers with
+    // HOLD_EFFECT_NONE, so a rule that compared hold effects without excluding NONE would
+    // call every effectless item in the build their twin and exempt the lot -- turning the
+    // single-set gate off for most of the item table with nothing visibly failing.
+    EXPECT_EQ(GetItemHoldEffect(ITEM_RUSTED_SWORD), HOLD_EFFECT_NONE);
+    EXPECT_EQ(ItemSharesHoldEffectWithAFormeUnlocker(ITEM_POTION), FALSE);
+
+    // Soul Dew is the control for over-reach in the other direction: it is a signature type
+    // item on the same BUFF_SIGNATURE_TYPE_ITEMS footing as the orbs, but it has no
+    // forme-unlocking twin, so it is NOT at a one-set ceiling and still owes the gate two
+    // sets. If this ever passes, the rule has stopped being about twins.
+    EXPECT_EQ(ItemSharesHoldEffectWithAFormeUnlocker(ITEM_SOUL_DEW), FALSE);
+    EXPECT_EQ(ItemUnlocksExactlyOneForme(ITEM_SOUL_DEW), FALSE);
+    EXPECT_GE(CountRosterSetsHolding(ITEM_SOUL_DEW), 2);
+
+    // And an ordinary item is exempt by neither rule, which is what keeps the gate a gate.
+    EXPECT_EQ(ItemSharesHoldEffectWithAFormeUnlocker(ITEM_LEFTOVERS), FALSE);
+    EXPECT_EQ(ItemUnlocksExactlyOneForme(ITEM_LEFTOVERS), FALSE);
 }
 
 TEST("Held item tracker: no set holds an ignored item")

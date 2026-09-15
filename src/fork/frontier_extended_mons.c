@@ -16058,7 +16058,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DIALGA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_SPECS,
+        .heldItem = ITEM_ADAMANT_ORB,
         .moves =
         {
             MOVE_DRACO_METEOR,
@@ -16102,7 +16102,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_PALKIA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_LUSTROUS_ORB,
         .moves =
         {
             MOVE_SPACIAL_REND,
@@ -16312,7 +16312,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GIRATINA_ORIGIN,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_GRISEOUS_ORB,
+        .heldItem = ITEM_GRISEOUS_CORE,
         .moves =
         {
             MOVE_SHADOW_FORCE,
