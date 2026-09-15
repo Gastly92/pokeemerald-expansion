@@ -27,14 +27,30 @@ roster *is*) and [`LINE_REVIEW.md`](LINE_REVIEW.md) (how to author a set).
 ## Status lives in the tracker, not here
 
 `test/fork/held_item_tracker.c` is the **source of truth for where each item stands**,
-and CI gates it. Every item that does something when held sits on exactly one of three
+and CI gates it. Every item that does something when held sits on exactly one of **two**
 lists, and the list *is* the status:
 
 | List | Meaning | Gated? |
 | --- | --- | --- |
-| `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, **more than one** unless it is a form-change enabler, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
-| `sPendingItems[]` | Work outstanding: needs a buff, is mechanically fine and needs a set, or is **thinly drafted** (on one set, which with one-item-per-team is a roll away from never appearing) | No — a pending item may sit at zero sets, which is usually why it is pending |
-| `sIgnoredItems[]` | Nothing it does is reachable in a frontier battle — the effect can't happen here, **or** its only legal holder can't use the effect it has | Exempt from the done gates, but **no set may hold one** — a Mega Stone or Z-Crystal in the slot does nothing under `FEATURE_FREE_GIMMICKS`, so the set would be playing an item down with no other symptom |
+| `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, **more than one** unless one is its ceiling, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
+| `sIgnoredItems[]` | **No set holds it** — either nothing it does is reachable in a frontier battle, or the effect works and we have deliberately decided not to draft it | Exempt from the done gates, but **no set may hold one**, which is enforced |
+
+There used to be a third list, `sPendingItems[]`, for work outstanding. **It was removed
+once the audit closed, and the reason is the point:** it was the one list with no gate of
+its own. Nothing asserted anything about a pending item, so an item sitting there was
+unwatched — which is exactly the "we decided something and nothing checked it" failure the
+tracker exists to catch, reappearing inside the tracker. Work that is genuinely outstanding
+belongs in an issue or a branch, not in an ungated array.
+
+That widened what `sIgnoredItems[]` asserts. It no longer means "the effect cannot happen";
+it means **"no set holds this, and that is on purpose."** The three items that moved across
+when the list was dropped — Ring Target and the Clamperl pair — are the second kind: they
+work, and we have decided not to draft them. The gate is the same for both kinds because the
+consequence of a set holding one is the same shape — for an inert item the set is playing an
+item down, for a deliberate one the set is undoing a considered call — and in both cases the
+fix is a reviewed edit rather than a drift. To start drafting one, move it to `sDoneItems[]`
+in the commit that gives it sets.
+
 
 A **one-set count is not automatically a shortfall.** The form-change enablers — Adamant
 Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and Shield, the three
@@ -173,9 +189,10 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | Species-locked but inert | 3 | **Lucky Punch** (Chansey only) is repaired twice over — +2 crit stage, which `DETERMINISTIC_HOLD_EFFECTS` upgrades to a guaranteed first-attack crit — but Chansey has **5 base Attack** and attacks with Seismic Toss, whose fixed damage a crit does not scale, so the crit lands and changes nothing. **Metal Powder / Quick Powder** (Ditto only) both gate on an *untransformed* Ditto, and the roster's Ditto runs Imposter, which transforms on switch-in. The effect is real in each case; the one holder allowed to have it cannot use it. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **3 unused items that are live in battle**, and all three are deliberately
-*parked* rather than outstanding — see
-[Parked](#parked-the-item-works-the-holder-costs-too-much) for the arithmetic behind each.
+That leaves **3 unused items that are live in battle**, and all three are on
+`sIgnoredItems[]` deliberately rather than outstanding — see
+[Undrafted on purpose](#undrafted-on-purpose-the-item-works-the-holder-costs-too-much) for
+the arithmetic behind each.
 
 ## How each class was settled
 
@@ -202,7 +219,7 @@ and why it was the cheapest capacity in the audit.
 | ~~**Wiki, Mago, Iapapa Berry**~~ — **shipped** | Drafted, **2 sets each** | Mechanically identical to Figy and Aguav — the only difference is which nature dislikes the flavor, so placement was the whole job. One screen matters and it is not obvious: a holder whose nature **dislikes** the berry's flavor is *confused* by it rather than healed cleanly, and the disliked flavor tracks the nature's **lowered** stat (`gPokeblockFlavorCompatibilityTable`). That is deterministic here, because `src/battle_frontier.c` runs `ModifyPersonalityForNature()` before the set is built — the nature written on the set is the nature in battle. |
 | ~~**Cheri, Pecha, Rawst, Aspear, Persim Berry**~~ — **shipped** | Drafted, **2 sets each** | Narrower Lum Berries, and narrow is the point on an uncrowded slot. Screened against the typing that cannot take the status at all — an Electric type cannot be paralysed, a Fire type cannot be burned — which would leave the berry permanently dead in the slot, the same failure a resist berry on an immune holder produces. |
 | ~~**Liechi, Ganlon, Apicot, Starf Berry**~~ — **shipped** | Drafted, **2 sets each** | Pinch berries, so the holder has to reach the threshold *and* be able to use the stat when it does — the stat raised is matched to what the set actually attacks with. Starf is deterministic here (it raises the holder's **currently highest** stat, not a random one), and innate **Gluttony** moves any of them from 1/4 to 1/2 max HP. |
-| ~~**The situational tail**~~ — **shipped** | Drafted, **2 sets each** | The last 39 draftable items, the ones with no class rule: the twelve berries in the three rows above, plus Absorb Bulb, Cell Battery, Snowball, Luminous Moss, Eject Button, Eject Pack, Red Card, Room Service, Adrenaline Orb, Ability Shield, Clear Amulet, Protective Pads, Utility Umbrella, Float Stone, Shed Shell, Sticky Barb, Binding Band, Lagging Tail, Full Incense, Metronome, Berserk Gene, Micle Berry, Enigma Berry, Jaboca, Rowap, Kee and Maranga. Each got an explicit rule of its own instead of a shared lever — Eject Pack on a self-lowering nuke, Room Service on a set that carries Trick Room, Lagging Tail on Avalanche/Counter/Mirror Coat, Metronome on a genuine single-move spammer, Utility Umbrella on a holder that does *not* set its own weather. **Ring Target** is the only item of this shape deliberately left out, being the one whose effect is a pure drawback to its own holder; it is [parked](#parked-the-item-works-the-holder-costs-too-much). See the caveat below before re-reading these picks. |
+| ~~**The situational tail**~~ — **shipped** | Drafted, **2 sets each** | The last 39 draftable items, the ones with no class rule: the twelve berries in the three rows above, plus Absorb Bulb, Cell Battery, Snowball, Luminous Moss, Eject Button, Eject Pack, Red Card, Room Service, Adrenaline Orb, Ability Shield, Clear Amulet, Protective Pads, Utility Umbrella, Float Stone, Shed Shell, Sticky Barb, Binding Band, Lagging Tail, Full Incense, Metronome, Berserk Gene, Micle Berry, Enigma Berry, Jaboca, Rowap, Kee and Maranga. Each got an explicit rule of its own instead of a shared lever — Eject Pack on a self-lowering nuke, Room Service on a set that carries Trick Room, Lagging Tail on Avalanche/Counter/Mirror Coat, Metronome on a genuine single-move spammer, Utility Umbrella on a holder that does *not* set its own weather. **Ring Target** is the only item of this shape deliberately left out, being the one whose effect is a pure drawback to its own holder; it is [parked](#undrafted-on-purpose-the-item-works-the-holder-costs-too-much). See the caveat below before re-reading these picks. |
 
 #### The situational tail is rule-governed, not hand-tuned
 
@@ -233,25 +250,29 @@ This group was regression collateral of our own making, and all of it has shippe
 | Item(s) | The problem | Sketch of a fix |
 | --- | --- | --- |
 | ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves, and the roster half is now complete: **all 18 types carry at least two sets**. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and placement followed the settled rule — a self-debuffing nuke (Overheat, Leaf Storm, Draco Meteor, Psycho Boost, Fleur Cannon), a literal one-use move (**Explosion**, the purest case), or true **off-STAB coverage**, which is what gives the eleven types with no nuke of their own a home. One screen is specific to this class: an **-ate ability re-types the move out from under the Gem**. Golem-Alola was the obvious Explosion home for the Normal Gem and its Galvanize turns Explosion Electric, so the Gem would never have fired; plain Golem took it instead. |
-| ~~**Soul Dew**~~ — **shipped** (balance + roster) | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package. The roster moved **that same Dragon Fang set** onto Soul Dew — Calm Mind / Psyshock / Dragon Pulse splits its damage across both boosted types, which is the shape the item exists for. The gate also had to start reading the holder by **base** species, or a Soul Dew Lati@s that Mega Evolved under `FEATURE_FREE_GIMMICKS` silently lost its own item. **Collateral, fixed later:** that Latios set was Dragon Fang's *second* home, so re-iteming it quietly left Dragon Fang on one set while it sat on the done list. It has since been demoted to pending. |
+| ~~**Soul Dew**~~ — **shipped** (balance + roster) | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package. The roster moved **that same Dragon Fang set** onto Soul Dew — Calm Mind / Psyshock / Dragon Pulse splits its damage across both boosted types, which is the shape the item exists for. The gate also had to start reading the holder by **base** species, or a Soul Dew Lati@s that Mega Evolved under `FEATURE_FREE_GIMMICKS` silently lost its own item. **Collateral, fixed later:** that Latios set was Dragon Fang's *second* home, so re-iteming it quietly left Dragon Fang on one set while it sat on the done list. It was demoted at the time and re-graduated later with a second set. |
 | ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. **Roster half, done later:** each orb now sits on its own forme's set — Adamant Orb on Dialga, Lustrous Orb on Palkia, Griseous Core on Giratina-Origin — with the crystal on the counterpart forme. One set each is the ceiling, since an orb and its crystal are the same item in battle. |
 | ~~**The 17 Memories and 4 Drives**~~ — **shipped** (balance + roster) | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally looked compelled to hold it too, though that turned out to be untrue here — see the note below on forme reversion. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` fixed the balance and locked each item to its own species; the roster then drafted **all 17 Memories** (Silvally formes) and **all 4 Drives** (Genesect formes). The Drive sets run Techno Blast, which the Drive re-types — note it does **not** re-type Genesect, which stays Bug/Steel, so a Drive is +40% off-STAB where a Memory is +40% on top of STAB. |
 
 ### Group C — weak in stock, still weak here — **shipped**
 
 Not caused by us; just never worth a slot. **This group closed the balance half of the
-audit** — after it, nothing pending was a balance problem, only a placement one.
+audit** — after it, nothing left undrafted was a balance problem, only a placement one.
 
 | Item(s) | The problem | Fix |
 | --- | --- | --- |
 | ~~**Oran Berry, Berry Juice**~~ — **shipped** | Flat 10 and 20 HP at ≤1/2 HP. At the frontier's Level 50 that is roughly 5–7% and 10–13% of a typical HP pool, against Sitrus Berry's 25% in the same slot — a flat number does not survive the jump to Level 50, and the roster held neither on a single set. | `BUFF_FLAT_HP_ITEMS` heals `maxHP/4` for both, **matching Sitrus exactly**. Duplication is the goal, not a fallback: one item per team means Sitrus's **103 sets** all compete for one slot, so two more items healing the same amount are two more uncontested slots those sets can move onto — the reasoning that put Sea/Wave Incense on the roster as Mystic Water clones. A **bigger** Berry Juice was considered and rejected: the drawback that would pay for it (Ripen cannot double it, Harvest cannot regrow it) reaches **2.3%** of species, so for the other 97.7% it would just be a strictly better Sitrus. At an equal number it keeps an identity for free by **not being a Berry** — innate Unnerve (44 species) blocks Sitrus but not Berry Juice, while Ripen/Harvest (34) amplify Sitrus but not Berry Juice. Same power, opposite matchups. Keyed on the two **items**, not on `HOLD_EFFECT_RESTORE_HP`, because Sitrus shares that hold effect whenever `I_SITRUS_BERRY_HEAL < GEN_4`. Site: `ItemHealHp()` in `src/battle_hold_effects.c`; `test/fork/buff_flat_hp_items.c`. |
 
-#### Parked: the item works, the holder costs too much
+#### Undrafted on purpose: the item works, the holder costs too much
 
-| Item(s) | Why it is parked |
+These three live on `sIgnoredItems[]`, not because their effects are dead — they are not —
+but because the decision not to draft them is deliberate and now gated. They were called
+*parked* while `sPendingItems[]` existed.
+
+| Item(s) | Why it is not drafted |
 | --- | --- |
-| **Deep Sea Tooth, Deep Sea Scale** | Both are **2x**, genuinely enormous, and locked to Clamperl, which has no set (it evolves, so the coverage test excuses it). The price is what stalls them, not the item: graduation takes two sets each, so drafting both means **four Clamperl entries** — a 35/64/85/74/55/32 NFE, four times, in a uniform draw — while Huntail and Gorebyss already carry four sets between them. They stay **pending**, not ignored, because nothing about them is dead: a line review that wants an NFE gimmick can pick them up without any code or list change. Just don't count them when sizing a batch. |
-| **Ring Target** | The only held item whose effect is a **pure drawback to its holder**: it turns the holder's type *immunities* into neutral damage (`MulByTypeEffectiveness`, `src/battle_util.c`). There is no upside term — it exists in the retail games to be handed to an opponent via Trick or Fling, which no set here does. Drafting it means deliberately making a set worse. |
+| **Deep Sea Tooth, Deep Sea Scale** | Both are **2x**, genuinely enormous, and locked to Clamperl, which has no set (it evolves, so the coverage test excuses it). The price is what stalls them, not the item: graduation takes two sets each, so drafting both means **four Clamperl entries** — a 35/64/85/74/55/32 NFE, four times, in a uniform draw — while Huntail and Gorebyss already carry four sets between them. Nothing about them is dead: a line review that wants an NFE gimmick can pick them up without any code or list change. Just don't count them when sizing a batch. |
+| **Ring Target** | The only held item whose effect is a **pure drawback to its holder**, and a no-op on the 11 types with no immunity to lose, so it is dead or negative on every possible holder and never positive: it turns the holder's type *immunities* into neutral damage (`MulByTypeEffectiveness`, `src/battle_util.c`). There is no upside term — it exists in the retail games to be handed to an opponent via Trick or Fling, which no set here does. Drafting it means deliberately making a set worse. |
 
 **Unparked, and why the original reasoning was wrong.** Adamant Orb, Lustrous Orb and
 Griseous Core sat in this table until the flavor question — shouldn't the orb belong to the
@@ -391,16 +412,18 @@ same period, but from line reviews, not from this audit.)
 **What is still on nobody, and why.** Three items, each a deliberate call rather than a gap:
 the **Clamperl pair** (Deep Sea Tooth/Scale — the effect is enormous, but graduating both
 costs four NFE sets in a uniform draw) and **Ring Target** (a pure drawback to its own
-holder). They sit in `sPendingItems[]` rather than `sIgnoredItems[]` because the ignored
-list makes a stronger claim — that the effect *cannot happen* — and neither of these is
-dead. See [Parked](#parked-the-item-works-the-holder-costs-too-much).
+holder, and a no-op on the 11 types with no immunity to lose — so it is dead or negative on
+every possible holder, never positive). All three sit on `sIgnoredItems[]`, which is gated:
+no set may hold one, so re-drafting any of them is a reviewed promotion to `sDoneItems[]`
+rather than a quiet edit. See
+[Undrafted on purpose](#undrafted-on-purpose-the-item-works-the-holder-costs-too-much).
 
 The three signature orbs used to be here as well. They were unparked once the flavor
 question turned out to have a mechanical answer: an orb and its crystal are the **same item
 in battle**, so the base forme holding the orb and the Origin forme holding the crystal is
 one set each at its ceiling, not a shortfall. The park's original arithmetic was wrong in
 both directions — see the correction under
-[Parked](#parked-the-item-works-the-holder-costs-too-much).
+[Undrafted on purpose](#undrafted-on-purpose-the-item-works-the-holder-costs-too-much).
 
 **Not backlog, and not counted anywhere above:** Lucky Punch, Metal Powder and Quick
 Powder are on `sIgnoredItems[]` — the effect is real, but the only legal holder cannot use
@@ -420,12 +443,11 @@ that stops a dead placement — read it even for a single re-item.
 make check TESTS="Held item tracker"     # the six gates; green means the lists are honest
 ```
 
-`test/fork/held_item_tracker.c` is the status. Read its three lists and the comment blocks
-inside `sPendingItems[]`, which are grouped by *what kind of work is outstanding*: **needs
-a buff**, **thinly drafted** (on one set), **needs a set** (on none). The first two blocks
-are empty and the third holds only the six parked items, so **a name you did not expect to
-see there is the signal** — it means an upstream sync added an item, or a done item lost a
-set. Re-measure usage before trusting any count in this doc:
+`test/fork/held_item_tracker.c` is the status. Read its two lists: `sDoneItems[]` is
+everything the roster drafts, and `sIgnoredItems[]` is everything it does not, with the
+comment above the latter saying which entries are inert and which are deliberate. Both are
+gated, so **the tests are the thing to run first** — an item in the wrong place says so out
+loud rather than sitting quietly. Re-measure usage before trusting any count in this doc:
 
 ```bash
 grep -oP '\.heldItem = \KITEM_\w+' src/fork/frontier_extended_mons.c | sort | uniq -c | sort -rn
@@ -447,7 +469,7 @@ final 78), and the last of those is exactly the batch carrying the
 
 - **A Gem is burst, not defense.** Making Gems grant type *immunity* was considered and
   rejected: it obsoletes Air Balloon outright and out-classes all 18 resist berries, both
-  already pending. Fixing 18 items by breaking 19 is not a fix.
+  undrafted at the time. Fixing 18 items by breaking 19 is not a fix.
 - **+60% was chosen deliberately.** A Gem is boost×one turn against a type item's
   boost×every turn, so the break-even is 1.5 uses. Bigger numbers start dominating the
   permanent items, which is the mistake the flag exists to undo.
@@ -538,7 +560,7 @@ final 78), and the last of those is exactly the batch carrying the
 
 An item joins `sDoneItems[]` only when **both** halves are true: balance is right **and**
 the roster uses it on more than one set. Graduating is what arms the gates for it, so a
-premature promotion is worse than leaving it pending. Bump `HELD_ITEM_DONE_FLOOR` by
+premature promotion is worse than leaving it on `sIgnoredItems[]`. Bump `HELD_ITEM_DONE_FLOOR` by
 however many you promoted — the ratchet is meant to make a demotion a visible, reviewed
 edit rather than a quiet way to go green.
 

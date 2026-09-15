@@ -94,12 +94,12 @@ An ongoing project to rebalance items and other functionality, usually as
 compensation for other changes — the `DETERMINISTIC_*` project trades random upsides
 away, so some items get buffed to keep battles balanced. Each tweak gets its own flag
 in `config/buff.h` (`FALSE` = stock). Both below are enabled. The held-item audit that
-drove them is finished; `test/fork/held_item_tracker.c` sorts every held item into done /
-pending / ignored and fails CI if a *done* item is unclassified, unheld by any set, held
-by only one set (unless one is its ceiling: a form-change enabler, or an item sharing a
-hold effect with one, which is what lets each signature orb sit beside its crystal), or over
-20% of the roster; [`HELD_ITEMS.md`](HELD_ITEMS.md) carries the reasoning behind
-each verdict. A companion gate in the roster suite ("no set holds an item none of its
+drove them is finished; `test/fork/held_item_tracker.c` sorts every held item into done or
+ignored — two lists, both gated, with no unwatched middle — and fails CI if a *done* item is
+unclassified, unheld by any set, held by only one set (unless one is its ceiling: a
+form-change enabler, or an item sharing a hold effect with one, which is what lets each
+signature orb sit beside its crystal), or over 20% of the roster, and if any set holds an
+*ignored* one; [`HELD_ITEMS.md`](HELD_ITEMS.md) carries the reasoning behind each verdict. A companion gate in the roster suite ("no set holds an item none of its
 moves can activate") catches the case no tracker gate can see: a conditional item sitting
 on a holder it can never fire for.
 
