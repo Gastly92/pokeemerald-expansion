@@ -1833,8 +1833,6 @@ s32 GetDrainedBigRootHp(enum BattlerId battler, s32 hp)
     return hp;
 }
 
-
-
 // Should always be the last check. Otherwise the ability might be wrongly recorded.
 bool32 IsAbilityAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck)
 {
@@ -1844,7 +1842,6 @@ bool32 IsAbilityAndRecord(enum BattlerId battler, enum Ability battlerAbility, e
     RecordAbilityBattle(battler, abilityToCheck);
     return TRUE;
 }
-
 
 bool32 HandleFaintedMonActions(void)
 {
@@ -5448,11 +5445,6 @@ enum Ability GetBattlerAbilityInternal(enum BattlerId battler, bool32 ignoreMold
 
     return gBattleMons[battler].ability;
 }
-
-
-
-
-
 
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability)
 {
@@ -12022,9 +12014,6 @@ u32 GetTotalAccuracy(struct BattleCalcValues *cv, u32 weather)
 
     return calc;
 }
-
-
-
 
 bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv)
 {

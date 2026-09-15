@@ -3736,7 +3736,6 @@ static enum MoveEndResult MoveEndResistBerryMessage(struct BattleCalcValues *cv)
     return result;
 }
 
-
 static enum MoveEndResult MoveEndFormChangeOnHit(struct BattleCalcValues *cv)
 {
     enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
@@ -4813,7 +4812,6 @@ static enum MoveEndResult MoveEndAbilityEffectFoesFainted(struct BattleCalcValue
     return result;
 }
 
-
 static enum MoveEndResult MoveEndShellTrap(struct BattleCalcValues *cv)
 {
     u32 shellTrapBattlerMask = 0;
@@ -4872,7 +4870,6 @@ static enum MoveEndResult MoveEndColorChange(struct BattleCalcValues *cv)
     gBattleScripting.moveendState++;
     return MOVEEND_RESULT_CONTINUE;
 }
-
 
 static enum MoveEndResult MoveEndKeeMarangaHpThresholdItemTarget(struct BattleCalcValues *cv)
 {
@@ -5365,8 +5362,6 @@ static enum MoveEndResult MoveEndItemOnStatChange(struct BattleCalcValues *cv)
     gBattleScripting.moveendState++;
     return MOVEEND_RESULT_CONTINUE;
 }
-
-
 
 static enum MoveEndResult MoveEndSendOutReplacements(struct BattleCalcValues *cv)
 {

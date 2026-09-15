@@ -494,7 +494,6 @@ static bool32 HandleEndTurnIngrain(enum BattlerId battler)
     return effect;
 }
 
-
 static bool32 HandleEndTurnLeechSeed(enum BattlerId battler)
 {
     bool32 effect = FALSE;

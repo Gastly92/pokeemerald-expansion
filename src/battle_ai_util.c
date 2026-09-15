@@ -1115,7 +1115,6 @@ bool32 AI_IsDamagedByRecoil(enum BattlerId battler)
     return TRUE;
 }
 
-
 static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
 {
     enum Ability abilityDef = gAiLogicData->abilities[battlerDef];
@@ -1253,7 +1252,6 @@ static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId ba
 
     return FALSE;
 }
-
 
 static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
 {
@@ -1900,7 +1898,6 @@ bool32 AI_IsAbilityOnSide(enum BattlerId battlerId, enum Ability ability)
     else
         return FALSE;
 }
-
 
 // does NOT include ability suppression checks
 enum Ability AI_DecideKnownAbilityForTurn(enum BattlerId battlerId)
@@ -3788,7 +3785,6 @@ bool32 IsBattlerIncapacitated(enum BattlerId battler, enum Ability ability)
 
     return FALSE;
 }
-
 
 bool32 AI_CanPutToSleep(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability defAbility, enum Move move, enum Move partnerMove)
 {
@@ -6102,7 +6098,6 @@ bool32 IsMoxieTypeAbility(enum Ability ability)
         return FALSE;
     }
 }
-
 
 bool32 DoesAbilityRaiseStatsWhenLowered(enum Ability ability)
 {
