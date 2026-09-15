@@ -229,9 +229,16 @@ easily; rewrites of existing logic conflict the most.
   ```c
   #define B_USE_FROSTBITE TRUE // FORK: upstream default is FALSE. In PLA, Frostbite replaces Freeze...
   ```
-  A fork-*only* flag in one of those headers (`B_CLEAN_HEALTHBOX`) is the same story
-  and should carry a leading `// FORK:` so it is obviously ours to keep. Better still,
-  per the rule above, put new fork flags in `config/fork.h` where upstream never edits.
+  That tag is only for flags **upstream owns** and we merely re-value. A fork-*only*
+  flag has no business in an upstream config header at all — `B_CLEAN_HEALTHBOX` used to
+  sit in `config/battle.h` and now lives in `config/fork.h`, where upstream never edits.
+  There are currently **no** fork-only defines left in upstream config headers; keep it
+  that way. To check after a sync:
+  ```bash
+  # any define we have that upstream does not = a fork-only flag in the wrong file
+  diff <(git show upstream/master:include/config/battle.h | grep -oE "^#define [A-Z_0-9]+" | sort) \
+       <(grep -oE "^#define [A-Z_0-9]+" include/config/battle.h | sort) | grep "^>"
+  ```
 - Caveats: this is not a silver bullet — adding enum values, species, moves, etc.
   still touches shared tables. And new files don't prevent *semantic* conflicts
   (upstream renaming a symbol we call breaks the build without a git conflict),
