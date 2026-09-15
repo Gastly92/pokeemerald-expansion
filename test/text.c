@@ -521,6 +521,11 @@ TEST("Ability names fit on Pokemon Summary Screen")
     enum Ability ability = ABILITY_NONE;
     for (i = 1; i < ABILITIES_COUNT; i++)
     {
+        // UPSTREAM: gAbilitiesInfo[] may be sparse (this fork bases its own abilities
+        // well above upstream's run, leaving zeroed entries in between). Skipping an
+        // empty entry is a no-op on a dense table, so this is upstream-safe.
+        if (gAbilitiesInfo[i].description == NULL)
+            continue;
         PARAMETRIZE_LABEL("%S", gAbilitiesInfo[i].name) { ability = i; }
     }
     EXPECT_LE(GetStringWidth(fontId, gAbilitiesInfo[ability].name, 0), widthPx);
@@ -533,6 +538,11 @@ TEST("Ability names fit on Ability Pop-Up")
     enum Ability ability = ABILITY_NONE;
     for (i = 1; i < ABILITIES_COUNT; i++)
     {
+        // UPSTREAM: gAbilitiesInfo[] may be sparse (this fork bases its own abilities
+        // well above upstream's run, leaving zeroed entries in between). Skipping an
+        // empty entry is a no-op on a dense table, so this is upstream-safe.
+        if (gAbilitiesInfo[i].description == NULL)
+            continue;
         PARAMETRIZE_LABEL("%S", gAbilitiesInfo[i].name) { ability = i; }
     }
     EXPECT_LE(GetStringWidth(fontId, gAbilitiesInfo[ability].name, 0), widthPx);
@@ -545,6 +555,9 @@ TEST("Ability descriptions fit on Pokemon Summary Screen")
     enum Ability ability = ABILITY_NONE;
     for (i = 1; i < ABILITIES_COUNT; i++)
     {
+        // UPSTREAM: skip empty entries in a sparse gAbilitiesInfo[] (see above).
+        if (gAbilitiesInfo[i].description == NULL)
+            continue;
         PARAMETRIZE_LABEL("%S", gAbilitiesInfo[i].description) { ability = i; }
     }
     EXPECT_LE(GetStringWidth(fontId, gAbilitiesInfo[ability].description, 0), widthPx);

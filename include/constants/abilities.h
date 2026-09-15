@@ -1,6 +1,10 @@
 #ifndef GUARD_CONSTANTS_ABILITIES_H
 #define GUARD_CONSTANTS_ABILITIES_H
 
+// FORK: first id of the fork's own ability block. See the block at the end of the
+// enum for why it sits this far above upstream's highest.
+#define FORK_ABILITY_BASE 400
+
 enum __attribute__((packed)) Ability
 {
     ABILITY_NONE = 0,
@@ -335,15 +339,38 @@ enum __attribute__((packed)) Ability
     ABILITY_PIERCING_DRILL = 311,
     ABILITY_DRAGONIZE = 312,
     ABILITY_EELEVATE = 313,
-    ABILITY_HALO = 314, // FORK: field-wide damage cap, paid for in the holder's PP. See src/fork/halo.c + fork-docs/NEW_ABILITIES.md.
+    ABILITY_314 = 314,
     ABILITY_MEGA_SOL = 315,
     ABILITY_FIRE_MANE = 316,
-    ABILITY_PSYCHIC_AFFINITY = 317, // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.
+    ABILITY_317 = 317,
     ABILITY_SPICY_SPRAY = 318,
     ABILITY_AURA_GUARD = 319,
-    ABILITY_WATER_AFFINITY = 320, // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.
     ABILITIES_COUNT_GEN9,
-    ABILITIES_COUNT = ABILITIES_COUNT_GEN9,
+
+    // FORK: the fork's own abilities live in their own block, based well above
+    // upstream's growth path, so upstream filling its next slot can never collide
+    // with one of ours. Upstream allocates upward and reached 320 in 1.17.0; at a
+    // historical ~10 new abilities per release, FORK_ABILITY_BASE buys decades.
+    // The gap between ABILITIES_COUNT_GEN9 and the base is unused ROM in
+    // gAbilitiesInfo[] (~2.2 KB of zeroed entries) and costs no RAM.
+    //
+    // Before this block existed the fork sat at 314/317/320 — on top of upstream's
+    // reserved ABILITY_314 / ABILITY_317 placeholders and one slot below the next
+    // free id — and 319 was taken out from under us by ABILITY_AURA_GUARD in the
+    // 1.17.0 sync. Add new fork abilities HERE, appended to this block, never into
+    // upstream's run above.
+    //
+    // A gap means gAbilitiesInfo[] is sparse: entries in the gap are zeroed, so a
+    // .description is NULL there. Anything that *iterates* the ability space (rather
+    // than indexing a known ability) has to skip empty entries — see test/text.c.
+    ABILITY_HALO = FORK_ABILITY_BASE, // FORK: field-wide damage cap, paid for in the holder's PP. See src/fork/halo.c + fork-docs/NEW_ABILITIES.md.
+    ABILITY_PSYCHIC_AFFINITY,         // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.
+    ABILITY_WATER_AFFINITY,           // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.
+
+    // FORK: was `= ABILITIES_COUNT_GEN9`; it now has to span the fork block above.
+    // On conflict, keep this definition and re-apply upstream's change to
+    // ABILITIES_COUNT_GEN9 instead.
+    ABILITIES_COUNT,
 };
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H
