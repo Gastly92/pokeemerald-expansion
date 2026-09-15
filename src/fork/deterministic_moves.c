@@ -79,7 +79,11 @@ bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId batt
             else
             {
                 enum Type moveType = GetBattleMoveType(move);
-                bool32 superEffective = (gBattleStruct->moveResultFlags[battlerDef] & MOVE_RESULT_SUPER_EFFECTIVE) != 0;
+                // NB: upstream's 1.17.0 sync split 4x off from 2x into MOVE_RESULT_EXTREMELY_EFFECTIVE,
+                // leaving MOVE_RESULT_SUPER_EFFECTIVE meaning exactly 2x. The gate means "super
+                // effective or better", so it reads the union flag; the AI mirror of this test
+                // (AI_IsAdditionalEffectReliable) already uses a >= 2.0 modifier comparison.
+                bool32 superEffective = (gBattleStruct->moveResultFlags[battlerDef] & MOVE_RESULT_HIGH_EFFECTIVENESS) != 0;
                 triggers = DeterministicAdditionalEffectApplies(moveType, superEffective, IS_BATTLER_OF_TYPE(battlerAtk, moveType));
             }
         }

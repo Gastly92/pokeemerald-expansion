@@ -5728,7 +5728,11 @@ bool32 ShouldUseZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum
         // Z-Move keeps its base move's type but not its matchup quirks, so Freeze-Dry
         // reads 2x against a Water-type while Subzero Slammer really lands for 0.5x.
         // Gating on the plain move's effectiveness let exactly those cases through.
-        if (!IsBattleMoveStatus(chosenMove))
+        // The zMove guard matters for a damaging base move whose Z-Move is a *status* one
+        // (Last Resort + Eevium Z -> Extreme Evoboost): that Z-Move deals no damage by design,
+        // so simulating it reads as a 0-damage, 0-effectiveness hit and the resist test would
+        // decline every Z-status move. Its value is the boost, not the matchup.
+        if (!IsBattleMoveStatus(chosenMove) && !IsBattleMoveStatus(zMove) && zMove != MOVE_Z_STATUS)
         {
             uq4_12_t zEffectiveness;
             struct SimulatedDamage zDmg = AI_CalcDamageSaveBattlers(chosenMove, battlerAtk, battlerDef, &zEffectiveness, GIMMICK_Z_MOVE, GIMMICK_NONE);

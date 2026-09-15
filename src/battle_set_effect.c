@@ -123,9 +123,15 @@ static void HandleSetEffectAbsorb(struct BattleCalcValues *cv, struct SetEffect 
         gEffectBattler = cv->battlerAtk;
         gBattlerAbility = gBattleScripting.battler = cv->battlerDef;
 
-        if (cv->abilities[cv->battlerDef] == ABILITY_LIQUID_OOZE
+        if ((cv->abilities[cv->battlerDef] == ABILITY_LIQUID_OOZE
+          || IsInnateActive(cv->battlerDef, ABILITY_LIQUID_OOZE)) // FORK: innate-aware Liquid Ooze (FEATURE_INNATE_ABILITIES)
          && (GetMoveEffect(cv->move)!= EFFECT_DREAM_EATER || GetConfig(B_DREAM_EATER_LIQUID_OOZE) >= GEN_5))
         {
+            // FORK: show the innate in the pop-up when the chosen ability differs (Speed Boost precedent).
+            // Upstream moved draining moves onto this MOVE_EFFECT_ABSORB handler in the 1.17.0 sync
+            // (EFFECT_ABSORB is gone), so the fork's Liquid Ooze hook belongs here now.
+            if (GetBattlerAbility(cv->battlerDef) != ABILITY_LIQUID_OOZE)
+                gBattleScripting.abilityPopupOverwrite = ABILITY_LIQUID_OOZE;
             SetPassiveDamageAmount(cv->battlerAtk, healAmount);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ABSORB_OOZE;
             BattleScriptPush(se->script);

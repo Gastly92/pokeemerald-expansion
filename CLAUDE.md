@@ -287,6 +287,33 @@ The general shape: a clean merge proves nothing about behaviour. Budget for a fu
 `make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
 the upstream commit behind any test that changed state.
 
+#### When upstream moves the hook out from under a fork feature
+
+The 1.17.0 sync's most expensive class of work was not conflicts at all: upstream relocated
+or deleted the exact line a fork feature hooked into, the merge took upstream's version
+cleanly, and the feature quietly stopped running. Every one of these was found by a fork
+*test*, never by the compiler. Examples, all from this one sync:
+
+- The `IsZMove(move) -> categoryOverride` branch in `GetBattleMoveCategory` was replaced by
+  a `SetDynamicMoveCategory` that re-handles only Dynamax, so Z-Moves silently fell back to
+  the `.category = PHYSICAL` placeholder every Z-Move entry carries.
+- `EFFECT_ABSORB` became the `MOVE_EFFECT_ABSORB` additional effect, moving every draining
+  move's Liquid Ooze interaction to a new handler in `src/battle_set_effect.c`.
+- `BattleScript_Pickpocket`'s `jumpifability BS_ATTACKER, ABILITY_STICKY_HOLD` moved into C,
+  taking with it the fork's innate-aware `Cmd_jumpifability` pop-up override.
+- `Cmd_jumpifsubstituteblocks` and `Cmd_presentdamagecalculation` were deleted outright;
+  their logic now lives in `battle_move_resolution.c` cancelers.
+- `MOVE_RESULT_SUPER_EFFECTIVE` narrowed to mean *exactly* 2x, with 4x split out into
+  `MOVE_RESULT_EXTREMELY_EFFECTIVE` and `MOVE_RESULT_HIGH_EFFECTIVENESS` as the union — so a
+  fork gate testing "super effective or better" silently stopped firing on 4x hits.
+
+The lesson for writing fork features: **a `FORK:` comment at the hook point should name the
+upstream mechanism it depends on**, so that when that mechanism moves, the grep that finds
+the feature also explains what it needs. And when a sync deletes an upstream symbol the fork
+referenced, do not just delete the fork's usage — find where upstream moved the behaviour and
+re-hook there. The fork's own tests are what catch this, so a red fork test after a sync is a
+lead, not a nuisance: it is usually pointing at a hook that needs re-attaching.
+
 #### Post-sync checklist
 
 Run these after every `git merge upstream/master`, before declaring the sync done:

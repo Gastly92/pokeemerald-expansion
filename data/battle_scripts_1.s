@@ -5938,6 +5938,12 @@ BattleScript_PickpocketPrevented::
 	call BattleScript_AbilityPopUp
 	pause B_WAIT_TIME_SHORT
 	copybyte gBattlerAbility, gBattlerAttacker
+	@ FORK: re-arm the pop-up overwrite so an innate Sticky Hold shows itself rather than the
+	@ holder's chosen ability. Upstream moved the Sticky Hold branch out of this script and into
+	@ C in the 1.17.0 sync, taking with it the innate-aware jumpifability that used to set the
+	@ overwrite (see Cmd_jumpifability). The jump target is the next line, so this only re-arms.
+	jumpifability BS_ATTACKER, ABILITY_STICKY_HOLD, BattleScript_PickpocketPreventedPopUp
+BattleScript_PickpocketPreventedPopUp:
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ITEMCANNOTBEREMOVED
 	waitmessage B_WAIT_TIME_LONG
