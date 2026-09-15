@@ -7,7 +7,6 @@ u8 GetFactoryMonFixedIV(u8 challengeNum, bool8 isLastBattle);
 void FillFactoryBrainParty(void);
 u8 GetNumPastRentalsRank(u8 battleMode, enum FrontierLevelMode lvlMode);
 u64 GetAiScriptsInBattleFactory(void);
-void SetMonMoveAvoidReturn(struct Pokemon *mon, enum Move moveArg, u8 moveSlot);
 void FillFactoryTrainerParty(void);
 
 // FORK: the roster the Battle Factory draws from. With B_FRONTIER_EXTENDED_MONS

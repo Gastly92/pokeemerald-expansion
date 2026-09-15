@@ -194,14 +194,15 @@ static const u8 *GetInfoWeatherName(void)
 
 static const u8 *GetInfoTerrainName(void)
 {
-    if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
-        return COMPOUND_STRING("Grassy");
-    if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
-        return COMPOUND_STRING("Misty");
-    if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
-        return COMPOUND_STRING("Electric");
-    if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
-        return COMPOUND_STRING("Psychic");
+    // NB: upstream moved terrain off the gFieldStatuses bitflags onto gFieldTimers.terrain in 1.17.0.
+    switch (gFieldTimers.terrain)
+    {
+    case B_TERRAIN_GRASSY:   return COMPOUND_STRING("Grassy");
+    case B_TERRAIN_MISTY:    return COMPOUND_STRING("Misty");
+    case B_TERRAIN_ELECTRIC: return COMPOUND_STRING("Electric");
+    case B_TERRAIN_PSYCHIC:  return COMPOUND_STRING("Psychic");
+    default: break;
+    }
     return COMPOUND_STRING("None");
 }
 
@@ -837,7 +838,7 @@ static void BuildConditionLine(u8 *dst, enum BattlerId battler)
     *p = EOS;
     if (status != NULL)
         p = AppendEntry(p, status, 1);
-    if (v->confusionTurns)
+    if (v->confusionTimer)
         p = AppendEntry(p, COMPOUND_STRING("Confusion"), 1);
     if (v->infatuation)
         p = AppendEntry(p, COMPOUND_STRING("Infatuation"), 1);
@@ -865,15 +866,15 @@ static void BuildConditionLine(u8 *dst, enum BattlerId battler)
         p = AppendEntry(p, COMPOUND_STRING("Disable"), 1);
     if (v->torment)
         p = AppendEntry(p, COMPOUND_STRING("Torment"), 1);
-    if (v->healBlock)
+    if (v->healBlockTimer)
         p = AppendEntry(p, COMPOUND_STRING("Heal Block"), 1);
-    if (v->embargo)
+    if (v->embargoTimer)
         p = AppendEntry(p, COMPOUND_STRING("Embargo"), 1);
     if (v->root)
         p = AppendEntry(p, COMPOUND_STRING("Ingrain"), 1);
     if (v->aquaRing)
         p = AppendEntry(p, COMPOUND_STRING("Aqua Ring"), 1);
-    if (v->magnetRise)
+    if (v->magnetRiseTimer)
         p = AppendEntry(p, COMPOUND_STRING("Magnet Rise"), 1);
     if (v->telekinesis)
         p = AppendEntry(p, COMPOUND_STRING("Telekinesis"), 1);

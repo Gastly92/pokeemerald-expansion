@@ -16,7 +16,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: a 2-5 hit move always hits three
     } WHEN {
         TURN { MOVE(player, MOVE_DOUBLE_SLAP); }
     } SCENE {
-        MESSAGE("The Pokémon was hit 3 time(s)!");
+        MESSAGE("The Pokémon was hit 3 times!");
     }
 }
 
@@ -30,7 +30,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Loaded Dice raises a multi-hit m
     } WHEN {
         TURN { MOVE(player, MOVE_DOUBLE_SLAP); }
     } SCENE {
-        MESSAGE("The Pokémon was hit 5 time(s)!");
+        MESSAGE("The Pokémon was hit 5 times!");
     }
 }
 
@@ -44,7 +44,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Population Bomb hits five times 
     } WHEN {
         TURN { MOVE(player, MOVE_POPULATION_BOMB); }
     } SCENE {
-        MESSAGE("The Pokémon was hit 5 time(s)!");
+        MESSAGE("The Pokémon was hit 5 times!");
     }
 }
 
@@ -59,7 +59,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Population Bomb hits ten times w
     } WHEN {
         TURN { MOVE(player, MOVE_POPULATION_BOMB); }
     } SCENE {
-        MESSAGE("The Pokémon was hit 10 time(s)!");
+        MESSAGE("The Pokémon was hit 10 times!");
     }
 }
 
@@ -73,7 +73,7 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Population Bomb hits ten times w
     } WHEN {
         TURN { MOVE(player, MOVE_POPULATION_BOMB); }
     } SCENE {
-        MESSAGE("The Pokémon was hit 10 time(s)!");
+        MESSAGE("The Pokémon was hit 10 times!");
     }
 }
 
@@ -215,7 +215,9 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Dire Claw paralyzes a target who
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE);
-        ASSUME(MoveHasAdditionalEffect(MOVE_DIRE_CLAW, MOVE_EFFECT_DIRE_CLAW));
+        // NB: upstream folded Tri Attack / Dire Claw into the data-driven MOVE_EFFECT_RANDOM_FROM_LIST
+        // mechanism in the 1.17.0 sync; MOVE_EFFECT_DIRE_CLAW no longer exists.
+        ASSUME(MoveHasAdditionalEffect(MOVE_DIRE_CLAW, MOVE_EFFECT_RANDOM_FROM_LIST));
         PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_DIRE_CLAW); }
         OPPONENT(SPECIES_WOBBUFFET) { Speed(200); Defense(50); SpDefense(50); }
     } WHEN {

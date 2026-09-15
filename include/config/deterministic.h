@@ -368,10 +368,10 @@
 //     (default 7). See SetWrapTurns.
 //   - Tri Attack picks its status by the target's offenses: burn if its Attack is
 //     higher, frostbite if its Sp. Atk is higher, paralysis on a tie. See the
-//     MOVE_EFFECT_TRI_ATTACK site.
+//     MOVE_EFFECT_RANDOM_FROM_LIST handler (Tri Attack's branch).
 //   - Dire Claw picks by the target's stats: paralysis if its Speed beats either
 //     defense, sleep on a three-way Speed/Def/SpD tie, else poison. See the
-//     MOVE_EFFECT_DIRE_CLAW site.
+//     MOVE_EFFECT_RANDOM_FROM_LIST handler (Dire Claw's branch).
 //   - Magnitude's power is chosen by the attacker:target weight ratio (like Heavy
 //     Slam) instead of a random tier. See CalculateMagnitudeDamage.
 //   - Present always damages a foe (DETERMINISTIC_PRESENT_POWER base power) and

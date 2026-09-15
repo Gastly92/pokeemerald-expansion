@@ -57,7 +57,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_DefeatedOpponent::
 	@ attendant has walked over (the Salon Maiden still appears at the 50th/100th).
 .else
 	switch VAR_RESULT
-	case 7, BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
+	case FRONTIER_STAGES_PER_CHALLENGE, BattleFrontier_BattleTowerBattleRoom_EventScript_WarpToLobbyWon
 .endif
 	applymovement LOCALID_TOWER_BATTLE_OPPONENT, BattleFrontier_BattleTowerBattleRoom_Movement_OpponentExit
 	waitmovement 0

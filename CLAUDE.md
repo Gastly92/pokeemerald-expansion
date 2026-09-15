@@ -196,6 +196,18 @@ easily; rewrites of existing logic conflict the most.
   Where a rewrite is genuinely unavoidable — a `? :` we must extend, a hoisted local a
   hot loop needs, a restructured `if/else if` chain — leave a `FORK:` hint saying how to
   resolve it, and accept the recurring conflict.
+- **Tag every changed-value line in an upstream config header with its upstream
+  default.** Upstream rewords the comments in `include/config/*.h` wholesale on a
+  release (1.17.0 reworded nearly every line of `config/battle.h`), so every flag whose
+  *value* we changed conflicts — and the conflict is 95% comment churn with one real
+  decision buried in it. Writing the divergence into the line itself makes the next
+  resolution mechanical ("take upstream's comment, keep our value"):
+  ```c
+  #define B_USE_FROSTBITE TRUE // FORK: upstream default is FALSE. In PLA, Frostbite replaces Freeze...
+  ```
+  A fork-*only* flag in one of those headers (`B_CLEAN_HEALTHBOX`) is the same story
+  and should carry a leading `// FORK:` so it is obviously ours to keep. Better still,
+  per the rule above, put new fork flags in `config/fork.h` where upstream never edits.
 - Caveats: this is not a silver bullet — adding enum values, species, moves, etc.
   still touches shared tables. And new files don't prevent *semantic* conflicts
   (upstream renaming a symbol we call breaks the build without a git conflict),
@@ -237,9 +249,132 @@ modes produce no conflict marker at all, and all three showed up in the Aug 2026
   either repoint the control at a case that still diverges or flip it into a guard
   on the new upstream behaviour (say which, and why, in a comment).
 
+Four more turned up in the Sep 2026 1.17.0 sync (239 commits, 33 conflicted files,
+~108 markers). All four merged **cleanly** — no marker, and three of them would not
+have been caught by reading the diff:
+
+- **A clean merge that silently un-registered every fork config flag.** Upstream
+  replaced the runtime `GetConfig(name)` dispatch (`GetConfigInternal(CONFIG_##name)`)
+  with per-group *generated inline getters* in `include/config_changes.h`. The fork
+  registers `DETERMINISTIC_/BUFF_/FEATURE_CONFIG_DEFINITIONS` in the struct, and those
+  lines merged fine — but the new getter-generation block is upstream's, so it listed
+  only upstream's three groups. Every `GetConfig(DETERMINISTIC_*)` became an implicit
+  function declaration. **Lesson: when the fork hooks into an upstream macro pattern,
+  it has to hook into every *instance* of that pattern.** After a sync, grep for each
+  fork group macro and check it appears everywhere upstream's groups do:
+  `grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/` — the fork's three should sit
+  beside it at every hit.
+- **ID-space collisions, which the fork's own conflict-avoidance hides.** Upstream
+  allocates ability IDs and AI-flag bits upward as it implements things. The fork had
+  claimed `ABILITY_WATER_AFFINITY = 319` (upstream took 319 for `ABILITY_AURA_GUARD`
+  this sync) and AI-flag bits 34/35 (upstream took both for `AI_FLAG_ABILITY_OMNISCIENCE`
+  / `AI_FLAG_ITEM_OMNISCIENCE`). The ability collision at least *conflicted*, because
+  both sides edited the same enum. The AI-flag collision produced **no conflict at all**
+  — the fork's flags live in `include/fork/*.h` precisely so upstream never touches
+  them, so nothing flagged that bit 34 now meant two different things. Enabling
+  `AI_FLAG_SMART_SPECIES_LOGIC` would silently have granted the AI ability omniscience.
+  See "ID spaces the fork claims" below for the allocation rule and the build-time guards.
+- **Bitfield padding that agrees by coincidence.** `struct SpecialStatus` carries three
+  fork bits stolen from `padding`. Upstream widened a neighbouring field by 3 bits and
+  shrank `padding` from 11 to 8 — and the fork's line *also* read `padding:8`, so git
+  auto-merged it and the word silently overflowed to 19 bits in a `u16`. Never take
+  either side's padding number after a sync: recompute it as *upstream's value minus
+  the fork bits in that word*. Each fork-touched padding line now carries a `FORK:`
+  comment saying exactly that, and `STATIC_ASSERT`s on the struct sizes make the next
+  overflow a build error.
+- **A new upstream caller walking a fork helper into a case it had never seen.** The
+  fork routes Z-Move base power through one helper, `GetZMoveBasePower(baseMove, zMove)`,
+  which returns a *signature* Z-Move's own power. That is right for all sixteen damaging
+  signature Z-Moves and meaningless for the one status one (Extreme Evoboost, power 0) —
+  which never mattered, because the engine does not damage-calc a status move. Upstream
+  1.17.0 then added `gimmickAtk` to the AI's damage simulation: the AI now asks "what
+  would this move do if I Z'd it" with the gimmick *active*, so `CalcMoveBasePower` took
+  the Z branch for a damaging base move (Last Resort) whose Z-Move is that status one and
+  answered 0. `AI_CheckViability` reads a powered move simulating 0 damage as failing
+  (`NO_DAMAGE_OR_FAILS`), so the AI dropped Last Resort + Eevium Z and never armed the
+  Z-Move. Nothing conflicted, nothing warned, and the only symptom was one upstream AI
+  test. **Lesson: a new upstream *caller* is as dangerous as a changed upstream callee.**
+  When a fork helper narrows or sharpens an upstream number, its `FORK:` comment should
+  say which callers it was written for — then a sync that adds a caller has something to
+  check against. Run the upstream test that fails against a clean upstream worktree at the
+  merged commit before assuming the fork is innocent: here it passed there and failed here,
+  which is what turned "upstream ships a flaky AI test" into a two-line fork bug.
+
 The general shape: a clean merge proves nothing about behaviour. Budget for a full
 `make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
 the upstream commit behind any test that changed state.
+
+#### When upstream moves the hook out from under a fork feature
+
+The 1.17.0 sync's most expensive class of work was not conflicts at all: upstream relocated
+or deleted the exact line a fork feature hooked into, the merge took upstream's version
+cleanly, and the feature quietly stopped running. Every one of these was found by a fork
+*test*, never by the compiler. Examples, all from this one sync:
+
+- The `IsZMove(move) -> categoryOverride` branch in `GetBattleMoveCategory` was replaced by
+  a `SetDynamicMoveCategory` that re-handles only Dynamax, so Z-Moves silently fell back to
+  the `.category = PHYSICAL` placeholder every Z-Move entry carries.
+- `EFFECT_ABSORB` became the `MOVE_EFFECT_ABSORB` additional effect, moving every draining
+  move's Liquid Ooze interaction to a new handler in `src/battle_set_effect.c`.
+- `BattleScript_Pickpocket`'s `jumpifability BS_ATTACKER, ABILITY_STICKY_HOLD` moved into C,
+  taking with it the fork's innate-aware `Cmd_jumpifability` pop-up override.
+- `Cmd_jumpifsubstituteblocks` and `Cmd_presentdamagecalculation` were deleted outright;
+  their logic now lives in `battle_move_resolution.c` cancelers.
+- `MOVE_RESULT_SUPER_EFFECTIVE` narrowed to mean *exactly* 2x, with 4x split out into
+  `MOVE_RESULT_EXTREMELY_EFFECTIVE` and `MOVE_RESULT_HIGH_EFFECTIVENESS` as the union — so a
+  fork gate testing "super effective or better" silently stopped firing on 4x hits.
+
+The lesson for writing fork features: **a `FORK:` comment at the hook point should name the
+upstream mechanism it depends on**, so that when that mechanism moves, the grep that finds
+the feature also explains what it needs. And when a sync deletes an upstream symbol the fork
+referenced, do not just delete the fork's usage — find where upstream moved the behaviour and
+re-hook there. The fork's own tests are what catch this, so a red fork test after a sync is a
+lead, not a nuisance: it is usually pointing at a hook that needs re-attaching.
+
+#### Post-sync checklist
+
+Run these after every `git merge upstream/master`, before declaring the sync done:
+
+```bash
+grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/   # each hit needs the 3 fork groups beside it
+grep -c "FORK" <file>                                  # per conflicted file: compare against the pre-merge count
+UNUSED_ERROR=1 DEPRECATED_ERROR=1 make -j$(nproc) -O all
+make -j$(nproc) check
+```
+
+The per-file `FORK` count is the cheapest guard against losing a divergence while
+resolving: note it before resolving a file, compare after. A drop means a fork edit
+went missing in a hunk that upstream had rewritten.
+
+### ID spaces the fork claims
+
+Upstream allocates enum values and flag bits **upward**, filling the next free slot as
+it implements things. Any fork ID sitting just above upstream's high-water mark will be
+taken from us sooner or later — and because our IDs often live in fork-owned headers,
+that collision can land with **no merge conflict at all** (this is exactly what happened
+to the AI flags in the 1.17.0 sync; see "After the merge" above).
+
+**The rule: never allocate a fork ID immediately above upstream's highest.** Leave a gap
+upstream will not cross in years, or allocate downward from the top of the space.
+
+| Space | Upstream grows | Fork uses | Rule |
+| --- | --- | --- | --- |
+| AI flags (`AI_FLAG(x)`, 64 bits) | up from bit 36 | 59, 58 (`include/fork/battle_ai_*.h`) | allocate **downward from 59** — bits 60-63 are upstream's "other" block |
+| Ability IDs (`enum Ability`) | up from 320 | 314, 317, 320 (`include/constants/abilities.h`) | **known hazard** — see below |
+| `STRINGID_*` | appended | appended in a marked fork block at the very end | keep the fork block last |
+| `MOVEEND_*` | inserted anywhere | `MOVEEND_ABILITIES_INNATE` after `MOVEEND_ABILITIES` | order is semantic; re-check placement each sync |
+
+**Ability IDs are the outstanding hazard.** `ABILITY_HALO = 314` and
+`ABILITY_PSYCHIC_AFFINITY = 317` sit on slots upstream still reserves as the
+placeholders `ABILITY_314` / `ABILITY_317`, and `ABILITY_WATER_AFFINITY = 320` is the
+next slot upstream will fill. Every one of these will collide again. The durable fix is
+to move the fork's abilities into their own block well above upstream's growth (e.g.
+400+) and let `ABILITIES_COUNT` carry the gap; the cost is the unused
+`gAbilitiesInfo[]` entries in the gap. Until that is done, expect an abilities conflict
+on every sync and resolve it by **renumbering ours, never upstream's**.
+
+Where a collision would otherwise be silent, add a `STATIC_ASSERT` so the next one is a
+build error instead — `src/fork/fork_id_guards.c` holds these.
 
 ### Fork-owned code lives under `fork/`
 
