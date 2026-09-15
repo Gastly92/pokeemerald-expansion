@@ -20,6 +20,7 @@
 #include "random.h"
 #include "string_util.h"
 #include "config/battle.h"
+#include "fork/innate_abilities.h" // FORK: IsInnateOnSide, innate-aware Liquid Ooze
 
 static inline bool32 IgnoreTargetingForMoveEffect(enum MoveEffect moveEffect);
 static bool32 DoesSubstituteBlockMoveEffectOnTarget(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum MoveEffect moveEffect);

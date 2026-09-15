@@ -5,6 +5,7 @@
 #include "battle_anim.h"
 #include "constants/battle_anim.h"
 #include "battle_interface.h"
+#include "fork/accessibility_gfx.h" // FORK: COLOR_BLIND healthbar palette
 #include "main.h"
 #include "menu.h"
 #include "dma3.h"
@@ -707,23 +708,6 @@ void DecompressTrainerFrontPic(enum TrainerPicID trainerPicId, enum BattlerId ba
 void FreeTrainerFrontPicPalette(enum TrainerPicID trainerPicId)
 {
     FreeSpritePaletteByTag(GetTrainerPicTag(trainerPicId, TRUE));
-}
-
-// FORK: When COLOR_BLIND is on, recolor the HP bar's healthy (>50%) band from
-// green to the EXP bar's blue. The bar fill is a separate "healthbar" sprite
-// using TAG_HEALTHBAR_PAL, whose palette holds the two green shades at entries
-// 10-11 (yellow at 12-13, red at 14-15), so swapping just those two entries
-// turns the green band blue and leaves the yellow/red bands untouched. See the
-// COLOR_BLIND comment in include/config/accessibility.h.
-static void ApplyHealthbarColorBlindPalette(void)
-{
-#if COLOR_BLIND
-    static const u16 sHpBarBlue[] = { RGB(13, 27, 31), RGB(8, 25, 31) }; // light + main EXP-style blue
-    u32 palIndex = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
-
-    if (palIndex != 0xFF)
-        LoadPalette(sHpBarBlue, OBJ_PLTT_ID(palIndex) + 10, sizeof(sHpBarBlue));
-#endif
 }
 
 bool8 BattleLoadAllHealthBoxesGfx(u8 state)

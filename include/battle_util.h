@@ -142,10 +142,8 @@ bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability);
 // innate Prankster check. No-op (FALSE) when the feature flag is off. See src/battle_util.c.
 bool32 IsInnateActive(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability);
-u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability); // FORK: FEATURE_INNATE_ABILITIES
 u32 IsAbilityOnField(enum Ability ability);
 u32 IsAbilityPreventingEscape(enum BattlerId battler);
-enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum BattlerId trapper); // FORK: FEATURE_INNATE_ABILITIES — the trapping ability (chosen or innate) shown in the escape/switch message
 bool32 IsBattlerProtected(struct BattleCalcValues *cv);
 enum ProtectType GetProtectType(enum ProtectMethod method);
 bool32 CanBattlerEscape(enum BattlerId battler); // no ability check

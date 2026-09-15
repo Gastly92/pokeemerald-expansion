@@ -71,6 +71,7 @@
 #include "test/battle.h"
 #include "battle_util.h"
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
+#include "fork/innate_abilities.h" // FORK: IsInnateOnSide
 #include "constants/pokemon.h"
 #include "config/battle.h"
 #include "data/battle_move_effects.h"

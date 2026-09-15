@@ -35,6 +35,14 @@ they don't fan out across 11k sprites and palettes.
 
 ### Syncing from upstream
 
+**The step-by-step procedure lives in the `sync-upstream` skill**
+(`.claude/skills/sync-upstream/SKILL.md`) — invoke it with `/sync-upstream` when
+starting a sync. It carries the ordered run (unshallow → fetch → merge → resolve →
+build → chase every red test → land), the fork-delta recipe for a file upstream has
+split or moved, and the "build clean upstream and run the same test there" check. The
+sections below stay the reference for *why* each rule exists; the skill does not
+repeat them.
+
 The web container is ephemeral, so the `upstream` remote must be re-added each
 session (the session-start hook does this automatically; the manual command is):
 
@@ -180,19 +188,35 @@ easily; rewrites of existing logic conflict the most.
   exception (config headers).
 - **When you must touch a shared file, keep edits additive and localized** (append
   a switch case / table entry / new function) rather than restructuring.
-- **Add a line; don't rewrite upstream's line.** This is the single highest-leverage
-  habit, because git conflicts are line-based: a line we left byte-identical to
-  upstream auto-merges forever, while a line we edited conflicts every time upstream
-  touches it. It bites most often when making a condition innate-aware. Prefer
+- **Add a line; don't rewrite upstream's line — this buys cheap *resolution*, not
+  avoidance.** It bites most often when making a condition innate-aware. Prefer
   ```c
   if (... || aiData->abilities[battler] == ABILITY_GOOD_AS_GOLD  // upstream's line, untouched
          || IsInnateActive(battler, ABILITY_GOOD_AS_GOLD))       // FORK: innate-aware
   ```
   over folding upstream's test into `BattlerHasAbility(battler, ABILITY_GOOD_AS_GOLD)`.
   The two are equivalent (`BattlerHasAbility` *is* `GetBattlerAbility(b) == a ||
-  IsInnateActive(b, a)`), but only the first keeps upstream's line mergeable. Same for
-  a negated test: `X != ABILITY_FOO && !IsInnateActive(b, ABILITY_FOO)` rather than
-  `!BattlerHasAbility(b, ABILITY_FOO)`.
+  IsInnateActive(b, a)`), but only the first leaves upstream's own test recognizable in
+  the conflict. Same for a negated test: `X != ABILITY_FOO && !IsInnateActive(b, ABILITY_FOO)`
+  rather than `!BattlerHasAbility(b, ABILITY_FOO)`.
+
+  **Be honest about what this rule does.** The 1.17.0 sync measured it: of 40 hunks that
+  added innate-awareness, **29 were already in the additive form and every one of them
+  still conflicted** — because upstream edited the same statement for its own reasons
+  (`IsMoldBreakerTypeAbility` gained a `move` parameter, `confusionTurns` became
+  `confusionTimer`, `gFieldStatuses` became `gFieldTimers.terrain`). Our added clause sits
+  inside the same `if`, so any upstream edit to that statement overlaps it. What the
+  additive form actually buys is a *mechanical* resolution — take upstream's new line,
+  re-append our `||` clause — instead of having to reconstruct what upstream's test used
+  to be. That is worth having, but it is triage, not prevention: do not expect this rule
+  to shrink the conflict count.
+- **Where upstream already has a predicate, make *it* innate-aware instead of each call
+  site.** Five of those 40 hunks were literally `IsAbilityOnSide(x, A) || IsInnateOnSide(x, A)`
+  at five different call sites. Teaching upstream's `IsAbilityOnSide` about innates inside
+  its own body would have made that one conflict instead of five. This only works when the
+  call sites go through a shared helper; the other 25 compare a raw field
+  (`aiData->abilities[b] == ABILITY_X`), where the innate clause has to be at the call site
+  and the additive form above is the best available.
   Where a rewrite is genuinely unavoidable — a `? :` we must extend, a hoisted local a
   hot loop needs, a restructured `if/else if` chain — leave a `FORK:` hint saying how to
   resolve it, and accept the recurring conflict.
@@ -333,7 +357,8 @@ lead, not a nuisance: it is usually pointing at a hook that needs re-attaching.
 
 #### Post-sync checklist
 
-Run these after every `git merge upstream/master`, before declaring the sync done:
+Run these after every `git merge upstream/master`, before declaring the sync done
+(the `sync-upstream` skill sequences them in context):
 
 ```bash
 grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/   # each hit needs the 3 fork groups beside it
@@ -413,6 +438,29 @@ which are conflict-neutral.
 When you add a fork feature, create its files under these `fork/` dirs from the
 start. Don't relocate an upstream file into `fork/` (that maximizes conflicts) —
 `fork/` is for files that are *ours*.
+
+**This applies to a single fork-authored function just as much as to a feature.** A
+fork function parked in an upstream file is fine until upstream edits *its neighbours* —
+then git drags the whole block into a conflict with nothing on upstream's side. The
+1.17.0 sync produced four of these, the cleanest being
+`ApplyHealthbarColorBlindPalette`, which sat directly after upstream's unused
+`BattleLoadAllHealthBoxesGfxAtOnce`: upstream deleted that function and our 43 lines
+came along as a conflict. In `src/fork/` with a one-line call at the hook point, the
+same deletion auto-merges. `asm/macros/` counts too — fork battle-script macros live in
+`asm/macros/fork/battle_script.inc`, pulled in by an additive `.include` line in
+`data/battle_scripts_[12].s`.
+
+Known backlog: **87 fork-authored functions still live in upstream-owned `src/*.c`**
+(mostly `src/battle_util.c`, `src/pokemon_summary_screen.c`, `src/battle_gimmick.c`).
+Only the four that actually conflicted have been moved. Most of the rest are `static`
+helpers that also touch file-local statics, so moving them is a real refactor rather
+than a cut-and-paste — do it opportunistically when a sync drags one into a conflict,
+and always with a one-line call left at the hook point. To list them:
+
+```bash
+# a definition in an upstream src/*.c that exists at neither the merge base nor upstream's tip is ours
+git grep -n '^[a-z].*(' -- 'src/*.c'   # then check each name against $(git merge-base HEAD upstream/master) and upstream/master
+```
 
 ### Using config flags in scripts (`.inc`/`.s`) — use `.if`, NOT `#if`
 

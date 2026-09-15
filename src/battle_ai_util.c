@@ -7,6 +7,7 @@
 #include "battle_ai_util.h"
 #include "battle_ai_main.h"
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
+#include "fork/innate_abilities.h" // FORK: IsInnateOnSide
 #include "fork/battle_ai_gimmick.h" // FORK: AI_GetGimmickExecutedMove
 #include "fork/battle_ai_zmove.h" // FORK: AI_FLAG_SMART_Z_MOVE
 #include "battle_stat_change.h"

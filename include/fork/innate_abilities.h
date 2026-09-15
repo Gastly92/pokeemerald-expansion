@@ -372,4 +372,13 @@ bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool
 // src/fork/innate_abilities.c for why gLastUsedAbility (and not abilityPopupOverwrite) is the signal.
 void ApplyInnateMessageAbilities(enum Ability *abilities);
 
+// FORK: the innate companion to upstream's IsAbilityOnSide() — returns holder id + 1, or 0.
+// Callers pair the two: `IsAbilityOnSide(b, A) || IsInnateOnSide(b, A)`.
+u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability);
+
+// FORK: the specific trapping ability (chosen or innate) `trapper` is holding `battler` with, or
+// ABILITY_NONE. Returning the ability rather than a bool lets the "prevents escape" message and the
+// can't-switch party menu name the real trapper even when an innate holder's chosen ability differs.
+enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum BattlerId trapper);
+
 #endif // GUARD_INNATE_ABILITIES_H

@@ -5621,19 +5621,6 @@ u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability)
 // the first side member (self, then partner) carrying `ability` as an ACTIVE innate, else 0 — used
 // for side-wide innates like Sweet Veil. IsInnateActive() is feature-gated and species-based, so this
 // is a strict no-op when the feature is off and never leaks the chosen ability.
-u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability)
-{
-    if (IsBattlerAlive(battler) && IsInnateActive(battler, ability))
-        return battler + 1;
-    // GetPartnerBattler() is a three-call chain since upstream #10542 dropped the BATTLE_PARTNER
-    // XOR macro, and this helper is AI-hot — resolve the partner once.
-    enum BattlerId partner = GetPartnerBattler(battler);
-    if (IsBattlerAlive(partner) && IsInnateActive(partner, ability))
-        return partner + 1;
-    else
-        return 0;
-}
-
 u32 IsAbilityOnField(enum Ability ability)
 {
     for (enum BattlerId i = 0; i < gBattlersCount; i++)
@@ -5643,28 +5630,6 @@ u32 IsAbilityOnField(enum Ability ability)
     }
 
     return 0;
-}
-
-// FORK: innate-aware (FEATURE_INNATE_ABILITIES). Returns the specific trapping ability `trapper` is
-// holding `battler` with — Shadow Tag / Arena Trap / Magnet Pull — or ABILITY_NONE if none. An innate
-// trapping ability traps exactly like the real one (BattlerHasAbility() is chosen-or-innate), and a
-// mon's own (chosen or innate) Shadow Tag exempts it from an enemy Shadow Tag. Returning the ability
-// (not just a bool) lets the "prevents escape" message and the can't-switch party menu name the real
-// trapper even when an innate holder's chosen ability differs — otherwise they'd show that mon's
-// unrelated chosen ability. In the vanilla (real-ability) case this returns the same ability that was
-// shown before, so display is byte-for-byte unchanged.
-enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum BattlerId trapper)
-{
-    bool32 isBattlerGrounded = IsBattlerGrounded(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
-
-    if (BattlerHasAbility(trapper, ABILITY_SHADOW_TAG) && (B_SHADOW_TAG_ESCAPE <= GEN_3 || !BattlerHasAbility(battler, ABILITY_SHADOW_TAG)))
-        return ABILITY_SHADOW_TAG;
-    if (BattlerHasAbility(trapper, ABILITY_ARENA_TRAP) && isBattlerGrounded)
-        return ABILITY_ARENA_TRAP;
-    if (BattlerHasAbility(trapper, ABILITY_MAGNET_PULL) && IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
-        return ABILITY_MAGNET_PULL;
-
-    return ABILITY_NONE;
 }
 
 u32 IsAbilityPreventingEscape(enum BattlerId battler)
