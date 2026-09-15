@@ -7017,6 +7017,17 @@ static inline u32 CalcMoveBasePower(struct DamageContext *ctx)
             if (baseMove == MOVE_NONE || IsZMove(baseMove))
                 baseMove = gBattleStruct->zmove.baseMoves[battlerAtk];
 
+            // FORK: a *status* signature Z-Move (Extreme Evoboost, the only one) has no power
+            // of its own to carry, and the engine never damage-calcs it - it runs as a status
+            // move. The one caller that still asks is the AI, simulating "what if I Z this
+            // damaging move": answering 0 there makes AI_CheckViability read the base move as
+            // failing (NO_DAMAGE_OR_FAILS) and drop Last Resort + Eevium Z entirely. Upstream
+            // asks GetZMovePower(baseMove) unconditionally here, so fall back to that and keep
+            // upstream's AI behaviour. GetZMoveBasePower itself stays exact for the move-
+            // selection preview, which upstream also drives off the signature power.
+            if (IsBattleMoveStatus(zMove))
+                return GetZMovePower(baseMove);
+
             return GetZMoveBasePower(baseMove, zMove);
         }
     case GIMMICK_DYNAMAX:

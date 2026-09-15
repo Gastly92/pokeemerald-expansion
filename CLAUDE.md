@@ -249,8 +249,8 @@ modes produce no conflict marker at all, and all three showed up in the Aug 2026
   either repoint the control at a case that still diverges or flip it into a guard
   on the new upstream behaviour (say which, and why, in a comment).
 
-Three more turned up in the Sep 2026 1.17.0 sync (239 commits, 33 conflicted files,
-~108 markers). All three merged **cleanly** — no marker, and two of them would not
+Four more turned up in the Sep 2026 1.17.0 sync (239 commits, 33 conflicted files,
+~108 markers). All four merged **cleanly** — no marker, and three of them would not
 have been caught by reading the diff:
 
 - **A clean merge that silently un-registered every fork config flag.** Upstream
@@ -282,6 +282,23 @@ have been caught by reading the diff:
   the fork bits in that word*. Each fork-touched padding line now carries a `FORK:`
   comment saying exactly that, and `STATIC_ASSERT`s on the struct sizes make the next
   overflow a build error.
+- **A new upstream caller walking a fork helper into a case it had never seen.** The
+  fork routes Z-Move base power through one helper, `GetZMoveBasePower(baseMove, zMove)`,
+  which returns a *signature* Z-Move's own power. That is right for all sixteen damaging
+  signature Z-Moves and meaningless for the one status one (Extreme Evoboost, power 0) —
+  which never mattered, because the engine does not damage-calc a status move. Upstream
+  1.17.0 then added `gimmickAtk` to the AI's damage simulation: the AI now asks "what
+  would this move do if I Z'd it" with the gimmick *active*, so `CalcMoveBasePower` took
+  the Z branch for a damaging base move (Last Resort) whose Z-Move is that status one and
+  answered 0. `AI_CheckViability` reads a powered move simulating 0 damage as failing
+  (`NO_DAMAGE_OR_FAILS`), so the AI dropped Last Resort + Eevium Z and never armed the
+  Z-Move. Nothing conflicted, nothing warned, and the only symptom was one upstream AI
+  test. **Lesson: a new upstream *caller* is as dangerous as a changed upstream callee.**
+  When a fork helper narrows or sharpens an upstream number, its `FORK:` comment should
+  say which callers it was written for — then a sync that adds a caller has something to
+  check against. Run the upstream test that fails against a clean upstream worktree at the
+  merged commit before assuming the fork is innocent: here it passed there and failed here,
+  which is what turned "upstream ships a flaky AI test" into a two-line fork bug.
 
 The general shape: a clean merge proves nothing about behaviour. Budget for a full
 `make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
