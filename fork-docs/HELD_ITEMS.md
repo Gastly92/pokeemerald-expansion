@@ -1,20 +1,28 @@
-# Held items: what the roster uses, and the buff backlog
+# Held items: what the roster uses, and why
 
 An audit of every held item against the extended frontier roster
-(`src/fork/frontier_extended_mons.c`), plus the design backlog it produced: for each
-item nothing holds, *why* nothing holds it, and what would have to change for a set to
-want it.
+(`src/fork/frontier_extended_mons.c`), and the record of what it changed: for each item,
+why it sits where it sits, and — for the handful still on nobody — why that is the right
+answer rather than a gap. It exists because "held items are deliberately varied" is a
+claim worth measuring.
+
+**The audit is closed.** Every held item that is live in a frontier battle now sits on at
+least two sets, except six that were each examined and deliberately left undrafted. No
+balance work is outstanding either — every complaint the audit raised shipped a `BUFF_*`
+flag in [`config/buff.h`](../include/config/buff.h). What follows is a reference, not a
+queue. It is kept because the *reasoning* is what a future line review or upstream sync
+needs, and because several conclusions here were expensive to reach and easy to re-derive
+wrongly.
 
 This doc is the counterpart to [`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md) (what the
-roster *is*) and [`LINE_REVIEW.md`](LINE_REVIEW.md) (how to author a set). It exists
-because "held items are deliberately varied" is a claim worth measuring, and because the
-`BUFF_*` project needs a queue: [`config/buff.h`](../include/config/buff.h) already
-fixed Shell Bell, Leech Seed, the accuracy lenses and the type-boost items, and the
-question "what next" should be answered from data rather than vibes.
+roster *is*) and [`LINE_REVIEW.md`](LINE_REVIEW.md) (how to author a set).
 
-> **Picking up this work fresh?** Jump to [Processing a batch](#processing-a-batch) — it
-> is written to make "process the next batch of pending held items" a complete
-> instruction, including the decisions already settled so they don't get re-argued.
+> **Just need the current status?** It is not here — it is
+> `test/fork/held_item_tracker.c`, which CI gates. See
+> [Status lives in the tracker](#status-lives-in-the-tracker-not-here).
+>
+> **Placing an item on a set?** The screens that stop a dead placement are in
+> [Decisions already settled](#3-decisions-already-settled--do-not-re-litigate).
 
 ## Status lives in the tracker, not here
 
@@ -113,13 +121,12 @@ The distribution is heavily top-loaded:
 | Sitrus Berry | 92 | 5.6% |
 | Heavy-Duty Boots | 71 | 4.4% |
 | Rocky Helmet | 69 | 4.2% |
-| Heavy-Duty Boots | 71 | 4.4% |
 | Choice Specs | 69 | 4.2% |
 | Assault Vest | 60 | 3.7% |
 | Focus Band | 52 | 3.2% |
 | Choice Scarf | 44 | 2.7% |
 
-The top two alone are **19.9% of the roster**, down from 24% when this audit opened, and
+The top two alone are **19.9% of the roster**, down from 25% when this audit opened, and
 the tail is long and thin: **86 items appear on one or two sets** — most of them the
 species-locked signature items, where one
 set is the ceiling rather than a gap.
@@ -132,7 +139,7 @@ duplicate" — a non-`ITEM_NONE` match makes the draft skip that mon and roll ag
 **Only one of each item can appear per team**, for the player's rentals and for each
 opponent alike.
 
-So item concentration is a *draft-rate tax*: the 213 Leftovers sets are competing for a
+So item concentration is a *draft-rate tax*: the 176 Leftovers sets are competing for a
 single team slot, and each one loses every roll where another mon already took it.
 Moving a set off a crowded item onto an uncrowded one makes that set appear more often
 at no balance cost. That is the real prize in this audit — unused items are unused
@@ -152,19 +159,20 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | Species-locked but inert | 3 | **Lucky Punch** (Chansey only) is repaired twice over — +2 crit stage, which `DETERMINISTIC_HOLD_EFFECTS` upgrades to a guaranteed first-attack crit — but Chansey has **5 base Attack** and attacks with Seismic Toss, whose fixed damage a crit does not scale, so the crit lands and changes nothing. **Metal Powder / Quick Powder** (Ditto only) both gate on an *untransformed* Ditto, and the roster's Ditto runs Imposter, which transforms on switch-in. The effect is real in each case; the one holder allowed to have it cannot use it. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **6 unused items that are live in battle** — the actual backlog (two of them the
-parked Clamperl pair, below).
+That leaves **6 unused items that are live in battle**, and all six are deliberately
+*parked* rather than outstanding — see
+[Parked](#parked-the-item-works-the-holder-costs-too-much) for the arithmetic behind each.
 
-## The backlog
+## How each class was settled
 
-Four groups, in the order they are worth working on.
+Four groups, in the order they were worked. All four are closed; the headings survive
+because the reasoning is indexed by them from `FORK.md` and the tracker.
 
-### Group A — already fixed, just not drafted (no code, roster work)
+### Group A — already fixed, just not drafted (no code, roster work) — **shipped**
 
-These items are good, or were *specifically repaired by this fork*. Zero engine work; they
-need a line review to pick them up. This is the highest-value group precisely because it
-costs nothing. The first five rows — the six fork-repaired items — have now shipped; the
-rest of the group is still open.
+These items were good, or were *specifically repaired by this fork*, and simply had no
+home. Zero engine work — the whole group was placement — which is why it was worked first
+and why it was the cheapest capacity in the audit.
 
 | Item(s) | Status | Note |
 | --- | --- | --- |
@@ -175,20 +183,38 @@ rest of the group is still open.
 | ~~**Leppa Berry**~~ — **shipped** | Quietly much stronger, now **2 sets** | `DETERMINISTIC_ACCURACY_EVASION` turned PP into the *currency accuracy is paid in*, and it also **scales max PP down by accuracy**, so the sets that feel it are the ones whose moves are already short. Leppa restores a move that hits 0 PP, so it went to the two lowest-total-PP rentable sets in the roster: Lurantis (17 effective PP across four moves — Focus Blast is scaled to **3**) and Camerupt (24, with Eruption and Fire Blast at 5 and 4). Camerupt gains twice over, since Life Orb chip was working against Eruption's HP scaling. |
 | ~~**Odd / Rock / Rose / Sea / Wave Incense**~~ — **shipped** | Drafted, **2 sets each** | All five are `HOLD_EFFECT_TYPE_POWER`, so `BUFF_TYPE_BOOST_ITEMS` already gave them the same **+40%** as Twisted Spoon, Hard Stone, Miracle Seed and Mystic Water — pure placement, no balance question. Each went to a set whose damage is genuinely concentrated in that type, off a crowded item: **Odd** on Munkidori and Tapu Lele (Psychic Surge makes Expanding Force the boosted move), **Rock** on Relicanth and Rampardos — both innate **Rock Head**, so Head Smash is 150 BP with no recoil and the incense boosts it and Rock Slide — **Rose** on Serperior (innate-free **Contrary**, which spams Leaf Storm, exactly the repeat-clicked move a permanent type item wants and a Gem does not) and Sunflora (Choice Specs was locking it into a SpA-dropping Leaf Storm), and **Sea/Wave** on Floatzel, Crawdaunt, Basculegion and Tentacruel. |
 | ~~**Lax Incense**~~ — **shipped** | Drafted, **2 sets** | Byte-identical to Bright Powder under the PP economy: `HOLD_EFFECT_EVASION_UP` is a flat `tax++` on the attacker (`src/battle_util.c`) and the item's own param is never read. Both homes are bulky doubles redirectors that already plan to be attacked repeatedly, so the tax compounds — Clefable (Follow Me + Moonlight) and Tangrowth (Rage Powder + Giga Drain). Unlike the Rocky Helmet each gave up, the tax also applies to non-contact and special attackers. |
-| **Lax Incense** | Free scarcity relief | Under the PP economy, `HOLD_EFFECT_EVASION_UP` is a **flat +1 PP tax** on the attacker (`src/battle_util.c:12133`) — the item's own param is never read. Lax Incense and Bright Powder are therefore *identical*, and Bright Powder is on 1 set while Lax Incense is on none. |
 | ~~**The 18 resist berries**~~ — **shipped** | Drafted, **2 sets each** | Determinism does not touch them, so the whole class was placement only. The rule that made 16 of the 18 mechanical: **put the berry on a genuine 4x weakness**, which it halves back to 2x, since the berry only fires on a super-effective hit (`GetDefenderItemsModifier`). Two screens are mandatory and both drew blood — an ability *or innate* granting immunity to the berry's own type makes it permanently dead (Scizor and Ferrothorn lost their Occa Berry to Well-Baked Body; a Ghost type would have killed Chilan the same way), and the old item may be the point of the set. Two fork innates cut the other way and produced the best placements: **Ripen** doubles the reduction to 0.25x, so the Grass/Dragon apple line takes a 4x Ice hit at *neutral* damage, and **Harvest** recycles the berry outright, which is why Exeggutor took the Tanga. |
 | **Haban and Chilan: the two that break the rule** | Placed on their own terms | Recorded because a future audit will re-derive it otherwise. **Haban** (Dragon) has **no** 4x home anywhere — nothing in the game is 4x weak to Dragon — so a 2x Dragon-type holder is its ceiling (Goodra, Kingdra). **Chilan** (Normal) is the mirror: no type is weak to Normal either, but its trigger is special-cased to fire on *any* Normal hit (`moveType == TYPE_NORMAL`), so it wants a holder that merely **expects** Normal damage. Blissey is the case it could have been written for — 255 base HP behind **10 base Defense**, against a roster carrying 126 physical-Normal move instances. |
-| **Wiki, Mago, Iapapa Berry** | Fine as-is | Mechanically identical to Figy (6 sets) and Aguav (3 sets) — the only difference is which nature dislikes the flavor. Pure arbitrary selection. |
-| **Cheri, Pecha, Rawst, Aspear, Persim Berry** | Fine as-is | Narrower Lum Berries (Lum: 12 sets, Chesto: 2). Narrower is the point on an uncrowded slot. |
-| **Liechi, Ganlon, Apicot, Starf Berry** | Fine as-is | Salac (1 set) and Petaya (2) are used; the other four are not. Starf was also made deterministic — it raises the holder's *currently highest* stat, not a random one. |
-| **Absorb Bulb, Cell Battery, Snowball, Luminous Moss, Eject Button, Eject Pack, Red Card, Room Service, Adrenaline Orb, Ability Shield, Clear Amulet, Protective Pads, Utility Umbrella, Float Stone, Ring Target, Shed Shell, Sticky Barb, Binding Band, Lagging Tail, Metronome, Berserk Gene, Micle Berry, Enigma Berry, Jaboca, Rowap, Kee, Maranga** | Niche but functional | Ordinary situational items. Several are strong build-arounds nothing has been built around yet — Berserk Gene (+2 Attack on entry at the cost of confusion) and Metronome (+20% per consecutive use, to 2x) both define a set on their own. |
+| ~~**Wiki, Mago, Iapapa Berry**~~ — **shipped** | Drafted, **2 sets each** | Mechanically identical to Figy and Aguav — the only difference is which nature dislikes the flavor, so placement was the whole job. One screen matters and it is not obvious: a holder whose nature **dislikes** the berry's flavor is *confused* by it rather than healed cleanly, and the disliked flavor tracks the nature's **lowered** stat (`gPokeblockFlavorCompatibilityTable`). That is deterministic here, because `src/battle_frontier.c` runs `ModifyPersonalityForNature()` before the set is built — the nature written on the set is the nature in battle. |
+| ~~**Cheri, Pecha, Rawst, Aspear, Persim Berry**~~ — **shipped** | Drafted, **2 sets each** | Narrower Lum Berries, and narrow is the point on an uncrowded slot. Screened against the typing that cannot take the status at all — an Electric type cannot be paralysed, a Fire type cannot be burned — which would leave the berry permanently dead in the slot, the same failure a resist berry on an immune holder produces. |
+| ~~**Liechi, Ganlon, Apicot, Starf Berry**~~ — **shipped** | Drafted, **2 sets each** | Pinch berries, so the holder has to reach the threshold *and* be able to use the stat when it does — the stat raised is matched to what the set actually attacks with. Starf is deterministic here (it raises the holder's **currently highest** stat, not a random one), and innate **Gluttony** moves any of them from 1/4 to 1/2 max HP. |
+| ~~**The situational tail**~~ — **shipped** | Drafted, **2 sets each** | The last 39 draftable items, the ones with no class rule: the twelve berries in the three rows above, plus Absorb Bulb, Cell Battery, Snowball, Luminous Moss, Eject Button, Eject Pack, Red Card, Room Service, Adrenaline Orb, Ability Shield, Clear Amulet, Protective Pads, Utility Umbrella, Float Stone, Shed Shell, Sticky Barb, Binding Band, Lagging Tail, Full Incense, Metronome, Berserk Gene, Micle Berry, Enigma Berry, Jaboca, Rowap, Kee and Maranga. Each got an explicit rule of its own instead of a shared lever — Eject Pack on a self-lowering nuke, Room Service on a set that carries Trick Room, Lagging Tail on Avalanche/Counter/Mirror Coat, Metronome on a genuine single-move spammer, Utility Umbrella on a holder that does *not* set its own weather. **Ring Target** is the only item of this shape deliberately left out, being the one whose effect is a pure drawback to its own holder; it is [parked](#parked-the-item-works-the-holder-costs-too-much). See the caveat below before re-reading these picks. |
 
-### Group B — dominated by our own buffs (needs code)
+#### The situational tail is rule-governed, not hand-tuned
+
+Worth knowing before re-reading the last row's picks. Those 78 placements closed out the
+items with no class rule, where each wants a set built *around* what it does — so each was
+placed by an explicit rule and every one was checked against a "can this item ever fire"
+sweep before being applied (zero dead placements, zero species reused). But the bar was
+**"this item can work here"**, not "this is its best home in the roster". A line review
+that wants to re-home one of them is improving a set, not fixing a bug, and should feel
+free to.
+
+Two corrections during that batch are worth keeping, because both were the picker being
+clever rather than right. The first pass drew **74 of 78 sets from Leftovers alone**, which
+would have meant nearly every pick was a defensive staller regardless of the item it was
+handed; the source is now spread across fourteen items. The second put Absorb Bulb (**+Sp.
+Atk**) on a Choice Band Luxray whose damage is entirely physical — it passed only because
+Volt Switch counts as special — and Jaboca, which punishes *physical* attackers, on Blissey
+and its ten base Defence. **Count damaging moves by category, and tell a physical wall from
+a special one.**
+
+### Group B — dominated by our own buffs — **shipped**
 
 `BUFF_TYPE_BOOST_ITEMS` raised the generic type items from +20% to **+40%** for good
-reasons, but it moved a goalpost several *other* item classes were standing on. These
-are now strictly or near-strictly worse than a Charcoal, which is why nothing holds
-them. This is regression collateral, and it is the most defensible buff work available.
+reasons, but it moved a goalpost several *other* item classes were standing on, leaving
+each strictly or near-strictly worse than a Charcoal — which is why nothing held them.
+This group was regression collateral of our own making, and all of it has shipped.
 
 | Item(s) | The problem | Sketch of a fix |
 | --- | --- | --- |
@@ -199,8 +225,8 @@ them. This is regression collateral, and it is the most defensible buff work ava
 
 ### Group C — weak in stock, still weak here — **shipped**
 
-Not caused by us; just never worth a slot. **This group is now empty, and with it the whole
-balance half of the backlog**: every remaining pending item is a placement problem.
+Not caused by us; just never worth a slot. **This group closed the balance half of the
+audit** — after it, nothing pending was a balance problem, only a placement one.
 
 | Item(s) | The problem | Fix |
 | --- | --- | --- |
@@ -211,9 +237,8 @@ balance half of the backlog**: every remaining pending item is a placement probl
 | Item(s) | Why it is parked |
 | --- | --- |
 | **Deep Sea Tooth, Deep Sea Scale** | Both are **2x**, genuinely enormous, and locked to Clamperl, which has no set (it evolves, so the coverage test excuses it). The price is what stalls them, not the item: graduation takes two sets each, so drafting both means **four Clamperl entries** — a 35/64/85/74/55/32 NFE, four times, in a uniform draw — while Huntail and Gorebyss already carry four sets between them. They stay **pending**, not ignored, because nothing about them is dead: a line review that wants an NFE gimmick can pick them up without any code or list change. Just don't count them when sizing a batch. |
-
 | **Adamant Orb, Lustrous Orb, Griseous Core** | Species-locked by `BUFF_SIGNATURE_TYPE_ITEMS`, and the arithmetic does not close. Graduation needs **two sets**, but Adamant Orb's only legal holders are **three** sets — two Dialga plus Dialga-Origin, which must keep its Adamant Crystal — so the only way to reach two is to put the orb on **both** Dialga sets. Under one-species-per-team those are mutually exclusive, so the second set adds **zero reach** while stripping Dialga of its Leftovers and Choice Specs. Lustrous Orb and Griseous Core have four legal sets each and the same shape. The item is fine; the holder pool is too small to graduate it honestly. Unparking needs *new* Dialga/Palkia/Giratina sets, not a re-item. |
-| **Ring Target** | The only item in the backlog whose effect is a **pure drawback to its holder**: it turns the holder's type *immunities* into neutral damage (`MulByTypeEffectiveness`, `src/battle_util.c`). There is no upside term — it exists in the retail games to be handed to an opponent via Trick or Fling, which no set here does. Drafting it means deliberately making a set worse. |
+| **Ring Target** | The only held item whose effect is a **pure drawback to its holder**: it turns the holder's type *immunities* into neutral damage (`MulByTypeEffectiveness`, `src/battle_util.c`). There is no upside term — it exists in the retail games to be handed to an opponent via Trick or Fling, which no set here does. Drafting it means deliberately making a set worse. |
 
 The other three species-locked strays — **Lucky Punch**, **Metal Powder** and **Quick
 Powder** — are not parked but *ignored*, because their effects genuinely cannot land on
@@ -307,35 +332,45 @@ its type rather than only Judgment: Arceus-Dark runs Knock Off, Arceus-Fighting 
 Combat, and Arceus-Ground runs a Cosmic Power / High Horsepower stall build, all collecting
 the same +40% a Judgment set gets.
 
-## Priority
+## Where it landed
 
-**The signature type items are finished** — balance and roster both. `BUFF_SIGNATURE_TYPE_ITEMS`
-settled the class and the roster drafted every member: 17 Memories on Silvally formes, 17 Plates
-on Arceus formes, 4 Drives on Genesect formes, and Soul Dew on Latios. Group B is empty.
+Both halves of the audit are finished.
 
-What is left is Group A and Group C, and it is overwhelmingly **roster work**:
+**Balance.** Three flags settled every complaint the audit raised: `BUFF_GEMS` (+60%,
+chosen so the break-even against a permanent item is 1.5 uses), `BUFF_SIGNATURE_TYPE_ITEMS`
+(the 17 Plates, 17 Memories, 4 Drives, Soul Dew and the three signature orbs, each locked
+to its own species) and `BUFF_FLAT_HP_ITEMS` (Oran Berry and Berry Juice at `maxHP/4`,
+matching Sitrus). `BUFF_TYPE_BOOST_ITEMS` is the odd one out: it predates the audit and is
+what *created* Group B by moving the goalpost to +40%. Nothing is pending on a number, and
+four further claims that *looked* like balance work were assessed and rejected rather than
+shipped — see [Assessed and rejected](#assessed-and-rejected-as-buff-candidates).
 
-1. **Group A.** No engine risk, no new flag, no test surface — a line review that spends its item
-   picks out of the tail instead of on Leftovers. The embarrassing subset is now closed: Wide Lens,
-   Zoom Lens, Blunder Policy, Razor Fang, Lansat **and** Leppa each carry two sets and are gated,
-   so no fork-repaired item ships to nobody any more. What is left in the group is pure uncontested
-   capacity, and it is still the top of the backlog:
-   - ~~**The six incenses.**~~ **Shipped** — two sets each, no balance question, no engine work.
-   - ~~**The resist berries.**~~ **Shipped** — all 18 carry two sets each.
-   - ~~**The Gems.**~~ **Shipped** — all 18 types carry two or more sets.
-2. ~~**Group C.**~~ **Shipped.** `BUFF_FLAT_HP_ITEMS` was the last engine work in the backlog.
-   **There is no balance work left** — every pending item now needs a set, not a flag. Oran and
-   Berry Juice are themselves the next obvious roster picks, since both are still on zero sets.
+**Roster.** Distinct held items used went **102 → 215**, and the top two went from **25% of
+the roster to 19.9%** — under a fifth for the first time. Every one of those placements was
+a **re-item**, not an appended set, which is both what pulled the concentration down and
+why no saved rental was ever invalidated. (The roster itself grew 1596 → 1629 sets over the
+same period, but from line reviews, not from this audit.)
 
-**The five species-locked strays are not backlog.** Lucky Punch, Metal Powder and Quick Powder
-are on `sIgnoredItems[]` — the effect is real but the only legal holder cannot use it — and the
-Clamperl pair (Deep Sea Tooth/Scale) is parked in pending at a price of four NFE sets. Don't
-count any of them when sizing what is left.
+**What is still on nobody, and why.** Six items, each a deliberate call rather than a gap:
+the **Clamperl pair** (Deep Sea Tooth/Scale — the effect is enormous, but graduating both
+costs four NFE sets in a uniform draw), the **three signature orbs** (Adamant Orb's only
+legal holders are three sets, so reaching two means both Dialga sets holding it, which
+adds zero reach under one-species-per-team) and **Ring Target** (a pure drawback to its
+own holder). They sit in `sPendingItems[]` rather than `sIgnoredItems[]` because the
+ignored list makes a stronger claim — that the effect *cannot happen* — and none of these
+is dead. See [Parked](#parked-the-item-works-the-holder-costs-too-much).
 
-## Processing a batch
+**Not backlog, and not counted anywhere above:** Lucky Punch, Metal Powder and Quick
+Powder are on `sIgnoredItems[]` — the effect is real, but the only legal holder cannot use
+it. See [Never expected](#never-expected--the-structural-exclusions).
 
-This section exists so "process the next batch of pending held items" is a complete
-instruction. Work it top to bottom.
+## Method, for when this comes up again
+
+Nothing is queued, so this is no longer a to-do list. It is kept for the two cases that
+will put an item back in play: an **upstream sync** adding one, or a **line review**
+re-homing one. Both are the same job at a smaller scale, and
+[Decisions already settled](#3-decisions-already-settled--do-not-re-litigate) is the part
+that stops a dead placement — read it even for a single re-item.
 
 ### 1. Read the current state
 
@@ -343,46 +378,28 @@ instruction. Work it top to bottom.
 make check TESTS="Held item tracker"     # the six gates; green means the lists are honest
 ```
 
-`test/fork/held_item_tracker.c` is the status. Read its three lists and the comment
-blocks inside `sPendingItems[]` — they are grouped by *what kind of work is outstanding*:
-**needs a buff**, **thinly drafted** (on one set), **needs a set** (on none). Re-measure
-usage before trusting any count in this doc:
+`test/fork/held_item_tracker.c` is the status. Read its three lists and the comment blocks
+inside `sPendingItems[]`, which are grouped by *what kind of work is outstanding*: **needs
+a buff**, **thinly drafted** (on one set), **needs a set** (on none). The first two blocks
+are empty and the third holds only the six parked items, so **a name you did not expect to
+see there is the signal** — it means an upstream sync added an item, or a done item lost a
+set. Re-measure usage before trusting any count in this doc:
 
 ```bash
 grep -oP '\.heldItem = \KITEM_\w+' src/fork/frontier_extended_mons.c | sort | uniq -c | sort -rn
 ```
 
-### 2. Pick the batch
+### 2. Scope it
 
 **One PR does one kind of work.** A buff PR ships one `BUFF_*` flag; a roster PR moves
 items onto sets. Don't mix them — the Gems took two PRs on purpose (#510 balance, #511
 roster), and that split is what let each be reviewed on its own merits.
 
-Order of value: the **Priority** section above. In short — roster work first, since it
-costs no engine risk, then the memories/drives extension, then the signature orbs.
-
-A sensible batch is **one buff flag**, or **8–15 roster re-items**. Bigger roster batches
-get hard to review; smaller ones waste a CI cycle.
-
-**How much is left: nothing.** Every held item that is live in a frontier battle and not parked
-now sits on at least two sets. `sPendingItems[]` contains exactly the six parked entries — the
-Clamperl pair, the three signature orbs whose holder pool is too small to graduate them, and Ring
-Target — and nothing else. A new name appearing there means an upstream sync added an item, or a
-done item lost a set; both are worth a look rather than a reflexive re-draft.
-
-**So this section is now maintenance, not a queue.** The batch machinery above stays because
-an upstream sync will eventually add items and the same method applies, but there is no
-standing backlog to work through.
-
-**A caveat on the last batch, which is worth knowing before re-reading its picks.** The final
-78 placements closed out the situational tail — the items with no class rule, where each
-wants a set built *around* what it does. They were placed by an explicit rule per item
-(Eject Pack on a self-lowering nuke, Room Service on a Trick Room set, Lagging Tail on
-Avalanche/Counter/Mirror Coat, the flavor berries screened against the nature that dislikes
-them) and every one was checked to be able to fire at all. But they are **rule-governed, not
-hand-tuned**: the bar was "this item can work here", not "this is the best home in the
-roster". A line review that wants to re-home one of them is improving a set, not fixing a
-bug.
+A sensible batch is **one buff flag**, or **8–15 roster re-items**: bigger roster batches
+get hard to review, smaller ones waste a CI cycle. The audit ran long batches past that
+only where every placement was mechanical (all 18 resist berries at once, all 18 Gems, the
+final 78), and the last of those is exactly the batch carrying the
+[rule-governed caveat](#the-situational-tail-is-rule-governed-not-hand-tuned).
 
 ### 3. Decisions already settled — do not re-litigate
 
