@@ -21,6 +21,7 @@
 #include "constants/battle_move_effects.h"
 #include "constants/moves.h"
 #include "constants/items.h"
+#include "fork/innate_abilities.h" // FORK: innate ability predicates
 
 static bool32 DoesAbilityBenefitFromWeather(enum Ability ability, u32 weather);
 static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather); // FORK: FEATURE_INNATE_ABILITIES

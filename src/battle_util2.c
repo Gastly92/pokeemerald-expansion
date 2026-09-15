@@ -13,6 +13,7 @@
 #include "battle_scripts.h"
 #include "window.h"
 #include "constants/battle_string_ids.h"
+#include "fork/innate_abilities.h" // FORK: innate ability predicates
 
 void AllocateBattleGfxResources(void)
 {

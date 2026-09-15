@@ -15,6 +15,7 @@
 #include "util.h"
 #include "constants/abilities.h"
 #include "constants/rgb.h"
+#include "fork/innate_abilities.h" // FORK: innate ability predicates
 
 // Sets flags and variables upon a battler's Terastallization.
 void ActivateTera(enum BattlerId battler)

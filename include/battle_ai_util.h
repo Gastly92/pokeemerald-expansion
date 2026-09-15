@@ -164,7 +164,6 @@ bool32 AI_IsAbilityOnSide(enum BattlerId battlerId, enum Ability ability);
 // `ability` as an *active innate*. Lets an AI effect-heuristic credit an innate the same way it
 // credits the chosen ability. Feature-gated (no-op, FALSE, when off) and species-based, so it never
 // leaks the chosen ability. Pair it with AI_IsAbilityOnSide at the effect site (OR the two).
-bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability);
 bool32 AI_MoveMakesContact(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability ability, enum HoldEffect holdEffect, enum Move move);
 bool32 AI_CanContactBypassProtect(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move);
 bool32 IsConsideringZMove(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move);
@@ -276,7 +275,6 @@ bool32 IsWakeupTurn(enum BattlerId battler);
 
 // ability logic
 bool32 IsMoxieTypeAbility(enum Ability ability);
-bool32 IsMoxieTypeInnateActive(u32 battler); // FORK: innate-aware Moxie/Chilling Neigh/Grim Neigh (FEATURE_INNATE_ABILITIES)
 bool32 DoesAbilityRaiseStatsWhenLowered(enum Ability ability);
 bool32 DoesIntimidateRaiseStats(enum Ability ability);
 bool32 ShouldTriggerAbility(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability ability);

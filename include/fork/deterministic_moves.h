@@ -54,4 +54,20 @@ enum AccuracyItemRelief
 // DETERMINISTIC_ACCURACY_EVASION is off, so stock behavior is untouched.
 u32 GetAccuracyItemRelief(enum BattlerId battlerAtk, enum BattlerId battlerDef);
 
+// FORK: DETERMINISTIC_ACCURACY_EVASION accuracy/evasion + PP economy, moved here from
+// include/battle_util.h with their definitions (src/fork/deterministic_moves.c).
+s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, bool32 ignorePenalties); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
+u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
+s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move); // FORK: DETERMINISTIC_ACCURACY_EVASION move-info PP cost
+
+// FORK: DETERMINISTIC_MOVE_RESULTS speed ties (moved from include/battle_main.h).
+s32 DeterministicSpeedTieWins(enum BattlerId battlerAtk, enum BattlerId battlerDef); // FORK: DETERMINISTIC_MOVE_RESULTS
+
+// FORK: MOVEEND deterministic handlers and AI deterministic predictions (see the matching .c).
+enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValues *cv);
+enum MoveEndResult MoveEndDeterministicRecharge(struct BattleCalcValues *cv);
+bool32 AI_DeterministicAbilityGuaranteesStatus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move);
+bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move);
+bool32 StatusWillBeCuredDeterministically(enum BattlerId battlerDef, enum Ability defAbility);
+
 #endif // GUARD_FORK_DETERMINISTIC_MOVES_H

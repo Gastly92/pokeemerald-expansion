@@ -2521,16 +2521,11 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Levitate and Beast Boost."),
     },
 
-    // FORK: an aura the holder projects over the whole field: no single hit may take more than
-    // HALO_DAMAGE_CAP_PERCENT% of its target's max HP, for EVERY battler present, the holder
-    // included. Applied at the shared damage chokepoint (src/fork/halo.c), so the AI prices it
-    // in for free. The holder alone pays the upkeep: every move it uses costs HALO_PP_TAX extra
-    // PP. Fixed-damage moves ignore the cap. See fork-docs/NEW_ABILITIES.md.
-    [ABILITY_HALO] =
+
+    [ABILITY_314] =
     {
-        .name = _("Halo"),
-        .description = COMPOUND_STRING("Caps all hits at 40% of HP."),
-        .aiRating = 6,
+        .name = _("-------"),
+        .description = COMPOUND_STRING("No special ability."),
     },
 
     [ABILITY_MEGA_SOL] =
@@ -2545,17 +2540,11 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Ups Fire-type moves."),
     },
 
-    // FORK: first member of the "Affinity" ability family. On switch-in the holder gains a
-    // latent third type (here Psychic) for the rest of the battle -- it gets that type's STAB
-    // and resistances, but also its weaknesses. The type is applied at the GetBattlerTypes()
-    // chokepoint (src/fork/type_affinity.c), so STAB, matchups and the AI all see it; a
-    // switch-in popup + message announces it. The built-in downside (new weaknesses) is why
-    // this is a chosen ability, not a "pure boon" innate. See fork-docs/NEW_ABILITIES.md.
-    [ABILITY_PSYCHIC_AFFINITY] =
+
+    [ABILITY_317] =
     {
-        .name = _("Psychic Affinity"),
-        .description = COMPOUND_STRING("Also gains a Psychic type."),
-        .aiRating = 5,
+        .name = _("-------"),
+        .description = COMPOUND_STRING("No special ability."),
     },
 
     [ABILITY_SPICY_SPRAY] =
@@ -2568,6 +2557,36 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
     {
         .name = _("Aura Guard"),
         .description = COMPOUND_STRING("Unimplemented."),
+    },
+
+    // FORK: the fork's own abilities, at FORK_ABILITY_BASE and up (see
+    // include/constants/abilities.h). Kept in one block at the end of the table so
+    // upstream only ever appends above it. gAbilitiesInfo[] is sparse between
+    // ABILITIES_COUNT_GEN9 and this block; those entries are zeroed.
+
+    // FORK: an aura the holder projects over the whole field: no single hit may take more than
+    // HALO_DAMAGE_CAP_PERCENT% of its target's max HP, for EVERY battler present, the holder
+    // included. Applied at the shared damage chokepoint (src/fork/halo.c), so the AI prices it
+    // in for free. The holder alone pays the upkeep: every move it uses costs HALO_PP_TAX extra
+    // PP. Fixed-damage moves ignore the cap. See fork-docs/NEW_ABILITIES.md.
+    [ABILITY_HALO] =
+    {
+        .name = _("Halo"),
+        .description = COMPOUND_STRING("Caps all hits at 40% of HP."),
+        .aiRating = 6,
+    },
+
+    // FORK: first member of the "Affinity" ability family. On switch-in the holder gains a
+    // latent third type (here Psychic) for the rest of the battle -- it gets that type's STAB
+    // and resistances, but also its weaknesses. The type is applied at the GetBattlerTypes()
+    // chokepoint (src/fork/type_affinity.c), so STAB, matchups and the AI all see it; a
+    // switch-in popup + message announces it. The built-in downside (new weaknesses) is why
+    // this is a chosen ability, not a "pure boon" innate. See fork-docs/NEW_ABILITIES.md.
+    [ABILITY_PSYCHIC_AFFINITY] =
+    {
+        .name = _("Psychic Affinity"),
+        .description = COMPOUND_STRING("Also gains a Psychic type."),
+        .aiRating = 5,
     },
 
     // FORK: second member of the "Affinity" family (see ABILITY_PSYCHIC_AFFINITY above for the

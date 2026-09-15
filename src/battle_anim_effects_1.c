@@ -21,6 +21,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/moves.h"
+#include "fork/innate_abilities.h" // FORK: innate ability predicates
 
 static void AnimMovePowderParticle_Step(struct Sprite *);
 static void AnimSolarBeamSmallOrb(struct Sprite *);

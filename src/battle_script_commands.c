@@ -78,6 +78,7 @@
 #include "test/battle.h"
 #include "follower_npc.h"
 #include "load_save.h"
+#include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
 
 // Helper for accessing command arguments and advancing gBattlescriptCurrInstr.
 //

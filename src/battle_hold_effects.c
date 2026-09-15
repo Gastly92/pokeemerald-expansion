@@ -13,6 +13,7 @@
 #include "string_util.h"
 #include "data/hold_effects.h"
 #include "constants/berry.h"
+#include "fork/innate_abilities.h" // FORK: innate ability predicates
 
 bool32 IsOnSwitchInActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].onSwitchIn; }
 bool32 IsMirrorHerbActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].mirrorHerb; }

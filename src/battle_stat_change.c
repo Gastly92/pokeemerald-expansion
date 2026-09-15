@@ -9,6 +9,7 @@
 #include "battle_ai_util.h"
 #include "item.h"
 #include "move.h"
+#include "fork/innate_abilities.h" // FORK: innate ability predicates
 
 // Stat change
 static enum StatChangeResult CanDecreaseStat(struct BattleCalcValues *cv, struct StatChange *st);

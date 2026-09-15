@@ -96,23 +96,7 @@ u32 CheckMoveLimitations(enum BattlerId battler, u8 unusableMoves, u32 check);
 bool32 AreAllMovesUnusable(enum BattlerId battler);
 u8 GetImprisonedMovesCount(enum BattlerId battler, enum Move move);
 s32 GetDrainedBigRootHp(enum BattlerId battler, s32 hp);
-// FORK: BUFF_LEECH_SEED. Which branch a Leech Seed drain takes, returned by SetUpLeechSeedDrain.
-enum LeechSeedDrainKind
-{
-    LEECH_SEED_DRAIN_RECOVERY,    // victim loses HP, seeder heals
-    LEECH_SEED_DRAIN_LIQUID_OOZE, // victim loses HP, seeder takes recoil (victim has Liquid Ooze)
-    LEECH_SEED_DRAIN_HEAL_BLOCK,  // victim loses HP, seeder heals nothing (seeder under Heal Block)
-};
-enum LeechSeedDrainKind SetUpLeechSeedDrain(enum BattlerId victim, enum BattlerId seeder);
-// FORK: BUFF_LEECH_SEED. TRUE when using Leech Seed on `victim` is the immediate re-drain
-// (`seeder` already seeds it) and that drain can actually land.
-bool32 CanLeechSeedReDrain(enum BattlerId seeder, enum BattlerId victim);
 bool32 IsAbilityAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck);
-// FORK: FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord: TRUE if the chosen
-// ability matches (recorded, exactly as upstream) OR an active innate matches (NOT recorded — the
-// chosen slot stays the mon's identity). Used at chip-damage / indirect-damage gates so an innate
-// holder is spared like the real ability (e.g. Magic Guard's many end-turn/hazard/recoil sites).
-bool32 IsAbilityOrInnateAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck);
 bool32 HandleFaintedMonActions(void);
 bool32 HasNoMonsToSwitch(enum BattlerId battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2);
 enum WeatherFailure TryChangeBattleWeather(enum BattlerId battler, u32 battleWeatherId, enum Ability ability);
@@ -131,16 +115,6 @@ enum Ability GetBattlerAbilityIgnoreMoldBreaker(enum BattlerId battler);
 enum Ability GetBattlerAbilityNoAbilityShield(enum BattlerId battler);
 enum Ability GetBattlerAbilityInternal(enum BattlerId battler, bool32 ignoreMoldBreaker, bool32 noAbilityShield);
 enum Ability GetBattlerAbility(enum BattlerId battler);
-// FORK: FEATURE_INNATE_ABILITIES. "Does this battler have ability X?" trait
-// predicate: TRUE for the primary (chosen) ability or an active innate. Use this
-// for trait checks; keep GetBattlerAbility() for identity/copy/swap/display.
-bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability);
-// FORK: FEATURE_INNATE_ABILITIES. TRUE if `battler`'s species declares `ability` as an
-// innate AND it is currently active (same suppression gates as the chosen slot). Unlike
-// BattlerHasAbility(), this does NOT also match the chosen ability — use it at innate-only
-// effect sites that must not credit (or leak) the chosen slot, e.g. GetBattleMovePriority's
-// innate Prankster check. No-op (FALSE) when the feature flag is off. See src/battle_util.c.
-bool32 IsInnateActive(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnSide(enum BattlerId battler, enum Ability ability);
 u32 IsAbilityOnField(enum Ability ability);
 u32 IsAbilityPreventingEscape(enum BattlerId battler);
@@ -162,7 +136,6 @@ u32 GetBattlerHoldEffectParam(enum BattlerId battler);
 bool32 CanBattlerAvoidContactEffects(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability abilityAtk, enum HoldEffect holdEffectAtk, enum Move move);
 bool32 IsMoveMakingContact(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability abilityAtk, enum HoldEffect holdEffectAtk, enum Move move);
 bool32 IsBattlerGrounded(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect);
-bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect); // FORK: grounded, or floating only by an innate Levitate (terrain / Toxic Spikes boon)
 u32 GetMoveSlot(enum Move *moves, enum Move move);
 u32 GetBattlerWeight(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect);
 u32 GetCriticalHitOdds(u32 critChance);
@@ -307,9 +280,6 @@ bool32 IsHazardOnSideAndClear(enum BattleSide side, enum Hazards hazardType);
 void RemoveHazardFromField(enum BattleSide side, enum Hazards hazardType);
 bool32 CanMoveSkipAccuracyCalc(struct BattleCalcValues *cv, u32 weather, enum ResultOption option);
 u32 GetTotalAccuracy(struct BattleCalcValues *cv, u32 weather);
-s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, bool32 ignorePenalties); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
-u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
-s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move); // FORK: DETERMINISTIC_ACCURACY_EVASION move-info PP cost
 bool32 DoesOHKOMoveMissTarget(struct BattleCalcValues *cv);
 bool32 DoesMoveMissTarget(struct BattleCalcValues *cv);
 bool32 IsSemiInvulnerable(enum BattlerId battler, enum SemiInvulnerableExclusion excludeCommander);

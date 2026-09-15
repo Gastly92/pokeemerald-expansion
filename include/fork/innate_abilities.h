@@ -381,4 +381,49 @@ u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability);
 // can't-switch party menu name the real trapper even when an innate holder's chosen ability differs.
 enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum BattlerId trapper);
 
+// FORK: the innate predicates, moved here from include/battle_util.h with their
+// definitions (src/fork/innate_abilities.c).
+// FORK: FEATURE_INNATE_ABILITIES. TRUE if `battler`'s species declares `ability` as an
+// innate AND it is currently active (same suppression gates as the chosen slot). Unlike
+// BattlerHasAbility(), this does NOT also match the chosen ability — use it at innate-only
+// effect sites that must not credit (or leak) the chosen slot, e.g. GetBattleMovePriority's
+// innate Prankster check. No-op (FALSE) when the feature flag is off. See src/battle_util.c.
+bool32 IsInnateActive(enum BattlerId battler, enum Ability ability);
+// FORK: FEATURE_INNATE_ABILITIES. "Does this battler have ability X?" trait
+// predicate: TRUE for the primary (chosen) ability or an active innate. Use this
+// for trait checks; keep GetBattlerAbility() for identity/copy/swap/display.
+bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability);
+// FORK: FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord: TRUE if the chosen
+// ability matches (recorded, exactly as upstream) OR an active innate matches (NOT recorded — the
+// chosen slot stays the mon's identity). Used at chip-damage / indirect-damage gates so an innate
+// holder is spared like the real ability (e.g. Magic Guard's many end-turn/hazard/recoil sites).
+bool32 IsAbilityOrInnateAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck);
+bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect); // FORK: grounded, or floating only by an innate Levitate (terrain / Toxic Spikes boon)
+
+// FORK: kept `static inline` in the header rather than in a .c, because both the damage
+// calc (src/battle_util.c) and the deterministic accuracy/PP code (src/fork/
+// deterministic_moves.c) call it on hot paths and must both inline it.
+// FORK: innate Unaware is a *pure boon* (FEATURE_INNATE_ABILITIES), NOT a 1:1 real
+// Unaware. A real Unaware blanks the foe's stat stage in *both* directions, which can
+// hurt: ignoring a foe's Attack/Defense/evasion/accuracy *drop* makes the holder take
+// more damage / deal less / be easier to hit than it otherwise would. At every Unaware
+// site the holder benefits from the *lower* stage, so an innate Unaware mimics the
+// ignore only for the favorable half — it caps a stage at default when it's a *boost*,
+// but leaves a *drop* in place. So an innate-Unaware mon ignores the foe's boosts yet
+// still reaps the foe's self-inflicted drops; a real Unaware forgoes the latter. Returns
+// the boon-adjusted stage. (See fork-docs/INNATE_ABILITIES.md "innates are pure boons".)
+static inline s32 InnateUnawareBoonStage(enum BattlerId battler, s32 stage)
+{
+    if (stage > DEFAULT_STAT_STAGE && IsInnateActive(battler, ABILITY_UNAWARE))
+        return DEFAULT_STAT_STAGE;
+    return stage;
+}
+
+// FORK: MOVEEND innate handlers and AI innate reads (see the matching .c).
+enum MoveEndResult MoveEndAbilitiesInnate(struct BattleCalcValues *cv);
+enum MoveEndResult MoveEndAbilityEffectFoesFaintedInnate(struct BattleCalcValues *cv);
+enum MoveEndResult MoveEndColorChangeInnate(struct BattleCalcValues *cv);
+bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability);
+bool32 IsMoxieTypeInnateActive(u32 battler); // innate-aware Moxie / Chilling Neigh / Grim Neigh
+
 #endif // GUARD_INNATE_ABILITIES_H

@@ -34,6 +34,7 @@
 #include "constants/moves.h"
 #include "constants/items.h"
 #include "constants/trainers.h"
+#include "fork/innate_abilities.h" // FORK: innate ability predicates
 
 #if TESTING
 #include "test/battle.h"

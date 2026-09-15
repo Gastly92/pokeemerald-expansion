@@ -29,17 +29,24 @@ STATIC_ASSERT(AI_FLAG_SMART_SPECIES_LOGIC < AI_FLAG_DYNAMIC_FUNC, ForkAiFlagEnte
 STATIC_ASSERT(AI_FLAG_SMART_Z_MOVE        < AI_FLAG_DYNAMIC_FUNC, ForkAiFlagEnteredUpstreamOtherBlock2);
 
 // --- Ability IDs ------------------------------------------------------------------
-// These three sit inside upstream's growth range: 314 and 317 are still upstream's
-// ABILITY_314 / ABILITY_317 placeholders, and 320 is the next slot upstream will fill.
-// They are expected to conflict on sync; resolve by renumbering OURS. The asserts below
-// catch the case where a resolution accidentally aliases a fork ability onto an
-// upstream one (which the compiler would otherwise accept silently, since a duplicated
-// designated initializer in gAbilitiesInfo[] is legal C).
-STATIC_ASSERT(ABILITY_HALO != ABILITY_PSYCHIC_AFFINITY, ForkAbilityIdsCollide_HaloPsychicAffinity);
-STATIC_ASSERT(ABILITY_HALO != ABILITY_WATER_AFFINITY,   ForkAbilityIdsCollide_HaloWaterAffinity);
-STATIC_ASSERT(ABILITY_PSYCHIC_AFFINITY != ABILITY_WATER_AFFINITY, ForkAbilityIdsCollide_Affinities);
-STATIC_ASSERT(ABILITY_WATER_AFFINITY != ABILITY_AURA_GUARD, ForkAbilityIdCollidesWithUpstream_AuraGuard);
-STATIC_ASSERT(ABILITY_HALO < ABILITIES_COUNT && ABILITY_WATER_AFFINITY < ABILITIES_COUNT, ForkAbilityIdOutOfRange);
+// The fork's abilities live in their own block at FORK_ABILITY_BASE and up, clear of
+// upstream's growth path (upstream allocates upward and reached 320 in 1.17.0, when
+// ABILITY_AURA_GUARD took 319 out from under the fork's old 314/317/320 numbering).
+//
+// The assert that matters is the first one: it fires the day upstream's own run grows
+// far enough to reach our base, which is the only way this scheme can break. When that
+// finally happens, raise FORK_ABILITY_BASE — never renumber into upstream's range.
+STATIC_ASSERT(ABILITIES_COUNT_GEN9 <= FORK_ABILITY_BASE, UpstreamAbilitiesReachedForkBlock);
+STATIC_ASSERT(ABILITY_HALO == FORK_ABILITY_BASE, ForkAbilityBlockNotAtBase);
+
+// The fork block must stay contiguous and ordered, so ABILITIES_COUNT spans all of it.
+STATIC_ASSERT(ABILITY_PSYCHIC_AFFINITY == ABILITY_HALO + 1, ForkAbilityBlockNotContiguous1);
+STATIC_ASSERT(ABILITY_WATER_AFFINITY == ABILITY_PSYCHIC_AFFINITY + 1, ForkAbilityBlockNotContiguous2);
+STATIC_ASSERT(ABILITY_WATER_AFFINITY < ABILITIES_COUNT, ForkAbilityIdOutOfRange);
+
+// gAbilitiesInfo[] is now sparse between upstream's run and the fork block. Anything
+// that ITERATES the ability space (rather than indexing a known ability) has to skip
+// entries whose .description is NULL — see test/text.c.
 
 // --- Bitfield words the fork steals padding bits from ------------------------------
 // Upstream regularly widens fields in these structs and shrinks `padding` to match.
