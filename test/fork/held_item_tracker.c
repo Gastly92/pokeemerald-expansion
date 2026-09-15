@@ -20,22 +20,32 @@
 //      drafted LESS often -- it loses every roll where another mon already took it --
 //      and an item on zero sets is unreachable no matter how good it is.
 //
-// Both axes collapse into three lists. An item's list IS its status:
+// Both axes collapse into TWO lists. An item's list IS its status, and every tracked item
+// is gated by one list or the other -- there is no unwatched middle any more:
 //
 //   sDoneItems[]    -- balance is right AND it is live in the roster. Gated both ways:
-//                      at least one set holds it, and it does not exceed
-//                      HELD_ITEM_MAX_ROSTER_SHARE_PERCENT of the roster.
-//   sPendingItems[] -- work outstanding, of any kind: it needs a buff, it is mechanically
-//                      fine and simply needs a set, or it is drafted so thinly that the
-//                      count is itself the signal. NOT gated -- a pending
-//                      item is allowed to sit at zero sets, which is usually why it is
-//                      pending. Promote it to sDoneItems[] once both axes are satisfied.
-//   sIgnoredItems[] -- nothing it does is reachable in a frontier battle, either because
-//                      the effect cannot happen there (Exp. Share) or because its only
-//                      legal holder cannot use the effect it has (Lucky Punch on Chansey).
-//                      Neither axis means anything for these, so they are exempt from the
-//                      done gates -- but no set may hold one, since doing so plays an item
-//                      down for free.
+//                      at least one set holds it (more than one unless one is its ceiling),
+//                      and it does not exceed HELD_ITEM_MAX_ROSTER_SHARE_PERCENT.
+//   sIgnoredItems[] -- NO SET HOLDS IT, and that is enforced. Two kinds of entry qualify,
+//                      and the list deliberately does not distinguish them, because the
+//                      gate is the same either way:
+//                        (a) nothing it does is reachable in a frontier battle -- the
+//                            effect cannot happen here (Exp. Share), or its only legal
+//                            holder cannot use the effect it has (Lucky Punch on Chansey);
+//                        (b) the effect works fine and we have decided not to draft it
+//                            anyway (Ring Target, whose effect is a pure drawback to its
+//                            own holder; the Clamperl pair, which would cost four NFE sets).
+//                      Either way no set may hold one: for (a) that would play an item down
+//                      for free, and for (b) it would silently undo a deliberate call.
+//
+// THIS FILE USED TO CARRY A THIRD LIST, sPendingItems[], for "work outstanding". It was
+// removed once the audit closed, and the reason is worth keeping: it was the one list with
+// NO GATE OF ITS OWN. Nothing asserted anything about a pending item, so an item parked
+// there was unwatched -- which is precisely the "we decided something and nothing checked
+// it" failure this file exists to catch, reappearing inside the file itself. Work that is
+// genuinely outstanding belongs in an issue or a branch, not in an ungated array here.
+// To re-draft an ignored item, MOVE IT TO sDoneItems[] in the same commit that gives it
+// sets; the no-set gate below makes that a deliberate, reviewed edit rather than a drift.
 //
 // The point of the split is that graduating an item to sDoneItems[] is what ARMS the
 // gates for it. That is the failure this file exists to catch: Wide Lens, Zoom Lens,
@@ -58,9 +68,14 @@
 // and the fix is to move sets onto the long tail (fork-docs/HELD_ITEMS.md, Groups A/D).
 #define HELD_ITEM_MAX_ROSTER_SHARE_PERCENT 20
 
-// The done list never shrinks. Bump this when items graduate; a drop means an item was
-// demoted to pending, which is a real regression and should be a deliberate, reviewed act
-// rather than a quiet way to dodge one of the gates above.
+// The done list never shrinks. Bump this when items graduate; a drop means an item stopped
+// being drafted, which is a real regression and should be a deliberate, reviewed act rather
+// than a quiet way to dodge one of the gates above. A demotion now means moving the item to
+// sIgnoredItems[], since that is the only other list.
+//
+// The entries below are a changelog, so the early ones still talk about sPendingItems[] and
+// about items being "pending". That list was removed once the audit closed (see the header);
+// read those as "not drafted at the time".
 //
 // 122 -> 121 is one such reviewed demotion: Dragon Fang. Drafting Soul Dew took the Latios
 // set that was Dragon Fang's SECOND home, leaving it at one -- the gates did not catch it
@@ -113,9 +128,12 @@
 // BUFF_FLAT_HP_ITEMS put them on Sitrus Berry's number. Nothing is left in this tracker between
 // "held by nobody" and "done" -- every remaining pending item is at zero sets.
 // 176 -> 215 finishes the audit. Every held item that is live in a frontier battle and not
-// parked now sits on at least two sets, so sPendingItems[] holds only the six parked entries
-// and nothing else. A new name appearing on it from here means either an upstream sync added
-// an item or a done item lost a set -- both of which the gates below will say out loud.
+// parked now sits on at least two sets.
+// 215 -> 218 gives each Sinnoh creation-trio forme its own signature item, after the park on
+// the three orbs turned out to rest on arithmetic that was wrong in both directions.
+// The floor stops here, and the three items still undrafted moved to sIgnoredItems[] rather
+// than staying on an ungated list. Every tracked item is now gated by one list or the other,
+// so a change in either direction has to say so out loud.
 #define HELD_ITEM_DONE_FLOOR 218
 
 // Balance is right AND the roster uses it. Both gates below apply to every entry here.
@@ -341,78 +359,37 @@ static const enum Item sDoneItems[] =
     ITEM_ZOOM_LENS,
 };
 
-// Work outstanding. Not gated -- these are allowed to sit at zero sets.
-static const enum Item sPendingItems[] =
-{
-    // ---- Needs a BUFF: dominated or underpowered as shipped. --------------------
-    // EMPTY, and that is the milestone: every balance complaint in the backlog has now
-    // shipped a flag. Oran Berry and Berry Juice were the last two, settled by
-    // BUFF_FLAT_HP_ITEMS, which heals maxHP/4 for both so a flat 10/20 HP stops
-    // being meaningless at Level 50; both moved down to "needs a SET". Before them, the
-    // Memories, Drives, Soul Dew and the signature orbs sat here and were settled by
-    // BUFF_SIGNATURE_TYPE_ITEMS. Everything still pending is a placement problem, not a
-    // balance one -- so a new entry here means a genuinely new balance finding, not a
-    // leftover.
-
-
-    // ---- Thinly drafted: on exactly one set, and the count is itself the signal. ----
-    // EMPTY. One set is close enough to zero that an item is barely reachable -- with only
-    // one of each allowed per team, a single set carrying it is one roll away from never
-    // appearing -- so this block held the items that needed a SECOND set. All 13 have one,
-    // and the tracker now has nothing between "held by nobody" and "done": every item still
-    // pending sits at zero sets.
-    //
-    // An earlier version of this comment named Safety Goggles, Power Herb, Mirror Herb and
-    // Custap Berry as wanting a buff. That was an unexamined aside from this file's first
-    // commit, and assessing it found all four claims false -- see fork-docs/HELD_ITEMS.md,
-    // "Assessed and rejected as buff candidates", before re-proposing any of them.
-    //
-    // A new entry here means a done item LOST a set, which the single-set gate catches --
-    // demote it and lower HELD_ITEM_DONE_FLOOR, or give it a replacement set.
-    //
-    // Note what deliberately never appears here: the items sitting at one set because one IS
-    // their ceiling. Two rules cover them, both derived rather than listed. The form-change
-    // enablers (Adamant Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and
-    // Shield, the three Ogerpon masks, the Plates, Memories and Drives) each unlock exactly one
-    // forme on exactly one species, so there is no second set to want. The three signature
-    // ORBS (Adamant, Lustrous, Griseous) are the same item in battle as the crystal that
-    // unlocks the forme -- same hold effect, same species gate, same boost -- and belong to
-    // the base forme as the crystal belongs to the Origin forme. All of them stay done so the
-    // zero-set gate keeps watching them: delete that Giratina set and CI should still notice.
-
-    // ---- Needs a SET: mechanically fine, held by nobody. No engine work. ---------
-    // Down to the THREE PARKED items and nothing else -- every other held item that is live
-    // in a frontier battle now sits on at least one set, and on two unless it is at a forme
-    // ceiling. These three are not a backlog; each was examined and deliberately left
-    // undrafted. They stay here rather than on sIgnoredItems[] because the ignored list means
-    // the effect CANNOT HAPPEN, which is a different claim -- nothing about these is dead.
-    // See the "Parked" section of fork-docs/HELD_ITEMS.md for the arithmetic behind each.
-    //
-    //   Deep Sea Tooth, Deep Sea Scale  -- locked to Clamperl; graduating both costs four NFE
-    //                                      sets in a uniform draw.
-    //   Ring Target                     -- the one item whose effect is a pure drawback to its
-    //                                      own holder (it deletes its type immunities).
-    //
-    // Adamant Orb, Lustrous Orb and Griseous Core used to sit here on the claim that their
-    // holder pools were too small to graduate -- that reaching two sets would mean doubling
-    // an orb onto a second set of the same forme "which adds no reach under
-    // one-species-per-team". BOTH HALVES OF THAT WERE WRONG. The draw is uniform over sets,
-    // so a second set does add reach; and the duplicate check compares exact species
-    // (src/battle_frontier.c), so the base forme and the Origin forme were never mutually
-    // exclusive in the first place. Each now holds its own forme's item at the one set that
-    // is its ceiling -- see ItemSharesHoldEffectWithAFormeUnlocker() above.
-    //
-    // A NEW name here means an upstream sync added an item, or a done item lost a set. Both
-    // are worth a look rather than a reflexive re-draft.
-    ITEM_DEEP_SEA_SCALE,
-    ITEM_DEEP_SEA_TOOTH,
-    ITEM_RING_TARGET,
-};
-
-// Nothing these do is reachable in a frontier battle, so neither axis means anything --
-// but no set may hold one (see the last test). Note the test is "does it do anything
-// here", not "can it exist here": Exp. Share is perfectly obtainable, it just has no
-// battle effect. Three species-locked items fail the same test from the other direction --
+// NO SET HOLDS THESE, and the last test enforces it. The list answers one question only --
+// "is this item drafted?" -- and deliberately does NOT record why not, because the gate is
+// the same for every entry. Two kinds of entry qualify.
+//
+// (a) Nothing it does is reachable in a frontier battle, so neither axis means anything.
+//     Note the test is "does it do anything here", not "can it exist here": Exp. Share is
+//     perfectly obtainable, it just has no battle effect.
+//
+// (b) The effect works fine and we have decided not to draft it anyway. These used to live
+//     on a separate sPendingItems[] list under the name "parked"; that list is gone, because
+//     it was ungated and so nothing watched them. Holding one of these is not a free item
+//     slot the way (a) is -- it is undoing a deliberate call -- but it is still an edit that
+//     should be reviewed rather than drift, which is exactly what the no-set gate makes it.
+//     To start drafting one, move it to sDoneItems[] in the commit that gives it sets.
+//       Ring Target    -- the one item in the build whose effect is a PURE DRAWBACK to its
+//                         own holder: it turns the holder's type immunities into neutral
+//                         damage (MulByTypeEffectiveness, src/battle_util.c, which keys on
+//                         ctx->battlerDef). It exists in the retail games to be handed to an
+//                         opponent via Trick or Fling, which no set here does. Drafting it
+//                         means deliberately making a set worse. Note it is also a no-op on
+//                         11 of the 18 types, which have no immunity to lose -- so it is
+//                         dead or negative, never positive, on every possible holder.
+//       Deep Sea Tooth -- Clamperl only, and both are genuinely enormous (2x). The price is
+//       Deep Sea Scale    the holder, not the item: Clamperl has no set because it evolves,
+//                         so drafting both means four Clamperl entries -- a 35/64/85/74/55/32
+//                         NFE, four times, in a uniform draw -- while Huntail and Gorebyss
+//                         already carry four sets between them. A line review that wants an
+//                         NFE gimmick can still pick them up; it just has to promote them
+//                         here rather than quietly adding a set.
+//
+// Three species-locked items fail (a) from the other direction --
 // the effect is real, but the one holder allowed to have it cannot use it:
 //   Lucky Punch  -- Chansey only. +2 crit stage, which DETERMINISTIC_HOLD_EFFECTS upgrades
 //                   to a guaranteed first-attack crit (IsCriticalHit, src/battle_util.c).
@@ -432,6 +409,8 @@ static const enum Item sIgnoredItems[] =
 {
     ITEM_AMULET_COIN,
     ITEM_CLEANSE_TAG,
+    ITEM_DEEP_SEA_SCALE,
+    ITEM_DEEP_SEA_TOOTH,
     ITEM_DESTINY_KNOT,
     ITEM_EVERSTONE,
     ITEM_EXP_SHARE,
@@ -448,6 +427,7 @@ static const enum Item sIgnoredItems[] =
     ITEM_POWER_WEIGHT,
     ITEM_PURE_INCENSE,
     ITEM_QUICK_POWDER,
+    ITEM_RING_TARGET,
     ITEM_SMOKE_BALL,
     ITEM_SOOTHE_BELL,
 };
@@ -456,7 +436,6 @@ enum ItemTrackerList
 {
     TRACKER_UNLISTED,
     TRACKER_DONE,
-    TRACKER_PENDING,
     TRACKER_IGNORED,
 };
 
@@ -492,8 +471,6 @@ static enum ItemTrackerList GetItemTrackerList(enum Item item)
 
     if (ItemIsInList(sDoneItems, ARRAY_COUNT(sDoneItems), item))
         return TRACKER_DONE;
-    if (ItemIsInList(sPendingItems, ARRAY_COUNT(sPendingItems), item))
-        return TRACKER_PENDING;
     if (ItemIsInList(sIgnoredItems, ARRAY_COUNT(sIgnoredItems), item))
         return TRACKER_IGNORED;
     return TRACKER_UNLISTED;
@@ -655,8 +632,6 @@ TEST("Held item tracker: every held item is on exactly one tracker list")
 
         if (ItemIsInList(sDoneItems, ARRAY_COUNT(sDoneItems), item))
             listed++;
-        if (ItemIsInList(sPendingItems, ARRAY_COUNT(sPendingItems), item))
-            listed++;
         if (ItemIsInList(sIgnoredItems, ARRAY_COUNT(sIgnoredItems), item))
             listed++;
 
@@ -669,7 +644,7 @@ TEST("Held item tracker: every held item is on exactly one tracker list")
         else if (listed == 0 && GetItemTrackerList(item) == TRACKER_UNLISTED)
         {
             unlisted++;
-            Test_MgbaPrintf("%S does something when held but is on no tracker list. Add it to sDoneItems[] (balance is right and a set holds it), sPendingItems[] (needs a buff, or needs a set), or sIgnoredItems[] (nothing it does is reachable in a frontier battle) in test/fork/held_item_tracker.c",
+            Test_MgbaPrintf("%S does something when held but is on no tracker list. There are only two: sDoneItems[] (balance is right AND at least one set holds it) or sIgnoredItems[] (no set holds it -- either nothing it does is reachable in a frontier battle, or we deliberately do not draft it). Judge it and add it in test/fork/held_item_tracker.c",
                             GetItemName(item));
         }
     }
@@ -711,7 +686,7 @@ TEST("Held item tracker: every done item appears on at least one set")
         if (CountRosterSetsHolding(sDoneItems[i]) == 0)
         {
             offenders++;
-            Test_MgbaPrintf("%S is on the done list but no set holds it, so nothing it does is reachable. Give a set the item, or move it to sPendingItems[] until one does",
+            Test_MgbaPrintf("%S is on the done list but no set holds it, so nothing it does is reachable. Give a set the item, or move it to sIgnoredItems[] and lower HELD_ITEM_DONE_FLOOR if you mean to stop drafting it",
                             GetItemName(sDoneItems[i]));
         }
     }
@@ -745,7 +720,7 @@ TEST("Held item tracker: no done item sits on a single set")
         if (CountRosterSetsHolding(sDoneItems[i]) == 1)
         {
             offenders++;
-            Test_MgbaPrintf("%S is on the done list but only one set holds it, and with one of each item per team that is a roll away from never appearing. Graduation takes TWO sets: give it a second one, or move it to the thinly-drafted block of sPendingItems[] and lower HELD_ITEM_DONE_FLOOR",
+            Test_MgbaPrintf("%S is on the done list but only one set holds it, and with one of each item per team that is a roll away from never appearing. Graduation takes TWO sets unless one is its ceiling: give it a second set, or move it to sIgnoredItems[] and lower HELD_ITEM_DONE_FLOOR if you mean to stop drafting it",
                             GetItemName(sDoneItems[i]));
         }
     }
@@ -813,7 +788,7 @@ TEST("Held item tracker: no set holds an ignored item")
         if (sets > 0)
         {
             offenders++;
-            Test_MgbaPrintf("%S is on the ignored list but %d set(s) hold it -- an ignored item does nothing in a frontier battle, so those sets are playing an item down. Give them a real item, or move this one off sIgnoredItems[] if it turns out to matter",
+            Test_MgbaPrintf("%S is on the ignored list but %d set(s) hold it. Ignored means NO SET HOLDS IT: either nothing it does is reachable here, in which case those sets are playing an item down, or it works and we deliberately do not draft it, in which case this set is undoing that call. Give them a real item, or move this one to sDoneItems[] in the same commit if you mean to start drafting it",
                             GetItemName(item), sets);
         }
     }
