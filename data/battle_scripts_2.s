@@ -10,6 +10,7 @@
 #include "constants/game_stat.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/battle_script.inc"
+	.include "asm/macros/fork/battle_script.inc" @ FORK: fork-owned battle script macros
 	.include "constants/constants.inc"
 
 	.section script_data, "aw", %progbits

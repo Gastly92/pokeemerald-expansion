@@ -1222,20 +1222,6 @@
 	.4byte \ptr
 	.endm
 
-	@ FORK: DETERMINISTIC_HOLD_EFFECTS — jump to \ptr unless the hung-on item should
-	@ be consumed (Focus Sash always; Focus Band only under the flag).
-	.macro jumpifhangonitemnotconsumed ptr:req
-	callnative BS_JumpIfHangOnItemNotConsumed
-	.4byte \ptr
-	.endm
-
-	@ FORK: jump to \ptr when DETERMINISTIC_HOLD_EFFECTS is off (so flag-gated item
-	@ consumption is skipped in stock play).
-	.macro jumpifnotdeterministicholdeffects ptr:req
-	callnative BS_JumpIfNotDeterministicHoldEffects
-	.4byte \ptr
-	.endm
-
 	.macro setterrain failInstr:req
 	callnative BS_SetTerrain
 	.4byte \failInstr
