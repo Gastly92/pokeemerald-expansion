@@ -1987,14 +1987,7 @@ static enum CancelerResult HandleSkyDropResult(struct BattleCalcValues *cv)
         gBattlescriptCurrInstr = BattleScript_ButItFailed;
         return CANCELER_RESULT_FAILURE;
     }
-    // FORK: BUFF_LEECH_SEED — a Leech Seed re-drain isn't stopped by the victim's Substitute.
-    // The seed is already on the mon behind it (the end-turn tick drains through a Substitute
-    // too), so an extra drain shouldn't fail just because the victim put one up afterwards.
-    // A fresh seed still fails, as in vanilla. Ported here from Cmd_jumpifsubstituteblocks,
-    // which upstream deleted in the 1.17.0 sync.
-    else if (DoesSubstituteBlockMove(cv->battlerAtk, cv->battlerDef, cv->move)
-          && !(GetMoveEffect(cv->move) == EFFECT_LEECH_SEED
-            && CanLeechSeedReDrain(cv->battlerAtk, cv->battlerDef)))
+    else if (DoesSubstituteBlockMove(cv->battlerAtk, cv->battlerDef, cv->move))
     {
         gBattlescriptCurrInstr = BattleScript_ButItFailed;
         return CANCELER_RESULT_FAILURE;
@@ -2678,6 +2671,15 @@ static enum CancelerResult CancelerSubstitute(struct BattleCalcValues *cv)
     for (enum BattlerId battler = 0; battler < gBattlersCount; battler++)
     {
         if (ShouldSkipFailureCheckOnBattler(cv->battlerAtk, cv->battlerDef))
+            continue;
+
+        // FORK: BUFF_LEECH_SEED — a Leech Seed re-drain isn't stopped by the victim's Substitute.
+        // The seed is already on the mon behind it (the end-turn tick drains through a Substitute
+        // too), so an extra drain shouldn't fail just because the victim put one up afterwards.
+        // A fresh seed still fails, as in vanilla. Ported here from the fork's
+        // `jumpifsubstituteblocks` line in BattleScript_EffectLeechSeed: upstream moved the
+        // status-move Substitute gate out of the script and into this canceler in the 1.17.0 sync.
+        if (cv->moveEffect == EFFECT_LEECH_SEED && CanLeechSeedReDrain(cv->battlerAtk, battler))
             continue;
 
         if (IsSubstituteProtected(cv->battlerAtk, battler, cv->abilities[cv->battlerAtk], cv->move))

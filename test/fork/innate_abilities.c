@@ -5557,9 +5557,9 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo prevents confusio
         TURN { MOVE(opponent, MOVE_CONFUSE_RAY); }
     } THEN {
         if (enabled)
-            EXPECT(player->volatiles.confusionTurns == 0);
+            EXPECT(player->volatiles.confusionTimer == 0);
         else
-            EXPECT(player->volatiles.confusionTurns > 0);
+            EXPECT(player->volatiles.confusionTimer > 0);
     }
 }
 
@@ -5580,7 +5580,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo cures confusion i
         ABILITY_POPUP(opponent, ABILITY_OWN_TEMPO);
         MESSAGE("The opposing Grumpig snapped out of its confusion!"); // innate cures right after
     } THEN {
-        EXPECT(opponent->volatiles.confusionTurns == 0);
+        EXPECT(opponent->volatiles.confusionTimer == 0);
     }
 }
 
@@ -5894,9 +5894,9 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Skill Link maxes multistrik
         TURN { MOVE(player, MOVE_ICICLE_SPEAR); }
     } SCENE {
         if (enabled)
-            MESSAGE("The Pokémon was hit 5 time(s)!");
+            MESSAGE("The Pokémon was hit 5 times!");
         else
-            MESSAGE("The Pokémon was hit 3 time(s)!");
+            MESSAGE("The Pokémon was hit 3 times!");
     }
 }
 
@@ -6550,8 +6550,9 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rough Skin / Iron Barbs chi
         TURN { MOVE(player, MOVE_SCRATCH); }
     } SCENE {
         if (enabled) {
+            // NB: upstream moved Rough Skin / Iron Barbs onto BattleScript_HurtAttackerNoMsg in
+            // the 1.17.0 sync, so there is no longer a "was hurt!" line; the HP check below pins the chip.
             ABILITY_POPUP(opponent, innate); // pop-up shows the innate, not the chosen ability
-            MESSAGE("Wobbuffet was hurt!");
         } else {
             NONE_OF { ABILITY_POPUP(opponent, innate); HP_BAR(player); }
         }
@@ -6573,8 +6574,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a chosen Rough Skin chips once, no
     } WHEN {
         TURN { MOVE(player, MOVE_SCRATCH); }
     } SCENE {
-        ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN);
-        MESSAGE("Wobbuffet was hurt!");
+        ABILITY_POPUP(opponent, ABILITY_ROUGH_SKIN); // upstream dropped the "was hurt!" line in 1.17.0
     } THEN {
         EXPECT_EQ(player->hp, player->maxHP - player->maxHP / 8); // one chip, not two
     }
@@ -7086,7 +7086,8 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Liquid Ooze damages a drain
     PARAMETRIZE { enabled = FALSE; }
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_LIQUID_OOZE));
-        ASSUME(GetMoveEffect(MOVE_GIGA_DRAIN) == EFFECT_ABSORB);
+        // NB: upstream removed EFFECT_ABSORB in the 1.17.0 sync; draining is an additional effect now.
+        ASSUME(MoveHasAdditionalEffect(MOVE_GIGA_DRAIN, MOVE_EFFECT_ABSORB));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
         PLAYER(SPECIES_WOBBUFFET) { MaxHP(300); HP(150); Moves(MOVE_GIGA_DRAIN); }
         OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_HUSTLE); } // chosen ability is NOT Liquid Ooze
@@ -7134,7 +7135,8 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate L
 {
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_GULPIN, ABILITY_LIQUID_OOZE));
-        ASSUME(GetMoveEffect(MOVE_GIGA_DRAIN) == EFFECT_ABSORB);
+        // NB: upstream removed EFFECT_ABSORB in the 1.17.0 sync; draining is an additional effect now.
+        ASSUME(MoveHasAdditionalEffect(MOVE_GIGA_DRAIN, MOVE_EFFECT_ABSORB));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         PLAYER(SPECIES_WOBBUFFET) { Speed(100); MaxHP(300); HP(150); Moves(MOVE_GASTRO_ACID, MOVE_GIGA_DRAIN); }
         OPPONENT(SPECIES_GULPIN) { Ability(ABILITY_HUSTLE); Speed(50); }
@@ -9134,7 +9136,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mega Sol lets the holder's 
     PARAMETRIZE { enabled = FALSE; }
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_MEGANIUM, ABILITY_MEGA_SOL));
-        ASSUME(GetMoveTwoTurnAttackWeather(MOVE_SOLAR_BEAM) == B_WEATHER_SUN);
+        ASSUME(GetTwoTurnMoveWeather(MOVE_SOLAR_BEAM) == B_WEATHER_SUN);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
         PLAYER(SPECIES_MEGANIUM) { Ability(ABILITY_OVERGROW); } // forced Overgrow; Mega Sol only as innate
         OPPONENT(SPECIES_WOBBUFFET);
@@ -9590,7 +9592,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Own Tempo shows its pop-up 
     } SCENE {
         ABILITY_POPUP(player, ABILITY_OWN_TEMPO); // pop-up shows the innate, not the chosen Regenerator
     } THEN {
-        EXPECT(player->volatiles.confusionTurns == 0); // still immune
+        EXPECT(player->volatiles.confusionTimer == 0); // still immune
     }
 }
 

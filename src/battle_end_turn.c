@@ -591,9 +591,14 @@ static bool32 HandleEndTurnLeechSeed(enum BattlerId battler)
 
             if (IsBattlerPresent(seeder))
             {
+                // NB: upstream's 1.17.0 rewrite of the drain scripts addresses the victim as
+                // BS_SCRIPTING and the receiver as BS_ATTACKER (it no longer uses BS_TARGET),
+                // so the BUFF path has to set the same globals its stock path above does.
+                gBattlerAttacker = seeder;                                  // receiver: gains HP
+                gBattlerAbility = gBattleScripting.battler = battler;        // victim: loses HP
                 gBattlerTarget = seeder; // leech seed receiver
-                gBattleScripting.animArg1 = gBattlerTarget;
-                gBattleScripting.animArg2 = gBattlerAttacker;
+                gBattleScripting.animArg1 = seeder;
+                gBattleScripting.animArg2 = battler;
                 CallLeechSeedTurnDrainScript(SetUpLeechSeedDrain(battler, seeder));
                 return TRUE; // hold endTurnBattler; resume at the next seeder after this drain runs
             }

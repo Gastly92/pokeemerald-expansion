@@ -7008,9 +7008,14 @@ static inline u32 CalcMoveBasePower(struct DamageContext *ctx)
         //     is recorded at every conversion site, so it stays correct on those paths too.
         // On conflict: port upstream's change into GetZMoveBasePower rather than re-inlining here.
         {
-            bool32 isExecuting = IsZMove(move);
-            enum Move baseMove = isExecuting ? gBattleStruct->zmove.baseMoves[battlerAtk] : ctx->baseMove;
-            enum Move zMove = isExecuting ? move : GetUsableZMove(battlerAtk, move);
+            enum Move baseMove = ctx->baseMove;
+            enum Move zMove = IsZMove(move) ? move : GetUsableZMove(battlerAtk, move);
+
+            // FORK: on the called-move path the canceler converts before assigning gCalledMove,
+            // so gBattleStruct->baseMove (hence ctx->baseMove) can be the Z-Move itself. Fall
+            // back to the fork's own record, written at every conversion site.
+            if (baseMove == MOVE_NONE || IsZMove(baseMove))
+                baseMove = gBattleStruct->zmove.baseMoves[battlerAtk];
 
             return GetZMoveBasePower(baseMove, zMove);
         }
@@ -10688,6 +10693,22 @@ void SetDynamicMoveCategory(enum BattlerId battlerAtk, enum BattlerId battlerDef
     case EFFECT_PRESENT:
     {
         gBattleStruct->presentBasePower = 0;
+        // FORK: DETERMINISTIC_MOVE_RESULTS — Present always damages a foe and always heals an
+        // ally, keyed off the target's side instead of a roll. Upstream moved this roll here from
+        // battle_move_resolution.c in the 1.17.0 sync and now signals the heal branch with
+        // dynamicMoveCategory = STATUS rather than a bare presentBasePower of 0, so the
+        // deterministic ally case sets both.
+        if (GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        {
+            bool32 ally = gBattlerTarget != gBattlerAttacker
+                       && GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker);
+
+            if (ally)
+                gBattleStruct->dynamicMoveCategory = DAMAGE_CATEGORY_STATUS;
+            else
+                gBattleStruct->presentBasePower = DETERMINISTIC_PRESENT_POWER;
+            break;
+        }
         u32 rand = RandomUniform(RNG_PRESENT, 0, 0xFF);
         if (rand < 102)
             gBattleStruct->presentBasePower = 40;
@@ -10702,6 +10723,20 @@ void SetDynamicMoveCategory(enum BattlerId battlerAtk, enum BattlerId battlerDef
     default:
         if (GetActiveGimmick(battlerAtk) == GIMMICK_DYNAMAX)
             gBattleStruct->dynamicMoveCategory = GetMoveCategory(GetBattlerChosenMove(battlerAtk));
+        // FORK: same treatment for Z-Moves. Upstream's dynamic-category refactor (#10300) removed
+        // GetBattleMoveCategory's `IsZMove(move) -> categoryOverride` branch and re-handled only
+        // Dynamax here, so a Z-Move falls through to its data entry — and every Z-Move's entry
+        // carries a placeholder `.category = DAMAGE_CATEGORY_PHYSICAL`. That silently ran special
+        // Z-Moves off the attacker's Attack against the target's Defense (a special Z-Move into
+        // Chansey did ~10x its real damage). Derive it from the base move, as Dynamax does.
+        // On conflict: if upstream adds its own Z-Move case here, drop this one.
+        else if (GetActiveGimmick(battlerAtk) == GIMMICK_Z_MOVE && IsZMove(move))
+        {
+            enum Move zBaseMove = gBattleStruct->zmove.baseMoves[battlerAtk];
+
+            if (zBaseMove != MOVE_NONE && !IsZMove(zBaseMove))
+                gBattleStruct->dynamicMoveCategory = GetMoveCategory(zBaseMove);
+        }
         break;
     }
 }
