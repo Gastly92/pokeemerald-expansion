@@ -50,6 +50,7 @@
 #include "type_icons.h"
 #include "pokedex.h"
 #include "test/battle.h"
+#include "fork/deterministic_moves.h" // FORK: DETERMINISTIC_ACCURACY_EVASION helpers
 
 static void PlayerHandleLoadMonSprite(enum BattlerId battler);
 static void PlayerHandleDrawTrainerPic(enum BattlerId battler);

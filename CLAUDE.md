@@ -385,18 +385,22 @@ upstream will not cross in years, or allocate downward from the top of the space
 | Space | Upstream grows | Fork uses | Rule |
 | --- | --- | --- | --- |
 | AI flags (`AI_FLAG(x)`, 64 bits) | up from bit 36 | 59, 58 (`include/fork/battle_ai_*.h`) | allocate **downward from 59** — bits 60-63 are upstream's "other" block |
-| Ability IDs (`enum Ability`) | up from 320 | 314, 317, 320 (`include/constants/abilities.h`) | **known hazard** — see below |
+| Ability IDs (`enum Ability`) | up from 320 | a block at `FORK_ABILITY_BASE` = 400 (`include/constants/abilities.h`) | append to the fork block; raise the base if the guard ever fires |
 | `STRINGID_*` | appended | appended in a marked fork block at the very end | keep the fork block last |
 | `MOVEEND_*` | inserted anywhere | `MOVEEND_ABILITIES_INNATE` after `MOVEEND_ABILITIES` | order is semantic; re-check placement each sync |
 
-**Ability IDs are the outstanding hazard.** `ABILITY_HALO = 314` and
-`ABILITY_PSYCHIC_AFFINITY = 317` sit on slots upstream still reserves as the
-placeholders `ABILITY_314` / `ABILITY_317`, and `ABILITY_WATER_AFFINITY = 320` is the
-next slot upstream will fill. Every one of these will collide again. The durable fix is
-to move the fork's abilities into their own block well above upstream's growth (e.g.
-400+) and let `ABILITIES_COUNT` carry the gap; the cost is the unused
-`gAbilitiesInfo[]` entries in the gap. Until that is done, expect an abilities conflict
-on every sync and resolve it by **renumbering ours, never upstream's**.
+**Ability IDs were the outstanding hazard, and are now fixed.** The fork used to sit at
+314/317/320 — two of those squatting on upstream's reserved `ABILITY_314` / `ABILITY_317`
+placeholders, the third on the next free slot — which guaranteed a conflict every sync and
+lost 319 to `ABILITY_AURA_GUARD` in 1.17.0. They now live in their own block based at
+`FORK_ABILITY_BASE` (400), and the 313-319 region is byte-identical to upstream again.
+Measured cost: 2,212 bytes of zeroed ROM for the 79-slot gap (28 bytes per
+`gAbilitiesInfo[]` entry), and no RAM. The trade the old scheme was making — a smaller
+`ABILITIES_COUNT` in exchange for a guaranteed annual conflict — was simply a bad one.
+
+The gap makes `gAbilitiesInfo[]` **sparse**: entries below the fork block are zeroed, so
+`.description` is `NULL` there. Anything that *iterates* the ability space rather than
+indexing a known ability must skip empty entries (`test/text.c` is the only such place).
 
 Where a collision would otherwise be silent, add a `STATIC_ASSERT` so the next one is a
 build error instead — `src/fork/fork_id_guards.c` holds these.
@@ -450,12 +454,36 @@ same deletion auto-merges. `asm/macros/` counts too — fork battle-script macro
 `asm/macros/fork/battle_script.inc`, pulled in by an additive `.include` line in
 `data/battle_scripts_[12].s`.
 
-Known backlog: **87 fork-authored functions still live in upstream-owned `src/*.c`**
-(mostly `src/battle_util.c`, `src/pokemon_summary_screen.c`, `src/battle_gimmick.c`).
-Only the four that actually conflicted have been moved. Most of the rest are `static`
-helpers that also touch file-local statics, so moving them is a real refactor rather
-than a cut-and-paste — do it opportunistically when a sync drags one into a conflict,
-and always with a one-line call left at the hook point. To list them:
+**Prioritise by upstream's churn, not by count.** The fork's code in upstream files is
+spread very unevenly against how hard upstream rewrites each file. Measured over the
+1.17.0 sync (`git diff --numstat <merge-base> upstream/master -- <file>`):
+
+| File | upstream churn in one sync | fork code there |
+| --- | --- | --- |
+| `src/battle_script_commands.c` | 3337 lines / 50 commits | 2 callnatives (must stay — see below) |
+| `src/battle_util.c` | 1797 lines / 70 commits | was 20 functions, now 9 |
+| `src/battle_move_resolution.c` | 1651 lines / 54 commits | was 6, now 1 |
+| `src/battle_ai_util.c` | 802 lines / 32 commits | was 6, now 1 |
+| `src/pokemon_summary_screen.c` | 54 lines / 8 commits | 8 (deliberately left) |
+| `src/battle_gimmick.c` | 45 lines / 4 commits | 8 (deliberately left) |
+
+Moving fork code out of the top four is worth real effort; moving it out of the bottom two
+buys almost nothing and costs a lot, because those functions are `static` helpers wired into
+file-local state (the innate browser's `sInnateCursorPos`/`sInnateScroll`, the party-menu
+callbacks). **Leave those, and say so, rather than churning them for symmetry.**
+
+Two lessons from doing this once:
+
+- **A `static` helper that moves has to become external**, which costs inlining. Where both
+  the moved code and the code left behind need it, put it in the fork *header* as
+  `static inline` instead (`InnateUnawareBoonStage` is the worked example — the damage calc
+  and the deterministic PP maths both inline it).
+- **Some fork code genuinely belongs in the upstream file.** The `BS_*` callnatives expand
+  `battle_script_commands.c`'s file-local `NATIVE_ARGS` macro; copying that macro into a fork
+  file would create exactly the silent-drift hazard this whole document is about. They stay,
+  with a comment saying why.
+
+To list what is left:
 
 ```bash
 # a definition in an upstream src/*.c that exists at neither the merge base nor upstream's tip is ours

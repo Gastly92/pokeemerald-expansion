@@ -13342,3 +13342,214 @@ enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum Batt
 
     return ABILITY_NONE;
 }
+
+// FORK: the innate-ability predicates themselves. These used to live in
+// src/battle_util.c beside upstream's own ability queries, which put ~60 lines of fork
+// code in the file upstream churns hardest (1797 lines across 70 commits in the 1.17.0
+// sync alone). They are unchanged; only their address has.
+
+// FORK: innate abilities (FEATURE_INNATE_ABILITIES). Mirrors CanBreakThroughAbility
+// for an arbitrary innate ability value: Mold Breaker & co. pierce an innate only
+// if that innate is itself breakable, exactly as they would the same ability in a
+// real slot. Keep in sync with CanBreakThroughAbility above.
+static bool32 CanBreakThroughInnate(enum BattlerId battlerDef, enum Ability ability, bool32 hasAbilityShield)
+{
+    if (hasAbilityShield || gBattlerAttacker == battlerDef)
+        return FALSE;
+    return gBattleStruct->moldBreakerActive && gAbilitiesInfo[ability].breakable;
+}
+
+// FORK: innate abilities (FEATURE_INNATE_ABILITIES). TRUE if `battler`'s species
+// declares `ability` as an innate AND that innate is currently active. Applies the
+// same suppression gates as GetBattlerAbilityInternal (not-on-field, Gastro Acid,
+// Neutralizing Gas, Mold Breaker on breakable abilities, Ability Shield) so an innate is
+// suppressed exactly like the same ability in a real slot. (Suppression parity only: the innate
+// LEVITATE *effect* is a deliberate pure-boon divergence — see IsBattlerGroundedForBenefit — so
+// an active innate Levitate is intentionally a bit stronger than a real one.) Mirrors the
+// default GetBattlerAbility() path (Mold Breaker respected, Ability Shield
+// honored); the Comatose-while-transformed micro-edge there does not apply to
+// innates (which key off the battler's species). Returns FALSE entirely when the
+// feature flag is off, so the BattlerHasAbility() sweep is a no-op in stock play.
+// Exported (declared in battle_util.h) so the innate-only effect sites that must NOT
+// also credit the chosen ability — e.g. GetBattleMovePriority's innate Prankster check,
+// which receives a hypothetical ability the chosen-slot test owns — can query the
+// innate directly without leaking the real chosen ability through BattlerHasAbility().
+bool32 IsInnateActive(enum BattlerId battler, enum Ability ability)
+{
+    bool32 hasAbilityShield;
+
+    if (!GetConfig(FEATURE_INNATE_ABILITIES))
+        return FALSE;
+
+    if (gBattleStruct->battlerState[battler].notOnField)
+        return FALSE;
+
+    if (!SpeciesHasInnate(gBattleMons[battler].species, ability))
+        return FALSE;
+
+    hasAbilityShield = GetBattlerHoldEffectIgnoreAbility(battler) == HOLD_EFFECT_ABILITY_SHIELD;
+
+    if (gAbilitiesInfo[ability].cantBeSuppressed)
+        return !CanBreakThroughInnate(battler, ability, hasAbilityShield);
+
+    if (gBattleMons[battler].volatiles.gastroAcid)
+        return FALSE;
+
+    if (!hasAbilityShield
+     && IsNeutralizingGasOnField()
+     && ability != ABILITY_NEUTRALIZING_GAS)
+        return FALSE;
+
+    return !CanBreakThroughInnate(battler, ability, hasAbilityShield);
+}
+
+// FORK: innate abilities (FEATURE_INNATE_ABILITIES). The central "does this
+// battler have ability X?" trait predicate. TRUE if X is the battler's primary
+// (chosen) ability — resolved by GetBattlerAbility(), so all the usual
+// suppression applies — OR an active innate. Identity-style queries (Trace, Skill
+// Swap, Role Play, ability pop-up, RecordAbilityBattle, ...) must keep using
+// GetBattlerAbility() directly: innates are additive passives, never copyable or
+// swappable, so the primary slot stays deterministic.
+bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability)
+{
+    if (GetBattlerAbility(battler) == ability)
+        return TRUE;
+    return IsInnateActive(battler, ability);
+}
+
+// FORK: TRUE if the battler should receive the *beneficial* ground interactions — field terrain
+// and Toxic Spikes absorption. That's any grounded battler, plus one that floats only by an
+// active innate Levitate (FEATURE_INNATE_ABILITIES). Unlike a real Levitate, the fork makes an
+// innate Levitate a pure boon: the battler still floats above Ground moves and entry-hazard
+// damage (that immunity flows from IsBattlerGrounded, untouched here), yet it still soaks the
+// terrain it/an ally sets and a Poison-type can still clear Toxic Spikes. A *real* Levitate is
+// deliberately NOT included, so it stays terrain-exempt exactly as in canon — only the innate
+// diverges. With the feature off, IsInnateActive() is FALSE, so this collapses to IsBattlerGrounded.
+bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect)
+{
+    if (IsInnateActive(battler, ABILITY_LEVITATE))
+        return TRUE;
+    return IsBattlerGrounded(battler, ability, holdEffect);
+}
+
+// FORK: FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord above: TRUE if the
+// chosen ability matches (recorded, as upstream) OR an active innate matches (no record — the chosen
+// slot stays identity, exactly like Rock Head's innate recoil clause). Used at indirect-damage chip
+// gates so an innate holder is spared like the real ability. Collapses to IsAbilityAndRecord when the
+// feature is off (IsInnateActive returns FALSE).
+bool32 IsAbilityOrInnateAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck)
+{
+    if (IsAbilityAndRecord(battler, battlerAbility, abilityToCheck))
+        return TRUE;
+    return IsInnateActive(battler, abilityToCheck);
+}
+
+// FORK: the MOVEEND innate handlers (from src/battle_move_resolution.c) and the AI's
+// innate reads (from src/battle_ai_util.c). Both files are in upstream's top-4 churn.
+// These were `static` in those files; they are external now so the hook points can still
+// reach them, which is the one real cost of moving a helper out.
+
+// FORK: fire the target's active on-hit innates (contact reactions: Rough Skin / Iron Barbs /
+// Gooey / Tangling Hair) right after the chosen-ability contact block. Re-entrant, mirroring the
+// end-turn innate hook (HandleEndTurnThirdEventBlock): fire one innate per pass, resuming from a
+// per-battler cursor; hold this state (keeping the cursor) while effects keep firing, and only
+// advance once the list is exhausted, then reset the cursor.
+enum MoveEndResult MoveEndAbilitiesInnate(struct BattleCalcValues *cv)
+{
+    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
+    u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
+
+    if (TryActivateInnateOnHitEffects(cv->battlerDef, &innateIndex, cv->move))
+    {
+        gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
+        result = MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance moveendState)
+    }
+    else
+    {
+        gBattleStruct->eventState.moveEndInnateIndex = 0;
+        gBattleScripting.moveendState++;
+    }
+
+    return result;
+}
+
+// FORK: fire the attacker's active attacker-side on-hit innates (Magician steals a held item off a
+// target it damaged) right after the chosen-ability MOVEEND_ABILITY_EFFECT_FOES_FAINTED block. Re-entrant,
+// mirroring MoveEndAbilitiesInnate: fire one innate per pass, resuming from the per-battler cursor (which
+// the defender-side MOVEEND_ABILITIES_INNATE step, running earlier in this same move, already reset to 0);
+// hold this state while effects keep firing and only advance once the list is exhausted, then reset.
+enum MoveEndResult MoveEndAbilityEffectFoesFaintedInnate(struct BattleCalcValues *cv)
+{
+    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
+    u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
+
+    if (TryActivateInnateOnHitAttackerEffects(cv->battlerAtk, &innateIndex, cv->move))
+    {
+        gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
+        result = MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance moveendState)
+    }
+    else
+    {
+        gBattleStruct->eventState.moveEndInnateIndex = 0;
+        gBattleScripting.moveendState++;
+    }
+
+    return result;
+}
+
+// FORK: fire each damaged holder's active on-damage innates (Berserk) right after the chosen-ability
+// MOVEEND_COLOR_CHANGE block. Mirrors MoveEndColorChange's per-battler iteration, with a nested
+// per-battler innate cursor: hold this state (keeping both cursors) while an effect fires for the
+// current battler; once that battler's innate list is exhausted, reset the cursor and advance to the
+// next battler; once all battlers are done, reset moveEndBattler and advance the move-end state.
+enum MoveEndResult MoveEndColorChangeInnate(struct BattleCalcValues *cv)
+{
+    while (gBattleStruct->eventState.moveEndBattler < gBattlersCount)
+    {
+        enum BattlerId battler = gBattleStruct->eventState.moveEndBattler;
+
+        if (battler == cv->battlerAtk)
+        {
+            gBattleStruct->eventState.moveEndBattler++;
+            continue;
+        }
+
+        u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
+        if (TryActivateInnateOnDamageEffects(battler, &innateIndex))
+        {
+            gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
+            return MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance), resume same battler
+        }
+
+        gBattleStruct->eventState.moveEndInnateIndex = 0; // this battler's list exhausted; advance
+        gBattleStruct->eventState.moveEndBattler++;
+    }
+
+    gBattleStruct->eventState.moveEndBattler = 0;
+    gBattleScripting.moveendState++;
+    return MOVEEND_RESULT_CONTINUE;
+}
+
+// FORK: FEATURE_INNATE_ABILITIES. Innate-aware companion to AI_IsAbilityOnSide — see the header.
+// IsInnateActive is feature-gated and species-based, so this is a strict no-op when the feature is
+// off and never leaks the chosen ability (it credits only the species' active innate).
+bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability)
+{
+    // GetPartnerBattler() is a three-call chain since upstream #10542 dropped the BATTLE_PARTNER
+    // XOR macro, and this helper is AI-hot — resolve the partner once.
+    enum BattlerId partner = GetPartnerBattler(battlerId);
+    return (IsBattlerAlive(battlerId) && IsInnateActive(battlerId, ability))
+        || (IsBattlerAlive(partner) && IsInnateActive(partner, ability));
+}
+
+// FORK: TRUE if the battler has any Moxie-type on-KO boost as an ACTIVE INNATE
+// (FEATURE_INNATE_ABILITIES). Moxie / Beast Boost / Chilling Neigh / Grim Neigh of the
+// Moxie-type set are innate-able (the As One combos are never innates), so this is the
+// innate-aware companion to IsMoxieTypeAbility used beside it at the AI's Moxie effect reads.
+bool32 IsMoxieTypeInnateActive(u32 battler)
+{
+    return IsInnateActive(battler, ABILITY_MOXIE)
+        || IsInnateActive(battler, ABILITY_CHILLING_NEIGH)
+        || IsInnateActive(battler, ABILITY_GRIM_NEIGH)
+        || IsInnateActive(battler, ABILITY_BEAST_BOOST);
+}

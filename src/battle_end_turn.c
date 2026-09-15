@@ -14,6 +14,7 @@
 #include "constants/abilities.h"
 #include "constants/items.h"
 #include "constants/moves.h"
+#include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
 
 static enum BattlerId GetBattlerSideForMessage(enum BattleSide side)
 {
@@ -493,24 +494,6 @@ static bool32 HandleEndTurnIngrain(enum BattlerId battler)
     return effect;
 }
 
-// FORK: BUFF_LEECH_SEED - queues the end-turn drain script matching the branch
-// chosen by SetUpLeechSeedDrain().
-static void CallLeechSeedTurnDrainScript(enum LeechSeedDrainKind kind)
-{
-    switch (kind)
-    {
-    case LEECH_SEED_DRAIN_LIQUID_OOZE:
-        BattleScriptCall(BattleScript_LeechSeedTurnDrainLiquidOoze);
-        break;
-    case LEECH_SEED_DRAIN_HEAL_BLOCK:
-        BattleScriptCall(BattleScript_LeechSeedTurnDrainHealBlock);
-        break;
-    case LEECH_SEED_DRAIN_RECOVERY:
-    default:
-        BattleScriptCall(BattleScript_LeechSeedTurnDrainRecovery);
-        break;
-    }
-}
 
 static bool32 HandleEndTurnLeechSeed(enum BattlerId battler)
 {

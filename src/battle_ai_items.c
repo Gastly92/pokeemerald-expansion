@@ -20,6 +20,7 @@
 #include "constants/battle_move_effects.h"
 #include "constants/items.h"
 #include "constants/moves.h"
+#include "fork/innate_abilities.h" // FORK: innate ability predicates
 
 // this file's functions
 static bool32 AI_ShouldHeal(enum BattlerId battler, u32 healAmount);

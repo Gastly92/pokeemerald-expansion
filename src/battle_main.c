@@ -79,6 +79,7 @@
 #include "constants/trainers.h"
 #include "constants/weather.h"
 #include "cable_club.h"
+#include "fork/deterministic_moves.h" // FORK: DETERMINISTIC_MOVE_RESULTS speed ties
 
 extern const struct BgTemplate gBattleBgTemplates[];
 extern const struct WindowTemplate *const gBattleWindowTemplates[];
@@ -4694,44 +4695,6 @@ static const u8 sBattlerOrders[24][4] =
     { 3, 2, 1, 0 },
 };
 
-// FORK: DETERMINISTIC_MOVE_RESULTS breaks a speed tie by a fixed ladder instead of the
-// random permutation: higher raw base Speed, then lighter weight, then higher
-// remaining-HP%. Returns 1 if battlerAtk wins the tie, -1 if battlerDef wins, or 0 if
-// every rung is also tied (caller falls back to the random order). Under Trick Room the
-// whole ladder is inverted, mirroring the speed axis. Shared with the AI's turn-order
-// prediction (AI_WhoStrikesFirst) so the two never disagree.
-s32 DeterministicSpeedTieWins(enum BattlerId battlerAtk, enum BattlerId battlerDef)
-{
-    s32 result = 0;
-    u32 baseAtk = gSpeciesInfo[gBattleMons[battlerAtk].species].baseSpeed;
-    u32 baseDef = gSpeciesInfo[gBattleMons[battlerDef].species].baseSpeed;
-    if (baseAtk != baseDef)
-    {
-        result = (baseAtk > baseDef) ? 1 : -1;
-    }
-    else
-    {
-        // NB: upstream gave GetBattlerWeight ability/holdEffect params in the 1.17.0 sync.
-        u32 weightAtk = GetBattlerWeight(battlerAtk, GetBattlerAbility(battlerAtk), GetBattlerHoldEffect(battlerAtk));
-        u32 weightDef = GetBattlerWeight(battlerDef, GetBattlerAbility(battlerDef), GetBattlerHoldEffect(battlerDef));
-        if (weightAtk != weightDef)
-        {
-            result = (weightAtk < weightDef) ? 1 : -1; // the lighter battler strikes first
-        }
-        else
-        {
-            // higher remaining-HP% strikes first (cross-multiply to avoid fractions)
-            u32 lhs = gBattleMons[battlerAtk].hp * gBattleMons[battlerDef].maxHP;
-            u32 rhs = gBattleMons[battlerDef].hp * gBattleMons[battlerAtk].maxHP;
-            if (lhs != rhs)
-                result = (lhs > rhs) ? 1 : -1;
-        }
-    }
-
-    if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
-        result = -result;
-    return result;
-}
 
 s32 GetWhichBattlerFaster(struct BattleCalcValues *calcValues, bool32 ignoreChosenMoves)
 {

@@ -42,31 +42,53 @@ abilities never have to touch it (see the stability rule in
 
 ## Where custom ability ids live
 
-Upstream's abilities run `0 … ABILITIES_COUNT_GEN9`. The fork's custom abilities occupy a
-**reserved block just below that count** (`ABILITY_314`, `ABILITY_MEGA_SOL`,
-`ABILITY_FIRE_MANE`, `ABILITY_SPICY_SPRAY`, … and now `ABILITY_PSYCHIC_AFFINITY`) in
-`include/constants/abilities.h`. Some entries are numeric placeholders (`ABILITY_314`, with a
-`-------` / "No special ability." data row) reserved for exactly this. **Prefer filling a
-placeholder over appending** — it keeps `ABILITIES_COUNT` (and every `gAbilitiesInfo`-sized
-array) stable and minimises the upstream-owned diff. Editing these two upstream-owned files is
-unavoidable for a genuinely new ability (like adding a species or move — it touches shared
-tables); keep the edits **additive and `FORK:`-tagged**.
+Upstream's abilities run `0 … ABILITIES_COUNT_GEN9`. **The fork's own abilities live in a
+separate block based at `FORK_ABILITY_BASE` (400)**, appended after that count in
+`include/constants/abilities.h`, with matching `gAbilitiesInfo[]` rows in a block at the end
+of `src/data/abilities.h`.
+
+This used to be the opposite advice: the fork squatted on upstream's reserved numeric
+placeholders (`ABILITY_314`, `ABILITY_317`) and on the next free slot, on the theory that it
+kept `ABILITIES_COUNT` small. That was wrong. Upstream allocates **upward** and fills its own
+placeholders, so every one of those ids was on a collision course — and in the 1.17.0 sync
+`ABILITY_AURA_GUARD` took 319, one slot below us. Squatting bought a smaller `ABILITIES_COUNT`
+and paid for it with a guaranteed conflict every single sync.
+
+The block costs 2,212 bytes of zeroed ROM for the gap (28 bytes per `gAbilitiesInfo` entry ×
+79 unused slots) and no RAM. That is the whole price, and it buys a region that upstream can
+never reach into.
+
+Two consequences worth knowing:
+
+- **`gAbilitiesInfo[]` is sparse.** Entries between `ABILITIES_COUNT_GEN9` and the fork block
+  are zeroed, so `.description` is `NULL` there. Anything that *iterates* the ability space
+  (rather than indexing a known ability) must skip empty entries — `test/text.c` is the only
+  place that does today.
+- **`src/fork/fork_id_guards.c` watches the base.** `UpstreamAbilitiesReachedForkBlock` fails
+  the build if upstream's run ever grows as far as `FORK_ABILITY_BASE`. If that fires, raise
+  the base — never renumber back down into upstream's range.
 
 ## Recipe: "add ability X"
 
 ### Step 1 — declare the constant
 
-In `include/constants/abilities.h`, rename a reserved placeholder (or add an id just before
-`ABILITIES_COUNT_GEN9`):
+In `include/constants/abilities.h`, **append to the fork block** at the end of the enum — never
+into upstream's run, and never onto one of upstream's `ABILITY_NNN` placeholders:
 
 ```c
-ABILITY_PSYCHIC_AFFINITY = 317, // FORK: "Affinity" family — grants a latent 3rd type in battle.
+    ABILITY_HALO = FORK_ABILITY_BASE, // FORK: …
+    ABILITY_PSYCHIC_AFFINITY,         // FORK: "Affinity" family — grants a latent 3rd type in battle.
+    ABILITY_WATER_AFFINITY,           // FORK: …
+    ABILITY_YOUR_NEW_ABILITY,         // FORK: … (add here)
 ```
+
+The block must stay contiguous — `fork_id_guards.c` asserts it, because `ABILITIES_COUNT` has
+to span all of it.
 
 ### Step 2 — add the data entry
 
-In `src/data/abilities.h`, fill the matching `[ABILITY_X] = { … }` initializer with a
-`.name`, `.description`, and `.aiRating`. **Both strings go through `charmap.txt`** — stick to
+In `src/data/abilities.h`, add the matching `[ABILITY_X] = { … }` initializer **to the fork
+block at the end of the table**, with a `.name`, `.description`, and `.aiRating`. **Both strings go through `charmap.txt`** — stick to
 ASCII punctuation (no em-dash `—`; see the charmap note in `CLAUDE.md`). Keep the description
 to one short line (it renders in a small box). `aiRating` is a coarse team-building / switch
 heuristic; if the effect lives in the shared damage/type calc (Step 3), the AI already sees the

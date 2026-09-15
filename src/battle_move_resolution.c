@@ -20,6 +20,7 @@
 #include "constants/battle_move_resolution.h"
 #include "fork/halo.h" // FORK: Halo (the holder's per-move PP upkeep)
 #include "constants/songs.h"
+#include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
 
 static void ValidateBattlers(void);
 static enum Move GetOriginallyUsedMove(enum Move chosenMove);
@@ -3735,29 +3736,6 @@ static enum MoveEndResult MoveEndResistBerryMessage(struct BattleCalcValues *cv)
     return result;
 }
 
-// FORK: fire the target's active on-hit innates (contact reactions: Rough Skin / Iron Barbs /
-// Gooey / Tangling Hair) right after the chosen-ability contact block. Re-entrant, mirroring the
-// end-turn innate hook (HandleEndTurnThirdEventBlock): fire one innate per pass, resuming from a
-// per-battler cursor; hold this state (keeping the cursor) while effects keep firing, and only
-// advance once the list is exhausted, then reset the cursor.
-static enum MoveEndResult MoveEndAbilitiesInnate(struct BattleCalcValues *cv)
-{
-    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
-    u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
-
-    if (TryActivateInnateOnHitEffects(cv->battlerDef, &innateIndex, cv->move))
-    {
-        gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
-        result = MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance moveendState)
-    }
-    else
-    {
-        gBattleStruct->eventState.moveEndInnateIndex = 0;
-        gBattleScripting.moveendState++;
-    }
-
-    return result;
-}
 
 static enum MoveEndResult MoveEndFormChangeOnHit(struct BattleCalcValues *cv)
 {
@@ -4835,29 +4813,6 @@ static enum MoveEndResult MoveEndAbilityEffectFoesFainted(struct BattleCalcValue
     return result;
 }
 
-// FORK: fire the attacker's active attacker-side on-hit innates (Magician steals a held item off a
-// target it damaged) right after the chosen-ability MOVEEND_ABILITY_EFFECT_FOES_FAINTED block. Re-entrant,
-// mirroring MoveEndAbilitiesInnate: fire one innate per pass, resuming from the per-battler cursor (which
-// the defender-side MOVEEND_ABILITIES_INNATE step, running earlier in this same move, already reset to 0);
-// hold this state while effects keep firing and only advance once the list is exhausted, then reset.
-static enum MoveEndResult MoveEndAbilityEffectFoesFaintedInnate(struct BattleCalcValues *cv)
-{
-    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
-    u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
-
-    if (TryActivateInnateOnHitAttackerEffects(cv->battlerAtk, &innateIndex, cv->move))
-    {
-        gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
-        result = MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance moveendState)
-    }
-    else
-    {
-        gBattleStruct->eventState.moveEndInnateIndex = 0;
-        gBattleScripting.moveendState++;
-    }
-
-    return result;
-}
 
 static enum MoveEndResult MoveEndShellTrap(struct BattleCalcValues *cv)
 {
@@ -4918,38 +4873,6 @@ static enum MoveEndResult MoveEndColorChange(struct BattleCalcValues *cv)
     return MOVEEND_RESULT_CONTINUE;
 }
 
-// FORK: fire each damaged holder's active on-damage innates (Berserk) right after the chosen-ability
-// MOVEEND_COLOR_CHANGE block. Mirrors MoveEndColorChange's per-battler iteration, with a nested
-// per-battler innate cursor: hold this state (keeping both cursors) while an effect fires for the
-// current battler; once that battler's innate list is exhausted, reset the cursor and advance to the
-// next battler; once all battlers are done, reset moveEndBattler and advance the move-end state.
-static enum MoveEndResult MoveEndColorChangeInnate(struct BattleCalcValues *cv)
-{
-    while (gBattleStruct->eventState.moveEndBattler < gBattlersCount)
-    {
-        enum BattlerId battler = gBattleStruct->eventState.moveEndBattler;
-
-        if (battler == cv->battlerAtk)
-        {
-            gBattleStruct->eventState.moveEndBattler++;
-            continue;
-        }
-
-        u32 innateIndex = gBattleStruct->eventState.moveEndInnateIndex;
-        if (TryActivateInnateOnDamageEffects(battler, &innateIndex))
-        {
-            gBattleStruct->eventState.moveEndInnateIndex = innateIndex;
-            return MOVEEND_RESULT_RUN_SCRIPT; // hold this state (don't advance), resume same battler
-        }
-
-        gBattleStruct->eventState.moveEndInnateIndex = 0; // this battler's list exhausted; advance
-        gBattleStruct->eventState.moveEndBattler++;
-    }
-
-    gBattleStruct->eventState.moveEndBattler = 0;
-    gBattleScripting.moveendState++;
-    return MOVEEND_RESULT_CONTINUE;
-}
 
 static enum MoveEndResult MoveEndKeeMarangaHpThresholdItemTarget(struct BattleCalcValues *cv)
 {
@@ -5443,61 +5366,7 @@ static enum MoveEndResult MoveEndItemOnStatChange(struct BattleCalcValues *cv)
     return MOVEEND_RESULT_CONTINUE;
 }
 
-// FORK: DETERMINISTIC_HOLD_EFFECTS — consume the attacker's crit/flinch entry item
-// (Scope Lens / Razor Claw / Lucky Punch / Leek, King's Rock / Razor Fang) after the
-// move it fired on. IsCriticalHit()/TryKingsRock() set the pending flag; we run a
-// removeitem here once per move.
-static enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValues *cv)
-{
-    enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
 
-    // FORK: DETERMINISTIC_HOLD_EFFECTS — the attacker just took an action, so every foe
-    // still on the field has now weathered a foe's action since it entered. This closes
-    // their Focus Band entry-turn window (see IsBattlersEntryTurn): a holder is protected
-    // only on the turn it actually faces an attack, not the turn after. Done at move end so
-    // the band can still fire during this very move (the holder's entry turn). Cheap and
-    // harmless when the config is off, so left ungated.
-    for (u32 i = 0; i < gBattlersCount; i++)
-    {
-        if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(cv->battlerAtk))
-            gBattleStruct->battlerState[i].facedFoeAction = TRUE;
-    }
-
-    if (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
-     && gBattleStruct->battlerState[cv->battlerAtk].deterministicHoldConsumePending)
-    {
-        gBattleStruct->battlerState[cv->battlerAtk].deterministicHoldConsumePending = FALSE;
-        if (gBattleMons[cv->battlerAtk].item != ITEM_NONE)
-        {
-            gLastUsedItem = gBattleMons[cv->battlerAtk].item;
-            BattleScriptCall(BattleScript_DeterministicHoldEffectConsume);
-            result = MOVEEND_RESULT_RUN_SCRIPT;
-        }
-    }
-
-    gBattleScripting.moveendState++;
-    return result;
-}
-
-// FORK: under DETERMINISTIC_ACCURACY_EVASION a damaging move that was exactly 50%
-// accurate (Zap Cannon, Inferno, DynamicPunch, ...) now requires a recharge turn like
-// Hyper Beam — set via the same rechargeTimer/gLockedMoves state Hyper Beam uses, so
-// CancelerRecharge forces the recharge next turn. Sleep moves (Dark Void) are handled
-// as drowsiness instead, and the move must have actually connected.
-static enum MoveEndResult MoveEndDeterministicRecharge(struct BattleCalcValues *cv)
-{
-    if (MoveGainsDeterministicRecharge(cv->move)
-     && gBattleMons[cv->battlerAtk].volatiles.rechargeTimer == 0
-     && IsBattlerAlive(cv->battlerAtk)
-     && !(gBattleStruct->moveResultFlags[cv->battlerDef] & MOVE_RESULT_NO_EFFECT))
-    {
-        gBattleMons[cv->battlerAtk].volatiles.rechargeTimer = 2;
-        gLockedMoves[cv->battlerAtk] = cv->move;
-    }
-
-    gBattleScripting.moveendState++;
-    return MOVEEND_RESULT_CONTINUE;
-}
 
 static enum MoveEndResult MoveEndSendOutReplacements(struct BattleCalcValues *cv)
 {

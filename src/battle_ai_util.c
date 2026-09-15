@@ -1115,32 +1115,6 @@ bool32 AI_IsDamagedByRecoil(enum BattlerId battler)
     return TRUE;
 }
 
-// Decide whether move having an additional effect for .
-// FORK: DETERMINISTIC_ABILITIES — TRUE when the attacker's own always-on ability
-// guarantees a beneficial poison on this damaging move: Poison Touch on a contact
-// hit, or Toxic Chain on any damaging hit. Reuses AI_CanPoison so it respects the
-// same immunity/effectiveness/substitute checks as a move's own poison effect.
-static bool32 AI_DeterministicAbilityGuaranteesStatus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
-{
-    enum Ability abilityAtk, abilityDef;
-
-    if (!GetConfig(DETERMINISTIC_ABILITIES) || IsBattleMoveStatus(move))
-        return FALSE;
-
-    abilityAtk = gAiLogicData->abilities[battlerAtk];
-    abilityDef = gAiLogicData->abilities[battlerDef];
-
-    if (abilityAtk == ABILITY_POISON_TOUCH
-     && AI_MoveMakesContact(battlerAtk, battlerDef, abilityAtk, gAiLogicData->holdEffects[battlerAtk], move)
-     && AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, gAiLogicData->partnerMove))
-        return TRUE;
-
-    if (abilityAtk == ABILITY_TOXIC_CHAIN
-     && AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, gAiLogicData->partnerMove))
-        return TRUE;
-
-    return FALSE;
-}
 
 static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
 {
@@ -1280,67 +1254,6 @@ static bool32 AI_IsMoveEffectInPlus(enum BattlerId battlerAtk, enum BattlerId ba
     return FALSE;
 }
 
-// FORK: DETERMINISTIC_ABILITIES — TRUE when making contact with battlerDef would
-// guarantee a status on battlerAtk via the defender's always-on contact ability
-// (Static/Flame Body/Poison Point/Effect Spore/Cute Charm) and the attacker can
-// actually receive it. Used to treat such a contact move as a downside.
-static bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
-{
-    enum Ability abilityAtk, abilityDef;
-
-    if (!GetConfig(DETERMINISTIC_ABILITIES))
-        return FALSE;
-
-    abilityAtk = gAiLogicData->abilities[battlerAtk];
-    abilityDef = gAiLogicData->abilities[battlerDef];
-
-    if (!AI_MoveMakesContact(battlerAtk, battlerDef, abilityAtk, gAiLogicData->holdEffects[battlerAtk], move))
-        return FALSE;
-
-    switch (abilityDef)
-    {
-    case ABILITY_STATIC:
-        return CanBeParalyzed(battlerDef, battlerAtk, abilityAtk);
-    case ABILITY_FLAME_BODY:
-        return CanBeBurned(battlerDef, battlerAtk, abilityAtk);
-    case ABILITY_POISON_POINT:
-        return CanBePoisoned(battlerDef, battlerAtk, abilityDef, abilityAtk);
-    case ABILITY_EFFECT_SPORE:
-        // FORK: Effect Spore no longer applies a status under this flag — it lowers the
-        // contact attacker's accuracy by one stage. Roles are reversed versus the usual
-        // CanLowerStat() call: the DEFENDER (the Effect Spore holder) is the one doing the
-        // lowering, so it is passed as the first argument.
-        return CanLowerStat(battlerDef, battlerAtk, gAiLogicData, STAT_ACC);
-    case ABILITY_CUTE_CHARM:
-        return !gBattleMons[battlerAtk].volatiles.infatuation
-            && abilityAtk != ABILITY_OBLIVIOUS
-            && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
-            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL)
-            && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // FORK: innate Aroma Veil on the attacker's side (Batch U)
-    default:
-        break;
-    }
-
-    // FORK: innate Cute Charm (FEATURE_INNATE_ABILITIES) — when the defender carries Cute Charm
-    // innately but its chosen ability differs, the switch above misses it, yet making contact still
-    // risks infatuation, so treat it as a downside too. (Static / Flame Body / Poison Point are never
-    // innates, so only Cute Charm needs this among the status set; BattlerHasAbility is a no-op with
-    // the feature off.)
-    if (abilityDef != ABILITY_CUTE_CHARM && BattlerHasAbility(battlerDef, ABILITY_CUTE_CHARM))
-        return !gBattleMons[battlerAtk].volatiles.infatuation
-            && abilityAtk != ABILITY_OBLIVIOUS
-            && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
-            && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL)
-            && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // FORK: innate Aroma Veil on the attacker's side (Batch U)
-
-    // FORK: innate Effect Spore (Tier 5.10) — same shape as the Cute Charm clause above. The switch
-    // keys off the chosen ability, so a holder whose Effect Spore is innate-only would be missed,
-    // yet contact still guarantees the accuracy drop. IsInnateActive supplies the usual suppression.
-    if (abilityDef != ABILITY_EFFECT_SPORE && IsInnateActive(battlerDef, ABILITY_EFFECT_SPORE))
-        return CanLowerStat(battlerDef, battlerAtk, gAiLogicData, STAT_ACC);
-
-    return FALSE;
-}
 
 static bool32 AI_IsMoveEffectInMinus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 noOfHitsToKo)
 {
@@ -1988,17 +1901,6 @@ bool32 AI_IsAbilityOnSide(enum BattlerId battlerId, enum Ability ability)
         return FALSE;
 }
 
-// FORK: FEATURE_INNATE_ABILITIES. Innate-aware companion to AI_IsAbilityOnSide — see the header.
-// IsInnateActive is feature-gated and species-based, so this is a strict no-op when the feature is
-// off and never leaks the chosen ability (it credits only the species' active innate).
-bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability)
-{
-    // GetPartnerBattler() is a three-call chain since upstream #10542 dropped the BATTLE_PARTNER
-    // XOR macro, and this helper is AI-hot — resolve the partner once.
-    enum BattlerId partner = GetPartnerBattler(battlerId);
-    return (IsBattlerAlive(battlerId) && IsInnateActive(battlerId, ability))
-        || (IsBattlerAlive(partner) && IsInnateActive(partner, ability));
-}
 
 // does NOT include ability suppression checks
 enum Ability AI_DecideKnownAbilityForTurn(enum BattlerId battlerId)
@@ -3887,29 +3789,6 @@ bool32 IsBattlerIncapacitated(enum BattlerId battler, enum Ability ability)
     return FALSE;
 }
 
-// FORK: under DETERMINISTIC_ABILITIES, some abilities cure the holder's
-// non-volatile status at the *end of every turn*, so inflicting one on a known
-// holder of such an ability is always wasted - it is wiped before it can act. The
-// engine still applies-then-cures (Synchronize, status-flash messaging, etc. fire
-// normally); this only stops the AI valuing a doomed status. Shed Skin cures
-// unconditionally; Hydration cures only while the target is being rained on (same
-// condition as the engine in AbilityBattleEffects, but read through the AI's view
-// of weather). Healer is deliberately not handled here - it cures the *partner*,
-// not the holder, so it isn't keyed on the target's own ability (see notes).
-static bool32 StatusWillBeCuredDeterministically(enum BattlerId battlerDef, enum Ability defAbility)
-{
-    if (!GetConfig(DETERMINISTIC_ABILITIES))
-        return FALSE;
-    switch (defAbility)
-    {
-    case ABILITY_SHED_SKIN:
-        return TRUE;
-    case ABILITY_HYDRATION:
-        return IsBattlerWeatherAffected(gAiLogicData->holdEffects[battlerDef], AI_GetWeather(), B_WEATHER_RAIN);
-    default:
-        return FALSE;
-    }
-}
 
 bool32 AI_CanPutToSleep(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability defAbility, enum Move move, enum Move partnerMove)
 {
@@ -6224,17 +6103,6 @@ bool32 IsMoxieTypeAbility(enum Ability ability)
     }
 }
 
-// FORK: TRUE if the battler has any Moxie-type on-KO boost as an ACTIVE INNATE
-// (FEATURE_INNATE_ABILITIES). Moxie / Beast Boost / Chilling Neigh / Grim Neigh of the
-// Moxie-type set are innate-able (the As One combos are never innates), so this is the
-// innate-aware companion to IsMoxieTypeAbility used beside it at the AI's Moxie effect reads.
-bool32 IsMoxieTypeInnateActive(u32 battler)
-{
-    return IsInnateActive(battler, ABILITY_MOXIE)
-        || IsInnateActive(battler, ABILITY_CHILLING_NEIGH)
-        || IsInnateActive(battler, ABILITY_GRIM_NEIGH)
-        || IsInnateActive(battler, ABILITY_BEAST_BOOST);
-}
 
 bool32 DoesAbilityRaiseStatsWhenLowered(enum Ability ability)
 {
