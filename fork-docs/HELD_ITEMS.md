@@ -46,10 +46,20 @@ The single-set gate derives that exemption from the form change tables rather th
 so it stays correct on its own — but note it is **config-dependent**, which is what caught
 Griseous Orb. The Orb only changes Giratina's forme when `I_GRISEOUS_ORB_FORM_CHANGE <
 GEN_9`, and this build is at `GEN_LATEST`, so that row is compiled out of
-`sGiratinaFormChangeTable` and **Griseous Core** is the enabler here. That makes the Orb an
-ordinary signature type item, class-mates with Adamant Orb and Lustrous Orb (both pending at
-zero), and it is now pending too. The Giratina-Origin set is unaffected — it names
-`SPECIES_GIRATINA_ORIGIN` directly, so the item was never what got it there.
+`sGiratinaFormChangeTable` and **Griseous Core** is the enabler here. The Giratina-Origin
+set is unaffected either way — it names `SPECIES_GIRATINA_ORIGIN` directly, so the item was
+never what got it there.
+
+**A second exemption covers the other half of each pair**, and it exists because the first
+one is config-dependent in exactly that way. An orb and its crystal share a hold effect, a
+species gate and a boost — `ITEM_ADAMANT_ORB` and `ITEM_ADAMANT_CRYSTAL` are both
+`HOLD_EFFECT_ADAMANT_ORB` — so which of the two happens to appear in a form change table
+says nothing about how either behaves in battle. `ItemSharesHoldEffectWithAFormeUnlocker()`
+therefore exempts an item that shares a (non-`HOLD_EFFECT_NONE`) hold effect with an
+enabler, which lets each orb sit at the one set that is its ceiling. The `NONE` guard is
+load-bearing: Rusted Sword and Shield are enablers with **no hold effect at all**, so
+without it every effectless item in the build would look like their twin and the gate would
+quietly switch itself off for most of the item table.
 
 Graduating an item to `sDoneItems[]` is what **arms** the gates for it. That is the
 failure the tracker exists to catch: Wide Lens, Zoom Lens, Blunder Policy, Razor Fang and
@@ -105,10 +115,10 @@ here will drift.
 
 ## What the roster uses today
 
-**1629 sets. 215 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
+**1629 sets. 218 distinct held items** (plus one deliberate `ITEM_NONE`, a Persian Thief
 set). The tracker classifies **241** items that do something when held, of which **20** do nothing
 reachable in a frontier battle (`sIgnoredItems[]` — see "Never expected" below), leaving a live
-universe of **221**. Against that, the roster is at **215 used, 6 unused** — and all six
+universe of **221**. Against that, the roster is at **218 used, 3 unused** — and all three
 are deliberately parked.
 
 The distribution is heavily top-loaded:
@@ -116,20 +126,24 @@ The distribution is heavily top-loaded:
 | Item | Sets | Share |
 | --- | --- | --- |
 | Leftovers | 176 | 10.8% |
-| Life Orb | 148 | 9.1% |
+| Life Orb | 147 | 9.0% |
 | Choice Band | 95 | 5.8% |
 | Sitrus Berry | 92 | 5.6% |
 | Heavy-Duty Boots | 71 | 4.4% |
 | Rocky Helmet | 69 | 4.2% |
-| Choice Specs | 69 | 4.2% |
-| Assault Vest | 60 | 3.7% |
-| Focus Band | 52 | 3.2% |
-| Choice Scarf | 44 | 2.7% |
+| Choice Specs | 62 | 3.8% |
+| Assault Vest | 52 | 3.2% |
+| Focus Band | 45 | 2.8% |
+| Choice Scarf | 38 | 2.3% |
 
-The top two alone are **19.9% of the roster**, down from 25% when this audit opened, and
-the tail is long and thin: **86 items appear on one or two sets** — most of them the
-species-locked signature items, where one
-set is the ceiling rather than a gap.
+The top two alone are **19.8% of the roster**, down from 25% when this audit opened, and
+the tail is long and thin: **160 items appear on one or two sets** — a large share of them
+the species-locked signature items, where one set is the ceiling rather than a gap.
+
+> Every number in this section was re-measured with the command under
+> [Reproducing the audit](#reproducing-the-audit) as of this commit. The rows below Rocky
+> Helmet had drifted by up to eight sets before that, which is the standing argument for
+> re-measuring rather than trusting the table.
 
 ### Why the concentration matters more than it looks
 
@@ -159,7 +173,7 @@ Do not re-litigate these in a future audit; they are correctly at zero.
 | Species-locked but inert | 3 | **Lucky Punch** (Chansey only) is repaired twice over — +2 crit stage, which `DETERMINISTIC_HOLD_EFFECTS` upgrades to a guaranteed first-attack crit — but Chansey has **5 base Attack** and attacks with Seismic Toss, whose fixed damage a crit does not scale, so the crit lands and changes nothing. **Metal Powder / Quick Powder** (Ditto only) both gate on an *untransformed* Ditto, and the roster's Ditto runs Imposter, which transforms on switch-in. The effect is real in each case; the one holder allowed to have it cannot use it. |
 | Out-of-battle utility | 17 | Exp. Share, Lucky Egg, Amulet Coin, Luck Incense, Soothe Bell, Cleanse Tag, Pure Incense, Smoke Ball, Everstone, Destiny Knot, Macho Brace and the six Power items. Nothing they do is reachable in a frontier battle (the Power items' Speed halving is reachable, but a Trick Room set gets the same result for free with `IVS(SPE, 0)`). |
 
-That leaves **6 unused items that are live in battle**, and all six are deliberately
+That leaves **3 unused items that are live in battle**, and all three are deliberately
 *parked* rather than outstanding — see
 [Parked](#parked-the-item-works-the-holder-costs-too-much) for the arithmetic behind each.
 
@@ -220,7 +234,7 @@ This group was regression collateral of our own making, and all of it has shippe
 | --- | --- | --- |
 | ~~**The 18 Gems**~~ — **shipped** (#510 balance, #511 roster) | A Gem was **+30%, once, then gone**; a type item is **+40%, every turn, forever**, so the Gem was a strictly worse Charcoal outside the Acrobatics/Unburden interaction. | Done both halves, and the roster half is now complete: **all 18 types carry at least two sets**. `BUFF_GEMS` took the class to **+60%** (break-even against +40% is 1.5 uses, so it wins on a move clicked **once**), and placement followed the settled rule — a self-debuffing nuke (Overheat, Leaf Storm, Draco Meteor, Psycho Boost, Fleur Cannon), a literal one-use move (**Explosion**, the purest case), or true **off-STAB coverage**, which is what gives the eleven types with no nuke of their own a home. One screen is specific to this class: an **-ate ability re-types the move out from under the Gem**. Golem-Alola was the obvious Explosion home for the Normal Gem and its Galvanize turns Explosion Electric, so the Gem would never have fired; plain Golem took it instead. |
 | ~~**Soul Dew**~~ — **shipped** (balance + roster) | +20% on Latios/Latias's Psychic and Dragon moves, while Dragon Fang gave them **+40%** on Dragon — the signature item lost to a generic one, and the roster proved it by giving Latios Dragon Fang. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. One number covers the one-type and two-type items alike because each boosts exactly its holder's STAB package. The roster moved **that same Dragon Fang set** onto Soul Dew — Calm Mind / Psyshock / Dragon Pulse splits its damage across both boosted types, which is the shape the item exists for. The gate also had to start reading the holder by **base** species, or a Soul Dew Lati@s that Mega Evolved under `FEATURE_FREE_GIMMICKS` silently lost its own item. **Collateral, fixed later:** that Latios set was Dragon Fang's *second* home, so re-iteming it quietly left Dragon Fang on one set while it sat on the done list. It has since been demoted to pending. |
-| ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. |
+| ~~**Adamant Orb, Lustrous Orb, Griseous Core**~~ — **shipped** | Same shape as Soul Dew: +20% on two types for one species, weakly dominated by a +40% type item everywhere. | Done under `BUFF_SIGNATURE_TYPE_ITEMS`. Each boosts exactly its holder's dual STAB (Dialga is Steel/Dragon, Palkia Water/Dragon, Giratina Ghost/Dragon). The Origin-forme versions share the hold effect, so they were covered by the same change. **Roster half, done later:** each orb now sits on its own forme's set — Adamant Orb on Dialga, Lustrous Orb on Palkia, Griseous Core on Giratina-Origin — with the crystal on the counterpart forme. One set each is the ceiling, since an orb and its crystal are the same item in battle. |
 | ~~**The 17 Memories and 4 Drives**~~ — **shipped** (balance + roster) | A Memory or Drive set the holder's type and gave **no damage multiplier at all**, while Arceus's plate — the same idea for a different species — carried the full +40%. Silvally looked compelled to hold it too, though that turned out to be untrue here — see the note below on forme reversion. | Done. `BUFF_SIGNATURE_TYPE_ITEMS` fixed the balance and locked each item to its own species; the roster then drafted **all 17 Memories** (Silvally formes) and **all 4 Drives** (Genesect formes). The Drive sets run Techno Blast, which the Drive re-types — note it does **not** re-type Genesect, which stays Bug/Steel, so a Drive is +40% off-STAB where a Memory is +40% on top of STAB. |
 
 ### Group C — weak in stock, still weak here — **shipped**
@@ -237,8 +251,31 @@ audit** — after it, nothing pending was a balance problem, only a placement on
 | Item(s) | Why it is parked |
 | --- | --- |
 | **Deep Sea Tooth, Deep Sea Scale** | Both are **2x**, genuinely enormous, and locked to Clamperl, which has no set (it evolves, so the coverage test excuses it). The price is what stalls them, not the item: graduation takes two sets each, so drafting both means **four Clamperl entries** — a 35/64/85/74/55/32 NFE, four times, in a uniform draw — while Huntail and Gorebyss already carry four sets between them. They stay **pending**, not ignored, because nothing about them is dead: a line review that wants an NFE gimmick can pick them up without any code or list change. Just don't count them when sizing a batch. |
-| **Adamant Orb, Lustrous Orb, Griseous Core** | Species-locked by `BUFF_SIGNATURE_TYPE_ITEMS`, and the arithmetic does not close. Graduation needs **two sets**, but Adamant Orb's only legal holders are **three** sets — two Dialga plus Dialga-Origin, which must keep its Adamant Crystal — so the only way to reach two is to put the orb on **both** Dialga sets. Under one-species-per-team those are mutually exclusive, so the second set adds **zero reach** while stripping Dialga of its Leftovers and Choice Specs. Lustrous Orb and Griseous Core have four legal sets each and the same shape. The item is fine; the holder pool is too small to graduate it honestly. Unparking needs *new* Dialga/Palkia/Giratina sets, not a re-item. |
 | **Ring Target** | The only held item whose effect is a **pure drawback to its holder**: it turns the holder's type *immunities* into neutral damage (`MulByTypeEffectiveness`, `src/battle_util.c`). There is no upside term — it exists in the retail games to be handed to an opponent via Trick or Fling, which no set here does. Drafting it means deliberately making a set worse. |
+
+**Unparked, and why the original reasoning was wrong.** Adamant Orb, Lustrous Orb and
+Griseous Core sat in this table until the flavor question — shouldn't the orb belong to the
+base forme and the crystal to the Origin forme? — turned out to have a mechanical answer.
+The park rested on two claims and **both were false**:
+
+- *"Reaching two sets means doubling the orb onto a second set of the same forme, which adds
+  no reach under one-species-per-team."* The draw is uniform over **sets**
+  (`GetRandomFrontierExtendedMonId()`), so a second set holding an item does roughly double
+  its appearance rate. One-item-per-team stops two sets appearing **together**; it does not
+  stop either being drawn.
+- *"Dialga-Origin must keep its Adamant Crystal, so only two legal sets remain."* No — this
+  doc's own [forme-set finding](#a-forme-set-is-not-compelled-to-hold-its-item) says
+  `FORM_CHANGE_ITEM_HOLD` never runs on a battle path. Every set in the family is a legal
+  holder, and the orbs read their holder with `GET_BASE_SPECIES_ID`, so either item works on
+  either forme.
+
+What actually settles it is that **the orb and the crystal are the same item in battle**:
+`ITEM_ADAMANT_ORB` and `ITEM_ADAMANT_CRYSTAL` both carry `HOLD_EFFECT_ADAMANT_ORB` and get
+the identical `BUFF_SIGNATURE_TYPE_ITEMS` boost on the identical two types. So one set each
+is the **ceiling**, for the same reason a form-change enabler's one set is — and since the
+draft compares **exact** species, a team can field Dialga with the Orb and Dialga-Origin
+with the Crystal at once. The single-set gate was widened to say so; see
+`ItemSharesHoldEffectWithAFormeUnlocker()` in the tracker.
 
 The other three species-locked strays — **Lucky Punch**, **Metal Powder** and **Quick
 Powder** — are not parked but *ignored*, because their effects genuinely cannot land on
@@ -345,20 +382,25 @@ what *created* Group B by moving the goalpost to +40%. Nothing is pending on a n
 four further claims that *looked* like balance work were assessed and rejected rather than
 shipped — see [Assessed and rejected](#assessed-and-rejected-as-buff-candidates).
 
-**Roster.** Distinct held items used went **102 → 215**, and the top two went from **25% of
-the roster to 19.9%** — under a fifth for the first time. Every one of those placements was
+**Roster.** Distinct held items used went **102 → 218**, and the top two went from **25% of
+the roster to 19.8%** — under a fifth for the first time. Every one of those placements was
 a **re-item**, not an appended set, which is both what pulled the concentration down and
 why no saved rental was ever invalidated. (The roster itself grew 1596 → 1629 sets over the
 same period, but from line reviews, not from this audit.)
 
-**What is still on nobody, and why.** Six items, each a deliberate call rather than a gap:
+**What is still on nobody, and why.** Three items, each a deliberate call rather than a gap:
 the **Clamperl pair** (Deep Sea Tooth/Scale — the effect is enormous, but graduating both
-costs four NFE sets in a uniform draw), the **three signature orbs** (Adamant Orb's only
-legal holders are three sets, so reaching two means both Dialga sets holding it, which
-adds zero reach under one-species-per-team) and **Ring Target** (a pure drawback to its
-own holder). They sit in `sPendingItems[]` rather than `sIgnoredItems[]` because the
-ignored list makes a stronger claim — that the effect *cannot happen* — and none of these
-is dead. See [Parked](#parked-the-item-works-the-holder-costs-too-much).
+costs four NFE sets in a uniform draw) and **Ring Target** (a pure drawback to its own
+holder). They sit in `sPendingItems[]` rather than `sIgnoredItems[]` because the ignored
+list makes a stronger claim — that the effect *cannot happen* — and neither of these is
+dead. See [Parked](#parked-the-item-works-the-holder-costs-too-much).
+
+The three signature orbs used to be here as well. They were unparked once the flavor
+question turned out to have a mechanical answer: an orb and its crystal are the **same item
+in battle**, so the base forme holding the orb and the Origin forme holding the crystal is
+one set each at its ceiling, not a shortfall. The park's original arithmetic was wrong in
+both directions — see the correction under
+[Parked](#parked-the-item-works-the-holder-costs-too-much).
 
 **Not backlog, and not counted anywhere above:** Lucky Punch, Metal Powder and Quick
 Powder are on `sIgnoredItems[]` — the effect is real, but the only legal holder cannot use
