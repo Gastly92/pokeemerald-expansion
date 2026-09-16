@@ -1,5 +1,6 @@
 #include "global.h"
 #include "fork/frontier_extended_mons.h"
+#include "fork/species_shorthand.h"
 #include "event_data.h"
 #include "random.h"
 #include "constants/abilities.h"
@@ -23411,7 +23412,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0718
     {
-        .species = SPECIES_ZYGARDE_50_POWER_CONSTRUCT,
+        .species = SPECIES_ZYGARDE_50_PC,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LEFTOVERS,
         .moves =
@@ -23431,7 +23432,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GROUND,
     },
     {
-        .species = SPECIES_ZYGARDE_10_POWER_CONSTRUCT,
+        .species = SPECIES_ZYGARDE_10_PC,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =

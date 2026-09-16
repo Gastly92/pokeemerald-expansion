@@ -141,6 +141,13 @@ Shaymin is `TIER_NORMAL` — and a weak base can sit below its formes — **base
 Currently covers the special species and formes the roster uses; anything unlisted
 returns `TIER_NORMAL`.
 
+Because an unlisted forme returns `TIER_NORMAL` rather than inheriting its base's tier,
+**every draftable forme of a restricted species has to be listed in its own right** — the
+17 Arceus plate formes were missing, which put a `TIER_MYTHICAL` mon in the ordinary draft
+pool. Deliberate divergences only ever make a forme *more* restricted than its base, so
+`test/fork/species_tiers.c` walks the roster and fails on any forme less restricted than
+its base forme.
+
 ## Draft rules
 
 Applied to player rentals, ordinary opponents and the Frontier Brain alike.

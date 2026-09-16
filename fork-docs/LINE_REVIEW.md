@@ -1212,6 +1212,12 @@ constants specifically so a set can be read and edited on a phone without counti
 argument positions or recalling that Bold is +Def/−Atk. All three are defined in
 `include/fork/frontier_extended_mons.h`.
 
+For the same reason, `include/fork/species_shorthand.h` aliases the handful of
+upstream species constants too long to type on a phone — currently
+`SPECIES_ZYGARDE_50_PC` / `SPECIES_ZYGARDE_10_PC` for the Power Construct formes.
+Use the alias at every fork call site, and only add one for a name over ~30
+characters that a hand-edited fork table actually uses.
+
 ### Easy to get backwards — check these before writing the reasoning
 
 Every row below was got *wrong* at least once during the Gen 1-3 sweep, in a PR
