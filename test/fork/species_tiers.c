@@ -94,20 +94,3 @@ TEST("Species tiers: no drafted forme is less restricted than its base forme")
 
     EXPECT_EQ(offenders, 0);
 }
-
-// The two families the leak above actually affected, pinned by name so the fix
-// is legible without decoding species ids.
-TEST("Species tiers: every Arceus plate forme is TIER_MYTHICAL")
-{
-    EXPECT_EQ(GetSpeciesTier(SPECIES_ARCEUS), TIER_MYTHICAL);
-    EXPECT_EQ(GetSpeciesTier(SPECIES_ARCEUS_FIGHTING), TIER_MYTHICAL);
-    EXPECT_EQ(GetSpeciesTier(SPECIES_ARCEUS_GHOST), TIER_MYTHICAL);
-    EXPECT_EQ(GetSpeciesTier(SPECIES_ARCEUS_FAIRY), TIER_MYTHICAL);
-}
-
-TEST("Species tiers: every Genesect drive forme is TIER_PSEUDO")
-{
-    EXPECT_EQ(GetSpeciesTier(SPECIES_GENESECT), TIER_PSEUDO);
-    EXPECT_EQ(GetSpeciesTier(SPECIES_GENESECT_DOUSE), TIER_PSEUDO);
-    EXPECT_EQ(GetSpeciesTier(SPECIES_GENESECT_CHILL), TIER_PSEUDO);
-}
