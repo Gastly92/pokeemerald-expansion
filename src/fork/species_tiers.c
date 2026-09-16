@@ -84,6 +84,9 @@ static const u16 sLegendarySpecies[] =
     SPECIES_SPECTRIER,          // 0897
     SPECIES_CHIEN_PAO,          // 1002
     SPECIES_ROARING_MOON,       // 1005
+    SPECIES_WALKING_WAKE,       // 1009
+    SPECIES_GOUGING_FIRE,       // 1020
+    SPECIES_RAGING_BOLT,        // 1021
 };
 
 // Pseudo: at most 1 per frontier draft team
@@ -172,14 +175,11 @@ static const u16 sPseudoSpecies[] =
     SPECIES_BAXCALIBUR,            // 0998
     SPECIES_CHI_YU,                // 1004
     SPECIES_IRON_VALIANT,          // 1006
-    SPECIES_WALKING_WAKE,          // 1009
     SPECIES_IRON_LEAVES,           // 1010
     SPECIES_OGERPON_CORNERSTONE,   // 1017
     SPECIES_OGERPON_HEARTHFLAME,   // 1017
     SPECIES_OGERPON_TEAL,          // 1017
     SPECIES_OGERPON_WELLSPRING,    // 1017
-    SPECIES_GOUGING_FIRE,          // 1020
-    SPECIES_RAGING_BOLT,           // 1021
     SPECIES_IRON_BOULDER,          // 1022
     SPECIES_IRON_CROWN,            // 1023
     SPECIES_TERAPAGOS_TERASTAL,    // 1024
