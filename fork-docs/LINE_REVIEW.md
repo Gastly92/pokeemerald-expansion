@@ -1641,12 +1641,23 @@ bar for an exemption is a mechanical contradiction, which is checkable, and each
 exemption is re-verified against the data every run so it cannot quietly go stale.
 Compare restoration, whose exceptions are taste.
 
-Scope is the roster, per the maintainer's ask. Over the whole dex it finds eight more,
-every one a **form**: Riolu (Lucario's carve-out again), Duraludon and its G-Max (Heavy
-Metal against their innate Light Metal), Mega Garchomp Z, **Rockruff-Own-Tempo** (no
-innate Own Tempo — the ability the form is named after) and **Mega Darkrai** (no innate
-Bad Dreams, though base Darkrai has it and a Mega mirrors its base), plus the 62
-Alcremie decoration forms, which have no innate row at all. The last two look like real
-losses and the Alcremie forms like a separate gap; each is a Step 1 call on a line
-nothing drafts, so they are left open, and widening the gate is a one-line change once
-they are settled.
+Scope is the roster, per the maintainer's ask — but the dex-wide run was worth doing
+anyway, because it found eight more, every one a **form**, and two of them were real.
+
+**Mega Darkrai had no innate Bad Dreams** while base Darkrai does. That is not cosmetic:
+Bad Dreams is Darkrai's *sole* real ability, so its frontier sets take the Sheer Force
+override and get the nightmare aura from the innate — and because rows are keyed by form
+exactly, Mega Evolving switched the aura off. Fixed, and pinned by the existing
+Mega-mirror test. **Rockruff-Own-Tempo's row was a byte-for-byte copy of ordinary
+Rockruff's**, so the one trait that distinguishes the two species was the one thing its
+row did not say. That one was never a loss in battle (Own Tempo is the form's only real
+ability, so it is always the chosen one too) — it is redundant-but-correct, the way the
+Oricorio forms carry Dancer, and it survives a Skill Swap or Gastro Acid.
+
+The other six are fine as they are: Riolu (Lucario's carve-out again), Duraludon and its
+G-Max (Heavy Metal against their innate Light Metal), Mega Garchomp Z, and the 62
+Alcremie decoration forms, which have no innate row at all — a separate gap, not this one.
+
+The general lesson is the Mega Darkrai one: **a gate is worth dry-running one scope wider
+than you intend to ship it.** The roster scope found nothing; the scope around it found a
+live trait loss on a drafted legend, for the cost of one extra column in the same run.

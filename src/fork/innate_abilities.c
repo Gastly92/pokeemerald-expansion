@@ -6108,6 +6108,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0491
         SPECIES_DARKRAI_MEGA,
         INNATES(
+            ABILITY_BAD_DREAMS,
             ABILITY_LEVITATE
         )
     },
@@ -9733,6 +9734,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ROCKRUFF_OWN_TEMPO,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_OWN_TEMPO,
             ABILITY_STEADFAST,
             ABILITY_VITAL_SPIRIT
         )

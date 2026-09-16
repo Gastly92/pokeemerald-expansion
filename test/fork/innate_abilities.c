@@ -2885,6 +2885,26 @@ TEST("Innate abilities: Mega forms inherit later-added base innates")
     // Froslass keeps both its innates (the flavor-floater Levitate and its Snow Cloak) when Mega.
     EXPECT(SpeciesHasInnate(SPECIES_FROSLASS_MEGA, ABILITY_LEVITATE));
     EXPECT(SpeciesHasInnate(SPECIES_FROSLASS_MEGA, ABILITY_SNOW_CLOAK));
+    // Darkrai's Bad Dreams rides through its Mega. This one was a real loss until the coverage gate
+    // below turned it up: Darkrai's sole real ability IS Bad Dreams, so its frontier sets take the
+    // Sheer Force override and get the nightmare aura from the innate -- and the Mega's row carried
+    // only Levitate, so Mega Evolving switched the aura off. Rows are keyed by form exactly, which
+    // is what makes a Mega row that does not mirror its base a silent trait loss rather than a typo.
+    EXPECT(SpeciesHasInnate(SPECIES_DARKRAI, ABILITY_BAD_DREAMS));
+    EXPECT(SpeciesHasInnate(SPECIES_DARKRAI_MEGA, ABILITY_BAD_DREAMS));
+}
+
+// The Own Tempo Rockruff is a SEPARATE species from ordinary Rockruff for one reason: it is the
+// only one that evolves into Lycanroc-Dusk, and Own Tempo is the whole difference between them.
+// Its row used to be a byte-for-byte copy of base Rockruff's, so the form's defining trait was the
+// one thing its row did not say. Unlike Mega Darkrai above this was never a loss in battle -- Own
+// Tempo is the form's only real ability, so it is always the chosen one too -- but the innate is
+// what keeps it through a Skill Swap / Entrainment / Gastro Acid, and what makes the two rows
+// differ where the two species do. Redundant-but-correct, the way the Oricorio forms carry Dancer.
+TEST("Innate abilities: the Own Tempo Rockruff carries the trait that names it")
+{
+    EXPECT(SpeciesHasInnate(SPECIES_ROCKRUFF_OWN_TEMPO, ABILITY_OWN_TEMPO));
+    EXPECT(!SpeciesHasInnate(SPECIES_ROCKRUFF, ABILITY_OWN_TEMPO)); // ordinary Rockruff is Keen Eye / Vital Spirit
 }
 
 // ============================== Compound Eyes / Keen Eye / Illuminate ==============================
@@ -10300,14 +10320,16 @@ TEST("Innate abilities: every pre-evolution of a species with innates has a row"
 // they are the exemption table below. So this gate is a REGRESSION gate, not a defect-finder: it
 // locks in coverage that is correct today and makes the next silent loss a build failure.
 //
-// It is scoped to the roster, as the maintainer asked. Run over the whole dex instead it finds 8
-// more, every one a FORM rather than a species: Riolu (the same Steadfast carve-out as Lucario),
-// Duraludon and its G-Max (Heavy Metal, which contradicts their innate Light Metal), Mega Garchomp
-// Z, Rockruff-Own-Tempo (missing the Own Tempo the form is named after) and Mega Darkrai (missing
-// base Darkrai's Bad Dreams, against the Mega-mirrors-its-base rule) -- plus the 62 Alcremie
-// decoration forms, which have no innate row at all. The last two look like real losses and the
-// Alcremie forms like a separate gap, but each is a Step 1 judgement on a line nothing drafts, so
-// they are the maintainer's call; widening this gate is a one-line change here once they are settled.
+// It is scoped to the roster, as the maintainer asked, but it was dry-run one scope wider -- over
+// the whole dex -- which found 8 more, every one a FORM rather than a species, and two of them real:
+// Mega Darkrai had lost base Darkrai's Bad Dreams (a live trait loss, since Bad Dreams is Darkrai's
+// sole real ability and its sets take an override), and Rockruff-Own-Tempo's row was a copy of base
+// Rockruff's, missing the one ability the two species differ by. Both are now fixed and pinned by
+// their own assertions above. The remaining six stay as they are: Riolu (the same Steadfast carve-out
+// as Lucario), Duraludon and its G-Max (Heavy Metal, which contradicts their innate Light Metal),
+// Mega Garchomp Z, and the 62 Alcremie decoration forms, which have no innate row at all -- a
+// separate gap rather than this one. Widening this gate to the dex is a one-line change here, once
+// those rows are settled.
 
 struct InnateCoverageExemption
 {
