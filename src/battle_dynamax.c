@@ -241,8 +241,26 @@ static enum Move GetTypeBasedMaxMove(enum BattlerId battler, enum Type type)
 enum Move GetMaxMove(enum BattlerId battler, enum Move baseMove)
 {
     enum Type moveType;
+    // FORK: SetTypeBeforeUsingMove only ever *sets* gBattleStruct->dynamicMoveType - it has
+    // no "this move has no dynamic type" branch - so it relies on its caller having cleared
+    // that latch first. The move-execution path does clear it (BattleTurnPassed); the move
+    // SELECTION menu does not, and MoveSelectionDisplayMoveNames calls this once per move
+    // slot. So the first slot with a dynamic type leaked it into every later slot, because
+    // GetBattleMoveType short-circuits on the latch: Arceus holding a Mind Plate showed
+    // Judgment (correctly Psychic) AND the Shadow Ball below it as Max Mindstorm, while the
+    // executed Shadow Ball came out Max Phantasm.
+    // Clear the latch around our own resolution and put it back, making this a pure query
+    // for every caller. The execution path in battle_util.c is unaffected: it latches this
+    // same base move's type just before converting, so the saved value it restores is the
+    // one it computed. On conflict: keep the save/clear/restore around whatever upstream's
+    // type resolution has become. If upstream ever has SetTypeBeforeUsingMove clear the
+    // latch itself, this becomes redundant and should go.
+    enum Type savedDynamicMoveType = gBattleStruct->dynamicMoveType;
+
+    gBattleStruct->dynamicMoveType = TYPE_NONE;
     SetTypeBeforeUsingMove(baseMove, battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
     moveType = GetBattleMoveType(baseMove);
+    gBattleStruct->dynamicMoveType = savedDynamicMoveType;
 
     if (baseMove == MOVE_NONE) // for move display
         return MOVE_NONE;

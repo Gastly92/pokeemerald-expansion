@@ -1788,8 +1788,14 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
 
     if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX || IsGimmickSelected(battler, GIMMICK_DYNAMAX))
     {
-        pwr = GetMaxMovePower(move, move);
-        move = GetMaxMove(battler, move);
+        // FORK: GetMaxMovePower's second parameter is the MAX move (that is how the damage
+        // calc calls it, GetMaxMovePower(ctx->baseMove, ctx->move)) - it reads it for the
+        // MOVE_EFFECT_FIXED_POWER check that pins G-Max Drum Solo / Hydrosnipe / Fireball to
+        // 160. Passing the base move twice meant this window tested the base move for that
+        // effect, never found it, and showed those three the tier-derived power instead.
+        enum Move maxMove = GetMaxMove(battler, move);
+        pwr = GetMaxMovePower(move, maxMove);
+        move = maxMove;
         acc = 0;
     }
     // FORK: the Dynamax branch above had no Z-Move counterpart, so with the Z trigger armed
