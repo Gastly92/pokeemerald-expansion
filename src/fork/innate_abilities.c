@@ -11400,7 +11400,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0882
         SPECIES_DRACOVISH,
         INNATES(
-            ABILITY_MOXIE,
             ABILITY_SAND_RUSH,
             ABILITY_STRONG_JAW
         )
