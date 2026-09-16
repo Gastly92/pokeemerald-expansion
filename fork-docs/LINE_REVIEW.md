@@ -1616,3 +1616,48 @@ over forty lines across the sweep. The distinction worth carrying forward: a che
 becomes a test when its violations are *always* wrong, and stays prose when it is a
 strong heuristic with principled exceptions. Confirm which by dry-running the rule
 over the data before writing the test, not after.
+
+### The canon floor *can* be a gate — and now is
+
+Restoration failed as a gate because it asks a judgement. The rule one level below it
+does not: **a species the roster drafts must carry its own vanilla abilities that the
+fork can run as innates.** That is where Step 1 starts (point 3 — a line with no row
+has a signature), it needs no flavor call, and it is now
+`TEST("Innate abilities: every roster species carries its own innate-capable
+abilities")`.
+
+Dry-running it first is what made it shippable, and also what stopped it shipping
+*wrong*. It flags three of the 692 drafted species — Spinda (Own Tempo), Zangoose
+(Immunity) and Lucario (Steadfast) — and all three are already-argued contradiction
+carve-outs: the ability would cancel an innate the species does carry (Own Tempo
+blocks the confusion Tangled Feet needs; Immunity blocks the poison Toxic Boost needs;
+Inner Focus blocks the flinch Steadfast needs). The first instinct was to "fix" the
+first two by adding the innate, which would have broken both rows. They are the
+test's exemption table instead, each with its reason.
+
+So it finds nothing today, and that is the point: it is a **regression** gate, not a
+defect-finder. It is also the shape to copy when a rule *does* have exceptions — the
+bar for an exemption is a mechanical contradiction, which is checkable, and each
+exemption is re-verified against the data every run so it cannot quietly go stale.
+Compare restoration, whose exceptions are taste.
+
+Scope is the roster, per the maintainer's ask — but the dex-wide run was worth doing
+anyway, because it found eight more, every one a **form**, and two of them were real.
+
+**Mega Darkrai had no innate Bad Dreams** while base Darkrai does. That is not cosmetic:
+Bad Dreams is Darkrai's *sole* real ability, so its frontier sets take the Sheer Force
+override and get the nightmare aura from the innate — and because rows are keyed by form
+exactly, Mega Evolving switched the aura off. Fixed, and pinned by the existing
+Mega-mirror test. **Rockruff-Own-Tempo's row was a byte-for-byte copy of ordinary
+Rockruff's**, so the one trait that distinguishes the two species was the one thing its
+row did not say. That one was never a loss in battle (Own Tempo is the form's only real
+ability, so it is always the chosen one too) — it is redundant-but-correct, the way the
+Oricorio forms carry Dancer, and it survives a Skill Swap or Gastro Acid.
+
+The other six are fine as they are: Riolu (Lucario's carve-out again), Duraludon and its
+G-Max (Heavy Metal against their innate Light Metal), Mega Garchomp Z, and the 62
+Alcremie decoration forms, which have no innate row at all — a separate gap, not this one.
+
+The general lesson is the Mega Darkrai one: **a gate is worth dry-running one scope wider
+than you intend to ship it.** The roster scope found nothing; the scope around it found a
+live trait loss on a drafted legend, for the cost of one extra column in the same run.

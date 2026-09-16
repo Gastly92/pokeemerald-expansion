@@ -19,6 +19,12 @@
 // there), add it to the SCOPE list in include/fork/innate_abilities.h, and add it to
 // sImplementedInnates[].
 //
+// COVERAGE: the reverse direction is gated too — a species the roster drafts must list every one of
+// its OWN vanilla abilities that is on that allowlist, so repointing a frontier set away from an
+// ability can never quietly leave the species without it. A genuine contradiction (the innate could
+// never fire, or would cancel another innate on the row — Spinda's Own Tempo vs Tangled Feet) goes in
+// sInnateCoverageExemptions[] beside that test, with its reason.
+//
 // FORMS ARE KEYED EXACTLY (no base-species fallback): a Mega / Gigantamax / regional / forme variant
 // gets innates ONLY if it has its own row, since gBattleMons[].species becomes the form constant after
 // a form change. Megas are a PURE BOON — each mirrors its base's list so the base creature's trait
@@ -6102,6 +6108,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0491
         SPECIES_DARKRAI_MEGA,
         INNATES(
+            ABILITY_BAD_DREAMS,
             ABILITY_LEVITATE
         )
     },
@@ -9727,6 +9734,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ROCKRUFF_OWN_TEMPO,
         INNATES(
             ABILITY_KEEN_EYE,
+            ABILITY_OWN_TEMPO,
             ABILITY_STEADFAST,
             ABILITY_VITAL_SPIRIT
         )

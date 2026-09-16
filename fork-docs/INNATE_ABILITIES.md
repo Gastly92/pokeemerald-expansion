@@ -2249,7 +2249,10 @@ attacker's Mold Breaker pierces the innate exactly as it would the real ability.
 user (any ability slot, forms + Mega parity per the FORMS/Mega rules) carries the innate. Magma Armor
 adds a tight molten/burning-body flavor set that can't freeze (Torkoal, the Coalossal line). Two
 contradiction carve-outs (like Zangoose's Immunity/Toxic Boost): **Spinda keeps innate Tangled Feet,
-not Own Tempo** (Own Tempo would block the confusion Tangled Feet needs). **Sole-ability species are
+not Own Tempo** (Own Tempo would block the confusion Tangled Feet needs). Both carve-outs are now
+machine-readable rather than prose-only — they are rows in `sInnateCoverageExemptions[]`
+(`test/fork/innate_abilities.c`), the exemption table of the gate that otherwise requires a drafted
+species to carry its own innate-capable abilities. **Sole-ability species are
 omitted as redundant** (their sole chosen ability already grants the effect) *unless* they are a
 frontier set — **Zarude** (sole Leaf Guard) and **Enamorus-Therian** (sole Overcoat) instead take the
 innate + a fork-owned chosen override (Tough Claws / Sheer Force), like Ogerpon-Cornerstone.

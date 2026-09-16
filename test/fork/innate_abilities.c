@@ -2885,6 +2885,26 @@ TEST("Innate abilities: Mega forms inherit later-added base innates")
     // Froslass keeps both its innates (the flavor-floater Levitate and its Snow Cloak) when Mega.
     EXPECT(SpeciesHasInnate(SPECIES_FROSLASS_MEGA, ABILITY_LEVITATE));
     EXPECT(SpeciesHasInnate(SPECIES_FROSLASS_MEGA, ABILITY_SNOW_CLOAK));
+    // Darkrai's Bad Dreams rides through its Mega. This one was a real loss until the coverage gate
+    // below turned it up: Darkrai's sole real ability IS Bad Dreams, so its frontier sets take the
+    // Sheer Force override and get the nightmare aura from the innate -- and the Mega's row carried
+    // only Levitate, so Mega Evolving switched the aura off. Rows are keyed by form exactly, which
+    // is what makes a Mega row that does not mirror its base a silent trait loss rather than a typo.
+    EXPECT(SpeciesHasInnate(SPECIES_DARKRAI, ABILITY_BAD_DREAMS));
+    EXPECT(SpeciesHasInnate(SPECIES_DARKRAI_MEGA, ABILITY_BAD_DREAMS));
+}
+
+// The Own Tempo Rockruff is a SEPARATE species from ordinary Rockruff for one reason: it is the
+// only one that evolves into Lycanroc-Dusk, and Own Tempo is the whole difference between them.
+// Its row used to be a byte-for-byte copy of base Rockruff's, so the form's defining trait was the
+// one thing its row did not say. Unlike Mega Darkrai above this was never a loss in battle -- Own
+// Tempo is the form's only real ability, so it is always the chosen one too -- but the innate is
+// what keeps it through a Skill Swap / Entrainment / Gastro Acid, and what makes the two rows
+// differ where the two species do. Redundant-but-correct, the way the Oricorio forms carry Dancer.
+TEST("Innate abilities: the Own Tempo Rockruff carries the trait that names it")
+{
+    EXPECT(SpeciesHasInnate(SPECIES_ROCKRUFF_OWN_TEMPO, ABILITY_OWN_TEMPO));
+    EXPECT(!SpeciesHasInnate(SPECIES_ROCKRUFF, ABILITY_OWN_TEMPO)); // ordinary Rockruff is Keen Eye / Vital Spirit
 }
 
 // ============================== Compound Eyes / Keen Eye / Illuminate ==============================
@@ -10276,6 +10296,127 @@ TEST("Innate abilities: every pre-evolution of a species with innates has a row"
     }
 
     EXPECT_GT(checked, 100);
+    EXPECT_EQ(missing, 0);
+}
+
+
+// FORK: a species the roster drafts must carry every one of its OWN vanilla abilities that the
+// fork knows how to run as an innate. This is the coverage half of gate (6) above: (6) says the one
+// observable slot may not name an innate-capable ability, and this says the innate-capable abilities
+// it displaced must actually be somewhere -- in the INNATES(...) row. Without both halves an ability
+// can fall down the gap between them: a set repointed off its species' own innate-capable ability
+// onto a never-an-innate pick satisfies (6) while leaving the species with that trait nowhere at all,
+// and nothing would notice.
+//
+// It is also the mechanical floor under Step 1 of a line review (fork-docs/LINE_REVIEW.md), which
+// seeds a row from the species' own canon abilities and then adds flavor picks on top. "It has its
+// own abilities" is the part of Step 1 that needs no judgement, so it can be a test. Everything
+// above that floor -- which BORROWED abilities a line should carry, and the restoration check
+// against a pre-evolution's row -- stays prose, because those violations are frequently deliberate
+// (see "Restoration cannot be a gate" in that doc).
+//
+// WHAT THE DRY RUN FOUND, stated plainly: nothing new. All three offenders across the 692 drafted
+// species -- Spinda, Zangoose and Lucario -- are already-documented contradiction carve-outs, and
+// they are the exemption table below. So this gate is a REGRESSION gate, not a defect-finder: it
+// locks in coverage that is correct today and makes the next silent loss a build failure.
+//
+// It is scoped to the roster, as the maintainer asked, but it was dry-run one scope wider -- over
+// the whole dex -- which found 8 more, every one a FORM rather than a species, and two of them real:
+// Mega Darkrai had lost base Darkrai's Bad Dreams (a live trait loss, since Bad Dreams is Darkrai's
+// sole real ability and its sets take an override), and Rockruff-Own-Tempo's row was a copy of base
+// Rockruff's, missing the one ability the two species differ by. Both are now fixed and pinned by
+// their own assertions above. The remaining six stay as they are: Riolu (the same Steadfast carve-out
+// as Lucario), Duraludon and its G-Max (Heavy Metal, which contradicts their innate Light Metal),
+// Mega Garchomp Z, and the 62 Alcremie decoration forms, which have no innate row at all -- a
+// separate gap rather than this one. Widening this gate to the dex is a one-line change here, once
+// those rows are settled.
+
+struct InnateCoverageExemption
+{
+    u16 species;
+    enum Ability ability;
+};
+
+// A vanilla ability a species deliberately does NOT carry as an innate. The bar is a genuine
+// CONTRADICTION -- the innate could never fire, or would cancel another innate on the same row --
+// and NOT "it did not feel right", which is the flavor judgement Step 1 reserves for the reviewer.
+// Every entry here is already argued in fork-docs/INNATE_ABILITIES.md; this table is the machine-
+// readable copy, not a second decision.
+static const struct InnateCoverageExemption sInnateCoverageExemptions[] =
+{
+    // Own Tempo blocks confusion, and Tangled Feet only does anything WHILE confused, so the two
+    // cancel. Spinda keeps Tangled Feet (the dizzy panda's whole identity) -- see the "two
+    // contradiction carve-outs" note under the status-immunity batch in INNATE_ABILITIES.md.
+    { SPECIES_SPINDA,  ABILITY_OWN_TEMPO },
+    // Same shape: Immunity blocks poison, and Toxic Boost only pays out WHILE poisoned. Zangoose
+    // keeps Toxic Boost -- the carve-out the Spinda note is itself compared against.
+    { SPECIES_ZANGOOSE, ABILITY_IMMUNITY },
+    // Steadfast raises Speed when the holder flinches, and both carry innate Inner Focus, which
+    // makes them unflinchable -- so an innate Steadfast could never fire once. Documented with the
+    // rest of Batch M in include/fork/innate_abilities.h.
+    { SPECIES_RIOLU,   ABILITY_STEADFAST },
+    { SPECIES_LUCARIO, ABILITY_STEADFAST },
+};
+
+static bool32 IsInnateCoverageExempt(u16 species, enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sInnateCoverageExemptions); i++)
+    {
+        if (sInnateCoverageExemptions[i].species == species && sInnateCoverageExemptions[i].ability == ability)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+TEST("Innate abilities: every roster species carries its own innate-capable abilities")
+{
+    u32 species, slot, i;
+    u32 checked = 0;
+    u32 missing = 0;
+
+    // Every exemption must still describe the data, or it is stale: the species really has that
+    // ability in vanilla, and really does not carry it as an innate. Giving an exempted species the
+    // innate after all should retire its row here rather than leave a lie in the table. (Riolu is
+    // not itself drafted, so this is also what keeps its entry honest.)
+    for (i = 0; i < ARRAY_COUNT(sInnateCoverageExemptions); i++)
+    {
+        u16 exemptSpecies = sInnateCoverageExemptions[i].species;
+        enum Ability exemptAbility = sInnateCoverageExemptions[i].ability;
+
+        EXPECT(IsImplementedInnate(exemptAbility)); // an unwired ability needs no exemption
+        EXPECT(SpeciesHasVanillaAbility(exemptSpecies, exemptAbility));
+        EXPECT(!SpeciesHasInnate(exemptSpecies, exemptAbility));
+    }
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (!IsSpeciesEnabled(species))
+            continue;
+        if (!RosterBuildsSpecies(species))
+            continue;
+
+        checked++;
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            // The vanilla slots, straight off gSpeciesInfo -- NOT GetSpeciesAbility(), which folds
+            // the fork's override table in and would let an override hide a missing innate.
+            enum Ability ability = gSpeciesInfo[species].abilities[slot];
+
+            if (ability == ABILITY_NONE || !IsImplementedInnate(ability))
+                continue;
+            if (SpeciesHasInnate(species, ability) || IsInnateCoverageExempt(species, ability))
+                continue;
+
+            missing++;
+            Test_MgbaPrintf("lost ability: %S (species %d) has %S in vanilla slot %d and the fork can run it as an innate, but its row does not list it -- add it to the INNATES(...) row, or add it to sInnateCoverageExemptions[] if it genuinely contradicts another innate",
+                            gSpeciesInfo[species].speciesName, species, gAbilitiesInfo[ability].name, slot);
+        }
+    }
+
+    // Guard against a vacuous pass if the roster accessor ever breaks.
+    EXPECT_GT(checked, 200);
     EXPECT_EQ(missing, 0);
 }
 
