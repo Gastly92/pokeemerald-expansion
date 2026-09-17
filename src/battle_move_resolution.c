@@ -3213,14 +3213,26 @@ static enum CancelerResult CancelerHealthBarUpdate(struct BattleCalcValues *cv)
 {
     for (enum BattlerId battlerDef = 0; battlerDef < gBattlersCount; battlerDef++)
     {
+        // FORK: gate the Substitute line on this battler actually being a target of the move.
+        // Upstream tests DoesSubstituteBlockMove() before ShouldSkipBattlerForDamage(), so ANY
+        // battler on the field holding a Substitute -- the attacker itself, or an untargeted
+        // ally -- reached PrepareStringBattle(). STRINGID_SUBSTITUTEDAMAGED reads
+        // {B_DEF_NAME_WITH_PREFIX2}, i.e. gBattlerTarget, NOT the battler handed to
+        // PrepareStringBattle() (that argument only picks the printing controller), so the line
+        // named whatever the move was aimed at: a Keldeo behind its own Substitute using Hydro
+        // Pump printed "The substitute took damage for the opposing Wobbuffet!" at a Wobbuffet
+        // that had no Substitute. CancelerHitAnimation() directly above already guards in this
+        // order. On conflict, keep the skip check first and port upstream's change after it.
+        if (ShouldSkipBattlerForDamage(cv->battlerAtk, battlerDef))
+            continue;
+
         if (DoesSubstituteBlockMove(cv->battlerAtk, battlerDef, cv->move))
         {
             PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, battlerDef);
             continue;
         }
 
-        if (ShouldSkipBattlerForDamage(cv->battlerAtk, battlerDef)
-         || DoesDisguiseBlockMove(battlerDef, cv->move)
+        if (DoesDisguiseBlockMove(battlerDef, cv->move)
          || DoesIceFaceBlockMove(battlerDef, cv->move))
             continue;
 
