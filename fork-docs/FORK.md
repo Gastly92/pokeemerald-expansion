@@ -196,6 +196,15 @@ not registered.
   `CHALLENGE_STATUS_WON` handler is unreachable for new runs (it only fires for a save
   left mid-WON by a pre-update build, or with the flag off). Kept for compatibility; a
   later cleanup can remove it.
+- **Substitute message mis-targeting (upstream #10630).** `CancelerHealthBarUpdate()` asked
+  every battler on the field whether its Substitute blocked the move, so a user behind its
+  own Substitute made the line fire against a target that had none — fixed here (see the
+  `FORK:` note in `src/battle_move_resolution.c`, tests in `test/fork/substitute_message.c`).
+  Two sibling defects from the same upstream commit are still open: `STRINGID_SUBSTITUTEDAMAGED`
+  reads `gBattlerTarget` rather than the Substitute's owner, so a spread move in a double names
+  the wrong foe; and `CancelerSubstitute()`'s loop tests `cv->battlerDef` instead of its own
+  `battler` index.
+
 - **Only the Factory and Tower are converted.** Per-facility status, what's left, and
   the repeatable conversion pattern are in [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md)
   — read it before converting Palace/Arena/Dome/Pyramid/Pike.

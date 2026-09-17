@@ -72,6 +72,93 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Lev
     }
 }
 
+// Z-Move coverage: a damaging Z-Move is an ordinary typed attack once it is unleashed,
+// so an innate Levitate must block it exactly like the base move, credit the *innate*
+// in the pop-up, and name the TARGET in the immunity line. The Z branch is worth pinning
+// separately because CancelerZMoves points gBattleScripting.battler at the ATTACKER for
+// the "Z-Power surrounds"/"unleashes" lines, and STRINGID_ITDOESNTAFFECTSCR prints that
+// same battler -- it is only re-pointed at the target by TargetAvoidedAttack() later in
+// CancelerTargetFailure. If a future sync moves either half, the immunity line starts
+// naming the attacker ("It doesn't affect the opposing Palossand...").
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Levitate blocks a Ground Z-Move and the message names the target")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TAPU_LELE, ABILITY_LEVITATE));
+        ASSUME(gSpeciesInfo[SPECIES_TAPU_LELE].abilities[0] != ABILITY_LEVITATE);
+        ASSUME(GetMoveType(MOVE_EARTHQUAKE) == TYPE_GROUND);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TAPU_LELE);
+        OPPONENT(SPECIES_PALOSSAND) { Item(ITEM_GROUNDIUM_Z); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_EARTHQUAKE, gimmick: GIMMICK_Z_MOVE); }
+    } SCENE {
+        MESSAGE("The opposing Palossand used Tectonic Rage!");
+        ABILITY_POPUP(player, ABILITY_LEVITATE);
+        MESSAGE("It doesn't affect Tapu Lele…"); // the target, never the attacker
+        NONE_OF { MESSAGE("It doesn't affect the opposing Palossand…"); }
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a Ground Z-Move blocked by an innate Levitate names the target in doubles")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TAPU_LELE, ABILITY_LEVITATE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_TAPU_LELE);
+        OPPONENT(SPECIES_PALOSSAND) { Item(ITEM_GROUNDIUM_Z); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_BULLDOZE, gimmick: GIMMICK_Z_MOVE, target: playerRight); }
+    } SCENE {
+        ABILITY_POPUP(playerRight, ABILITY_LEVITATE);
+        MESSAGE("It doesn't affect Tapu Lele…");
+        NONE_OF { MESSAGE("It doesn't affect the opposing Palossand…"); }
+    }
+}
+
+// The Dynamax counterpart of the Z-Move test above. A Max Move is TARGET_SELECTED
+// (single-target), so in doubles only the chosen foe is checked -- the sibling foe is
+// marked MOVE_RESULT_NOT_PRESENT and skipped, which is why an untargeted immune ally
+// correctly prints nothing. What this pins is the same naming guarantee: the pop-up
+// credits the innate on the target, and the immunity line names the target.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Levitate blocks a Ground Max Move and the message names the target")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TAPU_LELE, ABILITY_LEVITATE));
+        ASSUME(gSpeciesInfo[SPECIES_TAPU_LELE].abilities[0] != ABILITY_LEVITATE);
+        ASSUME(GetMoveType(MOVE_EARTHQUAKE) == TYPE_GROUND);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TAPU_LELE);
+        OPPONENT(SPECIES_PALOSSAND);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_EARTHQUAKE, gimmick: GIMMICK_DYNAMAX); }
+    } SCENE {
+        MESSAGE("The opposing Palossand used Max Quake!");
+        ABILITY_POPUP(player, ABILITY_LEVITATE);
+        MESSAGE("It doesn't affect Tapu Lele…"); // the target, never the attacker
+        NONE_OF { MESSAGE("It doesn't affect the opposing Palossand…"); }
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a Ground Max Move blocked by an innate Levitate names the target in doubles")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TAPU_LELE, ABILITY_LEVITATE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_TAPU_LELE);
+        OPPONENT(SPECIES_PALOSSAND);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_EARTHQUAKE, gimmick: GIMMICK_DYNAMAX, target: playerRight); }
+    } SCENE {
+        ABILITY_POPUP(playerRight, ABILITY_LEVITATE);
+        MESSAGE("It doesn't affect Tapu Lele…");
+        NONE_OF { MESSAGE("It doesn't affect the opposing Palossand…"); }
+    }
+}
+
 // Comprehensive-table coverage: every species that natively carries Levitate is also
 // listed as an innate (forward-looking — a later flag re-homes their primary). Today
 // that's redundant, but it becomes observable the moment the primary is overwritten:
