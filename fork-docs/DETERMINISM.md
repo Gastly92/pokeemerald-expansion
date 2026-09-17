@@ -371,9 +371,10 @@ Because the counter only moves on the *sleeper's* action, a faster attacker stil
 sees a sleeping target on the wake turn, so sleep-gated moves (Dream Eater,
 Nightmare) get two windows per application rather than one.
 **Confusion** stops being a 2-5 turn chain of self-hit rolls (`CancelerConfused`):
-on its first confused action the battler takes **one** guaranteed 40-BP typeless
-self-hit but **still carries out its chosen move that turn** (the move is never
-denied); the volatile then **lingers until the battler's next action, when it
+on its first confused action the battler takes **one** guaranteed typeless
+self-hit (40 BP, or 80 under `BUFF_CONFUSION_SELF_DAMAGE`, `config/buff.h`) but
+**still carries out its chosen move that turn** (the move is never denied); the
+volatile then **lingers until the battler's next action, when it
 snaps out**. Because the battler is never robbed of its action, a faster foe can't
 chain confusion into an action lock — and because the volatile persists in the
 interim, the foe can't *refresh* it either (a confused target can't be
@@ -384,7 +385,8 @@ on `BS_ATTACKER` then returns so the move continues — it does not repoint
 `gBattlerTarget`, so the continuing move keeps its real target; a self-hit that
 would KO falls back to ending the move). Infinite confusion never snaps out (it
 self-hits each action). The AI's confusion *valuation* (`IncreaseConfusionScore`)
-is lowered to a light-chip `WEAK_EFFECT` to match (it no longer disables the foe).
+is lowered to a light-chip `WEAK_EFFECT` to match (it no longer disables the foe),
+and rises back to `DECENT_EFFECT` when `BUFF_CONFUSION_SELF_DAMAGE` doubles that hit.
 Freeze is out of scope (handled by the frostbite-over-freeze config). The AI's
 risk heuristics that treat a confused foe as possibly-incapacitated (e.g. Focus
 Punch / Counter safety) are not retuned. Test: `deterministic_status.c`.

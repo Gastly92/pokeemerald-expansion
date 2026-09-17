@@ -309,6 +309,7 @@
     F(BUFF_GEMS, buffGems, (u32, TRUE)) \
     F(BUFF_SIGNATURE_TYPE_ITEMS, buffSignatureTypeItems, (u32, TRUE)) \
     F(BUFF_FLAT_HP_ITEMS, buffFlatHpItems, (u32, TRUE)) \
+    F(BUFF_CONFUSION_SELF_DAMAGE, buffConfusionSelfDamage, (u32, TRUE)) \
 
 // FORK: the FEATURE_* flags (config/feature.h) gate standalone gameplay
 // features this fork adds, riding the same runtime config system as the

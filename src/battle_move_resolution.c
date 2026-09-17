@@ -21,6 +21,7 @@
 #include "fork/halo.h" // FORK: Halo (the holder's per-move PP upkeep)
 #include "constants/songs.h"
 #include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
+#include "fork/buff_confusion.h" // FORK: BUFF_CONFUSION_SELF_DAMAGE
 
 static void ValidateBattlers(void);
 static enum Move GetOriginallyUsedMove(enum Move chosenMove);
@@ -445,7 +446,7 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
             dmgCtx.randomFactor = FALSE;
             dmgCtx.updateFlags = TRUE;
             dmgCtx.isSelfInflicted = TRUE;
-            dmgCtx.fixedBasePower = 40;
+            dmgCtx.fixedBasePower = GetConfusionSelfDamagePower(); // FORK: BUFF_CONFUSION_SELF_DAMAGE (stock 40)
             dmgCtx.abilities[gBattlerAttacker] = cv->abilities[gBattlerAttacker];
             dmgCtx.holdEffects[gBattlerAttacker] = cv->holdEffects[gBattlerAttacker];
             gBattleStruct->passiveHpUpdate[cv->battlerAtk] = CalculateMoveDamage(&dmgCtx);
@@ -482,7 +483,7 @@ static enum CancelerResult CancelerConfused(struct BattleCalcValues *cv)
                 dmgCtx.randomFactor = FALSE;
                 dmgCtx.updateFlags = TRUE;
                 dmgCtx.isSelfInflicted = TRUE;
-                dmgCtx.fixedBasePower = 40;
+                dmgCtx.fixedBasePower = GetConfusionSelfDamagePower(); // FORK: BUFF_CONFUSION_SELF_DAMAGE (stock 40)
                 dmgCtx.abilities[gBattlerAttacker] = cv->abilities[gBattlerAttacker];
                 dmgCtx.holdEffects[gBattlerAttacker] = cv->holdEffects[gBattlerAttacker];
                 gBattleStruct->passiveHpUpdate[cv->battlerAtk] = CalculateMoveDamage(&dmgCtx);
