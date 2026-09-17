@@ -5303,9 +5303,11 @@ void IncreaseConfusionScore(enum BattlerId battlerAtk, enum BattlerId battlerDef
         // FORK: under DETERMINISTIC_STATUS confusion no longer denies the foe its
         // action — it takes one guaranteed self-hit and then snaps out — so it is worth
         // far less than the vanilla random action-disruption. Value it as light chip
-        // rather than a disabling status.
+        // rather than a disabling status. BUFF_CONFUSION_SELF_DAMAGE doubles the base
+        // power of that one hit (config/buff.h), which is the flag's whole point, so the
+        // chip is worth a real turn again and the AI is told so.
         if (GetConfig(DETERMINISTIC_STATUS))
-            ADJUST_SCORE_PTR(WEAK_EFFECT);
+            ADJUST_SCORE_PTR(GetConfig(BUFF_CONFUSION_SELF_DAMAGE) ? DECENT_EFFECT : WEAK_EFFECT);
         else if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS
           || gBattleMons[battlerDef].volatiles.infatuation
           || ((gAiLogicData->abilities[battlerAtk] == ABILITY_SERENE_GRACE || IsInnateActive(battlerAtk, ABILITY_SERENE_GRACE)) // FORK: innate-aware
