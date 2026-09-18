@@ -114,3 +114,54 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_PARALYSIS: Quick Feet is exempt from the PP ta
         EXPECT_EQ(player->pp[0], 34);
     }
 }
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_PARALYSIS: Max Guard pays the priority tax too")
+{
+    // Regression: GetBattleMovePriority returned Max Guard's +4 from an early return
+    // placed above the paralysis tax, making a Dynamaxed status move the one move a
+    // paralyzed battler could still use at full priority. Unparalyzed, Max Guard (+4)
+    // ties the opponent's Protect (+4) and the faster player moves first; paralyzed,
+    // the tax drops Max Guard to +3 and the slower opponent moves first.
+    u32 status;
+    PARAMETRIZE { status = STATUS1_NONE; }
+    PARAMETRIZE { status = STATUS1_PARALYSIS; }
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_PARALYSIS, TRUE);
+        ASSUME(GetMovePriority(MOVE_MAX_GUARD) == 4);
+        ASSUME(GetMovePriority(MOVE_PROTECT) == 4);
+        PLAYER(SPECIES_WOBBUFFET) { Status1(status); Speed(100); Moves(MOVE_SPLASH); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(70); Moves(MOVE_PROTECT); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SPLASH, gimmick: GIMMICK_DYNAMAX); MOVE(opponent, MOVE_PROTECT); }
+    } SCENE {
+        if (status == STATUS1_PARALYSIS)
+        {
+            MESSAGE("The opposing Wobbuffet used Protect!");
+            MESSAGE("Wobbuffet used Max Guard!");
+        }
+        else
+        {
+            MESSAGE("Wobbuffet used Max Guard!");
+            MESSAGE("The opposing Wobbuffet used Protect!");
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_PARALYSIS: a damaging Max Move pays the priority tax")
+{
+    // Companion to the Max Guard case, and the one that already worked: a Dynamaxed
+    // Sucker Punch becomes Max Darkness and drops its +1 to 0, then the tax takes it
+    // to -1, so the slower opponent's priority-0 Scratch lands first.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_PARALYSIS, TRUE);
+        ASSUME(GetMovePriority(MOVE_SUCKER_PUNCH) == 1);
+        ASSUME(GetMovePriority(MOVE_SCRATCH) == 0);
+        PLAYER(SPECIES_WOBBUFFET) { Status1(STATUS1_PARALYSIS); Speed(100); Moves(MOVE_SUCKER_PUNCH); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(70); Moves(MOVE_SCRATCH); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SUCKER_PUNCH, gimmick: GIMMICK_DYNAMAX); MOVE(opponent, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("The opposing Wobbuffet used Scratch!");
+        MESSAGE("Wobbuffet used Max Darkness!");
+    }
+}

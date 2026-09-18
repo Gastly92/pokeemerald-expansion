@@ -4511,13 +4511,20 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
 
     priority = GetMovePriority(move);
 
-    // Max Guard check
-    if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
-        return GetMovePriority(MOVE_MAX_GUARD);
-
     if (gProtectStructs[battler].quash)
     {
         priority = -8;
+    }
+    // Max Guard check. A Dynamaxed status move becomes Max Guard, which carries its own
+    // +4 rather than the base move's priority.
+    // FORK: this used to be a `return GetMovePriority(MOVE_MAX_GUARD)` above the quash
+    // check, which made Max Guard the one move that skipped both quash and the
+    // DETERMINISTIC_PARALYSIS priority tax at the bottom of this function. It now sets
+    // `priority` and falls through so those modifiers apply like they do to every other
+    // move. On conflict, keep the fall-through rather than restoring the early return.
+    else if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
+    {
+        priority = GetMovePriority(MOVE_MAX_GUARD);
     }
     // Damaging Max Moves are always priority 0: they neither inherit the base move's
     // priority (e.g. a Dynamaxed Sucker Punch becomes Max Darkness, losing the +1) nor

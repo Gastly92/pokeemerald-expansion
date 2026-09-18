@@ -128,7 +128,9 @@ PP** (`CancelerPPDeduction`) and has its **priority lowered by
 `DETERMINISTIC_PARALYSIS_PRIORITY_TAX`** (`GetBattleMovePriority`), defaults 1/1,
 so it acts later in its bracket and burns PP faster while keeping full Speed (set
 either tax to 0 to drop it). **Quick Feet** (which already ignores the Speed drop)
-is exempt from both taxes. The full-paralysis roll still consults `RNG_PARALYSIS`
+is exempt from both taxes. Dynamax moves are taxed like anything else: a damaging
+Max Move's priority 0 and **Max Guard**'s +4 both take the drop. The
+full-paralysis roll still consults `RNG_PARALYSIS`
 (guaranteed pass via `RandomChance(1, 1)`) so `PASSES_RANDOMLY` tests stay valid.
 Because turn order (Speed + priority) is read through the shared engine functions,
 the AI's turn-order *prediction* tracks this automatically; the AI's paralysis
