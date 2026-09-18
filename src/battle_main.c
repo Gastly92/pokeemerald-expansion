@@ -4512,12 +4512,8 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
     priority = GetMovePriority(move);
 
     // Max Guard check
-    // FORK: the `- ParalysisPriorityTax(...)` is ours. This early return sits above the
-    // DETERMINISTIC_PARALYSIS tax applied at the bottom of this function, so without it
-    // Max Guard would be the one move a paralyzed battler could use at full priority.
-    // On conflict, take upstream's return and re-append the subtraction.
     if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
-        return GetMovePriority(MOVE_MAX_GUARD) - ParalysisPriorityTax(battler, ability);
+        return GetMovePriority(MOVE_MAX_GUARD) - ParalysisPriorityTax(battler, ability); // FORK: this early return skips the DETERMINISTIC_PARALYSIS tax at the end of the function; on conflict, take upstream's return and re-append the subtraction
 
     if (gProtectStructs[battler].quash)
     {
@@ -4575,8 +4571,8 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
 
     // FORK: DETERMINISTIC_PARALYSIS lowers the priority of every move a paralyzed
     // battler uses by DETERMINISTIC_PARALYSIS_PRIORITY_TAX, so it acts later in its
-    // priority bracket. Shared with the Max Guard early return above, which returns
-    // before reaching here; see fork/deterministic_moves.h for the Quick Feet exemption.
+    // priority bracket. Quick Feet (which already ignores the paralysis Speed drop)
+    // is exempt.
     priority -= ParalysisPriorityTax(battler, ability);
 
     return priority;
