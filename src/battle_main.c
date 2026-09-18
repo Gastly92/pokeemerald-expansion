@@ -4511,20 +4511,17 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
 
     priority = GetMovePriority(move);
 
+    // Max Guard check
+    // FORK: the `- ParalysisPriorityTax(...)` is ours. This early return sits above the
+    // DETERMINISTIC_PARALYSIS tax applied at the bottom of this function, so without it
+    // Max Guard would be the one move a paralyzed battler could use at full priority.
+    // On conflict, take upstream's return and re-append the subtraction.
+    if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
+        return GetMovePriority(MOVE_MAX_GUARD) - ParalysisPriorityTax(battler, ability);
+
     if (gProtectStructs[battler].quash)
     {
         priority = -8;
-    }
-    // Max Guard check. A Dynamaxed status move becomes Max Guard, which carries its own
-    // +4 rather than the base move's priority.
-    // FORK: this used to be a `return GetMovePriority(MOVE_MAX_GUARD)` above the quash
-    // check, which made Max Guard the one move that skipped both quash and the
-    // DETERMINISTIC_PARALYSIS priority tax at the bottom of this function. It now sets
-    // `priority` and falls through so those modifiers apply like they do to every other
-    // move. On conflict, keep the fall-through rather than restoring the early return.
-    else if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
-    {
-        priority = GetMovePriority(MOVE_MAX_GUARD);
     }
     // Damaging Max Moves are always priority 0: they neither inherit the base move's
     // priority (e.g. a Dynamaxed Sucker Punch becomes Max Darkness, losing the +1) nor
@@ -4578,12 +4575,9 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
 
     // FORK: DETERMINISTIC_PARALYSIS lowers the priority of every move a paralyzed
     // battler uses by DETERMINISTIC_PARALYSIS_PRIORITY_TAX, so it acts later in its
-    // priority bracket. Quick Feet (which already ignores the paralysis Speed drop)
-    // is exempt.
-    if (gBattleMons[battler].status1 & STATUS1_PARALYSIS && ability != ABILITY_QUICK_FEET
-        && !IsInnateActive(battler, ABILITY_QUICK_FEET) // FORK: innate Quick Feet is exempt from the para priority tax, like the real ability
-        && GetConfig(DETERMINISTIC_PARALYSIS))
-        priority -= DETERMINISTIC_PARALYSIS_PRIORITY_TAX;
+    // priority bracket. Shared with the Max Guard early return above, which returns
+    // before reaching here; see fork/deterministic_moves.h for the Quick Feet exemption.
+    priority -= ParalysisPriorityTax(battler, ability);
 
     return priority;
 }
