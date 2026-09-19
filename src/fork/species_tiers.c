@@ -74,12 +74,17 @@ static const u16 sLegendarySpecies[] =
 {
     SPECIES_MEW,                   // 0151
     SPECIES_LATIOS,                // 0381
+    SPECIES_JIRACHI,               // 0385
     SPECIES_SHAYMIN_SKY,           // 0492
+    SPECIES_TORNADUS,              // 0641
     SPECIES_TORNADUS_THERIAN,      // 0641
+    SPECIES_THUNDURUS,             // 0642
     SPECIES_THUNDURUS_THERIAN,     // 0642
+    SPECIES_LANDORUS,              // 0645
     SPECIES_LANDORUS_THERIAN,      // 0645
     SPECIES_KYUREM_BLACK,          // 0646
     SPECIES_KYUREM_WHITE,          // 0646
+    SPECIES_KELDEO,                // 0647
     SPECIES_MELOETTA,              // 0648
     SPECIES_GENESECT,              // 0649
     SPECIES_GENESECT_DOUSE,        // 0649
@@ -91,6 +96,7 @@ static const u16 sLegendarySpecies[] =
     SPECIES_NECROZMA,              // 0800
     SPECIES_MARSHADOW,             // 0802
     SPECIES_NAGANADEL,             // 0804
+    SPECIES_MELMETAL,              // 0809
     SPECIES_DRAGAPULT,             // 0887
     SPECIES_URSHIFU,               // 0892
     SPECIES_URSHIFU_RAPID_STRIKE,  // 0892
@@ -113,8 +119,11 @@ static const u16 sPseudoSpecies[] =
 {
     SPECIES_ALAKAZAM,              // 0065
     SPECIES_GENGAR,                // 0094
+    SPECIES_ARTICUNO,              // 0144
     SPECIES_ARTICUNO_GALAR,        // 0144
+    SPECIES_ZAPDOS,                // 0145
     SPECIES_ZAPDOS_GALAR,          // 0145
+    SPECIES_MOLTRES,               // 0146
     SPECIES_MOLTRES_GALAR,         // 0146
     SPECIES_DRAGONITE,             // 0149
     SPECIES_TYRANITAR,             // 0248
@@ -123,7 +132,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_SALAMENCE,             // 0373
     SPECIES_METAGROSS,             // 0376
     SPECIES_LATIAS,                // 0380
-    SPECIES_JIRACHI,               // 0385
     SPECIES_DEOXYS_DEFENSE,        // 0386
     SPECIES_GARCHOMP,              // 0445
     SPECIES_LUCARIO,               // 0448
@@ -133,11 +141,8 @@ static const u16 sPseudoSpecies[] =
     SPECIES_VICTINI,               // 0494
     SPECIES_HYDREIGON,             // 0635
     SPECIES_TERRAKION,             // 0639
-    SPECIES_TORNADUS,              // 0641
-    SPECIES_THUNDURUS,             // 0642
-    SPECIES_LANDORUS,              // 0645
     SPECIES_KYUREM,                // 0646
-    SPECIES_KELDEO,                // 0647
+    SPECIES_GRENINJA,              // 0658
     SPECIES_ZYGARDE_10_PC,         // 0718
     SPECIES_DIANCIE,               // 0719
     SPECIES_HOOPA,                 // 0720
@@ -157,7 +162,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_STAKATAKA,             // 0805
     SPECIES_BLACEPHALON,           // 0806
     SPECIES_ZERAORA,               // 0807
-    SPECIES_MELMETAL,              // 0809
     SPECIES_DRACOVISH,             // 0882
     SPECIES_REGIELEKI,             // 0894
     SPECIES_REGIDRAGO,             // 0895
