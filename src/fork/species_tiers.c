@@ -143,6 +143,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_TERRAKION,             // 0639
     SPECIES_KYUREM,                // 0646
     SPECIES_GRENINJA,              // 0658
+    SPECIES_GRENINJA_BATTLE_BOND,  // 0658
     SPECIES_ZYGARDE_10_PC,         // 0718
     SPECIES_DIANCIE,               // 0719
     SPECIES_HOOPA,                 // 0720
