@@ -4513,7 +4513,7 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
 
     // Max Guard check
     if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
-        return GetMovePriority(MOVE_MAX_GUARD);
+        return GetMovePriority(MOVE_MAX_GUARD) - ParalysisPriorityTax(battler, ability); // FORK: this early return skips the DETERMINISTIC_PARALYSIS tax at the end of the function; on conflict, take upstream's return and re-append the subtraction
 
     if (gProtectStructs[battler].quash)
     {
@@ -4573,10 +4573,7 @@ s32 GetBattleMovePriority(enum BattlerId battler, enum Ability ability, enum Mov
     // battler uses by DETERMINISTIC_PARALYSIS_PRIORITY_TAX, so it acts later in its
     // priority bracket. Quick Feet (which already ignores the paralysis Speed drop)
     // is exempt.
-    if (gBattleMons[battler].status1 & STATUS1_PARALYSIS && ability != ABILITY_QUICK_FEET
-        && !IsInnateActive(battler, ABILITY_QUICK_FEET) // FORK: innate Quick Feet is exempt from the para priority tax, like the real ability
-        && GetConfig(DETERMINISTIC_PARALYSIS))
-        priority -= DETERMINISTIC_PARALYSIS_PRIORITY_TAX;
+    priority -= ParalysisPriorityTax(battler, ability);
 
     return priority;
 }

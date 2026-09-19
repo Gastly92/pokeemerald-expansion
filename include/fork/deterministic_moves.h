@@ -15,6 +15,26 @@
 // or the stock RNG roll, so behavior is unchanged in vanilla play.
 
 #include "constants/battle.h"
+#include "fork/innate_abilities.h" // FORK: IsInnateActive (Quick Feet exemption below)
+
+// FORK: DETERMINISTIC_PARALYSIS -- how much priority a paralyzed battler's move loses.
+// Kept `static inline` in the header because GetBattleMovePriority needs it at two points
+// that cannot share a single statement: upstream's Max Guard early return near the top of
+// the function, and the ordinary path at the bottom. Putting the predicate here keeps the
+// edit to upstream's return line a one-term append instead of a restructure of its
+// if/else chain. Quick Feet, whose niche is shrugging off the paralysis Speed drop, is
+// exempt from the tax (chosen ability or innate alike). Returns 0 whenever the flag is
+// off, so this is a strict no-op in vanilla play.
+static inline s32 ParalysisPriorityTax(enum BattlerId battler, enum Ability ability)
+{
+    if (!(gBattleMons[battler].status1 & STATUS1_PARALYSIS))
+        return 0;
+    if (ability == ABILITY_QUICK_FEET || IsInnateActive(battler, ABILITY_QUICK_FEET))
+        return 0;
+    if (!GetConfig(DETERMINISTIC_PARALYSIS))
+        return 0;
+    return DETERMINISTIC_PARALYSIS_PRIORITY_TAX;
+}
 
 // DETERMINISTIC_ADDITIONAL_EFFECTS: given a move's (dynamic) type and the pre-computed
 // facts about this hit, decide whether its chance-based additional effect lands. Shared
