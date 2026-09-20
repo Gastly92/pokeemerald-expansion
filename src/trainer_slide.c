@@ -357,11 +357,13 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
 
     enum DifficultyLevel difficulty = GetCurrentDifficultyLevel();
 
-    // UPSTREAM: upstream assigns `gBattleScripting.battler = battler;` HERE. Moved down to the
-    // success path -- see the note at the bottom of this function. On conflict, keep it moved:
+    // UPSTREAM: upstream assigns `gBattleScripting.battler = battler;` HERE. We moved it to the
+    // success path at the end of this function; see the note there. On conflict, keep it moved --
     // re-inlining it at this spot restores the bug (a "no slide" answer leaves the scripting
     // battler on the opponent, and RunTurnActionsFunctions() re-probes every frame during a
-    // Z-Move, so the next queued message names the wrong mon).
+    // Z-Move, so the next queued message names the wrong mon). If upstream has restructured this
+    // function so neither note lands cleanly, run test/fork/battle_bond_message.c: it fails
+    // whenever the assignment can be reached from a path that returns TRAINER_SLIDE_TARGET_NONE.
     if (IsTrainerSlidePlayed(battler, slideId))
         return TRAINER_SLIDE_TARGET_NONE;
 
@@ -420,18 +422,19 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
     if (shouldRun == FALSE)
         return TRAINER_SLIDE_TARGET_NONE;
 
-    // UPSTREAM: only now, on the success path, point the scripting battler at the sliding trainer's
-    // mon -- callers that push BattleScript_*SlideMsg* rely on this being set for them. It used to
-    // be assigned before the IsTrainerSlidePlayed / DoesTrainerHaveSlideMessage / shouldRun checks,
-    // so a probe that answered "no slide" still left gBattleScripting.battler on the OPPONENT.
-    // RunTurnActionsFunctions() re-probes every frame while a Z-Move gimmick is active, so in any
-    // trainer battle that stomped the global between a script setting it and the next message being
-    // queued -- e.g. Battle Bond boosting Greninja but announcing the boosts against the KO'd foe.
-    // A predicate must not have side effects on the paths where it answers no. Not a fork
-    // divergence: this is upstream's bug and the fix belongs back upstream.
     if (GetBattlerTrainer(battler) == GetBattlerTrainer(GetPartnerBattler(battler)))
         MarkTrainerSlideAsPlayed(GetPartnerBattler(battler), slideId);
 
+    // UPSTREAM: upstream assigns this ~70 lines up, before the IsTrainerSlidePlayed /
+    // DoesTrainerHaveSlideMessage / shouldRun checks, so a probe answering "no slide" still left
+    // gBattleScripting.battler on the OPPONENT. RunTurnActionsFunctions() re-probes every frame
+    // while a Z-Move gimmick is active, so in a trainer battle that stomped the global between a
+    // script setting it and the next message being queued -- Battle Bond boosted Greninja but
+    // announced the boosts against the KO'd foe. A predicate must not have side effects on the
+    // paths where it answers no. Callers that push BattleScript_*SlideMsg* still rely on this
+    // being set, which is why it moved here rather than being dropped.
+    // Guarded by test/fork/battle_bond_message.c -- the comments are a signpost, that test is what
+    // actually fails if a sync puts the assignment back above the checks.
     gBattleScripting.battler = battler;
     MarkTrainerSlideAsPlayed(battler, slideId);
     SetTrainerSlideMessage(difficulty,trainerId,slideId);

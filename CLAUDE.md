@@ -596,12 +596,22 @@ divergences, which are intentionally ours and must never go upstream.
   preference. `ShouldDoTrainerSlide()` in `src/trainer_slide.c` is the worked
   example (PR #548). The test is ownership, not behavior: would upstream take this
   patch? If the change encodes a *choice of ours* they would not take, it's a `FORK:`.
-- **A moved line needs a marker at BOTH ends.** The rule from the `FORK:` section
-  applies here too, and deletions are the dangerous case: if the fix removes or
-  relocates an upstream statement, leave a note at the spot it used to occupy
-  saying where it went and that re-inlining it reintroduces the bug. Otherwise a
-  future sync takes upstream's version at that line, in silence, and the bug is back.
-  Tag the destination too, so the pair is greppable.
+- **A moved line needs a marker at BOTH ends — and a test.** The rule from the
+  `FORK:` section applies here too, and deletions are the dangerous case: if the fix
+  removes or relocates an upstream statement, leave a note at the spot it used to
+  occupy saying where it went and that re-inlining it reintroduces the bug. Tag the
+  destination too, so the pair is greppable, and **put the destination note directly
+  above the line it describes** — a comment parked a few statements away rides along
+  with whatever upstream code it happens to sit on, and lands in unrelated conflicts
+  while the line it documents drifts elsewhere.
+- **Markers are a signpost, not a guard.** They only help when the conflict lands
+  where the note is. If upstream restructures the function, moves the statement
+  itself, or fixes the bug differently, git can auto-merge their version cleanly and
+  leave our note pointing at nothing — silently reintroducing what we fixed. The only
+  thing that actually catches that is a **regression test that fails when the bug
+  comes back**; name it in the comment so whoever resolves the conflict knows what to
+  run. `ShouldDoTrainerSlide()` + `test/fork/battle_bond_message.c` is the worked pair.
+  A moved-line `UPSTREAM:` fix without such a test is one quiet sync from being undone.
 - Keep the note short; say what was clarified or fixed and why it's upstream-safe.
 
 ## Documenting fork features
