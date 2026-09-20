@@ -356,8 +356,14 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
         return TRAINER_SLIDE_TARGET_NONE;
 
     enum DifficultyLevel difficulty = GetCurrentDifficultyLevel();
-    gBattleScripting.battler = battler;
 
+    // UPSTREAM: upstream assigns `gBattleScripting.battler = battler;` HERE. We moved it to the
+    // success path at the end of this function; see the note there. On conflict, keep it moved --
+    // re-inlining it at this spot restores the bug (a "no slide" answer leaves the scripting
+    // battler on the opponent, and RunTurnActionsFunctions() re-probes every frame during a
+    // Z-Move, so the next queued message names the wrong mon). If upstream has restructured this
+    // function so neither note lands cleanly, run test/fork/battle_bond_message.c: it fails
+    // whenever the assignment can be reached from a path that returns TRAINER_SLIDE_TARGET_NONE.
     if (IsTrainerSlidePlayed(battler, slideId))
         return TRAINER_SLIDE_TARGET_NONE;
 
@@ -420,6 +426,17 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
     if (GetBattlerTrainer(battler) == GetBattlerTrainer(GetPartnerBattler(battler)))
         MarkTrainerSlideAsPlayed(GetPartnerBattler(battler), slideId);
 
+    // UPSTREAM: upstream assigns this ~70 lines up, before the IsTrainerSlidePlayed /
+    // DoesTrainerHaveSlideMessage / shouldRun checks, so a probe answering "no slide" still left
+    // gBattleScripting.battler on the OPPONENT. RunTurnActionsFunctions() re-probes every frame
+    // while a Z-Move gimmick is active, so in a trainer battle that stomped the global between a
+    // script setting it and the next message being queued -- Battle Bond boosted Greninja but
+    // announced the boosts against the KO'd foe. A predicate must not have side effects on the
+    // paths where it answers no. Callers that push BattleScript_*SlideMsg* still rely on this
+    // being set, which is why it moved here rather than being dropped.
+    // Guarded by test/fork/battle_bond_message.c -- the comments are a signpost, that test is what
+    // actually fails if a sync puts the assignment back above the checks.
+    gBattleScripting.battler = battler;
     MarkTrainerSlideAsPlayed(battler, slideId);
     SetTrainerSlideMessage(difficulty,trainerId,slideId);
     return retValue;

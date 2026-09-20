@@ -578,21 +578,52 @@ instead of silently re-inlining or dropping our change.
 - Keep it at the exact spot that would conflict (it shows up on *our* side of the
   conflict markers, where the person resolving will see it).
 
-### Upstream-mergeable cleanups: the `UPSTREAM:` tag
+### Upstream-mergeable changes: the `UPSTREAM:` tag
 
-Sometimes we touch upstream-owned code in a way that is *purely a readability
-improvement with no behavior change* — e.g. replacing a magic `3` with the named
-`FRONTIER_PARTY_SIZE`, or naming an unexplained constant. These are good
-candidates to contribute back upstream (unlike `FORK:` divergences, which are
-intentionally ours and must never go upstream).
+Sometimes we touch upstream-owned code in a way that is not a divergence we want
+to *keep* — either a pure readability improvement (replacing a magic `3` with the
+named `FRONTIER_PARTY_SIZE`, naming an unexplained constant) or a fix to a genuine
+bug in upstream's own code. Both should go back upstream, unlike `FORK:`
+divergences, which are intentionally ours and must never go upstream.
 
 - **Tag:** `UPSTREAM:` — the counterpart to `FORK:` (FORK: stays ours; UPSTREAM:
   is meant to be sent back). Greppable (`grep -rn "UPSTREAM:" src include`), so
-  the set of upstream-mergeable cleanups can be collected into a PR later.
-- **Only for behavior-preserving changes** at the vanilla config (a `3 →
+  the set of upstream-mergeable changes can be collected into a PR later.
+- **What qualifies:** behavior-preserving cleanups at the vanilla config (a `3 →
   FRONTIER_PARTY_SIZE` swap is behavior-preserving when the flag is off / the
-  constant is 3). If the change alters behavior, it's a `FORK:`, not an `UPSTREAM:`.
-- Keep the note short; say what was clarified and why it's upstream-safe.
+  constant is 3), **and upstream bug fixes** — a change that alters behavior is
+  still an `UPSTREAM:` when the old behavior was upstream's bug rather than our
+  preference. `ShouldDoTrainerSlide()` in `src/trainer_slide.c` is the worked
+  example (PR #548). The test is ownership, not behavior: would upstream take this
+  patch? If the change encodes a *choice of ours* they would not take, it's a `FORK:`.
+- **A moved line needs a marker at BOTH ends — and a test.** The rule from the
+  `FORK:` section applies here too, and deletions are the dangerous case: if the fix
+  removes or relocates an upstream statement, leave a note at the spot it used to
+  occupy saying where it went and that re-inlining it reintroduces the bug. Tag the
+  destination too, so the pair is greppable, and **put the destination note directly
+  above the line it describes** — a comment parked a few statements away rides along
+  with whatever upstream code it happens to sit on, and lands in unrelated conflicts
+  while the line it documents drifts elsewhere.
+- **Markers are a signpost, not a guard.** They only help when the conflict lands
+  where the note is. If upstream restructures the function, moves the statement
+  itself, or fixes the bug differently, git can auto-merge their version cleanly and
+  leave our note pointing at nothing — silently reintroducing what we fixed. The only
+  thing that actually catches that is a **regression test that fails when the bug
+  comes back**; name it in the comment so whoever resolves the conflict knows what to
+  run. `ShouldDoTrainerSlide()` + `test/fork/battle_bond_message.c` is the worked pair.
+  A moved-line `UPSTREAM:` fix without such a test is one quiet sync from being undone.
+- **Audit what your edit DELETES, not just what it adds.** Inserting a comment above
+  an upstream statement by replacing the block it sits in quietly eats upstream's own
+  comment — a pure loss that also shows up as a spurious deletion in any patch sent
+  back, and as a conflict on the next sync. Before pushing a change to an
+  upstream-owned file, print the removal set and check every line is one you meant to
+  remove:
+  ```bash
+  git diff origin/master -- <file> | grep '^-' | grep -v '^---'
+  ```
+  For an `UPSTREAM:` fix that set should be tiny and deliberate — ideally the single
+  statement you moved.
+- Keep the note short; say what was clarified or fixed and why it's upstream-safe.
 
 ## Documenting fork features
 
@@ -703,6 +734,41 @@ make -j$(nproc) release        # optimized build -> pokeemerald-release.gba
   produces bogus failures (e.g. a spurious non-zero `check` exit). Serialize them,
   or `rm -rf build` between configs. To wait on a background build, block on its
   completion (a single bounded wait) rather than firing off the next `make`.
+
+### Chasing a bug the maintainer saw in play
+
+A field report beats a proof. The trainer-slide bug (PR #548) cost most of a
+session because the engine code, read carefully, said the reported symptom was
+*impossible* — and the symptom was real. Reproduce first; only use static reading
+to explain a repro you already have, never to argue one away.
+
+- **A scripted opponent disables whole subsystems.** `SINGLE_BATTLE_TEST` with
+  `MOVE(opponent, ...)` is not a trainer battle for every purpose:
+  `ShouldDoTrainerSlide()` early-returns without `BATTLE_TYPE_TRAINER`, so the
+  entire trainer-slide path — and anything it stomps — is dead. Ten faithful-looking
+  tests missed the bug for this reason. **For anything involving messages, battler
+  attribution, or turn-loop state, reach for `AI_SINGLE_BATTLE_TEST` + `AI_FLAGS()`**,
+  which drives the opponent with the real AI, the way the Frontier does.
+- **Vary the environment, not just the moves.** What finally reproduced it was not a
+  different species, item or gimmick but the *battle context*: a real AI trainer
+  opponent. When a repro resists, enumerate what the maintainer's battle has that the
+  test does not — facility, AI flags, party size, fork feature flags — and change those.
+- **Instrument, then bisect.** `DebugPrintf()` works in test builds and the runner
+  prints it. Trace the value at each hop (where it is set, where it is read, the
+  commands in between) and narrow until two adjacent traces disagree. That found the
+  exact frame in one run after days of theorising. Watch for instrumentation that
+  changes behaviour: inserting a statement under a brace-less `if` silently moved the
+  guarded call out of the condition and produced a misleading trace.
+- **A near-miss `MESSAGE()` dumps the real text.** Assert a string that is close but
+  wrong and the runner prints "Did you mean:" with the actual messages — the cheapest
+  way to see what a battle really said. Conversely, an unmatched assertion proves
+  nothing if the expected string is subtly wrong: "Attack sharply rose!" vs the real
+  "Attack rose sharply!" wasted a round. Confirm wording with a control that *should*
+  match before trusting a negative result.
+- **Test the message and the state separately.** Assert the text in `SCENE` and the
+  stat stages in `THEN`. This bug applied the boost to the right battler and named the
+  wrong one; a test that only checked stat stages — as upstream's Gen 9 Battle Bond
+  tests do — passes straight through it.
 
 ## CI
 
