@@ -357,6 +357,11 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
 
     enum DifficultyLevel difficulty = GetCurrentDifficultyLevel();
 
+    // UPSTREAM: upstream assigns `gBattleScripting.battler = battler;` HERE. Moved down to the
+    // success path -- see the note at the bottom of this function. On conflict, keep it moved:
+    // re-inlining it at this spot restores the bug (a "no slide" answer leaves the scripting
+    // battler on the opponent, and RunTurnActionsFunctions() re-probes every frame during a
+    // Z-Move, so the next queued message names the wrong mon).
     if (IsTrainerSlidePlayed(battler, slideId))
         return TRAINER_SLIDE_TARGET_NONE;
 
