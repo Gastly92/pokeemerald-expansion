@@ -637,19 +637,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0212
         SPECIES_SCIZOR, 1,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_BULLETPROOF
     },
     {
         SPECIES_SCIZOR_MEGA, 0,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_BULLETPROOF
     },
     {
         SPECIES_SCIZOR_MEGA, 1,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_BULLETPROOF
     },
     {
         SPECIES_SCIZOR_MEGA, 2,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_BULLETPROOF
     },
     { // 0214
         SPECIES_HERACROSS, 2,
@@ -1699,7 +1699,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0598
         SPECIES_FERROTHORN, 1,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_TOXIC_DEBRIS
     },
     { // 0601
         SPECIES_KLINKLANG, 1,
