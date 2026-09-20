@@ -34,6 +34,28 @@ TEST("Species tiers: a forme resolves independently of its base species")
     EXPECT_EQ(GetSpeciesTier(SPECIES_SHAYMIN_SKY), TIER_LEGENDARY);
 }
 
+// FORK: the three tier arrays are maintained in ascending National Dex order
+// (each row carries a `// 0901`-style dex comment). Nothing about the lookup
+// depends on that -- GetSpeciesTier is a linear scan -- but the ordering is
+// what makes a new row have one obvious home and a near-duplicate visible when
+// reading the diff. Without a gate the convention only holds as long as every
+// reviewer eyeballs it, so check it here.
+//
+// Ties pass: sibling formes share a dex number (Ursaluna / Ursaluna-Bloodmoon
+// are both 0901), and their order among themselves is not meaningful.
+TEST("Species tiers: each tier list is in ascending National Dex order")
+{
+    u16 species = SPECIES_NONE, prevSpecies = SPECIES_NONE;
+    bool32 unsorted = SpeciesTierListIsUnsorted(&species, &prevSpecies);
+
+    if (unsorted)
+        Test_MgbaPrintf("species %d (dex %d) is listed after species %d (dex %d)",
+                        species, SpeciesToNationalPokedexNum(species),
+                        prevSpecies, SpeciesToNationalPokedexNum(prevSpecies));
+
+    EXPECT(!unsorted);
+}
+
 TEST("Species tiers: an unlisted species defaults to TIER_NORMAL")
 {
     EXPECT_EQ(GetSpeciesTier(SPECIES_BULBASAUR), TIER_NORMAL);
