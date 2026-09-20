@@ -105,6 +105,7 @@ static const u16 sLegendarySpecies[] =
     SPECIES_ENAMORUS_THERIAN,      // 0905
     SPECIES_FLUTTER_MANE,          // 0987
     SPECIES_IRON_BUNDLE,           // 0991
+    SPECIES_IRON_JUGULIS,          // 0993
     SPECIES_BAXCALIBUR,            // 0998
     SPECIES_CHIEN_PAO,             // 1002
     SPECIES_CHI_YU,                // 1004
@@ -131,6 +132,9 @@ static const u16 sPseudoSpecies[] =
     SPECIES_BLAZIKEN,              // 0257
     SPECIES_SALAMENCE,             // 0373
     SPECIES_METAGROSS,             // 0376
+    SPECIES_REGIROCK,              // 0377
+    SPECIES_REGICE,                // 0378
+    SPECIES_REGISTEEL,             // 0379
     SPECIES_LATIAS,                // 0380
     SPECIES_DEOXYS_DEFENSE,        // 0386
     SPECIES_GARCHOMP,              // 0445
@@ -176,7 +180,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_SANDY_SHOCKS,          // 0989
     SPECIES_IRON_TREADS,           // 0990
     SPECIES_IRON_HANDS,            // 0992
-    SPECIES_IRON_JUGULIS,          // 0993
     SPECIES_IRON_MOTH,             // 0994
     SPECIES_IRON_THORNS,           // 0995
     SPECIES_IRON_VALIANT,          // 1006
@@ -185,6 +188,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_OGERPON_HEARTHFLAME,   // 1017
     SPECIES_OGERPON_TEAL,          // 1017
     SPECIES_OGERPON_WELLSPRING,    // 1017
+    SPECIES_ARCHALUDON,            // 1018
     SPECIES_IRON_BOULDER,          // 1022
     SPECIES_IRON_CROWN,            // 1023
     SPECIES_TERAPAGOS_TERASTAL,    // 1024
