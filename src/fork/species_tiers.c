@@ -127,6 +127,9 @@ static const u16 sPseudoSpecies[] =
     SPECIES_MOLTRES,               // 0146
     SPECIES_MOLTRES_GALAR,         // 0146
     SPECIES_DRAGONITE,             // 0149
+    SPECIES_RAIKOU,                // 0243
+    SPECIES_ENTEI,                 // 0244
+    SPECIES_SUICUNE,               // 0245
     SPECIES_TYRANITAR,             // 0248
     SPECIES_CELEBI,                // 0251
     SPECIES_BLAZIKEN,              // 0257
@@ -144,7 +147,9 @@ static const u16 sPseudoSpecies[] =
     SPECIES_SHAYMIN,               // 0492
     SPECIES_VICTINI,               // 0494
     SPECIES_HYDREIGON,             // 0635
+    SPECIES_COBALION,              // 0638
     SPECIES_TERRAKION,             // 0639
+    SPECIES_VIRIZION,              // 0640
     SPECIES_KYUREM,                // 0646
     SPECIES_GRENINJA,              // 0658
     SPECIES_GRENINJA_BATTLE_BOND,  // 0658
@@ -184,6 +189,9 @@ static const u16 sPseudoSpecies[] =
     SPECIES_IRON_THORNS,           // 0995
     SPECIES_IRON_VALIANT,          // 1006
     SPECIES_IRON_LEAVES,           // 1010
+    SPECIES_OKIDOGI,               // 1014
+    SPECIES_MUNKIDORI,             // 1015
+    SPECIES_FEZANDIPITI,           // 1016
     SPECIES_OGERPON_CORNERSTONE,   // 1017
     SPECIES_OGERPON_HEARTHFLAME,   // 1017
     SPECIES_OGERPON_TEAL,          // 1017
