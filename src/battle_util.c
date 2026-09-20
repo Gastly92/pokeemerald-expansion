@@ -5031,16 +5031,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                     else if (ability == ABILITY_AS_ONE_SHADOW_RIDER)
                         gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_GRIM_NEIGH;
 
-                    // FORK: point the scripting battler at the ability holder before entering
-                    // BattleScript_AbilityStatChange. These KO-triggered boosts are reached straight
-                    // out of BattleScript_FaintBattler, which leaves gBattleScripting.battler on the
-                    // mon that just fainted (`copybyte sBATTLER, gBattlerFainted`, data/battle_scripts_1.s).
-                    // Every gStatUpStringIds entry reads {B_SCR_NAME_WITH_PREFIX}, so any line printed
-                    // before StatChanged() reassigns it would name the KO'd foe instead of the booster.
-                    // Behaviour-neutral on the normal path (StatChanged sets the same value) -- this
-                    // only removes the stale window. See ABILITYEFFECT_OPPORTUNIST below, which
-                    // already sets all three globals together.
-                    gEffectBattler = gBattlerAbility = gBattleScripting.battler = battler;
+                    gEffectBattler = gBattlerAbility = battler;
                     SetStatChange(battler, stat, numMonsFainted);
                     BattleScriptCall(BattleScript_AbilityStatChange);
                     effect = TRUE;
@@ -5077,9 +5068,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                     if (gSpecialStatuses[battler].statStageAmount > 0)
                     {
                         gLastUsedAbility = ability;
-                        // FORK: see the Moxie-family note above -- the scripting battler is still the
-                        // mon this KO'd, and every stat-up string names it, so pin it to the holder.
-                        gEffectBattler = gBattlerAbility = gBattleScripting.battler = battler;
+                        gEffectBattler = gBattlerAbility = battler;
 
                         GetBattlerPartyState(battler)->battleBondBoost = TRUE;
                         BattleScriptCall(BattleScript_AbilityStatChange);
