@@ -7131,7 +7131,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7151,7 +7151,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -7171,7 +7171,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_U_TURN
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19653,7 +19653,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_POWER_WHIP
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(DEF_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -19674,7 +19674,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_LEECH_SEED
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
