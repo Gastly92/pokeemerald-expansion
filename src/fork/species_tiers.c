@@ -74,9 +74,12 @@ static const u16 sMythicalSpecies[] =
 static const u16 sLegendarySpecies[] =
 {
     SPECIES_MEW,                   // 0151
+    SPECIES_LATIAS,                // 0380
     SPECIES_LATIOS,                // 0381
     SPECIES_JIRACHI,               // 0385
+    SPECIES_HEATRAN,               // 0485
     SPECIES_SHAYMIN_SKY,           // 0492
+    SPECIES_VICTINI,               // 0494
     SPECIES_TORNADUS,              // 0641
     SPECIES_TORNADUS_THERIAN,      // 0641
     SPECIES_THUNDURUS,             // 0642
@@ -102,7 +105,11 @@ static const u16 sLegendarySpecies[] =
     SPECIES_URSHIFU,               // 0892
     SPECIES_URSHIFU_RAPID_STRIKE,  // 0892
     SPECIES_ZARUDE,                // 0893
+    SPECIES_REGIELEKI,             // 0894
+    SPECIES_REGIDRAGO,             // 0895
+    SPECIES_GLASTRIER,             // 0896
     SPECIES_SPECTRIER,             // 0897
+    SPECIES_ENAMORUS,              // 0905
     SPECIES_ENAMORUS_THERIAN,      // 0905
     SPECIES_FLUTTER_MANE,          // 0987
     SPECIES_IRON_BUNDLE,           // 0991
@@ -112,6 +119,10 @@ static const u16 sLegendarySpecies[] =
     SPECIES_CHI_YU,                // 1004
     SPECIES_ROARING_MOON,          // 1005
     SPECIES_WALKING_WAKE,          // 1009
+    SPECIES_OGERPON_CORNERSTONE,   // 1017
+    SPECIES_OGERPON_HEARTHFLAME,   // 1017
+    SPECIES_OGERPON_TEAL,          // 1017
+    SPECIES_OGERPON_WELLSPRING,    // 1017
     SPECIES_GOUGING_FIRE,          // 1020
     SPECIES_RAGING_BOLT,           // 1021
 };
@@ -139,14 +150,11 @@ static const u16 sPseudoSpecies[] =
     SPECIES_REGIROCK,              // 0377
     SPECIES_REGICE,                // 0378
     SPECIES_REGISTEEL,             // 0379
-    SPECIES_LATIAS,                // 0380
     SPECIES_DEOXYS_DEFENSE,        // 0386
     SPECIES_GARCHOMP,              // 0445
     SPECIES_LUCARIO,               // 0448
-    SPECIES_HEATRAN,               // 0485
     SPECIES_MANAPHY,               // 0490
     SPECIES_SHAYMIN,               // 0492
-    SPECIES_VICTINI,               // 0494
     SPECIES_HYDREIGON,             // 0635
     SPECIES_COBALION,              // 0638
     SPECIES_TERRAKION,             // 0639
@@ -174,13 +182,9 @@ static const u16 sPseudoSpecies[] =
     SPECIES_BLACEPHALON,           // 0806
     SPECIES_ZERAORA,               // 0807
     SPECIES_DRACOVISH,             // 0882
-    SPECIES_REGIELEKI,             // 0894
-    SPECIES_REGIDRAGO,             // 0895
-    SPECIES_GLASTRIER,             // 0896
     SPECIES_CALYREX,               // 0898
     SPECIES_URSALUNA,              // 0901
     SPECIES_URSALUNA_BLOODMOON,    // 0901
-    SPECIES_ENAMORUS,              // 0905
     SPECIES_GREAT_TUSK,            // 0984
     SPECIES_SCREAM_TAIL,           // 0985
     SPECIES_BRUTE_BONNET,          // 0986
@@ -196,10 +200,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_OKIDOGI,               // 1014
     SPECIES_MUNKIDORI,             // 1015
     SPECIES_FEZANDIPITI,           // 1016
-    SPECIES_OGERPON_CORNERSTONE,   // 1017
-    SPECIES_OGERPON_HEARTHFLAME,   // 1017
-    SPECIES_OGERPON_TEAL,          // 1017
-    SPECIES_OGERPON_WELLSPRING,    // 1017
     SPECIES_ARCHALUDON,            // 1018
     SPECIES_IRON_BOULDER,          // 1022
     SPECIES_IRON_CROWN,            // 1023
