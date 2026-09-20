@@ -415,14 +415,15 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
     if (shouldRun == FALSE)
         return TRAINER_SLIDE_TARGET_NONE;
 
-    // FORK: only now, on the success path, point the scripting battler at the sliding trainer's
+    // UPSTREAM: only now, on the success path, point the scripting battler at the sliding trainer's
     // mon -- callers that push BattleScript_*SlideMsg* rely on this being set for them. It used to
     // be assigned before the IsTrainerSlidePlayed / DoesTrainerHaveSlideMessage / shouldRun checks,
     // so a probe that answered "no slide" still left gBattleScripting.battler on the OPPONENT.
     // RunTurnActionsFunctions() re-probes every frame while a Z-Move gimmick is active, so in any
     // trainer battle that stomped the global between a script setting it and the next message being
     // queued -- e.g. Battle Bond boosting Greninja but announcing the boosts against the KO'd foe.
-    // A predicate must not have side effects on the paths where it answers no.
+    // A predicate must not have side effects on the paths where it answers no. Not a fork
+    // divergence: this is upstream's bug and the fix belongs back upstream.
     if (GetBattlerTrainer(battler) == GetBattlerTrainer(GetPartnerBattler(battler)))
         MarkTrainerSlideAsPlayed(GetPartnerBattler(battler), slideId);
 
