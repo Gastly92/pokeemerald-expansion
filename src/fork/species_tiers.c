@@ -1,6 +1,7 @@
 #include "global.h"
 #include "fork/species_shorthand.h"
 #include "fork/species_tiers.h"
+#include "pokemon.h"
 #include "constants/species.h"
 
 // FORK: species -> tier classification (see include/species_tiers.h for the full
@@ -237,14 +238,17 @@ bool32 SpeciesIsTier(u16 species, enum SpeciesTier tier)
 }
 
 #if TESTING
+// Test-only view of the three tier arrays, so the guards below can walk every
+// list without the tables themselves leaving this file.
+static const struct { const u16 *list; u32 count; } sAllTierLists[] =
+{
+    { sMythicalSpecies,  ARRAY_COUNT(sMythicalSpecies) },
+    { sLegendarySpecies, ARRAY_COUNT(sLegendarySpecies) },
+    { sPseudoSpecies,    ARRAY_COUNT(sPseudoSpecies) },
+};
+
 bool32 SpeciesTierListsOverlap(u16 *outSpecies)
 {
-    static const struct { const u16 *list; u32 count; } sAllTierLists[] =
-    {
-        { sMythicalSpecies,  ARRAY_COUNT(sMythicalSpecies) },
-        { sLegendarySpecies, ARRAY_COUNT(sLegendarySpecies) },
-        { sPseudoSpecies,    ARRAY_COUNT(sPseudoSpecies) },
-    };
     u32 listA, listB, i, j;
 
     for (listA = 0; listA < ARRAY_COUNT(sAllTierLists); listA++)
@@ -272,6 +276,31 @@ bool32 SpeciesTierListsOverlap(u16 *outSpecies)
                         return TRUE;
                     }
                 }
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+bool32 SpeciesTierListIsUnsorted(u16 *outSpecies, u16 *outPrevSpecies)
+{
+    u32 list, i;
+
+    for (list = 0; list < ARRAY_COUNT(sAllTierLists); list++)
+    {
+        for (i = 1; i < sAllTierLists[list].count; i++)
+        {
+            u16 prevSpecies = sAllTierLists[list].list[i - 1];
+            u16 species = sAllTierLists[list].list[i];
+
+            // Sibling formes share a dex number, so equal numbers are fine --
+            // only a row that goes backwards is misplaced.
+            if (SpeciesToNationalPokedexNum(species) < SpeciesToNationalPokedexNum(prevSpecies))
+            {
+                *outSpecies = species;
+                *outPrevSpecies = prevSpecies;
+                return TRUE;
             }
         }
     }

@@ -148,6 +148,11 @@ pool. Deliberate divergences only ever make a forme *more* restricted than its b
 `test/fork/species_tiers.c` walks the roster and fails on any forme less restricted than
 its base forme.
 
+Each array is kept in **ascending National Dex order**, with a dex-number comment per row,
+so a new row has one obvious home and a near-duplicate is visible when reading the diff.
+`test/fork/species_tiers.c` gates this too, comparing real dex numbers (sibling formes tie,
+which passes) rather than the row comments.
+
 ## Draft rules
 
 Applied to player rentals, ordinary opponents and the Frontier Brain alike.

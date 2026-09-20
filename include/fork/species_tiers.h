@@ -65,6 +65,16 @@ bool32 SpeciesIsTier(u16 species, enum SpeciesTier tier);
 // accidentally listed twice (within one array or across two). Returns TRUE
 // and writes the offending species to *outSpecies if any duplicate exists.
 bool32 SpeciesTierListsOverlap(u16 *outSpecies);
+
+// Test-only: the tier arrays are kept in ascending National Dex order so a new
+// row has one obvious home and a duplicate is visible by eye, but nothing in
+// the data itself enforces that. Returns TRUE and writes the first row that
+// sits below its predecessor (plus that predecessor) to *outSpecies /
+// *outPrevSpecies. Sibling formes share a dex number, so ties pass.
+// NOTE: this checks the real dex number, not the `// 0901`-style comment on
+// each row -- a comment that disagrees with the species it labels still passes
+// as long as the row itself is in the right place.
+bool32 SpeciesTierListIsUnsorted(u16 *outSpecies, u16 *outPrevSpecies);
 #endif
 
 #endif // GUARD_SPECIES_TIERS_H
