@@ -356,7 +356,6 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
         return TRAINER_SLIDE_TARGET_NONE;
 
     enum DifficultyLevel difficulty = GetCurrentDifficultyLevel();
-    gBattleScripting.battler = battler;
 
     if (IsTrainerSlidePlayed(battler, slideId))
         return TRAINER_SLIDE_TARGET_NONE;
@@ -416,10 +415,18 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
     if (shouldRun == FALSE)
         return TRAINER_SLIDE_TARGET_NONE;
 
-    // Prevents slides triggering twice in single-trainer doubles
+    // FORK: only now, on the success path, point the scripting battler at the sliding trainer's
+    // mon -- callers that push BattleScript_*SlideMsg* rely on this being set for them. It used to
+    // be assigned before the IsTrainerSlidePlayed / DoesTrainerHaveSlideMessage / shouldRun checks,
+    // so a probe that answered "no slide" still left gBattleScripting.battler on the OPPONENT.
+    // RunTurnActionsFunctions() re-probes every frame while a Z-Move gimmick is active, so in any
+    // trainer battle that stomped the global between a script setting it and the next message being
+    // queued -- e.g. Battle Bond boosting Greninja but announcing the boosts against the KO'd foe.
+    // A predicate must not have side effects on the paths where it answers no.
     if (GetBattlerTrainer(battler) == GetBattlerTrainer(GetPartnerBattler(battler)))
         MarkTrainerSlideAsPlayed(GetPartnerBattler(battler), slideId);
 
+    gBattleScripting.battler = battler;
     MarkTrainerSlideAsPlayed(battler, slideId);
     SetTrainerSlideMessage(difficulty,trainerId,slideId);
     return retValue;
