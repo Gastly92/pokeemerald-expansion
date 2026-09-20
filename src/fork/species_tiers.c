@@ -177,6 +177,8 @@ static const u16 sPseudoSpecies[] =
     SPECIES_REGIDRAGO,             // 0895
     SPECIES_GLASTRIER,             // 0896
     SPECIES_CALYREX,               // 0898
+    SPECIES_URSALUNA,              // 0901
+    SPECIES_URSALUNA_BLOODMOON,    // 0901
     SPECIES_ENAMORUS,              // 0905
     SPECIES_GREAT_TUSK,            // 0984
     SPECIES_SCREAM_TAIL,           // 0985
@@ -187,6 +189,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_IRON_HANDS,            // 0992
     SPECIES_IRON_MOTH,             // 0994
     SPECIES_IRON_THORNS,           // 0995
+    SPECIES_GHOLDENGO,             // 1000
     SPECIES_IRON_VALIANT,          // 1006
     SPECIES_IRON_LEAVES,           // 1010
     SPECIES_OKIDOGI,               // 1014
