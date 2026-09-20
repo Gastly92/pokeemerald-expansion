@@ -422,6 +422,7 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(enum BattlerId battler, enum Train
     if (shouldRun == FALSE)
         return TRAINER_SLIDE_TARGET_NONE;
 
+    // Prevents slides triggering twice in single-trainer doubles
     if (GetBattlerTrainer(battler) == GetBattlerTrainer(GetPartnerBattler(battler)))
         MarkTrainerSlideAsPlayed(GetPartnerBattler(battler), slideId);
 

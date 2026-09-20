@@ -612,6 +612,17 @@ divergences, which are intentionally ours and must never go upstream.
   comes back**; name it in the comment so whoever resolves the conflict knows what to
   run. `ShouldDoTrainerSlide()` + `test/fork/battle_bond_message.c` is the worked pair.
   A moved-line `UPSTREAM:` fix without such a test is one quiet sync from being undone.
+- **Audit what your edit DELETES, not just what it adds.** Inserting a comment above
+  an upstream statement by replacing the block it sits in quietly eats upstream's own
+  comment — a pure loss that also shows up as a spurious deletion in any patch sent
+  back, and as a conflict on the next sync. Before pushing a change to an
+  upstream-owned file, print the removal set and check every line is one you meant to
+  remove:
+  ```bash
+  git diff origin/master -- <file> | grep '^-' | grep -v '^---'
+  ```
+  For an `UPSTREAM:` fix that set should be tiny and deliberate — ideally the single
+  statement you moved.
 - Keep the note short; say what was clarified or fixed and why it's upstream-safe.
 
 ## Documenting fork features
