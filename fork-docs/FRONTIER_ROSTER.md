@@ -134,9 +134,9 @@ Derived from the upstream `isRestrictedLegendary` / `isSubLegendary` / `isMythic
 
 **Keyed by exact species id, so formes are classified on their own merits** rather than
 inheriting one tier from the base's dex number. A powerful forme can outrank its base —
-**Shaymin-Sky is `TIER_LEGENDARY`** (its fork-boosted Serene Grace) while ordinary
-Shaymin is `TIER_NORMAL` — and a weak base can sit below its formes — **base Calyrex is
-`TIER_NORMAL`** while its Ice/Shadow riders are `TIER_MYTHICAL`.
+**Shaymin-Sky is `TIER_MYTHICAL`** (its fork-boosted Serene Grace) while ordinary
+Shaymin is `TIER_LEGENDARY` — and a weak base can sit below its formes — **base Calyrex is
+`TIER_LEGENDARY`** while its Ice/Shadow riders are `TIER_MYTHICAL`.
 
 Currently covers the special species and formes the roster uses; anything unlisted
 returns `TIER_NORMAL`.
