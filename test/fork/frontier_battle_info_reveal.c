@@ -3,6 +3,8 @@
 #include "battle_ai_util.h"
 #include "battle_ai_record.h"
 #include "fork/innate_abilities.h"
+#include "fork/frontier_battle_info.h" // INFO_MAX_DISPLAYED_ALT_FORMS (the Base Stats page's row budget)
+#include "constants/form_change_types.h"
 
 // FORK: B_FRONTIER_BATTLE_INFO. The in-battle INFO viewer must only treat a foe's
 // ability/item as "revealed" once the player has actually witnessed it. The AI's
@@ -80,4 +82,61 @@ SINGLE_BATTLE_TEST("Frontier INFO: witnessing an innate does not reveal the chos
         // shows "? (+Levitate, Sturdy)" rather than leaking the chosen ability.
         EXPECT((gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & 1u) == 0);
     }
+}
+
+// FORK: B_FRONTIER_BATTLE_INFO. The viewer's Base Stats page prints the foe's own spread and
+// then one row per Mega/Primal form its species can reach, read from the species' own
+// form-change table. That list is bounded by INFO_MAX_DISPLAYED_ALT_FORMS, so a species
+// declaring more of those entries than the page can hold would have a reachable form the page
+// silently drops — under FEATURE_FREE_GIMMICKS a form the foe can actually turn into. Same
+// shape of guard as the innates-page row budget: a table row that passes it is a data problem,
+// not a display one.
+TEST("Frontier INFO: no species declares more Mega/Primal forms than the Base Stats page can list")
+{
+    u32 offenders = 0, fullest = 0, carriers = 0;
+
+    for (u32 species = 1; species < NUM_SPECIES; species++)
+    {
+        const struct FormChange *formChanges;
+        u32 n = 0;
+
+        // GetSpeciesFormChanges -> SanitizeSpeciesId asserts on a species the build has
+        // disabled, so the sweep skips those. The viewer never hits this: it only ever asks
+        // about a species that is on the field.
+        if (!IsSpeciesEnabled(species))
+            continue;
+
+        formChanges = GetSpeciesFormChanges(species);
+        if (formChanges == NULL)
+            continue;
+
+        for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+        {
+            // The same three methods DrawAltFormRows() draws a row for.
+            if (formChanges[i].method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM
+                || formChanges[i].method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE
+                || formChanges[i].method == FORM_CHANGE_BATTLE_PRIMAL_REVERSION)
+                n++;
+        }
+
+        if (n == 0)
+            continue;
+
+        carriers++;
+        if (n > fullest)
+            fullest = n;
+        if (n > INFO_MAX_DISPLAYED_ALT_FORMS)
+        {
+            offenders++;
+            Test_MgbaPrintf("%S declares %d Mega/Primal forms, more than the Base Stats page's %d rows -- the Base Stats page layout needs reworking, not just a bigger INFO_MAX_DISPLAYED_ALT_FORMS",
+                            gSpeciesInfo[species].speciesName, n, INFO_MAX_DISPLAYED_ALT_FORMS);
+        }
+    }
+
+    // Guard against a vacuous pass if the form-change accessor ever breaks: Mega Evolution is
+    // compiled in (P_MEGA_EVOLUTIONS), so plenty of species must carry such an entry, and at
+    // least one (Charizard/Mewtwo) must carry two.
+    EXPECT_GT(carriers, 20);
+    EXPECT_GE(fullest, 2);
+    EXPECT_EQ(offenders, 0);
 }
