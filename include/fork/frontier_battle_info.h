@@ -21,6 +21,12 @@ bool32 ShouldReplaceBagWithInfo(void);
 // test/fork/innate_abilities.c guards the table against it.
 #define INFO_MAX_DISPLAYED_INNATES 14
 
+// FORK: B_FRONTIER_BATTLE_INFO -- how many Mega/Primal rows the viewer's Base Stats page can
+// list beneath a foe's own spread (its row budget). A species declaring more reachable forms
+// than this would have one the page silently drops, so test/fork/frontier_battle_info_reveal.c
+// guards the form-change tables against it.
+#define INFO_MAX_DISPLAYED_ALT_FORMS 4
+
 void CB2_FrontierBattleInfo(void);
 
 // Opens the viewer and returns to returnCallback when closed. Used from the

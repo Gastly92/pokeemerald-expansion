@@ -3,7 +3,7 @@
 In Frontier facilities the bag is disabled, so its action slot is dead space. This
 fork turns it into **INFO**: a read-only, six-page reference screen showing field
 state, both sides' conditions and stat changes, a foe speed-tier comparison, and the
-foe's revealed party data and innates.
+foe's revealed party data, base stats and innates.
 
 Its whole design problem is **what the player is allowed to know**. The battle engine
 holds far more about the foe than the player has witnessed, and most of the code here
@@ -33,7 +33,7 @@ menu (`CB2_OpenBattleInfoFromPartyMenu` / `CB2_ReturnToPartyMenuFromBattleInfo` 
 Opening it **does not consume the turn** — it reuses the `B_ACTION_DEBUG` controller
 path.
 
-## The six pages
+## The seven pages
 
 **L/R** cycle in both directions, with a right-aligned `n/N` indicator
 (`PrintPageIndicator`).
@@ -45,6 +45,7 @@ path.
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
 | **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, `FNT` when fainted, moves/PP/ability/held item |
+| **Base Stats** | The same foe's base spread as a table, plus a row per Mega/Primal form its species can reach |
 | **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
 
 The whole-field row (`BuildFieldEffectLine`) lists effects that belong to neither
@@ -215,6 +216,43 @@ Only the *chosen* ability stays gated. `RecordAbilityBattle` will not mark it re
 when what the player witnessed was an innate pop-up (`gBattleScripting.abilityPopupOverwrite`,
 an innate Levitate/Sturdy forcing the pop-up to its name) rather than the chosen
 ability — so an innate reveal never leaks the chosen one.
+
+## The Base Stats page
+
+The foe's base spread, as a right-aligned table so two forms can be compared down the
+column: `HP Atk Def SpA SpD Spe BST`, one row for the mon itself and one for each
+Mega/Primal form its species can reach.
+
+- **It is foe-scoped and shares `tFoeIndex`** with the Foe and Innates pages, so `<>`
+  cycles mons here too and an L/R step between the three stays on the same mon. It sits
+  directly after the Foe page.
+- **Base stats are not reveal-gated**, for the same reason innates aren't (below): they
+  are a static property of the *species*, fully determined the moment it is known. The
+  Speed Tiers page already exposes the foe's base Speed this way. The gates that do
+  apply are the Foe page's — nothing at all for a slot that has not been sent out, and
+  every species read goes through `GetFoeDisplayMon`, so a disguised Zoroark reports the
+  spread of the mon the player believes they are facing.
+- **The Mega/Primal rows come from the species' form-change table, never from the foe's
+  held item.** "Charizard has Mega forms" is dex knowledge; "this Charizard holds
+  Charizardite Y" is not, and reading the stone would leak the very item the Foe page
+  deliberately prints as `?`. Under `FEATURE_FREE_GIMMICKS` (on in real builds) no stone
+  is needed at all, so every row is a form the foe may genuinely turn into.
+- **Both X and Y are listed** for Charizard and Mewtwo, because `GetMegaStoneForBattler`
+  picks between them from the battler's hidden Attack/Sp. Atk spread. Every Mega shares
+  its base form's species *name*, so the X/Y row label is derived from the Mega Stone
+  that produces the form — that names the form, it does not read the foe's item.
+- **A foe that has already transformed** carries the Mega/Primal species in its party
+  slot, so its own row is labelled `Mega`/`Primal` rather than `Base`.
+- **Gigantamax is deliberately excluded**: Dynamax multiplies HP rather than swapping in
+  a new base spread, so a row for it would just repeat the one above.
+- **The row budget is a data invariant.** It is exported as
+  `INFO_MAX_DISPLAYED_ALT_FORMS`, and a table guard in
+  `test/fork/frontier_battle_info_reveal.c` fails if any species declares more
+  Mega/Primal form changes than the page can list — otherwise a reachable form would be
+  silently dropped.
+
+**Only the foe is shown.** The player's own spreads are a summary-screen away and the
+page's `<>` navigation is foe-indexed; adding a player side would need a second page.
 
 ## The Innates page
 

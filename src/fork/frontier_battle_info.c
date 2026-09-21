@@ -33,6 +33,7 @@
 #include "window.h"
 #include "constants/battle.h"
 #include "constants/characters.h" // FORK: TEXT_COLOR_* for the styled title/footer text
+#include "constants/form_change_types.h" // FORK: the Base Stats page walks a species' Mega/Primal form changes
 #include "constants/pokemon.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
@@ -86,6 +87,10 @@ enum
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
     INFO_PAGE_FOE,
+    // FORK: the foe's base stats, plus a row per Mega/Primal form its species can reach.
+    // Foe-scoped like the Foe page (it shares tFoeIndex), and placed directly after it so
+    // one L/R step from a mon's Foe page lands on that same mon's spread.
+    INFO_PAGE_BASE_STATS,
     // FEATURE_INNATE_ABILITIES -- the foe's innate list, on its own page (see
     // DrawInnatesPage). It sits directly after the Foe page and shares tFoeIndex, so
     // L/R steps from a mon's Foe page onto that same mon's innates. It is the LAST
@@ -928,6 +933,9 @@ static const u8 *GetStatAbbr(u32 stat)
 {
     switch (stat)
     {
+    // STAT_HP is here for the Base Stats page's column header; the stat-change page's
+    // own sStatOrder deliberately omits it (HP has no stat stage).
+    case STAT_HP:      return COMPOUND_STRING("HP");
     case STAT_ATK:     return COMPOUND_STRING("Atk");
     case STAT_DEF:     return COMPOUND_STRING("Def");
     case STAT_SPATK:   return COMPOUND_STRING("SpA");
@@ -1005,6 +1013,189 @@ static void DrawStatsPage(u8 windowId)
     DrawStatsForSide(windowId, FALSE, y);
 
     PrintFooter(windowId, COMPOUND_STRING("L/R: Page    B: Close"));
+}
+
+// ---------------------------------------------------------------------------
+// Base Stats page
+// ---------------------------------------------------------------------------
+// FORK: base stats are a static property of the SPECIES - like the type line and the
+// innate list - so by the same reasoning as "Innates are not reveal-gated" in
+// fork-docs/BATTLE_INFO.md they are shown in full the moment the mon is seen. The
+// Speed Tiers page already exposes the foe's base Speed exactly this way. The gates
+// that DO apply are the Foe page's: nothing at all for a slot that has not been sent
+// out, and every species read goes through GetFoeDisplayMon, so a disguised
+// Zoroark/Zorua reports the spread of the mon the player believes they are facing.
+//
+// The Mega/Primal rows come from the species' own form-change table, NEVER from the
+// foe's held item. "Charizard has Mega forms" is dex knowledge; "this Charizard holds
+// Charizardite Y" is not, and reading the stone would leak the very item the Foe page
+// deliberately prints as `?`. Under FEATURE_FREE_GIMMICKS (on in real builds) no stone
+// is needed at all - any species with a Mega form can use it - so each row is a form
+// the foe may genuinely turn into. Both X and Y are listed for the two-Mega species,
+// because GetMegaStoneForBattler() picks between them from the battler's hidden
+// Attack/Sp. Atk spread, which the player cannot see.
+//
+// Layout is a table: a label column, then NUM_STATS + 1 right-aligned numeric columns.
+// Right-aligning digits is what makes two forms comparable at a glance, so the columns
+// are fixed x positions rather than a built string.
+#define BST_COL_W          26                                     // 3 narrow digits are 15px wide, so this leaves a clear gutter
+#define BST_FIRST_COL_R    66                                     // right edge of the HP column; the row label owns everything left of it
+#define BST_COL_R(k)       (BST_FIRST_COL_R + (BST_COL_W * (k)))  // k = 0..NUM_STATS, the last column being the BST
+// Mega X + Mega Y + Primal is the most any species declares, with a slot spare. It lives in the
+// header so the table guard in test/fork/frontier_battle_info_reveal.c can assert against it.
+#define BST_MAX_ALT_FORMS  INFO_MAX_DISPLAYED_ALT_FORMS
+
+// The BST column must not run off the right edge of the window.
+STATIC_ASSERT(BST_COL_R(NUM_STATS) <= INFO_WIN_WIDTH * 8, BaseStatColumnsFitTheInfoWindow);
+
+// Conventional display order (HP/Atk/Def/SpA/SpD/Spe), not the internal STAT_* order,
+// which puts Speed fourth.
+static const u8 sBaseStatOrder[NUM_STATS] = { STAT_HP, STAT_ATK, STAT_DEF, STAT_SPATK, STAT_SPDEF, STAT_SPEED };
+
+// Right-align a cell against its column's right edge, the way PrintTrickRoomMarker
+// right-aligns against the window's.
+static void PrintStatCell(u8 windowId, const u8 *str, u32 colRight, u32 y)
+{
+    PrintLine(windowId, str, colRight - GetStringWidth(FONT_NARROW, str, 0), y);
+}
+
+// Every Mega shares its base form's species NAME ("Charizard" for both Mega X and
+// Mega Y), so an X/Y row is named from the Mega Stone that produces it (Charizardite X,
+// Mewtwonite Y). That names the FORM; it says nothing about what the foe is holding,
+// and the stone is never read off the mon. A species with a single Mega is just "Mega",
+// and an unrecognised suffix degrades to that too rather than guessing.
+static const u8 *MegaRowLabel(enum Item megaStone, bool32 speciesHasTwoMegas)
+{
+    if (speciesHasTwoMegas)
+    {
+        const u8 *name = GetItemName(megaStone);
+        u32 len = StringLength(name);
+
+        if (len != 0 && name[len - 1] == CHAR_X)
+            return COMPOUND_STRING("Mega X");
+        if (len != 0 && name[len - 1] == CHAR_Y)
+            return COMPOUND_STRING("Mega Y");
+    }
+    return COMPOUND_STRING("Mega");
+}
+
+// Collect the Mega/Primal forms the species can reach, with the label each row gets.
+// Only these two methods qualify: they are the transformations that change the stat
+// spread mid-battle off nothing but the species. Gigantamax is excluded on purpose -
+// Dynamax multiplies HP rather than swapping in a new base spread, so a row for it
+// would be duplicating this one.
+static u32 CollectAltFormRows(enum Species species, enum Species *outSpecies, const u8 **outLabels)
+{
+    const struct FormChange *formChanges = GetSpeciesFormChanges(species);
+    u32 megaCount = 0;
+    u32 n = 0;
+
+    if (formChanges == NULL)
+        return 0;
+
+    for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+    {
+        if (formChanges[i].method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM)
+            megaCount++;
+    }
+
+    for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR && n < BST_MAX_ALT_FORMS; i++)
+    {
+        switch (formChanges[i].method)
+        {
+        case FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM:
+            outLabels[n] = MegaRowLabel(formChanges[i].param1, megaCount > 1);
+            break;
+        case FORM_CHANGE_BATTLE_PRIMAL_REVERSION:
+            outLabels[n] = COMPOUND_STRING("Primal");
+            break;
+        default:
+            continue;
+        }
+        outSpecies[n] = formChanges[i].targetSpecies;
+        n++;
+    }
+    return n;
+}
+
+// The foe's own row. A mon that has already Mega Evolved or undergone Primal Reversion
+// carries that species in its party slot (activeGimmick persists the form), so labelling
+// its row "Base" there would be a lie - name the form the player is actually looking at.
+static const u8 *CurrentFormRowLabel(enum Species species)
+{
+    if (gSpeciesInfo[species].isMegaEvolution)
+        return COMPOUND_STRING("Mega");
+    if (gSpeciesInfo[species].isPrimalReversion)
+        return COMPOUND_STRING("Primal");
+    return COMPOUND_STRING("Base");
+}
+
+static void DrawBaseStatRow(u8 windowId, const u8 *label, enum Species species, u32 y)
+{
+    u8 num[8];
+
+    PrintLine(windowId, label, 0, y);
+    for (u32 k = 0; k < NUM_STATS; k++)
+    {
+        ConvertIntToDecimalStringN(num, GetSpeciesBaseStat(species, sBaseStatOrder[k]), STR_CONV_MODE_LEFT_ALIGN, 3);
+        PrintStatCell(windowId, num, BST_COL_R(k), y);
+    }
+    // Eternamax's 1125 is the only total that needs a fourth digit, and the BST column
+    // is the widest, so it still clears the window edge.
+    ConvertIntToDecimalStringN(num, GetSpeciesBaseStatTotal(species), STR_CONV_MODE_LEFT_ALIGN, 4);
+    PrintStatCell(windowId, num, BST_COL_R(NUM_STATS), y);
+}
+
+static void DrawBaseStatsPage(u8 windowId, u32 foeIndex)
+{
+    u8 line[64];
+    u8 *p;
+    u32 y = 0;
+    struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+    u32 count = GetFoePartyCount(foeParty);
+    bool32 seen = gBattleStruct->partyState[B_TRAINER_OPPONENT_A][foeIndex].sentOut;
+
+    p = StringCopy(line, COMPOUND_STRING("BATTLE INFO  -  BASE STATS "));
+    p = ConvertIntToDecimalStringN(p, foeIndex + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
+    *p++ = CHAR_SLASH;
+    ConvertIntToDecimalStringN(p, count, STR_CONV_MODE_LEFT_ALIGN, 1);
+    PrintTitle(windowId, line);
+    y += LINE_H;
+
+    if (!seen)
+    {
+        PrintLine(windowId, COMPOUND_STRING("Not yet seen."), 0, y);
+        PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
+        return;
+    }
+
+    struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
+    enum Species displaySpecies = GetMonData(displayMon, MON_DATA_SPECIES, NULL);
+    enum Species altForms[BST_MAX_ALT_FORMS];
+    const u8 *altLabels[BST_MAX_ALT_FORMS];
+    u32 altCount = CollectAltFormRows(displaySpecies, altForms, altLabels);
+
+    PrintLine(windowId, GetSpeciesName(displaySpecies), 0, y);
+    y += LINE_H;
+
+    for (u32 k = 0; k < NUM_STATS; k++)
+        PrintStatCell(windowId, GetStatAbbr(sBaseStatOrder[k]), BST_COL_R(k), y);
+    PrintStatCell(windowId, COMPOUND_STRING("BST"), BST_COL_R(NUM_STATS), y);
+    y += LINE_H;
+
+    DrawBaseStatRow(windowId, CurrentFormRowLabel(displaySpecies), displaySpecies, y);
+    y += LINE_H;
+
+    // At most BST_MAX_ALT_FORMS rows follow a title, a species header, a column header
+    // and the base row - five rows against the page's nine, so this cannot overrun the
+    // footer no matter what a species declares.
+    for (u32 i = 0; i < altCount; i++)
+    {
+        DrawBaseStatRow(windowId, altLabels[i], altForms[i], y);
+        y += LINE_H;
+    }
+
+    PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
 }
 
 // FORK: Speed tier report. From base stats + level alone, a foe's *possible*
@@ -1187,6 +1378,9 @@ static void RedrawInfo(u8 taskId)
     case INFO_PAGE_FOE:
         DrawFoePage(windowId, gTasks[taskId].tFoeIndex);
         break;
+    case INFO_PAGE_BASE_STATS:
+        DrawBaseStatsPage(windowId, gTasks[taskId].tFoeIndex);
+        break;
     case INFO_PAGE_INNATES:
         DrawInnatesPage(windowId, gTasks[taskId].tFoeIndex);
         break;
@@ -1215,11 +1409,12 @@ static void Task_InfoFadeOut(u8 taskId)
     }
 }
 
-// Pages that show a single foe and therefore honour <> to cycle mons. Both the
-// Foe page and its innates page are scoped to tFoeIndex, so they share the same cycling.
+// Pages that show a single foe and therefore honour <> to cycle mons. The Foe page and
+// its base-stats and innates pages are all scoped to tFoeIndex, so they share the same
+// cycling and an L/R step between them stays on the same mon.
 static bool32 IsFoeScopedPage(s16 page)
 {
-    return page == INFO_PAGE_FOE || page == INFO_PAGE_INNATES;
+    return page == INFO_PAGE_FOE || page == INFO_PAGE_BASE_STATS || page == INFO_PAGE_INNATES;
 }
 
 static void Task_InfoProcessInput(u8 taskId)
