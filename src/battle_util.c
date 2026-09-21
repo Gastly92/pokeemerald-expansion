@@ -7,6 +7,7 @@
 #include "battle_pyramid.h"
 #include "battle_util.h"
 #include "battle_controllers.h"
+#include "fork/free_gimmicks.h" // FORK: FindMegaStoneForStats, the item-free Mega pick
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
 #include "fork/halo.h" // FORK: Halo (field-wide per-hit damage cap)
@@ -9911,45 +9912,6 @@ bool32 IsBattlerInTeraForm(enum BattlerId battler)
     return (gSpeciesInfo[gBattleMons[battler].species].isTeraForm);
 }
 
-// FORK (FEATURE_FREE_GIMMICKS): mega evolution is item-free, so for a species with
-// more than one Mega form (the X/Y species: Charizard, Mewtwo) we pick which one
-// based on the battler's offensive stats and return the Mega Stone that yields it,
-// to feed into the held-item-driven form change machinery. The chosen form is the
-// physical one (X) when the mon's Attack >= Sp. Atk, otherwise the special one (Y);
-// since X always has the higher (or equal) Attack-minus-Sp.Atk of the pair, a stat
-// tie defaults to X. Single-Mega species return their one stone; non-Mega species
-// return ITEM_NONE.
-static u16 GetMegaStoneForBattler(enum BattlerId battler)
-{
-    enum Species species = gBattleMons[battler].species;
-    const struct FormChange *formChanges = GetSpeciesFormChanges(species);
-    bool32 preferPhysical = (gBattleMons[battler].attack >= gBattleMons[battler].spAttack);
-    u16 bestItem = ITEM_NONE;
-    s32 bestScore = 0;
-    u32 i;
-
-    if (formChanges == NULL)
-        return ITEM_NONE;
-
-    for (i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
-    {
-        if (formChanges[i].method != FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM)
-            continue;
-
-        enum Species target = formChanges[i].targetSpecies;
-        s32 bias = (s32)gSpeciesInfo[target].baseAttack - (s32)gSpeciesInfo[target].baseSpAttack;
-        s32 score = preferPhysical ? bias : -bias;
-
-        if (bestItem == ITEM_NONE || score > bestScore)
-        {
-            bestItem = formChanges[i].param1;
-            bestScore = score;
-        }
-    }
-
-    return bestItem;
-}
-
 enum Species GetBattleFormChangeTargetSpecies(enum BattlerId battler, enum FormChanges method, enum Ability ability)
 {
     enum Species species = gBattleMons[battler].species;
@@ -9963,7 +9925,7 @@ enum Species GetBattleFormChangeTargetSpecies(enum BattlerId battler, enum FormC
     // instead of its held stone by pretending it holds the stat-appropriate stone.
     if (GetConfig(FEATURE_FREE_GIMMICKS) && method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM)
     {
-        u16 megaStone = GetMegaStoneForBattler(battler);
+        u16 megaStone = FindMegaStoneForStats(species, gBattleMons[battler].attack, gBattleMons[battler].spAttack);
         if (megaStone != ITEM_NONE)
             heldItem = megaStone;
     }

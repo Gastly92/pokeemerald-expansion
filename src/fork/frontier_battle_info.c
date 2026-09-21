@@ -7,10 +7,12 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_controllers.h"
+#include "battle_gimmick.h" // FORK: HasTrainerUsedGimmick for the Base Stats page's projection
 #include "battle_main.h" // FORK: GetBattlerTotalSpeedStat for the player's effective Speed
 #include "battle_util.h"
 #include "bg.h"
 #include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
+#include "fork/free_gimmicks.h" // FORK: FindMegaStoneForStats, shared with the live form change
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/frontier_battle_info.h"
 #include "gpu_regs.h"
@@ -110,9 +112,13 @@ static u32 InfoPageCount(void)
 }
 
 // Task data layout.
-#define tWindowId  data[0]
-#define tPage      data[1]
-#define tFoeIndex  data[2]
+#define tWindowId     data[0]
+#define tPage         data[1]
+#define tFoeIndex     data[2]
+// FORK: the Base Stats page's second cursor - which of YOUR living party mons is shown.
+// It indexes CollectPlayerSlots()' list, not the party directly, and is re-defaulted on
+// every open (see DefaultPlayerCursor) rather than persisted like tFoeIndex.
+#define tPlayerIndex  data[3]
 
 // FORK: the last page/foe the player was viewing is remembered so re-opening the
 // viewer (often once per turn) returns to where they left off instead of always
@@ -369,15 +375,19 @@ static void PrintFooter(u8 windowId, const u8 *str)
 // costing a body line (the page can already fill its height with 2 player rows and
 // 6 foe rows). The title is 121px wide and the marker 47px in FONT_NARROW, so in a
 // 224px window the two never collide.
-static void PrintTrickRoomMarker(u8 windowId)
+// Right-aligned on the title row, in the title's own colour. Used for a page-level note
+// that must not cost a body row - the Speed page's TRICK ROOM, the Base Stats page's player
+// cursor. Every title is short enough to leave the right edge free.
+static void PrintTitleMarker(u8 windowId, const u8 *str)
 {
-    if (!(gFieldStatuses & STATUS_FIELD_TRICK_ROOM))
-        return;
-
-    const u8 *str = COMPOUND_STRING("TRICK ROOM");
-
     PrintLineEx(windowId, str, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, str, 0), 0,
                 TEXT_COLOR_RED, TEXT_COLOR_LIGHT_RED);
+}
+
+static void PrintTrickRoomMarker(u8 windowId)
+{
+    if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+        PrintTitleMarker(windowId, COMPOUND_STRING("TRICK ROOM"));
 }
 
 // FORK: compact "n/N" page counter, right-aligned on the footer row, so the
@@ -1058,6 +1068,10 @@ static void DrawStatsPage(u8 windowId)
 #define BST_TOTAL_R        (BST_COL_R(NUM_STATS - 1) + BST_COL_W + 2) // the BST column, 2px wider so a four-digit total still clears Spe
 #define BST_FORM_INDENT    6    // form rows sit indented under their species' row
 
+// The page cycles two axes, so its footer has to teach both. Measured at 164px in
+// FONT_NARROW, which clears the right-aligned page indicator.
+static const u8 sBaseStatsFooter[] = _("{UP_ARROW}{DOWN_ARROW}: You  <>: Foe  L/R: Page  B: Close");
+
 // Body rows that clear the pinned footer, less the title and the column header.
 #define BST_TOTAL_ROWS     (((INFO_WIN_HEIGHT * 8) - 14) / LINE_H)
 #define BST_ENTITY_ROWS    (BST_TOTAL_ROWS - 2)
@@ -1065,12 +1079,12 @@ static void DrawStatsPage(u8 windowId)
 // The BST column must not run off the right edge of the window.
 STATIC_ASSERT(BST_TOTAL_R <= INFO_WIN_WIDTH * 8, BaseStatColumnsFitTheInfoWindow);
 
-// The page must fit its own worst case without clipping: every player battler showing a
-// species row plus a projected-form row, then the foe's species row plus every alternative
-// form it can reach. If this ever fails, the layout needs reworking - not a silent drop,
-// which would hide a form the player can actually be hit by.
-STATIC_ASSERT((MAX_BATTLERS_COUNT / 2) * 2 + 1 + INFO_MAX_DISPLAYED_ALT_FORMS <= BST_ENTITY_ROWS,
-              BaseStatPageFitsItsWorstCase);
+// The page must fit its own worst case without clipping: your selected mon's species row
+// plus its projected-form row, then the foe's species row plus every alternative form it
+// can reach. If this ever fails the layout needs reworking - not a silent drop, which would
+// hide a form the player can actually be hit by. Showing ONE of your mons rather than every
+// active one is what buys the headroom here; up/down walks the rest of the party.
+STATIC_ASSERT(2 + 1 + INFO_MAX_DISPLAYED_ALT_FORMS <= BST_ENTITY_ROWS, BaseStatPageFitsItsWorstCase);
 
 // Conventional display order (HP/Atk/Def/SpA/SpD/Spe), not the internal STAT_* order,
 // which puts Speed fourth.
@@ -1202,14 +1216,127 @@ static u32 DrawAltFormRows(u8 windowId, enum Species species, u32 y)
     return y;
 }
 
-// FORK: the form YOUR mon would actually take, or SPECIES_NONE if it has none available.
-// Unlike the foe's possibility list this is a projection of fact: CanMegaEvolve applies the
-// real eligibility rules (your side's one-per-trainer gimmick budget, and - with
-// FEATURE_FREE_GIMMICKS off - the held stone), and GetBattleFormChangeTargetSpecies resolves
-// the stat-based X/Y/Z pick that GetMegaStoneForBattler makes from this battler's own
-// Attack/Sp. Atk. Primal Reversion is checked too, though a holder reverts on switch-in and
-// so is normally already in its Primal form by the time the viewer can be opened.
-static enum Species GetPlayerProjectedForm(enum BattlerId battler)
+// FORK: the player-side slots the Base Stats page can show. It is the whole party, not
+// just the battlers on the field, because "what should I switch to" is precisely the
+// question base stats answer and nothing else in the game shows them - the summary screen
+// shows computed stats, and neither it nor anything else shows a Mega form at all. Fainted
+// slots are left out: they are not switch candidates, and the label column has no room for
+// an FNT marker beside a 12-character species name.
+static u32 CollectPlayerSlots(u8 *out)
+{
+    struct Pokemon *party = GetTrainerParty(B_TRAINER_PLAYER);
+    u32 n = 0;
+
+    for (u32 i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE
+            || GetMonData(&party[i], MON_DATA_IS_EGG, NULL)
+            || GetMonData(&party[i], MON_DATA_HP, NULL) == 0)
+            continue;
+        out[n++] = i;
+    }
+    return n;
+}
+
+// The battler occupying a party slot, or MAX_BATTLERS_COUNT when that mon is benched.
+static u32 GetPlayerBattlerForSlot(u32 partyIndex)
+{
+    for (u32 battler = 0; battler < gBattlersCount; battler++)
+    {
+        if (IsOnPlayerSide(battler) && IsBattlerAlive(battler)
+            && gBattlerPartyIndexes[battler] == partyIndex)
+            return battler;
+    }
+    return MAX_BATTLERS_COUNT;
+}
+
+// FORK: where the page's player cursor starts. Unlike the foe tab - which is remembered
+// across re-opens so the player can keep tabbing through a scouted team - this is NOT
+// persisted, and deliberately: your active mon changes every time you switch, so a
+// remembered index would open the page on a benched mon when you wanted the one you are
+// deciding about. Opening always lands on what is on the field; up/down browses from there.
+// Falls back to the first living slot when nothing of yours is on the field, which is the
+// case on the entry point from the party menu after your mon has fainted.
+static u32 DefaultPlayerCursor(void)
+{
+    u8 slots[PARTY_SIZE];
+    u32 count = CollectPlayerSlots(slots);
+
+    for (u32 battler = 0; battler < gBattlersCount; battler++)
+    {
+        if (!IsOnPlayerSide(battler) || !IsBattlerAlive(battler))
+            continue;
+        for (u32 k = 0; k < count; k++)
+        {
+            if (slots[k] == gBattlerPartyIndexes[battler])
+                return k;
+        }
+    }
+    return 0;
+}
+
+// The Mega target a given stone yields for this species, or SPECIES_NONE.
+static enum Species GetMegaTargetForStone(enum Species species, enum Item megaStone)
+{
+    const struct FormChange *formChanges = GetSpeciesFormChanges(species);
+
+    if (formChanges == NULL || megaStone == ITEM_NONE)
+        return SPECIES_NONE;
+
+    for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+    {
+        if (formChanges[i].method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM
+            && formChanges[i].param1 == megaStone)
+            return formChanges[i].targetSpecies;
+    }
+    return SPECIES_NONE;
+}
+
+// FORK: the form a BENCHED party mon would take. Same resolution the live form change
+// makes, minus the parts that need a battler: under FEATURE_FREE_GIMMICKS the stone comes
+// from the mon's own Attack/Sp. Atk via the shared FindMegaStoneForStats (the one function
+// both this and GetBattleFormChangeTargetSpecies go through, so the projection cannot drift
+// from what actually happens); without the flag it is whatever stone the mon is holding,
+// which GetFormChangeTargetSpecies reads straight off the box mon. Rayquaza's move-based
+// Mega and Primal Reversion resolve through the same mon-based wrapper.
+static enum Species GetPartyMonProjectedForm(struct Pokemon *mon)
+{
+    enum Species species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    enum Species target;
+
+    if (GetConfig(FEATURE_FREE_GIMMICKS))
+    {
+        target = GetMegaTargetForStone(species, FindMegaStoneForStats(species,
+                                                                     GetMonData(mon, MON_DATA_ATK, NULL),
+                                                                     GetMonData(mon, MON_DATA_SPATK, NULL)));
+        if (target != SPECIES_NONE)
+            return target;
+    }
+    else
+    {
+        target = GetFormChangeTargetSpecies(mon, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM);
+        if (target != species)
+            return target;
+    }
+
+    target = GetFormChangeTargetSpecies(mon, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE);
+    if (target != species)
+        return target;
+
+    target = GetFormChangeTargetSpecies(mon, FORM_CHANGE_BATTLE_PRIMAL_REVERSION);
+    if (target != species)
+        return target;
+
+    return SPECIES_NONE;
+}
+
+// FORK: the form the mon ON THE FIELD would take. This goes through the engine's own
+// eligibility check rather than the party-mon resolution above, because for a battler the
+// engine can answer exactly: CanMegaEvolve applies the real rules (this mon's own gimmick
+// slot, a held Z-Crystal blocking a Mega without free gimmicks, the one-per-trainer budget)
+// and GetBattleFormChangeTargetSpecies resolves the pick. So the row for the mon you are
+// actually deciding about shows what WILL happen, and shows nothing when it cannot Mega.
+static enum Species GetBattlerProjectedForm(enum BattlerId battler)
 {
     enum Species species = gBattleMons[battler].species;
     enum Ability ability = GetBattlerAbility(battler);
@@ -1243,45 +1370,46 @@ static const u8 *AlreadyTransformedLabel(enum Species species)
     return NULL;
 }
 
-static u32 DrawPlayerBaseStats(u8 windowId, u32 y)
+// Your selected mon and the form it would take, and the y for the row after it.
+static u32 DrawPlayerBaseStats(u8 windowId, u32 partyIndex, u32 y)
 {
-    for (u32 battler = 0; battler < gBattlersCount; battler++)
+    struct Pokemon *mon = &GetTrainerParty(B_TRAINER_PLAYER)[partyIndex];
+    enum Species species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    u32 battler = GetPlayerBattlerForSlot(partyIndex);
+    const u8 *transformed = AlreadyTransformedLabel(species);
+    enum Species projected;
+    u8 label[32];
+
+    y = DrawSpeciesRow(windowId, COMPOUND_STRING("You "), species, y);
+
+    // Say so explicitly when a mon has already transformed, rather than leaving the absence
+    // of a second row to mean both "already Mega" and "cannot Mega".
+    if (transformed != NULL)
     {
-        enum Species species, projected;
-        const u8 *transformed;
-
-        if (!IsOnPlayerSide(battler) || !IsBattlerAlive(battler))
-            continue;
-
-        species = gBattleMons[battler].species;
-        y = DrawSpeciesRow(windowId, COMPOUND_STRING("You "), species, y);
-
-        // Say so explicitly when a mon is already transformed, rather than leaving the
-        // absence of a second row to mean both "already Mega" and "cannot Mega".
-        transformed = AlreadyTransformedLabel(species);
-        if (transformed != NULL)
-        {
-            PrintRowLabel(windowId, transformed, BST_FORM_INDENT, y);
-            y += LINE_H;
-            continue;
-        }
-
-        projected = GetPlayerProjectedForm(battler);
-        if (projected != SPECIES_NONE)
-        {
-            u8 label[32];
-
-            // The projection is a single known form, so it needs no X/Y/Z suffix to tell it
-            // from a sibling - the engine has already made that pick from this mon's stats.
-            StringCopy(label, gSpeciesInfo[projected].isPrimalReversion ? COMPOUND_STRING("Primal") : COMPOUND_STRING("Mega"));
-            DrawBaseStatRow(windowId, label, BST_FORM_INDENT, projected, y);
-            y += LINE_H;
-        }
+        PrintRowLabel(windowId, transformed, BST_FORM_INDENT, y);
+        return y + LINE_H;
     }
-    return y;
+
+    // Your side's Mega is spent once any of your mons has used it, benched ones included,
+    // so a projection that ignored it would promise a form no mon of yours can still reach.
+    if (battler < MAX_BATTLERS_COUNT)
+        projected = GetBattlerProjectedForm(battler);
+    else if (HasTrainerUsedGimmick(GetBattlerAtPosition(B_POSITION_PLAYER_LEFT), GIMMICK_MEGA))
+        projected = SPECIES_NONE;
+    else
+        projected = GetPartyMonProjectedForm(mon);
+
+    if (projected == SPECIES_NONE)
+        return y;
+
+    // The projection is a single known form, so it needs no X/Y/Z suffix to tell it from a
+    // sibling - the pick has already been made from this mon's own stats.
+    StringCopy(label, gSpeciesInfo[projected].isPrimalReversion ? COMPOUND_STRING("Primal") : COMPOUND_STRING("Mega"));
+    DrawBaseStatRow(windowId, label, BST_FORM_INDENT, projected, y);
+    return y + LINE_H;
 }
 
-static void DrawBaseStatsPage(u8 windowId, u32 foeIndex)
+static void DrawBaseStatsPage(u8 windowId, u32 playerCursor, u32 foeIndex)
 {
     u8 line[64];
     u8 *p;
@@ -1289,12 +1417,30 @@ static void DrawBaseStatsPage(u8 windowId, u32 foeIndex)
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
     u32 count = GetFoePartyCount(foeParty);
     bool32 seen = gBattleStruct->partyState[B_TRAINER_OPPONENT_A][foeIndex].sentOut;
+    u8 slots[PARTY_SIZE];
+    u32 playerCount = CollectPlayerSlots(slots);
 
     p = StringCopy(line, COMPOUND_STRING("BATTLE INFO  -  BASE STATS "));
     p = ConvertIntToDecimalStringN(p, foeIndex + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
     *p++ = CHAR_SLASH;
     ConvertIntToDecimalStringN(p, count, STR_CONV_MODE_LEFT_ALIGN, 1);
     PrintTitle(windowId, line);
+
+    // Right-aligned on the title row, so the player cursor costs no body row: which of your
+    // mons is shown, how many there are to cycle, and whether this one is on the field. The
+    // "on field / benched" word is what keeps a benched spread from being read as the matchup
+    // you are currently in, and it earns its place most in doubles.
+    if (playerCount != 0)
+    {
+        u32 partyIndex = slots[playerCursor];
+
+        p = StringCopy(line, GetPlayerBattlerForSlot(partyIndex) < MAX_BATTLERS_COUNT
+                             ? COMPOUND_STRING("You ") : COMPOUND_STRING("Bench "));
+        p = ConvertIntToDecimalStringN(p, playerCursor + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
+        *p++ = CHAR_SLASH;
+        ConvertIntToDecimalStringN(p, playerCount, STR_CONV_MODE_LEFT_ALIGN, 1);
+        PrintTitleMarker(windowId, line);
+    }
     y += LINE_H;
 
     for (u32 k = 0; k < NUM_STATS; k++)
@@ -1302,12 +1448,13 @@ static void DrawBaseStatsPage(u8 windowId, u32 foeIndex)
     PrintStatCell(windowId, COMPOUND_STRING("BST"), BST_TOTAL_R, y);
     y += LINE_H;
 
-    y = DrawPlayerBaseStats(windowId, y);
+    if (playerCount != 0)
+        y = DrawPlayerBaseStats(windowId, slots[playerCursor], y);
 
     if (!seen)
     {
-        PrintRowLabel(windowId, COMPOUND_STRING("Foe: not yet seen."), 0, y);
-        PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
+        PrintRowLabel(windowId, COMPOUND_STRING("Foe: not seen"), 0, y);
+        PrintFooter(windowId, sBaseStatsFooter);
         return;
     }
 
@@ -1317,7 +1464,7 @@ static void DrawBaseStatsPage(u8 windowId, u32 foeIndex)
     y = DrawSpeciesRow(windowId, COMPOUND_STRING("Foe "), displaySpecies, y);
     DrawAltFormRows(windowId, displaySpecies, y);
 
-    PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
+    PrintFooter(windowId, sBaseStatsFooter);
 }
 
 // FORK: Speed tier report. From base stats + level alone, a foe's *possible*
@@ -1501,7 +1648,7 @@ static void RedrawInfo(u8 taskId)
         DrawFoePage(windowId, gTasks[taskId].tFoeIndex);
         break;
     case INFO_PAGE_BASE_STATS:
-        DrawBaseStatsPage(windowId, gTasks[taskId].tFoeIndex);
+        DrawBaseStatsPage(windowId, gTasks[taskId].tPlayerIndex, gTasks[taskId].tFoeIndex);
         break;
     case INFO_PAGE_INNATES:
         DrawInnatesPage(windowId, gTasks[taskId].tFoeIndex);
@@ -1542,6 +1689,10 @@ static bool32 IsFoeScopedPage(s16 page)
 static void Task_InfoProcessInput(u8 taskId)
 {
     u32 count = GetFoePartyCount(GetTrainerParty(B_TRAINER_OPPONENT_A));
+    bool32 foeCycles = IsFoeScopedPage(gTasks[taskId].tPage);
+    // Every foe-scoped page but Base Stats aliases up/down onto the foe tab; that one needs
+    // vertical for its own player cursor.
+    bool32 verticalIsFoe = (gTasks[taskId].tPage != INFO_PAGE_BASE_STATS);
 
     if (JOY_NEW(B_BUTTON) || JOY_NEW(A_BUTTON))
     {
@@ -1567,21 +1718,37 @@ static void Task_InfoProcessInput(u8 taskId)
             gTasks[taskId].tPage = InfoPageCount() - 1;
         RedrawInfo(taskId);
     }
-    else if (IsFoeScopedPage(gTasks[taskId].tPage) && count != 0
-             && (JOY_NEW(DPAD_RIGHT) || JOY_NEW(DPAD_DOWN)))
+    else if (foeCycles && count != 0 && (JOY_NEW(DPAD_RIGHT) || (verticalIsFoe && JOY_NEW(DPAD_DOWN))))
     {
         PlaySE(SE_SELECT);
         if (++gTasks[taskId].tFoeIndex >= (s16)count)
             gTasks[taskId].tFoeIndex = 0;
         RedrawInfo(taskId);
     }
-    else if (IsFoeScopedPage(gTasks[taskId].tPage) && count != 0
-             && (JOY_NEW(DPAD_LEFT) || JOY_NEW(DPAD_UP)))
+    else if (foeCycles && count != 0 && (JOY_NEW(DPAD_LEFT) || (verticalIsFoe && JOY_NEW(DPAD_UP))))
     {
         PlaySE(SE_SELECT);
         if (--gTasks[taskId].tFoeIndex < 0)
             gTasks[taskId].tFoeIndex = count - 1;
         RedrawInfo(taskId);
+    }
+    // FORK: on the Base Stats page up/down is the second cursor, walking YOUR party, so
+    // that page alone does not alias vertical onto the foe tab.
+    else if (!verticalIsFoe && (JOY_NEW(DPAD_DOWN) || JOY_NEW(DPAD_UP)))
+    {
+        u8 slots[PARTY_SIZE];
+        s16 playerCount = CollectPlayerSlots(slots);
+
+        if (playerCount != 0)
+        {
+            PlaySE(SE_SELECT);
+            gTasks[taskId].tPlayerIndex += JOY_NEW(DPAD_DOWN) ? 1 : -1;
+            if (gTasks[taskId].tPlayerIndex >= playerCount)
+                gTasks[taskId].tPlayerIndex = 0;
+            else if (gTasks[taskId].tPlayerIndex < 0)
+                gTasks[taskId].tPlayerIndex = playerCount - 1;
+            RedrawInfo(taskId);
+        }
     }
 }
 
@@ -1753,6 +1920,7 @@ void CB2_FrontierBattleInfo(void)
         if (gTasks[taskId].tPage >= (s16)InfoPageCount())
             gTasks[taskId].tPage = INFO_PAGE_SPEED;
         gTasks[taskId].tFoeIndex = gBattleStruct->infoViewerFoeIndex;
+        gTasks[taskId].tPlayerIndex = DefaultPlayerCursor();
         PutWindowTilemap(gTasks[taskId].tWindowId);
         // FRAME_BG has no window, so give it its own tilemap buffer (heap, like
         // AddWindow does for the text window) and draw the border ring into it.

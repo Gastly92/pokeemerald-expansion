@@ -45,7 +45,7 @@ path.
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
 | **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, `FNT` when fainted, moves/PP/ability/held item |
-| **Base Stats** | Your active mon(s) and the selected foe as a stat table, each with the Mega/Primal form(s) it can reach |
+| **Base Stats** | One of your party mons (`{UP}{DOWN}`, bench included) and the selected foe as a stat table, each with the Mega/Primal form(s) it can reach |
 | **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
 
 The whole-field row (`BuildFieldEffectLine`) lists effects that belong to neither
@@ -220,17 +220,18 @@ ability — so an innate reveal never leaks the chosen one.
 ## The Base Stats page
 
 Base spreads as a table, right-aligned so forms compare straight down the column:
-`HP Atk Def SpA SpD Spe BST`. **Your active mon(s) come first, then the selected foe**,
-each followed by the Mega/Primal form rows it can reach.
+`HP Atk Def SpA SpD Spe BST`. **One of your mons above the selected foe**, each followed
+by the Mega/Primal form(s) it can reach.
 
 ```
-BATTLE INFO  -  BASE STATS 1/3
+BATTLE INFO  -  BASE STATS 1/3                Bench 4/6
                 HP  Atk  Def  SpA  SpD  Spe  BST
 You Salamence   95  135   80  110   80  100  600
   Mega          95  145  130  120   90  120  700
 Foe Charizard   78   84   78  109   85  100  534
   Mega X        78  130  111  130   85  100  634
   Mega Y        78  104   78  159  115  100  634
+{UP}{DOWN}: You  <>: Foe  L/R: Page  B: Close        6/7
 ```
 
 Nothing else in the game surfaces this. The summary screen shows *computed* stats — the
@@ -238,19 +239,50 @@ numbers after IVs, EVs, nature and level — and neither it nor anything else sh
 Mega form would turn a mon into. That matters most in the Factory, where the rentals
 aren't yours to begin with.
 
-### The two halves are asymmetric on purpose
+### Two cursors
 
-The same split the Speed Tiers page draws: **your side is fact, the foe's is
-possibility.**
+The page is the only one with two axes, because it answers two questions at once:
 
-- **Your row is a projection.** `CanMegaEvolve` applies the real eligibility rules (your
-  side's one-per-trainer gimmick budget, and — with `FEATURE_FREE_GIMMICKS` off — the
-  held stone), and `GetBattleFormChangeTargetSpecies` resolves the stat-based X/Y/Z pick
-  that `GetMegaStoneForBattler` makes from *this* battler's Attack/Sp. Atk. So you get
-  one row for what you **will** become, and a mon that can't Mega this battle correctly
-  shows none. A mon that has already transformed says so (`(Mega)`), rather than leaving
-  a missing row to mean both "already Mega" and "can't Mega".
+- **`<>` walks the foe's revealed slots**, shared with the Foe and Innates pages via
+  `tFoeIndex`, so an L/R step between the three stays on the same mon.
+- **Up/Down walks your own party**, benched mons included — "what should I switch to" is
+  exactly the question base stats answer. Every other foe-scoped page aliases Up/Down
+  onto the foe tab; this one needs vertical for its own cursor, which is why
+  `Task_InfoProcessInput` special-cases it.
+
+A right-aligned marker on the **title row** — `You 2/4` or `Bench 4/6` — says which of
+your mons is shown and whether it is on the field. It rides the title so it costs no body
+row, the same trick the Speed page's `TRICK ROOM` marker uses. The on-field/benched word
+is what keeps a benched spread from being misread as the matchup you are currently in,
+and it earns its place most in doubles.
+
+**Fainted slots are skipped**: they are not switch candidates, and the label column has no
+room for an `FNT` marker beside a 12-character species name.
+
+**The player cursor is not persisted**, unlike the foe tab. Your active mon changes every
+time you switch, so a remembered index would open the page on a benched mon when you
+wanted the one you are deciding about. Opening always lands on what is on the field (or,
+from the party-menu entry point after your mon has fainted, on your first living mon).
+
+### Your side is fact, the foe's is possibility
+
+The same split the Speed Tiers page draws.
+
+- **Your row is a projection — one row for what you *will* become.** For the mon on the
+  field it goes through the engine's own eligibility check: `CanMegaEvolve` applies the
+  real rules (that mon's gimmick slot, a held Z-Crystal blocking a Mega without free
+  gimmicks, the one-per-trainer budget), so a mon that can't Mega this battle correctly
+  shows no row. A **benched** mon has no battler to ask, so it gets the same resolution
+  minus the per-mon part, still gated on your side's Mega budget being unspent.
 - **The foe's rows are its species' whole list**, because its spread and item are hidden.
+
+**The two resolutions cannot drift**, because the pick that decides *which* Mega goes
+through one function. `FindMegaStoneForStats` (`include/fork/free_gimmicks.h`) chooses the
+form from a mon's Attack/Sp. Atk, and both the live form change
+(`GetBattleFormChangeTargetSpecies`) and this page's benched projection call it. It used
+to be `GetMegaStoneForBattler` in `src/battle_util.c`, reading `gBattleMons` directly;
+it moved to a fork header — as a `static inline`, so both callers keep inlining it —
+because a benched party mon has no `gBattleMons` entry.
 
 ### Reveal gating
 
@@ -268,27 +300,27 @@ possibility.**
 
 ### Details
 
-- **It is foe-scoped and shares `tFoeIndex`** with the Foe and Innates pages, so `<>`
-  cycles foes here too and an L/R step between the three stays on the same mon. It sits
-  directly after the Foe page.
 - **Form labels are built from the Mega Stone that produces the form.** Every Mega shares
   its base form's species *name* ("Charizard" for both X and Y, "Absol" for both Mega and
   Mega Z), so the suffix is taken from the stone — Charizardite **X**, Raichunite **Y**,
   Absolite **Z** — which keeps working as upstream adds Mega lines (the Gen 9 `_Z` megas
   under `P_GEN_9_MEGA_EVOLUTIONS` arrived exactly that way). This names the *form*; the
-  stone is never read off the mon.
+  stone is never read off the mon. Your own projected row needs no suffix — the pick has
+  already been made from that mon's stats.
+- **A mon that has already transformed says so** (`(Mega)`, `(Primal)`), rather than
+  leaving a missing row to mean both that and "cannot Mega".
 - **Rayquaza's move-based Mega counts**, via `FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE`.
   **Gigantamax does not**: Dynamax multiplies HP rather than replacing the spread, so a
   row for it would repeat the one above.
-- **Only your *active* mon(s) are shown**, matching the Speed Tiers, Conditions and Stat
-  Changes pages, which are all on-field-only.
 - **The row budget is proved, not hoped.** `INFO_MAX_DISPLAYED_ALT_FORMS` caps the foe's
-  form rows, and a `STATIC_ASSERT` proves the worst case — a doubles battle, both of your
-  mons projecting a form, against a two-Mega foe — fits the page exactly. A sweep in
+  form rows and a `STATIC_ASSERT` proves the worst case fits — showing one of your mons
+  rather than every active one is what buys the headroom. A sweep in
   `test/fork/frontier_battle_info_reveal.c` fails if any species declares more reachable
-  forms than that, because the fix there is to rework the layout, not to silently drop a
-  form the player can be hit by. Only an over-long *species name* is ever clipped, and
-  nothing in the current dex reaches that.
+  forms than the cap, because the fix there is to rework the layout, not to silently drop
+  a form the player can be hit by. The label column was measured against every species
+  name in the dex (widest: `Foe Brambleghast`, 77px of 78), so nothing clips; the
+  clip-to-fit path in `PrintRowLabel` is a safety net for future data and only ever
+  shortens a *name*, never drops a row.
 
 ## The Innates page
 
